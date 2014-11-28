@@ -20,10 +20,14 @@ public class TileEntityCommand extends TileEntity {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         this.b(nbttagcompound);
-        return new PacketPlayOutTileEntityData(this.x, this.y, this.z, 2, nbttagcompound);
+        return new PacketPlayOutTileEntityData(this.position, 2, nbttagcompound);
     }
 
     public CommandBlockListenerAbstract getCommandBlock() {
         return this.a;
+    }
+
+    public CommandObjectiveExecutor c() {
+        return this.a.n();
     }
 }

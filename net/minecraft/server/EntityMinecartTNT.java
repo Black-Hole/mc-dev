@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class EntityMinecartTNT extends EntityMinecartAbstract {
 
-    private int fuse = -1;
+    private int a = -1;
 
     public EntityMinecartTNT(World world) {
         super(world);
@@ -12,30 +12,45 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public int m() {
-        return 3;
+    public EnumMinecartType s() {
+        return EnumMinecartType.TNT;
     }
 
-    public Block o() {
-        return Blocks.TNT;
+    public IBlockData u() {
+        return Blocks.TNT.getBlockData();
     }
 
-    public void h() {
-        super.h();
-        if (this.fuse > 0) {
-            --this.fuse;
-            this.world.addParticle("smoke", this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D);
-        } else if (this.fuse == 0) {
-            this.c(this.motX * this.motX + this.motZ * this.motZ);
+    public void s_() {
+        super.s_();
+        if (this.a > 0) {
+            --this.a;
+            this.world.addParticle(EnumParticle.SMOKE_NORMAL, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
+        } else if (this.a == 0) {
+            this.b(this.motX * this.motX + this.motZ * this.motZ);
         }
 
         if (this.positionChanged) {
             double d0 = this.motX * this.motX + this.motZ * this.motZ;
 
             if (d0 >= 0.009999999776482582D) {
-                this.c(d0);
+                this.b(d0);
             }
         }
+
+    }
+
+    public boolean damageEntity(DamageSource damagesource, float f) {
+        Entity entity = damagesource.i();
+
+        if (entity instanceof EntityArrow) {
+            EntityArrow entityarrow = (EntityArrow) entity;
+
+            if (entityarrow.isBurning()) {
+                this.b(entityarrow.motX * entityarrow.motX + entityarrow.motY * entityarrow.motY + entityarrow.motZ * entityarrow.motZ);
+            }
+        }
+
+        return super.damageEntity(damagesource, f);
     }
 
     public void a(DamageSource damagesource) {
@@ -47,11 +62,12 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         }
 
         if (damagesource.o() || damagesource.isExplosion() || d0 >= 0.009999999776482582D) {
-            this.c(d0);
+            this.b(d0);
         }
+
     }
 
-    protected void c(double d0) {
+    protected void b(double d0) {
         if (!this.world.isStatic) {
             double d1 = Math.sqrt(d0);
 
@@ -62,53 +78,59 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
             this.world.explode(this, this.locX, this.locY, this.locZ, (float) (4.0D + this.random.nextDouble() * 1.5D * d1), true);
             this.die();
         }
+
     }
 
-    protected void b(float f) {
+    public void e(float f, float f1) {
         if (f >= 3.0F) {
-            float f1 = f / 10.0F;
+            float f2 = f / 10.0F;
 
-            this.c((double) (f1 * f1));
+            this.b((double) (f2 * f2));
         }
 
-        super.b(f);
+        super.e(f, f1);
     }
 
     public void a(int i, int j, int k, boolean flag) {
-        if (flag && this.fuse < 0) {
-            this.e();
+        if (flag && this.a < 0) {
+            this.j();
         }
+
     }
 
-    public void e() {
-        this.fuse = 80;
+    public void j() {
+        this.a = 80;
         if (!this.world.isStatic) {
             this.world.broadcastEntityEffect(this, (byte) 10);
-            this.world.makeSound(this, "game.tnt.primed", 1.0F, 1.0F);
+            if (!this.R()) {
+                this.world.makeSound(this, "game.tnt.primed", 1.0F, 1.0F);
+            }
         }
+
     }
 
-    public boolean v() {
-        return this.fuse > -1;
+    public boolean y() {
+        return this.a > -1;
     }
 
-    public float a(Explosion explosion, World world, int i, int j, int k, Block block) {
-        return this.v() && (BlockMinecartTrackAbstract.a(block) || BlockMinecartTrackAbstract.b_(world, i, j + 1, k)) ? 0.0F : super.a(explosion, world, i, j, k, block);
+    public float a(Explosion explosion, World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return this.y() && (BlockMinecartTrackAbstract.d(iblockdata) || BlockMinecartTrackAbstract.d(world, blockposition.up())) ? 0.0F : super.a(explosion, world, blockposition, iblockdata);
     }
 
-    public boolean a(Explosion explosion, World world, int i, int j, int k, Block block, float f) {
-        return this.v() && (BlockMinecartTrackAbstract.a(block) || BlockMinecartTrackAbstract.b_(world, i, j + 1, k)) ? false : super.a(explosion, world, i, j, k, block, f);
+    public boolean a(Explosion explosion, World world, BlockPosition blockposition, IBlockData iblockdata, float f) {
+        return this.y() && (BlockMinecartTrackAbstract.d(iblockdata) || BlockMinecartTrackAbstract.d(world, blockposition.up())) ? false : super.a(explosion, world, blockposition, iblockdata, f);
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("TNTFuse", 99)) {
-            this.fuse = nbttagcompound.getInt("TNTFuse");
+            this.a = nbttagcompound.getInt("TNTFuse");
         }
+
     }
 
     protected void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("TNTFuse", this.fuse);
+        nbttagcompound.setInt("TNTFuse", this.a);
     }
 }

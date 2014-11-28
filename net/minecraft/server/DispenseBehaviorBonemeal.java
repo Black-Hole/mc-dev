@@ -7,16 +7,13 @@ final class DispenseBehaviorBonemeal extends DispenseBehaviorItem {
     DispenseBehaviorBonemeal() {}
 
     protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-        if (itemstack.getData() == 15) {
-            EnumFacing enumfacing = BlockDispenser.b(isourceblock.h());
-            World world = isourceblock.k();
-            int i = isourceblock.getBlockX() + enumfacing.getAdjacentX();
-            int j = isourceblock.getBlockY() + enumfacing.getAdjacentY();
-            int k = isourceblock.getBlockZ() + enumfacing.getAdjacentZ();
+        if (EnumColor.WHITE == EnumColor.fromInvColorIndex(itemstack.getData())) {
+            World world = isourceblock.i();
+            BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.b(isourceblock.f()));
 
-            if (ItemDye.a(itemstack, world, i, j, k)) {
+            if (ItemDye.a(itemstack, world, blockposition)) {
                 if (!world.isStatic) {
-                    world.triggerEffect(2005, i, j, k, 0);
+                    world.triggerEffect(2005, blockposition, 0);
                 }
             } else {
                 this.b = false;
@@ -30,9 +27,10 @@ final class DispenseBehaviorBonemeal extends DispenseBehaviorItem {
 
     protected void a(ISourceBlock isourceblock) {
         if (this.b) {
-            isourceblock.k().triggerEffect(1000, isourceblock.getBlockX(), isourceblock.getBlockY(), isourceblock.getBlockZ(), 0);
+            isourceblock.i().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
         } else {
-            isourceblock.k().triggerEffect(1001, isourceblock.getBlockX(), isourceblock.getBlockY(), isourceblock.getBlockZ(), 0);
+            isourceblock.i().triggerEffect(1001, isourceblock.getBlockPosition(), 0);
         }
+
     }
 }

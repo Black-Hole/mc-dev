@@ -1,16 +1,16 @@
 package net.minecraft.server;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.IllegalFormatException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
-import net.minecraft.util.com.google.common.base.Splitter;
-import net.minecraft.util.com.google.common.collect.Iterables;
-import net.minecraft.util.com.google.common.collect.Maps;
-import net.minecraft.util.org.apache.commons.io.Charsets;
-import net.minecraft.util.org.apache.commons.io.IOUtils;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 
 public class LocaleLanguage {
 
@@ -29,11 +29,11 @@ public class LocaleLanguage {
                 String s = (String) iterator.next();
 
                 if (!s.isEmpty() && s.charAt(0) != 35) {
-                    String[] astring = (String[]) Iterables.toArray(b.split(s), String.class);
+                    String[] astring = (String[]) Iterables.toArray(LocaleLanguage.b.split(s), String.class);
 
                     if (astring != null && astring.length == 2) {
                         String s1 = astring[0];
-                        String s2 = a.matcher(astring[1]).replaceAll("%$1s");
+                        String s2 = LocaleLanguage.a.matcher(astring[1]).replaceAll("%$1s");
 
                         this.d.put(s1, s2);
                     }
@@ -44,10 +44,11 @@ public class LocaleLanguage {
         } catch (IOException ioexception) {
             ;
         }
+
     }
 
     static LocaleLanguage a() {
-        return c;
+        return LocaleLanguage.c;
     }
 
     public synchronized String a(String s) {

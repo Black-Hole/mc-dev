@@ -1,19 +1,19 @@
 package net.minecraft.server;
 
-public class PacketPlayInSetCreativeSlot extends Packet {
+public class PacketPlayInSetCreativeSlot implements Packet {
 
     private int slot;
     private ItemStack b;
 
     public PacketPlayInSetCreativeSlot() {}
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
         this.slot = packetdataserializer.readShort();
-        this.b = packetdataserializer.c();
+        this.b = packetdataserializer.i();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
@@ -21,7 +21,7 @@ public class PacketPlayInSetCreativeSlot extends Packet {
         packetdataserializer.a(this.b);
     }
 
-    public int c() {
+    public int a() {
         return this.slot;
     }
 
@@ -29,7 +29,7 @@ public class PacketPlayInSetCreativeSlot extends Packet {
         return this.b;
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

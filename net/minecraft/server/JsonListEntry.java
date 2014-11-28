@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import net.minecraft.util.com.google.gson.JsonObject;
+import com.google.gson.JsonObject;
 
 public class JsonListEntry {
 
@@ -14,7 +14,7 @@ public class JsonListEntry {
         this.a = object;
     }
 
-    Object getKey() {
+    public Object getKey() {
         return this.a;
     }
 

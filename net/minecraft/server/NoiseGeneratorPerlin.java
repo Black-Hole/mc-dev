@@ -38,6 +38,7 @@ public class NoiseGeneratorPerlin extends NoiseGenerator {
             this.d[j] = k;
             this.d[i + 256] = this.d[i];
         }
+
     }
 
     public final double b(double d0, double d1, double d2) {
@@ -47,13 +48,13 @@ public class NoiseGeneratorPerlin extends NoiseGenerator {
     public final double a(int i, double d0, double d1) {
         int j = i & 15;
 
-        return h[j] * d0 + i[j] * d1;
+        return NoiseGeneratorPerlin.h[j] * d0 + NoiseGeneratorPerlin.i[j] * d1;
     }
 
     public final double a(int i, double d0, double d1, double d2) {
         int j = i & 15;
 
-        return e[j] * d0 + f[j] * d1 + g[j] * d2;
+        return NoiseGeneratorPerlin.e[j] * d0 + NoiseGeneratorPerlin.f[j] * d1 + NoiseGeneratorPerlin.g[j] * d2;
     }
 
     public void a(double[] adouble, double d0, double d1, double d2, int i, int j, int k, double d3, double d4, double d5, double d6) {
@@ -61,11 +62,11 @@ public class NoiseGeneratorPerlin extends NoiseGenerator {
         int i1;
         double d7;
         double d8;
-        double d9;
         int j1;
-        double d10;
+        double d9;
         int k1;
         int l1;
+        double d10;
         int i2;
         int j2;
 
@@ -77,7 +78,7 @@ public class NoiseGeneratorPerlin extends NoiseGenerator {
             double d11 = 0.0D;
             double d12 = 0.0D;
 
-            j2 = 0;
+            i2 = 0;
             double d13 = 1.0D / d6;
 
             for (int k2 = 0; k2 < i; ++k2) {
@@ -112,10 +113,11 @@ public class NoiseGeneratorPerlin extends NoiseGenerator {
                     d12 = this.b(d8, this.a(this.d[j3 + 1], d7, 0.0D, d9 - 1.0D), this.a(this.d[i1 + 1], d7 - 1.0D, 0.0D, d9 - 1.0D));
                     double d14 = this.b(d10, d11, d12);
 
-                    i2 = j2++;
-                    adouble[i2] += d14 * d13;
+                    j2 = i2++;
+                    adouble[j2] += d14 * d13;
                 }
             }
+
         } else {
             l = 0;
             double d15 = 1.0D / d6;
@@ -178,12 +180,12 @@ public class NoiseGeneratorPerlin extends NoiseGenerator {
                             int l5 = this.d[j5 + 1] + j4;
                             int i6 = this.d[l1 + 1] + i5;
 
-                            j2 = this.d[i6] + j4;
+                            i2 = this.d[i6] + j4;
                             int j6 = this.d[i6 + 1] + j4;
 
-                            d16 = this.b(d10, this.a(this.d[k5], d9, d20, d18), this.a(this.d[j2], d9 - 1.0D, d20, d18));
+                            d16 = this.b(d10, this.a(this.d[k5], d9, d20, d18), this.a(this.d[i2], d9 - 1.0D, d20, d18));
                             d7 = this.b(d10, this.a(this.d[l5], d9, d20 - 1.0D, d18), this.a(this.d[j6], d9 - 1.0D, d20 - 1.0D, d18));
-                            d17 = this.b(d10, this.a(this.d[k5 + 1], d9, d20, d18 - 1.0D), this.a(this.d[j2 + 1], d9 - 1.0D, d20, d18 - 1.0D));
+                            d17 = this.b(d10, this.a(this.d[k5 + 1], d9, d20, d18 - 1.0D), this.a(this.d[i2 + 1], d9 - 1.0D, d20, d18 - 1.0D));
                             d8 = this.b(d10, this.a(this.d[l5 + 1], d9, d20 - 1.0D, d18 - 1.0D), this.a(this.d[j6 + 1], d9 - 1.0D, d20 - 1.0D, d18 - 1.0D));
                         }
 
@@ -191,11 +193,12 @@ public class NoiseGeneratorPerlin extends NoiseGenerator {
                         double d23 = this.b(d21, d17, d8);
                         double d24 = this.b(d19, d22, d23);
 
-                        i2 = l++;
-                        adouble[i2] += d24 * d15;
+                        j2 = l++;
+                        adouble[j2] += d24 * d15;
                     }
                 }
             }
+
         }
     }
 }

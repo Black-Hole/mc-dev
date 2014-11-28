@@ -10,7 +10,7 @@ class ContainerEnchantTableInventory extends InventorySubcontainer {
     }
 
     public int getMaxStackSize() {
-        return 1;
+        return 64;
     }
 
     public void update() {

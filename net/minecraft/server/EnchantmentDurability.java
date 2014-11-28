@@ -4,9 +4,9 @@ import java.util.Random;
 
 public class EnchantmentDurability extends Enchantment {
 
-    protected EnchantmentDurability(int i, int j) {
-        super(i, j, EnchantmentSlotType.BREAKABLE);
-        this.b("durability");
+    protected EnchantmentDurability(int i, MinecraftKey minecraftkey, int j) {
+        super(i, minecraftkey, j, EnchantmentSlotType.BREAKABLE);
+        this.c("durability");
     }
 
     public int a(int i) {
@@ -22,7 +22,7 @@ public class EnchantmentDurability extends Enchantment {
     }
 
     public boolean canEnchant(ItemStack itemstack) {
-        return itemstack.g() ? true : super.canEnchant(itemstack);
+        return itemstack.e() ? true : super.canEnchant(itemstack);
     }
 
     public static boolean a(ItemStack itemstack, int i, Random random) {

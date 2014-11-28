@@ -6,7 +6,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,17 +24,17 @@ public class RemoteControlSession extends RemoteConnectionThread {
         try {
             this.j.setSoTimeout(0);
         } catch (Exception exception) {
-            this.running = false;
+            this.a = false;
         }
 
         this.l = iminecraftserver.a("rcon.password", "");
-        this.info("Rcon connection from: " + socket.getInetAddress());
+        this.b("Rcon connection from: " + socket.getInetAddress());
     }
 
     public void run() {
         while (true) {
             try {
-                if (!this.running) {
+                if (!this.a) {
                     break;
                 }
 
@@ -63,7 +62,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
                             String s = StatusChallengeUtils.a(this.k, k, i);
 
                             try {
-                                this.a(l, this.server.g(s));
+                                this.a(l, this.b.executeRemoteCommand(s));
                             } catch (Exception exception) {
                                 this.a(l, "Error executing: " + s + " (" + exception.getMessage() + ")");
                             }
@@ -97,7 +96,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
             } catch (IOException ioexception) {
                 break;
             } catch (Exception exception1) {
-                h.error("Exception whilst parsing RCON input", exception1);
+                RemoteControlSession.h.error("Exception whilst parsing RCON input", exception1);
                 break;
             } finally {
                 this.g();
@@ -105,6 +104,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
 
             return;
         }
+
     }
 
     private void a(int i, int j, String s) {
@@ -143,7 +143,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
             try {
                 this.j.close();
             } catch (IOException ioexception) {
-                this.warning("IO: " + ioexception.getMessage());
+                this.c("IO: " + ioexception.getMessage());
             }
 
             this.j = null;

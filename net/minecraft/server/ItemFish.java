@@ -12,16 +12,16 @@ public class ItemFish extends ItemFood {
     public int getNutrition(ItemStack itemstack) {
         EnumFish enumfish = EnumFish.a(itemstack);
 
-        return this.b && enumfish.i() ? enumfish.e() : enumfish.c();
+        return this.b && enumfish.g() ? enumfish.e() : enumfish.c();
     }
 
     public float getSaturationModifier(ItemStack itemstack) {
         EnumFish enumfish = EnumFish.a(itemstack);
 
-        return this.b && enumfish.i() ? enumfish.f() : enumfish.d();
+        return this.b && enumfish.g() ? enumfish.f() : enumfish.d();
     }
 
-    public String i(ItemStack itemstack) {
+    public String j(ItemStack itemstack) {
         return EnumFish.a(itemstack) == EnumFish.PUFFERFISH ? PotionBrewer.m : null;
     }
 
@@ -37,9 +37,9 @@ public class ItemFish extends ItemFood {
         super.c(itemstack, world, entityhuman);
     }
 
-    public String a(ItemStack itemstack) {
+    public String e_(ItemStack itemstack) {
         EnumFish enumfish = EnumFish.a(itemstack);
 
-        return this.getName() + "." + enumfish.b() + "." + (this.b && enumfish.i() ? "cooked" : "raw");
+        return this.getName() + "." + enumfish.b() + "." + (this.b && enumfish.g() ? "cooked" : "raw");
     }
 }

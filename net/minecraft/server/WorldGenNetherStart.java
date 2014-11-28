@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -13,12 +12,12 @@ public class WorldGenNetherStart extends StructureStart {
         WorldGenNetherPiece15 worldgennetherpiece15 = new WorldGenNetherPiece15(random, (i << 4) + 2, (j << 4) + 2);
 
         this.a.add(worldgennetherpiece15);
-        worldgennetherpiece15.a(worldgennetherpiece15, this.a, random);
-        ArrayList arraylist = worldgennetherpiece15.e;
+        worldgennetherpiece15.a((StructurePiece) worldgennetherpiece15, (List) this.a, random);
+        List list = worldgennetherpiece15.e;
 
-        while (!arraylist.isEmpty()) {
-            int k = random.nextInt(arraylist.size());
-            StructurePiece structurepiece = (StructurePiece) arraylist.remove(k);
+        while (!list.isEmpty()) {
+            int k = random.nextInt(list.size());
+            StructurePiece structurepiece = (StructurePiece) list.remove(k);
 
             structurepiece.a((StructurePiece) worldgennetherpiece15, (List) this.a, random);
         }

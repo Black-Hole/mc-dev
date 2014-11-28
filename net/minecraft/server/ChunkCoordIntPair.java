@@ -41,8 +41,28 @@ public class ChunkCoordIntPair {
         return (this.z << 4) + 8;
     }
 
-    public ChunkPosition a(int i) {
-        return new ChunkPosition(this.a(), i, this.b());
+    public int c() {
+        return this.x << 4;
+    }
+
+    public int d() {
+        return this.z << 4;
+    }
+
+    public int e() {
+        return (this.x << 4) + 15;
+    }
+
+    public int f() {
+        return (this.z << 4) + 15;
+    }
+
+    public BlockPosition a(int i, int j, int k) {
+        return new BlockPosition((this.x << 4) + i, j, (this.z << 4) + k);
+    }
+
+    public BlockPosition a(int i) {
+        return new BlockPosition(this.a(), i, this.b());
     }
 
     public String toString() {

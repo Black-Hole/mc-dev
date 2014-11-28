@@ -2,56 +2,57 @@ package net.minecraft.server;
 
 public class ItemArmor extends Item {
 
-    private static final int[] m = new int[] { 11, 16, 15, 13};
-    private static final String[] n = new String[] { "leather_helmet_overlay", "leather_chestplate_overlay", "leather_leggings_overlay", "leather_boots_overlay"};
-    public static final String[] a = new String[] { "empty_armor_slot_helmet", "empty_armor_slot_chestplate", "empty_armor_slot_leggings", "empty_armor_slot_boots"};
-    private static final IDispenseBehavior o = new DispenseBehaviorArmor();
+    private static final int[] k = new int[] { 11, 16, 15, 13};
+    public static final String[] a = new String[] { "minecraft:items/empty_armor_slot_helmet", "minecraft:items/empty_armor_slot_chestplate", "minecraft:items/empty_armor_slot_leggings", "minecraft:items/empty_armor_slot_boots"};
+    private static final IDispenseBehavior l = new DispenseBehaviorArmor();
     public final int b;
     public final int c;
     public final int d;
-    private final EnumArmorMaterial p;
+    private final EnumArmorMaterial m;
 
     public ItemArmor(EnumArmorMaterial enumarmormaterial, int i, int j) {
-        this.p = enumarmormaterial;
+        this.m = enumarmormaterial;
         this.b = j;
         this.d = i;
         this.c = enumarmormaterial.b(j);
         this.setMaxDurability(enumarmormaterial.a(j));
         this.maxStackSize = 1;
         this.a(CreativeModeTab.j);
-        BlockDispenser.a.a(this, o);
+        BlockDispenser.M.a(this, ItemArmor.l);
     }
 
-    public int c() {
-        return this.p.a();
+    public int b() {
+        return this.m.a();
     }
 
-    public EnumArmorMaterial m_() {
-        return this.p;
+    public EnumArmorMaterial w_() {
+        return this.m;
     }
 
-    public boolean c_(ItemStack itemstack) {
-        return this.p != EnumArmorMaterial.CLOTH ? false : (!itemstack.hasTag() ? false : (!itemstack.getTag().hasKeyOfType("display", 10) ? false : itemstack.getTag().getCompound("display").hasKeyOfType("color", 3)));
+    public boolean d_(ItemStack itemstack) {
+        return this.m != EnumArmorMaterial.LEATHER ? false : (!itemstack.hasTag() ? false : (!itemstack.getTag().hasKeyOfType("display", 10) ? false : itemstack.getTag().getCompound("display").hasKeyOfType("color", 3)));
     }
 
     public int b(ItemStack itemstack) {
-        if (this.p != EnumArmorMaterial.CLOTH) {
+        if (this.m != EnumArmorMaterial.LEATHER) {
             return -1;
         } else {
             NBTTagCompound nbttagcompound = itemstack.getTag();
 
-            if (nbttagcompound == null) {
-                return 10511680;
-            } else {
+            if (nbttagcompound != null) {
                 NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("display");
 
-                return nbttagcompound1 == null ? 10511680 : (nbttagcompound1.hasKeyOfType("color", 3) ? nbttagcompound1.getInt("color") : 10511680);
+                if (nbttagcompound1 != null && nbttagcompound1.hasKeyOfType("color", 3)) {
+                    return nbttagcompound1.getInt("color");
+                }
             }
+
+            return 10511680;
         }
     }
 
     public void c(ItemStack itemstack) {
-        if (this.p == EnumArmorMaterial.CLOTH) {
+        if (this.m == EnumArmorMaterial.LEATHER) {
             NBTTagCompound nbttagcompound = itemstack.getTag();
 
             if (nbttagcompound != null) {
@@ -60,12 +61,13 @@ public class ItemArmor extends Item {
                 if (nbttagcompound1.hasKey("color")) {
                     nbttagcompound1.remove("color");
                 }
+
             }
         }
     }
 
     public void b(ItemStack itemstack, int i) {
-        if (this.p != EnumArmorMaterial.CLOTH) {
+        if (this.m != EnumArmorMaterial.LEATHER) {
             throw new UnsupportedOperationException("Can\'t dye non-leather!");
         } else {
             NBTTagCompound nbttagcompound = itemstack.getTag();
@@ -86,12 +88,12 @@ public class ItemArmor extends Item {
     }
 
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return this.p.b() == itemstack1.getItem() ? true : super.a(itemstack, itemstack1);
+        return this.m.b() == itemstack1.getItem() ? true : super.a(itemstack, itemstack1);
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        int i = EntityInsentient.b(itemstack) - 1;
-        ItemStack itemstack1 = entityhuman.r(i);
+        int i = EntityInsentient.c(itemstack) - 1;
+        ItemStack itemstack1 = entityhuman.q(i);
 
         if (itemstack1 == null) {
             entityhuman.setEquipment(i, itemstack.cloneItemStack());
@@ -101,7 +103,7 @@ public class ItemArmor extends Item {
         return itemstack;
     }
 
-    static int[] e() {
-        return m;
+    static int[] d() {
+        return ItemArmor.k;
     }
 }

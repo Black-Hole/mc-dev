@@ -11,20 +11,25 @@ public class BlockDeadBush extends BlockPlant {
         this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.8F, 0.5F + f);
     }
 
-    protected boolean a(Block block) {
+    protected boolean c(Block block) {
         return block == Blocks.SAND || block == Blocks.HARDENED_CLAY || block == Blocks.STAINED_HARDENED_CLAY || block == Blocks.DIRT;
     }
 
-    public Item getDropType(int i, Random random, int j) {
+    public boolean f(World world, BlockPosition blockposition) {
+        return true;
+    }
+
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return null;
     }
 
-    public void a(World world, EntityHuman entityhuman, int i, int j, int k, int l) {
-        if (!world.isStatic && entityhuman.bF() != null && entityhuman.bF().getItem() == Items.SHEARS) {
-            entityhuman.a(StatisticList.MINE_BLOCK_COUNT[Block.getId(this)], 1);
-            this.a(world, i, j, k, new ItemStack(Blocks.DEAD_BUSH, 1, l));
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity) {
+        if (!world.isStatic && entityhuman.bY() != null && entityhuman.bY().getItem() == Items.SHEARS) {
+            entityhuman.b(StatisticList.MINE_BLOCK_COUNT[Block.getId(this)]);
+            a(world, blockposition, new ItemStack(Blocks.DEADBUSH, 1, 0));
         } else {
-            super.a(world, entityhuman, i, j, k, l);
+            super.a(world, entityhuman, blockposition, iblockdata, tileentity);
         }
+
     }
 }

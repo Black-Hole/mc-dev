@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayInChat extends Packet {
+public class PacketPlayInChat implements Packet {
 
-    private String message;
+    private String a;
 
     public PacketPlayInChat() {}
 
@@ -11,30 +11,26 @@ public class PacketPlayInChat extends Packet {
             s = s.substring(0, 100);
         }
 
-        this.message = s;
+        this.a = s;
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.message = packetdataserializer.c(100);
+        this.a = packetdataserializer.c(100);
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.a(this.message);
+        packetdataserializer.a(this.a);
     }
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
-    public String b() {
-        return String.format("message=\'%s\'", new Object[] { this.message});
+    public String a() {
+        return this.a;
     }
 
-    public String c() {
-        return this.message;
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

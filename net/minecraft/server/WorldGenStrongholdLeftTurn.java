@@ -7,25 +7,26 @@ public class WorldGenStrongholdLeftTurn extends WorldGenStrongholdPiece {
 
     public WorldGenStrongholdLeftTurn() {}
 
-    public WorldGenStrongholdLeftTurn(int i, Random random, StructureBoundingBox structureboundingbox, int j) {
+    public WorldGenStrongholdLeftTurn(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
         super(i);
-        this.g = j;
+        this.m = enumdirection;
         this.d = this.a(random);
-        this.f = structureboundingbox;
+        this.l = structureboundingbox;
     }
 
     public void a(StructurePiece structurepiece, List list, Random random) {
-        if (this.g != 2 && this.g != 3) {
+        if (this.m != EnumDirection.NORTH && this.m != EnumDirection.EAST) {
             this.c((WorldGenStrongholdStart) structurepiece, list, random, 1, 1);
         } else {
             this.b((WorldGenStrongholdStart) structurepiece, list, random, 1, 1);
         }
+
     }
 
-    public static WorldGenStrongholdLeftTurn a(List list, Random random, int i, int j, int k, int l, int i1) {
-        StructureBoundingBox structureboundingbox = StructureBoundingBox.a(i, j, k, -1, -1, 0, 5, 5, 5, l);
+    public static WorldGenStrongholdLeftTurn a(List list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
+        StructureBoundingBox structureboundingbox = StructureBoundingBox.a(i, j, k, -1, -1, 0, 5, 5, 5, enumdirection);
 
-        return a(structureboundingbox) && StructurePiece.a(list, structureboundingbox) == null ? new WorldGenStrongholdLeftTurn(i1, random, structureboundingbox, l) : null;
+        return a(structureboundingbox) && StructurePiece.a(list, structureboundingbox) == null ? new WorldGenStrongholdLeftTurn(l, random, structureboundingbox, enumdirection) : null;
     }
 
     public boolean a(World world, Random random, StructureBoundingBox structureboundingbox) {
@@ -34,10 +35,10 @@ public class WorldGenStrongholdLeftTurn extends WorldGenStrongholdPiece {
         } else {
             this.a(world, structureboundingbox, 0, 0, 0, 4, 4, 4, true, random, WorldGenStrongholdPieces.c());
             this.a(world, random, structureboundingbox, this.d, 1, 1, 0);
-            if (this.g != 2 && this.g != 3) {
-                this.a(world, structureboundingbox, 4, 1, 1, 4, 3, 3, Blocks.AIR, Blocks.AIR, false);
+            if (this.m != EnumDirection.NORTH && this.m != EnumDirection.EAST) {
+                this.a(world, structureboundingbox, 4, 1, 1, 4, 3, 3, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             } else {
-                this.a(world, structureboundingbox, 0, 1, 1, 0, 3, 3, Blocks.AIR, Blocks.AIR, false);
+                this.a(world, structureboundingbox, 0, 1, 1, 0, 3, 3, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             }
 
             return true;

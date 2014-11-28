@@ -6,14 +6,14 @@ public class BiomeOcean extends BiomeBase {
 
     public BiomeOcean(int i) {
         super(i);
-        this.at.clear();
+        this.au.clear();
     }
 
     public EnumTemperature m() {
         return EnumTemperature.OCEAN;
     }
 
-    public void a(World world, Random random, Block[] ablock, byte[] abyte, int i, int j, double d0) {
-        super.a(world, random, ablock, abyte, i, j, d0);
+    public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
+        super.a(world, random, chunksnapshot, i, j, d0);
     }
 }

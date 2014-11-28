@@ -1,8 +1,7 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
 import java.util.Map;
-
-import net.minecraft.util.com.google.common.collect.Maps;
 
 public class StatisticManager {
 

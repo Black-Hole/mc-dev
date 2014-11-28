@@ -1,13 +1,12 @@
 package net.minecraft.server;
 
-public class PacketPlayInSettings extends Packet {
+public class PacketPlayInSettings implements Packet {
 
     private String a;
     private int b;
     private EnumChatVisibility c;
     private boolean d;
-    private EnumDifficulty e;
-    private boolean f;
+    private int e;
 
     public PacketPlayInSettings() {}
 
@@ -16,8 +15,7 @@ public class PacketPlayInSettings extends Packet {
         this.b = packetdataserializer.readByte();
         this.c = EnumChatVisibility.a(packetdataserializer.readByte());
         this.d = packetdataserializer.readBoolean();
-        this.e = EnumDifficulty.getById(packetdataserializer.readByte());
-        this.f = packetdataserializer.readBoolean();
+        this.e = packetdataserializer.readUnsignedByte();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
@@ -25,43 +23,30 @@ public class PacketPlayInSettings extends Packet {
         packetdataserializer.writeByte(this.b);
         packetdataserializer.writeByte(this.c.a());
         packetdataserializer.writeBoolean(this.d);
-        packetdataserializer.writeByte(this.e.a());
-        packetdataserializer.writeBoolean(this.f);
+        packetdataserializer.writeByte(this.e);
     }
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
-    public String c() {
+    public String a() {
         return this.a;
     }
 
-    public int d() {
-        return this.b;
-    }
-
-    public EnumChatVisibility e() {
+    public EnumChatVisibility c() {
         return this.c;
     }
 
-    public boolean f() {
+    public boolean d() {
         return this.d;
     }
 
-    public EnumDifficulty g() {
+    public int e() {
         return this.e;
     }
 
-    public boolean h() {
-        return this.f;
-    }
-
-    public String b() {
-        return String.format("lang=\'%s\', view=%d, chat=%s, col=%b, difficulty=%s, cape=%b", new Object[] { this.a, Integer.valueOf(this.b), this.c, Boolean.valueOf(this.d), this.e, Boolean.valueOf(this.f)});
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

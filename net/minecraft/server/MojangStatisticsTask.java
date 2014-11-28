@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
@@ -17,7 +18,7 @@ class MojangStatisticsTask extends TimerTask {
             HashMap hashmap;
 
             synchronized (MojangStatisticsGenerator.b(this.a)) {
-                hashmap = new HashMap(MojangStatisticsGenerator.c(this.a));
+                hashmap = Maps.newHashMap(MojangStatisticsGenerator.c(this.a));
                 if (MojangStatisticsGenerator.d(this.a) == 0) {
                     hashmap.putAll(MojangStatisticsGenerator.e(this.a));
                 }

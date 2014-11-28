@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.util.List;
 
-public class PacketPlayOutWindowItems extends Packet {
+public class PacketPlayOutWindowItems implements Packet {
 
     private int a;
     private ItemStack[] b;
@@ -18,17 +18,19 @@ public class PacketPlayOutWindowItems extends Packet {
 
             this.b[j] = itemstack == null ? null : itemstack.cloneItemStack();
         }
+
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
         this.a = packetdataserializer.readUnsignedByte();
-        short short1 = packetdataserializer.readShort();
+        short short0 = packetdataserializer.readShort();
 
-        this.b = new ItemStack[short1];
+        this.b = new ItemStack[short0];
 
-        for (int i = 0; i < short1; ++i) {
-            this.b[i] = packetdataserializer.c();
+        for (int i = 0; i < short0; ++i) {
+            this.b[i] = packetdataserializer.i();
         }
+
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
@@ -42,13 +44,14 @@ public class PacketPlayOutWindowItems extends Packet {
 
             packetdataserializer.a(itemstack);
         }
+
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

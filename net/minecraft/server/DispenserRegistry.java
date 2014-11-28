@@ -1,37 +1,59 @@
 package net.minecraft.server;
 
+import java.io.PrintStream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class DispenserRegistry {
 
-    private static boolean a = false;
+    private static final PrintStream a = System.out;
+    private static boolean b = false;
+    private static final Logger c = LogManager.getLogger();
 
-    static void a() {
-        BlockDispenser.a.a(Items.ARROW, new DispenseBehaviorArrow());
-        BlockDispenser.a.a(Items.EGG, new DispenseBehaviorEgg());
-        BlockDispenser.a.a(Items.SNOW_BALL, new DispenseBehaviorSnowBall());
-        BlockDispenser.a.a(Items.EXP_BOTTLE, new DispenseBehaviorExpBottle());
-        BlockDispenser.a.a(Items.POTION, new DispenseBehaviorPotion());
-        BlockDispenser.a.a(Items.MONSTER_EGG, new DispenseBehaviorMonsterEgg());
-        BlockDispenser.a.a(Items.FIREWORKS, new DispenseBehaviorFireworks());
-        BlockDispenser.a.a(Items.FIREBALL, new DispenseBehaviorFireball());
-        BlockDispenser.a.a(Items.BOAT, new DispenseBehaviorBoat());
-        DispenseBehaviorFilledBucket dispensebehaviorfilledbucket = new DispenseBehaviorFilledBucket();
-
-        BlockDispenser.a.a(Items.LAVA_BUCKET, dispensebehaviorfilledbucket);
-        BlockDispenser.a.a(Items.WATER_BUCKET, dispensebehaviorfilledbucket);
-        BlockDispenser.a.a(Items.BUCKET, new DispenseBehaviorEmptyBucket());
-        BlockDispenser.a.a(Items.FLINT_AND_STEEL, new DispenseBehaviorFlintAndSteel());
-        BlockDispenser.a.a(Items.INK_SACK, new DispenseBehaviorBonemeal());
-        BlockDispenser.a.a(Item.getItemOf(Blocks.TNT), new DispenseBehaviorTNT());
+    public static boolean a() {
+        return DispenserRegistry.b;
     }
 
-    public static void b() {
-        if (!a) {
-            a = true;
-            Block.p();
-            BlockFire.e();
-            Item.l();
+    static void b() {
+        BlockDispenser.M.a(Items.ARROW, new DispenseBehaviorArrow());
+        BlockDispenser.M.a(Items.EGG, new DispenseBehaviorEgg());
+        BlockDispenser.M.a(Items.SNOWBALL, new DispenseBehaviorSnowBall());
+        BlockDispenser.M.a(Items.EXPERIENCE_BOTTLE, new DispenseBehaviorExpBottle());
+        BlockDispenser.M.a(Items.POTION, new DispenseBehaviorPotion());
+        BlockDispenser.M.a(Items.SPAWN_EGG, new DispenseBehaviorMonsterEgg());
+        BlockDispenser.M.a(Items.FIREWORKS, new DispenseBehaviorFireworks());
+        BlockDispenser.M.a(Items.FIRE_CHARGE, new DispenseBehaviorFireball());
+        BlockDispenser.M.a(Items.BOAT, new DispenseBehaviorBoat());
+        DispenseBehaviorFilledBucket dispensebehaviorfilledbucket = new DispenseBehaviorFilledBucket();
+
+        BlockDispenser.M.a(Items.LAVA_BUCKET, dispensebehaviorfilledbucket);
+        BlockDispenser.M.a(Items.WATER_BUCKET, dispensebehaviorfilledbucket);
+        BlockDispenser.M.a(Items.BUCKET, new DispenseBehaviorEmptyBucket());
+        BlockDispenser.M.a(Items.FLINT_AND_STEEL, new DispenseBehaviorFlintAndSteel());
+        BlockDispenser.M.a(Items.DYE, new DispenseBehaviorBonemeal());
+        BlockDispenser.M.a(Item.getItemOf(Blocks.TNT), new DispenseBehaviorTNT());
+        BlockDispenser.M.a(Items.SKULL, new DispenseBehaviorSkull());
+        BlockDispenser.M.a(Item.getItemOf(Blocks.PUMPKIN), new DispenseBehaviorPumpkin());
+        BlockDispenser.M.a(Item.getItemOf(Blocks.COMMAND_BLOCK), new DispenseBehaviorCommandBlock());
+    }
+
+    public static void c() {
+        if (!DispenserRegistry.b) {
+            DispenserRegistry.b = true;
+            if (DispenserRegistry.c.isDebugEnabled()) {
+                d();
+            }
+
+            Block.R();
+            BlockFire.j();
+            Item.t();
             StatisticList.a();
-            a();
+            b();
         }
+    }
+
+    private static void d() {
+        System.setErr(new RedirectStream("STDERR", System.err));
+        System.setOut(new RedirectStream("STDOUT", DispenserRegistry.a));
     }
 }

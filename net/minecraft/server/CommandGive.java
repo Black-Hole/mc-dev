@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Collection;
 import java.util.List;
 
 public class CommandGive extends CommandAbstract {
@@ -14,7 +15,7 @@ public class CommandGive extends CommandAbstract {
         return 2;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.give.usage";
     }
 
@@ -22,49 +23,53 @@ public class CommandGive extends CommandAbstract {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.give.usage", new Object[0]);
         } else {
-            EntityPlayer entityplayer = d(icommandlistener, astring[0]);
+            EntityPlayer entityplayer = a(icommandlistener, astring[0]);
             Item item = f(icommandlistener, astring[1]);
-            int i = 1;
-            int j = 0;
-
-            if (astring.length >= 3) {
-                i = a(icommandlistener, astring[2], 1, 64);
-            }
-
-            if (astring.length >= 4) {
-                j = a(icommandlistener, astring[3]);
-            }
-
+            int i = astring.length >= 3 ? a(astring[2], 1, 64) : 1;
+            int j = astring.length >= 4 ? a(astring[3]) : 0;
             ItemStack itemstack = new ItemStack(item, i, j);
 
             if (astring.length >= 5) {
                 String s = a(icommandlistener, astring, 4).c();
 
                 try {
-                    NBTBase nbtbase = MojangsonParser.parse(s);
-
-                    if (!(nbtbase instanceof NBTTagCompound)) {
-                        a(icommandlistener, this, "commands.give.tagError", new Object[] { "Not a valid tag"});
-                        return;
-                    }
-
-                    itemstack.setTag((NBTTagCompound) nbtbase);
+                    itemstack.setTag(MojangsonParser.parse(s));
                 } catch (MojangsonParseException mojangsonparseexception) {
-                    a(icommandlistener, this, "commands.give.tagError", new Object[] { mojangsonparseexception.getMessage()});
-                    return;
+                    throw new CommandException("commands.give.tagError", new Object[] { mojangsonparseexception.getMessage()});
                 }
             }
 
-            EntityItem entityitem = entityplayer.drop(itemstack, false);
+            boolean flag = entityplayer.inventory.pickup(itemstack);
 
-            entityitem.pickupDelay = 0;
-            entityitem.a(entityplayer.getName());
-            a(icommandlistener, this, "commands.give.success", new Object[] { itemstack.E(), Integer.valueOf(i), entityplayer.getName()});
+            if (flag) {
+                entityplayer.world.makeSound(entityplayer, "random.pop", 0.2F, ((entityplayer.bb().nextFloat() - entityplayer.bb().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                entityplayer.defaultContainer.b();
+            }
+
+            EntityItem entityitem;
+
+            if (flag && itemstack.count <= 0) {
+                itemstack.count = 1;
+                icommandlistener.a(EnumCommandResult.AFFECTED_ITEMS, i);
+                entityitem = entityplayer.drop(itemstack, false);
+                if (entityitem != null) {
+                    entityitem.v();
+                }
+            } else {
+                icommandlistener.a(EnumCommandResult.AFFECTED_ITEMS, i - itemstack.count);
+                entityitem = entityplayer.drop(itemstack, false);
+                if (entityitem != null) {
+                    entityitem.q();
+                    entityitem.b(entityplayer.getName());
+                }
+            }
+
+            a(icommandlistener, this, "commands.give.success", new Object[] { itemstack.C(), Integer.valueOf(i), entityplayer.getName()});
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
-        return astring.length == 1 ? a(astring, this.d()) : (astring.length == 2 ? a(astring, Item.REGISTRY.keySet()) : null);
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, this.d()) : (astring.length == 2 ? a(astring, (Collection) Item.REGISTRY.keySet()) : null);
     }
 
     protected String[] d() {

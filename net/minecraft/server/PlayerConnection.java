@@ -1,23 +1,22 @@
 package net.minecraft.server;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
+import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.Futures;
+import io.netty.buffer.Unpooled;
+import io.netty.util.concurrent.GenericFutureListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Random;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
-
-import net.minecraft.util.com.google.common.base.Charsets;
-import net.minecraft.util.com.google.common.collect.Lists;
-import net.minecraft.util.io.netty.buffer.Unpooled;
-import net.minecraft.util.io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.util.org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class PlayerConnection implements PacketPlayInListener {
+public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerListBox {
 
     private static final Logger c = LogManager.getLogger();
     public final NetworkManager networkManager;
@@ -25,18 +24,18 @@ public class PlayerConnection implements PacketPlayInListener {
     public EntityPlayer player;
     private int e;
     private int f;
-    private boolean g;
-    private int h;
-    private long i;
-    private static Random j = new Random();
+    private int g;
+    private boolean h;
+    private int i;
+    private long j;
     private long k;
     private int chatThrottle;
-    private int x;
+    private int m;
     private IntHashMap n = new IntHashMap();
-    private double y;
-    private double z;
+    private double o;
+    private double p;
     private double q;
-    private boolean checkMovement = true;
+    public boolean checkMovement = true;
 
     public PlayerConnection(MinecraftServer minecraftserver, NetworkManager networkmanager, EntityPlayer entityplayer) {
         this.minecraftServer = minecraftserver;
@@ -46,351 +45,369 @@ public class PlayerConnection implements PacketPlayInListener {
         entityplayer.playerConnection = this;
     }
 
-    public void a() {
-        this.g = false;
+    public void c() {
+        this.h = false;
         ++this.e;
         this.minecraftServer.methodProfiler.a("keepAlive");
         if ((long) this.e - this.k > 40L) {
             this.k = (long) this.e;
-            this.i = this.d();
-            this.h = (int) this.i;
-            this.sendPacket(new PacketPlayOutKeepAlive(this.h));
+            this.j = this.d();
+            this.i = (int) this.j;
+            this.sendPacket(new PacketPlayOutKeepAlive(this.i));
         }
 
+        this.minecraftServer.methodProfiler.b();
         if (this.chatThrottle > 0) {
             --this.chatThrottle;
         }
 
-        if (this.x > 0) {
-            --this.x;
+        if (this.m > 0) {
+            --this.m;
         }
 
-        if (this.player.x() > 0L && this.minecraftServer.getIdleTimeout() > 0 && MinecraftServer.ar() - this.player.x() > (long) (this.minecraftServer.getIdleTimeout() * 1000 * 60)) {
+        if (this.player.D() > 0L && this.minecraftServer.getIdleTimeout() > 0 && MinecraftServer.ax() - this.player.D() > (long) (this.minecraftServer.getIdleTimeout() * 1000 * 60)) {
             this.disconnect("You have been idle for too long!");
         }
+
     }
 
-    public NetworkManager b() {
+    public NetworkManager a() {
         return this.networkManager;
     }
 
     public void disconnect(String s) {
         ChatComponentText chatcomponenttext = new ChatComponentText(s);
 
-        this.networkManager.handle(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener[] { new PlayerConnectionFuture(this, chatcomponenttext)});
-        this.networkManager.g();
+        this.networkManager.a(new PacketPlayOutKickDisconnect(chatcomponenttext), new PlayerConnectionFuture(this, chatcomponenttext), new GenericFutureListener[0]);
+        this.networkManager.k();
+        Futures.getUnchecked(this.minecraftServer.postToMainThread(new PlayerConnectionDisconnector(this)));
     }
 
     public void a(PacketPlayInSteerVehicle packetplayinsteervehicle) {
-        this.player.a(packetplayinsteervehicle.c(), packetplayinsteervehicle.d(), packetplayinsteervehicle.e(), packetplayinsteervehicle.f());
+        PlayerConnectionUtils.ensureMainThread(packetplayinsteervehicle, this, this.player.u());
+        this.player.a(packetplayinsteervehicle.a(), packetplayinsteervehicle.b(), packetplayinsteervehicle.c(), packetplayinsteervehicle.d());
     }
 
     public void a(PacketPlayInFlying packetplayinflying) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinflying, this, this.player.u());
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
 
-        this.g = true;
+        this.h = true;
         if (!this.player.viewingCredits) {
-            double d0;
+            double d0 = this.player.locX;
+            double d1 = this.player.locY;
+            double d2 = this.player.locZ;
+            double d3 = 0.0D;
+            double d4 = packetplayinflying.a() - this.o;
+            double d5 = packetplayinflying.b() - this.p;
+            double d6 = packetplayinflying.c() - this.q;
 
-            if (!this.checkMovement) {
-                d0 = packetplayinflying.d() - this.z;
-                if (packetplayinflying.c() == this.y && d0 * d0 < 0.01D && packetplayinflying.e() == this.q) {
+            if (packetplayinflying.g()) {
+                d3 = d4 * d4 + d5 * d5 + d6 * d6;
+                if (!this.checkMovement && d3 < 0.25D) {
                     this.checkMovement = true;
                 }
             }
 
             if (this.checkMovement) {
-                double d1;
-                double d2;
-                double d3;
+                this.f = this.e;
+                double d7;
+                double d8;
+                double d9;
 
                 if (this.player.vehicle != null) {
                     float f = this.player.yaw;
                     float f1 = this.player.pitch;
 
-                    this.player.vehicle.ac();
-                    d1 = this.player.locX;
-                    d2 = this.player.locY;
-                    d3 = this.player.locZ;
-                    if (packetplayinflying.k()) {
-                        f = packetplayinflying.g();
-                        f1 = packetplayinflying.h();
+                    this.player.vehicle.al();
+                    d7 = this.player.locX;
+                    d8 = this.player.locY;
+                    d9 = this.player.locZ;
+                    if (packetplayinflying.h()) {
+                        f = packetplayinflying.d();
+                        f1 = packetplayinflying.e();
                     }
 
-                    this.player.onGround = packetplayinflying.i();
-                    this.player.i();
-                    this.player.V = 0.0F;
-                    this.player.setLocation(d1, d2, d3, f, f1);
+                    this.player.onGround = packetplayinflying.f();
+                    this.player.l();
+                    this.player.setLocation(d7, d8, d9, f, f1);
                     if (this.player.vehicle != null) {
-                        this.player.vehicle.ac();
+                        this.player.vehicle.al();
                     }
 
                     this.minecraftServer.getPlayerList().d(this.player);
+                    if (this.player.vehicle != null) {
+                        if (d3 > 4.0D) {
+                            Entity entity = this.player.vehicle;
+
+                            this.player.playerConnection.sendPacket(new PacketPlayOutEntityTeleport(entity));
+                            this.a(this.player.locX, this.player.locY, this.player.locZ, this.player.yaw, this.player.pitch);
+                        }
+
+                        this.player.vehicle.ai = true;
+                    }
+
                     if (this.checkMovement) {
-                        this.y = this.player.locX;
-                        this.z = this.player.locY;
+                        this.o = this.player.locX;
+                        this.p = this.player.locY;
                         this.q = this.player.locZ;
                     }
 
-                    worldserver.playerJoinedWorld(this.player);
+                    worldserver.g(this.player);
                     return;
                 }
 
                 if (this.player.isSleeping()) {
-                    this.player.i();
-                    this.player.setLocation(this.y, this.z, this.q, this.player.yaw, this.player.pitch);
-                    worldserver.playerJoinedWorld(this.player);
+                    this.player.l();
+                    this.player.setLocation(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
+                    worldserver.g(this.player);
                     return;
                 }
 
-                d0 = this.player.locY;
-                this.y = this.player.locX;
-                this.z = this.player.locY;
+                double d10 = this.player.locY;
+
+                this.o = this.player.locX;
+                this.p = this.player.locY;
                 this.q = this.player.locZ;
-                d1 = this.player.locX;
-                d2 = this.player.locY;
-                d3 = this.player.locZ;
+                d7 = this.player.locX;
+                d8 = this.player.locY;
+                d9 = this.player.locZ;
                 float f2 = this.player.yaw;
                 float f3 = this.player.pitch;
 
-                if (packetplayinflying.j() && packetplayinflying.d() == -999.0D && packetplayinflying.f() == -999.0D) {
+                if (packetplayinflying.g() && packetplayinflying.b() == -999.0D) {
                     packetplayinflying.a(false);
                 }
 
-                double d4;
-
-                if (packetplayinflying.j()) {
-                    d1 = packetplayinflying.c();
-                    d2 = packetplayinflying.d();
-                    d3 = packetplayinflying.e();
-                    d4 = packetplayinflying.f() - packetplayinflying.d();
-                    if (!this.player.isSleeping() && (d4 > 1.65D || d4 < 0.1D)) {
-                        this.disconnect("Illegal stance");
-                        c.warn(this.player.getName() + " had an illegal stance: " + d4);
-                        return;
-                    }
-
-                    if (Math.abs(packetplayinflying.c()) > 3.2E7D || Math.abs(packetplayinflying.e()) > 3.2E7D) {
+                if (packetplayinflying.g()) {
+                    d7 = packetplayinflying.a();
+                    d8 = packetplayinflying.b();
+                    d9 = packetplayinflying.c();
+                    if (Math.abs(packetplayinflying.a()) > 3.0E7D || Math.abs(packetplayinflying.c()) > 3.0E7D) {
                         this.disconnect("Illegal position");
                         return;
                     }
                 }
 
-                if (packetplayinflying.k()) {
-                    f2 = packetplayinflying.g();
-                    f3 = packetplayinflying.h();
+                if (packetplayinflying.h()) {
+                    f2 = packetplayinflying.d();
+                    f3 = packetplayinflying.e();
                 }
 
-                this.player.i();
-                this.player.V = 0.0F;
-                this.player.setLocation(this.y, this.z, this.q, f2, f3);
+                this.player.l();
+                this.player.setLocation(this.o, this.p, this.q, f2, f3);
                 if (!this.checkMovement) {
                     return;
                 }
 
-                d4 = d1 - this.player.locX;
-                double d5 = d2 - this.player.locY;
-                double d6 = d3 - this.player.locZ;
-                double d7 = Math.min(Math.abs(d4), Math.abs(this.player.motX));
-                double d8 = Math.min(Math.abs(d5), Math.abs(this.player.motY));
-                double d9 = Math.min(Math.abs(d6), Math.abs(this.player.motZ));
-                double d10 = d7 * d7 + d8 * d8 + d9 * d9;
+                double d11 = d7 - this.player.locX;
+                double d12 = d8 - this.player.locY;
+                double d13 = d9 - this.player.locZ;
+                double d14 = Math.min(Math.abs(d11), Math.abs(this.player.motX));
+                double d15 = Math.min(Math.abs(d12), Math.abs(this.player.motY));
+                double d16 = Math.min(Math.abs(d13), Math.abs(this.player.motZ));
+                double d17 = d14 * d14 + d15 * d15 + d16 * d16;
 
-                if (d10 > 100.0D && (!this.minecraftServer.N() || !this.minecraftServer.M().equals(this.player.getName()))) {
-                    c.warn(this.player.getName() + " moved too quickly! " + d4 + "," + d5 + "," + d6 + " (" + d7 + ", " + d8 + ", " + d9 + ")");
-                    this.a(this.y, this.z, this.q, this.player.yaw, this.player.pitch);
+                if (d17 > 100.0D && (!this.minecraftServer.S() || !this.minecraftServer.R().equals(this.player.getName()))) {
+                    PlayerConnection.c.warn(this.player.getName() + " moved too quickly! " + d11 + "," + d12 + "," + d13 + " (" + d14 + ", " + d15 + ", " + d16 + ")");
+                    this.a(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
                     return;
                 }
 
                 float f4 = 0.0625F;
-                boolean flag = worldserver.getCubes(this.player, this.player.boundingBox.clone().shrink((double) f4, (double) f4, (double) f4)).isEmpty();
+                boolean flag = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink((double) f4, (double) f4, (double) f4)).isEmpty();
 
-                if (this.player.onGround && !packetplayinflying.i() && d5 > 0.0D) {
-                    this.player.bj();
+                if (this.player.onGround && !packetplayinflying.f() && d12 > 0.0D) {
+                    this.player.bE();
                 }
 
-                this.player.move(d4, d5, d6);
-                this.player.onGround = packetplayinflying.i();
-                this.player.checkMovement(d4, d5, d6);
-                double d11 = d5;
+                this.player.move(d11, d12, d13);
+                this.player.onGround = packetplayinflying.f();
+                double d18 = d12;
 
-                d4 = d1 - this.player.locX;
-                d5 = d2 - this.player.locY;
-                if (d5 > -0.5D || d5 < 0.5D) {
-                    d5 = 0.0D;
+                d11 = d7 - this.player.locX;
+                d12 = d8 - this.player.locY;
+                if (d12 > -0.5D || d12 < 0.5D) {
+                    d12 = 0.0D;
                 }
 
-                d6 = d3 - this.player.locZ;
-                d10 = d4 * d4 + d5 * d5 + d6 * d6;
+                d13 = d9 - this.player.locZ;
+                d17 = d11 * d11 + d12 * d12 + d13 * d13;
                 boolean flag1 = false;
 
-                if (d10 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative()) {
+                if (d17 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative()) {
                     flag1 = true;
-                    c.warn(this.player.getName() + " moved wrongly!");
+                    PlayerConnection.c.warn(this.player.getName() + " moved wrongly!");
                 }
 
-                this.player.setLocation(d1, d2, d3, f2, f3);
-                boolean flag2 = worldserver.getCubes(this.player, this.player.boundingBox.clone().shrink((double) f4, (double) f4, (double) f4)).isEmpty();
+                this.player.setLocation(d7, d8, d9, f2, f3);
+                this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
+                if (!this.player.T) {
+                    boolean flag2 = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink((double) f4, (double) f4, (double) f4)).isEmpty();
 
-                if (flag && (flag1 || !flag2) && !this.player.isSleeping()) {
-                    this.a(this.y, this.z, this.q, f2, f3);
-                    return;
+                    if (flag && (flag1 || !flag2) && !this.player.isSleeping()) {
+                        this.a(this.o, this.p, this.q, f2, f3);
+                        return;
+                    }
                 }
 
-                AxisAlignedBB axisalignedbb = this.player.boundingBox.clone().grow((double) f4, (double) f4, (double) f4).a(0.0D, -0.55D, 0.0D);
+                AxisAlignedBB axisalignedbb = this.player.getBoundingBox().grow((double) f4, (double) f4, (double) f4).a(0.0D, -0.55D, 0.0D);
 
-                if (!this.minecraftServer.getAllowFlight() && !this.player.playerInteractManager.isCreative() && !worldserver.c(axisalignedbb)) {
-                    if (d11 >= -0.03125D) {
-                        ++this.f;
-                        if (this.f > 80) {
-                            c.warn(this.player.getName() + " was kicked for floating too long!");
+                if (!this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly && !worldserver.c(axisalignedbb)) {
+                    if (d18 >= -0.03125D) {
+                        ++this.g;
+                        if (this.g > 80) {
+                            PlayerConnection.c.warn(this.player.getName() + " was kicked for floating too long!");
                             this.disconnect("Flying is not enabled on this server");
                             return;
                         }
                     }
                 } else {
-                    this.f = 0;
+                    this.g = 0;
                 }
 
-                this.player.onGround = packetplayinflying.i();
+                this.player.onGround = packetplayinflying.f();
                 this.minecraftServer.getPlayerList().d(this.player);
-                this.player.b(this.player.locY - d0, packetplayinflying.i());
-            } else if (this.e % 20 == 0) {
-                this.a(this.y, this.z, this.q, this.player.yaw, this.player.pitch);
+                this.player.a(this.player.locY - d10, packetplayinflying.f());
+            } else if (this.e - this.f > 20) {
+                this.a(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
             }
+
         }
     }
 
     public void a(double d0, double d1, double d2, float f, float f1) {
+        this.a(d0, d1, d2, f, f1, Collections.emptySet());
+    }
+
+    public void a(double d0, double d1, double d2, float f, float f1, Set set) {
         this.checkMovement = false;
-        this.y = d0;
-        this.z = d1;
+        this.o = d0;
+        this.p = d1;
         this.q = d2;
-        this.player.setLocation(d0, d1, d2, f, f1);
-        this.player.playerConnection.sendPacket(new PacketPlayOutPosition(d0, d1 + 1.6200000047683716D, d2, f, f1, false));
+        if (set.contains(EnumPlayerTeleportFlags.X)) {
+            this.o += this.player.locX;
+        }
+
+        if (set.contains(EnumPlayerTeleportFlags.Y)) {
+            this.p += this.player.locY;
+        }
+
+        if (set.contains(EnumPlayerTeleportFlags.Z)) {
+            this.q += this.player.locZ;
+        }
+
+        float f2 = f;
+        float f3 = f1;
+
+        if (set.contains(EnumPlayerTeleportFlags.Y_ROT)) {
+            f2 = f + this.player.yaw;
+        }
+
+        if (set.contains(EnumPlayerTeleportFlags.X_ROT)) {
+            f3 = f1 + this.player.pitch;
+        }
+
+        this.player.setLocation(this.o, this.p, this.q, f2, f3);
+        this.player.playerConnection.sendPacket(new PacketPlayOutPosition(d0, d1, d2, f, f1, set));
     }
 
     public void a(PacketPlayInBlockDig packetplayinblockdig) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinblockdig, this, this.player.u());
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
+        BlockPosition blockposition = packetplayinblockdig.a();
 
-        this.player.v();
-        if (packetplayinblockdig.g() == 4) {
-            this.player.a(false);
-        } else if (packetplayinblockdig.g() == 3) {
-            this.player.a(true);
-        } else if (packetplayinblockdig.g() == 5) {
-            this.player.bA();
-        } else {
-            boolean flag = false;
-
-            if (packetplayinblockdig.g() == 0) {
-                flag = true;
+        this.player.z();
+        switch (SwitchHelperCommandActionType.a[packetplayinblockdig.c().ordinal()]) {
+        case 1:
+            if (!this.player.v()) {
+                this.player.a(false);
             }
 
-            if (packetplayinblockdig.g() == 1) {
-                flag = true;
+            return;
+
+        case 2:
+            if (!this.player.v()) {
+                this.player.a(true);
             }
 
-            if (packetplayinblockdig.g() == 2) {
-                flag = true;
-            }
+            return;
 
-            int i = packetplayinblockdig.c();
-            int j = packetplayinblockdig.d();
-            int k = packetplayinblockdig.e();
+        case 3:
+            this.player.bT();
+            return;
 
-            if (flag) {
-                double d0 = this.player.locX - ((double) i + 0.5D);
-                double d1 = this.player.locY - ((double) j + 0.5D) + 1.5D;
-                double d2 = this.player.locZ - ((double) k + 0.5D);
-                double d3 = d0 * d0 + d1 * d1 + d2 * d2;
+        case 4:
+        case 5:
+        case 6:
+            double d0 = this.player.locX - ((double) blockposition.getX() + 0.5D);
+            double d1 = this.player.locY - ((double) blockposition.getY() + 0.5D) + 1.5D;
+            double d2 = this.player.locZ - ((double) blockposition.getZ() + 0.5D);
+            double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
-                if (d3 > 36.0D) {
-                    return;
-                }
-
-                if (j >= this.minecraftServer.getMaxBuildHeight()) {
-                    return;
-                }
-            }
-
-            if (packetplayinblockdig.g() == 0) {
-                if (!this.minecraftServer.a(worldserver, i, j, k, this.player)) {
-                    this.player.playerInteractManager.dig(i, j, k, packetplayinblockdig.f());
+            if (d3 > 36.0D) {
+                return;
+            } else if (blockposition.getY() >= this.minecraftServer.getMaxBuildHeight()) {
+                return;
+            } else {
+                if (packetplayinblockdig.c() == EnumPlayerDigType.START_DESTROY_BLOCK) {
+                    if (!this.minecraftServer.a(worldserver, blockposition, this.player) && worldserver.af().a(blockposition)) {
+                        this.player.playerInteractManager.a(blockposition, packetplayinblockdig.b());
+                    } else {
+                        this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(worldserver, blockposition));
+                    }
                 } else {
-                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(i, j, k, worldserver));
+                    if (packetplayinblockdig.c() == EnumPlayerDigType.STOP_DESTROY_BLOCK) {
+                        this.player.playerInteractManager.a(blockposition);
+                    } else if (packetplayinblockdig.c() == EnumPlayerDigType.ABORT_DESTROY_BLOCK) {
+                        this.player.playerInteractManager.e();
+                    }
+
+                    if (worldserver.getType(blockposition).getBlock().getMaterial() != Material.AIR) {
+                        this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(worldserver, blockposition));
+                    }
                 }
-            } else if (packetplayinblockdig.g() == 2) {
-                this.player.playerInteractManager.a(i, j, k);
-                if (worldserver.getType(i, j, k).getMaterial() != Material.AIR) {
-                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(i, j, k, worldserver));
-                }
-            } else if (packetplayinblockdig.g() == 1) {
-                this.player.playerInteractManager.c(i, j, k);
-                if (worldserver.getType(i, j, k).getMaterial() != Material.AIR) {
-                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(i, j, k, worldserver));
-                }
+
+                return;
             }
+
+        default:
+            throw new IllegalArgumentException("Invalid player action");
         }
     }
 
     public void a(PacketPlayInBlockPlace packetplayinblockplace) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinblockplace, this, this.player.u());
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
         ItemStack itemstack = this.player.inventory.getItemInHand();
         boolean flag = false;
-        int i = packetplayinblockplace.c();
-        int j = packetplayinblockplace.d();
-        int k = packetplayinblockplace.e();
-        int l = packetplayinblockplace.getFace();
+        BlockPosition blockposition = packetplayinblockplace.a();
+        EnumDirection enumdirection = EnumDirection.fromType1(packetplayinblockplace.getFace());
 
-        this.player.v();
+        this.player.z();
         if (packetplayinblockplace.getFace() == 255) {
             if (itemstack == null) {
                 return;
             }
 
             this.player.playerInteractManager.useItem(this.player, worldserver, itemstack);
-        } else if (packetplayinblockplace.d() >= this.minecraftServer.getMaxBuildHeight() - 1 && (packetplayinblockplace.getFace() == 1 || packetplayinblockplace.d() >= this.minecraftServer.getMaxBuildHeight())) {
+        } else if (blockposition.getY() >= this.minecraftServer.getMaxBuildHeight() - 1 && (enumdirection == EnumDirection.UP || blockposition.getY() >= this.minecraftServer.getMaxBuildHeight())) {
             ChatMessage chatmessage = new ChatMessage("build.tooHigh", new Object[] { Integer.valueOf(this.minecraftServer.getMaxBuildHeight())});
 
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             this.player.playerConnection.sendPacket(new PacketPlayOutChat(chatmessage));
             flag = true;
         } else {
-            if (this.checkMovement && this.player.e((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D) < 64.0D && !this.minecraftServer.a(worldserver, i, j, k, this.player)) {
-                this.player.playerInteractManager.interact(this.player, worldserver, itemstack, i, j, k, l, packetplayinblockplace.h(), packetplayinblockplace.i(), packetplayinblockplace.j());
+            if (this.checkMovement && this.player.e((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && !this.minecraftServer.a(worldserver, blockposition, this.player) && worldserver.af().a(blockposition)) {
+                this.player.playerInteractManager.interact(this.player, worldserver, itemstack, blockposition, enumdirection, packetplayinblockplace.d(), packetplayinblockplace.e(), packetplayinblockplace.f());
             }
 
             flag = true;
         }
 
         if (flag) {
-            this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(i, j, k, worldserver));
-            if (l == 0) {
-                --j;
-            }
-
-            if (l == 1) {
-                ++j;
-            }
-
-            if (l == 2) {
-                --k;
-            }
-
-            if (l == 3) {
-                ++k;
-            }
-
-            if (l == 4) {
-                --i;
-            }
-
-            if (l == 5) {
-                ++i;
-            }
-
-            this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(i, j, k, worldserver));
+            this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(worldserver, blockposition));
+            this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(worldserver, blockposition.shift(enumdirection)));
         }
 
         itemstack = this.player.inventory.getItemInHand();
@@ -399,7 +416,7 @@ public class PlayerConnection implements PacketPlayInListener {
             itemstack = null;
         }
 
-        if (itemstack == null || itemstack.n() == 0) {
+        if (itemstack == null || itemstack.l() == 0) {
             this.player.g = true;
             this.player.inventory.items[this.player.inventory.itemInHandIndex] = ItemStack.b(this.player.inventory.items[this.player.inventory.itemInHandIndex]);
             Slot slot = this.player.activeContainer.getSlot(this.player.inventory, this.player.inventory.itemInHandIndex);
@@ -410,21 +427,75 @@ public class PlayerConnection implements PacketPlayInListener {
                 this.sendPacket(new PacketPlayOutSetSlot(this.player.activeContainer.windowId, slot.rawSlotIndex, this.player.inventory.getItemInHand()));
             }
         }
+
     }
 
+    public void a(PacketPlayInSpectate packetplayinspectate) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinspectate, this, this.player.u());
+        if (this.player.v()) {
+            Entity entity = null;
+            WorldServer[] aworldserver = this.minecraftServer.worldServer;
+            int i = aworldserver.length;
+
+            for (int j = 0; j < i; ++j) {
+                WorldServer worldserver = aworldserver[j];
+
+                if (worldserver != null) {
+                    entity = packetplayinspectate.a(worldserver);
+                    if (entity != null) {
+                        break;
+                    }
+                }
+            }
+
+            if (entity != null) {
+                this.player.e((Entity) this.player);
+                this.player.mount((Entity) null);
+                if (entity.world != this.player.world) {
+                    WorldServer worldserver1 = this.player.u();
+                    WorldServer worldserver2 = (WorldServer) entity.world;
+
+                    this.player.dimension = entity.dimension;
+                    this.sendPacket(new PacketPlayOutRespawn(this.player.dimension, worldserver1.getDifficulty(), worldserver1.getWorldData().getType(), this.player.playerInteractManager.getGameMode()));
+                    worldserver1.removeEntity(this.player);
+                    this.player.dead = false;
+                    this.player.setPositionRotation(entity.locX, entity.locY, entity.locZ, entity.yaw, entity.pitch);
+                    if (this.player.isAlive()) {
+                        worldserver1.entityJoinedWorld(this.player, false);
+                        worldserver2.addEntity(this.player);
+                        worldserver2.entityJoinedWorld(this.player, false);
+                    }
+
+                    this.player.spawnIn(worldserver2);
+                    this.minecraftServer.getPlayerList().a(this.player, worldserver1);
+                    this.player.enderTeleportTo(entity.locX, entity.locY, entity.locZ);
+                    this.player.playerInteractManager.a(worldserver2);
+                    this.minecraftServer.getPlayerList().b(this.player, worldserver2);
+                    this.minecraftServer.getPlayerList().updateClient(this.player);
+                } else {
+                    this.player.enderTeleportTo(entity.locX, entity.locY, entity.locZ);
+                }
+            }
+        }
+
+    }
+
+    public void a(PacketPlayInResourcePackStatus packetplayinresourcepackstatus) {}
+
     public void a(IChatBaseComponent ichatbasecomponent) {
-        c.info(this.player.getName() + " lost connection: " + ichatbasecomponent);
-        this.minecraftServer.az();
+        PlayerConnection.c.info(this.player.getName() + " lost connection: " + ichatbasecomponent);
+        this.minecraftServer.aF();
         ChatMessage chatmessage = new ChatMessage("multiplayer.player.left", new Object[] { this.player.getScoreboardDisplayName()});
 
         chatmessage.getChatModifier().setColor(EnumChatFormat.YELLOW);
         this.minecraftServer.getPlayerList().sendMessage(chatmessage);
-        this.player.n();
+        this.player.q();
         this.minecraftServer.getPlayerList().disconnect(this.player);
-        if (this.minecraftServer.N() && this.player.getName().equals(this.minecraftServer.M())) {
-            c.info("Stopping singleplayer server as player logged out");
+        if (this.minecraftServer.S() && this.player.getName().equals(this.minecraftServer.R())) {
+            PlayerConnection.c.info("Stopping singleplayer server as player logged out");
             this.minecraftServer.safeShutdown();
         }
+
     }
 
     public void sendPacket(Packet packet) {
@@ -436,40 +507,42 @@ public class PlayerConnection implements PacketPlayInListener {
                 return;
             }
 
-            if (enumchatvisibility == EnumChatVisibility.SYSTEM && !packetplayoutchat.d()) {
+            if (enumchatvisibility == EnumChatVisibility.SYSTEM && !packetplayoutchat.b()) {
                 return;
             }
         }
 
         try {
-            this.networkManager.handle(packet, new GenericFutureListener[0]);
+            this.networkManager.handle(packet);
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.a(throwable, "Sending packet");
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Packet being sent");
 
-            crashreportsystemdetails.a("Packet class", (Callable) (new CrashReportConnectionPacketClass(this, packet)));
+            crashreportsystemdetails.a("Packet class", (Callable) (new CrashReportPacketName(this, packet)));
             throw new ReportedException(crashreport);
         }
     }
 
     public void a(PacketPlayInHeldItemSlot packetplayinhelditemslot) {
-        if (packetplayinhelditemslot.c() >= 0 && packetplayinhelditemslot.c() < PlayerInventory.getHotbarSize()) {
-            this.player.inventory.itemInHandIndex = packetplayinhelditemslot.c();
-            this.player.v();
+        PlayerConnectionUtils.ensureMainThread(packetplayinhelditemslot, this, this.player.u());
+        if (packetplayinhelditemslot.a() >= 0 && packetplayinhelditemslot.a() < PlayerInventory.getHotbarSize()) {
+            this.player.inventory.itemInHandIndex = packetplayinhelditemslot.a();
+            this.player.z();
         } else {
-            c.warn(this.player.getName() + " tried to set an invalid carried item");
+            PlayerConnection.c.warn(this.player.getName() + " tried to set an invalid carried item");
         }
     }
 
     public void a(PacketPlayInChat packetplayinchat) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinchat, this, this.player.u());
         if (this.player.getChatFlags() == EnumChatVisibility.HIDDEN) {
             ChatMessage chatmessage = new ChatMessage("chat.cannotSend", new Object[0]);
 
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             this.sendPacket(new PacketPlayOutChat(chatmessage));
         } else {
-            this.player.v();
-            String s = packetplayinchat.c();
+            this.player.z();
+            String s = packetplayinchat.a();
 
             s = StringUtils.normalizeSpace(s);
 
@@ -492,6 +565,7 @@ public class PlayerConnection implements PacketPlayInListener {
             if (this.chatThrottle > 200 && !this.minecraftServer.getPlayerList().isOp(this.player.getProfile())) {
                 this.disconnect("disconnect.spam");
             }
+
         }
     }
 
@@ -500,39 +574,60 @@ public class PlayerConnection implements PacketPlayInListener {
     }
 
     public void a(PacketPlayInArmAnimation packetplayinarmanimation) {
-        this.player.v();
-        if (packetplayinarmanimation.d() == 1) {
-            this.player.ba();
-        }
+        PlayerConnectionUtils.ensureMainThread(packetplayinarmanimation, this, this.player.u());
+        this.player.z();
+        this.player.bv();
     }
 
     public void a(PacketPlayInEntityAction packetplayinentityaction) {
-        this.player.v();
-        if (packetplayinentityaction.d() == 1) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinentityaction, this, this.player.u());
+        this.player.z();
+        switch (SwitchHelperCommandActionType.b[packetplayinentityaction.b().ordinal()]) {
+        case 1:
             this.player.setSneaking(true);
-        } else if (packetplayinentityaction.d() == 2) {
+            break;
+
+        case 2:
             this.player.setSneaking(false);
-        } else if (packetplayinentityaction.d() == 4) {
+            break;
+
+        case 3:
             this.player.setSprinting(true);
-        } else if (packetplayinentityaction.d() == 5) {
+            break;
+
+        case 4:
             this.player.setSprinting(false);
-        } else if (packetplayinentityaction.d() == 3) {
+            break;
+
+        case 5:
             this.player.a(false, true, true);
             this.checkMovement = false;
-        } else if (packetplayinentityaction.d() == 6) {
-            if (this.player.vehicle != null && this.player.vehicle instanceof EntityHorse) {
-                ((EntityHorse) this.player.vehicle).w(packetplayinentityaction.e());
+            break;
+
+        case 6:
+            if (this.player.vehicle instanceof EntityHorse) {
+                ((EntityHorse) this.player.vehicle).v(packetplayinentityaction.c());
             }
-        } else if (packetplayinentityaction.d() == 7 && this.player.vehicle != null && this.player.vehicle instanceof EntityHorse) {
-            ((EntityHorse) this.player.vehicle).g(this.player);
+            break;
+
+        case 7:
+            if (this.player.vehicle instanceof EntityHorse) {
+                ((EntityHorse) this.player.vehicle).g((EntityHuman) this.player);
+            }
+            break;
+
+        default:
+            throw new IllegalArgumentException("Invalid client command!");
         }
+
     }
 
     public void a(PacketPlayInUseEntity packetplayinuseentity) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinuseentity, this, this.player.u());
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
         Entity entity = packetplayinuseentity.a((World) worldserver);
 
-        this.player.v();
+        this.player.z();
         if (entity != null) {
             boolean flag = this.player.hasLineOfSight(entity);
             double d0 = 36.0D;
@@ -541,10 +636,12 @@ public class PlayerConnection implements PacketPlayInListener {
                 d0 = 9.0D;
             }
 
-            if (this.player.f(entity) < d0) {
-                if (packetplayinuseentity.c() == EnumEntityUseAction.INTERACT) {
-                    this.player.q(entity);
-                } else if (packetplayinuseentity.c() == EnumEntityUseAction.ATTACK) {
+            if (this.player.h(entity) < d0) {
+                if (packetplayinuseentity.a() == EnumEntityUseAction.INTERACT) {
+                    this.player.u(entity);
+                } else if (packetplayinuseentity.a() == EnumEntityUseAction.INTERACT_AT) {
+                    entity.a((EntityHuman) this.player, packetplayinuseentity.b());
+                } else if (packetplayinuseentity.a() == EnumEntityUseAction.ATTACK) {
                     if (entity instanceof EntityItem || entity instanceof EntityExperienceOrb || entity instanceof EntityArrow || entity == this.player) {
                         this.disconnect("Attempting to attack an invalid entity");
                         this.minecraftServer.warning("Player " + this.player.getName() + " tried to attack an invalid entity");
@@ -555,20 +652,22 @@ public class PlayerConnection implements PacketPlayInListener {
                 }
             }
         }
+
     }
 
     public void a(PacketPlayInClientCommand packetplayinclientcommand) {
-        this.player.v();
-        EnumClientCommand enumclientcommand = packetplayinclientcommand.c();
+        PlayerConnectionUtils.ensureMainThread(packetplayinclientcommand, this, this.player.u());
+        this.player.z();
+        EnumClientCommand enumclientcommand = packetplayinclientcommand.a();
 
-        switch (ClientCommandOrdinalWrapper.a[enumclientcommand.ordinal()]) {
+        switch (SwitchHelperCommandActionType.c[enumclientcommand.ordinal()]) {
         case 1:
             if (this.player.viewingCredits) {
                 this.player = this.minecraftServer.getPlayerList().moveToWorld(this.player, 0, true);
-            } else if (this.player.r().getWorldData().isHardcore()) {
-                if (this.minecraftServer.N() && this.player.getName().equals(this.minecraftServer.M())) {
+            } else if (this.player.u().getWorldData().isHardcore()) {
+                if (this.minecraftServer.S() && this.player.getName().equals(this.minecraftServer.R())) {
                     this.player.playerConnection.disconnect("You have died. Game over, man, it\'s game over!");
-                    this.minecraftServer.U();
+                    this.minecraftServer.Z();
                 } else {
                     GameProfileBanEntry gameprofilebanentry = new GameProfileBanEntry(this.player.getProfile(), (Date) null, "(You just lost the game)", (Date) null, "Death in Hardcore");
 
@@ -589,140 +688,157 @@ public class PlayerConnection implements PacketPlayInListener {
             break;
 
         case 3:
-            this.player.a((Statistic) AchievementList.f);
+            this.player.b((Statistic) AchievementList.f);
         }
+
     }
 
     public void a(PacketPlayInCloseWindow packetplayinclosewindow) {
-        this.player.m();
+        PlayerConnectionUtils.ensureMainThread(packetplayinclosewindow, this, this.player.u());
+        this.player.p();
     }
 
     public void a(PacketPlayInWindowClick packetplayinwindowclick) {
-        this.player.v();
-        if (this.player.activeContainer.windowId == packetplayinwindowclick.c() && this.player.activeContainer.c(this.player)) {
-            ItemStack itemstack = this.player.activeContainer.clickItem(packetplayinwindowclick.d(), packetplayinwindowclick.e(), packetplayinwindowclick.h(), this.player);
-
-            if (ItemStack.matches(packetplayinwindowclick.g(), itemstack)) {
-                this.player.playerConnection.sendPacket(new PacketPlayOutTransaction(packetplayinwindowclick.c(), packetplayinwindowclick.f(), true));
-                this.player.g = true;
-                this.player.activeContainer.b();
-                this.player.broadcastCarriedItem();
-                this.player.g = false;
-            } else {
-                this.n.a(this.player.activeContainer.windowId, Short.valueOf(packetplayinwindowclick.f()));
-                this.player.playerConnection.sendPacket(new PacketPlayOutTransaction(packetplayinwindowclick.c(), packetplayinwindowclick.f(), false));
-                this.player.activeContainer.a(this.player, false);
-                ArrayList arraylist = new ArrayList();
+        PlayerConnectionUtils.ensureMainThread(packetplayinwindowclick, this, this.player.u());
+        this.player.z();
+        if (this.player.activeContainer.windowId == packetplayinwindowclick.a() && this.player.activeContainer.c(this.player)) {
+            if (this.player.v()) {
+                ArrayList arraylist = Lists.newArrayList();
 
                 for (int i = 0; i < this.player.activeContainer.c.size(); ++i) {
                     arraylist.add(((Slot) this.player.activeContainer.c.get(i)).getItem());
                 }
 
-                this.player.a(this.player.activeContainer, arraylist);
+                this.player.a(this.player.activeContainer, (List) arraylist);
+            } else {
+                ItemStack itemstack = this.player.activeContainer.clickItem(packetplayinwindowclick.b(), packetplayinwindowclick.c(), packetplayinwindowclick.f(), this.player);
+
+                if (ItemStack.matches(packetplayinwindowclick.e(), itemstack)) {
+                    this.player.playerConnection.sendPacket(new PacketPlayOutTransaction(packetplayinwindowclick.a(), packetplayinwindowclick.d(), true));
+                    this.player.g = true;
+                    this.player.activeContainer.b();
+                    this.player.broadcastCarriedItem();
+                    this.player.g = false;
+                } else {
+                    this.n.a(this.player.activeContainer.windowId, Short.valueOf(packetplayinwindowclick.d()));
+                    this.player.playerConnection.sendPacket(new PacketPlayOutTransaction(packetplayinwindowclick.a(), packetplayinwindowclick.d(), false));
+                    this.player.activeContainer.a(this.player, false);
+                    ArrayList arraylist1 = Lists.newArrayList();
+
+                    for (int j = 0; j < this.player.activeContainer.c.size(); ++j) {
+                        arraylist1.add(((Slot) this.player.activeContainer.c.get(j)).getItem());
+                    }
+
+                    this.player.a(this.player.activeContainer, (List) arraylist1);
+                }
             }
         }
+
     }
 
     public void a(PacketPlayInEnchantItem packetplayinenchantitem) {
-        this.player.v();
-        if (this.player.activeContainer.windowId == packetplayinenchantitem.c() && this.player.activeContainer.c(this.player)) {
-            this.player.activeContainer.a(this.player, packetplayinenchantitem.d());
+        PlayerConnectionUtils.ensureMainThread(packetplayinenchantitem, this, this.player.u());
+        this.player.z();
+        if (this.player.activeContainer.windowId == packetplayinenchantitem.a() && this.player.activeContainer.c(this.player) && !this.player.v()) {
+            this.player.activeContainer.a(this.player, packetplayinenchantitem.b());
             this.player.activeContainer.b();
         }
+
     }
 
     public void a(PacketPlayInSetCreativeSlot packetplayinsetcreativeslot) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinsetcreativeslot, this, this.player.u());
         if (this.player.playerInteractManager.isCreative()) {
-            boolean flag = packetplayinsetcreativeslot.c() < 0;
+            boolean flag = packetplayinsetcreativeslot.a() < 0;
             ItemStack itemstack = packetplayinsetcreativeslot.getItemStack();
-            boolean flag1 = packetplayinsetcreativeslot.c() >= 1 && packetplayinsetcreativeslot.c() < 36 + PlayerInventory.getHotbarSize();
+
+            if (itemstack != null && itemstack.hasTag() && itemstack.getTag().hasKeyOfType("BlockEntityTag", 10)) {
+                NBTTagCompound nbttagcompound = itemstack.getTag().getCompound("BlockEntityTag");
+
+                if (nbttagcompound.hasKey("x") && nbttagcompound.hasKey("y") && nbttagcompound.hasKey("z")) {
+                    BlockPosition blockposition = new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z"));
+                    TileEntity tileentity = this.player.world.getTileEntity(blockposition);
+
+                    if (tileentity != null) {
+                        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+
+                        tileentity.b(nbttagcompound1);
+                        nbttagcompound1.remove("x");
+                        nbttagcompound1.remove("y");
+                        nbttagcompound1.remove("z");
+                        itemstack.a("BlockEntityTag", (NBTBase) nbttagcompound1);
+                    }
+                }
+            }
+
+            boolean flag1 = packetplayinsetcreativeslot.a() >= 1 && packetplayinsetcreativeslot.a() < 36 + PlayerInventory.getHotbarSize();
             boolean flag2 = itemstack == null || itemstack.getItem() != null;
             boolean flag3 = itemstack == null || itemstack.getData() >= 0 && itemstack.count <= 64 && itemstack.count > 0;
 
             if (flag1 && flag2 && flag3) {
                 if (itemstack == null) {
-                    this.player.defaultContainer.setItem(packetplayinsetcreativeslot.c(), (ItemStack) null);
+                    this.player.defaultContainer.setItem(packetplayinsetcreativeslot.a(), (ItemStack) null);
                 } else {
-                    this.player.defaultContainer.setItem(packetplayinsetcreativeslot.c(), itemstack);
+                    this.player.defaultContainer.setItem(packetplayinsetcreativeslot.a(), itemstack);
                 }
 
                 this.player.defaultContainer.a(this.player, true);
-            } else if (flag && flag2 && flag3 && this.x < 200) {
-                this.x += 20;
+            } else if (flag && flag2 && flag3 && this.m < 200) {
+                this.m += 20;
                 EntityItem entityitem = this.player.drop(itemstack, true);
 
                 if (entityitem != null) {
-                    entityitem.e();
+                    entityitem.j();
                 }
             }
         }
+
     }
 
     public void a(PacketPlayInTransaction packetplayintransaction) {
+        PlayerConnectionUtils.ensureMainThread(packetplayintransaction, this, this.player.u());
         Short oshort = (Short) this.n.get(this.player.activeContainer.windowId);
 
-        if (oshort != null && packetplayintransaction.d() == oshort.shortValue() && this.player.activeContainer.windowId == packetplayintransaction.c() && !this.player.activeContainer.c(this.player)) {
+        if (oshort != null && packetplayintransaction.b() == oshort.shortValue() && this.player.activeContainer.windowId == packetplayintransaction.a() && !this.player.activeContainer.c(this.player) && !this.player.v()) {
             this.player.activeContainer.a(this.player, true);
         }
+
     }
 
     public void a(PacketPlayInUpdateSign packetplayinupdatesign) {
-        this.player.v();
+        PlayerConnectionUtils.ensureMainThread(packetplayinupdatesign, this, this.player.u());
+        this.player.z();
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
+        BlockPosition blockposition = packetplayinupdatesign.a();
 
-        if (worldserver.isLoaded(packetplayinupdatesign.c(), packetplayinupdatesign.d(), packetplayinupdatesign.e())) {
-            TileEntity tileentity = worldserver.getTileEntity(packetplayinupdatesign.c(), packetplayinupdatesign.d(), packetplayinupdatesign.e());
+        if (worldserver.isLoaded(blockposition)) {
+            TileEntity tileentity = worldserver.getTileEntity(blockposition);
 
-            if (tileentity instanceof TileEntitySign) {
-                TileEntitySign tileentitysign = (TileEntitySign) tileentity;
-
-                if (!tileentitysign.a() || tileentitysign.b() != this.player) {
-                    this.minecraftServer.warning("Player " + this.player.getName() + " just tried to change non-editable sign");
-                    return;
-                }
+            if (!(tileentity instanceof TileEntitySign)) {
+                return;
             }
 
-            int i;
-            int j;
+            TileEntitySign tileentitysign = (TileEntitySign) tileentity;
 
-            for (j = 0; j < 4; ++j) {
-                boolean flag = true;
-
-                if (packetplayinupdatesign.f()[j].length() > 15) {
-                    flag = false;
-                } else {
-                    for (i = 0; i < packetplayinupdatesign.f()[j].length(); ++i) {
-                        if (!SharedConstants.isAllowedChatCharacter(packetplayinupdatesign.f()[j].charAt(i))) {
-                            flag = false;
-                        }
-                    }
-                }
-
-                if (!flag) {
-                    packetplayinupdatesign.f()[j] = "!?";
-                }
+            if (!tileentitysign.b() || tileentitysign.c() != this.player) {
+                this.minecraftServer.warning("Player " + this.player.getName() + " just tried to change non-editable sign");
+                return;
             }
 
-            if (tileentity instanceof TileEntitySign) {
-                j = packetplayinupdatesign.c();
-                int k = packetplayinupdatesign.d();
-
-                i = packetplayinupdatesign.e();
-                TileEntitySign tileentitysign1 = (TileEntitySign) tileentity;
-
-                System.arraycopy(packetplayinupdatesign.f(), 0, tileentitysign1.lines, 0, 4);
-                tileentitysign1.update();
-                worldserver.notify(j, k, i);
-            }
+            System.arraycopy(packetplayinupdatesign.b(), 0, tileentitysign.lines, 0, 4);
+            tileentitysign.update();
+            worldserver.notify(blockposition);
         }
+
     }
 
     public void a(PacketPlayInKeepAlive packetplayinkeepalive) {
-        if (packetplayinkeepalive.c() == this.h) {
-            int i = (int) (this.d() - this.i);
+        if (packetplayinkeepalive.a() == this.i) {
+            int i = (int) (this.d() - this.j);
 
             this.player.ping = (this.player.ping * 3 + i) / 4;
         }
+
     }
 
     private long d() {
@@ -730,12 +846,14 @@ public class PlayerConnection implements PacketPlayInListener {
     }
 
     public void a(PacketPlayInAbilities packetplayinabilities) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinabilities, this, this.player.u());
         this.player.abilities.isFlying = packetplayinabilities.isFlying() && this.player.abilities.canFly;
     }
 
     public void a(PacketPlayInTabComplete packetplayintabcomplete) {
+        PlayerConnectionUtils.ensureMainThread(packetplayintabcomplete, this, this.player.u());
         ArrayList arraylist = Lists.newArrayList();
-        Iterator iterator = this.minecraftServer.a(this.player, packetplayintabcomplete.c()).iterator();
+        Iterator iterator = this.minecraftServer.tabCompleteCommand(this.player, packetplayintabcomplete.a(), packetplayintabcomplete.b()).iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
@@ -747,59 +865,61 @@ public class PlayerConnection implements PacketPlayInListener {
     }
 
     public void a(PacketPlayInSettings packetplayinsettings) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinsettings, this, this.player.u());
         this.player.a(packetplayinsettings);
     }
 
     public void a(PacketPlayInCustomPayload packetplayincustompayload) {
+        PlayerConnectionUtils.ensureMainThread(packetplayincustompayload, this, this.player.u());
         PacketDataSerializer packetdataserializer;
         ItemStack itemstack;
         ItemStack itemstack1;
 
-        if ("MC|BEdit".equals(packetplayincustompayload.c())) {
-            packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(packetplayincustompayload.e()));
+        if ("MC|BEdit".equals(packetplayincustompayload.a())) {
+            packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(packetplayincustompayload.b()));
 
             try {
-                itemstack = packetdataserializer.c();
-                if (itemstack != null) {
-                    if (!ItemBookAndQuill.a(itemstack.getTag())) {
-                        throw new IOException("Invalid book tag!");
-                    }
+                itemstack = packetdataserializer.i();
+                if (itemstack == null) {
+                    return;
+                }
 
-                    itemstack1 = this.player.inventory.getItemInHand();
-                    if (itemstack1 == null) {
-                        return;
-                    }
+                if (!ItemBookAndQuill.b(itemstack.getTag())) {
+                    throw new IOException("Invalid book tag!");
+                }
 
-                    if (itemstack.getItem() == Items.BOOK_AND_QUILL && itemstack.getItem() == itemstack1.getItem()) {
+                itemstack1 = this.player.inventory.getItemInHand();
+                if (itemstack1 != null) {
+                    if (itemstack.getItem() == Items.WRITABLE_BOOK && itemstack.getItem() == itemstack1.getItem()) {
                         itemstack1.a("pages", (NBTBase) itemstack.getTag().getList("pages", 8));
                     }
 
                     return;
                 }
             } catch (Exception exception) {
-                c.error("Couldn\'t handle book info", exception);
+                PlayerConnection.c.error("Couldn\'t handle book info", exception);
                 return;
             } finally {
                 packetdataserializer.release();
             }
 
             return;
-        } else if ("MC|BSign".equals(packetplayincustompayload.c())) {
-            packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(packetplayincustompayload.e()));
+        } else if ("MC|BSign".equals(packetplayincustompayload.a())) {
+            packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(packetplayincustompayload.b()));
 
             try {
-                itemstack = packetdataserializer.c();
-                if (itemstack != null) {
-                    if (!ItemWrittenBook.a(itemstack.getTag())) {
-                        throw new IOException("Invalid book tag!");
-                    }
+                itemstack = packetdataserializer.i();
+                if (itemstack == null) {
+                    return;
+                }
 
-                    itemstack1 = this.player.inventory.getItemInHand();
-                    if (itemstack1 == null) {
-                        return;
-                    }
+                if (!ItemWrittenBook.b(itemstack.getTag())) {
+                    throw new IOException("Invalid book tag!");
+                }
 
-                    if (itemstack.getItem() == Items.WRITTEN_BOOK && itemstack1.getItem() == Items.BOOK_AND_QUILL) {
+                itemstack1 = this.player.inventory.getItemInHand();
+                if (itemstack1 != null) {
+                    if (itemstack.getItem() == Items.WRITTEN_BOOK && itemstack1.getItem() == Items.WRITABLE_BOOK) {
                         itemstack1.a("author", (NBTBase) (new NBTTagString(this.player.getName())));
                         itemstack1.a("title", (NBTBase) (new NBTTagString(itemstack.getTag().getString("title"))));
                         itemstack1.a("pages", (NBTBase) itemstack.getTag().getList("pages", 8));
@@ -809,108 +929,103 @@ public class PlayerConnection implements PacketPlayInListener {
                     return;
                 }
             } catch (Exception exception1) {
-                c.error("Couldn\'t sign book", exception1);
+                PlayerConnection.c.error("Couldn\'t sign book", exception1);
                 return;
             } finally {
                 packetdataserializer.release();
             }
 
             return;
-        } else {
-            int i;
-            DataInputStream datainputstream;
+        } else if ("MC|TrSel".equals(packetplayincustompayload.a())) {
+            try {
+                int i = packetplayincustompayload.b().readInt();
+                Container container = this.player.activeContainer;
 
-            if ("MC|TrSel".equals(packetplayincustompayload.c())) {
+                if (container instanceof ContainerMerchant) {
+                    ((ContainerMerchant) container).d(i);
+                }
+            } catch (Exception exception2) {
+                PlayerConnection.c.error("Couldn\'t select trade", exception2);
+            }
+        } else if ("MC|AdvCdm".equals(packetplayincustompayload.a())) {
+            if (!this.minecraftServer.getEnableCommandBlock()) {
+                this.player.sendMessage(new ChatMessage("advMode.notEnabled", new Object[0]));
+            } else if (this.player.a(2, "") && this.player.abilities.canInstantlyBuild) {
+                packetdataserializer = packetplayincustompayload.b();
+
                 try {
-                    datainputstream = new DataInputStream(new ByteArrayInputStream(packetplayincustompayload.e()));
-                    i = datainputstream.readInt();
-                    Container container = this.player.activeContainer;
+                    byte b0 = packetdataserializer.readByte();
+                    CommandBlockListenerAbstract commandblocklistenerabstract = null;
 
-                    if (container instanceof ContainerMerchant) {
-                        ((ContainerMerchant) container).e(i);
+                    if (b0 == 0) {
+                        TileEntity tileentity = this.player.world.getTileEntity(new BlockPosition(packetdataserializer.readInt(), packetdataserializer.readInt(), packetdataserializer.readInt()));
+
+                        if (tileentity instanceof TileEntityCommand) {
+                            commandblocklistenerabstract = ((TileEntityCommand) tileentity).getCommandBlock();
+                        }
+                    } else if (b0 == 1) {
+                        Entity entity = this.player.world.a(packetdataserializer.readInt());
+
+                        if (entity instanceof EntityMinecartCommandBlock) {
+                            commandblocklistenerabstract = ((EntityMinecartCommandBlock) entity).getCommandBlock();
+                        }
                     }
-                } catch (Exception exception2) {
-                    c.error("Couldn\'t select trade", exception2);
-                }
-            } else if ("MC|AdvCdm".equals(packetplayincustompayload.c())) {
-                if (!this.minecraftServer.getEnableCommandBlock()) {
-                    this.player.sendMessage(new ChatMessage("advMode.notEnabled", new Object[0]));
-                } else if (this.player.a(2, "") && this.player.abilities.canInstantlyBuild) {
-                    packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(packetplayincustompayload.e()));
 
-                    try {
-                        byte b0 = packetdataserializer.readByte();
-                        CommandBlockListenerAbstract commandblocklistenerabstract = null;
+                    String s = packetdataserializer.c(packetdataserializer.readableBytes());
+                    boolean flag = packetdataserializer.readBoolean();
 
-                        if (b0 == 0) {
-                            TileEntity tileentity = this.player.world.getTileEntity(packetdataserializer.readInt(), packetdataserializer.readInt(), packetdataserializer.readInt());
-
-                            if (tileentity instanceof TileEntityCommand) {
-                                commandblocklistenerabstract = ((TileEntityCommand) tileentity).getCommandBlock();
-                            }
-                        } else if (b0 == 1) {
-                            Entity entity = this.player.world.getEntity(packetdataserializer.readInt());
-
-                            if (entity instanceof EntityMinecartCommandBlock) {
-                                commandblocklistenerabstract = ((EntityMinecartCommandBlock) entity).getCommandBlock();
-                            }
+                    if (commandblocklistenerabstract != null) {
+                        commandblocklistenerabstract.setCommand(s);
+                        commandblocklistenerabstract.a(flag);
+                        if (!flag) {
+                            commandblocklistenerabstract.b((IChatBaseComponent) null);
                         }
 
-                        String s = packetdataserializer.c(packetdataserializer.readableBytes());
-
-                        if (commandblocklistenerabstract != null) {
-                            commandblocklistenerabstract.setCommand(s);
-                            commandblocklistenerabstract.e();
-                            this.player.sendMessage(new ChatMessage("advMode.setCommand.success", new Object[] { s}));
-                        }
-                    } catch (Exception exception3) {
-                        c.error("Couldn\'t set command block", exception3);
-                    } finally {
-                        packetdataserializer.release();
+                        commandblocklistenerabstract.h();
+                        this.player.sendMessage(new ChatMessage("advMode.setCommand.success", new Object[] { s}));
                     }
-                } else {
-                    this.player.sendMessage(new ChatMessage("advMode.notAllowed", new Object[0]));
+                } catch (Exception exception3) {
+                    PlayerConnection.c.error("Couldn\'t set command block", exception3);
+                } finally {
+                    packetdataserializer.release();
                 }
-            } else if ("MC|Beacon".equals(packetplayincustompayload.c())) {
-                if (this.player.activeContainer instanceof ContainerBeacon) {
-                    try {
-                        datainputstream = new DataInputStream(new ByteArrayInputStream(packetplayincustompayload.e()));
-                        i = datainputstream.readInt();
-                        int j = datainputstream.readInt();
-                        ContainerBeacon containerbeacon = (ContainerBeacon) this.player.activeContainer;
-                        Slot slot = containerbeacon.getSlot(0);
+            } else {
+                this.player.sendMessage(new ChatMessage("advMode.notAllowed", new Object[0]));
+            }
+        } else if ("MC|Beacon".equals(packetplayincustompayload.a())) {
+            if (this.player.activeContainer instanceof ContainerBeacon) {
+                try {
+                    packetdataserializer = packetplayincustompayload.b();
+                    int j = packetdataserializer.readInt();
+                    int k = packetdataserializer.readInt();
+                    ContainerBeacon containerbeacon = (ContainerBeacon) this.player.activeContainer;
+                    Slot slot = containerbeacon.getSlot(0);
 
-                        if (slot.hasItem()) {
-                            slot.a(1);
-                            TileEntityBeacon tileentitybeacon = containerbeacon.e();
+                    if (slot.hasItem()) {
+                        slot.a(1);
+                        IInventory iinventory = containerbeacon.e();
 
-                            tileentitybeacon.d(i);
-                            tileentitybeacon.e(j);
-                            tileentitybeacon.update();
-                        }
-                    } catch (Exception exception4) {
-                        c.error("Couldn\'t set beacon", exception4);
+                        iinventory.b(1, j);
+                        iinventory.b(2, k);
+                        iinventory.update();
                     }
-                }
-            } else if ("MC|ItemName".equals(packetplayincustompayload.c()) && this.player.activeContainer instanceof ContainerAnvil) {
-                ContainerAnvil containeranvil = (ContainerAnvil) this.player.activeContainer;
-
-                if (packetplayincustompayload.e() != null && packetplayincustompayload.e().length >= 1) {
-                    String s1 = SharedConstants.a(new String(packetplayincustompayload.e(), Charsets.UTF_8));
-
-                    if (s1.length() <= 30) {
-                        containeranvil.a(s1);
-                    }
-                } else {
-                    containeranvil.a("");
+                } catch (Exception exception4) {
+                    PlayerConnection.c.error("Couldn\'t set beacon", exception4);
                 }
             }
-        }
-    }
+        } else if ("MC|ItemName".equals(packetplayincustompayload.a()) && this.player.activeContainer instanceof ContainerAnvil) {
+            ContainerAnvil containeranvil = (ContainerAnvil) this.player.activeContainer;
 
-    public void a(EnumProtocol enumprotocol, EnumProtocol enumprotocol1) {
-        if (enumprotocol1 != EnumProtocol.PLAY) {
-            throw new IllegalStateException("Unexpected change in protocol!");
+            if (packetplayincustompayload.b() != null && packetplayincustompayload.b().readableBytes() >= 1) {
+                String s1 = SharedConstants.a(packetplayincustompayload.b().c(32767));
+
+                if (s1.length() <= 30) {
+                    containeranvil.a(s1);
+                }
+            } else {
+                containeranvil.a("");
+            }
         }
+
     }
 }

@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutCloseWindow extends Packet {
+public class PacketPlayOutCloseWindow implements Packet {
 
     private int a;
 
@@ -10,8 +10,8 @@ public class PacketPlayOutCloseWindow extends Packet {
         this.a = i;
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
@@ -22,7 +22,7 @@ public class PacketPlayOutCloseWindow extends Packet {
         packetdataserializer.writeByte(this.a);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

@@ -8,17 +8,17 @@ public class EnchantmentWeaponDamage extends Enchantment {
     private static final int[] H = new int[] { 20, 20, 20};
     public final int a;
 
-    public EnchantmentWeaponDamage(int i, int j, int k) {
-        super(i, j, EnchantmentSlotType.WEAPON);
+    public EnchantmentWeaponDamage(int i, MinecraftKey minecraftkey, int j, int k) {
+        super(i, minecraftkey, j, EnchantmentSlotType.WEAPON);
         this.a = k;
     }
 
     public int a(int i) {
-        return F[this.a] + (i - 1) * G[this.a];
+        return EnchantmentWeaponDamage.F[this.a] + (i - 1) * EnchantmentWeaponDamage.G[this.a];
     }
 
     public int b(int i) {
-        return this.a(i) + H[this.a];
+        return this.a(i) + EnchantmentWeaponDamage.H[this.a];
     }
 
     public int getMaxLevel() {
@@ -30,7 +30,7 @@ public class EnchantmentWeaponDamage extends Enchantment {
     }
 
     public String a() {
-        return "enchantment.damage." + E[this.a];
+        return "enchantment.damage." + EnchantmentWeaponDamage.E[this.a];
     }
 
     public boolean a(Enchantment enchantment) {
@@ -46,10 +46,11 @@ public class EnchantmentWeaponDamage extends Enchantment {
             EntityLiving entityliving1 = (EntityLiving) entity;
 
             if (this.a == 2 && entityliving1.getMonsterType() == EnumMonsterType.ARTHROPOD) {
-                int j = 20 + entityliving.aI().nextInt(10 * i);
+                int j = 20 + entityliving.bb().nextInt(10 * i);
 
                 entityliving1.addEffect(new MobEffect(MobEffectList.SLOWER_MOVEMENT.id, j, 3));
             }
         }
+
     }
 }

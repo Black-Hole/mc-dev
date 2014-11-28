@@ -7,21 +7,19 @@ final class DispenseBehaviorBoat extends DispenseBehaviorItem {
     DispenseBehaviorBoat() {}
 
     public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-        EnumFacing enumfacing = BlockDispenser.b(isourceblock.h());
-        World world = isourceblock.k();
-        double d0 = isourceblock.getX() + (double) ((float) enumfacing.getAdjacentX() * 1.125F);
-        double d1 = isourceblock.getY() + (double) ((float) enumfacing.getAdjacentY() * 1.125F);
-        double d2 = isourceblock.getZ() + (double) ((float) enumfacing.getAdjacentZ() * 1.125F);
-        int i = isourceblock.getBlockX() + enumfacing.getAdjacentX();
-        int j = isourceblock.getBlockY() + enumfacing.getAdjacentY();
-        int k = isourceblock.getBlockZ() + enumfacing.getAdjacentZ();
-        Material material = world.getType(i, j, k).getMaterial();
+        EnumDirection enumdirection = BlockDispenser.b(isourceblock.f());
+        World world = isourceblock.i();
+        double d0 = isourceblock.getX() + (double) ((float) enumdirection.getAdjacentX() * 1.125F);
+        double d1 = isourceblock.getY() + (double) ((float) enumdirection.getAdjacentY() * 1.125F);
+        double d2 = isourceblock.getZ() + (double) ((float) enumdirection.getAdjacentZ() * 1.125F);
+        BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
+        Material material = world.getType(blockposition).getBlock().getMaterial();
         double d3;
 
         if (Material.WATER.equals(material)) {
             d3 = 1.0D;
         } else {
-            if (!Material.AIR.equals(material) || !Material.WATER.equals(world.getType(i, j - 1, k).getMaterial())) {
+            if (!Material.AIR.equals(material) || !Material.WATER.equals(world.getType(blockposition.down()).getBlock().getMaterial())) {
                 return this.b.a(isourceblock, itemstack);
             }
 
@@ -36,6 +34,6 @@ final class DispenseBehaviorBoat extends DispenseBehaviorItem {
     }
 
     protected void a(ISourceBlock isourceblock) {
-        isourceblock.k().triggerEffect(1000, isourceblock.getBlockX(), isourceblock.getBlockY(), isourceblock.getBlockZ(), 0);
+        isourceblock.i().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
     }
 }

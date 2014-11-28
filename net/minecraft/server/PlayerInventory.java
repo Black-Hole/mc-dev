@@ -8,7 +8,7 @@ public class PlayerInventory implements IInventory {
     public ItemStack[] armor = new ItemStack[4];
     public int itemInHandIndex;
     public EntityHuman player;
-    private ItemStack g;
+    private ItemStack f;
     public boolean e;
 
     public PlayerInventory(EntityHuman entityhuman) {
@@ -53,94 +53,115 @@ public class PlayerInventory implements IInventory {
         return -1;
     }
 
-    public int a(Item item, int i) {
-        int j = 0;
+    public int a(Item item, int i, int j, NBTTagCompound nbttagcompound) {
+        int k = 0;
 
-        int k;
+        int l;
         ItemStack itemstack;
+        int i1;
 
-        for (k = 0; k < this.items.length; ++k) {
-            itemstack = this.items[k];
-            if (itemstack != null && (item == null || itemstack.getItem() == item) && (i <= -1 || itemstack.getData() == i)) {
-                j += itemstack.count;
-                this.items[k] = null;
+        for (l = 0; l < this.items.length; ++l) {
+            itemstack = this.items[l];
+            if (itemstack != null && (item == null || itemstack.getItem() == item) && (i <= -1 || itemstack.getData() == i) && (nbttagcompound == null || CommandTestForBlock.a(nbttagcompound, itemstack.getTag(), true))) {
+                i1 = j <= 0 ? itemstack.count : Math.min(j - k, itemstack.count);
+                k += i1;
+                if (j != 0) {
+                    this.items[l].count -= i1;
+                    if (this.items[l].count == 0) {
+                        this.items[l] = null;
+                    }
+
+                    if (j > 0 && k >= j) {
+                        return k;
+                    }
+                }
             }
         }
 
-        for (k = 0; k < this.armor.length; ++k) {
-            itemstack = this.armor[k];
-            if (itemstack != null && (item == null || itemstack.getItem() == item) && (i <= -1 || itemstack.getData() == i)) {
-                j += itemstack.count;
-                this.armor[k] = null;
+        for (l = 0; l < this.armor.length; ++l) {
+            itemstack = this.armor[l];
+            if (itemstack != null && (item == null || itemstack.getItem() == item) && (i <= -1 || itemstack.getData() == i) && (nbttagcompound == null || CommandTestForBlock.a(nbttagcompound, itemstack.getTag(), false))) {
+                i1 = j <= 0 ? itemstack.count : Math.min(j - k, itemstack.count);
+                k += i1;
+                if (j != 0) {
+                    this.armor[l].count -= i1;
+                    if (this.armor[l].count == 0) {
+                        this.armor[l] = null;
+                    }
+
+                    if (j > 0 && k >= j) {
+                        return k;
+                    }
+                }
             }
         }
 
-        if (this.g != null) {
-            if (item != null && this.g.getItem() != item) {
-                return j;
+        if (this.f != null) {
+            if (item != null && this.f.getItem() != item) {
+                return k;
             }
 
-            if (i > -1 && this.g.getData() != i) {
-                return j;
+            if (i > -1 && this.f.getData() != i) {
+                return k;
             }
 
-            j += this.g.count;
-            this.setCarried((ItemStack) null);
+            if (nbttagcompound != null && !CommandTestForBlock.a(nbttagcompound, this.f.getTag(), false)) {
+                return k;
+            }
+
+            l = j <= 0 ? this.f.count : Math.min(j - k, this.f.count);
+            k += l;
+            if (j != 0) {
+                this.f.count -= l;
+                if (this.f.count == 0) {
+                    this.f = null;
+                }
+
+                if (j > 0 && k >= j) {
+                    return k;
+                }
+            }
         }
 
-        return j;
+        return k;
     }
 
     private int e(ItemStack itemstack) {
         Item item = itemstack.getItem();
         int i = itemstack.count;
-        int j;
+        int j = this.firstPartial(itemstack);
 
-        if (itemstack.getMaxStackSize() == 1) {
+        if (j < 0) {
             j = this.getFirstEmptySlotIndex();
-            if (j < 0) {
-                return i;
-            } else {
-                if (this.items[j] == null) {
-                    this.items[j] = ItemStack.b(itemstack);
-                }
+        }
 
-                return 0;
-            }
+        if (j < 0) {
+            return i;
         } else {
-            j = this.firstPartial(itemstack);
-            if (j < 0) {
-                j = this.getFirstEmptySlotIndex();
+            if (this.items[j] == null) {
+                this.items[j] = new ItemStack(item, 0, itemstack.getData());
+                if (itemstack.hasTag()) {
+                    this.items[j].setTag((NBTTagCompound) itemstack.getTag().clone());
+                }
             }
 
-            if (j < 0) {
+            int k = i;
+
+            if (i > this.items[j].getMaxStackSize() - this.items[j].count) {
+                k = this.items[j].getMaxStackSize() - this.items[j].count;
+            }
+
+            if (k > this.getMaxStackSize() - this.items[j].count) {
+                k = this.getMaxStackSize() - this.items[j].count;
+            }
+
+            if (k == 0) {
                 return i;
             } else {
-                if (this.items[j] == null) {
-                    this.items[j] = new ItemStack(item, 0, itemstack.getData());
-                    if (itemstack.hasTag()) {
-                        this.items[j].setTag((NBTTagCompound) itemstack.getTag().clone());
-                    }
-                }
-
-                int k = i;
-
-                if (i > this.items[j].getMaxStackSize() - this.items[j].count) {
-                    k = this.items[j].getMaxStackSize() - this.items[j].count;
-                }
-
-                if (k > this.getMaxStackSize() - this.items[j].count) {
-                    k = this.getMaxStackSize() - this.items[j].count;
-                }
-
-                if (k == 0) {
-                    return i;
-                } else {
-                    i -= k;
-                    this.items[j].count += k;
-                    this.items[j].c = 5;
-                    return i;
-                }
+                i -= k;
+                this.items[j].count += k;
+                this.items[j].c = 5;
+                return i;
             }
         }
     }
@@ -151,6 +172,7 @@ public class PlayerInventory implements IInventory {
                 this.items[i].a(this.player.world, this.player, i, this.itemInHandIndex == i);
             }
         }
+
     }
 
     public boolean a(Item item) {
@@ -178,7 +200,7 @@ public class PlayerInventory implements IInventory {
             try {
                 int i;
 
-                if (itemstack.i()) {
+                if (itemstack.g()) {
                     i = this.getFirstEmptySlotIndex();
                     if (i >= 0) {
                         this.items[i] = ItemStack.b(itemstack);
@@ -208,8 +230,8 @@ public class PlayerInventory implements IInventory {
                 CrashReport crashreport = CrashReport.a(throwable, "Adding item to inventory");
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Item being added");
 
-                crashreportsystemdetails.a("Item ID", Integer.valueOf(Item.getId(itemstack.getItem())));
-                crashreportsystemdetails.a("Item data", Integer.valueOf(itemstack.getData()));
+                crashreportsystemdetails.a("Item ID", (Object) Integer.valueOf(Item.getId(itemstack.getItem())));
+                crashreportsystemdetails.a("Item data", (Object) Integer.valueOf(itemstack.getData()));
                 crashreportsystemdetails.a("Item name", (Callable) (new CrashReportItemName(this, itemstack)));
                 throw new ReportedException(crashreport);
             }
@@ -329,6 +351,7 @@ public class PlayerInventory implements IInventory {
                 }
             }
         }
+
     }
 
     public int getSize() {
@@ -346,12 +369,16 @@ public class PlayerInventory implements IInventory {
         return aitemstack[i];
     }
 
-    public String getInventoryName() {
+    public String getName() {
         return "container.inventory";
     }
 
-    public boolean k_() {
+    public boolean hasCustomName() {
         return false;
+    }
+
+    public IChatBaseComponent getScoreboardDisplayName() {
+        return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
     }
 
     public int getMaxStackSize() {
@@ -368,11 +395,11 @@ public class PlayerInventory implements IInventory {
         }
     }
 
-    public ItemStack d(int i) {
+    public ItemStack e(int i) {
         return this.armor[i];
     }
 
-    public int l() {
+    public int m() {
         int i = 0;
 
         for (int j = 0; j < this.armor.length; ++j) {
@@ -400,9 +427,10 @@ public class PlayerInventory implements IInventory {
                 }
             }
         }
+
     }
 
-    public void m() {
+    public void n() {
         int i;
 
         for (i = 0; i < this.items.length; ++i) {
@@ -418,6 +446,7 @@ public class PlayerInventory implements IInventory {
                 this.armor[i] = null;
             }
         }
+
     }
 
     public void update() {
@@ -425,15 +454,15 @@ public class PlayerInventory implements IInventory {
     }
 
     public void setCarried(ItemStack itemstack) {
-        this.g = itemstack;
+        this.f = itemstack;
     }
 
     public ItemStack getCarried() {
-        return this.g;
+        return this.f;
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.player.dead ? false : entityhuman.f(this.player) <= 64.0D;
+        return this.player.dead ? false : entityhuman.h(this.player) <= 64.0D;
     }
 
     public boolean c(ItemStack itemstack) {
@@ -454,9 +483,9 @@ public class PlayerInventory implements IInventory {
         return false;
     }
 
-    public void startOpen() {}
+    public void startOpen(EntityHuman entityhuman) {}
 
-    public void closeContainer() {}
+    public void closeContainer(EntityHuman entityhuman) {}
 
     public boolean b(int i, ItemStack itemstack) {
         return true;
@@ -474,5 +503,28 @@ public class PlayerInventory implements IInventory {
         }
 
         this.itemInHandIndex = playerinventory.itemInHandIndex;
+    }
+
+    public int getProperty(int i) {
+        return 0;
+    }
+
+    public void b(int i, int j) {}
+
+    public int g() {
+        return 0;
+    }
+
+    public void l() {
+        int i;
+
+        for (i = 0; i < this.items.length; ++i) {
+            this.items[i] = null;
+        }
+
+        for (i = 0; i < this.armor.length; ++i) {
+            this.armor[i] = null;
+        }
+
     }
 }

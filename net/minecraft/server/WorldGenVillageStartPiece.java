@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Random;
 
@@ -11,8 +11,8 @@ public class WorldGenVillageStartPiece extends WorldGenVillageWell {
     public int c;
     public WorldGenVillagePieceWeight d;
     public List e;
-    public List i = new ArrayList();
-    public List j = new ArrayList();
+    public List f = Lists.newArrayList();
+    public List g = Lists.newArrayList();
 
     public WorldGenVillageStartPiece() {}
 
@@ -21,9 +21,10 @@ public class WorldGenVillageStartPiece extends WorldGenVillageWell {
         this.a = worldchunkmanager;
         this.e = list;
         this.c = l;
-        BiomeBase biomebase = worldchunkmanager.getBiome(j, k);
+        BiomeBase biomebase = worldchunkmanager.getBiome(new BlockPosition(j, 0, k), BiomeBase.ad);
 
         this.b = biomebase == BiomeBase.DESERT || biomebase == BiomeBase.DESERT_HILLS;
+        this.a(this.b);
     }
 
     public WorldChunkManager e() {

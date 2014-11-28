@@ -9,7 +9,7 @@ public class BlockClay extends Block {
         this.a(CreativeModeTab.b);
     }
 
-    public Item getDropType(int i, Random random, int j) {
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.CLAY_BALL;
     }
 

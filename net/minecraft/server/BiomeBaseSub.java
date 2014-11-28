@@ -1,62 +1,62 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.Random;
 
 public class BiomeBaseSub extends BiomeBase {
 
-    protected BiomeBase aD;
+    protected BiomeBase aE;
 
     public BiomeBaseSub(int i, BiomeBase biomebase) {
         super(i);
-        this.aD = biomebase;
-        this.a(biomebase.ag, true);
-        this.af = biomebase.af + " M";
-        this.ai = biomebase.ai;
+        this.aE = biomebase;
+        this.a(biomebase.ai, true);
+        this.ah = biomebase.ah + " M";
         this.ak = biomebase.ak;
         this.al = biomebase.al;
         this.am = biomebase.am;
         this.an = biomebase.an;
+        this.ao = biomebase.ao;
         this.temperature = biomebase.temperature;
         this.humidity = biomebase.humidity;
-        this.aq = biomebase.aq;
-        this.aw = biomebase.aw;
+        this.ar = biomebase.ar;
         this.ax = biomebase.ax;
-        this.at = new ArrayList(biomebase.at);
-        this.as = new ArrayList(biomebase.as);
-        this.av = new ArrayList(biomebase.av);
-        this.au = new ArrayList(biomebase.au);
+        this.ay = biomebase.ay;
+        this.au = Lists.newArrayList(biomebase.au);
+        this.at = Lists.newArrayList(biomebase.at);
+        this.aw = Lists.newArrayList(biomebase.aw);
+        this.av = Lists.newArrayList(biomebase.av);
         this.temperature = biomebase.temperature;
         this.humidity = biomebase.humidity;
-        this.am = biomebase.am + 0.1F;
-        this.an = biomebase.an + 0.2F;
+        this.an = biomebase.an + 0.1F;
+        this.ao = biomebase.ao + 0.2F;
     }
 
-    public void a(World world, Random random, int i, int j) {
-        this.aD.ar.a(world, random, this, i, j);
+    public void a(World world, Random random, BlockPosition blockposition) {
+        this.aE.as.a(world, random, this, blockposition);
     }
 
-    public void a(World world, Random random, Block[] ablock, byte[] abyte, int i, int j, double d0) {
-        this.aD.a(world, random, ablock, abyte, i, j, d0);
+    public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
+        this.aE.a(world, random, chunksnapshot, i, j, d0);
     }
 
     public float g() {
-        return this.aD.g();
+        return this.aE.g();
     }
 
     public WorldGenTreeAbstract a(Random random) {
-        return this.aD.a(random);
+        return this.aE.a(random);
     }
 
     public Class l() {
-        return this.aD.l();
+        return this.aE.l();
     }
 
     public boolean a(BiomeBase biomebase) {
-        return this.aD.a(biomebase);
+        return this.aE.a(biomebase);
     }
 
     public EnumTemperature m() {
-        return this.aD.m();
+        return this.aE.m();
     }
 }

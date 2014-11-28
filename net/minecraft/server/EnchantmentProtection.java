@@ -8,20 +8,21 @@ public class EnchantmentProtection extends Enchantment {
     private static final int[] H = new int[] { 20, 12, 10, 12, 15};
     public final int a;
 
-    public EnchantmentProtection(int i, int j, int k) {
-        super(i, j, EnchantmentSlotType.ARMOR);
+    public EnchantmentProtection(int i, MinecraftKey minecraftkey, int j, int k) {
+        super(i, minecraftkey, j, EnchantmentSlotType.ARMOR);
         this.a = k;
         if (k == 2) {
             this.slot = EnchantmentSlotType.ARMOR_FEET;
         }
+
     }
 
     public int a(int i) {
-        return F[this.a] + (i - 1) * G[this.a];
+        return EnchantmentProtection.F[this.a] + (i - 1) * EnchantmentProtection.G[this.a];
     }
 
     public int b(int i) {
-        return this.a(i) + H[this.a];
+        return this.a(i) + EnchantmentProtection.H[this.a];
     }
 
     public int getMaxLevel() {
@@ -39,7 +40,7 @@ public class EnchantmentProtection extends Enchantment {
     }
 
     public String a() {
-        return "enchantment.protect." + E[this.a];
+        return "enchantment.protect." + EnchantmentProtection.E[this.a];
     }
 
     public boolean a(Enchantment enchantment) {
@@ -53,7 +54,7 @@ public class EnchantmentProtection extends Enchantment {
     }
 
     public static int a(Entity entity, int i) {
-        int j = EnchantmentManager.getEnchantmentLevel(Enchantment.PROTECTION_FIRE.id, entity.getEquipment());
+        int j = EnchantmentManager.a(Enchantment.PROTECTION_FIRE.id, entity.getEquipment());
 
         if (j > 0) {
             i -= MathHelper.d((float) i * (float) j * 0.15F);
@@ -63,7 +64,7 @@ public class EnchantmentProtection extends Enchantment {
     }
 
     public static double a(Entity entity, double d0) {
-        int i = EnchantmentManager.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS.id, entity.getEquipment());
+        int i = EnchantmentManager.a(Enchantment.PROTECTION_EXPLOSIONS.id, entity.getEquipment());
 
         if (i > 0) {
             d0 -= (double) MathHelper.floor(d0 * (double) ((float) i * 0.15F));

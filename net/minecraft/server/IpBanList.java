@@ -1,14 +1,13 @@
 package net.minecraft.server;
 
+import com.google.gson.JsonObject;
 import java.io.File;
 import java.net.SocketAddress;
 
-import net.minecraft.util.com.google.gson.JsonObject;
-
 public class IpBanList extends JsonList {
 
-    public IpBanList(File file1) {
-        super(file1);
+    public IpBanList(File file) {
+        super(file);
     }
 
     protected JsonListEntry a(JsonObject jsonobject) {
@@ -24,7 +23,7 @@ public class IpBanList extends JsonList {
     public IpBanEntry get(SocketAddress socketaddress) {
         String s = this.c(socketaddress);
 
-        return (IpBanEntry) this.get(s);
+        return (IpBanEntry) this.get((Object) s);
     }
 
     private String c(SocketAddress socketaddress) {

@@ -1,48 +1,40 @@
 package net.minecraft.server;
 
-public class PacketPlayOutWorldEvent extends Packet {
+public class PacketPlayOutWorldEvent implements Packet {
 
     private int a;
-    private int b;
+    private BlockPosition b;
     private int c;
-    private int d;
-    private int e;
-    private boolean f;
+    private boolean d;
 
     public PacketPlayOutWorldEvent() {}
 
-    public PacketPlayOutWorldEvent(int i, int j, int k, int l, int i1, boolean flag) {
+    public PacketPlayOutWorldEvent(int i, BlockPosition blockposition, int j, boolean flag) {
         this.a = i;
+        this.b = blockposition;
         this.c = j;
-        this.d = k;
-        this.e = l;
-        this.b = i1;
-        this.f = flag;
+        this.d = flag;
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
         this.a = packetdataserializer.readInt();
+        this.b = packetdataserializer.c();
         this.c = packetdataserializer.readInt();
-        this.d = packetdataserializer.readByte() & 255;
-        this.e = packetdataserializer.readInt();
-        this.b = packetdataserializer.readInt();
-        this.f = packetdataserializer.readBoolean();
+        this.d = packetdataserializer.readBoolean();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
         packetdataserializer.writeInt(this.a);
+        packetdataserializer.a(this.b);
         packetdataserializer.writeInt(this.c);
-        packetdataserializer.writeByte(this.d & 255);
-        packetdataserializer.writeInt(this.e);
-        packetdataserializer.writeInt(this.b);
-        packetdataserializer.writeBoolean(this.f);
+        packetdataserializer.writeBoolean(this.d);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

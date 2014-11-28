@@ -4,14 +4,14 @@ import java.util.concurrent.Callable;
 
 final class CrashReportGenLayer1 implements Callable {
 
-    final int a;
+    final BiomeBase a;
 
-    CrashReportGenLayer1(int i) {
-        this.a = i;
+    CrashReportGenLayer1(BiomeBase biomebase) {
+        this.a = biomebase;
     }
 
     public String a() {
-        return String.valueOf(BiomeBase.getBiome(this.a));
+        return String.valueOf(this.a);
     }
 
     public Object call() {

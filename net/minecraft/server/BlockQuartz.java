@@ -2,49 +2,57 @@ package net.minecraft.server;
 
 public class BlockQuartz extends Block {
 
-    public static final String[] a = new String[] { "default", "chiseled", "lines"};
-    private static final String[] b = new String[] { "side", "chiseled", "lines", null, null};
+    public static final BlockStateEnum VARIANT = BlockStateEnum.of("variant", EnumQuartzVariant.class);
 
     public BlockQuartz() {
         super(Material.STONE);
+        this.j(this.blockStateList.getBlockData().set(BlockQuartz.VARIANT, EnumQuartzVariant.DEFAULT));
         this.a(CreativeModeTab.b);
     }
 
-    public int getPlacedData(World world, int i, int j, int k, int l, float f, float f1, float f2, int i1) {
-        if (i1 == 2) {
-            switch (l) {
-            case 0:
+    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
+        if (i == EnumQuartzVariant.LINES_Y.a()) {
+            switch (SwitchHelperAxis.a[enumdirection.k().ordinal()]) {
             case 1:
-                i1 = 2;
-                break;
+                return this.getBlockData().set(BlockQuartz.VARIANT, EnumQuartzVariant.LINES_Z);
 
             case 2:
+                return this.getBlockData().set(BlockQuartz.VARIANT, EnumQuartzVariant.LINES_X);
+
             case 3:
-                i1 = 4;
-                break;
-
-            case 4:
-            case 5:
-                i1 = 3;
+            default:
+                return this.getBlockData().set(BlockQuartz.VARIANT, EnumQuartzVariant.LINES_Y);
             }
+        } else {
+            return i == EnumQuartzVariant.CHISELED.a() ? this.getBlockData().set(BlockQuartz.VARIANT, EnumQuartzVariant.CHISELED) : this.getBlockData().set(BlockQuartz.VARIANT, EnumQuartzVariant.DEFAULT);
         }
-
-        return i1;
     }
 
-    public int getDropData(int i) {
-        return i != 3 && i != 4 ? i : 2;
+    public int getDropData(IBlockData iblockdata) {
+        EnumQuartzVariant enumquartzvariant = (EnumQuartzVariant) iblockdata.get(BlockQuartz.VARIANT);
+
+        return enumquartzvariant != EnumQuartzVariant.LINES_X && enumquartzvariant != EnumQuartzVariant.LINES_Z ? enumquartzvariant.a() : EnumQuartzVariant.LINES_Y.a();
     }
 
-    protected ItemStack j(int i) {
-        return i != 3 && i != 4 ? super.j(i) : new ItemStack(Item.getItemOf(this), 1, 2);
+    protected ItemStack i(IBlockData iblockdata) {
+        EnumQuartzVariant enumquartzvariant = (EnumQuartzVariant) iblockdata.get(BlockQuartz.VARIANT);
+
+        return enumquartzvariant != EnumQuartzVariant.LINES_X && enumquartzvariant != EnumQuartzVariant.LINES_Z ? super.i(iblockdata) : new ItemStack(Item.getItemOf(this), 1, EnumQuartzVariant.LINES_Y.a());
     }
 
-    public int b() {
-        return 39;
-    }
-
-    public MaterialMapColor f(int i) {
+    public MaterialMapColor g(IBlockData iblockdata) {
         return MaterialMapColor.p;
+    }
+
+    public IBlockData fromLegacyData(int i) {
+        return this.getBlockData().set(BlockQuartz.VARIANT, EnumQuartzVariant.a(i));
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        return ((EnumQuartzVariant) iblockdata.get(BlockQuartz.VARIANT)).a();
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockQuartz.VARIANT});
     }
 }

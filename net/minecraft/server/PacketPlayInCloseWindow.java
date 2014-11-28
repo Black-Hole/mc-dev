@@ -1,24 +1,24 @@
 package net.minecraft.server;
 
-public class PacketPlayInCloseWindow extends Packet {
+public class PacketPlayInCloseWindow implements Packet {
 
-    private int a;
+    private int id;
 
     public PacketPlayInCloseWindow() {}
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.readByte();
+        this.id = packetdataserializer.readByte();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeByte(this.a);
+        packetdataserializer.writeByte(this.id);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

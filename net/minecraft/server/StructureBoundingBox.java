@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import com.google.common.base.Objects;
+
 public class StructureBoundingBox {
 
     public int a;
@@ -20,29 +22,34 @@ public class StructureBoundingBox {
             this.e = aint[4];
             this.f = aint[5];
         }
+
     }
 
     public static StructureBoundingBox a() {
         return new StructureBoundingBox(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
     }
 
-    public static StructureBoundingBox a(int i, int j, int k, int l, int i1, int j1, int k1, int l1, int i2, int j2) {
-        switch (j2) {
-        case 0:
-            return new StructureBoundingBox(i + l, j + i1, k + j1, i + k1 - 1 + l, j + l1 - 1 + i1, k + i2 - 1 + j1);
-
+    public static StructureBoundingBox a(int i, int j, int k, int l, int i1, int j1, int k1, int l1, int i2, EnumDirection enumdirection) {
+        switch (SwitchHelperDirection8.a[enumdirection.ordinal()]) {
         case 1:
-            return new StructureBoundingBox(i - i2 + 1 + j1, j + i1, k + l, i + j1, j + l1 - 1 + i1, k + k1 - 1 + l);
-
-        case 2:
             return new StructureBoundingBox(i + l, j + i1, k - i2 + 1 + j1, i + k1 - 1 + l, j + l1 - 1 + i1, k + j1);
 
+        case 2:
+            return new StructureBoundingBox(i + l, j + i1, k + j1, i + k1 - 1 + l, j + l1 - 1 + i1, k + i2 - 1 + j1);
+
         case 3:
+            return new StructureBoundingBox(i - i2 + 1 + j1, j + i1, k + l, i + j1, j + l1 - 1 + i1, k + k1 - 1 + l);
+
+        case 4:
             return new StructureBoundingBox(i + j1, j + i1, k + l, i + i2 - 1 + j1, j + l1 - 1 + i1, k + k1 - 1 + l);
 
         default:
             return new StructureBoundingBox(i + l, j + i1, k + j1, i + k1 - 1 + l, j + l1 - 1 + i1, k + i2 - 1 + j1);
         }
+    }
+
+    public static StructureBoundingBox a(int i, int j, int k, int l, int i1, int j1) {
+        return new StructureBoundingBox(Math.min(i, l), Math.min(j, i1), Math.min(k, j1), Math.max(i, l), Math.max(j, i1), Math.max(k, j1));
     }
 
     public StructureBoundingBox(StructureBoundingBox structureboundingbox) {
@@ -61,6 +68,15 @@ public class StructureBoundingBox {
         this.d = l;
         this.e = i1;
         this.f = j1;
+    }
+
+    public StructureBoundingBox(BaseBlockPosition baseblockposition, BaseBlockPosition baseblockposition1) {
+        this.a = Math.min(baseblockposition.getX(), baseblockposition1.getX());
+        this.b = Math.min(baseblockposition.getY(), baseblockposition1.getY());
+        this.c = Math.min(baseblockposition.getZ(), baseblockposition1.getZ());
+        this.d = Math.max(baseblockposition.getX(), baseblockposition1.getX());
+        this.e = Math.max(baseblockposition.getY(), baseblockposition1.getY());
+        this.f = Math.max(baseblockposition.getZ(), baseblockposition1.getZ());
     }
 
     public StructureBoundingBox(int i, int j, int k, int l) {
@@ -98,39 +114,35 @@ public class StructureBoundingBox {
         this.f += k;
     }
 
-    public boolean b(int i, int j, int k) {
-        return i >= this.a && i <= this.d && k >= this.c && k <= this.f && j >= this.b && j <= this.e;
+    public boolean b(BaseBlockPosition baseblockposition) {
+        return baseblockposition.getX() >= this.a && baseblockposition.getX() <= this.d && baseblockposition.getZ() >= this.c && baseblockposition.getZ() <= this.f && baseblockposition.getY() >= this.b && baseblockposition.getY() <= this.e;
     }
 
-    public int b() {
-        return this.d - this.a + 1;
+    public BaseBlockPosition b() {
+        return new BaseBlockPosition(this.d - this.a, this.e - this.b, this.f - this.c);
     }
 
     public int c() {
-        return this.e - this.b + 1;
+        return this.d - this.a + 1;
     }
 
     public int d() {
-        return this.f - this.c + 1;
+        return this.e - this.b + 1;
     }
 
     public int e() {
-        return this.a + (this.d - this.a + 1) / 2;
+        return this.f - this.c + 1;
     }
 
-    public int f() {
-        return this.b + (this.e - this.b + 1) / 2;
-    }
-
-    public int g() {
-        return this.c + (this.f - this.c + 1) / 2;
+    public BaseBlockPosition f() {
+        return new BlockPosition(this.a + (this.d - this.a + 1) / 2, this.b + (this.e - this.b + 1) / 2, this.c + (this.f - this.c + 1) / 2);
     }
 
     public String toString() {
-        return "(" + this.a + ", " + this.b + ", " + this.c + "; " + this.d + ", " + this.e + ", " + this.f + ")";
+        return Objects.toStringHelper(this).add("x0", this.a).add("y0", this.b).add("z0", this.c).add("x1", this.d).add("y1", this.e).add("z1", this.f).toString();
     }
 
-    public NBTTagIntArray h() {
+    public NBTTagIntArray g() {
         return new NBTTagIntArray(new int[] { this.a, this.b, this.c, this.d, this.e, this.f});
     }
 }

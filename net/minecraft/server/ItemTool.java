@@ -1,8 +1,7 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Multimap;
 import java.util.Set;
-
-import net.minecraft.util.com.google.common.collect.Multimap;
 
 public class ItemTool extends Item {
 
@@ -30,23 +29,23 @@ public class ItemTool extends Item {
         return true;
     }
 
-    public boolean a(ItemStack itemstack, World world, Block block, int i, int j, int k, EntityLiving entityliving) {
-        if ((double) block.f(world, i, j, k) != 0.0D) {
+    public boolean a(ItemStack itemstack, World world, Block block, BlockPosition blockposition, EntityLiving entityliving) {
+        if ((double) block.g(world, blockposition) != 0.0D) {
             itemstack.damage(1, entityliving);
         }
 
         return true;
     }
 
-    public EnumToolMaterial i() {
+    public EnumToolMaterial g() {
         return this.b;
     }
 
-    public int c() {
+    public int b() {
         return this.b.e();
     }
 
-    public String j() {
+    public String h() {
         return this.b.toString();
     }
 
@@ -54,10 +53,10 @@ public class ItemTool extends Item {
         return this.b.f() == itemstack1.getItem() ? true : super.a(itemstack, itemstack1);
     }
 
-    public Multimap k() {
-        Multimap multimap = super.k();
+    public Multimap i() {
+        Multimap multimap = super.i();
 
-        multimap.put(GenericAttributes.e.getName(), new AttributeModifier(f, "Tool modifier", (double) this.d, 0));
+        multimap.put(GenericAttributes.e.getName(), new AttributeModifier(ItemTool.f, "Tool modifier", (double) this.d, 0));
         return multimap;
     }
 }

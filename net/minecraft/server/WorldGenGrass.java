@@ -4,28 +4,24 @@ import java.util.Random;
 
 public class WorldGenGrass extends WorldGenerator {
 
-    private Block a;
-    private int b;
+    private final IBlockData a;
 
-    public WorldGenGrass(Block block, int i) {
-        this.a = block;
-        this.b = i;
+    public WorldGenGrass(EnumTallGrassType enumtallgrasstype) {
+        this.a = Blocks.TALLGRASS.getBlockData().set(BlockLongGrass.TYPE, enumtallgrasstype);
     }
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
         Block block;
 
-        while (((block = world.getType(i, j, k)).getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) && j > 0) {
-            --j;
+        while (((block = world.getType(blockposition).getBlock()).getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) && blockposition.getY() > 0) {
+            blockposition = blockposition.down();
         }
 
-        for (int l = 0; l < 128; ++l) {
-            int i1 = i + random.nextInt(8) - random.nextInt(8);
-            int j1 = j + random.nextInt(4) - random.nextInt(4);
-            int k1 = k + random.nextInt(8) - random.nextInt(8);
+        for (int i = 0; i < 128; ++i) {
+            BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 
-            if (world.isEmpty(i1, j1, k1) && this.a.j(world, i1, j1, k1)) {
-                world.setTypeAndData(i1, j1, k1, this.a, this.b, 2);
+            if (world.isEmpty(blockposition1) && Blocks.TALLGRASS.f(world, blockposition1, this.a)) {
+                world.setTypeAndData(blockposition1, this.a, 2);
             }
         }
 

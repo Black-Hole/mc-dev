@@ -1,14 +1,13 @@
 package net.minecraft.server;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
-
-import net.minecraft.util.com.google.gson.JsonDeserializationContext;
-import net.minecraft.util.com.google.gson.JsonDeserializer;
-import net.minecraft.util.com.google.gson.JsonElement;
-import net.minecraft.util.com.google.gson.JsonObject;
-import net.minecraft.util.com.google.gson.JsonPrimitive;
-import net.minecraft.util.com.google.gson.JsonSerializationContext;
-import net.minecraft.util.com.google.gson.JsonSerializer;
 
 public class ChatModifierSerializer implements JsonDeserializer, JsonSerializer {
 
@@ -44,6 +43,10 @@ public class ChatModifierSerializer implements JsonDeserializer, JsonSerializer 
 
                 if (jsonobject.has("color")) {
                     ChatModifier.a(chatmodifier, (EnumChatFormat) jsondeserializationcontext.deserialize(jsonobject.get("color"), EnumChatFormat.class));
+                }
+
+                if (jsonobject.has("insertion")) {
+                    ChatModifier.a(chatmodifier, jsonobject.get("insertion").getAsString());
                 }
 
                 JsonObject jsonobject1;
@@ -113,19 +116,23 @@ public class ChatModifierSerializer implements JsonDeserializer, JsonSerializer 
                 jsonobject.add("color", jsonserializationcontext.serialize(ChatModifier.g(chatmodifier)));
             }
 
-            JsonObject jsonobject1;
-
             if (ChatModifier.h(chatmodifier) != null) {
-                jsonobject1 = new JsonObject();
-                jsonobject1.addProperty("action", ChatModifier.h(chatmodifier).a().b());
-                jsonobject1.addProperty("value", ChatModifier.h(chatmodifier).b());
-                jsonobject.add("clickEvent", jsonobject1);
+                jsonobject.add("insertion", jsonserializationcontext.serialize(ChatModifier.h(chatmodifier)));
             }
+
+            JsonObject jsonobject1;
 
             if (ChatModifier.i(chatmodifier) != null) {
                 jsonobject1 = new JsonObject();
                 jsonobject1.addProperty("action", ChatModifier.i(chatmodifier).a().b());
-                jsonobject1.add("value", jsonserializationcontext.serialize(ChatModifier.i(chatmodifier).b()));
+                jsonobject1.addProperty("value", ChatModifier.i(chatmodifier).b());
+                jsonobject.add("clickEvent", jsonobject1);
+            }
+
+            if (ChatModifier.j(chatmodifier) != null) {
+                jsonobject1 = new JsonObject();
+                jsonobject1.addProperty("action", ChatModifier.j(chatmodifier).a().b());
+                jsonobject1.add("value", jsonserializationcontext.serialize(ChatModifier.j(chatmodifier).b()));
                 jsonobject.add("hoverEvent", jsonobject1);
             }
 

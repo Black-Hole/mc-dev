@@ -16,6 +16,7 @@ class CrashReportDetail {
         } else {
             this.b = object.toString();
         }
+
     }
 
     public String a() {

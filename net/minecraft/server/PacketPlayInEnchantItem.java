@@ -1,14 +1,14 @@
 package net.minecraft.server;
 
-public class PacketPlayInEnchantItem extends Packet {
+public class PacketPlayInEnchantItem implements Packet {
 
     private int a;
     private int b;
 
     public PacketPlayInEnchantItem() {}
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
@@ -21,19 +21,15 @@ public class PacketPlayInEnchantItem extends Packet {
         packetdataserializer.writeByte(this.b);
     }
 
-    public String b() {
-        return String.format("id=%d, button=%d", new Object[] { Integer.valueOf(this.a), Integer.valueOf(this.b)});
-    }
-
-    public int c() {
+    public int a() {
         return this.a;
     }
 
-    public int d() {
+    public int b() {
         return this.b;
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

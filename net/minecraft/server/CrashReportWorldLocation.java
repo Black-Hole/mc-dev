@@ -4,18 +4,16 @@ import java.util.concurrent.Callable;
 
 class CrashReportWorldLocation implements Callable {
 
-    final int a;
-    final int b;
-    final World c;
+    final BlockPosition a;
+    final World b;
 
-    CrashReportWorldLocation(World world, int i, int j) {
-        this.c = world;
-        this.a = i;
-        this.b = j;
+    CrashReportWorldLocation(World world, BlockPosition blockposition) {
+        this.b = world;
+        this.a = blockposition;
     }
 
     public String a() {
-        return CrashReportSystemDetails.a(this.a, 0, this.b);
+        return CrashReportSystemDetails.a(this.a);
     }
 
     public Object call() {

@@ -6,14 +6,17 @@ class GameRuleValue {
     private boolean b;
     private int c;
     private double d;
+    private final EnumGameRuleType e;
 
-    public GameRuleValue(String s) {
+    public GameRuleValue(String s, EnumGameRuleType enumgameruletype) {
+        this.e = enumgameruletype;
         this.a(s);
     }
 
     public void a(String s) {
         this.a = s;
         this.b = Boolean.parseBoolean(s);
+        this.c = this.b ? 1 : 0;
 
         try {
             this.c = Integer.parseInt(s);
@@ -26,6 +29,7 @@ class GameRuleValue {
         } catch (NumberFormatException numberformatexception1) {
             ;
         }
+
     }
 
     public String a() {
@@ -34,5 +38,13 @@ class GameRuleValue {
 
     public boolean b() {
         return this.b;
+    }
+
+    public int c() {
+        return this.c;
+    }
+
+    public EnumGameRuleType e() {
+        return this.e;
     }
 }

@@ -3,45 +3,43 @@ package net.minecraft.server;
 public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
 
     protected EntityInsentient a;
-    protected int b;
-    protected int c;
-    protected int d;
-    protected BlockDoor e;
-    boolean f;
-    float g;
-    float h;
+    protected BlockPosition b;
+    protected BlockDoor c;
+    boolean d;
+    float e;
+    float f;
 
     public PathfinderGoalDoorInteract(EntityInsentient entityinsentient) {
+        this.b = BlockPosition.ZERO;
         this.a = entityinsentient;
+        if (!(entityinsentient.getNavigation() instanceof Navigation)) {
+            throw new IllegalArgumentException("Unsupported mob type for DoorInteractGoal");
+        }
     }
 
     public boolean a() {
         if (!this.a.positionChanged) {
             return false;
         } else {
-            Navigation navigation = this.a.getNavigation();
-            PathEntity pathentity = navigation.e();
+            Navigation navigation = (Navigation) this.a.getNavigation();
+            PathEntity pathentity = navigation.j();
 
-            if (pathentity != null && !pathentity.b() && navigation.c()) {
+            if (pathentity != null && !pathentity.b() && navigation.g()) {
                 for (int i = 0; i < Math.min(pathentity.e() + 2, pathentity.d()); ++i) {
                     PathPoint pathpoint = pathentity.a(i);
 
-                    this.b = pathpoint.a;
-                    this.c = pathpoint.b + 1;
-                    this.d = pathpoint.c;
-                    if (this.a.e((double) this.b, this.a.locY, (double) this.d) <= 2.25D) {
-                        this.e = this.a(this.b, this.c, this.d);
-                        if (this.e != null) {
+                    this.b = new BlockPosition(pathpoint.a, pathpoint.b + 1, pathpoint.c);
+                    if (this.a.e((double) this.b.getX(), this.a.locY, (double) this.b.getZ()) <= 2.25D) {
+                        this.c = this.a(this.b);
+                        if (this.c != null) {
                             return true;
                         }
                     }
                 }
 
-                this.b = MathHelper.floor(this.a.locX);
-                this.c = MathHelper.floor(this.a.locY + 1.0D);
-                this.d = MathHelper.floor(this.a.locZ);
-                this.e = this.a(this.b, this.c, this.d);
-                return this.e != null;
+                this.b = (new BlockPosition(this.a)).up();
+                this.c = this.a(this.b);
+                return this.c != null;
             } else {
                 return false;
             }
@@ -49,28 +47,29 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.f;
+        return !this.d;
     }
 
     public void c() {
-        this.f = false;
-        this.g = (float) ((double) ((float) this.b + 0.5F) - this.a.locX);
-        this.h = (float) ((double) ((float) this.d + 0.5F) - this.a.locZ);
+        this.d = false;
+        this.e = (float) ((double) ((float) this.b.getX() + 0.5F) - this.a.locX);
+        this.f = (float) ((double) ((float) this.b.getZ() + 0.5F) - this.a.locZ);
     }
 
     public void e() {
-        float f = (float) ((double) ((float) this.b + 0.5F) - this.a.locX);
-        float f1 = (float) ((double) ((float) this.d + 0.5F) - this.a.locZ);
-        float f2 = this.g * f + this.h * f1;
+        float f = (float) ((double) ((float) this.b.getX() + 0.5F) - this.a.locX);
+        float f1 = (float) ((double) ((float) this.b.getZ() + 0.5F) - this.a.locZ);
+        float f2 = this.e * f + this.f * f1;
 
         if (f2 < 0.0F) {
-            this.f = true;
+            this.d = true;
         }
+
     }
 
-    private BlockDoor a(int i, int j, int k) {
-        Block block = this.a.world.getType(i, j, k);
+    private BlockDoor a(BlockPosition blockposition) {
+        Block block = this.a.world.getType(blockposition).getBlock();
 
-        return block != Blocks.WOODEN_DOOR ? null : (BlockDoor) block;
+        return block instanceof BlockDoor && block.getMaterial() == Material.WOOD ? (BlockDoor) block : null;
     }
 }

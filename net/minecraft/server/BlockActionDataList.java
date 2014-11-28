@@ -6,7 +6,7 @@ class BlockActionDataList extends ArrayList {
 
     private BlockActionDataList() {}
 
-    BlockActionDataList(BananaAPI bananaapi) {
+    public BlockActionDataList(EntitySelectorLiving2 entityselectorliving2) {
         this();
     }
 }

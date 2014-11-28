@@ -20,6 +20,7 @@ public class NBTTagIntArray extends NBTBase {
         for (int i = 0; i < this.data.length; ++i) {
             dataoutput.writeInt(this.data[i]);
         }
+
     }
 
     void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) {
@@ -31,6 +32,7 @@ public class NBTTagIntArray extends NBTBase {
         for (int k = 0; k < j; ++k) {
             this.data[k] = datainput.readInt();
         }
+
     }
 
     public byte getTypeId() {

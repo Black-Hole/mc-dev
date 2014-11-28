@@ -4,51 +4,51 @@ import java.util.Random;
 
 public class BiomeIcePlains extends BiomeBase {
 
-    private boolean aC;
-    private WorldGenPackedIce2 aD = new WorldGenPackedIce2();
-    private WorldGenPackedIce1 aE = new WorldGenPackedIce1(4);
+    private boolean aD;
+    private WorldGenPackedIce2 aE = new WorldGenPackedIce2();
+    private WorldGenPackedIce1 aF = new WorldGenPackedIce1(4);
 
     public BiomeIcePlains(int i, boolean flag) {
         super(i);
-        this.aC = flag;
+        this.aD = flag;
         if (flag) {
-            this.ai = Blocks.SNOW_BLOCK;
+            this.ak = Blocks.SNOW.getBlockData();
         }
 
-        this.at.clear();
+        this.au.clear();
     }
 
-    public void a(World world, Random random, int i, int j) {
-        if (this.aC) {
+    public void a(World world, Random random, BlockPosition blockposition) {
+        if (this.aD) {
+            int i;
+            int j;
             int k;
-            int l;
-            int i1;
 
-            for (k = 0; k < 3; ++k) {
-                l = i + random.nextInt(16) + 8;
-                i1 = j + random.nextInt(16) + 8;
-                this.aD.generate(world, random, l, world.getHighestBlockYAt(l, i1), i1);
+            for (i = 0; i < 3; ++i) {
+                j = random.nextInt(16) + 8;
+                k = random.nextInt(16) + 8;
+                this.aE.generate(world, random, world.getHighestBlockYAt(blockposition.a(j, 0, k)));
             }
 
-            for (k = 0; k < 2; ++k) {
-                l = i + random.nextInt(16) + 8;
-                i1 = j + random.nextInt(16) + 8;
-                this.aE.generate(world, random, l, world.getHighestBlockYAt(l, i1), i1);
+            for (i = 0; i < 2; ++i) {
+                j = random.nextInt(16) + 8;
+                k = random.nextInt(16) + 8;
+                this.aF.generate(world, random, world.getHighestBlockYAt(blockposition.a(j, 0, k)));
             }
         }
 
-        super.a(world, random, i, j);
+        super.a(world, random, blockposition);
     }
 
     public WorldGenTreeAbstract a(Random random) {
         return new WorldGenTaiga2(false);
     }
 
-    protected BiomeBase k() {
-        BiomeBase biomebase = (new BiomeIcePlains(this.id + 128, true)).a(13828095, true).a(this.af + " Spikes").c().a(0.0F, 0.5F).a(new BiomeTemperature(this.am + 0.1F, this.an + 0.1F));
+    protected BiomeBase d(int i) {
+        BiomeBase biomebase = (new BiomeIcePlains(i, true)).a(13828095, true).a(this.ah + " Spikes").c().a(0.0F, 0.5F).a(new BiomeTemperature(this.an + 0.1F, this.ao + 0.1F));
 
-        biomebase.am = this.am + 0.3F;
-        biomebase.an = this.an + 0.4F;
+        biomebase.an = this.an + 0.3F;
+        biomebase.ao = this.ao + 0.4F;
         return biomebase;
     }
 }

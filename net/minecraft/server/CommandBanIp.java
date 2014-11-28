@@ -24,18 +24,14 @@ public class CommandBanIp extends CommandAbstract {
         return MinecraftServer.getServer().getPlayerList().getIPBans().isEnabled() && super.canUse(icommandlistener);
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.banip.usage";
     }
 
     public void execute(ICommandListener icommandlistener, String[] astring) {
         if (astring.length >= 1 && astring[0].length() > 1) {
-            Matcher matcher = a.matcher(astring[0]);
-            IChatBaseComponent ichatbasecomponent = null;
-
-            if (astring.length >= 2) {
-                ichatbasecomponent = a(icommandlistener, astring, 1);
-            }
+            IChatBaseComponent ichatbasecomponent = astring.length >= 2 ? a(icommandlistener, astring, 1) : null;
+            Matcher matcher = CommandBanIp.a.matcher(astring[0]);
 
             if (matcher.matches()) {
                 this.a(icommandlistener, astring[0], ichatbasecomponent == null ? null : ichatbasecomponent.c());
@@ -46,14 +42,15 @@ public class CommandBanIp extends CommandAbstract {
                     throw new ExceptionPlayerNotFound("commands.banip.invalid", new Object[0]);
                 }
 
-                this.a(icommandlistener, entityplayer.s(), ichatbasecomponent == null ? null : ichatbasecomponent.c());
+                this.a(icommandlistener, entityplayer.w(), ichatbasecomponent == null ? null : ichatbasecomponent.c());
             }
+
         } else {
             throw new ExceptionUsage("commands.banip.usage", new Object[0]);
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : null;
     }
 
@@ -75,7 +72,8 @@ public class CommandBanIp extends CommandAbstract {
         if (list.isEmpty()) {
             a(icommandlistener, this, "commands.banip.success", new Object[] { s});
         } else {
-            a(icommandlistener, this, "commands.banip.success.players", new Object[] { s, a(astring)});
+            a(icommandlistener, this, "commands.banip.success.players", new Object[] { s, a((Object[]) astring)});
         }
+
     }
 }

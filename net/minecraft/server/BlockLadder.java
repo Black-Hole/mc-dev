@@ -1,40 +1,47 @@
 package net.minecraft.server;
 
-import java.util.Random;
+import com.google.common.base.Predicate;
+import java.util.Iterator;
 
 public class BlockLadder extends Block {
 
+    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirectionLimit.HORIZONTAL);
+
     protected BlockLadder() {
         super(Material.ORIENTABLE);
+        this.j(this.blockStateList.getBlockData().set(BlockLadder.FACING, EnumDirection.NORTH));
         this.a(CreativeModeTab.c);
     }
 
-    public AxisAlignedBB a(World world, int i, int j, int k) {
-        this.updateShape(world, i, j, k);
-        return super.a(world, i, j, k);
+    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        this.updateShape(world, blockposition);
+        return super.a(world, blockposition, iblockdata);
     }
 
-    public void updateShape(IBlockAccess iblockaccess, int i, int j, int k) {
-        this.b(iblockaccess.getData(i, j, k));
-    }
+    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        IBlockData iblockdata = iblockaccess.getType(blockposition);
 
-    public void b(int i) {
-        float f = 0.125F;
+        if (iblockdata.getBlock() == this) {
+            float f = 0.125F;
 
-        if (i == 2) {
-            this.a(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
-        }
+            switch (SwitchHelperDirection16.a[((EnumDirection) iblockdata.get(BlockLadder.FACING)).ordinal()]) {
+            case 1:
+                this.a(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
+                break;
 
-        if (i == 3) {
-            this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
-        }
+            case 2:
+                this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
+                break;
 
-        if (i == 4) {
-            this.a(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-        }
+            case 3:
+                this.a(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+                break;
 
-        if (i == 5) {
-            this.a(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
+            case 4:
+            default:
+                this.a(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
+            }
+
         }
     }
 
@@ -46,65 +53,60 @@ public class BlockLadder extends Block {
         return false;
     }
 
-    public int b() {
-        return 8;
+    public boolean canPlace(World world, BlockPosition blockposition) {
+        return world.getType(blockposition.west()).getBlock().isOccluding() ? true : (world.getType(blockposition.east()).getBlock().isOccluding() ? true : (world.getType(blockposition.north()).getBlock().isOccluding() ? true : world.getType(blockposition.south()).getBlock().isOccluding()));
     }
 
-    public boolean canPlace(World world, int i, int j, int k) {
-        return world.getType(i - 1, j, k).r() ? true : (world.getType(i + 1, j, k).r() ? true : (world.getType(i, j, k - 1).r() ? true : world.getType(i, j, k + 1).r()));
+    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
+        if (enumdirection.k().c() && this.b(world, blockposition, enumdirection)) {
+            return this.getBlockData().set(BlockLadder.FACING, enumdirection);
+        } else {
+            Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+
+            EnumDirection enumdirection1;
+
+            do {
+                if (!iterator.hasNext()) {
+                    return this.getBlockData();
+                }
+
+                enumdirection1 = (EnumDirection) iterator.next();
+            } while (!this.b(world, blockposition, enumdirection1));
+
+            return this.getBlockData().set(BlockLadder.FACING, enumdirection1);
+        }
     }
 
-    public int getPlacedData(World world, int i, int j, int k, int l, float f, float f1, float f2, int i1) {
-        int j1 = i1;
+    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockLadder.FACING);
 
-        if ((i1 == 0 || l == 2) && world.getType(i, j, k + 1).r()) {
-            j1 = 2;
+        if (!this.b(world, blockposition, enumdirection)) {
+            this.b(world, blockposition, iblockdata, 0);
+            world.setAir(blockposition);
         }
 
-        if ((j1 == 0 || l == 3) && world.getType(i, j, k - 1).r()) {
-            j1 = 3;
-        }
-
-        if ((j1 == 0 || l == 4) && world.getType(i + 1, j, k).r()) {
-            j1 = 4;
-        }
-
-        if ((j1 == 0 || l == 5) && world.getType(i - 1, j, k).r()) {
-            j1 = 5;
-        }
-
-        return j1;
+        super.doPhysics(world, blockposition, iblockdata, block);
     }
 
-    public void doPhysics(World world, int i, int j, int k, Block block) {
-        int l = world.getData(i, j, k);
-        boolean flag = false;
-
-        if (l == 2 && world.getType(i, j, k + 1).r()) {
-            flag = true;
-        }
-
-        if (l == 3 && world.getType(i, j, k - 1).r()) {
-            flag = true;
-        }
-
-        if (l == 4 && world.getType(i + 1, j, k).r()) {
-            flag = true;
-        }
-
-        if (l == 5 && world.getType(i - 1, j, k).r()) {
-            flag = true;
-        }
-
-        if (!flag) {
-            this.b(world, i, j, k, l, 0);
-            world.setAir(i, j, k);
-        }
-
-        super.doPhysics(world, i, j, k, block);
+    protected boolean b(World world, BlockPosition blockposition, EnumDirection enumdirection) {
+        return world.getType(blockposition.shift(enumdirection.opposite())).getBlock().isOccluding();
     }
 
-    public int a(Random random) {
-        return 1;
+    public IBlockData fromLegacyData(int i) {
+        EnumDirection enumdirection = EnumDirection.fromType1(i);
+
+        if (enumdirection.k() == EnumAxis.Y) {
+            enumdirection = EnumDirection.NORTH;
+        }
+
+        return this.getBlockData().set(BlockLadder.FACING, enumdirection);
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        return ((EnumDirection) iblockdata.get(BlockLadder.FACING)).a();
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockLadder.FACING});
     }
 }

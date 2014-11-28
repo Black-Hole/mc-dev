@@ -5,68 +5,68 @@ import java.util.Random;
 
 public class BiomeMesa extends BiomeBase {
 
-    private byte[] aC;
-    private long aD;
-    private NoiseGenerator3 aE;
+    private IBlockData[] aD;
+    private long aE;
     private NoiseGenerator3 aF;
     private NoiseGenerator3 aG;
-    private boolean aH;
+    private NoiseGenerator3 aH;
     private boolean aI;
+    private boolean aJ;
 
     public BiomeMesa(int i, boolean flag, boolean flag1) {
         super(i);
-        this.aH = flag;
-        this.aI = flag1;
+        this.aI = flag;
+        this.aJ = flag1;
         this.b();
         this.a(2.0F, 0.0F);
-        this.at.clear();
-        this.ai = Blocks.SAND;
-        this.aj = 1;
-        this.ak = Blocks.STAINED_HARDENED_CLAY;
-        this.ar.x = -999;
-        this.ar.A = 20;
-        this.ar.C = 3;
-        this.ar.D = 5;
-        this.ar.y = 0;
-        this.at.clear();
+        this.au.clear();
+        this.ak = Blocks.SAND.getBlockData().set(BlockSand.VARIANT, EnumSandVariant.RED_SAND);
+        this.al = Blocks.STAINED_HARDENED_CLAY.getBlockData();
+        this.as.A = -999;
+        this.as.D = 20;
+        this.as.F = 3;
+        this.as.G = 5;
+        this.as.B = 0;
+        this.au.clear();
         if (flag1) {
-            this.ar.x = 5;
+            this.as.A = 5;
         }
+
     }
 
     public WorldGenTreeAbstract a(Random random) {
-        return this.az;
+        return this.aA;
     }
 
-    public void a(World world, Random random, int i, int j) {
-        super.a(world, random, i, j);
+    public void a(World world, Random random, BlockPosition blockposition) {
+        super.a(world, random, blockposition);
     }
 
-    public void a(World world, Random random, Block[] ablock, byte[] abyte, int i, int j, double d0) {
-        if (this.aC == null || this.aD != world.getSeed()) {
+    public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
+        if (this.aD == null || this.aE != world.getSeed()) {
             this.a(world.getSeed());
         }
 
-        if (this.aE == null || this.aF == null || this.aD != world.getSeed()) {
-            Random random1 = new Random(this.aD);
+        if (this.aF == null || this.aG == null || this.aE != world.getSeed()) {
+            Random random1 = new Random(this.aE);
 
-            this.aE = new NoiseGenerator3(random1, 4);
-            this.aF = new NoiseGenerator3(random1, 1);
+            this.aF = new NoiseGenerator3(random1, 4);
+            this.aG = new NoiseGenerator3(random1, 1);
         }
 
-        this.aD = world.getSeed();
+        this.aE = world.getSeed();
         double d1 = 0.0D;
         int k;
         int l;
 
-        if (this.aH) {
+        if (this.aI) {
             k = (i & -16) + (j & 15);
             l = (j & -16) + (i & 15);
-            double d2 = Math.min(Math.abs(d0), this.aE.a((double) k * 0.25D, (double) l * 0.25D));
+            double d2 = Math.min(Math.abs(d0), this.aF.a((double) k * 0.25D, (double) l * 0.25D));
 
             if (d2 > 0.0D) {
                 double d3 = 0.001953125D;
-                double d4 = Math.abs(this.aF.a((double) k * d3, (double) l * d3));
+                double d4 = Math.abs(this.aG.a((double) k * d3, (double) l * d3));
 
                 d1 = d2 * d2 * 2.5D;
                 double d5 = Math.ceil(d4 * 50.0D) + 14.0D;
@@ -82,116 +82,100 @@ public class BiomeMesa extends BiomeBase {
         k = i & 15;
         l = j & 15;
         boolean flag = true;
-        Block block = Blocks.STAINED_HARDENED_CLAY;
-        Block block1 = this.ak;
+        IBlockData iblockdata = Blocks.STAINED_HARDENED_CLAY.getBlockData();
+        IBlockData iblockdata1 = this.al;
         int i1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
         boolean flag1 = Math.cos(d0 / 3.0D * 3.141592653589793D) > 0.0D;
         int j1 = -1;
         boolean flag2 = false;
-        int k1 = ablock.length / 256;
 
-        for (int l1 = 255; l1 >= 0; --l1) {
-            int i2 = (l * 16 + k) * k1 + l1;
-
-            if ((ablock[i2] == null || ablock[i2].getMaterial() == Material.AIR) && l1 < (int) d1) {
-                ablock[i2] = Blocks.STONE;
+        for (int k1 = 255; k1 >= 0; --k1) {
+            if (chunksnapshot.a(l, k1, k).getBlock().getMaterial() == Material.AIR && k1 < (int) d1) {
+                chunksnapshot.a(l, k1, k, Blocks.STONE.getBlockData());
             }
 
-            if (l1 <= 0 + random.nextInt(5)) {
-                ablock[i2] = Blocks.BEDROCK;
+            if (k1 <= random.nextInt(5)) {
+                chunksnapshot.a(l, k1, k, Blocks.BEDROCK.getBlockData());
             } else {
-                Block block2 = ablock[i2];
+                IBlockData iblockdata2 = chunksnapshot.a(l, k1, k);
 
-                if (block2 != null && block2.getMaterial() != Material.AIR) {
-                    if (block2 == Blocks.STONE) {
-                        byte b0;
+                if (iblockdata2.getBlock().getMaterial() == Material.AIR) {
+                    j1 = -1;
+                } else if (iblockdata2.getBlock() == Blocks.STONE) {
+                    IBlockData iblockdata3;
 
-                        if (j1 == -1) {
-                            flag2 = false;
-                            if (i1 <= 0) {
-                                block = null;
-                                block1 = Blocks.STONE;
-                            } else if (l1 >= 59 && l1 <= 64) {
-                                block = Blocks.STAINED_HARDENED_CLAY;
-                                block1 = this.ak;
-                            }
+                    if (j1 == -1) {
+                        flag2 = false;
+                        if (i1 <= 0) {
+                            iblockdata = null;
+                            iblockdata1 = Blocks.STONE.getBlockData();
+                        } else if (k1 >= 59 && k1 <= 64) {
+                            iblockdata = Blocks.STAINED_HARDENED_CLAY.getBlockData();
+                            iblockdata1 = this.al;
+                        }
 
-                            if (l1 < 63 && (block == null || block.getMaterial() == Material.AIR)) {
-                                block = Blocks.STATIONARY_WATER;
-                            }
+                        if (k1 < 63 && (iblockdata == null || iblockdata.getBlock().getMaterial() == Material.AIR)) {
+                            iblockdata = Blocks.WATER.getBlockData();
+                        }
 
-                            j1 = i1 + Math.max(0, l1 - 63);
-                            if (l1 >= 62) {
-                                if (this.aI && l1 > 86 + i1 * 2) {
+                        j1 = i1 + Math.max(0, k1 - 63);
+                        if (k1 >= 62) {
+                            if (this.aJ && k1 > 86 + i1 * 2) {
+                                if (flag1) {
+                                    chunksnapshot.a(l, k1, k, Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, EnumDirtVariant.COARSE_DIRT));
+                                } else {
+                                    chunksnapshot.a(l, k1, k, Blocks.GRASS.getBlockData());
+                                }
+                            } else if (k1 > 66 + i1) {
+                                if (k1 >= 64 && k1 <= 127) {
                                     if (flag1) {
-                                        ablock[i2] = Blocks.DIRT;
-                                        abyte[i2] = 1;
+                                        iblockdata3 = Blocks.HARDENED_CLAY.getBlockData();
                                     } else {
-                                        ablock[i2] = Blocks.GRASS;
+                                        iblockdata3 = this.a(i, k1, j);
                                     }
-                                } else if (l1 > 66 + i1) {
-                                    b0 = 16;
-                                    if (l1 >= 64 && l1 <= 127) {
-                                        if (!flag1) {
-                                            b0 = this.d(i, l1, j);
-                                        }
-                                    } else {
-                                        b0 = 1;
-                                    }
+                                } else {
+                                    iblockdata3 = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE);
+                                }
 
-                                    if (b0 < 16) {
-                                        ablock[i2] = Blocks.STAINED_HARDENED_CLAY;
-                                        abyte[i2] = (byte) b0;
-                                    } else {
-                                        ablock[i2] = Blocks.HARDENED_CLAY;
-                                    }
-                                } else {
-                                    ablock[i2] = this.ai;
-                                    abyte[i2] = (byte) this.aj;
-                                    flag2 = true;
-                                }
+                                chunksnapshot.a(l, k1, k, iblockdata3);
                             } else {
-                                ablock[i2] = block1;
-                                if (block1 == Blocks.STAINED_HARDENED_CLAY) {
-                                    abyte[i2] = 1;
-                                }
+                                chunksnapshot.a(l, k1, k, this.ak);
+                                flag2 = true;
                             }
-                        } else if (j1 > 0) {
-                            --j1;
-                            if (flag2) {
-                                ablock[i2] = Blocks.STAINED_HARDENED_CLAY;
-                                abyte[i2] = 1;
-                            } else {
-                                b0 = this.d(i, l1, j);
-                                if (b0 < 16) {
-                                    ablock[i2] = Blocks.STAINED_HARDENED_CLAY;
-                                    abyte[i2] = b0;
-                                } else {
-                                    ablock[i2] = Blocks.HARDENED_CLAY;
-                                }
+                        } else {
+                            chunksnapshot.a(l, k1, k, iblockdata1);
+                            if (iblockdata1.getBlock() == Blocks.STAINED_HARDENED_CLAY) {
+                                chunksnapshot.a(l, k1, k, iblockdata1.getBlock().getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE));
                             }
                         }
+                    } else if (j1 > 0) {
+                        --j1;
+                        if (flag2) {
+                            chunksnapshot.a(l, k1, k, Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE));
+                        } else {
+                            iblockdata3 = this.a(i, k1, j);
+                            chunksnapshot.a(l, k1, k, iblockdata3);
+                        }
                     }
-                } else {
-                    j1 = -1;
                 }
             }
         }
+
     }
 
     private void a(long i) {
-        this.aC = new byte[64];
-        Arrays.fill(this.aC, (byte) 16);
+        this.aD = new IBlockData[64];
+        Arrays.fill(this.aD, Blocks.HARDENED_CLAY.getBlockData());
         Random random = new Random(i);
 
-        this.aG = new NoiseGenerator3(random, 1);
+        this.aH = new NoiseGenerator3(random, 1);
 
         int j;
 
         for (j = 0; j < 64; ++j) {
             j += random.nextInt(5) + 1;
             if (j < 64) {
-                this.aC[j] = 1;
+                this.aD[j] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE);
             }
         }
 
@@ -207,7 +191,7 @@ public class BiomeMesa extends BiomeBase {
             i1 = random.nextInt(64);
 
             for (j1 = 0; i1 + j1 < 64 && j1 < l; ++j1) {
-                this.aC[i1 + j1] = 4;
+                this.aD[i1 + j1] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.YELLOW);
             }
         }
 
@@ -220,7 +204,7 @@ public class BiomeMesa extends BiomeBase {
             j1 = random.nextInt(64);
 
             for (k1 = 0; j1 + k1 < 64 && k1 < i1; ++k1) {
-                this.aC[j1 + k1] = 12;
+                this.aD[j1 + k1] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.BROWN);
             }
         }
 
@@ -231,7 +215,7 @@ public class BiomeMesa extends BiomeBase {
             k1 = random.nextInt(64);
 
             for (int l1 = 0; k1 + l1 < 64 && l1 < j1; ++l1) {
-                this.aC[k1 + l1] = 14;
+                this.aD[k1 + l1] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.RED);
             }
         }
 
@@ -244,36 +228,37 @@ public class BiomeMesa extends BiomeBase {
             j1 += random.nextInt(16) + 4;
 
             for (int i2 = 0; j1 + i2 < 64 && i2 < b0; ++i2) {
-                this.aC[j1 + i2] = 0;
+                this.aD[j1 + i2] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.WHITE);
                 if (j1 + i2 > 1 && random.nextBoolean()) {
-                    this.aC[j1 + i2 - 1] = 8;
+                    this.aD[j1 + i2 - 1] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.SILVER);
                 }
 
                 if (j1 + i2 < 63 && random.nextBoolean()) {
-                    this.aC[j1 + i2 + 1] = 8;
+                    this.aD[j1 + i2 + 1] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.SILVER);
                 }
             }
         }
+
     }
 
-    private byte d(int i, int j, int k) {
-        int l = (int) Math.round(this.aG.a((double) i * 1.0D / 512.0D, (double) i * 1.0D / 512.0D) * 2.0D);
+    private IBlockData a(int i, int j, int k) {
+        int l = (int) Math.round(this.aH.a((double) i * 1.0D / 512.0D, (double) i * 1.0D / 512.0D) * 2.0D);
 
-        return this.aC[(j + l + 64) % 64];
+        return this.aD[(j + l + 64) % 64];
     }
 
-    protected BiomeBase k() {
+    protected BiomeBase d(int i) {
         boolean flag = this.id == BiomeBase.MESA.id;
-        BiomeMesa biomemesa = new BiomeMesa(this.id + 128, flag, this.aI);
+        BiomeMesa biomemesa = new BiomeMesa(i, flag, this.aJ);
 
         if (!flag) {
-            biomemesa.a(g);
-            biomemesa.a(this.af + " M");
+            biomemesa.a(BiomeMesa.g);
+            biomemesa.a(this.ah + " M");
         } else {
-            biomemesa.a(this.af + " (Bryce)");
+            biomemesa.a(this.ah + " (Bryce)");
         }
 
-        biomemesa.a(this.ag, true);
+        biomemesa.a(this.ai, true);
         return biomemesa;
     }
 }

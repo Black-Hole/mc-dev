@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class InstantMobEffect extends MobEffectList {
 
-    public InstantMobEffect(int i, boolean flag, int j) {
-        super(i, flag, j);
+    public InstantMobEffect(int i, MinecraftKey minecraftkey, boolean flag, int j) {
+        super(i, minecraftkey, flag, j);
     }
 
     public boolean isInstant() {

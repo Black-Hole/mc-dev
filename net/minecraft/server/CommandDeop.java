@@ -1,8 +1,7 @@
 package net.minecraft.server;
 
+import com.mojang.authlib.GameProfile;
 import java.util.List;
-
-import net.minecraft.util.com.mojang.authlib.GameProfile;
 
 public class CommandDeop extends CommandAbstract {
 
@@ -16,7 +15,7 @@ public class CommandDeop extends CommandAbstract {
         return 3;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.deop.usage";
     }
 
@@ -36,7 +35,7 @@ public class CommandDeop extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
-        return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayerList().n()) : null;
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayerList().o()) : null;
     }
 }

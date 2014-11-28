@@ -18,7 +18,7 @@ public class PacketPlayInLook extends PacketPlayInFlying {
         super.b(packetdataserializer);
     }
 
-    public void handle(PacketListener packetlistener) {
-        super.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        super.a((PacketListenerPlayIn) packetlistener);
     }
 }

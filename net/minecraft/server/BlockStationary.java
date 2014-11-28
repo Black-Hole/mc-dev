@@ -10,60 +10,74 @@ public class BlockStationary extends BlockFluids {
         if (material == Material.LAVA) {
             this.a(true);
         }
+
     }
 
-    public void doPhysics(World world, int i, int j, int k, Block block) {
-        super.doPhysics(world, i, j, k, block);
-        if (world.getType(i, j, k) == this) {
-            this.n(world, i, j, k);
+    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+        if (!this.e(world, blockposition, iblockdata)) {
+            this.f(world, blockposition, iblockdata);
         }
+
     }
 
-    private void n(World world, int i, int j, int k) {
-        int l = world.getData(i, j, k);
+    private void f(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        BlockFlowing blockflowing = a(this.material);
 
-        world.setTypeAndData(i, j, k, Block.getById(Block.getId(this) - 1), l, 2);
-        world.a(i, j, k, Block.getById(Block.getId(this) - 1), this.a(world));
+        world.setTypeAndData(blockposition, blockflowing.getBlockData().set(BlockStationary.LEVEL, iblockdata.get(BlockStationary.LEVEL)), 2);
+        world.a(blockposition, (Block) blockflowing, this.a(world));
     }
 
-    public void a(World world, int i, int j, int k, Random random) {
+    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (this.material == Material.LAVA) {
-            int l = random.nextInt(3);
+            if (world.getGameRules().getBoolean("doFireTick")) {
+                int i = random.nextInt(3);
 
-            int i1;
+                if (i > 0) {
+                    BlockPosition blockposition1 = blockposition;
 
-            for (i1 = 0; i1 < l; ++i1) {
-                i += random.nextInt(3) - 1;
-                ++j;
-                k += random.nextInt(3) - 1;
-                Block block = world.getType(i, j, k);
+                    for (int j = 0; j < i; ++j) {
+                        blockposition1 = blockposition1.a(random.nextInt(3) - 1, 1, random.nextInt(3) - 1);
+                        Block block = world.getType(blockposition1).getBlock();
 
-                if (block.material == Material.AIR) {
-                    if (this.o(world, i - 1, j, k) || this.o(world, i + 1, j, k) || this.o(world, i, j, k - 1) || this.o(world, i, j, k + 1) || this.o(world, i, j - 1, k) || this.o(world, i, j + 1, k)) {
-                        world.setTypeUpdate(i, j, k, Blocks.FIRE);
-                        return;
+                        if (block.material == Material.AIR) {
+                            if (this.e(world, blockposition1)) {
+                                world.setTypeUpdate(blockposition1, Blocks.FIRE.getBlockData());
+                                return;
+                            }
+                        } else if (block.material.isSolid()) {
+                            return;
+                        }
                     }
-                } else if (block.material.isSolid()) {
-                    return;
-                }
-            }
+                } else {
+                    for (int k = 0; k < 3; ++k) {
+                        BlockPosition blockposition2 = blockposition.a(random.nextInt(3) - 1, 0, random.nextInt(3) - 1);
 
-            if (l == 0) {
-                i1 = i;
-                int j1 = k;
-
-                for (int k1 = 0; k1 < 3; ++k1) {
-                    i = i1 + random.nextInt(3) - 1;
-                    k = j1 + random.nextInt(3) - 1;
-                    if (world.isEmpty(i, j + 1, k) && this.o(world, i, j, k)) {
-                        world.setTypeUpdate(i, j + 1, k, Blocks.FIRE);
+                        if (world.isEmpty(blockposition2.up()) && this.m(world, blockposition2)) {
+                            world.setTypeUpdate(blockposition2.up(), Blocks.FIRE.getBlockData());
+                        }
                     }
                 }
+
             }
         }
     }
 
-    private boolean o(World world, int i, int j, int k) {
-        return world.getType(i, j, k).getMaterial().isBurnable();
+    protected boolean e(World world, BlockPosition blockposition) {
+        EnumDirection[] aenumdirection = EnumDirection.values();
+        int i = aenumdirection.length;
+
+        for (int j = 0; j < i; ++j) {
+            EnumDirection enumdirection = aenumdirection[j];
+
+            if (this.m(world, blockposition.shift(enumdirection))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean m(World world, BlockPosition blockposition) {
+        return world.getType(blockposition).getBlock().getMaterial().isBurnable();
     }
 }

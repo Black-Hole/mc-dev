@@ -7,19 +7,19 @@ public class EntityCaveSpider extends EntitySpider {
         this.a(0.7F, 0.5F);
     }
 
-    protected void aD() {
-        super.aD();
+    protected void aW() {
+        super.aW();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(12.0D);
     }
 
-    public boolean n(Entity entity) {
-        if (super.n(entity)) {
+    public boolean r(Entity entity) {
+        if (super.r(entity)) {
             if (entity instanceof EntityLiving) {
                 byte b0 = 0;
 
-                if (this.world.difficulty == EnumDifficulty.NORMAL) {
+                if (this.world.getDifficulty() == EnumDifficulty.NORMAL) {
                     b0 = 7;
-                } else if (this.world.difficulty == EnumDifficulty.HARD) {
+                } else if (this.world.getDifficulty() == EnumDifficulty.HARD) {
                     b0 = 15;
                 }
 
@@ -34,7 +34,11 @@ public class EntityCaveSpider extends EntitySpider {
         }
     }
 
-    public GroupDataEntity prepare(GroupDataEntity groupdataentity) {
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
         return groupdataentity;
+    }
+
+    public float getHeadHeight() {
+        return 0.45F;
     }
 }

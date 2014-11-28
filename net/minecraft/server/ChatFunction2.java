@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import net.minecraft.util.com.google.common.base.Function;
+import com.google.common.base.Function;
 
 final class ChatFunction2 implements Function {
 
@@ -9,7 +9,7 @@ final class ChatFunction2 implements Function {
     public IChatBaseComponent a(IChatBaseComponent ichatbasecomponent) {
         IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent.f();
 
-        ichatbasecomponent1.setChatModifier(ichatbasecomponent1.getChatModifier().m());
+        ichatbasecomponent1.setChatModifier(ichatbasecomponent1.getChatModifier().n());
         return ichatbasecomponent1;
     }
 

@@ -19,7 +19,7 @@ public class RecipeBookClone implements IRecipe {
 
                     itemstack = itemstack1;
                 } else {
-                    if (itemstack1.getItem() != Items.BOOK_AND_QUILL) {
+                    if (itemstack1.getItem() != Items.WRITABLE_BOOK) {
                         return false;
                     }
 
@@ -46,7 +46,7 @@ public class RecipeBookClone implements IRecipe {
 
                     itemstack = itemstack1;
                 } else {
-                    if (itemstack1.getItem() != Items.BOOK_AND_QUILL) {
+                    if (itemstack1.getItem() != Items.WRITABLE_BOOK) {
                         return null;
                     }
 
@@ -55,10 +55,11 @@ public class RecipeBookClone implements IRecipe {
             }
         }
 
-        if (itemstack != null && i >= 1) {
-            ItemStack itemstack2 = new ItemStack(Items.WRITTEN_BOOK, i + 1);
+        if (itemstack != null && i >= 1 && ItemWrittenBook.h(itemstack) < 2) {
+            ItemStack itemstack2 = new ItemStack(Items.WRITTEN_BOOK, i);
 
             itemstack2.setTag((NBTTagCompound) itemstack.getTag().clone());
+            itemstack2.getTag().setInt("generation", ItemWrittenBook.h(itemstack) + 1);
             if (itemstack.hasName()) {
                 itemstack2.c(itemstack.getName());
             }
@@ -75,5 +76,20 @@ public class RecipeBookClone implements IRecipe {
 
     public ItemStack b() {
         return null;
+    }
+
+    public ItemStack[] b(InventoryCrafting inventorycrafting) {
+        ItemStack[] aitemstack = new ItemStack[inventorycrafting.getSize()];
+
+        for (int i = 0; i < aitemstack.length; ++i) {
+            ItemStack itemstack = inventorycrafting.getItem(i);
+
+            if (itemstack != null && itemstack.getItem() instanceof ItemWrittenBook) {
+                aitemstack[i] = itemstack;
+                break;
+            }
+        }
+
+        return aitemstack;
     }
 }

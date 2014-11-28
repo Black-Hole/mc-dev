@@ -1,10 +1,9 @@
 package net.minecraft.server;
 
+import com.mojang.authlib.GameProfile;
 import java.util.UUID;
 
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-
-public class PacketLoginOutSuccess extends Packet {
+public class PacketLoginOutSuccess implements Packet {
 
     private GameProfile a;
 
@@ -33,11 +32,7 @@ public class PacketLoginOutSuccess extends Packet {
         packetloginoutlistener.a(this);
     }
 
-    public boolean a() {
-        return true;
-    }
-
-    public void handle(PacketListener packetlistener) {
+    public void a(PacketListener packetlistener) {
         this.a((PacketLoginOutListener) packetlistener);
     }
 }

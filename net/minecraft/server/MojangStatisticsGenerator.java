@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.net.MalformedURLException;
@@ -9,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.UUID;
-
-import net.minecraft.util.com.google.common.collect.Maps;
 
 public class MojangStatisticsGenerator {
 
@@ -52,7 +51,7 @@ public class MojangStatisticsGenerator {
         this.b("os_version", System.getProperty("os.version"));
         this.b("os_architecture", System.getProperty("os.arch"));
         this.b("java_version", System.getProperty("java.version"));
-        this.b("version", "1.7.10");
+        this.b("version", "1.8");
         this.e.b(this);
     }
 

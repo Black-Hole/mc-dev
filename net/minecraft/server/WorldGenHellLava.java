@@ -4,69 +4,67 @@ import java.util.Random;
 
 public class WorldGenHellLava extends WorldGenerator {
 
-    private Block a;
-    private boolean b;
+    private final Block a;
+    private final boolean b;
 
     public WorldGenHellLava(Block block, boolean flag) {
         this.a = block;
         this.b = flag;
     }
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        if (world.getType(i, j + 1, k) != Blocks.NETHERRACK) {
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        if (world.getType(blockposition.up()).getBlock() != Blocks.NETHERRACK) {
             return false;
-        } else if (world.getType(i, j, k).getMaterial() != Material.AIR && world.getType(i, j, k) != Blocks.NETHERRACK) {
+        } else if (world.getType(blockposition).getBlock().getMaterial() != Material.AIR && world.getType(blockposition).getBlock() != Blocks.NETHERRACK) {
             return false;
         } else {
-            int l = 0;
+            int i = 0;
 
-            if (world.getType(i - 1, j, k) == Blocks.NETHERRACK) {
-                ++l;
+            if (world.getType(blockposition.west()).getBlock() == Blocks.NETHERRACK) {
+                ++i;
             }
 
-            if (world.getType(i + 1, j, k) == Blocks.NETHERRACK) {
-                ++l;
+            if (world.getType(blockposition.east()).getBlock() == Blocks.NETHERRACK) {
+                ++i;
             }
 
-            if (world.getType(i, j, k - 1) == Blocks.NETHERRACK) {
-                ++l;
+            if (world.getType(blockposition.north()).getBlock() == Blocks.NETHERRACK) {
+                ++i;
             }
 
-            if (world.getType(i, j, k + 1) == Blocks.NETHERRACK) {
-                ++l;
+            if (world.getType(blockposition.south()).getBlock() == Blocks.NETHERRACK) {
+                ++i;
             }
 
-            if (world.getType(i, j - 1, k) == Blocks.NETHERRACK) {
-                ++l;
+            if (world.getType(blockposition.down()).getBlock() == Blocks.NETHERRACK) {
+                ++i;
             }
 
-            int i1 = 0;
+            int j = 0;
 
-            if (world.isEmpty(i - 1, j, k)) {
-                ++i1;
+            if (world.isEmpty(blockposition.west())) {
+                ++j;
             }
 
-            if (world.isEmpty(i + 1, j, k)) {
-                ++i1;
+            if (world.isEmpty(blockposition.east())) {
+                ++j;
             }
 
-            if (world.isEmpty(i, j, k - 1)) {
-                ++i1;
+            if (world.isEmpty(blockposition.north())) {
+                ++j;
             }
 
-            if (world.isEmpty(i, j, k + 1)) {
-                ++i1;
+            if (world.isEmpty(blockposition.south())) {
+                ++j;
             }
 
-            if (world.isEmpty(i, j - 1, k)) {
-                ++i1;
+            if (world.isEmpty(blockposition.down())) {
+                ++j;
             }
 
-            if (!this.b && l == 4 && i1 == 1 || l == 5) {
-                world.setTypeAndData(i, j, k, this.a, 0, 2);
-                world.d = true;
-                this.a.a(world, i, j, k, random);
-                world.d = false;
+            if (!this.b && i == 4 && j == 1 || i == 5) {
+                world.setTypeAndData(blockposition, this.a.getBlockData(), 2);
+                world.a(this.a, blockposition, random);
             }
 
             return true;

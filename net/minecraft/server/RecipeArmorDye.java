@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 
 public class RecipeArmorDye implements IRecipe {
@@ -8,7 +9,7 @@ public class RecipeArmorDye implements IRecipe {
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
         ItemStack itemstack = null;
-        ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
             ItemStack itemstack1 = inventorycrafting.getItem(i);
@@ -17,13 +18,13 @@ public class RecipeArmorDye implements IRecipe {
                 if (itemstack1.getItem() instanceof ItemArmor) {
                     ItemArmor itemarmor = (ItemArmor) itemstack1.getItem();
 
-                    if (itemarmor.m_() != EnumArmorMaterial.CLOTH || itemstack != null) {
+                    if (itemarmor.w_() != EnumArmorMaterial.LEATHER || itemstack != null) {
                         return false;
                     }
 
                     itemstack = itemstack1;
                 } else {
-                    if (itemstack1.getItem() != Items.INK_SACK) {
+                    if (itemstack1.getItem() != Items.DYE) {
                         return false;
                     }
 
@@ -54,13 +55,13 @@ public class RecipeArmorDye implements IRecipe {
             if (itemstack1 != null) {
                 if (itemstack1.getItem() instanceof ItemArmor) {
                     itemarmor = (ItemArmor) itemstack1.getItem();
-                    if (itemarmor.m_() != EnumArmorMaterial.CLOTH || itemstack != null) {
+                    if (itemarmor.w_() != EnumArmorMaterial.LEATHER || itemstack != null) {
                         return null;
                     }
 
                     itemstack = itemstack1.cloneItemStack();
                     itemstack.count = 1;
-                    if (itemarmor.c_(itemstack1)) {
+                    if (itemarmor.d_(itemstack1)) {
                         l = itemarmor.b(itemstack);
                         f = (float) (l >> 16 & 255) / 255.0F;
                         f1 = (float) (l >> 8 & 255) / 255.0F;
@@ -73,11 +74,11 @@ public class RecipeArmorDye implements IRecipe {
                         ++j;
                     }
                 } else {
-                    if (itemstack1.getItem() != Items.INK_SACK) {
+                    if (itemstack1.getItem() != Items.DYE) {
                         return null;
                     }
 
-                    float[] afloat = EntitySheep.bp[BlockCloth.b(itemstack1.getData())];
+                    float[] afloat = EntitySheep.a(EnumColor.fromInvColorIndex(itemstack1.getData()));
                     int j1 = (int) (afloat[0] * 255.0F);
                     int k1 = (int) (afloat[1] * 255.0F);
 
@@ -116,5 +117,19 @@ public class RecipeArmorDye implements IRecipe {
 
     public ItemStack b() {
         return null;
+    }
+
+    public ItemStack[] b(InventoryCrafting inventorycrafting) {
+        ItemStack[] aitemstack = new ItemStack[inventorycrafting.getSize()];
+
+        for (int i = 0; i < aitemstack.length; ++i) {
+            ItemStack itemstack = inventorycrafting.getItem(i);
+
+            if (itemstack != null && itemstack.getItem().r()) {
+                aitemstack[i] = new ItemStack(itemstack.getItem().q());
+            }
+        }
+
+        return aitemstack;
     }
 }

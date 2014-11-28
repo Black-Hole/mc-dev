@@ -1,11 +1,11 @@
 package net.minecraft.server;
 
-public interface IEntitySelector {
+import com.google.common.base.Predicate;
 
-    IEntitySelector a = new EntitySelectorLiving();
-    IEntitySelector b = new EntitySelectorChickenJockey();
-    IEntitySelector c = new EntitySelectorContainer();
+public final class IEntitySelector {
 
-    boolean a(Entity entity);
-
+    public static final Predicate a = new EntitySelectorLiving();
+    public static final Predicate b = new EntitySelectorChickenJockey();
+    public static final Predicate c = new EntitySelectorContainer();
+    public static final Predicate d = new EntitySelectorNonPlayer();
 }

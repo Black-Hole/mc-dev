@@ -1,31 +1,31 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
 import java.util.Map;
-import net.minecraft.util.com.google.common.collect.Maps;
 
 public enum EnumHoverAction {
 
-    SHOW_TEXT("SHOW_TEXT", 0, "show_text", true), SHOW_ACHIEVEMENT("SHOW_ACHIEVEMENT", 1, "show_achievement", true), SHOW_ITEM("SHOW_ITEM", 2, "show_item", true);
-    private static final Map d = Maps.newHashMap();
-    private final boolean e;
-    private final String f;
-    private static final EnumHoverAction[] g = new EnumHoverAction[] { SHOW_TEXT, SHOW_ACHIEVEMENT, SHOW_ITEM};
+    SHOW_TEXT("show_text", true), SHOW_ACHIEVEMENT("show_achievement", true), SHOW_ITEM("show_item", true), SHOW_ENTITY("show_entity", true);
 
-    private EnumHoverAction(String s, int i, String s1, boolean flag) {
-        this.f = s1;
-        this.e = flag;
+    private static final Map e = Maps.newHashMap();
+    private final boolean f;
+    private final String g;
+
+    private EnumHoverAction(String s, boolean flag) {
+        this.g = s;
+        this.f = flag;
     }
 
     public boolean a() {
-        return this.e;
-    }
-
-    public String b() {
         return this.f;
     }
 
+    public String b() {
+        return this.g;
+    }
+
     public static EnumHoverAction a(String s) {
-        return (EnumHoverAction) d.get(s);
+        return (EnumHoverAction) EnumHoverAction.e.get(s);
     }
 
     static {
@@ -35,7 +35,8 @@ public enum EnumHoverAction {
         for (int j = 0; j < i; ++j) {
             EnumHoverAction enumhoveraction = aenumhoveraction[j];
 
-            d.put(enumhoveraction.b(), enumhoveraction);
+            EnumHoverAction.e.put(enumhoveraction.b(), enumhoveraction);
         }
+
     }
 }

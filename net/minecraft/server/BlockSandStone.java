@@ -2,15 +2,27 @@ package net.minecraft.server;
 
 public class BlockSandStone extends Block {
 
-    public static final String[] a = new String[] { "default", "chiseled", "smooth"};
-    private static final String[] b = new String[] { "normal", "carved", "smooth"};
+    public static final BlockStateEnum TYPE = BlockStateEnum.of("type", EnumSandstoneVariant.class);
 
     public BlockSandStone() {
         super(Material.STONE);
+        this.j(this.blockStateList.getBlockData().set(BlockSandStone.TYPE, EnumSandstoneVariant.DEFAULT));
         this.a(CreativeModeTab.b);
     }
 
-    public int getDropData(int i) {
-        return i;
+    public int getDropData(IBlockData iblockdata) {
+        return ((EnumSandstoneVariant) iblockdata.get(BlockSandStone.TYPE)).a();
+    }
+
+    public IBlockData fromLegacyData(int i) {
+        return this.getBlockData().set(BlockSandStone.TYPE, EnumSandstoneVariant.a(i));
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        return ((EnumSandstoneVariant) iblockdata.get(BlockSandStone.TYPE)).a();
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockSandStone.TYPE});
     }
 }

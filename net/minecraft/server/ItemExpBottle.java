@@ -11,11 +11,12 @@ public class ItemExpBottle extends Item {
             --itemstack.count;
         }
 
-        world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (g.nextFloat() * 0.4F + 0.8F));
+        world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (ItemExpBottle.g.nextFloat() * 0.4F + 0.8F));
         if (!world.isStatic) {
             world.addEntity(new EntityThrownExpBottle(world, entityhuman));
         }
 
+        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
         return itemstack;
     }
 }

@@ -23,63 +23,29 @@ public class WeightedRandom {
             throw new IllegalArgumentException();
         } else {
             int j = random.nextInt(i);
-            Iterator iterator = collection.iterator();
 
-            WeightedRandomChoice weightedrandomchoice;
-
-            do {
-                if (!iterator.hasNext()) {
-                    return null;
-                }
-
-                weightedrandomchoice = (WeightedRandomChoice) iterator.next();
-                j -= weightedrandomchoice.a;
-            } while (j >= 0);
-
-            return weightedrandomchoice;
+            return a(collection, j);
         }
+    }
+
+    public static WeightedRandomChoice a(Collection collection, int i) {
+        Iterator iterator = collection.iterator();
+
+        WeightedRandomChoice weightedrandomchoice;
+
+        do {
+            if (!iterator.hasNext()) {
+                return null;
+            }
+
+            weightedrandomchoice = (WeightedRandomChoice) iterator.next();
+            i -= weightedrandomchoice.a;
+        } while (i >= 0);
+
+        return weightedrandomchoice;
     }
 
     public static WeightedRandomChoice a(Random random, Collection collection) {
         return a(random, collection, a(collection));
-    }
-
-    public static int a(WeightedRandomChoice[] aweightedrandomchoice) {
-        int i = 0;
-        WeightedRandomChoice[] aweightedrandomchoice1 = aweightedrandomchoice;
-        int j = aweightedrandomchoice.length;
-
-        for (int k = 0; k < j; ++k) {
-            WeightedRandomChoice weightedrandomchoice = aweightedrandomchoice1[k];
-
-            i += weightedrandomchoice.a;
-        }
-
-        return i;
-    }
-
-    public static WeightedRandomChoice a(Random random, WeightedRandomChoice[] aweightedrandomchoice, int i) {
-        if (i <= 0) {
-            throw new IllegalArgumentException();
-        } else {
-            int j = random.nextInt(i);
-            WeightedRandomChoice[] aweightedrandomchoice1 = aweightedrandomchoice;
-            int k = aweightedrandomchoice.length;
-
-            for (int l = 0; l < k; ++l) {
-                WeightedRandomChoice weightedrandomchoice = aweightedrandomchoice1[l];
-
-                j -= weightedrandomchoice.a;
-                if (j < 0) {
-                    return weightedrandomchoice;
-                }
-            }
-
-            return null;
-        }
-    }
-
-    public static WeightedRandomChoice a(Random random, WeightedRandomChoice[] aweightedrandomchoice) {
-        return a(random, aweightedrandomchoice, a(aweightedrandomchoice));
     }
 }

@@ -8,23 +8,21 @@ class WorldGenStrongholdStones extends StructurePieceBlockSelector {
 
     public void a(Random random, int i, int j, int k, boolean flag) {
         if (flag) {
-            this.a = Blocks.SMOOTH_BRICK;
             float f = random.nextFloat();
 
             if (f < 0.2F) {
-                this.b = 2;
+                this.a = Blocks.STONEBRICK.fromLegacyData(BlockSmoothBrick.N);
             } else if (f < 0.5F) {
-                this.b = 1;
+                this.a = Blocks.STONEBRICK.fromLegacyData(BlockSmoothBrick.M);
             } else if (f < 0.55F) {
-                this.a = Blocks.MONSTER_EGGS;
-                this.b = 2;
+                this.a = Blocks.MONSTER_EGG.fromLegacyData(EnumMonsterEggVarient.STONEBRICK.a());
             } else {
-                this.b = 0;
+                this.a = Blocks.STONEBRICK.getBlockData();
             }
         } else {
-            this.a = Blocks.AIR;
-            this.b = 0;
+            this.a = Blocks.AIR.getBlockData();
         }
+
     }
 
     WorldGenStrongholdStones(WorldGenStrongholdUnknown worldgenstrongholdunknown) {

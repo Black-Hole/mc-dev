@@ -4,7 +4,7 @@ public class ItemWorldMapBase extends Item {
 
     protected ItemWorldMapBase() {}
 
-    public boolean h() {
+    public boolean f() {
         return true;
     }
 

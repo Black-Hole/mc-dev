@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayInAbilities extends Packet {
+public class PacketPlayInAbilities implements Packet {
 
     private boolean a;
     private boolean b;
@@ -34,7 +34,7 @@ public class PacketPlayInAbilities extends Packet {
     public void b(PacketDataSerializer packetdataserializer) {
         byte b0 = 0;
 
-        if (this.c()) {
+        if (this.a()) {
             b0 = (byte) (b0 | 1);
         }
 
@@ -42,11 +42,11 @@ public class PacketPlayInAbilities extends Packet {
             b0 = (byte) (b0 | 2);
         }
 
-        if (this.e()) {
+        if (this.c()) {
             b0 = (byte) (b0 | 4);
         }
 
-        if (this.f()) {
+        if (this.d()) {
             b0 = (byte) (b0 | 8);
         }
 
@@ -55,15 +55,11 @@ public class PacketPlayInAbilities extends Packet {
         packetdataserializer.writeFloat(this.f);
     }
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
-    public String b() {
-        return String.format("invuln=%b, flying=%b, canfly=%b, instabuild=%b, flyspeed=%.4f, walkspped=%.4f", new Object[] { Boolean.valueOf(this.c()), Boolean.valueOf(this.isFlying()), Boolean.valueOf(this.e()), Boolean.valueOf(this.f()), Float.valueOf(this.g()), Float.valueOf(this.h())});
-    }
-
-    public boolean c() {
+    public boolean a() {
         return this.a;
     }
 
@@ -79,7 +75,7 @@ public class PacketPlayInAbilities extends Packet {
         this.b = flag;
     }
 
-    public boolean e() {
+    public boolean c() {
         return this.c;
     }
 
@@ -87,7 +83,7 @@ public class PacketPlayInAbilities extends Packet {
         this.c = flag;
     }
 
-    public boolean f() {
+    public boolean d() {
         return this.d;
     }
 
@@ -95,23 +91,15 @@ public class PacketPlayInAbilities extends Packet {
         this.d = flag;
     }
 
-    public float g() {
-        return this.e;
-    }
-
     public void a(float f) {
         this.e = f;
-    }
-
-    public float h() {
-        return this.f;
     }
 
     public void b(float f) {
         this.f = f;
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

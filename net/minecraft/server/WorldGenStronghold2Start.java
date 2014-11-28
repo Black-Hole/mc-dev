@@ -13,7 +13,7 @@ public class WorldGenStronghold2Start extends StructureStart {
         WorldGenStrongholdStart worldgenstrongholdstart = new WorldGenStrongholdStart(0, random, (i << 4) + 2, (j << 4) + 2);
 
         this.a.add(worldgenstrongholdstart);
-        worldgenstrongholdstart.a(worldgenstrongholdstart, this.a, random);
+        worldgenstrongholdstart.a((StructurePiece) worldgenstrongholdstart, (List) this.a, random);
         List list = worldgenstrongholdstart.c;
 
         while (!list.isEmpty()) {

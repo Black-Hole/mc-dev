@@ -1,23 +1,23 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class MethodProfiler {
 
     private static final Logger b = LogManager.getLogger();
-    private final List c = new ArrayList();
-    private final List d = new ArrayList();
+    private final List c = Lists.newArrayList();
+    private final List d = Lists.newArrayList();
     public boolean a;
     private String e = "";
-    private final Map f = new HashMap();
+    private final Map f = Maps.newHashMap();
 
     public MethodProfiler() {}
 
@@ -54,7 +54,7 @@ public class MethodProfiler {
             }
 
             if (k > 100000000L) {
-                b.warn("Something\'s taking too long! \'" + this.e + "\' took aprox " + (double) k / 1000000.0D + " ms");
+                MethodProfiler.b.warn("Something\'s taking too long! \'" + this.e + "\' took aprox " + (double) k / 1000000.0D + " ms");
             }
 
             this.e = !this.c.isEmpty() ? (String) this.c.get(this.c.size() - 1) : "";
@@ -67,7 +67,7 @@ public class MethodProfiler {
         } else {
             long i = this.f.containsKey("root") ? ((Long) this.f.get("root")).longValue() : 0L;
             long j = this.f.containsKey(s) ? ((Long) this.f.get(s)).longValue() : -1L;
-            ArrayList arraylist = new ArrayList();
+            ArrayList arraylist = Lists.newArrayList();
 
             if (s.length() > 0) {
                 s = s + ".";

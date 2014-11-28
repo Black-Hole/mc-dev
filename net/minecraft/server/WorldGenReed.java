@@ -6,18 +6,20 @@ public class WorldGenReed extends WorldGenerator {
 
     public WorldGenReed() {}
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        for (int l = 0; l < 20; ++l) {
-            int i1 = i + random.nextInt(4) - random.nextInt(4);
-            int j1 = j;
-            int k1 = k + random.nextInt(4) - random.nextInt(4);
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        for (int i = 0; i < 20; ++i) {
+            BlockPosition blockposition1 = blockposition.a(random.nextInt(4) - random.nextInt(4), 0, random.nextInt(4) - random.nextInt(4));
 
-            if (world.isEmpty(i1, j, k1) && (world.getType(i1 - 1, j - 1, k1).getMaterial() == Material.WATER || world.getType(i1 + 1, j - 1, k1).getMaterial() == Material.WATER || world.getType(i1, j - 1, k1 - 1).getMaterial() == Material.WATER || world.getType(i1, j - 1, k1 + 1).getMaterial() == Material.WATER)) {
-                int l1 = 2 + random.nextInt(random.nextInt(3) + 1);
+            if (world.isEmpty(blockposition1)) {
+                BlockPosition blockposition2 = blockposition1.down();
 
-                for (int i2 = 0; i2 < l1; ++i2) {
-                    if (Blocks.SUGAR_CANE_BLOCK.j(world, i1, j1 + i2, k1)) {
-                        world.setTypeAndData(i1, j1 + i2, k1, Blocks.SUGAR_CANE_BLOCK, 0, 2);
+                if (world.getType(blockposition2.west()).getBlock().getMaterial() == Material.WATER || world.getType(blockposition2.east()).getBlock().getMaterial() == Material.WATER || world.getType(blockposition2.north()).getBlock().getMaterial() == Material.WATER || world.getType(blockposition2.south()).getBlock().getMaterial() == Material.WATER) {
+                    int j = 2 + random.nextInt(random.nextInt(3) + 1);
+
+                    for (int k = 0; k < j; ++k) {
+                        if (Blocks.REEDS.d(world, blockposition1)) {
+                            world.setTypeAndData(blockposition1.up(k), Blocks.REEDS.getBlockData(), 2);
+                        }
                     }
                 }
             }

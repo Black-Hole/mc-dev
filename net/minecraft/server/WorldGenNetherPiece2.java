@@ -9,17 +9,17 @@ public class WorldGenNetherPiece2 extends WorldGenNetherPiece {
 
     public WorldGenNetherPiece2() {}
 
-    public WorldGenNetherPiece2(int i, Random random, StructureBoundingBox structureboundingbox, int j) {
+    public WorldGenNetherPiece2(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
         super(i);
-        this.g = j;
-        this.f = structureboundingbox;
+        this.m = enumdirection;
+        this.l = structureboundingbox;
         this.b = random.nextInt();
     }
 
-    public static WorldGenNetherPiece2 a(List list, Random random, int i, int j, int k, int l, int i1) {
-        StructureBoundingBox structureboundingbox = StructureBoundingBox.a(i, j, k, -1, -3, 0, 5, 10, 8, l);
+    public static WorldGenNetherPiece2 a(List list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
+        StructureBoundingBox structureboundingbox = StructureBoundingBox.a(i, j, k, -1, -3, 0, 5, 10, 8, enumdirection);
 
-        return a(structureboundingbox) && StructurePiece.a(list, structureboundingbox) == null ? new WorldGenNetherPiece2(i1, random, structureboundingbox, l) : null;
+        return a(structureboundingbox) && StructurePiece.a(list, structureboundingbox) == null ? new WorldGenNetherPiece2(l, random, structureboundingbox, enumdirection) : null;
     }
 
     protected void b(NBTTagCompound nbttagcompound) {
@@ -42,24 +42,24 @@ public class WorldGenNetherPiece2 extends WorldGenNetherPiece {
         for (i = 0; i <= 4; ++i) {
             for (j = 3; j <= 4; ++j) {
                 k = random1.nextInt(8);
-                this.a(world, structureboundingbox, i, j, 0, i, j, k, Blocks.NETHER_BRICK, Blocks.NETHER_BRICK, false);
+                this.a(world, structureboundingbox, i, j, 0, i, j, k, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
             }
         }
 
         i = random1.nextInt(8);
-        this.a(world, structureboundingbox, 0, 5, 0, 0, 5, i, Blocks.NETHER_BRICK, Blocks.NETHER_BRICK, false);
+        this.a(world, structureboundingbox, 0, 5, 0, 0, 5, i, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
         i = random1.nextInt(8);
-        this.a(world, structureboundingbox, 4, 5, 0, 4, 5, i, Blocks.NETHER_BRICK, Blocks.NETHER_BRICK, false);
+        this.a(world, structureboundingbox, 4, 5, 0, 4, 5, i, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
 
         for (i = 0; i <= 4; ++i) {
             j = random1.nextInt(5);
-            this.a(world, structureboundingbox, i, 2, 0, i, 2, j, Blocks.NETHER_BRICK, Blocks.NETHER_BRICK, false);
+            this.a(world, structureboundingbox, i, 2, 0, i, 2, j, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
         }
 
         for (i = 0; i <= 4; ++i) {
             for (j = 0; j <= 1; ++j) {
                 k = random1.nextInt(3);
-                this.a(world, structureboundingbox, i, j, 0, i, j, k, Blocks.NETHER_BRICK, Blocks.NETHER_BRICK, false);
+                this.a(world, structureboundingbox, i, j, 0, i, j, k, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
             }
         }
 

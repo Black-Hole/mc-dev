@@ -1,43 +1,44 @@
 package net.minecraft.server;
 
-import net.minecraft.util.io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBuf;
+import java.io.IOException;
 
-public class PacketPlayOutCustomPayload extends Packet {
+public class PacketPlayOutCustomPayload implements Packet {
 
-    private String tag;
-    private byte[] data;
+    private String a;
+    private PacketDataSerializer b;
 
     public PacketPlayOutCustomPayload() {}
 
-    public PacketPlayOutCustomPayload(String s, ByteBuf bytebuf) {
-        this(s, bytebuf.array());
-    }
-
-    public PacketPlayOutCustomPayload(String s, byte[] abyte) {
-        this.tag = s;
-        this.data = abyte;
-        if (abyte.length >= 1048576) {
+    public PacketPlayOutCustomPayload(String s, PacketDataSerializer packetdataserializer) {
+        this.a = s;
+        this.b = packetdataserializer;
+        if (packetdataserializer.writerIndex() > 1048576) {
             throw new IllegalArgumentException("Payload may not be larger than 1048576 bytes");
         }
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.tag = packetdataserializer.c(20);
-        this.data = new byte[packetdataserializer.readUnsignedShort()];
-        packetdataserializer.readBytes(this.data);
+        this.a = packetdataserializer.c(20);
+        int i = packetdataserializer.readableBytes();
+
+        if (i >= 0 && i <= 1048576) {
+            this.b = new PacketDataSerializer(packetdataserializer.readBytes(i));
+        } else {
+            throw new IOException("Payload may not be larger than 1048576 bytes");
+        }
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.a(this.tag);
-        packetdataserializer.writeShort(this.data.length);
-        packetdataserializer.writeBytes(this.data);
+        packetdataserializer.a(this.a);
+        packetdataserializer.writeBytes((ByteBuf) this.b);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

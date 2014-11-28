@@ -7,19 +7,19 @@ public abstract class BlockContainer extends Block implements IContainer {
         this.isTileEntity = true;
     }
 
-    public void onPlace(World world, int i, int j, int k) {
-        super.onPlace(world, i, j, k);
+    public int b() {
+        return -1;
     }
 
-    public void remove(World world, int i, int j, int k, Block block, int l) {
-        super.remove(world, i, j, k, block, l);
-        world.p(i, j, k);
+    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        super.remove(world, blockposition, iblockdata);
+        world.t(blockposition);
     }
 
-    public boolean a(World world, int i, int j, int k, int l, int i1) {
-        super.a(world, i, j, k, l, i1);
-        TileEntity tileentity = world.getTileEntity(i, j, k);
+    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, int i, int j) {
+        super.a(world, blockposition, iblockdata, i, j);
+        TileEntity tileentity = world.getTileEntity(blockposition);
 
-        return tileentity != null ? tileentity.c(l, i1) : false;
+        return tileentity == null ? false : tileentity.c(i, j);
     }
 }

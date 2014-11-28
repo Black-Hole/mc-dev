@@ -2,15 +2,15 @@ package net.minecraft.server;
 
 public enum EnumDifficulty {
 
-    PEACEFUL("PEACEFUL", 0, 0, "options.difficulty.peaceful"), EASY("EASY", 1, 1, "options.difficulty.easy"), NORMAL("NORMAL", 2, 2, "options.difficulty.normal"), HARD("HARD", 3, 3, "options.difficulty.hard");
+    PEACEFUL(0, "options.difficulty.peaceful"), EASY(1, "options.difficulty.easy"), NORMAL(2, "options.difficulty.normal"), HARD(3, "options.difficulty.hard");
+
     private static final EnumDifficulty[] e = new EnumDifficulty[values().length];
     private final int f;
     private final String g;
-    private static final EnumDifficulty[] h = new EnumDifficulty[] { PEACEFUL, EASY, NORMAL, HARD};
 
-    private EnumDifficulty(String s, int i, int j, String s1) {
-        this.f = j;
-        this.g = s1;
+    private EnumDifficulty(int i, String s) {
+        this.f = i;
+        this.g = s;
     }
 
     public int a() {
@@ -18,7 +18,7 @@ public enum EnumDifficulty {
     }
 
     public static EnumDifficulty getById(int i) {
-        return e[i % e.length];
+        return EnumDifficulty.e[i % EnumDifficulty.e.length];
     }
 
     public String b() {
@@ -32,7 +32,8 @@ public enum EnumDifficulty {
         for (int j = 0; j < i; ++j) {
             EnumDifficulty enumdifficulty = aenumdifficulty[j];
 
-            e[enumdifficulty.f] = enumdifficulty;
+            EnumDifficulty.e[enumdifficulty.f] = enumdifficulty;
         }
+
     }
 }

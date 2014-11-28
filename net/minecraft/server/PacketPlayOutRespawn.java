@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutRespawn extends Packet {
+public class PacketPlayOutRespawn implements Packet {
 
     private int a;
     private EnumDifficulty b;
@@ -16,8 +16,8 @@ public class PacketPlayOutRespawn extends Packet {
         this.d = worldtype;
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
@@ -28,6 +28,7 @@ public class PacketPlayOutRespawn extends Packet {
         if (this.d == null) {
             this.d = WorldType.NORMAL;
         }
+
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
@@ -37,7 +38,7 @@ public class PacketPlayOutRespawn extends Packet {
         packetdataserializer.a(this.d.name());
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

@@ -14,21 +14,21 @@ public class EntityThrownExpBottle extends EntityProjectile {
         super(world, d0, d1, d2);
     }
 
-    protected float i() {
+    protected float m() {
         return 0.07F;
     }
 
-    protected float e() {
+    protected float j() {
         return 0.7F;
     }
 
-    protected float f() {
+    protected float l() {
         return -20.0F;
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
         if (!this.world.isStatic) {
-            this.world.triggerEffect(2002, (int) Math.round(this.locX), (int) Math.round(this.locY), (int) Math.round(this.locZ), 0);
+            this.world.triggerEffect(2002, new BlockPosition(this), 0);
             int i = 3 + this.world.random.nextInt(5) + this.world.random.nextInt(5);
 
             while (i > 0) {
@@ -40,5 +40,6 @@ public class EntityThrownExpBottle extends EntityProjectile {
 
             this.die();
         }
+
     }
 }

@@ -11,7 +11,7 @@ class ChunkFilenameFilter implements FilenameFilter {
         this.a = worldloaderserver;
     }
 
-    public boolean accept(File file1, String s) {
+    public boolean accept(File file, String s) {
         return s.endsWith(".mcr");
     }
 }

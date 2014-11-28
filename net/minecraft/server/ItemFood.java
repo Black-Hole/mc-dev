@@ -6,11 +6,11 @@ public class ItemFood extends Item {
     private final int b;
     private final float c;
     private final boolean d;
-    private boolean m;
+    private boolean k;
+    private int l;
+    private int m;
     private int n;
-    private int o;
-    private int p;
-    private float q;
+    private float o;
 
     public ItemFood(int i, float f, boolean flag) {
         this.a = 32;
@@ -29,26 +29,28 @@ public class ItemFood extends Item {
         entityhuman.getFoodData().a(this, itemstack);
         world.makeSound(entityhuman, "random.burp", 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
         this.c(itemstack, world, entityhuman);
+        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
         return itemstack;
     }
 
     protected void c(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (!world.isStatic && this.n > 0 && world.random.nextFloat() < this.q) {
-            entityhuman.addEffect(new MobEffect(this.n, this.o * 20, this.p));
+        if (!world.isStatic && this.l > 0 && world.random.nextFloat() < this.o) {
+            entityhuman.addEffect(new MobEffect(this.l, this.m * 20, this.n));
         }
+
     }
 
-    public int d_(ItemStack itemstack) {
+    public int d(ItemStack itemstack) {
         return 32;
     }
 
-    public EnumAnimation d(ItemStack itemstack) {
+    public EnumAnimation e(ItemStack itemstack) {
         return EnumAnimation.EAT;
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (entityhuman.g(this.m)) {
-            entityhuman.a(itemstack, this.d_(itemstack));
+        if (entityhuman.j(this.k)) {
+            entityhuman.a(itemstack, this.d(itemstack));
         }
 
         return itemstack;
@@ -62,20 +64,20 @@ public class ItemFood extends Item {
         return this.c;
     }
 
-    public boolean i() {
+    public boolean g() {
         return this.d;
     }
 
     public ItemFood a(int i, int j, int k, float f) {
-        this.n = i;
-        this.o = j;
-        this.p = k;
-        this.q = f;
+        this.l = i;
+        this.m = j;
+        this.n = k;
+        this.o = f;
         return this;
     }
 
-    public ItemFood j() {
-        this.m = true;
+    public ItemFood h() {
+        this.k = true;
         return this;
     }
 }

@@ -1,10 +1,12 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class PotionBrewer {
 
@@ -21,9 +23,10 @@ public class PotionBrewer {
     public static final String k;
     public static final String l;
     public static final String m;
-    private static final HashMap effectDurations = new HashMap();
-    private static final HashMap effectAmplifiers = new HashMap();
-    private static final HashMap p;
+    public static final String n;
+    private static final Map effectDurations = Maps.newHashMap();
+    private static final Map effectAmplifiers = Maps.newHashMap();
+    private static final Map q;
     private static final String[] appearances;
 
     public static boolean a(int i, int j) {
@@ -54,20 +57,27 @@ public class PotionBrewer {
 
             while (iterator.hasNext()) {
                 MobEffect mobeffect = (MobEffect) iterator.next();
-                int j = MobEffectList.byId[mobeffect.getEffectId()].j();
 
-                for (int k = 0; k <= mobeffect.getAmplifier(); ++k) {
-                    f += (float) (j >> 16 & 255) / 255.0F;
-                    f1 += (float) (j >> 8 & 255) / 255.0F;
-                    f2 += (float) (j >> 0 & 255) / 255.0F;
-                    ++f3;
+                if (mobeffect.isShowParticles()) {
+                    int j = MobEffectList.byId[mobeffect.getEffectId()].k();
+
+                    for (int k = 0; k <= mobeffect.getAmplifier(); ++k) {
+                        f += (float) (j >> 16 & 255) / 255.0F;
+                        f1 += (float) (j >> 8 & 255) / 255.0F;
+                        f2 += (float) (j >> 0 & 255) / 255.0F;
+                        ++f3;
+                    }
                 }
             }
 
-            f = f / f3 * 255.0F;
-            f1 = f1 / f3 * 255.0F;
-            f2 = f2 / f3 * 255.0F;
-            return (int) f << 16 | (int) f1 << 8 | (int) f2;
+            if (f3 == 0.0F) {
+                return 0;
+            } else {
+                f = f / f3 * 255.0F;
+                f1 = f1 / f3 * 255.0F;
+                f2 = f2 / f3 * 255.0F;
+                return (int) f << 16 | (int) f1 << 8 | (int) f2;
+            }
         } else {
             return i;
         }
@@ -92,7 +102,7 @@ public class PotionBrewer {
     public static String c(int i) {
         int j = a(i);
 
-        return appearances[j];
+        return PotionBrewer.appearances[j];
     }
 
     private static int a(boolean flag, boolean flag1, boolean flag2, int i, int j, int k, int l) {
@@ -266,15 +276,15 @@ public class PotionBrewer {
         for (int k = 0; k < j; ++k) {
             MobEffectList mobeffectlist = amobeffectlist[k];
 
-            if (mobeffectlist != null && (!mobeffectlist.i() || flag)) {
-                String s = (String) effectDurations.get(Integer.valueOf(mobeffectlist.getId()));
+            if (mobeffectlist != null && (!mobeffectlist.j() || flag)) {
+                String s = (String) PotionBrewer.effectDurations.get(Integer.valueOf(mobeffectlist.getId()));
 
                 if (s != null) {
                     int l = a(s, 0, s.length(), i);
 
                     if (l > 0) {
                         int i1 = 0;
-                        String s1 = (String) effectAmplifiers.get(Integer.valueOf(mobeffectlist.getId()));
+                        String s1 = (String) PotionBrewer.effectAmplifiers.get(Integer.valueOf(mobeffectlist.getId()));
 
                         if (s1 != null) {
                             i1 = a(s1, 0, s1.length(), i);
@@ -295,7 +305,7 @@ public class PotionBrewer {
                         }
 
                         if (arraylist == null) {
-                            arraylist = new ArrayList();
+                            arraylist = Lists.newArrayList();
                         }
 
                         MobEffect mobeffect = new MobEffect(mobeffectlist.getId(), l, i1);
@@ -406,38 +416,41 @@ public class PotionBrewer {
     }
 
     static {
-        effectDurations.put(Integer.valueOf(MobEffectList.REGENERATION.getId()), "0 & !1 & !2 & !3 & 0+6");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.REGENERATION.getId()), "0 & !1 & !2 & !3 & 0+6");
         b = "-0+1-2-3&4-4+13";
-        effectDurations.put(Integer.valueOf(MobEffectList.FASTER_MOVEMENT.getId()), "!0 & 1 & !2 & !3 & 1+6");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.FASTER_MOVEMENT.getId()), "!0 & 1 & !2 & !3 & 1+6");
         h = "+0+1-2-3&4-4+13";
-        effectDurations.put(Integer.valueOf(MobEffectList.FIRE_RESISTANCE.getId()), "0 & 1 & !2 & !3 & 0+6");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.FIRE_RESISTANCE.getId()), "0 & 1 & !2 & !3 & 0+6");
         f = "+0-1+2-3&4-4+13";
-        effectDurations.put(Integer.valueOf(MobEffectList.HEAL.getId()), "0 & !1 & 2 & !3");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.HEAL.getId()), "0 & !1 & 2 & !3");
         d = "-0-1+2-3&4-4+13";
-        effectDurations.put(Integer.valueOf(MobEffectList.POISON.getId()), "!0 & !1 & 2 & !3 & 2+6");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.POISON.getId()), "!0 & !1 & 2 & !3 & 2+6");
         e = "-0+3-4+13";
-        effectDurations.put(Integer.valueOf(MobEffectList.WEAKNESS.getId()), "!0 & !1 & !2 & 3 & 3+6");
-        effectDurations.put(Integer.valueOf(MobEffectList.HARM.getId()), "!0 & !1 & 2 & 3");
-        effectDurations.put(Integer.valueOf(MobEffectList.SLOWER_MOVEMENT.getId()), "!0 & 1 & !2 & 3 & 3+6");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.WEAKNESS.getId()), "!0 & !1 & !2 & 3 & 3+6");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.HARM.getId()), "!0 & !1 & 2 & 3");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.SLOWER_MOVEMENT.getId()), "!0 & 1 & !2 & 3 & 3+6");
         g = "+0-1-2+3&4-4+13";
-        effectDurations.put(Integer.valueOf(MobEffectList.INCREASE_DAMAGE.getId()), "0 & !1 & !2 & 3 & 3+6");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.INCREASE_DAMAGE.getId()), "0 & !1 & !2 & 3 & 3+6");
         l = "-0+1+2-3+13&4-4";
-        effectDurations.put(Integer.valueOf(MobEffectList.NIGHT_VISION.getId()), "!0 & 1 & 2 & !3 & 2+6");
-        effectDurations.put(Integer.valueOf(MobEffectList.INVISIBILITY.getId()), "!0 & 1 & 2 & 3 & 2+6");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.NIGHT_VISION.getId()), "!0 & 1 & 2 & !3 & 2+6");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.INVISIBILITY.getId()), "!0 & 1 & 2 & 3 & 2+6");
         m = "+0-1+2+3+13&4-4";
-        effectDurations.put(Integer.valueOf(MobEffectList.WATER_BREATHING.getId()), "0 & !1 & 2 & 3 & 2+6");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.WATER_BREATHING.getId()), "0 & !1 & 2 & 3 & 2+6");
+        n = "+0+1-2+3&4-4+13";
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.JUMP.getId()), "0 & 1 & !2 & 3");
         j = "+5-6-7";
-        effectAmplifiers.put(Integer.valueOf(MobEffectList.FASTER_MOVEMENT.getId()), "5");
-        effectAmplifiers.put(Integer.valueOf(MobEffectList.FASTER_DIG.getId()), "5");
-        effectAmplifiers.put(Integer.valueOf(MobEffectList.INCREASE_DAMAGE.getId()), "5");
-        effectAmplifiers.put(Integer.valueOf(MobEffectList.REGENERATION.getId()), "5");
-        effectAmplifiers.put(Integer.valueOf(MobEffectList.HARM.getId()), "5");
-        effectAmplifiers.put(Integer.valueOf(MobEffectList.HEAL.getId()), "5");
-        effectAmplifiers.put(Integer.valueOf(MobEffectList.RESISTANCE.getId()), "5");
-        effectAmplifiers.put(Integer.valueOf(MobEffectList.POISON.getId()), "5");
+        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.FASTER_MOVEMENT.getId()), "5");
+        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.FASTER_DIG.getId()), "5");
+        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.INCREASE_DAMAGE.getId()), "5");
+        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.REGENERATION.getId()), "5");
+        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.HARM.getId()), "5");
+        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.HEAL.getId()), "5");
+        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.RESISTANCE.getId()), "5");
+        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.POISON.getId()), "5");
+        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.JUMP.getId()), "5");
         i = "-5+6-7";
         k = "+14&13-13";
-        p = new HashMap();
+        q = Maps.newHashMap();
         appearances = new String[] { "potion.prefix.mundane", "potion.prefix.uninteresting", "potion.prefix.bland", "potion.prefix.clear", "potion.prefix.milky", "potion.prefix.diffuse", "potion.prefix.artless", "potion.prefix.thin", "potion.prefix.awkward", "potion.prefix.flat", "potion.prefix.bulky", "potion.prefix.bungling", "potion.prefix.buttered", "potion.prefix.smooth", "potion.prefix.suave", "potion.prefix.debonair", "potion.prefix.thick", "potion.prefix.elegant", "potion.prefix.fancy", "potion.prefix.charming", "potion.prefix.dashing", "potion.prefix.refined", "potion.prefix.cordial", "potion.prefix.sparkling", "potion.prefix.potent", "potion.prefix.foul", "potion.prefix.odorless", "potion.prefix.rank", "potion.prefix.harsh", "potion.prefix.acrid", "potion.prefix.gross", "potion.prefix.stinky"};
     }
 }

@@ -1,9 +1,9 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.util.com.mojang.authlib.GameProfile;
 
 public class CommandOp extends CommandAbstract {
 
@@ -17,7 +17,7 @@ public class CommandOp extends CommandAbstract {
         return 3;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.op.usage";
     }
 
@@ -37,11 +37,11 @@ public class CommandOp extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         if (astring.length == 1) {
             String s = astring[astring.length - 1];
-            ArrayList arraylist = new ArrayList();
-            GameProfile[] agameprofile = MinecraftServer.getServer().F();
+            ArrayList arraylist = Lists.newArrayList();
+            GameProfile[] agameprofile = MinecraftServer.getServer().J();
             int i = agameprofile.length;
 
             for (int j = 0; j < i; ++j) {

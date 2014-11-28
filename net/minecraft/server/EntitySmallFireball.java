@@ -19,50 +19,37 @@ public class EntitySmallFireball extends EntityFireball {
 
     protected void a(MovingObjectPosition movingobjectposition) {
         if (!this.world.isStatic) {
+            boolean flag;
+
             if (movingobjectposition.entity != null) {
-                if (!movingobjectposition.entity.isFireproof() && movingobjectposition.entity.damageEntity(DamageSource.fireball(this, this.shooter), 5.0F)) {
-                    movingobjectposition.entity.setOnFire(5);
+                flag = movingobjectposition.entity.damageEntity(DamageSource.fireball(this, this.shooter), 5.0F);
+                if (flag) {
+                    this.a(this.shooter, movingobjectposition.entity);
+                    if (!movingobjectposition.entity.isFireProof()) {
+                        movingobjectposition.entity.setOnFire(5);
+                    }
                 }
             } else {
-                int i = movingobjectposition.b;
-                int j = movingobjectposition.c;
-                int k = movingobjectposition.d;
-
-                switch (movingobjectposition.face) {
-                case 0:
-                    --j;
-                    break;
-
-                case 1:
-                    ++j;
-                    break;
-
-                case 2:
-                    --k;
-                    break;
-
-                case 3:
-                    ++k;
-                    break;
-
-                case 4:
-                    --i;
-                    break;
-
-                case 5:
-                    ++i;
+                flag = true;
+                if (this.shooter != null && this.shooter instanceof EntityInsentient) {
+                    flag = this.world.getGameRules().getBoolean("mobGriefing");
                 }
 
-                if (this.world.isEmpty(i, j, k)) {
-                    this.world.setTypeUpdate(i, j, k, Blocks.FIRE);
+                if (flag) {
+                    BlockPosition blockposition = movingobjectposition.a().shift(movingobjectposition.direction);
+
+                    if (this.world.isEmpty(blockposition)) {
+                        this.world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
+                    }
                 }
             }
 
             this.die();
         }
+
     }
 
-    public boolean R() {
+    public boolean ad() {
         return false;
     }
 

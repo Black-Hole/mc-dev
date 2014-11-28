@@ -1,83 +1,100 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Iterables;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import java.util.UUID;
-
-import net.minecraft.util.com.google.common.collect.Iterables;
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-import net.minecraft.util.com.mojang.authlib.properties.Property;
 
 public class TileEntitySkull extends TileEntity {
 
     private int a;
-    private int i;
-    private GameProfile j = null;
+    public int rotation;
+    private GameProfile g = null;
 
     public TileEntitySkull() {}
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setByte("SkullType", (byte) (this.a & 255));
-        nbttagcompound.setByte("Rot", (byte) (this.i & 255));
-        if (this.j != null) {
+        nbttagcompound.setByte("Rot", (byte) (this.rotation & 255));
+        if (this.g != null) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            GameProfileSerializer.serialize(nbttagcompound1, this.j);
+            GameProfileSerializer.serialize(nbttagcompound1, this.g);
             nbttagcompound.set("Owner", nbttagcompound1);
         }
+
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.a = nbttagcompound.getByte("SkullType");
-        this.i = nbttagcompound.getByte("Rot");
+        this.rotation = nbttagcompound.getByte("Rot");
         if (this.a == 3) {
             if (nbttagcompound.hasKeyOfType("Owner", 10)) {
-                this.j = GameProfileSerializer.deserialize(nbttagcompound.getCompound("Owner"));
-            } else if (nbttagcompound.hasKeyOfType("ExtraType", 8) && !UtilColor.b(nbttagcompound.getString("ExtraType"))) {
-                this.j = new GameProfile((UUID) null, nbttagcompound.getString("ExtraType"));
-                this.d();
+                this.g = GameProfileSerializer.deserialize(nbttagcompound.getCompound("Owner"));
+            } else if (nbttagcompound.hasKeyOfType("ExtraType", 8)) {
+                String s = nbttagcompound.getString("ExtraType");
+
+                if (!UtilColor.b(s)) {
+                    this.g = new GameProfile((UUID) null, s);
+                    this.e();
+                }
             }
         }
+
     }
 
     public GameProfile getGameProfile() {
-        return this.j;
+        return this.g;
     }
 
     public Packet getUpdatePacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         this.b(nbttagcompound);
-        return new PacketPlayOutTileEntityData(this.x, this.y, this.z, 4, nbttagcompound);
+        return new PacketPlayOutTileEntityData(this.position, 4, nbttagcompound);
     }
 
     public void setSkullType(int i) {
         this.a = i;
-        this.j = null;
+        this.g = null;
     }
 
     public void setGameProfile(GameProfile gameprofile) {
         this.a = 3;
-        this.j = gameprofile;
-        this.d();
+        this.g = gameprofile;
+        this.e();
     }
 
-    private void d() {
-        if (this.j != null && !UtilColor.b(this.j.getName())) {
-            if (!this.j.isComplete() || !this.j.getProperties().containsKey("textures")) {
-                GameProfile gameprofile = MinecraftServer.getServer().getUserCache().getProfile(this.j.getName());
+    private void e() {
+        this.g = b(this.g);
+        this.update();
+    }
 
-                if (gameprofile != null) {
-                    Property property = (Property) Iterables.getFirst(gameprofile.getProperties().get("textures"), null);
+    public static GameProfile b(GameProfile gameprofile) {
+        if (gameprofile != null && !UtilColor.b(gameprofile.getName())) {
+            if (gameprofile.isComplete() && gameprofile.getProperties().containsKey("textures")) {
+                return gameprofile;
+            } else if (MinecraftServer.getServer() == null) {
+                return gameprofile;
+            } else {
+                GameProfile gameprofile1 = MinecraftServer.getServer().getUserCache().getProfile(gameprofile.getName());
+
+                if (gameprofile1 == null) {
+                    return gameprofile;
+                } else {
+                    Property property = (Property) Iterables.getFirst(gameprofile1.getProperties().get("textures"), (Object) null);
 
                     if (property == null) {
-                        gameprofile = MinecraftServer.getServer().av().fillProfileProperties(gameprofile, true);
+                        gameprofile1 = MinecraftServer.getServer().aB().fillProfileProperties(gameprofile1, true);
                     }
 
-                    this.j = gameprofile;
-                    this.update();
+                    return gameprofile1;
                 }
             }
+        } else {
+            return gameprofile;
         }
     }
 
@@ -86,6 +103,6 @@ public class TileEntitySkull extends TileEntity {
     }
 
     public void setRotation(int i) {
-        this.i = i;
+        this.rotation = i;
     }
 }

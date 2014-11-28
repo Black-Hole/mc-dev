@@ -10,7 +10,7 @@ public class BlockOreBlock extends Block {
         this.a(CreativeModeTab.b);
     }
 
-    public MaterialMapColor f(int i) {
+    public MaterialMapColor g(IBlockData iblockdata) {
         return this.a;
     }
 }

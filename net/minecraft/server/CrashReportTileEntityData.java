@@ -11,7 +11,8 @@ class CrashReportTileEntityData implements Callable {
     }
 
     public String a() {
-        int i = this.a.world.getData(this.a.x, this.a.y, this.a.z);
+        IBlockData iblockdata = this.a.world.getType(this.a.position);
+        int i = iblockdata.getBlock().toLegacyData(iblockdata);
 
         if (i < 0) {
             return "Unknown? (Got " + i + ")";

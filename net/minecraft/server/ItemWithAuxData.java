@@ -12,6 +12,7 @@ public class ItemWithAuxData extends ItemBlock {
             this.setMaxDurability(0);
             this.a(true);
         }
+
     }
 
     public int filterData(int i) {
@@ -23,13 +24,13 @@ public class ItemWithAuxData extends ItemBlock {
         return this;
     }
 
-    public String a(ItemStack itemstack) {
+    public String e_(ItemStack itemstack) {
         if (this.c == null) {
-            return super.a(itemstack);
+            return super.e_(itemstack);
         } else {
             int i = itemstack.getData();
 
-            return i >= 0 && i < this.c.length ? super.a(itemstack) + "." + this.c[i] : super.a(itemstack);
+            return i >= 0 && i < this.c.length ? super.e_(itemstack) + "." + this.c[i] : super.e_(itemstack);
         }
     }
 }

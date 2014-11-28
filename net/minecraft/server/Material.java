@@ -36,16 +36,17 @@ public class Material {
     public static final Material CAKE = (new Material(MaterialMapColor.b)).n();
     public static final Material WEB = (new MaterialWeb(MaterialMapColor.e)).f().n();
     public static final Material PISTON = (new Material(MaterialMapColor.m)).o();
+    public static final Material BANNER = (new Material(MaterialMapColor.b)).f().o();
     private boolean canBurn;
-    private boolean J;
     private boolean K;
-    private final MaterialMapColor L;
-    private boolean M = true;
-    private int N;
-    private boolean O;
+    private boolean L;
+    private final MaterialMapColor M;
+    private boolean N = true;
+    private int O;
+    private boolean P;
 
     public Material(MaterialMapColor materialmapcolor) {
-        this.L = materialmapcolor;
+        this.M = materialmapcolor;
     }
 
     public boolean isLiquid() {
@@ -65,12 +66,12 @@ public class Material {
     }
 
     private Material s() {
-        this.K = true;
+        this.L = true;
         return this;
     }
 
     protected Material f() {
-        this.M = false;
+        this.N = false;
         return this;
     }
 
@@ -84,46 +85,42 @@ public class Material {
     }
 
     public Material i() {
-        this.J = true;
+        this.K = true;
         return this;
     }
 
     public boolean isReplaceable() {
-        return this.J;
+        return this.K;
     }
 
     public boolean k() {
-        return this.K ? false : this.isSolid();
+        return this.L ? false : this.isSolid();
     }
 
     public boolean isAlwaysDestroyable() {
-        return this.M;
-    }
-
-    public int getPushReaction() {
         return this.N;
     }
 
+    public int getPushReaction() {
+        return this.O;
+    }
+
     protected Material n() {
-        this.N = 1;
+        this.O = 1;
         return this;
     }
 
     protected Material o() {
-        this.N = 2;
+        this.O = 2;
         return this;
     }
 
     protected Material p() {
-        this.O = true;
+        this.P = true;
         return this;
     }
 
-    public boolean q() {
-        return this.O;
-    }
-
     public MaterialMapColor r() {
-        return this.L;
+        return this.M;
     }
 }

@@ -1,56 +1,60 @@
 package net.minecraft.server;
 
+import java.util.List;
 import java.util.Random;
 
 public class WorldGenBonusChest extends WorldGenerator {
 
-    private final StructurePieceTreasure[] a;
+    private final List a;
     private final int b;
 
-    public WorldGenBonusChest(StructurePieceTreasure[] astructurepiecetreasure, int i) {
-        this.a = astructurepiecetreasure;
+    public WorldGenBonusChest(List list, int i) {
+        this.a = list;
         this.b = i;
     }
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
         Block block;
 
-        while (((block = world.getType(i, j, k)).getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) && j > 1) {
-            --j;
+        while (((block = world.getType(blockposition).getBlock()).getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) && blockposition.getY() > 1) {
+            blockposition = blockposition.down();
         }
 
-        if (j < 1) {
+        if (blockposition.getY() < 1) {
             return false;
         } else {
-            ++j;
+            blockposition = blockposition.up();
 
-            for (int l = 0; l < 4; ++l) {
-                int i1 = i + random.nextInt(4) - random.nextInt(4);
-                int j1 = j + random.nextInt(3) - random.nextInt(3);
-                int k1 = k + random.nextInt(4) - random.nextInt(4);
+            for (int i = 0; i < 4; ++i) {
+                BlockPosition blockposition1 = blockposition.a(random.nextInt(4) - random.nextInt(4), random.nextInt(3) - random.nextInt(3), random.nextInt(4) - random.nextInt(4));
 
-                if (world.isEmpty(i1, j1, k1) && World.a((IBlockAccess) world, i1, j1 - 1, k1)) {
-                    world.setTypeAndData(i1, j1, k1, Blocks.CHEST, 0, 2);
-                    TileEntityChest tileentitychest = (TileEntityChest) world.getTileEntity(i1, j1, k1);
+                if (world.isEmpty(blockposition1) && World.a((IBlockAccess) world, blockposition1.down())) {
+                    world.setTypeAndData(blockposition1, Blocks.CHEST.getBlockData(), 2);
+                    TileEntity tileentity = world.getTileEntity(blockposition1);
 
-                    if (tileentitychest != null && tileentitychest != null) {
-                        StructurePieceTreasure.a(random, this.a, (IInventory) tileentitychest, this.b);
+                    if (tileentity instanceof TileEntityChest) {
+                        StructurePieceTreasure.a(random, this.a, (IInventory) ((TileEntityChest) tileentity), this.b);
                     }
 
-                    if (world.isEmpty(i1 - 1, j1, k1) && World.a((IBlockAccess) world, i1 - 1, j1 - 1, k1)) {
-                        world.setTypeAndData(i1 - 1, j1, k1, Blocks.TORCH, 0, 2);
+                    BlockPosition blockposition2 = blockposition1.east();
+                    BlockPosition blockposition3 = blockposition1.west();
+                    BlockPosition blockposition4 = blockposition1.north();
+                    BlockPosition blockposition5 = blockposition1.south();
+
+                    if (world.isEmpty(blockposition3) && World.a((IBlockAccess) world, blockposition3.down())) {
+                        world.setTypeAndData(blockposition3, Blocks.TORCH.getBlockData(), 2);
                     }
 
-                    if (world.isEmpty(i1 + 1, j1, k1) && World.a((IBlockAccess) world, i1 - 1, j1 - 1, k1)) {
-                        world.setTypeAndData(i1 + 1, j1, k1, Blocks.TORCH, 0, 2);
+                    if (world.isEmpty(blockposition2) && World.a((IBlockAccess) world, blockposition2.down())) {
+                        world.setTypeAndData(blockposition2, Blocks.TORCH.getBlockData(), 2);
                     }
 
-                    if (world.isEmpty(i1, j1, k1 - 1) && World.a((IBlockAccess) world, i1 - 1, j1 - 1, k1)) {
-                        world.setTypeAndData(i1, j1, k1 - 1, Blocks.TORCH, 0, 2);
+                    if (world.isEmpty(blockposition4) && World.a((IBlockAccess) world, blockposition4.down())) {
+                        world.setTypeAndData(blockposition4, Blocks.TORCH.getBlockData(), 2);
                     }
 
-                    if (world.isEmpty(i1, j1, k1 + 1) && World.a((IBlockAccess) world, i1 - 1, j1 - 1, k1)) {
-                        world.setTypeAndData(i1, j1, k1 + 1, Blocks.TORCH, 0, 2);
+                    if (world.isEmpty(blockposition5) && World.a((IBlockAccess) world, blockposition5.down())) {
+                        world.setTypeAndData(blockposition5, Blocks.TORCH.getBlockData(), 2);
                     }
 
                     return true;

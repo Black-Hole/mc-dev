@@ -1,44 +1,28 @@
 package net.minecraft.server;
 
-public class PacketPlayOutSpawnPosition extends Packet {
+public class PacketPlayOutSpawnPosition implements Packet {
 
-    private int x;
-    private int y;
-    private int z;
+    public BlockPosition position;
 
     public PacketPlayOutSpawnPosition() {}
 
-    public PacketPlayOutSpawnPosition(int i, int j, int k) {
-        this.x = i;
-        this.y = j;
-        this.z = k;
+    public PacketPlayOutSpawnPosition(BlockPosition blockposition) {
+        this.position = blockposition;
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.x = packetdataserializer.readInt();
-        this.y = packetdataserializer.readInt();
-        this.z = packetdataserializer.readInt();
+        this.position = packetdataserializer.c();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeInt(this.x);
-        packetdataserializer.writeInt(this.y);
-        packetdataserializer.writeInt(this.z);
+        packetdataserializer.a(this.position);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public boolean a() {
-        return false;
-    }
-
-    public String b() {
-        return String.format("x=%d, y=%d, z=%d", new Object[] { Integer.valueOf(this.x), Integer.valueOf(this.y), Integer.valueOf(this.z)});
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

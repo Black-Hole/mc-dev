@@ -12,21 +12,21 @@ public class EntityComplexPart extends Entity {
         this.b = s;
     }
 
-    protected void c() {}
+    protected void h() {}
 
     protected void a(NBTTagCompound nbttagcompound) {}
 
     protected void b(NBTTagCompound nbttagcompound) {}
 
-    public boolean R() {
+    public boolean ad() {
         return true;
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
-        return this.isInvulnerable() ? false : this.owner.a(this, damagesource, f);
+        return this.isInvulnerable(damagesource) ? false : this.owner.a(this, damagesource, f);
     }
 
-    public boolean i(Entity entity) {
+    public boolean k(Entity entity) {
         return this == entity || this.owner == entity;
     }
 }

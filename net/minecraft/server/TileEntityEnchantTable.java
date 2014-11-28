@@ -2,80 +2,81 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class TileEntityEnchantTable extends TileEntity {
+public class TileEntityEnchantTable extends TileEntity implements IUpdatePlayerListBox, ITileEntityContainer {
 
     public int a;
+    public float f;
+    public float g;
+    public float h;
     public float i;
     public float j;
     public float k;
     public float l;
     public float m;
     public float n;
-    public float o;
-    public float p;
-    public float q;
-    private static Random r = new Random();
-    private String s;
+    private static Random o = new Random();
+    private String p;
 
     public TileEntityEnchantTable() {}
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        if (this.b()) {
-            nbttagcompound.setString("CustomName", this.s);
+        if (this.hasCustomName()) {
+            nbttagcompound.setString("CustomName", this.p);
         }
+
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
-            this.s = nbttagcompound.getString("CustomName");
+            this.p = nbttagcompound.getString("CustomName");
         }
+
     }
 
-    public void h() {
-        super.h();
-        this.n = this.m;
-        this.p = this.o;
-        EntityHuman entityhuman = this.world.findNearbyPlayer((double) ((float) this.x + 0.5F), (double) ((float) this.y + 0.5F), (double) ((float) this.z + 0.5F), 3.0D);
+    public void c() {
+        this.k = this.j;
+        this.m = this.l;
+        EntityHuman entityhuman = this.world.findNearbyPlayer((double) ((float) this.position.getX() + 0.5F), (double) ((float) this.position.getY() + 0.5F), (double) ((float) this.position.getZ() + 0.5F), 3.0D);
 
         if (entityhuman != null) {
-            double d0 = entityhuman.locX - (double) ((float) this.x + 0.5F);
-            double d1 = entityhuman.locZ - (double) ((float) this.z + 0.5F);
+            double d0 = entityhuman.locX - (double) ((float) this.position.getX() + 0.5F);
+            double d1 = entityhuman.locZ - (double) ((float) this.position.getZ() + 0.5F);
 
-            this.q = (float) Math.atan2(d1, d0);
-            this.m += 0.1F;
-            if (this.m < 0.5F || r.nextInt(40) == 0) {
-                float f = this.k;
+            this.n = (float) Math.atan2(d1, d0);
+            this.j += 0.1F;
+            if (this.j < 0.5F || TileEntityEnchantTable.o.nextInt(40) == 0) {
+                float f = this.h;
 
                 do {
-                    this.k += (float) (r.nextInt(4) - r.nextInt(4));
-                } while (f == this.k);
+                    this.h += (float) (TileEntityEnchantTable.o.nextInt(4) - TileEntityEnchantTable.o.nextInt(4));
+                } while (f == this.h);
             }
         } else {
-            this.q += 0.02F;
-            this.m -= 0.1F;
+            this.n += 0.02F;
+            this.j -= 0.1F;
         }
 
-        while (this.o >= 3.1415927F) {
-            this.o -= 6.2831855F;
+        while (this.l >= 3.1415927F) {
+            this.l -= 6.2831855F;
         }
 
-        while (this.o < -3.1415927F) {
-            this.o += 6.2831855F;
+        while (this.l < -3.1415927F) {
+            this.l += 6.2831855F;
         }
 
-        while (this.q >= 3.1415927F) {
-            this.q -= 6.2831855F;
+        while (this.n >= 3.1415927F) {
+            this.n -= 6.2831855F;
         }
 
-        while (this.q < -3.1415927F) {
-            this.q += 6.2831855F;
+        while (this.n < -3.1415927F) {
+            this.n += 6.2831855F;
         }
 
         float f1;
 
-        for (f1 = this.q - this.o; f1 >= 3.1415927F; f1 -= 6.2831855F) {
+        for (f1 = this.n - this.l; f1 >= 3.1415927F; f1 -= 6.2831855F) {
             ;
         }
 
@@ -83,41 +84,39 @@ public class TileEntityEnchantTable extends TileEntity {
             f1 += 6.2831855F;
         }
 
-        this.o += f1 * 0.4F;
-        if (this.m < 0.0F) {
-            this.m = 0.0F;
-        }
-
-        if (this.m > 1.0F) {
-            this.m = 1.0F;
-        }
-
+        this.l += f1 * 0.4F;
+        this.j = MathHelper.a(this.j, 0.0F, 1.0F);
         ++this.a;
-        this.j = this.i;
-        float f2 = (this.k - this.i) * 0.4F;
+        this.g = this.f;
+        float f2 = (this.h - this.f) * 0.4F;
         float f3 = 0.2F;
 
-        if (f2 < -f3) {
-            f2 = -f3;
-        }
-
-        if (f2 > f3) {
-            f2 = f3;
-        }
-
-        this.l += (f2 - this.l) * 0.9F;
-        this.i += this.l;
+        f2 = MathHelper.a(f2, -f3, f3);
+        this.i += (f2 - this.i) * 0.9F;
+        this.f += this.i;
     }
 
-    public String a() {
-        return this.b() ? this.s : "container.enchant";
+    public String getName() {
+        return this.hasCustomName() ? this.p : "container.enchant";
     }
 
-    public boolean b() {
-        return this.s != null && this.s.length() > 0;
+    public boolean hasCustomName() {
+        return this.p != null && this.p.length() > 0;
     }
 
     public void a(String s) {
-        this.s = s;
+        this.p = s;
+    }
+
+    public IChatBaseComponent getScoreboardDisplayName() {
+        return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
+    }
+
+    public Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman) {
+        return new ContainerEnchantTable(playerinventory, this.world, this.position);
+    }
+
+    public String getContainerName() {
+        return "minecraft:enchanting_table";
     }
 }

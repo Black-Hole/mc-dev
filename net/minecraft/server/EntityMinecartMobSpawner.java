@@ -12,12 +12,12 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public int m() {
-        return 4;
+    public EnumMinecartType s() {
+        return EnumMinecartType.SPAWNER;
     }
 
-    public Block o() {
-        return Blocks.MOB_SPAWNER;
+    public IBlockData u() {
+        return Blocks.MOB_SPAWNER.getBlockData();
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
@@ -30,8 +30,8 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
         this.a.b(nbttagcompound);
     }
 
-    public void h() {
-        super.h();
-        this.a.g();
+    public void s_() {
+        super.s_();
+        this.a.c();
     }
 }

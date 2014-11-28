@@ -1,13 +1,13 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.List;
 
 public class InventorySubcontainer implements IInventory {
 
     private String a;
     private int b;
-    private ItemStack[] items;
+    public ItemStack[] items;
     private List d;
     private boolean e;
 
@@ -20,7 +20,7 @@ public class InventorySubcontainer implements IInventory {
 
     public void a(IInventoryListener iinventorylistener) {
         if (this.d == null) {
-            this.d = new ArrayList();
+            this.d = Lists.newArrayList();
         }
 
         this.d.add(iinventorylistener);
@@ -57,6 +57,40 @@ public class InventorySubcontainer implements IInventory {
         }
     }
 
+    public ItemStack a(ItemStack itemstack) {
+        ItemStack itemstack1 = itemstack.cloneItemStack();
+
+        for (int i = 0; i < this.b; ++i) {
+            ItemStack itemstack2 = this.getItem(i);
+
+            if (itemstack2 == null) {
+                this.setItem(i, itemstack1);
+                this.update();
+                return null;
+            }
+
+            if (ItemStack.c(itemstack2, itemstack1)) {
+                int j = Math.min(this.getMaxStackSize(), itemstack2.getMaxStackSize());
+                int k = Math.min(itemstack1.count, j - itemstack2.count);
+
+                if (k > 0) {
+                    itemstack2.count += k;
+                    itemstack1.count -= k;
+                    if (itemstack1.count <= 0) {
+                        this.update();
+                        return null;
+                    }
+                }
+            }
+        }
+
+        if (itemstack1.count != itemstack.count) {
+            this.update();
+        }
+
+        return itemstack1;
+    }
+
     public ItemStack splitWithoutUpdate(int i) {
         if (this.items[i] != null) {
             ItemStack itemstack = this.items[i];
@@ -81,17 +115,21 @@ public class InventorySubcontainer implements IInventory {
         return this.b;
     }
 
-    public String getInventoryName() {
+    public String getName() {
         return this.a;
     }
 
-    public boolean k_() {
+    public boolean hasCustomName() {
         return this.e;
     }
 
     public void a(String s) {
         this.e = true;
         this.a = s;
+    }
+
+    public IChatBaseComponent getScoreboardDisplayName() {
+        return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
     }
 
     public int getMaxStackSize() {
@@ -104,17 +142,35 @@ public class InventorySubcontainer implements IInventory {
                 ((IInventoryListener) this.d.get(i)).a(this);
             }
         }
+
     }
 
     public boolean a(EntityHuman entityhuman) {
         return true;
     }
 
-    public void startOpen() {}
+    public void startOpen(EntityHuman entityhuman) {}
 
-    public void closeContainer() {}
+    public void closeContainer(EntityHuman entityhuman) {}
 
     public boolean b(int i, ItemStack itemstack) {
         return true;
+    }
+
+    public int getProperty(int i) {
+        return 0;
+    }
+
+    public void b(int i, int j) {}
+
+    public int g() {
+        return 0;
+    }
+
+    public void l() {
+        for (int i = 0; i < this.items.length; ++i) {
+            this.items[i] = null;
+        }
+
     }
 }

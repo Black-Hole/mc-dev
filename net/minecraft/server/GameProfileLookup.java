@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-import net.minecraft.util.com.mojang.authlib.ProfileLookupCallback;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.ProfileLookupCallback;
 
 final class GameProfileLookup implements ProfileLookupCallback {
 

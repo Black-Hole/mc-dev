@@ -1,64 +1,59 @@
 package net.minecraft.server;
 
-public class PacketPlayInFlying extends Packet {
+public class PacketPlayInFlying implements Packet {
 
     protected double x;
     protected double y;
     protected double z;
-    protected double stance;
     protected float yaw;
     protected float pitch;
-    protected boolean g;
+    protected boolean f;
     protected boolean hasPos;
     protected boolean hasLook;
 
     public PacketPlayInFlying() {}
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.g = packetdataserializer.readUnsignedByte() != 0;
+        this.f = packetdataserializer.readUnsignedByte() != 0;
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeByte(this.g ? 1 : 0);
+        packetdataserializer.writeByte(this.f ? 1 : 0);
     }
 
-    public double c() {
+    public double a() {
         return this.x;
     }
 
-    public double d() {
+    public double b() {
         return this.y;
     }
 
-    public double e() {
+    public double c() {
         return this.z;
     }
 
-    public double f() {
-        return this.stance;
-    }
-
-    public float g() {
+    public float d() {
         return this.yaw;
     }
 
-    public float h() {
+    public float e() {
         return this.pitch;
     }
 
-    public boolean i() {
-        return this.g;
+    public boolean f() {
+        return this.f;
     }
 
-    public boolean j() {
+    public boolean g() {
         return this.hasPos;
     }
 
-    public boolean k() {
+    public boolean h() {
         return this.hasLook;
     }
 
@@ -66,7 +61,7 @@ public class PacketPlayInFlying extends Packet {
         this.hasPos = flag;
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

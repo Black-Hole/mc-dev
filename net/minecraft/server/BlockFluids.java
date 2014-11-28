@@ -1,19 +1,20 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
 import java.util.Random;
 
 public abstract class BlockFluids extends Block {
 
+    public static final BlockStateInteger LEVEL = BlockStateInteger.of("level", 0, 15);
+
     protected BlockFluids(Material material) {
         super(material);
-        float f = 0.0F;
-        float f1 = 0.0F;
-
-        this.a(0.0F + f1, 0.0F + f, 0.0F + f1, 1.0F + f1, 1.0F + f, 1.0F + f1);
+        this.j(this.blockStateList.getBlockData().set(BlockFluids.LEVEL, Integer.valueOf(0)));
+        this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         this.a(true);
     }
 
-    public boolean b(IBlockAccess iblockaccess, int i, int j, int k) {
+    public boolean b(IBlockAccess iblockaccess, BlockPosition blockposition) {
         return this.material != Material.LAVA;
     }
 
@@ -25,22 +26,14 @@ public abstract class BlockFluids extends Block {
         return (float) (i + 1) / 9.0F;
     }
 
-    protected int e(World world, int i, int j, int k) {
-        return world.getType(i, j, k).getMaterial() == this.material ? world.getData(i, j, k) : -1;
+    protected int e(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockaccess.getType(blockposition).getBlock().getMaterial() == this.material ? ((Integer) iblockaccess.getType(blockposition).get(BlockFluids.LEVEL)).intValue() : -1;
     }
 
-    protected int e(IBlockAccess iblockaccess, int i, int j, int k) {
-        if (iblockaccess.getType(i, j, k).getMaterial() != this.material) {
-            return -1;
-        } else {
-            int l = iblockaccess.getData(i, j, k);
+    protected int f(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        int i = this.e(iblockaccess, blockposition);
 
-            if (l >= 8) {
-                l = 0;
-            }
-
-            return l;
-        }
+        return i >= 8 ? 0 : i;
     }
 
     public boolean d() {
@@ -51,25 +44,25 @@ public abstract class BlockFluids extends Block {
         return false;
     }
 
-    public boolean a(int i, boolean flag) {
-        return flag && i == 0;
+    public boolean a(IBlockData iblockdata, boolean flag) {
+        return flag && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0;
     }
 
-    public boolean d(IBlockAccess iblockaccess, int i, int j, int k, int l) {
-        Material material = iblockaccess.getType(i, j, k).getMaterial();
+    public boolean b(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+        Material material = iblockaccess.getType(blockposition).getBlock().getMaterial();
 
-        return material == this.material ? false : (l == 1 ? true : (material == Material.ICE ? false : super.d(iblockaccess, i, j, k, l)));
+        return material == this.material ? false : (enumdirection == EnumDirection.UP ? true : (material == Material.ICE ? false : super.b(iblockaccess, blockposition, enumdirection)));
     }
 
-    public AxisAlignedBB a(World world, int i, int j, int k) {
+    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return null;
     }
 
     public int b() {
-        return 4;
+        return 1;
     }
 
-    public Item getDropType(int i, Random random, int j) {
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return null;
     }
 
@@ -77,156 +70,143 @@ public abstract class BlockFluids extends Block {
         return 0;
     }
 
-    private Vec3D f(IBlockAccess iblockaccess, int i, int j, int k) {
-        Vec3D vec3d = Vec3D.a(0.0D, 0.0D, 0.0D);
-        int l = this.e(iblockaccess, i, j, k);
+    protected Vec3D h(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        Vec3D vec3d = new Vec3D(0.0D, 0.0D, 0.0D);
+        int i = this.f(iblockaccess, blockposition);
+        Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
 
-        for (int i1 = 0; i1 < 4; ++i1) {
-            int j1 = i;
-            int k1 = k;
+        EnumDirection enumdirection;
+        BlockPosition blockposition1;
 
-            if (i1 == 0) {
-                j1 = i - 1;
-            }
+        while (iterator.hasNext()) {
+            enumdirection = (EnumDirection) iterator.next();
+            blockposition1 = blockposition.shift(enumdirection);
+            int j = this.f(iblockaccess, blockposition1);
+            int k;
 
-            if (i1 == 1) {
-                k1 = k - 1;
-            }
-
-            if (i1 == 2) {
-                ++j1;
-            }
-
-            if (i1 == 3) {
-                ++k1;
-            }
-
-            int l1 = this.e(iblockaccess, j1, j, k1);
-            int i2;
-
-            if (l1 < 0) {
-                if (!iblockaccess.getType(j1, j, k1).getMaterial().isSolid()) {
-                    l1 = this.e(iblockaccess, j1, j - 1, k1);
-                    if (l1 >= 0) {
-                        i2 = l1 - (l - 8);
-                        vec3d = vec3d.add((double) ((j1 - i) * i2), (double) ((j - j) * i2), (double) ((k1 - k) * i2));
+            if (j < 0) {
+                if (!iblockaccess.getType(blockposition1).getBlock().getMaterial().isSolid()) {
+                    j = this.f(iblockaccess, blockposition1.down());
+                    if (j >= 0) {
+                        k = j - (i - 8);
+                        vec3d = vec3d.add((double) ((blockposition1.getX() - blockposition.getX()) * k), (double) ((blockposition1.getY() - blockposition.getY()) * k), (double) ((blockposition1.getZ() - blockposition.getZ()) * k));
                     }
                 }
-            } else if (l1 >= 0) {
-                i2 = l1 - l;
-                vec3d = vec3d.add((double) ((j1 - i) * i2), (double) ((j - j) * i2), (double) ((k1 - k) * i2));
+            } else if (j >= 0) {
+                k = j - i;
+                vec3d = vec3d.add((double) ((blockposition1.getX() - blockposition.getX()) * k), (double) ((blockposition1.getY() - blockposition.getY()) * k), (double) ((blockposition1.getZ() - blockposition.getZ()) * k));
             }
         }
 
-        if (iblockaccess.getData(i, j, k) >= 8) {
-            boolean flag = false;
+        if (((Integer) iblockaccess.getType(blockposition).get(BlockFluids.LEVEL)).intValue() >= 8) {
+            iterator = EnumDirectionLimit.HORIZONTAL.iterator();
 
-            if (flag || this.d(iblockaccess, i, j, k - 1, 2)) {
-                flag = true;
-            }
-
-            if (flag || this.d(iblockaccess, i, j, k + 1, 3)) {
-                flag = true;
-            }
-
-            if (flag || this.d(iblockaccess, i - 1, j, k, 4)) {
-                flag = true;
-            }
-
-            if (flag || this.d(iblockaccess, i + 1, j, k, 5)) {
-                flag = true;
-            }
-
-            if (flag || this.d(iblockaccess, i, j + 1, k - 1, 2)) {
-                flag = true;
-            }
-
-            if (flag || this.d(iblockaccess, i, j + 1, k + 1, 3)) {
-                flag = true;
-            }
-
-            if (flag || this.d(iblockaccess, i - 1, j + 1, k, 4)) {
-                flag = true;
-            }
-
-            if (flag || this.d(iblockaccess, i + 1, j + 1, k, 5)) {
-                flag = true;
-            }
-
-            if (flag) {
-                vec3d = vec3d.a().add(0.0D, -6.0D, 0.0D);
+            while (iterator.hasNext()) {
+                enumdirection = (EnumDirection) iterator.next();
+                blockposition1 = blockposition.shift(enumdirection);
+                if (this.b(iblockaccess, blockposition1, enumdirection) || this.b(iblockaccess, blockposition1.up(), enumdirection)) {
+                    vec3d = vec3d.a().add(0.0D, -6.0D, 0.0D);
+                    break;
+                }
             }
         }
 
-        vec3d = vec3d.a();
-        return vec3d;
+        return vec3d.a();
     }
 
-    public void a(World world, int i, int j, int k, Entity entity, Vec3D vec3d) {
-        Vec3D vec3d1 = this.f(world, i, j, k);
-
-        vec3d.a += vec3d1.a;
-        vec3d.b += vec3d1.b;
-        vec3d.c += vec3d1.c;
+    public Vec3D a(World world, BlockPosition blockposition, Entity entity, Vec3D vec3d) {
+        return vec3d.e(this.h(world, blockposition));
     }
 
     public int a(World world) {
-        return this.material == Material.WATER ? 5 : (this.material == Material.LAVA ? (world.worldProvider.g ? 10 : 30) : 0);
+        return this.material == Material.WATER ? 5 : (this.material == Material.LAVA ? (world.worldProvider.o() ? 10 : 30) : 0);
     }
 
-    public void onPlace(World world, int i, int j, int k) {
-        this.n(world, i, j, k);
+    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        this.e(world, blockposition, iblockdata);
     }
 
-    public void doPhysics(World world, int i, int j, int k, Block block) {
-        this.n(world, i, j, k);
+    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+        this.e(world, blockposition, iblockdata);
     }
 
-    private void n(World world, int i, int j, int k) {
-        if (world.getType(i, j, k) == this) {
-            if (this.material == Material.LAVA) {
-                boolean flag = false;
+    public boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        if (this.material == Material.LAVA) {
+            boolean flag = false;
+            EnumDirection[] aenumdirection = EnumDirection.values();
+            int i = aenumdirection.length;
 
-                if (flag || world.getType(i, j, k - 1).getMaterial() == Material.WATER) {
+            for (int j = 0; j < i; ++j) {
+                EnumDirection enumdirection = aenumdirection[j];
+
+                if (enumdirection != EnumDirection.DOWN && world.getType(blockposition.shift(enumdirection)).getBlock().getMaterial() == Material.WATER) {
                     flag = true;
+                    break;
+                }
+            }
+
+            if (flag) {
+                Integer integer = (Integer) iblockdata.get(BlockFluids.LEVEL);
+
+                if (integer.intValue() == 0) {
+                    world.setTypeUpdate(blockposition, Blocks.OBSIDIAN.getBlockData());
+                    this.fizz(world, blockposition);
+                    return true;
                 }
 
-                if (flag || world.getType(i, j, k + 1).getMaterial() == Material.WATER) {
-                    flag = true;
-                }
-
-                if (flag || world.getType(i - 1, j, k).getMaterial() == Material.WATER) {
-                    flag = true;
-                }
-
-                if (flag || world.getType(i + 1, j, k).getMaterial() == Material.WATER) {
-                    flag = true;
-                }
-
-                if (flag || world.getType(i, j + 1, k).getMaterial() == Material.WATER) {
-                    flag = true;
-                }
-
-                if (flag) {
-                    int l = world.getData(i, j, k);
-
-                    if (l == 0) {
-                        world.setTypeUpdate(i, j, k, Blocks.OBSIDIAN);
-                    } else if (l <= 4) {
-                        world.setTypeUpdate(i, j, k, Blocks.COBBLESTONE);
-                    }
-
-                    this.fizz(world, i, j, k);
+                if (integer.intValue() <= 4) {
+                    world.setTypeUpdate(blockposition, Blocks.COBBLESTONE.getBlockData());
+                    this.fizz(world, blockposition);
+                    return true;
                 }
             }
         }
+
+        return false;
     }
 
-    protected void fizz(World world, int i, int j, int k) {
-        world.makeSound((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), "random.fizz", 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+    protected void fizz(World world, BlockPosition blockposition) {
+        double d0 = (double) blockposition.getX();
+        double d1 = (double) blockposition.getY();
+        double d2 = (double) blockposition.getZ();
 
-        for (int l = 0; l < 8; ++l) {
-            world.addParticle("largesmoke", (double) i + Math.random(), (double) j + 1.2D, (double) k + Math.random(), 0.0D, 0.0D, 0.0D);
+        world.makeSound(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D, "random.fizz", 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+
+        for (int i = 0; i < 8; ++i) {
+            world.addParticle(EnumParticle.SMOKE_LARGE, d0 + Math.random(), d1 + 1.2D, d2 + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+        }
+
+    }
+
+    public IBlockData fromLegacyData(int i) {
+        return this.getBlockData().set(BlockFluids.LEVEL, Integer.valueOf(i));
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        return ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue();
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockFluids.LEVEL});
+    }
+
+    public static BlockFlowing a(Material material) {
+        if (material == Material.WATER) {
+            return Blocks.FLOWING_WATER;
+        } else if (material == Material.LAVA) {
+            return Blocks.FLOWING_LAVA;
+        } else {
+            throw new IllegalArgumentException("Invalid material");
+        }
+    }
+
+    public static BlockStationary b(Material material) {
+        if (material == Material.WATER) {
+            return Blocks.WATER;
+        } else if (material == Material.LAVA) {
+            return Blocks.LAVA;
+        } else {
+            throw new IllegalArgumentException("Invalid material");
         }
     }
 }

@@ -11,10 +11,10 @@ public class CommandKick extends CommandAbstract {
     }
 
     public int a() {
-        return 2;
+        return 3;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.kick.usage";
     }
 
@@ -38,13 +38,14 @@ public class CommandKick extends CommandAbstract {
                 } else {
                     a(icommandlistener, this, "commands.kick.success", new Object[] { entityplayer.getName()});
                 }
+
             }
         } else {
             throw new ExceptionUsage("commands.kick.usage", new Object[0]);
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length >= 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : null;
     }
 }

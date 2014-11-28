@@ -4,20 +4,21 @@ public class BlockPotatoes extends BlockCrops {
 
     public BlockPotatoes() {}
 
-    protected Item i() {
+    protected Item j() {
         return Items.POTATO;
     }
 
-    protected Item P() {
+    protected Item l() {
         return Items.POTATO;
     }
 
-    public void dropNaturally(World world, int i, int j, int k, int l, float f, int i1) {
-        super.dropNaturally(world, i, j, k, l, f, i1);
+    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
+        super.dropNaturally(world, blockposition, iblockdata, f, i);
         if (!world.isStatic) {
-            if (l >= 7 && world.random.nextInt(50) == 0) {
-                this.a(world, i, j, k, new ItemStack(Items.POTATO_POISON));
+            if (((Integer) iblockdata.get(BlockPotatoes.AGE)).intValue() >= 7 && world.random.nextInt(50) == 0) {
+                a(world, blockposition, new ItemStack(Items.POISONOUS_POTATO));
             }
+
         }
     }
 }

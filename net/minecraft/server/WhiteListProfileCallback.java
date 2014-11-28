@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-import net.minecraft.util.com.mojang.authlib.ProfileLookupCallback;
-import net.minecraft.util.com.mojang.authlib.yggdrasil.ProfileNotFoundException;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.ProfileLookupCallback;
+import com.mojang.authlib.yggdrasil.ProfileNotFoundException;
 
 final class WhiteListProfileCallback implements ProfileLookupCallback {
 

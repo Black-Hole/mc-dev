@@ -3,50 +3,44 @@ package net.minecraft.server;
 public class SourceBlock implements ISourceBlock {
 
     private final World a;
-    private final int b;
-    private final int c;
-    private final int d;
+    private final BlockPosition b;
 
-    public SourceBlock(World world, int i, int j, int k) {
+    public SourceBlock(World world, BlockPosition blockposition) {
         this.a = world;
-        this.b = i;
-        this.c = j;
-        this.d = k;
+        this.b = blockposition;
     }
 
-    public World k() {
+    public World i() {
         return this.a;
     }
 
     public double getX() {
-        return (double) this.b + 0.5D;
+        return (double) this.b.getX() + 0.5D;
     }
 
     public double getY() {
-        return (double) this.c + 0.5D;
+        return (double) this.b.getY() + 0.5D;
     }
 
     public double getZ() {
-        return (double) this.d + 0.5D;
+        return (double) this.b.getZ() + 0.5D;
     }
 
-    public int getBlockX() {
+    public BlockPosition getBlockPosition() {
         return this.b;
     }
 
-    public int getBlockY() {
-        return this.c;
+    public Block e() {
+        return this.a.getType(this.b).getBlock();
     }
 
-    public int getBlockZ() {
-        return this.d;
-    }
+    public int f() {
+        IBlockData iblockdata = this.a.getType(this.b);
 
-    public int h() {
-        return this.a.getData(this.b, this.c, this.d);
+        return iblockdata.getBlock().toLegacyData(iblockdata);
     }
 
     public TileEntity getTileEntity() {
-        return this.a.getTileEntity(this.b, this.c, this.d);
+        return this.a.getTileEntity(this.b);
     }
 }

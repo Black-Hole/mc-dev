@@ -2,8 +2,6 @@ package net.minecraft.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutput;
@@ -38,33 +36,7 @@ public class NBTCompressedStreamTools {
         } finally {
             dataoutputstream.close();
         }
-    }
 
-    public static NBTTagCompound a(byte[] abyte, NBTReadLimiter nbtreadlimiter) {
-        DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(abyte))));
-
-        NBTTagCompound nbttagcompound;
-
-        try {
-            nbttagcompound = a((DataInput) datainputstream, nbtreadlimiter);
-        } finally {
-            datainputstream.close();
-        }
-
-        return nbttagcompound;
-    }
-
-    public static byte[] a(NBTTagCompound nbttagcompound) {
-        ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
-        DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(bytearrayoutputstream));
-
-        try {
-            a(nbttagcompound, (DataOutput) dataoutputstream);
-        } finally {
-            dataoutputstream.close();
-        }
-
-        return bytearrayoutputstream.toByteArray();
     }
 
     public static NBTTagCompound a(DataInputStream datainputstream) {
@@ -109,8 +81,8 @@ public class NBTCompressedStreamTools {
                 CrashReport crashreport = CrashReport.a(ioexception, "Loading NBT data");
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("NBT Tag");
 
-                crashreportsystemdetails.a("Tag name", "[UNNAMED TAG]");
-                crashreportsystemdetails.a("Tag type", Byte.valueOf(b0));
+                crashreportsystemdetails.a("Tag name", (Object) "[UNNAMED TAG]");
+                crashreportsystemdetails.a("Tag type", (Object) Byte.valueOf(b0));
                 throw new ReportedException(crashreport);
             }
         }

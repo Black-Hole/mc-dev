@@ -14,6 +14,7 @@ public class NoiseGenerator3 extends NoiseGenerator {
         for (int j = 0; j < i; ++j) {
             this.a[j] = new NoiseGenerator3Handler(random);
         }
+
     }
 
     public double a(double d0, double d1) {

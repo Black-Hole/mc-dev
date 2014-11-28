@@ -2,11 +2,11 @@ package net.minecraft.server;
 
 public enum EnumSkyBlock {
 
-    SKY("Sky", 0, 15), BLOCK("Block", 1, 0);
-    public final int c;
-    private static final EnumSkyBlock[] d = new EnumSkyBlock[] { SKY, BLOCK};
+    SKY(15), BLOCK(0);
 
-    private EnumSkyBlock(String s, int i, int j) {
-        this.c = j;
+    public final int c;
+
+    private EnumSkyBlock(int i) {
+        this.c = i;
     }
 }

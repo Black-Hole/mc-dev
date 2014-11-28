@@ -1,5 +1,12 @@
 package net.minecraft.server;
 
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.io.Files;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,15 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-
-import net.minecraft.util.com.google.common.base.Charsets;
-import net.minecraft.util.com.google.common.collect.Lists;
-import net.minecraft.util.com.google.common.collect.Maps;
-import net.minecraft.util.com.google.common.io.Files;
-import net.minecraft.util.com.google.gson.Gson;
-import net.minecraft.util.com.google.gson.GsonBuilder;
-import net.minecraft.util.com.google.gson.JsonObject;
-import net.minecraft.util.org.apache.commons.io.IOUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,8 +29,8 @@ public class JsonList {
     private boolean e = true;
     private static final ParameterizedType f = new JsonListType();
 
-    public JsonList(File file1) {
-        this.c = file1;
+    public JsonList(File file) {
+        this.c = file;
         GsonBuilder gsonbuilder = (new GsonBuilder()).setPrettyPrinting();
 
         gsonbuilder.registerTypeHierarchyAdapter(JsonListEntry.class, new JsonListEntrySerializer(this, (JsonListType) null));
@@ -56,8 +55,9 @@ public class JsonList {
         try {
             this.save();
         } catch (IOException ioexception) {
-            a.warn("Could not save the list after adding a user.", ioexception);
+            JsonList.a.warn("Could not save the list after adding a user.", ioexception);
         }
+
     }
 
     public JsonListEntry get(Object object) {
@@ -71,8 +71,9 @@ public class JsonList {
         try {
             this.save();
         } catch (IOException ioexception) {
-            a.warn("Could not save the list after removing a user.", ioexception);
+            JsonList.a.warn("Could not save the list after removing a user.", ioexception);
         }
+
     }
 
     public String[] getEntries() {
@@ -110,10 +111,11 @@ public class JsonList {
 
             this.d.remove(object);
         }
+
     }
 
     protected JsonListEntry a(JsonObject jsonobject) {
-        return new JsonListEntry(null, jsonobject);
+        return new JsonListEntry((Object) null, jsonobject);
     }
 
     protected Map e() {
@@ -131,6 +133,7 @@ public class JsonList {
         } finally {
             IOUtils.closeQuietly(bufferedwriter);
         }
+
     }
 
     public void load() {
@@ -139,7 +142,7 @@ public class JsonList {
 
         try {
             bufferedreader = Files.newReader(this.c, Charsets.UTF_8);
-            collection = (Collection) this.b.fromJson(bufferedreader, f);
+            collection = (Collection) this.b.fromJson(bufferedreader, JsonList.f);
         } finally {
             IOUtils.closeQuietly(bufferedreader);
         }
@@ -156,5 +159,6 @@ public class JsonList {
                 }
             }
         }
+
     }
 }

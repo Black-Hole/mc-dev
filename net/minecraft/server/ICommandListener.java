@@ -10,7 +10,15 @@ public interface ICommandListener {
 
     boolean a(int i, String s);
 
-    ChunkCoordinates getChunkCoordinates();
+    BlockPosition getChunkCoordinates();
+
+    Vec3D d();
 
     World getWorld();
+
+    Entity f();
+
+    boolean getSendCommandFeedback();
+
+    void a(EnumCommandResult enumcommandresult, int i);
 }

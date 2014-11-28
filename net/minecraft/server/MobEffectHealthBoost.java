@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class MobEffectHealthBoost extends MobEffectList {
 
-    public MobEffectHealthBoost(int i, boolean flag, int j) {
-        super(i, flag, j);
+    public MobEffectHealthBoost(int i, MinecraftKey minecraftkey, boolean flag, int j) {
+        super(i, minecraftkey, flag, j);
     }
 
     public void a(EntityLiving entityliving, AttributeMapBase attributemapbase, int i) {
@@ -11,5 +11,6 @@ public class MobEffectHealthBoost extends MobEffectList {
         if (entityliving.getHealth() > entityliving.getMaxHealth()) {
             entityliving.setHealth(entityliving.getMaxHealth());
         }
+
     }
 }

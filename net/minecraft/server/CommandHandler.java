@@ -1,22 +1,22 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class CommandHandler implements ICommandHandler {
 
     private static final Logger a = LogManager.getLogger();
-    private final Map b = new HashMap();
-    private final Set c = new HashSet();
+    private final Map b = Maps.newHashMap();
+    private final Set c = Sets.newHashSet();
 
     public CommandHandler() {}
 
@@ -33,87 +33,81 @@ public class CommandHandler implements ICommandHandler {
         ICommand icommand = (ICommand) this.b.get(s1);
         int i = this.a(icommand, astring);
         int j = 0;
+        ChatMessage chatmessage;
 
+        if (icommand == null) {
+            chatmessage = new ChatMessage("commands.generic.notFound", new Object[0]);
+            chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
+            icommandlistener.sendMessage(chatmessage);
+        } else if (icommand.canUse(icommandlistener)) {
+            if (i > -1) {
+                List list = PlayerSelector.getPlayers(icommandlistener, astring[i], Entity.class);
+                String s2 = astring[i];
+
+                icommandlistener.a(EnumCommandResult.AFFECTED_ENTITIES, list.size());
+                Iterator iterator = list.iterator();
+
+                while (iterator.hasNext()) {
+                    Entity entity = (Entity) iterator.next();
+
+                    astring[i] = entity.getUniqueID().toString();
+                    if (this.a(icommandlistener, astring, icommand, s)) {
+                        ++j;
+                    }
+                }
+
+                astring[i] = s2;
+            } else {
+                icommandlistener.a(EnumCommandResult.AFFECTED_ENTITIES, 1);
+                if (this.a(icommandlistener, astring, icommand, s)) {
+                    ++j;
+                }
+            }
+        } else {
+            chatmessage = new ChatMessage("commands.generic.permission", new Object[0]);
+            chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
+            icommandlistener.sendMessage(chatmessage);
+        }
+
+        icommandlistener.a(EnumCommandResult.SUCCESS_COUNT, j);
+        return j;
+    }
+
+    protected boolean a(ICommandListener icommandlistener, String[] astring, ICommand icommand, String s) {
         ChatMessage chatmessage;
 
         try {
-            if (icommand == null) {
-                throw new ExceptionUnknownCommand();
-            }
-
-            if (icommand.canUse(icommandlistener)) {
-                if (i > -1) {
-                    EntityPlayer[] aentityplayer = PlayerSelector.getPlayers(icommandlistener, astring[i]);
-                    String s2 = astring[i];
-                    EntityPlayer[] aentityplayer1 = aentityplayer;
-                    int k = aentityplayer.length;
-
-                    for (int l = 0; l < k; ++l) {
-                        EntityPlayer entityplayer = aentityplayer1[l];
-
-                        astring[i] = entityplayer.getName();
-
-                        try {
-                            icommand.execute(icommandlistener, astring);
-                            ++j;
-                        } catch (CommandException commandexception) {
-                            ChatMessage chatmessage1 = new ChatMessage(commandexception.getMessage(), commandexception.getArgs());
-
-                            chatmessage1.getChatModifier().setColor(EnumChatFormat.RED);
-                            icommandlistener.sendMessage(chatmessage1);
-                        }
-                    }
-
-                    astring[i] = s2;
-                } else {
-                    try {
-                        icommand.execute(icommandlistener, astring);
-                        ++j;
-                    } catch (CommandException commandexception1) {
-                        chatmessage = new ChatMessage(commandexception1.getMessage(), commandexception1.getArgs());
-                        chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
-                        icommandlistener.sendMessage(chatmessage);
-                    }
-                }
-            } else {
-                ChatMessage chatmessage2 = new ChatMessage("commands.generic.permission", new Object[0]);
-
-                chatmessage2.getChatModifier().setColor(EnumChatFormat.RED);
-                icommandlistener.sendMessage(chatmessage2);
-            }
+            icommand.execute(icommandlistener, astring);
+            return true;
         } catch (ExceptionUsage exceptionusage) {
             chatmessage = new ChatMessage("commands.generic.usage", new Object[] { new ChatMessage(exceptionusage.getMessage(), exceptionusage.getArgs())});
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             icommandlistener.sendMessage(chatmessage);
-        } catch (CommandException commandexception2) {
-            chatmessage = new ChatMessage(commandexception2.getMessage(), commandexception2.getArgs());
+        } catch (CommandException commandexception) {
+            chatmessage = new ChatMessage(commandexception.getMessage(), commandexception.getArgs());
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             icommandlistener.sendMessage(chatmessage);
         } catch (Throwable throwable) {
             chatmessage = new ChatMessage("commands.generic.exception", new Object[0]);
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             icommandlistener.sendMessage(chatmessage);
-            a.error("Couldn\'t process command: \'" + s + "\'", throwable);
+            CommandHandler.a.error("Couldn\'t process command: \'" + s + "\'", throwable);
         }
 
-        return j;
+        return false;
     }
 
     public ICommand a(ICommand icommand) {
-        List list = icommand.b();
-
         this.b.put(icommand.getCommand(), icommand);
         this.c.add(icommand);
-        if (list != null) {
-            Iterator iterator = list.iterator();
+        Iterator iterator = icommand.b().iterator();
 
-            while (iterator.hasNext()) {
-                String s = (String) iterator.next();
-                ICommand icommand1 = (ICommand) this.b.get(s);
+        while (iterator.hasNext()) {
+            String s = (String) iterator.next();
+            ICommand icommand1 = (ICommand) this.b.get(s);
 
-                if (icommand1 == null || !icommand1.getCommand().equals(s)) {
-                    this.b.put(s, icommand);
-                }
+            if (icommand1 == null || !icommand1.getCommand().equals(s)) {
+                this.b.put(s, icommand);
             }
         }
 
@@ -123,19 +117,16 @@ public class CommandHandler implements ICommandHandler {
     private static String[] a(String[] astring) {
         String[] astring1 = new String[astring.length - 1];
 
-        for (int i = 1; i < astring.length; ++i) {
-            astring1[i - 1] = astring[i];
-        }
-
+        System.arraycopy(astring, 1, astring1, 0, astring.length - 1);
         return astring1;
     }
 
-    public List b(ICommandListener icommandlistener, String s) {
+    public List a(ICommandListener icommandlistener, String s, BlockPosition blockposition) {
         String[] astring = s.split(" ", -1);
         String s1 = astring[0];
 
         if (astring.length == 1) {
-            ArrayList arraylist = new ArrayList();
+            ArrayList arraylist = Lists.newArrayList();
             Iterator iterator = this.b.entrySet().iterator();
 
             while (iterator.hasNext()) {
@@ -151,8 +142,8 @@ public class CommandHandler implements ICommandHandler {
             if (astring.length > 1) {
                 ICommand icommand = (ICommand) this.b.get(s1);
 
-                if (icommand != null) {
-                    return icommand.tabComplete(icommandlistener, a(astring));
+                if (icommand != null && icommand.canUse(icommandlistener)) {
+                    return icommand.tabComplete(icommandlistener, a(astring), blockposition);
                 }
             }
 
@@ -161,7 +152,7 @@ public class CommandHandler implements ICommandHandler {
     }
 
     public List a(ICommandListener icommandlistener) {
-        ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
@@ -175,7 +166,7 @@ public class CommandHandler implements ICommandHandler {
         return arraylist;
     }
 
-    public Map a() {
+    public Map getCommands() {
         return this.b;
     }
 

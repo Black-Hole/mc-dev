@@ -6,11 +6,11 @@ public class BlockGravel extends BlockFalling {
 
     public BlockGravel() {}
 
-    public Item getDropType(int i, Random random, int j) {
-        if (j > 3) {
-            j = 3;
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
+        if (i > 3) {
+            i = 3;
         }
 
-        return random.nextInt(10 - j * 3) == 0 ? Items.FLINT : Item.getItemOf(this);
+        return random.nextInt(10 - i * 3) == 0 ? Items.FLINT : Item.getItemOf(this);
     }
 }

@@ -2,13 +2,16 @@ package net.minecraft.server;
 
 public class LongHashMap {
 
-    private transient LongHashMapEntry[] entries = new LongHashMapEntry[16];
+    private transient LongHashMapEntry[] entries = new LongHashMapEntry[4096];
     private transient int count;
-    private int c = 12;
-    private final float d = 0.75F;
-    private transient volatile int e;
+    private int c;
+    private int d = 3072;
+    private final float e = 0.75F;
+    private transient volatile int f;
 
-    public LongHashMap() {}
+    public LongHashMap() {
+        this.c = this.entries.length - 1;
+    }
 
     private static int g(long i) {
         return a((int) (i ^ i >>> 32));
@@ -20,7 +23,7 @@ public class LongHashMap {
     }
 
     private static int a(int i, int j) {
-        return i & j - 1;
+        return i & j;
     }
 
     public int count() {
@@ -30,7 +33,7 @@ public class LongHashMap {
     public Object getEntry(long i) {
         int j = g(i);
 
-        for (LongHashMapEntry longhashmapentry = this.entries[a(j, this.entries.length)]; longhashmapentry != null; longhashmapentry = longhashmapentry.c) {
+        for (LongHashMapEntry longhashmapentry = this.entries[a(j, this.c)]; longhashmapentry != null; longhashmapentry = longhashmapentry.c) {
             if (longhashmapentry.a == i) {
                 return longhashmapentry.b;
             }
@@ -46,7 +49,7 @@ public class LongHashMap {
     final LongHashMapEntry c(long i) {
         int j = g(i);
 
-        for (LongHashMapEntry longhashmapentry = this.entries[a(j, this.entries.length)]; longhashmapentry != null; longhashmapentry = longhashmapentry.c) {
+        for (LongHashMapEntry longhashmapentry = this.entries[a(j, this.c)]; longhashmapentry != null; longhashmapentry = longhashmapentry.c) {
             if (longhashmapentry.a == i) {
                 return longhashmapentry;
             }
@@ -57,7 +60,7 @@ public class LongHashMap {
 
     public void put(long i, Object object) {
         int j = g(i);
-        int k = a(j, this.entries.length);
+        int k = a(j, this.c);
 
         for (LongHashMapEntry longhashmapentry = this.entries[k]; longhashmapentry != null; longhashmapentry = longhashmapentry.c) {
             if (longhashmapentry.a == i) {
@@ -66,7 +69,7 @@ public class LongHashMap {
             }
         }
 
-        ++this.e;
+        ++this.f;
         this.a(j, i, object, k);
     }
 
@@ -75,13 +78,14 @@ public class LongHashMap {
         int j = alonghashmapentry.length;
 
         if (j == 1073741824) {
-            this.c = Integer.MAX_VALUE;
+            this.d = Integer.MAX_VALUE;
         } else {
             LongHashMapEntry[] alonghashmapentry1 = new LongHashMapEntry[i];
 
             this.a(alonghashmapentry1);
             this.entries = alonghashmapentry1;
-            this.c = (int) ((float) i * this.d);
+            this.c = this.entries.length - 1;
+            this.d = (int) ((float) i * this.e);
         }
     }
 
@@ -99,7 +103,7 @@ public class LongHashMap {
 
                 do {
                     longhashmapentry1 = longhashmapentry.c;
-                    int k = a(longhashmapentry.d, i);
+                    int k = a(longhashmapentry.d, i - 1);
 
                     longhashmapentry.c = alonghashmapentry[k];
                     alonghashmapentry[k] = longhashmapentry;
@@ -107,6 +111,7 @@ public class LongHashMap {
                 } while (longhashmapentry1 != null);
             }
         }
+
     }
 
     public Object remove(long i) {
@@ -117,7 +122,7 @@ public class LongHashMap {
 
     final LongHashMapEntry e(long i) {
         int j = g(i);
-        int k = a(j, this.entries.length);
+        int k = a(j, this.c);
         LongHashMapEntry longhashmapentry = this.entries[k];
 
         LongHashMapEntry longhashmapentry1;
@@ -126,7 +131,7 @@ public class LongHashMap {
         for (longhashmapentry1 = longhashmapentry; longhashmapentry1 != null; longhashmapentry1 = longhashmapentry2) {
             longhashmapentry2 = longhashmapentry1.c;
             if (longhashmapentry1.a == i) {
-                ++this.e;
+                ++this.f;
                 --this.count;
                 if (longhashmapentry == longhashmapentry1) {
                     this.entries[k] = longhashmapentry2;
@@ -147,9 +152,10 @@ public class LongHashMap {
         LongHashMapEntry longhashmapentry = this.entries[k];
 
         this.entries[k] = new LongHashMapEntry(i, j, object, longhashmapentry);
-        if (this.count++ >= this.c) {
+        if (this.count++ >= this.d) {
             this.b(2 * this.entries.length);
         }
+
     }
 
     static int f(long i) {

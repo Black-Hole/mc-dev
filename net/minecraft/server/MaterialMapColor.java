@@ -46,64 +46,9 @@ public class MaterialMapColor {
         if (i >= 0 && i <= 63) {
             this.M = i;
             this.L = j;
-            a[i] = this;
+            MaterialMapColor.a[i] = this;
         } else {
             throw new IndexOutOfBoundsException("Map colour ID must be between 0 and 63 (inclusive)");
-        }
-    }
-
-    public static MaterialMapColor a(int i) {
-        switch (BlockCloth.c(i)) {
-        case 0:
-            return E;
-
-        case 1:
-            return D;
-
-        case 2:
-            return C;
-
-        case 3:
-            return B;
-
-        case 4:
-            return A;
-
-        case 5:
-            return z;
-
-        case 6:
-            return y;
-
-        case 7:
-            return x;
-
-        case 8:
-            return w;
-
-        case 9:
-            return v;
-
-        case 10:
-            return u;
-
-        case 11:
-            return t;
-
-        case 12:
-            return s;
-
-        case 13:
-            return r;
-
-        case 14:
-            return q;
-
-        case 15:
-            return j;
-
-        default:
-            return b;
         }
     }
 }

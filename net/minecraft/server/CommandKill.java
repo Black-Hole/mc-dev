@@ -9,17 +9,28 @@ public class CommandKill extends CommandAbstract {
     }
 
     public int a() {
-        return 0;
+        return 2;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.kill.usage";
     }
 
     public void execute(ICommandListener icommandlistener, String[] astring) {
-        EntityPlayer entityplayer = b(icommandlistener);
+        if (astring.length == 0) {
+            EntityPlayer entityplayer = b(icommandlistener);
 
-        entityplayer.damageEntity(DamageSource.OUT_OF_WORLD, Float.MAX_VALUE);
-        icommandlistener.sendMessage(new ChatMessage("commands.kill.success", new Object[0]));
+            entityplayer.G();
+            a(icommandlistener, this, "commands.kill.successful", new Object[] { entityplayer.getScoreboardDisplayName()});
+        } else {
+            Entity entity = b(icommandlistener, astring[0]);
+
+            entity.G();
+            a(icommandlistener, this, "commands.kill.successful", new Object[] { entity.getScoreboardDisplayName()});
+        }
+    }
+
+    public boolean isListStart(String[] astring, int i) {
+        return i == 0;
     }
 }

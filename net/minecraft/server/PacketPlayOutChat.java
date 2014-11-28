@@ -1,45 +1,40 @@
 package net.minecraft.server;
 
-public class PacketPlayOutChat extends Packet {
+public class PacketPlayOutChat implements Packet {
 
     private IChatBaseComponent a;
-    private boolean b;
+    private byte b;
 
-    public PacketPlayOutChat() {
-        this.b = true;
-    }
+    public PacketPlayOutChat() {}
 
     public PacketPlayOutChat(IChatBaseComponent ichatbasecomponent) {
-        this(ichatbasecomponent, true);
+        this(ichatbasecomponent, (byte) 1);
     }
 
-    public PacketPlayOutChat(IChatBaseComponent ichatbasecomponent, boolean flag) {
-        this.b = true;
+    public PacketPlayOutChat(IChatBaseComponent ichatbasecomponent, byte b0) {
         this.a = ichatbasecomponent;
-        this.b = flag;
+        this.b = b0;
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = ChatSerializer.a(packetdataserializer.c(32767));
+        this.a = packetdataserializer.d();
+        this.b = packetdataserializer.readByte();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.a(ChatSerializer.a(this.a));
+        packetdataserializer.a(this.a);
+        packetdataserializer.writeByte(this.b);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public String b() {
-        return String.format("message=\'%s\'", new Object[] { this.a});
+    public boolean b() {
+        return this.b == 1 || this.b == 2;
     }
 
-    public boolean d() {
-        return this.b;
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

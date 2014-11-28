@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketStatusOutPong extends Packet {
+public class PacketStatusOutPong implements Packet {
 
     private long a;
 
@@ -22,11 +22,7 @@ public class PacketStatusOutPong extends Packet {
         packetstatusoutlistener.a(this);
     }
 
-    public boolean a() {
-        return true;
-    }
-
-    public void handle(PacketListener packetlistener) {
+    public void a(PacketListener packetlistener) {
         this.a((PacketStatusOutListener) packetlistener);
     }
 }

@@ -1,11 +1,12 @@
 package net.minecraft.server;
 
-public class PacketPlayOutEntityEffect extends Packet {
+public class PacketPlayOutEntityEffect implements Packet {
 
     private int a;
     private byte b;
     private byte c;
-    private short d;
+    private int d;
+    private byte e;
 
     public PacketPlayOutEntityEffect() {}
 
@@ -16,29 +17,33 @@ public class PacketPlayOutEntityEffect extends Packet {
         if (mobeffect.getDuration() > 32767) {
             this.d = 32767;
         } else {
-            this.d = (short) mobeffect.getDuration();
+            this.d = mobeffect.getDuration();
         }
+
+        this.e = (byte) (mobeffect.isShowParticles() ? 1 : 0);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.readInt();
+        this.a = packetdataserializer.e();
         this.b = packetdataserializer.readByte();
         this.c = packetdataserializer.readByte();
-        this.d = packetdataserializer.readShort();
+        this.d = packetdataserializer.e();
+        this.e = packetdataserializer.readByte();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeInt(this.a);
+        packetdataserializer.b(this.a);
         packetdataserializer.writeByte(this.b);
         packetdataserializer.writeByte(this.c);
-        packetdataserializer.writeShort(this.d);
+        packetdataserializer.b(this.d);
+        packetdataserializer.writeByte(this.e);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

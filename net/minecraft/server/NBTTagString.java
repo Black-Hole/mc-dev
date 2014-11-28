@@ -32,11 +32,15 @@ public class NBTTagString extends NBTBase {
     }
 
     public String toString() {
-        return "\"" + this.data + "\"";
+        return "\"" + this.data.replace("\"", "\\\"") + "\"";
     }
 
     public NBTBase clone() {
         return new NBTTagString(this.data);
+    }
+
+    public boolean isEmpty() {
+        return this.data.isEmpty();
     }
 
     public boolean equals(Object object) {

@@ -15,31 +15,31 @@ public class WorldGenHugeMushroom extends WorldGenerator {
         super(false);
     }
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        int l = random.nextInt(2);
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        int i = random.nextInt(2);
 
         if (this.a >= 0) {
-            l = this.a;
+            i = this.a;
         }
 
-        int i1 = random.nextInt(3) + 4;
+        int j = random.nextInt(3) + 4;
         boolean flag = true;
 
-        if (j >= 1 && j + i1 + 1 < 256) {
-            int j1;
-            int k1;
+        if (blockposition.getY() >= 1 && blockposition.getY() + j + 1 < 256) {
+            int k;
+            int l;
 
-            for (int l1 = j; l1 <= j + 1 + i1; ++l1) {
+            for (int i1 = blockposition.getY(); i1 <= blockposition.getY() + 1 + j; ++i1) {
                 byte b0 = 3;
 
-                if (l1 <= j + 3) {
+                if (i1 <= blockposition.getY() + 3) {
                     b0 = 0;
                 }
 
-                for (j1 = i - b0; j1 <= i + b0 && flag; ++j1) {
-                    for (k1 = k - b0; k1 <= k + b0 && flag; ++k1) {
-                        if (l1 >= 0 && l1 < 256) {
-                            Block block = world.getType(j1, l1, k1);
+                for (k = blockposition.getX() - b0; k <= blockposition.getX() + b0 && flag; ++k) {
+                    for (l = blockposition.getZ() - b0; l <= blockposition.getZ() + b0 && flag; ++l) {
+                        if (i1 >= 0 && i1 < 256) {
+                            Block block = world.getType(new BlockPosition(k, i1, l)).getBlock();
 
                             if (block.getMaterial() != Material.AIR && block.getMaterial() != Material.LEAVES) {
                                 flag = false;
@@ -54,101 +54,105 @@ public class WorldGenHugeMushroom extends WorldGenerator {
             if (!flag) {
                 return false;
             } else {
-                Block block1 = world.getType(i, j - 1, k);
+                Block block1 = world.getType(blockposition.down()).getBlock();
 
-                if (block1 != Blocks.DIRT && block1 != Blocks.GRASS && block1 != Blocks.MYCEL) {
+                if (block1 != Blocks.DIRT && block1 != Blocks.GRASS && block1 != Blocks.MYCELIUM) {
                     return false;
                 } else {
-                    int i2 = j + i1;
+                    int j1 = blockposition.getY() + j;
 
-                    if (l == 1) {
-                        i2 = j + i1 - 3;
+                    if (i == 1) {
+                        j1 = blockposition.getY() + j - 3;
                     }
 
-                    for (j1 = i2; j1 <= j + i1; ++j1) {
-                        k1 = 1;
-                        if (j1 < j + i1) {
-                            ++k1;
+                    for (k = j1; k <= blockposition.getY() + j; ++k) {
+                        l = 1;
+                        if (k < blockposition.getY() + j) {
+                            ++l;
                         }
 
-                        if (l == 0) {
-                            k1 = 3;
+                        if (i == 0) {
+                            l = 3;
                         }
 
-                        for (int j2 = i - k1; j2 <= i + k1; ++j2) {
-                            for (int k2 = k - k1; k2 <= k + k1; ++k2) {
-                                int l2 = 5;
+                        for (int k1 = blockposition.getX() - l; k1 <= blockposition.getX() + l; ++k1) {
+                            for (int l1 = blockposition.getZ() - l; l1 <= blockposition.getZ() + l; ++l1) {
+                                int i2 = 5;
 
-                                if (j2 == i - k1) {
-                                    --l2;
+                                if (k1 == blockposition.getX() - l) {
+                                    --i2;
                                 }
 
-                                if (j2 == i + k1) {
-                                    ++l2;
+                                if (k1 == blockposition.getX() + l) {
+                                    ++i2;
                                 }
 
-                                if (k2 == k - k1) {
-                                    l2 -= 3;
+                                if (l1 == blockposition.getZ() - l) {
+                                    i2 -= 3;
                                 }
 
-                                if (k2 == k + k1) {
-                                    l2 += 3;
+                                if (l1 == blockposition.getZ() + l) {
+                                    i2 += 3;
                                 }
 
-                                if (l == 0 || j1 < j + i1) {
-                                    if ((j2 == i - k1 || j2 == i + k1) && (k2 == k - k1 || k2 == k + k1)) {
+                                if (i == 0 || k < blockposition.getY() + j) {
+                                    if ((k1 == blockposition.getX() - l || k1 == blockposition.getX() + l) && (l1 == blockposition.getZ() - l || l1 == blockposition.getZ() + l)) {
                                         continue;
                                     }
 
-                                    if (j2 == i - (k1 - 1) && k2 == k - k1) {
-                                        l2 = 1;
+                                    if (k1 == blockposition.getX() - (l - 1) && l1 == blockposition.getZ() - l) {
+                                        i2 = 1;
                                     }
 
-                                    if (j2 == i - k1 && k2 == k - (k1 - 1)) {
-                                        l2 = 1;
+                                    if (k1 == blockposition.getX() - l && l1 == blockposition.getZ() - (l - 1)) {
+                                        i2 = 1;
                                     }
 
-                                    if (j2 == i + (k1 - 1) && k2 == k - k1) {
-                                        l2 = 3;
+                                    if (k1 == blockposition.getX() + (l - 1) && l1 == blockposition.getZ() - l) {
+                                        i2 = 3;
                                     }
 
-                                    if (j2 == i + k1 && k2 == k - (k1 - 1)) {
-                                        l2 = 3;
+                                    if (k1 == blockposition.getX() + l && l1 == blockposition.getZ() - (l - 1)) {
+                                        i2 = 3;
                                     }
 
-                                    if (j2 == i - (k1 - 1) && k2 == k + k1) {
-                                        l2 = 7;
+                                    if (k1 == blockposition.getX() - (l - 1) && l1 == blockposition.getZ() + l) {
+                                        i2 = 7;
                                     }
 
-                                    if (j2 == i - k1 && k2 == k + (k1 - 1)) {
-                                        l2 = 7;
+                                    if (k1 == blockposition.getX() - l && l1 == blockposition.getZ() + (l - 1)) {
+                                        i2 = 7;
                                     }
 
-                                    if (j2 == i + (k1 - 1) && k2 == k + k1) {
-                                        l2 = 9;
+                                    if (k1 == blockposition.getX() + (l - 1) && l1 == blockposition.getZ() + l) {
+                                        i2 = 9;
                                     }
 
-                                    if (j2 == i + k1 && k2 == k + (k1 - 1)) {
-                                        l2 = 9;
+                                    if (k1 == blockposition.getX() + l && l1 == blockposition.getZ() + (l - 1)) {
+                                        i2 = 9;
                                     }
                                 }
 
-                                if (l2 == 5 && j1 < j + i1) {
-                                    l2 = 0;
+                                if (i2 == 5 && k < blockposition.getY() + j) {
+                                    i2 = 0;
                                 }
 
-                                if ((l2 != 0 || j >= j + i1 - 1) && !world.getType(j2, j1, k2).j()) {
-                                    this.setTypeAndData(world, j2, j1, k2, Block.getById(Block.getId(Blocks.BIG_MUSHROOM_1) + l), l2);
+                                if (i2 != 0 || blockposition.getY() >= blockposition.getY() + j - 1) {
+                                    BlockPosition blockposition1 = new BlockPosition(k1, k, l1);
+
+                                    if (!world.getType(blockposition1).getBlock().m()) {
+                                        this.a(world, blockposition1, Block.getById(Block.getId(Blocks.BROWN_MUSHROOM_BLOCK) + i), i2);
+                                    }
                                 }
                             }
                         }
                     }
 
-                    for (j1 = 0; j1 < i1; ++j1) {
-                        Block block2 = world.getType(i, j + j1, k);
+                    for (k = 0; k < j; ++k) {
+                        Block block2 = world.getType(blockposition.up(k)).getBlock();
 
-                        if (!block2.j()) {
-                            this.setTypeAndData(world, i, j + j1, k, Block.getById(Block.getId(Blocks.BIG_MUSHROOM_1) + l), 10);
+                        if (!block2.m()) {
+                            this.a(world, blockposition.up(k), Block.getById(Block.getId(Blocks.BROWN_MUSHROOM_BLOCK) + i), 10);
                         }
                     }
 

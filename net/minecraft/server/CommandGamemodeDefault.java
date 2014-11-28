@@ -10,25 +10,25 @@ public class CommandGamemodeDefault extends CommandGamemode {
         return "defaultgamemode";
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.defaultgamemode.usage";
     }
 
     public void execute(ICommandListener icommandlistener, String[] astring) {
-        if (astring.length > 0) {
+        if (astring.length <= 0) {
+            throw new ExceptionUsage("commands.defaultgamemode.usage", new Object[0]);
+        } else {
             EnumGamemode enumgamemode = this.h(icommandlistener, astring[0]);
 
             this.a(enumgamemode);
             a(icommandlistener, this, "commands.defaultgamemode.success", new Object[] { new ChatMessage("gameMode." + enumgamemode.b(), new Object[0])});
-        } else {
-            throw new ExceptionUsage("commands.defaultgamemode.usage", new Object[0]);
         }
     }
 
     protected void a(EnumGamemode enumgamemode) {
         MinecraftServer minecraftserver = MinecraftServer.getServer();
 
-        minecraftserver.a(enumgamemode);
+        minecraftserver.setGamemode(enumgamemode);
         EntityPlayer entityplayer;
 
         if (minecraftserver.getForceGamemode()) {
@@ -37,5 +37,6 @@ public class CommandGamemodeDefault extends CommandGamemode {
                 entityplayer.a(enumgamemode);
             }
         }
+
     }
 }

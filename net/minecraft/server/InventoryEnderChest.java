@@ -27,6 +27,7 @@ public class InventoryEnderChest extends InventorySubcontainer {
                 this.setItem(j, ItemStack.createStack(nbttagcompound));
             }
         }
+
     }
 
     public NBTTagList h() {
@@ -51,20 +52,20 @@ public class InventoryEnderChest extends InventorySubcontainer {
         return this.a != null && !this.a.a(entityhuman) ? false : super.a(entityhuman);
     }
 
-    public void startOpen() {
-        if (this.a != null) {
-            this.a.a();
-        }
-
-        super.startOpen();
-    }
-
-    public void closeContainer() {
+    public void startOpen(EntityHuman entityhuman) {
         if (this.a != null) {
             this.a.b();
         }
 
-        super.closeContainer();
+        super.startOpen(entityhuman);
+    }
+
+    public void closeContainer(EntityHuman entityhuman) {
+        if (this.a != null) {
+            this.a.d();
+        }
+
+        super.closeContainer(entityhuman);
         this.a = null;
     }
 }

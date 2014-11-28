@@ -1,167 +1,213 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicate;
+import java.util.List;
 import java.util.Random;
 
 public class BlockRedstoneComparator extends BlockDiodeAbstract implements IContainer {
 
+    public static final BlockStateBoolean POWERED = BlockStateBoolean.of("powered");
+    public static final BlockStateEnum MODE = BlockStateEnum.of("mode", EnumComparatorMode.class);
+
     public BlockRedstoneComparator(boolean flag) {
         super(flag);
+        this.j(this.blockStateList.getBlockData().set(BlockRedstoneComparator.FACING, EnumDirection.NORTH).set(BlockRedstoneComparator.POWERED, Boolean.valueOf(false)).set(BlockRedstoneComparator.MODE, EnumComparatorMode.COMPARE));
         this.isTileEntity = true;
     }
 
-    public Item getDropType(int i, Random random, int j) {
-        return Items.REDSTONE_COMPARATOR;
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
+        return Items.COMPARATOR;
     }
 
-    protected int b(int i) {
+    protected int d(IBlockData iblockdata) {
         return 2;
     }
 
-    protected BlockDiodeAbstract e() {
-        return Blocks.REDSTONE_COMPARATOR_ON;
+    protected IBlockData e(IBlockData iblockdata) {
+        Boolean obool = (Boolean) iblockdata.get(BlockRedstoneComparator.POWERED);
+        EnumComparatorMode enumcomparatormode = (EnumComparatorMode) iblockdata.get(BlockRedstoneComparator.MODE);
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockRedstoneComparator.FACING);
+
+        return Blocks.POWERED_COMPARATOR.getBlockData().set(BlockRedstoneComparator.FACING, enumdirection).set(BlockRedstoneComparator.POWERED, obool).set(BlockRedstoneComparator.MODE, enumcomparatormode);
     }
 
-    protected BlockDiodeAbstract i() {
-        return Blocks.REDSTONE_COMPARATOR_OFF;
+    protected IBlockData k(IBlockData iblockdata) {
+        Boolean obool = (Boolean) iblockdata.get(BlockRedstoneComparator.POWERED);
+        EnumComparatorMode enumcomparatormode = (EnumComparatorMode) iblockdata.get(BlockRedstoneComparator.MODE);
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockRedstoneComparator.FACING);
+
+        return Blocks.UNPOWERED_COMPARATOR.getBlockData().set(BlockRedstoneComparator.FACING, enumdirection).set(BlockRedstoneComparator.POWERED, obool).set(BlockRedstoneComparator.MODE, enumcomparatormode);
     }
 
-    public int b() {
-        return 37;
+    protected boolean l(IBlockData iblockdata) {
+        return this.M || ((Boolean) iblockdata.get(BlockRedstoneComparator.POWERED)).booleanValue();
     }
 
-    protected boolean c(int i) {
-        return this.a || (i & 8) != 0;
+    protected int a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
+
+        return tileentity instanceof TileEntityComparator ? ((TileEntityComparator) tileentity).b() : 0;
     }
 
-    protected int f(IBlockAccess iblockaccess, int i, int j, int k, int l) {
-        return this.e(iblockaccess, i, j, k).a();
+    private int j(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return iblockdata.get(BlockRedstoneComparator.MODE) == EnumComparatorMode.SUBTRACT ? Math.max(this.f(world, blockposition, iblockdata) - this.c(world, blockposition, iblockdata), 0) : this.f(world, blockposition, iblockdata);
     }
 
-    private int j(World world, int i, int j, int k, int l) {
-        return !this.d(l) ? this.h(world, i, j, k, l) : Math.max(this.h(world, i, j, k, l) - this.h(world, i, j, k, l), 0);
-    }
+    protected boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        int i = this.f(world, blockposition, iblockdata);
 
-    public boolean d(int i) {
-        return (i & 4) == 4;
-    }
-
-    protected boolean a(World world, int i, int j, int k, int l) {
-        int i1 = this.h(world, i, j, k, l);
-
-        if (i1 >= 15) {
+        if (i >= 15) {
             return true;
-        } else if (i1 == 0) {
+        } else if (i == 0) {
             return false;
         } else {
-            int j1 = this.h(world, i, j, k, l);
+            int j = this.c(world, blockposition, iblockdata);
 
-            return j1 == 0 ? true : i1 >= j1;
+            return j == 0 ? true : i >= j;
         }
     }
 
-    protected int h(World world, int i, int j, int k, int l) {
-        int i1 = super.h(world, i, j, k, l);
-        int j1 = l(l);
-        int k1 = i + Direction.a[j1];
-        int l1 = k + Direction.b[j1];
-        Block block = world.getType(k1, j, l1);
+    protected int f(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        int i = super.f(world, blockposition, iblockdata);
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockRedstoneComparator.FACING);
+        BlockPosition blockposition1 = blockposition.shift(enumdirection);
+        Block block = world.getType(blockposition1).getBlock();
 
         if (block.isComplexRedstone()) {
-            i1 = block.g(world, k1, j, l1, Direction.f[j1]);
-        } else if (i1 < 15 && block.r()) {
-            k1 += Direction.a[j1];
-            l1 += Direction.b[j1];
-            block = world.getType(k1, j, l1);
+            i = block.l(world, blockposition1);
+        } else if (i < 15 && block.isOccluding()) {
+            blockposition1 = blockposition1.shift(enumdirection);
+            block = world.getType(blockposition1).getBlock();
             if (block.isComplexRedstone()) {
-                i1 = block.g(world, k1, j, l1, Direction.f[j1]);
-            }
-        }
+                i = block.l(world, blockposition1);
+            } else if (block.getMaterial() == Material.AIR) {
+                EntityItemFrame entityitemframe = this.a(world, enumdirection, blockposition1);
 
-        return i1;
-    }
-
-    public TileEntityComparator e(IBlockAccess iblockaccess, int i, int j, int k) {
-        return (TileEntityComparator) iblockaccess.getTileEntity(i, j, k);
-    }
-
-    public boolean interact(World world, int i, int j, int k, EntityHuman entityhuman, int l, float f, float f1, float f2) {
-        int i1 = world.getData(i, j, k);
-        boolean flag = this.a | (i1 & 8) != 0;
-        boolean flag1 = !this.d(i1);
-        int j1 = flag1 ? 4 : 0;
-
-        j1 |= flag ? 8 : 0;
-        world.makeSound((double) i + 0.5D, (double) j + 0.5D, (double) k + 0.5D, "random.click", 0.3F, flag1 ? 0.55F : 0.5F);
-        world.setData(i, j, k, j1 | i1 & 3, 2);
-        this.c(world, i, j, k, world.random);
-        return true;
-    }
-
-    protected void b(World world, int i, int j, int k, Block block) {
-        if (!world.a(i, j, k, (Block) this)) {
-            int l = world.getData(i, j, k);
-            int i1 = this.j(world, i, j, k, l);
-            int j1 = this.e(world, i, j, k).a();
-
-            if (i1 != j1 || this.c(l) != this.a(world, i, j, k, l)) {
-                if (this.i(world, i, j, k, l)) {
-                    world.a(i, j, k, this, this.b(0), -1);
-                } else {
-                    world.a(i, j, k, this, this.b(0), 0);
+                if (entityitemframe != null) {
+                    i = entityitemframe.q();
                 }
             }
         }
+
+        return i;
     }
 
-    private void c(World world, int i, int j, int k, Random random) {
-        int l = world.getData(i, j, k);
-        int i1 = this.j(world, i, j, k, l);
-        int j1 = this.e(world, i, j, k).a();
+    private EntityItemFrame a(World world, EnumDirection enumdirection, BlockPosition blockposition) {
+        List list = world.a(EntityItemFrame.class, new AxisAlignedBB((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), (double) (blockposition.getX() + 1), (double) (blockposition.getY() + 1), (double) (blockposition.getZ() + 1)), (Predicate) (new BlockRedstoneComparatorInnerClass1(this, enumdirection)));
 
-        this.e(world, i, j, k).a(i1);
-        if (j1 != i1 || !this.d(l)) {
-            boolean flag = this.a(world, i, j, k, l);
-            boolean flag1 = this.a || (l & 8) != 0;
+        return list.size() == 1 ? (EntityItemFrame) list.get(0) : null;
+    }
 
-            if (flag1 && !flag) {
-                world.setData(i, j, k, l & -9, 2);
-            } else if (!flag1 && flag) {
-                world.setData(i, j, k, l | 8, 2);
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+        if (!entityhuman.abilities.mayBuild) {
+            return false;
+        } else {
+            iblockdata = iblockdata.a(BlockRedstoneComparator.MODE);
+            world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, "random.click", 0.3F, iblockdata.get(BlockRedstoneComparator.MODE) == EnumComparatorMode.SUBTRACT ? 0.55F : 0.5F);
+            world.setTypeAndData(blockposition, iblockdata, 2);
+            this.k(world, blockposition, iblockdata);
+            return true;
+        }
+    }
+
+    protected void g(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        if (!world.a(blockposition, (Block) this)) {
+            int i = this.j(world, blockposition, iblockdata);
+            TileEntity tileentity = world.getTileEntity(blockposition);
+            int j = tileentity instanceof TileEntityComparator ? ((TileEntityComparator) tileentity).b() : 0;
+
+            if (i != j || this.l(iblockdata) != this.e(world, blockposition, iblockdata)) {
+                if (this.i(world, blockposition, iblockdata)) {
+                    world.a(blockposition, this, 2, -1);
+                } else {
+                    world.a(blockposition, this, 2, 0);
+                }
             }
 
-            this.e(world, i, j, k);
         }
     }
 
-    public void a(World world, int i, int j, int k, Random random) {
-        if (this.a) {
-            int l = world.getData(i, j, k);
+    private void k(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        int i = this.j(world, blockposition, iblockdata);
+        TileEntity tileentity = world.getTileEntity(blockposition);
+        int j = 0;
 
-            world.setTypeAndData(i, j, k, this.i(), l | 8, 4);
+        if (tileentity instanceof TileEntityComparator) {
+            TileEntityComparator tileentitycomparator = (TileEntityComparator) tileentity;
+
+            j = tileentitycomparator.b();
+            tileentitycomparator.a(i);
         }
 
-        this.c(world, i, j, k, random);
+        if (j != i || iblockdata.get(BlockRedstoneComparator.MODE) == EnumComparatorMode.COMPARE) {
+            boolean flag = this.e(world, blockposition, iblockdata);
+            boolean flag1 = this.l(iblockdata);
+
+            if (flag1 && !flag) {
+                world.setTypeAndData(blockposition, iblockdata.set(BlockRedstoneComparator.POWERED, Boolean.valueOf(false)), 2);
+            } else if (!flag1 && flag) {
+                world.setTypeAndData(blockposition, iblockdata.set(BlockRedstoneComparator.POWERED, Boolean.valueOf(true)), 2);
+            }
+
+            this.h(world, blockposition, iblockdata);
+        }
+
     }
 
-    public void onPlace(World world, int i, int j, int k) {
-        super.onPlace(world, i, j, k);
-        world.setTileEntity(i, j, k, this.a(world, 0));
+    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+        if (this.M) {
+            world.setTypeAndData(blockposition, this.k(iblockdata).set(BlockRedstoneComparator.POWERED, Boolean.valueOf(true)), 4);
+        }
+
+        this.k(world, blockposition, iblockdata);
     }
 
-    public void remove(World world, int i, int j, int k, Block block, int l) {
-        super.remove(world, i, j, k, block, l);
-        world.p(i, j, k);
-        this.e(world, i, j, k);
+    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        super.onPlace(world, blockposition, iblockdata);
+        world.setTileEntity(blockposition, this.a(world, 0));
     }
 
-    public boolean a(World world, int i, int j, int k, int l, int i1) {
-        super.a(world, i, j, k, l, i1);
-        TileEntity tileentity = world.getTileEntity(i, j, k);
+    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        super.remove(world, blockposition, iblockdata);
+        world.t(blockposition);
+        this.h(world, blockposition, iblockdata);
+    }
 
-        return tileentity != null ? tileentity.c(l, i1) : false;
+    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, int i, int j) {
+        super.a(world, blockposition, iblockdata, i, j);
+        TileEntity tileentity = world.getTileEntity(blockposition);
+
+        return tileentity == null ? false : tileentity.c(i, j);
     }
 
     public TileEntity a(World world, int i) {
         return new TileEntityComparator();
+    }
+
+    public IBlockData fromLegacyData(int i) {
+        return this.getBlockData().set(BlockRedstoneComparator.FACING, EnumDirection.fromType2(i)).set(BlockRedstoneComparator.POWERED, Boolean.valueOf((i & 8) > 0)).set(BlockRedstoneComparator.MODE, (i & 4) > 0 ? EnumComparatorMode.SUBTRACT : EnumComparatorMode.COMPARE);
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        byte b0 = 0;
+        int i = b0 | ((EnumDirection) iblockdata.get(BlockRedstoneComparator.FACING)).b();
+
+        if (((Boolean) iblockdata.get(BlockRedstoneComparator.POWERED)).booleanValue()) {
+            i |= 8;
+        }
+
+        if (iblockdata.get(BlockRedstoneComparator.MODE) == EnumComparatorMode.SUBTRACT) {
+            i |= 4;
+        }
+
+        return i;
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockRedstoneComparator.FACING, BlockRedstoneComparator.MODE, BlockRedstoneComparator.POWERED});
+    }
+
+    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
+        return this.getBlockData().set(BlockRedstoneComparator.FACING, entityliving.getDirection().opposite()).set(BlockRedstoneComparator.POWERED, Boolean.valueOf(false)).set(BlockRedstoneComparator.MODE, EnumComparatorMode.COMPARE);
     }
 }

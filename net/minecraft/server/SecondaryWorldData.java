@@ -2,87 +2,83 @@ package net.minecraft.server;
 
 public class SecondaryWorldData extends WorldData {
 
-    private final WorldData a;
+    private final WorldData b;
 
     public SecondaryWorldData(WorldData worlddata) {
-        this.a = worlddata;
+        this.b = worlddata;
     }
 
     public NBTTagCompound a() {
-        return this.a.a();
+        return this.b.a();
     }
 
     public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        return this.a.a(nbttagcompound);
+        return this.b.a(nbttagcompound);
     }
 
     public long getSeed() {
-        return this.a.getSeed();
+        return this.b.getSeed();
     }
 
     public int c() {
-        return this.a.c();
+        return this.b.c();
     }
 
     public int d() {
-        return this.a.d();
+        return this.b.d();
     }
 
     public int e() {
-        return this.a.e();
+        return this.b.e();
     }
 
     public long getTime() {
-        return this.a.getTime();
+        return this.b.getTime();
     }
 
     public long getDayTime() {
-        return this.a.getDayTime();
+        return this.b.getDayTime();
     }
 
     public NBTTagCompound i() {
-        return this.a.i();
-    }
-
-    public int j() {
-        return this.a.j();
+        return this.b.i();
     }
 
     public String getName() {
-        return this.a.getName();
+        return this.b.getName();
     }
 
     public int l() {
-        return this.a.l();
+        return this.b.l();
     }
 
     public boolean isThundering() {
-        return this.a.isThundering();
+        return this.b.isThundering();
     }
 
     public int getThunderDuration() {
-        return this.a.getThunderDuration();
+        return this.b.getThunderDuration();
     }
 
     public boolean hasStorm() {
-        return this.a.hasStorm();
+        return this.b.hasStorm();
     }
 
     public int getWeatherDuration() {
-        return this.a.getWeatherDuration();
+        return this.b.getWeatherDuration();
     }
 
     public EnumGamemode getGameType() {
-        return this.a.getGameType();
+        return this.b.getGameType();
     }
 
     public void setTime(long i) {}
 
     public void setDayTime(long i) {}
 
-    public void setSpawn(int i, int j, int k) {}
+    public void setSpawn(BlockPosition blockposition) {}
 
-    public void setName(String s) {}
+    public void a(String s) {}
 
     public void e(int i) {}
 
@@ -95,30 +91,44 @@ public class SecondaryWorldData extends WorldData {
     public void setWeatherDuration(int i) {}
 
     public boolean shouldGenerateMapFeatures() {
-        return this.a.shouldGenerateMapFeatures();
+        return this.b.shouldGenerateMapFeatures();
     }
 
     public boolean isHardcore() {
-        return this.a.isHardcore();
+        return this.b.isHardcore();
     }
 
     public WorldType getType() {
-        return this.a.getType();
+        return this.b.getType();
     }
 
-    public void setType(WorldType worldtype) {}
+    public void a(WorldType worldtype) {}
 
-    public boolean allowCommands() {
-        return this.a.allowCommands();
+    public boolean v() {
+        return this.b.v();
     }
 
-    public boolean isInitialized() {
-        return this.a.isInitialized();
+    public void c(boolean flag) {}
+
+    public boolean w() {
+        return this.b.w();
     }
 
     public void d(boolean flag) {}
 
-    public GameRules getGameRules() {
-        return this.a.getGameRules();
+    public GameRules x() {
+        return this.b.x();
     }
+
+    public EnumDifficulty y() {
+        return this.b.y();
+    }
+
+    public void setDifficulty(EnumDifficulty enumdifficulty) {}
+
+    public boolean z() {
+        return this.b.z();
+    }
+
+    public void e(boolean flag) {}
 }

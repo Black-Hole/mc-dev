@@ -1,48 +1,53 @@
 package net.minecraft.server;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class EntityTypes {
 
     private static final Logger b = LogManager.getLogger();
-    private static Map c = new HashMap();
-    private static Map d = new HashMap();
-    private static Map e = new HashMap();
-    private static Map f = new HashMap();
-    private static Map g = new HashMap();
-    public static HashMap eggInfo = new LinkedHashMap();
+    private static final Map c = Maps.newHashMap();
+    private static final Map d = Maps.newHashMap();
+    private static final Map e = Maps.newHashMap();
+    private static final Map f = Maps.newHashMap();
+    private static final Map g = Maps.newHashMap();
+    public static final Map eggInfo = Maps.newLinkedHashMap();
 
     private static void a(Class oclass, String s, int i) {
-        if (c.containsKey(s)) {
+        if (EntityTypes.c.containsKey(s)) {
             throw new IllegalArgumentException("ID is already registered: " + s);
-        } else if (e.containsKey(Integer.valueOf(i))) {
+        } else if (EntityTypes.e.containsKey(Integer.valueOf(i))) {
             throw new IllegalArgumentException("ID is already registered: " + i);
+        } else if (i == 0) {
+            throw new IllegalArgumentException("Cannot register to reserved id: " + i);
+        } else if (oclass == null) {
+            throw new IllegalArgumentException("Cannot register null clazz for id: " + i);
         } else {
-            c.put(s, oclass);
-            d.put(oclass, s);
-            e.put(Integer.valueOf(i), oclass);
-            f.put(oclass, Integer.valueOf(i));
-            g.put(s, Integer.valueOf(i));
+            EntityTypes.c.put(s, oclass);
+            EntityTypes.d.put(oclass, s);
+            EntityTypes.e.put(Integer.valueOf(i), oclass);
+            EntityTypes.f.put(oclass, Integer.valueOf(i));
+            EntityTypes.g.put(s, Integer.valueOf(i));
         }
     }
 
     private static void a(Class oclass, String s, int i, int j, int k) {
         a(oclass, s, i);
-        eggInfo.put(Integer.valueOf(i), new MonsterEggInfo(i, j, k));
+        EntityTypes.eggInfo.put(Integer.valueOf(i), new MonsterEggInfo(i, j, k));
     }
 
     public static Entity createEntityByName(String s, World world) {
         Entity entity = null;
 
         try {
-            Class oclass = (Class) c.get(s);
+            Class oclass = (Class) EntityTypes.c.get(s);
 
             if (oclass != null) {
                 entity = (Entity) oclass.getConstructor(new Class[] { World.class}).newInstance(new Object[] { world});
@@ -58,24 +63,12 @@ public class EntityTypes {
         Entity entity = null;
 
         if ("Minecart".equals(nbttagcompound.getString("id"))) {
-            switch (nbttagcompound.getInt("Type")) {
-            case 0:
-                nbttagcompound.setString("id", "MinecartRideable");
-                break;
-
-            case 1:
-                nbttagcompound.setString("id", "MinecartChest");
-                break;
-
-            case 2:
-                nbttagcompound.setString("id", "MinecartFurnace");
-            }
-
+            nbttagcompound.setString("id", EnumMinecartType.a(nbttagcompound.getInt("Type")).b());
             nbttagcompound.remove("Type");
         }
 
         try {
-            Class oclass = (Class) c.get(nbttagcompound.getString("id"));
+            Class oclass = (Class) EntityTypes.c.get(nbttagcompound.getString("id"));
 
             if (oclass != null) {
                 entity = (Entity) oclass.getConstructor(new Class[] { World.class}).newInstance(new Object[] { world});
@@ -87,7 +80,7 @@ public class EntityTypes {
         if (entity != null) {
             entity.f(nbttagcompound);
         } else {
-            b.warn("Skipping Entity with id " + nbttagcompound.getString("id"));
+            EntityTypes.b.warn("Skipping Entity with id " + nbttagcompound.getString("id"));
         }
 
         return entity;
@@ -107,36 +100,64 @@ public class EntityTypes {
         }
 
         if (entity == null) {
-            b.warn("Skipping Entity with id " + i);
+            EntityTypes.b.warn("Skipping Entity with id " + i);
         }
 
         return entity;
     }
 
     public static int a(Entity entity) {
-        Class oclass = entity.getClass();
+        Integer integer = (Integer) EntityTypes.f.get(entity.getClass());
 
-        return f.containsKey(oclass) ? ((Integer) f.get(oclass)).intValue() : 0;
+        return integer == null ? 0 : integer.intValue();
     }
 
     public static Class a(int i) {
-        return (Class) e.get(Integer.valueOf(i));
+        return (Class) EntityTypes.e.get(Integer.valueOf(i));
     }
 
     public static String b(Entity entity) {
-        return (String) d.get(entity.getClass());
+        return (String) EntityTypes.d.get(entity.getClass());
     }
 
     public static String b(int i) {
-        Class oclass = a(i);
-
-        return oclass != null ? (String) d.get(oclass) : null;
+        return (String) EntityTypes.d.get(a(i));
     }
 
     public static void a() {}
 
-    public static Set b() {
-        return Collections.unmodifiableSet(g.keySet());
+    public static List b() {
+        Set set = EntityTypes.c.keySet();
+        ArrayList arraylist = Lists.newArrayList();
+        Iterator iterator = set.iterator();
+
+        while (iterator.hasNext()) {
+            String s = (String) iterator.next();
+            Class oclass = (Class) EntityTypes.c.get(s);
+
+            if ((oclass.getModifiers() & 1024) != 1024) {
+                arraylist.add(s);
+            }
+        }
+
+        arraylist.add("LightningBolt");
+        return arraylist;
+    }
+
+    public static boolean a(Entity entity, String s) {
+        String s1 = b(entity);
+
+        if (s1 == null && entity instanceof EntityHuman) {
+            s1 = "Player";
+        } else if (s1 == null && entity instanceof EntityLightning) {
+            s1 = "LightningBolt";
+        }
+
+        return s.equals(s1);
+    }
+
+    public static boolean b(String s) {
+        return "Player".equals(s) || b().contains(s);
     }
 
     static {
@@ -157,14 +178,15 @@ public class EntityTypes {
         a(EntityTNTPrimed.class, "PrimedTnt", 20);
         a(EntityFallingBlock.class, "FallingSand", 21);
         a(EntityFireworks.class, "FireworksRocketEntity", 22);
+        a(EntityArmorStand.class, "ArmorStand", 30);
         a(EntityBoat.class, "Boat", 41);
-        a(EntityMinecartRideable.class, "MinecartRideable", 42);
-        a(EntityMinecartChest.class, "MinecartChest", 43);
-        a(EntityMinecartFurnace.class, "MinecartFurnace", 44);
-        a(EntityMinecartTNT.class, "MinecartTNT", 45);
-        a(EntityMinecartHopper.class, "MinecartHopper", 46);
-        a(EntityMinecartMobSpawner.class, "MinecartSpawner", 47);
-        a(EntityMinecartCommandBlock.class, "MinecartCommandBlock", 40);
+        a(EntityMinecartRideable.class, EnumMinecartType.RIDEABLE.b(), 42);
+        a(EntityMinecartChest.class, EnumMinecartType.CHEST.b(), 43);
+        a(EntityMinecartFurnace.class, EnumMinecartType.FURNACE.b(), 44);
+        a(EntityMinecartTNT.class, EnumMinecartType.TNT.b(), 45);
+        a(EntityMinecartHopper.class, EnumMinecartType.HOPPER.b(), 46);
+        a(EntityMinecartMobSpawner.class, EnumMinecartType.SPAWNER.b(), 47);
+        a(EntityMinecartCommandBlock.class, EnumMinecartType.COMMAND_BLOCK.b(), 40);
         a(EntityInsentient.class, "Mob", 48);
         a(EntityMonster.class, "Monster", 49);
         a(EntityCreeper.class, "Creeper", 50, 894731, 0);
@@ -184,6 +206,8 @@ public class EntityTypes {
         a(EntityWither.class, "WitherBoss", 64);
         a(EntityBat.class, "Bat", 65, 4996656, 986895);
         a(EntityWitch.class, "Witch", 66, 3407872, 5349438);
+        a(EntityEndermite.class, "Endermite", 67, 1447446, 7237230);
+        a(EntityGuardian.class, "Guardian", 68, 5931634, 15826224);
         a(EntityPig.class, "Pig", 90, 15771042, 14377823);
         a(EntitySheep.class, "Sheep", 91, 15198183, 16758197);
         a(EntityCow.class, "Cow", 92, 4470310, 10592673);
@@ -195,6 +219,7 @@ public class EntityTypes {
         a(EntityOcelot.class, "Ozelot", 98, 15720061, 5653556);
         a(EntityIronGolem.class, "VillagerGolem", 99);
         a(EntityHorse.class, "EntityHorse", 100, 12623485, 15656192);
+        a(EntityRabbit.class, "Rabbit", 101, 10051392, 7555121);
         a(EntityVillager.class, "Villager", 120, 5651507, 12422002);
         a(EntityEnderCrystal.class, "EnderCrystal", 200);
     }

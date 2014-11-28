@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import net.minecraft.util.io.netty.util.concurrent.GenericFutureListener;
-
 public class PacketStatusListener implements PacketStatusInListener {
 
     private final MinecraftServer minecraftServer;
@@ -14,19 +12,11 @@ public class PacketStatusListener implements PacketStatusInListener {
 
     public void a(IChatBaseComponent ichatbasecomponent) {}
 
-    public void a(EnumProtocol enumprotocol, EnumProtocol enumprotocol1) {
-        if (enumprotocol1 != EnumProtocol.STATUS) {
-            throw new UnsupportedOperationException("Unexpected change in protocol to " + enumprotocol1);
-        }
-    }
-
-    public void a() {}
-
     public void a(PacketStatusInStart packetstatusinstart) {
-        this.networkManager.handle(new PacketStatusOutServerInfo(this.minecraftServer.ay()), new GenericFutureListener[0]);
+        this.networkManager.handle(new PacketStatusOutServerInfo(this.minecraftServer.aE()));
     }
 
     public void a(PacketStatusInPing packetstatusinping) {
-        this.networkManager.handle(new PacketStatusOutPong(packetstatusinping.c()), new GenericFutureListener[0]);
+        this.networkManager.handle(new PacketStatusOutPong(packetstatusinping.a()));
     }
 }

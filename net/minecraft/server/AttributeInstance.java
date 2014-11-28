@@ -11,13 +11,17 @@ public interface AttributeInstance {
 
     void setValue(double d0);
 
+    Collection a(int i);
+
     Collection c();
+
+    boolean a(AttributeModifier attributemodifier);
 
     AttributeModifier a(UUID uuid);
 
-    void a(AttributeModifier attributemodifier);
-
     void b(AttributeModifier attributemodifier);
+
+    void c(AttributeModifier attributemodifier);
 
     double getValue();
 }

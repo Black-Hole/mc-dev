@@ -7,26 +7,24 @@ final class DispenseBehaviorEmptyBucket extends DispenseBehaviorItem {
     DispenseBehaviorEmptyBucket() {}
 
     public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-        EnumFacing enumfacing = BlockDispenser.b(isourceblock.h());
-        World world = isourceblock.k();
-        int i = isourceblock.getBlockX() + enumfacing.getAdjacentX();
-        int j = isourceblock.getBlockY() + enumfacing.getAdjacentY();
-        int k = isourceblock.getBlockZ() + enumfacing.getAdjacentZ();
-        Material material = world.getType(i, j, k).getMaterial();
-        int l = world.getData(i, j, k);
+        World world = isourceblock.i();
+        BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.b(isourceblock.f()));
+        IBlockData iblockdata = world.getType(blockposition);
+        Block block = iblockdata.getBlock();
+        Material material = block.getMaterial();
         Item item;
 
-        if (Material.WATER.equals(material) && l == 0) {
+        if (Material.WATER.equals(material) && block instanceof BlockFluids && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0) {
             item = Items.WATER_BUCKET;
         } else {
-            if (!Material.LAVA.equals(material) || l != 0) {
+            if (!Material.LAVA.equals(material) || !(block instanceof BlockFluids) || ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() != 0) {
                 return super.b(isourceblock, itemstack);
             }
 
             item = Items.LAVA_BUCKET;
         }
 
-        world.setAir(i, j, k);
+        world.setAir(blockposition);
         if (--itemstack.count == 0) {
             itemstack.setItem(item);
             itemstack.count = 1;

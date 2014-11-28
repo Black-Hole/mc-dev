@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public class EnchantmentInfiniteArrows extends Enchantment {
 
-    public EnchantmentInfiniteArrows(int i, int j) {
-        super(i, j, EnchantmentSlotType.BOW);
-        this.b("arrowInfinite");
+    public EnchantmentInfiniteArrows(int i, MinecraftKey minecraftkey, int j) {
+        super(i, minecraftkey, j, EnchantmentSlotType.BOW);
+        this.c("arrowInfinite");
     }
 
     public int a(int i) {

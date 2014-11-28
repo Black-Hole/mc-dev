@@ -4,14 +4,15 @@ import java.util.UUID;
 
 public abstract class EntityTameableAnimal extends EntityAnimal implements EntityOwnable {
 
-    protected PathfinderGoalSit bp = new PathfinderGoalSit(this);
+    protected PathfinderGoalSit bk = new PathfinderGoalSit(this);
 
     public EntityTameableAnimal(World world) {
         super(world);
+        this.ck();
     }
 
-    protected void c() {
-        super.c();
+    protected void h() {
+        super.h();
         this.datawatcher.a(16, Byte.valueOf((byte) 0));
         this.datawatcher.a(17, "");
     }
@@ -44,15 +45,15 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
             this.setTamed(true);
         }
 
-        this.bp.setSitting(nbttagcompound.getBoolean("Sitting"));
+        this.bk.setSitting(nbttagcompound.getBoolean("Sitting"));
         this.setSitting(nbttagcompound.getBoolean("Sitting"));
     }
 
-    protected void i(boolean flag) {
-        String s = "heart";
+    protected void l(boolean flag) {
+        EnumParticle enumparticle = EnumParticle.HEART;
 
         if (!flag) {
-            s = "smoke";
+            enumparticle = EnumParticle.SMOKE_NORMAL;
         }
 
         for (int i = 0; i < 7; ++i) {
@@ -60,8 +61,9 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
             double d1 = this.random.nextGaussian() * 0.02D;
             double d2 = this.random.nextGaussian() * 0.02D;
 
-            this.world.addParticle(s, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
+            this.world.addParticle(enumparticle, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2, new int[0]);
         }
+
     }
 
     public boolean isTamed() {
@@ -76,7 +78,11 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
         } else {
             this.datawatcher.watch(16, Byte.valueOf((byte) (b0 & -5)));
         }
+
+        this.ck();
     }
+
+    protected void ck() {}
 
     public boolean isSitting() {
         return (this.datawatcher.getByte(16) & 1) != 0;
@@ -90,6 +96,7 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
         } else {
             this.datawatcher.watch(16, Byte.valueOf((byte) (b0 & -2)));
         }
+
     }
 
     public String getOwnerUUID() {
@@ -104,7 +111,7 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
         try {
             UUID uuid = UUID.fromString(this.getOwnerUUID());
 
-            return uuid == null ? null : this.world.a(uuid);
+            return uuid == null ? null : this.world.b(uuid);
         } catch (IllegalArgumentException illegalargumentexception) {
             return null;
         }
@@ -115,7 +122,7 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
     }
 
     public PathfinderGoalSit getGoalSit() {
-        return this.bp;
+        return this.bk;
     }
 
     public boolean a(EntityLiving entityliving, EntityLiving entityliving1) {
@@ -148,6 +155,14 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
         }
 
         return super.c(entityliving);
+    }
+
+    public void die(DamageSource damagesource) {
+        if (!this.world.isStatic && this.world.getGameRules().getBoolean("showDeathMessages") && this.hasCustomName() && this.getOwner() instanceof EntityPlayer) {
+            ((EntityPlayer) this.getOwner()).sendMessage(this.br().b());
+        }
+
+        super.die(damagesource);
     }
 
     public Entity getOwner() {

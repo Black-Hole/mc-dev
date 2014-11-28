@@ -2,19 +2,19 @@ package net.minecraft.server;
 
 public class ControllerJump {
 
-    private EntityInsentient a;
-    private boolean b;
+    private EntityInsentient b;
+    protected boolean a;
 
     public ControllerJump(EntityInsentient entityinsentient) {
-        this.a = entityinsentient;
+        this.b = entityinsentient;
     }
 
     public void a() {
-        this.b = true;
+        this.a = true;
     }
 
     public void b() {
-        this.a.f(this.b);
-        this.b = false;
+        this.b.i(this.a);
+        this.a = false;
     }
 }

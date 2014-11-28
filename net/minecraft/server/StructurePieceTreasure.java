@@ -1,5 +1,9 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class StructurePieceTreasure extends WeightedRandomChoice {
@@ -22,9 +26,9 @@ public class StructurePieceTreasure extends WeightedRandomChoice {
         this.d = j;
     }
 
-    public static void a(Random random, StructurePieceTreasure[] astructurepiecetreasure, IInventory iinventory, int i) {
+    public static void a(Random random, List list, IInventory iinventory, int i) {
         for (int j = 0; j < i; ++j) {
-            StructurePieceTreasure structurepiecetreasure = (StructurePieceTreasure) WeightedRandom.a(random, (WeightedRandomChoice[]) astructurepiecetreasure);
+            StructurePieceTreasure structurepiecetreasure = (StructurePieceTreasure) WeightedRandom.a(random, list);
             int k = structurepiecetreasure.c + random.nextInt(structurepiecetreasure.d - structurepiecetreasure.c + 1);
 
             if (structurepiecetreasure.b.getMaxStackSize() >= k) {
@@ -41,11 +45,12 @@ public class StructurePieceTreasure extends WeightedRandomChoice {
                 }
             }
         }
+
     }
 
-    public static void a(Random random, StructurePieceTreasure[] astructurepiecetreasure, TileEntityDispenser tileentitydispenser, int i) {
+    public static void a(Random random, List list, TileEntityDispenser tileentitydispenser, int i) {
         for (int j = 0; j < i; ++j) {
-            StructurePieceTreasure structurepiecetreasure = (StructurePieceTreasure) WeightedRandom.a(random, (WeightedRandomChoice[]) astructurepiecetreasure);
+            StructurePieceTreasure structurepiecetreasure = (StructurePieceTreasure) WeightedRandom.a(random, list);
             int k = structurepiecetreasure.c + random.nextInt(structurepiecetreasure.d - structurepiecetreasure.c + 1);
 
             if (structurepiecetreasure.b.getMaxStackSize() >= k) {
@@ -62,25 +67,13 @@ public class StructurePieceTreasure extends WeightedRandomChoice {
                 }
             }
         }
+
     }
 
-    public static StructurePieceTreasure[] a(StructurePieceTreasure[] astructurepiecetreasure, StructurePieceTreasure... astructurepiecetreasure) {
-        StructurePieceTreasure[] astructurepiecetreasure1 = new StructurePieceTreasure[astructurepiecetreasure.length + astructurepiecetreasure.length];
-        int i = 0;
+    public static List a(List list, StructurePieceTreasure... astructurepiecetreasure) {
+        ArrayList arraylist = Lists.newArrayList(list);
 
-        for (int j = 0; j < astructurepiecetreasure.length; ++j) {
-            astructurepiecetreasure1[i++] = astructurepiecetreasure[j];
-        }
-
-        StructurePieceTreasure[] astructurepiecetreasure2 = astructurepiecetreasure;
-        int k = astructurepiecetreasure.length;
-
-        for (int l = 0; l < k; ++l) {
-            StructurePieceTreasure structurepiecetreasure = astructurepiecetreasure2[l];
-
-            astructurepiecetreasure1[i++] = structurepiecetreasure;
-        }
-
-        return astructurepiecetreasure1;
+        Collections.addAll(arraylist, astructurepiecetreasure);
+        return arraylist;
     }
 }

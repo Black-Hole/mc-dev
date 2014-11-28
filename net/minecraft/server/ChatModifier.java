@@ -11,32 +11,33 @@ public class ChatModifier {
     private Boolean g;
     private ChatClickable h;
     private ChatHoverable i;
-    private static final ChatModifier j = new ChatStyleRoot();
+    private String j;
+    private static final ChatModifier k = new ChatStyleRoot();
 
     public ChatModifier() {}
 
-    public EnumChatFormat a() {
-        return this.b == null ? this.n().a() : this.b;
+    public EnumChatFormat getColor() {
+        return this.b == null ? this.o().getColor() : this.b;
     }
 
-    public boolean b() {
-        return this.c == null ? this.n().b() : this.c.booleanValue();
+    public boolean isBold() {
+        return this.c == null ? this.o().isBold() : this.c.booleanValue();
     }
 
-    public boolean c() {
-        return this.d == null ? this.n().c() : this.d.booleanValue();
+    public boolean isItalic() {
+        return this.d == null ? this.o().isItalic() : this.d.booleanValue();
     }
 
-    public boolean d() {
-        return this.f == null ? this.n().d() : this.f.booleanValue();
+    public boolean isStrikethrough() {
+        return this.f == null ? this.o().isStrikethrough() : this.f.booleanValue();
     }
 
-    public boolean e() {
-        return this.e == null ? this.n().e() : this.e.booleanValue();
+    public boolean isUnderlined() {
+        return this.e == null ? this.o().isUnderlined() : this.e.booleanValue();
     }
 
-    public boolean f() {
-        return this.g == null ? this.n().f() : this.g.booleanValue();
+    public boolean isRandom() {
+        return this.g == null ? this.o().isRandom() : this.g.booleanValue();
     }
 
     public boolean g() {
@@ -44,11 +45,15 @@ public class ChatModifier {
     }
 
     public ChatClickable h() {
-        return this.h == null ? this.n().h() : this.h;
+        return this.h == null ? this.o().h() : this.h;
     }
 
     public ChatHoverable i() {
-        return this.i == null ? this.n().i() : this.i;
+        return this.i == null ? this.o().i() : this.i;
+    }
+
+    public String j() {
+        return this.j == null ? this.o().j() : this.j;
     }
 
     public ChatModifier setColor(EnumChatFormat enumchatformat) {
@@ -86,22 +91,27 @@ public class ChatModifier {
         return this;
     }
 
-    public ChatModifier a(ChatHoverable chathoverable) {
+    public ChatModifier setChatHoverable(ChatHoverable chathoverable) {
         this.i = chathoverable;
         return this;
     }
 
-    public ChatModifier a(ChatModifier chatmodifier) {
+    public ChatModifier setInsertion(String s) {
+        this.j = s;
+        return this;
+    }
+
+    public ChatModifier setChatModifier(ChatModifier chatmodifier) {
         this.a = chatmodifier;
         return this;
     }
 
-    private ChatModifier n() {
-        return this.a == null ? j : this.a;
+    private ChatModifier o() {
+        return this.a == null ? ChatModifier.k : this.a;
     }
 
     public String toString() {
-        return "Style{hasParent=" + (this.a != null) + ", color=" + this.b + ", bold=" + this.c + ", italic=" + this.d + ", underlined=" + this.e + ", obfuscated=" + this.g + ", clickEvent=" + this.h() + ", hoverEvent=" + this.i() + '}';
+        return "Style{hasParent=" + (this.a != null) + ", color=" + this.b + ", bold=" + this.c + ", italic=" + this.d + ", underlined=" + this.e + ", obfuscated=" + this.g + ", clickEvent=" + this.h() + ", hoverEvent=" + this.i() + ", insertion=" + this.j() + '}';
     }
 
     public boolean equals(Object object) {
@@ -113,22 +123,30 @@ public class ChatModifier {
             ChatModifier chatmodifier = (ChatModifier) object;
             boolean flag;
 
-            if (this.b() == chatmodifier.b() && this.a() == chatmodifier.a() && this.c() == chatmodifier.c() && this.f() == chatmodifier.f() && this.d() == chatmodifier.d() && this.e() == chatmodifier.e()) {
-                label56: {
+            if (this.isBold() == chatmodifier.isBold() && this.getColor() == chatmodifier.getColor() && this.isItalic() == chatmodifier.isItalic() && this.isRandom() == chatmodifier.isRandom() && this.isStrikethrough() == chatmodifier.isStrikethrough() && this.isUnderlined() == chatmodifier.isUnderlined()) {
+                label65: {
                     if (this.h() != null) {
                         if (!this.h().equals(chatmodifier.h())) {
-                            break label56;
+                            break label65;
                         }
                     } else if (chatmodifier.h() != null) {
-                        break label56;
+                        break label65;
                     }
 
                     if (this.i() != null) {
                         if (!this.i().equals(chatmodifier.i())) {
-                            break label56;
+                            break label65;
                         }
                     } else if (chatmodifier.i() != null) {
-                        break label56;
+                        break label65;
+                    }
+
+                    if (this.j() != null) {
+                        if (!this.j().equals(chatmodifier.j())) {
+                            break label65;
+                        }
+                    } else if (chatmodifier.j() != null) {
+                        break label65;
                     }
 
                     flag = true;
@@ -151,6 +169,7 @@ public class ChatModifier {
         i = 31 * i + this.g.hashCode();
         i = 31 * i + this.h.hashCode();
         i = 31 * i + this.i.hashCode();
+        i = 31 * i + this.j.hashCode();
         return i;
     }
 
@@ -166,20 +185,22 @@ public class ChatModifier {
         chatmodifier.h = this.h;
         chatmodifier.i = this.i;
         chatmodifier.a = this.a;
+        chatmodifier.j = this.j;
         return chatmodifier;
     }
 
-    public ChatModifier m() {
+    public ChatModifier n() {
         ChatModifier chatmodifier = new ChatModifier();
 
-        chatmodifier.setBold(Boolean.valueOf(this.b()));
-        chatmodifier.setItalic(Boolean.valueOf(this.c()));
-        chatmodifier.setStrikethrough(Boolean.valueOf(this.d()));
-        chatmodifier.setUnderline(Boolean.valueOf(this.e()));
-        chatmodifier.setRandom(Boolean.valueOf(this.f()));
-        chatmodifier.setColor(this.a());
+        chatmodifier.setBold(Boolean.valueOf(this.isBold()));
+        chatmodifier.setItalic(Boolean.valueOf(this.isItalic()));
+        chatmodifier.setStrikethrough(Boolean.valueOf(this.isStrikethrough()));
+        chatmodifier.setUnderline(Boolean.valueOf(this.isUnderlined()));
+        chatmodifier.setRandom(Boolean.valueOf(this.isRandom()));
+        chatmodifier.setColor(this.getColor());
         chatmodifier.setChatClickable(this.h());
-        chatmodifier.a(this.i());
+        chatmodifier.setChatHoverable(this.i());
+        chatmodifier.setInsertion(this.j());
         return chatmodifier;
     }
 
@@ -205,6 +226,10 @@ public class ChatModifier {
 
     static EnumChatFormat a(ChatModifier chatmodifier, EnumChatFormat enumchatformat) {
         return chatmodifier.b = enumchatformat;
+    }
+
+    static String a(ChatModifier chatmodifier, String s) {
+        return chatmodifier.j = s;
     }
 
     static ChatClickable a(ChatModifier chatmodifier, ChatClickable chatclickable) {
@@ -239,11 +264,15 @@ public class ChatModifier {
         return chatmodifier.b;
     }
 
-    static ChatClickable h(ChatModifier chatmodifier) {
+    static String h(ChatModifier chatmodifier) {
+        return chatmodifier.j;
+    }
+
+    static ChatClickable i(ChatModifier chatmodifier) {
         return chatmodifier.h;
     }
 
-    static ChatHoverable i(ChatModifier chatmodifier) {
+    static ChatHoverable j(ChatModifier chatmodifier) {
         return chatmodifier.i;
     }
 }

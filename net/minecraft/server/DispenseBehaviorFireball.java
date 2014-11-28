@@ -7,16 +7,16 @@ final class DispenseBehaviorFireball extends DispenseBehaviorItem {
     DispenseBehaviorFireball() {}
 
     public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-        EnumFacing enumfacing = BlockDispenser.b(isourceblock.h());
+        EnumDirection enumdirection = BlockDispenser.b(isourceblock.f());
         IPosition iposition = BlockDispenser.a(isourceblock);
-        double d0 = iposition.getX() + (double) ((float) enumfacing.getAdjacentX() * 0.3F);
-        double d1 = iposition.getY() + (double) ((float) enumfacing.getAdjacentX() * 0.3F);
-        double d2 = iposition.getZ() + (double) ((float) enumfacing.getAdjacentZ() * 0.3F);
-        World world = isourceblock.k();
+        double d0 = iposition.getX() + (double) ((float) enumdirection.getAdjacentX() * 0.3F);
+        double d1 = iposition.getY() + (double) ((float) enumdirection.getAdjacentX() * 0.3F);
+        double d2 = iposition.getZ() + (double) ((float) enumdirection.getAdjacentZ() * 0.3F);
+        World world = isourceblock.i();
         Random random = world.random;
-        double d3 = random.nextGaussian() * 0.05D + (double) enumfacing.getAdjacentX();
-        double d4 = random.nextGaussian() * 0.05D + (double) enumfacing.getAdjacentY();
-        double d5 = random.nextGaussian() * 0.05D + (double) enumfacing.getAdjacentZ();
+        double d3 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentX();
+        double d4 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentY();
+        double d5 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentZ();
 
         world.addEntity(new EntitySmallFireball(world, d0, d1, d2, d3, d4, d5));
         itemstack.a(1);
@@ -24,6 +24,6 @@ final class DispenseBehaviorFireball extends DispenseBehaviorItem {
     }
 
     protected void a(ISourceBlock isourceblock) {
-        isourceblock.k().triggerEffect(1009, isourceblock.getBlockX(), isourceblock.getBlockY(), isourceblock.getBlockZ(), 0);
+        isourceblock.i().triggerEffect(1009, isourceblock.getBlockPosition(), 0);
     }
 }

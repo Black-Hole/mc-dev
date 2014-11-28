@@ -12,14 +12,14 @@ public class BlockBeacon extends BlockContainer {
         return new TileEntityBeacon();
     }
 
-    public boolean interact(World world, int i, int j, int k, EntityHuman entityhuman, int l, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isStatic) {
             return true;
         } else {
-            TileEntityBeacon tileentitybeacon = (TileEntityBeacon) world.getTileEntity(i, j, k);
+            TileEntity tileentity = world.getTileEntity(blockposition);
 
-            if (tileentitybeacon != null) {
-                entityhuman.openBeacon(tileentitybeacon);
+            if (tileentity instanceof TileEntityBeacon) {
+                entityhuman.openContainer((TileEntityBeacon) tileentity);
             }
 
             return true;
@@ -35,13 +35,32 @@ public class BlockBeacon extends BlockContainer {
     }
 
     public int b() {
-        return 34;
+        return 3;
     }
 
-    public void postPlace(World world, int i, int j, int k, EntityLiving entityliving, ItemStack itemstack) {
-        super.postPlace(world, i, j, k, entityliving, itemstack);
+    public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
+        super.postPlace(world, blockposition, iblockdata, entityliving, itemstack);
         if (itemstack.hasName()) {
-            ((TileEntityBeacon) world.getTileEntity(i, j, k)).a(itemstack.getName());
+            TileEntity tileentity = world.getTileEntity(blockposition);
+
+            if (tileentity instanceof TileEntityBeacon) {
+                ((TileEntityBeacon) tileentity).a(itemstack.getName());
+            }
         }
+
+    }
+
+    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+        TileEntity tileentity = world.getTileEntity(blockposition);
+
+        if (tileentity instanceof TileEntityBeacon) {
+            ((TileEntityBeacon) tileentity).m();
+            world.playBlockAction(blockposition, this, 1, 0);
+        }
+
+    }
+
+    public static void d(World world, BlockPosition blockposition) {
+        HttpUtilities.a.submit(new BlockBeaconInnerClass1(world, blockposition));
     }
 }

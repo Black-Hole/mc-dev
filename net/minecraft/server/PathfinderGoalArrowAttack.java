@@ -45,7 +45,7 @@ public class PathfinderGoalArrowAttack extends PathfinderGoal {
     }
 
     public boolean b() {
-        return this.a() || !this.a.getNavigation().g();
+        return this.a() || !this.a.getNavigation().m();
     }
 
     public void d() {
@@ -55,8 +55,8 @@ public class PathfinderGoalArrowAttack extends PathfinderGoal {
     }
 
     public void e() {
-        double d0 = this.a.e(this.c.locX, this.c.boundingBox.b, this.c.locZ);
-        boolean flag = this.a.getEntitySenses().canSee(this.c);
+        double d0 = this.a.e(this.c.locX, this.c.getBoundingBox().b, this.c.locZ);
+        boolean flag = this.a.getEntitySenses().a(this.c);
 
         if (flag) {
             ++this.f;
@@ -65,7 +65,7 @@ public class PathfinderGoalArrowAttack extends PathfinderGoal {
         }
 
         if (d0 <= (double) this.j && this.f >= 20) {
-            this.a.getNavigation().h();
+            this.a.getNavigation().n();
         } else {
             this.a.getNavigation().a((Entity) this.c, this.e);
         }
@@ -79,15 +79,7 @@ public class PathfinderGoalArrowAttack extends PathfinderGoal {
             }
 
             f = MathHelper.sqrt(d0) / this.i;
-            float f1 = f;
-
-            if (f < 0.1F) {
-                f1 = 0.1F;
-            }
-
-            if (f1 > 1.0F) {
-                f1 = 1.0F;
-            }
+            float f1 = MathHelper.a(f, 0.1F, 1.0F);
 
             this.b.a(this.c, f1);
             this.d = MathHelper.d(f * (float) (this.h - this.g) + (float) this.g);
@@ -95,5 +87,6 @@ public class PathfinderGoalArrowAttack extends PathfinderGoal {
             f = MathHelper.sqrt(d0) / this.i;
             this.d = MathHelper.d(f * (float) (this.h - this.g) + (float) this.g);
         }
+
     }
 }

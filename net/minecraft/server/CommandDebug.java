@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,53 +24,65 @@ public class CommandDebug extends CommandAbstract {
         return 3;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.debug.usage";
     }
 
     public void execute(ICommandListener icommandlistener, String[] astring) {
-        if (astring.length == 1) {
+        if (astring.length < 1) {
+            throw new ExceptionUsage("commands.debug.usage", new Object[0]);
+        } else {
             if (astring[0].equals("start")) {
-                a(icommandlistener, this, "commands.debug.start", new Object[0]);
-                MinecraftServer.getServer().am();
-                this.b = MinecraftServer.ar();
-                this.c = MinecraftServer.getServer().al();
-                return;
-            }
+                if (astring.length != 1) {
+                    throw new ExceptionUsage("commands.debug.usage", new Object[0]);
+                }
 
-            if (astring[0].equals("stop")) {
+                a(icommandlistener, this, "commands.debug.start", new Object[0]);
+                MinecraftServer.getServer().as();
+                this.b = MinecraftServer.ax();
+                this.c = MinecraftServer.getServer().ar();
+            } else if (astring[0].equals("stop")) {
+                if (astring.length != 1) {
+                    throw new ExceptionUsage("commands.debug.usage", new Object[0]);
+                }
+
                 if (!MinecraftServer.getServer().methodProfiler.a) {
                     throw new CommandException("commands.debug.notStarted", new Object[0]);
                 }
 
-                long i = MinecraftServer.ar();
-                int j = MinecraftServer.getServer().al();
+                long i = MinecraftServer.ax();
+                int j = MinecraftServer.getServer().ar();
                 long k = i - this.b;
                 int l = j - this.c;
 
                 this.a(k, l);
                 MinecraftServer.getServer().methodProfiler.a = false;
                 a(icommandlistener, this, "commands.debug.stop", new Object[] { Float.valueOf((float) k / 1000.0F), Integer.valueOf(l)});
-                return;
-            }
-        }
+            } else if (astring[0].equals("chunk")) {
+                if (astring.length != 4) {
+                    throw new ExceptionUsage("commands.debug.usage", new Object[0]);
+                }
 
-        throw new ExceptionUsage("commands.debug.usage", new Object[0]);
+                a(icommandlistener, astring, 1, true);
+            }
+
+        }
     }
 
     private void a(long i, int j) {
-        File file1 = new File(MinecraftServer.getServer().d("debug"), "profile-results-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + ".txt");
+        File file = new File(MinecraftServer.getServer().d("debug"), "profile-results-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + ".txt");
 
-        file1.getParentFile().mkdirs();
+        file.getParentFile().mkdirs();
 
         try {
-            FileWriter filewriter = new FileWriter(file1);
+            FileWriter filewriter = new FileWriter(file);
 
             filewriter.write(this.b(i, j));
             filewriter.close();
         } catch (Throwable throwable) {
-            a.error("Could not save profiler results to " + file1, throwable);
+            CommandDebug.a.error("Could not save profiler results to " + file, throwable);
         }
+
     }
 
     private String b(long i, int j) {
@@ -103,20 +114,16 @@ public class CommandDebug extends CommandAbstract {
                     stringbuilder.append(" ");
                 }
 
-                stringbuilder.append(profilerinfo.c);
-                stringbuilder.append(" - ");
-                stringbuilder.append(String.format("%.2f", new Object[] { Double.valueOf(profilerinfo.a)}));
-                stringbuilder.append("%/");
-                stringbuilder.append(String.format("%.2f", new Object[] { Double.valueOf(profilerinfo.b)}));
-                stringbuilder.append("%\n");
+                stringbuilder.append(profilerinfo.c).append(" - ").append(String.format("%.2f", new Object[] { Double.valueOf(profilerinfo.a)})).append("%/").append(String.format("%.2f", new Object[] { Double.valueOf(profilerinfo.b)})).append("%\n");
                 if (!profilerinfo.c.equals("unspecified")) {
                     try {
                         this.a(i + 1, s + "." + profilerinfo.c, stringbuilder);
                     } catch (Exception exception) {
-                        stringbuilder.append("[[ EXCEPTION " + exception + " ]]");
+                        stringbuilder.append("[[ EXCEPTION ").append(exception).append(" ]]");
                     }
                 }
             }
+
         }
     }
 
@@ -130,7 +137,7 @@ public class CommandDebug extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, new String[] { "start", "stop"}) : null;
     }
 }

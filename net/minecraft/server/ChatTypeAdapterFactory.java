@@ -1,12 +1,12 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
 import java.util.HashMap;
 import java.util.Locale;
-
-import net.minecraft.util.com.google.gson.Gson;
-import net.minecraft.util.com.google.gson.TypeAdapter;
-import net.minecraft.util.com.google.gson.TypeAdapterFactory;
-import net.minecraft.util.com.google.gson.reflect.TypeToken;
 
 public class ChatTypeAdapterFactory implements TypeAdapterFactory {
 
@@ -18,7 +18,7 @@ public class ChatTypeAdapterFactory implements TypeAdapterFactory {
         if (!oclass.isEnum()) {
             return null;
         } else {
-            HashMap hashmap = new HashMap();
+            HashMap hashmap = Maps.newHashMap();
             Object[] aobject = oclass.getEnumConstants();
             int i = aobject.length;
 

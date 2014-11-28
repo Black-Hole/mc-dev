@@ -8,9 +8,11 @@ public interface IChunkProvider {
 
     Chunk getOrCreateChunk(int i, int j);
 
-    Chunk getChunkAt(int i, int j);
+    Chunk getChunkAt(BlockPosition blockposition);
 
     void getChunkAt(IChunkProvider ichunkprovider, int i, int j);
+
+    boolean a(IChunkProvider ichunkprovider, Chunk chunk, int i, int j);
 
     boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate);
 
@@ -20,13 +22,13 @@ public interface IChunkProvider {
 
     String getName();
 
-    List getMobsFor(EnumCreatureType enumcreaturetype, int i, int j, int k);
+    List getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition);
 
-    ChunkPosition findNearestMapFeature(World world, String s, int i, int j, int k);
+    BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition);
 
     int getLoadedChunks();
 
-    void recreateStructures(int i, int j);
+    void recreateStructures(Chunk chunk, int i, int j);
 
     void c();
 }

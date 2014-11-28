@@ -1,16 +1,11 @@
 package net.minecraft.server;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class IntHashMap {
 
     private transient IntHashMapEntry[] a = new IntHashMapEntry[16];
     private transient int b;
     private int c = 12;
     private final float d = 0.75F;
-    private transient volatile int e;
-    private Set f = new HashSet();
 
     public IntHashMap() {}
 
@@ -52,7 +47,6 @@ public class IntHashMap {
     }
 
     public void a(int i, Object object) {
-        this.f.add(Integer.valueOf(i));
         int j = g(i);
         int k = a(j, this.a.length);
 
@@ -63,7 +57,6 @@ public class IntHashMap {
             }
         }
 
-        ++this.e;
         this.a(j, i, object, k);
     }
 
@@ -104,10 +97,10 @@ public class IntHashMap {
                 } while (inthashmapentry1 != null);
             }
         }
+
     }
 
     public Object d(int i) {
-        this.f.remove(Integer.valueOf(i));
         IntHashMapEntry inthashmapentry = this.e(i);
 
         return inthashmapentry == null ? null : inthashmapentry.b;
@@ -124,7 +117,6 @@ public class IntHashMap {
         for (inthashmapentry1 = inthashmapentry; inthashmapentry1 != null; inthashmapentry1 = inthashmapentry2) {
             inthashmapentry2 = inthashmapentry1.c;
             if (inthashmapentry1.a == i) {
-                ++this.e;
                 --this.b;
                 if (inthashmapentry == inthashmapentry1) {
                     this.a[k] = inthashmapentry2;
@@ -142,7 +134,6 @@ public class IntHashMap {
     }
 
     public void c() {
-        ++this.e;
         IntHashMapEntry[] ainthashmapentry = this.a;
 
         for (int i = 0; i < ainthashmapentry.length; ++i) {
@@ -159,6 +150,7 @@ public class IntHashMap {
         if (this.b++ >= this.c) {
             this.h(2 * this.a.length);
         }
+
     }
 
     static int f(int i) {

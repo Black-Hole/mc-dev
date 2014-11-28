@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-import net.minecraft.util.com.mojang.authlib.ProfileLookupCallback;
-import net.minecraft.util.com.mojang.authlib.yggdrasil.ProfileNotFoundException;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.ProfileLookupCallback;
+import com.mojang.authlib.yggdrasil.ProfileNotFoundException;
 
 final class OpListProfileCallback implements ProfileLookupCallback {
 
@@ -16,7 +16,7 @@ final class OpListProfileCallback implements ProfileLookupCallback {
 
     public void onProfileLookupSucceeded(GameProfile gameprofile) {
         this.a.getUserCache().a(gameprofile);
-        this.b.add(new OpListEntry(gameprofile, this.a.l()));
+        this.b.add(new OpListEntry(gameprofile, this.a.p()));
     }
 
     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {

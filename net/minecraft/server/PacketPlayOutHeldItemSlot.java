@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutHeldItemSlot extends Packet {
+public class PacketPlayOutHeldItemSlot implements Packet {
 
     private int a;
 
@@ -18,11 +18,11 @@ public class PacketPlayOutHeldItemSlot extends Packet {
         packetdataserializer.writeByte(this.a);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

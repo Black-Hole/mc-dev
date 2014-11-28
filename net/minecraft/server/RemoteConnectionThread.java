@@ -1,9 +1,9 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,59 +11,60 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class RemoteConnectionThread implements Runnable {
 
     private static final AtomicInteger h = new AtomicInteger(0);
-    protected boolean running;
-    protected IMinecraftServer server;
+    protected boolean a;
+    protected IMinecraftServer b;
     protected final String c;
-    protected Thread thread;
+    protected Thread d;
     protected int e = 5;
-    protected List f = new ArrayList();
-    protected List g = new ArrayList();
+    protected List f = Lists.newArrayList();
+    protected List g = Lists.newArrayList();
 
     protected RemoteConnectionThread(IMinecraftServer iminecraftserver, String s) {
-        this.server = iminecraftserver;
+        this.b = iminecraftserver;
         this.c = s;
-        if (this.server.isDebugging()) {
-            this.warning("Debugging is enabled, performance maybe reduced!");
+        if (this.b.isDebugging()) {
+            this.c("Debugging is enabled, performance maybe reduced!");
         }
+
     }
 
     public synchronized void a() {
-        this.thread = new Thread(this, this.c + " #" + h.incrementAndGet());
-        this.thread.start();
-        this.running = true;
+        this.d = new Thread(this, this.c + " #" + RemoteConnectionThread.h.incrementAndGet());
+        this.d.start();
+        this.a = true;
     }
 
     public boolean c() {
-        return this.running;
+        return this.a;
     }
 
-    protected void debug(String s) {
-        this.server.i(s);
+    protected void a(String s) {
+        this.b.i(s);
     }
 
-    protected void info(String s) {
-        this.server.info(s);
+    protected void b(String s) {
+        this.b.info(s);
     }
 
-    protected void warning(String s) {
-        this.server.warning(s);
+    protected void c(String s) {
+        this.b.warning(s);
     }
 
-    protected void error(String s) {
-        this.server.h(s);
+    protected void d(String s) {
+        this.b.h(s);
     }
 
     protected int d() {
-        return this.server.C();
+        return this.b.G();
     }
 
     protected void a(DatagramSocket datagramsocket) {
-        this.debug("registerSocket: " + datagramsocket);
+        this.a("registerSocket: " + datagramsocket);
         this.f.add(datagramsocket);
     }
 
     protected boolean a(DatagramSocket datagramsocket, boolean flag) {
-        this.debug("closeSocket: " + datagramsocket);
+        this.a("closeSocket: " + datagramsocket);
         if (null == datagramsocket) {
             return false;
         } else {
@@ -87,7 +88,7 @@ public abstract class RemoteConnectionThread implements Runnable {
     }
 
     protected boolean a(ServerSocket serversocket, boolean flag) {
-        this.debug("closeSocket: " + serversocket);
+        this.a("closeSocket: " + serversocket);
         if (null == serversocket) {
             return false;
         } else {
@@ -99,7 +100,7 @@ public abstract class RemoteConnectionThread implements Runnable {
                     flag1 = true;
                 }
             } catch (IOException ioexception) {
-                this.warning("IO: " + ioexception.getMessage());
+                this.c("IO: " + ioexception.getMessage());
             }
 
             if (flag) {
@@ -139,7 +140,8 @@ public abstract class RemoteConnectionThread implements Runnable {
 
         this.g.clear();
         if (flag && 0 < i) {
-            this.warning("Force closed " + i + " sockets");
+            this.c("Force closed " + i + " sockets");
         }
+
     }
 }

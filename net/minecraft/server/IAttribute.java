@@ -9,4 +9,6 @@ public interface IAttribute {
     double b();
 
     boolean c();
+
+    IAttribute d();
 }

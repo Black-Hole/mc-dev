@@ -42,48 +42,50 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
         } else if (j == 5L && i % 24000L == 22000L) {
             this.player.sendMessage(new ChatMessage("demo.day.warning", new Object[0]));
         }
+
     }
 
-    private void e() {
+    private void f() {
         if (this.e > 100) {
             this.player.sendMessage(new ChatMessage("demo.reminder", new Object[0]));
             this.e = 0;
         }
+
     }
 
-    public void dig(int i, int j, int k, int l) {
+    public void a(BlockPosition blockposition, EnumDirection enumdirection) {
         if (this.d) {
-            this.e();
+            this.f();
         } else {
-            super.dig(i, j, k, l);
+            super.a(blockposition, enumdirection);
         }
     }
 
-    public void a(int i, int j, int k) {
+    public void a(BlockPosition blockposition) {
         if (!this.d) {
-            super.a(i, j, k);
+            super.a(blockposition);
         }
     }
 
-    public boolean breakBlock(int i, int j, int k) {
-        return this.d ? false : super.breakBlock(i, j, k);
+    public boolean breakBlock(BlockPosition blockposition) {
+        return this.d ? false : super.breakBlock(blockposition);
     }
 
     public boolean useItem(EntityHuman entityhuman, World world, ItemStack itemstack) {
         if (this.d) {
-            this.e();
+            this.f();
             return false;
         } else {
             return super.useItem(entityhuman, world, itemstack);
         }
     }
 
-    public boolean interact(EntityHuman entityhuman, World world, ItemStack itemstack, int i, int j, int k, int l, float f, float f1, float f2) {
+    public boolean interact(EntityHuman entityhuman, World world, ItemStack itemstack, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
         if (this.d) {
-            this.e();
+            this.f();
             return false;
         } else {
-            return super.interact(entityhuman, world, itemstack, i, j, k, l, f, f1, f2);
+            return super.interact(entityhuman, world, itemstack, blockposition, enumdirection, f, f1, f2);
         }
     }
 }

@@ -100,6 +100,7 @@ public class GenLayerMushroomShore extends GenLayer {
             } else {
                 aint1[i + j * k] = i1;
             }
+
         }
     }
 
@@ -108,6 +109,6 @@ public class GenLayerMushroomShore extends GenLayer {
     }
 
     private boolean d(int i) {
-        return BiomeBase.getBiome(i) != null && BiomeBase.getBiome(i) instanceof BiomeMesa;
+        return BiomeBase.getBiome(i) instanceof BiomeMesa;
     }
 }

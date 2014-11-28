@@ -2,24 +2,31 @@ package net.minecraft.server;
 
 public class BlockCloth extends Block {
 
+    public static final BlockStateEnum COLOR = BlockStateEnum.of("color", EnumColor.class);
+
     public BlockCloth(Material material) {
         super(material);
+        this.j(this.blockStateList.getBlockData().set(BlockCloth.COLOR, EnumColor.WHITE));
         this.a(CreativeModeTab.b);
     }
 
-    public int getDropData(int i) {
-        return i;
+    public int getDropData(IBlockData iblockdata) {
+        return ((EnumColor) iblockdata.get(BlockCloth.COLOR)).getColorIndex();
     }
 
-    public static int b(int i) {
-        return c(i);
+    public MaterialMapColor g(IBlockData iblockdata) {
+        return ((EnumColor) iblockdata.get(BlockCloth.COLOR)).e();
     }
 
-    public static int c(int i) {
-        return ~i & 15;
+    public IBlockData fromLegacyData(int i) {
+        return this.getBlockData().set(BlockCloth.COLOR, EnumColor.fromColorIndex(i));
     }
 
-    public MaterialMapColor f(int i) {
-        return MaterialMapColor.a(i);
+    public int toLegacyData(IBlockData iblockdata) {
+        return ((EnumColor) iblockdata.get(BlockCloth.COLOR)).getColorIndex();
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockCloth.COLOR});
     }
 }

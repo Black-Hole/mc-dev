@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 public class FoodMetaData {
 
-    private int foodLevel = 20;
-    private float saturationLevel = 5.0F;
-    private float exhaustionLevel;
-    private int foodTickTimer;
+    public int foodLevel = 20;
+    public float saturationLevel = 5.0F;
+    public float exhaustionLevel;
+    public int foodTickTimer;
     private int e = 20;
 
     public FoodMetaData() {}
@@ -20,7 +20,7 @@ public class FoodMetaData {
     }
 
     public void a(EntityHuman entityhuman) {
-        EnumDifficulty enumdifficulty = entityhuman.world.difficulty;
+        EnumDifficulty enumdifficulty = entityhuman.world.getDifficulty();
 
         this.e = this.foodLevel;
         if (this.exhaustionLevel > 4.0F) {
@@ -32,7 +32,7 @@ public class FoodMetaData {
             }
         }
 
-        if (entityhuman.world.getGameRules().getBoolean("naturalRegeneration") && this.foodLevel >= 18 && entityhuman.bR()) {
+        if (entityhuman.world.getGameRules().getBoolean("naturalRegeneration") && this.foodLevel >= 18 && entityhuman.cl()) {
             ++this.foodTickTimer;
             if (this.foodTickTimer >= 80) {
                 entityhuman.heal(1.0F);
@@ -51,6 +51,7 @@ public class FoodMetaData {
         } else {
             this.foodTickTimer = 0;
         }
+
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -60,6 +61,7 @@ public class FoodMetaData {
             this.saturationLevel = nbttagcompound.getFloat("foodSaturationLevel");
             this.exhaustionLevel = nbttagcompound.getFloat("foodExhaustionLevel");
         }
+
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -83,5 +85,9 @@ public class FoodMetaData {
 
     public float getSaturationLevel() {
         return this.saturationLevel;
+    }
+
+    public void a(int i) {
+        this.foodLevel = i;
     }
 }

@@ -8,42 +8,43 @@ public class RecipesDyes {
         int i;
 
         for (i = 0; i < 16; ++i) {
-            craftingmanager.registerShapelessRecipe(new ItemStack(Blocks.WOOL, 1, BlockCloth.c(i)), new Object[] { new ItemStack(Items.INK_SACK, 1, i), new ItemStack(Item.getItemOf(Blocks.WOOL), 1, 0)});
-            craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 8, BlockCloth.c(i)), new Object[] { "###", "#X#", "###", Character.valueOf('#'), new ItemStack(Blocks.HARDENED_CLAY), Character.valueOf('X'), new ItemStack(Items.INK_SACK, 1, i)});
-            craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STAINED_GLASS, 8, BlockCloth.c(i)), new Object[] { "###", "#X#", "###", Character.valueOf('#'), new ItemStack(Blocks.GLASS), Character.valueOf('X'), new ItemStack(Items.INK_SACK, 1, i)});
+            craftingmanager.registerShapelessRecipe(new ItemStack(Blocks.WOOL, 1, i), new Object[] { new ItemStack(Items.DYE, 1, 15 - i), new ItemStack(Item.getItemOf(Blocks.WOOL), 1, 0)});
+            craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 8, 15 - i), new Object[] { "###", "#X#", "###", Character.valueOf('#'), new ItemStack(Blocks.HARDENED_CLAY), Character.valueOf('X'), new ItemStack(Items.DYE, 1, i)});
+            craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STAINED_GLASS, 8, 15 - i), new Object[] { "###", "#X#", "###", Character.valueOf('#'), new ItemStack(Blocks.GLASS), Character.valueOf('X'), new ItemStack(Items.DYE, 1, i)});
             craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STAINED_GLASS_PANE, 16, i), new Object[] { "###", "###", Character.valueOf('#'), new ItemStack(Blocks.STAINED_GLASS, 1, i)});
         }
 
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 1, 11), new Object[] { new ItemStack(Blocks.YELLOW_FLOWER, 1, 0)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 1, 1), new Object[] { new ItemStack(Blocks.RED_ROSE, 1, 0)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 3, 15), new Object[] { Items.BONE});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 9), new Object[] { new ItemStack(Items.INK_SACK, 1, 1), new ItemStack(Items.INK_SACK, 1, 15)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 14), new Object[] { new ItemStack(Items.INK_SACK, 1, 1), new ItemStack(Items.INK_SACK, 1, 11)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 10), new Object[] { new ItemStack(Items.INK_SACK, 1, 2), new ItemStack(Items.INK_SACK, 1, 15)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 8), new Object[] { new ItemStack(Items.INK_SACK, 1, 0), new ItemStack(Items.INK_SACK, 1, 15)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 7), new Object[] { new ItemStack(Items.INK_SACK, 1, 8), new ItemStack(Items.INK_SACK, 1, 15)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 3, 7), new Object[] { new ItemStack(Items.INK_SACK, 1, 0), new ItemStack(Items.INK_SACK, 1, 15), new ItemStack(Items.INK_SACK, 1, 15)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 12), new Object[] { new ItemStack(Items.INK_SACK, 1, 4), new ItemStack(Items.INK_SACK, 1, 15)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 6), new Object[] { new ItemStack(Items.INK_SACK, 1, 4), new ItemStack(Items.INK_SACK, 1, 2)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 5), new Object[] { new ItemStack(Items.INK_SACK, 1, 4), new ItemStack(Items.INK_SACK, 1, 1)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 13), new Object[] { new ItemStack(Items.INK_SACK, 1, 5), new ItemStack(Items.INK_SACK, 1, 9)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 3, 13), new Object[] { new ItemStack(Items.INK_SACK, 1, 4), new ItemStack(Items.INK_SACK, 1, 1), new ItemStack(Items.INK_SACK, 1, 9)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 4, 13), new Object[] { new ItemStack(Items.INK_SACK, 1, 4), new ItemStack(Items.INK_SACK, 1, 1), new ItemStack(Items.INK_SACK, 1, 1), new ItemStack(Items.INK_SACK, 1, 15)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 1, 12), new Object[] { new ItemStack(Blocks.RED_ROSE, 1, 1)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 1, 13), new Object[] { new ItemStack(Blocks.RED_ROSE, 1, 2)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 1, 7), new Object[] { new ItemStack(Blocks.RED_ROSE, 1, 3)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 1, 1), new Object[] { new ItemStack(Blocks.RED_ROSE, 1, 4)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 1, 14), new Object[] { new ItemStack(Blocks.RED_ROSE, 1, 5)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 1, 7), new Object[] { new ItemStack(Blocks.RED_ROSE, 1, 6)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 1, 9), new Object[] { new ItemStack(Blocks.RED_ROSE, 1, 7)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 1, 7), new Object[] { new ItemStack(Blocks.RED_ROSE, 1, 8)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 11), new Object[] { new ItemStack(Blocks.DOUBLE_PLANT, 1, 0)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 13), new Object[] { new ItemStack(Blocks.DOUBLE_PLANT, 1, 1)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 1), new Object[] { new ItemStack(Blocks.DOUBLE_PLANT, 1, 4)});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Items.INK_SACK, 2, 9), new Object[] { new ItemStack(Blocks.DOUBLE_PLANT, 1, 5)});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 1, EnumColor.YELLOW.getInvColorIndex()), new Object[] { new ItemStack(Blocks.YELLOW_FLOWER, 1, EnumFlowerVarient.DANDELION.b())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 1, EnumColor.RED.getInvColorIndex()), new Object[] { new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerVarient.POPPY.b())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 3, EnumColor.WHITE.getInvColorIndex()), new Object[] { Items.BONE});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.PINK.getInvColorIndex()), new Object[] { new ItemStack(Items.DYE, 1, EnumColor.RED.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.WHITE.getInvColorIndex())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.ORANGE.getInvColorIndex()), new Object[] { new ItemStack(Items.DYE, 1, EnumColor.RED.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.YELLOW.getInvColorIndex())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.LIME.getInvColorIndex()), new Object[] { new ItemStack(Items.DYE, 1, EnumColor.GREEN.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.WHITE.getInvColorIndex())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.GRAY.getInvColorIndex()), new Object[] { new ItemStack(Items.DYE, 1, EnumColor.BLACK.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.WHITE.getInvColorIndex())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.SILVER.getInvColorIndex()), new Object[] { new ItemStack(Items.DYE, 1, EnumColor.GRAY.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.WHITE.getInvColorIndex())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 3, EnumColor.SILVER.getInvColorIndex()), new Object[] { new ItemStack(Items.DYE, 1, EnumColor.BLACK.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.WHITE.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.WHITE.getInvColorIndex())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.LIGHT_BLUE.getInvColorIndex()), new Object[] { new ItemStack(Items.DYE, 1, EnumColor.BLUE.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.WHITE.getInvColorIndex())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.CYAN.getInvColorIndex()), new Object[] { new ItemStack(Items.DYE, 1, EnumColor.BLUE.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.GREEN.getInvColorIndex())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.PURPLE.getInvColorIndex()), new Object[] { new ItemStack(Items.DYE, 1, EnumColor.BLUE.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.RED.getInvColorIndex())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.MAGENTA.getInvColorIndex()), new Object[] { new ItemStack(Items.DYE, 1, EnumColor.PURPLE.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.PINK.getInvColorIndex())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 3, EnumColor.MAGENTA.getInvColorIndex()), new Object[] { new ItemStack(Items.DYE, 1, EnumColor.BLUE.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.RED.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.PINK.getInvColorIndex())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 4, EnumColor.MAGENTA.getInvColorIndex()), new Object[] { new ItemStack(Items.DYE, 1, EnumColor.BLUE.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.RED.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.RED.getInvColorIndex()), new ItemStack(Items.DYE, 1, EnumColor.WHITE.getInvColorIndex())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 1, EnumColor.LIGHT_BLUE.getInvColorIndex()), new Object[] { new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerVarient.BLUE_ORCHID.b())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 1, EnumColor.MAGENTA.getInvColorIndex()), new Object[] { new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerVarient.ALLIUM.b())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 1, EnumColor.SILVER.getInvColorIndex()), new Object[] { new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerVarient.HOUSTONIA.b())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 1, EnumColor.RED.getInvColorIndex()), new Object[] { new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerVarient.RED_TULIP.b())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 1, EnumColor.ORANGE.getInvColorIndex()), new Object[] { new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerVarient.ORANGE_TULIP.b())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 1, EnumColor.SILVER.getInvColorIndex()), new Object[] { new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerVarient.WHITE_TULIP.b())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 1, EnumColor.PINK.getInvColorIndex()), new Object[] { new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerVarient.PINK_TULIP.b())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 1, EnumColor.SILVER.getInvColorIndex()), new Object[] { new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerVarient.OXEYE_DAISY.b())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.YELLOW.getInvColorIndex()), new Object[] { new ItemStack(Blocks.DOUBLE_PLANT, 1, EnumTallFlowerVariants.SUNFLOWER.a())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.MAGENTA.getInvColorIndex()), new Object[] { new ItemStack(Blocks.DOUBLE_PLANT, 1, EnumTallFlowerVariants.SYRINGA.a())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.RED.getInvColorIndex()), new Object[] { new ItemStack(Blocks.DOUBLE_PLANT, 1, EnumTallFlowerVariants.ROSE.a())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.PINK.getInvColorIndex()), new Object[] { new ItemStack(Blocks.DOUBLE_PLANT, 1, EnumTallFlowerVariants.PAEONIA.a())});
 
         for (i = 0; i < 16; ++i) {
-            craftingmanager.registerShapedRecipe(new ItemStack(Blocks.WOOL_CARPET, 3, i), new Object[] { "##", Character.valueOf('#'), new ItemStack(Blocks.WOOL, 1, i)});
+            craftingmanager.registerShapedRecipe(new ItemStack(Blocks.CARPET, 3, i), new Object[] { "##", Character.valueOf('#'), new ItemStack(Blocks.WOOL, 1, i)});
         }
+
     }
 }

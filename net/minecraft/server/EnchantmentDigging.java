@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public class EnchantmentDigging extends Enchantment {
 
-    protected EnchantmentDigging(int i, int j) {
-        super(i, j, EnchantmentSlotType.DIGGER);
-        this.b("digging");
+    protected EnchantmentDigging(int i, MinecraftKey minecraftkey, int j) {
+        super(i, minecraftkey, j, EnchantmentSlotType.DIGGER);
+        this.c("digging");
     }
 
     public int a(int i) {

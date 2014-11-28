@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutLogin extends Packet {
+public class PacketPlayOutLogin implements Packet {
 
     private int a;
     private boolean b;
@@ -9,10 +9,11 @@ public class PacketPlayOutLogin extends Packet {
     private EnumDifficulty e;
     private int f;
     private WorldType g;
+    private boolean h;
 
     public PacketPlayOutLogin() {}
 
-    public PacketPlayOutLogin(int i, EnumGamemode enumgamemode, boolean flag, int j, EnumDifficulty enumdifficulty, int k, WorldType worldtype) {
+    public PacketPlayOutLogin(int i, EnumGamemode enumgamemode, boolean flag, int j, EnumDifficulty enumdifficulty, int k, WorldType worldtype, boolean flag1) {
         this.a = i;
         this.d = j;
         this.e = enumdifficulty;
@@ -20,14 +21,15 @@ public class PacketPlayOutLogin extends Packet {
         this.f = k;
         this.b = flag;
         this.g = worldtype;
+        this.h = flag1;
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
         this.a = packetdataserializer.readInt();
-        short short1 = packetdataserializer.readUnsignedByte();
+        short short0 = packetdataserializer.readUnsignedByte();
 
-        this.b = (short1 & 8) == 8;
-        int i = short1 & -9;
+        this.b = (short0 & 8) == 8;
+        int i = short0 & -9;
 
         this.c = EnumGamemode.getById(i);
         this.d = packetdataserializer.readByte();
@@ -37,6 +39,8 @@ public class PacketPlayOutLogin extends Packet {
         if (this.g == null) {
             this.g = WorldType.NORMAL;
         }
+
+        this.h = packetdataserializer.readBoolean();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
@@ -52,17 +56,14 @@ public class PacketPlayOutLogin extends Packet {
         packetdataserializer.writeByte(this.e.a());
         packetdataserializer.writeByte(this.f);
         packetdataserializer.a(this.g.name());
+        packetdataserializer.writeBoolean(this.h);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public String b() {
-        return String.format("eid=%d, gameType=%d, hardcore=%b, dimension=%d, difficulty=%s, maxplayers=%d", new Object[] { Integer.valueOf(this.a), Integer.valueOf(this.c.getId()), Boolean.valueOf(this.b), Integer.valueOf(this.d), this.e, Integer.valueOf(this.f)});
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

@@ -1,11 +1,12 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.Iterator;
+import java.util.List;
 
 class MojangsonCompoundParser extends MojangsonTypeParser {
 
-    protected ArrayList b = new ArrayList();
+    protected List b = Lists.newArrayList();
 
     public MojangsonCompoundParser(String s) {
         this.a = s;

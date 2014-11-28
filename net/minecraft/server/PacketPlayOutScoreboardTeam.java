@@ -1,43 +1,58 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class PacketPlayOutScoreboardTeam extends Packet {
+public class PacketPlayOutScoreboardTeam implements Packet {
 
     private String a = "";
     private String b = "";
     private String c = "";
     private String d = "";
-    private Collection e = new ArrayList();
+    private String e;
     private int f;
-    private int g;
+    private Collection g;
+    private int h;
+    private int i;
 
-    public PacketPlayOutScoreboardTeam() {}
+    public PacketPlayOutScoreboardTeam() {
+        this.e = EnumNameTagVisibility.ALWAYS.e;
+        this.f = -1;
+        this.g = Lists.newArrayList();
+    }
 
     public PacketPlayOutScoreboardTeam(ScoreboardTeam scoreboardteam, int i) {
+        this.e = EnumNameTagVisibility.ALWAYS.e;
+        this.f = -1;
+        this.g = Lists.newArrayList();
         this.a = scoreboardteam.getName();
-        this.f = i;
+        this.h = i;
         if (i == 0 || i == 2) {
             this.b = scoreboardteam.getDisplayName();
             this.c = scoreboardteam.getPrefix();
             this.d = scoreboardteam.getSuffix();
-            this.g = scoreboardteam.packOptionData();
+            this.i = scoreboardteam.packOptionData();
+            this.e = scoreboardteam.i().e;
+            this.f = scoreboardteam.l().b();
         }
 
         if (i == 0) {
-            this.e.addAll(scoreboardteam.getPlayerNameSet());
+            this.g.addAll(scoreboardteam.getPlayerNameSet());
         }
+
     }
 
     public PacketPlayOutScoreboardTeam(ScoreboardTeam scoreboardteam, Collection collection, int i) {
+        this.e = EnumNameTagVisibility.ALWAYS.e;
+        this.f = -1;
+        this.g = Lists.newArrayList();
         if (i != 3 && i != 4) {
             throw new IllegalArgumentException("Method must be join or leave for player constructor");
         } else if (collection != null && !collection.isEmpty()) {
-            this.f = i;
+            this.h = i;
             this.a = scoreboardteam.getName();
-            this.e.addAll(collection);
+            this.g.addAll(collection);
         } else {
             throw new IllegalArgumentException("Players cannot be null/empty");
         }
@@ -45,36 +60,41 @@ public class PacketPlayOutScoreboardTeam extends Packet {
 
     public void a(PacketDataSerializer packetdataserializer) {
         this.a = packetdataserializer.c(16);
-        this.f = packetdataserializer.readByte();
-        if (this.f == 0 || this.f == 2) {
+        this.h = packetdataserializer.readByte();
+        if (this.h == 0 || this.h == 2) {
             this.b = packetdataserializer.c(32);
             this.c = packetdataserializer.c(16);
             this.d = packetdataserializer.c(16);
-            this.g = packetdataserializer.readByte();
+            this.i = packetdataserializer.readByte();
+            this.e = packetdataserializer.c(32);
+            this.f = packetdataserializer.readByte();
         }
 
-        if (this.f == 0 || this.f == 3 || this.f == 4) {
-            short short1 = packetdataserializer.readShort();
+        if (this.h == 0 || this.h == 3 || this.h == 4) {
+            int i = packetdataserializer.e();
 
-            for (int i = 0; i < short1; ++i) {
-                this.e.add(packetdataserializer.c(40));
+            for (int j = 0; j < i; ++j) {
+                this.g.add(packetdataserializer.c(40));
             }
         }
+
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
         packetdataserializer.a(this.a);
-        packetdataserializer.writeByte(this.f);
-        if (this.f == 0 || this.f == 2) {
+        packetdataserializer.writeByte(this.h);
+        if (this.h == 0 || this.h == 2) {
             packetdataserializer.a(this.b);
             packetdataserializer.a(this.c);
             packetdataserializer.a(this.d);
-            packetdataserializer.writeByte(this.g);
+            packetdataserializer.writeByte(this.i);
+            packetdataserializer.a(this.e);
+            packetdataserializer.writeByte(this.f);
         }
 
-        if (this.f == 0 || this.f == 3 || this.f == 4) {
-            packetdataserializer.writeShort(this.e.size());
-            Iterator iterator = this.e.iterator();
+        if (this.h == 0 || this.h == 3 || this.h == 4) {
+            packetdataserializer.b(this.g.size());
+            Iterator iterator = this.g.iterator();
 
             while (iterator.hasNext()) {
                 String s = (String) iterator.next();
@@ -82,13 +102,14 @@ public class PacketPlayOutScoreboardTeam extends Packet {
                 packetdataserializer.a(s);
             }
         }
+
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

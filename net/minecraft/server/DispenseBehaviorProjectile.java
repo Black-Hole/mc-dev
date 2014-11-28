@@ -5,19 +5,19 @@ public abstract class DispenseBehaviorProjectile extends DispenseBehaviorItem {
     public DispenseBehaviorProjectile() {}
 
     public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-        World world = isourceblock.k();
+        World world = isourceblock.i();
         IPosition iposition = BlockDispenser.a(isourceblock);
-        EnumFacing enumfacing = BlockDispenser.b(isourceblock.h());
+        EnumDirection enumdirection = BlockDispenser.b(isourceblock.f());
         IProjectile iprojectile = this.a(world, iposition);
 
-        iprojectile.shoot((double) enumfacing.getAdjacentX(), (double) ((float) enumfacing.getAdjacentY() + 0.1F), (double) enumfacing.getAdjacentZ(), this.b(), this.a());
+        iprojectile.shoot((double) enumdirection.getAdjacentX(), (double) ((float) enumdirection.getAdjacentY() + 0.1F), (double) enumdirection.getAdjacentZ(), this.b(), this.a());
         world.addEntity((Entity) iprojectile);
         itemstack.a(1);
         return itemstack;
     }
 
     protected void a(ISourceBlock isourceblock) {
-        isourceblock.k().triggerEffect(1002, isourceblock.getBlockX(), isourceblock.getBlockY(), isourceblock.getBlockZ(), 0);
+        isourceblock.i().triggerEffect(1002, isourceblock.getBlockPosition(), 0);
     }
 
     protected abstract IProjectile a(World world, IPosition iposition);

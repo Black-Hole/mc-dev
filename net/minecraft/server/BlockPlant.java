@@ -17,35 +17,36 @@ public class BlockPlant extends Block {
         this(Material.PLANT);
     }
 
-    public boolean canPlace(World world, int i, int j, int k) {
-        return super.canPlace(world, i, j, k) && this.a(world.getType(i, j - 1, k));
+    public boolean canPlace(World world, BlockPosition blockposition) {
+        return super.canPlace(world, blockposition) && this.c(world.getType(blockposition.down()).getBlock());
     }
 
-    protected boolean a(Block block) {
-        return block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.SOIL;
+    protected boolean c(Block block) {
+        return block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.FARMLAND;
     }
 
-    public void doPhysics(World world, int i, int j, int k, Block block) {
-        super.doPhysics(world, i, j, k, block);
-        this.e(world, i, j, k);
+    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+        super.doPhysics(world, blockposition, iblockdata, block);
+        this.e(world, blockposition, iblockdata);
     }
 
-    public void a(World world, int i, int j, int k, Random random) {
-        this.e(world, i, j, k);
+    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+        this.e(world, blockposition, iblockdata);
     }
 
-    protected void e(World world, int i, int j, int k) {
-        if (!this.j(world, i, j, k)) {
-            this.b(world, i, j, k, world.getData(i, j, k), 0);
-            world.setTypeAndData(i, j, k, getById(0), 0, 2);
+    protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        if (!this.f(world, blockposition, iblockdata)) {
+            this.b(world, blockposition, iblockdata, 0);
+            world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 3);
         }
+
     }
 
-    public boolean j(World world, int i, int j, int k) {
-        return this.a(world.getType(i, j - 1, k));
+    public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return this.c(world.getType(blockposition.down()).getBlock());
     }
 
-    public AxisAlignedBB a(World world, int i, int j, int k) {
+    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return null;
     }
 
@@ -55,9 +56,5 @@ public class BlockPlant extends Block {
 
     public boolean d() {
         return false;
-    }
-
-    public int b() {
-        return 1;
     }
 }

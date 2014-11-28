@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Random;
 
@@ -9,13 +9,13 @@ public class WorldGenNetherPiece15 extends WorldGenNetherPiece1 {
     public WorldGenNetherPieceWeight b;
     public List c;
     public List d;
-    public ArrayList e = new ArrayList();
+    public List e = Lists.newArrayList();
 
     public WorldGenNetherPiece15() {}
 
     public WorldGenNetherPiece15(Random random, int i, int j) {
         super(random, i, j);
-        this.c = new ArrayList();
+        this.c = Lists.newArrayList();
         WorldGenNetherPieceWeight[] aworldgennetherpieceweight = WorldGenNetherPieces.b();
         int k = aworldgennetherpieceweight.length;
 
@@ -28,7 +28,7 @@ public class WorldGenNetherPiece15 extends WorldGenNetherPiece1 {
             this.c.add(worldgennetherpieceweight);
         }
 
-        this.d = new ArrayList();
+        this.d = Lists.newArrayList();
         aworldgennetherpieceweight = WorldGenNetherPieces.c();
         k = aworldgennetherpieceweight.length;
 
@@ -37,6 +37,7 @@ public class WorldGenNetherPiece15 extends WorldGenNetherPiece1 {
             worldgennetherpieceweight.c = 0;
             this.d.add(worldgennetherpieceweight);
         }
+
     }
 
     protected void b(NBTTagCompound nbttagcompound) {

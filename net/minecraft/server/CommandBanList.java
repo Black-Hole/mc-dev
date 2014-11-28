@@ -18,21 +18,22 @@ public class CommandBanList extends CommandAbstract {
         return (MinecraftServer.getServer().getPlayerList().getIPBans().isEnabled() || MinecraftServer.getServer().getPlayerList().getProfileBans().isEnabled()) && super.canUse(icommandlistener);
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.banlist.usage";
     }
 
     public void execute(ICommandListener icommandlistener, String[] astring) {
         if (astring.length >= 1 && astring[0].equalsIgnoreCase("ips")) {
             icommandlistener.sendMessage(new ChatMessage("commands.banlist.ips", new Object[] { Integer.valueOf(MinecraftServer.getServer().getPlayerList().getIPBans().getEntries().length)}));
-            icommandlistener.sendMessage(new ChatComponentText(a(MinecraftServer.getServer().getPlayerList().getIPBans().getEntries())));
+            icommandlistener.sendMessage(new ChatComponentText(a((Object[]) MinecraftServer.getServer().getPlayerList().getIPBans().getEntries())));
         } else {
             icommandlistener.sendMessage(new ChatMessage("commands.banlist.players", new Object[] { Integer.valueOf(MinecraftServer.getServer().getPlayerList().getProfileBans().getEntries().length)}));
-            icommandlistener.sendMessage(new ChatComponentText(a(MinecraftServer.getServer().getPlayerList().getProfileBans().getEntries())));
+            icommandlistener.sendMessage(new ChatComponentText(a((Object[]) MinecraftServer.getServer().getPlayerList().getProfileBans().getEntries())));
         }
+
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, new String[] { "players", "ips"}) : null;
     }
 }

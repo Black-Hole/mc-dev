@@ -10,11 +10,11 @@ class FileConversionException extends RuntimeException {
         super(s);
     }
 
-    FileConversionException(String s, PredicateEmptyList predicateemptylist) {
+    public FileConversionException(String s, PredicateEmptyList predicateemptylist) {
         this(s);
     }
 
-    FileConversionException(String s, Throwable throwable, PredicateEmptyList predicateemptylist) {
+    public FileConversionException(String s, Throwable throwable, PredicateEmptyList predicateemptylist) {
         this(s, throwable);
     }
 }

@@ -1,40 +1,39 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
 import java.util.Map;
-
-import net.minecraft.util.com.google.common.collect.Maps;
 
 public enum EnumFish {
 
-    COD("COD", 0, 0, "cod", 2, 0.1F, 5, 0.6F), SALMON("SALMON", 1, 1, "salmon", 2, 0.1F, 6, 0.8F), CLOWNFISH("CLOWNFISH", 2, 2, "clownfish", 1, 0.1F), PUFFERFISH("PUFFERFISH", 3, 3, "pufferfish", 1, 0.1F);
+    COD(0, "cod", 2, 0.1F, 5, 0.6F), SALMON(1, "salmon", 2, 0.1F, 6, 0.8F), CLOWNFISH(2, "clownfish", 1, 0.1F), PUFFERFISH(3, "pufferfish", 1, 0.1F);
+
     private static final Map e = Maps.newHashMap();
     private final int f;
     private final String g;
+    private final int h;
+    private final float i;
     private final int j;
     private final float k;
-    private final int l;
-    private final float m;
-    private boolean n = false;
-    private static final EnumFish[] o = new EnumFish[] { COD, SALMON, CLOWNFISH, PUFFERFISH};
+    private boolean l = false;
 
-    private EnumFish(String s, int i, int j, String s1, int k, float f, int l, float f1) {
-        this.f = j;
-        this.g = s1;
+    private EnumFish(int i, String s, int j, float f, int k, float f1) {
+        this.f = i;
+        this.g = s;
+        this.h = j;
+        this.i = f;
         this.j = k;
-        this.k = f;
-        this.l = l;
-        this.m = f1;
-        this.n = true;
+        this.k = f1;
+        this.l = true;
     }
 
-    private EnumFish(String s, int i, int j, String s1, int k, float f) {
-        this.f = j;
-        this.g = s1;
-        this.j = k;
-        this.k = f;
-        this.l = 0;
-        this.m = 0.0F;
-        this.n = false;
+    private EnumFish(int i, String s, int j, float f) {
+        this.f = i;
+        this.g = s;
+        this.h = j;
+        this.i = f;
+        this.j = 0;
+        this.k = 0.0F;
+        this.l = false;
     }
 
     public int a() {
@@ -46,33 +45,33 @@ public enum EnumFish {
     }
 
     public int c() {
-        return this.j;
+        return this.h;
     }
 
     public float d() {
-        return this.k;
+        return this.i;
     }
 
     public int e() {
-        return this.l;
+        return this.j;
     }
 
     public float f() {
-        return this.m;
+        return this.k;
     }
 
-    public boolean i() {
-        return this.n;
+    public boolean g() {
+        return this.l;
     }
 
     public static EnumFish a(int i) {
-        EnumFish enumfish = (EnumFish) e.get(Integer.valueOf(i));
+        EnumFish enumfish = (EnumFish) EnumFish.e.get(Integer.valueOf(i));
 
-        return enumfish == null ? COD : enumfish;
+        return enumfish == null ? EnumFish.COD : enumfish;
     }
 
     public static EnumFish a(ItemStack itemstack) {
-        return itemstack.getItem() instanceof ItemFish ? a(itemstack.getData()) : COD;
+        return itemstack.getItem() instanceof ItemFish ? a(itemstack.getData()) : EnumFish.COD;
     }
 
     static {
@@ -82,7 +81,8 @@ public enum EnumFish {
         for (int j = 0; j < i; ++j) {
             EnumFish enumfish = aenumfish[j];
 
-            e.put(Integer.valueOf(enumfish.a()), enumfish);
+            EnumFish.e.put(Integer.valueOf(enumfish.a()), enumfish);
         }
+
     }
 }

@@ -7,26 +7,31 @@ public abstract class WorldGenerator {
     private final boolean a;
 
     public WorldGenerator() {
-        this.a = false;
+        this(false);
     }
 
     public WorldGenerator(boolean flag) {
         this.a = flag;
     }
 
-    public abstract boolean generate(World world, Random random, int i, int j, int k);
+    public abstract boolean generate(World world, Random random, BlockPosition blockposition);
 
-    public void a(double d0, double d1, double d2) {}
+    public void e() {}
 
-    protected void setType(World world, int i, int j, int k, Block block) {
-        this.setTypeAndData(world, i, j, k, block, 0);
+    protected void a(World world, BlockPosition blockposition, Block block) {
+        this.a(world, blockposition, block, 0);
     }
 
-    protected void setTypeAndData(World world, int i, int j, int k, Block block, int l) {
+    protected void a(World world, BlockPosition blockposition, Block block, int i) {
+        this.a(world, blockposition, block.fromLegacyData(i));
+    }
+
+    protected void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (this.a) {
-            world.setTypeAndData(i, j, k, block, l, 3);
+            world.setTypeAndData(blockposition, iblockdata, 3);
         } else {
-            world.setTypeAndData(i, j, k, block, l, 2);
+            world.setTypeAndData(blockposition, iblockdata, 2);
         }
+
     }
 }

@@ -1,9 +1,8 @@
 package net.minecraft.server;
 
+import com.mojang.util.QueueLogAppender;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
-import net.minecraft.util.com.mojang.util.QueueLogAppender;
 
 class ServerGuiThreadRunnable implements Runnable {
 
@@ -23,5 +22,6 @@ class ServerGuiThreadRunnable implements Runnable {
         while ((s = QueueLogAppender.getNextLogEvent("ServerGuiConsole")) != null) {
             this.c.a(this.a, this.b, s);
         }
+
     }
 }

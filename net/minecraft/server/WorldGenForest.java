@@ -11,36 +11,34 @@ public class WorldGenForest extends WorldGenTreeAbstract {
         this.a = flag1;
     }
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        int l = random.nextInt(3) + 5;
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        int i = random.nextInt(3) + 5;
 
         if (this.a) {
-            l += random.nextInt(7);
+            i += random.nextInt(7);
         }
 
         boolean flag = true;
 
-        if (j >= 1 && j + l + 1 <= 256) {
-            int i1;
-            int j1;
+        if (blockposition.getY() >= 1 && blockposition.getY() + i + 1 <= 256) {
+            int j;
+            int k;
 
-            for (int k1 = j; k1 <= j + 1 + l; ++k1) {
+            for (int l = blockposition.getY(); l <= blockposition.getY() + 1 + i; ++l) {
                 byte b0 = 1;
 
-                if (k1 == j) {
+                if (l == blockposition.getY()) {
                     b0 = 0;
                 }
 
-                if (k1 >= j + 1 + l - 2) {
+                if (l >= blockposition.getY() + 1 + i - 2) {
                     b0 = 2;
                 }
 
-                for (i1 = i - b0; i1 <= i + b0 && flag; ++i1) {
-                    for (j1 = k - b0; j1 <= k + b0 && flag; ++j1) {
-                        if (k1 >= 0 && k1 < 256) {
-                            Block block = world.getType(i1, k1, j1);
-
-                            if (!this.a(block)) {
+                for (j = blockposition.getX() - b0; j <= blockposition.getX() + b0 && flag; ++j) {
+                    for (k = blockposition.getZ() - b0; k <= blockposition.getZ() + b0 && flag; ++k) {
+                        if (l >= 0 && l < 256) {
+                            if (!this.a(world.getType(new BlockPosition(j, l, k)).getBlock())) {
                                 flag = false;
                             }
                         } else {
@@ -53,39 +51,40 @@ public class WorldGenForest extends WorldGenTreeAbstract {
             if (!flag) {
                 return false;
             } else {
-                Block block1 = world.getType(i, j - 1, k);
+                Block block = world.getType(blockposition.down()).getBlock();
 
-                if ((block1 == Blocks.GRASS || block1 == Blocks.DIRT || block1 == Blocks.SOIL) && j < 256 - l - 1) {
-                    this.setType(world, i, j - 1, k, Blocks.DIRT);
+                if ((block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.FARMLAND) && blockposition.getY() < 256 - i - 1) {
+                    this.a(world, blockposition.down());
 
-                    int l1;
+                    int i1;
 
-                    for (l1 = j - 3 + l; l1 <= j + l; ++l1) {
-                        i1 = l1 - (j + l);
-                        j1 = 1 - i1 / 2;
+                    for (i1 = blockposition.getY() - 3 + i; i1 <= blockposition.getY() + i; ++i1) {
+                        j = i1 - (blockposition.getY() + i);
+                        k = 1 - j / 2;
 
-                        for (int i2 = i - j1; i2 <= i + j1; ++i2) {
-                            int j2 = i2 - i;
+                        for (int j1 = blockposition.getX() - k; j1 <= blockposition.getX() + k; ++j1) {
+                            int k1 = j1 - blockposition.getX();
 
-                            for (int k2 = k - j1; k2 <= k + j1; ++k2) {
-                                int l2 = k2 - k;
+                            for (int l1 = blockposition.getZ() - k; l1 <= blockposition.getZ() + k; ++l1) {
+                                int i2 = l1 - blockposition.getZ();
 
-                                if (Math.abs(j2) != j1 || Math.abs(l2) != j1 || random.nextInt(2) != 0 && i1 != 0) {
-                                    Block block2 = world.getType(i2, l1, k2);
+                                if (Math.abs(k1) != k || Math.abs(i2) != k || random.nextInt(2) != 0 && j != 0) {
+                                    BlockPosition blockposition1 = new BlockPosition(j1, i1, l1);
+                                    Block block1 = world.getType(blockposition1).getBlock();
 
-                                    if (block2.getMaterial() == Material.AIR || block2.getMaterial() == Material.LEAVES) {
-                                        this.setTypeAndData(world, i2, l1, k2, Blocks.LEAVES, 2);
+                                    if (block1.getMaterial() == Material.AIR || block1.getMaterial() == Material.LEAVES) {
+                                        this.a(world, blockposition1, Blocks.LEAVES, EnumLogVariant.BIRCH.a());
                                     }
                                 }
                             }
                         }
                     }
 
-                    for (l1 = 0; l1 < l; ++l1) {
-                        Block block3 = world.getType(i, j + l1, k);
+                    for (i1 = 0; i1 < i; ++i1) {
+                        Block block2 = world.getType(blockposition.up(i1)).getBlock();
 
-                        if (block3.getMaterial() == Material.AIR || block3.getMaterial() == Material.LEAVES) {
-                            this.setTypeAndData(world, i, j + l1, k, Blocks.LOG, 2);
+                        if (block2.getMaterial() == Material.AIR || block2.getMaterial() == Material.LEAVES) {
+                            this.a(world, blockposition.up(i1), Blocks.LOG, EnumLogVariant.BIRCH.a());
                         }
                     }
 

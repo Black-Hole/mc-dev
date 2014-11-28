@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutGameStateChange extends Packet {
+public class PacketPlayOutGameStateChange implements Packet {
 
-    public static final String[] a = new String[] { "tile.bed.notValid", null, null, "gameMode.changed"};
+    public static final String[] a = new String[] { "tile.bed.notValid"};
     private int b;
     private float c;
 
@@ -23,11 +23,11 @@ public class PacketPlayOutGameStateChange extends Packet {
         packetdataserializer.writeFloat(this.c);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

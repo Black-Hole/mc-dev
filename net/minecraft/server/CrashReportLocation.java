@@ -17,7 +17,7 @@ class CrashReportLocation implements Callable {
     }
 
     public String a() {
-        return CrashReportSystemDetails.a(this.a, this.b, this.c);
+        return CrashReportSystemDetails.a(new BlockPosition(this.d.locX * 16 + this.a, this.b, this.d.locZ * 16 + this.c));
     }
 
     public Object call() {

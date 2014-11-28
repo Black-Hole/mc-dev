@@ -3,17 +3,18 @@ package net.minecraft.server;
 public class PacketPlayOutRelEntityMoveLook extends PacketPlayOutEntity {
 
     public PacketPlayOutRelEntityMoveLook() {
-        this.g = true;
+        this.h = true;
     }
 
-    public PacketPlayOutRelEntityMoveLook(int i, byte b0, byte b1, byte b2, byte b3, byte b4) {
+    public PacketPlayOutRelEntityMoveLook(int i, byte b0, byte b1, byte b2, byte b3, byte b4, boolean flag) {
         super(i);
         this.b = b0;
         this.c = b1;
         this.d = b2;
         this.e = b3;
         this.f = b4;
-        this.g = true;
+        this.g = flag;
+        this.h = true;
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
@@ -23,6 +24,7 @@ public class PacketPlayOutRelEntityMoveLook extends PacketPlayOutEntity {
         this.d = packetdataserializer.readByte();
         this.e = packetdataserializer.readByte();
         this.f = packetdataserializer.readByte();
+        this.g = packetdataserializer.readBoolean();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
@@ -32,13 +34,10 @@ public class PacketPlayOutRelEntityMoveLook extends PacketPlayOutEntity {
         packetdataserializer.writeByte(this.d);
         packetdataserializer.writeByte(this.e);
         packetdataserializer.writeByte(this.f);
+        packetdataserializer.writeBoolean(this.g);
     }
 
-    public String b() {
-        return super.b() + String.format(", xa=%d, ya=%d, za=%d, yRot=%d, xRot=%d", new Object[] { Byte.valueOf(this.b), Byte.valueOf(this.c), Byte.valueOf(this.d), Byte.valueOf(this.e), Byte.valueOf(this.f)});
-    }
-
-    public void handle(PacketListener packetlistener) {
-        super.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        super.a((PacketListenerPlayOut) packetlistener);
     }
 }

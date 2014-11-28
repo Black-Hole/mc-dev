@@ -25,7 +25,7 @@ public class PathfinderGoalPassengerCarrotStick extends PathfinderGoal {
     }
 
     public boolean a() {
-        return this.a.isAlive() && this.a.passenger != null && this.a.passenger instanceof EntityHuman && (this.d || this.a.bE());
+        return this.a.isAlive() && this.a.passenger != null && this.a.passenger instanceof EntityHuman && (this.d || this.a.bV());
     }
 
     public void e() {
@@ -66,13 +66,13 @@ public class PathfinderGoalPassengerCarrotStick extends PathfinderGoal {
         float f2 = 0.91F;
 
         if (this.a.onGround) {
-            f2 = this.a.world.getType(MathHelper.d((float) i), MathHelper.d((float) j) - 1, MathHelper.d((float) k)).frictionFactor * 0.91F;
+            f2 = this.a.world.getType(new BlockPosition(MathHelper.d((float) i), MathHelper.d((float) j) - 1, MathHelper.d((float) k))).getBlock().frictionFactor * 0.91F;
         }
 
         float f3 = 0.16277136F / (f2 * f2 * f2);
         float f4 = MathHelper.sin(entitycreature.yaw * 3.1415927F / 180.0F);
         float f5 = MathHelper.cos(entitycreature.yaw * 3.1415927F / 180.0F);
-        float f6 = entitycreature.bl() * f3;
+        float f6 = entitycreature.bH() * f3;
         float f7 = Math.max(f1, 1.0F);
 
         f7 = f6 / f7;
@@ -80,7 +80,7 @@ public class PathfinderGoalPassengerCarrotStick extends PathfinderGoal {
         float f9 = -(f8 * f4);
         float f10 = f8 * f5;
 
-        if (MathHelper.abs(f9) > MathHelper.abs(f10)) {
+        if (MathHelper.e(f9) > MathHelper.e(f10)) {
             if (f9 < 0.0F) {
                 f9 -= this.a.width / 2.0F;
             }
@@ -103,36 +103,38 @@ public class PathfinderGoalPassengerCarrotStick extends PathfinderGoal {
 
         int l = MathHelper.floor(this.a.locX + (double) f9);
         int i1 = MathHelper.floor(this.a.locZ + (double) f10);
-        PathPoint pathpoint = new PathPoint(MathHelper.d(this.a.width + 1.0F), MathHelper.d(this.a.length + entityhuman.length + 1.0F), MathHelper.d(this.a.width + 1.0F));
+        int j1 = MathHelper.d(this.a.width + 1.0F);
+        int k1 = MathHelper.d(this.a.length + entityhuman.length + 1.0F);
+        int l1 = MathHelper.d(this.a.width + 1.0F);
 
         if (i != l || k != i1) {
-            Block block = this.a.world.getType(i, j, k);
-            boolean flag = !this.a(block) && (block.getMaterial() != Material.AIR || !this.a(this.a.world.getType(i, j - 1, k)));
+            Block block = this.a.world.getType(new BlockPosition(i, j, k)).getBlock();
+            boolean flag = !this.a(block) && (block.getMaterial() != Material.AIR || !this.a(this.a.world.getType(new BlockPosition(i, j - 1, k)).getBlock()));
 
-            if (flag && Pathfinder.a(this.a, l, j, i1, pathpoint, false, false, true) == 0 && Pathfinder.a(this.a, i, j + 1, k, pathpoint, false, false, true) == 1 && Pathfinder.a(this.a, l, j + 1, i1, pathpoint, false, false, true) == 1) {
+            if (flag && 0 == PathfinderNormal.a(this.a.world, this.a, l, j, i1, j1, k1, l1, false, false, true) && 1 == PathfinderNormal.a(this.a.world, this.a, i, j + 1, k, j1, k1, l1, false, false, true) && 1 == PathfinderNormal.a(this.a.world, this.a, l, j + 1, i1, j1, k1, l1, false, false, true)) {
                 entitycreature.getControllerJump().a();
             }
         }
 
-        if (!entityhuman.abilities.canInstantlyBuild && this.c >= this.b * 0.5F && this.a.aI().nextFloat() < 0.006F && !this.d) {
-            ItemStack itemstack = entityhuman.be();
+        if (!entityhuman.abilities.canInstantlyBuild && this.c >= this.b * 0.5F && this.a.bb().nextFloat() < 0.006F && !this.d) {
+            ItemStack itemstack = entityhuman.bz();
 
-            if (itemstack != null && itemstack.getItem() == Items.CARROT_STICK) {
+            if (itemstack != null && itemstack.getItem() == Items.CARROT_ON_A_STICK) {
                 itemstack.damage(1, entityhuman);
                 if (itemstack.count == 0) {
                     ItemStack itemstack1 = new ItemStack(Items.FISHING_ROD);
 
-                    itemstack1.setTag(itemstack.tag);
+                    itemstack1.setTag(itemstack.getTag());
                     entityhuman.inventory.items[entityhuman.inventory.itemInHandIndex] = itemstack1;
                 }
             }
         }
 
-        this.a.e(0.0F, f1);
+        this.a.g(0.0F, f1);
     }
 
     private boolean a(Block block) {
-        return block.b() == 10 || block instanceof BlockStepAbstract;
+        return block instanceof BlockStairs || block instanceof BlockStepAbstract;
     }
 
     public boolean f() {
@@ -142,7 +144,7 @@ public class PathfinderGoalPassengerCarrotStick extends PathfinderGoal {
     public void g() {
         this.d = true;
         this.e = 0;
-        this.f = this.a.aI().nextInt(841) + 140;
+        this.f = this.a.bb().nextInt(841) + 140;
     }
 
     public boolean h() {

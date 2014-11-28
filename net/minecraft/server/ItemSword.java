@@ -1,10 +1,10 @@
 package net.minecraft.server;
 
-import net.minecraft.util.com.google.common.collect.Multimap;
+import com.google.common.collect.Multimap;
 
 public class ItemSword extends Item {
 
-    private float damage;
+    private float a;
     private final EnumToolMaterial b;
 
     public ItemSword(EnumToolMaterial enumtoolmaterial) {
@@ -12,10 +12,10 @@ public class ItemSword extends Item {
         this.maxStackSize = 1;
         this.setMaxDurability(enumtoolmaterial.a());
         this.a(CreativeModeTab.j);
-        this.damage = 4.0F + enumtoolmaterial.c();
+        this.a = 4.0F + enumtoolmaterial.c();
     }
 
-    public float i() {
+    public float g() {
         return this.b.c();
     }
 
@@ -34,24 +34,24 @@ public class ItemSword extends Item {
         return true;
     }
 
-    public boolean a(ItemStack itemstack, World world, Block block, int i, int j, int k, EntityLiving entityliving) {
-        if ((double) block.f(world, i, j, k) != 0.0D) {
+    public boolean a(ItemStack itemstack, World world, Block block, BlockPosition blockposition, EntityLiving entityliving) {
+        if ((double) block.g(world, blockposition) != 0.0D) {
             itemstack.damage(2, entityliving);
         }
 
         return true;
     }
 
-    public EnumAnimation d(ItemStack itemstack) {
+    public EnumAnimation e(ItemStack itemstack) {
         return EnumAnimation.BLOCK;
     }
 
-    public int d_(ItemStack itemstack) {
+    public int d(ItemStack itemstack) {
         return 72000;
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        entityhuman.a(itemstack, this.d_(itemstack));
+        entityhuman.a(itemstack, this.d(itemstack));
         return itemstack;
     }
 
@@ -59,11 +59,11 @@ public class ItemSword extends Item {
         return block == Blocks.WEB;
     }
 
-    public int c() {
+    public int b() {
         return this.b.e();
     }
 
-    public String j() {
+    public String h() {
         return this.b.toString();
     }
 
@@ -71,10 +71,10 @@ public class ItemSword extends Item {
         return this.b.f() == itemstack1.getItem() ? true : super.a(itemstack, itemstack1);
     }
 
-    public Multimap k() {
-        Multimap multimap = super.k();
+    public Multimap i() {
+        Multimap multimap = super.i();
 
-        multimap.put(GenericAttributes.e.getName(), new AttributeModifier(f, "Weapon modifier", (double) this.damage, 0));
+        multimap.put(GenericAttributes.e.getName(), new AttributeModifier(ItemSword.f, "Weapon modifier", (double) this.a, 0));
         return multimap;
     }
 }

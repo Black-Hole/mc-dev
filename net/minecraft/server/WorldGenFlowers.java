@@ -4,26 +4,24 @@ import java.util.Random;
 
 public class WorldGenFlowers extends WorldGenerator {
 
-    private Block a;
-    private int b;
+    private BlockFlowers a;
+    private IBlockData b;
 
-    public WorldGenFlowers(Block block) {
-        this.a = block;
+    public WorldGenFlowers(BlockFlowers blockflowers, EnumFlowerVarient enumflowervarient) {
+        this.a(blockflowers, enumflowervarient);
     }
 
-    public void a(Block block, int i) {
-        this.a = block;
-        this.b = i;
+    public void a(BlockFlowers blockflowers, EnumFlowerVarient enumflowervarient) {
+        this.a = blockflowers;
+        this.b = blockflowers.getBlockData().set(blockflowers.l(), enumflowervarient);
     }
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        for (int l = 0; l < 64; ++l) {
-            int i1 = i + random.nextInt(8) - random.nextInt(8);
-            int j1 = j + random.nextInt(4) - random.nextInt(4);
-            int k1 = k + random.nextInt(8) - random.nextInt(8);
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        for (int i = 0; i < 64; ++i) {
+            BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 
-            if (world.isEmpty(i1, j1, k1) && (!world.worldProvider.g || j1 < 255) && this.a.j(world, i1, j1, k1)) {
-                world.setTypeAndData(i1, j1, k1, this.a, this.b, 2);
+            if (world.isEmpty(blockposition1) && (!world.worldProvider.o() || blockposition1.getY() < 255) && this.a.f(world, blockposition1, this.b)) {
+                world.setTypeAndData(blockposition1, this.b, 2);
             }
         }
 

@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.util.List;
 
-public class PacketPlayOutSpawnEntityLiving extends Packet {
+public class PacketPlayOutSpawnEntityLiving implements Packet {
 
     private int a;
     private int b;
@@ -23,12 +23,12 @@ public class PacketPlayOutSpawnEntityLiving extends Packet {
     public PacketPlayOutSpawnEntityLiving(EntityLiving entityliving) {
         this.a = entityliving.getId();
         this.b = (byte) EntityTypes.a(entityliving);
-        this.c = entityliving.as.a(entityliving.locX);
+        this.c = MathHelper.floor(entityliving.locX * 32.0D);
         this.d = MathHelper.floor(entityliving.locY * 32.0D);
-        this.e = entityliving.as.a(entityliving.locZ);
+        this.e = MathHelper.floor(entityliving.locZ * 32.0D);
         this.i = (byte) ((int) (entityliving.yaw * 256.0F / 360.0F));
         this.j = (byte) ((int) (entityliving.pitch * 256.0F / 360.0F));
-        this.k = (byte) ((int) (entityliving.aO * 256.0F / 360.0F));
+        this.k = (byte) ((int) (entityliving.aI * 256.0F / 360.0F));
         double d0 = 3.9D;
         double d1 = entityliving.motX;
         double d2 = entityliving.motY;
@@ -65,7 +65,7 @@ public class PacketPlayOutSpawnEntityLiving extends Packet {
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.a();
+        this.a = packetdataserializer.e();
         this.b = packetdataserializer.readByte() & 255;
         this.c = packetdataserializer.readInt();
         this.d = packetdataserializer.readInt();
@@ -94,15 +94,11 @@ public class PacketPlayOutSpawnEntityLiving extends Packet {
         this.l.a(packetdataserializer);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public String b() {
-        return String.format("id=%d, type=%d, x=%.2f, y=%.2f, z=%.2f, xd=%.2f, yd=%.2f, zd=%.2f", new Object[] { Integer.valueOf(this.a), Integer.valueOf(this.b), Float.valueOf((float) this.c / 32.0F), Float.valueOf((float) this.d / 32.0F), Float.valueOf((float) this.e / 32.0F), Float.valueOf((float) this.f / 8000.0F), Float.valueOf((float) this.g / 8000.0F), Float.valueOf((float) this.h / 8000.0F)});
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

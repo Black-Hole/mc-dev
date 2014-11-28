@@ -1,37 +1,37 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.List;
 
 public class EntitySenses {
 
-    EntityInsentient entity;
-    List seenEntities = new ArrayList();
-    List unseenEntities = new ArrayList();
+    EntityInsentient a;
+    List b = Lists.newArrayList();
+    List c = Lists.newArrayList();
 
     public EntitySenses(EntityInsentient entityinsentient) {
-        this.entity = entityinsentient;
+        this.a = entityinsentient;
     }
 
     public void a() {
-        this.seenEntities.clear();
-        this.unseenEntities.clear();
+        this.b.clear();
+        this.c.clear();
     }
 
-    public boolean canSee(Entity entity) {
-        if (this.seenEntities.contains(entity)) {
+    public boolean a(Entity entity) {
+        if (this.b.contains(entity)) {
             return true;
-        } else if (this.unseenEntities.contains(entity)) {
+        } else if (this.c.contains(entity)) {
             return false;
         } else {
-            this.entity.world.methodProfiler.a("canSee");
-            boolean flag = this.entity.hasLineOfSight(entity);
+            this.a.world.methodProfiler.a("canSee");
+            boolean flag = this.a.hasLineOfSight(entity);
 
-            this.entity.world.methodProfiler.b();
+            this.a.world.methodProfiler.b();
             if (flag) {
-                this.seenEntities.add(entity);
+                this.b.add(entity);
             } else {
-                this.unseenEntities.add(entity);
+                this.c.add(entity);
             }
 
             return flag;

@@ -1,72 +1,80 @@
 package net.minecraft.server;
 
+import java.util.Arrays;
 import java.util.List;
 
-public class TileEntityBrewingStand extends TileEntity implements IWorldInventory {
+public class TileEntityBrewingStand extends TileEntityContainer implements IUpdatePlayerListBox, IWorldInventory {
 
     private static final int[] a = new int[] { 3};
-    private static final int[] i = new int[] { 0, 1, 2};
-    private ItemStack[] items = new ItemStack[4];
-    private int brewTime;
-    private int l;
-    private Item m;
-    private String n;
+    private static final int[] f = new int[] { 0, 1, 2};
+    public ItemStack[] items = new ItemStack[4];
+    public int brewTime;
+    private boolean[] i;
+    private Item j;
+    private String k;
 
     public TileEntityBrewingStand() {}
 
-    public String getInventoryName() {
-        return this.k_() ? this.n : "container.brewing";
+    public String getName() {
+        return this.hasCustomName() ? this.k : "container.brewing";
     }
 
-    public boolean k_() {
-        return this.n != null && this.n.length() > 0;
+    public boolean hasCustomName() {
+        return this.k != null && this.k.length() > 0;
     }
 
     public void a(String s) {
-        this.n = s;
+        this.k = s;
     }
 
     public int getSize() {
         return this.items.length;
     }
 
-    public void h() {
+    public void c() {
         if (this.brewTime > 0) {
             --this.brewTime;
             if (this.brewTime == 0) {
-                this.l();
+                this.o();
                 this.update();
-            } else if (!this.k()) {
+            } else if (!this.n()) {
                 this.brewTime = 0;
                 this.update();
-            } else if (this.m != this.items[3].getItem()) {
+            } else if (this.j != this.items[3].getItem()) {
                 this.brewTime = 0;
                 this.update();
             }
-        } else if (this.k()) {
+        } else if (this.n()) {
             this.brewTime = 400;
-            this.m = this.items[3].getItem();
+            this.j = this.items[3].getItem();
         }
 
-        int i = this.j();
+        if (!this.world.isStatic) {
+            boolean[] aboolean = this.m();
 
-        if (i != this.l) {
-            this.l = i;
-            this.world.setData(this.x, this.y, this.z, i, 2);
+            if (!Arrays.equals(aboolean, this.i)) {
+                this.i = aboolean;
+                IBlockData iblockdata = this.world.getType(this.getPosition());
+
+                if (!(iblockdata.getBlock() instanceof BlockBrewingStand)) {
+                    return;
+                }
+
+                for (int i = 0; i < BlockBrewingStand.HAS_BOTTLE.length; ++i) {
+                    iblockdata = iblockdata.set(BlockBrewingStand.HAS_BOTTLE[i], Boolean.valueOf(aboolean[i]));
+                }
+
+                this.world.setTypeAndData(this.position, iblockdata, 2);
+            }
         }
 
-        super.h();
     }
 
-    public int i() {
-        return this.brewTime;
-    }
-
-    private boolean k() {
+    private boolean n() {
         if (this.items[3] != null && this.items[3].count > 0) {
             ItemStack itemstack = this.items[3];
 
-            if (!itemstack.getItem().m(itemstack)) {
+            if (!itemstack.getItem().l(itemstack)) {
                 return false;
             } else {
                 boolean flag = false;
@@ -76,13 +84,13 @@ public class TileEntityBrewingStand extends TileEntity implements IWorldInventor
                         int j = this.items[i].getData();
                         int k = this.c(j, itemstack);
 
-                        if (!ItemPotion.g(j) && ItemPotion.g(k)) {
+                        if (!ItemPotion.f(j) && ItemPotion.f(k)) {
                             flag = true;
                             break;
                         }
 
-                        List list = Items.POTION.c(j);
-                        List list1 = Items.POTION.c(k);
+                        List list = Items.POTION.e(j);
+                        List list1 = Items.POTION.e(k);
 
                         if ((j <= 0 || list != list1) && (list == null || !list.equals(list1) && list1 != null) && j != k) {
                             flag = true;
@@ -98,40 +106,41 @@ public class TileEntityBrewingStand extends TileEntity implements IWorldInventor
         }
     }
 
-    private void l() {
-        if (this.k()) {
+    private void o() {
+        if (this.n()) {
             ItemStack itemstack = this.items[3];
 
             for (int i = 0; i < 3; ++i) {
                 if (this.items[i] != null && this.items[i].getItem() == Items.POTION) {
                     int j = this.items[i].getData();
                     int k = this.c(j, itemstack);
-                    List list = Items.POTION.c(j);
-                    List list1 = Items.POTION.c(k);
+                    List list = Items.POTION.e(j);
+                    List list1 = Items.POTION.e(k);
 
                     if ((j <= 0 || list != list1) && (list == null || !list.equals(list1) && list1 != null)) {
                         if (j != k) {
                             this.items[i].setData(k);
                         }
-                    } else if (!ItemPotion.g(j) && ItemPotion.g(k)) {
+                    } else if (!ItemPotion.f(j) && ItemPotion.f(k)) {
                         this.items[i].setData(k);
                     }
                 }
             }
 
-            if (itemstack.getItem().u()) {
-                this.items[3] = new ItemStack(itemstack.getItem().t());
+            if (itemstack.getItem().r()) {
+                this.items[3] = new ItemStack(itemstack.getItem().q());
             } else {
                 --this.items[3].count;
                 if (this.items[3].count <= 0) {
                     this.items[3] = null;
                 }
             }
+
         }
     }
 
     private int c(int i, ItemStack itemstack) {
-        return itemstack == null ? i : (itemstack.getItem().m(itemstack) ? PotionBrewer.a(i, itemstack.getItem().i(itemstack)) : i);
+        return itemstack == null ? i : (itemstack.getItem().l(itemstack) ? PotionBrewer.a(i, itemstack.getItem().j(itemstack)) : i);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -151,8 +160,9 @@ public class TileEntityBrewingStand extends TileEntity implements IWorldInventor
 
         this.brewTime = nbttagcompound.getShort("BrewTime");
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
-            this.n = nbttagcompound.getString("CustomName");
+            this.k = nbttagcompound.getString("CustomName");
         }
+
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -171,9 +181,10 @@ public class TileEntityBrewingStand extends TileEntity implements IWorldInventor
         }
 
         nbttagcompound.set("Items", nbttaglist);
-        if (this.k_()) {
-            nbttagcompound.setString("CustomName", this.n);
+        if (this.hasCustomName()) {
+            nbttagcompound.setString("CustomName", this.k);
         }
+
     }
 
     public ItemStack getItem(int i) {
@@ -206,6 +217,7 @@ public class TileEntityBrewingStand extends TileEntity implements IWorldInventor
         if (i >= 0 && i < this.items.length) {
             this.items[i] = itemstack;
         }
+
     }
 
     public int getMaxStackSize() {
@@ -213,38 +225,76 @@ public class TileEntityBrewingStand extends TileEntity implements IWorldInventor
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getTileEntity(this.x, this.y, this.z) != this ? false : entityhuman.e((double) this.x + 0.5D, (double) this.y + 0.5D, (double) this.z + 0.5D) <= 64.0D;
+        return this.world.getTileEntity(this.position) != this ? false : entityhuman.e((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
-    public void startOpen() {}
+    public void startOpen(EntityHuman entityhuman) {}
 
-    public void closeContainer() {}
+    public void closeContainer(EntityHuman entityhuman) {}
 
     public boolean b(int i, ItemStack itemstack) {
-        return i == 3 ? itemstack.getItem().m(itemstack) : itemstack.getItem() == Items.POTION || itemstack.getItem() == Items.GLASS_BOTTLE;
+        return i == 3 ? itemstack.getItem().l(itemstack) : itemstack.getItem() == Items.POTION || itemstack.getItem() == Items.GLASS_BOTTLE;
     }
 
-    public int j() {
-        int i = 0;
+    public boolean[] m() {
+        boolean[] aboolean = new boolean[3];
 
-        for (int j = 0; j < 3; ++j) {
-            if (this.items[j] != null) {
-                i |= 1 << j;
+        for (int i = 0; i < 3; ++i) {
+            if (this.items[i] != null) {
+                aboolean[i] = true;
             }
         }
 
-        return i;
+        return aboolean;
     }
 
-    public int[] getSlotsForFace(int i) {
-        return i == 1 ? a : i;
+    public int[] getSlotsForFace(EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.UP ? TileEntityBrewingStand.a : TileEntityBrewingStand.f;
     }
 
-    public boolean canPlaceItemThroughFace(int i, ItemStack itemstack, int j) {
+    public boolean canPlaceItemThroughFace(int i, ItemStack itemstack, EnumDirection enumdirection) {
         return this.b(i, itemstack);
     }
 
-    public boolean canTakeItemThroughFace(int i, ItemStack itemstack, int j) {
+    public boolean canTakeItemThroughFace(int i, ItemStack itemstack, EnumDirection enumdirection) {
         return true;
+    }
+
+    public String getContainerName() {
+        return "minecraft:brewing_stand";
+    }
+
+    public Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman) {
+        return new ContainerBrewingStand(playerinventory, this);
+    }
+
+    public int getProperty(int i) {
+        switch (i) {
+        case 0:
+            return this.brewTime;
+
+        default:
+            return 0;
+        }
+    }
+
+    public void b(int i, int j) {
+        switch (i) {
+        case 0:
+            this.brewTime = j;
+
+        default:
+        }
+    }
+
+    public int g() {
+        return 1;
+    }
+
+    public void l() {
+        for (int i = 0; i < this.items.length; ++i) {
+            this.items[i] = null;
+        }
+
     }
 }

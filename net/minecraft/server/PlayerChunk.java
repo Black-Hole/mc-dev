@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.List;
 
 class PlayerChunk {
@@ -15,7 +15,7 @@ class PlayerChunk {
 
     public PlayerChunk(PlayerChunkMap playerchunkmap, int i, int j) {
         this.playerChunkMap = playerchunkmap;
-        this.b = new ArrayList();
+        this.b = Lists.newArrayList();
         this.dirtyBlocks = new short[64];
         this.location = new ChunkCoordIntPair(i, j);
         playerchunkmap.a().chunkProviderServer.getChunkAt(i, j);
@@ -56,6 +56,7 @@ class PlayerChunk {
 
                 this.playerChunkMap.a().chunkProviderServer.queueUnload(this.location.x, this.location.z);
             }
+
         }
     }
 
@@ -64,7 +65,7 @@ class PlayerChunk {
     }
 
     private void a(Chunk chunk) {
-        chunk.s += PlayerChunkMap.a(this.playerChunkMap).getTime() - this.g;
+        chunk.c(chunk.w() + PlayerChunkMap.a(this.playerChunkMap).getTime() - this.g);
         this.g = PlayerChunkMap.a(this.playerChunkMap).getTime();
     }
 
@@ -75,19 +76,20 @@ class PlayerChunk {
 
         this.f |= 1 << (j >> 4);
         if (this.dirtyCount < 64) {
-            short short1 = (short) (i << 12 | k << 8 | j);
+            short short0 = (short) (i << 12 | k << 8 | j);
 
             for (int l = 0; l < this.dirtyCount; ++l) {
-                if (this.dirtyBlocks[l] == short1) {
+                if (this.dirtyBlocks[l] == short0) {
                     return;
                 }
             }
 
-            this.dirtyBlocks[this.dirtyCount++] = short1;
+            this.dirtyBlocks[this.dirtyCount++] = short0;
         }
+
     }
 
-    public void sendAll(Packet packet) {
+    public void a(Packet packet) {
         for (int i = 0; i < this.b.size(); ++i) {
             EntityPlayer entityplayer = (EntityPlayer) this.b.get(i);
 
@@ -95,6 +97,7 @@ class PlayerChunk {
                 entityplayer.playerConnection.sendPacket(packet);
             }
         }
+
     }
 
     public void b() {
@@ -104,12 +107,14 @@ class PlayerChunk {
             int k;
 
             if (this.dirtyCount == 1) {
-                i = this.location.x * 16 + (this.dirtyBlocks[0] >> 12 & 15);
+                i = (this.dirtyBlocks[0] >> 12 & 15) + this.location.x * 16;
                 j = this.dirtyBlocks[0] & 255;
-                k = this.location.z * 16 + (this.dirtyBlocks[0] >> 8 & 15);
-                this.sendAll(new PacketPlayOutBlockChange(i, j, k, PlayerChunkMap.a(this.playerChunkMap)));
-                if (PlayerChunkMap.a(this.playerChunkMap).getType(i, j, k).isTileEntity()) {
-                    this.sendTileEntity(PlayerChunkMap.a(this.playerChunkMap).getTileEntity(i, j, k));
+                k = (this.dirtyBlocks[0] >> 8 & 15) + this.location.z * 16;
+                BlockPosition blockposition = new BlockPosition(i, j, k);
+
+                this.a((Packet) (new PacketPlayOutBlockChange(PlayerChunkMap.a(this.playerChunkMap), blockposition)));
+                if (PlayerChunkMap.a(this.playerChunkMap).getType(blockposition).getBlock().isTileEntity()) {
+                    this.a(PlayerChunkMap.a(this.playerChunkMap).getTileEntity(blockposition));
                 }
             } else {
                 int l;
@@ -117,7 +122,7 @@ class PlayerChunk {
                 if (this.dirtyCount == 64) {
                     i = this.location.x * 16;
                     j = this.location.z * 16;
-                    this.sendAll(new PacketPlayOutMapChunk(PlayerChunkMap.a(this.playerChunkMap).getChunkAt(this.location.x, this.location.z), false, this.f));
+                    this.a((Packet) (new PacketPlayOutMapChunk(PlayerChunkMap.a(this.playerChunkMap).getChunkAt(this.location.x, this.location.z), false, this.f)));
 
                     for (k = 0; k < 16; ++k) {
                         if ((this.f & 1 << k) != 0) {
@@ -125,19 +130,21 @@ class PlayerChunk {
                             List list = PlayerChunkMap.a(this.playerChunkMap).getTileEntities(i, l, j, i + 16, l + 16, j + 16);
 
                             for (int i1 = 0; i1 < list.size(); ++i1) {
-                                this.sendTileEntity((TileEntity) list.get(i1));
+                                this.a((TileEntity) list.get(i1));
                             }
                         }
                     }
                 } else {
-                    this.sendAll(new PacketPlayOutMultiBlockChange(this.dirtyCount, this.dirtyBlocks, PlayerChunkMap.a(this.playerChunkMap).getChunkAt(this.location.x, this.location.z)));
+                    this.a((Packet) (new PacketPlayOutMultiBlockChange(this.dirtyCount, this.dirtyBlocks, PlayerChunkMap.a(this.playerChunkMap).getChunkAt(this.location.x, this.location.z))));
 
                     for (i = 0; i < this.dirtyCount; ++i) {
-                        j = this.location.x * 16 + (this.dirtyBlocks[i] >> 12 & 15);
+                        j = (this.dirtyBlocks[i] >> 12 & 15) + this.location.x * 16;
                         k = this.dirtyBlocks[i] & 255;
-                        l = this.location.z * 16 + (this.dirtyBlocks[i] >> 8 & 15);
-                        if (PlayerChunkMap.a(this.playerChunkMap).getType(j, k, l).isTileEntity()) {
-                            this.sendTileEntity(PlayerChunkMap.a(this.playerChunkMap).getTileEntity(j, k, l));
+                        l = (this.dirtyBlocks[i] >> 8 & 15) + this.location.z * 16;
+                        BlockPosition blockposition1 = new BlockPosition(j, k, l);
+
+                        if (PlayerChunkMap.a(this.playerChunkMap).getType(blockposition1).getBlock().isTileEntity()) {
+                            this.a(PlayerChunkMap.a(this.playerChunkMap).getTileEntity(blockposition1));
                         }
                     }
                 }
@@ -148,14 +155,15 @@ class PlayerChunk {
         }
     }
 
-    private void sendTileEntity(TileEntity tileentity) {
+    private void a(TileEntity tileentity) {
         if (tileentity != null) {
             Packet packet = tileentity.getUpdatePacket();
 
             if (packet != null) {
-                this.sendAll(packet);
+                this.a(packet);
             }
         }
+
     }
 
     static ChunkCoordIntPair a(PlayerChunk playerchunk) {

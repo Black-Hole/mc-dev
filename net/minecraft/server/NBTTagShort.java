@@ -9,8 +9,8 @@ public class NBTTagShort extends NBTNumber {
 
     public NBTTagShort() {}
 
-    public NBTTagShort(short short1) {
-        this.data = short1;
+    public NBTTagShort(short short0) {
+        this.data = short0;
     }
 
     void write(DataOutput dataoutput) {

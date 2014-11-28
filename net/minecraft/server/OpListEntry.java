@@ -1,9 +1,8 @@
 package net.minecraft.server;
 
+import com.google.gson.JsonObject;
+import com.mojang.authlib.GameProfile;
 import java.util.UUID;
-
-import net.minecraft.util.com.google.gson.JsonObject;
-import net.minecraft.util.com.mojang.authlib.GameProfile;
 
 public class OpListEntry extends JsonListEntry {
 

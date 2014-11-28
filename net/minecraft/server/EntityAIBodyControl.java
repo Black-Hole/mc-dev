@@ -2,29 +2,29 @@ package net.minecraft.server;
 
 public class EntityAIBodyControl {
 
-    private EntityLiving entity;
+    private EntityLiving a;
     private int b;
     private float c;
 
     public EntityAIBodyControl(EntityLiving entityliving) {
-        this.entity = entityliving;
+        this.a = entityliving;
     }
 
     public void a() {
-        double d0 = this.entity.locX - this.entity.lastX;
-        double d1 = this.entity.locZ - this.entity.lastZ;
+        double d0 = this.a.locX - this.a.lastX;
+        double d1 = this.a.locZ - this.a.lastZ;
 
         if (d0 * d0 + d1 * d1 > 2.500000277905201E-7D) {
-            this.entity.aM = this.entity.yaw;
-            this.entity.aO = this.a(this.entity.aM, this.entity.aO, 75.0F);
-            this.c = this.entity.aO;
+            this.a.aG = this.a.yaw;
+            this.a.aI = this.a(this.a.aG, this.a.aI, 75.0F);
+            this.c = this.a.aI;
             this.b = 0;
         } else {
             float f = 75.0F;
 
-            if (Math.abs(this.entity.aO - this.c) > 15.0F) {
+            if (Math.abs(this.a.aI - this.c) > 15.0F) {
                 this.b = 0;
-                this.c = this.entity.aO;
+                this.c = this.a.aI;
             } else {
                 ++this.b;
                 boolean flag = true;
@@ -34,7 +34,7 @@ public class EntityAIBodyControl {
                 }
             }
 
-            this.entity.aM = this.a(this.entity.aO, this.entity.aM, f);
+            this.a.aG = this.a(this.a.aI, this.a.aG, f);
         }
     }
 

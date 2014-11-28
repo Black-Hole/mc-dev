@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,8 +11,8 @@ import java.util.Map.Entry;
 
 public class WorldGenFlatInfo {
 
-    private final List layers = new ArrayList();
-    private final Map structures = new HashMap();
+    private final List layers = Lists.newArrayList();
+    private final Map structures = Maps.newHashMap();
     private int c;
 
     public WorldGenFlatInfo() {}
@@ -36,16 +38,17 @@ public class WorldGenFlatInfo {
 
         WorldGenFlatLayerInfo worldgenflatlayerinfo;
 
-        for (Iterator iterator = this.layers.iterator(); iterator.hasNext(); i += worldgenflatlayerinfo.a()) {
+        for (Iterator iterator = this.layers.iterator(); iterator.hasNext(); i += worldgenflatlayerinfo.b()) {
             worldgenflatlayerinfo = (WorldGenFlatLayerInfo) iterator.next();
-            worldgenflatlayerinfo.c(i);
+            worldgenflatlayerinfo.b(i);
         }
+
     }
 
     public String toString() {
         StringBuilder stringbuilder = new StringBuilder();
 
-        stringbuilder.append(2);
+        stringbuilder.append(3);
         stringbuilder.append(";");
 
         int i;
@@ -102,73 +105,90 @@ public class WorldGenFlatInfo {
         return stringbuilder.toString();
     }
 
-    private static WorldGenFlatLayerInfo a(String s, int i) {
-        String[] astring = s.split("x", 2);
-        int j = 1;
-        int k = 0;
+    private static WorldGenFlatLayerInfo a(int i, String s, int j) {
+        String[] astring = i >= 3 ? s.split("\\*", 2) : s.split("x", 2);
+        int k = 1;
+        int l = 0;
 
         if (astring.length == 2) {
             try {
-                j = Integer.parseInt(astring[0]);
-                if (i + j >= 256) {
-                    j = 256 - i;
+                k = Integer.parseInt(astring[0]);
+                if (j + k >= 256) {
+                    k = 256 - j;
                 }
 
-                if (j < 0) {
-                    j = 0;
+                if (k < 0) {
+                    k = 0;
                 }
             } catch (Throwable throwable) {
                 return null;
             }
         }
 
-        int l;
+        Block block = null;
 
         try {
             String s1 = astring[astring.length - 1];
 
-            astring = s1.split(":", 2);
-            l = Integer.parseInt(astring[0]);
-            if (astring.length > 1) {
-                k = Integer.parseInt(astring[1]);
+            if (i < 3) {
+                astring = s1.split(":", 2);
+                if (astring.length > 1) {
+                    l = Integer.parseInt(astring[1]);
+                }
+
+                block = Block.getById(Integer.parseInt(astring[0]));
+            } else {
+                astring = s1.split(":", 3);
+                block = astring.length > 1 ? Block.getByName(astring[0] + ":" + astring[1]) : null;
+                if (block != null) {
+                    l = astring.length > 2 ? Integer.parseInt(astring[2]) : 0;
+                } else {
+                    block = Block.getByName(astring[0]);
+                    if (block != null) {
+                        l = astring.length > 1 ? Integer.parseInt(astring[1]) : 0;
+                    }
+                }
+
+                if (block == null) {
+                    return null;
+                }
             }
 
-            if (Block.getById(l) == Blocks.AIR) {
+            if (block == Blocks.AIR) {
                 l = 0;
-                k = 0;
             }
 
-            if (k < 0 || k > 15) {
-                k = 0;
+            if (l < 0 || l > 15) {
+                l = 0;
             }
         } catch (Throwable throwable1) {
             return null;
         }
 
-        WorldGenFlatLayerInfo worldgenflatlayerinfo = new WorldGenFlatLayerInfo(j, Block.getById(l), k);
+        WorldGenFlatLayerInfo worldgenflatlayerinfo = new WorldGenFlatLayerInfo(i, k, block, l);
 
-        worldgenflatlayerinfo.c(i);
+        worldgenflatlayerinfo.b(j);
         return worldgenflatlayerinfo;
     }
 
-    private static List b(String s) {
+    private static List a(int i, String s) {
         if (s != null && s.length() >= 1) {
-            ArrayList arraylist = new ArrayList();
+            ArrayList arraylist = Lists.newArrayList();
             String[] astring = s.split(",");
-            int i = 0;
+            int j = 0;
             String[] astring1 = astring;
-            int j = astring.length;
+            int k = astring.length;
 
-            for (int k = 0; k < j; ++k) {
-                String s1 = astring1[k];
-                WorldGenFlatLayerInfo worldgenflatlayerinfo = a(s1, i);
+            for (int l = 0; l < k; ++l) {
+                String s1 = astring1[l];
+                WorldGenFlatLayerInfo worldgenflatlayerinfo = a(i, s1, j);
 
                 if (worldgenflatlayerinfo == null) {
                     return null;
                 }
 
                 arraylist.add(worldgenflatlayerinfo);
-                i += worldgenflatlayerinfo.a();
+                j += worldgenflatlayerinfo.b();
             }
 
             return arraylist;
@@ -184,10 +204,10 @@ public class WorldGenFlatInfo {
             String[] astring = s.split(";", -1);
             int i = astring.length == 1 ? 0 : MathHelper.a(astring[0], 0);
 
-            if (i >= 0 && i <= 2) {
+            if (i >= 0 && i <= 3) {
                 WorldGenFlatInfo worldgenflatinfo = new WorldGenFlatInfo();
                 int j = astring.length == 1 ? 0 : 1;
-                List list = b(astring[j++]);
+                List list = a(i, astring[j++]);
 
                 if (list != null && !list.isEmpty()) {
                     worldgenflatinfo.c().addAll(list);
@@ -207,7 +227,7 @@ public class WorldGenFlatInfo {
                         for (int i1 = 0; i1 < l; ++i1) {
                             String s1 = astring2[i1];
                             String[] astring3 = s1.split("\\(", 2);
-                            HashMap hashmap = new HashMap();
+                            HashMap hashmap = Maps.newHashMap();
 
                             if (astring3[0].length() > 0) {
                                 worldgenflatinfo.b().put(astring3[0], hashmap);
@@ -225,7 +245,7 @@ public class WorldGenFlatInfo {
                             }
                         }
                     } else {
-                        worldgenflatinfo.b().put("village", new HashMap());
+                        worldgenflatinfo.b().put("village", Maps.newHashMap());
                     }
 
                     return worldgenflatinfo;
@@ -246,7 +266,7 @@ public class WorldGenFlatInfo {
         worldgenflatinfo.c().add(new WorldGenFlatLayerInfo(2, Blocks.DIRT));
         worldgenflatinfo.c().add(new WorldGenFlatLayerInfo(1, Blocks.GRASS));
         worldgenflatinfo.d();
-        worldgenflatinfo.b().put("village", new HashMap());
+        worldgenflatinfo.b().put("village", Maps.newHashMap());
         return worldgenflatinfo;
     }
 }

@@ -19,7 +19,7 @@ public class CommandPardonIP extends CommandAbstract {
         return MinecraftServer.getServer().getPlayerList().getIPBans().isEnabled() && super.canUse(icommandlistener);
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.unbanip.usage";
     }
 
@@ -38,7 +38,7 @@ public class CommandPardonIP extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayerList().getIPBans().getEntries()) : null;
     }
 }

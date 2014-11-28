@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.Collection;
+
 public abstract class ScoreboardTeamBase {
 
     public ScoreboardTeamBase() {}
@@ -13,4 +15,8 @@ public abstract class ScoreboardTeamBase {
     public abstract String getFormattedName(String s);
 
     public abstract boolean allowFriendlyFire();
+
+    public abstract Collection getPlayerNameSet();
+
+    public abstract EnumNameTagVisibility j();
 }

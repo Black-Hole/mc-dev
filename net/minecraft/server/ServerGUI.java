@@ -18,7 +18,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,8 +53,9 @@ public class ServerGUI extends JComponent {
             this.add(this.c(), "Center");
             this.add(this.a(), "West");
         } catch (Exception exception) {
-            b.error("Couldn\'t build server GUI", exception);
+            ServerGUI.b.error("Couldn\'t build server GUI", exception);
         }
+
     }
 
     private JComponent a() {
@@ -81,7 +81,7 @@ public class ServerGUI extends JComponent {
         JScrollPane jscrollpane = new JScrollPane(jtextarea, 22, 30);
 
         jtextarea.setEditable(false);
-        jtextarea.setFont(a);
+        jtextarea.setFont(ServerGUI.a);
         JTextField jtextfield = new JTextField();
 
         jtextfield.addActionListener(new ServerGuiCommandListener(this, jtextfield));
@@ -105,7 +105,7 @@ public class ServerGUI extends JComponent {
             boolean flag = false;
 
             if (jscrollpane.getViewport().getView() == jtextarea) {
-                flag = (double) jscrollbar.getValue() + jscrollbar.getSize().getHeight() + (double) (a.getSize() * 4) > (double) jscrollbar.getMaximum();
+                flag = (double) jscrollbar.getValue() + jscrollbar.getSize().getHeight() + (double) (ServerGUI.a.getSize() * 4) > (double) jscrollbar.getMaximum();
             }
 
             try {
@@ -117,6 +117,7 @@ public class ServerGUI extends JComponent {
             if (flag) {
                 jscrollbar.setValue(Integer.MAX_VALUE);
             }
+
         }
     }
 

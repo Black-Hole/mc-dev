@@ -1,36 +1,28 @@
 package net.minecraft.server;
 
-public class PacketPlayOutOpenSignEditor extends Packet {
+public class PacketPlayOutOpenSignEditor implements Packet {
 
-    private int a;
-    private int b;
-    private int c;
+    private BlockPosition a;
 
     public PacketPlayOutOpenSignEditor() {}
 
-    public PacketPlayOutOpenSignEditor(int i, int j, int k) {
-        this.a = i;
-        this.b = j;
-        this.c = k;
+    public PacketPlayOutOpenSignEditor(BlockPosition blockposition) {
+        this.a = blockposition;
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.readInt();
-        this.b = packetdataserializer.readInt();
-        this.c = packetdataserializer.readInt();
+        this.a = packetdataserializer.c();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeInt(this.a);
-        packetdataserializer.writeInt(this.b);
-        packetdataserializer.writeInt(this.c);
+        packetdataserializer.a(this.a);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

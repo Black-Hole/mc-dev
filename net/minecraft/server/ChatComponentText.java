@@ -14,7 +14,7 @@ public class ChatComponentText extends ChatBaseComponent {
         return this.b;
     }
 
-    public String e() {
+    public String getText() {
         return this.b;
     }
 

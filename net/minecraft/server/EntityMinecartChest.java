@@ -19,15 +19,23 @@ public class EntityMinecartChest extends EntityMinecartContainer {
         return 27;
     }
 
-    public int m() {
-        return 1;
+    public EnumMinecartType s() {
+        return EnumMinecartType.CHEST;
     }
 
-    public Block o() {
-        return Blocks.CHEST;
+    public IBlockData u() {
+        return Blocks.CHEST.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH);
     }
 
-    public int s() {
+    public int w() {
         return 8;
+    }
+
+    public String getContainerName() {
+        return "minecraft:chest";
+    }
+
+    public Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman) {
+        return new ContainerChest(playerinventory, this, entityhuman);
     }
 }

@@ -5,12 +5,12 @@ public class SlotMerchantResult extends Slot {
     private final InventoryMerchant a;
     private EntityHuman b;
     private int c;
-    private final IMerchant d;
+    private final IMerchant h;
 
     public SlotMerchantResult(EntityHuman entityhuman, IMerchant imerchant, InventoryMerchant inventorymerchant, int i, int j, int k) {
         super(inventorymerchant, i, j, k);
         this.b = entityhuman;
-        this.d = imerchant;
+        this.h = imerchant;
         this.a = inventorymerchant;
     }
 
@@ -28,16 +28,16 @@ public class SlotMerchantResult extends Slot {
 
     protected void a(ItemStack itemstack, int i) {
         this.c += i;
-        this.b(itemstack);
+        this.c(itemstack);
     }
 
-    protected void b(ItemStack itemstack) {
+    protected void c(ItemStack itemstack) {
         itemstack.a(this.b.world, this.b, this.c);
         this.c = 0;
     }
 
     public void a(EntityHuman entityhuman, ItemStack itemstack) {
-        this.b(itemstack);
+        this.c(itemstack);
         MerchantRecipe merchantrecipe = this.a.getRecipe();
 
         if (merchantrecipe != null) {
@@ -45,7 +45,8 @@ public class SlotMerchantResult extends Slot {
             ItemStack itemstack2 = this.a.getItem(1);
 
             if (this.a(merchantrecipe, itemstack1, itemstack2) || this.a(merchantrecipe, itemstack2, itemstack1)) {
-                this.d.a(merchantrecipe);
+                this.h.a(merchantrecipe);
+                entityhuman.b(StatisticList.G);
                 if (itemstack1 != null && itemstack1.count <= 0) {
                     itemstack1 = null;
                 }
@@ -58,6 +59,7 @@ public class SlotMerchantResult extends Slot {
                 this.a.setItem(1, itemstack2);
             }
         }
+
     }
 
     private boolean a(MerchantRecipe merchantrecipe, ItemStack itemstack, ItemStack itemstack1) {

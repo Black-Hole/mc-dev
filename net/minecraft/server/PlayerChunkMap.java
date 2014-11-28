@@ -1,9 +1,9 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,17 +11,17 @@ public class PlayerChunkMap {
 
     private static final Logger a = LogManager.getLogger();
     private final WorldServer world;
-    private final List managedPlayers = new ArrayList();
+    private final List managedPlayers = Lists.newArrayList();
     private final LongHashMap d = new LongHashMap();
-    private final List e = new ArrayList();
-    private final List f = new ArrayList();
+    private final List e = Lists.newArrayList();
+    private final List f = Lists.newArrayList();
     private int g;
     private long h;
     private final int[][] i = new int[][] { { 1, 0}, { 0, 1}, { -1, 0}, { 0, -1}};
 
     public PlayerChunkMap(WorldServer worldserver) {
         this.world = worldserver;
-        this.a(worldserver.getMinecraftServer().getPlayerList().s());
+        this.a(worldserver.getMinecraftServer().getPlayerList().t());
     }
 
     public WorldServer a() {
@@ -56,6 +56,7 @@ public class PlayerChunkMap {
                 this.world.chunkProviderServer.b();
             }
         }
+
     }
 
     public boolean a(int i, int j) {
@@ -77,14 +78,15 @@ public class PlayerChunkMap {
         return playerchunk;
     }
 
-    public void flagDirty(int i, int j, int k) {
-        int l = i >> 4;
-        int i1 = k >> 4;
-        PlayerChunk playerchunk = this.a(l, i1, false);
+    public void flagDirty(BlockPosition blockposition) {
+        int i = blockposition.getX() >> 4;
+        int j = blockposition.getZ() >> 4;
+        PlayerChunk playerchunk = this.a(i, j, false);
 
         if (playerchunk != null) {
-            playerchunk.a(i & 15, j, k & 15);
+            playerchunk.a(blockposition.getX() & 15, blockposition.getY(), blockposition.getZ() & 15);
         }
+
     }
 
     public void addPlayer(EntityPlayer entityplayer) {
@@ -105,7 +107,7 @@ public class PlayerChunkMap {
     }
 
     public void b(EntityPlayer entityplayer) {
-        ArrayList arraylist = new ArrayList(entityplayer.chunkCoordIntPairQueue);
+        ArrayList arraylist = Lists.newArrayList(entityplayer.chunkCoordIntPairQueue);
         int i = 0;
         int j = this.g;
         int k = (int) entityplayer.locX >> 4;
@@ -146,6 +148,7 @@ public class PlayerChunkMap {
                 entityplayer.chunkCoordIntPairQueue.add(chunkcoordintpair);
             }
         }
+
     }
 
     public void removePlayer(EntityPlayer entityplayer) {
@@ -217,10 +220,11 @@ public class PlayerChunkMap {
     }
 
     public void a(int i) {
-        i = MathHelper.a(i, 3, 20);
+        i = MathHelper.clamp(i, 3, 32);
         if (i != this.g) {
             int j = i - this.g;
-            Iterator iterator = this.managedPlayers.iterator();
+            ArrayList arraylist = Lists.newArrayList(this.managedPlayers);
+            Iterator iterator = arraylist.iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -259,7 +263,7 @@ public class PlayerChunkMap {
     }
 
     static Logger c() {
-        return a;
+        return PlayerChunkMap.a;
     }
 
     static WorldServer a(PlayerChunkMap playerchunkmap) {

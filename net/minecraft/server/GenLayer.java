@@ -9,8 +9,7 @@ public abstract class GenLayer {
     private long d;
     protected long b;
 
-    public static GenLayer[] a(long i, WorldType worldtype) {
-        boolean flag = false;
+    public static GenLayer[] a(long i, WorldType worldtype, String s) {
         LayerIsland layerisland = new LayerIsland(1L);
         GenLayerZoomFuzzy genlayerzoomfuzzy = new GenLayerZoomFuzzy(2000L, layerisland);
         GenLayerIsland genlayerisland = new GenLayerIsland(1L, genlayerzoomfuzzy);
@@ -26,50 +25,48 @@ public abstract class GenLayer {
         GenLayerSpecial genlayerspecial = new GenLayerSpecial(2L, genlayerisland, EnumGenLayerSpecial.COOL_WARM);
 
         genlayerspecial = new GenLayerSpecial(2L, genlayerspecial, EnumGenLayerSpecial.HEAT_ICE);
-        genlayerspecial = new GenLayerSpecial(3L, genlayerspecial, EnumGenLayerSpecial.PUFFERFISH);
+        genlayerspecial = new GenLayerSpecial(3L, genlayerspecial, EnumGenLayerSpecial.SPECIAL);
         genlayerzoom = new GenLayerZoom(2002L, genlayerspecial);
         genlayerzoom = new GenLayerZoom(2003L, genlayerzoom);
         genlayerisland = new GenLayerIsland(4L, genlayerzoom);
         GenLayerMushroomIsland genlayermushroomisland = new GenLayerMushroomIsland(5L, genlayerisland);
         GenLayerDeepOcean genlayerdeepocean = new GenLayerDeepOcean(4L, genlayermushroomisland);
         GenLayer genlayer = GenLayerZoom.b(1000L, genlayerdeepocean, 0);
-        byte b0 = 4;
+        CustomWorldSettingsFinal customworldsettingsfinal = null;
+        int j = 4;
+        int k = j;
 
-        if (worldtype == WorldType.LARGE_BIOMES) {
-            b0 = 6;
+        if (worldtype == WorldType.CUSTOMIZED && s.length() > 0) {
+            customworldsettingsfinal = CustomWorldSettings.a(s).b();
+            j = customworldsettingsfinal.G;
+            k = customworldsettingsfinal.H;
         }
 
-        if (flag) {
-            b0 = 4;
+        if (worldtype == WorldType.LARGE_BIOMES) {
+            j = 6;
         }
 
         GenLayer genlayer1 = GenLayerZoom.b(1000L, genlayer, 0);
         GenLayerCleaner genlayercleaner = new GenLayerCleaner(100L, genlayer1);
-        Object object = new GenLayerBiome(200L, genlayer, worldtype);
-
-        if (!flag) {
-            GenLayer genlayer2 = GenLayerZoom.b(1000L, (GenLayer) object, 2);
-
-            object = new GenLayerDesert(1000L, genlayer2);
-        }
-
+        GenLayerBiome genlayerbiome = new GenLayerBiome(200L, genlayer, worldtype, s);
+        GenLayer genlayer2 = GenLayerZoom.b(1000L, genlayerbiome, 2);
+        GenLayerDesert genlayerdesert = new GenLayerDesert(1000L, genlayer2);
         GenLayer genlayer3 = GenLayerZoom.b(1000L, genlayercleaner, 2);
-        GenLayerRegionHills genlayerregionhills = new GenLayerRegionHills(1000L, (GenLayer) object, genlayer3);
+        GenLayerRegionHills genlayerregionhills = new GenLayerRegionHills(1000L, genlayerdesert, genlayer3);
 
         genlayer1 = GenLayerZoom.b(1000L, genlayercleaner, 2);
-        genlayer1 = GenLayerZoom.b(1000L, genlayer1, b0);
+        genlayer1 = GenLayerZoom.b(1000L, genlayer1, k);
         GenLayerRiver genlayerriver = new GenLayerRiver(1L, genlayer1);
         GenLayerSmooth genlayersmooth = new GenLayerSmooth(1000L, genlayerriver);
+        Object object = new GenLayerPlains(1001L, genlayerregionhills);
 
-        object = new GenLayerPlains(1001L, genlayerregionhills);
-
-        for (int j = 0; j < b0; ++j) {
-            object = new GenLayerZoom((long) (1000 + j), (GenLayer) object);
-            if (j == 0) {
+        for (int l = 0; l < j; ++l) {
+            object = new GenLayerZoom((long) (1000 + l), (GenLayer) object);
+            if (l == 0) {
                 object = new GenLayerIsland(3L, (GenLayer) object);
             }
 
-            if (j == 1) {
+            if (l == 1 || j == 1) {
                 object = new GenLayerMushroomShore(1000L, (GenLayer) object);
             }
         }
@@ -137,16 +134,19 @@ public abstract class GenLayer {
         if (i == j) {
             return true;
         } else if (i != BiomeBase.MESA_PLATEAU_F.id && i != BiomeBase.MESA_PLATEAU.id) {
+            BiomeBase biomebase = BiomeBase.getBiome(i);
+            BiomeBase biomebase1 = BiomeBase.getBiome(j);
+
             try {
-                return BiomeBase.getBiome(i) != null && BiomeBase.getBiome(j) != null ? BiomeBase.getBiome(i).a(BiomeBase.getBiome(j)) : false;
+                return biomebase != null && biomebase1 != null ? biomebase.a(biomebase1) : false;
             } catch (Throwable throwable) {
                 CrashReport crashreport = CrashReport.a(throwable, "Comparing biomes");
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Biomes being compared");
 
-                crashreportsystemdetails.a("Biome A ID", Integer.valueOf(i));
-                crashreportsystemdetails.a("Biome B ID", Integer.valueOf(j));
-                crashreportsystemdetails.a("Biome A", (Callable) (new CrashReportGenLayer1(i)));
-                crashreportsystemdetails.a("Biome B", (Callable) (new CrashReportGenLayer2(j)));
+                crashreportsystemdetails.a("Biome A ID", (Object) Integer.valueOf(i));
+                crashreportsystemdetails.a("Biome B ID", (Object) Integer.valueOf(j));
+                crashreportsystemdetails.a("Biome A", (Callable) (new CrashReportGenLayer1(biomebase)));
+                crashreportsystemdetails.a("Biome B", (Callable) (new CrashReportGenLayer2(biomebase1)));
                 throw new ReportedException(crashreport);
             }
         } else {

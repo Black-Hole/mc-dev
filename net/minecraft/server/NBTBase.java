@@ -62,6 +62,10 @@ public abstract class NBTBase {
 
     public abstract NBTBase clone();
 
+    public boolean isEmpty() {
+        return false;
+    }
+
     public boolean equals(Object object) {
         if (!(object instanceof NBTBase)) {
             return false;

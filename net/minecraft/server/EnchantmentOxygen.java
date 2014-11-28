@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public class EnchantmentOxygen extends Enchantment {
 
-    public EnchantmentOxygen(int i, int j) {
-        super(i, j, EnchantmentSlotType.ARMOR_HEAD);
-        this.b("oxygen");
+    public EnchantmentOxygen(int i, MinecraftKey minecraftkey, int j) {
+        super(i, minecraftkey, j, EnchantmentSlotType.ARMOR_HEAD);
+        this.c("oxygen");
     }
 
     public int a(int i) {

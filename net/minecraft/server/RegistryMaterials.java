@@ -1,10 +1,9 @@
 package net.minecraft.server;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import net.minecraft.util.com.google.common.collect.BiMap;
-import net.minecraft.util.com.google.common.collect.HashBiMap;
 
 public class RegistryMaterials extends RegistrySimple implements Registry {
 
@@ -15,25 +14,25 @@ public class RegistryMaterials extends RegistrySimple implements Registry {
         this.b = ((BiMap) this.c).inverse();
     }
 
-    public void a(int i, String s, Object object) {
-        this.a.a(object, i);
-        this.a(c(s), object);
+    public void a(int i, Object object, Object object1) {
+        this.a.a(object1, i);
+        this.a(object, object1);
     }
 
-    protected Map a() {
+    protected Map b() {
         return HashBiMap.create();
     }
 
-    public Object get(String s) {
-        return super.get(c(s));
+    public Object get(Object object) {
+        return super.get(object);
     }
 
-    public String c(Object object) {
-        return (String) this.b.get(object);
+    public Object c(Object object) {
+        return this.b.get(object);
     }
 
-    public boolean b(String s) {
-        return super.d(c(s));
+    public boolean d(Object object) {
+        return super.d(object);
     }
 
     public int b(Object object) {
@@ -46,21 +45,5 @@ public class RegistryMaterials extends RegistrySimple implements Registry {
 
     public Iterator iterator() {
         return this.a.iterator();
-    }
-
-    public boolean b(int i) {
-        return this.a.b(i);
-    }
-
-    private static String c(String s) {
-        return s.indexOf(58) == -1 ? "minecraft:" + s : s;
-    }
-
-    public boolean d(Object object) {
-        return this.b((String) object);
-    }
-
-    public Object get(Object object) {
-        return this.get((String) object);
     }
 }

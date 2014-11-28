@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.util.List;
 
-public class PacketPlayOutEntityMetadata extends Packet {
+public class PacketPlayOutEntityMetadata implements Packet {
 
     private int a;
     private List b;
@@ -16,23 +16,24 @@ public class PacketPlayOutEntityMetadata extends Packet {
         } else {
             this.b = datawatcher.b();
         }
+
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.readInt();
+        this.a = packetdataserializer.e();
         this.b = DataWatcher.b(packetdataserializer);
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeInt(this.a);
+        packetdataserializer.b(this.a);
         DataWatcher.a(this.b, packetdataserializer);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

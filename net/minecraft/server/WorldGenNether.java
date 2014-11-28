@@ -1,17 +1,17 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.List;
 
 public class WorldGenNether extends StructureGenerator {
 
-    private List e = new ArrayList();
+    private List d = Lists.newArrayList();
 
     public WorldGenNether() {
-        this.e.add(new BiomeMeta(EntityBlaze.class, 10, 2, 3));
-        this.e.add(new BiomeMeta(EntityPigZombie.class, 5, 4, 4));
-        this.e.add(new BiomeMeta(EntitySkeleton.class, 10, 4, 4));
-        this.e.add(new BiomeMeta(EntityMagmaCube.class, 3, 4, 4));
+        this.d.add(new BiomeMeta(EntityBlaze.class, 10, 2, 3));
+        this.d.add(new BiomeMeta(EntityPigZombie.class, 5, 4, 4));
+        this.d.add(new BiomeMeta(EntitySkeleton.class, 10, 4, 4));
+        this.d.add(new BiomeMeta(EntityMagmaCube.class, 3, 4, 4));
     }
 
     public String a() {
@@ -19,7 +19,7 @@ public class WorldGenNether extends StructureGenerator {
     }
 
     public List b() {
-        return this.e;
+        return this.d;
     }
 
     protected boolean a(int i, int j) {

@@ -2,8 +2,11 @@ package net.minecraft.server;
 
 public abstract class EntityAgeable extends EntityCreature {
 
-    private float bp = -1.0F;
-    private float bq;
+    protected int a;
+    protected int b;
+    protected int c;
+    private float bk = -1.0F;
+    private float bl;
 
     public EntityAgeable(World world) {
         super(world);
@@ -14,15 +17,15 @@ public abstract class EntityAgeable extends EntityCreature {
     public boolean a(EntityHuman entityhuman) {
         ItemStack itemstack = entityhuman.inventory.getItemInHand();
 
-        if (itemstack != null && itemstack.getItem() == Items.MONSTER_EGG) {
+        if (itemstack != null && itemstack.getItem() == Items.SPAWN_EGG) {
             if (!this.world.isStatic) {
                 Class oclass = EntityTypes.a(itemstack.getData());
 
-                if (oclass != null && oclass.isAssignableFrom(this.getClass())) {
+                if (oclass != null && this.getClass() == oclass) {
                     EntityAgeable entityageable = this.createChild(this);
 
                     if (entityageable != null) {
-                        entityageable.setAge(-24000);
+                        entityageable.setAgeRaw(-24000);
                         entityageable.setPositionRotation(this.locX, this.locY, this.locZ, 0.0F, 0.0F);
                         this.world.addEntity(entityageable);
                         if (itemstack.hasName()) {
@@ -45,57 +48,95 @@ public abstract class EntityAgeable extends EntityCreature {
         }
     }
 
-    protected void c() {
-        super.c();
-        this.datawatcher.a(12, new Integer(0));
+    protected void h() {
+        super.h();
+        this.datawatcher.a(12, Byte.valueOf((byte) 0));
     }
 
     public int getAge() {
-        return this.datawatcher.getInt(12);
+        return this.world.isStatic ? this.datawatcher.getByte(12) : this.a;
     }
 
-    public void a(int i) {
+    public void setAge(int i, boolean flag) {
         int j = this.getAge();
+        int k = j;
 
         j += i * 20;
         if (j > 0) {
             j = 0;
+            if (k < 0) {
+                this.n();
+            }
         }
 
-        this.setAge(j);
+        int l = j - k;
+
+        this.setAgeRaw(j);
+        if (flag) {
+            this.b += l;
+            if (this.c == 0) {
+                this.c = 40;
+            }
+        }
+
+        if (this.getAge() == 0) {
+            this.setAgeRaw(this.b);
+        }
+
     }
 
     public void setAge(int i) {
-        this.datawatcher.watch(12, Integer.valueOf(i));
+        this.setAge(i, false);
+    }
+
+    public void setAgeRaw(int i) {
+        this.datawatcher.watch(12, Byte.valueOf((byte) MathHelper.clamp(i, -1, 1)));
+        this.a = i;
         this.a(this.isBaby());
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setInt("Age", this.getAge());
+        nbttagcompound.setInt("ForcedAge", this.b);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.setAge(nbttagcompound.getInt("Age"));
+        this.setAgeRaw(nbttagcompound.getInt("Age"));
+        this.b = nbttagcompound.getInt("ForcedAge");
     }
 
-    public void e() {
-        super.e();
+    public void m() {
+        super.m();
         if (this.world.isStatic) {
+            if (this.c > 0) {
+                if (this.c % 4 == 0) {
+                    this.world.addParticle(EnumParticle.VILLAGER_HAPPY, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, 0.0D, 0.0D, 0.0D, new int[0]);
+                }
+
+                --this.c;
+            }
+
             this.a(this.isBaby());
         } else {
             int i = this.getAge();
 
             if (i < 0) {
                 ++i;
-                this.setAge(i);
+                this.setAgeRaw(i);
+                if (i == 0) {
+                    this.n();
+                }
             } else if (i > 0) {
                 --i;
-                this.setAge(i);
+                this.setAgeRaw(i);
             }
         }
+
     }
+
+    protected void n() {}
 
     public boolean isBaby() {
         return this.getAge() < 0;
@@ -106,16 +147,17 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     protected final void a(float f, float f1) {
-        boolean flag = this.bp > 0.0F;
+        boolean flag = this.bk > 0.0F;
 
-        this.bp = f;
-        this.bq = f1;
+        this.bk = f;
+        this.bl = f1;
         if (!flag) {
             this.a(1.0F);
         }
+
     }
 
     protected final void a(float f) {
-        super.a(this.bp * f, this.bq * f);
+        super.a(this.bk * f, this.bl * f);
     }
 }

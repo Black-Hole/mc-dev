@@ -7,11 +7,11 @@ public class BlockWorkbench extends Block {
         this.a(CreativeModeTab.c);
     }
 
-    public boolean interact(World world, int i, int j, int k, EntityHuman entityhuman, int l, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isStatic) {
             return true;
         } else {
-            entityhuman.startCrafting(i, j, k);
+            entityhuman.openTileEntity(new TileEntityContainerWorkbench(world, blockposition));
             return true;
         }
     }

@@ -6,44 +6,41 @@ public class BiomeSwamp extends BiomeBase {
 
     protected BiomeSwamp(int i) {
         super(i);
-        this.ar.x = 2;
-        this.ar.y = 1;
-        this.ar.A = 1;
-        this.ar.B = 8;
-        this.ar.C = 10;
-        this.ar.G = 1;
-        this.ar.w = 4;
-        this.ar.F = 0;
-        this.ar.E = 0;
-        this.ar.z = 5;
-        this.aq = 14745518;
-        this.as.add(new BiomeMeta(EntitySlime.class, 1, 1, 1));
+        this.as.A = 2;
+        this.as.B = 1;
+        this.as.D = 1;
+        this.as.E = 8;
+        this.as.F = 10;
+        this.as.J = 1;
+        this.as.z = 4;
+        this.as.I = 0;
+        this.as.H = 0;
+        this.as.C = 5;
+        this.ar = 14745518;
+        this.at.add(new BiomeMeta(EntitySlime.class, 1, 1, 1));
     }
 
     public WorldGenTreeAbstract a(Random random) {
-        return this.aB;
+        return this.aC;
     }
 
-    public String a(Random random, int i, int j, int k) {
-        return BlockFlowers.a[1];
+    public EnumFlowerVarient a(Random random, BlockPosition blockposition) {
+        return EnumFlowerVarient.BLUE_ORCHID;
     }
 
-    public void a(World world, Random random, Block[] ablock, byte[] abyte, int i, int j, double d0) {
-        double d1 = ad.a((double) i * 0.25D, (double) j * 0.25D);
+    public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
+        double d1 = BiomeSwamp.af.a((double) i * 0.25D, (double) j * 0.25D);
 
         if (d1 > 0.0D) {
             int k = i & 15;
             int l = j & 15;
-            int i1 = ablock.length / 256;
 
-            for (int j1 = 255; j1 >= 0; --j1) {
-                int k1 = (l * 16 + k) * i1 + j1;
-
-                if (ablock[k1] == null || ablock[k1].getMaterial() != Material.AIR) {
-                    if (j1 == 62 && ablock[k1] != Blocks.STATIONARY_WATER) {
-                        ablock[k1] = Blocks.STATIONARY_WATER;
+            for (int i1 = 255; i1 >= 0; --i1) {
+                if (chunksnapshot.a(l, i1, k).getBlock().getMaterial() != Material.AIR) {
+                    if (i1 == 62 && chunksnapshot.a(l, i1, k).getBlock() != Blocks.WATER) {
+                        chunksnapshot.a(l, i1, k, Blocks.WATER.getBlockData());
                         if (d1 < 0.12D) {
-                            ablock[k1 + 1] = Blocks.WATER_LILY;
+                            chunksnapshot.a(l, i1 + 1, k, Blocks.WATERLILY.getBlockData());
                         }
                     }
                     break;
@@ -51,6 +48,6 @@ public class BiomeSwamp extends BiomeBase {
             }
         }
 
-        this.b(world, random, ablock, abyte, i, j, d0);
+        this.b(world, random, chunksnapshot, i, j, d0);
     }
 }

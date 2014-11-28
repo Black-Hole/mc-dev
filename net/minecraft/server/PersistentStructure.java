@@ -2,22 +2,22 @@ package net.minecraft.server;
 
 public class PersistentStructure extends PersistentBase {
 
-    private NBTTagCompound a = new NBTTagCompound();
+    private NBTTagCompound b = new NBTTagCompound();
 
     public PersistentStructure(String s) {
         super(s);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        this.a = nbttagcompound.getCompound("Features");
+        this.b = nbttagcompound.getCompound("Features");
     }
 
     public void b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.set("Features", this.a);
+        nbttagcompound.set("Features", this.b);
     }
 
     public void a(NBTTagCompound nbttagcompound, int i, int j) {
-        this.a.set(b(i, j), nbttagcompound);
+        this.b.set(b(i, j), nbttagcompound);
     }
 
     public static String b(int i, int j) {
@@ -25,6 +25,6 @@ public class PersistentStructure extends PersistentBase {
     }
 
     public NBTTagCompound a() {
-        return this.a;
+        return this.b;
     }
 }

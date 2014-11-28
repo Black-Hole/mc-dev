@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public class EnchantmentLure extends Enchantment {
 
-    protected EnchantmentLure(int i, int j, EnchantmentSlotType enchantmentslottype) {
-        super(i, j, enchantmentslottype);
-        this.b("fishingSpeed");
+    protected EnchantmentLure(int i, MinecraftKey minecraftkey, int j, EnchantmentSlotType enchantmentslottype) {
+        super(i, minecraftkey, j, enchantmentslottype);
+        this.c("fishingSpeed");
     }
 
     public int a(int i) {

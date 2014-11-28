@@ -1,45 +1,41 @@
 package net.minecraft.server;
 
-public class PacketHandshakingInSetProtocol extends Packet {
+public class PacketHandshakingInSetProtocol implements Packet {
 
     private int a;
-    private String b;
-    private int c;
+    public String b;
+    public int c;
     private EnumProtocol d;
 
     public PacketHandshakingInSetProtocol() {}
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.a();
+        this.a = packetdataserializer.e();
         this.b = packetdataserializer.c(255);
         this.c = packetdataserializer.readUnsignedShort();
-        this.d = EnumProtocol.a(packetdataserializer.a());
+        this.d = EnumProtocol.a(packetdataserializer.e());
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
         packetdataserializer.b(this.a);
         packetdataserializer.a(this.b);
         packetdataserializer.writeShort(this.c);
-        packetdataserializer.b(this.d.c());
+        packetdataserializer.b(this.d.a());
     }
 
     public void a(PacketHandshakingInListener packethandshakinginlistener) {
         packethandshakinginlistener.a(this);
     }
 
-    public boolean a() {
-        return true;
-    }
-
-    public EnumProtocol c() {
+    public EnumProtocol a() {
         return this.d;
     }
 
-    public int d() {
+    public int b() {
         return this.a;
     }
 
-    public void handle(PacketListener packetlistener) {
+    public void a(PacketListener packetlistener) {
         this.a((PacketHandshakingInListener) packetlistener);
     }
 }

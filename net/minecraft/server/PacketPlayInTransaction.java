@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayInTransaction extends Packet {
+public class PacketPlayInTransaction implements Packet {
 
     private int a;
     private short b;
@@ -8,8 +8,8 @@ public class PacketPlayInTransaction extends Packet {
 
     public PacketPlayInTransaction() {}
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
@@ -24,19 +24,15 @@ public class PacketPlayInTransaction extends Packet {
         packetdataserializer.writeByte(this.c ? 1 : 0);
     }
 
-    public String b() {
-        return String.format("id=%d, uid=%d, accepted=%b", new Object[] { Integer.valueOf(this.a), Short.valueOf(this.b), Boolean.valueOf(this.c)});
-    }
-
-    public int c() {
+    public int a() {
         return this.a;
     }
 
-    public short d() {
+    public short b() {
         return this.b;
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

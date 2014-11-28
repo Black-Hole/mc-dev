@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 public class ShapedRecipes implements IRecipe {
 
-    private int width;
-    private int height;
-    private ItemStack[] items;
-    private ItemStack result;
+    private final int width;
+    private final int height;
+    private final ItemStack[] items;
+    private final ItemStack result;
     private boolean e;
 
     public ShapedRecipes(int i, int j, ItemStack[] aitemstack, ItemStack itemstack) {
@@ -17,6 +17,20 @@ public class ShapedRecipes implements IRecipe {
 
     public ItemStack b() {
         return this.result;
+    }
+
+    public ItemStack[] b(InventoryCrafting inventorycrafting) {
+        ItemStack[] aitemstack = new ItemStack[inventorycrafting.getSize()];
+
+        for (int i = 0; i < aitemstack.length; ++i) {
+            ItemStack itemstack = inventorycrafting.getItem(i);
+
+            if (itemstack != null && itemstack.getItem().r()) {
+                aitemstack[i] = new ItemStack(itemstack.getItem().q());
+            }
+        }
+
+        return aitemstack;
     }
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
@@ -50,7 +64,7 @@ public class ShapedRecipes implements IRecipe {
                     }
                 }
 
-                ItemStack itemstack1 = inventorycrafting.b(k, l);
+                ItemStack itemstack1 = inventorycrafting.c(k, l);
 
                 if (itemstack1 != null || itemstack != null) {
                     if (itemstack1 == null && itemstack != null || itemstack1 != null && itemstack == null) {
@@ -79,7 +93,7 @@ public class ShapedRecipes implements IRecipe {
                 ItemStack itemstack1 = inventorycrafting.getItem(i);
 
                 if (itemstack1 != null && itemstack1.hasTag()) {
-                    itemstack.setTag((NBTTagCompound) itemstack1.tag.clone());
+                    itemstack.setTag((NBTTagCompound) itemstack1.getTag().clone());
                 }
             }
         }

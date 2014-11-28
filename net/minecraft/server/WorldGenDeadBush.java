@@ -4,26 +4,20 @@ import java.util.Random;
 
 public class WorldGenDeadBush extends WorldGenerator {
 
-    private Block a;
+    public WorldGenDeadBush() {}
 
-    public WorldGenDeadBush(Block block) {
-        this.a = block;
-    }
-
-    public boolean generate(World world, Random random, int i, int j, int k) {
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
         Block block;
 
-        while (((block = world.getType(i, j, k)).getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) && j > 0) {
-            --j;
+        while (((block = world.getType(blockposition).getBlock()).getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) && blockposition.getY() > 0) {
+            blockposition = blockposition.down();
         }
 
-        for (int l = 0; l < 4; ++l) {
-            int i1 = i + random.nextInt(8) - random.nextInt(8);
-            int j1 = j + random.nextInt(4) - random.nextInt(4);
-            int k1 = k + random.nextInt(8) - random.nextInt(8);
+        for (int i = 0; i < 4; ++i) {
+            BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 
-            if (world.isEmpty(i1, j1, k1) && this.a.j(world, i1, j1, k1)) {
-                world.setTypeAndData(i1, j1, k1, this.a, 0, 2);
+            if (world.isEmpty(blockposition1) && Blocks.DEADBUSH.f(world, blockposition1, Blocks.DEADBUSH.getBlockData())) {
+                world.setTypeAndData(blockposition1, Blocks.DEADBUSH.getBlockData(), 2);
             }
         }
 

@@ -1,13 +1,13 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
 
 public class FileIOThread implements Runnable {
 
-    public static final FileIOThread a = new FileIOThread();
-    private List b = Collections.synchronizedList(new ArrayList());
+    private static final FileIOThread a = new FileIOThread();
+    private List b = Collections.synchronizedList(Lists.newArrayList());
     private volatile long c;
     private volatile long d;
     private volatile boolean e;
@@ -19,11 +19,17 @@ public class FileIOThread implements Runnable {
         thread.start();
     }
 
-    public void run() {
-        this.b();
+    public static FileIOThread a() {
+        return FileIOThread.a;
     }
 
-    private void b() {
+    public void run() {
+        while (true) {
+            this.c();
+        }
+    }
+
+    private void c() {
         for (int i = 0; i < this.b.size(); ++i) {
             IAsyncChunkSaver iasyncchunksaver = (IAsyncChunkSaver) this.b.get(i);
             boolean flag = iasyncchunksaver.c();
@@ -47,6 +53,7 @@ public class FileIOThread implements Runnable {
                 interruptedexception1.printStackTrace();
             }
         }
+
     }
 
     public void a(IAsyncChunkSaver iasyncchunksaver) {
@@ -56,7 +63,7 @@ public class FileIOThread implements Runnable {
         }
     }
 
-    public void a() {
+    public void b() {
         this.e = true;
 
         while (this.c != this.d) {

@@ -1,218 +1,76 @@
 package net.minecraft.server;
 
-import java.util.List;
-
 public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
 
-    private int love;
-    private int bq;
-    private EntityHuman br;
+    protected Block bl;
+    private int bk;
+    private EntityHuman bm;
 
     public EntityAnimal(World world) {
         super(world);
+        this.bl = Blocks.GRASS;
     }
 
-    protected void bp() {
+    protected void E() {
         if (this.getAge() != 0) {
-            this.love = 0;
+            this.bk = 0;
         }
 
-        super.bp();
+        super.E();
     }
 
-    public void e() {
-        super.e();
+    public void m() {
+        super.m();
         if (this.getAge() != 0) {
-            this.love = 0;
+            this.bk = 0;
         }
 
-        if (this.love > 0) {
-            --this.love;
-            String s = "heart";
-
-            if (this.love % 10 == 0) {
+        if (this.bk > 0) {
+            --this.bk;
+            if (this.bk % 10 == 0) {
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = this.random.nextGaussian() * 0.02D;
                 double d2 = this.random.nextGaussian() * 0.02D;
 
-                this.world.addParticle(s, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
-            }
-        } else {
-            this.bq = 0;
-        }
-    }
-
-    protected void a(Entity entity, float f) {
-        if (entity instanceof EntityHuman) {
-            if (f < 3.0F) {
-                double d0 = entity.locX - this.locX;
-                double d1 = entity.locZ - this.locZ;
-
-                this.yaw = (float) (Math.atan2(d1, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
-                this.bn = true;
-            }
-
-            EntityHuman entityhuman = (EntityHuman) entity;
-
-            if (entityhuman.bF() == null || !this.c(entityhuman.bF())) {
-                this.target = null;
-            }
-        } else if (entity instanceof EntityAnimal) {
-            EntityAnimal entityanimal = (EntityAnimal) entity;
-
-            if (this.getAge() > 0 && entityanimal.getAge() < 0) {
-                if ((double) f < 2.5D) {
-                    this.bn = true;
-                }
-            } else if (this.love > 0 && entityanimal.love > 0) {
-                if (entityanimal.target == null) {
-                    entityanimal.target = this;
-                }
-
-                if (entityanimal.target == this && (double) f < 3.5D) {
-                    ++entityanimal.love;
-                    ++this.love;
-                    ++this.bq;
-                    if (this.bq % 4 == 0) {
-                        this.world.addParticle("heart", this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, 0.0D, 0.0D, 0.0D);
-                    }
-
-                    if (this.bq == 60) {
-                        this.b((EntityAnimal) entity);
-                    }
-                } else {
-                    this.bq = 0;
-                }
-            } else {
-                this.bq = 0;
-                this.target = null;
+                this.world.addParticle(EnumParticle.HEART, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2, new int[0]);
             }
         }
-    }
 
-    private void b(EntityAnimal entityanimal) {
-        EntityAgeable entityageable = this.createChild(entityanimal);
-
-        if (entityageable != null) {
-            if (this.br == null && entityanimal.cd() != null) {
-                this.br = entityanimal.cd();
-            }
-
-            if (this.br != null) {
-                this.br.a(StatisticList.x);
-                if (this instanceof EntityCow) {
-                    this.br.a((Statistic) AchievementList.H);
-                }
-            }
-
-            this.setAge(6000);
-            entityanimal.setAge(6000);
-            this.love = 0;
-            this.bq = 0;
-            this.target = null;
-            entityanimal.target = null;
-            entityanimal.bq = 0;
-            entityanimal.love = 0;
-            entityageable.setAge(-24000);
-            entityageable.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
-
-            for (int i = 0; i < 7; ++i) {
-                double d0 = this.random.nextGaussian() * 0.02D;
-                double d1 = this.random.nextGaussian() * 0.02D;
-                double d2 = this.random.nextGaussian() * 0.02D;
-
-                this.world.addParticle("heart", this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
-            }
-
-            this.world.addEntity(entityageable);
-        }
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (this.isInvulnerable()) {
+        if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            this.bo = 60;
-            if (!this.bk()) {
-                AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.d);
-
-                if (attributeinstance.a(h) == null) {
-                    attributeinstance.a(i);
-                }
-            }
-
-            this.target = null;
-            this.love = 0;
+            this.bk = 0;
             return super.damageEntity(damagesource, f);
         }
     }
 
-    public float a(int i, int j, int k) {
-        return this.world.getType(i, j - 1, k) == Blocks.GRASS ? 10.0F : this.world.n(i, j, k) - 0.5F;
+    public float a(BlockPosition blockposition) {
+        return this.world.getType(blockposition.down()).getBlock() == Blocks.GRASS ? 10.0F : this.world.o(blockposition) - 0.5F;
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("InLove", this.love);
+        nbttagcompound.setInt("InLove", this.bk);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.love = nbttagcompound.getInt("InLove");
+        this.bk = nbttagcompound.getInt("InLove");
     }
 
-    protected Entity findTarget() {
-        if (this.bo > 0) {
-            return null;
-        } else {
-            float f = 8.0F;
-            List list;
-            int i;
-            EntityAnimal entityanimal;
-
-            if (this.love > 0) {
-                list = this.world.a(this.getClass(), this.boundingBox.grow((double) f, (double) f, (double) f));
-
-                for (i = 0; i < list.size(); ++i) {
-                    entityanimal = (EntityAnimal) list.get(i);
-                    if (entityanimal != this && entityanimal.love > 0) {
-                        return entityanimal;
-                    }
-                }
-            } else if (this.getAge() == 0) {
-                list = this.world.a(EntityHuman.class, this.boundingBox.grow((double) f, (double) f, (double) f));
-
-                for (i = 0; i < list.size(); ++i) {
-                    EntityHuman entityhuman = (EntityHuman) list.get(i);
-
-                    if (entityhuman.bF() != null && this.c(entityhuman.bF())) {
-                        return entityhuman;
-                    }
-                }
-            } else if (this.getAge() > 0) {
-                list = this.world.a(this.getClass(), this.boundingBox.grow((double) f, (double) f, (double) f));
-
-                for (i = 0; i < list.size(); ++i) {
-                    entityanimal = (EntityAnimal) list.get(i);
-                    if (entityanimal != this && entityanimal.getAge() < 0) {
-                        return entityanimal;
-                    }
-                }
-            }
-
-            return null;
-        }
-    }
-
-    public boolean canSpawn() {
+    public boolean bQ() {
         int i = MathHelper.floor(this.locX);
-        int j = MathHelper.floor(this.boundingBox.b);
+        int j = MathHelper.floor(this.getBoundingBox().b);
         int k = MathHelper.floor(this.locZ);
+        BlockPosition blockposition = new BlockPosition(i, j, k);
 
-        return this.world.getType(i, j - 1, k) == Blocks.GRASS && this.world.j(i, j, k) > 8 && super.canSpawn();
+        return this.world.getType(blockposition.down()).getBlock() == this.bl && this.world.k(blockposition) > 8 && super.bQ();
     }
 
-    public int q() {
+    public int w() {
         return 120;
     }
 
@@ -224,48 +82,59 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
         return 1 + this.world.random.nextInt(3);
     }
 
-    public boolean c(ItemStack itemstack) {
-        return itemstack.getItem() == Items.WHEAT;
+    public boolean d(ItemStack itemstack) {
+        return itemstack == null ? false : itemstack.getItem() == Items.WHEAT;
     }
 
     public boolean a(EntityHuman entityhuman) {
         ItemStack itemstack = entityhuman.inventory.getItemInHand();
 
-        if (itemstack != null && this.c(itemstack) && this.getAge() == 0 && this.love <= 0) {
-            if (!entityhuman.abilities.canInstantlyBuild) {
-                --itemstack.count;
-                if (itemstack.count <= 0) {
-                    entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, (ItemStack) null);
-                }
+        if (itemstack != null) {
+            if (this.d(itemstack) && this.getAge() == 0 && this.bk <= 0) {
+                this.a(entityhuman, itemstack);
+                this.c(entityhuman);
+                return true;
             }
 
-            this.f(entityhuman);
-            return true;
-        } else {
-            return super.a(entityhuman);
+            if (this.isBaby() && this.d(itemstack)) {
+                this.a(entityhuman, itemstack);
+                this.setAge((int) ((float) (-this.getAge() / 20) * 0.1F), true);
+                return true;
+            }
         }
+
+        return super.a(entityhuman);
     }
 
-    public void f(EntityHuman entityhuman) {
-        this.love = 600;
-        this.br = entityhuman;
-        this.target = null;
+    protected void a(EntityHuman entityhuman, ItemStack itemstack) {
+        if (!entityhuman.abilities.canInstantlyBuild) {
+            --itemstack.count;
+            if (itemstack.count <= 0) {
+                entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, (ItemStack) null);
+            }
+        }
+
+    }
+
+    public void c(EntityHuman entityhuman) {
+        this.bk = 600;
+        this.bm = entityhuman;
         this.world.broadcastEntityEffect(this, (byte) 18);
     }
 
-    public EntityHuman cd() {
-        return this.br;
+    public EntityHuman co() {
+        return this.bm;
     }
 
-    public boolean ce() {
-        return this.love > 0;
+    public boolean cp() {
+        return this.bk > 0;
     }
 
-    public void cf() {
-        this.love = 0;
+    public void cq() {
+        this.bk = 0;
     }
 
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (entityanimal.getClass() != this.getClass() ? false : this.ce() && entityanimal.ce());
+        return entityanimal == this ? false : (entityanimal.getClass() != this.getClass() ? false : this.cp() && entityanimal.cp());
     }
 }

@@ -10,11 +10,11 @@ public class WorldGenStrongholdStairs extends WorldGenStrongholdPiece {
 
     public WorldGenStrongholdStairs() {}
 
-    public WorldGenStrongholdStairs(int i, Random random, StructureBoundingBox structureboundingbox, int j) {
+    public WorldGenStrongholdStairs(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
         super(i);
-        this.g = j;
+        this.m = enumdirection;
         this.d = this.a(random);
-        this.f = structureboundingbox;
+        this.l = structureboundingbox;
         this.a = random.nextInt(2) == 0;
         this.b = random.nextInt(2) == 0;
     }
@@ -40,12 +40,13 @@ public class WorldGenStrongholdStairs extends WorldGenStrongholdPiece {
         if (this.b) {
             this.c((WorldGenStrongholdStart) structurepiece, list, random, 1, 2);
         }
+
     }
 
-    public static WorldGenStrongholdStairs a(List list, Random random, int i, int j, int k, int l, int i1) {
-        StructureBoundingBox structureboundingbox = StructureBoundingBox.a(i, j, k, -1, -1, 0, 5, 5, 7, l);
+    public static WorldGenStrongholdStairs a(List list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
+        StructureBoundingBox structureboundingbox = StructureBoundingBox.a(i, j, k, -1, -1, 0, 5, 5, 7, enumdirection);
 
-        return a(structureboundingbox) && StructurePiece.a(list, structureboundingbox) == null ? new WorldGenStrongholdStairs(i1, random, structureboundingbox, l) : null;
+        return a(structureboundingbox) && StructurePiece.a(list, structureboundingbox) == null ? new WorldGenStrongholdStairs(l, random, structureboundingbox, enumdirection) : null;
     }
 
     public boolean a(World world, Random random, StructureBoundingBox structureboundingbox) {
@@ -54,17 +55,17 @@ public class WorldGenStrongholdStairs extends WorldGenStrongholdPiece {
         } else {
             this.a(world, structureboundingbox, 0, 0, 0, 4, 4, 6, true, random, WorldGenStrongholdPieces.c());
             this.a(world, random, structureboundingbox, this.d, 1, 1, 0);
-            this.a(world, random, structureboundingbox, WorldGenStrongholdDoorType.a, 1, 1, 6);
-            this.a(world, structureboundingbox, random, 0.1F, 1, 2, 1, Blocks.TORCH, 0);
-            this.a(world, structureboundingbox, random, 0.1F, 3, 2, 1, Blocks.TORCH, 0);
-            this.a(world, structureboundingbox, random, 0.1F, 1, 2, 5, Blocks.TORCH, 0);
-            this.a(world, structureboundingbox, random, 0.1F, 3, 2, 5, Blocks.TORCH, 0);
+            this.a(world, random, structureboundingbox, WorldGenStrongholdDoorType.OPENING, 1, 1, 6);
+            this.a(world, structureboundingbox, random, 0.1F, 1, 2, 1, Blocks.TORCH.getBlockData());
+            this.a(world, structureboundingbox, random, 0.1F, 3, 2, 1, Blocks.TORCH.getBlockData());
+            this.a(world, structureboundingbox, random, 0.1F, 1, 2, 5, Blocks.TORCH.getBlockData());
+            this.a(world, structureboundingbox, random, 0.1F, 3, 2, 5, Blocks.TORCH.getBlockData());
             if (this.a) {
-                this.a(world, structureboundingbox, 0, 1, 2, 0, 3, 4, Blocks.AIR, Blocks.AIR, false);
+                this.a(world, structureboundingbox, 0, 1, 2, 0, 3, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             }
 
             if (this.b) {
-                this.a(world, structureboundingbox, 4, 1, 2, 4, 3, 4, Blocks.AIR, Blocks.AIR, false);
+                this.a(world, structureboundingbox, 4, 1, 2, 4, 3, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             }
 
             return true;

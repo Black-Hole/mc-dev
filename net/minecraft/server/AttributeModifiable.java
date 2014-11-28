@@ -1,13 +1,13 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
-import net.minecraft.util.com.google.common.collect.Maps;
 
 public class AttributeModifiable implements AttributeInstance {
 
@@ -26,8 +26,9 @@ public class AttributeModifiable implements AttributeInstance {
         this.f = iattribute.b();
 
         for (int i = 0; i < 3; ++i) {
-            this.c.put(Integer.valueOf(i), new HashSet());
+            this.c.put(Integer.valueOf(i), Sets.newHashSet());
         }
+
     }
 
     public IAttribute getAttribute() {
@@ -50,7 +51,7 @@ public class AttributeModifiable implements AttributeInstance {
     }
 
     public Collection c() {
-        HashSet hashset = new HashSet();
+        HashSet hashset = Sets.newHashSet();
 
         for (int i = 0; i < 3; ++i) {
             hashset.addAll(this.a(i));
@@ -63,14 +64,18 @@ public class AttributeModifiable implements AttributeInstance {
         return (AttributeModifier) this.e.get(uuid);
     }
 
-    public void a(AttributeModifier attributemodifier) {
+    public boolean a(AttributeModifier attributemodifier) {
+        return this.e.get(attributemodifier.a()) != null;
+    }
+
+    public void b(AttributeModifier attributemodifier) {
         if (this.a(attributemodifier.a()) != null) {
             throw new IllegalArgumentException("Modifier is already applied on this attribute!");
         } else {
             Object object = (Set) this.d.get(attributemodifier.b());
 
             if (object == null) {
-                object = new HashSet();
+                object = Sets.newHashSet();
                 this.d.put(attributemodifier.b(), object);
             }
 
@@ -81,12 +86,12 @@ public class AttributeModifiable implements AttributeInstance {
         }
     }
 
-    private void f() {
+    protected void f() {
         this.g = true;
-        this.a.a(this);
+        this.a.a((AttributeInstance) this);
     }
 
-    public void b(AttributeModifier attributemodifier) {
+    public void c(AttributeModifier attributemodifier) {
         for (int i = 0; i < 3; ++i) {
             Set set = (Set) this.c.get(Integer.valueOf(i));
 
@@ -120,7 +125,7 @@ public class AttributeModifiable implements AttributeInstance {
 
         AttributeModifier attributemodifier;
 
-        for (Iterator iterator = this.a(0).iterator(); iterator.hasNext(); d0 += attributemodifier.d()) {
+        for (Iterator iterator = this.b(0).iterator(); iterator.hasNext(); d0 += attributemodifier.d()) {
             attributemodifier = (AttributeModifier) iterator.next();
         }
 
@@ -129,14 +134,28 @@ public class AttributeModifiable implements AttributeInstance {
         Iterator iterator1;
         AttributeModifier attributemodifier1;
 
-        for (iterator1 = this.a(1).iterator(); iterator1.hasNext(); d1 += d0 * attributemodifier1.d()) {
+        for (iterator1 = this.b(1).iterator(); iterator1.hasNext(); d1 += d0 * attributemodifier1.d()) {
             attributemodifier1 = (AttributeModifier) iterator1.next();
         }
 
-        for (iterator1 = this.a(2).iterator(); iterator1.hasNext(); d1 *= 1.0D + attributemodifier1.d()) {
+        for (iterator1 = this.b(2).iterator(); iterator1.hasNext(); d1 *= 1.0D + attributemodifier1.d()) {
             attributemodifier1 = (AttributeModifier) iterator1.next();
         }
 
         return this.b.a(d1);
+    }
+
+    private Collection b(int i) {
+        HashSet hashset = Sets.newHashSet(this.a(i));
+
+        for (IAttribute iattribute = this.b.d(); iattribute != null; iattribute = iattribute.d()) {
+            AttributeInstance attributeinstance = this.a.a(iattribute);
+
+            if (attributeinstance != null) {
+                hashset.addAll(attributeinstance.a(i));
+            }
+        }
+
+        return hashset;
     }
 }

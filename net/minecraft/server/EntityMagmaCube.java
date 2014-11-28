@@ -7,28 +7,32 @@ public class EntityMagmaCube extends EntitySlime {
         this.fireProof = true;
     }
 
-    protected void aD() {
-        super.aD();
+    protected void aW() {
+        super.aW();
         this.getAttributeInstance(GenericAttributes.d).setValue(0.20000000298023224D);
     }
 
-    public boolean canSpawn() {
-        return this.world.difficulty != EnumDifficulty.PEACEFUL && this.world.b(this.boundingBox) && this.world.getCubes(this, this.boundingBox).isEmpty() && !this.world.containsLiquid(this.boundingBox);
+    public boolean bQ() {
+        return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
-    public int aV() {
+    public boolean canSpawn() {
+        return this.world.a(this.getBoundingBox(), (Entity) this) && this.world.getCubes(this, this.getBoundingBox()).isEmpty() && !this.world.containsLiquid(this.getBoundingBox());
+    }
+
+    public int bq() {
         return this.getSize() * 3;
     }
 
-    public float d(float f) {
+    public float c(float f) {
         return 1.0F;
     }
 
-    protected String bP() {
-        return "flame";
+    protected EnumParticle n() {
+        return EnumParticle.FLAME;
     }
 
-    protected EntitySlime bQ() {
+    protected EntitySlime cd() {
         return new EntityMagmaCube(this.world);
     }
 
@@ -50,44 +54,46 @@ public class EntityMagmaCube extends EntitySlime {
                 this.a(item, 1);
             }
         }
+
     }
 
     public boolean isBurning() {
         return false;
     }
 
-    protected int bR() {
-        return super.bR() * 4;
+    protected int ce() {
+        return super.ce() * 4;
     }
 
-    protected void bS() {
-        this.h *= 0.9F;
+    protected void cf() {
+        this.a *= 0.9F;
     }
 
-    protected void bj() {
+    protected void bE() {
         this.motY = (double) (0.42F + (float) this.getSize() * 0.1F);
-        this.al = true;
+        this.ai = true;
     }
 
-    protected void b(float f) {}
+    protected void bG() {
+        this.motY = (double) (0.22F + (float) this.getSize() * 0.05F);
+        this.ai = true;
+    }
 
-    protected boolean bT() {
+    public void e(float f, float f1) {}
+
+    protected boolean cg() {
         return true;
     }
 
-    protected int bU() {
-        return super.bU() + 2;
+    protected int ch() {
+        return super.ch() + 2;
     }
 
-    protected String bV() {
+    protected String ci() {
         return this.getSize() > 1 ? "mob.magmacube.big" : "mob.magmacube.small";
     }
 
-    public boolean P() {
-        return false;
-    }
-
-    protected boolean bW() {
+    protected boolean cj() {
         return true;
     }
 }

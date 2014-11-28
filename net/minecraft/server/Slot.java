@@ -2,17 +2,17 @@ package net.minecraft.server;
 
 public class Slot {
 
-    private final int index;
+    public final int index;
     public final IInventory inventory;
     public int rawSlotIndex;
-    public int h;
-    public int i;
+    public int f;
+    public int g;
 
     public Slot(IInventory iinventory, int i, int j, int k) {
         this.inventory = iinventory;
         this.index = i;
-        this.h = j;
-        this.i = k;
+        this.f = j;
+        this.g = k;
     }
 
     public void a(ItemStack itemstack, ItemStack itemstack1) {
@@ -23,13 +23,14 @@ public class Slot {
                 if (i > 0) {
                     this.a(itemstack, i);
                 }
+
             }
         }
     }
 
     protected void a(ItemStack itemstack, int i) {}
 
-    protected void b(ItemStack itemstack) {}
+    protected void c(ItemStack itemstack) {}
 
     public void a(EntityHuman entityhuman, ItemStack itemstack) {
         this.f();
@@ -58,6 +59,10 @@ public class Slot {
 
     public int getMaxStackSize() {
         return this.inventory.getMaxStackSize();
+    }
+
+    public int getMaxStackSize(ItemStack itemstack) {
+        return this.getMaxStackSize();
     }
 
     public ItemStack a(int i) {

@@ -4,27 +4,27 @@ final class ChatStyleRoot extends ChatModifier {
 
     ChatStyleRoot() {}
 
-    public EnumChatFormat a() {
+    public EnumChatFormat getColor() {
         return null;
     }
 
-    public boolean b() {
+    public boolean isBold() {
         return false;
     }
 
-    public boolean c() {
+    public boolean isItalic() {
         return false;
     }
 
-    public boolean d() {
+    public boolean isStrikethrough() {
         return false;
     }
 
-    public boolean e() {
+    public boolean isUnderlined() {
         return false;
     }
 
-    public boolean f() {
+    public boolean isRandom() {
         return false;
     }
 
@@ -33,6 +33,10 @@ final class ChatStyleRoot extends ChatModifier {
     }
 
     public ChatHoverable i() {
+        return null;
+    }
+
+    public String j() {
         return null;
     }
 
@@ -64,11 +68,11 @@ final class ChatStyleRoot extends ChatModifier {
         throw new UnsupportedOperationException();
     }
 
-    public ChatModifier a(ChatHoverable chathoverable) {
+    public ChatModifier setChatHoverable(ChatHoverable chathoverable) {
         throw new UnsupportedOperationException();
     }
 
-    public ChatModifier a(ChatModifier chatmodifier) {
+    public ChatModifier setChatModifier(ChatModifier chatmodifier) {
         throw new UnsupportedOperationException();
     }
 
@@ -80,7 +84,7 @@ final class ChatStyleRoot extends ChatModifier {
         return this;
     }
 
-    public ChatModifier m() {
+    public ChatModifier n() {
         return this;
     }
 }

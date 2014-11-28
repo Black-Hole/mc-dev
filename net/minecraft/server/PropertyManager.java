@@ -10,20 +10,20 @@ import org.apache.logging.log4j.Logger;
 
 public class PropertyManager {
 
-    private static final Logger loggingAgent = LogManager.getLogger();
-    private final Properties properties = new Properties();
-    private final File c;
+    private static final Logger a = LogManager.getLogger();
+    public final Properties properties = new Properties();
+    private final File file;
 
-    public PropertyManager(File file1) {
-        this.c = file1;
-        if (file1.exists()) {
+    public PropertyManager(File file) {
+        this.file = file;
+        if (file.exists()) {
             FileInputStream fileinputstream = null;
 
             try {
-                fileinputstream = new FileInputStream(file1);
+                fileinputstream = new FileInputStream(file);
                 this.properties.load(fileinputstream);
             } catch (Exception exception) {
-                loggingAgent.warn("Failed to load " + file1, exception);
+                PropertyManager.a.warn("Failed to load " + file, exception);
                 this.a();
             } finally {
                 if (fileinputstream != null) {
@@ -33,15 +33,17 @@ public class PropertyManager {
                         ;
                     }
                 }
+
             }
         } else {
-            loggingAgent.warn(file1 + " does not exist");
+            PropertyManager.a.warn(file + " does not exist");
             this.a();
         }
+
     }
 
     public void a() {
-        loggingAgent.info("Generating new properties file");
+        PropertyManager.a.info("Generating new properties file");
         this.savePropertiesFile();
     }
 
@@ -49,10 +51,10 @@ public class PropertyManager {
         FileOutputStream fileoutputstream = null;
 
         try {
-            fileoutputstream = new FileOutputStream(this.c);
+            fileoutputstream = new FileOutputStream(this.file);
             this.properties.store(fileoutputstream, "Minecraft server properties");
         } catch (Exception exception) {
-            loggingAgent.warn("Failed to save " + this.c, exception);
+            PropertyManager.a.warn("Failed to save " + this.file, exception);
             this.a();
         } finally {
             if (fileoutputstream != null) {
@@ -62,11 +64,13 @@ public class PropertyManager {
                     ;
                 }
             }
+
         }
+
     }
 
     public File c() {
-        return this.c;
+        return this.file;
     }
 
     public String getString(String s, String s1) {
@@ -82,6 +86,16 @@ public class PropertyManager {
     public int getInt(String s, int i) {
         try {
             return Integer.parseInt(this.getString(s, "" + i));
+        } catch (Exception exception) {
+            this.properties.setProperty(s, "" + i);
+            this.savePropertiesFile();
+            return i;
+        }
+    }
+
+    public long getLong(String s, long i) {
+        try {
+            return Long.parseLong(this.getString(s, "" + i));
         } catch (Exception exception) {
             this.properties.setProperty(s, "" + i);
             this.savePropertiesFile();

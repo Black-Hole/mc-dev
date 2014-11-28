@@ -12,7 +12,7 @@ public interface IChatBaseComponent extends Iterable {
 
     IChatBaseComponent addSibling(IChatBaseComponent ichatbasecomponent);
 
-    String e();
+    String getText();
 
     String c();
 

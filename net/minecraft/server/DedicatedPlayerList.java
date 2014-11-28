@@ -1,129 +1,137 @@
 package net.minecraft.server;
 
+import com.mojang.authlib.GameProfile;
 import java.io.IOException;
-
-import net.minecraft.util.com.mojang.authlib.GameProfile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class DedicatedPlayerList extends PlayerList {
 
-    private static final Logger g = LogManager.getLogger();
+    private static final Logger h = LogManager.getLogger();
 
     public DedicatedPlayerList(DedicatedServer dedicatedserver) {
         super(dedicatedserver);
         this.a(dedicatedserver.a("view-distance", 10));
         this.maxPlayers = dedicatedserver.a("max-players", 20);
         this.setHasWhitelist(dedicatedserver.a("white-list", false));
-        if (!dedicatedserver.N()) {
+        if (!dedicatedserver.S()) {
             this.getProfileBans().a(true);
             this.getIPBans().a(true);
         }
 
+        this.z();
+        this.x();
         this.y();
         this.w();
-        this.x();
-        this.v();
-        this.z();
-        this.B();
         this.A();
+        this.C();
+        this.B();
         if (!this.getWhitelist().c().exists()) {
-            this.C();
+            this.D();
         }
+
     }
 
     public void setHasWhitelist(boolean flag) {
         super.setHasWhitelist(flag);
-        this.getServer().a("white-list", Boolean.valueOf(flag));
+        this.getServer().a("white-list", (Object) Boolean.valueOf(flag));
         this.getServer().a();
     }
 
     public void addOp(GameProfile gameprofile) {
         super.addOp(gameprofile);
-        this.A();
+        this.B();
     }
 
     public void removeOp(GameProfile gameprofile) {
         super.removeOp(gameprofile);
-        this.A();
+        this.B();
     }
 
     public void removeWhitelist(GameProfile gameprofile) {
         super.removeWhitelist(gameprofile);
-        this.C();
+        this.D();
     }
 
     public void addWhitelist(GameProfile gameprofile) {
         super.addWhitelist(gameprofile);
-        this.C();
+        this.D();
     }
 
     public void reloadWhitelist() {
-        this.B();
-    }
-
-    private void v() {
-        try {
-            this.getIPBans().save();
-        } catch (IOException ioexception) {
-            g.warn("Failed to save ip banlist: ", ioexception);
-        }
+        this.C();
     }
 
     private void w() {
         try {
-            this.getProfileBans().save();
+            this.getIPBans().save();
         } catch (IOException ioexception) {
-            g.warn("Failed to save user banlist: ", ioexception);
+            DedicatedPlayerList.h.warn("Failed to save ip banlist: ", ioexception);
         }
+
     }
 
     private void x() {
         try {
-            this.getIPBans().load();
+            this.getProfileBans().save();
         } catch (IOException ioexception) {
-            g.warn("Failed to load ip banlist: ", ioexception);
+            DedicatedPlayerList.h.warn("Failed to save user banlist: ", ioexception);
         }
+
     }
 
     private void y() {
         try {
-            this.getProfileBans().load();
+            this.getIPBans().load();
         } catch (IOException ioexception) {
-            g.warn("Failed to load user banlist: ", ioexception);
+            DedicatedPlayerList.h.warn("Failed to load ip banlist: ", ioexception);
         }
+
     }
 
     private void z() {
         try {
-            this.getOPs().load();
-        } catch (Exception exception) {
-            g.warn("Failed to load operators list: ", exception);
+            this.getProfileBans().load();
+        } catch (IOException ioexception) {
+            DedicatedPlayerList.h.warn("Failed to load user banlist: ", ioexception);
         }
+
     }
 
     private void A() {
         try {
-            this.getOPs().save();
+            this.getOPs().load();
         } catch (Exception exception) {
-            g.warn("Failed to save operators list: ", exception);
+            DedicatedPlayerList.h.warn("Failed to load operators list: ", exception);
         }
+
     }
 
     private void B() {
         try {
-            this.getWhitelist().load();
+            this.getOPs().save();
         } catch (Exception exception) {
-            g.warn("Failed to load white-list: ", exception);
+            DedicatedPlayerList.h.warn("Failed to save operators list: ", exception);
         }
+
     }
 
     private void C() {
         try {
+            this.getWhitelist().load();
+        } catch (Exception exception) {
+            DedicatedPlayerList.h.warn("Failed to load white-list: ", exception);
+        }
+
+    }
+
+    private void D() {
+        try {
             this.getWhitelist().save();
         } catch (Exception exception) {
-            g.warn("Failed to save white-list: ", exception);
+            DedicatedPlayerList.h.warn("Failed to save white-list: ", exception);
         }
+
     }
 
     public boolean isWhitelisted(GameProfile gameprofile) {

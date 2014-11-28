@@ -6,14 +6,12 @@ public class WorldGenFire extends WorldGenerator {
 
     public WorldGenFire() {}
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        for (int l = 0; l < 64; ++l) {
-            int i1 = i + random.nextInt(8) - random.nextInt(8);
-            int j1 = j + random.nextInt(4) - random.nextInt(4);
-            int k1 = k + random.nextInt(8) - random.nextInt(8);
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        for (int i = 0; i < 64; ++i) {
+            BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 
-            if (world.isEmpty(i1, j1, k1) && world.getType(i1, j1 - 1, k1) == Blocks.NETHERRACK) {
-                world.setTypeAndData(i1, j1, k1, Blocks.FIRE, 0, 2);
+            if (world.isEmpty(blockposition1) && world.getType(blockposition1.down()).getBlock() == Blocks.NETHERRACK) {
+                world.setTypeAndData(blockposition1, Blocks.FIRE.getBlockData(), 2);
             }
         }
 

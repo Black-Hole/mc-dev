@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutRemoveEntityEffect extends Packet {
+public class PacketPlayOutRemoveEntityEffect implements Packet {
 
     private int a;
     private int b;
@@ -13,20 +13,20 @@ public class PacketPlayOutRemoveEntityEffect extends Packet {
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.readInt();
+        this.a = packetdataserializer.e();
         this.b = packetdataserializer.readUnsignedByte();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeInt(this.a);
+        packetdataserializer.b(this.a);
         packetdataserializer.writeByte(this.b);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Map.Entry;
 
 public class WorldGenStronghold extends StructureGenerator {
 
-    private List e;
+    private List d;
     private boolean f;
     private ChunkCoordIntPair[] g;
     private double h;
@@ -19,17 +20,18 @@ public class WorldGenStronghold extends StructureGenerator {
         this.g = new ChunkCoordIntPair[3];
         this.h = 32.0D;
         this.i = 3;
-        this.e = new ArrayList();
+        this.d = Lists.newArrayList();
         BiomeBase[] abiomebase = BiomeBase.getBiomes();
         int i = abiomebase.length;
 
         for (int j = 0; j < i; ++j) {
             BiomeBase biomebase = abiomebase[j];
 
-            if (biomebase != null && biomebase.am > 0.0F) {
-                this.e.add(biomebase);
+            if (biomebase != null && biomebase.an > 0.0F) {
+                this.d.add(biomebase);
             }
         }
+
     }
 
     public WorldGenStronghold(Map map) {
@@ -47,6 +49,7 @@ public class WorldGenStronghold extends StructureGenerator {
                 this.i = MathHelper.a((String) entry.getValue(), this.i, 1);
             }
         }
+
     }
 
     public String a() {
@@ -65,11 +68,11 @@ public class WorldGenStronghold extends StructureGenerator {
                 double d1 = (1.25D * (double) k + random.nextDouble()) * this.h * (double) k;
                 int i1 = (int) Math.round(Math.cos(d0) * d1);
                 int j1 = (int) Math.round(Math.sin(d0) * d1);
-                ChunkPosition chunkposition = this.c.getWorldChunkManager().a((i1 << 4) + 8, (j1 << 4) + 8, 112, this.e, random);
+                BlockPosition blockposition = this.c.getWorldChunkManager().a((i1 << 4) + 8, (j1 << 4) + 8, 112, this.d, random);
 
-                if (chunkposition != null) {
-                    i1 = chunkposition.x >> 4;
-                    j1 = chunkposition.z >> 4;
+                if (blockposition != null) {
+                    i1 = blockposition.getX() >> 4;
+                    j1 = blockposition.getZ() >> 4;
                 }
 
                 this.g[l] = new ChunkCoordIntPair(i1, j1);
@@ -97,8 +100,8 @@ public class WorldGenStronghold extends StructureGenerator {
         return false;
     }
 
-    protected List o_() {
-        ArrayList arraylist = new ArrayList();
+    protected List y_() {
+        ArrayList arraylist = Lists.newArrayList();
         ChunkCoordIntPair[] achunkcoordintpair = this.g;
         int i = achunkcoordintpair.length;
 

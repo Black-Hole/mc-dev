@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import net.minecraft.util.com.mojang.authlib.GameProfile;
+import com.mojang.authlib.GameProfile;
 
 public class ServerPingPlayerSample {
 

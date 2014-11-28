@@ -2,15 +2,13 @@ package net.minecraft.server;
 
 public class ItemStep extends ItemBlock {
 
-    private final boolean b;
+    private final BlockStepAbstract b;
     private final BlockStepAbstract c;
-    private final BlockStepAbstract d;
 
-    public ItemStep(Block block, BlockStepAbstract blockstepabstract, BlockStepAbstract blockstepabstract1, boolean flag) {
+    public ItemStep(Block block, BlockStepAbstract blockstepabstract, BlockStepAbstract blockstepabstract1) {
         super(block);
-        this.c = blockstepabstract;
-        this.d = blockstepabstract1;
-        this.b = flag;
+        this.b = blockstepabstract;
+        this.c = blockstepabstract1;
         this.setMaxDurability(0);
         this.a(true);
     }
@@ -19,74 +17,58 @@ public class ItemStep extends ItemBlock {
         return i;
     }
 
-    public String a(ItemStack itemstack) {
-        return this.c.b(itemstack.getData());
+    public String e_(ItemStack itemstack) {
+        return this.b.b(itemstack.getData());
     }
 
-    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, int i, int j, int k, int l, float f, float f1, float f2) {
-        if (this.b) {
-            return super.interactWith(itemstack, entityhuman, world, i, j, k, l, f, f1, f2);
-        } else if (itemstack.count == 0) {
+    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+        if (itemstack.count == 0) {
             return false;
-        } else if (!entityhuman.a(i, j, k, l, itemstack)) {
+        } else if (!entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
             return false;
         } else {
-            Block block = world.getType(i, j, k);
-            int i1 = world.getData(i, j, k);
-            int j1 = i1 & 7;
-            boolean flag = (i1 & 8) != 0;
+            Object object = this.b.a(itemstack);
+            IBlockData iblockdata = world.getType(blockposition);
 
-            if ((l == 1 && !flag || l == 0 && flag) && block == this.c && j1 == itemstack.getData()) {
-                if (world.b(this.d.a(world, i, j, k)) && world.setTypeAndData(i, j, k, this.d, j1, 3)) {
-                    world.makeSound((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), this.d.stepSound.getPlaceSound(), (this.d.stepSound.getVolume1() + 1.0F) / 2.0F, this.d.stepSound.getVolume2() * 0.8F);
+            if (iblockdata.getBlock() == this.b) {
+                IBlockState iblockstate = this.b.l();
+                Comparable comparable = iblockdata.get(iblockstate);
+                EnumSlabHalf enumslabhalf = (EnumSlabHalf) iblockdata.get(BlockStepAbstract.HALF);
+
+                if ((enumdirection == EnumDirection.UP && enumslabhalf == EnumSlabHalf.BOTTOM || enumdirection == EnumDirection.DOWN && enumslabhalf == EnumSlabHalf.TOP) && comparable == object) {
+                    IBlockData iblockdata1 = this.c.getBlockData().set(iblockstate, comparable);
+
+                    if (world.b(this.c.a(world, blockposition, iblockdata1)) && world.setTypeAndData(blockposition, iblockdata1, 3)) {
+                        world.makeSound((double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), this.c.stepSound.getPlaceSound(), (this.c.stepSound.getVolume1() + 1.0F) / 2.0F, this.c.stepSound.getVolume2() * 0.8F);
+                        --itemstack.count;
+                    }
+
+                    return true;
+                }
+            }
+
+            return this.a(itemstack, world, blockposition.shift(enumdirection), object) ? true : super.interactWith(itemstack, entityhuman, world, blockposition, enumdirection, f, f1, f2);
+        }
+    }
+
+    private boolean a(ItemStack itemstack, World world, BlockPosition blockposition, Object object) {
+        IBlockData iblockdata = world.getType(blockposition);
+
+        if (iblockdata.getBlock() == this.b) {
+            Comparable comparable = iblockdata.get(this.b.l());
+
+            if (comparable == object) {
+                IBlockData iblockdata1 = this.c.getBlockData().set(this.b.l(), comparable);
+
+                if (world.b(this.c.a(world, blockposition, iblockdata1)) && world.setTypeAndData(blockposition, iblockdata1, 3)) {
+                    world.makeSound((double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), this.c.stepSound.getPlaceSound(), (this.c.stepSound.getVolume1() + 1.0F) / 2.0F, this.c.stepSound.getVolume2() * 0.8F);
                     --itemstack.count;
                 }
 
                 return true;
-            } else {
-                return this.a(itemstack, entityhuman, world, i, j, k, l) ? true : super.interactWith(itemstack, entityhuman, world, i, j, k, l, f, f1, f2);
             }
         }
-    }
 
-    private boolean a(ItemStack itemstack, EntityHuman entityhuman, World world, int i, int j, int k, int l) {
-        if (l == 0) {
-            --j;
-        }
-
-        if (l == 1) {
-            ++j;
-        }
-
-        if (l == 2) {
-            --k;
-        }
-
-        if (l == 3) {
-            ++k;
-        }
-
-        if (l == 4) {
-            --i;
-        }
-
-        if (l == 5) {
-            ++i;
-        }
-
-        Block block = world.getType(i, j, k);
-        int i1 = world.getData(i, j, k);
-        int j1 = i1 & 7;
-
-        if (block == this.c && j1 == itemstack.getData()) {
-            if (world.b(this.d.a(world, i, j, k)) && world.setTypeAndData(i, j, k, this.d, j1, 3)) {
-                world.makeSound((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), this.d.stepSound.getPlaceSound(), (this.d.stepSound.getVolume1() + 1.0F) / 2.0F, this.d.stepSound.getVolume2() * 0.8F);
-                --itemstack.count;
-            }
-
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 }

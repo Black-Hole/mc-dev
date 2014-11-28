@@ -13,7 +13,7 @@ class CrashReportCorruptNBTTag implements Callable {
     }
 
     public String a() {
-        return NBTBase.a[((NBTBase) NBTTagCompound.a(this.b).get(this.a)).getTypeId()];
+        return NBTBase.a[((NBTBase) NBTTagCompound.b(this.b).get(this.a)).getTypeId()];
     }
 
     public Object call() {

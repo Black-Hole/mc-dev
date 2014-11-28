@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public interface IInventory {
+public interface IInventory extends INamableTileEntity {
 
     int getSize();
 
@@ -12,19 +12,23 @@ public interface IInventory {
 
     void setItem(int i, ItemStack itemstack);
 
-    String getInventoryName();
-
-    boolean k_();
-
     int getMaxStackSize();
 
     void update();
 
     boolean a(EntityHuman entityhuman);
 
-    void startOpen();
+    void startOpen(EntityHuman entityhuman);
 
-    void closeContainer();
+    void closeContainer(EntityHuman entityhuman);
 
     boolean b(int i, ItemStack itemstack);
+
+    int getProperty(int i);
+
+    void b(int i, int j);
+
+    int g();
+
+    void l();
 }

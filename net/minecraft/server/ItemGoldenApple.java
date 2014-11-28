@@ -7,13 +7,13 @@ public class ItemGoldenApple extends ItemFood {
         this.a(true);
     }
 
-    public EnumItemRarity f(ItemStack itemstack) {
+    public EnumItemRarity g(ItemStack itemstack) {
         return itemstack.getData() == 0 ? EnumItemRarity.RARE : EnumItemRarity.EPIC;
     }
 
     protected void c(ItemStack itemstack, World world, EntityHuman entityhuman) {
         if (!world.isStatic) {
-            entityhuman.addEffect(new MobEffect(MobEffectList.ABSORPTION.id, 2400, 0));
+            entityhuman.addEffect(new MobEffect(MobEffectList.ABSORBTION.id, 2400, 0));
         }
 
         if (itemstack.getData() > 0) {
@@ -25,5 +25,6 @@ public class ItemGoldenApple extends ItemFood {
         } else {
             super.c(itemstack, world, entityhuman);
         }
+
     }
 }

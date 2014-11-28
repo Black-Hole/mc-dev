@@ -1,32 +1,28 @@
 package net.minecraft.server;
 
-public class PacketPlayInKeepAlive extends Packet {
+public class PacketPlayInKeepAlive implements Packet {
 
     private int a;
 
     public PacketPlayInKeepAlive() {}
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.readInt();
+        this.a = packetdataserializer.e();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeInt(this.a);
+        packetdataserializer.b(this.a);
     }
 
-    public boolean a() {
-        return true;
-    }
-
-    public int c() {
+    public int a() {
         return this.a;
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

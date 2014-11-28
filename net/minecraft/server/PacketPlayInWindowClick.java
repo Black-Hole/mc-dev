@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayInWindowClick extends Packet {
+public class PacketPlayInWindowClick implements Packet {
 
     private int a;
     private int slot;
@@ -11,8 +11,8 @@ public class PacketPlayInWindowClick extends Packet {
 
     public PacketPlayInWindowClick() {}
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
@@ -21,7 +21,7 @@ public class PacketPlayInWindowClick extends Packet {
         this.button = packetdataserializer.readByte();
         this.d = packetdataserializer.readShort();
         this.shift = packetdataserializer.readByte();
-        this.item = packetdataserializer.c();
+        this.item = packetdataserializer.i();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
@@ -33,35 +33,31 @@ public class PacketPlayInWindowClick extends Packet {
         packetdataserializer.a(this.item);
     }
 
-    public String b() {
-        return this.item != null ? String.format("id=%d, slot=%d, button=%d, type=%d, itemid=%d, itemcount=%d, itemaux=%d", new Object[] { Integer.valueOf(this.a), Integer.valueOf(this.slot), Integer.valueOf(this.button), Integer.valueOf(this.shift), Integer.valueOf(Item.getId(this.item.getItem())), Integer.valueOf(this.item.count), Integer.valueOf(this.item.getData())}) : String.format("id=%d, slot=%d, button=%d, type=%d, itemid=-1", new Object[] { Integer.valueOf(this.a), Integer.valueOf(this.slot), Integer.valueOf(this.button), Integer.valueOf(this.shift)});
-    }
-
-    public int c() {
+    public int a() {
         return this.a;
     }
 
-    public int d() {
+    public int b() {
         return this.slot;
     }
 
-    public int e() {
+    public int c() {
         return this.button;
     }
 
-    public short f() {
+    public short d() {
         return this.d;
     }
 
-    public ItemStack g() {
+    public ItemStack e() {
         return this.item;
     }
 
-    public int h() {
+    public int f() {
         return this.shift;
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

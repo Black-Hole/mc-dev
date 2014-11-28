@@ -2,29 +2,34 @@ package net.minecraft.server;
 
 public enum EnumGamemode {
 
-    NONE("NOT_SET", 0, -1, ""), SURVIVAL("SURVIVAL", 1, 0, "survival"), CREATIVE("CREATIVE", 2, 1, "creative"), ADVENTURE("ADVENTURE", 3, 2, "adventure");
-    int e;
-    String f;
-    private static final EnumGamemode[] g = new EnumGamemode[] { NONE, SURVIVAL, CREATIVE, ADVENTURE};
+    NOT_SET(-1, ""), SURVIVAL(0, "survival"), CREATIVE(1, "creative"), ADVENTURE(2, "adventure"), SPECTATOR(3, "spectator");
 
-    private EnumGamemode(String s, int i, int j, String s1) {
-        this.e = j;
-        this.f = s1;
+    int f;
+    String g;
+
+    private EnumGamemode(int i, String s) {
+        this.f = i;
+        this.g = s;
     }
 
     public int getId() {
-        return this.e;
-    }
-
-    public String b() {
         return this.f;
     }
 
+    public String b() {
+        return this.g;
+    }
+
     public void a(PlayerAbilities playerabilities) {
-        if (this == CREATIVE) {
+        if (this == EnumGamemode.CREATIVE) {
             playerabilities.canFly = true;
             playerabilities.canInstantlyBuild = true;
             playerabilities.isInvulnerable = true;
+        } else if (this == EnumGamemode.SPECTATOR) {
+            playerabilities.canFly = true;
+            playerabilities.canInstantlyBuild = false;
+            playerabilities.isInvulnerable = true;
+            playerabilities.isFlying = true;
         } else {
             playerabilities.canFly = false;
             playerabilities.canInstantlyBuild = false;
@@ -32,15 +37,19 @@ public enum EnumGamemode {
             playerabilities.isFlying = false;
         }
 
-        playerabilities.mayBuild = !this.isAdventure();
+        playerabilities.mayBuild = !this.c();
     }
 
-    public boolean isAdventure() {
-        return this == ADVENTURE;
+    public boolean c() {
+        return this == EnumGamemode.ADVENTURE || this == EnumGamemode.SPECTATOR;
     }
 
     public boolean d() {
-        return this == CREATIVE;
+        return this == EnumGamemode.CREATIVE;
+    }
+
+    public boolean e() {
+        return this == EnumGamemode.SURVIVAL || this == EnumGamemode.ADVENTURE;
     }
 
     public static EnumGamemode getById(int i) {
@@ -50,11 +59,11 @@ public enum EnumGamemode {
         for (int k = 0; k < j; ++k) {
             EnumGamemode enumgamemode = aenumgamemode[k];
 
-            if (enumgamemode.e == i) {
+            if (enumgamemode.f == i) {
                 return enumgamemode;
             }
         }
 
-        return SURVIVAL;
+        return EnumGamemode.SURVIVAL;
     }
 }

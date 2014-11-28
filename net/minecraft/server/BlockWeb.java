@@ -9,31 +9,27 @@ public class BlockWeb extends Block {
         this.a(CreativeModeTab.c);
     }
 
-    public void a(World world, int i, int j, int k, Entity entity) {
-        entity.as();
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
+        entity.aB();
     }
 
     public boolean c() {
         return false;
     }
 
-    public AxisAlignedBB a(World world, int i, int j, int k) {
+    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return null;
-    }
-
-    public int b() {
-        return 1;
     }
 
     public boolean d() {
         return false;
     }
 
-    public Item getDropType(int i, Random random, int j) {
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.STRING;
     }
 
-    protected boolean E() {
+    protected boolean G() {
         return true;
     }
 }

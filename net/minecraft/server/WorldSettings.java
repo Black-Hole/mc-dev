@@ -29,7 +29,7 @@ public final class WorldSettings {
         return this;
     }
 
-    public WorldSettings a(String s) {
+    public WorldSettings setGeneratorSettings(String s) {
         this.h = s;
         return this;
     }

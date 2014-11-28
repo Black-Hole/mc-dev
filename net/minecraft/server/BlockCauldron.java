@@ -5,27 +5,30 @@ import java.util.Random;
 
 public class BlockCauldron extends Block {
 
+    public static final BlockStateInteger LEVEL = BlockStateInteger.of("level", 0, 3);
+
     public BlockCauldron() {
         super(Material.ORE);
+        this.j(this.blockStateList.getBlockData().set(BlockCauldron.LEVEL, Integer.valueOf(0)));
     }
 
-    public void a(World world, int i, int j, int k, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.3125F, 1.0F);
-        super.a(world, i, j, k, axisalignedbb, list, entity);
+        super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         float f = 0.125F;
 
         this.a(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
-        super.a(world, i, j, k, axisalignedbb, list, entity);
+        super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
-        super.a(world, i, j, k, axisalignedbb, list, entity);
+        super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         this.a(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-        super.a(world, i, j, k, axisalignedbb, list, entity);
+        super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         this.a(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
-        super.a(world, i, j, k, axisalignedbb, list, entity);
-        this.g();
+        super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
+        this.h();
     }
 
-    public void g() {
+    public void h() {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
@@ -33,25 +36,22 @@ public class BlockCauldron extends Block {
         return false;
     }
 
-    public int b() {
-        return 24;
-    }
-
     public boolean d() {
         return false;
     }
 
-    public void a(World world, int i, int j, int k, Entity entity) {
-        int l = b(world.getData(i, j, k));
-        float f = (float) j + (6.0F + (float) (3 * l)) / 16.0F;
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
+        int i = ((Integer) iblockdata.get(BlockCauldron.LEVEL)).intValue();
+        float f = (float) blockposition.getY() + (6.0F + (float) (3 * i)) / 16.0F;
 
-        if (!world.isStatic && entity.isBurning() && l > 0 && entity.boundingBox.b <= (double) f) {
+        if (!world.isStatic && entity.isBurning() && i > 0 && entity.getBoundingBox().b <= (double) f) {
             entity.extinguish();
-            this.a(world, i, j, k, l - 1);
+            this.a(world, blockposition, iblockdata, i - 1);
         }
+
     }
 
-    public boolean interact(World world, int i, int j, int k, EntityHuman entityhuman, int l, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isStatic) {
             return true;
         } else {
@@ -60,27 +60,28 @@ public class BlockCauldron extends Block {
             if (itemstack == null) {
                 return true;
             } else {
-                int i1 = world.getData(i, j, k);
-                int j1 = b(i1);
+                int i = ((Integer) iblockdata.get(BlockCauldron.LEVEL)).intValue();
+                Item item = itemstack.getItem();
 
-                if (itemstack.getItem() == Items.WATER_BUCKET) {
-                    if (j1 < 3) {
+                if (item == Items.WATER_BUCKET) {
+                    if (i < 3) {
                         if (!entityhuman.abilities.canInstantlyBuild) {
                             entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, new ItemStack(Items.BUCKET));
                         }
 
-                        this.a(world, i, j, k, 3);
+                        this.a(world, blockposition, iblockdata, 3);
                     }
 
                     return true;
                 } else {
-                    if (itemstack.getItem() == Items.GLASS_BOTTLE) {
-                        if (j1 > 0) {
-                            if (!entityhuman.abilities.canInstantlyBuild) {
-                                ItemStack itemstack1 = new ItemStack(Items.POTION, 1, 0);
+                    ItemStack itemstack1;
 
+                    if (item == Items.GLASS_BOTTLE) {
+                        if (i > 0) {
+                            if (!entityhuman.abilities.canInstantlyBuild) {
+                                itemstack1 = new ItemStack(Items.POTION, 1, 0);
                                 if (!entityhuman.inventory.pickup(itemstack1)) {
-                                    world.addEntity(new EntityItem(world, (double) i + 0.5D, (double) j + 1.5D, (double) k + 0.5D, itemstack1));
+                                    world.addEntity(new EntityItem(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 1.5D, (double) blockposition.getZ() + 0.5D, itemstack1));
                                 } else if (entityhuman instanceof EntityPlayer) {
                                     ((EntityPlayer) entityhuman).updateInventory(entityhuman.defaultContainer);
                                 }
@@ -91,38 +92,70 @@ public class BlockCauldron extends Block {
                                 }
                             }
 
-                            this.a(world, i, j, k, j1 - 1);
+                            this.a(world, blockposition, iblockdata, i - 1);
                         }
-                    } else if (j1 > 0 && itemstack.getItem() instanceof ItemArmor && ((ItemArmor) itemstack.getItem()).m_() == EnumArmorMaterial.CLOTH) {
-                        ItemArmor itemarmor = (ItemArmor) itemstack.getItem();
 
-                        itemarmor.c(itemstack);
-                        this.a(world, i, j, k, j1 - 1);
                         return true;
-                    }
+                    } else {
+                        if (i > 0 && item instanceof ItemArmor) {
+                            ItemArmor itemarmor = (ItemArmor) item;
 
-                    return false;
+                            if (itemarmor.w_() == EnumArmorMaterial.LEATHER && itemarmor.d_(itemstack)) {
+                                itemarmor.c(itemstack);
+                                this.a(world, blockposition, iblockdata, i - 1);
+                                return true;
+                            }
+                        }
+
+                        if (i > 0 && item instanceof ItemBanner && TileEntityBanner.c(itemstack) > 0) {
+                            itemstack1 = itemstack.cloneItemStack();
+                            itemstack1.count = 1;
+                            TileEntityBanner.e(itemstack1);
+                            if (itemstack.count <= 1 && !entityhuman.abilities.canInstantlyBuild) {
+                                entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, itemstack1);
+                            } else {
+                                if (!entityhuman.inventory.pickup(itemstack1)) {
+                                    world.addEntity(new EntityItem(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 1.5D, (double) blockposition.getZ() + 0.5D, itemstack1));
+                                } else if (entityhuman instanceof EntityPlayer) {
+                                    ((EntityPlayer) entityhuman).updateInventory(entityhuman.defaultContainer);
+                                }
+
+                                if (!entityhuman.abilities.canInstantlyBuild) {
+                                    --itemstack.count;
+                                }
+                            }
+
+                            if (!entityhuman.abilities.canInstantlyBuild) {
+                                this.a(world, blockposition, iblockdata, i - 1);
+                            }
+
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
                 }
             }
         }
     }
 
-    public void a(World world, int i, int j, int k, int l) {
-        world.setData(i, j, k, MathHelper.a(l, 0, 3), 2);
-        world.updateAdjacentComparators(i, j, k, this);
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, int i) {
+        world.setTypeAndData(blockposition, iblockdata.set(BlockCauldron.LEVEL, Integer.valueOf(MathHelper.clamp(i, 0, 3))), 2);
+        world.updateAdjacentComparators(blockposition, this);
     }
 
-    public void l(World world, int i, int j, int k) {
+    public void k(World world, BlockPosition blockposition) {
         if (world.random.nextInt(20) == 1) {
-            int l = world.getData(i, j, k);
+            IBlockData iblockdata = world.getType(blockposition);
 
-            if (l < 3) {
-                world.setData(i, j, k, l + 1, 2);
+            if (((Integer) iblockdata.get(BlockCauldron.LEVEL)).intValue() < 3) {
+                world.setTypeAndData(blockposition, iblockdata.a(BlockCauldron.LEVEL), 2);
             }
+
         }
     }
 
-    public Item getDropType(int i, Random random, int j) {
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.CAULDRON;
     }
 
@@ -130,13 +163,19 @@ public class BlockCauldron extends Block {
         return true;
     }
 
-    public int g(World world, int i, int j, int k, int l) {
-        int i1 = world.getData(i, j, k);
-
-        return b(i1);
+    public int l(World world, BlockPosition blockposition) {
+        return ((Integer) world.getType(blockposition).get(BlockCauldron.LEVEL)).intValue();
     }
 
-    public static int b(int i) {
-        return i;
+    public IBlockData fromLegacyData(int i) {
+        return this.getBlockData().set(BlockCauldron.LEVEL, Integer.valueOf(i));
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        return ((Integer) iblockdata.get(BlockCauldron.LEVEL)).intValue();
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockCauldron.LEVEL});
     }
 }

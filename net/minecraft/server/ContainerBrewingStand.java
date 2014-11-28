@@ -2,16 +2,16 @@ package net.minecraft.server;
 
 public class ContainerBrewingStand extends Container {
 
-    private TileEntityBrewingStand brewingStand;
+    private IInventory brewingStand;
     private final Slot f;
     private int g;
 
-    public ContainerBrewingStand(PlayerInventory playerinventory, TileEntityBrewingStand tileentitybrewingstand) {
-        this.brewingStand = tileentitybrewingstand;
-        this.a(new SlotPotionBottle(playerinventory.player, tileentitybrewingstand, 0, 56, 46));
-        this.a(new SlotPotionBottle(playerinventory.player, tileentitybrewingstand, 1, 79, 53));
-        this.a(new SlotPotionBottle(playerinventory.player, tileentitybrewingstand, 2, 102, 46));
-        this.f = this.a(new SlotBrewing(this, tileentitybrewingstand, 3, 79, 17));
+    public ContainerBrewingStand(PlayerInventory playerinventory, IInventory iinventory) {
+        this.brewingStand = iinventory;
+        this.a((Slot) (new SlotPotionBottle(playerinventory.player, iinventory, 0, 56, 46)));
+        this.a((Slot) (new SlotPotionBottle(playerinventory.player, iinventory, 1, 79, 53)));
+        this.a((Slot) (new SlotPotionBottle(playerinventory.player, iinventory, 2, 102, 46)));
+        this.f = this.a((Slot) (new SlotBrewing(this, iinventory, 3, 79, 17)));
 
         int i;
 
@@ -24,11 +24,12 @@ public class ContainerBrewingStand extends Container {
         for (i = 0; i < 9; ++i) {
             this.a(new Slot(playerinventory, i, 8 + i * 18, 142));
         }
+
     }
 
     public void addSlotListener(ICrafting icrafting) {
         super.addSlotListener(icrafting);
-        icrafting.setContainerData(this, 0, this.brewingStand.i());
+        icrafting.setContainerData(this, this.brewingStand);
     }
 
     public void b() {
@@ -37,12 +38,12 @@ public class ContainerBrewingStand extends Container {
         for (int i = 0; i < this.listeners.size(); ++i) {
             ICrafting icrafting = (ICrafting) this.listeners.get(i);
 
-            if (this.g != this.brewingStand.i()) {
-                icrafting.setContainerData(this, 0, this.brewingStand.i());
+            if (this.g != this.brewingStand.getProperty(0)) {
+                icrafting.setContainerData(this, 0, this.brewingStand.getProperty(0));
             }
         }
 
-        this.g = this.brewingStand.i();
+        this.g = this.brewingStand.getProperty(0);
     }
 
     public boolean a(EntityHuman entityhuman) {

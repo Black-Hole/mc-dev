@@ -1,15 +1,15 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 
 public class PersistentVillage extends PersistentBase {
 
     private World world;
-    private final List b = new ArrayList();
-    private final List c = new ArrayList();
-    private final List villages = new ArrayList();
+    private final List c = Lists.newArrayList();
+    private final List d = Lists.newArrayList();
+    private final List villages = Lists.newArrayList();
     private int time;
 
     public PersistentVillage(String s) {
@@ -17,7 +17,7 @@ public class PersistentVillage extends PersistentBase {
     }
 
     public PersistentVillage(World world) {
-        super("villages");
+        super(a(world.worldProvider));
         this.world = world;
         this.c();
     }
@@ -31,13 +31,15 @@ public class PersistentVillage extends PersistentBase {
 
             village.a(world);
         }
+
     }
 
-    public void a(int i, int j, int k) {
-        if (this.b.size() <= 64) {
-            if (!this.d(i, j, k)) {
-                this.b.add(new ChunkCoordinates(i, j, k));
+    public void a(BlockPosition blockposition) {
+        if (this.c.size() <= 64) {
+            if (!this.e(blockposition)) {
+                this.c.add(blockposition);
             }
+
         }
     }
 
@@ -48,7 +50,7 @@ public class PersistentVillage extends PersistentBase {
         while (iterator.hasNext()) {
             Village village = (Village) iterator.next();
 
-            village.tick(this.time);
+            village.a(this.time);
         }
 
         this.e();
@@ -57,6 +59,7 @@ public class PersistentVillage extends PersistentBase {
         if (this.time % 400 == 0) {
             this.c();
         }
+
     }
 
     private void e() {
@@ -65,32 +68,33 @@ public class PersistentVillage extends PersistentBase {
         while (iterator.hasNext()) {
             Village village = (Village) iterator.next();
 
-            if (village.isAbandoned()) {
+            if (village.g()) {
                 iterator.remove();
                 this.c();
             }
         }
+
     }
 
     public List getVillages() {
         return this.villages;
     }
 
-    public Village getClosestVillage(int i, int j, int k, int l) {
+    public Village getClosestVillage(BlockPosition blockposition, int i) {
         Village village = null;
-        float f = Float.MAX_VALUE;
+        double d0 = 3.4028234663852886E38D;
         Iterator iterator = this.villages.iterator();
 
         while (iterator.hasNext()) {
             Village village1 = (Village) iterator.next();
-            float f1 = village1.getCenter().e(i, j, k);
+            double d1 = village1.a().i(blockposition);
 
-            if (f1 < f) {
-                float f2 = (float) (l + village1.getSize());
+            if (d1 < d0) {
+                float f = (float) (i + village1.b());
 
-                if (f1 <= f2 * f2) {
+                if (d1 <= (double) (f * f)) {
                     village = village1;
-                    f = f1;
+                    d0 = d1;
                 }
             }
         }
@@ -99,73 +103,55 @@ public class PersistentVillage extends PersistentBase {
     }
 
     private void f() {
-        if (!this.b.isEmpty()) {
-            this.a((ChunkCoordinates) this.b.remove(0));
+        if (!this.c.isEmpty()) {
+            this.b((BlockPosition) this.c.remove(0));
         }
     }
 
     private void g() {
-        int i = 0;
+        for (int i = 0; i < this.d.size(); ++i) {
+            VillageDoor villagedoor = (VillageDoor) this.d.get(i);
+            Village village = this.getClosestVillage(villagedoor.d(), 32);
 
-        while (i < this.c.size()) {
-            VillageDoor villagedoor = (VillageDoor) this.c.get(i);
-            boolean flag = false;
-            Iterator iterator = this.villages.iterator();
-
-            while (true) {
-                if (iterator.hasNext()) {
-                    Village village = (Village) iterator.next();
-                    int j = (int) village.getCenter().e(villagedoor.locX, villagedoor.locY, villagedoor.locZ);
-                    int k = 32 + village.getSize();
-
-                    if (j > k * k) {
-                        continue;
-                    }
-
-                    village.addDoor(villagedoor);
-                    flag = true;
-                }
-
-                if (!flag) {
-                    Village village1 = new Village(this.world);
-
-                    village1.addDoor(villagedoor);
-                    this.villages.add(village1);
-                    this.c();
-                }
-
-                ++i;
-                break;
+            if (village == null) {
+                village = new Village(this.world);
+                this.villages.add(village);
+                this.c();
             }
+
+            village.a(villagedoor);
         }
 
-        this.c.clear();
+        this.d.clear();
     }
 
-    private void a(ChunkCoordinates chunkcoordinates) {
+    private void b(BlockPosition blockposition) {
         byte b0 = 16;
         byte b1 = 4;
         byte b2 = 16;
 
-        for (int i = chunkcoordinates.x - b0; i < chunkcoordinates.x + b0; ++i) {
-            for (int j = chunkcoordinates.y - b1; j < chunkcoordinates.y + b1; ++j) {
-                for (int k = chunkcoordinates.z - b2; k < chunkcoordinates.z + b2; ++k) {
-                    if (this.e(i, j, k)) {
-                        VillageDoor villagedoor = this.b(i, j, k);
+        for (int i = -b0; i < b0; ++i) {
+            for (int j = -b1; j < b1; ++j) {
+                for (int k = -b2; k < b2; ++k) {
+                    BlockPosition blockposition1 = blockposition.a(i, j, k);
+
+                    if (this.f(blockposition1)) {
+                        VillageDoor villagedoor = this.c(blockposition1);
 
                         if (villagedoor == null) {
-                            this.c(i, j, k);
+                            this.d(blockposition1);
                         } else {
-                            villagedoor.addedTime = this.time;
+                            villagedoor.a(this.time);
                         }
                     }
                 }
             }
         }
+
     }
 
-    private VillageDoor b(int i, int j, int k) {
-        Iterator iterator = this.c.iterator();
+    private VillageDoor c(BlockPosition blockposition) {
+        Iterator iterator = this.d.iterator();
 
         VillageDoor villagedoor;
 
@@ -182,80 +168,65 @@ public class PersistentVillage extends PersistentBase {
 
                     Village village = (Village) iterator.next();
 
-                    villagedoor1 = village.e(i, j, k);
+                    villagedoor1 = village.e(blockposition);
                 } while (villagedoor1 == null);
 
                 return villagedoor1;
             }
 
             villagedoor = (VillageDoor) iterator.next();
-        } while (villagedoor.locX != i || villagedoor.locZ != k || Math.abs(villagedoor.locY - j) > 1);
+        } while (villagedoor.d().getX() != blockposition.getX() || villagedoor.d().getZ() != blockposition.getZ() || Math.abs(villagedoor.d().getY() - blockposition.getY()) > 1);
 
         return villagedoor;
     }
 
-    private void c(int i, int j, int k) {
-        int l = ((BlockDoor) Blocks.WOODEN_DOOR).e(this.world, i, j, k);
-        int i1;
-        int j1;
+    private void d(BlockPosition blockposition) {
+        EnumDirection enumdirection = BlockDoor.h(this.world, blockposition);
+        EnumDirection enumdirection1 = enumdirection.opposite();
+        int i = this.a(blockposition, enumdirection, 5);
+        int j = this.a(blockposition, enumdirection1, i + 1);
 
-        if (l != 0 && l != 2) {
-            i1 = 0;
-
-            for (j1 = -5; j1 < 0; ++j1) {
-                if (this.world.i(i, j, k + j1)) {
-                    --i1;
-                }
-            }
-
-            for (j1 = 1; j1 <= 5; ++j1) {
-                if (this.world.i(i, j, k + j1)) {
-                    ++i1;
-                }
-            }
-
-            if (i1 != 0) {
-                this.c.add(new VillageDoor(i, j, k, 0, i1 > 0 ? -2 : 2, this.time));
-            }
-        } else {
-            i1 = 0;
-
-            for (j1 = -5; j1 < 0; ++j1) {
-                if (this.world.i(i + j1, j, k)) {
-                    --i1;
-                }
-            }
-
-            for (j1 = 1; j1 <= 5; ++j1) {
-                if (this.world.i(i + j1, j, k)) {
-                    ++i1;
-                }
-            }
-
-            if (i1 != 0) {
-                this.c.add(new VillageDoor(i, j, k, i1 > 0 ? -2 : 2, 0, this.time));
-            }
+        if (i != j) {
+            this.d.add(new VillageDoor(blockposition, i < j ? enumdirection : enumdirection1, this.time));
         }
+
     }
 
-    private boolean d(int i, int j, int k) {
-        Iterator iterator = this.b.iterator();
+    private int a(BlockPosition blockposition, EnumDirection enumdirection, int i) {
+        int j = 0;
 
-        ChunkCoordinates chunkcoordinates;
+        for (int k = 1; k <= 5; ++k) {
+            if (this.world.i(blockposition.shift(enumdirection, k))) {
+                ++j;
+                if (j >= i) {
+                    return j;
+                }
+            }
+        }
+
+        return j;
+    }
+
+    private boolean e(BlockPosition blockposition) {
+        Iterator iterator = this.c.iterator();
+
+        BlockPosition blockposition1;
 
         do {
             if (!iterator.hasNext()) {
                 return false;
             }
 
-            chunkcoordinates = (ChunkCoordinates) iterator.next();
-        } while (chunkcoordinates.x != i || chunkcoordinates.y != j || chunkcoordinates.z != k);
+            blockposition1 = (BlockPosition) iterator.next();
+        } while (!blockposition1.equals(blockposition));
 
         return true;
     }
 
-    private boolean e(int i, int j, int k) {
-        return this.world.getType(i, j, k) == Blocks.WOODEN_DOOR;
+    private boolean f(BlockPosition blockposition) {
+        Block block = this.world.getType(blockposition).getBlock();
+
+        return block instanceof BlockDoor ? block.getMaterial() == Material.WOOD : false;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -269,6 +240,7 @@ public class PersistentVillage extends PersistentBase {
             village.a(nbttagcompound1);
             this.villages.add(village);
         }
+
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -285,5 +257,9 @@ public class PersistentVillage extends PersistentBase {
         }
 
         nbttagcompound.set("Villages", nbttaglist);
+    }
+
+    public static String a(WorldProvider worldprovider) {
+        return "villages" + worldprovider.getSuffix();
     }
 }

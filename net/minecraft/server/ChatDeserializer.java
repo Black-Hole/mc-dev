@@ -1,11 +1,11 @@
 package net.minecraft.server;
 
-import net.minecraft.util.com.google.gson.JsonArray;
-import net.minecraft.util.com.google.gson.JsonElement;
-import net.minecraft.util.com.google.gson.JsonObject;
-import net.minecraft.util.com.google.gson.JsonPrimitive;
-import net.minecraft.util.com.google.gson.JsonSyntaxException;
-import net.minecraft.util.org.apache.commons.lang3.StringUtils;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
+import org.apache.commons.lang3.StringUtils;
 
 public class ChatDeserializer {
 
@@ -33,6 +33,30 @@ public class ChatDeserializer {
         }
     }
 
+    public static boolean b(JsonElement jsonelement, String s) {
+        if (jsonelement.isJsonPrimitive()) {
+            return jsonelement.getAsBoolean();
+        } else {
+            throw new JsonSyntaxException("Expected " + s + " to be a Boolean, was " + d(jsonelement));
+        }
+    }
+
+    public static boolean a(JsonObject jsonobject, String s, boolean flag) {
+        return jsonobject.has(s) ? b(jsonobject.get(s), s) : flag;
+    }
+
+    public static float d(JsonElement jsonelement, String s) {
+        if (jsonelement.isJsonPrimitive() && jsonelement.getAsJsonPrimitive().isNumber()) {
+            return jsonelement.getAsFloat();
+        } else {
+            throw new JsonSyntaxException("Expected " + s + " to be a Float, was " + d(jsonelement));
+        }
+    }
+
+    public static float a(JsonObject jsonobject, String s, float f) {
+        return jsonobject.has(s) ? d(jsonobject.get(s), s) : f;
+    }
+
     public static int f(JsonElement jsonelement, String s) {
         if (jsonelement.isJsonPrimitive() && jsonelement.getAsJsonPrimitive().isNumber()) {
             return jsonelement.getAsInt();
@@ -47,6 +71,10 @@ public class ChatDeserializer {
         } else {
             throw new JsonSyntaxException("Missing " + s + ", expected to find a Int");
         }
+    }
+
+    public static int a(JsonObject jsonobject, String s, int i) {
+        return jsonobject.has(s) ? f(jsonobject.get(s), s) : i;
     }
 
     public static JsonObject l(JsonElement jsonelement, String s) {

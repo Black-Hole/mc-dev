@@ -60,30 +60,34 @@ class Location2D {
     }
 
     public int a(World world) {
-        int i = MathHelper.floor(this.a);
-        int j = MathHelper.floor(this.b);
+        BlockPosition blockposition = new BlockPosition(this.a, 256.0D, this.b);
 
-        for (int k = 256; k > 0; --k) {
-            if (world.getType(i, k, j).getMaterial() != Material.AIR) {
-                return k + 1;
+        do {
+            if (blockposition.getY() <= 0) {
+                return 257;
             }
-        }
 
-        return 257;
+            blockposition = blockposition.down();
+        } while (world.getType(blockposition).getBlock().getMaterial() == Material.AIR);
+
+        return blockposition.getY() + 1;
     }
 
     public boolean b(World world) {
-        int i = MathHelper.floor(this.a);
-        int j = MathHelper.floor(this.b);
-        short short1 = 256;
+        BlockPosition blockposition = new BlockPosition(this.a, 256.0D, this.b);
 
-        if (short1 <= 0) {
-            return false;
-        } else {
-            Material material = world.getType(i, short1, j).getMaterial();
+        Material material;
 
-            return !material.isLiquid() && material != Material.FIRE;
-        }
+        do {
+            if (blockposition.getY() <= 0) {
+                return false;
+            }
+
+            blockposition = blockposition.down();
+            material = world.getType(blockposition).getBlock().getMaterial();
+        } while (material == Material.AIR);
+
+        return !material.isLiquid() && material != Material.FIRE;
     }
 
     public void a(Random random, double d0, double d1, double d2, double d3) {

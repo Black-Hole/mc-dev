@@ -6,21 +6,22 @@ class GenLayerJumpTable {
 
     static {
         try {
-            a[EnumGenLayerSpecial.COOL_WARM.ordinal()] = 1;
+            GenLayerJumpTable.a[EnumGenLayerSpecial.COOL_WARM.ordinal()] = 1;
         } catch (NoSuchFieldError nosuchfielderror) {
             ;
         }
 
         try {
-            a[EnumGenLayerSpecial.HEAT_ICE.ordinal()] = 2;
+            GenLayerJumpTable.a[EnumGenLayerSpecial.HEAT_ICE.ordinal()] = 2;
         } catch (NoSuchFieldError nosuchfielderror1) {
             ;
         }
 
         try {
-            a[EnumGenLayerSpecial.PUFFERFISH.ordinal()] = 3;
+            GenLayerJumpTable.a[EnumGenLayerSpecial.SPECIAL.ordinal()] = 3;
         } catch (NoSuchFieldError nosuchfielderror2) {
             ;
         }
+
     }
 }

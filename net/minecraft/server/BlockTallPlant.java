@@ -4,157 +4,192 @@ import java.util.Random;
 
 public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElement {
 
-    public static final String[] a = new String[] { "sunflower", "syringa", "grass", "fern", "rose", "paeonia"};
+    public static final BlockStateEnum VARIANT = BlockStateEnum.of("variant", EnumTallFlowerVariants.class);
+    public static final BlockStateEnum HALF = BlockStateEnum.of("half", EnumTallPlantHalf.class);
 
     public BlockTallPlant() {
-        super(Material.PLANT);
+        super(Material.REPLACEABLE_PLANT);
+        this.j(this.blockStateList.getBlockData().set(BlockTallPlant.VARIANT, EnumTallFlowerVariants.SUNFLOWER).set(BlockTallPlant.HALF, EnumTallPlantHalf.LOWER));
         this.c(0.0F);
-        this.a(h);
+        this.a(BlockTallPlant.h);
         this.c("doublePlant");
     }
 
-    public int b() {
-        return 40;
-    }
-
-    public void updateShape(IBlockAccess iblockaccess, int i, int j, int k) {
+    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    public int e(IBlockAccess iblockaccess, int i, int j, int k) {
-        int l = iblockaccess.getData(i, j, k);
+    public EnumTallFlowerVariants e(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        IBlockData iblockdata = iblockaccess.getType(blockposition);
 
-        return !c(l) ? l & 7 : iblockaccess.getData(i, j - 1, k) & 7;
-    }
-
-    public boolean canPlace(World world, int i, int j, int k) {
-        return super.canPlace(world, i, j, k) && world.isEmpty(i, j + 1, k);
-    }
-
-    protected void e(World world, int i, int j, int k) {
-        if (!this.j(world, i, j, k)) {
-            int l = world.getData(i, j, k);
-
-            if (!c(l)) {
-                this.b(world, i, j, k, l, 0);
-                if (world.getType(i, j + 1, k) == this) {
-                    world.setTypeAndData(i, j + 1, k, Blocks.AIR, 0, 2);
-                }
-            }
-
-            world.setTypeAndData(i, j, k, Blocks.AIR, 0, 2);
+        if (iblockdata.getBlock() == this) {
+            iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
+            return (EnumTallFlowerVariants) iblockdata.get(BlockTallPlant.VARIANT);
+        } else {
+            return EnumTallFlowerVariants.FERN;
         }
     }
 
-    public boolean j(World world, int i, int j, int k) {
-        int l = world.getData(i, j, k);
-
-        return c(l) ? world.getType(i, j - 1, k) == this : world.getType(i, j + 1, k) == this && super.j(world, i, j, k);
+    public boolean canPlace(World world, BlockPosition blockposition) {
+        return super.canPlace(world, blockposition) && world.isEmpty(blockposition.up());
     }
 
-    public Item getDropType(int i, Random random, int j) {
-        if (c(i)) {
+    public boolean f(World world, BlockPosition blockposition) {
+        IBlockData iblockdata = world.getType(blockposition);
+
+        if (iblockdata.getBlock() != this) {
+            return true;
+        } else {
+            EnumTallFlowerVariants enumtallflowervariants = (EnumTallFlowerVariants) this.updateState(iblockdata, world, blockposition).get(BlockTallPlant.VARIANT);
+
+            return enumtallflowervariants == EnumTallFlowerVariants.FERN || enumtallflowervariants == EnumTallFlowerVariants.GRASS;
+        }
+    }
+
+    protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        if (!this.f(world, blockposition, iblockdata)) {
+            boolean flag = iblockdata.get(BlockTallPlant.HALF) == EnumTallPlantHalf.UPPER;
+            BlockPosition blockposition1 = flag ? blockposition : blockposition.up();
+            BlockPosition blockposition2 = flag ? blockposition.down() : blockposition;
+            Object object = flag ? this : world.getType(blockposition1).getBlock();
+            Object object1 = flag ? world.getType(blockposition2).getBlock() : this;
+
+            if (object == this) {
+                world.setTypeAndData(blockposition1, Blocks.AIR.getBlockData(), 3);
+            }
+
+            if (object1 == this) {
+                world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 3);
+                if (!flag) {
+                    this.b(world, blockposition2, iblockdata, 0);
+                }
+            }
+
+        }
+    }
+
+    public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        if (iblockdata.get(BlockTallPlant.HALF) == EnumTallPlantHalf.UPPER) {
+            return world.getType(blockposition.down()).getBlock() == this;
+        } else {
+            IBlockData iblockdata1 = world.getType(blockposition.up());
+
+            return iblockdata1.getBlock() == this && super.f(world, blockposition, iblockdata1);
+        }
+    }
+
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
+        if (iblockdata.get(BlockTallPlant.HALF) == EnumTallPlantHalf.UPPER) {
             return null;
         } else {
-            int k = d(i);
+            EnumTallFlowerVariants enumtallflowervariants = (EnumTallFlowerVariants) iblockdata.get(BlockTallPlant.VARIANT);
 
-            return k != 3 && k != 2 ? Item.getItemOf(this) : null;
+            return enumtallflowervariants == EnumTallFlowerVariants.FERN ? null : (enumtallflowervariants == EnumTallFlowerVariants.GRASS ? (random.nextInt(8) == 0 ? Items.WHEAT_SEEDS : null) : Item.getItemOf(this));
         }
     }
 
-    public int getDropData(int i) {
-        return c(i) ? 0 : i & 7;
+    public int getDropData(IBlockData iblockdata) {
+        return iblockdata.get(BlockTallPlant.HALF) != EnumTallPlantHalf.UPPER && iblockdata.get(BlockTallPlant.VARIANT) != EnumTallFlowerVariants.GRASS ? ((EnumTallFlowerVariants) iblockdata.get(BlockTallPlant.VARIANT)).a() : 0;
     }
 
-    public static boolean c(int i) {
-        return (i & 8) != 0;
+    public void a(World world, BlockPosition blockposition, EnumTallFlowerVariants enumtallflowervariants, int i) {
+        world.setTypeAndData(blockposition, this.getBlockData().set(BlockTallPlant.HALF, EnumTallPlantHalf.LOWER).set(BlockTallPlant.VARIANT, enumtallflowervariants), i);
+        world.setTypeAndData(blockposition.up(), this.getBlockData().set(BlockTallPlant.HALF, EnumTallPlantHalf.UPPER), i);
     }
 
-    public static int d(int i) {
-        return i & 7;
+    public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
+        world.setTypeAndData(blockposition.up(), this.getBlockData().set(BlockTallPlant.HALF, EnumTallPlantHalf.UPPER), 2);
     }
 
-    public void c(World world, int i, int j, int k, int l, int i1) {
-        world.setTypeAndData(i, j, k, this, l, i1);
-        world.setTypeAndData(i, j + 1, k, this, 8, i1);
-    }
-
-    public void postPlace(World world, int i, int j, int k, EntityLiving entityliving, ItemStack itemstack) {
-        int l = ((MathHelper.floor((double) (entityliving.yaw * 4.0F / 360.0F) + 0.5D) & 3) + 2) % 4;
-
-        world.setTypeAndData(i, j + 1, k, this, 8 | l, 2);
-    }
-
-    public void a(World world, EntityHuman entityhuman, int i, int j, int k, int l) {
-        if (world.isStatic || entityhuman.bF() == null || entityhuman.bF().getItem() != Items.SHEARS || c(l) || !this.b(world, i, j, k, l, entityhuman)) {
-            super.a(world, entityhuman, i, j, k, l);
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity) {
+        if (world.isStatic || entityhuman.bY() == null || entityhuman.bY().getItem() != Items.SHEARS || iblockdata.get(BlockTallPlant.HALF) != EnumTallPlantHalf.LOWER || !this.b(world, blockposition, iblockdata, entityhuman)) {
+            super.a(world, entityhuman, blockposition, iblockdata, tileentity);
         }
     }
 
-    public void a(World world, int i, int j, int k, int l, EntityHuman entityhuman) {
-        if (c(l)) {
-            if (world.getType(i, j - 1, k) == this) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
+        if (iblockdata.get(BlockTallPlant.HALF) == EnumTallPlantHalf.UPPER) {
+            if (world.getType(blockposition.down()).getBlock() == this) {
                 if (!entityhuman.abilities.canInstantlyBuild) {
-                    int i1 = world.getData(i, j - 1, k);
-                    int j1 = d(i1);
+                    IBlockData iblockdata1 = world.getType(blockposition.down());
+                    EnumTallFlowerVariants enumtallflowervariants = (EnumTallFlowerVariants) iblockdata1.get(BlockTallPlant.VARIANT);
 
-                    if (j1 != 3 && j1 != 2) {
-                        world.setAir(i, j - 1, k, true);
-                    } else {
-                        if (!world.isStatic && entityhuman.bF() != null && entityhuman.bF().getItem() == Items.SHEARS) {
-                            this.b(world, i, j, k, i1, entityhuman);
+                    if (enumtallflowervariants != EnumTallFlowerVariants.FERN && enumtallflowervariants != EnumTallFlowerVariants.GRASS) {
+                        world.setAir(blockposition.down(), true);
+                    } else if (!world.isStatic) {
+                        if (entityhuman.bY() != null && entityhuman.bY().getItem() == Items.SHEARS) {
+                            this.b(world, blockposition, iblockdata1, entityhuman);
+                            world.setAir(blockposition.down());
+                        } else {
+                            world.setAir(blockposition.down(), true);
                         }
-
-                        world.setAir(i, j - 1, k);
+                    } else {
+                        world.setAir(blockposition.down());
                     }
                 } else {
-                    world.setAir(i, j - 1, k);
+                    world.setAir(blockposition.down());
                 }
             }
-        } else if (entityhuman.abilities.canInstantlyBuild && world.getType(i, j + 1, k) == this) {
-            world.setTypeAndData(i, j + 1, k, Blocks.AIR, 0, 2);
+        } else if (entityhuman.abilities.canInstantlyBuild && world.getType(blockposition.up()).getBlock() == this) {
+            world.setTypeAndData(blockposition.up(), Blocks.AIR.getBlockData(), 2);
         }
 
-        super.a(world, i, j, k, l, entityhuman);
+        super.a(world, blockposition, iblockdata, entityhuman);
     }
 
-    private boolean b(World world, int i, int j, int k, int l, EntityHuman entityhuman) {
-        int i1 = d(l);
+    private boolean b(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
+        EnumTallFlowerVariants enumtallflowervariants = (EnumTallFlowerVariants) iblockdata.get(BlockTallPlant.VARIANT);
 
-        if (i1 != 3 && i1 != 2) {
+        if (enumtallflowervariants != EnumTallFlowerVariants.FERN && enumtallflowervariants != EnumTallFlowerVariants.GRASS) {
             return false;
         } else {
-            entityhuman.a(StatisticList.MINE_BLOCK_COUNT[Block.getId(this)], 1);
-            byte b0 = 1;
+            entityhuman.b(StatisticList.MINE_BLOCK_COUNT[Block.getId(this)]);
+            int i = (enumtallflowervariants == EnumTallFlowerVariants.GRASS ? EnumTallGrassType.GRASS : EnumTallGrassType.FERN).a();
 
-            if (i1 == 3) {
-                b0 = 2;
-            }
-
-            this.a(world, i, j, k, new ItemStack(Blocks.LONG_GRASS, 2, b0));
+            a(world, blockposition, new ItemStack(Blocks.TALLGRASS, 2, i));
             return true;
         }
     }
 
-    public int getDropData(World world, int i, int j, int k) {
-        int l = world.getData(i, j, k);
-
-        return c(l) ? d(world.getData(i, j - 1, k)) : d(l);
+    public int getDropData(World world, BlockPosition blockposition) {
+        return this.e(world, blockposition).a();
     }
 
-    public boolean a(World world, int i, int j, int k, boolean flag) {
-        int l = this.e((IBlockAccess) world, i, j, k);
+    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
+        EnumTallFlowerVariants enumtallflowervariants = this.e(world, blockposition);
 
-        return l != 2 && l != 3;
+        return enumtallflowervariants != EnumTallFlowerVariants.GRASS && enumtallflowervariants != EnumTallFlowerVariants.FERN;
     }
 
-    public boolean a(World world, Random random, int i, int j, int k) {
+    public boolean a(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         return true;
     }
 
-    public void b(World world, Random random, int i, int j, int k) {
-        int l = this.e((IBlockAccess) world, i, j, k);
+    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+        a(world, blockposition, new ItemStack(this, 1, this.e(world, blockposition).a()));
+    }
 
-        this.a(world, i, j, k, new ItemStack(this, 1, l));
+    public IBlockData fromLegacyData(int i) {
+        return (i & 8) > 0 ? this.getBlockData().set(BlockTallPlant.HALF, EnumTallPlantHalf.UPPER) : this.getBlockData().set(BlockTallPlant.HALF, EnumTallPlantHalf.LOWER).set(BlockTallPlant.VARIANT, EnumTallFlowerVariants.a(i & 7));
+    }
+
+    public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        if (iblockdata.get(BlockTallPlant.HALF) == EnumTallPlantHalf.UPPER) {
+            IBlockData iblockdata1 = iblockaccess.getType(blockposition.down());
+
+            if (iblockdata1.getBlock() == this) {
+                iblockdata = iblockdata.set(BlockTallPlant.VARIANT, iblockdata1.get(BlockTallPlant.VARIANT));
+            }
+        }
+
+        return iblockdata;
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        return iblockdata.get(BlockTallPlant.HALF) == EnumTallPlantHalf.UPPER ? 8 : ((EnumTallFlowerVariants) iblockdata.get(BlockTallPlant.VARIANT)).a();
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockTallPlant.HALF, BlockTallPlant.VARIANT});
     }
 }

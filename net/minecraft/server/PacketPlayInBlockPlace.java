@@ -1,77 +1,77 @@
 package net.minecraft.server;
 
-public class PacketPlayInBlockPlace extends Packet {
+public class PacketPlayInBlockPlace implements Packet {
 
-    private int a;
-    private int b;
+    private static final BlockPosition a = new BlockPosition(-1, -1, -1);
+    private BlockPosition b;
     private int c;
-    private int d;
-    private ItemStack e;
+    private ItemStack d;
+    private float e;
     private float f;
     private float g;
-    private float h;
 
     public PacketPlayInBlockPlace() {}
 
+    public PacketPlayInBlockPlace(ItemStack itemstack) {
+        this(PacketPlayInBlockPlace.a, 255, itemstack, 0.0F, 0.0F, 0.0F);
+    }
+
+    public PacketPlayInBlockPlace(BlockPosition blockposition, int i, ItemStack itemstack, float f, float f1, float f2) {
+        this.b = blockposition;
+        this.c = i;
+        this.d = itemstack != null ? itemstack.cloneItemStack() : null;
+        this.e = f;
+        this.f = f1;
+        this.g = f2;
+    }
+
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.readInt();
-        this.b = packetdataserializer.readUnsignedByte();
-        this.c = packetdataserializer.readInt();
-        this.d = packetdataserializer.readUnsignedByte();
-        this.e = packetdataserializer.c();
+        this.b = packetdataserializer.c();
+        this.c = packetdataserializer.readUnsignedByte();
+        this.d = packetdataserializer.i();
+        this.e = (float) packetdataserializer.readUnsignedByte() / 16.0F;
         this.f = (float) packetdataserializer.readUnsignedByte() / 16.0F;
         this.g = (float) packetdataserializer.readUnsignedByte() / 16.0F;
-        this.h = (float) packetdataserializer.readUnsignedByte() / 16.0F;
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeInt(this.a);
-        packetdataserializer.writeByte(this.b);
-        packetdataserializer.writeInt(this.c);
-        packetdataserializer.writeByte(this.d);
-        packetdataserializer.a(this.e);
+        packetdataserializer.a(this.b);
+        packetdataserializer.writeByte(this.c);
+        packetdataserializer.a(this.d);
+        packetdataserializer.writeByte((int) (this.e * 16.0F));
         packetdataserializer.writeByte((int) (this.f * 16.0F));
         packetdataserializer.writeByte((int) (this.g * 16.0F));
-        packetdataserializer.writeByte((int) (this.h * 16.0F));
     }
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
-    public int c() {
-        return this.a;
-    }
-
-    public int d() {
+    public BlockPosition a() {
         return this.b;
     }
 
-    public int e() {
+    public int getFace() {
         return this.c;
     }
 
-    public int getFace() {
+    public ItemStack getItemStack() {
         return this.d;
     }
 
-    public ItemStack getItemStack() {
+    public float d() {
         return this.e;
     }
 
-    public float h() {
+    public float e() {
         return this.f;
     }
 
-    public float i() {
+    public float f() {
         return this.g;
     }
 
-    public float j() {
-        return this.h;
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

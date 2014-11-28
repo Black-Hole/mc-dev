@@ -3,22 +3,26 @@ package net.minecraft.server;
 public class ItemWrittenBook extends Item {
 
     public ItemWrittenBook() {
-        this.e(1);
+        this.c(1);
     }
 
-    public static boolean a(NBTTagCompound nbttagcompound) {
-        if (!ItemBookAndQuill.a(nbttagcompound)) {
+    public static boolean b(NBTTagCompound nbttagcompound) {
+        if (!ItemBookAndQuill.b(nbttagcompound)) {
             return false;
         } else if (!nbttagcompound.hasKeyOfType("title", 8)) {
             return false;
         } else {
             String s = nbttagcompound.getString("title");
 
-            return s != null && s.length() <= 16 ? nbttagcompound.hasKeyOfType("author", 8) : false;
+            return s != null && s.length() <= 32 ? nbttagcompound.hasKeyOfType("author", 8) : false;
         }
     }
 
-    public String n(ItemStack itemstack) {
+    public static int h(ItemStack itemstack) {
+        return itemstack.getTag().getInt("generation");
+    }
+
+    public String a(ItemStack itemstack) {
         if (itemstack.hasTag()) {
             NBTTagCompound nbttagcompound = itemstack.getTag();
             String s = nbttagcompound.getString("title");
@@ -28,15 +32,53 @@ public class ItemWrittenBook extends Item {
             }
         }
 
-        return super.n(itemstack);
+        return super.a(itemstack);
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        entityhuman.b(itemstack);
+        if (!world.isStatic) {
+            this.a(itemstack, entityhuman);
+        }
+
+        entityhuman.openBook(itemstack);
+        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
         return itemstack;
     }
 
-    public boolean s() {
-        return true;
+    private void a(ItemStack itemstack, EntityHuman entityhuman) {
+        if (itemstack != null && itemstack.getTag() != null) {
+            NBTTagCompound nbttagcompound = itemstack.getTag();
+
+            if (!nbttagcompound.getBoolean("resolved")) {
+                nbttagcompound.setBoolean("resolved", true);
+                if (b(nbttagcompound)) {
+                    NBTTagList nbttaglist = nbttagcompound.getList("pages", 8);
+
+                    for (int i = 0; i < nbttaglist.size(); ++i) {
+                        String s = nbttaglist.getString(i);
+
+                        Object object;
+
+                        try {
+                            IChatBaseComponent ichatbasecomponent = ChatSerializer.a(s);
+
+                            object = ChatComponentUtils.filterForDisplay(entityhuman, ichatbasecomponent, entityhuman);
+                        } catch (Exception exception) {
+                            object = new ChatComponentText(s);
+                        }
+
+                        nbttaglist.a(i, new NBTTagString(ChatSerializer.a((IChatBaseComponent) object)));
+                    }
+
+                    nbttagcompound.set("pages", nbttaglist);
+                    if (entityhuman instanceof EntityPlayer && entityhuman.bY() == itemstack) {
+                        Slot slot = entityhuman.activeContainer.getSlot(entityhuman.inventory, entityhuman.inventory.itemInHandIndex);
+
+                        ((EntityPlayer) entityhuman).playerConnection.sendPacket(new PacketPlayOutSetSlot(0, slot.rawSlotIndex, itemstack));
+                    }
+
+                }
+            }
+        }
     }
 }

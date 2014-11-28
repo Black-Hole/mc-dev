@@ -4,15 +4,15 @@ public class BiomeMushrooms extends BiomeBase {
 
     public BiomeMushrooms(int i) {
         super(i);
-        this.ar.x = -100;
-        this.ar.y = -100;
-        this.ar.z = -100;
-        this.ar.B = 1;
-        this.ar.H = 1;
-        this.ai = Blocks.MYCEL;
-        this.as.clear();
+        this.as.A = -100;
+        this.as.B = -100;
+        this.as.C = -100;
+        this.as.E = 1;
+        this.as.K = 1;
+        this.ak = Blocks.MYCELIUM.getBlockData();
         this.at.clear();
         this.au.clear();
-        this.at.add(new BiomeMeta(EntityMushroomCow.class, 8, 4, 8));
+        this.av.clear();
+        this.au.add(new BiomeMeta(EntityMushroomCow.class, 8, 4, 8));
     }
 }

@@ -28,4 +28,8 @@ public class ScoreboardHealthCriteria extends ScoreboardBaseCriteria {
     public boolean isReadOnly() {
         return true;
     }
+
+    public EnumScoreboardHealthDisplay c() {
+        return EnumScoreboardHealthDisplay.HEARTS;
+    }
 }

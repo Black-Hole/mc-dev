@@ -10,11 +10,14 @@ public class ScoreboardScore {
     private final ScoreboardObjective c;
     private final String playerName;
     private int score;
+    private boolean f;
+    private boolean g;
 
     public ScoreboardScore(Scoreboard scoreboard, ScoreboardObjective scoreboardobjective, String s) {
         this.b = scoreboard;
         this.c = scoreboardobjective;
         this.playerName = s;
+        this.g = true;
     }
 
     public void addScore(int i) {
@@ -49,9 +52,11 @@ public class ScoreboardScore {
         int j = this.score;
 
         this.score = i;
-        if (j != i) {
+        if (j != i || this.g) {
+            this.g = false;
             this.f().handleScoreChanged(this);
         }
+
     }
 
     public ScoreboardObjective getObjective() {
@@ -64,6 +69,14 @@ public class ScoreboardScore {
 
     public Scoreboard f() {
         return this.b;
+    }
+
+    public boolean g() {
+        return this.f;
+    }
+
+    public void a(boolean flag) {
+        this.f = flag;
     }
 
     public void updateForList(List list) {

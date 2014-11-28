@@ -4,52 +4,77 @@ import java.util.Random;
 
 public class BlockRepeater extends BlockDiodeAbstract {
 
-    public static final double[] b = new double[] { -0.0625D, 0.0625D, 0.1875D, 0.3125D};
-    private static final int[] M = new int[] { 1, 2, 3, 4};
+    public static final BlockStateBoolean LOCKED = BlockStateBoolean.of("locked");
+    public static final BlockStateInteger DELAY = BlockStateInteger.of("delay", 1, 4);
 
     protected BlockRepeater(boolean flag) {
         super(flag);
+        this.j(this.blockStateList.getBlockData().set(BlockRepeater.FACING, EnumDirection.NORTH).set(BlockRepeater.DELAY, Integer.valueOf(1)).set(BlockRepeater.LOCKED, Boolean.valueOf(false)));
     }
 
-    public boolean interact(World world, int i, int j, int k, EntityHuman entityhuman, int l, float f, float f1, float f2) {
-        int i1 = world.getData(i, j, k);
-        int j1 = (i1 & 12) >> 2;
-
-        j1 = j1 + 1 << 2 & 12;
-        world.setData(i, j, k, j1 | i1 & 3, 3);
-        return true;
+    public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.set(BlockRepeater.LOCKED, Boolean.valueOf(this.b(iblockaccess, blockposition, iblockdata)));
     }
 
-    protected int b(int i) {
-        return M[(i & 12) >> 2] * 2;
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+        if (!entityhuman.abilities.mayBuild) {
+            return false;
+        } else {
+            world.setTypeAndData(blockposition, iblockdata.a(BlockRepeater.DELAY), 3);
+            return true;
+        }
     }
 
-    protected BlockDiodeAbstract e() {
-        return Blocks.DIODE_ON;
+    protected int d(IBlockData iblockdata) {
+        return ((Integer) iblockdata.get(BlockRepeater.DELAY)).intValue() * 2;
     }
 
-    protected BlockDiodeAbstract i() {
-        return Blocks.DIODE_OFF;
+    protected IBlockData e(IBlockData iblockdata) {
+        Integer integer = (Integer) iblockdata.get(BlockRepeater.DELAY);
+        Boolean obool = (Boolean) iblockdata.get(BlockRepeater.LOCKED);
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockRepeater.FACING);
+
+        return Blocks.POWERED_REPEATER.getBlockData().set(BlockRepeater.FACING, enumdirection).set(BlockRepeater.DELAY, integer).set(BlockRepeater.LOCKED, obool);
     }
 
-    public Item getDropType(int i, Random random, int j) {
-        return Items.DIODE;
+    protected IBlockData k(IBlockData iblockdata) {
+        Integer integer = (Integer) iblockdata.get(BlockRepeater.DELAY);
+        Boolean obool = (Boolean) iblockdata.get(BlockRepeater.LOCKED);
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockRepeater.FACING);
+
+        return Blocks.UNPOWERED_REPEATER.getBlockData().set(BlockRepeater.FACING, enumdirection).set(BlockRepeater.DELAY, integer).set(BlockRepeater.LOCKED, obool);
     }
 
-    public int b() {
-        return 15;
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
+        return Items.REPEATER;
     }
 
-    public boolean g(IBlockAccess iblockaccess, int i, int j, int k, int l) {
-        return this.h(iblockaccess, i, j, k, l) > 0;
+    public boolean b(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        return this.c(iblockaccess, blockposition, iblockdata) > 0;
     }
 
-    protected boolean a(Block block) {
+    protected boolean c(Block block) {
         return d(block);
     }
 
-    public void remove(World world, int i, int j, int k, Block block, int l) {
-        super.remove(world, i, j, k, block, l);
-        this.e(world, i, j, k);
+    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        super.remove(world, blockposition, iblockdata);
+        this.h(world, blockposition, iblockdata);
+    }
+
+    public IBlockData fromLegacyData(int i) {
+        return this.getBlockData().set(BlockRepeater.FACING, EnumDirection.fromType2(i)).set(BlockRepeater.LOCKED, Boolean.valueOf(false)).set(BlockRepeater.DELAY, Integer.valueOf(1 + (i >> 2)));
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        byte b0 = 0;
+        int i = b0 | ((EnumDirection) iblockdata.get(BlockRepeater.FACING)).b();
+
+        i |= ((Integer) iblockdata.get(BlockRepeater.DELAY)).intValue() - 1 << 2;
+        return i;
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockRepeater.FACING, BlockRepeater.DELAY, BlockRepeater.LOCKED});
     }
 }

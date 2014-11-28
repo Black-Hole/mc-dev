@@ -1,15 +1,17 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicate;
+
 public class PathfinderGoalRandomTargetNonTamed extends PathfinderGoalNearestAttackableTarget {
 
-    private EntityTameableAnimal a;
+    private EntityTameableAnimal g;
 
-    public PathfinderGoalRandomTargetNonTamed(EntityTameableAnimal entitytameableanimal, Class oclass, int i, boolean flag) {
-        super(entitytameableanimal, oclass, i, flag);
-        this.a = entitytameableanimal;
+    public PathfinderGoalRandomTargetNonTamed(EntityTameableAnimal entitytameableanimal, Class oclass, boolean flag, Predicate predicate) {
+        super(entitytameableanimal, oclass, 10, flag, false, predicate);
+        this.g = entitytameableanimal;
     }
 
     public boolean a() {
-        return !this.a.isTamed() && super.a();
+        return !this.g.isTamed() && super.a();
     }
 }

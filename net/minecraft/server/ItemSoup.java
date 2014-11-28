@@ -4,7 +4,7 @@ public class ItemSoup extends ItemFood {
 
     public ItemSoup(int i) {
         super(i, false);
-        this.e(1);
+        this.c(1);
     }
 
     public ItemStack b(ItemStack itemstack, World world, EntityHuman entityhuman) {

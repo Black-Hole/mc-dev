@@ -1,43 +1,44 @@
 package net.minecraft.server;
 
-public class PacketPlayInCustomPayload extends Packet {
+import io.netty.buffer.ByteBuf;
+import java.io.IOException;
 
-    private String tag;
-    private int length;
-    private byte[] data;
+public class PacketPlayInCustomPayload implements Packet {
+
+    private String a;
+    private PacketDataSerializer b;
 
     public PacketPlayInCustomPayload() {}
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.tag = packetdataserializer.c(20);
-        this.length = packetdataserializer.readShort();
-        if (this.length > 0 && this.length < 32767) {
-            this.data = new byte[this.length];
-            packetdataserializer.readBytes(this.data);
+        this.a = packetdataserializer.c(20);
+        int i = packetdataserializer.readableBytes();
+
+        if (i >= 0 && i <= 32767) {
+            this.b = new PacketDataSerializer(packetdataserializer.readBytes(i));
+        } else {
+            throw new IOException("Payload may not be larger than 32767 bytes");
         }
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.a(this.tag);
-        packetdataserializer.writeShort((short) this.length);
-        if (this.data != null) {
-            packetdataserializer.writeBytes(this.data);
-        }
+        packetdataserializer.a(this.a);
+        packetdataserializer.writeBytes((ByteBuf) this.b);
     }
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
-    public String c() {
-        return this.tag;
+    public String a() {
+        return this.a;
     }
 
-    public byte[] e() {
-        return this.data;
+    public PacketDataSerializer b() {
+        return this.b;
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

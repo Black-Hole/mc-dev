@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutSpawnEntityWeather extends Packet {
+public class PacketPlayOutSpawnEntityWeather implements Packet {
 
     private int a;
     private int b;
@@ -18,10 +18,11 @@ public class PacketPlayOutSpawnEntityWeather extends Packet {
         if (entity instanceof EntityLightning) {
             this.e = 1;
         }
+
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.a();
+        this.a = packetdataserializer.e();
         this.e = packetdataserializer.readByte();
         this.b = packetdataserializer.readInt();
         this.c = packetdataserializer.readInt();
@@ -36,15 +37,11 @@ public class PacketPlayOutSpawnEntityWeather extends Packet {
         packetdataserializer.writeInt(this.d);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public String b() {
-        return String.format("id=%d, type=%d, x=%.2f, y=%.2f, z=%.2f", new Object[] { Integer.valueOf(this.a), Integer.valueOf(this.e), Float.valueOf((float) this.b / 32.0F), Float.valueOf((float) this.c / 32.0F), Float.valueOf((float) this.d / 32.0F)});
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

@@ -1,8 +1,7 @@
 package net.minecraft.server;
 
+import com.google.common.base.Function;
 import java.util.Iterator;
-
-import net.minecraft.util.com.google.common.base.Function;
 
 final class ChatFunction1 implements Function {
 

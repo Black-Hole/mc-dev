@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutAbilities extends Packet {
+public class PacketPlayOutAbilities implements Packet {
 
     private boolean a;
     private boolean b;
@@ -34,19 +34,19 @@ public class PacketPlayOutAbilities extends Packet {
     public void b(PacketDataSerializer packetdataserializer) {
         byte b0 = 0;
 
-        if (this.c()) {
+        if (this.a()) {
             b0 = (byte) (b0 | 1);
         }
 
-        if (this.d()) {
+        if (this.b()) {
             b0 = (byte) (b0 | 2);
         }
 
-        if (this.e()) {
+        if (this.c()) {
             b0 = (byte) (b0 | 4);
         }
 
-        if (this.f()) {
+        if (this.d()) {
             b0 = (byte) (b0 | 8);
         }
 
@@ -55,15 +55,11 @@ public class PacketPlayOutAbilities extends Packet {
         packetdataserializer.writeFloat(this.f);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public String b() {
-        return String.format("invuln=%b, flying=%b, canfly=%b, instabuild=%b, flyspeed=%.4f, walkspped=%.4f", new Object[] { Boolean.valueOf(this.c()), Boolean.valueOf(this.d()), Boolean.valueOf(this.e()), Boolean.valueOf(this.f()), Float.valueOf(this.g()), Float.valueOf(this.h())});
-    }
-
-    public boolean c() {
+    public boolean a() {
         return this.a;
     }
 
@@ -71,7 +67,7 @@ public class PacketPlayOutAbilities extends Packet {
         this.a = flag;
     }
 
-    public boolean d() {
+    public boolean b() {
         return this.b;
     }
 
@@ -79,7 +75,7 @@ public class PacketPlayOutAbilities extends Packet {
         this.b = flag;
     }
 
-    public boolean e() {
+    public boolean c() {
         return this.c;
     }
 
@@ -87,7 +83,7 @@ public class PacketPlayOutAbilities extends Packet {
         this.c = flag;
     }
 
-    public boolean f() {
+    public boolean d() {
         return this.d;
     }
 
@@ -95,23 +91,15 @@ public class PacketPlayOutAbilities extends Packet {
         this.d = flag;
     }
 
-    public float g() {
-        return this.e;
-    }
-
     public void a(float f) {
         this.e = f;
-    }
-
-    public float h() {
-        return this.f;
     }
 
     public void b(float f) {
         this.f = f;
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

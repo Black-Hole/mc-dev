@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class ItemMilkBucket extends Item {
 
     public ItemMilkBucket() {
-        this.e(1);
+        this.c(1);
         this.a(CreativeModeTab.f);
     }
 
@@ -16,19 +16,20 @@ public class ItemMilkBucket extends Item {
             entityhuman.removeAllEffects();
         }
 
+        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
         return itemstack.count <= 0 ? new ItemStack(Items.BUCKET) : itemstack;
     }
 
-    public int d_(ItemStack itemstack) {
+    public int d(ItemStack itemstack) {
         return 32;
     }
 
-    public EnumAnimation d(ItemStack itemstack) {
+    public EnumAnimation e(ItemStack itemstack) {
         return EnumAnimation.DRINK;
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        entityhuman.a(itemstack, this.d_(itemstack));
+        entityhuman.a(itemstack, this.d(itemstack));
         return itemstack;
     }
 }

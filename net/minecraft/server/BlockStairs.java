@@ -1,33 +1,40 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class BlockStairs extends Block {
 
-    private static final int[][] a = new int[][] { { 2, 6}, { 3, 7}, { 2, 3}, { 6, 7}, { 0, 4}, { 1, 5}, { 0, 1}, { 4, 5}};
-    private final Block b;
-    private final int M;
-    private boolean N;
-    private int O;
+    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateEnum HALF = BlockStateEnum.of("half", EnumHalf.class);
+    public static final BlockStateEnum SHAPE = BlockStateEnum.of("shape", EnumStairShape.class);
+    private static final int[][] N = new int[][] { { 4, 5}, { 5, 7}, { 6, 7}, { 4, 6}, { 0, 1}, { 1, 3}, { 2, 3}, { 0, 2}};
+    private final Block O;
+    private final IBlockData P;
+    private boolean Q;
+    private int R;
 
-    protected BlockStairs(Block block, int i) {
-        super(block.material);
-        this.b = block;
-        this.M = i;
-        this.c(block.strength);
-        this.b(block.durability / 3.0F);
-        this.a(block.stepSound);
-        this.g(255);
+    protected BlockStairs(IBlockData iblockdata) {
+        super(iblockdata.getBlock().material);
+        this.j(this.blockStateList.getBlockData().set(BlockStairs.FACING, EnumDirection.NORTH).set(BlockStairs.HALF, EnumHalf.BOTTOM).set(BlockStairs.SHAPE, EnumStairShape.STRAIGHT));
+        this.O = iblockdata.getBlock();
+        this.P = iblockdata;
+        this.c(this.O.strength);
+        this.b(this.O.durability / 3.0F);
+        this.a(this.O.stepSound);
+        this.e(255);
         this.a(CreativeModeTab.b);
     }
 
-    public void updateShape(IBlockAccess iblockaccess, int i, int j, int k) {
-        if (this.N) {
-            this.a(0.5F * (float) (this.O % 2), 0.5F * (float) (this.O / 2 % 2), 0.5F * (float) (this.O / 4 % 2), 0.5F + 0.5F * (float) (this.O % 2), 0.5F + 0.5F * (float) (this.O / 2 % 2), 0.5F + 0.5F * (float) (this.O / 4 % 2));
+    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        if (this.Q) {
+            this.a(0.5F * (float) (this.R % 2), 0.5F * (float) (this.R / 4 % 2), 0.5F * (float) (this.R / 2 % 2), 0.5F + 0.5F * (float) (this.R % 2), 0.5F + 0.5F * (float) (this.R / 4 % 2), 0.5F + 0.5F * (float) (this.R / 2 % 2));
         } else {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         }
+
     }
 
     public boolean c() {
@@ -38,37 +45,167 @@ public class BlockStairs extends Block {
         return false;
     }
 
-    public int b() {
-        return 10;
-    }
-
-    public void e(IBlockAccess iblockaccess, int i, int j, int k) {
-        int l = iblockaccess.getData(i, j, k);
-
-        if ((l & 4) != 0) {
+    public void e(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        if (iblockaccess.getType(blockposition).get(BlockStairs.HALF) == EnumHalf.TOP) {
             this.a(0.0F, 0.5F, 0.0F, 1.0F, 1.0F, 1.0F);
         } else {
             this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         }
+
     }
 
-    public static boolean a(Block block) {
+    public static boolean c(Block block) {
         return block instanceof BlockStairs;
     }
 
-    private boolean f(IBlockAccess iblockaccess, int i, int j, int k, int l) {
-        Block block = iblockaccess.getType(i, j, k);
+    public static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        IBlockData iblockdata1 = iblockaccess.getType(blockposition);
+        Block block = iblockdata1.getBlock();
 
-        return a(block) && iblockaccess.getData(i, j, k) == l;
+        return c(block) && iblockdata1.get(BlockStairs.HALF) == iblockdata.get(BlockStairs.HALF) && iblockdata1.get(BlockStairs.FACING) == iblockdata.get(BlockStairs.FACING);
     }
 
-    public boolean f(IBlockAccess iblockaccess, int i, int j, int k) {
-        int l = iblockaccess.getData(i, j, k);
-        int i1 = l & 3;
+    public int f(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        IBlockData iblockdata = iblockaccess.getType(blockposition);
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
+        EnumHalf enumhalf = (EnumHalf) iblockdata.get(BlockStairs.HALF);
+        boolean flag = enumhalf == EnumHalf.TOP;
+        IBlockData iblockdata1;
+        Block block;
+        EnumDirection enumdirection1;
+
+        if (enumdirection == EnumDirection.EAST) {
+            iblockdata1 = iblockaccess.getType(blockposition.east());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.NORTH && !a(iblockaccess, blockposition.south(), iblockdata)) {
+                    return flag ? 1 : 2;
+                }
+
+                if (enumdirection1 == EnumDirection.SOUTH && !a(iblockaccess, blockposition.north(), iblockdata)) {
+                    return flag ? 2 : 1;
+                }
+            }
+        } else if (enumdirection == EnumDirection.WEST) {
+            iblockdata1 = iblockaccess.getType(blockposition.west());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.NORTH && !a(iblockaccess, blockposition.south(), iblockdata)) {
+                    return flag ? 2 : 1;
+                }
+
+                if (enumdirection1 == EnumDirection.SOUTH && !a(iblockaccess, blockposition.north(), iblockdata)) {
+                    return flag ? 1 : 2;
+                }
+            }
+        } else if (enumdirection == EnumDirection.SOUTH) {
+            iblockdata1 = iblockaccess.getType(blockposition.south());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.WEST && !a(iblockaccess, blockposition.east(), iblockdata)) {
+                    return flag ? 2 : 1;
+                }
+
+                if (enumdirection1 == EnumDirection.EAST && !a(iblockaccess, blockposition.west(), iblockdata)) {
+                    return flag ? 1 : 2;
+                }
+            }
+        } else if (enumdirection == EnumDirection.NORTH) {
+            iblockdata1 = iblockaccess.getType(blockposition.north());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.WEST && !a(iblockaccess, blockposition.east(), iblockdata)) {
+                    return flag ? 1 : 2;
+                }
+
+                if (enumdirection1 == EnumDirection.EAST && !a(iblockaccess, blockposition.west(), iblockdata)) {
+                    return flag ? 2 : 1;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    public int g(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        IBlockData iblockdata = iblockaccess.getType(blockposition);
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
+        EnumHalf enumhalf = (EnumHalf) iblockdata.get(BlockStairs.HALF);
+        boolean flag = enumhalf == EnumHalf.TOP;
+        IBlockData iblockdata1;
+        Block block;
+        EnumDirection enumdirection1;
+
+        if (enumdirection == EnumDirection.EAST) {
+            iblockdata1 = iblockaccess.getType(blockposition.west());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.NORTH && !a(iblockaccess, blockposition.north(), iblockdata)) {
+                    return flag ? 1 : 2;
+                }
+
+                if (enumdirection1 == EnumDirection.SOUTH && !a(iblockaccess, blockposition.south(), iblockdata)) {
+                    return flag ? 2 : 1;
+                }
+            }
+        } else if (enumdirection == EnumDirection.WEST) {
+            iblockdata1 = iblockaccess.getType(blockposition.east());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.NORTH && !a(iblockaccess, blockposition.north(), iblockdata)) {
+                    return flag ? 2 : 1;
+                }
+
+                if (enumdirection1 == EnumDirection.SOUTH && !a(iblockaccess, blockposition.south(), iblockdata)) {
+                    return flag ? 1 : 2;
+                }
+            }
+        } else if (enumdirection == EnumDirection.SOUTH) {
+            iblockdata1 = iblockaccess.getType(blockposition.north());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.WEST && !a(iblockaccess, blockposition.west(), iblockdata)) {
+                    return flag ? 2 : 1;
+                }
+
+                if (enumdirection1 == EnumDirection.EAST && !a(iblockaccess, blockposition.east(), iblockdata)) {
+                    return flag ? 1 : 2;
+                }
+            }
+        } else if (enumdirection == EnumDirection.NORTH) {
+            iblockdata1 = iblockaccess.getType(blockposition.south());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.WEST && !a(iblockaccess, blockposition.west(), iblockdata)) {
+                    return flag ? 1 : 2;
+                }
+
+                if (enumdirection1 == EnumDirection.EAST && !a(iblockaccess, blockposition.east(), iblockdata)) {
+                    return flag ? 2 : 1;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    public boolean h(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        IBlockData iblockdata = iblockaccess.getType(blockposition);
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
+        EnumHalf enumhalf = (EnumHalf) iblockdata.get(BlockStairs.HALF);
+        boolean flag = enumhalf == EnumHalf.TOP;
         float f = 0.5F;
         float f1 = 1.0F;
 
-        if ((l & 4) != 0) {
+        if (flag) {
             f = 0.0F;
             f1 = 0.5F;
         }
@@ -77,82 +214,84 @@ public class BlockStairs extends Block {
         float f3 = 1.0F;
         float f4 = 0.0F;
         float f5 = 0.5F;
-        boolean flag = true;
+        boolean flag1 = true;
+        IBlockData iblockdata1;
         Block block;
-        int j1;
-        int k1;
+        EnumDirection enumdirection1;
 
-        if (i1 == 0) {
+        if (enumdirection == EnumDirection.EAST) {
             f2 = 0.5F;
             f5 = 1.0F;
-            block = iblockaccess.getType(i + 1, j, k);
-            j1 = iblockaccess.getData(i + 1, j, k);
-            if (a(block) && (l & 4) == (j1 & 4)) {
-                k1 = j1 & 3;
-                if (k1 == 3 && !this.f(iblockaccess, i, j, k + 1, l)) {
+            iblockdata1 = iblockaccess.getType(blockposition.east());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.NORTH && !a(iblockaccess, blockposition.south(), iblockdata)) {
                     f5 = 0.5F;
-                    flag = false;
-                } else if (k1 == 2 && !this.f(iblockaccess, i, j, k - 1, l)) {
+                    flag1 = false;
+                } else if (enumdirection1 == EnumDirection.SOUTH && !a(iblockaccess, blockposition.north(), iblockdata)) {
                     f4 = 0.5F;
-                    flag = false;
+                    flag1 = false;
                 }
             }
-        } else if (i1 == 1) {
+        } else if (enumdirection == EnumDirection.WEST) {
             f3 = 0.5F;
             f5 = 1.0F;
-            block = iblockaccess.getType(i - 1, j, k);
-            j1 = iblockaccess.getData(i - 1, j, k);
-            if (a(block) && (l & 4) == (j1 & 4)) {
-                k1 = j1 & 3;
-                if (k1 == 3 && !this.f(iblockaccess, i, j, k + 1, l)) {
+            iblockdata1 = iblockaccess.getType(blockposition.west());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.NORTH && !a(iblockaccess, blockposition.south(), iblockdata)) {
                     f5 = 0.5F;
-                    flag = false;
-                } else if (k1 == 2 && !this.f(iblockaccess, i, j, k - 1, l)) {
+                    flag1 = false;
+                } else if (enumdirection1 == EnumDirection.SOUTH && !a(iblockaccess, blockposition.north(), iblockdata)) {
                     f4 = 0.5F;
-                    flag = false;
+                    flag1 = false;
                 }
             }
-        } else if (i1 == 2) {
+        } else if (enumdirection == EnumDirection.SOUTH) {
             f4 = 0.5F;
             f5 = 1.0F;
-            block = iblockaccess.getType(i, j, k + 1);
-            j1 = iblockaccess.getData(i, j, k + 1);
-            if (a(block) && (l & 4) == (j1 & 4)) {
-                k1 = j1 & 3;
-                if (k1 == 1 && !this.f(iblockaccess, i + 1, j, k, l)) {
+            iblockdata1 = iblockaccess.getType(blockposition.south());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.WEST && !a(iblockaccess, blockposition.east(), iblockdata)) {
                     f3 = 0.5F;
-                    flag = false;
-                } else if (k1 == 0 && !this.f(iblockaccess, i - 1, j, k, l)) {
+                    flag1 = false;
+                } else if (enumdirection1 == EnumDirection.EAST && !a(iblockaccess, blockposition.west(), iblockdata)) {
                     f2 = 0.5F;
-                    flag = false;
+                    flag1 = false;
                 }
             }
-        } else if (i1 == 3) {
-            block = iblockaccess.getType(i, j, k - 1);
-            j1 = iblockaccess.getData(i, j, k - 1);
-            if (a(block) && (l & 4) == (j1 & 4)) {
-                k1 = j1 & 3;
-                if (k1 == 1 && !this.f(iblockaccess, i + 1, j, k, l)) {
+        } else if (enumdirection == EnumDirection.NORTH) {
+            iblockdata1 = iblockaccess.getType(blockposition.north());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.WEST && !a(iblockaccess, blockposition.east(), iblockdata)) {
                     f3 = 0.5F;
-                    flag = false;
-                } else if (k1 == 0 && !this.f(iblockaccess, i - 1, j, k, l)) {
+                    flag1 = false;
+                } else if (enumdirection1 == EnumDirection.EAST && !a(iblockaccess, blockposition.west(), iblockdata)) {
                     f2 = 0.5F;
-                    flag = false;
+                    flag1 = false;
                 }
             }
         }
 
         this.a(f2, f, f4, f3, f1, f5);
-        return flag;
+        return flag1;
     }
 
-    public boolean g(IBlockAccess iblockaccess, int i, int j, int k) {
-        int l = iblockaccess.getData(i, j, k);
-        int i1 = l & 3;
+    public boolean i(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        IBlockData iblockdata = iblockaccess.getType(blockposition);
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
+        EnumHalf enumhalf = (EnumHalf) iblockdata.get(BlockStairs.HALF);
+        boolean flag = enumhalf == EnumHalf.TOP;
         float f = 0.5F;
         float f1 = 1.0F;
 
-        if ((l & 4) != 0) {
+        if (flag) {
             f = 0.0F;
             f1 = 0.5F;
         }
@@ -161,224 +300,193 @@ public class BlockStairs extends Block {
         float f3 = 0.5F;
         float f4 = 0.5F;
         float f5 = 1.0F;
-        boolean flag = false;
+        boolean flag1 = false;
+        IBlockData iblockdata1;
         Block block;
-        int j1;
-        int k1;
+        EnumDirection enumdirection1;
 
-        if (i1 == 0) {
-            block = iblockaccess.getType(i - 1, j, k);
-            j1 = iblockaccess.getData(i - 1, j, k);
-            if (a(block) && (l & 4) == (j1 & 4)) {
-                k1 = j1 & 3;
-                if (k1 == 3 && !this.f(iblockaccess, i, j, k - 1, l)) {
+        if (enumdirection == EnumDirection.EAST) {
+            iblockdata1 = iblockaccess.getType(blockposition.west());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.NORTH && !a(iblockaccess, blockposition.north(), iblockdata)) {
                     f4 = 0.0F;
                     f5 = 0.5F;
-                    flag = true;
-                } else if (k1 == 2 && !this.f(iblockaccess, i, j, k + 1, l)) {
+                    flag1 = true;
+                } else if (enumdirection1 == EnumDirection.SOUTH && !a(iblockaccess, blockposition.south(), iblockdata)) {
                     f4 = 0.5F;
                     f5 = 1.0F;
-                    flag = true;
+                    flag1 = true;
                 }
             }
-        } else if (i1 == 1) {
-            block = iblockaccess.getType(i + 1, j, k);
-            j1 = iblockaccess.getData(i + 1, j, k);
-            if (a(block) && (l & 4) == (j1 & 4)) {
+        } else if (enumdirection == EnumDirection.WEST) {
+            iblockdata1 = iblockaccess.getType(blockposition.east());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
                 f2 = 0.5F;
                 f3 = 1.0F;
-                k1 = j1 & 3;
-                if (k1 == 3 && !this.f(iblockaccess, i, j, k - 1, l)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.NORTH && !a(iblockaccess, blockposition.north(), iblockdata)) {
                     f4 = 0.0F;
                     f5 = 0.5F;
-                    flag = true;
-                } else if (k1 == 2 && !this.f(iblockaccess, i, j, k + 1, l)) {
+                    flag1 = true;
+                } else if (enumdirection1 == EnumDirection.SOUTH && !a(iblockaccess, blockposition.south(), iblockdata)) {
                     f4 = 0.5F;
                     f5 = 1.0F;
-                    flag = true;
+                    flag1 = true;
                 }
             }
-        } else if (i1 == 2) {
-            block = iblockaccess.getType(i, j, k - 1);
-            j1 = iblockaccess.getData(i, j, k - 1);
-            if (a(block) && (l & 4) == (j1 & 4)) {
+        } else if (enumdirection == EnumDirection.SOUTH) {
+            iblockdata1 = iblockaccess.getType(blockposition.north());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
                 f4 = 0.0F;
                 f5 = 0.5F;
-                k1 = j1 & 3;
-                if (k1 == 1 && !this.f(iblockaccess, i - 1, j, k, l)) {
-                    flag = true;
-                } else if (k1 == 0 && !this.f(iblockaccess, i + 1, j, k, l)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.WEST && !a(iblockaccess, blockposition.west(), iblockdata)) {
+                    flag1 = true;
+                } else if (enumdirection1 == EnumDirection.EAST && !a(iblockaccess, blockposition.east(), iblockdata)) {
                     f2 = 0.5F;
                     f3 = 1.0F;
-                    flag = true;
+                    flag1 = true;
                 }
             }
-        } else if (i1 == 3) {
-            block = iblockaccess.getType(i, j, k + 1);
-            j1 = iblockaccess.getData(i, j, k + 1);
-            if (a(block) && (l & 4) == (j1 & 4)) {
-                k1 = j1 & 3;
-                if (k1 == 1 && !this.f(iblockaccess, i - 1, j, k, l)) {
-                    flag = true;
-                } else if (k1 == 0 && !this.f(iblockaccess, i + 1, j, k, l)) {
+        } else if (enumdirection == EnumDirection.NORTH) {
+            iblockdata1 = iblockaccess.getType(blockposition.south());
+            block = iblockdata1.getBlock();
+            if (c(block) && enumhalf == iblockdata1.get(BlockStairs.HALF)) {
+                enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
+                if (enumdirection1 == EnumDirection.WEST && !a(iblockaccess, blockposition.west(), iblockdata)) {
+                    flag1 = true;
+                } else if (enumdirection1 == EnumDirection.EAST && !a(iblockaccess, blockposition.east(), iblockdata)) {
                     f2 = 0.5F;
                     f3 = 1.0F;
-                    flag = true;
+                    flag1 = true;
                 }
             }
         }
 
-        if (flag) {
+        if (flag1) {
             this.a(f2, f, f4, f3, f1, f5);
         }
 
-        return flag;
+        return flag1;
     }
 
-    public void a(World world, int i, int j, int k, AxisAlignedBB axisalignedbb, List list, Entity entity) {
-        this.e(world, i, j, k);
-        super.a(world, i, j, k, axisalignedbb, list, entity);
-        boolean flag = this.f(world, i, j, k);
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+        this.e(world, blockposition);
+        super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
+        boolean flag = this.h(world, blockposition);
 
-        super.a(world, i, j, k, axisalignedbb, list, entity);
-        if (flag && this.g(world, i, j, k)) {
-            super.a(world, i, j, k, axisalignedbb, list, entity);
+        super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
+        if (flag && this.i(world, blockposition)) {
+            super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         }
 
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    public void attack(World world, int i, int j, int k, EntityHuman entityhuman) {
-        this.b.attack(world, i, j, k, entityhuman);
+    public void attack(World world, BlockPosition blockposition, EntityHuman entityhuman) {
+        this.O.attack(world, blockposition, entityhuman);
     }
 
-    public void postBreak(World world, int i, int j, int k, int l) {
-        this.b.postBreak(world, i, j, k, l);
+    public void postBreak(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        this.O.postBreak(world, blockposition, iblockdata);
     }
 
     public float a(Entity entity) {
-        return this.b.a(entity);
+        return this.O.a(entity);
     }
 
     public int a(World world) {
-        return this.b.a(world);
+        return this.O.a(world);
     }
 
-    public void a(World world, int i, int j, int k, Entity entity, Vec3D vec3d) {
-        this.b.a(world, i, j, k, entity, vec3d);
+    public Vec3D a(World world, BlockPosition blockposition, Entity entity, Vec3D vec3d) {
+        return this.O.a(world, blockposition, entity, vec3d);
     }
 
-    public boolean v() {
-        return this.b.v();
+    public boolean y() {
+        return this.O.y();
     }
 
-    public boolean a(int i, boolean flag) {
-        return this.b.a(i, flag);
+    public boolean a(IBlockData iblockdata, boolean flag) {
+        return this.O.a(iblockdata, flag);
     }
 
-    public boolean canPlace(World world, int i, int j, int k) {
-        return this.b.canPlace(world, i, j, k);
+    public boolean canPlace(World world, BlockPosition blockposition) {
+        return this.O.canPlace(world, blockposition);
     }
 
-    public void onPlace(World world, int i, int j, int k) {
-        this.doPhysics(world, i, j, k, Blocks.AIR);
-        this.b.onPlace(world, i, j, k);
+    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        this.doPhysics(world, blockposition, this.P, Blocks.AIR);
+        this.O.onPlace(world, blockposition, this.P);
     }
 
-    public void remove(World world, int i, int j, int k, Block block, int l) {
-        this.b.remove(world, i, j, k, block, l);
+    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        this.O.remove(world, blockposition, this.P);
     }
 
-    public void b(World world, int i, int j, int k, Entity entity) {
-        this.b.b(world, i, j, k, entity);
+    public void a(World world, BlockPosition blockposition, Entity entity) {
+        this.O.a(world, blockposition, entity);
     }
 
-    public void a(World world, int i, int j, int k, Random random) {
-        this.b.a(world, i, j, k, random);
+    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+        this.O.b(world, blockposition, iblockdata, random);
     }
 
-    public boolean interact(World world, int i, int j, int k, EntityHuman entityhuman, int l, float f, float f1, float f2) {
-        return this.b.interact(world, i, j, k, entityhuman, 0, 0.0F, 0.0F, 0.0F);
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+        return this.O.interact(world, blockposition, this.P, entityhuman, EnumDirection.DOWN, 0.0F, 0.0F, 0.0F);
     }
 
-    public void wasExploded(World world, int i, int j, int k, Explosion explosion) {
-        this.b.wasExploded(world, i, j, k, explosion);
+    public void wasExploded(World world, BlockPosition blockposition, Explosion explosion) {
+        this.O.wasExploded(world, blockposition, explosion);
     }
 
-    public MaterialMapColor f(int i) {
-        return this.b.f(this.M);
+    public MaterialMapColor g(IBlockData iblockdata) {
+        return this.O.g(this.P);
     }
 
-    public void postPlace(World world, int i, int j, int k, EntityLiving entityliving, ItemStack itemstack) {
-        int l = MathHelper.floor((double) (entityliving.yaw * 4.0F / 360.0F) + 0.5D) & 3;
-        int i1 = world.getData(i, j, k) & 4;
+    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
+        IBlockData iblockdata = super.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityliving);
 
-        if (l == 0) {
-            world.setData(i, j, k, 2 | i1, 2);
-        }
-
-        if (l == 1) {
-            world.setData(i, j, k, 1 | i1, 2);
-        }
-
-        if (l == 2) {
-            world.setData(i, j, k, 3 | i1, 2);
-        }
-
-        if (l == 3) {
-            world.setData(i, j, k, 0 | i1, 2);
-        }
+        iblockdata = iblockdata.set(BlockStairs.FACING, entityliving.getDirection()).set(BlockStairs.SHAPE, EnumStairShape.STRAIGHT);
+        return enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) f1 <= 0.5D) ? iblockdata.set(BlockStairs.HALF, EnumHalf.BOTTOM) : iblockdata.set(BlockStairs.HALF, EnumHalf.TOP);
     }
 
-    public int getPlacedData(World world, int i, int j, int k, int l, float f, float f1, float f2, int i1) {
-        return l != 0 && (l == 1 || (double) f1 <= 0.5D) ? i1 : i1 | 4;
-    }
-
-    public MovingObjectPosition a(World world, int i, int j, int k, Vec3D vec3d, Vec3D vec3d1) {
+    public MovingObjectPosition a(World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
         MovingObjectPosition[] amovingobjectposition = new MovingObjectPosition[8];
-        int l = world.getData(i, j, k);
-        int i1 = l & 3;
-        boolean flag = (l & 4) == 4;
-        int[] aint = a[i1 + (flag ? 4 : 0)];
+        IBlockData iblockdata = world.getType(blockposition);
+        int i = ((EnumDirection) iblockdata.get(BlockStairs.FACING)).b();
+        boolean flag = iblockdata.get(BlockStairs.HALF) == EnumHalf.TOP;
+        int[] aint = BlockStairs.N[i + (flag ? 4 : 0)];
 
-        this.N = true;
+        this.Q = true;
 
-        int j1;
-        int k1;
-        int l1;
-
-        for (int i2 = 0; i2 < 8; ++i2) {
-            this.O = i2;
-            int[] aint1 = aint;
-
-            j1 = aint.length;
-
-            for (k1 = 0; k1 < j1; ++k1) {
-                l1 = aint1[k1];
-                if (l1 == i2) {
-                    ;
-                }
+        for (int j = 0; j < 8; ++j) {
+            this.R = j;
+            if (Arrays.binarySearch(aint, j) < 0) {
+                amovingobjectposition[j] = super.a(world, blockposition, vec3d, vec3d1);
             }
-
-            amovingobjectposition[i2] = super.a(world, i, j, k, vec3d, vec3d1);
         }
 
-        int[] aint2 = aint;
-        int j2 = aint.length;
+        int[] aint1 = aint;
+        int k = aint.length;
 
-        for (j1 = 0; j1 < j2; ++j1) {
-            k1 = aint2[j1];
-            amovingobjectposition[k1] = null;
+        for (int l = 0; l < k; ++l) {
+            int i1 = aint1[l];
+
+            amovingobjectposition[i1] = null;
         }
 
         MovingObjectPosition movingobjectposition = null;
         double d0 = 0.0D;
         MovingObjectPosition[] amovingobjectposition1 = amovingobjectposition;
+        int j1 = amovingobjectposition.length;
 
-        l1 = amovingobjectposition.length;
-
-        for (int k2 = 0; k2 < l1; ++k2) {
-            MovingObjectPosition movingobjectposition1 = amovingobjectposition1[k2];
+        for (int k1 = 0; k1 < j1; ++k1) {
+            MovingObjectPosition movingobjectposition1 = amovingobjectposition1[k1];
 
             if (movingobjectposition1 != null) {
                 double d1 = movingobjectposition1.pos.distanceSquared(vec3d1);
@@ -391,5 +499,59 @@ public class BlockStairs extends Block {
         }
 
         return movingobjectposition;
+    }
+
+    public IBlockData fromLegacyData(int i) {
+        IBlockData iblockdata = this.getBlockData().set(BlockStairs.HALF, (i & 4) > 0 ? EnumHalf.TOP : EnumHalf.BOTTOM);
+
+        iblockdata = iblockdata.set(BlockStairs.FACING, EnumDirection.fromType1(5 - (i & 3)));
+        return iblockdata;
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        int i = 0;
+
+        if (iblockdata.get(BlockStairs.HALF) == EnumHalf.TOP) {
+            i |= 4;
+        }
+
+        i |= 5 - ((EnumDirection) iblockdata.get(BlockStairs.FACING)).a();
+        return i;
+    }
+
+    public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        if (this.h(iblockaccess, blockposition)) {
+            switch (this.g(iblockaccess, blockposition)) {
+            case 0:
+                iblockdata = iblockdata.set(BlockStairs.SHAPE, EnumStairShape.STRAIGHT);
+                break;
+
+            case 1:
+                iblockdata = iblockdata.set(BlockStairs.SHAPE, EnumStairShape.INNER_RIGHT);
+                break;
+
+            case 2:
+                iblockdata = iblockdata.set(BlockStairs.SHAPE, EnumStairShape.INNER_LEFT);
+            }
+        } else {
+            switch (this.f(iblockaccess, blockposition)) {
+            case 0:
+                iblockdata = iblockdata.set(BlockStairs.SHAPE, EnumStairShape.STRAIGHT);
+                break;
+
+            case 1:
+                iblockdata = iblockdata.set(BlockStairs.SHAPE, EnumStairShape.OUTER_RIGHT);
+                break;
+
+            case 2:
+                iblockdata = iblockdata.set(BlockStairs.SHAPE, EnumStairShape.OUTER_LEFT);
+            }
+        }
+
+        return iblockdata;
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockStairs.FACING, BlockStairs.HALF, BlockStairs.SHAPE});
     }
 }

@@ -48,7 +48,7 @@ public class PathEntity {
         double d1 = (double) this.a[i].b;
         double d2 = (double) this.a[i].c + (double) ((int) (entity.width + 1.0F)) * 0.5D;
 
-        return Vec3D.a(d0, d1, d2);
+        return new Vec3D(d0, d1, d2);
     }
 
     public Vec3D a(Entity entity) {

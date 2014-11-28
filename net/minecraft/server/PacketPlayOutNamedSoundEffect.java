@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-import net.minecraft.util.org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.Validate;
 
-public class PacketPlayOutNamedSoundEffect extends Packet {
+public class PacketPlayOutNamedSoundEffect implements Packet {
 
     private String a;
     private int b;
@@ -21,13 +21,7 @@ public class PacketPlayOutNamedSoundEffect extends Packet {
         this.d = (int) (d2 * 8.0D);
         this.e = f;
         this.f = (int) (f1 * 63.0F);
-        if (this.f < 0) {
-            this.f = 0;
-        }
-
-        if (this.f > 255) {
-            this.f = 255;
-        }
+        f1 = MathHelper.a(f1, 0.0F, 255.0F);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
@@ -48,11 +42,11 @@ public class PacketPlayOutNamedSoundEffect extends Packet {
         packetdataserializer.writeByte(this.f);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

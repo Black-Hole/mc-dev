@@ -2,15 +2,11 @@ package net.minecraft.server;
 
 class RedstoneUpdateInfo {
 
-    int a;
-    int b;
-    int c;
-    long d;
+    BlockPosition a;
+    long b;
 
-    public RedstoneUpdateInfo(int i, int j, int k, long l) {
-        this.a = i;
-        this.b = j;
-        this.c = k;
-        this.d = l;
+    public RedstoneUpdateInfo(BlockPosition blockposition, long i) {
+        this.a = blockposition;
+        this.b = i;
     }
 }

@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public class EnchantmentSilkTouch extends Enchantment {
 
-    protected EnchantmentSilkTouch(int i, int j) {
-        super(i, j, EnchantmentSlotType.DIGGER);
-        this.b("untouching");
+    protected EnchantmentSilkTouch(int i, MinecraftKey minecraftkey, int j) {
+        super(i, minecraftkey, j, EnchantmentSlotType.DIGGER);
+        this.c("untouching");
     }
 
     public int a(int i) {
@@ -20,7 +20,7 @@ public class EnchantmentSilkTouch extends Enchantment {
     }
 
     public boolean a(Enchantment enchantment) {
-        return super.a(enchantment) && enchantment.id != LOOT_BONUS_BLOCKS.id;
+        return super.a(enchantment) && enchantment.id != EnchantmentSilkTouch.LOOT_BONUS_BLOCKS.id;
     }
 
     public boolean canEnchant(ItemStack itemstack) {

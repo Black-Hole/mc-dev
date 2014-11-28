@@ -5,9 +5,9 @@ public class WorldProviderHell extends WorldProvider {
     public WorldProviderHell() {}
 
     public void b() {
-        this.e = new WorldChunkManagerHell(BiomeBase.HELL, 0.0F);
-        this.f = true;
-        this.g = true;
+        this.c = new WorldChunkManagerHell(BiomeBase.HELL, 0.0F);
+        this.d = true;
+        this.e = true;
         this.dimension = -1;
     }
 
@@ -17,12 +17,13 @@ public class WorldProviderHell extends WorldProvider {
         for (int i = 0; i <= 15; ++i) {
             float f1 = 1.0F - (float) i / 15.0F;
 
-            this.h[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * (1.0F - f) + f;
+            this.f[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * (1.0F - f) + f;
         }
+
     }
 
     public IChunkProvider getChunkProvider() {
-        return new ChunkProviderHell(this.b, this.b.getSeed());
+        return new ChunkProviderHell(this.b, this.b.getWorldData().shouldGenerateMapFeatures(), this.b.getSeed());
     }
 
     public boolean d() {
@@ -43,5 +44,13 @@ public class WorldProviderHell extends WorldProvider {
 
     public String getName() {
         return "Nether";
+    }
+
+    public String getSuffix() {
+        return "_nether";
+    }
+
+    public WorldBorder getWorldBorder() {
+        return new WorldBorderHell(this);
     }
 }

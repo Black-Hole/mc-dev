@@ -1,15 +1,15 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
 public class InsensitiveStringMap implements Map {
 
-    private final Map a = new LinkedHashMap();
+    private final Map a = Maps.newLinkedHashMap();
 
     public InsensitiveStringMap() {}
 
@@ -33,7 +33,7 @@ public class InsensitiveStringMap implements Map {
         return this.a.get(object.toString().toLowerCase());
     }
 
-    public Object put(String s, Object object) {
+    public Object a(String s, Object object) {
         return this.a.put(s.toLowerCase(), object);
     }
 
@@ -47,8 +47,9 @@ public class InsensitiveStringMap implements Map {
         while (iterator.hasNext()) {
             Entry entry = (Entry) iterator.next();
 
-            this.put((String) entry.getKey(), entry.getValue());
+            this.a((String) entry.getKey(), entry.getValue());
         }
+
     }
 
     public void clear() {
@@ -68,6 +69,6 @@ public class InsensitiveStringMap implements Map {
     }
 
     public Object put(Object object, Object object1) {
-        return this.put((String) object, object1);
+        return this.a((String) object, object1);
     }
 }

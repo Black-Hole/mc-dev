@@ -36,6 +36,7 @@ public abstract class StructureStart {
                 iterator.remove();
             }
         }
+
     }
 
     protected void c() {
@@ -47,6 +48,7 @@ public abstract class StructureStart {
 
             this.b.b(structurepiece.c());
         }
+
     }
 
     public NBTTagCompound a(int i, int j) {
@@ -55,7 +57,7 @@ public abstract class StructureStart {
         nbttagcompound.setString("id", WorldGenFactory.a(this));
         nbttagcompound.setInt("ChunkX", i);
         nbttagcompound.setInt("ChunkZ", j);
-        nbttagcompound.set("BB", this.b.h());
+        nbttagcompound.set("BB", this.b.g());
         NBTTagList nbttaglist = new NBTTagList();
         Iterator iterator = this.a.iterator();
 
@@ -92,7 +94,7 @@ public abstract class StructureStart {
 
     protected void a(World world, Random random, int i) {
         int j = 63 - i;
-        int k = this.b.c() + 1;
+        int k = this.b.d() + 1;
 
         if (k < j) {
             k += random.nextInt(j - k);
@@ -108,10 +110,11 @@ public abstract class StructureStart {
 
             structurepiece.c().a(0, l, 0);
         }
+
     }
 
     protected void a(World world, Random random, int i, int j) {
-        int k = j - i + 1 - this.b.c();
+        int k = j - i + 1 - this.b.d();
         boolean flag = true;
         int l;
 
@@ -131,11 +134,18 @@ public abstract class StructureStart {
 
             structurepiece.c().a(0, i1, 0);
         }
+
     }
 
     public boolean d() {
         return true;
     }
+
+    public boolean a(ChunkCoordIntPair chunkcoordintpair) {
+        return true;
+    }
+
+    public void b(ChunkCoordIntPair chunkcoordintpair) {}
 
     public int e() {
         return this.c;

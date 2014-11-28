@@ -12,7 +12,7 @@ public class CommandToggleDownfall extends CommandAbstract {
         return 2;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.downfall.usage";
     }
 

@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import net.minecraft.util.io.netty.util.concurrent.GenericFutureListener;
+import io.netty.util.concurrent.GenericFutureListener;
 
 class QueuedPacket {
 
@@ -12,11 +12,11 @@ class QueuedPacket {
         this.b = agenericfuturelistener;
     }
 
-    static Packet a(QueuedPacket queuedpacket) {
+    public static Packet a(QueuedPacket queuedpacket) {
         return queuedpacket.a;
     }
 
-    static GenericFutureListener[] b(QueuedPacket queuedpacket) {
+    public static GenericFutureListener[] b(QueuedPacket queuedpacket) {
         return queuedpacket.b;
     }
 }

@@ -4,11 +4,11 @@ public class ItemBook extends Item {
 
     public ItemBook() {}
 
-    public boolean e_(ItemStack itemstack) {
+    public boolean f_(ItemStack itemstack) {
         return itemstack.count == 1;
     }
 
-    public int c() {
+    public int b() {
         return 1;
     }
 }

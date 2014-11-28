@@ -2,43 +2,35 @@ package net.minecraft.server;
 
 public class ContainerBeacon extends Container {
 
-    private TileEntityBeacon a;
+    private IInventory a;
     private final SlotBeacon f;
-    private int g;
-    private int h;
-    private int i;
 
-    public ContainerBeacon(PlayerInventory playerinventory, TileEntityBeacon tileentitybeacon) {
-        this.a = tileentitybeacon;
-        this.a(this.f = new SlotBeacon(this, tileentitybeacon, 0, 136, 110));
+    public ContainerBeacon(IInventory iinventory, IInventory iinventory1) {
+        this.a = iinventory1;
+        this.a((Slot) (this.f = new SlotBeacon(this, iinventory1, 0, 136, 110)));
         byte b0 = 36;
-        short short1 = 137;
+        short short0 = 137;
 
         int i;
 
         for (i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.a(new Slot(playerinventory, j + i * 9 + 9, b0 + j * 18, short1 + i * 18));
+                this.a(new Slot(iinventory, j + i * 9 + 9, b0 + j * 18, short0 + i * 18));
             }
         }
 
         for (i = 0; i < 9; ++i) {
-            this.a(new Slot(playerinventory, i, b0 + i * 18, 58 + short1));
+            this.a(new Slot(iinventory, i, b0 + i * 18, 58 + short0));
         }
 
-        this.g = tileentitybeacon.l();
-        this.h = tileentitybeacon.j();
-        this.i = tileentitybeacon.k();
     }
 
     public void addSlotListener(ICrafting icrafting) {
         super.addSlotListener(icrafting);
-        icrafting.setContainerData(this, 0, this.g);
-        icrafting.setContainerData(this, 1, this.h);
-        icrafting.setContainerData(this, 2, this.i);
+        icrafting.setContainerData(this, this.a);
     }
 
-    public TileEntityBeacon e() {
+    public IInventory e() {
         return this.a;
     }
 

@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutUpdateTime extends Packet {
+public class PacketPlayOutUpdateTime implements Packet {
 
     private long a;
     private long b;
@@ -16,6 +16,7 @@ public class PacketPlayOutUpdateTime extends Packet {
                 this.b = -1L;
             }
         }
+
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
@@ -28,15 +29,11 @@ public class PacketPlayOutUpdateTime extends Packet {
         packetdataserializer.writeLong(this.b);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public String b() {
-        return String.format("time=%d,dtime=%d", new Object[] { Long.valueOf(this.a), Long.valueOf(this.b)});
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

@@ -6,22 +6,22 @@ public class LocaleI18n {
     private static LocaleLanguage b = new LocaleLanguage();
 
     public static String get(String s) {
-        return a.a(s);
+        return LocaleI18n.a.a(s);
     }
 
-    public static String get(String s, Object... aobject) {
-        return a.a(s, aobject);
+    public static String a(String s, Object... aobject) {
+        return LocaleI18n.a.a(s, aobject);
     }
 
     public static String b(String s) {
-        return b.a(s);
+        return LocaleI18n.b.a(s);
     }
 
     public static boolean c(String s) {
-        return a.b(s);
+        return LocaleI18n.a.b(s);
     }
 
     public static long a() {
-        return a.c();
+        return LocaleI18n.a.c();
     }
 }

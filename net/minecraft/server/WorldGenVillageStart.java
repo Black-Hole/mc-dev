@@ -16,9 +16,9 @@ public class WorldGenVillageStart extends StructureStart {
         WorldGenVillageStartPiece worldgenvillagestartpiece = new WorldGenVillageStartPiece(world.getWorldChunkManager(), 0, random, (i << 4) + 2, (j << 4) + 2, list, k);
 
         this.a.add(worldgenvillagestartpiece);
-        worldgenvillagestartpiece.a(worldgenvillagestartpiece, this.a, random);
-        List list1 = worldgenvillagestartpiece.j;
-        List list2 = worldgenvillagestartpiece.i;
+        worldgenvillagestartpiece.a((StructurePiece) worldgenvillagestartpiece, (List) this.a, random);
+        List list1 = worldgenvillagestartpiece.g;
+        List list2 = worldgenvillagestartpiece.f;
 
         int l;
 

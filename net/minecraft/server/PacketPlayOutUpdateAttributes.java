@@ -1,15 +1,16 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class PacketPlayOutUpdateAttributes extends Packet {
+public class PacketPlayOutUpdateAttributes implements Packet {
 
     private int a;
-    private final List b = new ArrayList();
+    private final List b = Lists.newArrayList();
 
     public PacketPlayOutUpdateAttributes() {}
 
@@ -22,30 +23,32 @@ public class PacketPlayOutUpdateAttributes extends Packet {
 
             this.b.add(new AttributeSnapshot(this, attributeinstance.getAttribute().getName(), attributeinstance.b(), attributeinstance.c()));
         }
+
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.readInt();
+        this.a = packetdataserializer.e();
         int i = packetdataserializer.readInt();
 
         for (int j = 0; j < i; ++j) {
             String s = packetdataserializer.c(64);
             double d0 = packetdataserializer.readDouble();
-            ArrayList arraylist = new ArrayList();
-            short short1 = packetdataserializer.readShort();
+            ArrayList arraylist = Lists.newArrayList();
+            int k = packetdataserializer.e();
 
-            for (int k = 0; k < short1; ++k) {
-                UUID uuid = new UUID(packetdataserializer.readLong(), packetdataserializer.readLong());
+            for (int l = 0; l < k; ++l) {
+                UUID uuid = packetdataserializer.g();
 
                 arraylist.add(new AttributeModifier(uuid, "Unknown synced attribute modifier", packetdataserializer.readDouble(), packetdataserializer.readByte()));
             }
 
             this.b.add(new AttributeSnapshot(this, s, d0, arraylist));
         }
+
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeInt(this.a);
+        packetdataserializer.b(this.a);
         packetdataserializer.writeInt(this.b.size());
         Iterator iterator = this.b.iterator();
 
@@ -54,25 +57,25 @@ public class PacketPlayOutUpdateAttributes extends Packet {
 
             packetdataserializer.a(attributesnapshot.a());
             packetdataserializer.writeDouble(attributesnapshot.b());
-            packetdataserializer.writeShort(attributesnapshot.c().size());
+            packetdataserializer.b(attributesnapshot.c().size());
             Iterator iterator1 = attributesnapshot.c().iterator();
 
             while (iterator1.hasNext()) {
                 AttributeModifier attributemodifier = (AttributeModifier) iterator1.next();
 
-                packetdataserializer.writeLong(attributemodifier.a().getMostSignificantBits());
-                packetdataserializer.writeLong(attributemodifier.a().getLeastSignificantBits());
+                packetdataserializer.a(attributemodifier.a());
                 packetdataserializer.writeDouble(attributemodifier.d());
                 packetdataserializer.writeByte(attributemodifier.c());
             }
         }
+
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

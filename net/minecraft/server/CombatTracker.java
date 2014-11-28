@@ -1,12 +1,12 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 
 public class CombatTracker {
 
-    private final List a = new ArrayList();
+    private final List a = Lists.newArrayList();
     private final EntityLiving b;
     private int c;
     private int d;
@@ -21,17 +21,18 @@ public class CombatTracker {
 
     public void a() {
         this.j();
-        if (this.b.h_()) {
-            Block block = this.b.world.getType(MathHelper.floor(this.b.locX), MathHelper.floor(this.b.boundingBox.b), MathHelper.floor(this.b.locZ));
+        if (this.b.j_()) {
+            Block block = this.b.world.getType(new BlockPosition(this.b.locX, this.b.getBoundingBox().b, this.b.locZ)).getBlock();
 
             if (block == Blocks.LADDER) {
                 this.h = "ladder";
             } else if (block == Blocks.VINE) {
                 this.h = "vines";
             }
-        } else if (this.b.M()) {
+        } else if (this.b.V()) {
             this.h = "water";
         }
+
     }
 
     public void a(DamageSource damagesource, float f, float f1) {
@@ -46,8 +47,9 @@ public class CombatTracker {
             this.f = true;
             this.d = this.b.ticksLived;
             this.e = this.d;
-            this.b.bu();
+            this.b.enterCombat();
         }
+
     }
 
     public IChatBaseComponent b() {
@@ -66,18 +68,18 @@ public class CombatTracker {
                 if (combatentry.a() != DamageSource.FALL && combatentry.a() != DamageSource.OUT_OF_WORLD) {
                     if (ichatbasecomponent1 != null && (ichatbasecomponent == null || !ichatbasecomponent1.equals(ichatbasecomponent))) {
                         Entity entity1 = combatentry.a().getEntity();
-                        ItemStack itemstack = entity1 instanceof EntityLiving ? ((EntityLiving) entity1).be() : null;
+                        ItemStack itemstack = entity1 instanceof EntityLiving ? ((EntityLiving) entity1).bz() : null;
 
                         if (itemstack != null && itemstack.hasName()) {
-                            object = new ChatMessage("death.fell.assist.item", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent1, itemstack.E()});
+                            object = new ChatMessage("death.fell.assist.item", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent1, itemstack.C()});
                         } else {
                             object = new ChatMessage("death.fell.assist", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent1});
                         }
                     } else if (ichatbasecomponent != null) {
-                        ItemStack itemstack1 = entity instanceof EntityLiving ? ((EntityLiving) entity).be() : null;
+                        ItemStack itemstack1 = entity instanceof EntityLiving ? ((EntityLiving) entity).bz() : null;
 
                         if (itemstack1 != null && itemstack1.hasName()) {
-                            object = new ChatMessage("death.fell.finish.item", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent, itemstack1.E()});
+                            object = new ChatMessage("death.fell.finish.item", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent, itemstack1.C()});
                         } else {
                             object = new ChatMessage("death.fell.finish", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent});
                         }
@@ -161,6 +163,10 @@ public class CombatTracker {
         return combatentry.g() == null ? "generic" : combatentry.g();
     }
 
+    public int f() {
+        return this.f ? this.b.ticksLived - this.d : this.e - this.d;
+    }
+
     private void j() {
         this.h = null;
     }
@@ -175,10 +181,15 @@ public class CombatTracker {
             this.f = false;
             this.e = this.b.ticksLived;
             if (flag) {
-                this.b.bv();
+                this.b.exitCombat();
             }
 
             this.a.clear();
         }
+
+    }
+
+    public EntityLiving h() {
+        return this.b;
     }
 }

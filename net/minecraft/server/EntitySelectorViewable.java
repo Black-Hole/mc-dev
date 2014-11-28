@@ -1,14 +1,20 @@
 package net.minecraft.server;
 
-class EntitySelectorViewable implements IEntitySelector {
+import com.google.common.base.Predicate;
 
-    final PathfinderGoalAvoidPlayer d;
+class EntitySelectorViewable implements Predicate {
 
-    EntitySelectorViewable(PathfinderGoalAvoidPlayer pathfindergoalavoidplayer) {
-        this.d = pathfindergoalavoidplayer;
+    final PathfinderGoalAvoidTarget a;
+
+    EntitySelectorViewable(PathfinderGoalAvoidTarget pathfindergoalavoidtarget) {
+        this.a = pathfindergoalavoidtarget;
     }
 
     public boolean a(Entity entity) {
-        return entity.isAlive() && PathfinderGoalAvoidPlayer.a(this.d).getEntitySenses().canSee(entity);
+        return entity.isAlive() && this.a.b.getEntitySenses().a(entity);
+    }
+
+    public boolean apply(Object object) {
+        return this.a((Entity) object);
     }
 }

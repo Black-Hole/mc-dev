@@ -3,6 +3,7 @@ package net.minecraft.server;
 public class DamageSource {
 
     public static DamageSource FIRE = (new DamageSource("inFire")).setExplosion();
+    public static DamageSource LIGHTNING = new DamageSource("lightningBolt");
     public static DamageSource BURN = (new DamageSource("onFire")).setIgnoreArmor().setExplosion();
     public static DamageSource LAVA = (new DamageSource("lava")).setExplosion();
     public static DamageSource STUCK = (new DamageSource("inWall")).setIgnoreArmor();
@@ -16,15 +17,15 @@ public class DamageSource {
     public static DamageSource WITHER = (new DamageSource("wither")).setIgnoreArmor();
     public static DamageSource ANVIL = new DamageSource("anvil");
     public static DamageSource FALLING_BLOCK = new DamageSource("fallingBlock");
-    private boolean p;
     private boolean q;
     private boolean r;
-    private float s = 0.3F;
-    private boolean t;
+    private boolean s;
+    private float t = 0.3F;
     private boolean u;
     private boolean v;
     private boolean w;
     private boolean x;
+    private boolean y;
     public String translationIndex;
 
     public static DamageSource mobAttack(EntityLiving entityliving) {
@@ -52,7 +53,7 @@ public class DamageSource {
     }
 
     public static DamageSource a(Entity entity) {
-        return (new EntityDamageSource("thorns", entity)).setMagic();
+        return (new EntityDamageSource("thorns", entity)).v().setMagic();
     }
 
     public static DamageSource explosion(Explosion explosion) {
@@ -60,37 +61,37 @@ public class DamageSource {
     }
 
     public boolean a() {
-        return this.u;
+        return this.v;
     }
 
     public DamageSource b() {
-        this.u = true;
+        this.v = true;
         return this;
     }
 
     public boolean isExplosion() {
-        return this.x;
+        return this.y;
     }
 
     public DamageSource d() {
-        this.x = true;
+        this.y = true;
         return this;
     }
 
     public boolean ignoresArmor() {
-        return this.p;
-    }
-
-    public float getExhaustionCost() {
-        return this.s;
-    }
-
-    public boolean ignoresInvulnerability() {
         return this.q;
     }
 
-    public boolean isStarvation() {
+    public float getExhaustionCost() {
+        return this.t;
+    }
+
+    public boolean ignoresInvulnerability() {
         return this.r;
+    }
+
+    public boolean isStarvation() {
+        return this.s;
     }
 
     protected DamageSource(String s) {
@@ -106,29 +107,29 @@ public class DamageSource {
     }
 
     protected DamageSource setIgnoreArmor() {
-        this.p = true;
-        this.s = 0.0F;
+        this.q = true;
+        this.t = 0.0F;
         return this;
     }
 
     protected DamageSource l() {
-        this.q = true;
+        this.r = true;
         return this;
     }
 
     protected DamageSource m() {
-        this.r = true;
-        this.s = 0.0F;
+        this.s = true;
+        this.t = 0.0F;
         return this;
     }
 
     protected DamageSource setExplosion() {
-        this.t = true;
+        this.u = true;
         return this;
     }
 
     public IChatBaseComponent getLocalizedDeathMessage(EntityLiving entityliving) {
-        EntityLiving entityliving1 = entityliving.aX();
+        EntityLiving entityliving1 = entityliving.bs();
         String s = "death.attack." + this.translationIndex;
         String s1 = s + ".player";
 
@@ -136,7 +137,7 @@ public class DamageSource {
     }
 
     public boolean o() {
-        return this.t;
+        return this.u;
     }
 
     public String p() {
@@ -144,20 +145,26 @@ public class DamageSource {
     }
 
     public DamageSource q() {
-        this.v = true;
+        this.w = true;
         return this;
     }
 
     public boolean r() {
-        return this.v;
-    }
-
-    public boolean isMagic() {
         return this.w;
     }
 
+    public boolean isMagic() {
+        return this.x;
+    }
+
     public DamageSource setMagic() {
-        this.w = true;
+        this.x = true;
         return this;
+    }
+
+    public boolean u() {
+        Entity entity = this.getEntity();
+
+        return entity instanceof EntityHuman && ((EntityHuman) entity).abilities.canInstantlyBuild;
     }
 }

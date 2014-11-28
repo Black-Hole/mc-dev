@@ -1,44 +1,36 @@
 package net.minecraft.server;
 
-public class PacketPlayOutBlockBreakAnimation extends Packet {
+public class PacketPlayOutBlockBreakAnimation implements Packet {
 
     private int a;
-    private int b;
+    private BlockPosition b;
     private int c;
-    private int d;
-    private int e;
 
     public PacketPlayOutBlockBreakAnimation() {}
 
-    public PacketPlayOutBlockBreakAnimation(int i, int j, int k, int l, int i1) {
+    public PacketPlayOutBlockBreakAnimation(int i, BlockPosition blockposition, int j) {
         this.a = i;
-        this.b = j;
-        this.c = k;
-        this.d = l;
-        this.e = i1;
+        this.b = blockposition;
+        this.c = j;
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.a();
-        this.b = packetdataserializer.readInt();
-        this.c = packetdataserializer.readInt();
-        this.d = packetdataserializer.readInt();
-        this.e = packetdataserializer.readUnsignedByte();
+        this.a = packetdataserializer.e();
+        this.b = packetdataserializer.c();
+        this.c = packetdataserializer.readUnsignedByte();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
         packetdataserializer.b(this.a);
-        packetdataserializer.writeInt(this.b);
-        packetdataserializer.writeInt(this.c);
-        packetdataserializer.writeInt(this.d);
-        packetdataserializer.writeByte(this.e);
+        packetdataserializer.a(this.b);
+        packetdataserializer.writeByte(this.c);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

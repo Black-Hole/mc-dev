@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicate;
 import java.util.List;
 import java.util.Random;
 
@@ -19,33 +20,25 @@ public class EmptyChunk extends Chunk {
 
     public void initLighting() {}
 
-    public Block getType(int i, int j, int k) {
+    public Block getType(BlockPosition blockposition) {
         return Blocks.AIR;
     }
 
-    public int b(int i, int j, int k) {
+    public int b(BlockPosition blockposition) {
         return 255;
     }
 
-    public boolean a(int i, int j, int k, Block block, int l) {
-        return true;
-    }
-
-    public int getData(int i, int j, int k) {
+    public int c(BlockPosition blockposition) {
         return 0;
     }
 
-    public boolean a(int i, int j, int k, int l) {
-        return false;
+    public int getBrightness(EnumSkyBlock enumskyblock, BlockPosition blockposition) {
+        return enumskyblock.c;
     }
 
-    public int getBrightness(EnumSkyBlock enumskyblock, int i, int j, int k) {
-        return 0;
-    }
+    public void a(EnumSkyBlock enumskyblock, BlockPosition blockposition, int i) {}
 
-    public void a(EnumSkyBlock enumskyblock, int i, int j, int k, int l) {}
-
-    public int b(int i, int j, int k, int l) {
+    public int a(BlockPosition blockposition, int i) {
         return 0;
     }
 
@@ -55,19 +48,19 @@ public class EmptyChunk extends Chunk {
 
     public void a(Entity entity, int i) {}
 
-    public boolean d(int i, int j, int k) {
+    public boolean d(BlockPosition blockposition) {
         return false;
     }
 
-    public TileEntity e(int i, int j, int k) {
+    public TileEntity a(BlockPosition blockposition, EnumTileEntityState enumtileentitystate) {
         return null;
     }
 
     public void a(TileEntity tileentity) {}
 
-    public void a(int i, int j, int k, TileEntity tileentity) {}
+    public void a(BlockPosition blockposition, TileEntity tileentity) {}
 
-    public void f(int i, int j, int k) {}
+    public void e(BlockPosition blockposition) {}
 
     public void addEntities() {}
 
@@ -75,16 +68,16 @@ public class EmptyChunk extends Chunk {
 
     public void e() {}
 
-    public void a(Entity entity, AxisAlignedBB axisalignedbb, List list, IEntitySelector ientityselector) {}
+    public void a(Entity entity, AxisAlignedBB axisalignedbb, List list, Predicate predicate) {}
 
-    public void a(Class oclass, AxisAlignedBB axisalignedbb, List list, IEntitySelector ientityselector) {}
+    public void a(Class oclass, AxisAlignedBB axisalignedbb, List list, Predicate predicate) {}
 
     public boolean a(boolean flag) {
         return false;
     }
 
     public Random a(long i) {
-        return new Random(this.world.getSeed() + (long) (this.locX * this.locX * 4987142) + (long) (this.locX * 5947611) + (long) (this.locZ * this.locZ) * 4392871L + (long) (this.locZ * 389711) ^ i);
+        return new Random(this.getWorld().getSeed() + (long) (this.locX * this.locX * 4987142) + (long) (this.locX * 5947611) + (long) (this.locZ * this.locZ) * 4392871L + (long) (this.locZ * 389711) ^ i);
     }
 
     public boolean isEmpty() {

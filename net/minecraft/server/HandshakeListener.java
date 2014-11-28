@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import net.minecraft.util.io.netty.util.concurrent.GenericFutureListener;
-
 public class HandshakeListener implements PacketHandshakingInListener {
 
     private final MinecraftServer a;
@@ -13,18 +11,18 @@ public class HandshakeListener implements PacketHandshakingInListener {
     }
 
     public void a(PacketHandshakingInSetProtocol packethandshakinginsetprotocol) {
-        switch (ProtocolOrdinalWrapper.a[packethandshakinginsetprotocol.c().ordinal()]) {
+        switch (ProtocolOrdinalWrapper.a[packethandshakinginsetprotocol.a().ordinal()]) {
         case 1:
             this.b.a(EnumProtocol.LOGIN);
             ChatComponentText chatcomponenttext;
 
-            if (packethandshakinginsetprotocol.d() > 5) {
-                chatcomponenttext = new ChatComponentText("Outdated server! I\'m still on 1.7.10");
-                this.b.handle(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener[0]);
+            if (packethandshakinginsetprotocol.b() > 47) {
+                chatcomponenttext = new ChatComponentText("Outdated server! I\'m still on 1.8");
+                this.b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
                 this.b.close(chatcomponenttext);
-            } else if (packethandshakinginsetprotocol.d() < 5) {
-                chatcomponenttext = new ChatComponentText("Outdated client! Please use 1.7.10");
-                this.b.handle(new PacketLoginOutDisconnect(chatcomponenttext), new GenericFutureListener[0]);
+            } else if (packethandshakinginsetprotocol.b() < 47) {
+                chatcomponenttext = new ChatComponentText("Outdated client! Please use 1.8");
+                this.b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
                 this.b.close(chatcomponenttext);
             } else {
                 this.b.a((PacketListener) (new LoginListener(this.a, this.b)));
@@ -37,17 +35,10 @@ public class HandshakeListener implements PacketHandshakingInListener {
             break;
 
         default:
-            throw new UnsupportedOperationException("Invalid intention " + packethandshakinginsetprotocol.c());
+            throw new UnsupportedOperationException("Invalid intention " + packethandshakinginsetprotocol.a());
         }
+
     }
 
     public void a(IChatBaseComponent ichatbasecomponent) {}
-
-    public void a(EnumProtocol enumprotocol, EnumProtocol enumprotocol1) {
-        if (enumprotocol1 != EnumProtocol.LOGIN && enumprotocol1 != EnumProtocol.STATUS) {
-            throw new UnsupportedOperationException("Invalid state " + enumprotocol1);
-        }
-    }
-
-    public void a() {}
 }

@@ -1,12 +1,13 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 abstract class WorldGenNetherPiece extends StructurePiece {
 
-    protected static final StructurePieceTreasure[] a = new StructurePieceTreasure[] { new StructurePieceTreasure(Items.DIAMOND, 0, 1, 3, 5), new StructurePieceTreasure(Items.IRON_INGOT, 0, 1, 5, 5), new StructurePieceTreasure(Items.GOLD_INGOT, 0, 1, 3, 15), new StructurePieceTreasure(Items.GOLD_SWORD, 0, 1, 1, 5), new StructurePieceTreasure(Items.GOLD_CHESTPLATE, 0, 1, 1, 5), new StructurePieceTreasure(Items.FLINT_AND_STEEL, 0, 1, 1, 5), new StructurePieceTreasure(Items.NETHER_STALK, 0, 3, 7, 5), new StructurePieceTreasure(Items.SADDLE, 0, 1, 1, 10), new StructurePieceTreasure(Items.HORSE_ARMOR_GOLD, 0, 1, 1, 8), new StructurePieceTreasure(Items.HORSE_ARMOR_IRON, 0, 1, 1, 5), new StructurePieceTreasure(Items.HORSE_ARMOR_DIAMOND, 0, 1, 1, 3)};
+    protected static final List a = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.DIAMOND, 0, 1, 3, 5), new StructurePieceTreasure(Items.IRON_INGOT, 0, 1, 5, 5), new StructurePieceTreasure(Items.GOLD_INGOT, 0, 1, 3, 15), new StructurePieceTreasure(Items.GOLDEN_SWORD, 0, 1, 1, 5), new StructurePieceTreasure(Items.GOLDEN_CHESTPLATE, 0, 1, 1, 5), new StructurePieceTreasure(Items.FLINT_AND_STEEL, 0, 1, 1, 5), new StructurePieceTreasure(Items.NETHER_WART, 0, 3, 7, 5), new StructurePieceTreasure(Items.SADDLE, 0, 1, 1, 10), new StructurePieceTreasure(Items.GOLDEN_HORSE_ARMOR, 0, 1, 1, 8), new StructurePieceTreasure(Items.IRON_HORSE_ARMOR, 0, 1, 1, 5), new StructurePieceTreasure(Items.DIAMOND_HORSE_ARMOR, 0, 1, 1, 3), new StructurePieceTreasure(Item.getItemOf(Blocks.OBSIDIAN), 0, 2, 4, 2)});
 
     public WorldGenNetherPiece() {}
 
@@ -34,26 +35,26 @@ abstract class WorldGenNetherPiece extends StructurePiece {
         return flag ? i : -1;
     }
 
-    private WorldGenNetherPiece a(WorldGenNetherPiece15 worldgennetherpiece15, List list, List list1, Random random, int i, int j, int k, int l, int i1) {
-        int j1 = this.a(list);
-        boolean flag = j1 > 0 && i1 <= 30;
-        int k1 = 0;
+    private WorldGenNetherPiece a(WorldGenNetherPiece15 worldgennetherpiece15, List list, List list1, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
+        int i1 = this.a(list);
+        boolean flag = i1 > 0 && l <= 30;
+        int j1 = 0;
 
-        while (k1 < 5 && flag) {
-            ++k1;
-            int l1 = random.nextInt(j1);
+        while (j1 < 5 && flag) {
+            ++j1;
+            int k1 = random.nextInt(i1);
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 WorldGenNetherPieceWeight worldgennetherpieceweight = (WorldGenNetherPieceWeight) iterator.next();
 
-                l1 -= worldgennetherpieceweight.b;
-                if (l1 < 0) {
-                    if (!worldgennetherpieceweight.a(i1) || worldgennetherpieceweight == worldgennetherpiece15.b && !worldgennetherpieceweight.e) {
+                k1 -= worldgennetherpieceweight.b;
+                if (k1 < 0) {
+                    if (!worldgennetherpieceweight.a(l) || worldgennetherpieceweight == worldgennetherpiece15.b && !worldgennetherpieceweight.e) {
                         break;
                     }
 
-                    WorldGenNetherPiece worldgennetherpiece = WorldGenNetherPieces.a(worldgennetherpieceweight, list1, random, i, j, k, l, i1);
+                    WorldGenNetherPiece worldgennetherpiece = WorldGenNetherPieces.a(worldgennetherpieceweight, list1, random, i, j, k, enumdirection, l);
 
                     if (worldgennetherpiece != null) {
                         ++worldgennetherpieceweight.c;
@@ -68,10 +69,10 @@ abstract class WorldGenNetherPiece extends StructurePiece {
             }
         }
 
-        return WorldGenNetherPiece2.a(list1, random, i, j, k, l, i1);
+        return WorldGenNetherPiece2.a(list1, random, i, j, k, enumdirection, l);
     }
 
-    private StructurePiece a(WorldGenNetherPiece15 worldgennetherpiece15, List list, Random random, int i, int j, int k, int l, int i1, boolean flag) {
+    private StructurePiece a(WorldGenNetherPiece15 worldgennetherpiece15, List list, Random random, int i, int j, int k, EnumDirection enumdirection, int l, boolean flag) {
         if (Math.abs(i - worldgennetherpiece15.c().a) <= 112 && Math.abs(k - worldgennetherpiece15.c().c) <= 112) {
             List list1 = worldgennetherpiece15.c;
 
@@ -79,7 +80,7 @@ abstract class WorldGenNetherPiece extends StructurePiece {
                 list1 = worldgennetherpiece15.d;
             }
 
-            WorldGenNetherPiece worldgennetherpiece = this.a(worldgennetherpiece15, list1, list, random, i, j, k, l, i1 + 1);
+            WorldGenNetherPiece worldgennetherpiece = this.a(worldgennetherpiece15, list1, list, random, i, j, k, enumdirection, l + 1);
 
             if (worldgennetherpiece != null) {
                 list.add(worldgennetherpiece);
@@ -88,65 +89,68 @@ abstract class WorldGenNetherPiece extends StructurePiece {
 
             return worldgennetherpiece;
         } else {
-            return WorldGenNetherPiece2.a(list, random, i, j, k, l, i1);
+            return WorldGenNetherPiece2.a(list, random, i, j, k, enumdirection, l);
         }
     }
 
     protected StructurePiece a(WorldGenNetherPiece15 worldgennetherpiece15, List list, Random random, int i, int j, boolean flag) {
-        switch (this.g) {
-        case 0:
-            return this.a(worldgennetherpiece15, list, random, this.f.a + i, this.f.b + j, this.f.f + 1, this.g, this.d(), flag);
+        if (this.m != null) {
+            switch (SwitchHelperDirection6.a[this.m.ordinal()]) {
+            case 1:
+                return this.a(worldgennetherpiece15, list, random, this.l.a + i, this.l.b + j, this.l.c - 1, this.m, this.d(), flag);
 
-        case 1:
-            return this.a(worldgennetherpiece15, list, random, this.f.a - 1, this.f.b + j, this.f.c + i, this.g, this.d(), flag);
+            case 2:
+                return this.a(worldgennetherpiece15, list, random, this.l.a + i, this.l.b + j, this.l.f + 1, this.m, this.d(), flag);
 
-        case 2:
-            return this.a(worldgennetherpiece15, list, random, this.f.a + i, this.f.b + j, this.f.c - 1, this.g, this.d(), flag);
+            case 3:
+                return this.a(worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + j, this.l.c + i, this.m, this.d(), flag);
 
-        case 3:
-            return this.a(worldgennetherpiece15, list, random, this.f.d + 1, this.f.b + j, this.f.c + i, this.g, this.d(), flag);
-
-        default:
-            return null;
+            case 4:
+                return this.a(worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + j, this.l.c + i, this.m, this.d(), flag);
+            }
         }
+
+        return null;
     }
 
     protected StructurePiece b(WorldGenNetherPiece15 worldgennetherpiece15, List list, Random random, int i, int j, boolean flag) {
-        switch (this.g) {
-        case 0:
-            return this.a(worldgennetherpiece15, list, random, this.f.a - 1, this.f.b + i, this.f.c + j, 1, this.d(), flag);
+        if (this.m != null) {
+            switch (SwitchHelperDirection6.a[this.m.ordinal()]) {
+            case 1:
+                return this.a(worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.d(), flag);
 
-        case 1:
-            return this.a(worldgennetherpiece15, list, random, this.f.a + j, this.f.b + i, this.f.c - 1, 2, this.d(), flag);
+            case 2:
+                return this.a(worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.d(), flag);
 
-        case 2:
-            return this.a(worldgennetherpiece15, list, random, this.f.a - 1, this.f.b + i, this.f.c + j, 1, this.d(), flag);
+            case 3:
+                return this.a(worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.d(), flag);
 
-        case 3:
-            return this.a(worldgennetherpiece15, list, random, this.f.a + j, this.f.b + i, this.f.c - 1, 2, this.d(), flag);
-
-        default:
-            return null;
+            case 4:
+                return this.a(worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.d(), flag);
+            }
         }
+
+        return null;
     }
 
     protected StructurePiece c(WorldGenNetherPiece15 worldgennetherpiece15, List list, Random random, int i, int j, boolean flag) {
-        switch (this.g) {
-        case 0:
-            return this.a(worldgennetherpiece15, list, random, this.f.d + 1, this.f.b + i, this.f.c + j, 3, this.d(), flag);
+        if (this.m != null) {
+            switch (SwitchHelperDirection6.a[this.m.ordinal()]) {
+            case 1:
+                return this.a(worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.d(), flag);
 
-        case 1:
-            return this.a(worldgennetherpiece15, list, random, this.f.a + j, this.f.b + i, this.f.f + 1, 0, this.d(), flag);
+            case 2:
+                return this.a(worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.d(), flag);
 
-        case 2:
-            return this.a(worldgennetherpiece15, list, random, this.f.d + 1, this.f.b + i, this.f.c + j, 3, this.d(), flag);
+            case 3:
+                return this.a(worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.d(), flag);
 
-        case 3:
-            return this.a(worldgennetherpiece15, list, random, this.f.a + j, this.f.b + i, this.f.f + 1, 0, this.d(), flag);
-
-        default:
-            return null;
+            case 4:
+                return this.a(worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.d(), flag);
+            }
         }
+
+        return null;
     }
 
     protected static boolean a(StructureBoundingBox structureboundingbox) {

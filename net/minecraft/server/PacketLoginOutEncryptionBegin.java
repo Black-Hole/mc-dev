@@ -2,9 +2,7 @@ package net.minecraft.server;
 
 import java.security.PublicKey;
 
-import net.minecraft.util.io.netty.buffer.ByteBuf;
-
-public class PacketLoginOutEncryptionBegin extends Packet {
+public class PacketLoginOutEncryptionBegin implements Packet {
 
     private String a;
     private PublicKey b;
@@ -20,21 +18,21 @@ public class PacketLoginOutEncryptionBegin extends Packet {
 
     public void a(PacketDataSerializer packetdataserializer) {
         this.a = packetdataserializer.c(20);
-        this.b = MinecraftEncryption.a(a((ByteBuf) packetdataserializer));
-        this.c = a((ByteBuf) packetdataserializer);
+        this.b = MinecraftEncryption.a(packetdataserializer.a());
+        this.c = packetdataserializer.a();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
         packetdataserializer.a(this.a);
-        a(packetdataserializer, this.b.getEncoded());
-        a(packetdataserializer, this.c);
+        packetdataserializer.a(this.b.getEncoded());
+        packetdataserializer.a(this.c);
     }
 
     public void a(PacketLoginOutListener packetloginoutlistener) {
         packetloginoutlistener.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
+    public void a(PacketListener packetlistener) {
         this.a((PacketLoginOutListener) packetlistener);
     }
 }

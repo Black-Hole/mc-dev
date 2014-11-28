@@ -14,7 +14,7 @@ public class CommandEnchant extends CommandAbstract {
         return 2;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.enchant.usage";
     }
 
@@ -22,23 +22,39 @@ public class CommandEnchant extends CommandAbstract {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.enchant.usage", new Object[0]);
         } else {
-            EntityPlayer entityplayer = d(icommandlistener, astring[0]);
-            int i = a(icommandlistener, astring[1], 0, Enchantment.byId.length - 1);
+            EntityPlayer entityplayer = a(icommandlistener, astring[0]);
+
+            icommandlistener.a(EnumCommandResult.AFFECTED_ITEMS, 0);
+
+            int i;
+
+            try {
+                i = a(astring[1], 0);
+            } catch (ExceptionInvalidNumber exceptioninvalidnumber) {
+                Enchantment enchantment = Enchantment.getByName(astring[1]);
+
+                if (enchantment == null) {
+                    throw exceptioninvalidnumber;
+                }
+
+                i = enchantment.id;
+            }
+
             int j = 1;
-            ItemStack itemstack = entityplayer.bF();
+            ItemStack itemstack = entityplayer.bY();
 
             if (itemstack == null) {
                 throw new CommandException("commands.enchant.noItem", new Object[0]);
             } else {
-                Enchantment enchantment = Enchantment.byId[i];
+                Enchantment enchantment1 = Enchantment.getById(i);
 
-                if (enchantment == null) {
+                if (enchantment1 == null) {
                     throw new ExceptionInvalidNumber("commands.enchant.notFound", new Object[] { Integer.valueOf(i)});
-                } else if (!enchantment.canEnchant(itemstack)) {
+                } else if (!enchantment1.canEnchant(itemstack)) {
                     throw new CommandException("commands.enchant.cantEnchant", new Object[0]);
                 } else {
                     if (astring.length >= 3) {
-                        j = a(icommandlistener, astring[2], enchantment.getStartLevel(), enchantment.getMaxLevel());
+                        j = a(astring[2], enchantment1.getStartLevel(), enchantment1.getMaxLevel());
                     }
 
                     if (itemstack.hasTag()) {
@@ -46,28 +62,29 @@ public class CommandEnchant extends CommandAbstract {
 
                         if (nbttaglist != null) {
                             for (int k = 0; k < nbttaglist.size(); ++k) {
-                                short short1 = nbttaglist.get(k).getShort("id");
+                                short short0 = nbttaglist.get(k).getShort("id");
 
-                                if (Enchantment.byId[short1] != null) {
-                                    Enchantment enchantment1 = Enchantment.byId[short1];
+                                if (Enchantment.getById(short0) != null) {
+                                    Enchantment enchantment2 = Enchantment.getById(short0);
 
-                                    if (!enchantment1.a(enchantment)) {
-                                        throw new CommandException("commands.enchant.cantCombine", new Object[] { enchantment.c(j), enchantment1.c(nbttaglist.get(k).getShort("lvl"))});
+                                    if (!enchantment2.a(enchantment1)) {
+                                        throw new CommandException("commands.enchant.cantCombine", new Object[] { enchantment1.d(j), enchantment2.d(nbttaglist.get(k).getShort("lvl"))});
                                     }
                                 }
                             }
                         }
                     }
 
-                    itemstack.addEnchantment(enchantment, j);
+                    itemstack.addEnchantment(enchantment1, j);
                     a(icommandlistener, this, "commands.enchant.success", new Object[0]);
+                    icommandlistener.a(EnumCommandResult.AFFECTED_ITEMS, 1);
                 }
             }
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
-        return astring.length == 1 ? a(astring, this.d()) : null;
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, this.d()) : (astring.length == 2 ? a(astring, Enchantment.getNames()) : null);
     }
 
     protected String[] d() {

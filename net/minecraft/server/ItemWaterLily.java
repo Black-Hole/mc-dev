@@ -13,23 +13,26 @@ public class ItemWaterLily extends ItemWithAuxData {
             return itemstack;
         } else {
             if (movingobjectposition.type == EnumMovingObjectType.BLOCK) {
-                int i = movingobjectposition.b;
-                int j = movingobjectposition.c;
-                int k = movingobjectposition.d;
+                BlockPosition blockposition = movingobjectposition.a();
 
-                if (!world.a(entityhuman, i, j, k)) {
+                if (!world.a(entityhuman, blockposition)) {
                     return itemstack;
                 }
 
-                if (!entityhuman.a(i, j, k, movingobjectposition.face, itemstack)) {
+                if (!entityhuman.a(blockposition.shift(movingobjectposition.direction), movingobjectposition.direction, itemstack)) {
                     return itemstack;
                 }
 
-                if (world.getType(i, j, k).getMaterial() == Material.WATER && world.getData(i, j, k) == 0 && world.isEmpty(i, j + 1, k)) {
-                    world.setTypeUpdate(i, j + 1, k, Blocks.WATER_LILY);
+                BlockPosition blockposition1 = blockposition.up();
+                IBlockData iblockdata = world.getType(blockposition);
+
+                if (iblockdata.getBlock().getMaterial() == Material.WATER && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0 && world.isEmpty(blockposition1)) {
+                    world.setTypeUpdate(blockposition1, Blocks.WATERLILY.getBlockData());
                     if (!entityhuman.abilities.canInstantlyBuild) {
                         --itemstack.count;
                     }
+
+                    entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
                 }
             }
 

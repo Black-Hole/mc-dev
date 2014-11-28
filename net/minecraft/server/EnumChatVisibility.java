@@ -2,15 +2,15 @@ package net.minecraft.server;
 
 public enum EnumChatVisibility {
 
-    FULL("FULL", 0, 0, "options.chat.visibility.full"), SYSTEM("SYSTEM", 1, 1, "options.chat.visibility.system"), HIDDEN("HIDDEN", 2, 2, "options.chat.visibility.hidden");
+    FULL(0, "options.chat.visibility.full"), SYSTEM(1, "options.chat.visibility.system"), HIDDEN(2, "options.chat.visibility.hidden");
+
     private static final EnumChatVisibility[] d = new EnumChatVisibility[values().length];
     private final int e;
     private final String f;
-    private static final EnumChatVisibility[] g = new EnumChatVisibility[] { FULL, SYSTEM, HIDDEN};
 
-    private EnumChatVisibility(String s, int i, int j, String s1) {
-        this.e = j;
-        this.f = s1;
+    private EnumChatVisibility(int i, String s) {
+        this.e = i;
+        this.f = s;
     }
 
     public int a() {
@@ -18,7 +18,7 @@ public enum EnumChatVisibility {
     }
 
     public static EnumChatVisibility a(int i) {
-        return d[i % d.length];
+        return EnumChatVisibility.d[i % EnumChatVisibility.d.length];
     }
 
     static {
@@ -28,7 +28,8 @@ public enum EnumChatVisibility {
         for (int j = 0; j < i; ++j) {
             EnumChatVisibility enumchatvisibility = aenumchatvisibility[j];
 
-            d[enumchatvisibility.e] = enumchatvisibility;
+            EnumChatVisibility.d[enumchatvisibility.e] = enumchatvisibility;
         }
+
     }
 }

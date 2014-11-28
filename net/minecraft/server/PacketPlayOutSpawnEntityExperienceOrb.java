@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutSpawnEntityExperienceOrb extends Packet {
+public class PacketPlayOutSpawnEntityExperienceOrb implements Packet {
 
     private int a;
     private int b;
@@ -15,11 +15,11 @@ public class PacketPlayOutSpawnEntityExperienceOrb extends Packet {
         this.b = MathHelper.floor(entityexperienceorb.locX * 32.0D);
         this.c = MathHelper.floor(entityexperienceorb.locY * 32.0D);
         this.d = MathHelper.floor(entityexperienceorb.locZ * 32.0D);
-        this.e = entityexperienceorb.e();
+        this.e = entityexperienceorb.j();
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.a();
+        this.a = packetdataserializer.e();
         this.b = packetdataserializer.readInt();
         this.c = packetdataserializer.readInt();
         this.d = packetdataserializer.readInt();
@@ -34,15 +34,11 @@ public class PacketPlayOutSpawnEntityExperienceOrb extends Packet {
         packetdataserializer.writeShort(this.e);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public String b() {
-        return String.format("id=%d, value=%d, x=%.2f, y=%.2f, z=%.2f", new Object[] { Integer.valueOf(this.a), Integer.valueOf(this.e), Float.valueOf((float) this.b / 32.0F), Float.valueOf((float) this.c / 32.0F), Float.valueOf((float) this.d / 32.0F)});
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

@@ -1,12 +1,11 @@
 package net.minecraft.server;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.ProfileLookupCallback;
+import com.mojang.authlib.yggdrasil.ProfileNotFoundException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-import net.minecraft.util.com.mojang.authlib.ProfileLookupCallback;
-import net.minecraft.util.com.mojang.authlib.yggdrasil.ProfileNotFoundException;
 
 final class GameProfileBanListEntryConverter implements ProfileLookupCallback {
 

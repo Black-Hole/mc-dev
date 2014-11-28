@@ -16,11 +16,15 @@ public class EntityLargeFireball extends EntityFireball {
         if (!this.world.isStatic) {
             if (movingobjectposition.entity != null) {
                 movingobjectposition.entity.damageEntity(DamageSource.fireball(this, this.shooter), 6.0F);
+                this.a(this.shooter, movingobjectposition.entity);
             }
 
-            this.world.createExplosion((Entity) null, this.locX, this.locY, this.locZ, (float) this.yield, true, this.world.getGameRules().getBoolean("mobGriefing"));
+            boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
+
+            this.world.createExplosion((Entity) null, this.locX, this.locY, this.locZ, (float) this.yield, flag, flag);
             this.die();
         }
+
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -33,5 +37,6 @@ public class EntityLargeFireball extends EntityFireball {
         if (nbttagcompound.hasKeyOfType("ExplosionPower", 99)) {
             this.yield = nbttagcompound.getInt("ExplosionPower");
         }
+
     }
 }

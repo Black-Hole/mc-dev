@@ -6,8 +6,9 @@ public class GenLayerBiome extends GenLayer {
     private BiomeBase[] d;
     private BiomeBase[] e;
     private BiomeBase[] f;
+    private final CustomWorldSettingsFinal g;
 
-    public GenLayerBiome(long i, GenLayer genlayer, WorldType worldtype) {
+    public GenLayerBiome(long i, GenLayer genlayer, WorldType worldtype, String s) {
         super(i);
         this.c = new BiomeBase[] { BiomeBase.DESERT, BiomeBase.DESERT, BiomeBase.DESERT, BiomeBase.SAVANNA, BiomeBase.SAVANNA, BiomeBase.PLAINS};
         this.d = new BiomeBase[] { BiomeBase.FOREST, BiomeBase.ROOFED_FOREST, BiomeBase.EXTREME_HILLS, BiomeBase.PLAINS, BiomeBase.BIRCH_FOREST, BiomeBase.SWAMPLAND};
@@ -16,7 +17,13 @@ public class GenLayerBiome extends GenLayer {
         this.a = genlayer;
         if (worldtype == WorldType.NORMAL_1_1) {
             this.c = new BiomeBase[] { BiomeBase.DESERT, BiomeBase.FOREST, BiomeBase.EXTREME_HILLS, BiomeBase.SWAMPLAND, BiomeBase.PLAINS, BiomeBase.TAIGA};
+            this.g = null;
+        } else if (worldtype == WorldType.CUSTOMIZED) {
+            this.g = CustomWorldSettings.a(s).b();
+        } else {
+            this.g = null;
         }
+
     }
 
     public int[] a(int i, int j, int k, int l) {
@@ -30,7 +37,9 @@ public class GenLayerBiome extends GenLayer {
                 int l1 = (k1 & 3840) >> 8;
 
                 k1 &= -3841;
-                if (b(k1)) {
+                if (this.g != null && this.g.F >= 0) {
+                    aint1[j1 + i1 * k] = this.g.F;
+                } else if (b(k1)) {
                     aint1[j1 + i1 * k] = k1;
                 } else if (k1 == BiomeBase.MUSHROOM_ISLAND.id) {
                     aint1[j1 + i1 * k] = k1;

@@ -5,7 +5,7 @@ public class BlockEnchantmentTable extends BlockContainer {
     protected BlockEnchantmentTable() {
         super(Material.STONE);
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F);
-        this.g(0);
+        this.e(0);
         this.a(CreativeModeTab.c);
     }
 
@@ -17,25 +17,37 @@ public class BlockEnchantmentTable extends BlockContainer {
         return false;
     }
 
+    public int b() {
+        return 3;
+    }
+
     public TileEntity a(World world, int i) {
         return new TileEntityEnchantTable();
     }
 
-    public boolean interact(World world, int i, int j, int k, EntityHuman entityhuman, int l, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isStatic) {
             return true;
         } else {
-            TileEntityEnchantTable tileentityenchanttable = (TileEntityEnchantTable) world.getTileEntity(i, j, k);
+            TileEntity tileentity = world.getTileEntity(blockposition);
 
-            entityhuman.startEnchanting(i, j, k, tileentityenchanttable.b() ? tileentityenchanttable.a() : null);
+            if (tileentity instanceof TileEntityEnchantTable) {
+                entityhuman.openTileEntity((TileEntityEnchantTable) tileentity);
+            }
+
             return true;
         }
     }
 
-    public void postPlace(World world, int i, int j, int k, EntityLiving entityliving, ItemStack itemstack) {
-        super.postPlace(world, i, j, k, entityliving, itemstack);
+    public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
+        super.postPlace(world, blockposition, iblockdata, entityliving, itemstack);
         if (itemstack.hasName()) {
-            ((TileEntityEnchantTable) world.getTileEntity(i, j, k)).a(itemstack.getName());
+            TileEntity tileentity = world.getTileEntity(blockposition);
+
+            if (tileentity instanceof TileEntityEnchantTable) {
+                ((TileEntityEnchantTable) tileentity).a(itemstack.getName());
+            }
         }
+
     }
 }

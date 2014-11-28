@@ -20,8 +20,12 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MinecraftEncryption {
+
+    private static final Logger a = LogManager.getLogger();
 
     public static KeyPair b() {
         try {
@@ -31,7 +35,7 @@ public class MinecraftEncryption {
             return keypairgenerator.generateKeyPair();
         } catch (NoSuchAlgorithmException nosuchalgorithmexception) {
             nosuchalgorithmexception.printStackTrace();
-            System.err.println("Key pair generation failed!");
+            MinecraftEncryption.a.error("Key pair generation failed!");
             return null;
         }
     }
@@ -48,13 +52,13 @@ public class MinecraftEncryption {
     private static byte[] a(String s, byte[]... abyte) {
         try {
             MessageDigest messagedigest = MessageDigest.getInstance(s);
-            byte[][] abyte = abyte;
+            byte[][] abyte1 = abyte;
             int i = abyte.length;
 
             for (int j = 0; j < i; ++j) {
-                byte[] abyte1 = abyte[j];
+                byte[] abyte2 = abyte1[j];
 
-                messagedigest.update(abyte1);
+                messagedigest.update(abyte2);
             }
 
             return messagedigest.digest();
@@ -76,7 +80,7 @@ public class MinecraftEncryption {
             ;
         }
 
-        System.err.println("Public key reconstitute failed!");
+        MinecraftEncryption.a.error("Public key reconstitute failed!");
         return null;
     }
 
@@ -97,7 +101,7 @@ public class MinecraftEncryption {
             badpaddingexception.printStackTrace();
         }
 
-        System.err.println("Cipher data failed!");
+        MinecraftEncryption.a.error("Cipher data failed!");
         return null;
     }
 
@@ -115,7 +119,7 @@ public class MinecraftEncryption {
             nosuchpaddingexception.printStackTrace();
         }
 
-        System.err.println("Cipher creation failed!");
+        MinecraftEncryption.a.error("Cipher creation failed!");
         return null;
     }
 

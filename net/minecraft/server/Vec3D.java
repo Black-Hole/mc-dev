@@ -2,15 +2,11 @@ package net.minecraft.server;
 
 public class Vec3D {
 
-    public double a;
-    public double b;
-    public double c;
+    public final double a;
+    public final double b;
+    public final double c;
 
-    public static Vec3D a(double d0, double d1, double d2) {
-        return new Vec3D(d0, d1, d2);
-    }
-
-    protected Vec3D(double d0, double d1, double d2) {
+    public Vec3D(double d0, double d1, double d2) {
         if (d0 == -0.0D) {
             d0 = 0.0D;
         }
@@ -28,28 +24,33 @@ public class Vec3D {
         this.c = d2;
     }
 
-    protected Vec3D b(double d0, double d1, double d2) {
-        this.a = d0;
-        this.b = d1;
-        this.c = d2;
-        return this;
-    }
-
     public Vec3D a() {
         double d0 = (double) MathHelper.sqrt(this.a * this.a + this.b * this.b + this.c * this.c);
 
-        return d0 < 1.0E-4D ? a(0.0D, 0.0D, 0.0D) : a(this.a / d0, this.b / d0, this.c / d0);
+        return d0 < 1.0E-4D ? new Vec3D(0.0D, 0.0D, 0.0D) : new Vec3D(this.a / d0, this.b / d0, this.c / d0);
     }
 
     public double b(Vec3D vec3d) {
         return this.a * vec3d.a + this.b * vec3d.b + this.c * vec3d.c;
     }
 
-    public Vec3D add(double d0, double d1, double d2) {
-        return a(this.a + d0, this.b + d1, this.c + d2);
+    public Vec3D d(Vec3D vec3d) {
+        return this.a(vec3d.a, vec3d.b, vec3d.c);
     }
 
-    public double d(Vec3D vec3d) {
+    public Vec3D a(double d0, double d1, double d2) {
+        return this.add(-d0, -d1, -d2);
+    }
+
+    public Vec3D e(Vec3D vec3d) {
+        return this.add(vec3d.a, vec3d.b, vec3d.c);
+    }
+
+    public Vec3D add(double d0, double d1, double d2) {
+        return new Vec3D(this.a + d0, this.b + d1, this.c + d2);
+    }
+
+    public double f(Vec3D vec3d) {
         double d0 = vec3d.a - this.a;
         double d1 = vec3d.b - this.b;
         double d2 = vec3d.c - this.c;
@@ -65,19 +66,11 @@ public class Vec3D {
         return d0 * d0 + d1 * d1 + d2 * d2;
     }
 
-    public double d(double d0, double d1, double d2) {
-        double d3 = d0 - this.a;
-        double d4 = d1 - this.b;
-        double d5 = d2 - this.c;
-
-        return d3 * d3 + d4 * d4 + d5 * d5;
-    }
-
     public double b() {
         return (double) MathHelper.sqrt(this.a * this.a + this.b * this.b + this.c * this.c);
     }
 
-    public Vec3D b(Vec3D vec3d, double d0) {
+    public Vec3D a(Vec3D vec3d, double d0) {
         double d1 = vec3d.a - this.a;
         double d2 = vec3d.b - this.b;
         double d3 = vec3d.c - this.c;
@@ -87,11 +80,11 @@ public class Vec3D {
         } else {
             double d4 = (d0 - this.a) / d1;
 
-            return d4 >= 0.0D && d4 <= 1.0D ? a(this.a + d1 * d4, this.b + d2 * d4, this.c + d3 * d4) : null;
+            return d4 >= 0.0D && d4 <= 1.0D ? new Vec3D(this.a + d1 * d4, this.b + d2 * d4, this.c + d3 * d4) : null;
         }
     }
 
-    public Vec3D c(Vec3D vec3d, double d0) {
+    public Vec3D b(Vec3D vec3d, double d0) {
         double d1 = vec3d.a - this.a;
         double d2 = vec3d.b - this.b;
         double d3 = vec3d.c - this.c;
@@ -101,11 +94,11 @@ public class Vec3D {
         } else {
             double d4 = (d0 - this.b) / d2;
 
-            return d4 >= 0.0D && d4 <= 1.0D ? a(this.a + d1 * d4, this.b + d2 * d4, this.c + d3 * d4) : null;
+            return d4 >= 0.0D && d4 <= 1.0D ? new Vec3D(this.a + d1 * d4, this.b + d2 * d4, this.c + d3 * d4) : null;
         }
     }
 
-    public Vec3D d(Vec3D vec3d, double d0) {
+    public Vec3D c(Vec3D vec3d, double d0) {
         double d1 = vec3d.a - this.a;
         double d2 = vec3d.b - this.b;
         double d3 = vec3d.c - this.c;
@@ -115,7 +108,7 @@ public class Vec3D {
         } else {
             double d4 = (d0 - this.c) / d3;
 
-            return d4 >= 0.0D && d4 <= 1.0D ? a(this.a + d1 * d4, this.b + d2 * d4, this.c + d3 * d4) : null;
+            return d4 >= 0.0D && d4 <= 1.0D ? new Vec3D(this.a + d1 * d4, this.b + d2 * d4, this.c + d3 * d4) : null;
         }
     }
 
@@ -123,23 +116,23 @@ public class Vec3D {
         return "(" + this.a + ", " + this.b + ", " + this.c + ")";
     }
 
-    public void a(float f) {
+    public Vec3D a(float f) {
         float f1 = MathHelper.cos(f);
         float f2 = MathHelper.sin(f);
         double d0 = this.a;
         double d1 = this.b * (double) f1 + this.c * (double) f2;
         double d2 = this.c * (double) f1 - this.b * (double) f2;
 
-        this.b(d0, d1, d2);
+        return new Vec3D(d0, d1, d2);
     }
 
-    public void b(float f) {
+    public Vec3D b(float f) {
         float f1 = MathHelper.cos(f);
         float f2 = MathHelper.sin(f);
         double d0 = this.a * (double) f1 + this.c * (double) f2;
         double d1 = this.b;
         double d2 = this.c * (double) f1 - this.a * (double) f2;
 
-        this.b(d0, d1, d2);
+        return new Vec3D(d0, d1, d2);
     }
 }

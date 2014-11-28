@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,13 +11,16 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
     private PathEntity c;
     private VillageDoor d;
     private boolean e;
-    private List f = new ArrayList();
+    private List f = Lists.newArrayList();
 
     public PathfinderGoalMoveThroughVillage(EntityCreature entitycreature, double d0, boolean flag) {
         this.a = entitycreature;
         this.b = d0;
         this.e = flag;
         this.a(1);
+        if (!(entitycreature.getNavigation() instanceof Navigation)) {
+            throw new IllegalArgumentException("Unsupported mob for MoveThroughVillageGoal");
+        }
     }
 
     public boolean a() {
@@ -25,7 +28,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
         if (this.e && this.a.world.w()) {
             return false;
         } else {
-            Village village = this.a.world.villages.getClosestVillage(MathHelper.floor(this.a.locX), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ), 0);
+            Village village = this.a.world.ae().getClosestVillage(new BlockPosition(this.a), 0);
 
             if (village == null) {
                 return false;
@@ -34,22 +37,23 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
                 if (this.d == null) {
                     return false;
                 } else {
-                    boolean flag = this.a.getNavigation().c();
+                    Navigation navigation = (Navigation) this.a.getNavigation();
+                    boolean flag = navigation.g();
 
-                    this.a.getNavigation().b(false);
-                    this.c = this.a.getNavigation().a((double) this.d.locX, (double) this.d.locY, (double) this.d.locZ);
-                    this.a.getNavigation().b(flag);
+                    navigation.b(false);
+                    this.c = navigation.a(this.d.d());
+                    navigation.b(flag);
                     if (this.c != null) {
                         return true;
                     } else {
-                        Vec3D vec3d = RandomPositionGenerator.a(this.a, 10, 7, Vec3D.a((double) this.d.locX, (double) this.d.locY, (double) this.d.locZ));
+                        Vec3D vec3d = RandomPositionGenerator.a(this.a, 10, 7, new Vec3D((double) this.d.d().getX(), (double) this.d.d().getY(), (double) this.d.d().getZ()));
 
                         if (vec3d == null) {
                             return false;
                         } else {
-                            this.a.getNavigation().b(false);
+                            navigation.b(false);
                             this.c = this.a.getNavigation().a(vec3d.a, vec3d.b, vec3d.c);
-                            this.a.getNavigation().b(flag);
+                            navigation.b(flag);
                             return this.c != null;
                         }
                     }
@@ -59,12 +63,12 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
     }
 
     public boolean b() {
-        if (this.a.getNavigation().g()) {
+        if (this.a.getNavigation().m()) {
             return false;
         } else {
             float f = this.a.width + 4.0F;
 
-            return this.a.e((double) this.d.locX, (double) this.d.locY, (double) this.d.locZ) > (double) (f * f);
+            return this.a.b(this.d.d()) > (double) (f * f);
         }
     }
 
@@ -73,15 +77,16 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
     }
 
     public void d() {
-        if (this.a.getNavigation().g() || this.a.e((double) this.d.locX, (double) this.d.locY, (double) this.d.locZ) < 16.0D) {
+        if (this.a.getNavigation().m() || this.a.b(this.d.d()) < 16.0D) {
             this.f.add(this.d);
         }
+
     }
 
     private VillageDoor a(Village village) {
         VillageDoor villagedoor = null;
         int i = Integer.MAX_VALUE;
-        List list = village.getDoors();
+        List list = village.f();
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -108,7 +113,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
             }
 
             villagedoor1 = (VillageDoor) iterator.next();
-        } while (villagedoor.locX != villagedoor1.locX || villagedoor.locY != villagedoor1.locY || villagedoor.locZ != villagedoor1.locZ);
+        } while (!villagedoor.d().equals(villagedoor1.d()));
 
         return true;
     }
@@ -117,5 +122,6 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
         if (this.f.size() > 15) {
             this.f.remove(0);
         }
+
     }
 }

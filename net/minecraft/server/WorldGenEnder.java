@@ -10,34 +10,34 @@ public class WorldGenEnder extends WorldGenerator {
         this.a = block;
     }
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        if (world.isEmpty(i, j, k) && world.getType(i, j - 1, k) == this.a) {
-            int l = random.nextInt(32) + 6;
-            int i1 = random.nextInt(4) + 1;
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        if (world.isEmpty(blockposition) && world.getType(blockposition.down()).getBlock() == this.a) {
+            int i = random.nextInt(32) + 6;
+            int j = random.nextInt(4) + 1;
 
+            int k;
+            int l;
+            int i1;
             int j1;
-            int k1;
-            int l1;
-            int i2;
 
-            for (j1 = i - i1; j1 <= i + i1; ++j1) {
-                for (k1 = k - i1; k1 <= k + i1; ++k1) {
-                    l1 = j1 - i;
-                    i2 = k1 - k;
-                    if (l1 * l1 + i2 * i2 <= i1 * i1 + 1 && world.getType(j1, j - 1, k1) != this.a) {
+            for (k = blockposition.getX() - j; k <= blockposition.getX() + j; ++k) {
+                for (l = blockposition.getZ() - j; l <= blockposition.getZ() + j; ++l) {
+                    i1 = k - blockposition.getX();
+                    j1 = l - blockposition.getZ();
+                    if (i1 * i1 + j1 * j1 <= j * j + 1 && world.getType(new BlockPosition(k, blockposition.getY() - 1, l)).getBlock() != this.a) {
                         return false;
                     }
                 }
             }
 
-            for (j1 = j; j1 < j + l && j1 < 256; ++j1) {
-                for (k1 = i - i1; k1 <= i + i1; ++k1) {
-                    for (l1 = k - i1; l1 <= k + i1; ++l1) {
-                        i2 = k1 - i;
-                        int j2 = l1 - k;
+            for (k = blockposition.getY(); k < blockposition.getY() + i && k < 256; ++k) {
+                for (l = blockposition.getX() - j; l <= blockposition.getX() + j; ++l) {
+                    for (i1 = blockposition.getZ() - j; i1 <= blockposition.getZ() + j; ++i1) {
+                        j1 = l - blockposition.getX();
+                        int k1 = i1 - blockposition.getZ();
 
-                        if (i2 * i2 + j2 * j2 <= i1 * i1 + 1) {
-                            world.setTypeAndData(k1, j1, l1, Blocks.OBSIDIAN, 0, 2);
+                        if (j1 * j1 + k1 * k1 <= j * j + 1) {
+                            world.setTypeAndData(new BlockPosition(l, k, i1), Blocks.OBSIDIAN.getBlockData(), 2);
                         }
                     }
                 }
@@ -45,9 +45,9 @@ public class WorldGenEnder extends WorldGenerator {
 
             EntityEnderCrystal entityendercrystal = new EntityEnderCrystal(world);
 
-            entityendercrystal.setPositionRotation((double) ((float) i + 0.5F), (double) (j + l), (double) ((float) k + 0.5F), random.nextFloat() * 360.0F, 0.0F);
+            entityendercrystal.setPositionRotation((double) ((float) blockposition.getX() + 0.5F), (double) (blockposition.getY() + i), (double) ((float) blockposition.getZ() + 0.5F), random.nextFloat() * 360.0F, 0.0F);
             world.addEntity(entityendercrystal);
-            world.setTypeAndData(i, j + l, k, Blocks.BEDROCK, 0, 2);
+            world.setTypeAndData(blockposition.up(i), Blocks.BEDROCK.getBlockData(), 2);
             return true;
         } else {
             return false;

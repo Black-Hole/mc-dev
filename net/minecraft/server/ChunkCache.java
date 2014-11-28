@@ -2,85 +2,74 @@ package net.minecraft.server;
 
 public class ChunkCache implements IBlockAccess {
 
-    private int a;
-    private int b;
-    private Chunk[][] c;
-    private boolean d;
-    private World e;
+    protected int a;
+    protected int b;
+    protected Chunk[][] c;
+    protected boolean d;
+    protected World e;
 
-    public ChunkCache(World world, int i, int j, int k, int l, int i1, int j1, int k1) {
+    public ChunkCache(World world, BlockPosition blockposition, BlockPosition blockposition1, int i) {
         this.e = world;
-        this.a = i - k1 >> 4;
-        this.b = k - k1 >> 4;
-        int l1 = l + k1 >> 4;
-        int i2 = j1 + k1 >> 4;
+        this.a = blockposition.getX() - i >> 4;
+        this.b = blockposition.getZ() - i >> 4;
+        int j = blockposition1.getX() + i >> 4;
+        int k = blockposition1.getZ() + i >> 4;
 
-        this.c = new Chunk[l1 - this.a + 1][i2 - this.b + 1];
+        this.c = new Chunk[j - this.a + 1][k - this.b + 1];
         this.d = true;
 
-        int j2;
-        int k2;
-        Chunk chunk;
+        int l;
+        int i1;
 
-        for (j2 = this.a; j2 <= l1; ++j2) {
-            for (k2 = this.b; k2 <= i2; ++k2) {
-                chunk = world.getChunkAt(j2, k2);
-                if (chunk != null) {
-                    this.c[j2 - this.a][k2 - this.b] = chunk;
-                }
+        for (l = this.a; l <= j; ++l) {
+            for (i1 = this.b; i1 <= k; ++i1) {
+                this.c[l - this.a][i1 - this.b] = world.getChunkAt(l, i1);
             }
         }
 
-        for (j2 = i >> 4; j2 <= l >> 4; ++j2) {
-            for (k2 = k >> 4; k2 <= j1 >> 4; ++k2) {
-                chunk = this.c[j2 - this.a][k2 - this.b];
-                if (chunk != null && !chunk.c(j, i1)) {
+        for (l = blockposition.getX() >> 4; l <= blockposition1.getX() >> 4; ++l) {
+            for (i1 = blockposition.getZ() >> 4; i1 <= blockposition1.getZ() >> 4; ++i1) {
+                Chunk chunk = this.c[l - this.a][i1 - this.b];
+
+                if (chunk != null && !chunk.c(blockposition.getY(), blockposition1.getY())) {
                     this.d = false;
                 }
             }
         }
+
     }
 
-    public Block getType(int i, int j, int k) {
-        Block block = Blocks.AIR;
+    public TileEntity getTileEntity(BlockPosition blockposition) {
+        int i = (blockposition.getX() >> 4) - this.a;
+        int j = (blockposition.getZ() >> 4) - this.b;
 
-        if (j >= 0 && j < 256) {
-            int l = (i >> 4) - this.a;
-            int i1 = (k >> 4) - this.b;
+        return this.c[i][j].a(blockposition, EnumTileEntityState.IMMEDIATE);
+    }
 
-            if (l >= 0 && l < this.c.length && i1 >= 0 && i1 < this.c[l].length) {
-                Chunk chunk = this.c[l][i1];
+    public IBlockData getType(BlockPosition blockposition) {
+        if (blockposition.getY() >= 0 && blockposition.getY() < 256) {
+            int i = (blockposition.getX() >> 4) - this.a;
+            int j = (blockposition.getZ() >> 4) - this.b;
+
+            if (i >= 0 && i < this.c.length && j >= 0 && j < this.c[i].length) {
+                Chunk chunk = this.c[i][j];
 
                 if (chunk != null) {
-                    block = chunk.getType(i & 15, j, k & 15);
+                    return chunk.getBlockData(blockposition);
                 }
             }
         }
 
-        return block;
+        return Blocks.AIR.getBlockData();
     }
 
-    public TileEntity getTileEntity(int i, int j, int k) {
-        int l = (i >> 4) - this.a;
-        int i1 = (k >> 4) - this.b;
-
-        return this.c[l][i1].e(i & 15, j, k & 15);
+    public boolean isEmpty(BlockPosition blockposition) {
+        return this.getType(blockposition).getBlock().getMaterial() == Material.AIR;
     }
 
-    public int getData(int i, int j, int k) {
-        if (j < 0) {
-            return 0;
-        } else if (j >= 256) {
-            return 0;
-        } else {
-            int l = (i >> 4) - this.a;
-            int i1 = (k >> 4) - this.b;
+    public int getBlockPower(BlockPosition blockposition, EnumDirection enumdirection) {
+        IBlockData iblockdata = this.getType(blockposition);
 
-            return this.c[l][i1].getData(i & 15, j, k & 15);
-        }
-    }
-
-    public int getBlockPower(int i, int j, int k, int l) {
-        return this.getType(i, j, k).c(this, i, j, k, l);
+        return iblockdata.getBlock().b((IBlockAccess) this, blockposition, iblockdata, enumdirection);
     }
 }

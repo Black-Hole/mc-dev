@@ -4,60 +4,78 @@ import java.util.Random;
 
 public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElement {
 
-    private static final String[] a = new String[] { "deadbush", "tallgrass", "fern"};
+    public static final BlockStateEnum TYPE = BlockStateEnum.of("type", EnumTallGrassType.class);
 
     protected BlockLongGrass() {
         super(Material.REPLACEABLE_PLANT);
+        this.j(this.blockStateList.getBlockData().set(BlockLongGrass.TYPE, EnumTallGrassType.DEAD_BUSH));
         float f = 0.4F;
 
         this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.8F, 0.5F + f);
     }
 
-    public boolean j(World world, int i, int j, int k) {
-        return this.a(world.getType(i, j - 1, k));
+    public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return this.c(world.getType(blockposition.down()).getBlock());
     }
 
-    public Item getDropType(int i, Random random, int j) {
-        return random.nextInt(8) == 0 ? Items.SEEDS : null;
+    public boolean f(World world, BlockPosition blockposition) {
+        return true;
+    }
+
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
+        return random.nextInt(8) == 0 ? Items.WHEAT_SEEDS : null;
     }
 
     public int getDropCount(int i, Random random) {
         return 1 + random.nextInt(i * 2 + 1);
     }
 
-    public void a(World world, EntityHuman entityhuman, int i, int j, int k, int l) {
-        if (!world.isStatic && entityhuman.bF() != null && entityhuman.bF().getItem() == Items.SHEARS) {
-            entityhuman.a(StatisticList.MINE_BLOCK_COUNT[Block.getId(this)], 1);
-            this.a(world, i, j, k, new ItemStack(Blocks.LONG_GRASS, 1, l));
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity) {
+        if (!world.isStatic && entityhuman.bY() != null && entityhuman.bY().getItem() == Items.SHEARS) {
+            entityhuman.b(StatisticList.MINE_BLOCK_COUNT[Block.getId(this)]);
+            a(world, blockposition, new ItemStack(Blocks.TALLGRASS, 1, ((EnumTallGrassType) iblockdata.get(BlockLongGrass.TYPE)).a()));
         } else {
-            super.a(world, entityhuman, i, j, k, l);
+            super.a(world, entityhuman, blockposition, iblockdata, tileentity);
         }
+
     }
 
-    public int getDropData(World world, int i, int j, int k) {
-        return world.getData(i, j, k);
+    public int getDropData(World world, BlockPosition blockposition) {
+        IBlockData iblockdata = world.getType(blockposition);
+
+        return iblockdata.getBlock().toLegacyData(iblockdata);
     }
 
-    public boolean a(World world, int i, int j, int k, boolean flag) {
-        int l = world.getData(i, j, k);
-
-        return l != 0;
+    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
+        return iblockdata.get(BlockLongGrass.TYPE) != EnumTallGrassType.DEAD_BUSH;
     }
 
-    public boolean a(World world, Random random, int i, int j, int k) {
+    public boolean a(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         return true;
     }
 
-    public void b(World world, Random random, int i, int j, int k) {
-        int l = world.getData(i, j, k);
-        byte b0 = 2;
+    public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
+        EnumTallFlowerVariants enumtallflowervariants = EnumTallFlowerVariants.GRASS;
 
-        if (l == 2) {
-            b0 = 3;
+        if (iblockdata.get(BlockLongGrass.TYPE) == EnumTallGrassType.FERN) {
+            enumtallflowervariants = EnumTallFlowerVariants.FERN;
         }
 
-        if (Blocks.DOUBLE_PLANT.canPlace(world, i, j, k)) {
-            Blocks.DOUBLE_PLANT.c(world, i, j, k, b0, 2);
+        if (Blocks.DOUBLE_PLANT.canPlace(world, blockposition)) {
+            Blocks.DOUBLE_PLANT.a(world, blockposition, enumtallflowervariants, 2);
         }
+
+    }
+
+    public IBlockData fromLegacyData(int i) {
+        return this.getBlockData().set(BlockLongGrass.TYPE, EnumTallGrassType.a(i));
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        return ((EnumTallGrassType) iblockdata.get(BlockLongGrass.TYPE)).a();
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockLongGrass.TYPE});
     }
 }

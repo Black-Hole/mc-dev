@@ -3,22 +3,22 @@ package net.minecraft.server;
 public abstract class WorldProvider {
 
     public static final float[] a = new float[] { 1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
-    public World b;
-    public WorldType type;
-    public String d;
-    public WorldChunkManager e;
-    public boolean f;
-    public boolean g;
-    public float[] h = new float[16];
-    public int dimension;
-    private float[] j = new float[4];
+    protected World b;
+    private WorldType type;
+    private String i;
+    protected WorldChunkManager c;
+    protected boolean d;
+    protected boolean e;
+    protected final float[] f = new float[16];
+    protected int dimension;
+    private final float[] j = new float[4];
 
     public WorldProvider() {}
 
     public final void a(World world) {
         this.b = world;
         this.type = world.getWorldData().getType();
-        this.d = world.getWorldData().getGeneratorOptions();
+        this.i = world.getWorldData().getGeneratorOptions();
         this.b();
         this.a();
     }
@@ -29,26 +29,32 @@ public abstract class WorldProvider {
         for (int i = 0; i <= 15; ++i) {
             float f1 = 1.0F - (float) i / 15.0F;
 
-            this.h[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * (1.0F - f) + f;
+            this.f[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * (1.0F - f) + f;
         }
+
     }
 
     protected void b() {
-        if (this.b.getWorldData().getType() == WorldType.FLAT) {
+        WorldType worldtype = this.b.getWorldData().getType();
+
+        if (worldtype == WorldType.FLAT) {
             WorldGenFlatInfo worldgenflatinfo = WorldGenFlatInfo.a(this.b.getWorldData().getGeneratorOptions());
 
-            this.e = new WorldChunkManagerHell(BiomeBase.getBiome(worldgenflatinfo.a()), 0.5F);
+            this.c = new WorldChunkManagerHell(BiomeBase.getBiome(worldgenflatinfo.a(), BiomeBase.ad), 0.5F);
+        } else if (worldtype == WorldType.DEBUG_ALL_BLOCK_STATES) {
+            this.c = new WorldChunkManagerHell(BiomeBase.PLAINS, 0.0F);
         } else {
-            this.e = new WorldChunkManager(this.b);
+            this.c = new WorldChunkManager(this.b);
         }
+
     }
 
     public IChunkProvider getChunkProvider() {
-        return (IChunkProvider) (this.type == WorldType.FLAT ? new ChunkProviderFlat(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.d) : new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures()));
+        return (IChunkProvider) (this.type == WorldType.FLAT ? new ChunkProviderFlat(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.i) : (this.type == WorldType.DEBUG_ALL_BLOCK_STATES ? new ChunkProviderDebug(this.b) : (this.type == WorldType.CUSTOMIZED ? new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.i) : new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.i))));
     }
 
     public boolean canSpawn(int i, int j) {
-        return this.b.b(i, j) == Blocks.GRASS;
+        return this.b.c(new BlockPosition(i, 0, j)) == Blocks.GRASS;
     }
 
     public float a(long i, float f) {
@@ -86,7 +92,7 @@ public abstract class WorldProvider {
         return (WorldProvider) (i == -1 ? new WorldProviderHell() : (i == 0 ? new WorldProviderNormal() : (i == 1 ? new WorldProviderTheEnd() : null)));
     }
 
-    public ChunkCoordinates h() {
+    public BlockPosition h() {
         return null;
     }
 
@@ -96,4 +102,29 @@ public abstract class WorldProvider {
 
     public abstract String getName();
 
+    public abstract String getSuffix();
+
+    public WorldChunkManager m() {
+        return this.c;
+    }
+
+    public boolean n() {
+        return this.d;
+    }
+
+    public boolean o() {
+        return this.e;
+    }
+
+    public float[] p() {
+        return this.f;
+    }
+
+    public int getDimension() {
+        return this.dimension;
+    }
+
+    public WorldBorder getWorldBorder() {
+        return new WorldBorder();
+    }
 }

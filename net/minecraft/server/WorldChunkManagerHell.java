@@ -6,16 +6,16 @@ import java.util.Random;
 
 public class WorldChunkManagerHell extends WorldChunkManager {
 
-    private BiomeBase c;
-    private float d;
+    private BiomeBase b;
+    private float c;
 
     public WorldChunkManagerHell(BiomeBase biomebase, float f) {
-        this.c = biomebase;
-        this.d = f;
+        this.b = biomebase;
+        this.c = f;
     }
 
-    public BiomeBase getBiome(int i, int j) {
-        return this.c;
+    public BiomeBase getBiome(BlockPosition blockposition) {
+        return this.b;
     }
 
     public BiomeBase[] getBiomes(BiomeBase[] abiomebase, int i, int j, int k, int l) {
@@ -23,7 +23,7 @@ public class WorldChunkManagerHell extends WorldChunkManager {
             abiomebase = new BiomeBase[k * l];
         }
 
-        Arrays.fill(abiomebase, 0, k * l, this.c);
+        Arrays.fill(abiomebase, 0, k * l, this.b);
         return abiomebase;
     }
 
@@ -32,7 +32,7 @@ public class WorldChunkManagerHell extends WorldChunkManager {
             afloat = new float[k * l];
         }
 
-        Arrays.fill(afloat, 0, k * l, this.d);
+        Arrays.fill(afloat, 0, k * l, this.c);
         return afloat;
     }
 
@@ -41,7 +41,7 @@ public class WorldChunkManagerHell extends WorldChunkManager {
             abiomebase = new BiomeBase[k * l];
         }
 
-        Arrays.fill(abiomebase, 0, k * l, this.c);
+        Arrays.fill(abiomebase, 0, k * l, this.b);
         return abiomebase;
     }
 
@@ -49,11 +49,11 @@ public class WorldChunkManagerHell extends WorldChunkManager {
         return this.getBiomeBlock(abiomebase, i, j, k, l);
     }
 
-    public ChunkPosition a(int i, int j, int k, List list, Random random) {
-        return list.contains(this.c) ? new ChunkPosition(i - k + random.nextInt(k * 2 + 1), 0, j - k + random.nextInt(k * 2 + 1)) : null;
+    public BlockPosition a(int i, int j, int k, List list, Random random) {
+        return list.contains(this.b) ? new BlockPosition(i - k + random.nextInt(k * 2 + 1), 0, j - k + random.nextInt(k * 2 + 1)) : null;
     }
 
     public boolean a(int i, int j, int k, List list) {
-        return list.contains(this.c);
+        return list.contains(this.b);
     }
 }

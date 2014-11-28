@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutEntity extends Packet {
+public class PacketPlayOutEntity implements Packet {
 
     protected int a;
     protected byte b;
@@ -9,6 +9,7 @@ public class PacketPlayOutEntity extends Packet {
     protected byte e;
     protected byte f;
     protected boolean g;
+    protected boolean h;
 
     public PacketPlayOutEntity() {}
 
@@ -17,26 +18,22 @@ public class PacketPlayOutEntity extends Packet {
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.readInt();
+        this.a = packetdataserializer.e();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeInt(this.a);
+        packetdataserializer.b(this.a);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
-    }
-
-    public String b() {
-        return String.format("id=%d", new Object[] { Integer.valueOf(this.a)});
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
     public String toString() {
         return "Entity_" + super.toString();
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

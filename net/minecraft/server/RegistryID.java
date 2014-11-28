@@ -1,17 +1,16 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.util.com.google.common.base.Predicates;
-import net.minecraft.util.com.google.common.collect.Iterators;
-import net.minecraft.util.com.google.common.collect.Lists;
-
 public class RegistryID implements Registry {
 
-    private IdentityHashMap a = new IdentityHashMap(512);
-    private List b = Lists.newArrayList();
+    private final IdentityHashMap a = new IdentityHashMap(512);
+    private final List b = Lists.newArrayList();
 
     public RegistryID() {}
 
@@ -19,7 +18,7 @@ public class RegistryID implements Registry {
         this.a.put(object, Integer.valueOf(i));
 
         while (this.b.size() <= i) {
-            this.b.add(null);
+            this.b.add((Object) null);
         }
 
         this.b.set(i, object);
@@ -31,15 +30,11 @@ public class RegistryID implements Registry {
         return integer == null ? -1 : integer.intValue();
     }
 
-    public Object a(int i) {
+    public final Object a(int i) {
         return i >= 0 && i < this.b.size() ? this.b.get(i) : null;
     }
 
     public Iterator iterator() {
         return Iterators.filter(this.b.iterator(), Predicates.notNull());
-    }
-
-    public boolean b(int i) {
-        return this.a(i) != null;
     }
 }

@@ -8,13 +8,11 @@ public interface ISourceBlock extends ILocationSource {
 
     double getZ();
 
-    int getBlockX();
+    BlockPosition getBlockPosition();
 
-    int getBlockY();
+    Block e();
 
-    int getBlockZ();
-
-    int h();
+    int f();
 
     TileEntity getTileEntity();
 }

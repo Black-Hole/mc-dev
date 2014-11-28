@@ -1,10 +1,9 @@
 package net.minecraft.server;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import java.util.Iterator;
 import java.util.UUID;
-
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-import net.minecraft.util.com.mojang.authlib.properties.Property;
 
 public final class GameProfileSerializer {
 
@@ -58,7 +57,7 @@ public final class GameProfileSerializer {
         }
     }
 
-    public static void serialize(NBTTagCompound nbttagcompound, GameProfile gameprofile) {
+    public static NBTTagCompound serialize(NBTTagCompound nbttagcompound, GameProfile gameprofile) {
         if (!UtilColor.b(gameprofile.getName())) {
             nbttagcompound.setString("Name", gameprofile.getName());
         }
@@ -92,5 +91,7 @@ public final class GameProfileSerializer {
 
             nbttagcompound.set("Properties", nbttagcompound1);
         }
+
+        return nbttagcompound;
     }
 }

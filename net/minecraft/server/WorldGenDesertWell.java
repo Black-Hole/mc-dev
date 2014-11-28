@@ -1,72 +1,86 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicates;
+import java.util.Iterator;
 import java.util.Random;
 
 public class WorldGenDesertWell extends WorldGenerator {
 
-    public WorldGenDesertWell() {}
+    private static final BlockStatePredicate a = BlockStatePredicate.a((Block) Blocks.SAND).a(BlockSand.VARIANT, Predicates.equalTo(EnumSandVariant.SAND));
+    private final IBlockData b;
+    private final IBlockData c;
+    private final IBlockData d;
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        while (world.isEmpty(i, j, k) && j > 2) {
-            --j;
+    public WorldGenDesertWell() {
+        this.b = Blocks.STONE_SLAB.getBlockData().set(BlockDoubleStepAbstract.VARIANT, EnumStoneSlabVariant.SAND).set(BlockStepAbstract.HALF, EnumSlabHalf.BOTTOM);
+        this.c = Blocks.SANDSTONE.getBlockData();
+        this.d = Blocks.FLOWING_WATER.getBlockData();
+    }
+
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        while (world.isEmpty(blockposition) && blockposition.getY() > 2) {
+            blockposition = blockposition.down();
         }
 
-        if (world.getType(i, j, k) != Blocks.SAND) {
+        if (!WorldGenDesertWell.a.a(world.getType(blockposition))) {
             return false;
         } else {
-            int l;
-            int i1;
+            int i;
+            int j;
 
-            for (l = -2; l <= 2; ++l) {
-                for (i1 = -2; i1 <= 2; ++i1) {
-                    if (world.isEmpty(i + l, j - 1, k + i1) && world.isEmpty(i + l, j - 2, k + i1)) {
+            for (i = -2; i <= 2; ++i) {
+                for (j = -2; j <= 2; ++j) {
+                    if (world.isEmpty(blockposition.a(i, -1, j)) && world.isEmpty(blockposition.a(i, -2, j))) {
                         return false;
                     }
                 }
             }
 
-            for (l = -1; l <= 0; ++l) {
-                for (i1 = -2; i1 <= 2; ++i1) {
-                    for (int j1 = -2; j1 <= 2; ++j1) {
-                        world.setTypeAndData(i + i1, j + l, k + j1, Blocks.SANDSTONE, 0, 2);
+            for (i = -1; i <= 0; ++i) {
+                for (j = -2; j <= 2; ++j) {
+                    for (int k = -2; k <= 2; ++k) {
+                        world.setTypeAndData(blockposition.a(j, i, k), this.c, 2);
                     }
                 }
             }
 
-            world.setTypeAndData(i, j, k, Blocks.WATER, 0, 2);
-            world.setTypeAndData(i - 1, j, k, Blocks.WATER, 0, 2);
-            world.setTypeAndData(i + 1, j, k, Blocks.WATER, 0, 2);
-            world.setTypeAndData(i, j, k - 1, Blocks.WATER, 0, 2);
-            world.setTypeAndData(i, j, k + 1, Blocks.WATER, 0, 2);
+            world.setTypeAndData(blockposition, this.d, 2);
+            Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
 
-            for (l = -2; l <= 2; ++l) {
-                for (i1 = -2; i1 <= 2; ++i1) {
-                    if (l == -2 || l == 2 || i1 == -2 || i1 == 2) {
-                        world.setTypeAndData(i + l, j + 1, k + i1, Blocks.SANDSTONE, 0, 2);
+            while (iterator.hasNext()) {
+                EnumDirection enumdirection = (EnumDirection) iterator.next();
+
+                world.setTypeAndData(blockposition.shift(enumdirection), this.d, 2);
+            }
+
+            for (i = -2; i <= 2; ++i) {
+                for (j = -2; j <= 2; ++j) {
+                    if (i == -2 || i == 2 || j == -2 || j == 2) {
+                        world.setTypeAndData(blockposition.a(i, 1, j), this.c, 2);
                     }
                 }
             }
 
-            world.setTypeAndData(i + 2, j + 1, k, Blocks.STEP, 1, 2);
-            world.setTypeAndData(i - 2, j + 1, k, Blocks.STEP, 1, 2);
-            world.setTypeAndData(i, j + 1, k + 2, Blocks.STEP, 1, 2);
-            world.setTypeAndData(i, j + 1, k - 2, Blocks.STEP, 1, 2);
+            world.setTypeAndData(blockposition.a(2, 1, 0), this.b, 2);
+            world.setTypeAndData(blockposition.a(-2, 1, 0), this.b, 2);
+            world.setTypeAndData(blockposition.a(0, 1, 2), this.b, 2);
+            world.setTypeAndData(blockposition.a(0, 1, -2), this.b, 2);
 
-            for (l = -1; l <= 1; ++l) {
-                for (i1 = -1; i1 <= 1; ++i1) {
-                    if (l == 0 && i1 == 0) {
-                        world.setTypeAndData(i + l, j + 4, k + i1, Blocks.SANDSTONE, 0, 2);
+            for (i = -1; i <= 1; ++i) {
+                for (j = -1; j <= 1; ++j) {
+                    if (i == 0 && j == 0) {
+                        world.setTypeAndData(blockposition.a(i, 4, j), this.c, 2);
                     } else {
-                        world.setTypeAndData(i + l, j + 4, k + i1, Blocks.STEP, 1, 2);
+                        world.setTypeAndData(blockposition.a(i, 4, j), this.b, 2);
                     }
                 }
             }
 
-            for (l = 1; l <= 3; ++l) {
-                world.setTypeAndData(i - 1, j + l, k - 1, Blocks.SANDSTONE, 0, 2);
-                world.setTypeAndData(i - 1, j + l, k + 1, Blocks.SANDSTONE, 0, 2);
-                world.setTypeAndData(i + 1, j + l, k - 1, Blocks.SANDSTONE, 0, 2);
-                world.setTypeAndData(i + 1, j + l, k + 1, Blocks.SANDSTONE, 0, 2);
+            for (i = 1; i <= 3; ++i) {
+                world.setTypeAndData(blockposition.a(-1, i, -1), this.c, 2);
+                world.setTypeAndData(blockposition.a(-1, i, 1), this.c, 2);
+                world.setTypeAndData(blockposition.a(1, i, -1), this.c, 2);
+                world.setTypeAndData(blockposition.a(1, i, 1), this.c, 2);
             }
 
             return true;

@@ -1,56 +1,42 @@
 package net.minecraft.server;
 
-public class PacketPlayInBlockDig extends Packet {
+public class PacketPlayInBlockDig implements Packet {
 
-    private int a;
-    private int b;
-    private int c;
-    private int face;
-    private int e;
+    private BlockPosition a;
+    private EnumDirection b;
+    private EnumPlayerDigType c;
 
     public PacketPlayInBlockDig() {}
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.e = packetdataserializer.readUnsignedByte();
-        this.a = packetdataserializer.readInt();
-        this.b = packetdataserializer.readUnsignedByte();
-        this.c = packetdataserializer.readInt();
-        this.face = packetdataserializer.readUnsignedByte();
+        this.c = (EnumPlayerDigType) packetdataserializer.a(EnumPlayerDigType.class);
+        this.a = packetdataserializer.c();
+        this.b = EnumDirection.fromType1(packetdataserializer.readUnsignedByte());
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeByte(this.e);
-        packetdataserializer.writeInt(this.a);
-        packetdataserializer.writeByte(this.b);
-        packetdataserializer.writeInt(this.c);
-        packetdataserializer.writeByte(this.face);
+        packetdataserializer.a((Enum) this.c);
+        packetdataserializer.a(this.a);
+        packetdataserializer.writeByte(this.b.a());
     }
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
-    public int c() {
+    public BlockPosition a() {
         return this.a;
     }
 
-    public int d() {
+    public EnumDirection b() {
         return this.b;
     }
 
-    public int e() {
+    public EnumPlayerDigType c() {
         return this.c;
     }
 
-    public int f() {
-        return this.face;
-    }
-
-    public int g() {
-        return this.e;
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

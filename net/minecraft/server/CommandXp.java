@@ -14,7 +14,7 @@ public class CommandXp extends CommandAbstract {
         return 2;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.xp.usage";
     }
 
@@ -29,22 +29,17 @@ public class CommandXp extends CommandAbstract {
                 s = s.substring(0, s.length() - 1);
             }
 
-            int i = a(icommandlistener, s);
+            int i = a(s);
             boolean flag1 = i < 0;
 
             if (flag1) {
                 i *= -1;
             }
 
-            EntityPlayer entityplayer;
-
-            if (astring.length > 1) {
-                entityplayer = d(icommandlistener, astring[1]);
-            } else {
-                entityplayer = b(icommandlistener);
-            }
+            EntityPlayer entityplayer = astring.length > 1 ? a(icommandlistener, astring[1]) : b(icommandlistener);
 
             if (flag) {
+                icommandlistener.a(EnumCommandResult.QUERY_RESULT, entityplayer.expLevel);
                 if (flag1) {
                     entityplayer.levelDown(-i);
                     a(icommandlistener, this, "commands.xp.success.negative.levels", new Object[] { Integer.valueOf(i), entityplayer.getName()});
@@ -53,17 +48,19 @@ public class CommandXp extends CommandAbstract {
                     a(icommandlistener, this, "commands.xp.success.levels", new Object[] { Integer.valueOf(i), entityplayer.getName()});
                 }
             } else {
+                icommandlistener.a(EnumCommandResult.QUERY_RESULT, entityplayer.expTotal);
                 if (flag1) {
-                    throw new ExceptionUsage("commands.xp.failure.widthdrawXp", new Object[0]);
+                    throw new CommandException("commands.xp.failure.widthdrawXp", new Object[0]);
                 }
 
                 entityplayer.giveExp(i);
                 a(icommandlistener, this, "commands.xp.success", new Object[] { Integer.valueOf(i), entityplayer.getName()});
             }
+
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 2 ? a(astring, this.d()) : null;
     }
 

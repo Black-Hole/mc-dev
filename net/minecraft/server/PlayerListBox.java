@@ -13,7 +13,7 @@ public class PlayerListBox extends JList implements IUpdatePlayerListBox {
         minecraftserver.a((IUpdatePlayerListBox) this);
     }
 
-    public void a() {
+    public void c() {
         if (this.b++ % 20 == 0) {
             Vector vector = new Vector();
 
@@ -23,5 +23,6 @@ public class PlayerListBox extends JList implements IUpdatePlayerListBox {
 
             this.setListData(vector);
         }
+
     }
 }

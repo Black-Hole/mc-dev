@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import java.util.HashMap;
+import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -8,44 +8,48 @@ import java.util.Map.Entry;
 public class RecipesFurnace {
 
     private static final RecipesFurnace a = new RecipesFurnace();
-    private Map recipes = new HashMap();
-    private Map c = new HashMap();
+    public Map recipes = Maps.newHashMap();
+    private Map c = Maps.newHashMap();
 
     public static RecipesFurnace getInstance() {
-        return a;
+        return RecipesFurnace.a;
     }
 
-    private RecipesFurnace() {
+    public RecipesFurnace() {
         this.registerRecipe(Blocks.IRON_ORE, new ItemStack(Items.IRON_INGOT), 0.7F);
         this.registerRecipe(Blocks.GOLD_ORE, new ItemStack(Items.GOLD_INGOT), 1.0F);
         this.registerRecipe(Blocks.DIAMOND_ORE, new ItemStack(Items.DIAMOND), 1.0F);
         this.registerRecipe(Blocks.SAND, new ItemStack(Blocks.GLASS), 0.1F);
-        this.a(Items.PORK, new ItemStack(Items.GRILLED_PORK), 0.35F);
-        this.a(Items.RAW_BEEF, new ItemStack(Items.COOKED_BEEF), 0.35F);
-        this.a(Items.RAW_CHICKEN, new ItemStack(Items.COOKED_CHICKEN), 0.35F);
+        this.a(Items.PORKCHOP, new ItemStack(Items.COOKED_PORKCHOP), 0.35F);
+        this.a(Items.BEEF, new ItemStack(Items.COOKED_BEEF), 0.35F);
+        this.a(Items.CHICKEN, new ItemStack(Items.COOKED_CHICKEN), 0.35F);
+        this.a(Items.RABBIT, new ItemStack(Items.COOKED_RABBIT), 0.35F);
+        this.a(Items.MUTTON, new ItemStack(Items.COOKED_MUTTON), 0.35F);
         this.registerRecipe(Blocks.COBBLESTONE, new ItemStack(Blocks.STONE), 0.1F);
-        this.a(Items.CLAY_BALL, new ItemStack(Items.CLAY_BRICK), 0.3F);
+        this.a(new ItemStack(Blocks.STONEBRICK, 1, BlockSmoothBrick.b), new ItemStack(Blocks.STONEBRICK, 1, BlockSmoothBrick.N), 0.1F);
+        this.a(Items.CLAY_BALL, new ItemStack(Items.BRICK), 0.3F);
         this.registerRecipe(Blocks.CLAY, new ItemStack(Blocks.HARDENED_CLAY), 0.35F);
-        this.registerRecipe(Blocks.CACTUS, new ItemStack(Items.INK_SACK, 1, 2), 0.2F);
+        this.registerRecipe(Blocks.CACTUS, new ItemStack(Items.DYE, 1, EnumColor.GREEN.getInvColorIndex()), 0.2F);
         this.registerRecipe(Blocks.LOG, new ItemStack(Items.COAL, 1, 1), 0.15F);
         this.registerRecipe(Blocks.LOG2, new ItemStack(Items.COAL, 1, 1), 0.15F);
         this.registerRecipe(Blocks.EMERALD_ORE, new ItemStack(Items.EMERALD), 1.0F);
-        this.a(Items.POTATO, new ItemStack(Items.POTATO_BAKED), 0.35F);
-        this.registerRecipe(Blocks.NETHERRACK, new ItemStack(Items.NETHER_BRICK), 0.1F);
+        this.a(Items.POTATO, new ItemStack(Items.BAKED_POTATO), 0.35F);
+        this.registerRecipe(Blocks.NETHERRACK, new ItemStack(Items.NETHERBRICK), 0.1F);
+        this.a(new ItemStack(Blocks.SPONGE, 1, 1), new ItemStack(Blocks.SPONGE, 1, 0), 0.15F);
         EnumFish[] aenumfish = EnumFish.values();
         int i = aenumfish.length;
 
         for (int j = 0; j < i; ++j) {
             EnumFish enumfish = aenumfish[j];
 
-            if (enumfish.i()) {
-                this.a(new ItemStack(Items.RAW_FISH, 1, enumfish.a()), new ItemStack(Items.COOKED_FISH, 1, enumfish.a()), 0.35F);
+            if (enumfish.g()) {
+                this.a(new ItemStack(Items.FISH, 1, enumfish.a()), new ItemStack(Items.COOKED_FISH, 1, enumfish.a()), 0.35F);
             }
         }
 
         this.registerRecipe(Blocks.COAL_ORE, new ItemStack(Items.COAL), 0.1F);
         this.registerRecipe(Blocks.REDSTONE_ORE, new ItemStack(Items.REDSTONE), 0.7F);
-        this.registerRecipe(Blocks.LAPIS_ORE, new ItemStack(Items.INK_SACK, 1, 4), 0.2F);
+        this.registerRecipe(Blocks.LAPIS_ORE, new ItemStack(Items.DYE, 1, EnumColor.BLUE.getInvColorIndex()), 0.2F);
         this.registerRecipe(Blocks.QUARTZ_ORE, new ItemStack(Items.QUARTZ), 0.2F);
     }
 

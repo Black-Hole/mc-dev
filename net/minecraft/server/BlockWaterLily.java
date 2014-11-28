@@ -12,25 +12,32 @@ public class BlockWaterLily extends BlockPlant {
         this.a(CreativeModeTab.c);
     }
 
-    public int b() {
-        return 23;
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+        if (entity == null || !(entity instanceof EntityBoat)) {
+            super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
+        }
+
     }
 
-    public void a(World world, int i, int j, int k, AxisAlignedBB axisalignedbb, List list, Entity entity) {
-        if (entity == null || !(entity instanceof EntityBoat)) {
-            super.a(world, i, j, k, axisalignedbb, list, entity);
+    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new AxisAlignedBB((double) blockposition.getX() + this.minX, (double) blockposition.getY() + this.minY, (double) blockposition.getZ() + this.minZ, (double) blockposition.getX() + this.maxX, (double) blockposition.getY() + this.maxY, (double) blockposition.getZ() + this.maxZ);
+    }
+
+    protected boolean c(Block block) {
+        return block == Blocks.WATER;
+    }
+
+    public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        if (blockposition.getY() >= 0 && blockposition.getY() < 256) {
+            IBlockData iblockdata1 = world.getType(blockposition.down());
+
+            return iblockdata1.getBlock().getMaterial() == Material.WATER && ((Integer) iblockdata1.get(BlockFluids.LEVEL)).intValue() == 0;
+        } else {
+            return false;
         }
     }
 
-    public AxisAlignedBB a(World world, int i, int j, int k) {
-        return AxisAlignedBB.a((double) i + this.minX, (double) j + this.minY, (double) k + this.minZ, (double) i + this.maxX, (double) j + this.maxY, (double) k + this.maxZ);
-    }
-
-    protected boolean a(Block block) {
-        return block == Blocks.STATIONARY_WATER;
-    }
-
-    public boolean j(World world, int i, int j, int k) {
-        return j >= 0 && j < 256 ? world.getType(i, j - 1, k).getMaterial() == Material.WATER && world.getData(i, j - 1, k) == 0 : false;
+    public int toLegacyData(IBlockData iblockdata) {
+        return 0;
     }
 }

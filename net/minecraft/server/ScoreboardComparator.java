@@ -7,7 +7,7 @@ final class ScoreboardComparator implements Comparator {
     ScoreboardComparator() {}
 
     public int a(ScoreboardScore scoreboardscore, ScoreboardScore scoreboardscore1) {
-        return scoreboardscore.getScore() > scoreboardscore1.getScore() ? 1 : (scoreboardscore.getScore() < scoreboardscore1.getScore() ? -1 : 0);
+        return scoreboardscore.getScore() > scoreboardscore1.getScore() ? 1 : (scoreboardscore.getScore() < scoreboardscore1.getScore() ? -1 : scoreboardscore1.getPlayerName().compareToIgnoreCase(scoreboardscore.getPlayerName()));
     }
 
     public int compare(Object object, Object object1) {

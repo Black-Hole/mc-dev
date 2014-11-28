@@ -2,81 +2,132 @@ package net.minecraft.server;
 
 public class BlockPumpkin extends BlockDirectional {
 
-    private boolean a;
+    private ShapeDetector snowGolemPart;
+    private ShapeDetector snowGolem;
+    private ShapeDetector ironGolemPart;
+    private ShapeDetector ironGolem;
 
-    protected BlockPumpkin(boolean flag) {
+    protected BlockPumpkin() {
         super(Material.PUMPKIN);
+        this.j(this.blockStateList.getBlockData().set(BlockPumpkin.FACING, EnumDirection.NORTH));
         this.a(true);
-        this.a = flag;
         this.a(CreativeModeTab.b);
     }
 
-    public void onPlace(World world, int i, int j, int k) {
-        super.onPlace(world, i, j, k);
-        if (world.getType(i, j - 1, k) == Blocks.SNOW_BLOCK && world.getType(i, j - 2, k) == Blocks.SNOW_BLOCK) {
-            if (!world.isStatic) {
-                world.setTypeAndData(i, j, k, getById(0), 0, 2);
-                world.setTypeAndData(i, j - 1, k, getById(0), 0, 2);
-                world.setTypeAndData(i, j - 2, k, getById(0), 0, 2);
-                EntitySnowman entitysnowman = new EntitySnowman(world);
+    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        super.onPlace(world, blockposition, iblockdata);
+        this.e(world, blockposition);
+    }
 
-                entitysnowman.setPositionRotation((double) i + 0.5D, (double) j - 1.95D, (double) k + 0.5D, 0.0F, 0.0F);
-                world.addEntity(entitysnowman);
-                world.update(i, j, k, getById(0));
-                world.update(i, j - 1, k, getById(0));
-                world.update(i, j - 2, k, getById(0));
+    public boolean d(World world, BlockPosition blockposition) {
+        return this.getDetectorSnowGolemPart().a(world, blockposition) != null || this.getDetectorIronGolemPart().a(world, blockposition) != null;
+    }
+
+    private void e(World world, BlockPosition blockposition) {
+        ShapeDetectorCollection shapedetectorcollection;
+        int i;
+        int j;
+
+        if ((shapedetectorcollection = this.getDetectorSnowGolem().a(world, blockposition)) != null) {
+            for (i = 0; i < this.getDetectorSnowGolem().b(); ++i) {
+                ShapeDetectorBlock shapedetectorblock = shapedetectorcollection.a(0, i, 0);
+
+                world.setTypeAndData(shapedetectorblock.d(), Blocks.AIR.getBlockData(), 2);
             }
 
-            for (int l = 0; l < 120; ++l) {
-                world.addParticle("snowshovel", (double) i + world.random.nextDouble(), (double) (j - 2) + world.random.nextDouble() * 2.5D, (double) k + world.random.nextDouble(), 0.0D, 0.0D, 0.0D);
+            EntitySnowman entitysnowman = new EntitySnowman(world);
+            BlockPosition blockposition1 = shapedetectorcollection.a(0, 2, 0).d();
+
+            entitysnowman.setPositionRotation((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.05D, (double) blockposition1.getZ() + 0.5D, 0.0F, 0.0F);
+            world.addEntity(entitysnowman);
+
+            for (j = 0; j < 120; ++j) {
+                world.addParticle(EnumParticle.SNOW_SHOVEL, (double) blockposition1.getX() + world.random.nextDouble(), (double) blockposition1.getY() + world.random.nextDouble() * 2.5D, (double) blockposition1.getZ() + world.random.nextDouble(), 0.0D, 0.0D, 0.0D, new int[0]);
             }
-        } else if (world.getType(i, j - 1, k) == Blocks.IRON_BLOCK && world.getType(i, j - 2, k) == Blocks.IRON_BLOCK) {
-            boolean flag = world.getType(i - 1, j - 1, k) == Blocks.IRON_BLOCK && world.getType(i + 1, j - 1, k) == Blocks.IRON_BLOCK;
-            boolean flag1 = world.getType(i, j - 1, k - 1) == Blocks.IRON_BLOCK && world.getType(i, j - 1, k + 1) == Blocks.IRON_BLOCK;
 
-            if (flag || flag1) {
-                world.setTypeAndData(i, j, k, getById(0), 0, 2);
-                world.setTypeAndData(i, j - 1, k, getById(0), 0, 2);
-                world.setTypeAndData(i, j - 2, k, getById(0), 0, 2);
-                if (flag) {
-                    world.setTypeAndData(i - 1, j - 1, k, getById(0), 0, 2);
-                    world.setTypeAndData(i + 1, j - 1, k, getById(0), 0, 2);
-                } else {
-                    world.setTypeAndData(i, j - 1, k - 1, getById(0), 0, 2);
-                    world.setTypeAndData(i, j - 1, k + 1, getById(0), 0, 2);
+            for (j = 0; j < this.getDetectorSnowGolem().b(); ++j) {
+                ShapeDetectorBlock shapedetectorblock1 = shapedetectorcollection.a(0, j, 0);
+
+                world.update(shapedetectorblock1.d(), Blocks.AIR);
+            }
+        } else if ((shapedetectorcollection = this.getDetectorIronGolem().a(world, blockposition)) != null) {
+            for (i = 0; i < this.getDetectorIronGolem().c(); ++i) {
+                for (int k = 0; k < this.getDetectorIronGolem().b(); ++k) {
+                    world.setTypeAndData(shapedetectorcollection.a(i, k, 0).d(), Blocks.AIR.getBlockData(), 2);
                 }
+            }
 
-                EntityIronGolem entityirongolem = new EntityIronGolem(world);
+            BlockPosition blockposition2 = shapedetectorcollection.a(1, 2, 0).d();
+            EntityIronGolem entityirongolem = new EntityIronGolem(world);
 
-                entityirongolem.setPlayerCreated(true);
-                entityirongolem.setPositionRotation((double) i + 0.5D, (double) j - 1.95D, (double) k + 0.5D, 0.0F, 0.0F);
-                world.addEntity(entityirongolem);
+            entityirongolem.setPlayerCreated(true);
+            entityirongolem.setPositionRotation((double) blockposition2.getX() + 0.5D, (double) blockposition2.getY() + 0.05D, (double) blockposition2.getZ() + 0.5D, 0.0F, 0.0F);
+            world.addEntity(entityirongolem);
 
-                for (int i1 = 0; i1 < 120; ++i1) {
-                    world.addParticle("snowballpoof", (double) i + world.random.nextDouble(), (double) (j - 2) + world.random.nextDouble() * 3.9D, (double) k + world.random.nextDouble(), 0.0D, 0.0D, 0.0D);
-                }
+            for (j = 0; j < 120; ++j) {
+                world.addParticle(EnumParticle.SNOWBALL, (double) blockposition2.getX() + world.random.nextDouble(), (double) blockposition2.getY() + world.random.nextDouble() * 3.9D, (double) blockposition2.getZ() + world.random.nextDouble(), 0.0D, 0.0D, 0.0D, new int[0]);
+            }
 
-                world.update(i, j, k, getById(0));
-                world.update(i, j - 1, k, getById(0));
-                world.update(i, j - 2, k, getById(0));
-                if (flag) {
-                    world.update(i - 1, j - 1, k, getById(0));
-                    world.update(i + 1, j - 1, k, getById(0));
-                } else {
-                    world.update(i, j - 1, k - 1, getById(0));
-                    world.update(i, j - 1, k + 1, getById(0));
+            for (j = 0; j < this.getDetectorIronGolem().c(); ++j) {
+                for (int l = 0; l < this.getDetectorIronGolem().b(); ++l) {
+                    ShapeDetectorBlock shapedetectorblock2 = shapedetectorcollection.a(j, l, 0);
+
+                    world.update(shapedetectorblock2.d(), Blocks.AIR);
                 }
             }
         }
+
     }
 
-    public boolean canPlace(World world, int i, int j, int k) {
-        return world.getType(i, j, k).material.isReplaceable() && World.a((IBlockAccess) world, i, j - 1, k);
+    public boolean canPlace(World world, BlockPosition blockposition) {
+        return world.getType(blockposition).getBlock().material.isReplaceable() && World.a((IBlockAccess) world, blockposition.down());
     }
 
-    public void postPlace(World world, int i, int j, int k, EntityLiving entityliving, ItemStack itemstack) {
-        int l = MathHelper.floor((double) (entityliving.yaw * 4.0F / 360.0F) + 2.5D) & 3;
+    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
+        return this.getBlockData().set(BlockPumpkin.FACING, entityliving.getDirection().opposite());
+    }
 
-        world.setData(i, j, k, l, 2);
+    public IBlockData fromLegacyData(int i) {
+        return this.getBlockData().set(BlockPumpkin.FACING, EnumDirection.fromType2(i));
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        return ((EnumDirection) iblockdata.get(BlockPumpkin.FACING)).b();
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockPumpkin.FACING});
+    }
+
+    protected ShapeDetector getDetectorSnowGolemPart() {
+        if (this.snowGolemPart == null) {
+            this.snowGolemPart = ShapeDetectorBuilder.a().a(new String[] { " ", "#", "#"}).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW))).b();
+        }
+
+        return this.snowGolemPart;
+    }
+
+    protected ShapeDetector getDetectorSnowGolem() {
+        if (this.snowGolem == null) {
+            this.snowGolem = ShapeDetectorBuilder.a().a(new String[] { "^", "#", "#"}).a('^', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.PUMPKIN))).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW))).b();
+        }
+
+        return this.snowGolem;
+    }
+
+    protected ShapeDetector getDetectorIronGolemPart() {
+        if (this.ironGolemPart == null) {
+            this.ironGolemPart = ShapeDetectorBuilder.a().a(new String[] { "~ ~", "###", "~#~"}).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.AIR))).b();
+        }
+
+        return this.ironGolemPart;
+    }
+
+    protected ShapeDetector getDetectorIronGolem() {
+        if (this.ironGolem == null) {
+            this.ironGolem = ShapeDetectorBuilder.a().a(new String[] { "~^~", "###", "~#~"}).a('^', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.PUMPKIN))).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.AIR))).b();
+        }
+
+        return this.ironGolem;
     }
 }

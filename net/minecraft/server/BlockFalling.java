@@ -15,42 +15,46 @@ public class BlockFalling extends Block {
         super(material);
     }
 
-    public void onPlace(World world, int i, int j, int k) {
-        world.a(i, j, k, this, this.a(world));
+    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        world.a(blockposition, (Block) this, this.a(world));
     }
 
-    public void doPhysics(World world, int i, int j, int k, Block block) {
-        world.a(i, j, k, this, this.a(world));
+    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+        world.a(blockposition, (Block) this, this.a(world));
     }
 
-    public void a(World world, int i, int j, int k, Random random) {
+    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (!world.isStatic) {
-            this.m(world, i, j, k);
+            this.e(world, blockposition);
         }
+
     }
 
-    private void m(World world, int i, int j, int k) {
-        if (canFall(world, i, j - 1, k) && j >= 0) {
+    private void e(World world, BlockPosition blockposition) {
+        if (canFall(world, blockposition.down()) && blockposition.getY() >= 0) {
             byte b0 = 32;
 
-            if (!instaFall && world.b(i - b0, j - b0, k - b0, i + b0, j + b0, k + b0)) {
+            if (!BlockFalling.instaFall && world.areChunksLoadedBetween(blockposition.a(-b0, -b0, -b0), blockposition.a(b0, b0, b0))) {
                 if (!world.isStatic) {
-                    EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), this, world.getData(i, j, k));
+                    EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, world.getType(blockposition));
 
                     this.a(entityfallingblock);
                     world.addEntity(entityfallingblock);
                 }
             } else {
-                world.setAir(i, j, k);
+                world.setAir(blockposition);
 
-                while (canFall(world, i, j - 1, k) && j > 0) {
-                    --j;
+                BlockPosition blockposition1;
+
+                for (blockposition1 = blockposition.down(); canFall(world, blockposition1) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
+                    ;
                 }
 
-                if (j > 0) {
-                    world.setTypeUpdate(i, j, k, this);
+                if (blockposition1.getY() > 0) {
+                    world.setTypeUpdate(blockposition1.up(), this.getBlockData());
                 }
             }
+
         }
     }
 
@@ -60,19 +64,12 @@ public class BlockFalling extends Block {
         return 2;
     }
 
-    public static boolean canFall(World world, int i, int j, int k) {
-        Block block = world.getType(i, j, k);
+    public static boolean canFall(World world, BlockPosition blockposition) {
+        Block block = world.getType(blockposition).getBlock();
+        Material material = block.material;
 
-        if (block.material == Material.AIR) {
-            return true;
-        } else if (block == Blocks.FIRE) {
-            return true;
-        } else {
-            Material material = block.material;
-
-            return material == Material.WATER ? true : material == Material.LAVA;
-        }
+        return block == Blocks.FIRE || material == Material.AIR || material == Material.WATER || material == Material.LAVA;
     }
 
-    public void a(World world, int i, int j, int k, int l) {}
+    public void a_(World world, BlockPosition blockposition) {}
 }

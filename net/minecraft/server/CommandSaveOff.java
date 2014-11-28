@@ -8,7 +8,7 @@ public class CommandSaveOff extends CommandAbstract {
         return "save-off";
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.save-off.usage";
     }
 

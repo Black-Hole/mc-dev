@@ -1,7 +1,9 @@
 package net.minecraft.server;
 
+import io.netty.util.internal.ThreadLocalRandom;
+import java.util.Random;
 import java.util.UUID;
-import net.minecraft.util.org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.Validate;
 
 public class AttributeModifier {
 
@@ -12,7 +14,7 @@ public class AttributeModifier {
     private boolean e;
 
     public AttributeModifier(String s, double d0, int i) {
-        this(UUID.randomUUID(), s, d0, i);
+        this(MathHelper.a((Random) ThreadLocalRandom.current()), s, d0, i);
     }
 
     public AttributeModifier(UUID uuid, String s, double d0, int i) {
@@ -22,7 +24,7 @@ public class AttributeModifier {
         this.a = d0;
         this.b = i;
         Validate.notEmpty(s, "Modifier name cannot be empty", new Object[0]);
-        Validate.inclusiveBetween(Integer.valueOf(0), Integer.valueOf(2), Integer.valueOf(i), "Invalid operation", new Object[0]);
+        Validate.inclusiveBetween(0L, 2L, (long) i, "Invalid operation");
     }
 
     public UUID a() {

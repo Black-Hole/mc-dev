@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketLoginOutDisconnect extends Packet {
+public class PacketLoginOutDisconnect implements Packet {
 
     private IChatBaseComponent a;
 
@@ -11,22 +11,18 @@ public class PacketLoginOutDisconnect extends Packet {
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = ChatSerializer.a(packetdataserializer.c(32767));
+        this.a = packetdataserializer.d();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.a(ChatSerializer.a(this.a));
+        packetdataserializer.a(this.a);
     }
 
     public void a(PacketLoginOutListener packetloginoutlistener) {
         packetloginoutlistener.a(this);
     }
 
-    public boolean a() {
-        return true;
-    }
-
-    public void handle(PacketListener packetlistener) {
+    public void a(PacketListener packetlistener) {
         this.a((PacketLoginOutListener) packetlistener);
     }
 }

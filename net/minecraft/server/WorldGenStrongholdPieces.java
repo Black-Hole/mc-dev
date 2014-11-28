@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -30,28 +30,28 @@ public class WorldGenStrongholdPieces {
     }
 
     public static void b() {
-        c = new ArrayList();
-        WorldGenStrongholdPieceWeight[] aworldgenstrongholdpieceweight = b;
+        WorldGenStrongholdPieces.c = Lists.newArrayList();
+        WorldGenStrongholdPieceWeight[] aworldgenstrongholdpieceweight = WorldGenStrongholdPieces.b;
         int i = aworldgenstrongholdpieceweight.length;
 
         for (int j = 0; j < i; ++j) {
             WorldGenStrongholdPieceWeight worldgenstrongholdpieceweight = aworldgenstrongholdpieceweight[j];
 
             worldgenstrongholdpieceweight.c = 0;
-            c.add(worldgenstrongholdpieceweight);
+            WorldGenStrongholdPieces.c.add(worldgenstrongholdpieceweight);
         }
 
-        d = null;
+        WorldGenStrongholdPieces.d = null;
     }
 
     private static boolean d() {
         boolean flag = false;
 
-        a = 0;
+        WorldGenStrongholdPieces.a = 0;
 
         WorldGenStrongholdPieceWeight worldgenstrongholdpieceweight;
 
-        for (Iterator iterator = c.iterator(); iterator.hasNext(); a += worldgenstrongholdpieceweight.b) {
+        for (Iterator iterator = WorldGenStrongholdPieces.c.iterator(); iterator.hasNext(); WorldGenStrongholdPieces.a += worldgenstrongholdpieceweight.b) {
             worldgenstrongholdpieceweight = (WorldGenStrongholdPieceWeight) iterator.next();
             if (worldgenstrongholdpieceweight.d > 0 && worldgenstrongholdpieceweight.c < worldgenstrongholdpieceweight.d) {
                 flag = true;
@@ -61,72 +61,72 @@ public class WorldGenStrongholdPieces {
         return flag;
     }
 
-    private static WorldGenStrongholdPiece a(Class oclass, List list, Random random, int i, int j, int k, int l, int i1) {
+    private static WorldGenStrongholdPiece a(Class oclass, List list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
         Object object = null;
 
         if (oclass == WorldGenStrongholdStairs.class) {
-            object = WorldGenStrongholdStairs.a(list, random, i, j, k, l, i1);
+            object = WorldGenStrongholdStairs.a(list, random, i, j, k, enumdirection, l);
         } else if (oclass == WorldGenStrongholdPrison.class) {
-            object = WorldGenStrongholdPrison.a(list, random, i, j, k, l, i1);
+            object = WorldGenStrongholdPrison.a(list, random, i, j, k, enumdirection, l);
         } else if (oclass == WorldGenStrongholdLeftTurn.class) {
-            object = WorldGenStrongholdLeftTurn.a(list, random, i, j, k, l, i1);
+            object = WorldGenStrongholdLeftTurn.a(list, random, i, j, k, enumdirection, l);
         } else if (oclass == WorldGenStrongholdRightTurn.class) {
-            object = WorldGenStrongholdRightTurn.a(list, random, i, j, k, l, i1);
+            object = WorldGenStrongholdRightTurn.a(list, random, i, j, k, enumdirection, l);
         } else if (oclass == WorldGenStrongholdRoomCrossing.class) {
-            object = WorldGenStrongholdRoomCrossing.a(list, random, i, j, k, l, i1);
+            object = WorldGenStrongholdRoomCrossing.a(list, random, i, j, k, enumdirection, l);
         } else if (oclass == WorldGenStrongholdStairsStraight.class) {
-            object = WorldGenStrongholdStairsStraight.a(list, random, i, j, k, l, i1);
+            object = WorldGenStrongholdStairsStraight.a(list, random, i, j, k, enumdirection, l);
         } else if (oclass == WorldGenStrongholdStairs2.class) {
-            object = WorldGenStrongholdStairs2.a(list, random, i, j, k, l, i1);
+            object = WorldGenStrongholdStairs2.a(list, random, i, j, k, enumdirection, l);
         } else if (oclass == WorldGenStrongholdCrossing.class) {
-            object = WorldGenStrongholdCrossing.a(list, random, i, j, k, l, i1);
+            object = WorldGenStrongholdCrossing.a(list, random, i, j, k, enumdirection, l);
         } else if (oclass == WorldGenStrongholdChestCorridor.class) {
-            object = WorldGenStrongholdChestCorridor.a(list, random, i, j, k, l, i1);
+            object = WorldGenStrongholdChestCorridor.a(list, random, i, j, k, enumdirection, l);
         } else if (oclass == WorldGenStrongholdLibrary.class) {
-            object = WorldGenStrongholdLibrary.a(list, random, i, j, k, l, i1);
+            object = WorldGenStrongholdLibrary.a(list, random, i, j, k, enumdirection, l);
         } else if (oclass == WorldGenStrongholdPortalRoom.class) {
-            object = WorldGenStrongholdPortalRoom.a(list, random, i, j, k, l, i1);
+            object = WorldGenStrongholdPortalRoom.a(list, random, i, j, k, enumdirection, l);
         }
 
         return (WorldGenStrongholdPiece) object;
     }
 
-    private static WorldGenStrongholdPiece b(WorldGenStrongholdStart worldgenstrongholdstart, List list, Random random, int i, int j, int k, int l, int i1) {
+    private static WorldGenStrongholdPiece b(WorldGenStrongholdStart worldgenstrongholdstart, List list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
         if (!d()) {
             return null;
         } else {
-            if (d != null) {
-                WorldGenStrongholdPiece worldgenstrongholdpiece = a(d, list, random, i, j, k, l, i1);
+            if (WorldGenStrongholdPieces.d != null) {
+                WorldGenStrongholdPiece worldgenstrongholdpiece = a(WorldGenStrongholdPieces.d, list, random, i, j, k, enumdirection, l);
 
-                d = null;
+                WorldGenStrongholdPieces.d = null;
                 if (worldgenstrongholdpiece != null) {
                     return worldgenstrongholdpiece;
                 }
             }
 
-            int j1 = 0;
+            int i1 = 0;
 
-            while (j1 < 5) {
-                ++j1;
-                int k1 = random.nextInt(a);
-                Iterator iterator = c.iterator();
+            while (i1 < 5) {
+                ++i1;
+                int j1 = random.nextInt(WorldGenStrongholdPieces.a);
+                Iterator iterator = WorldGenStrongholdPieces.c.iterator();
 
                 while (iterator.hasNext()) {
                     WorldGenStrongholdPieceWeight worldgenstrongholdpieceweight = (WorldGenStrongholdPieceWeight) iterator.next();
 
-                    k1 -= worldgenstrongholdpieceweight.b;
-                    if (k1 < 0) {
-                        if (!worldgenstrongholdpieceweight.a(i1) || worldgenstrongholdpieceweight == worldgenstrongholdstart.a) {
+                    j1 -= worldgenstrongholdpieceweight.b;
+                    if (j1 < 0) {
+                        if (!worldgenstrongholdpieceweight.a(l) || worldgenstrongholdpieceweight == worldgenstrongholdstart.a) {
                             break;
                         }
 
-                        WorldGenStrongholdPiece worldgenstrongholdpiece1 = a(worldgenstrongholdpieceweight.a, list, random, i, j, k, l, i1);
+                        WorldGenStrongholdPiece worldgenstrongholdpiece1 = a(worldgenstrongholdpieceweight.a, list, random, i, j, k, enumdirection, l);
 
                         if (worldgenstrongholdpiece1 != null) {
                             ++worldgenstrongholdpieceweight.c;
                             worldgenstrongholdstart.a = worldgenstrongholdpieceweight;
                             if (!worldgenstrongholdpieceweight.a()) {
-                                c.remove(worldgenstrongholdpieceweight);
+                                WorldGenStrongholdPieces.c.remove(worldgenstrongholdpieceweight);
                             }
 
                             return worldgenstrongholdpiece1;
@@ -135,21 +135,21 @@ public class WorldGenStrongholdPieces {
                 }
             }
 
-            StructureBoundingBox structureboundingbox = WorldGenStrongholdCorridor.a(list, random, i, j, k, l);
+            StructureBoundingBox structureboundingbox = WorldGenStrongholdCorridor.a(list, random, i, j, k, enumdirection);
 
             if (structureboundingbox != null && structureboundingbox.b > 1) {
-                return new WorldGenStrongholdCorridor(i1, random, structureboundingbox, l);
+                return new WorldGenStrongholdCorridor(l, random, structureboundingbox, enumdirection);
             } else {
                 return null;
             }
         }
     }
 
-    private static StructurePiece c(WorldGenStrongholdStart worldgenstrongholdstart, List list, Random random, int i, int j, int k, int l, int i1) {
-        if (i1 > 50) {
+    private static StructurePiece c(WorldGenStrongholdStart worldgenstrongholdstart, List list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
+        if (l > 50) {
             return null;
         } else if (Math.abs(i - worldgenstrongholdstart.c().a) <= 112 && Math.abs(k - worldgenstrongholdstart.c().c) <= 112) {
-            WorldGenStrongholdPiece worldgenstrongholdpiece = b(worldgenstrongholdstart, list, random, i, j, k, l, i1 + 1);
+            WorldGenStrongholdPiece worldgenstrongholdpiece = b(worldgenstrongholdstart, list, random, i, j, k, enumdirection, l + 1);
 
             if (worldgenstrongholdpiece != null) {
                 list.add(worldgenstrongholdpiece);
@@ -162,16 +162,16 @@ public class WorldGenStrongholdPieces {
         }
     }
 
-    static StructurePiece a(WorldGenStrongholdStart worldgenstrongholdstart, List list, Random random, int i, int j, int k, int l, int i1) {
-        return c(worldgenstrongholdstart, list, random, i, j, k, l, i1);
+    static StructurePiece a(WorldGenStrongholdStart worldgenstrongholdstart, List list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
+        return c(worldgenstrongholdstart, list, random, i, j, k, enumdirection, l);
     }
 
     static Class a(Class oclass) {
-        d = oclass;
+        WorldGenStrongholdPieces.d = oclass;
         return oclass;
     }
 
     static WorldGenStrongholdStones c() {
-        return e;
+        return WorldGenStrongholdPieces.e;
     }
 }

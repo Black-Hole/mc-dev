@@ -6,7 +6,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
     private EntityLiving e;
     World a;
     private double f;
-    private Navigation g;
+    private NavigationAbstract g;
     private int h;
     float b;
     float c;
@@ -20,6 +20,9 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
         this.c = f;
         this.b = f1;
         this.a(3);
+        if (!(entitytameableanimal.getNavigation() instanceof Navigation)) {
+            throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
+        }
     }
 
     public boolean a() {
@@ -29,7 +32,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
             return false;
         } else if (this.d.isSitting()) {
             return false;
-        } else if (this.d.f(entityliving) < (double) (this.c * this.c)) {
+        } else if (this.d.h(entityliving) < (double) (this.c * this.c)) {
             return false;
         } else {
             this.e = entityliving;
@@ -38,42 +41,43 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.g.g() && this.d.f(this.e) > (double) (this.b * this.b) && !this.d.isSitting();
+        return !this.g.m() && this.d.h(this.e) > (double) (this.b * this.b) && !this.d.isSitting();
     }
 
     public void c() {
         this.h = 0;
-        this.i = this.d.getNavigation().a();
-        this.d.getNavigation().a(false);
+        this.i = ((Navigation) this.d.getNavigation()).e();
+        ((Navigation) this.d.getNavigation()).a(false);
     }
 
     public void d() {
         this.e = null;
-        this.g.h();
-        this.d.getNavigation().a(this.i);
+        this.g.n();
+        ((Navigation) this.d.getNavigation()).a(true);
     }
 
     public void e() {
-        this.d.getControllerLook().a(this.e, 10.0F, (float) this.d.x());
+        this.d.getControllerLook().a(this.e, 10.0F, (float) this.d.bP());
         if (!this.d.isSitting()) {
             if (--this.h <= 0) {
                 this.h = 10;
                 if (!this.g.a((Entity) this.e, this.f)) {
-                    if (!this.d.bN()) {
-                        if (this.d.f(this.e) >= 144.0D) {
+                    if (!this.d.cb()) {
+                        if (this.d.h(this.e) >= 144.0D) {
                             int i = MathHelper.floor(this.e.locX) - 2;
                             int j = MathHelper.floor(this.e.locZ) - 2;
-                            int k = MathHelper.floor(this.e.boundingBox.b);
+                            int k = MathHelper.floor(this.e.getBoundingBox().b);
 
                             for (int l = 0; l <= 4; ++l) {
                                 for (int i1 = 0; i1 <= 4; ++i1) {
-                                    if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && World.a((IBlockAccess) this.a, i + l, k - 1, j + i1) && !this.a.getType(i + l, k, j + i1).r() && !this.a.getType(i + l, k + 1, j + i1).r()) {
+                                    if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && World.a((IBlockAccess) this.a, new BlockPosition(i + l, k - 1, j + i1)) && !this.a.getType(new BlockPosition(i + l, k, j + i1)).getBlock().d() && !this.a.getType(new BlockPosition(i + l, k + 1, j + i1)).getBlock().d()) {
                                         this.d.setPositionRotation((double) ((float) (i + l) + 0.5F), (double) k, (double) ((float) (j + i1) + 0.5F), this.d.yaw, this.d.pitch);
-                                        this.g.h();
+                                        this.g.n();
                                         return;
                                     }
                                 }
                             }
+
                         }
                     }
                 }

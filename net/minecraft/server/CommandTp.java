@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public class CommandTp extends CommandAbstract {
@@ -14,7 +15,7 @@ public class CommandTp extends CommandAbstract {
         return 2;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.tp.usage";
     }
 
@@ -22,48 +23,105 @@ public class CommandTp extends CommandAbstract {
         if (astring.length < 1) {
             throw new ExceptionUsage("commands.tp.usage", new Object[0]);
         } else {
-            EntityPlayer entityplayer;
+            byte b0 = 0;
+            Object object;
 
-            if (astring.length != 2 && astring.length != 4) {
-                entityplayer = b(icommandlistener);
+            if (astring.length != 2 && astring.length != 4 && astring.length != 6) {
+                object = b(icommandlistener);
             } else {
-                entityplayer = d(icommandlistener, astring[0]);
-                if (entityplayer == null) {
-                    throw new ExceptionPlayerNotFound();
-                }
+                object = b(icommandlistener, astring[0]);
+                b0 = 1;
             }
 
-            if (astring.length != 3 && astring.length != 4) {
-                if (astring.length == 1 || astring.length == 2) {
-                    EntityPlayer entityplayer1 = d(icommandlistener, astring[astring.length - 1]);
+            if (astring.length != 1 && astring.length != 2) {
+                if (astring.length < b0 + 3) {
+                    throw new ExceptionUsage("commands.tp.usage", new Object[0]);
+                } else if (((Entity) object).world != null) {
+                    int i = b0 + 1;
+                    CommandNumber commandnumber = a(((Entity) object).locX, astring[b0], true);
+                    CommandNumber commandnumber1 = a(((Entity) object).locY, astring[i++], 0, 0, false);
+                    CommandNumber commandnumber2 = a(((Entity) object).locZ, astring[i++], true);
+                    CommandNumber commandnumber3 = a((double) ((Entity) object).yaw, astring.length > i ? astring[i++] : "~", false);
+                    CommandNumber commandnumber4 = a((double) ((Entity) object).pitch, astring.length > i ? astring[i] : "~", false);
+                    float f;
 
-                    if (entityplayer1 == null) {
-                        throw new ExceptionPlayerNotFound();
+                    if (object instanceof EntityPlayer) {
+                        EnumSet enumset = EnumSet.noneOf(EnumPlayerTeleportFlags.class);
+
+                        if (commandnumber.c()) {
+                            enumset.add(EnumPlayerTeleportFlags.X);
+                        }
+
+                        if (commandnumber1.c()) {
+                            enumset.add(EnumPlayerTeleportFlags.Y);
+                        }
+
+                        if (commandnumber2.c()) {
+                            enumset.add(EnumPlayerTeleportFlags.Z);
+                        }
+
+                        if (commandnumber4.c()) {
+                            enumset.add(EnumPlayerTeleportFlags.X_ROT);
+                        }
+
+                        if (commandnumber3.c()) {
+                            enumset.add(EnumPlayerTeleportFlags.Y_ROT);
+                        }
+
+                        f = (float) commandnumber3.b();
+                        if (!commandnumber3.c()) {
+                            f = MathHelper.g(f);
+                        }
+
+                        float f1 = (float) commandnumber4.b();
+
+                        if (!commandnumber4.c()) {
+                            f1 = MathHelper.g(f1);
+                        }
+
+                        if (f1 > 90.0F || f1 < -90.0F) {
+                            f1 = MathHelper.g(180.0F - f1);
+                            f = MathHelper.g(f + 180.0F);
+                        }
+
+                        ((Entity) object).mount((Entity) null);
+                        ((EntityPlayer) object).playerConnection.a(commandnumber.b(), commandnumber1.b(), commandnumber2.b(), f, f1, enumset);
+                        ((Entity) object).f(f);
+                    } else {
+                        float f2 = (float) MathHelper.g(commandnumber3.a());
+
+                        f = (float) MathHelper.g(commandnumber4.a());
+                        if (f > 90.0F || f < -90.0F) {
+                            f = MathHelper.g(180.0F - f);
+                            f2 = MathHelper.g(f2 + 180.0F);
+                        }
+
+                        ((Entity) object).setPositionRotation(commandnumber.a(), commandnumber1.a(), commandnumber2.a(), f2, f);
+                        ((Entity) object).f(f2);
                     }
 
-                    if (entityplayer1.world != entityplayer.world) {
-                        a(icommandlistener, this, "commands.tp.notSameDimension", new Object[0]);
-                        return;
-                    }
-
-                    entityplayer.mount((Entity) null);
-                    entityplayer.playerConnection.a(entityplayer1.locX, entityplayer1.locY, entityplayer1.locZ, entityplayer1.yaw, entityplayer1.pitch);
-                    a(icommandlistener, this, "commands.tp.success", new Object[] { entityplayer.getName(), entityplayer1.getName()});
+                    a(icommandlistener, this, "commands.tp.success.coordinates", new Object[] { ((Entity) object).getName(), Double.valueOf(commandnumber.a()), Double.valueOf(commandnumber1.a()), Double.valueOf(commandnumber2.a())});
                 }
-            } else if (entityplayer.world != null) {
-                int i = astring.length - 3;
-                double d0 = a(icommandlistener, entityplayer.locX, astring[i++]);
-                double d1 = a(icommandlistener, entityplayer.locY, astring[i++], 0, 0);
-                double d2 = a(icommandlistener, entityplayer.locZ, astring[i++]);
+            } else {
+                Entity entity = b(icommandlistener, astring[astring.length - 1]);
 
-                entityplayer.mount((Entity) null);
-                entityplayer.enderTeleportTo(d0, d1, d2);
-                a(icommandlistener, this, "commands.tp.success.coordinates", new Object[] { entityplayer.getName(), Double.valueOf(d0), Double.valueOf(d1), Double.valueOf(d2)});
+                if (entity.world != ((Entity) object).world) {
+                    throw new CommandException("commands.tp.notSameDimension", new Object[0]);
+                } else {
+                    ((Entity) object).mount((Entity) null);
+                    if (object instanceof EntityPlayer) {
+                        ((EntityPlayer) object).playerConnection.a(entity.locX, entity.locY, entity.locZ, entity.yaw, entity.pitch);
+                    } else {
+                        ((Entity) object).setPositionRotation(entity.locX, entity.locY, entity.locZ, entity.yaw, entity.pitch);
+                    }
+
+                    a(icommandlistener, this, "commands.tp.success", new Object[] { ((Entity) object).getName(), entity.getName()});
+                }
             }
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length != 1 && astring.length != 2 ? null : a(astring, MinecraftServer.getServer().getPlayers());
     }
 

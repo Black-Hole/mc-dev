@@ -14,7 +14,7 @@ public class CommandEffect extends CommandAbstract {
         return 2;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.effect.usage";
     }
 
@@ -22,59 +22,78 @@ public class CommandEffect extends CommandAbstract {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.effect.usage", new Object[0]);
         } else {
-            EntityPlayer entityplayer = d(icommandlistener, astring[0]);
+            EntityLiving entityliving = (EntityLiving) a(icommandlistener, astring[0], EntityLiving.class);
 
             if (astring[1].equals("clear")) {
-                if (entityplayer.getEffects().isEmpty()) {
-                    throw new CommandException("commands.effect.failure.notActive.all", new Object[] { entityplayer.getName()});
+                if (entityliving.getEffects().isEmpty()) {
+                    throw new CommandException("commands.effect.failure.notActive.all", new Object[] { entityliving.getName()});
+                } else {
+                    entityliving.removeAllEffects();
+                    a(icommandlistener, this, "commands.effect.success.removed.all", new Object[] { entityliving.getName()});
+                }
+            } else {
+                int i;
+
+                try {
+                    i = a(astring[1], 1);
+                } catch (ExceptionInvalidNumber exceptioninvalidnumber) {
+                    MobEffectList mobeffectlist = MobEffectList.b(astring[1]);
+
+                    if (mobeffectlist == null) {
+                        throw exceptioninvalidnumber;
+                    }
+
+                    i = mobeffectlist.id;
                 }
 
-                entityplayer.removeAllEffects();
-                a(icommandlistener, this, "commands.effect.success.removed.all", new Object[] { entityplayer.getName()});
-            } else {
-                int i = a(icommandlistener, astring[1], 1);
                 int j = 600;
                 int k = 30;
                 int l = 0;
 
-                if (i < 0 || i >= MobEffectList.byId.length || MobEffectList.byId[i] == null) {
-                    throw new ExceptionInvalidNumber("commands.effect.notFound", new Object[] { Integer.valueOf(i)});
-                }
+                if (i >= 0 && i < MobEffectList.byId.length && MobEffectList.byId[i] != null) {
+                    MobEffectList mobeffectlist1 = MobEffectList.byId[i];
 
-                if (astring.length >= 3) {
-                    k = a(icommandlistener, astring[2], 0, 1000000);
-                    if (MobEffectList.byId[i].isInstant()) {
-                        j = k;
+                    if (astring.length >= 3) {
+                        k = a(astring[2], 0, 1000000);
+                        if (mobeffectlist1.isInstant()) {
+                            j = k;
+                        } else {
+                            j = k * 20;
+                        }
+                    } else if (mobeffectlist1.isInstant()) {
+                        j = 1;
+                    }
+
+                    if (astring.length >= 4) {
+                        l = a(astring[3], 0, 255);
+                    }
+
+                    boolean flag = true;
+
+                    if (astring.length >= 5 && "true".equalsIgnoreCase(astring[4])) {
+                        flag = false;
+                    }
+
+                    if (k > 0) {
+                        MobEffect mobeffect = new MobEffect(i, j, l, false, flag);
+
+                        entityliving.addEffect(mobeffect);
+                        a(icommandlistener, this, "commands.effect.success", new Object[] { new ChatMessage(mobeffect.g(), new Object[0]), Integer.valueOf(i), Integer.valueOf(l), entityliving.getName(), Integer.valueOf(k)});
+                    } else if (entityliving.hasEffect(i)) {
+                        entityliving.removeEffect(i);
+                        a(icommandlistener, this, "commands.effect.success.removed", new Object[] { new ChatMessage(mobeffectlist1.a(), new Object[0]), entityliving.getName()});
                     } else {
-                        j = k * 20;
+                        throw new CommandException("commands.effect.failure.notActive", new Object[] { new ChatMessage(mobeffectlist1.a(), new Object[0]), entityliving.getName()});
                     }
-                } else if (MobEffectList.byId[i].isInstant()) {
-                    j = 1;
-                }
-
-                if (astring.length >= 4) {
-                    l = a(icommandlistener, astring[3], 0, 255);
-                }
-
-                if (k == 0) {
-                    if (!entityplayer.hasEffect(i)) {
-                        throw new CommandException("commands.effect.failure.notActive", new Object[] { new ChatMessage(MobEffectList.byId[i].a(), new Object[0]), entityplayer.getName()});
-                    }
-
-                    entityplayer.removeEffect(i);
-                    a(icommandlistener, this, "commands.effect.success.removed", new Object[] { new ChatMessage(MobEffectList.byId[i].a(), new Object[0]), entityplayer.getName()});
                 } else {
-                    MobEffect mobeffect = new MobEffect(i, j, l);
-
-                    entityplayer.addEffect(mobeffect);
-                    a(icommandlistener, this, "commands.effect.success", new Object[] { new ChatMessage(mobeffect.f(), new Object[0]), Integer.valueOf(i), Integer.valueOf(l), entityplayer.getName(), Integer.valueOf(k)});
+                    throw new ExceptionInvalidNumber("commands.effect.notFound", new Object[] { Integer.valueOf(i)});
                 }
             }
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
-        return astring.length == 1 ? a(astring, this.d()) : null;
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, this.d()) : (astring.length == 2 ? a(astring, MobEffectList.c()) : (astring.length == 5 ? a(astring, new String[] { "true", "false"}) : null));
     }
 
     protected String[] d() {

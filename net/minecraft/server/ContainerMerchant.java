@@ -25,9 +25,10 @@ public class ContainerMerchant extends Container {
         for (i = 0; i < 9; ++i) {
             this.a(new Slot(playerinventory, i, 8 + i * 18, 142));
         }
+
     }
 
-    public InventoryMerchant getMerchantInventory() {
+    public InventoryMerchant e() {
         return this.f;
     }
 
@@ -44,12 +45,12 @@ public class ContainerMerchant extends Container {
         super.a(iinventory);
     }
 
-    public void e(int i) {
-        this.f.c(i);
+    public void d(int i) {
+        this.f.d(i);
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.merchant.b() == entityhuman;
+        return this.merchant.u_() == entityhuman;
     }
 
     public ItemStack b(EntityHuman entityhuman, int i) {
@@ -109,6 +110,7 @@ public class ContainerMerchant extends Container {
             if (itemstack != null) {
                 entityhuman.drop(itemstack, false);
             }
+
         }
     }
 }

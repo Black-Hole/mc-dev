@@ -2,17 +2,17 @@ package net.minecraft.server;
 
 public class ContainerDispenser extends Container {
 
-    private TileEntityDispenser items;
+    private IInventory items;
 
-    public ContainerDispenser(IInventory iinventory, TileEntityDispenser tileentitydispenser) {
-        this.items = tileentitydispenser;
+    public ContainerDispenser(IInventory iinventory, IInventory iinventory1) {
+        this.items = iinventory1;
 
         int i;
         int j;
 
         for (i = 0; i < 3; ++i) {
             for (j = 0; j < 3; ++j) {
-                this.a(new Slot(tileentitydispenser, j + i * 3, 62 + j * 18, 17 + i * 18));
+                this.a(new Slot(iinventory1, j + i * 3, 62 + j * 18, 17 + i * 18));
             }
         }
 
@@ -25,6 +25,7 @@ public class ContainerDispenser extends Container {
         for (i = 0; i < 9; ++i) {
             this.a(new Slot(iinventory, i, 8 + i * 18, 142));
         }
+
     }
 
     public boolean a(EntityHuman entityhuman) {

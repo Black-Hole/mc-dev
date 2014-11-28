@@ -7,9 +7,9 @@ public interface ICommandHandler {
 
     int a(ICommandListener icommandlistener, String s);
 
-    List b(ICommandListener icommandlistener, String s);
+    List a(ICommandListener icommandlistener, String s, BlockPosition blockposition);
 
     List a(ICommandListener icommandlistener);
 
-    Map a();
+    Map getCommands();
 }

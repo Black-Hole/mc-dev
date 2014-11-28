@@ -4,19 +4,22 @@ import java.util.List;
 
 public class BlockFence extends Block {
 
-    private final String a;
+    public static final BlockStateBoolean NORTH = BlockStateBoolean.of("north");
+    public static final BlockStateBoolean EAST = BlockStateBoolean.of("east");
+    public static final BlockStateBoolean SOUTH = BlockStateBoolean.of("south");
+    public static final BlockStateBoolean WEST = BlockStateBoolean.of("west");
 
-    public BlockFence(String s, Material material) {
+    public BlockFence(Material material) {
         super(material);
-        this.a = s;
+        this.j(this.blockStateList.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(false)).set(BlockFence.EAST, Boolean.valueOf(false)).set(BlockFence.SOUTH, Boolean.valueOf(false)).set(BlockFence.WEST, Boolean.valueOf(false)));
         this.a(CreativeModeTab.c);
     }
 
-    public void a(World world, int i, int j, int k, AxisAlignedBB axisalignedbb, List list, Entity entity) {
-        boolean flag = this.e(world, i, j, k - 1);
-        boolean flag1 = this.e(world, i, j, k + 1);
-        boolean flag2 = this.e(world, i - 1, j, k);
-        boolean flag3 = this.e(world, i + 1, j, k);
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+        boolean flag = this.e(world, blockposition.north());
+        boolean flag1 = this.e(world, blockposition.south());
+        boolean flag2 = this.e(world, blockposition.west());
+        boolean flag3 = this.e(world, blockposition.east());
         float f = 0.375F;
         float f1 = 0.625F;
         float f2 = 0.375F;
@@ -32,7 +35,7 @@ public class BlockFence extends Block {
 
         if (flag || flag1) {
             this.a(f, 0.0F, f2, f1, 1.5F, f3);
-            super.a(world, i, j, k, axisalignedbb, list, entity);
+            super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         }
 
         f2 = 0.375F;
@@ -47,7 +50,7 @@ public class BlockFence extends Block {
 
         if (flag2 || flag3 || !flag && !flag1) {
             this.a(f, 0.0F, f2, f1, 1.5F, f3);
-            super.a(world, i, j, k, axisalignedbb, list, entity);
+            super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         }
 
         if (flag) {
@@ -61,11 +64,11 @@ public class BlockFence extends Block {
         this.a(f, 0.0F, f2, f1, 1.0F, f3);
     }
 
-    public void updateShape(IBlockAccess iblockaccess, int i, int j, int k) {
-        boolean flag = this.e(iblockaccess, i, j, k - 1);
-        boolean flag1 = this.e(iblockaccess, i, j, k + 1);
-        boolean flag2 = this.e(iblockaccess, i - 1, j, k);
-        boolean flag3 = this.e(iblockaccess, i + 1, j, k);
+    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        boolean flag = this.e(iblockaccess, blockposition.north());
+        boolean flag1 = this.e(iblockaccess, blockposition.south());
+        boolean flag2 = this.e(iblockaccess, blockposition.west());
+        boolean flag3 = this.e(iblockaccess, blockposition.east());
         float f = 0.375F;
         float f1 = 0.625F;
         float f2 = 0.375F;
@@ -98,25 +101,29 @@ public class BlockFence extends Block {
         return false;
     }
 
-    public boolean b(IBlockAccess iblockaccess, int i, int j, int k) {
+    public boolean b(IBlockAccess iblockaccess, BlockPosition blockposition) {
         return false;
     }
 
-    public int b() {
-        return 11;
+    public boolean e(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        Block block = iblockaccess.getType(blockposition).getBlock();
+
+        return block == Blocks.BARRIER ? false : ((!(block instanceof BlockFence) || block.material != this.material) && !(block instanceof BlockFenceGate) ? (block.material.k() && block.d() ? block.material != Material.PUMPKIN : false) : true);
     }
 
-    public boolean e(IBlockAccess iblockaccess, int i, int j, int k) {
-        Block block = iblockaccess.getType(i, j, k);
-
-        return block != this && block != Blocks.FENCE_GATE ? (block.material.k() && block.d() ? block.material != Material.PUMPKIN : false) : true;
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+        return world.isStatic ? true : ItemLeash.a(entityhuman, world, blockposition);
     }
 
-    public static boolean a(Block block) {
-        return block == Blocks.FENCE || block == Blocks.NETHER_FENCE;
+    public int toLegacyData(IBlockData iblockdata) {
+        return 0;
     }
 
-    public boolean interact(World world, int i, int j, int k, EntityHuman entityhuman, int l, float f, float f1, float f2) {
-        return world.isStatic ? true : ItemLeash.a(entityhuman, world, i, j, k);
+    public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.set(BlockFence.NORTH, Boolean.valueOf(this.e(iblockaccess, blockposition.north()))).set(BlockFence.EAST, Boolean.valueOf(this.e(iblockaccess, blockposition.east()))).set(BlockFence.SOUTH, Boolean.valueOf(this.e(iblockaccess, blockposition.south()))).set(BlockFence.WEST, Boolean.valueOf(this.e(iblockaccess, blockposition.west())));
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockFence.NORTH, BlockFence.EAST, BlockFence.WEST, BlockFence.SOUTH});
     }
 }

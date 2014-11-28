@@ -28,7 +28,7 @@ public class Statistic {
     }
 
     public Statistic(String s, IChatBaseComponent ichatbasecomponent) {
-        this(s, ichatbasecomponent, g);
+        this(s, ichatbasecomponent, Statistic.g);
     }
 
     public Statistic i() {
@@ -54,7 +54,7 @@ public class Statistic {
         IChatBaseComponent ichatbasecomponent = this.a.f();
 
         ichatbasecomponent.getChatModifier().setColor(EnumChatFormat.GRAY);
-        ichatbasecomponent.getChatModifier().a(new ChatHoverable(EnumHoverAction.SHOW_ACHIEVEMENT, new ChatComponentText(this.name)));
+        ichatbasecomponent.getChatModifier().setChatHoverable(new ChatHoverable(EnumHoverAction.SHOW_ACHIEVEMENT, new ChatComponentText(this.name)));
         return ichatbasecomponent;
     }
 

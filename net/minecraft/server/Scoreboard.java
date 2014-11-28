@@ -1,21 +1,23 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class Scoreboard {
 
-    private final Map objectivesByName = new HashMap();
-    private final Map objectivesByCriteria = new HashMap();
-    private final Map playerScores = new HashMap();
-    private final ScoreboardObjective[] displaySlots = new ScoreboardObjective[3];
-    private final Map teamsByName = new HashMap();
-    private final Map teamsByPlayer = new HashMap();
+    private final Map objectivesByName = Maps.newHashMap();
+    private final Map objectivesByCriteria = Maps.newHashMap();
+    private final Map playerScores = Maps.newHashMap();
+    private final ScoreboardObjective[] displaySlots = new ScoreboardObjective[19];
+    private final Map teamsByName = Maps.newHashMap();
+    private final Map teamsByPlayer = Maps.newHashMap();
+    private static String[] g = null;
 
     public Scoreboard() {}
 
@@ -33,7 +35,7 @@ public class Scoreboard {
             Object object = (List) this.objectivesByCriteria.get(iscoreboardcriteria);
 
             if (object == null) {
-                object = new ArrayList();
+                object = Lists.newArrayList();
                 this.objectivesByCriteria.put(iscoreboardcriteria, object);
             }
 
@@ -47,14 +49,26 @@ public class Scoreboard {
     public Collection getObjectivesForCriteria(IScoreboardCriteria iscoreboardcriteria) {
         Collection collection = (Collection) this.objectivesByCriteria.get(iscoreboardcriteria);
 
-        return collection == null ? new ArrayList() : new ArrayList(collection);
+        return collection == null ? Lists.newArrayList() : Lists.newArrayList(collection);
+    }
+
+    public boolean b(String s, ScoreboardObjective scoreboardobjective) {
+        Map map = (Map) this.playerScores.get(s);
+
+        if (map == null) {
+            return false;
+        } else {
+            ScoreboardScore scoreboardscore = (ScoreboardScore) map.get(scoreboardobjective);
+
+            return scoreboardscore != null;
+        }
     }
 
     public ScoreboardScore getPlayerScoreForObjective(String s, ScoreboardObjective scoreboardobjective) {
         Object object = (Map) this.playerScores.get(s);
 
         if (object == null) {
-            object = new HashMap();
+            object = Maps.newHashMap();
             this.playerScores.put(s, object);
         }
 
@@ -69,7 +83,7 @@ public class Scoreboard {
     }
 
     public Collection getScoresForObjective(ScoreboardObjective scoreboardobjective) {
-        ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = this.playerScores.values().iterator();
 
         while (iterator.hasNext()) {
@@ -93,17 +107,36 @@ public class Scoreboard {
         return this.playerScores.keySet();
     }
 
-    public void resetPlayerScores(String s) {
-        Map map = (Map) this.playerScores.remove(s);
+    public void resetPlayerScores(String s, ScoreboardObjective scoreboardobjective) {
+        Map map;
 
-        if (map != null) {
-            this.handlePlayerRemoved(s);
+        if (scoreboardobjective == null) {
+            map = (Map) this.playerScores.remove(s);
+            if (map != null) {
+                this.handlePlayerRemoved(s);
+            }
+        } else {
+            map = (Map) this.playerScores.get(s);
+            if (map != null) {
+                ScoreboardScore scoreboardscore = (ScoreboardScore) map.remove(scoreboardobjective);
+
+                if (map.size() < 1) {
+                    Map map1 = (Map) this.playerScores.remove(s);
+
+                    if (map1 != null) {
+                        this.handlePlayerRemoved(s);
+                    }
+                } else if (scoreboardscore != null) {
+                    this.a(s, scoreboardobjective);
+                }
+            }
         }
+
     }
 
     public Collection getScores() {
         Collection collection = this.playerScores.values();
-        ArrayList arraylist = new ArrayList();
+        ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
@@ -119,7 +152,7 @@ public class Scoreboard {
         Object object = (Map) this.playerScores.get(s);
 
         if (object == null) {
-            object = new HashMap();
+            object = Maps.newHashMap();
         }
 
         return (Map) object;
@@ -128,7 +161,7 @@ public class Scoreboard {
     public void unregisterObjective(ScoreboardObjective scoreboardobjective) {
         this.objectivesByName.remove(scoreboardobjective.getName());
 
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 19; ++i) {
             if (this.getObjectiveForSlot(i) == scoreboardobjective) {
                 this.setDisplaySlot(i, (ScoreboardObjective) null);
             }
@@ -247,6 +280,8 @@ public class Scoreboard {
 
     public void handlePlayerRemoved(String s) {}
 
+    public void a(String s, ScoreboardObjective scoreboardobjective) {}
+
     public void handleTeamAdded(ScoreboardTeam scoreboardteam) {}
 
     public void handleTeamChanged(ScoreboardTeam scoreboardteam) {}
@@ -265,11 +300,48 @@ public class Scoreboard {
             return "belowName";
 
         default:
+            if (i >= 3 && i <= 18) {
+                EnumChatFormat enumchatformat = EnumChatFormat.a(i - 3);
+
+                if (enumchatformat != null && enumchatformat != EnumChatFormat.RESET) {
+                    return "sidebar.team." + enumchatformat.e();
+                }
+            }
+
             return null;
         }
     }
 
     public static int getSlotForName(String s) {
-        return s.equalsIgnoreCase("list") ? 0 : (s.equalsIgnoreCase("sidebar") ? 1 : (s.equalsIgnoreCase("belowName") ? 2 : -1));
+        if (s.equalsIgnoreCase("list")) {
+            return 0;
+        } else if (s.equalsIgnoreCase("sidebar")) {
+            return 1;
+        } else if (s.equalsIgnoreCase("belowName")) {
+            return 2;
+        } else {
+            if (s.startsWith("sidebar.team.")) {
+                String s1 = s.substring("sidebar.team.".length());
+                EnumChatFormat enumchatformat = EnumChatFormat.b(s1);
+
+                if (enumchatformat != null && enumchatformat.b() >= 0) {
+                    return enumchatformat.b() + 3;
+                }
+            }
+
+            return -1;
+        }
+    }
+
+    public static String[] h() {
+        if (Scoreboard.g == null) {
+            Scoreboard.g = new String[19];
+
+            for (int i = 0; i < 19; ++i) {
+                Scoreboard.g[i] = getSlotName(i);
+            }
+        }
+
+        return Scoreboard.g;
     }
 }

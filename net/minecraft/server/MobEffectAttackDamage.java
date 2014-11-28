@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class MobEffectAttackDamage extends MobEffectList {
 
-    protected MobEffectAttackDamage(int i, boolean flag, int j) {
-        super(i, flag, j);
+    protected MobEffectAttackDamage(int i, MinecraftKey minecraftkey, boolean flag, int j) {
+        super(i, minecraftkey, flag, j);
     }
 
     public double a(int i, AttributeModifier attributemodifier) {

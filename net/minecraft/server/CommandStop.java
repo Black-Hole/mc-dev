@@ -8,7 +8,7 @@ public class CommandStop extends CommandAbstract {
         return "stop";
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.stop.usage";
     }
 

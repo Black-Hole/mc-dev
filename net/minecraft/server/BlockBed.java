@@ -5,60 +5,45 @@ import java.util.Random;
 
 public class BlockBed extends BlockDirectional {
 
-    public static final int[][] a = new int[][] { { 0, 1}, { -1, 0}, { 0, -1}, { 1, 0}};
+    public static final BlockStateEnum PART = BlockStateEnum.of("part", EnumBedPart.class);
+    public static final BlockStateBoolean OCCUPIED = BlockStateBoolean.of("occupied");
 
     public BlockBed() {
         super(Material.CLOTH);
-        this.e();
+        this.j(this.blockStateList.getBlockData().set(BlockBed.PART, EnumBedPart.FOOT).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
+        this.j();
     }
 
-    public boolean interact(World world, int i, int j, int k, EntityHuman entityhuman, int l, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isStatic) {
             return true;
         } else {
-            int i1 = world.getData(i, j, k);
-
-            if (!b(i1)) {
-                int j1 = l(i1);
-
-                i += a[j1][0];
-                k += a[j1][1];
-                if (world.getType(i, j, k) != this) {
+            if (iblockdata.get(BlockBed.PART) != EnumBedPart.HEAD) {
+                blockposition = blockposition.shift((EnumDirection) iblockdata.get(BlockBed.FACING));
+                iblockdata = world.getType(blockposition);
+                if (iblockdata.getBlock() != this) {
                     return true;
                 }
-
-                i1 = world.getData(i, j, k);
             }
 
-            if (world.worldProvider.e() && world.getBiome(i, k) != BiomeBase.HELL) {
-                if (c(i1)) {
-                    EntityHuman entityhuman1 = null;
-                    Iterator iterator = world.players.iterator();
-
-                    while (iterator.hasNext()) {
-                        EntityHuman entityhuman2 = (EntityHuman) iterator.next();
-
-                        if (entityhuman2.isSleeping()) {
-                            ChunkCoordinates chunkcoordinates = entityhuman2.bB;
-
-                            if (chunkcoordinates.x == i && chunkcoordinates.y == j && chunkcoordinates.z == k) {
-                                entityhuman1 = entityhuman2;
-                            }
-                        }
-                    }
+            if (world.worldProvider.e() && world.getBiome(blockposition) != BiomeBase.HELL) {
+                if (((Boolean) iblockdata.get(BlockBed.OCCUPIED)).booleanValue()) {
+                    EntityHuman entityhuman1 = this.e(world, blockposition);
 
                     if (entityhuman1 != null) {
                         entityhuman.b((IChatBaseComponent) (new ChatMessage("tile.bed.occupied", new Object[0])));
                         return true;
                     }
 
-                    a(world, i, j, k, false);
+                    iblockdata = iblockdata.set(BlockBed.OCCUPIED, Boolean.valueOf(false));
+                    world.setTypeAndData(blockposition, iblockdata, 4);
                 }
 
-                EnumBedResult enumbedresult = entityhuman.a(i, j, k);
+                EnumBedResult enumbedresult = entityhuman.a(blockposition);
 
                 if (enumbedresult == EnumBedResult.OK) {
-                    a(world, i, j, k, true);
+                    iblockdata = iblockdata.set(BlockBed.OCCUPIED, Boolean.valueOf(true));
+                    world.setTypeAndData(blockposition, iblockdata, 4);
                     return true;
                 } else {
                     if (enumbedresult == EnumBedResult.NOT_POSSIBLE_NOW) {
@@ -70,30 +55,33 @@ public class BlockBed extends BlockDirectional {
                     return true;
                 }
             } else {
-                double d0 = (double) i + 0.5D;
-                double d1 = (double) j + 0.5D;
-                double d2 = (double) k + 0.5D;
+                world.setAir(blockposition);
+                BlockPosition blockposition1 = blockposition.shift(((EnumDirection) iblockdata.get(BlockBed.FACING)).opposite());
 
-                world.setAir(i, j, k);
-                int k1 = l(i1);
-
-                i += a[k1][0];
-                k += a[k1][1];
-                if (world.getType(i, j, k) == this) {
-                    world.setAir(i, j, k);
-                    d0 = (d0 + (double) i + 0.5D) / 2.0D;
-                    d1 = (d1 + (double) j + 0.5D) / 2.0D;
-                    d2 = (d2 + (double) k + 0.5D) / 2.0D;
+                if (world.getType(blockposition1).getBlock() == this) {
+                    world.setAir(blockposition1);
                 }
 
-                world.createExplosion((Entity) null, (double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), 5.0F, true, true);
+                world.createExplosion((Entity) null, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, 5.0F, true, true);
                 return true;
             }
         }
     }
 
-    public int b() {
-        return 14;
+    private EntityHuman e(World world, BlockPosition blockposition) {
+        Iterator iterator = world.players.iterator();
+
+        EntityHuman entityhuman;
+
+        do {
+            if (!iterator.hasNext()) {
+                return null;
+            }
+
+            entityhuman = (EntityHuman) iterator.next();
+        } while (!entityhuman.isSleeping() || !entityhuman.bv.equals(blockposition));
+
+        return entityhuman;
     }
 
     public boolean d() {
@@ -104,72 +92,56 @@ public class BlockBed extends BlockDirectional {
         return false;
     }
 
-    public void updateShape(IBlockAccess iblockaccess, int i, int j, int k) {
-        this.e();
+    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        this.j();
     }
 
-    public void doPhysics(World world, int i, int j, int k, Block block) {
-        int l = world.getData(i, j, k);
-        int i1 = l(l);
+    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockBed.FACING);
 
-        if (b(l)) {
-            if (world.getType(i - a[i1][0], j, k - a[i1][1]) != this) {
-                world.setAir(i, j, k);
+        if (iblockdata.get(BlockBed.PART) == EnumBedPart.HEAD) {
+            if (world.getType(blockposition.shift(enumdirection.opposite())).getBlock() != this) {
+                world.setAir(blockposition);
             }
-        } else if (world.getType(i + a[i1][0], j, k + a[i1][1]) != this) {
-            world.setAir(i, j, k);
+        } else if (world.getType(blockposition.shift(enumdirection)).getBlock() != this) {
+            world.setAir(blockposition);
             if (!world.isStatic) {
-                this.b(world, i, j, k, l, 0);
+                this.b(world, blockposition, iblockdata, 0);
             }
         }
+
     }
 
-    public Item getDropType(int i, Random random, int j) {
-        return b(i) ? Item.getById(0) : Items.BED;
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
+        return iblockdata.get(BlockBed.PART) == EnumBedPart.HEAD ? null : Items.BED;
     }
 
-    private void e() {
+    private void j() {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5625F, 1.0F);
     }
 
-    public static boolean b(int i) {
-        return (i & 8) != 0;
-    }
+    public static BlockPosition a(World world, BlockPosition blockposition, int i) {
+        EnumDirection enumdirection = (EnumDirection) world.getType(blockposition).get(BlockBed.FACING);
+        int j = blockposition.getX();
+        int k = blockposition.getY();
+        int l = blockposition.getZ();
 
-    public static boolean c(int i) {
-        return (i & 4) != 0;
-    }
+        for (int i1 = 0; i1 <= 1; ++i1) {
+            int j1 = j - enumdirection.getAdjacentX() * i1 - 1;
+            int k1 = l - enumdirection.getAdjacentZ() * i1 - 1;
+            int l1 = j1 + 2;
+            int i2 = k1 + 2;
 
-    public static void a(World world, int i, int j, int k, boolean flag) {
-        int l = world.getData(i, j, k);
+            for (int j2 = j1; j2 <= l1; ++j2) {
+                for (int k2 = k1; k2 <= i2; ++k2) {
+                    BlockPosition blockposition1 = new BlockPosition(j2, k, k2);
 
-        if (flag) {
-            l |= 4;
-        } else {
-            l &= -5;
-        }
-
-        world.setData(i, j, k, l, 4);
-    }
-
-    public static ChunkCoordinates a(World world, int i, int j, int k, int l) {
-        int i1 = world.getData(i, j, k);
-        int j1 = BlockDirectional.l(i1);
-
-        for (int k1 = 0; k1 <= 1; ++k1) {
-            int l1 = i - a[j1][0] * k1 - 1;
-            int i2 = k - a[j1][1] * k1 - 1;
-            int j2 = l1 + 2;
-            int k2 = i2 + 2;
-
-            for (int l2 = l1; l2 <= j2; ++l2) {
-                for (int i3 = i2; i3 <= k2; ++i3) {
-                    if (World.a((IBlockAccess) world, l2, j - 1, i3) && !world.getType(l2, j, i3).getMaterial().k() && !world.getType(l2, j + 1, i3).getMaterial().k()) {
-                        if (l <= 0) {
-                            return new ChunkCoordinates(l2, j, i3);
+                    if (d(world, blockposition1)) {
+                        if (i <= 0) {
+                            return blockposition1;
                         }
 
-                        --l;
+                        --i;
                     }
                 }
             }
@@ -178,25 +150,65 @@ public class BlockBed extends BlockDirectional {
         return null;
     }
 
-    public void dropNaturally(World world, int i, int j, int k, int l, float f, int i1) {
-        if (!b(l)) {
-            super.dropNaturally(world, i, j, k, l, f, 0);
-        }
+    protected static boolean d(World world, BlockPosition blockposition) {
+        return World.a((IBlockAccess) world, blockposition.down()) && !world.getType(blockposition).getBlock().getMaterial().isBuildable() && !world.getType(blockposition.up()).getBlock().getMaterial().isBuildable();
     }
 
-    public int h() {
+    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
+        if (iblockdata.get(BlockBed.PART) == EnumBedPart.FOOT) {
+            super.dropNaturally(world, blockposition, iblockdata, f, 0);
+        }
+
+    }
+
+    public int i() {
         return 1;
     }
 
-    public void a(World world, int i, int j, int k, int l, EntityHuman entityhuman) {
-        if (entityhuman.abilities.canInstantlyBuild && b(l)) {
-            int i1 = l(l);
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
+        if (entityhuman.abilities.canInstantlyBuild && iblockdata.get(BlockBed.PART) == EnumBedPart.HEAD) {
+            BlockPosition blockposition1 = blockposition.shift(((EnumDirection) iblockdata.get(BlockBed.FACING)).opposite());
 
-            i -= a[i1][0];
-            k -= a[i1][1];
-            if (world.getType(i, j, k) == this) {
-                world.setAir(i, j, k);
+            if (world.getType(blockposition1).getBlock() == this) {
+                world.setAir(blockposition1);
             }
         }
+
+    }
+
+    public IBlockData fromLegacyData(int i) {
+        EnumDirection enumdirection = EnumDirection.fromType2(i);
+
+        return (i & 8) > 0 ? this.getBlockData().set(BlockBed.PART, EnumBedPart.HEAD).set(BlockBed.FACING, enumdirection).set(BlockBed.OCCUPIED, Boolean.valueOf((i & 4) > 0)) : this.getBlockData().set(BlockBed.PART, EnumBedPart.FOOT).set(BlockBed.FACING, enumdirection);
+    }
+
+    public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        if (iblockdata.get(BlockBed.PART) == EnumBedPart.FOOT) {
+            IBlockData iblockdata1 = iblockaccess.getType(blockposition.shift((EnumDirection) iblockdata.get(BlockBed.FACING)));
+
+            if (iblockdata1.getBlock() == this) {
+                iblockdata = iblockdata.set(BlockBed.OCCUPIED, iblockdata1.get(BlockBed.OCCUPIED));
+            }
+        }
+
+        return iblockdata;
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        byte b0 = 0;
+        int i = b0 | ((EnumDirection) iblockdata.get(BlockBed.FACING)).b();
+
+        if (iblockdata.get(BlockBed.PART) == EnumBedPart.HEAD) {
+            i |= 8;
+            if (((Boolean) iblockdata.get(BlockBed.OCCUPIED)).booleanValue()) {
+                i |= 4;
+            }
+        }
+
+        return i;
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockBed.FACING, BlockBed.PART, BlockBed.OCCUPIED});
     }
 }

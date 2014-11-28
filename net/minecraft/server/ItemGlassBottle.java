@@ -13,20 +13,19 @@ public class ItemGlassBottle extends Item {
             return itemstack;
         } else {
             if (movingobjectposition.type == EnumMovingObjectType.BLOCK) {
-                int i = movingobjectposition.b;
-                int j = movingobjectposition.c;
-                int k = movingobjectposition.d;
+                BlockPosition blockposition = movingobjectposition.a();
 
-                if (!world.a(entityhuman, i, j, k)) {
+                if (!world.a(entityhuman, blockposition)) {
                     return itemstack;
                 }
 
-                if (!entityhuman.a(i, j, k, movingobjectposition.face, itemstack)) {
+                if (!entityhuman.a(blockposition.shift(movingobjectposition.direction), movingobjectposition.direction, itemstack)) {
                     return itemstack;
                 }
 
-                if (world.getType(i, j, k).getMaterial() == Material.WATER) {
+                if (world.getType(blockposition).getBlock().getMaterial() == Material.WATER) {
                     --itemstack.count;
+                    entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
                     if (itemstack.count <= 0) {
                         return new ItemStack(Items.POTION);
                     }

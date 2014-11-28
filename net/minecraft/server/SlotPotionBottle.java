@@ -19,7 +19,7 @@ class SlotPotionBottle extends Slot {
 
     public void a(EntityHuman entityhuman, ItemStack itemstack) {
         if (itemstack.getItem() == Items.POTION && itemstack.getData() > 0) {
-            this.a.a((Statistic) AchievementList.B, 1);
+            this.a.b((Statistic) AchievementList.B);
         }
 
         super.a(entityhuman, itemstack);

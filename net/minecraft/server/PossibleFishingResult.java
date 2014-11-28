@@ -17,8 +17,8 @@ public class PossibleFishingResult extends WeightedRandomChoice {
         ItemStack itemstack = this.b.cloneItemStack();
 
         if (this.c > 0.0F) {
-            int i = (int) (this.c * (float) this.b.l());
-            int j = itemstack.l() - random.nextInt(random.nextInt(i) + 1);
+            int i = (int) (this.c * (float) this.b.j());
+            int j = itemstack.j() - random.nextInt(random.nextInt(i) + 1);
 
             if (j > i) {
                 j = i;

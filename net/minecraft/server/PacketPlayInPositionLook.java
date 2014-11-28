@@ -10,7 +10,6 @@ public class PacketPlayInPositionLook extends PacketPlayInFlying {
     public void a(PacketDataSerializer packetdataserializer) {
         this.x = packetdataserializer.readDouble();
         this.y = packetdataserializer.readDouble();
-        this.stance = packetdataserializer.readDouble();
         this.z = packetdataserializer.readDouble();
         this.yaw = packetdataserializer.readFloat();
         this.pitch = packetdataserializer.readFloat();
@@ -20,14 +19,13 @@ public class PacketPlayInPositionLook extends PacketPlayInFlying {
     public void b(PacketDataSerializer packetdataserializer) {
         packetdataserializer.writeDouble(this.x);
         packetdataserializer.writeDouble(this.y);
-        packetdataserializer.writeDouble(this.stance);
         packetdataserializer.writeDouble(this.z);
         packetdataserializer.writeFloat(this.yaw);
         packetdataserializer.writeFloat(this.pitch);
         super.b(packetdataserializer);
     }
 
-    public void handle(PacketListener packetlistener) {
-        super.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        super.a((PacketListenerPlayIn) packetlistener);
     }
 }

@@ -14,9 +14,7 @@ class ThreadSleepForever extends Thread {
     public void run() {
         while (true) {
             try {
-                while (true) {
-                    Thread.sleep(2147483647L);
-                }
+                Thread.sleep(2147483647L);
             } catch (InterruptedException interruptedexception) {
                 ;
             }

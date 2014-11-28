@@ -14,7 +14,7 @@ class GroupDataZombie implements GroupDataEntity {
         this.b = flag1;
     }
 
-    GroupDataZombie(EntityZombie entityzombie, boolean flag, boolean flag1, EmptyClassZombie emptyclasszombie) {
+    public GroupDataZombie(EntityZombie entityzombie, boolean flag, boolean flag1, EmptyClassZombie emptyclasszombie) {
         this(entityzombie, flag, flag1);
     }
 }

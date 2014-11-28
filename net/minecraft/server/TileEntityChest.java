@@ -3,20 +3,20 @@ package net.minecraft.server;
 import java.util.Iterator;
 import java.util.List;
 
-public class TileEntityChest extends TileEntity implements IInventory {
+public class TileEntityChest extends TileEntityContainer implements IUpdatePlayerListBox, IInventory {
 
-    private ItemStack[] items = new ItemStack[36];
+    private ItemStack[] items = new ItemStack[27];
     public boolean a;
+    public TileEntityChest f;
+    public TileEntityChest g;
+    public TileEntityChest h;
     public TileEntityChest i;
-    public TileEntityChest j;
-    public TileEntityChest k;
-    public TileEntityChest l;
-    public float m;
-    public float n;
-    public int o;
-    private int ticks;
-    private int r = -1;
-    private String s;
+    public float j;
+    public float k;
+    public int l;
+    private int n;
+    private int o = -1;
+    private String p;
 
     public TileEntityChest() {}
 
@@ -71,16 +71,16 @@ public class TileEntityChest extends TileEntity implements IInventory {
         this.update();
     }
 
-    public String getInventoryName() {
-        return this.k_() ? this.s : "container.chest";
+    public String getName() {
+        return this.hasCustomName() ? this.p : "container.chest";
     }
 
-    public boolean k_() {
-        return this.s != null && this.s.length() > 0;
+    public boolean hasCustomName() {
+        return this.p != null && this.p.length() > 0;
     }
 
     public void a(String s) {
-        this.s = s;
+        this.p = s;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -89,7 +89,7 @@ public class TileEntityChest extends TileEntity implements IInventory {
 
         this.items = new ItemStack[this.getSize()];
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
-            this.s = nbttagcompound.getString("CustomName");
+            this.p = nbttagcompound.getString("CustomName");
         }
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -100,6 +100,7 @@ public class TileEntityChest extends TileEntity implements IInventory {
                 this.items[j] = ItemStack.createStack(nbttagcompound1);
             }
         }
+
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -117,9 +118,10 @@ public class TileEntityChest extends TileEntity implements IInventory {
         }
 
         nbttagcompound.set("Items", nbttaglist);
-        if (this.k_()) {
-            nbttagcompound.setString("CustomName", this.s);
+        if (this.hasCustomName()) {
+            nbttagcompound.setString("CustomName", this.p);
         }
+
     }
 
     public int getMaxStackSize() {
@@ -127,27 +129,21 @@ public class TileEntityChest extends TileEntity implements IInventory {
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getTileEntity(this.x, this.y, this.z) != this ? false : entityhuman.e((double) this.x + 0.5D, (double) this.y + 0.5D, (double) this.z + 0.5D) <= 64.0D;
+        return this.world.getTileEntity(this.position) != this ? false : entityhuman.e((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
-    public void u() {
-        super.u();
+    public void E() {
+        super.E();
         this.a = false;
     }
 
-    private void a(TileEntityChest tileentitychest, int i) {
-        if (tileentitychest.r()) {
+    private void a(TileEntityChest tileentitychest, EnumDirection enumdirection) {
+        if (tileentitychest.x()) {
             this.a = false;
         } else if (this.a) {
-            switch (i) {
-            case 0:
-                if (this.l != tileentitychest) {
-                    this.a = false;
-                }
-                break;
-
+            switch (SwitchHelperTileEntityChest.a[enumdirection.ordinal()]) {
             case 1:
-                if (this.k != tileentitychest) {
+                if (this.f != tileentitychest) {
                     this.a = false;
                 }
                 break;
@@ -159,74 +155,70 @@ public class TileEntityChest extends TileEntity implements IInventory {
                 break;
 
             case 3:
-                if (this.j != tileentitychest) {
+                if (this.g != tileentitychest) {
+                    this.a = false;
+                }
+                break;
+
+            case 4:
+                if (this.h != tileentitychest) {
                     this.a = false;
                 }
             }
         }
+
     }
 
-    public void i() {
+    public void m() {
         if (!this.a) {
             this.a = true;
-            this.i = null;
-            this.j = null;
-            this.k = null;
-            this.l = null;
-            if (this.a(this.x - 1, this.y, this.z)) {
-                this.k = (TileEntityChest) this.world.getTileEntity(this.x - 1, this.y, this.z);
-            }
-
-            if (this.a(this.x + 1, this.y, this.z)) {
-                this.j = (TileEntityChest) this.world.getTileEntity(this.x + 1, this.y, this.z);
-            }
-
-            if (this.a(this.x, this.y, this.z - 1)) {
-                this.i = (TileEntityChest) this.world.getTileEntity(this.x, this.y, this.z - 1);
-            }
-
-            if (this.a(this.x, this.y, this.z + 1)) {
-                this.l = (TileEntityChest) this.world.getTileEntity(this.x, this.y, this.z + 1);
-            }
-
-            if (this.i != null) {
-                this.i.a(this, 0);
-            }
-
-            if (this.l != null) {
-                this.l.a(this, 2);
-            }
-
-            if (this.j != null) {
-                this.j.a(this, 1);
-            }
-
-            if (this.k != null) {
-                this.k.a(this, 3);
-            }
+            this.h = this.a(EnumDirection.WEST);
+            this.g = this.a(EnumDirection.EAST);
+            this.f = this.a(EnumDirection.NORTH);
+            this.i = this.a(EnumDirection.SOUTH);
         }
     }
 
-    private boolean a(int i, int j, int k) {
+    protected TileEntityChest a(EnumDirection enumdirection) {
+        BlockPosition blockposition = this.position.shift(enumdirection);
+
+        if (this.b(blockposition)) {
+            TileEntity tileentity = this.world.getTileEntity(blockposition);
+
+            if (tileentity instanceof TileEntityChest) {
+                TileEntityChest tileentitychest = (TileEntityChest) tileentity;
+
+                tileentitychest.a(this, enumdirection.opposite());
+                return tileentitychest;
+            }
+        }
+
+        return null;
+    }
+
+    private boolean b(BlockPosition blockposition) {
         if (this.world == null) {
             return false;
         } else {
-            Block block = this.world.getType(i, j, k);
+            Block block = this.world.getType(blockposition).getBlock();
 
-            return block instanceof BlockChest && ((BlockChest) block).a == this.j();
+            return block instanceof BlockChest && ((BlockChest) block).b == this.n();
         }
     }
 
-    public void h() {
-        super.h();
-        this.i();
-        ++this.ticks;
+    public void c() {
+        this.m();
+        int i = this.position.getX();
+        int j = this.position.getY();
+        int k = this.position.getZ();
+
+        ++this.n;
         float f;
 
-        if (!this.world.isStatic && this.o != 0 && (this.ticks + this.x + this.y + this.z) % 200 == 0) {
-            this.o = 0;
+        if (!this.world.isStatic && this.l != 0 && (this.n + i + j + k) % 200 == 0) {
+            this.l = 0;
             f = 5.0F;
-            List list = this.world.a(EntityHuman.class, AxisAlignedBB.a((double) ((float) this.x - f), (double) ((float) this.y - f), (double) ((float) this.z - f), (double) ((float) (this.x + 1) + f), (double) ((float) (this.y + 1) + f), (double) ((float) (this.z + 1) + f)));
+            List list = this.world.a(EntityHuman.class, new AxisAlignedBB((double) ((float) i - f), (double) ((float) j - f), (double) ((float) k - f), (double) ((float) (i + 1) + f), (double) ((float) (j + 1) + f), (double) ((float) (k + 1) + f)));
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
@@ -236,115 +228,145 @@ public class TileEntityChest extends TileEntity implements IInventory {
                     IInventory iinventory = ((ContainerChest) entityhuman.activeContainer).e();
 
                     if (iinventory == this || iinventory instanceof InventoryLargeChest && ((InventoryLargeChest) iinventory).a((IInventory) this)) {
-                        ++this.o;
+                        ++this.l;
                     }
                 }
             }
         }
 
-        this.n = this.m;
+        this.k = this.j;
         f = 0.1F;
         double d0;
 
-        if (this.o > 0 && this.m == 0.0F && this.i == null && this.k == null) {
-            double d1 = (double) this.x + 0.5D;
+        if (this.l > 0 && this.j == 0.0F && this.f == null && this.h == null) {
+            double d1 = (double) i + 0.5D;
 
-            d0 = (double) this.z + 0.5D;
-            if (this.l != null) {
+            d0 = (double) k + 0.5D;
+            if (this.i != null) {
                 d0 += 0.5D;
             }
 
-            if (this.j != null) {
+            if (this.g != null) {
                 d1 += 0.5D;
             }
 
-            this.world.makeSound(d1, (double) this.y + 0.5D, d0, "random.chestopen", 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            this.world.makeSound(d1, (double) j + 0.5D, d0, "random.chestopen", 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
         }
 
-        if (this.o == 0 && this.m > 0.0F || this.o > 0 && this.m < 1.0F) {
-            float f1 = this.m;
+        if (this.l == 0 && this.j > 0.0F || this.l > 0 && this.j < 1.0F) {
+            float f1 = this.j;
 
-            if (this.o > 0) {
-                this.m += f;
+            if (this.l > 0) {
+                this.j += f;
             } else {
-                this.m -= f;
+                this.j -= f;
             }
 
-            if (this.m > 1.0F) {
-                this.m = 1.0F;
+            if (this.j > 1.0F) {
+                this.j = 1.0F;
             }
 
             float f2 = 0.5F;
 
-            if (this.m < f2 && f1 >= f2 && this.i == null && this.k == null) {
-                d0 = (double) this.x + 0.5D;
-                double d2 = (double) this.z + 0.5D;
+            if (this.j < f2 && f1 >= f2 && this.f == null && this.h == null) {
+                d0 = (double) i + 0.5D;
+                double d2 = (double) k + 0.5D;
 
-                if (this.l != null) {
+                if (this.i != null) {
                     d2 += 0.5D;
                 }
 
-                if (this.j != null) {
+                if (this.g != null) {
                     d0 += 0.5D;
                 }
 
-                this.world.makeSound(d0, (double) this.y + 0.5D, d2, "random.chestclosed", 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                this.world.makeSound(d0, (double) j + 0.5D, d2, "random.chestclosed", 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
             }
 
-            if (this.m < 0.0F) {
-                this.m = 0.0F;
+            if (this.j < 0.0F) {
+                this.j = 0.0F;
             }
         }
+
     }
 
     public boolean c(int i, int j) {
         if (i == 1) {
-            this.o = j;
+            this.l = j;
             return true;
         } else {
             return super.c(i, j);
         }
     }
 
-    public void startOpen() {
-        if (this.o < 0) {
-            this.o = 0;
+    public void startOpen(EntityHuman entityhuman) {
+        if (!entityhuman.v()) {
+            if (this.l < 0) {
+                this.l = 0;
+            }
+
+            ++this.l;
+            this.world.playBlockAction(this.position, this.w(), 1, this.l);
+            this.world.applyPhysics(this.position, this.w());
+            this.world.applyPhysics(this.position.down(), this.w());
         }
 
-        ++this.o;
-        this.world.playBlockAction(this.x, this.y, this.z, this.q(), 1, this.o);
-        this.world.applyPhysics(this.x, this.y, this.z, this.q());
-        this.world.applyPhysics(this.x, this.y - 1, this.z, this.q());
     }
 
-    public void closeContainer() {
-        if (this.q() instanceof BlockChest) {
-            --this.o;
-            this.world.playBlockAction(this.x, this.y, this.z, this.q(), 1, this.o);
-            this.world.applyPhysics(this.x, this.y, this.z, this.q());
-            this.world.applyPhysics(this.x, this.y - 1, this.z, this.q());
+    public void closeContainer(EntityHuman entityhuman) {
+        if (!entityhuman.v() && this.w() instanceof BlockChest) {
+            --this.l;
+            this.world.playBlockAction(this.position, this.w(), 1, this.l);
+            this.world.applyPhysics(this.position, this.w());
+            this.world.applyPhysics(this.position.down(), this.w());
         }
+
     }
 
     public boolean b(int i, ItemStack itemstack) {
         return true;
     }
 
-    public void s() {
-        super.s();
-        this.u();
-        this.i();
+    public void y() {
+        super.y();
+        this.E();
+        this.m();
     }
 
-    public int j() {
-        if (this.r == -1) {
-            if (this.world == null || !(this.q() instanceof BlockChest)) {
+    public int n() {
+        if (this.o == -1) {
+            if (this.world == null || !(this.w() instanceof BlockChest)) {
                 return 0;
             }
 
-            this.r = ((BlockChest) this.q()).a;
+            this.o = ((BlockChest) this.w()).b;
         }
 
-        return this.r;
+        return this.o;
+    }
+
+    public String getContainerName() {
+        return "minecraft:chest";
+    }
+
+    public Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman) {
+        return new ContainerChest(playerinventory, this, entityhuman);
+    }
+
+    public int getProperty(int i) {
+        return 0;
+    }
+
+    public void b(int i, int j) {}
+
+    public int g() {
+        return 0;
+    }
+
+    public void l() {
+        for (int i = 0; i < this.items.length; ++i) {
+            this.items[i] = null;
+        }
+
     }
 }

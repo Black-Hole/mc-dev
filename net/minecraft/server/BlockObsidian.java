@@ -2,19 +2,18 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class BlockObsidian extends BlockStone {
+public class BlockObsidian extends Block {
 
-    public BlockObsidian() {}
-
-    public int a(Random random) {
-        return 1;
+    public BlockObsidian() {
+        super(Material.STONE);
+        this.a(CreativeModeTab.b);
     }
 
-    public Item getDropType(int i, Random random, int j) {
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.OBSIDIAN);
     }
 
-    public MaterialMapColor f(int i) {
+    public MaterialMapColor g(IBlockData iblockdata) {
         return MaterialMapColor.J;
     }
 }

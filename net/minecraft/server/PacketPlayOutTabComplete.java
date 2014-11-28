@@ -1,8 +1,6 @@
 package net.minecraft.server;
 
-import net.minecraft.util.org.apache.commons.lang3.ArrayUtils;
-
-public class PacketPlayOutTabComplete extends Packet {
+public class PacketPlayOutTabComplete implements Packet {
 
     private String[] a;
 
@@ -13,11 +11,12 @@ public class PacketPlayOutTabComplete extends Packet {
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = new String[packetdataserializer.a()];
+        this.a = new String[packetdataserializer.e()];
 
         for (int i = 0; i < this.a.length; ++i) {
             this.a[i] = packetdataserializer.c(32767);
         }
+
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
@@ -30,17 +29,14 @@ public class PacketPlayOutTabComplete extends Packet {
 
             packetdataserializer.a(s);
         }
+
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public String b() {
-        return String.format("candidates=\'%s\'", new Object[] { ArrayUtils.toString(this.a)});
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

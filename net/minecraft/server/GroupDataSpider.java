@@ -20,5 +20,6 @@ public class GroupDataSpider implements GroupDataEntity {
         } else if (i <= 4) {
             this.a = MobEffectList.INVISIBILITY.id;
         }
+
     }
 }

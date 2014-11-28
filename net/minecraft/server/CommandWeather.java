@@ -15,7 +15,7 @@ public class CommandWeather extends CommandAbstract {
         return 2;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.weather.usage";
     }
 
@@ -24,20 +24,23 @@ public class CommandWeather extends CommandAbstract {
             int i = (300 + (new Random()).nextInt(600)) * 20;
 
             if (astring.length >= 2) {
-                i = a(icommandlistener, astring[1], 1, 1000000) * 20;
+                i = a(astring[1], 1, 1000000) * 20;
             }
 
             WorldServer worldserver = MinecraftServer.getServer().worldServer[0];
             WorldData worlddata = worldserver.getWorldData();
 
             if ("clear".equalsIgnoreCase(astring[0])) {
+                worlddata.i(i);
                 worlddata.setWeatherDuration(0);
                 worlddata.setThunderDuration(0);
                 worlddata.setStorm(false);
                 worlddata.setThundering(false);
                 a(icommandlistener, this, "commands.weather.clear", new Object[0]);
             } else if ("rain".equalsIgnoreCase(astring[0])) {
+                worlddata.i(0);
                 worlddata.setWeatherDuration(i);
+                worlddata.setThunderDuration(i);
                 worlddata.setStorm(true);
                 worlddata.setThundering(false);
                 a(icommandlistener, this, "commands.weather.rain", new Object[0]);
@@ -46,18 +49,20 @@ public class CommandWeather extends CommandAbstract {
                     throw new ExceptionUsage("commands.weather.usage", new Object[0]);
                 }
 
+                worlddata.i(0);
                 worlddata.setWeatherDuration(i);
                 worlddata.setThunderDuration(i);
                 worlddata.setStorm(true);
                 worlddata.setThundering(true);
                 a(icommandlistener, this, "commands.weather.thunder", new Object[0]);
             }
+
         } else {
             throw new ExceptionUsage("commands.weather.usage", new Object[0]);
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, new String[] { "clear", "rain", "thunder"}) : null;
     }
 }

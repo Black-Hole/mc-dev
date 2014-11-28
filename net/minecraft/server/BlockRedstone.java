@@ -11,7 +11,7 @@ public class BlockRedstone extends BlockOreBlock {
         return true;
     }
 
-    public int b(IBlockAccess iblockaccess, int i, int j, int k, int l) {
+    public int a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, EnumDirection enumdirection) {
         return 15;
     }
 }

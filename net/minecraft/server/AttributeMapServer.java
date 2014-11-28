@@ -1,21 +1,20 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.util.com.google.common.collect.Sets;
-
 public class AttributeMapServer extends AttributeMapBase {
 
-    private final Set d = Sets.newHashSet();
-    protected final Map c = new InsensitiveStringMap();
+    private final Set e = Sets.newHashSet();
+    protected final Map d = new InsensitiveStringMap();
 
     public AttributeMapServer() {}
 
-    public AttributeModifiable c(IAttribute iattribute) {
+    public AttributeModifiable e(IAttribute iattribute) {
         return (AttributeModifiable) super.a(iattribute);
     }
 
@@ -23,36 +22,46 @@ public class AttributeMapServer extends AttributeMapBase {
         AttributeInstance attributeinstance = super.a(s);
 
         if (attributeinstance == null) {
-            attributeinstance = (AttributeInstance) this.c.get(s);
+            attributeinstance = (AttributeInstance) this.d.get(s);
         }
 
         return (AttributeModifiable) attributeinstance;
     }
 
     public AttributeInstance b(IAttribute iattribute) {
-        if (this.b.containsKey(iattribute.getName())) {
-            throw new IllegalArgumentException("Attribute is already registered!");
-        } else {
-            AttributeModifiable attributemodifiable = new AttributeModifiable(this, iattribute);
+        AttributeInstance attributeinstance = super.b(iattribute);
 
-            this.b.put(iattribute.getName(), attributemodifiable);
-            if (iattribute instanceof AttributeRanged && ((AttributeRanged) iattribute).f() != null) {
-                this.c.put(((AttributeRanged) iattribute).f(), attributemodifiable);
-            }
-
-            this.a.put(iattribute, attributemodifiable);
-            return attributemodifiable;
+        if (iattribute instanceof AttributeRanged && ((AttributeRanged) iattribute).g() != null) {
+            this.d.put(((AttributeRanged) iattribute).g(), attributeinstance);
         }
+
+        return attributeinstance;
     }
 
-    public void a(AttributeModifiable attributemodifiable) {
-        if (attributemodifiable.getAttribute().c()) {
-            this.d.add(attributemodifiable);
+    protected AttributeInstance c(IAttribute iattribute) {
+        return new AttributeModifiable(this, iattribute);
+    }
+
+    public void a(AttributeInstance attributeinstance) {
+        if (attributeinstance.getAttribute().c()) {
+            this.e.add(attributeinstance);
         }
+
+        Iterator iterator = this.c.get(attributeinstance.getAttribute()).iterator();
+
+        while (iterator.hasNext()) {
+            IAttribute iattribute = (IAttribute) iterator.next();
+            AttributeModifiable attributemodifiable = this.e(iattribute);
+
+            if (attributemodifiable != null) {
+                attributemodifiable.f();
+            }
+        }
+
     }
 
     public Set getAttributes() {
-        return this.d;
+        return this.e;
     }
 
     public Collection c() {
@@ -75,6 +84,6 @@ public class AttributeMapServer extends AttributeMapBase {
     }
 
     public AttributeInstance a(IAttribute iattribute) {
-        return this.c(iattribute);
+        return this.e(iattribute);
     }
 }

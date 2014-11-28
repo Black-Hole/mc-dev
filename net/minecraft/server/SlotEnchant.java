@@ -12,4 +12,8 @@ class SlotEnchant extends Slot {
     public boolean isAllowed(ItemStack itemstack) {
         return true;
     }
+
+    public int getMaxStackSize() {
+        return 1;
+    }
 }

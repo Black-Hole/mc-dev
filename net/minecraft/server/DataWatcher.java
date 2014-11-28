@@ -1,21 +1,21 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import net.minecraft.util.org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 public class DataWatcher {
 
     private final Entity a;
     private boolean b = true;
-    private static final HashMap c = new HashMap();
-    private final Map d = new HashMap();
+    private static final Map c = Maps.newHashMap();
+    private final Map d = Maps.newHashMap();
     private boolean e;
     private ReadWriteLock f = new ReentrantReadWriteLock();
 
@@ -24,7 +24,7 @@ public class DataWatcher {
     }
 
     public void a(int i, Object object) {
-        Integer integer = (Integer) c.get(object.getClass());
+        Integer integer = (Integer) DataWatcher.c.get(object.getClass());
 
         if (integer == null) {
             throw new IllegalArgumentException("Unknown data type: " + object.getClass());
@@ -43,7 +43,7 @@ public class DataWatcher {
     }
 
     public void add(int i, int j) {
-        WatchableObject watchableobject = new WatchableObject(j, i, null);
+        WatchableObject watchableobject = new WatchableObject(j, i, (Object) null);
 
         this.f.writeLock().lock();
         this.d.put(Integer.valueOf(i), watchableobject);
@@ -52,30 +52,30 @@ public class DataWatcher {
     }
 
     public byte getByte(int i) {
-        return ((Byte) this.i(i).b()).byteValue();
+        return ((Byte) this.j(i).b()).byteValue();
     }
 
     public short getShort(int i) {
-        return ((Short) this.i(i).b()).shortValue();
+        return ((Short) this.j(i).b()).shortValue();
     }
 
     public int getInt(int i) {
-        return ((Integer) this.i(i).b()).intValue();
+        return ((Integer) this.j(i).b()).intValue();
     }
 
     public float getFloat(int i) {
-        return ((Float) this.i(i).b()).floatValue();
+        return ((Float) this.j(i).b()).floatValue();
     }
 
     public String getString(int i) {
-        return (String) this.i(i).b();
+        return (String) this.j(i).b();
     }
 
     public ItemStack getItemStack(int i) {
-        return (ItemStack) this.i(i).b();
+        return (ItemStack) this.j(i).b();
     }
 
-    private WatchableObject i(int i) {
+    private WatchableObject j(int i) {
         this.f.readLock().lock();
 
         WatchableObject watchableobject;
@@ -86,7 +86,7 @@ public class DataWatcher {
             CrashReport crashreport = CrashReport.a(throwable, "Getting synched entity data");
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Synched entity data");
 
-            crashreportsystemdetails.a("Data ID", Integer.valueOf(i));
+            crashreportsystemdetails.a("Data ID", (Object) Integer.valueOf(i));
             throw new ReportedException(crashreport);
         }
 
@@ -94,8 +94,12 @@ public class DataWatcher {
         return watchableobject;
     }
 
+    public Vector3f h(int i) {
+        return (Vector3f) this.j(i).b();
+    }
+
     public void watch(int i, Object object) {
-        WatchableObject watchableobject = this.i(i);
+        WatchableObject watchableobject = this.j(i);
 
         if (ObjectUtils.notEqual(object, watchableobject.b())) {
             watchableobject.a(object);
@@ -103,10 +107,11 @@ public class DataWatcher {
             watchableobject.a(true);
             this.e = true;
         }
+
     }
 
     public void update(int i) {
-        WatchableObject.a(this.i(i), true);
+        WatchableObject.a(this.j(i), true);
         this.e = true;
     }
 
@@ -141,7 +146,7 @@ public class DataWatcher {
                 if (watchableobject.d()) {
                     watchableobject.a(false);
                     if (arraylist == null) {
-                        arraylist = new ArrayList();
+                        arraylist = Lists.newArrayList();
                     }
 
                     arraylist.add(watchableobject);
@@ -179,7 +184,7 @@ public class DataWatcher {
         for (Iterator iterator = this.d.values().iterator(); iterator.hasNext(); arraylist.add(watchableobject)) {
             watchableobject = (WatchableObject) iterator.next();
             if (arraylist == null) {
-                arraylist = new ArrayList();
+                arraylist = Lists.newArrayList();
             }
         }
 
@@ -219,12 +224,21 @@ public class DataWatcher {
             break;
 
         case 6:
-            ChunkCoordinates chunkcoordinates = (ChunkCoordinates) watchableobject.b();
+            BlockPosition blockposition = (BlockPosition) watchableobject.b();
 
-            packetdataserializer.writeInt(chunkcoordinates.x);
-            packetdataserializer.writeInt(chunkcoordinates.y);
-            packetdataserializer.writeInt(chunkcoordinates.z);
+            packetdataserializer.writeInt(blockposition.getX());
+            packetdataserializer.writeInt(blockposition.getY());
+            packetdataserializer.writeInt(blockposition.getZ());
+            break;
+
+        case 7:
+            Vector3f vector3f = (Vector3f) watchableobject.b();
+
+            packetdataserializer.writeFloat(vector3f.getX());
+            packetdataserializer.writeFloat(vector3f.getY());
+            packetdataserializer.writeFloat(vector3f.getZ());
         }
+
     }
 
     public static List b(PacketDataSerializer packetdataserializer) {
@@ -232,7 +246,7 @@ public class DataWatcher {
 
         for (byte b0 = packetdataserializer.readByte(); b0 != 127; b0 = packetdataserializer.readByte()) {
             if (arraylist == null) {
-                arraylist = new ArrayList();
+                arraylist = Lists.newArrayList();
             }
 
             int i = (b0 & 224) >> 5;
@@ -261,7 +275,7 @@ public class DataWatcher {
                 break;
 
             case 5:
-                watchableobject = new WatchableObject(i, j, packetdataserializer.c());
+                watchableobject = new WatchableObject(i, j, packetdataserializer.i());
                 break;
 
             case 6:
@@ -269,7 +283,15 @@ public class DataWatcher {
                 int l = packetdataserializer.readInt();
                 int i1 = packetdataserializer.readInt();
 
-                watchableobject = new WatchableObject(i, j, new ChunkCoordinates(k, l, i1));
+                watchableobject = new WatchableObject(i, j, new BlockPosition(k, l, i1));
+                break;
+
+            case 7:
+                float f = packetdataserializer.readFloat();
+                float f1 = packetdataserializer.readFloat();
+                float f2 = packetdataserializer.readFloat();
+
+                watchableobject = new WatchableObject(i, j, new Vector3f(f, f1, f2));
             }
 
             arraylist.add(watchableobject);
@@ -287,12 +309,13 @@ public class DataWatcher {
     }
 
     static {
-        c.put(Byte.class, Integer.valueOf(0));
-        c.put(Short.class, Integer.valueOf(1));
-        c.put(Integer.class, Integer.valueOf(2));
-        c.put(Float.class, Integer.valueOf(3));
-        c.put(String.class, Integer.valueOf(4));
-        c.put(ItemStack.class, Integer.valueOf(5));
-        c.put(ChunkCoordinates.class, Integer.valueOf(6));
+        DataWatcher.c.put(Byte.class, Integer.valueOf(0));
+        DataWatcher.c.put(Short.class, Integer.valueOf(1));
+        DataWatcher.c.put(Integer.class, Integer.valueOf(2));
+        DataWatcher.c.put(Float.class, Integer.valueOf(3));
+        DataWatcher.c.put(String.class, Integer.valueOf(4));
+        DataWatcher.c.put(ItemStack.class, Integer.valueOf(5));
+        DataWatcher.c.put(BlockPosition.class, Integer.valueOf(6));
+        DataWatcher.c.put(Vector3f.class, Integer.valueOf(7));
     }
 }

@@ -2,11 +2,11 @@ package net.minecraft.server;
 
 public class BlockTransparent extends Block {
 
-    protected boolean P;
+    protected boolean Q;
 
     protected BlockTransparent(Material material, boolean flag) {
         super(material);
-        this.P = flag;
+        this.Q = flag;
     }
 
     public boolean c() {

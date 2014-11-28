@@ -2,29 +2,29 @@ package net.minecraft.server;
 
 public class MovingObjectPosition {
 
+    private BlockPosition e;
     public EnumMovingObjectType type;
-    public int b;
-    public int c;
-    public int d;
-    public int face;
+    public EnumDirection direction;
     public Vec3D pos;
     public Entity entity;
 
-    public MovingObjectPosition(int i, int j, int k, int l, Vec3D vec3d) {
-        this(i, j, k, l, vec3d, true);
+    public MovingObjectPosition(Vec3D vec3d, EnumDirection enumdirection, BlockPosition blockposition) {
+        this(EnumMovingObjectType.BLOCK, vec3d, enumdirection, blockposition);
     }
 
-    public MovingObjectPosition(int i, int j, int k, int l, Vec3D vec3d, boolean flag) {
-        this.type = flag ? EnumMovingObjectType.BLOCK : EnumMovingObjectType.MISS;
-        this.b = i;
-        this.c = j;
-        this.d = k;
-        this.face = l;
-        this.pos = Vec3D.a(vec3d.a, vec3d.b, vec3d.c);
+    public MovingObjectPosition(Vec3D vec3d, EnumDirection enumdirection) {
+        this(EnumMovingObjectType.BLOCK, vec3d, enumdirection, BlockPosition.ZERO);
     }
 
     public MovingObjectPosition(Entity entity) {
-        this(entity, Vec3D.a(entity.locX, entity.locY, entity.locZ));
+        this(entity, new Vec3D(entity.locX, entity.locY, entity.locZ));
+    }
+
+    public MovingObjectPosition(EnumMovingObjectType enummovingobjecttype, Vec3D vec3d, EnumDirection enumdirection, BlockPosition blockposition) {
+        this.type = enummovingobjecttype;
+        this.e = blockposition;
+        this.direction = enumdirection;
+        this.pos = new Vec3D(vec3d.a, vec3d.b, vec3d.c);
     }
 
     public MovingObjectPosition(Entity entity, Vec3D vec3d) {
@@ -33,7 +33,11 @@ public class MovingObjectPosition {
         this.pos = vec3d;
     }
 
+    public BlockPosition a() {
+        return this.e;
+    }
+
     public String toString() {
-        return "HitResult{type=" + this.type + ", x=" + this.b + ", y=" + this.c + ", z=" + this.d + ", f=" + this.face + ", pos=" + this.pos + ", entity=" + this.entity + '}';
+        return "HitResult{type=" + this.type + ", blockpos=" + this.e + ", f=" + this.direction + ", pos=" + this.pos + ", entity=" + this.entity + '}';
     }
 }

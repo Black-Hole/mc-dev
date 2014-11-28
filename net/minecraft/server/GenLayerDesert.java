@@ -97,13 +97,18 @@ public class GenLayerDesert extends GenLayer {
     private boolean b(int i, int j) {
         if (a(i, j)) {
             return true;
-        } else if (BiomeBase.getBiome(i) != null && BiomeBase.getBiome(j) != null) {
-            EnumTemperature enumtemperature = BiomeBase.getBiome(i).m();
-            EnumTemperature enumtemperature1 = BiomeBase.getBiome(j).m();
-
-            return enumtemperature == enumtemperature1 || enumtemperature == EnumTemperature.MEDIUM || enumtemperature1 == EnumTemperature.MEDIUM;
         } else {
-            return false;
+            BiomeBase biomebase = BiomeBase.getBiome(i);
+            BiomeBase biomebase1 = BiomeBase.getBiome(j);
+
+            if (biomebase != null && biomebase1 != null) {
+                EnumTemperature enumtemperature = biomebase.m();
+                EnumTemperature enumtemperature1 = biomebase1.m();
+
+                return enumtemperature == enumtemperature1 || enumtemperature == EnumTemperature.MEDIUM || enumtemperature1 == EnumTemperature.MEDIUM;
+            } else {
+                return false;
+            }
         }
     }
 }

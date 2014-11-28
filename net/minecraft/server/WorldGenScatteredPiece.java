@@ -16,16 +16,17 @@ abstract class WorldGenScatteredPiece extends StructurePiece {
         this.a = l;
         this.b = i1;
         this.c = j1;
-        this.g = random.nextInt(4);
-        switch (this.g) {
-        case 0:
+        this.m = EnumDirectionLimit.HORIZONTAL.a(random);
+        switch (WorldGenJungleTempleUnknown.a[this.m.ordinal()]) {
+        case 1:
         case 2:
-            this.f = new StructureBoundingBox(i, j, k, i + l - 1, j + i1 - 1, k + j1 - 1);
+            this.l = new StructureBoundingBox(i, j, k, i + l - 1, j + i1 - 1, k + j1 - 1);
             break;
 
         default:
-            this.f = new StructureBoundingBox(i, j, k, i + j1 - 1, j + i1 - 1, k + l - 1);
+            this.l = new StructureBoundingBox(i, j, k, i + j1 - 1, j + i1 - 1, k + l - 1);
         }
+
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
@@ -49,10 +50,12 @@ abstract class WorldGenScatteredPiece extends StructurePiece {
             int j = 0;
             int k = 0;
 
-            for (int l = this.f.c; l <= this.f.f; ++l) {
-                for (int i1 = this.f.a; i1 <= this.f.d; ++i1) {
-                    if (structureboundingbox.b(i1, 64, l)) {
-                        j += Math.max(world.i(i1, l), world.worldProvider.getSeaLevel());
+            for (int l = this.l.c; l <= this.l.f; ++l) {
+                for (int i1 = this.l.a; i1 <= this.l.d; ++i1) {
+                    BlockPosition blockposition = new BlockPosition(i1, 64, l);
+
+                    if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
+                        j += Math.max(world.r(blockposition).getY(), world.worldProvider.getSeaLevel());
                         ++k;
                     }
                 }
@@ -62,7 +65,7 @@ abstract class WorldGenScatteredPiece extends StructurePiece {
                 return false;
             } else {
                 this.d = j / k;
-                this.f.a(0, this.d - this.f.b + i, 0);
+                this.l.a(0, this.d - this.l.b + i, 0);
                 return true;
             }
         }

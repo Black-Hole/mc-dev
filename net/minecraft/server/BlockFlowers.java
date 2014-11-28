@@ -1,63 +1,39 @@
 package net.minecraft.server;
 
-public class BlockFlowers extends BlockPlant {
+import com.google.common.base.Predicate;
 
-    private static final String[][] M = new String[][] { { "flower_dandelion"}, { "flower_rose", "flower_blue_orchid", "flower_allium", "flower_houstonia", "flower_tulip_red", "flower_tulip_orange", "flower_tulip_white", "flower_tulip_pink", "flower_oxeye_daisy"}};
-    public static final String[] a = new String[] { "poppy", "blueOrchid", "allium", "houstonia", "tulipRed", "tulipOrange", "tulipWhite", "tulipPink", "oxeyeDaisy"};
-    public static final String[] b = new String[] { "dandelion"};
-    private int O;
+public abstract class BlockFlowers extends BlockPlant {
 
-    protected BlockFlowers(int i) {
+    protected BlockStateEnum TYPE;
+
+    protected BlockFlowers() {
         super(Material.PLANT);
-        this.O = i;
+        this.j(this.blockStateList.getBlockData().set(this.l(), this.j() == EnumFlowerType.RED ? EnumFlowerVarient.POPPY : EnumFlowerVarient.DANDELION));
     }
 
-    public int getDropData(int i) {
-        return i;
+    public int getDropData(IBlockData iblockdata) {
+        return ((EnumFlowerVarient) iblockdata.get(this.l())).b();
     }
 
-    public static BlockFlowers e(String s) {
-        String[] astring = b;
-        int i = astring.length;
-
-        int j;
-        String s1;
-
-        for (j = 0; j < i; ++j) {
-            s1 = astring[j];
-            if (s1.equals(s)) {
-                return Blocks.YELLOW_FLOWER;
-            }
-        }
-
-        astring = a;
-        i = astring.length;
-
-        for (j = 0; j < i; ++j) {
-            s1 = astring[j];
-            if (s1.equals(s)) {
-                return Blocks.RED_ROSE;
-            }
-        }
-
-        return null;
+    public IBlockData fromLegacyData(int i) {
+        return this.getBlockData().set(this.l(), EnumFlowerVarient.a(this.j(), i));
     }
 
-    public static int f(String s) {
-        int i;
+    public abstract EnumFlowerType j();
 
-        for (i = 0; i < b.length; ++i) {
-            if (b[i].equals(s)) {
-                return i;
-            }
+    public IBlockState l() {
+        if (this.TYPE == null) {
+            this.TYPE = BlockStateEnum.a("type", EnumFlowerVarient.class, (Predicate) (new BlockFlowersInnerClass1(this)));
         }
 
-        for (i = 0; i < a.length; ++i) {
-            if (a[i].equals(s)) {
-                return i;
-            }
-        }
+        return this.TYPE;
+    }
 
-        return 0;
+    public int toLegacyData(IBlockData iblockdata) {
+        return ((EnumFlowerVarient) iblockdata.get(this.l())).b();
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { this.l()});
     }
 }

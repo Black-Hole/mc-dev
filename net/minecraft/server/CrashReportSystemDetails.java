@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -9,7 +9,7 @@ public class CrashReportSystemDetails {
 
     private final CrashReport a;
     private final String b;
-    private final List c = new ArrayList();
+    private final List c = Lists.newArrayList();
     private StackTraceElement[] d = new StackTraceElement[0];
 
     public CrashReportSystemDetails(CrashReport crashreport, String s) {
@@ -17,7 +17,14 @@ public class CrashReportSystemDetails {
         this.b = s;
     }
 
-    public static String a(int i, int j, int k) {
+    public static String a(double d0, double d1, double d2) {
+        return String.format("%.2f,%.2f,%.2f - %s", new Object[] { Double.valueOf(d0), Double.valueOf(d1), Double.valueOf(d2), a(new BlockPosition(d0, d1, d2))});
+    }
+
+    public static String a(BlockPosition blockposition) {
+        int i = blockposition.getX();
+        int j = blockposition.getY();
+        int k = blockposition.getZ();
         StringBuilder stringbuilder = new StringBuilder();
 
         try {
@@ -81,6 +88,7 @@ public class CrashReportSystemDetails {
         } catch (Throwable throwable) {
             this.a(s, throwable);
         }
+
     }
 
     public void a(String s, Object object) {
@@ -88,7 +96,7 @@ public class CrashReportSystemDetails {
     }
 
     public void a(String s, Throwable throwable) {
-        this.a(s, throwable);
+        this.a(s, (Object) throwable);
     }
 
     public int a(int i) {
@@ -157,17 +165,23 @@ public class CrashReportSystemDetails {
                 stringbuilder.append(stacktraceelement.toString());
             }
         }
+
     }
 
     public StackTraceElement[] a() {
         return this.d;
     }
 
-    public static void a(CrashReportSystemDetails crashreportsystemdetails, int i, int j, int k, Block block, int l) {
-        int i1 = Block.getId(block);
+    public static void a(CrashReportSystemDetails crashreportsystemdetails, BlockPosition blockposition, Block block, int i) {
+        int j = Block.getId(block);
 
-        crashreportsystemdetails.a("Block type", (Callable) (new CrashReportBlockType(i1, block)));
-        crashreportsystemdetails.a("Block data value", (Callable) (new CrashReportBlockDataValue(l)));
-        crashreportsystemdetails.a("Block location", (Callable) (new CrashReportBlockLocation(i, j, k)));
+        crashreportsystemdetails.a("Block type", (Callable) (new CrashReportBlockType(j, block)));
+        crashreportsystemdetails.a("Block data value", (Callable) (new CrashReportBlockDataValue(i)));
+        crashreportsystemdetails.a("Block location", (Callable) (new CrashReportBlockLocation(blockposition)));
+    }
+
+    public static void a(CrashReportSystemDetails crashreportsystemdetails, BlockPosition blockposition, IBlockData iblockdata) {
+        crashreportsystemdetails.a("Block", (Callable) (new CrashReportIBlockData(iblockdata)));
+        crashreportsystemdetails.a("Block location", (Callable) (new CrashReportBlockPosition(blockposition)));
     }
 }

@@ -1,7 +1,8 @@
 package net.minecraft.server;
 
-import net.minecraft.util.io.netty.channel.ChannelFutureListener;
-import net.minecraft.util.io.netty.util.concurrent.GenericFutureListener;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.util.concurrent.GenericFutureListener;
 
 class QueuedProtocolSwitch implements Runnable {
 
@@ -24,6 +25,12 @@ class QueuedProtocolSwitch implements Runnable {
             this.e.a(this.a);
         }
 
-        NetworkManager.a(this.e).writeAndFlush(this.c).addListeners(this.d).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+        ChannelFuture channelfuture = NetworkManager.a(this.e).writeAndFlush(this.c);
+
+        if (this.d != null) {
+            channelfuture.addListeners(this.d);
+        }
+
+        channelfuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
     }
 }

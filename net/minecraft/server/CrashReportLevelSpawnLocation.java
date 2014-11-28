@@ -11,7 +11,7 @@ class CrashReportLevelSpawnLocation implements Callable {
     }
 
     public String a() {
-        return CrashReportSystemDetails.a(WorldData.d(this.a), WorldData.e(this.a), WorldData.f(this.a));
+        return CrashReportSystemDetails.a((double) WorldData.d(this.a), (double) WorldData.e(this.a), (double) WorldData.f(this.a));
     }
 
     public Object call() {

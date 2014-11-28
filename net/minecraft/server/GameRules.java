@@ -9,19 +9,24 @@ public class GameRules {
     private TreeMap a = new TreeMap();
 
     public GameRules() {
-        this.a("doFireTick", "true");
-        this.a("mobGriefing", "true");
-        this.a("keepInventory", "false");
-        this.a("doMobSpawning", "true");
-        this.a("doMobLoot", "true");
-        this.a("doTileDrops", "true");
-        this.a("commandBlockOutput", "true");
-        this.a("naturalRegeneration", "true");
-        this.a("doDaylightCycle", "true");
+        this.a("doFireTick", "true", EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("mobGriefing", "true", EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("keepInventory", "false", EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("doMobSpawning", "true", EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("doMobLoot", "true", EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("doTileDrops", "true", EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("commandBlockOutput", "true", EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("naturalRegeneration", "true", EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("doDaylightCycle", "true", EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("logAdminCommands", "true", EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("showDeathMessages", "true", EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("randomTickSpeed", "3", EnumGameRuleType.NUMERICAL_VALUE);
+        this.a("sendCommandFeedback", "true", EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("reducedDebugInfo", "false", EnumGameRuleType.BOOLEAN_VALUE);
     }
 
-    public void a(String s, String s1) {
-        this.a.put(s, new GameRuleValue(s1));
+    public void a(String s, String s1, EnumGameRuleType enumgameruletype) {
+        this.a.put(s, new GameRuleValue(s1, enumgameruletype));
     }
 
     public void set(String s, String s1) {
@@ -30,8 +35,9 @@ public class GameRules {
         if (gamerulevalue != null) {
             gamerulevalue.a(s1);
         } else {
-            this.a(s, s1);
+            this.a(s, s1, EnumGameRuleType.ANY_VALUE);
         }
+
     }
 
     public String get(String s) {
@@ -44,6 +50,12 @@ public class GameRules {
         GameRuleValue gamerulevalue = (GameRuleValue) this.a.get(s);
 
         return gamerulevalue != null ? gamerulevalue.b() : false;
+    }
+
+    public int c(String s) {
+        GameRuleValue gamerulevalue = (GameRuleValue) this.a.get(s);
+
+        return gamerulevalue != null ? gamerulevalue.c() : 0;
     }
 
     public NBTTagCompound a() {
@@ -70,6 +82,7 @@ public class GameRules {
 
             this.set(s, s1);
         }
+
     }
 
     public String[] getGameRules() {
@@ -78,5 +91,11 @@ public class GameRules {
 
     public boolean contains(String s) {
         return this.a.containsKey(s);
+    }
+
+    public boolean a(String s, EnumGameRuleType enumgameruletype) {
+        GameRuleValue gamerulevalue = (GameRuleValue) this.a.get(s);
+
+        return gamerulevalue != null && (gamerulevalue.e() == enumgameruletype || enumgameruletype == EnumGameRuleType.ANY_VALUE);
     }
 }

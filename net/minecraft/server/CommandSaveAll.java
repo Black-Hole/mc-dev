@@ -8,7 +8,7 @@ public class CommandSaveAll extends CommandAbstract {
         return "save-all";
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.save.usage";
     }
 

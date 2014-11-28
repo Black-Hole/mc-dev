@@ -12,24 +12,25 @@ public class WorldGenClay extends WorldGenerator {
         this.b = i;
     }
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        if (world.getType(i, j, k).getMaterial() != Material.WATER) {
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        if (world.getType(blockposition).getBlock().getMaterial() != Material.WATER) {
             return false;
         } else {
-            int l = random.nextInt(this.b - 2) + 2;
+            int i = random.nextInt(this.b - 2) + 2;
             byte b0 = 1;
 
-            for (int i1 = i - l; i1 <= i + l; ++i1) {
-                for (int j1 = k - l; j1 <= k + l; ++j1) {
-                    int k1 = i1 - i;
-                    int l1 = j1 - k;
+            for (int j = blockposition.getX() - i; j <= blockposition.getX() + i; ++j) {
+                for (int k = blockposition.getZ() - i; k <= blockposition.getZ() + i; ++k) {
+                    int l = j - blockposition.getX();
+                    int i1 = k - blockposition.getZ();
 
-                    if (k1 * k1 + l1 * l1 <= l * l) {
-                        for (int i2 = j - b0; i2 <= j + b0; ++i2) {
-                            Block block = world.getType(i1, i2, j1);
+                    if (l * l + i1 * i1 <= i * i) {
+                        for (int j1 = blockposition.getY() - b0; j1 <= blockposition.getY() + b0; ++j1) {
+                            BlockPosition blockposition1 = new BlockPosition(j, j1, k);
+                            Block block = world.getType(blockposition1).getBlock();
 
                             if (block == Blocks.DIRT || block == Blocks.CLAY) {
-                                world.setTypeAndData(i1, i2, j1, this.a, 0, 2);
+                                world.setTypeAndData(blockposition1, this.a.getBlockData(), 2);
                             }
                         }
                     }

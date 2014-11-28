@@ -6,14 +6,14 @@ public class WorldGenWaterLily extends WorldGenerator {
 
     public WorldGenWaterLily() {}
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        for (int l = 0; l < 10; ++l) {
-            int i1 = i + random.nextInt(8) - random.nextInt(8);
-            int j1 = j + random.nextInt(4) - random.nextInt(4);
-            int k1 = k + random.nextInt(8) - random.nextInt(8);
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        for (int i = 0; i < 10; ++i) {
+            int j = blockposition.getX() + random.nextInt(8) - random.nextInt(8);
+            int k = blockposition.getY() + random.nextInt(4) - random.nextInt(4);
+            int l = blockposition.getZ() + random.nextInt(8) - random.nextInt(8);
 
-            if (world.isEmpty(i1, j1, k1) && Blocks.WATER_LILY.canPlace(world, i1, j1, k1)) {
-                world.setTypeAndData(i1, j1, k1, Blocks.WATER_LILY, 0, 2);
+            if (world.isEmpty(new BlockPosition(j, k, l)) && Blocks.WATERLILY.canPlace(world, new BlockPosition(j, k, l))) {
+                world.setTypeAndData(new BlockPosition(j, k, l), Blocks.WATERLILY.getBlockData(), 2);
             }
         }
 

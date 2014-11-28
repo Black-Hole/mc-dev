@@ -9,7 +9,6 @@ public class EntityTNTPrimed extends Entity {
         super(world);
         this.k = true;
         this.a(0.98F, 0.98F);
-        this.height = this.length / 2.0F;
     }
 
     public EntityTNTPrimed(World world, double d0, double d1, double d2, EntityLiving entityliving) {
@@ -27,17 +26,17 @@ public class EntityTNTPrimed extends Entity {
         this.source = entityliving;
     }
 
-    protected void c() {}
+    protected void h() {}
 
-    protected boolean g_() {
+    protected boolean r_() {
         return false;
     }
 
-    public boolean R() {
+    public boolean ad() {
         return !this.dead;
     }
 
-    public void h() {
+    public void s_() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
@@ -58,14 +57,16 @@ public class EntityTNTPrimed extends Entity {
                 this.explode();
             }
         } else {
-            this.world.addParticle("smoke", this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D);
+            this.W();
+            this.world.addParticle(EnumParticle.SMOKE_NORMAL, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
         }
+
     }
 
     private void explode() {
         float f = 4.0F;
 
-        this.world.explode(this, this.locX, this.locY, this.locZ, f, true);
+        this.world.explode(this, this.locX, this.locY + (double) (this.length / 2.0F), this.locZ, f, true);
     }
 
     protected void b(NBTTagCompound nbttagcompound) {
@@ -78,5 +79,9 @@ public class EntityTNTPrimed extends Entity {
 
     public EntityLiving getSource() {
         return this.source;
+    }
+
+    public float getHeadHeight() {
+        return 0.0F;
     }
 }

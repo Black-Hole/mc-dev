@@ -1,10 +1,9 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
-
-import net.minecraft.util.com.google.common.collect.Iterators;
-import net.minecraft.util.com.google.common.collect.Lists;
 
 public abstract class ChatBaseComponent implements IChatBaseComponent {
 
@@ -14,7 +13,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
     public ChatBaseComponent() {}
 
     public IChatBaseComponent addSibling(IChatBaseComponent ichatbasecomponent) {
-        ichatbasecomponent.getChatModifier().a(this.getChatModifier());
+        ichatbasecomponent.getChatModifier().setChatModifier(this.getChatModifier());
         this.a.add(ichatbasecomponent);
         return this;
     }
@@ -34,7 +33,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
         while (iterator.hasNext()) {
             IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
 
-            ichatbasecomponent.getChatModifier().a(this.getChatModifier());
+            ichatbasecomponent.getChatModifier().setChatModifier(this.getChatModifier());
         }
 
         return this;
@@ -48,7 +47,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
             while (iterator.hasNext()) {
                 IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
 
-                ichatbasecomponent.getChatModifier().a(this.b);
+                ichatbasecomponent.getChatModifier().setChatModifier(this.b);
             }
         }
 
@@ -66,7 +65,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
         while (iterator.hasNext()) {
             IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
 
-            stringbuilder.append(ichatbasecomponent.e());
+            stringbuilder.append(ichatbasecomponent.getText());
         }
 
         return stringbuilder.toString();

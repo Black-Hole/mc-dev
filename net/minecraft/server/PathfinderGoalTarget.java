@@ -1,117 +1,135 @@
 package net.minecraft.server;
 
-import net.minecraft.util.org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public abstract class PathfinderGoalTarget extends PathfinderGoal {
 
-    protected EntityCreature c;
-    protected boolean d;
+    protected final EntityCreature e;
+    protected boolean f;
     private boolean a;
     private int b;
-    private int e;
-    private int f;
+    private int c;
+    private int d;
 
     public PathfinderGoalTarget(EntityCreature entitycreature, boolean flag) {
         this(entitycreature, flag, false);
     }
 
     public PathfinderGoalTarget(EntityCreature entitycreature, boolean flag, boolean flag1) {
-        this.c = entitycreature;
-        this.d = flag;
+        this.e = entitycreature;
+        this.f = flag;
         this.a = flag1;
     }
 
     public boolean b() {
-        EntityLiving entityliving = this.c.getGoalTarget();
+        EntityLiving entityliving = this.e.getGoalTarget();
 
         if (entityliving == null) {
             return false;
         } else if (!entityliving.isAlive()) {
             return false;
         } else {
-            double d0 = this.f();
+            ScoreboardTeamBase scoreboardteambase = this.e.getScoreboardTeam();
+            ScoreboardTeamBase scoreboardteambase1 = entityliving.getScoreboardTeam();
 
-            if (this.c.f(entityliving) > d0 * d0) {
+            if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
                 return false;
             } else {
-                if (this.d) {
-                    if (this.c.getEntitySenses().canSee(entityliving)) {
-                        this.f = 0;
-                    } else if (++this.f > 60) {
-                        return false;
-                    }
-                }
+                double d0 = this.f();
 
-                return !(entityliving instanceof EntityPlayer) || !((EntityPlayer) entityliving).playerInteractManager.isCreative();
+                if (this.e.h(entityliving) > d0 * d0) {
+                    return false;
+                } else {
+                    if (this.f) {
+                        if (this.e.getEntitySenses().a(entityliving)) {
+                            this.d = 0;
+                        } else if (++this.d > 60) {
+                            return false;
+                        }
+                    }
+
+                    return !(entityliving instanceof EntityHuman) || !((EntityHuman) entityliving).abilities.isInvulnerable;
+                }
             }
         }
     }
 
     protected double f() {
-        AttributeInstance attributeinstance = this.c.getAttributeInstance(GenericAttributes.b);
+        AttributeInstance attributeinstance = this.e.getAttributeInstance(GenericAttributes.b);
 
         return attributeinstance == null ? 16.0D : attributeinstance.getValue();
     }
 
     public void c() {
         this.b = 0;
-        this.e = 0;
-        this.f = 0;
+        this.c = 0;
+        this.d = 0;
     }
 
     public void d() {
-        this.c.setGoalTarget((EntityLiving) null);
+        this.e.setGoalTarget((EntityLiving) null);
     }
 
-    protected boolean a(EntityLiving entityliving, boolean flag) {
+    public static boolean a(EntityInsentient entityinsentient, EntityLiving entityliving, boolean flag, boolean flag1) {
         if (entityliving == null) {
             return false;
-        } else if (entityliving == this.c) {
+        } else if (entityliving == entityinsentient) {
             return false;
         } else if (!entityliving.isAlive()) {
             return false;
-        } else if (!this.c.a(entityliving.getClass())) {
+        } else if (!entityinsentient.a(entityliving.getClass())) {
             return false;
         } else {
-            if (this.c instanceof EntityOwnable && StringUtils.isNotEmpty(((EntityOwnable) this.c).getOwnerUUID())) {
-                if (entityliving instanceof EntityOwnable && ((EntityOwnable) this.c).getOwnerUUID().equals(((EntityOwnable) entityliving).getOwnerUUID())) {
-                    return false;
-                }
+            ScoreboardTeamBase scoreboardteambase = entityinsentient.getScoreboardTeam();
+            ScoreboardTeamBase scoreboardteambase1 = entityliving.getScoreboardTeam();
 
-                if (entityliving == ((EntityOwnable) this.c).getOwner()) {
-                    return false;
-                }
-            } else if (entityliving instanceof EntityHuman && !flag && ((EntityHuman) entityliving).abilities.isInvulnerable) {
-                return false;
-            }
-
-            if (!this.c.b(MathHelper.floor(entityliving.locX), MathHelper.floor(entityliving.locY), MathHelper.floor(entityliving.locZ))) {
-                return false;
-            } else if (this.d && !this.c.getEntitySenses().canSee(entityliving)) {
+            if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
                 return false;
             } else {
-                if (this.a) {
-                    if (--this.e <= 0) {
-                        this.b = 0;
-                    }
-
-                    if (this.b == 0) {
-                        this.b = this.a(entityliving) ? 1 : 2;
-                    }
-
-                    if (this.b == 2) {
+                if (entityinsentient instanceof EntityOwnable && StringUtils.isNotEmpty(((EntityOwnable) entityinsentient).getOwnerUUID())) {
+                    if (entityliving instanceof EntityOwnable && ((EntityOwnable) entityinsentient).getOwnerUUID().equals(((EntityOwnable) entityliving).getOwnerUUID())) {
                         return false;
                     }
+
+                    if (entityliving == ((EntityOwnable) entityinsentient).getOwner()) {
+                        return false;
+                    }
+                } else if (entityliving instanceof EntityHuman && !flag && ((EntityHuman) entityliving).abilities.isInvulnerable) {
+                    return false;
                 }
 
-                return true;
+                return !flag1 || entityinsentient.getEntitySenses().a(entityliving);
             }
         }
     }
 
+    protected boolean a(EntityLiving entityliving, boolean flag) {
+        if (!a(this.e, entityliving, flag, this.f)) {
+            return false;
+        } else if (!this.e.d(new BlockPosition(entityliving))) {
+            return false;
+        } else {
+            if (this.a) {
+                if (--this.c <= 0) {
+                    this.b = 0;
+                }
+
+                if (this.b == 0) {
+                    this.b = this.a(entityliving) ? 1 : 2;
+                }
+
+                if (this.b == 2) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+
     private boolean a(EntityLiving entityliving) {
-        this.e = 10 + this.c.aI().nextInt(5);
-        PathEntity pathentity = this.c.getNavigation().a(entityliving);
+        this.c = 10 + this.e.bb().nextInt(5);
+        PathEntity pathentity = this.e.getNavigation().a((Entity) entityliving);
 
         if (pathentity == null) {
             return false;

@@ -13,17 +13,19 @@ public class EntityEnderSignal extends Entity {
         this.a(0.25F, 0.25F);
     }
 
-    protected void c() {}
+    protected void h() {}
 
     public EntityEnderSignal(World world, double d0, double d1, double d2) {
         super(world);
         this.d = 0;
         this.a(0.25F, 0.25F);
         this.setPosition(d0, d1, d2);
-        this.height = 0.0F;
     }
 
-    public void a(double d0, int i, double d1) {
+    public void a(BlockPosition blockposition) {
+        double d0 = (double) blockposition.getX();
+        int i = blockposition.getY();
+        double d1 = (double) blockposition.getZ();
         double d2 = d0 - this.locX;
         double d3 = d1 - this.locZ;
         float f = MathHelper.sqrt(d2 * d2 + d3 * d3);
@@ -42,11 +44,11 @@ public class EntityEnderSignal extends Entity {
         this.e = this.random.nextInt(5) > 0;
     }
 
-    public void h() {
-        this.S = this.locX;
-        this.T = this.locY;
-        this.U = this.locZ;
-        super.h();
+    public void s_() {
+        this.P = this.locX;
+        this.Q = this.locY;
+        this.R = this.locZ;
+        super.s_();
         this.locX += this.motX;
         this.locY += this.motY;
         this.locZ += this.motZ;
@@ -95,12 +97,12 @@ public class EntityEnderSignal extends Entity {
 
         float f3 = 0.25F;
 
-        if (this.M()) {
+        if (this.V()) {
             for (int i = 0; i < 4; ++i) {
-                this.world.addParticle("bubble", this.locX - this.motX * (double) f3, this.locY - this.motY * (double) f3, this.locZ - this.motZ * (double) f3, this.motX, this.motY, this.motZ);
+                this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX - this.motX * (double) f3, this.locY - this.motY * (double) f3, this.locZ - this.motZ * (double) f3, this.motX, this.motY, this.motZ, new int[0]);
             }
         } else {
-            this.world.addParticle("portal", this.locX - this.motX * (double) f3 + this.random.nextDouble() * 0.6D - 0.3D, this.locY - this.motY * (double) f3 - 0.5D, this.locZ - this.motZ * (double) f3 + this.random.nextDouble() * 0.6D - 0.3D, this.motX, this.motY, this.motZ);
+            this.world.addParticle(EnumParticle.PORTAL, this.locX - this.motX * (double) f3 + this.random.nextDouble() * 0.6D - 0.3D, this.locY - this.motY * (double) f3 - 0.5D, this.locZ - this.motZ * (double) f3 + this.random.nextDouble() * 0.6D - 0.3D, this.motX, this.motY, this.motZ, new int[0]);
         }
 
         if (!this.world.isStatic) {
@@ -109,23 +111,24 @@ public class EntityEnderSignal extends Entity {
             if (this.d > 80 && !this.world.isStatic) {
                 this.die();
                 if (this.e) {
-                    this.world.addEntity(new EntityItem(this.world, this.locX, this.locY, this.locZ, new ItemStack(Items.EYE_OF_ENDER)));
+                    this.world.addEntity(new EntityItem(this.world, this.locX, this.locY, this.locZ, new ItemStack(Items.ENDER_EYE)));
                 } else {
-                    this.world.triggerEffect(2003, (int) Math.round(this.locX), (int) Math.round(this.locY), (int) Math.round(this.locZ), 0);
+                    this.world.triggerEffect(2003, new BlockPosition(this), 0);
                 }
             }
         }
+
     }
 
     public void b(NBTTagCompound nbttagcompound) {}
 
     public void a(NBTTagCompound nbttagcompound) {}
 
-    public float d(float f) {
+    public float c(float f) {
         return 1.0F;
     }
 
-    public boolean av() {
+    public boolean aE() {
         return false;
     }
 }

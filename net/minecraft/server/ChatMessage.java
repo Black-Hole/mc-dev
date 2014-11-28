@@ -1,14 +1,13 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.IllegalFormatException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import net.minecraft.util.com.google.common.collect.Iterators;
-import net.minecraft.util.com.google.common.collect.Lists;
 
 public class ChatMessage extends ChatBaseComponent {
 
@@ -29,9 +28,10 @@ public class ChatMessage extends ChatBaseComponent {
             Object object = aobject1[j];
 
             if (object instanceof IChatBaseComponent) {
-                ((IChatBaseComponent) object).getChatModifier().a(this.getChatModifier());
+                ((IChatBaseComponent) object).getChatModifier().setChatModifier(this.getChatModifier());
             }
         }
+
     }
 
     synchronized void g() {
@@ -50,20 +50,21 @@ public class ChatMessage extends ChatBaseComponent {
 
         try {
             this.b(LocaleI18n.get(this.d));
-        } catch (ChatMessageException throw) {
+        } catch (ChatMessageException chatmessageexception) {
             this.b.clear();
 
             try {
                 this.b(LocaleI18n.b(this.d));
             } catch (ChatMessageException chatmessageexception1) {
-                throw throw;
+                throw chatmessageexception;
             }
         }
+
     }
 
     protected void b(String s) {
         boolean flag = false;
-        Matcher matcher = c.matcher(s);
+        Matcher matcher = ChatMessage.c.matcher(s);
         int i = 0;
         int j = 0;
 
@@ -77,7 +78,7 @@ public class ChatMessage extends ChatBaseComponent {
                 if (l > j) {
                     ChatComponentText chatcomponenttext = new ChatComponentText(String.format(s.substring(j, l), new Object[0]));
 
-                    chatcomponenttext.getChatModifier().a(this.getChatModifier());
+                    chatcomponenttext.getChatModifier().setChatModifier(this.getChatModifier());
                     this.b.add(chatcomponenttext);
                 }
 
@@ -87,7 +88,7 @@ public class ChatMessage extends ChatBaseComponent {
                 if ("%".equals(s1) && "%%".equals(s2)) {
                     ChatComponentText chatcomponenttext1 = new ChatComponentText("%");
 
-                    chatcomponenttext1.getChatModifier().a(this.getChatModifier());
+                    chatcomponenttext1.getChatModifier().setChatModifier(this.getChatModifier());
                     this.b.add(chatcomponenttext1);
                 } else {
                     if (!"s".equals(s1)) {
@@ -97,16 +98,19 @@ public class ChatMessage extends ChatBaseComponent {
                     String s3 = matcher.group(1);
                     int i1 = s3 != null ? Integer.parseInt(s3) - 1 : i++;
 
-                    this.b.add(this.a(i1));
+                    if (i1 < this.e.length) {
+                        this.b.add(this.a(i1));
+                    }
                 }
             }
 
             if (j < s.length()) {
                 ChatComponentText chatcomponenttext2 = new ChatComponentText(String.format(s.substring(j), new Object[0]));
 
-                chatcomponenttext2.getChatModifier().a(this.getChatModifier());
+                chatcomponenttext2.getChatModifier().setChatModifier(this.getChatModifier());
                 this.b.add(chatcomponenttext2);
             }
+
         } catch (IllegalFormatException illegalformatexception) {
             throw new ChatMessageException(this, illegalformatexception);
         }
@@ -123,7 +127,7 @@ public class ChatMessage extends ChatBaseComponent {
                 object1 = (IChatBaseComponent) object;
             } else {
                 object1 = new ChatComponentText(object == null ? "null" : object.toString());
-                ((IChatBaseComponent) object1).getChatModifier().a(this.getChatModifier());
+                ((IChatBaseComponent) object1).getChatModifier().setChatModifier(this.getChatModifier());
             }
 
             return (IChatBaseComponent) object1;
@@ -139,7 +143,7 @@ public class ChatMessage extends ChatBaseComponent {
             Object object = aobject[j];
 
             if (object instanceof IChatBaseComponent) {
-                ((IChatBaseComponent) object).getChatModifier().a(this.getChatModifier());
+                ((IChatBaseComponent) object).getChatModifier().setChatModifier(this.getChatModifier());
             }
         }
 
@@ -149,7 +153,7 @@ public class ChatMessage extends ChatBaseComponent {
             while (iterator.hasNext()) {
                 IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
 
-                ichatbasecomponent.getChatModifier().a(chatmodifier);
+                ichatbasecomponent.getChatModifier().setChatModifier(chatmodifier);
             }
         }
 
@@ -158,10 +162,10 @@ public class ChatMessage extends ChatBaseComponent {
 
     public Iterator iterator() {
         this.g();
-        return Iterators.concat(a(this.b), a(this.a));
+        return Iterators.concat(a((Iterable) this.b), a((Iterable) this.a));
     }
 
-    public String e() {
+    public String getText() {
         this.g();
         StringBuilder stringbuilder = new StringBuilder();
         Iterator iterator = this.b.iterator();
@@ -169,7 +173,7 @@ public class ChatMessage extends ChatBaseComponent {
         while (iterator.hasNext()) {
             IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
 
-            stringbuilder.append(ichatbasecomponent.e());
+            stringbuilder.append(ichatbasecomponent.getText());
         }
 
         return stringbuilder.toString();

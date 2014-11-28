@@ -6,80 +6,79 @@ public class ItemEnderEye extends Item {
         this.a(CreativeModeTab.f);
     }
 
-    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, int i, int j, int k, int l, float f, float f1, float f2) {
-        Block block = world.getType(i, j, k);
-        int i1 = world.getData(i, j, k);
+    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+        IBlockData iblockdata = world.getType(blockposition);
 
-        if (entityhuman.a(i, j, k, l, itemstack) && block == Blocks.ENDER_PORTAL_FRAME && !BlockEnderPortalFrame.b(i1)) {
+        if (entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack) && iblockdata.getBlock() == Blocks.END_PORTAL_FRAME && !((Boolean) iblockdata.get(BlockEnderPortalFrame.EYE)).booleanValue()) {
             if (world.isStatic) {
                 return true;
             } else {
-                world.setData(i, j, k, i1 + 4, 2);
-                world.updateAdjacentComparators(i, j, k, Blocks.ENDER_PORTAL_FRAME);
+                world.setTypeAndData(blockposition, iblockdata.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(true)), 2);
+                world.updateAdjacentComparators(blockposition, Blocks.END_PORTAL_FRAME);
                 --itemstack.count;
 
-                int j1;
-
-                for (j1 = 0; j1 < 16; ++j1) {
-                    double d0 = (double) ((float) i + (5.0F + g.nextFloat() * 6.0F) / 16.0F);
-                    double d1 = (double) ((float) j + 0.8125F);
-                    double d2 = (double) ((float) k + (5.0F + g.nextFloat() * 6.0F) / 16.0F);
+                for (int i = 0; i < 16; ++i) {
+                    double d0 = (double) ((float) blockposition.getX() + (5.0F + ItemEnderEye.g.nextFloat() * 6.0F) / 16.0F);
+                    double d1 = (double) ((float) blockposition.getY() + 0.8125F);
+                    double d2 = (double) ((float) blockposition.getZ() + (5.0F + ItemEnderEye.g.nextFloat() * 6.0F) / 16.0F);
                     double d3 = 0.0D;
                     double d4 = 0.0D;
                     double d5 = 0.0D;
 
-                    world.addParticle("smoke", d0, d1, d2, d3, d4, d5);
+                    world.addParticle(EnumParticle.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
                 }
 
-                j1 = i1 & 3;
-                int k1 = 0;
-                int l1 = 0;
+                EnumDirection enumdirection1 = (EnumDirection) iblockdata.get(BlockEnderPortalFrame.FACING);
+                int j = 0;
+                int k = 0;
                 boolean flag = false;
                 boolean flag1 = true;
-                int i2 = Direction.g[j1];
+                EnumDirection enumdirection2 = enumdirection1.e();
 
-                int j2;
-                int k2;
-                int l2;
+                for (int l = -2; l <= 2; ++l) {
+                    BlockPosition blockposition1 = blockposition.shift(enumdirection2, l);
+                    IBlockData iblockdata1 = world.getType(blockposition1);
 
-                for (l2 = -2; l2 <= 2; ++l2) {
-                    j2 = i + Direction.a[i2] * l2;
-                    k2 = k + Direction.b[i2] * l2;
-                    if (world.getType(j2, j, k2) == Blocks.ENDER_PORTAL_FRAME) {
-                        if (!BlockEnderPortalFrame.b(world.getData(j2, j, k2))) {
+                    if (iblockdata1.getBlock() == Blocks.END_PORTAL_FRAME) {
+                        if (!((Boolean) iblockdata1.get(BlockEnderPortalFrame.EYE)).booleanValue()) {
                             flag1 = false;
                             break;
                         }
 
-                        l1 = l2;
+                        k = l;
                         if (!flag) {
-                            k1 = l2;
+                            j = l;
                             flag = true;
                         }
                     }
                 }
 
-                if (flag1 && l1 == k1 + 2) {
-                    for (l2 = k1; l2 <= l1; ++l2) {
-                        j2 = i + Direction.a[i2] * l2;
-                        k2 = k + Direction.b[i2] * l2;
-                        j2 += Direction.a[j1] * 4;
-                        k2 += Direction.b[j1] * 4;
-                        if (world.getType(j2, j, k2) != Blocks.ENDER_PORTAL_FRAME || !BlockEnderPortalFrame.b(world.getData(j2, j, k2))) {
+                if (flag1 && k == j + 2) {
+                    BlockPosition blockposition2 = blockposition.shift(enumdirection1, 4);
+
+                    int i1;
+
+                    for (i1 = j; i1 <= k; ++i1) {
+                        BlockPosition blockposition3 = blockposition2.shift(enumdirection2, i1);
+                        IBlockData iblockdata2 = world.getType(blockposition3);
+
+                        if (iblockdata2.getBlock() != Blocks.END_PORTAL_FRAME || !((Boolean) iblockdata2.get(BlockEnderPortalFrame.EYE)).booleanValue()) {
                             flag1 = false;
                             break;
                         }
                     }
 
-                    int i3;
+                    int j1;
+                    BlockPosition blockposition4;
 
-                    for (l2 = k1 - 1; l2 <= l1 + 1; l2 += 4) {
-                        for (j2 = 1; j2 <= 3; ++j2) {
-                            k2 = i + Direction.a[i2] * l2;
-                            i3 = k + Direction.b[i2] * l2;
-                            k2 += Direction.a[j1] * j2;
-                            i3 += Direction.b[j1] * j2;
-                            if (world.getType(k2, j, i3) != Blocks.ENDER_PORTAL_FRAME || !BlockEnderPortalFrame.b(world.getData(k2, j, i3))) {
+                    for (i1 = j - 1; i1 <= k + 1; i1 += 4) {
+                        blockposition2 = blockposition.shift(enumdirection2, i1);
+
+                        for (j1 = 1; j1 <= 3; ++j1) {
+                            blockposition4 = blockposition2.shift(enumdirection1, j1);
+                            IBlockData iblockdata3 = world.getType(blockposition4);
+
+                            if (iblockdata3.getBlock() != Blocks.END_PORTAL_FRAME || !((Boolean) iblockdata3.get(BlockEnderPortalFrame.EYE)).booleanValue()) {
                                 flag1 = false;
                                 break;
                             }
@@ -87,13 +86,12 @@ public class ItemEnderEye extends Item {
                     }
 
                     if (flag1) {
-                        for (l2 = k1; l2 <= l1; ++l2) {
-                            for (j2 = 1; j2 <= 3; ++j2) {
-                                k2 = i + Direction.a[i2] * l2;
-                                i3 = k + Direction.b[i2] * l2;
-                                k2 += Direction.a[j1] * j2;
-                                i3 += Direction.b[j1] * j2;
-                                world.setTypeAndData(k2, j, i3, Blocks.ENDER_PORTAL, 0, 2);
+                        for (i1 = j; i1 <= k; ++i1) {
+                            blockposition2 = blockposition.shift(enumdirection2, i1);
+
+                            for (j1 = 1; j1 <= 3; ++j1) {
+                                blockposition4 = blockposition2.shift(enumdirection1, j1);
+                                world.setTypeAndData(blockposition4, Blocks.END_PORTAL.getBlockData(), 2);
                             }
                         }
                     }
@@ -109,22 +107,24 @@ public class ItemEnderEye extends Item {
     public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
         MovingObjectPosition movingobjectposition = this.a(world, entityhuman, false);
 
-        if (movingobjectposition != null && movingobjectposition.type == EnumMovingObjectType.BLOCK && world.getType(movingobjectposition.b, movingobjectposition.c, movingobjectposition.d) == Blocks.ENDER_PORTAL_FRAME) {
+        if (movingobjectposition != null && movingobjectposition.type == EnumMovingObjectType.BLOCK && world.getType(movingobjectposition.a()).getBlock() == Blocks.END_PORTAL_FRAME) {
             return itemstack;
         } else {
             if (!world.isStatic) {
-                ChunkPosition chunkposition = world.b("Stronghold", (int) entityhuman.locX, (int) entityhuman.locY, (int) entityhuman.locZ);
+                BlockPosition blockposition = world.a("Stronghold", new BlockPosition(entityhuman));
 
-                if (chunkposition != null) {
-                    EntityEnderSignal entityendersignal = new EntityEnderSignal(world, entityhuman.locX, entityhuman.locY + 1.62D - (double) entityhuman.height, entityhuman.locZ);
+                if (blockposition != null) {
+                    EntityEnderSignal entityendersignal = new EntityEnderSignal(world, entityhuman.locX, entityhuman.locY, entityhuman.locZ);
 
-                    entityendersignal.a((double) chunkposition.x, chunkposition.y, (double) chunkposition.z);
+                    entityendersignal.a(blockposition);
                     world.addEntity(entityendersignal);
-                    world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (g.nextFloat() * 0.4F + 0.8F));
-                    world.a((EntityHuman) null, 1002, (int) entityhuman.locX, (int) entityhuman.locY, (int) entityhuman.locZ, 0);
+                    world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (ItemEnderEye.g.nextFloat() * 0.4F + 0.8F));
+                    world.a((EntityHuman) null, 1002, new BlockPosition(entityhuman), 0);
                     if (!entityhuman.abilities.canInstantlyBuild) {
                         --itemstack.count;
                     }
+
+                    entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
                 }
             }
 

@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutEntityStatus extends Packet {
+public class PacketPlayOutEntityStatus implements Packet {
 
     private int a;
     private byte b;
@@ -22,11 +22,11 @@ public class PacketPlayOutEntityStatus extends Packet {
         packetdataserializer.writeByte(this.b);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

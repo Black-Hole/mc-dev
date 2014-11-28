@@ -1,14 +1,17 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import java.io.DataInput;
 import java.io.DataOutput;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class NBTTagList extends NBTBase {
 
-    private List list = new ArrayList();
+    private static final Logger b = LogManager.getLogger();
+    private List list = Lists.newArrayList();
     private byte type = 0;
 
     public NBTTagList() {}
@@ -26,6 +29,7 @@ public class NBTTagList extends NBTBase {
         for (int i = 0; i < this.list.size(); ++i) {
             ((NBTBase) this.list.get(i)).write(dataoutput);
         }
+
     }
 
     void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) {
@@ -36,7 +40,7 @@ public class NBTTagList extends NBTBase {
             this.type = datainput.readByte();
             int j = datainput.readInt();
 
-            this.list = new ArrayList();
+            this.list = Lists.newArrayList();
 
             for (int k = 0; k < j; ++k) {
                 NBTBase nbtbase = NBTBase.createTag(this.type);
@@ -44,6 +48,7 @@ public class NBTTagList extends NBTBase {
                 nbtbase.load(datainput, i + 1, nbtreadlimiter);
                 this.list.add(nbtbase);
             }
+
         }
     }
 
@@ -68,11 +73,34 @@ public class NBTTagList extends NBTBase {
         if (this.type == 0) {
             this.type = nbtbase.getTypeId();
         } else if (this.type != nbtbase.getTypeId()) {
-            System.err.println("WARNING: Adding mismatching tag types to tag list");
+            NBTTagList.b.warn("Adding mismatching tag types to tag list");
             return;
         }
 
         this.list.add(nbtbase);
+    }
+
+    public void a(int i, NBTBase nbtbase) {
+        if (i >= 0 && i < this.list.size()) {
+            if (this.type == 0) {
+                this.type = nbtbase.getTypeId();
+            } else if (this.type != nbtbase.getTypeId()) {
+                NBTTagList.b.warn("Adding mismatching tag types to tag list");
+                return;
+            }
+
+            this.list.set(i, nbtbase);
+        } else {
+            NBTTagList.b.warn("index out of bounds to set tag in tag list");
+        }
+    }
+
+    public NBTBase a(int i) {
+        return (NBTBase) this.list.remove(i);
+    }
+
+    public boolean isEmpty() {
+        return this.list.isEmpty();
     }
 
     public NBTTagCompound get(int i) {
@@ -125,6 +153,10 @@ public class NBTTagList extends NBTBase {
         }
     }
 
+    public NBTBase g(int i) {
+        return (NBTBase) (i >= 0 && i < this.list.size() ? (NBTBase) this.list.get(i) : new NBTTagEnd());
+    }
+
     public int size() {
         return this.list.size();
     }
@@ -161,7 +193,7 @@ public class NBTTagList extends NBTBase {
         return super.hashCode() ^ this.list.hashCode();
     }
 
-    public int d() {
+    public int f() {
         return this.type;
     }
 }

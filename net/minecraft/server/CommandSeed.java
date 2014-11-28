@@ -5,7 +5,7 @@ public class CommandSeed extends CommandAbstract {
     public CommandSeed() {}
 
     public boolean canUse(ICommandListener icommandlistener) {
-        return MinecraftServer.getServer().N() || super.canUse(icommandlistener);
+        return MinecraftServer.getServer().S() || super.canUse(icommandlistener);
     }
 
     public String getCommand() {
@@ -16,7 +16,7 @@ public class CommandSeed extends CommandAbstract {
         return 2;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.seed.usage";
     }
 

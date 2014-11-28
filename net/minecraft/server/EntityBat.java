@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 public class EntityBat extends EntityAmbient {
 
-    private ChunkCoordinates h;
+    private BlockPosition a;
 
     public EntityBat(World world) {
         super(world);
@@ -12,41 +12,41 @@ public class EntityBat extends EntityAmbient {
         this.setAsleep(true);
     }
 
-    protected void c() {
-        super.c();
+    protected void h() {
+        super.h();
         this.datawatcher.a(16, new Byte((byte) 0));
     }
 
-    protected float bf() {
+    protected float bA() {
         return 0.1F;
     }
 
-    protected float bg() {
-        return super.bg() * 0.95F;
+    protected float bB() {
+        return super.bB() * 0.95F;
     }
 
-    protected String t() {
+    protected String z() {
         return this.isAsleep() && this.random.nextInt(4) != 0 ? null : "mob.bat.idle";
     }
 
-    protected String aT() {
+    protected String bn() {
         return "mob.bat.hurt";
     }
 
-    protected String aU() {
+    protected String bo() {
         return "mob.bat.death";
     }
 
-    public boolean S() {
+    public boolean ae() {
         return false;
     }
 
-    protected void o(Entity entity) {}
+    protected void s(Entity entity) {}
 
-    protected void bo() {}
+    protected void bK() {}
 
-    protected void aD() {
-        super.aD();
+    protected void aW() {
+        super.aW();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(6.0D);
     }
 
@@ -62,50 +62,51 @@ public class EntityBat extends EntityAmbient {
         } else {
             this.datawatcher.watch(16, Byte.valueOf((byte) (b0 & -2)));
         }
+
     }
 
-    protected boolean bk() {
-        return true;
-    }
-
-    public void h() {
-        super.h();
+    public void s_() {
+        super.s_();
         if (this.isAsleep()) {
             this.motX = this.motY = this.motZ = 0.0D;
             this.locY = (double) MathHelper.floor(this.locY) + 1.0D - (double) this.length;
         } else {
             this.motY *= 0.6000000238418579D;
         }
+
     }
 
-    protected void bn() {
-        super.bn();
+    protected void E() {
+        super.E();
+        BlockPosition blockposition = new BlockPosition(this);
+        BlockPosition blockposition1 = blockposition.up();
+
         if (this.isAsleep()) {
-            if (!this.world.getType(MathHelper.floor(this.locX), (int) this.locY + 1, MathHelper.floor(this.locZ)).r()) {
+            if (!this.world.getType(blockposition1).getBlock().isOccluding()) {
                 this.setAsleep(false);
-                this.world.a((EntityHuman) null, 1015, (int) this.locX, (int) this.locY, (int) this.locZ, 0);
+                this.world.a((EntityHuman) null, 1015, blockposition, 0);
             } else {
                 if (this.random.nextInt(200) == 0) {
-                    this.aO = (float) this.random.nextInt(360);
+                    this.aI = (float) this.random.nextInt(360);
                 }
 
                 if (this.world.findNearbyPlayer(this, 4.0D) != null) {
                     this.setAsleep(false);
-                    this.world.a((EntityHuman) null, 1015, (int) this.locX, (int) this.locY, (int) this.locZ, 0);
+                    this.world.a((EntityHuman) null, 1015, blockposition, 0);
                 }
             }
         } else {
-            if (this.h != null && (!this.world.isEmpty(this.h.x, this.h.y, this.h.z) || this.h.y < 1)) {
-                this.h = null;
+            if (this.a != null && (!this.world.isEmpty(this.a) || this.a.getY() < 1)) {
+                this.a = null;
             }
 
-            if (this.h == null || this.random.nextInt(30) == 0 || this.h.e((int) this.locX, (int) this.locY, (int) this.locZ) < 4.0F) {
-                this.h = new ChunkCoordinates((int) this.locX + this.random.nextInt(7) - this.random.nextInt(7), (int) this.locY + this.random.nextInt(6) - 2, (int) this.locZ + this.random.nextInt(7) - this.random.nextInt(7));
+            if (this.a == null || this.random.nextInt(30) == 0 || this.a.c((double) ((int) this.locX), (double) ((int) this.locY), (double) ((int) this.locZ)) < 4.0D) {
+                this.a = new BlockPosition((int) this.locX + this.random.nextInt(7) - this.random.nextInt(7), (int) this.locY + this.random.nextInt(6) - 2, (int) this.locZ + this.random.nextInt(7) - this.random.nextInt(7));
             }
 
-            double d0 = (double) this.h.x + 0.5D - this.locX;
-            double d1 = (double) this.h.y + 0.1D - this.locY;
-            double d2 = (double) this.h.z + 0.5D - this.locZ;
+            double d0 = (double) this.a.getX() + 0.5D - this.locX;
+            double d1 = (double) this.a.getY() + 0.1D - this.locY;
+            double d2 = (double) this.a.getZ() + 0.5D - this.locZ;
 
             this.motX += (Math.signum(d0) * 0.5D - this.motX) * 0.10000000149011612D;
             this.motY += (Math.signum(d1) * 0.699999988079071D - this.motY) * 0.10000000149011612D;
@@ -113,28 +114,29 @@ public class EntityBat extends EntityAmbient {
             float f = (float) (Math.atan2(this.motZ, this.motX) * 180.0D / 3.1415927410125732D) - 90.0F;
             float f1 = MathHelper.g(f - this.yaw);
 
-            this.be = 0.5F;
+            this.aY = 0.5F;
             this.yaw += f1;
-            if (this.random.nextInt(100) == 0 && this.world.getType(MathHelper.floor(this.locX), (int) this.locY + 1, MathHelper.floor(this.locZ)).r()) {
+            if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).getBlock().isOccluding()) {
                 this.setAsleep(true);
             }
         }
+
     }
 
-    protected boolean g_() {
+    protected boolean r_() {
         return false;
     }
 
-    protected void b(float f) {}
+    public void e(float f, float f1) {}
 
-    protected void a(double d0, boolean flag) {}
+    protected void a(double d0, boolean flag, Block block, BlockPosition blockposition) {}
 
-    public boolean az() {
+    public boolean aH() {
         return true;
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (this.isInvulnerable()) {
+        if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
             if (!this.world.isStatic && this.isAsleep()) {
@@ -155,27 +157,30 @@ public class EntityBat extends EntityAmbient {
         nbttagcompound.setByte("BatFlags", this.datawatcher.getByte(16));
     }
 
-    public boolean canSpawn() {
-        int i = MathHelper.floor(this.boundingBox.b);
+    public boolean bQ() {
+        BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
-        if (i >= 63) {
+        if (blockposition.getY() >= 63) {
             return false;
         } else {
-            int j = MathHelper.floor(this.locX);
-            int k = MathHelper.floor(this.locZ);
-            int l = this.world.getLightLevel(j, i, k);
+            int i = this.world.getLightLevel(blockposition);
             byte b0 = 4;
-            Calendar calendar = this.world.V();
 
-            if ((calendar.get(2) + 1 != 10 || calendar.get(5) < 20) && (calendar.get(2) + 1 != 11 || calendar.get(5) > 3)) {
-                if (this.random.nextBoolean()) {
-                    return false;
-                }
-            } else {
+            if (this.a(this.world.Y())) {
                 b0 = 7;
+            } else if (this.random.nextBoolean()) {
+                return false;
             }
 
-            return l > this.random.nextInt(b0) ? false : super.canSpawn();
+            return i > this.random.nextInt(b0) ? false : super.bQ();
         }
+    }
+
+    private boolean a(Calendar calendar) {
+        return calendar.get(2) + 1 == 10 && calendar.get(5) >= 20 || calendar.get(2) + 1 == 11 && calendar.get(5) <= 3;
+    }
+
+    public float getHeadHeight() {
+        return this.length / 2.0F;
     }
 }

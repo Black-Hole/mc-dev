@@ -1,11 +1,12 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
 import java.util.Random;
 
 public class WorldGenTaigaStructure extends WorldGenerator {
 
-    private Block a;
-    private int b;
+    private final Block a;
+    private final int b;
 
     public WorldGenTaigaStructure(Block block, int i) {
         super(false);
@@ -13,52 +14,45 @@ public class WorldGenTaigaStructure extends WorldGenerator {
         this.b = i;
     }
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
         while (true) {
-            if (j > 3) {
-                label63: {
-                    if (!world.isEmpty(i, j - 1, k)) {
-                        Block block = world.getType(i, j - 1, k);
+            if (blockposition.getY() > 3) {
+                label47: {
+                    if (!world.isEmpty(blockposition.down())) {
+                        Block block = world.getType(blockposition.down()).getBlock();
 
                         if (block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.STONE) {
-                            break label63;
+                            break label47;
                         }
                     }
 
-                    --j;
+                    blockposition = blockposition.down();
                     continue;
                 }
             }
 
-            if (j <= 3) {
+            if (blockposition.getY() <= 3) {
                 return false;
             }
 
-            int l = this.b;
+            int i = this.b;
 
-            for (int i1 = 0; l >= 0 && i1 < 3; ++i1) {
-                int j1 = l + random.nextInt(2);
-                int k1 = l + random.nextInt(2);
-                int l1 = l + random.nextInt(2);
-                float f = (float) (j1 + k1 + l1) * 0.333F + 0.5F;
+            for (int j = 0; i >= 0 && j < 3; ++j) {
+                int k = i + random.nextInt(2);
+                int l = i + random.nextInt(2);
+                int i1 = i + random.nextInt(2);
+                float f = (float) (k + l + i1) * 0.333F + 0.5F;
+                Iterator iterator = BlockPosition.a(blockposition.a(-k, -l, -i1), blockposition.a(k, l, i1)).iterator();
 
-                for (int i2 = i - j1; i2 <= i + j1; ++i2) {
-                    for (int j2 = k - l1; j2 <= k + l1; ++j2) {
-                        for (int k2 = j - k1; k2 <= j + k1; ++k2) {
-                            float f1 = (float) (i2 - i);
-                            float f2 = (float) (j2 - k);
-                            float f3 = (float) (k2 - j);
+                while (iterator.hasNext()) {
+                    BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-                            if (f1 * f1 + f2 * f2 + f3 * f3 <= f * f) {
-                                world.setTypeAndData(i2, k2, j2, this.a, 0, 4);
-                            }
-                        }
+                    if (blockposition1.i(blockposition) <= (double) (f * f)) {
+                        world.setTypeAndData(blockposition1, this.a.getBlockData(), 4);
                     }
                 }
 
-                i += -(l + 1) + random.nextInt(2 + l * 2);
-                k += -(l + 1) + random.nextInt(2 + l * 2);
-                j += 0 - random.nextInt(2);
+                blockposition = blockposition.a(-(i + 1) + random.nextInt(2 + i * 2), 0 - random.nextInt(2), -(i + 1) + random.nextInt(2 + i * 2));
             }
 
             return true;

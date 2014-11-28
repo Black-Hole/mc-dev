@@ -7,16 +7,23 @@ public class MerchantRecipe {
     private ItemStack sellingItem;
     private int uses;
     private int maxUses;
+    private boolean rewardExp;
 
     public MerchantRecipe(NBTTagCompound nbttagcompound) {
         this.a(nbttagcompound);
     }
 
     public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, ItemStack itemstack2) {
+        this(itemstack, itemstack1, itemstack2, 0, 7);
+    }
+
+    public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, ItemStack itemstack2, int i, int j) {
         this.buyingItem1 = itemstack;
         this.buyingItem2 = itemstack1;
         this.sellingItem = itemstack2;
-        this.maxUses = 7;
+        this.uses = i;
+        this.maxUses = j;
+        this.rewardExp = true;
     }
 
     public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1) {
@@ -43,15 +50,15 @@ public class MerchantRecipe {
         return this.sellingItem;
     }
 
-    public boolean a(MerchantRecipe merchantrecipe) {
-        return this.buyingItem1.getItem() == merchantrecipe.buyingItem1.getItem() && this.sellingItem.getItem() == merchantrecipe.sellingItem.getItem() ? this.buyingItem2 == null && merchantrecipe.buyingItem2 == null || this.buyingItem2 != null && merchantrecipe.buyingItem2 != null && this.buyingItem2.getItem() == merchantrecipe.buyingItem2.getItem() : false;
+    public int e() {
+        return this.uses;
     }
 
-    public boolean b(MerchantRecipe merchantrecipe) {
-        return this.a(merchantrecipe) && (this.buyingItem1.count < merchantrecipe.buyingItem1.count || this.buyingItem2 != null && this.buyingItem2.count < merchantrecipe.buyingItem2.count);
+    public int f() {
+        return this.maxUses;
     }
 
-    public void f() {
+    public void g() {
         ++this.uses;
     }
 
@@ -59,8 +66,12 @@ public class MerchantRecipe {
         this.maxUses += i;
     }
 
-    public boolean g() {
+    public boolean h() {
         return this.uses >= this.maxUses;
+    }
+
+    public boolean j() {
+        return this.rewardExp;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -83,9 +94,16 @@ public class MerchantRecipe {
         } else {
             this.maxUses = 7;
         }
+
+        if (nbttagcompound.hasKeyOfType("rewardExp", 1)) {
+            this.rewardExp = nbttagcompound.getBoolean("rewardExp");
+        } else {
+            this.rewardExp = true;
+        }
+
     }
 
-    public NBTTagCompound i() {
+    public NBTTagCompound k() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.set("buy", this.buyingItem1.save(new NBTTagCompound()));
@@ -96,6 +114,7 @@ public class MerchantRecipe {
 
         nbttagcompound.setInt("uses", this.uses);
         nbttagcompound.setInt("maxUses", this.maxUses);
+        nbttagcompound.setBoolean("rewardExp", this.rewardExp);
         return nbttagcompound;
     }
 }

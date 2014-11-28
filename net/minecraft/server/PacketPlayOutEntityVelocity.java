@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutEntityVelocity extends Packet {
+public class PacketPlayOutEntityVelocity implements Packet {
 
     private int a;
     private int b;
@@ -47,28 +47,24 @@ public class PacketPlayOutEntityVelocity extends Packet {
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.readInt();
+        this.a = packetdataserializer.e();
         this.b = packetdataserializer.readShort();
         this.c = packetdataserializer.readShort();
         this.d = packetdataserializer.readShort();
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeInt(this.a);
+        packetdataserializer.b(this.a);
         packetdataserializer.writeShort(this.b);
         packetdataserializer.writeShort(this.c);
         packetdataserializer.writeShort(this.d);
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
-    public String b() {
-        return String.format("id=%d, x=%.2f, y=%.2f, z=%.2f", new Object[] { Integer.valueOf(this.a), Float.valueOf((float) this.b / 8000.0F), Float.valueOf((float) this.c / 8000.0F), Float.valueOf((float) this.d / 8000.0F)});
-    }
-
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

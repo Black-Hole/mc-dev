@@ -27,7 +27,7 @@ public class GenLayerRegionHills extends GenLayer {
                 boolean flag = (l1 - 2) % 29 == 0;
 
                 if (k1 > 255) {
-                    c.debug("old! " + k1);
+                    GenLayerRegionHills.c.debug("old! " + k1);
                 }
 
                 if (k1 != 0 && l1 >= 2 && (l1 - 2) % 29 == 1 && k1 < 128) {

@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-class ContainerAnvilInventory extends InventorySubcontainer {
+public class ContainerAnvilInventory extends InventorySubcontainer {
 
     final ContainerAnvil a;
 

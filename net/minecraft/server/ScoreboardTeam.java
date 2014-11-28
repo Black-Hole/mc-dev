@@ -1,21 +1,27 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Sets;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 public class ScoreboardTeam extends ScoreboardTeamBase {
 
     private final Scoreboard a;
     private final String b;
-    private final Set c = new HashSet();
+    private final Set c = Sets.newHashSet();
     private String d;
     private String e = "";
     private String f = "";
     private boolean g = true;
     private boolean h = true;
+    private EnumNameTagVisibility i;
+    private EnumNameTagVisibility j;
+    private EnumChatFormat k;
 
     public ScoreboardTeam(Scoreboard scoreboard, String s) {
+        this.i = EnumNameTagVisibility.ALWAYS;
+        this.j = EnumNameTagVisibility.ALWAYS;
+        this.k = EnumChatFormat.RESET;
         this.a = scoreboard;
         this.b = s;
         this.d = s;
@@ -60,12 +66,8 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
     }
 
     public void setSuffix(String s) {
-        if (s == null) {
-            throw new IllegalArgumentException("Suffix cannot be null");
-        } else {
-            this.f = s;
-            this.a.handleTeamChanged(this);
-        }
+        this.f = s;
+        this.a.handleTeamChanged(this);
     }
 
     public String getFormattedName(String s) {
@@ -94,6 +96,24 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         this.a.handleTeamChanged(this);
     }
 
+    public EnumNameTagVisibility i() {
+        return this.i;
+    }
+
+    public EnumNameTagVisibility j() {
+        return this.j;
+    }
+
+    public void a(EnumNameTagVisibility enumnametagvisibility) {
+        this.i = enumnametagvisibility;
+        this.a.handleTeamChanged(this);
+    }
+
+    public void b(EnumNameTagVisibility enumnametagvisibility) {
+        this.j = enumnametagvisibility;
+        this.a.handleTeamChanged(this);
+    }
+
     public int packOptionData() {
         int i = 0;
 
@@ -106,5 +126,13 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         }
 
         return i;
+    }
+
+    public void a(EnumChatFormat enumchatformat) {
+        this.k = enumchatformat;
+    }
+
+    public EnumChatFormat l() {
+        return this.k;
     }
 }

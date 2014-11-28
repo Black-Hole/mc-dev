@@ -1,121 +1,135 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class WorldGenDungeons extends WorldGenerator {
 
-    private static final StructurePieceTreasure[] a = new StructurePieceTreasure[] { new StructurePieceTreasure(Items.SADDLE, 0, 1, 1, 10), new StructurePieceTreasure(Items.IRON_INGOT, 0, 1, 4, 10), new StructurePieceTreasure(Items.BREAD, 0, 1, 1, 10), new StructurePieceTreasure(Items.WHEAT, 0, 1, 4, 10), new StructurePieceTreasure(Items.SULPHUR, 0, 1, 4, 10), new StructurePieceTreasure(Items.STRING, 0, 1, 4, 10), new StructurePieceTreasure(Items.BUCKET, 0, 1, 1, 10), new StructurePieceTreasure(Items.GOLDEN_APPLE, 0, 1, 1, 1), new StructurePieceTreasure(Items.REDSTONE, 0, 1, 4, 10), new StructurePieceTreasure(Items.RECORD_1, 0, 1, 1, 10), new StructurePieceTreasure(Items.RECORD_2, 0, 1, 1, 10), new StructurePieceTreasure(Items.NAME_TAG, 0, 1, 1, 10), new StructurePieceTreasure(Items.HORSE_ARMOR_GOLD, 0, 1, 1, 2), new StructurePieceTreasure(Items.HORSE_ARMOR_IRON, 0, 1, 1, 5), new StructurePieceTreasure(Items.HORSE_ARMOR_DIAMOND, 0, 1, 1, 1)};
+    private static final Logger a = LogManager.getLogger();
+    private static final String[] b = new String[] { "Skeleton", "Zombie", "Zombie", "Spider"};
+    private static final List c = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.SADDLE, 0, 1, 1, 10), new StructurePieceTreasure(Items.IRON_INGOT, 0, 1, 4, 10), new StructurePieceTreasure(Items.BREAD, 0, 1, 1, 10), new StructurePieceTreasure(Items.WHEAT, 0, 1, 4, 10), new StructurePieceTreasure(Items.GUNPOWDER, 0, 1, 4, 10), new StructurePieceTreasure(Items.STRING, 0, 1, 4, 10), new StructurePieceTreasure(Items.BUCKET, 0, 1, 1, 10), new StructurePieceTreasure(Items.GOLDEN_APPLE, 0, 1, 1, 1), new StructurePieceTreasure(Items.REDSTONE, 0, 1, 4, 10), new StructurePieceTreasure(Items.RECORD_13, 0, 1, 1, 4), new StructurePieceTreasure(Items.RECORD_CAT, 0, 1, 1, 4), new StructurePieceTreasure(Items.NAME_TAG, 0, 1, 1, 10), new StructurePieceTreasure(Items.GOLDEN_HORSE_ARMOR, 0, 1, 1, 2), new StructurePieceTreasure(Items.IRON_HORSE_ARMOR, 0, 1, 1, 5), new StructurePieceTreasure(Items.DIAMOND_HORSE_ARMOR, 0, 1, 1, 1)});
 
     public WorldGenDungeons() {}
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        byte b0 = 3;
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        boolean flag = true;
+        int i = random.nextInt(2) + 2;
+        int j = -i - 1;
+        int k = i + 1;
+        boolean flag1 = true;
+        boolean flag2 = true;
         int l = random.nextInt(2) + 2;
-        int i1 = random.nextInt(2) + 2;
-        int j1 = 0;
+        int i1 = -l - 1;
+        int j1 = l + 1;
+        int k1 = 0;
 
-        int k1;
         int l1;
         int i2;
+        int j2;
+        BlockPosition blockposition1;
 
-        for (k1 = i - l - 1; k1 <= i + l + 1; ++k1) {
-            for (l1 = j - 1; l1 <= j + b0 + 1; ++l1) {
-                for (i2 = k - i1 - 1; i2 <= k + i1 + 1; ++i2) {
-                    Material material = world.getType(k1, l1, i2).getMaterial();
+        for (l1 = j; l1 <= k; ++l1) {
+            for (i2 = -1; i2 <= 4; ++i2) {
+                for (j2 = i1; j2 <= j1; ++j2) {
+                    blockposition1 = blockposition.a(l1, i2, j2);
+                    Material material = world.getType(blockposition1).getBlock().getMaterial();
+                    boolean flag3 = material.isBuildable();
 
-                    if (l1 == j - 1 && !material.isBuildable()) {
+                    if (i2 == -1 && !flag3) {
                         return false;
                     }
 
-                    if (l1 == j + b0 + 1 && !material.isBuildable()) {
+                    if (i2 == 4 && !flag3) {
                         return false;
                     }
 
-                    if ((k1 == i - l - 1 || k1 == i + l + 1 || i2 == k - i1 - 1 || i2 == k + i1 + 1) && l1 == j && world.isEmpty(k1, l1, i2) && world.isEmpty(k1, l1 + 1, i2)) {
-                        ++j1;
+                    if ((l1 == j || l1 == k || j2 == i1 || j2 == j1) && i2 == 0 && world.isEmpty(blockposition1) && world.isEmpty(blockposition1.up())) {
+                        ++k1;
                     }
                 }
             }
         }
 
-        if (j1 >= 1 && j1 <= 5) {
-            for (k1 = i - l - 1; k1 <= i + l + 1; ++k1) {
-                for (l1 = j + b0; l1 >= j - 1; --l1) {
-                    for (i2 = k - i1 - 1; i2 <= k + i1 + 1; ++i2) {
-                        if (k1 != i - l - 1 && l1 != j - 1 && i2 != k - i1 - 1 && k1 != i + l + 1 && l1 != j + b0 + 1 && i2 != k + i1 + 1) {
-                            world.setAir(k1, l1, i2);
-                        } else if (l1 >= 0 && !world.getType(k1, l1 - 1, i2).getMaterial().isBuildable()) {
-                            world.setAir(k1, l1, i2);
-                        } else if (world.getType(k1, l1, i2).getMaterial().isBuildable()) {
-                            if (l1 == j - 1 && random.nextInt(4) != 0) {
-                                world.setTypeAndData(k1, l1, i2, Blocks.MOSSY_COBBLESTONE, 0, 2);
+        if (k1 >= 1 && k1 <= 5) {
+            for (l1 = j; l1 <= k; ++l1) {
+                for (i2 = 3; i2 >= -1; --i2) {
+                    for (j2 = i1; j2 <= j1; ++j2) {
+                        blockposition1 = blockposition.a(l1, i2, j2);
+                        if (l1 != j && i2 != -1 && j2 != i1 && l1 != k && i2 != 4 && j2 != j1) {
+                            if (world.getType(blockposition1).getBlock() != Blocks.CHEST) {
+                                world.setAir(blockposition1);
+                            }
+                        } else if (blockposition1.getY() >= 0 && !world.getType(blockposition1.down()).getBlock().getMaterial().isBuildable()) {
+                            world.setAir(blockposition1);
+                        } else if (world.getType(blockposition1).getBlock().getMaterial().isBuildable() && world.getType(blockposition1).getBlock() != Blocks.CHEST) {
+                            if (i2 == -1 && random.nextInt(4) != 0) {
+                                world.setTypeAndData(blockposition1, Blocks.MOSSY_COBBLESTONE.getBlockData(), 2);
                             } else {
-                                world.setTypeAndData(k1, l1, i2, Blocks.COBBLESTONE, 0, 2);
+                                world.setTypeAndData(blockposition1, Blocks.COBBLESTONE.getBlockData(), 2);
                             }
                         }
                     }
                 }
             }
 
-            k1 = 0;
+            l1 = 0;
 
-            while (k1 < 2) {
-                l1 = 0;
+            while (l1 < 2) {
+                i2 = 0;
 
                 while (true) {
-                    if (l1 < 3) {
-                        label101: {
-                            i2 = i + random.nextInt(l * 2 + 1) - l;
-                            int j2 = k + random.nextInt(i1 * 2 + 1) - i1;
+                    if (i2 < 3) {
+                        label197: {
+                            j2 = blockposition.getX() + random.nextInt(i * 2 + 1) - i;
+                            int k2 = blockposition.getY();
+                            int l2 = blockposition.getZ() + random.nextInt(l * 2 + 1) - l;
+                            BlockPosition blockposition2 = new BlockPosition(j2, k2, l2);
 
-                            if (world.isEmpty(i2, j, j2)) {
-                                int k2 = 0;
+                            if (world.isEmpty(blockposition2)) {
+                                int i3 = 0;
+                                Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
 
-                                if (world.getType(i2 - 1, j, j2).getMaterial().isBuildable()) {
-                                    ++k2;
-                                }
+                                while (iterator.hasNext()) {
+                                    EnumDirection enumdirection = (EnumDirection) iterator.next();
 
-                                if (world.getType(i2 + 1, j, j2).getMaterial().isBuildable()) {
-                                    ++k2;
-                                }
-
-                                if (world.getType(i2, j, j2 - 1).getMaterial().isBuildable()) {
-                                    ++k2;
-                                }
-
-                                if (world.getType(i2, j, j2 + 1).getMaterial().isBuildable()) {
-                                    ++k2;
-                                }
-
-                                if (k2 == 1) {
-                                    world.setTypeAndData(i2, j, j2, Blocks.CHEST, 0, 2);
-                                    StructurePieceTreasure[] astructurepiecetreasure = StructurePieceTreasure.a(a, new StructurePieceTreasure[] { Items.ENCHANTED_BOOK.b(random)});
-                                    TileEntityChest tileentitychest = (TileEntityChest) world.getTileEntity(i2, j, j2);
-
-                                    if (tileentitychest != null) {
-                                        StructurePieceTreasure.a(random, astructurepiecetreasure, (IInventory) tileentitychest, 8);
+                                    if (world.getType(blockposition2.shift(enumdirection)).getBlock().getMaterial().isBuildable()) {
+                                        ++i3;
                                     }
-                                    break label101;
+                                }
+
+                                if (i3 == 1) {
+                                    world.setTypeAndData(blockposition2, Blocks.CHEST.f(world, blockposition2, Blocks.CHEST.getBlockData()), 2);
+                                    List list = StructurePieceTreasure.a(WorldGenDungeons.c, new StructurePieceTreasure[] { Items.ENCHANTED_BOOK.b(random)});
+                                    TileEntity tileentity = world.getTileEntity(blockposition2);
+
+                                    if (tileentity instanceof TileEntityChest) {
+                                        StructurePieceTreasure.a(random, list, (IInventory) ((TileEntityChest) tileentity), 8);
+                                    }
+                                    break label197;
                                 }
                             }
 
-                            ++l1;
+                            ++i2;
                             continue;
                         }
                     }
 
-                    ++k1;
+                    ++l1;
                     break;
                 }
             }
 
-            world.setTypeAndData(i, j, k, Blocks.MOB_SPAWNER, 0, 2);
-            TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner) world.getTileEntity(i, j, k);
+            world.setTypeAndData(blockposition, Blocks.MOB_SPAWNER.getBlockData(), 2);
+            TileEntity tileentity1 = world.getTileEntity(blockposition);
 
-            if (tileentitymobspawner != null) {
-                tileentitymobspawner.getSpawner().setMobName(this.a(random));
+            if (tileentity1 instanceof TileEntityMobSpawner) {
+                ((TileEntityMobSpawner) tileentity1).getSpawner().setMobName(this.a(random));
             } else {
-                System.err.println("Failed to fetch mob spawner entity at (" + i + ", " + j + ", " + k + ")");
+                WorldGenDungeons.a.error("Failed to fetch mob spawner entity at (" + blockposition.getX() + ", " + blockposition.getY() + ", " + blockposition.getZ() + ")");
             }
 
             return true;
@@ -125,8 +139,6 @@ public class WorldGenDungeons extends WorldGenerator {
     }
 
     private String a(Random random) {
-        int i = random.nextInt(4);
-
-        return i == 0 ? "Skeleton" : (i == 1 ? "Zombie" : (i == 2 ? "Zombie" : (i == 3 ? "Spider" : "")));
+        return WorldGenDungeons.b[random.nextInt(WorldGenDungeons.b.length)];
     }
 }

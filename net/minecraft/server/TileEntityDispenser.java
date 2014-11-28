@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class TileEntityDispenser extends TileEntity implements IInventory {
+public class TileEntityDispenser extends TileEntityContainer implements IInventory {
 
+    private static final Random f = new Random();
     private ItemStack[] items = new ItemStack[9];
-    private Random j = new Random();
     protected String a;
 
     public TileEntityDispenser() {}
@@ -52,12 +52,12 @@ public class TileEntityDispenser extends TileEntity implements IInventory {
         }
     }
 
-    public int i() {
+    public int m() {
         int i = -1;
         int j = 1;
 
         for (int k = 0; k < this.items.length; ++k) {
-            if (this.items[k] != null && this.j.nextInt(j++) == 0) {
+            if (this.items[k] != null && TileEntityDispenser.f.nextInt(j++) == 0) {
                 i = k;
             }
         }
@@ -85,15 +85,15 @@ public class TileEntityDispenser extends TileEntity implements IInventory {
         return -1;
     }
 
-    public String getInventoryName() {
-        return this.k_() ? this.a : "container.dispenser";
+    public String getName() {
+        return this.hasCustomName() ? this.a : "container.dispenser";
     }
 
     public void a(String s) {
         this.a = s;
     }
 
-    public boolean k_() {
+    public boolean hasCustomName() {
         return this.a != null;
     }
 
@@ -115,6 +115,7 @@ public class TileEntityDispenser extends TileEntity implements IInventory {
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
             this.a = nbttagcompound.getString("CustomName");
         }
+
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -132,9 +133,10 @@ public class TileEntityDispenser extends TileEntity implements IInventory {
         }
 
         nbttagcompound.set("Items", nbttaglist);
-        if (this.k_()) {
+        if (this.hasCustomName()) {
             nbttagcompound.setString("CustomName", this.a);
         }
+
     }
 
     public int getMaxStackSize() {
@@ -142,14 +144,39 @@ public class TileEntityDispenser extends TileEntity implements IInventory {
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getTileEntity(this.x, this.y, this.z) != this ? false : entityhuman.e((double) this.x + 0.5D, (double) this.y + 0.5D, (double) this.z + 0.5D) <= 64.0D;
+        return this.world.getTileEntity(this.position) != this ? false : entityhuman.e((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
-    public void startOpen() {}
+    public void startOpen(EntityHuman entityhuman) {}
 
-    public void closeContainer() {}
+    public void closeContainer(EntityHuman entityhuman) {}
 
     public boolean b(int i, ItemStack itemstack) {
         return true;
+    }
+
+    public String getContainerName() {
+        return "minecraft:dispenser";
+    }
+
+    public Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman) {
+        return new ContainerDispenser(playerinventory, this);
+    }
+
+    public int getProperty(int i) {
+        return 0;
+    }
+
+    public void b(int i, int j) {}
+
+    public int g() {
+        return 0;
+    }
+
+    public void l() {
+        for (int i = 0; i < this.items.length; ++i) {
+            this.items[i] = null;
+        }
+
     }
 }

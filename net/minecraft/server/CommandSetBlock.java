@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Collection;
 import java.util.List;
 
 public class CommandSetBlock extends CommandAbstract {
@@ -14,29 +15,26 @@ public class CommandSetBlock extends CommandAbstract {
         return 2;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.setblock.usage";
     }
 
     public void execute(ICommandListener icommandlistener, String[] astring) {
-        if (astring.length >= 4) {
-            int i = icommandlistener.getChunkCoordinates().x;
-            int j = icommandlistener.getChunkCoordinates().y;
-            int k = icommandlistener.getChunkCoordinates().z;
-
-            i = MathHelper.floor(a(icommandlistener, (double) i, astring[0]));
-            j = MathHelper.floor(a(icommandlistener, (double) j, astring[1]));
-            k = MathHelper.floor(a(icommandlistener, (double) k, astring[2]));
+        if (astring.length < 4) {
+            throw new ExceptionUsage("commands.setblock.usage", new Object[0]);
+        } else {
+            icommandlistener.a(EnumCommandResult.AFFECTED_BLOCKS, 0);
+            BlockPosition blockposition = a(icommandlistener, astring, 0, false);
             Block block = CommandAbstract.g(icommandlistener, astring[3]);
-            int l = 0;
+            int i = 0;
 
             if (astring.length >= 5) {
-                l = a(icommandlistener, astring[4], 0, 15);
+                i = a(astring[4], 0, 15);
             }
 
             World world = icommandlistener.getWorld();
 
-            if (!world.isLoaded(i, j, k)) {
+            if (!world.isLoaded(blockposition)) {
                 throw new CommandException("commands.setblock.outOfWorld", new Object[0]);
             } else {
                 NBTTagCompound nbttagcompound = new NBTTagCompound();
@@ -46,13 +44,7 @@ public class CommandSetBlock extends CommandAbstract {
                     String s = a(icommandlistener, astring, 6).c();
 
                     try {
-                        NBTBase nbtbase = MojangsonParser.parse(s);
-
-                        if (!(nbtbase instanceof NBTTagCompound)) {
-                            throw new CommandException("commands.setblock.tagError", new Object[] { "Not a valid tag"});
-                        }
-
-                        nbttagcompound = (NBTTagCompound) nbtbase;
+                        nbttagcompound = MojangsonParser.parse(s);
                         flag = true;
                     } catch (MojangsonParseException mojangsonparseexception) {
                         throw new CommandException("commands.setblock.tagError", new Object[] { mojangsonparseexception.getMessage()});
@@ -61,35 +53,51 @@ public class CommandSetBlock extends CommandAbstract {
 
                 if (astring.length >= 6) {
                     if (astring[5].equals("destroy")) {
-                        world.setAir(i, j, k, true);
-                    } else if (astring[5].equals("keep") && !world.isEmpty(i, j, k)) {
+                        world.setAir(blockposition, true);
+                        if (block == Blocks.AIR) {
+                            a(icommandlistener, this, "commands.setblock.success", new Object[0]);
+                            return;
+                        }
+                    } else if (astring[5].equals("keep") && !world.isEmpty(blockposition)) {
                         throw new CommandException("commands.setblock.noChange", new Object[0]);
                     }
                 }
 
-                if (!world.setTypeAndData(i, j, k, block, l, 3)) {
+                TileEntity tileentity = world.getTileEntity(blockposition);
+
+                if (tileentity != null) {
+                    if (tileentity instanceof IInventory) {
+                        ((IInventory) tileentity).l();
+                    }
+
+                    world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), block == Blocks.AIR ? 2 : 4);
+                }
+
+                IBlockData iblockdata = block.fromLegacyData(i);
+
+                if (!world.setTypeAndData(blockposition, iblockdata, 2)) {
                     throw new CommandException("commands.setblock.noChange", new Object[0]);
                 } else {
                     if (flag) {
-                        TileEntity tileentity = world.getTileEntity(i, j, k);
+                        TileEntity tileentity1 = world.getTileEntity(blockposition);
 
-                        if (tileentity != null) {
-                            nbttagcompound.setInt("x", i);
-                            nbttagcompound.setInt("y", j);
-                            nbttagcompound.setInt("z", k);
-                            tileentity.a(nbttagcompound);
+                        if (tileentity1 != null) {
+                            nbttagcompound.setInt("x", blockposition.getX());
+                            nbttagcompound.setInt("y", blockposition.getY());
+                            nbttagcompound.setInt("z", blockposition.getZ());
+                            tileentity1.a(nbttagcompound);
                         }
                     }
 
+                    world.update(blockposition, iblockdata.getBlock());
+                    icommandlistener.a(EnumCommandResult.AFFECTED_BLOCKS, 1);
                     a(icommandlistener, this, "commands.setblock.success", new Object[0]);
                 }
             }
-        } else {
-            throw new ExceptionUsage("commands.setblock.usage", new Object[0]);
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
-        return astring.length == 4 ? a(astring, Block.REGISTRY.keySet()) : (astring.length == 6 ? a(astring, new String[] { "replace", "destroy", "keep"}) : null);
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length == 4 ? a(astring, (Collection) Block.REGISTRY.keySet()) : (astring.length == 6 ? a(astring, new String[] { "replace", "destroy", "keep"}) : null));
     }
 }

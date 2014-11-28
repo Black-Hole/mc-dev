@@ -25,7 +25,7 @@ public abstract class CreativeModeTab {
     public CreativeModeTab(int i, String s) {
         this.n = i;
         this.o = s;
-        a[i] = this;
+        CreativeModeTab.a[i] = this;
     }
 
     public CreativeModeTab a(String s) {

@@ -4,9 +4,9 @@ import java.util.Random;
 
 public class EnchantmentThorns extends Enchantment {
 
-    public EnchantmentThorns(int i, int j) {
-        super(i, j, EnchantmentSlotType.ARMOR_TORSO);
-        this.b("thorns");
+    public EnchantmentThorns(int i, MinecraftKey minecraftkey, int j) {
+        super(i, minecraftkey, j, EnchantmentSlotType.ARMOR_TORSO);
+        this.c("thorns");
     }
 
     public int a(int i) {
@@ -26,7 +26,7 @@ public class EnchantmentThorns extends Enchantment {
     }
 
     public void b(EntityLiving entityliving, Entity entity, int i) {
-        Random random = entityliving.aI();
+        Random random = entityliving.bb();
         ItemStack itemstack = EnchantmentManager.a(Enchantment.THORNS, entityliving);
 
         if (a(i, random)) {
@@ -38,6 +38,7 @@ public class EnchantmentThorns extends Enchantment {
         } else if (itemstack != null) {
             itemstack.damage(1, entityliving);
         }
+
     }
 
     public static boolean a(int i, Random random) {

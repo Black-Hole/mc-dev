@@ -1,16 +1,14 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-import net.minecraft.util.com.google.common.collect.Lists;
-import net.minecraft.util.com.google.common.collect.Maps;
-import net.minecraft.util.com.google.common.collect.Sets;
 
 public class CommandSpreadPlayers extends CommandAbstract {
 
@@ -24,7 +22,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
         return 2;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.spreadplayers.usage";
     }
 
@@ -33,44 +31,44 @@ public class CommandSpreadPlayers extends CommandAbstract {
             throw new ExceptionUsage("commands.spreadplayers.usage", new Object[0]);
         } else {
             byte b0 = 0;
+            BlockPosition blockposition = icommandlistener.getChunkCoordinates();
+            double d0 = (double) blockposition.getX();
             int i = b0 + 1;
-            double d0 = a(icommandlistener, Double.NaN, astring[b0]);
-            double d1 = a(icommandlistener, Double.NaN, astring[i++]);
-            double d2 = a(icommandlistener, astring[i++], 0.0D);
-            double d3 = a(icommandlistener, astring[i++], d2 + 1.0D);
-            boolean flag = c(icommandlistener, astring[i++]);
+            double d1 = b(d0, astring[b0], true);
+            double d2 = b((double) blockposition.getZ(), astring[i++], true);
+            double d3 = a(astring[i++], 0.0D);
+            double d4 = a(astring[i++], d3 + 1.0D);
+            boolean flag = d(astring[i++]);
             ArrayList arraylist = Lists.newArrayList();
 
-            while (true) {
-                while (i < astring.length) {
-                    String s = astring[i++];
+            while (i < astring.length) {
+                String s = astring[i++];
 
-                    if (PlayerSelector.isPattern(s)) {
-                        EntityPlayer[] aentityplayer = PlayerSelector.getPlayers(icommandlistener, s);
+                if (PlayerSelector.isPattern(s)) {
+                    List list = PlayerSelector.getPlayers(icommandlistener, s, Entity.class);
 
-                        if (aentityplayer == null || aentityplayer.length == 0) {
-                            throw new ExceptionPlayerNotFound();
-                        }
-
-                        Collections.addAll(arraylist, aentityplayer);
-                    } else {
-                        EntityPlayer entityplayer = MinecraftServer.getServer().getPlayerList().getPlayer(s);
-
-                        if (entityplayer == null) {
-                            throw new ExceptionPlayerNotFound();
-                        }
-
-                        arraylist.add(entityplayer);
+                    if (list.size() == 0) {
+                        throw new ExceptionEntityNotFound();
                     }
-                }
 
-                if (arraylist.isEmpty()) {
-                    throw new ExceptionPlayerNotFound();
-                }
+                    arraylist.addAll(list);
+                } else {
+                    EntityPlayer entityplayer = MinecraftServer.getServer().getPlayerList().getPlayer(s);
 
-                icommandlistener.sendMessage(new ChatMessage("commands.spreadplayers.spreading." + (flag ? "teams" : "players"), new Object[] { Integer.valueOf(arraylist.size()), Double.valueOf(d3), Double.valueOf(d0), Double.valueOf(d1), Double.valueOf(d2)}));
-                this.a(icommandlistener, arraylist, new Location2D(d0, d1), d2, d3, ((EntityLiving) arraylist.get(0)).world, flag);
-                return;
+                    if (entityplayer == null) {
+                        throw new ExceptionPlayerNotFound();
+                    }
+
+                    arraylist.add(entityplayer);
+                }
+            }
+
+            icommandlistener.a(EnumCommandResult.AFFECTED_ENTITIES, arraylist.size());
+            if (arraylist.isEmpty()) {
+                throw new ExceptionEntityNotFound();
+            } else {
+                icommandlistener.sendMessage(new ChatMessage("commands.spreadplayers.spreading." + (flag ? "teams" : "players"), new Object[] { Integer.valueOf(arraylist.size()), Double.valueOf(d4), Double.valueOf(d1), Double.valueOf(d2), Double.valueOf(d3)}));
+                this.a(icommandlistener, arraylist, new Location2D(d1, d2), d3, d4, ((Entity) arraylist.get(0)).world, flag);
             }
         }
     }
@@ -81,7 +79,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
         double d3 = location2d.b - d1;
         double d4 = location2d.a + d1;
         double d5 = location2d.b + d1;
-        Location2D[] alocation2d = this.a(random, flag ? this.a(list) : list.size(), d2, d3, d4, d5);
+        Location2D[] alocation2d = this.a(random, flag ? this.b(list) : list.size(), d2, d3, d4, d5);
         int i = this.a(location2d, d0, world, random, d2, d3, d4, d5, alocation2d, flag);
         double d6 = this.a(list, world, alocation2d, flag);
 
@@ -89,19 +87,20 @@ public class CommandSpreadPlayers extends CommandAbstract {
         if (alocation2d.length > 1) {
             icommandlistener.sendMessage(new ChatMessage("commands.spreadplayers.info." + (flag ? "teams" : "players"), new Object[] { String.format("%.2f", new Object[] { Double.valueOf(d6)}), Integer.valueOf(i)}));
         }
+
     }
 
-    private int a(List list) {
+    private int b(List list) {
         HashSet hashset = Sets.newHashSet();
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
-            EntityLiving entityliving = (EntityLiving) iterator.next();
+            Entity entity = (Entity) iterator.next();
 
-            if (entityliving instanceof EntityHuman) {
-                hashset.add(entityliving.getScoreboardTeam());
+            if (entity instanceof EntityHuman) {
+                hashset.add(((EntityHuman) entity).getScoreboardTeam());
             } else {
-                hashset.add(null);
+                hashset.add((Object) null);
             }
         }
 
@@ -118,8 +117,8 @@ public class CommandSpreadPlayers extends CommandAbstract {
             flag1 = false;
             d5 = 3.4028234663852886E38D;
 
-            Location2D location2d1;
             int j;
+            Location2D location2d1;
 
             for (int k = 0; k < alocation2d.length; ++k) {
                 Location2D location2d2 = alocation2d[k];
@@ -188,11 +187,11 @@ public class CommandSpreadPlayers extends CommandAbstract {
         HashMap hashmap = Maps.newHashMap();
 
         for (int j = 0; j < list.size(); ++j) {
-            EntityLiving entityliving = (EntityLiving) list.get(j);
+            Entity entity = (Entity) list.get(j);
             Location2D location2d;
 
             if (flag) {
-                ScoreboardTeamBase scoreboardteambase = entityliving instanceof EntityHuman ? entityliving.getScoreboardTeam() : null;
+                ScoreboardTeamBase scoreboardteambase = entity instanceof EntityHuman ? ((EntityHuman) entity).getScoreboardTeam() : null;
 
                 if (!hashmap.containsKey(scoreboardteambase)) {
                     hashmap.put(scoreboardteambase, alocation2d[i++]);
@@ -203,7 +202,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
                 location2d = alocation2d[i++];
             }
 
-            entityliving.enderTeleportTo((double) ((float) MathHelper.floor(location2d.a) + 0.5F), (double) location2d.a(world), (double) MathHelper.floor(location2d.b) + 0.5D);
+            entity.enderTeleportTo((double) ((float) MathHelper.floor(location2d.a) + 0.5F), (double) location2d.a(world), (double) MathHelper.floor(location2d.b) + 0.5D);
             double d1 = Double.MAX_VALUE;
 
             for (int k = 0; k < alocation2d.length; ++k) {

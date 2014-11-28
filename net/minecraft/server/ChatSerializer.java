@@ -1,20 +1,19 @@
 package net.minecraft.server;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.Map.Entry;
-
-import net.minecraft.util.com.google.gson.Gson;
-import net.minecraft.util.com.google.gson.GsonBuilder;
-import net.minecraft.util.com.google.gson.JsonArray;
-import net.minecraft.util.com.google.gson.JsonDeserializationContext;
-import net.minecraft.util.com.google.gson.JsonDeserializer;
-import net.minecraft.util.com.google.gson.JsonElement;
-import net.minecraft.util.com.google.gson.JsonObject;
-import net.minecraft.util.com.google.gson.JsonParseException;
-import net.minecraft.util.com.google.gson.JsonPrimitive;
-import net.minecraft.util.com.google.gson.JsonSerializationContext;
-import net.minecraft.util.com.google.gson.JsonSerializer;
 
 public class ChatSerializer implements JsonDeserializer, JsonSerializer {
 
@@ -52,11 +51,7 @@ public class ChatSerializer implements JsonDeserializer, JsonSerializer {
 
             if (jsonobject.has("text")) {
                 object = new ChatComponentText(jsonobject.get("text").getAsString());
-            } else {
-                if (!jsonobject.has("translate")) {
-                    throw new JsonParseException("Don\'t know how to turn " + jsonelement.toString() + " into a Component");
-                }
-
+            } else if (jsonobject.has("translate")) {
                 String s = jsonobject.get("translate").getAsString();
 
                 if (jsonobject.has("with")) {
@@ -78,6 +73,23 @@ public class ChatSerializer implements JsonDeserializer, JsonSerializer {
                 } else {
                     object = new ChatMessage(s, new Object[0]);
                 }
+            } else if (jsonobject.has("score")) {
+                JsonObject jsonobject1 = jsonobject.getAsJsonObject("score");
+
+                if (!jsonobject1.has("name") || !jsonobject1.has("objective")) {
+                    throw new JsonParseException("A score component needs a least a name and an objective");
+                }
+
+                object = new ChatComponentScore(ChatDeserializer.h(jsonobject1, "name"), ChatDeserializer.h(jsonobject1, "objective"));
+                if (jsonobject1.has("value")) {
+                    ((ChatComponentScore) object).b(ChatDeserializer.h(jsonobject1, "value"));
+                }
+            } else {
+                if (!jsonobject.has("selector")) {
+                    throw new JsonParseException("Don\'t know how to turn " + jsonelement.toString() + " into a Component");
+                }
+
+                object = new ChatComponentSelector(ChatDeserializer.h(jsonobject, "selector"));
             }
 
             if (jsonobject.has("extra")) {
@@ -110,6 +122,7 @@ public class ChatSerializer implements JsonDeserializer, JsonSerializer {
                 jsonobject.add((String) entry.getKey(), (JsonElement) entry.getValue());
             }
         }
+
     }
 
     public JsonElement a(IChatBaseComponent ichatbasecomponent, Type type, JsonSerializationContext jsonserializationcontext) {
@@ -137,11 +150,7 @@ public class ChatSerializer implements JsonDeserializer, JsonSerializer {
 
             if (ichatbasecomponent instanceof ChatComponentText) {
                 jsonobject.addProperty("text", ((ChatComponentText) ichatbasecomponent).g());
-            } else {
-                if (!(ichatbasecomponent instanceof ChatMessage)) {
-                    throw new IllegalArgumentException("Don\'t know how to serialize " + ichatbasecomponent + " as a Component");
-                }
-
+            } else if (ichatbasecomponent instanceof ChatMessage) {
                 ChatMessage chatmessage = (ChatMessage) ichatbasecomponent;
 
                 jsonobject.addProperty("translate", chatmessage.i());
@@ -162,6 +171,22 @@ public class ChatSerializer implements JsonDeserializer, JsonSerializer {
 
                     jsonobject.add("with", jsonarray1);
                 }
+            } else if (ichatbasecomponent instanceof ChatComponentScore) {
+                ChatComponentScore chatcomponentscore = (ChatComponentScore) ichatbasecomponent;
+                JsonObject jsonobject1 = new JsonObject();
+
+                jsonobject1.addProperty("name", chatcomponentscore.g());
+                jsonobject1.addProperty("objective", chatcomponentscore.h());
+                jsonobject1.addProperty("value", chatcomponentscore.getText());
+                jsonobject.add("score", jsonobject1);
+            } else {
+                if (!(ichatbasecomponent instanceof ChatComponentSelector)) {
+                    throw new IllegalArgumentException("Don\'t know how to serialize " + ichatbasecomponent + " as a Component");
+                }
+
+                ChatComponentSelector chatcomponentselector = (ChatComponentSelector) ichatbasecomponent;
+
+                jsonobject.addProperty("selector", chatcomponentselector.g());
             }
 
             return jsonobject;
@@ -169,11 +194,11 @@ public class ChatSerializer implements JsonDeserializer, JsonSerializer {
     }
 
     public static String a(IChatBaseComponent ichatbasecomponent) {
-        return a.toJson(ichatbasecomponent);
+        return ChatSerializer.a.toJson(ichatbasecomponent);
     }
 
     public static IChatBaseComponent a(String s) {
-        return (IChatBaseComponent) a.fromJson(s, IChatBaseComponent.class);
+        return (IChatBaseComponent) ChatSerializer.a.fromJson(s, IChatBaseComponent.class);
     }
 
     public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {

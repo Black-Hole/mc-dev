@@ -6,7 +6,7 @@ public interface ICommand extends Comparable {
 
     String getCommand();
 
-    String c(ICommandListener icommandlistener);
+    String getUsage(ICommandListener icommandlistener);
 
     List b();
 
@@ -14,7 +14,7 @@ public interface ICommand extends Comparable {
 
     boolean canUse(ICommandListener icommandlistener);
 
-    List tabComplete(ICommandListener icommandlistener, String[] astring);
+    List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition);
 
     boolean isListStart(String[] astring, int i);
 }

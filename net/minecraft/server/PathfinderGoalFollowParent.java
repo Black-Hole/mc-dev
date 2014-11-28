@@ -19,7 +19,7 @@ public class PathfinderGoalFollowParent extends PathfinderGoal {
         if (this.a.getAge() >= 0) {
             return false;
         } else {
-            List list = this.a.world.a(this.a.getClass(), this.a.boundingBox.grow(8.0D, 4.0D, 8.0D));
+            List list = this.a.world.a(this.a.getClass(), this.a.getBoundingBox().grow(8.0D, 4.0D, 8.0D));
             EntityAnimal entityanimal = null;
             double d0 = Double.MAX_VALUE;
             Iterator iterator = list.iterator();
@@ -28,7 +28,7 @@ public class PathfinderGoalFollowParent extends PathfinderGoal {
                 EntityAnimal entityanimal1 = (EntityAnimal) iterator.next();
 
                 if (entityanimal1.getAge() >= 0) {
-                    double d1 = this.a.f(entityanimal1);
+                    double d1 = this.a.h(entityanimal1);
 
                     if (d1 <= d0) {
                         d0 = d1;
@@ -49,10 +49,12 @@ public class PathfinderGoalFollowParent extends PathfinderGoal {
     }
 
     public boolean b() {
-        if (!this.b.isAlive()) {
+        if (this.a.getAge() >= 0) {
+            return false;
+        } else if (!this.b.isAlive()) {
             return false;
         } else {
-            double d0 = this.a.f(this.b);
+            double d0 = this.a.h(this.b);
 
             return d0 >= 9.0D && d0 <= 256.0D;
         }

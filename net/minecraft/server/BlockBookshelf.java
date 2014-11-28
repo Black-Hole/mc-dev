@@ -13,7 +13,7 @@ public class BlockBookshelf extends Block {
         return 3;
     }
 
-    public Item getDropType(int i, Random random, int j) {
+    public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.BOOK;
     }
 }

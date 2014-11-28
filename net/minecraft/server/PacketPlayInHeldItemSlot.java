@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayInHeldItemSlot extends Packet {
+public class PacketPlayInHeldItemSlot implements Packet {
 
     private int itemInHandIndex;
 
@@ -14,15 +14,15 @@ public class PacketPlayInHeldItemSlot extends Packet {
         packetdataserializer.writeShort(this.itemInHandIndex);
     }
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
-    public int c() {
+    public int a() {
         return this.itemInHandIndex;
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

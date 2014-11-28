@@ -9,4 +9,6 @@ public interface IRecipe {
     int a();
 
     ItemStack b();
+
+    ItemStack[] b(InventoryCrafting inventorycrafting);
 }

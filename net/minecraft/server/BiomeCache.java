@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.List;
 
 public class BiomeCache {
@@ -8,7 +8,7 @@ public class BiomeCache {
     private final WorldChunkManager a;
     private long b;
     private LongHashMap c = new LongHashMap();
-    private List d = new ArrayList();
+    private List d = Lists.newArrayList();
 
     public BiomeCache(WorldChunkManager worldchunkmanager) {
         this.a = worldchunkmanager;
@@ -26,16 +26,18 @@ public class BiomeCache {
             this.d.add(biomecacheblock);
         }
 
-        biomecacheblock.e = MinecraftServer.ar();
+        biomecacheblock.e = MinecraftServer.ax();
         return biomecacheblock;
     }
 
-    public BiomeBase b(int i, int j) {
-        return this.a(i, j).a(i, j);
+    public BiomeBase a(int i, int j, BiomeBase biomebase) {
+        BiomeBase biomebase1 = this.a(i, j).a(i, j);
+
+        return biomebase1 == null ? biomebase : biomebase1;
     }
 
     public void a() {
-        long i = MinecraftServer.ar();
+        long i = MinecraftServer.ax();
         long j = i - this.b;
 
         if (j > 7500L || j < 0L) {
@@ -53,9 +55,10 @@ public class BiomeCache {
                 }
             }
         }
+
     }
 
-    public BiomeBase[] d(int i, int j) {
+    public BiomeBase[] c(int i, int j) {
         return this.a(i, j).b;
     }
 

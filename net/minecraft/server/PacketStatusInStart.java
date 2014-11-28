@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketStatusInStart extends Packet {
+public class PacketStatusInStart implements Packet {
 
     public PacketStatusInStart() {}
 
@@ -12,11 +12,7 @@ public class PacketStatusInStart extends Packet {
         packetstatusinlistener.a(this);
     }
 
-    public boolean a() {
-        return true;
-    }
-
-    public void handle(PacketListener packetlistener) {
+    public void a(PacketListener packetlistener) {
         this.a((PacketStatusInListener) packetlistener);
     }
 }

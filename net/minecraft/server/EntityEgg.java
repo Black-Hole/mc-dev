@@ -29,18 +29,21 @@ public class EntityEgg extends EntityProjectile {
             for (int i = 0; i < b0; ++i) {
                 EntityChicken entitychicken = new EntityChicken(this.world);
 
-                entitychicken.setAge(-24000);
+                entitychicken.setAgeRaw(-24000);
                 entitychicken.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, 0.0F);
                 this.world.addEntity(entitychicken);
             }
         }
 
+        double d0 = 0.08D;
+
         for (int j = 0; j < 8; ++j) {
-            this.world.addParticle("snowballpoof", this.locX, this.locY, this.locZ, 0.0D, 0.0D, 0.0D);
+            this.world.addParticle(EnumParticle.ITEM_CRACK, this.locX, this.locY, this.locZ, ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D, new int[] { Item.getId(Items.EGG)});
         }
 
         if (!this.world.isStatic) {
             this.die();
         }
+
     }
 }

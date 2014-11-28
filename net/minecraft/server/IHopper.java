@@ -4,9 +4,9 @@ public interface IHopper extends IInventory {
 
     World getWorld();
 
-    double x();
+    double A();
 
-    double aD();
+    double B();
 
-    double aE();
+    double C();
 }

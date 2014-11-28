@@ -8,7 +8,7 @@ public class CommandPublish extends CommandAbstract {
         return "publish";
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.publish.usage";
     }
 
@@ -20,5 +20,6 @@ public class CommandPublish extends CommandAbstract {
         } else {
             a(icommandlistener, this, "commands.publish.failed", new Object[0]);
         }
+
     }
 }

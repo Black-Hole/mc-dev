@@ -7,20 +7,17 @@ final class DispenseBehaviorFlintAndSteel extends DispenseBehaviorItem {
     DispenseBehaviorFlintAndSteel() {}
 
     protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-        EnumFacing enumfacing = BlockDispenser.b(isourceblock.h());
-        World world = isourceblock.k();
-        int i = isourceblock.getBlockX() + enumfacing.getAdjacentX();
-        int j = isourceblock.getBlockY() + enumfacing.getAdjacentY();
-        int k = isourceblock.getBlockZ() + enumfacing.getAdjacentZ();
+        World world = isourceblock.i();
+        BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.b(isourceblock.f()));
 
-        if (world.isEmpty(i, j, k)) {
-            world.setTypeUpdate(i, j, k, Blocks.FIRE);
+        if (world.isEmpty(blockposition)) {
+            world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
             if (itemstack.isDamaged(1, world.random)) {
                 itemstack.count = 0;
             }
-        } else if (world.getType(i, j, k) == Blocks.TNT) {
-            Blocks.TNT.postBreak(world, i, j, k, 1);
-            world.setAir(i, j, k);
+        } else if (world.getType(blockposition).getBlock() == Blocks.TNT) {
+            Blocks.TNT.postBreak(world, blockposition, Blocks.TNT.getBlockData().set(BlockTNT.EXPLODE, Boolean.valueOf(true)));
+            world.setAir(blockposition);
         } else {
             this.b = false;
         }
@@ -30,9 +27,10 @@ final class DispenseBehaviorFlintAndSteel extends DispenseBehaviorItem {
 
     protected void a(ISourceBlock isourceblock) {
         if (this.b) {
-            isourceblock.k().triggerEffect(1000, isourceblock.getBlockX(), isourceblock.getBlockY(), isourceblock.getBlockZ(), 0);
+            isourceblock.i().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
         } else {
-            isourceblock.k().triggerEffect(1001, isourceblock.getBlockX(), isourceblock.getBlockY(), isourceblock.getBlockZ(), 0);
+            isourceblock.i().triggerEffect(1001, isourceblock.getBlockPosition(), 0);
         }
+
     }
 }

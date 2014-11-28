@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayInClientCommand extends Packet {
+public class PacketPlayInClientCommand implements Packet {
 
     private EnumClientCommand a;
 
@@ -11,22 +11,22 @@ public class PacketPlayInClientCommand extends Packet {
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = EnumClientCommand.a()[packetdataserializer.readByte() % EnumClientCommand.a().length];
+        this.a = (EnumClientCommand) packetdataserializer.a(EnumClientCommand.class);
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeByte(EnumClientCommand.a(this.a));
+        packetdataserializer.a((Enum) this.a);
     }
 
-    public void a(PacketPlayInListener packetplayinlistener) {
-        packetplayinlistener.a(this);
+    public void a(PacketListenerPlayIn packetlistenerplayin) {
+        packetlistenerplayin.a(this);
     }
 
-    public EnumClientCommand c() {
+    public EnumClientCommand a() {
         return this.a;
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayInListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

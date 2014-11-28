@@ -1,98 +1,67 @@
 package net.minecraft.server;
 
-public class PathfinderGoalJumpOnBlock extends PathfinderGoal {
+public class PathfinderGoalJumpOnBlock extends PathfinderGoalGotoTarget {
 
-    private final EntityOcelot a;
-    private final double b;
-    private int c;
-    private int d;
-    private int e;
-    private int f;
-    private int g;
-    private int h;
+    private final EntityOcelot c;
 
     public PathfinderGoalJumpOnBlock(EntityOcelot entityocelot, double d0) {
-        this.a = entityocelot;
-        this.b = d0;
-        this.a(5);
+        super(entityocelot, d0, 8);
+        this.c = entityocelot;
     }
 
     public boolean a() {
-        return this.a.isTamed() && !this.a.isSitting() && this.a.aI().nextDouble() <= 0.006500000134110451D && this.f();
+        return this.c.isTamed() && !this.c.isSitting() && super.a();
     }
 
     public boolean b() {
-        return this.c <= this.e && this.d <= 60 && this.a(this.a.world, this.f, this.g, this.h);
+        return super.b();
     }
 
     public void c() {
-        this.a.getNavigation().a((double) ((float) this.f) + 0.5D, (double) (this.g + 1), (double) ((float) this.h) + 0.5D, this.b);
-        this.c = 0;
-        this.d = 0;
-        this.e = this.a.aI().nextInt(this.a.aI().nextInt(1200) + 1200) + 1200;
-        this.a.getGoalSit().setSitting(false);
+        super.c();
+        this.c.getGoalSit().setSitting(false);
     }
 
     public void d() {
-        this.a.setSitting(false);
+        super.d();
+        this.c.setSitting(false);
     }
 
     public void e() {
-        ++this.c;
-        this.a.getGoalSit().setSitting(false);
-        if (this.a.e((double) this.f, (double) (this.g + 1), (double) this.h) > 1.0D) {
-            this.a.setSitting(false);
-            this.a.getNavigation().a((double) ((float) this.f) + 0.5D, (double) (this.g + 1), (double) ((float) this.h) + 0.5D, this.b);
-            ++this.d;
-        } else if (!this.a.isSitting()) {
-            this.a.setSitting(true);
-        } else {
-            --this.d;
+        super.e();
+        this.c.getGoalSit().setSitting(false);
+        if (!this.f()) {
+            this.c.setSitting(false);
+        } else if (!this.c.isSitting()) {
+            this.c.setSitting(true);
         }
+
     }
 
-    private boolean f() {
-        int i = (int) this.a.locY;
-        double d0 = 2.147483647E9D;
+    protected boolean a(World world, BlockPosition blockposition) {
+        if (!world.isEmpty(blockposition.up())) {
+            return false;
+        } else {
+            IBlockData iblockdata = world.getType(blockposition);
+            Block block = iblockdata.getBlock();
 
-        for (int j = (int) this.a.locX - 8; (double) j < this.a.locX + 8.0D; ++j) {
-            for (int k = (int) this.a.locZ - 8; (double) k < this.a.locZ + 8.0D; ++k) {
-                if (this.a(this.a.world, j, i, k) && this.a.world.isEmpty(j, i + 1, k)) {
-                    double d1 = this.a.e((double) j, (double) i, (double) k);
+            if (block == Blocks.CHEST) {
+                TileEntity tileentity = world.getTileEntity(blockposition);
 
-                    if (d1 < d0) {
-                        this.f = j;
-                        this.g = i;
-                        this.h = k;
-                        d0 = d1;
-                    }
+                if (tileentity instanceof TileEntityChest && ((TileEntityChest) tileentity).l < 1) {
+                    return true;
+                }
+            } else {
+                if (block == Blocks.LIT_FURNACE) {
+                    return true;
+                }
+
+                if (block == Blocks.BED && iblockdata.get(BlockBed.PART) != EnumBedPart.HEAD) {
+                    return true;
                 }
             }
+
+            return false;
         }
-
-        return d0 < 2.147483647E9D;
-    }
-
-    private boolean a(World world, int i, int j, int k) {
-        Block block = world.getType(i, j, k);
-        int l = world.getData(i, j, k);
-
-        if (block == Blocks.CHEST) {
-            TileEntityChest tileentitychest = (TileEntityChest) world.getTileEntity(i, j, k);
-
-            if (tileentitychest.o < 1) {
-                return true;
-            }
-        } else {
-            if (block == Blocks.BURNING_FURNACE) {
-                return true;
-            }
-
-            if (block == Blocks.BED && !BlockBed.b(l)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

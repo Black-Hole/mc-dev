@@ -1,12 +1,11 @@
 package net.minecraft.server;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.codec.CorruptedFrameException;
 import java.util.List;
-
-import net.minecraft.util.io.netty.buffer.ByteBuf;
-import net.minecraft.util.io.netty.buffer.Unpooled;
-import net.minecraft.util.io.netty.channel.ChannelHandlerContext;
-import net.minecraft.util.io.netty.handler.codec.ByteToMessageDecoder;
-import net.minecraft.util.io.netty.handler.codec.CorruptedFrameException;
 
 public class PacketSplitter extends ByteToMessageDecoder {
 
@@ -27,7 +26,7 @@ public class PacketSplitter extends ByteToMessageDecoder {
                 PacketDataSerializer packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(abyte));
 
                 try {
-                    int j = packetdataserializer.a();
+                    int j = packetdataserializer.e();
 
                     if (bytebuf.readableBytes() >= j) {
                         list.add(bytebuf.readBytes(j));

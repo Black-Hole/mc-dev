@@ -6,24 +6,25 @@ public class BiomeDesert extends BiomeBase {
 
     public BiomeDesert(int i) {
         super(i);
-        this.at.clear();
-        this.ai = Blocks.SAND;
-        this.ak = Blocks.SAND;
-        this.ar.x = -999;
-        this.ar.A = 2;
-        this.ar.C = 50;
-        this.ar.D = 10;
-        this.at.clear();
+        this.au.clear();
+        this.ak = Blocks.SAND.getBlockData();
+        this.al = Blocks.SAND.getBlockData();
+        this.as.A = -999;
+        this.as.D = 2;
+        this.as.F = 50;
+        this.as.G = 10;
+        this.au.clear();
     }
 
-    public void a(World world, Random random, int i, int j) {
-        super.a(world, random, i, j);
+    public void a(World world, Random random, BlockPosition blockposition) {
+        super.a(world, random, blockposition);
         if (random.nextInt(1000) == 0) {
-            int k = i + random.nextInt(16) + 8;
-            int l = j + random.nextInt(16) + 8;
-            WorldGenDesertWell worldgendesertwell = new WorldGenDesertWell();
+            int i = random.nextInt(16) + 8;
+            int j = random.nextInt(16) + 8;
+            BlockPosition blockposition1 = world.getHighestBlockYAt(blockposition.a(i, 0, j)).up();
 
-            worldgendesertwell.generate(world, random, k, world.getHighestBlockYAt(k, l) + 1, l);
+            (new WorldGenDesertWell()).generate(world, random, blockposition1);
         }
+
     }
 }

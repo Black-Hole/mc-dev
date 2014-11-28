@@ -1,10 +1,9 @@
 package net.minecraft.server;
 
+import com.mojang.authlib.GameProfile;
 import java.util.UUID;
 
-import net.minecraft.util.com.mojang.authlib.GameProfile;
-
-public class PacketLoginInStart extends Packet {
+public class PacketLoginInStart implements Packet {
 
     private GameProfile a;
 
@@ -26,11 +25,11 @@ public class PacketLoginInStart extends Packet {
         packetlogininlistener.a(this);
     }
 
-    public GameProfile c() {
+    public GameProfile a() {
         return this.a;
     }
 
-    public void handle(PacketListener packetlistener) {
+    public void a(PacketListener packetlistener) {
         this.a((PacketLoginInListener) packetlistener);
     }
 }

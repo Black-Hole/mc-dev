@@ -1,21 +1,20 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class NBTTagCompound extends NBTBase {
 
     private static final Logger b = LogManager.getLogger();
-    private Map map = new HashMap();
+    private Map map = Maps.newHashMap();
 
     public NBTTagCompound() {}
 
@@ -48,6 +47,7 @@ public class NBTTagCompound extends NBTBase {
 
                 this.map.put(s, nbtbase);
             }
+
         }
     }
 
@@ -67,8 +67,8 @@ public class NBTTagCompound extends NBTBase {
         this.map.put(s, new NBTTagByte(b0));
     }
 
-    public void setShort(String s, short short1) {
-        this.map.put(s, new NBTTagShort(short1));
+    public void setShort(String s, short short0) {
+        this.map.put(s, new NBTTagShort(short0));
     }
 
     public void setInt(String s, int i) {
@@ -120,12 +120,22 @@ public class NBTTagCompound extends NBTBase {
     public boolean hasKeyOfType(String s, int i) {
         byte b0 = this.b(s);
 
-        return b0 == i ? true : (i != 99 ? false : b0 == 1 || b0 == 2 || b0 == 3 || b0 == 4 || b0 == 5 || b0 == 6);
+        if (b0 == i) {
+            return true;
+        } else if (i != 99) {
+            if (b0 > 0) {
+                ;
+            }
+
+            return false;
+        } else {
+            return b0 == 1 || b0 == 2 || b0 == 3 || b0 == 4 || b0 == 5 || b0 == 6;
+        }
     }
 
     public byte getByte(String s) {
         try {
-            return !this.map.containsKey(s) ? 0 : ((NBTNumber) this.map.get(s)).f();
+            return !this.hasKeyOfType(s, 99) ? 0 : ((NBTNumber) this.map.get(s)).f();
         } catch (ClassCastException classcastexception) {
             return (byte) 0;
         }
@@ -133,7 +143,7 @@ public class NBTTagCompound extends NBTBase {
 
     public short getShort(String s) {
         try {
-            return !this.map.containsKey(s) ? 0 : ((NBTNumber) this.map.get(s)).e();
+            return !this.hasKeyOfType(s, 99) ? 0 : ((NBTNumber) this.map.get(s)).e();
         } catch (ClassCastException classcastexception) {
             return (short) 0;
         }
@@ -141,7 +151,7 @@ public class NBTTagCompound extends NBTBase {
 
     public int getInt(String s) {
         try {
-            return !this.map.containsKey(s) ? 0 : ((NBTNumber) this.map.get(s)).d();
+            return !this.hasKeyOfType(s, 99) ? 0 : ((NBTNumber) this.map.get(s)).d();
         } catch (ClassCastException classcastexception) {
             return 0;
         }
@@ -149,7 +159,7 @@ public class NBTTagCompound extends NBTBase {
 
     public long getLong(String s) {
         try {
-            return !this.map.containsKey(s) ? 0L : ((NBTNumber) this.map.get(s)).c();
+            return !this.hasKeyOfType(s, 99) ? 0L : ((NBTNumber) this.map.get(s)).c();
         } catch (ClassCastException classcastexception) {
             return 0L;
         }
@@ -157,7 +167,7 @@ public class NBTTagCompound extends NBTBase {
 
     public float getFloat(String s) {
         try {
-            return !this.map.containsKey(s) ? 0.0F : ((NBTNumber) this.map.get(s)).h();
+            return !this.hasKeyOfType(s, 99) ? 0.0F : ((NBTNumber) this.map.get(s)).h();
         } catch (ClassCastException classcastexception) {
             return 0.0F;
         }
@@ -165,7 +175,7 @@ public class NBTTagCompound extends NBTBase {
 
     public double getDouble(String s) {
         try {
-            return !this.map.containsKey(s) ? 0.0D : ((NBTNumber) this.map.get(s)).g();
+            return !this.hasKeyOfType(s, 99) ? 0.0D : ((NBTNumber) this.map.get(s)).g();
         } catch (ClassCastException classcastexception) {
             return 0.0D;
         }
@@ -173,7 +183,7 @@ public class NBTTagCompound extends NBTBase {
 
     public String getString(String s) {
         try {
-            return !this.map.containsKey(s) ? "" : ((NBTBase) this.map.get(s)).a_();
+            return !this.hasKeyOfType(s, 8) ? "" : ((NBTBase) this.map.get(s)).a_();
         } catch (ClassCastException classcastexception) {
             return "";
         }
@@ -181,7 +191,7 @@ public class NBTTagCompound extends NBTBase {
 
     public byte[] getByteArray(String s) {
         try {
-            return !this.map.containsKey(s) ? new byte[0] : ((NBTTagByteArray) this.map.get(s)).c();
+            return !this.hasKeyOfType(s, 7) ? new byte[0] : ((NBTTagByteArray) this.map.get(s)).c();
         } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s, 7, classcastexception));
         }
@@ -189,7 +199,7 @@ public class NBTTagCompound extends NBTBase {
 
     public int[] getIntArray(String s) {
         try {
-            return !this.map.containsKey(s) ? new int[0] : ((NBTTagIntArray) this.map.get(s)).c();
+            return !this.hasKeyOfType(s, 11) ? new int[0] : ((NBTTagIntArray) this.map.get(s)).c();
         } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s, 11, classcastexception));
         }
@@ -197,7 +207,7 @@ public class NBTTagCompound extends NBTBase {
 
     public NBTTagCompound getCompound(String s) {
         try {
-            return !this.map.containsKey(s) ? new NBTTagCompound() : (NBTTagCompound) this.map.get(s);
+            return !this.hasKeyOfType(s, 10) ? new NBTTagCompound() : (NBTTagCompound) this.map.get(s);
         } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s, 10, classcastexception));
         }
@@ -210,7 +220,7 @@ public class NBTTagCompound extends NBTBase {
             } else {
                 NBTTagList nbttaglist = (NBTTagList) this.map.get(s);
 
-                return nbttaglist.size() > 0 && nbttaglist.d() != i ? new NBTTagList() : nbttaglist;
+                return nbttaglist.size() > 0 && nbttaglist.f() != i ? new NBTTagList() : nbttaglist;
             }
         } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s, 9, classcastexception));
@@ -247,7 +257,7 @@ public class NBTTagCompound extends NBTBase {
 
         crashreportsystemdetails.a("Tag type found", (Callable) (new CrashReportCorruptNBTTag(this, s)));
         crashreportsystemdetails.a("Tag type expected", (Callable) (new CrashReportCorruptNBTTag2(this, i)));
-        crashreportsystemdetails.a("Tag name", s);
+        crashreportsystemdetails.a("Tag name", (Object) s);
         return crashreport;
     }
 
@@ -304,13 +314,35 @@ public class NBTTagCompound extends NBTBase {
             CrashReport crashreport = CrashReport.a(ioexception, "Loading NBT data");
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("NBT Tag");
 
-            crashreportsystemdetails.a("Tag name", s);
-            crashreportsystemdetails.a("Tag type", Byte.valueOf(b0));
+            crashreportsystemdetails.a("Tag name", (Object) s);
+            crashreportsystemdetails.a("Tag type", (Object) Byte.valueOf(b0));
             throw new ReportedException(crashreport);
         }
     }
 
-    static Map a(NBTTagCompound nbttagcompound) {
+    public void a(NBTTagCompound nbttagcompound) {
+        Iterator iterator = nbttagcompound.map.keySet().iterator();
+
+        while (iterator.hasNext()) {
+            String s = (String) iterator.next();
+            NBTBase nbtbase = (NBTBase) nbttagcompound.map.get(s);
+
+            if (nbtbase.getTypeId() == 10) {
+                if (this.hasKeyOfType(s, 10)) {
+                    NBTTagCompound nbttagcompound1 = this.getCompound(s);
+
+                    nbttagcompound1.a((NBTTagCompound) nbtbase);
+                } else {
+                    this.set(s, nbtbase.clone());
+                }
+            } else {
+                this.set(s, nbtbase.clone());
+            }
+        }
+
+    }
+
+    static Map b(NBTTagCompound nbttagcompound) {
         return nbttagcompound.map;
     }
 }

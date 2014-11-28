@@ -13,28 +13,28 @@ public class RemoteStatusReply {
         this.stream = new DataOutputStream(this.buffer);
     }
 
-    public void write(byte[] abyte) {
+    public void a(byte[] abyte) {
         this.stream.write(abyte, 0, abyte.length);
     }
 
-    public void write(String s) {
+    public void a(String s) {
         this.stream.writeBytes(s);
         this.stream.write(0);
     }
 
-    public void write(int i) {
+    public void a(int i) {
         this.stream.write(i);
     }
 
-    public void write(short short1) {
-        this.stream.writeShort(Short.reverseBytes(short1));
+    public void a(short short0) {
+        this.stream.writeShort(Short.reverseBytes(short0));
     }
 
-    public byte[] getBytes() {
+    public byte[] a() {
         return this.buffer.toByteArray();
     }
 
-    public void reset() {
+    public void b() {
         this.buffer.reset();
     }
 }

@@ -2,68 +2,88 @@ package net.minecraft.server;
 
 public class VillageDoor {
 
-    public final int locX;
-    public final int locY;
-    public final int locZ;
-    public final int d;
-    public final int e;
-    public int addedTime;
-    public boolean removed;
-    private int bookings;
+    private final BlockPosition a;
+    private final BlockPosition b;
+    private final EnumDirection c;
+    private int d;
+    private boolean e;
+    private int f;
 
-    public VillageDoor(int i, int j, int k, int l, int i1, int j1) {
-        this.locX = i;
-        this.locY = j;
-        this.locZ = k;
-        this.d = l;
-        this.e = i1;
-        this.addedTime = j1;
+    public VillageDoor(BlockPosition blockposition, int i, int j, int k) {
+        this(blockposition, a(i, j), k);
+    }
+
+    private static EnumDirection a(int i, int j) {
+        return i < 0 ? EnumDirection.WEST : (i > 0 ? EnumDirection.EAST : (j < 0 ? EnumDirection.NORTH : EnumDirection.SOUTH));
+    }
+
+    public VillageDoor(BlockPosition blockposition, EnumDirection enumdirection, int i) {
+        this.a = blockposition;
+        this.c = enumdirection;
+        this.b = blockposition.shift(enumdirection, 2);
+        this.d = i;
     }
 
     public int b(int i, int j, int k) {
-        int l = i - this.locX;
-        int i1 = j - this.locY;
-        int j1 = k - this.locZ;
-
-        return l * l + i1 * i1 + j1 * j1;
+        return (int) this.a.c((double) i, (double) j, (double) k);
     }
 
-    public int c(int i, int j, int k) {
-        int l = i - this.locX - this.d;
-        int i1 = j - this.locY;
-        int j1 = k - this.locZ - this.e;
-
-        return l * l + i1 * i1 + j1 * j1;
+    public int a(BlockPosition blockposition) {
+        return (int) blockposition.i(this.d());
     }
 
-    public int getIndoorsX() {
-        return this.locX + this.d;
+    public int b(BlockPosition blockposition) {
+        return (int) this.b.i(blockposition);
     }
 
-    public int getIndoorsY() {
-        return this.locY;
+    public boolean c(BlockPosition blockposition) {
+        int i = blockposition.getX() - this.a.getX();
+        int j = blockposition.getZ() - this.a.getY();
+
+        return i * this.c.getAdjacentX() + j * this.c.getAdjacentZ() >= 0;
     }
 
-    public int getIndoorsZ() {
-        return this.locZ + this.e;
+    public void a() {
+        this.f = 0;
     }
 
-    public boolean a(int i, int j) {
-        int k = i - this.locX;
-        int l = j - this.locZ;
-
-        return k * this.d + l * this.e >= 0;
+    public void b() {
+        ++this.f;
     }
 
-    public void d() {
-        this.bookings = 0;
+    public int c() {
+        return this.f;
     }
 
-    public void e() {
-        ++this.bookings;
+    public BlockPosition d() {
+        return this.a;
+    }
+
+    public BlockPosition e() {
+        return this.b;
     }
 
     public int f() {
-        return this.bookings;
+        return this.c.getAdjacentX() * 2;
+    }
+
+    public int g() {
+        return this.c.getAdjacentZ() * 2;
+    }
+
+    public int h() {
+        return this.d;
+    }
+
+    public void a(int i) {
+        this.d = i;
+    }
+
+    public boolean i() {
+        return this.e;
+    }
+
+    public void a(boolean flag) {
+        this.e = flag;
     }
 }

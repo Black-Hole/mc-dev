@@ -10,55 +10,53 @@ public class WorldGenLiquids extends WorldGenerator {
         this.a = block;
     }
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        if (world.getType(i, j + 1, k) != Blocks.STONE) {
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        if (world.getType(blockposition.up()).getBlock() != Blocks.STONE) {
             return false;
-        } else if (world.getType(i, j - 1, k) != Blocks.STONE) {
+        } else if (world.getType(blockposition.down()).getBlock() != Blocks.STONE) {
             return false;
-        } else if (world.getType(i, j, k).getMaterial() != Material.AIR && world.getType(i, j, k) != Blocks.STONE) {
+        } else if (world.getType(blockposition).getBlock().getMaterial() != Material.AIR && world.getType(blockposition).getBlock() != Blocks.STONE) {
             return false;
         } else {
-            int l = 0;
+            int i = 0;
 
-            if (world.getType(i - 1, j, k) == Blocks.STONE) {
-                ++l;
+            if (world.getType(blockposition.west()).getBlock() == Blocks.STONE) {
+                ++i;
             }
 
-            if (world.getType(i + 1, j, k) == Blocks.STONE) {
-                ++l;
+            if (world.getType(blockposition.east()).getBlock() == Blocks.STONE) {
+                ++i;
             }
 
-            if (world.getType(i, j, k - 1) == Blocks.STONE) {
-                ++l;
+            if (world.getType(blockposition.north()).getBlock() == Blocks.STONE) {
+                ++i;
             }
 
-            if (world.getType(i, j, k + 1) == Blocks.STONE) {
-                ++l;
+            if (world.getType(blockposition.south()).getBlock() == Blocks.STONE) {
+                ++i;
             }
 
-            int i1 = 0;
+            int j = 0;
 
-            if (world.isEmpty(i - 1, j, k)) {
-                ++i1;
+            if (world.isEmpty(blockposition.west())) {
+                ++j;
             }
 
-            if (world.isEmpty(i + 1, j, k)) {
-                ++i1;
+            if (world.isEmpty(blockposition.east())) {
+                ++j;
             }
 
-            if (world.isEmpty(i, j, k - 1)) {
-                ++i1;
+            if (world.isEmpty(blockposition.north())) {
+                ++j;
             }
 
-            if (world.isEmpty(i, j, k + 1)) {
-                ++i1;
+            if (world.isEmpty(blockposition.south())) {
+                ++j;
             }
 
-            if (l == 3 && i1 == 1) {
-                world.setTypeAndData(i, j, k, this.a, 0, 2);
-                world.d = true;
-                this.a.a(world, i, j, k, random);
-                world.d = false;
+            if (i == 3 && j == 1) {
+                world.setTypeAndData(blockposition, this.a.getBlockData(), 2);
+                world.a(this.a, blockposition, random);
             }
 
             return true;

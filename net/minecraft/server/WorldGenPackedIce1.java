@@ -12,28 +12,29 @@ public class WorldGenPackedIce1 extends WorldGenerator {
         this.b = i;
     }
 
-    public boolean generate(World world, Random random, int i, int j, int k) {
-        while (world.isEmpty(i, j, k) && j > 2) {
-            --j;
+    public boolean generate(World world, Random random, BlockPosition blockposition) {
+        while (world.isEmpty(blockposition) && blockposition.getY() > 2) {
+            blockposition = blockposition.down();
         }
 
-        if (world.getType(i, j, k) != Blocks.SNOW_BLOCK) {
+        if (world.getType(blockposition).getBlock() != Blocks.SNOW) {
             return false;
         } else {
-            int l = random.nextInt(this.b - 2) + 2;
+            int i = random.nextInt(this.b - 2) + 2;
             byte b0 = 1;
 
-            for (int i1 = i - l; i1 <= i + l; ++i1) {
-                for (int j1 = k - l; j1 <= k + l; ++j1) {
-                    int k1 = i1 - i;
-                    int l1 = j1 - k;
+            for (int j = blockposition.getX() - i; j <= blockposition.getX() + i; ++j) {
+                for (int k = blockposition.getZ() - i; k <= blockposition.getZ() + i; ++k) {
+                    int l = j - blockposition.getX();
+                    int i1 = k - blockposition.getZ();
 
-                    if (k1 * k1 + l1 * l1 <= l * l) {
-                        for (int i2 = j - b0; i2 <= j + b0; ++i2) {
-                            Block block = world.getType(i1, i2, j1);
+                    if (l * l + i1 * i1 <= i * i) {
+                        for (int j1 = blockposition.getY() - b0; j1 <= blockposition.getY() + b0; ++j1) {
+                            BlockPosition blockposition1 = new BlockPosition(j, j1, k);
+                            Block block = world.getType(blockposition1).getBlock();
 
-                            if (block == Blocks.DIRT || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
-                                world.setTypeAndData(i1, i2, j1, this.a, 0, 2);
+                            if (block == Blocks.DIRT || block == Blocks.SNOW || block == Blocks.ICE) {
+                                world.setTypeAndData(blockposition1, this.a.getBlockData(), 2);
                             }
                         }
                     }

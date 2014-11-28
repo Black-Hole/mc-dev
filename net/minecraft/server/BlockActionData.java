@@ -2,44 +2,32 @@ package net.minecraft.server;
 
 public class BlockActionData {
 
-    private int a;
-    private int b;
+    private BlockPosition a;
+    private Block b;
     private int c;
-    private Block d;
-    private int e;
-    private int f;
+    private int d;
 
-    public BlockActionData(int i, int j, int k, Block block, int l, int i1) {
-        this.a = i;
-        this.b = j;
-        this.c = k;
-        this.e = l;
-        this.f = i1;
-        this.d = block;
+    public BlockActionData(BlockPosition blockposition, Block block, int i, int j) {
+        this.a = blockposition;
+        this.c = i;
+        this.d = j;
+        this.b = block;
     }
 
-    public int a() {
+    public BlockPosition a() {
         return this.a;
     }
 
     public int b() {
-        return this.b;
-    }
-
-    public int c() {
         return this.c;
     }
 
-    public int d() {
-        return this.e;
-    }
-
-    public int e() {
-        return this.f;
-    }
-
-    public Block f() {
+    public int c() {
         return this.d;
+    }
+
+    public Block d() {
+        return this.b;
     }
 
     public boolean equals(Object object) {
@@ -48,11 +36,11 @@ public class BlockActionData {
         } else {
             BlockActionData blockactiondata = (BlockActionData) object;
 
-            return this.a == blockactiondata.a && this.b == blockactiondata.b && this.c == blockactiondata.c && this.e == blockactiondata.e && this.f == blockactiondata.f && this.d == blockactiondata.d;
+            return this.a.equals(blockactiondata.a) && this.c == blockactiondata.c && this.d == blockactiondata.d && this.b == blockactiondata.b;
         }
     }
 
     public String toString() {
-        return "TE(" + this.a + "," + this.b + "," + this.c + ")," + this.e + "," + this.f + "," + this.d;
+        return "TE(" + this.a + ")," + this.c + "," + this.d + "," + this.b;
     }
 }

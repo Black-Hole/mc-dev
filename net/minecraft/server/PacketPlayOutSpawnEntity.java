@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PacketPlayOutSpawnEntity extends Packet {
+public class PacketPlayOutSpawnEntity implements Packet {
 
     private int a;
     private int b;
@@ -63,10 +63,11 @@ public class PacketPlayOutSpawnEntity extends Packet {
             this.f = (int) (d1 * 8000.0D);
             this.g = (int) (d2 * 8000.0D);
         }
+
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        this.a = packetdataserializer.a();
+        this.a = packetdataserializer.e();
         this.j = packetdataserializer.readByte();
         this.b = packetdataserializer.readInt();
         this.c = packetdataserializer.readInt();
@@ -79,6 +80,7 @@ public class PacketPlayOutSpawnEntity extends Packet {
             this.f = packetdataserializer.readShort();
             this.g = packetdataserializer.readShort();
         }
+
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
@@ -95,14 +97,11 @@ public class PacketPlayOutSpawnEntity extends Packet {
             packetdataserializer.writeShort(this.f);
             packetdataserializer.writeShort(this.g);
         }
+
     }
 
-    public void a(PacketPlayOutListener packetplayoutlistener) {
-        packetplayoutlistener.a(this);
-    }
-
-    public String b() {
-        return String.format("id=%d, type=%d, x=%.2f, y=%.2f, z=%.2f", new Object[] { Integer.valueOf(this.a), Integer.valueOf(this.j), Float.valueOf((float) this.b / 32.0F), Float.valueOf((float) this.c / 32.0F), Float.valueOf((float) this.d / 32.0F)});
+    public void a(PacketListenerPlayOut packetlistenerplayout) {
+        packetlistenerplayout.a(this);
     }
 
     public void a(int i) {
@@ -129,7 +128,7 @@ public class PacketPlayOutSpawnEntity extends Packet {
         this.g = i;
     }
 
-    public void handle(PacketListener packetlistener) {
-        this.a((PacketPlayOutListener) packetlistener);
+    public void a(PacketListener packetlistener) {
+        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

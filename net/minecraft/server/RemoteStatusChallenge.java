@@ -25,22 +25,22 @@ class RemoteStatusChallenge {
         this.identity[3] = abyte[6];
         this.f = new String(this.identity);
         this.token = (new Random()).nextInt(16777216);
-        this.response = String.format("\t%s%d, new Object[] { this.f, Integer.valueOf(this.token)}).getBytes();
+        this.response = String.format("\t%s%d\u0000", new Object[] { this.f, Integer.valueOf(this.token)}).getBytes();
     }
 
-    public Boolean isExpired(long i) {
+    public Boolean a(long i) {
         return Boolean.valueOf(this.time < i);
     }
 
-    public int getToken() {
+    public int a() {
         return this.token;
     }
 
-    public byte[] getChallengeResponse() {
+    public byte[] b() {
         return this.response;
     }
 
-    public byte[] getIdentityToken() {
+    public byte[] c() {
         return this.identity;
     }
 }

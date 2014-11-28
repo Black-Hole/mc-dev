@@ -4,14 +4,14 @@ import java.util.Random;
 
 class BiomeBaseSubForest2 extends BiomeBaseSub {
 
-    final BiomeForest aC;
+    final BiomeForest aD;
 
     BiomeBaseSubForest2(BiomeForest biomeforest, int i, BiomeBase biomebase) {
         super(i, biomebase);
-        this.aC = biomeforest;
+        this.aD = biomeforest;
     }
 
-    public void a(World world, Random random, int i, int j) {
-        this.aD.a(world, random, i, j);
+    public void a(World world, Random random, BlockPosition blockposition) {
+        this.aE.a(world, random, blockposition);
     }
 }

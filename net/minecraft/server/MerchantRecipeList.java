@@ -14,34 +14,18 @@ public class MerchantRecipeList extends ArrayList {
         if (i > 0 && i < this.size()) {
             MerchantRecipe merchantrecipe = (MerchantRecipe) this.get(i);
 
-            return itemstack.getItem() == merchantrecipe.getBuyItem1().getItem() && (itemstack1 == null && !merchantrecipe.hasSecondItem() || merchantrecipe.hasSecondItem() && itemstack1 != null && merchantrecipe.getBuyItem2().getItem() == itemstack1.getItem()) && itemstack.count >= merchantrecipe.getBuyItem1().count && (!merchantrecipe.hasSecondItem() || itemstack1.count >= merchantrecipe.getBuyItem2().count) ? merchantrecipe : null;
+            return ItemStack.c(itemstack, merchantrecipe.getBuyItem1()) && (itemstack1 == null && !merchantrecipe.hasSecondItem() || merchantrecipe.hasSecondItem() && ItemStack.c(itemstack1, merchantrecipe.getBuyItem2())) && itemstack.count >= merchantrecipe.getBuyItem1().count && (!merchantrecipe.hasSecondItem() || itemstack1.count >= merchantrecipe.getBuyItem2().count) ? merchantrecipe : null;
         } else {
             for (int j = 0; j < this.size(); ++j) {
                 MerchantRecipe merchantrecipe1 = (MerchantRecipe) this.get(j);
 
-                if (itemstack.getItem() == merchantrecipe1.getBuyItem1().getItem() && itemstack.count >= merchantrecipe1.getBuyItem1().count && (!merchantrecipe1.hasSecondItem() && itemstack1 == null || merchantrecipe1.hasSecondItem() && itemstack1 != null && merchantrecipe1.getBuyItem2().getItem() == itemstack1.getItem() && itemstack1.count >= merchantrecipe1.getBuyItem2().count)) {
+                if (ItemStack.c(itemstack, merchantrecipe1.getBuyItem1()) && itemstack.count >= merchantrecipe1.getBuyItem1().count && (!merchantrecipe1.hasSecondItem() && itemstack1 == null || merchantrecipe1.hasSecondItem() && ItemStack.c(itemstack1, merchantrecipe1.getBuyItem2()) && itemstack1.count >= merchantrecipe1.getBuyItem2().count)) {
                     return merchantrecipe1;
                 }
             }
 
             return null;
         }
-    }
-
-    public void a(MerchantRecipe merchantrecipe) {
-        for (int i = 0; i < this.size(); ++i) {
-            MerchantRecipe merchantrecipe1 = (MerchantRecipe) this.get(i);
-
-            if (merchantrecipe.a(merchantrecipe1)) {
-                if (merchantrecipe.b(merchantrecipe1)) {
-                    this.set(i, merchantrecipe);
-                }
-
-                return;
-            }
-        }
-
-        this.add(merchantrecipe);
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
@@ -59,8 +43,11 @@ public class MerchantRecipeList extends ArrayList {
                 packetdataserializer.a(itemstack);
             }
 
-            packetdataserializer.writeBoolean(merchantrecipe.g());
+            packetdataserializer.writeBoolean(merchantrecipe.h());
+            packetdataserializer.writeInt(merchantrecipe.e());
+            packetdataserializer.writeInt(merchantrecipe.f());
         }
+
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -71,6 +58,7 @@ public class MerchantRecipeList extends ArrayList {
 
             this.add(new MerchantRecipe(nbttagcompound1));
         }
+
     }
 
     public NBTTagCompound a() {
@@ -80,7 +68,7 @@ public class MerchantRecipeList extends ArrayList {
         for (int i = 0; i < this.size(); ++i) {
             MerchantRecipe merchantrecipe = (MerchantRecipe) this.get(i);
 
-            nbttaglist.add(merchantrecipe.i());
+            nbttaglist.add(merchantrecipe.k());
         }
 
         nbttagcompound.set("Recipes", nbttaglist);

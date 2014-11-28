@@ -2,19 +2,15 @@ package net.minecraft.server;
 
 public class BlockCarpet extends Block {
 
+    public static final BlockStateEnum COLOR = BlockStateEnum.of("color", EnumColor.class);
+
     protected BlockCarpet() {
         super(Material.WOOL);
+        this.j(this.blockStateList.getBlockData().set(BlockCarpet.COLOR, EnumColor.WHITE));
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
         this.a(true);
         this.a(CreativeModeTab.c);
         this.b(0);
-    }
-
-    public AxisAlignedBB a(World world, int i, int j, int k) {
-        byte b0 = 0;
-        float f = 0.0625F;
-
-        return AxisAlignedBB.a((double) i + this.minX, (double) j + this.minY, (double) k + this.minZ, (double) i + this.maxX, (double) ((float) j + (float) b0 * f), (double) k + this.maxZ);
     }
 
     public boolean c() {
@@ -25,12 +21,12 @@ public class BlockCarpet extends Block {
         return false;
     }
 
-    public void g() {
+    public void h() {
         this.b(0);
     }
 
-    public void updateShape(IBlockAccess iblockaccess, int i, int j, int k) {
-        this.b(iblockaccess.getData(i, j, k));
+    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        this.b(0);
     }
 
     protected void b(int i) {
@@ -40,29 +36,41 @@ public class BlockCarpet extends Block {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, f, 1.0F);
     }
 
-    public boolean canPlace(World world, int i, int j, int k) {
-        return super.canPlace(world, i, j, k) && this.j(world, i, j, k);
+    public boolean canPlace(World world, BlockPosition blockposition) {
+        return super.canPlace(world, blockposition) && this.d(world, blockposition);
     }
 
-    public void doPhysics(World world, int i, int j, int k, Block block) {
-        this.e(world, i, j, k);
+    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+        this.e(world, blockposition, iblockdata);
     }
 
-    private boolean e(World world, int i, int j, int k) {
-        if (!this.j(world, i, j, k)) {
-            this.b(world, i, j, k, world.getData(i, j, k), 0);
-            world.setAir(i, j, k);
+    private boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        if (!this.d(world, blockposition)) {
+            this.b(world, blockposition, iblockdata, 0);
+            world.setAir(blockposition);
             return false;
         } else {
             return true;
         }
     }
 
-    public boolean j(World world, int i, int j, int k) {
-        return !world.isEmpty(i, j - 1, k);
+    private boolean d(World world, BlockPosition blockposition) {
+        return !world.isEmpty(blockposition.down());
     }
 
-    public int getDropData(int i) {
-        return i;
+    public int getDropData(IBlockData iblockdata) {
+        return ((EnumColor) iblockdata.get(BlockCarpet.COLOR)).getColorIndex();
+    }
+
+    public IBlockData fromLegacyData(int i) {
+        return this.getBlockData().set(BlockCarpet.COLOR, EnumColor.fromColorIndex(i));
+    }
+
+    public int toLegacyData(IBlockData iblockdata) {
+        return ((EnumColor) iblockdata.get(BlockCarpet.COLOR)).getColorIndex();
+    }
+
+    protected BlockStateList getStateList() {
+        return new BlockStateList(this, new IBlockState[] { BlockCarpet.COLOR});
     }
 }

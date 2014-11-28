@@ -2,11 +2,11 @@ package net.minecraft.server;
 
 public interface IBlockAccess {
 
-    Block getType(int i, int j, int k);
+    TileEntity getTileEntity(BlockPosition blockposition);
 
-    TileEntity getTileEntity(int i, int j, int k);
+    IBlockData getType(BlockPosition blockposition);
 
-    int getData(int i, int j, int k);
+    boolean isEmpty(BlockPosition blockposition);
 
-    int getBlockPower(int i, int j, int k, int l);
+    int getBlockPower(BlockPosition blockposition, EnumDirection enumdirection);
 }

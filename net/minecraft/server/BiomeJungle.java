@@ -4,49 +4,50 @@ import java.util.Random;
 
 public class BiomeJungle extends BiomeBase {
 
-    private boolean aC;
+    private boolean aD;
 
     public BiomeJungle(int i, boolean flag) {
         super(i);
-        this.aC = flag;
+        this.aD = flag;
         if (flag) {
-            this.ar.x = 2;
+            this.as.A = 2;
         } else {
-            this.ar.x = 50;
+            this.as.A = 50;
         }
 
-        this.ar.z = 25;
-        this.ar.y = 4;
+        this.as.C = 25;
+        this.as.B = 4;
         if (!flag) {
-            this.as.add(new BiomeMeta(EntityOcelot.class, 2, 1, 1));
+            this.at.add(new BiomeMeta(EntityOcelot.class, 2, 1, 1));
         }
 
-        this.at.add(new BiomeMeta(EntityChicken.class, 10, 4, 4));
+        this.au.add(new BiomeMeta(EntityChicken.class, 10, 4, 4));
     }
 
     public WorldGenTreeAbstract a(Random random) {
-        return (WorldGenTreeAbstract) (random.nextInt(10) == 0 ? this.aA : (random.nextInt(2) == 0 ? new WorldGenGroundBush(3, 0) : (!this.aC && random.nextInt(3) == 0 ? new WorldGenJungleTree(false, 10, 20, 3, 3) : new WorldGenTrees(false, 4 + random.nextInt(7), 3, 3, true))));
+        return (WorldGenTreeAbstract) (random.nextInt(10) == 0 ? this.aB : (random.nextInt(2) == 0 ? new WorldGenGroundBush(EnumLogVariant.JUNGLE.a(), EnumLogVariant.OAK.a()) : (!this.aD && random.nextInt(3) == 0 ? new WorldGenJungleTree(false, 10, 20, EnumLogVariant.JUNGLE.a(), EnumLogVariant.JUNGLE.a()) : new WorldGenTrees(false, 4 + random.nextInt(7), EnumLogVariant.JUNGLE.a(), EnumLogVariant.JUNGLE.a(), true))));
     }
 
     public WorldGenerator b(Random random) {
-        return random.nextInt(4) == 0 ? new WorldGenGrass(Blocks.LONG_GRASS, 2) : new WorldGenGrass(Blocks.LONG_GRASS, 1);
+        return random.nextInt(4) == 0 ? new WorldGenGrass(EnumTallGrassType.FERN) : new WorldGenGrass(EnumTallGrassType.GRASS);
     }
 
-    public void a(World world, Random random, int i, int j) {
-        super.a(world, random, i, j);
-        int k = i + random.nextInt(16) + 8;
-        int l = j + random.nextInt(16) + 8;
-        int i1 = random.nextInt(world.getHighestBlockYAt(k, l) * 2);
+    public void a(World world, Random random, BlockPosition blockposition) {
+        super.a(world, random, blockposition);
+        int i = random.nextInt(16) + 8;
+        int j = random.nextInt(16) + 8;
+        int k = random.nextInt(world.getHighestBlockYAt(blockposition.a(i, 0, j)).getY() * 2);
 
-        (new WorldGenMelon()).generate(world, random, k, i1, l);
+        (new WorldGenMelon()).generate(world, random, blockposition.a(i, k, j));
         WorldGenVines worldgenvines = new WorldGenVines();
 
-        for (l = 0; l < 50; ++l) {
-            i1 = i + random.nextInt(16) + 8;
-            short short1 = 128;
-            int j1 = j + random.nextInt(16) + 8;
+        for (j = 0; j < 50; ++j) {
+            k = random.nextInt(16) + 8;
+            boolean flag = true;
+            int l = random.nextInt(16) + 8;
 
-            worldgenvines.generate(world, random, i1, short1, j1);
+            worldgenvines.generate(world, random, blockposition.a(k, 128, l));
         }
+
     }
 }

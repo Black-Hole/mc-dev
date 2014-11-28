@@ -14,6 +14,7 @@ public class NoiseGeneratorOctaves extends NoiseGenerator {
         for (int j = 0; j < i; ++j) {
             this.a[j] = new NoiseGeneratorPerlin(random);
         }
+
     }
 
     public double[] a(double[] adouble, int i, int j, int k, int l, int i1, int j1, double d0, double d1, double d2) {

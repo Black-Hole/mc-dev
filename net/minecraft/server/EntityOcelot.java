@@ -1,33 +1,35 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicate;
+
 public class EntityOcelot extends EntityTameableAnimal {
 
-    private PathfinderGoalTempt bq;
+    private PathfinderGoalAvoidTarget bm;
+    private PathfinderGoalTempt bn;
 
     public EntityOcelot(World world) {
         super(world);
-        this.a(0.6F, 0.8F);
-        this.getNavigation().a(true);
+        this.a(0.6F, 0.7F);
+        ((Navigation) this.getNavigation()).a(true);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(2, this.bp);
-        this.goalSelector.a(3, this.bq = new PathfinderGoalTempt(this, 0.6D, Items.RAW_FISH, true));
-        this.goalSelector.a(4, new PathfinderGoalAvoidPlayer(this, EntityHuman.class, 16.0F, 0.8D, 1.33D));
+        this.goalSelector.a(2, this.bk);
+        this.goalSelector.a(3, this.bn = new PathfinderGoalTempt(this, 0.6D, Items.FISH, true));
         this.goalSelector.a(5, new PathfinderGoalFollowOwner(this, 1.0D, 10.0F, 5.0F));
-        this.goalSelector.a(6, new PathfinderGoalJumpOnBlock(this, 1.33D));
+        this.goalSelector.a(6, new PathfinderGoalJumpOnBlock(this, 0.8D));
         this.goalSelector.a(7, new PathfinderGoalLeapAtTarget(this, 0.3F));
         this.goalSelector.a(8, new PathfinderGoalOcelotAttack(this));
         this.goalSelector.a(9, new PathfinderGoalBreed(this, 0.8D));
         this.goalSelector.a(10, new PathfinderGoalRandomStroll(this, 0.8D));
         this.goalSelector.a(11, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 10.0F));
-        this.targetSelector.a(1, new PathfinderGoalRandomTargetNonTamed(this, EntityChicken.class, 750, false));
+        this.targetSelector.a(1, new PathfinderGoalRandomTargetNonTamed(this, EntityChicken.class, false, (Predicate) null));
     }
 
-    protected void c() {
-        super.c();
+    protected void h() {
+        super.h();
         this.datawatcher.a(18, Byte.valueOf((byte) 0));
     }
 
-    public void bp() {
+    public void E() {
         if (this.getControllerMove().a()) {
             double d0 = this.getControllerMove().b();
 
@@ -45,23 +47,20 @@ public class EntityOcelot extends EntityTameableAnimal {
             this.setSneaking(false);
             this.setSprinting(false);
         }
+
     }
 
     protected boolean isTypeNotPersistent() {
         return !this.isTamed() && this.ticksLived > 2400;
     }
 
-    public boolean bk() {
-        return true;
-    }
-
-    protected void aD() {
-        super.aD();
+    protected void aW() {
+        super.aW();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(10.0D);
         this.getAttributeInstance(GenericAttributes.d).setValue(0.30000001192092896D);
     }
 
-    protected void b(float f) {}
+    public void e(float f, float f1) {}
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
@@ -73,19 +72,19 @@ public class EntityOcelot extends EntityTameableAnimal {
         this.setCatType(nbttagcompound.getInt("CatType"));
     }
 
-    protected String t() {
-        return this.isTamed() ? (this.ce() ? "mob.cat.purr" : (this.random.nextInt(4) == 0 ? "mob.cat.purreow" : "mob.cat.meow")) : "";
+    protected String z() {
+        return this.isTamed() ? (this.cp() ? "mob.cat.purr" : (this.random.nextInt(4) == 0 ? "mob.cat.purreow" : "mob.cat.meow")) : "";
     }
 
-    protected String aT() {
+    protected String bn() {
         return "mob.cat.hitt";
     }
 
-    protected String aU() {
+    protected String bo() {
         return "mob.cat.hitt";
     }
 
-    protected float bf() {
+    protected float bA() {
         return 0.4F;
     }
 
@@ -93,15 +92,15 @@ public class EntityOcelot extends EntityTameableAnimal {
         return Items.LEATHER;
     }
 
-    public boolean n(Entity entity) {
+    public boolean r(Entity entity) {
         return entity.damageEntity(DamageSource.mobAttack(this), 3.0F);
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (this.isInvulnerable()) {
+        if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            this.bp.setSitting(false);
+            this.bk.setSitting(false);
             return super.damageEntity(damagesource, f);
         }
     }
@@ -112,10 +111,10 @@ public class EntityOcelot extends EntityTameableAnimal {
         ItemStack itemstack = entityhuman.inventory.getItemInHand();
 
         if (this.isTamed()) {
-            if (this.e(entityhuman) && !this.world.isStatic && !this.c(itemstack)) {
-                this.bp.setSitting(!this.isSitting());
+            if (this.e((EntityLiving) entityhuman) && !this.world.isStatic && !this.d(itemstack)) {
+                this.bk.setSitting(!this.isSitting());
             }
-        } else if (this.bq.f() && itemstack != null && itemstack.getItem() == Items.RAW_FISH && entityhuman.f(this) < 9.0D) {
+        } else if (this.bn.f() && itemstack != null && itemstack.getItem() == Items.FISH && entityhuman.h(this) < 9.0D) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 --itemstack.count;
             }
@@ -129,11 +128,11 @@ public class EntityOcelot extends EntityTameableAnimal {
                     this.setTamed(true);
                     this.setCatType(1 + this.world.random.nextInt(3));
                     this.setOwnerUUID(entityhuman.getUniqueID().toString());
-                    this.i(true);
-                    this.bp.setSitting(true);
+                    this.l(true);
+                    this.bk.setSitting(true);
                     this.world.broadcastEntityEffect(this, (byte) 7);
                 } else {
-                    this.i(false);
+                    this.l(false);
                     this.world.broadcastEntityEffect(this, (byte) 6);
                 }
             }
@@ -156,8 +155,8 @@ public class EntityOcelot extends EntityTameableAnimal {
         return entityocelot;
     }
 
-    public boolean c(ItemStack itemstack) {
-        return itemstack != null && itemstack.getItem() == Items.RAW_FISH;
+    public boolean d(ItemStack itemstack) {
+        return itemstack != null && itemstack.getItem() == Items.FISH;
     }
 
     public boolean mate(EntityAnimal entityanimal) {
@@ -170,7 +169,7 @@ public class EntityOcelot extends EntityTameableAnimal {
         } else {
             EntityOcelot entityocelot = (EntityOcelot) entityanimal;
 
-            return !entityocelot.isTamed() ? false : this.ce() && entityocelot.ce();
+            return !entityocelot.isTamed() ? false : this.cp() && entityocelot.cp();
         }
     }
 
@@ -182,42 +181,56 @@ public class EntityOcelot extends EntityTameableAnimal {
         this.datawatcher.watch(18, Byte.valueOf((byte) i));
     }
 
+    public boolean bQ() {
+        return this.world.random.nextInt(3) != 0;
+    }
+
     public boolean canSpawn() {
-        if (this.world.random.nextInt(3) == 0) {
-            return false;
-        } else {
-            if (this.world.b(this.boundingBox) && this.world.getCubes(this, this.boundingBox).isEmpty() && !this.world.containsLiquid(this.boundingBox)) {
-                int i = MathHelper.floor(this.locX);
-                int j = MathHelper.floor(this.boundingBox.b);
-                int k = MathHelper.floor(this.locZ);
+        if (this.world.a(this.getBoundingBox(), (Entity) this) && this.world.getCubes(this, this.getBoundingBox()).isEmpty() && !this.world.containsLiquid(this.getBoundingBox())) {
+            BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
-                if (j < 63) {
-                    return false;
-                }
-
-                Block block = this.world.getType(i, j - 1, k);
-
-                if (block == Blocks.GRASS || block.getMaterial() == Material.LEAVES) {
-                    return true;
-                }
+            if (blockposition.getY() < 63) {
+                return false;
             }
 
-            return false;
+            Block block = this.world.getType(blockposition.down()).getBlock();
+
+            if (block == Blocks.GRASS || block.getMaterial() == Material.LEAVES) {
+                return true;
+            }
         }
+
+        return false;
     }
 
     public String getName() {
         return this.hasCustomName() ? this.getCustomName() : (this.isTamed() ? LocaleI18n.get("entity.Cat.name") : super.getName());
     }
 
-    public GroupDataEntity prepare(GroupDataEntity groupdataentity) {
-        groupdataentity = super.prepare(groupdataentity);
+    public void setTamed(boolean flag) {
+        super.setTamed(flag);
+    }
+
+    protected void ck() {
+        if (this.bm == null) {
+            this.bm = new PathfinderGoalAvoidTarget(this, new EntitySelectorOceletHuman(this), 16.0F, 0.8D, 1.33D);
+        }
+
+        this.goalSelector.a((PathfinderGoal) this.bm);
+        if (!this.isTamed()) {
+            this.goalSelector.a(4, this.bm);
+        }
+
+    }
+
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
+        groupdataentity = super.prepare(difficultydamagescaler, groupdataentity);
         if (this.world.random.nextInt(7) == 0) {
             for (int i = 0; i < 2; ++i) {
                 EntityOcelot entityocelot = new EntityOcelot(this.world);
 
                 entityocelot.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, 0.0F);
-                entityocelot.setAge(-24000);
+                entityocelot.setAgeRaw(-24000);
                 this.world.addEntity(entityocelot);
             }
         }

@@ -5,33 +5,33 @@ import java.util.Random;
 
 public class ContainerEnchantTable extends Container {
 
-    public IInventory enchantSlots = new ContainerEnchantTableInventory(this, "Enchant", true, 1);
+    public IInventory enchantSlots = new ContainerEnchantTableInventory(this, "Enchant", true, 2);
     private World world;
-    private int x;
-    private int y;
-    private int z;
-    private Random l = new Random();
-    public long f;
+    private BlockPosition position;
+    private Random k = new Random();
+    public int f;
     public int[] costs = new int[3];
+    public int[] h = new int[] { -1, -1, -1};
 
-    public ContainerEnchantTable(PlayerInventory playerinventory, World world, int i, int j, int k) {
+    public ContainerEnchantTable(PlayerInventory playerinventory, World world, BlockPosition blockposition) {
         this.world = world;
-        this.x = i;
-        this.y = j;
-        this.z = k;
-        this.a((Slot) (new SlotEnchant(this, this.enchantSlots, 0, 25, 47)));
+        this.position = blockposition;
+        this.f = playerinventory.player.ci();
+        this.a((Slot) (new SlotEnchant(this, this.enchantSlots, 0, 15, 47)));
+        this.a((Slot) (new SlotEnchantLapis(this, this.enchantSlots, 1, 35, 47)));
 
-        int l;
+        int i;
 
-        for (l = 0; l < 3; ++l) {
-            for (int i1 = 0; i1 < 9; ++i1) {
-                this.a(new Slot(playerinventory, i1 + l * 9 + 9, 8 + i1 * 18, 84 + l * 18));
+        for (i = 0; i < 3; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                this.a(new Slot(playerinventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
 
-        for (l = 0; l < 9; ++l) {
-            this.a(new Slot(playerinventory, l, 8 + l * 18, 142));
+        for (i = 0; i < 9; ++i) {
+            this.a(new Slot(playerinventory, i, 8 + i * 18, 142));
         }
+
     }
 
     public void addSlotListener(ICrafting icrafting) {
@@ -39,6 +39,10 @@ public class ContainerEnchantTable extends Container {
         icrafting.setContainerData(this, 0, this.costs[0]);
         icrafting.setContainerData(this, 1, this.costs[1]);
         icrafting.setContainerData(this, 2, this.costs[2]);
+        icrafting.setContainerData(this, 3, this.f & -16);
+        icrafting.setContainerData(this, 4, this.h[0]);
+        icrafting.setContainerData(this, 5, this.h[1]);
+        icrafting.setContainerData(this, 6, this.h[2]);
     }
 
     public void b() {
@@ -50,7 +54,12 @@ public class ContainerEnchantTable extends Container {
             icrafting.setContainerData(this, 0, this.costs[0]);
             icrafting.setContainerData(this, 1, this.costs[1]);
             icrafting.setContainerData(this, 2, this.costs[2]);
+            icrafting.setContainerData(this, 3, this.f & -16);
+            icrafting.setContainerData(this, 4, this.h[0]);
+            icrafting.setContainerData(this, 5, this.h[1]);
+            icrafting.setContainerData(this, 6, this.h[2]);
         }
+
     }
 
     public void a(IInventory iinventory) {
@@ -58,8 +67,7 @@ public class ContainerEnchantTable extends Container {
             ItemStack itemstack = iinventory.getItem(0);
             int i;
 
-            if (itemstack != null && itemstack.x()) {
-                this.f = this.l.nextLong();
+            if (itemstack != null && itemstack.v()) {
                 if (!this.world.isStatic) {
                     i = 0;
 
@@ -67,29 +75,29 @@ public class ContainerEnchantTable extends Container {
 
                     for (j = -1; j <= 1; ++j) {
                         for (int k = -1; k <= 1; ++k) {
-                            if ((j != 0 || k != 0) && this.world.isEmpty(this.x + k, this.y, this.z + j) && this.world.isEmpty(this.x + k, this.y + 1, this.z + j)) {
-                                if (this.world.getType(this.x + k * 2, this.y, this.z + j * 2) == Blocks.BOOKSHELF) {
+                            if ((j != 0 || k != 0) && this.world.isEmpty(this.position.a(k, 0, j)) && this.world.isEmpty(this.position.a(k, 1, j))) {
+                                if (this.world.getType(this.position.a(k * 2, 0, j * 2)).getBlock() == Blocks.BOOKSHELF) {
                                     ++i;
                                 }
 
-                                if (this.world.getType(this.x + k * 2, this.y + 1, this.z + j * 2) == Blocks.BOOKSHELF) {
+                                if (this.world.getType(this.position.a(k * 2, 1, j * 2)).getBlock() == Blocks.BOOKSHELF) {
                                     ++i;
                                 }
 
                                 if (k != 0 && j != 0) {
-                                    if (this.world.getType(this.x + k * 2, this.y, this.z + j) == Blocks.BOOKSHELF) {
+                                    if (this.world.getType(this.position.a(k * 2, 0, j)).getBlock() == Blocks.BOOKSHELF) {
                                         ++i;
                                     }
 
-                                    if (this.world.getType(this.x + k * 2, this.y + 1, this.z + j) == Blocks.BOOKSHELF) {
+                                    if (this.world.getType(this.position.a(k * 2, 1, j)).getBlock() == Blocks.BOOKSHELF) {
                                         ++i;
                                     }
 
-                                    if (this.world.getType(this.x + k, this.y, this.z + j * 2) == Blocks.BOOKSHELF) {
+                                    if (this.world.getType(this.position.a(k, 0, j * 2)).getBlock() == Blocks.BOOKSHELF) {
                                         ++i;
                                     }
 
-                                    if (this.world.getType(this.x + k, this.y + 1, this.z + j * 2) == Blocks.BOOKSHELF) {
+                                    if (this.world.getType(this.position.a(k, 1, j * 2)).getBlock() == Blocks.BOOKSHELF) {
                                         ++i;
                                     }
                                 }
@@ -97,8 +105,26 @@ public class ContainerEnchantTable extends Container {
                         }
                     }
 
+                    this.k.setSeed((long) this.f);
+
                     for (j = 0; j < 3; ++j) {
-                        this.costs[j] = EnchantmentManager.a(this.l, j, i, itemstack);
+                        this.costs[j] = EnchantmentManager.a(this.k, j, i, itemstack);
+                        this.h[j] = -1;
+                        if (this.costs[j] < j + 1) {
+                            this.costs[j] = 0;
+                        }
+                    }
+
+                    for (j = 0; j < 3; ++j) {
+                        if (this.costs[j] > 0) {
+                            List list = this.a(itemstack, j, this.costs[j]);
+
+                            if (list != null && !list.isEmpty()) {
+                                WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(this.k.nextInt(list.size()));
+
+                                this.h[j] = weightedrandomenchant.enchantment.id | weightedrandomenchant.level << 8;
+                            }
+                        }
                     }
 
                     this.b();
@@ -106,39 +132,50 @@ public class ContainerEnchantTable extends Container {
             } else {
                 for (i = 0; i < 3; ++i) {
                     this.costs[i] = 0;
+                    this.h[i] = -1;
                 }
             }
         }
+
     }
 
     public boolean a(EntityHuman entityhuman, int i) {
         ItemStack itemstack = this.enchantSlots.getItem(0);
+        ItemStack itemstack1 = this.enchantSlots.getItem(1);
+        int j = i + 1;
 
-        if (this.costs[i] > 0 && itemstack != null && (entityhuman.expLevel >= this.costs[i] || entityhuman.abilities.canInstantlyBuild)) {
+        if ((itemstack1 == null || itemstack1.count < j) && !entityhuman.abilities.canInstantlyBuild) {
+            return false;
+        } else if (this.costs[i] > 0 && itemstack != null && (entityhuman.expLevel >= j && entityhuman.expLevel >= this.costs[i] || entityhuman.abilities.canInstantlyBuild)) {
             if (!this.world.isStatic) {
-                List list = EnchantmentManager.b(this.l, itemstack, this.costs[i]);
+                List list = this.a(itemstack, i, this.costs[i]);
                 boolean flag = itemstack.getItem() == Items.BOOK;
 
                 if (list != null) {
-                    entityhuman.levelDown(-this.costs[i]);
+                    entityhuman.b(j);
                     if (flag) {
                         itemstack.setItem(Items.ENCHANTED_BOOK);
                     }
 
-                    int j = flag && list.size() > 1 ? this.l.nextInt(list.size()) : -1;
-
                     for (int k = 0; k < list.size(); ++k) {
-                        EnchantmentInstance enchantmentinstance = (EnchantmentInstance) list.get(k);
+                        WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(k);
 
-                        if (!flag || k != j) {
-                            if (flag) {
-                                Items.ENCHANTED_BOOK.a(itemstack, enchantmentinstance);
-                            } else {
-                                itemstack.addEnchantment(enchantmentinstance.enchantment, enchantmentinstance.level);
-                            }
+                        if (flag) {
+                            Items.ENCHANTED_BOOK.a(itemstack, weightedrandomenchant);
+                        } else {
+                            itemstack.addEnchantment(weightedrandomenchant.enchantment, weightedrandomenchant.level);
                         }
                     }
 
+                    if (!entityhuman.abilities.canInstantlyBuild) {
+                        itemstack1.count -= j;
+                        if (itemstack1.count <= 0) {
+                            this.enchantSlots.setItem(1, (ItemStack) null);
+                        }
+                    }
+
+                    this.enchantSlots.update();
+                    this.f = entityhuman.ci();
                     this.a(this.enchantSlots);
                 }
             }
@@ -149,19 +186,33 @@ public class ContainerEnchantTable extends Container {
         }
     }
 
+    private List a(ItemStack itemstack, int i, int j) {
+        this.k.setSeed((long) (this.f + i));
+        List list = EnchantmentManager.b(this.k, itemstack, j);
+
+        if (itemstack.getItem() == Items.BOOK && list != null && list.size() > 1) {
+            list.remove(this.k.nextInt(list.size()));
+        }
+
+        return list;
+    }
+
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
         if (!this.world.isStatic) {
-            ItemStack itemstack = this.enchantSlots.splitWithoutUpdate(0);
+            for (int i = 0; i < this.enchantSlots.getSize(); ++i) {
+                ItemStack itemstack = this.enchantSlots.splitWithoutUpdate(i);
 
-            if (itemstack != null) {
-                entityhuman.drop(itemstack, false);
+                if (itemstack != null) {
+                    entityhuman.drop(itemstack, false);
+                }
             }
+
         }
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getType(this.x, this.y, this.z) != Blocks.ENCHANTMENT_TABLE ? false : entityhuman.e((double) this.x + 0.5D, (double) this.y + 0.5D, (double) this.z + 0.5D) <= 64.0D;
+        return this.world.getType(this.position).getBlock() != Blocks.ENCHANTING_TABLE ? false : entityhuman.e((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
     public ItemStack b(EntityHuman entityhuman, int i) {
@@ -173,7 +224,15 @@ public class ContainerEnchantTable extends Container {
 
             itemstack = itemstack1.cloneItemStack();
             if (i == 0) {
-                if (!this.a(itemstack1, 1, 37, true)) {
+                if (!this.a(itemstack1, 2, 38, true)) {
+                    return null;
+                }
+            } else if (i == 1) {
+                if (!this.a(itemstack1, 2, 38, true)) {
+                    return null;
+                }
+            } else if (itemstack1.getItem() == Items.DYE && EnumColor.fromInvColorIndex(itemstack1.getData()) == EnumColor.BLUE) {
+                if (!this.a(itemstack1, 1, 2, true)) {
                     return null;
                 }
             } else {

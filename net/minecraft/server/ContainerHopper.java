@@ -4,9 +4,9 @@ public class ContainerHopper extends Container {
 
     private final IInventory hopper;
 
-    public ContainerHopper(PlayerInventory playerinventory, IInventory iinventory) {
+    public ContainerHopper(PlayerInventory playerinventory, IInventory iinventory, EntityHuman entityhuman) {
         this.hopper = iinventory;
-        iinventory.startOpen();
+        iinventory.startOpen(entityhuman);
         byte b0 = 51;
 
         int i;
@@ -24,6 +24,7 @@ public class ContainerHopper extends Container {
         for (i = 0; i < 9; ++i) {
             this.a(new Slot(playerinventory, i, 8 + i * 18, 58 + b0));
         }
+
     }
 
     public boolean a(EntityHuman entityhuman) {
@@ -58,6 +59,6 @@ public class ContainerHopper extends Container {
 
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        this.hopper.closeContainer();
+        this.hopper.closeContainer(entityhuman);
     }
 }

@@ -5,9 +5,9 @@ public class WorldProviderTheEnd extends WorldProvider {
     public WorldProviderTheEnd() {}
 
     public void b() {
-        this.e = new WorldChunkManagerHell(BiomeBase.SKY, 0.0F);
+        this.c = new WorldChunkManagerHell(BiomeBase.SKY, 0.0F);
         this.dimension = 1;
-        this.g = true;
+        this.e = true;
     }
 
     public IChunkProvider getChunkProvider() {
@@ -27,11 +27,11 @@ public class WorldProviderTheEnd extends WorldProvider {
     }
 
     public boolean canSpawn(int i, int j) {
-        return this.b.b(i, j).getMaterial().isSolid();
+        return this.b.c(new BlockPosition(i, 0, j)).getMaterial().isSolid();
     }
 
-    public ChunkCoordinates h() {
-        return new ChunkCoordinates(100, 50, 0);
+    public BlockPosition h() {
+        return new BlockPosition(100, 50, 0);
     }
 
     public int getSeaLevel() {
@@ -40,5 +40,9 @@ public class WorldProviderTheEnd extends WorldProvider {
 
     public String getName() {
         return "The End";
+    }
+
+    public String getSuffix() {
+        return "_end";
     }
 }

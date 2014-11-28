@@ -14,26 +14,26 @@ public class CommandDifficulty extends CommandAbstract {
         return 2;
     }
 
-    public String c(ICommandListener icommandlistener) {
+    public String getUsage(ICommandListener icommandlistener) {
         return "commands.difficulty.usage";
     }
 
     public void execute(ICommandListener icommandlistener, String[] astring) {
-        if (astring.length > 0) {
-            EnumDifficulty enumdifficulty = this.h(icommandlistener, astring[0]);
+        if (astring.length <= 0) {
+            throw new ExceptionUsage("commands.difficulty.usage", new Object[0]);
+        } else {
+            EnumDifficulty enumdifficulty = this.e(astring[0]);
 
             MinecraftServer.getServer().a(enumdifficulty);
             a(icommandlistener, this, "commands.difficulty.success", new Object[] { new ChatMessage(enumdifficulty.b(), new Object[0])});
-        } else {
-            throw new ExceptionUsage("commands.difficulty.usage", new Object[0]);
         }
     }
 
-    protected EnumDifficulty h(ICommandListener icommandlistener, String s) {
-        return !s.equalsIgnoreCase("peaceful") && !s.equalsIgnoreCase("p") ? (!s.equalsIgnoreCase("easy") && !s.equalsIgnoreCase("e") ? (!s.equalsIgnoreCase("normal") && !s.equalsIgnoreCase("n") ? (!s.equalsIgnoreCase("hard") && !s.equalsIgnoreCase("h") ? EnumDifficulty.getById(a(icommandlistener, s, 0, 3)) : EnumDifficulty.HARD) : EnumDifficulty.NORMAL) : EnumDifficulty.EASY) : EnumDifficulty.PEACEFUL;
+    protected EnumDifficulty e(String s) {
+        return !s.equalsIgnoreCase("peaceful") && !s.equalsIgnoreCase("p") ? (!s.equalsIgnoreCase("easy") && !s.equalsIgnoreCase("e") ? (!s.equalsIgnoreCase("normal") && !s.equalsIgnoreCase("n") ? (!s.equalsIgnoreCase("hard") && !s.equalsIgnoreCase("h") ? EnumDifficulty.getById(a(s, 0, 3)) : EnumDifficulty.HARD) : EnumDifficulty.NORMAL) : EnumDifficulty.EASY) : EnumDifficulty.PEACEFUL;
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring) {
+    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, new String[] { "peaceful", "easy", "normal", "hard"}) : null;
     }
 }

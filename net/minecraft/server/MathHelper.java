@@ -1,25 +1,27 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import java.util.UUID;
 
 public class MathHelper {
 
-    private static float[] a = new float[65536];
-    private static final int[] b;
+    public static final float a = c(2.0F);
+    private static final float[] b = new float[65536];
+    private static final int[] c;
 
-    public static final float sin(float f) {
-        return a[(int) (f * 10430.378F) & '\uffff'];
+    public static float sin(float f) {
+        return MathHelper.b[(int) (f * 10430.378F) & '\uffff'];
     }
 
-    public static final float cos(float f) {
-        return a[(int) (f * 10430.378F + 16384.0F) & '\uffff'];
+    public static float cos(float f) {
+        return MathHelper.b[(int) (f * 10430.378F + 16384.0F) & '\uffff'];
     }
 
-    public static final float c(float f) {
+    public static float c(float f) {
         return (float) Math.sqrt((double) f);
     }
 
-    public static final float sqrt(double d0) {
+    public static float sqrt(double d0) {
         return (float) Math.sqrt(d0);
     }
 
@@ -41,7 +43,7 @@ public class MathHelper {
         return d0 < (double) i ? i - 1L : i;
     }
 
-    public static float abs(float f) {
+    public static float e(float f) {
         return f >= 0.0F ? f : -f;
     }
 
@@ -61,7 +63,7 @@ public class MathHelper {
         return d0 > (double) i ? i + 1 : i;
     }
 
-    public static int a(int i, int j, int k) {
+    public static int clamp(int i, int j, int k) {
         return i < j ? j : (i > k ? k : i);
     }
 
@@ -142,66 +144,81 @@ public class MathHelper {
     }
 
     public static int a(String s, int i) {
-        int j = i;
-
         try {
-            j = Integer.parseInt(s);
+            return Integer.parseInt(s);
         } catch (Throwable throwable) {
-            ;
+            return i;
         }
-
-        return j;
     }
 
     public static int a(String s, int i, int j) {
-        int k = i;
-
-        try {
-            k = Integer.parseInt(s);
-        } catch (Throwable throwable) {
-            ;
-        }
-
-        if (k < j) {
-            k = j;
-        }
-
-        return k;
+        return Math.max(j, a(s, i));
     }
 
     public static double a(String s, double d0) {
-        double d1 = d0;
-
         try {
-            d1 = Double.parseDouble(s);
+            return Double.parseDouble(s);
         } catch (Throwable throwable) {
-            ;
+            return d0;
         }
-
-        return d1;
     }
 
     public static double a(String s, double d0, double d1) {
-        double d2 = d0;
+        return Math.max(d1, a(s, d0));
+    }
 
-        try {
-            d2 = Double.parseDouble(s);
-        } catch (Throwable throwable) {
-            ;
+    public static int b(int i) {
+        int j = i - 1;
+
+        j |= j >> 1;
+        j |= j >> 2;
+        j |= j >> 4;
+        j |= j >> 8;
+        j |= j >> 16;
+        return j + 1;
+    }
+
+    private static boolean d(int i) {
+        return i != 0 && (i & i - 1) == 0;
+    }
+
+    private static int e(int i) {
+        i = d(i) ? i : b(i);
+        return MathHelper.c[(int) ((long) i * 125613361L >> 27) & 31];
+    }
+
+    public static int c(int i) {
+        return e(i) - (d(i) ? 0 : 1);
+    }
+
+    public static int c(int i, int j) {
+        if (j == 0) {
+            return 0;
+        } else if (i == 0) {
+            return j;
+        } else {
+            if (i < 0) {
+                j *= -1;
+            }
+
+            int k = i % j;
+
+            return k == 0 ? i : i + j - k;
         }
+    }
 
-        if (d2 < d1) {
-            d2 = d1;
-        }
+    public static UUID a(Random random) {
+        long i = random.nextLong() & -61441L | 16384L;
+        long j = random.nextLong() & 4611686018427387903L | Long.MIN_VALUE;
 
-        return d2;
+        return new UUID(i, j);
     }
 
     static {
         for (int i = 0; i < 65536; ++i) {
-            a[i] = (float) Math.sin((double) i * 3.141592653589793D * 2.0D / 65536.0D);
+            MathHelper.b[i] = (float) Math.sin((double) i * 3.141592653589793D * 2.0D / 65536.0D);
         }
 
-        b = new int[] { 0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8, 31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9};
+        c = new int[] { 0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8, 31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9};
     }
 }
