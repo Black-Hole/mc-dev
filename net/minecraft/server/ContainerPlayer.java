@@ -7,12 +7,12 @@ public class ContainerPlayer extends Container {
     public boolean g;
     private final EntityHuman h;
 
-    public ContainerPlayer(PlayerInventory playerinventory, boolean flag, EntityHuman entityhuman) {
+    public ContainerPlayer(final PlayerInventory playerinventory, boolean flag, EntityHuman entityhuman) {
         this.g = flag;
         this.h = entityhuman;
         this.a((Slot) (new SlotResult(playerinventory.player, this.craftInventory, this.resultInventory, 0, 144, 36)));
 
-        int i;
+        final int i;
         int j;
 
         for (i = 0; i < 2; ++i) {
@@ -22,7 +22,15 @@ public class ContainerPlayer extends Container {
         }
 
         for (i = 0; i < 4; ++i) {
-            this.a((Slot) (new SlotArmor(this, playerinventory, playerinventory.getSize() - 1 - i, 8, 8 + i * 18, i)));
+            this.a(new Slot(playerinventory, playerinventory.getSize() - 1 - i, 8, 8 + i * 18) {
+                public int getMaxStackSize() {
+                    return 1;
+                }
+
+                public boolean isAllowed(ItemStack itemstack) {
+                    return itemstack == null ? false : (itemstack.getItem() instanceof ItemArmor ? ((ItemArmor) itemstack.getItem()).b == i : (itemstack.getItem() != Item.getItemOf(Blocks.PUMPKIN) && itemstack.getItem() != Items.SKULL ? false : i == 0));
+                }
+            });
         }
 
         for (i = 0; i < 3; ++i) {

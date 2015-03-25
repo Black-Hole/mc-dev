@@ -5,11 +5,11 @@ import java.util.Random;
 public class BlockPistonMoving extends BlockContainer {
 
     public static final BlockStateDirection FACING = BlockPistonExtension.FACING;
-    public static final BlockStateEnum TYPE = BlockPistonExtension.TYPE;
+    public static final BlockStateEnum<BlockPistonExtension.EnumPistonType> TYPE = BlockPistonExtension.TYPE;
 
     public BlockPistonMoving() {
         super(Material.PISTON);
-        this.j(this.blockStateList.getBlockData().set(BlockPistonMoving.FACING, EnumDirection.NORTH).set(BlockPistonMoving.TYPE, EnumPistonType.DEFAULT));
+        this.j(this.blockStateList.getBlockData().set(BlockPistonMoving.FACING, EnumDirection.NORTH).set(BlockPistonMoving.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT));
         this.c(-1.0F);
     }
 
@@ -59,7 +59,7 @@ public class BlockPistonMoving extends BlockContainer {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (!world.isStatic && world.getTileEntity(blockposition) == null) {
+        if (!world.isClientSide && world.getTileEntity(blockposition) == null) {
             world.setAir(blockposition);
             return true;
         } else {
@@ -72,8 +72,8 @@ public class BlockPistonMoving extends BlockContainer {
     }
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
-        if (!world.isStatic) {
-            TileEntityPiston tileentitypiston = this.e(world, blockposition);
+        if (!world.isClientSide) {
+            TileEntityPiston tileentitypiston = this.e((IBlockAccess) world, blockposition);
 
             if (tileentitypiston != null) {
                 IBlockData iblockdata1 = tileentitypiston.b();
@@ -88,14 +88,14 @@ public class BlockPistonMoving extends BlockContainer {
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             world.getTileEntity(blockposition);
         }
 
     }
 
     public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        TileEntityPiston tileentitypiston = this.e(world, blockposition);
+        TileEntityPiston tileentitypiston = this.e((IBlockAccess) world, blockposition);
 
         if (tileentitypiston == null) {
             return null;
@@ -134,12 +134,12 @@ public class BlockPistonMoving extends BlockContainer {
 
             EnumDirection enumdirection = tileentitypiston.e();
 
-            this.minX = block.z() - (double) ((float) enumdirection.getAdjacentX() * f);
-            this.minY = block.B() - (double) ((float) enumdirection.getAdjacentY() * f);
-            this.minZ = block.D() - (double) ((float) enumdirection.getAdjacentZ() * f);
-            this.maxX = block.A() - (double) ((float) enumdirection.getAdjacentX() * f);
-            this.maxY = block.C() - (double) ((float) enumdirection.getAdjacentY() * f);
-            this.maxZ = block.E() - (double) ((float) enumdirection.getAdjacentZ() * f);
+            this.minX = block.B() - (double) ((float) enumdirection.getAdjacentX() * f);
+            this.minY = block.D() - (double) ((float) enumdirection.getAdjacentY() * f);
+            this.minZ = block.F() - (double) ((float) enumdirection.getAdjacentZ() * f);
+            this.maxX = block.C() - (double) ((float) enumdirection.getAdjacentX() * f);
+            this.maxY = block.E() - (double) ((float) enumdirection.getAdjacentY() * f);
+            this.maxZ = block.G() - (double) ((float) enumdirection.getAdjacentZ() * f);
         }
 
     }
@@ -190,14 +190,14 @@ public class BlockPistonMoving extends BlockContainer {
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockPistonMoving.FACING, BlockPistonExtension.b(i)).set(BlockPistonMoving.TYPE, (i & 8) > 0 ? EnumPistonType.STICKY : EnumPistonType.DEFAULT);
+        return this.getBlockData().set(BlockPistonMoving.FACING, BlockPistonExtension.b(i)).set(BlockPistonMoving.TYPE, (i & 8) > 0 ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT);
     }
 
     public int toLegacyData(IBlockData iblockdata) {
         byte b0 = 0;
         int i = b0 | ((EnumDirection) iblockdata.get(BlockPistonMoving.FACING)).a();
 
-        if (iblockdata.get(BlockPistonMoving.TYPE) == EnumPistonType.STICKY) {
+        if (iblockdata.get(BlockPistonMoving.TYPE) == BlockPistonExtension.EnumPistonType.STICKY) {
             i |= 8;
         }
 

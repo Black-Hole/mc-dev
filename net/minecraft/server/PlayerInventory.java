@@ -62,7 +62,7 @@ public class PlayerInventory implements IInventory {
 
         for (l = 0; l < this.items.length; ++l) {
             itemstack = this.items[l];
-            if (itemstack != null && (item == null || itemstack.getItem() == item) && (i <= -1 || itemstack.getData() == i) && (nbttagcompound == null || CommandTestForBlock.a(nbttagcompound, itemstack.getTag(), true))) {
+            if (itemstack != null && (item == null || itemstack.getItem() == item) && (i <= -1 || itemstack.getData() == i) && (nbttagcompound == null || GameProfileSerializer.a(nbttagcompound, itemstack.getTag(), true))) {
                 i1 = j <= 0 ? itemstack.count : Math.min(j - k, itemstack.count);
                 k += i1;
                 if (j != 0) {
@@ -80,7 +80,7 @@ public class PlayerInventory implements IInventory {
 
         for (l = 0; l < this.armor.length; ++l) {
             itemstack = this.armor[l];
-            if (itemstack != null && (item == null || itemstack.getItem() == item) && (i <= -1 || itemstack.getData() == i) && (nbttagcompound == null || CommandTestForBlock.a(nbttagcompound, itemstack.getTag(), false))) {
+            if (itemstack != null && (item == null || itemstack.getItem() == item) && (i <= -1 || itemstack.getData() == i) && (nbttagcompound == null || GameProfileSerializer.a(nbttagcompound, itemstack.getTag(), false))) {
                 i1 = j <= 0 ? itemstack.count : Math.min(j - k, itemstack.count);
                 k += i1;
                 if (j != 0) {
@@ -105,7 +105,7 @@ public class PlayerInventory implements IInventory {
                 return k;
             }
 
-            if (nbttagcompound != null && !CommandTestForBlock.a(nbttagcompound, this.f.getTag(), false)) {
+            if (nbttagcompound != null && !GameProfileSerializer.a(nbttagcompound, this.f.getTag(), false)) {
                 return k;
             }
 
@@ -195,7 +195,7 @@ public class PlayerInventory implements IInventory {
         return i >= 0;
     }
 
-    public boolean pickup(ItemStack itemstack) {
+    public boolean pickup(final ItemStack itemstack) {
         if (itemstack != null && itemstack.count != 0 && itemstack.getItem() != null) {
             try {
                 int i;
@@ -232,7 +232,15 @@ public class PlayerInventory implements IInventory {
 
                 crashreportsystemdetails.a("Item ID", (Object) Integer.valueOf(Item.getId(itemstack.getItem())));
                 crashreportsystemdetails.a("Item data", (Object) Integer.valueOf(itemstack.getData()));
-                crashreportsystemdetails.a("Item name", (Callable) (new CrashReportItemName(this, itemstack)));
+                crashreportsystemdetails.a("Item name", new Callable() {
+                    public String a() throws Exception {
+                        return itemstack.getName();
+                    }
+
+                    public Object call() throws Exception {
+                        return this.a();
+                    }
+                });
                 throw new ReportedException(crashreport);
             }
         } else {

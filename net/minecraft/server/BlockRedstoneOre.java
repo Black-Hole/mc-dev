@@ -20,22 +20,22 @@ public class BlockRedstoneOre extends Block {
     }
 
     public void attack(World world, BlockPosition blockposition, EntityHuman entityhuman) {
-        this.d(world, blockposition);
+        this.e(world, blockposition);
         super.attack(world, blockposition, entityhuman);
     }
 
     public void a(World world, BlockPosition blockposition, Entity entity) {
-        this.d(world, blockposition);
+        this.e(world, blockposition);
         super.a(world, blockposition, entity);
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        this.d(world, blockposition);
+        this.e(world, blockposition);
         return super.interact(world, blockposition, iblockdata, entityhuman, enumdirection, f, f1, f2);
     }
 
-    private void d(World world, BlockPosition blockposition) {
-        this.e(world, blockposition);
+    private void e(World world, BlockPosition blockposition) {
+        this.f(world, blockposition);
         if (this == Blocks.REDSTONE_ORE) {
             world.setTypeUpdate(blockposition, Blocks.LIT_REDSTONE_ORE.getBlockData());
         }
@@ -71,7 +71,7 @@ public class BlockRedstoneOre extends Block {
 
     }
 
-    private void e(World world, BlockPosition blockposition) {
+    private void f(World world, BlockPosition blockposition) {
         Random random = world.random;
         double d0 = 0.0625D;
 

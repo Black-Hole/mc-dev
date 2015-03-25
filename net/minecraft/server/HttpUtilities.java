@@ -25,7 +25,7 @@ public class HttpUtilities {
     private static final AtomicInteger b = new AtomicInteger(0);
     private static final Logger c = LogManager.getLogger();
 
-    public static String a(Map map) {
+    public static String a(Map<String, Object> map) {
         StringBuilder stringbuilder = new StringBuilder();
         Iterator iterator = map.entrySet().iterator();
 
@@ -56,13 +56,13 @@ public class HttpUtilities {
         return stringbuilder.toString();
     }
 
-    public static String a(URL url, Map map, boolean flag) {
+    public static String a(URL url, Map<String, Object> map, boolean flag) {
         return a(url, a(map), flag);
     }
 
     private static String a(URL url, String s, boolean flag) {
         try {
-            Proxy proxy = MinecraftServer.getServer() == null ? null : MinecraftServer.getServer().aw();
+            Proxy proxy = MinecraftServer.getServer() == null ? null : MinecraftServer.getServer().ax();
 
             if (proxy == null) {
                 proxy = Proxy.NO_PROXY;

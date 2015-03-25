@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutBed implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutBed implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private BlockPosition b;
@@ -12,12 +14,12 @@ public class PacketPlayOutBed implements Packet {
         this.b = blockposition;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = packetdataserializer.c();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.a(this.b);
     }

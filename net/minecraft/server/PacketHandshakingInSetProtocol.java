@@ -1,22 +1,24 @@
 package net.minecraft.server;
 
-public class PacketHandshakingInSetProtocol implements Packet {
+import java.io.IOException;
+
+public class PacketHandshakingInSetProtocol implements Packet<PacketHandshakingInListener> {
 
     private int a;
-    public String b;
-    public int c;
+    private String b;
+    private int c;
     private EnumProtocol d;
 
     public PacketHandshakingInSetProtocol() {}
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = packetdataserializer.c(255);
         this.c = packetdataserializer.readUnsignedShort();
         this.d = EnumProtocol.a(packetdataserializer.e());
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.a(this.b);
         packetdataserializer.writeShort(this.c);

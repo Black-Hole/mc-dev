@@ -17,16 +17,16 @@ import java.util.Map;
 public class PersistentCollection {
 
     private IDataManager b;
-    protected Map a = Maps.newHashMap();
-    private List c = Lists.newArrayList();
-    private Map d = Maps.newHashMap();
+    protected Map<String, PersistentBase> a = Maps.newHashMap();
+    private List<PersistentBase> c = Lists.newArrayList();
+    private Map<String, Short> d = Maps.newHashMap();
 
     public PersistentCollection(IDataManager idatamanager) {
         this.b = idatamanager;
         this.b();
     }
 
-    public PersistentBase get(Class oclass, String s) {
+    public PersistentBase get(Class<? extends PersistentBase> oclass, String s) {
         PersistentBase persistentbase = (PersistentBase) this.a.get(s);
 
         if (persistentbase != null) {

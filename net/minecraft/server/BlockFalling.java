@@ -24,18 +24,18 @@ public class BlockFalling extends Block {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (!world.isStatic) {
-            this.e(world, blockposition);
+        if (!world.isClientSide) {
+            this.f(world, blockposition);
         }
 
     }
 
-    private void e(World world, BlockPosition blockposition) {
+    private void f(World world, BlockPosition blockposition) {
         if (canFall(world, blockposition.down()) && blockposition.getY() >= 0) {
             byte b0 = 32;
 
             if (!BlockFalling.instaFall && world.areChunksLoadedBetween(blockposition.a(-b0, -b0, -b0), blockposition.a(b0, b0, b0))) {
-                if (!world.isStatic) {
+                if (!world.isClientSide) {
                     EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, world.getType(blockposition));
 
                     this.a(entityfallingblock);

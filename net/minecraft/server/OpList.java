@@ -5,13 +5,13 @@ import com.mojang.authlib.GameProfile;
 import java.io.File;
 import java.util.Iterator;
 
-public class OpList extends JsonList {
+public class OpList extends JsonList<GameProfile, OpListEntry> {
 
     public OpList(File file) {
         super(file);
     }
 
-    protected JsonListEntry a(JsonObject jsonobject) {
+    protected JsonListEntry<GameProfile> a(JsonObject jsonobject) {
         return new OpListEntry(jsonobject);
     }
 

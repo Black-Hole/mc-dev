@@ -19,19 +19,19 @@ public class CommandExecute extends CommandAbstract {
         return "commands.execute.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(final ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 5) {
             throw new ExceptionUsage("commands.execute.usage", new Object[0]);
         } else {
-            Entity entity = a(icommandlistener, astring[0], Entity.class);
-            double d0 = b(entity.locX, astring[1], false);
-            double d1 = b(entity.locY, astring[2], false);
-            double d2 = b(entity.locZ, astring[3], false);
-            BlockPosition blockposition = new BlockPosition(d0, d1, d2);
+            final Entity entity = a(icommandlistener, astring[0], Entity.class);
+            final double d0 = b(entity.locX, astring[1], false);
+            final double d1 = b(entity.locY, astring[2], false);
+            final double d2 = b(entity.locZ, astring[3], false);
+            final BlockPosition blockposition = new BlockPosition(d0, d1, d2);
             byte b0 = 4;
 
             if ("detect".equals(astring[4]) && astring.length > 10) {
-                World world = icommandlistener.getWorld();
+                World world = entity.getWorld();
                 double d3 = b(d0, astring[5], false);
                 double d4 = b(d1, astring[6], false);
                 double d5 = b(d2, astring[7], false);
@@ -48,11 +48,53 @@ public class CommandExecute extends CommandAbstract {
             }
 
             String s = a(astring, b0);
-            CommandListenerEntity commandlistenerentity = new CommandListenerEntity(this, entity, icommandlistener, blockposition, d0, d1, d2);
+            ICommandListener icommandlistener1 = new ICommandListener() {
+                public String getName() {
+                    return entity.getName();
+                }
+
+                public IChatBaseComponent getScoreboardDisplayName() {
+                    return entity.getScoreboardDisplayName();
+                }
+
+                public void sendMessage(IChatBaseComponent ichatbasecomponent) {
+                    icommandlistener.sendMessage(ichatbasecomponent);
+                }
+
+                public boolean a(int i, String s) {
+                    return icommandlistener.a(i, s);
+                }
+
+                public BlockPosition getChunkCoordinates() {
+                    return blockposition;
+                }
+
+                public Vec3D d() {
+                    return new Vec3D(d0, d1, d2);
+                }
+
+                public World getWorld() {
+                    return entity.world;
+                }
+
+                public Entity f() {
+                    return entity;
+                }
+
+                public boolean getSendCommandFeedback() {
+                    MinecraftServer minecraftserver = MinecraftServer.getServer();
+
+                    return minecraftserver == null || minecraftserver.worldServer[0].getGameRules().getBoolean("commandBlockOutput");
+                }
+
+                public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
+                    entity.a(commandobjectiveexecutor_enumcommandresult, i);
+                }
+            };
             ICommandHandler icommandhandler = MinecraftServer.getServer().getCommandHandler();
 
             try {
-                int j = icommandhandler.a(commandlistenerentity, s);
+                int j = icommandhandler.a(icommandlistener1, s);
 
                 if (j < 1) {
                     throw new CommandException("commands.execute.allInvocationsFailed", new Object[] { s});
@@ -63,7 +105,7 @@ public class CommandExecute extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : (astring.length > 5 && astring.length <= 8 && "detect".equals(astring[4]) ? a(astring, 5, blockposition) : (astring.length == 9 && "detect".equals(astring[4]) ? a(astring, (Collection) Block.REGISTRY.keySet()) : null)));
     }
 

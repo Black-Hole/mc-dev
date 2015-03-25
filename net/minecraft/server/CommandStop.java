@@ -12,7 +12,7 @@ public class CommandStop extends CommandAbstract {
         return "commands.stop.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (MinecraftServer.getServer().worldServer != null) {
             a(icommandlistener, this, "commands.stop.start", new Object[0]);
         }

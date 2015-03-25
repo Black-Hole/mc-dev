@@ -106,7 +106,7 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
     protected boolean a(EntityLiving entityliving, boolean flag) {
         if (!a(this.e, entityliving, flag, this.f)) {
             return false;
-        } else if (!this.e.d(new BlockPosition(entityliving))) {
+        } else if (!this.e.e(new BlockPosition(entityliving))) {
             return false;
         } else {
             if (this.a) {
@@ -128,7 +128,7 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
     }
 
     private boolean a(EntityLiving entityliving) {
-        this.c = 10 + this.e.bb().nextInt(5);
+        this.c = 10 + this.e.bc().nextInt(5);
         PathEntity pathentity = this.e.getNavigation().a((Entity) entityliving);
 
         if (pathentity == null) {

@@ -20,7 +20,7 @@ public class BiomeMesa extends BiomeBase {
         this.b();
         this.a(2.0F, 0.0F);
         this.au.clear();
-        this.ak = Blocks.SAND.getBlockData().set(BlockSand.VARIANT, EnumSandVariant.RED_SAND);
+        this.ak = Blocks.SAND.getBlockData().set(BlockSand.VARIANT, BlockSand.EnumSandVariant.RED_SAND);
         this.al = Blocks.STAINED_HARDENED_CLAY.getBlockData();
         this.as.A = -999;
         this.as.D = 20;
@@ -81,80 +81,80 @@ public class BiomeMesa extends BiomeBase {
 
         k = i & 15;
         l = j & 15;
-        boolean flag = true;
+        int i1 = world.F();
         IBlockData iblockdata = Blocks.STAINED_HARDENED_CLAY.getBlockData();
         IBlockData iblockdata1 = this.al;
-        int i1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
-        boolean flag1 = Math.cos(d0 / 3.0D * 3.141592653589793D) > 0.0D;
-        int j1 = -1;
-        boolean flag2 = false;
+        int j1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
+        boolean flag = Math.cos(d0 / 3.0D * 3.141592653589793D) > 0.0D;
+        int k1 = -1;
+        boolean flag1 = false;
 
-        for (int k1 = 255; k1 >= 0; --k1) {
-            if (chunksnapshot.a(l, k1, k).getBlock().getMaterial() == Material.AIR && k1 < (int) d1) {
-                chunksnapshot.a(l, k1, k, Blocks.STONE.getBlockData());
+        for (int l1 = 255; l1 >= 0; --l1) {
+            if (chunksnapshot.a(l, l1, k).getBlock().getMaterial() == Material.AIR && l1 < (int) d1) {
+                chunksnapshot.a(l, l1, k, Blocks.STONE.getBlockData());
             }
 
-            if (k1 <= random.nextInt(5)) {
-                chunksnapshot.a(l, k1, k, Blocks.BEDROCK.getBlockData());
+            if (l1 <= random.nextInt(5)) {
+                chunksnapshot.a(l, l1, k, Blocks.BEDROCK.getBlockData());
             } else {
-                IBlockData iblockdata2 = chunksnapshot.a(l, k1, k);
+                IBlockData iblockdata2 = chunksnapshot.a(l, l1, k);
 
                 if (iblockdata2.getBlock().getMaterial() == Material.AIR) {
-                    j1 = -1;
+                    k1 = -1;
                 } else if (iblockdata2.getBlock() == Blocks.STONE) {
                     IBlockData iblockdata3;
 
-                    if (j1 == -1) {
-                        flag2 = false;
-                        if (i1 <= 0) {
+                    if (k1 == -1) {
+                        flag1 = false;
+                        if (j1 <= 0) {
                             iblockdata = null;
                             iblockdata1 = Blocks.STONE.getBlockData();
-                        } else if (k1 >= 59 && k1 <= 64) {
+                        } else if (l1 >= i1 - 4 && l1 <= i1 + 1) {
                             iblockdata = Blocks.STAINED_HARDENED_CLAY.getBlockData();
                             iblockdata1 = this.al;
                         }
 
-                        if (k1 < 63 && (iblockdata == null || iblockdata.getBlock().getMaterial() == Material.AIR)) {
+                        if (l1 < i1 && (iblockdata == null || iblockdata.getBlock().getMaterial() == Material.AIR)) {
                             iblockdata = Blocks.WATER.getBlockData();
                         }
 
-                        j1 = i1 + Math.max(0, k1 - 63);
-                        if (k1 >= 62) {
-                            if (this.aJ && k1 > 86 + i1 * 2) {
-                                if (flag1) {
-                                    chunksnapshot.a(l, k1, k, Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, EnumDirtVariant.COARSE_DIRT));
+                        k1 = j1 + Math.max(0, l1 - i1);
+                        if (l1 >= i1 - 1) {
+                            if (this.aJ && l1 > 86 + j1 * 2) {
+                                if (flag) {
+                                    chunksnapshot.a(l, l1, k, Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.COARSE_DIRT));
                                 } else {
-                                    chunksnapshot.a(l, k1, k, Blocks.GRASS.getBlockData());
+                                    chunksnapshot.a(l, l1, k, Blocks.GRASS.getBlockData());
                                 }
-                            } else if (k1 > 66 + i1) {
-                                if (k1 >= 64 && k1 <= 127) {
-                                    if (flag1) {
+                            } else if (l1 > i1 + 3 + j1) {
+                                if (l1 >= 64 && l1 <= 127) {
+                                    if (flag) {
                                         iblockdata3 = Blocks.HARDENED_CLAY.getBlockData();
                                     } else {
-                                        iblockdata3 = this.a(i, k1, j);
+                                        iblockdata3 = this.a(i, l1, j);
                                     }
                                 } else {
                                     iblockdata3 = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE);
                                 }
 
-                                chunksnapshot.a(l, k1, k, iblockdata3);
+                                chunksnapshot.a(l, l1, k, iblockdata3);
                             } else {
-                                chunksnapshot.a(l, k1, k, this.ak);
-                                flag2 = true;
+                                chunksnapshot.a(l, l1, k, this.ak);
+                                flag1 = true;
                             }
                         } else {
-                            chunksnapshot.a(l, k1, k, iblockdata1);
+                            chunksnapshot.a(l, l1, k, iblockdata1);
                             if (iblockdata1.getBlock() == Blocks.STAINED_HARDENED_CLAY) {
-                                chunksnapshot.a(l, k1, k, iblockdata1.getBlock().getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE));
+                                chunksnapshot.a(l, l1, k, iblockdata1.getBlock().getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE));
                             }
                         }
-                    } else if (j1 > 0) {
-                        --j1;
-                        if (flag2) {
-                            chunksnapshot.a(l, k1, k, Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE));
+                    } else if (k1 > 0) {
+                        --k1;
+                        if (flag1) {
+                            chunksnapshot.a(l, l1, k, Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE));
                         } else {
-                            iblockdata3 = this.a(i, k1, j);
-                            chunksnapshot.a(l, k1, k, iblockdata3);
+                            iblockdata3 = this.a(i, l1, j);
+                            chunksnapshot.a(l, l1, k, iblockdata3);
                         }
                     }
                 }

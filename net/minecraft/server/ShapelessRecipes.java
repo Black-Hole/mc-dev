@@ -8,9 +8,9 @@ import java.util.List;
 public class ShapelessRecipes implements IRecipe {
 
     private final ItemStack result;
-    private final List ingredients;
+    private final List<ItemStack> ingredients;
 
-    public ShapelessRecipes(ItemStack itemstack, List list) {
+    public ShapelessRecipes(ItemStack itemstack, List<ItemStack> list) {
         this.result = itemstack;
         this.ingredients = list;
     }

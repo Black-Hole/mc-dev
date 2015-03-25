@@ -12,7 +12,7 @@ public class ItemMilkBucket extends Item {
             --itemstack.count;
         }
 
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             entityhuman.removeAllEffects();
         }
 

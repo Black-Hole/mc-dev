@@ -6,7 +6,7 @@ public class TileEntitySign extends TileEntity {
 
     public final IChatBaseComponent[] lines = new IChatBaseComponent[] { new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
     public int f = -1;
-    public boolean isEditable = true;
+    private boolean isEditable = true;
     private EntityHuman h;
     private final CommandObjectiveExecutor i = new CommandObjectiveExecutor();
 
@@ -16,7 +16,7 @@ public class TileEntitySign extends TileEntity {
         super.b(nbttagcompound);
 
         for (int i = 0; i < 4; ++i) {
-            String s = ChatSerializer.a(this.lines[i]);
+            String s = IChatBaseComponent.ChatSerializer.a(this.lines[i]);
 
             nbttagcompound.setString("Text" + (i + 1), s);
         }
@@ -27,16 +27,52 @@ public class TileEntitySign extends TileEntity {
     public void a(NBTTagCompound nbttagcompound) {
         this.isEditable = false;
         super.a(nbttagcompound);
-        TileEntitySignCommandListener tileentitysigncommandlistener = new TileEntitySignCommandListener(this);
+        ICommandListener icommandlistener = new ICommandListener() {
+            public String getName() {
+                return "Sign";
+            }
+
+            public IChatBaseComponent getScoreboardDisplayName() {
+                return new ChatComponentText(this.getName());
+            }
+
+            public void sendMessage(IChatBaseComponent ichatbasecomponent) {}
+
+            public boolean a(int i, String s) {
+                return true;
+            }
+
+            public BlockPosition getChunkCoordinates() {
+                return TileEntitySign.this.position;
+            }
+
+            public Vec3D d() {
+                return new Vec3D((double) TileEntitySign.this.position.getX() + 0.5D, (double) TileEntitySign.this.position.getY() + 0.5D, (double) TileEntitySign.this.position.getZ() + 0.5D);
+            }
+
+            public World getWorld() {
+                return TileEntitySign.this.world;
+            }
+
+            public Entity f() {
+                return null;
+            }
+
+            public boolean getSendCommandFeedback() {
+                return false;
+            }
+
+            public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {}
+        };
 
         for (int i = 0; i < 4; ++i) {
             String s = nbttagcompound.getString("Text" + (i + 1));
 
             try {
-                IChatBaseComponent ichatbasecomponent = ChatSerializer.a(s);
+                IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
 
                 try {
-                    this.lines[i] = ChatComponentUtils.filterForDisplay(tileentitysigncommandlistener, ichatbasecomponent, (Entity) null);
+                    this.lines[i] = ChatComponentUtils.filterForDisplay(icommandlistener, ichatbasecomponent, (Entity) null);
                 } catch (CommandException commandexception) {
                     this.lines[i] = ichatbasecomponent;
                 }
@@ -67,8 +103,46 @@ public class TileEntitySign extends TileEntity {
         return this.h;
     }
 
-    public boolean b(EntityHuman entityhuman) {
-        TileEntitySignPlayerWrapper tileentitysignplayerwrapper = new TileEntitySignPlayerWrapper(this, entityhuman);
+    public boolean b(final EntityHuman entityhuman) {
+        ICommandListener icommandlistener = new ICommandListener() {
+            public String getName() {
+                return entityhuman.getName();
+            }
+
+            public IChatBaseComponent getScoreboardDisplayName() {
+                return entityhuman.getScoreboardDisplayName();
+            }
+
+            public void sendMessage(IChatBaseComponent ichatbasecomponent) {}
+
+            public boolean a(int i, String s) {
+                return true;
+            }
+
+            public BlockPosition getChunkCoordinates() {
+                return TileEntitySign.this.position;
+            }
+
+            public Vec3D d() {
+                return new Vec3D((double) TileEntitySign.this.position.getX() + 0.5D, (double) TileEntitySign.this.position.getY() + 0.5D, (double) TileEntitySign.this.position.getZ() + 0.5D);
+            }
+
+            public World getWorld() {
+                return entityhuman.getWorld();
+            }
+
+            public Entity f() {
+                return entityhuman;
+            }
+
+            public boolean getSendCommandFeedback() {
+                return false;
+            }
+
+            public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
+                TileEntitySign.this.i.a(this, commandobjectiveexecutor_enumcommandresult, i);
+            }
+        };
 
         for (int i = 0; i < this.lines.length; ++i) {
             ChatModifier chatmodifier = this.lines[i] == null ? null : this.lines[i].getChatModifier();
@@ -76,8 +150,8 @@ public class TileEntitySign extends TileEntity {
             if (chatmodifier != null && chatmodifier.h() != null) {
                 ChatClickable chatclickable = chatmodifier.h();
 
-                if (chatclickable.a() == EnumClickAction.RUN_COMMAND) {
-                    MinecraftServer.getServer().getCommandHandler().a(tileentitysignplayerwrapper, chatclickable.b());
+                if (chatclickable.a() == ChatClickable.EnumClickAction.RUN_COMMAND) {
+                    MinecraftServer.getServer().getCommandHandler().a(icommandlistener, chatclickable.b());
                 }
             }
         }
@@ -87,9 +161,5 @@ public class TileEntitySign extends TileEntity {
 
     public CommandObjectiveExecutor d() {
         return this.i;
-    }
-
-    static CommandObjectiveExecutor a(TileEntitySign tileentitysign) {
-        return tileentitysign.i;
     }
 }

@@ -13,10 +13,10 @@ import java.util.Random;
 public class EnchantmentManager {
 
     private static final Random a = new Random();
-    private static final EnchantmentModifierProtection b = new EnchantmentModifierProtection((EmptyClass) null);
-    private static final EnchantmentModifierDamage c = new EnchantmentModifierDamage((EmptyClass) null);
-    private static final EnchantmentModifierThorns d = new EnchantmentModifierThorns((EmptyClass) null);
-    private static final EnchantmentModifierArthropods e = new EnchantmentModifierArthropods((EmptyClass) null);
+    private static final EnchantmentManager.EnchantmentModifierProtection b = new EnchantmentManager.EnchantmentModifierProtection((EnchantmentManager.SyntheticClass_1) null);
+    private static final EnchantmentManager.EnchantmentModifierDamage c = new EnchantmentManager.EnchantmentModifierDamage((EnchantmentManager.SyntheticClass_1) null);
+    private static final EnchantmentManager.EnchantmentModifierThorns d = new EnchantmentManager.EnchantmentModifierThorns((EnchantmentManager.SyntheticClass_1) null);
+    private static final EnchantmentManager.EnchantmentModifierArthropods e = new EnchantmentManager.EnchantmentModifierArthropods((EnchantmentManager.SyntheticClass_1) null);
 
     public static int getEnchantmentLevel(int i, ItemStack itemstack) {
         if (itemstack == null) {
@@ -41,7 +41,7 @@ public class EnchantmentManager {
         }
     }
 
-    public static Map a(ItemStack itemstack) {
+    public static Map<Integer, Integer> a(ItemStack itemstack) {
         LinkedHashMap linkedhashmap = Maps.newLinkedHashMap();
         NBTTagList nbttaglist = itemstack.getItem() == Items.ENCHANTED_BOOK ? Items.ENCHANTED_BOOK.h(itemstack) : itemstack.getEnchantments();
 
@@ -57,7 +57,7 @@ public class EnchantmentManager {
         return linkedhashmap;
     }
 
-    public static void a(Map map, ItemStack itemstack) {
+    public static void a(Map<Integer, Integer> map, ItemStack itemstack) {
         NBTTagList nbttaglist = new NBTTagList();
         Iterator iterator = map.keySet().iterator();
 
@@ -108,7 +108,7 @@ public class EnchantmentManager {
         }
     }
 
-    private static void a(EnchantmentModifier enchantmentmodifier, ItemStack itemstack) {
+    private static void a(EnchantmentManager.EnchantmentModifier enchantmentmanager_enchantmentmodifier, ItemStack itemstack) {
         if (itemstack != null) {
             NBTTagList nbttaglist = itemstack.getEnchantments();
 
@@ -118,7 +118,7 @@ public class EnchantmentManager {
                     short short1 = nbttaglist.get(i).getShort("lvl");
 
                     if (Enchantment.getById(short0) != null) {
-                        enchantmentmodifier.a(Enchantment.getById(short0), short1);
+                        enchantmentmanager_enchantmentmodifier.a(Enchantment.getById(short0), short1);
                     }
                 }
 
@@ -126,14 +126,14 @@ public class EnchantmentManager {
         }
     }
 
-    private static void a(EnchantmentModifier enchantmentmodifier, ItemStack[] aitemstack) {
+    private static void a(EnchantmentManager.EnchantmentModifier enchantmentmanager_enchantmentmodifier, ItemStack[] aitemstack) {
         ItemStack[] aitemstack1 = aitemstack;
         int i = aitemstack.length;
 
         for (int j = 0; j < i; ++j) {
             ItemStack itemstack = aitemstack1[j];
 
-            a(enchantmentmodifier, itemstack);
+            a(enchantmentmanager_enchantmentmodifier, itemstack);
         }
 
     }
@@ -141,9 +141,11 @@ public class EnchantmentManager {
     public static int a(ItemStack[] aitemstack, DamageSource damagesource) {
         EnchantmentManager.b.a = 0;
         EnchantmentManager.b.b = damagesource;
-        a((EnchantmentModifier) EnchantmentManager.b, aitemstack);
+        a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.b, aitemstack);
         if (EnchantmentManager.b.a > 25) {
             EnchantmentManager.b.a = 25;
+        } else if (EnchantmentManager.b.a < 0) {
+            EnchantmentManager.b.a = 0;
         }
 
         return (EnchantmentManager.b.a + 1 >> 1) + EnchantmentManager.a.nextInt((EnchantmentManager.b.a >> 1) + 1);
@@ -152,7 +154,7 @@ public class EnchantmentManager {
     public static float a(ItemStack itemstack, EnumMonsterType enummonstertype) {
         EnchantmentManager.c.a = 0.0F;
         EnchantmentManager.c.b = enummonstertype;
-        a((EnchantmentModifier) EnchantmentManager.c, itemstack);
+        a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.c, itemstack);
         return EnchantmentManager.c.a;
     }
 
@@ -160,11 +162,11 @@ public class EnchantmentManager {
         EnchantmentManager.d.b = entity;
         EnchantmentManager.d.a = entityliving;
         if (entityliving != null) {
-            a((EnchantmentModifier) EnchantmentManager.d, entityliving.getEquipment());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.getEquipment());
         }
 
         if (entity instanceof EntityHuman) {
-            a((EnchantmentModifier) EnchantmentManager.d, entityliving.bz());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.bA());
         }
 
     }
@@ -173,21 +175,21 @@ public class EnchantmentManager {
         EnchantmentManager.e.a = entityliving;
         EnchantmentManager.e.b = entity;
         if (entityliving != null) {
-            a((EnchantmentModifier) EnchantmentManager.e, entityliving.getEquipment());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.e, entityliving.getEquipment());
         }
 
         if (entityliving instanceof EntityHuman) {
-            a((EnchantmentModifier) EnchantmentManager.e, entityliving.bz());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.e, entityliving.bA());
         }
 
     }
 
     public static int a(EntityLiving entityliving) {
-        return getEnchantmentLevel(Enchantment.KNOCKBACK.id, entityliving.bz());
+        return getEnchantmentLevel(Enchantment.KNOCKBACK.id, entityliving.bA());
     }
 
     public static int getFireAspectEnchantmentLevel(EntityLiving entityliving) {
-        return getEnchantmentLevel(Enchantment.FIRE_ASPECT.id, entityliving.bz());
+        return getEnchantmentLevel(Enchantment.FIRE_ASPECT.id, entityliving.bA());
     }
 
     public static int getOxygenEnchantmentLevel(Entity entity) {
@@ -199,27 +201,27 @@ public class EnchantmentManager {
     }
 
     public static int getDigSpeedEnchantmentLevel(EntityLiving entityliving) {
-        return getEnchantmentLevel(Enchantment.DIG_SPEED.id, entityliving.bz());
+        return getEnchantmentLevel(Enchantment.DIG_SPEED.id, entityliving.bA());
     }
 
     public static boolean hasSilkTouchEnchantment(EntityLiving entityliving) {
-        return getEnchantmentLevel(Enchantment.SILK_TOUCH.id, entityliving.bz()) > 0;
+        return getEnchantmentLevel(Enchantment.SILK_TOUCH.id, entityliving.bA()) > 0;
     }
 
     public static int getBonusBlockLootEnchantmentLevel(EntityLiving entityliving) {
-        return getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS.id, entityliving.bz());
+        return getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS.id, entityliving.bA());
     }
 
     public static int g(EntityLiving entityliving) {
-        return getEnchantmentLevel(Enchantment.LUCK.id, entityliving.bz());
+        return getEnchantmentLevel(Enchantment.LUCK.id, entityliving.bA());
     }
 
     public static int h(EntityLiving entityliving) {
-        return getEnchantmentLevel(Enchantment.LURE.id, entityliving.bz());
+        return getEnchantmentLevel(Enchantment.LURE.id, entityliving.bA());
     }
 
     public static int getBonusMonsterLootEnchantmentLevel(EntityLiving entityliving) {
-        return getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS.id, entityliving.bz());
+        return getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS.id, entityliving.bA());
     }
 
     public static boolean j(EntityLiving entityliving) {
@@ -283,7 +285,7 @@ public class EnchantmentManager {
         return itemstack;
     }
 
-    public static List b(Random random, ItemStack itemstack, int i) {
+    public static List<WeightedRandomEnchant> b(Random random, ItemStack itemstack, int i) {
         Item item = itemstack.getItem();
         int j = item.b();
 
@@ -349,7 +351,7 @@ public class EnchantmentManager {
         }
     }
 
-    public static Map b(int i, ItemStack itemstack) {
+    public static Map<Integer, WeightedRandomEnchant> b(int i, ItemStack itemstack) {
         Item item = itemstack.getItem();
         HashMap hashmap = null;
         boolean flag = itemstack.getItem() == Items.BOOK;
@@ -373,5 +375,76 @@ public class EnchantmentManager {
         }
 
         return hashmap;
+    }
+
+    static class SyntheticClass_1 {    }
+
+    static final class EnchantmentModifierArthropods implements EnchantmentManager.EnchantmentModifier {
+
+        public EntityLiving a;
+        public Entity b;
+
+        private EnchantmentModifierArthropods() {}
+
+        public void a(Enchantment enchantment, int i) {
+            enchantment.a(this.a, this.b, i);
+        }
+
+        EnchantmentModifierArthropods(EnchantmentManager.SyntheticClass_1 enchantmentmanager_syntheticclass_1) {
+            this();
+        }
+    }
+
+    static final class EnchantmentModifierThorns implements EnchantmentManager.EnchantmentModifier {
+
+        public EntityLiving a;
+        public Entity b;
+
+        private EnchantmentModifierThorns() {}
+
+        public void a(Enchantment enchantment, int i) {
+            enchantment.b(this.a, this.b, i);
+        }
+
+        EnchantmentModifierThorns(EnchantmentManager.SyntheticClass_1 enchantmentmanager_syntheticclass_1) {
+            this();
+        }
+    }
+
+    static final class EnchantmentModifierDamage implements EnchantmentManager.EnchantmentModifier {
+
+        public float a;
+        public EnumMonsterType b;
+
+        private EnchantmentModifierDamage() {}
+
+        public void a(Enchantment enchantment, int i) {
+            this.a += enchantment.a(i, this.b);
+        }
+
+        EnchantmentModifierDamage(EnchantmentManager.SyntheticClass_1 enchantmentmanager_syntheticclass_1) {
+            this();
+        }
+    }
+
+    static final class EnchantmentModifierProtection implements EnchantmentManager.EnchantmentModifier {
+
+        public int a;
+        public DamageSource b;
+
+        private EnchantmentModifierProtection() {}
+
+        public void a(Enchantment enchantment, int i) {
+            this.a += enchantment.a(i, this.b);
+        }
+
+        EnchantmentModifierProtection(EnchantmentManager.SyntheticClass_1 enchantmentmanager_syntheticclass_1) {
+            this();
+        }
+    }
+
+    interface EnchantmentModifier {
+
+        void a(Enchantment enchantment, int i);
     }
 }

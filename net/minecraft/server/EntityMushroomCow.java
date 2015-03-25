@@ -4,8 +4,8 @@ public class EntityMushroomCow extends EntityCow {
 
     public EntityMushroomCow(World world) {
         super(world);
-        this.a(0.9F, 1.3F);
-        this.bl = Blocks.MYCELIUM;
+        this.setSize(0.9F, 1.3F);
+        this.bn = Blocks.MYCELIUM;
     }
 
     public boolean a(EntityHuman entityhuman) {
@@ -26,12 +26,12 @@ public class EntityMushroomCow extends EntityCow {
         if (itemstack != null && itemstack.getItem() == Items.SHEARS && this.getAge() >= 0) {
             this.die();
             this.world.addParticle(EnumParticle.EXPLOSION_LARGE, this.locX, this.locY + (double) (this.length / 2.0F), this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
-            if (!this.world.isStatic) {
+            if (!this.world.isClientSide) {
                 EntityCow entitycow = new EntityCow(this.world);
 
                 entitycow.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
                 entitycow.setHealth(this.getHealth());
-                entitycow.aG = this.aG;
+                entitycow.aI = this.aI;
                 if (this.hasCustomName()) {
                     entitycow.setCustomName(this.getCustomName());
                 }

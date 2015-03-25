@@ -1,16 +1,19 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
+import java.util.Map;
+
 public class ChatHoverable {
 
-    private final EnumHoverAction a;
+    private final ChatHoverable.EnumHoverAction a;
     private final IChatBaseComponent b;
 
-    public ChatHoverable(EnumHoverAction enumhoveraction, IChatBaseComponent ichatbasecomponent) {
-        this.a = enumhoveraction;
+    public ChatHoverable(ChatHoverable.EnumHoverAction chathoverable_enumhoveraction, IChatBaseComponent ichatbasecomponent) {
+        this.a = chathoverable_enumhoveraction;
         this.b = ichatbasecomponent;
     }
 
-    public EnumHoverAction a() {
+    public ChatHoverable.EnumHoverAction a() {
         return this.a;
     }
 
@@ -51,5 +54,43 @@ public class ChatHoverable {
 
         i = 31 * i + (this.b != null ? this.b.hashCode() : 0);
         return i;
+    }
+
+    public static enum EnumHoverAction {
+
+        SHOW_TEXT("show_text", true), SHOW_ACHIEVEMENT("show_achievement", true), SHOW_ITEM("show_item", true), SHOW_ENTITY("show_entity", true);
+
+        private static final Map<String, ChatHoverable.EnumHoverAction> e = Maps.newHashMap();
+        private final boolean f;
+        private final String g;
+
+        private EnumHoverAction(String s, boolean flag) {
+            this.g = s;
+            this.f = flag;
+        }
+
+        public boolean a() {
+            return this.f;
+        }
+
+        public String b() {
+            return this.g;
+        }
+
+        public static ChatHoverable.EnumHoverAction a(String s) {
+            return (ChatHoverable.EnumHoverAction) ChatHoverable.EnumHoverAction.e.get(s);
+        }
+
+        static {
+            ChatHoverable.EnumHoverAction[] achathoverable_enumhoveraction = values();
+            int i = achathoverable_enumhoveraction.length;
+
+            for (int j = 0; j < i; ++j) {
+                ChatHoverable.EnumHoverAction chathoverable_enumhoveraction = achathoverable_enumhoveraction[j];
+
+                ChatHoverable.EnumHoverAction.e.put(chathoverable_enumhoveraction.b(), chathoverable_enumhoveraction);
+            }
+
+        }
     }
 }

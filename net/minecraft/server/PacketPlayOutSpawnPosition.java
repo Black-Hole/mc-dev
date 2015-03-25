@@ -1,8 +1,10 @@
 package net.minecraft.server;
 
-public class PacketPlayOutSpawnPosition implements Packet {
+import java.io.IOException;
 
-    public BlockPosition position;
+public class PacketPlayOutSpawnPosition implements Packet<PacketListenerPlayOut> {
+
+    private BlockPosition position;
 
     public PacketPlayOutSpawnPosition() {}
 
@@ -10,11 +12,11 @@ public class PacketPlayOutSpawnPosition implements Packet {
         this.position = blockposition;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.position = packetdataserializer.c();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.position);
     }
 

@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayInSteerVehicle implements Packet {
+import java.io.IOException;
+
+public class PacketPlayInSteerVehicle implements Packet<PacketListenerPlayIn> {
 
     private float a;
     private float b;
@@ -9,7 +11,7 @@ public class PacketPlayInSteerVehicle implements Packet {
 
     public PacketPlayInSteerVehicle() {}
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readFloat();
         this.b = packetdataserializer.readFloat();
         byte b0 = packetdataserializer.readByte();
@@ -18,7 +20,7 @@ public class PacketPlayInSteerVehicle implements Packet {
         this.d = (b0 & 2) > 0;
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeFloat(this.a);
         packetdataserializer.writeFloat(this.b);
         byte b0 = 0;

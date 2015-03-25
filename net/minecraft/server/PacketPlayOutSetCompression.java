@@ -1,16 +1,18 @@
 package net.minecraft.server;
 
-public class PacketPlayOutSetCompression implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutSetCompression implements Packet<PacketListenerPlayOut> {
 
     private int a;
 
     public PacketPlayOutSetCompression() {}
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
     }
 

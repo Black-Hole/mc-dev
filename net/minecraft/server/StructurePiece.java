@@ -43,7 +43,7 @@ public abstract class StructurePiece {
 
     protected abstract void b(NBTTagCompound nbttagcompound);
 
-    public void a(StructurePiece structurepiece, List list, Random random) {}
+    public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {}
 
     public abstract boolean a(World world, Random random, StructureBoundingBox structureboundingbox);
 
@@ -55,7 +55,7 @@ public abstract class StructurePiece {
         return this.n;
     }
 
-    public static StructurePiece a(List list, StructureBoundingBox structureboundingbox) {
+    public static StructurePiece a(List<StructurePiece> list, StructureBoundingBox structureboundingbox) {
         Iterator iterator = list.iterator();
 
         StructurePiece structurepiece;
@@ -82,17 +82,18 @@ public abstract class StructurePiece {
         int l = Math.min(this.l.d + 1, structureboundingbox.d);
         int i1 = Math.min(this.l.e + 1, structureboundingbox.e);
         int j1 = Math.min(this.l.f + 1, structureboundingbox.f);
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
         int k1;
         int l1;
 
         for (k1 = i; k1 <= l; ++k1) {
             for (l1 = k; l1 <= j1; ++l1) {
-                if (world.getType(new BlockPosition(k1, j, l1)).getBlock().getMaterial().isLiquid()) {
+                if (world.getType(blockposition_mutableblockposition.c(k1, j, l1)).getBlock().getMaterial().isLiquid()) {
                     return true;
                 }
 
-                if (world.getType(new BlockPosition(k1, i1, l1)).getBlock().getMaterial().isLiquid()) {
+                if (world.getType(blockposition_mutableblockposition.c(k1, i1, l1)).getBlock().getMaterial().isLiquid()) {
                     return true;
                 }
             }
@@ -100,11 +101,11 @@ public abstract class StructurePiece {
 
         for (k1 = i; k1 <= l; ++k1) {
             for (l1 = j; l1 <= i1; ++l1) {
-                if (world.getType(new BlockPosition(k1, l1, k)).getBlock().getMaterial().isLiquid()) {
+                if (world.getType(blockposition_mutableblockposition.c(k1, l1, k)).getBlock().getMaterial().isLiquid()) {
                     return true;
                 }
 
-                if (world.getType(new BlockPosition(k1, l1, j1)).getBlock().getMaterial().isLiquid()) {
+                if (world.getType(blockposition_mutableblockposition.c(k1, l1, j1)).getBlock().getMaterial().isLiquid()) {
                     return true;
                 }
             }
@@ -112,11 +113,11 @@ public abstract class StructurePiece {
 
         for (k1 = k; k1 <= j1; ++k1) {
             for (l1 = j; l1 <= i1; ++l1) {
-                if (world.getType(new BlockPosition(i, l1, k1)).getBlock().getMaterial().isLiquid()) {
+                if (world.getType(blockposition_mutableblockposition.c(i, l1, k1)).getBlock().getMaterial().isLiquid()) {
                     return true;
                 }
 
-                if (world.getType(new BlockPosition(l, l1, k1)).getBlock().getMaterial().isLiquid()) {
+                if (world.getType(blockposition_mutableblockposition.c(l, l1, k1)).getBlock().getMaterial().isLiquid()) {
                     return true;
                 }
             }
@@ -129,7 +130,7 @@ public abstract class StructurePiece {
         if (this.m == null) {
             return i;
         } else {
-            switch (SwitchHelperDirection4.a[this.m.ordinal()]) {
+            switch (StructurePiece.SyntheticClass_1.a[this.m.ordinal()]) {
             case 1:
             case 2:
                 return this.l.a + i;
@@ -154,7 +155,7 @@ public abstract class StructurePiece {
         if (this.m == null) {
             return j;
         } else {
-            switch (SwitchHelperDirection4.a[this.m.ordinal()]) {
+            switch (StructurePiece.SyntheticClass_1.a[this.m.ordinal()]) {
             case 1:
                 return this.l.f - j;
 
@@ -421,8 +422,9 @@ public abstract class StructurePiece {
         int l = this.a(i, k);
         int i1 = this.d(j);
         int j1 = this.b(i, k);
+        BlockPosition blockposition = new BlockPosition(l, i1, j1);
 
-        return !structureboundingbox.b((BaseBlockPosition) (new BlockPosition(l, i1, j1))) ? Blocks.AIR.getBlockData() : world.getType(new BlockPosition(l, i1, j1));
+        return !structureboundingbox.b((BaseBlockPosition) blockposition) ? Blocks.AIR.getBlockData() : world.getType(blockposition);
     }
 
     protected void a(World world, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1) {
@@ -453,13 +455,13 @@ public abstract class StructurePiece {
 
     }
 
-    protected void a(World world, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1, boolean flag, Random random, StructurePieceBlockSelector structurepieceblockselector) {
+    protected void a(World world, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1, boolean flag, Random random, StructurePiece.StructurePieceBlockSelector structurepiece_structurepieceblockselector) {
         for (int k1 = j; k1 <= i1; ++k1) {
             for (int l1 = i; l1 <= l; ++l1) {
                 for (int i2 = k; i2 <= j1; ++i2) {
                     if (!flag || this.a(world, l1, k1, i2, structureboundingbox).getBlock().getMaterial() != Material.AIR) {
-                        structurepieceblockselector.a(random, l1, k1, i2, k1 == j || k1 == i1 || l1 == i || l1 == l || i2 == k || i2 == j1);
-                        this.a(world, structurepieceblockselector.a(), l1, k1, i2, structureboundingbox);
+                        structurepiece_structurepieceblockselector.a(random, l1, k1, i2, k1 == j || k1 == i1 || l1 == i || l1 == l || i2 == k || i2 == j1);
+                        this.a(world, structurepiece_structurepieceblockselector.a(), l1, k1, i2, structureboundingbox);
                     }
                 }
             }
@@ -546,7 +548,7 @@ public abstract class StructurePiece {
         }
     }
 
-    protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, List list, int l) {
+    protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, List<StructurePieceTreasure> list, int l) {
         BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
 
         if (structureboundingbox.b((BaseBlockPosition) blockposition) && world.getType(blockposition).getBlock() != Blocks.CHEST) {
@@ -565,7 +567,7 @@ public abstract class StructurePiece {
         }
     }
 
-    protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, int l, List list, int i1) {
+    protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, int l, List<StructurePieceTreasure> list, int i1) {
         BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
 
         if (structureboundingbox.b((BaseBlockPosition) blockposition) && world.getType(blockposition).getBlock() != Blocks.DISPENSER) {
@@ -589,5 +591,56 @@ public abstract class StructurePiece {
             ItemDoor.a(world, blockposition, enumdirection.f(), Blocks.WOODEN_DOOR);
         }
 
+    }
+
+    public void a(int i, int j, int k) {
+        this.l.a(i, j, k);
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EnumDirection.values().length];
+
+        static {
+            try {
+                StructurePiece.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                StructurePiece.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                StructurePiece.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                StructurePiece.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+        }
+    }
+
+    public abstract static class StructurePieceBlockSelector {
+
+        protected IBlockData a;
+
+        protected StructurePieceBlockSelector() {
+            this.a = Blocks.AIR.getBlockData();
+        }
+
+        public abstract void a(Random random, int i, int j, int k, boolean flag);
+
+        public IBlockData a() {
+            return this.a;
+        }
     }
 }

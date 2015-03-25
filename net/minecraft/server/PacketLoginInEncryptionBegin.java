@@ -1,21 +1,22 @@
 package net.minecraft.server;
 
+import java.io.IOException;
 import java.security.PrivateKey;
 import javax.crypto.SecretKey;
 
-public class PacketLoginInEncryptionBegin implements Packet {
+public class PacketLoginInEncryptionBegin implements Packet<PacketLoginInListener> {
 
     private byte[] a = new byte[0];
     private byte[] b = new byte[0];
 
     public PacketLoginInEncryptionBegin() {}
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.a();
         this.b = packetdataserializer.a();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.a(this.b);
     }

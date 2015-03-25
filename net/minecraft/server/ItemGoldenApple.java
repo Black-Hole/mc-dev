@@ -12,12 +12,12 @@ public class ItemGoldenApple extends ItemFood {
     }
 
     protected void c(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             entityhuman.addEffect(new MobEffect(MobEffectList.ABSORBTION.id, 2400, 0));
         }
 
         if (itemstack.getData() > 0) {
-            if (!world.isStatic) {
+            if (!world.isClientSide) {
                 entityhuman.addEffect(new MobEffect(MobEffectList.REGENERATION.id, 600, 4));
                 entityhuman.addEffect(new MobEffect(MobEffectList.RESISTANCE.id, 6000, 0));
                 entityhuman.addEffect(new MobEffect(MobEffectList.FIRE_RESISTANCE.id, 6000, 0));

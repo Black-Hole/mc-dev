@@ -107,7 +107,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
 
     }
 
-    private void a(int i, int j, String s) {
+    private void a(int i, int j, String s) throws IOException {
         ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream(1248);
         DataOutputStream dataoutputstream = new DataOutputStream(bytearrayoutputstream);
         byte[] abyte = s.getBytes("UTF-8");
@@ -121,11 +121,11 @@ public class RemoteControlSession extends RemoteConnectionThread {
         this.j.getOutputStream().write(bytearrayoutputstream.toByteArray());
     }
 
-    private void f() {
+    private void f() throws IOException {
         this.a(-1, 2, "");
     }
 
-    private void a(int i, String s) {
+    private void a(int i, String s) throws IOException {
         int j = s.length();
 
         do {

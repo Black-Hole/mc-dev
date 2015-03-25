@@ -15,7 +15,7 @@ public class WorldGenLightStone2 extends WorldGenerator {
             world.setTypeAndData(blockposition, Blocks.GLOWSTONE.getBlockData(), 2);
 
             for (int i = 0; i < 1500; ++i) {
-                BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(12), random.nextInt(8) - random.nextInt(8));
+                BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), -random.nextInt(12), random.nextInt(8) - random.nextInt(8));
 
                 if (world.getType(blockposition1).getBlock().getMaterial() == Material.AIR) {
                     int j = 0;

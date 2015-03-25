@@ -19,7 +19,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
     int g;
     int h;
     int i;
-    List j;
+    List<WorldGenBigTree.Position> j;
 
     public WorldGenBigTree(boolean flag) {
         super(flag);
@@ -49,7 +49,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
         int k = this.a - this.i;
 
         this.j = Lists.newArrayList();
-        this.j.add(new WorldGenBigTreeInnerClassPosition(this.m.up(k), j));
+        this.j.add(new WorldGenBigTree.Position(this.m.up(k), j));
 
         for (; k >= 0; --k) {
             float f = this.a(k);
@@ -71,7 +71,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
                         BlockPosition blockposition2 = new BlockPosition(this.m.getX(), k1, this.m.getZ());
 
                         if (this.a(blockposition2, blockposition) == -1) {
-                            this.j.add(new WorldGenBigTreeInnerClassPosition(blockposition, blockposition2.getY()));
+                            this.j.add(new WorldGenBigTree.Position(blockposition, blockposition2.getY()));
                         }
                     }
                 }
@@ -80,7 +80,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
 
     }
 
-    void a(BlockPosition blockposition, float f, Block block) {
+    void a(BlockPosition blockposition, float f, IBlockData iblockdata) {
         int i = (int) ((double) f + 0.618D);
 
         for (int j = -i; j <= i; ++j) {
@@ -90,7 +90,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
                     Material material = this.l.getType(blockposition1).getBlock().getMaterial();
 
                     if (material == Material.AIR || material == Material.LEAVES) {
-                        this.a(this.l, blockposition1, block, 0);
+                        this.a(this.l, blockposition1, iblockdata);
                     }
                 }
             }
@@ -122,7 +122,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
 
     void a(BlockPosition blockposition) {
         for (int i = 0; i < this.i; ++i) {
-            this.a(blockposition.up(i), this.b(i), Blocks.LEAVES);
+            this.a(blockposition.up(i), this.b(i), Blocks.LEAVES.getBlockData().set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)));
         }
 
     }
@@ -136,9 +136,9 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
 
         for (int j = 0; j <= i; ++j) {
             BlockPosition blockposition3 = blockposition.a((double) (0.5F + (float) j * f), (double) (0.5F + (float) j * f1), (double) (0.5F + (float) j * f2));
-            EnumLogRotation enumlogrotation = this.b(blockposition, blockposition3);
+            BlockLogAbstract.EnumLogRotation blocklogabstract_enumlogrotation = this.b(blockposition, blockposition3);
 
-            this.a(this.l, blockposition3, block.getBlockData().set(BlockLogAbstract.AXIS, enumlogrotation));
+            this.a(this.l, blockposition3, block.getBlockData().set(BlockLogAbstract.AXIS, blocklogabstract_enumlogrotation));
         }
 
     }
@@ -151,30 +151,30 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
         return k > i && k > j ? k : (j > i ? j : i);
     }
 
-    private EnumLogRotation b(BlockPosition blockposition, BlockPosition blockposition1) {
-        EnumLogRotation enumlogrotation = EnumLogRotation.Y;
+    private BlockLogAbstract.EnumLogRotation b(BlockPosition blockposition, BlockPosition blockposition1) {
+        BlockLogAbstract.EnumLogRotation blocklogabstract_enumlogrotation = BlockLogAbstract.EnumLogRotation.Y;
         int i = Math.abs(blockposition1.getX() - blockposition.getX());
         int j = Math.abs(blockposition1.getZ() - blockposition.getZ());
         int k = Math.max(i, j);
 
         if (k > 0) {
             if (i == k) {
-                enumlogrotation = EnumLogRotation.X;
+                blocklogabstract_enumlogrotation = BlockLogAbstract.EnumLogRotation.X;
             } else if (j == k) {
-                enumlogrotation = EnumLogRotation.Z;
+                blocklogabstract_enumlogrotation = BlockLogAbstract.EnumLogRotation.Z;
             }
         }
 
-        return enumlogrotation;
+        return blocklogabstract_enumlogrotation;
     }
 
     void b() {
         Iterator iterator = this.j.iterator();
 
         while (iterator.hasNext()) {
-            WorldGenBigTreeInnerClassPosition worldgenbigtreeinnerclassposition = (WorldGenBigTreeInnerClassPosition) iterator.next();
+            WorldGenBigTree.Position worldgenbigtree_position = (WorldGenBigTree.Position) iterator.next();
 
-            this.a((BlockPosition) worldgenbigtreeinnerclassposition);
+            this.a((BlockPosition) worldgenbigtree_position);
         }
 
     }
@@ -201,12 +201,12 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
         Iterator iterator = this.j.iterator();
 
         while (iterator.hasNext()) {
-            WorldGenBigTreeInnerClassPosition worldgenbigtreeinnerclassposition = (WorldGenBigTreeInnerClassPosition) iterator.next();
-            int i = worldgenbigtreeinnerclassposition.q();
+            WorldGenBigTree.Position worldgenbigtree_position = (WorldGenBigTree.Position) iterator.next();
+            int i = worldgenbigtree_position.q();
             BlockPosition blockposition = new BlockPosition(this.m.getX(), i, this.m.getZ());
 
-            if (this.c(i - this.m.getY())) {
-                this.a(blockposition, (BlockPosition) worldgenbigtreeinnerclassposition, Blocks.LOG);
+            if (!blockposition.equals(worldgenbigtree_position) && this.c(i - this.m.getY())) {
+                this.a(blockposition, (BlockPosition) worldgenbigtree_position, Blocks.LOG);
             }
         }
 
@@ -273,6 +273,20 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
                 this.a = i;
                 return true;
             }
+        }
+    }
+
+    static class Position extends BlockPosition {
+
+        private final int c;
+
+        public Position(BlockPosition blockposition, int i) {
+            super(blockposition.getX(), blockposition.getY(), blockposition.getZ());
+            this.c = i;
+        }
+
+        public int q() {
+            return this.c;
         }
     }
 }

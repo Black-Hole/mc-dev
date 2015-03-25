@@ -6,18 +6,17 @@ import java.util.UUID;
 
 public class EntityWitch extends EntityMonster implements IRangedEntity {
 
-    private static final UUID b = UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E");
-    private static final AttributeModifier c = (new AttributeModifier(EntityWitch.b, "Drinking speed penalty", -0.25D, 0)).a(false);
-    private static final Item[] bk = new Item[] { Items.GLOWSTONE_DUST, Items.SUGAR, Items.REDSTONE, Items.SPIDER_EYE, Items.GLASS_BOTTLE, Items.GUNPOWDER, Items.STICK, Items.STICK};
-    private int bl;
+    private static final UUID a = UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E");
+    private static final AttributeModifier b = (new AttributeModifier(EntityWitch.a, "Drinking speed penalty", -0.25D, 0)).a(false);
+    private static final Item[] c = new Item[] { Items.GLOWSTONE_DUST, Items.SUGAR, Items.REDSTONE, Items.SPIDER_EYE, Items.GLASS_BOTTLE, Items.GUNPOWDER, Items.STICK, Items.STICK};
+    private int bm;
 
     public EntityWitch(World world) {
         super(world);
-        this.a(0.6F, 1.95F);
+        this.setSize(0.6F, 1.95F);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, new PathfinderGoalArrowAttack(this, 1.0D, 60, 10.0F));
         this.goalSelector.a(2, new PathfinderGoalRandomStroll(this, 1.0D));
-        this.goalSelector.a(2, this.a);
         this.goalSelector.a(3, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(3, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
@@ -33,11 +32,11 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
         return null;
     }
 
-    protected String bn() {
+    protected String bo() {
         return null;
     }
 
-    protected String bo() {
+    protected String bp() {
         return null;
     }
 
@@ -49,18 +48,18 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
         return this.getDataWatcher().getByte(21) == 1;
     }
 
-    protected void aW() {
-        super.aW();
+    protected void initAttributes() {
+        super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(26.0D);
         this.getAttributeInstance(GenericAttributes.d).setValue(0.25D);
     }
 
     public void m() {
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             if (this.n()) {
-                if (this.bl-- <= 0) {
+                if (this.bm-- <= 0) {
                     this.a(false);
-                    ItemStack itemstack = this.bz();
+                    ItemStack itemstack = this.bA();
 
                     this.setEquipment(0, (ItemStack) null);
                     if (itemstack != null && itemstack.getItem() == Items.POTION) {
@@ -77,7 +76,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
                         }
                     }
 
-                    this.getAttributeInstance(GenericAttributes.d).c(EntityWitch.c);
+                    this.getAttributeInstance(GenericAttributes.d).c(EntityWitch.b);
                 }
             } else {
                 short short0 = -1;
@@ -96,12 +95,12 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
 
                 if (short0 > -1) {
                     this.setEquipment(0, new ItemStack(Items.POTION, 1, short0));
-                    this.bl = this.bz().l();
+                    this.bm = this.bA().l();
                     this.a(true);
                     AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.d);
 
-                    attributeinstance.c(EntityWitch.c);
-                    attributeinstance.b(EntityWitch.c);
+                    attributeinstance.c(EntityWitch.b);
+                    attributeinstance.b(EntityWitch.b);
                 }
             }
 
@@ -131,7 +130,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
 
         for (int k = 0; k < j; ++k) {
             int l = this.random.nextInt(3);
-            Item item = EntityWitch.bk[this.random.nextInt(EntityWitch.bk.length)];
+            Item item = EntityWitch.c[this.random.nextInt(EntityWitch.c.length)];
 
             if (i > 0) {
                 l += this.random.nextInt(i + 1);

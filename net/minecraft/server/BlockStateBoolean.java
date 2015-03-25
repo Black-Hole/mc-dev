@@ -3,15 +3,15 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
 
-public class BlockStateBoolean extends BlockState {
+public class BlockStateBoolean extends BlockState<Boolean> {
 
-    private final ImmutableSet a = ImmutableSet.of(Boolean.valueOf(true), Boolean.valueOf(false));
+    private final ImmutableSet<Boolean> a = ImmutableSet.of(Boolean.valueOf(true), Boolean.valueOf(false));
 
     protected BlockStateBoolean(String s) {
         super(s, Boolean.class);
     }
 
-    public Collection c() {
+    public Collection<Boolean> c() {
         return this.a;
     }
 

@@ -7,15 +7,19 @@ public class BlockCobbleWall extends Block {
     public static final BlockStateBoolean EAST = BlockStateBoolean.of("east");
     public static final BlockStateBoolean SOUTH = BlockStateBoolean.of("south");
     public static final BlockStateBoolean WEST = BlockStateBoolean.of("west");
-    public static final BlockStateEnum VARIANT = BlockStateEnum.of("variant", EnumCobbleVariant.class);
+    public static final BlockStateEnum<BlockCobbleWall.EnumCobbleVariant> VARIANT = BlockStateEnum.of("variant", BlockCobbleWall.EnumCobbleVariant.class);
 
     public BlockCobbleWall(Block block) {
         super(block.material);
-        this.j(this.blockStateList.getBlockData().set(BlockCobbleWall.UP, Boolean.valueOf(false)).set(BlockCobbleWall.NORTH, Boolean.valueOf(false)).set(BlockCobbleWall.EAST, Boolean.valueOf(false)).set(BlockCobbleWall.SOUTH, Boolean.valueOf(false)).set(BlockCobbleWall.WEST, Boolean.valueOf(false)).set(BlockCobbleWall.VARIANT, EnumCobbleVariant.NORMAL));
+        this.j(this.blockStateList.getBlockData().set(BlockCobbleWall.UP, Boolean.valueOf(false)).set(BlockCobbleWall.NORTH, Boolean.valueOf(false)).set(BlockCobbleWall.EAST, Boolean.valueOf(false)).set(BlockCobbleWall.SOUTH, Boolean.valueOf(false)).set(BlockCobbleWall.WEST, Boolean.valueOf(false)).set(BlockCobbleWall.VARIANT, BlockCobbleWall.EnumCobbleVariant.NORMAL));
         this.c(block.strength);
         this.b(block.durability / 3.0F);
         this.a(block.stepSound);
         this.a(CreativeModeTab.b);
+    }
+
+    public String getName() {
+        return LocaleI18n.get(this.a() + "." + BlockCobbleWall.EnumCobbleVariant.NORMAL.c() + ".name");
     }
 
     public boolean d() {
@@ -83,15 +87,15 @@ public class BlockCobbleWall extends Block {
     }
 
     public int getDropData(IBlockData iblockdata) {
-        return ((EnumCobbleVariant) iblockdata.get(BlockCobbleWall.VARIANT)).a();
+        return ((BlockCobbleWall.EnumCobbleVariant) iblockdata.get(BlockCobbleWall.VARIANT)).a();
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockCobbleWall.VARIANT, EnumCobbleVariant.a(i));
+        return this.getBlockData().set(BlockCobbleWall.VARIANT, BlockCobbleWall.EnumCobbleVariant.a(i));
     }
 
     public int toLegacyData(IBlockData iblockdata) {
-        return ((EnumCobbleVariant) iblockdata.get(BlockCobbleWall.VARIANT)).a();
+        return ((BlockCobbleWall.EnumCobbleVariant) iblockdata.get(BlockCobbleWall.VARIANT)).a();
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -100,5 +104,57 @@ public class BlockCobbleWall extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockCobbleWall.UP, BlockCobbleWall.NORTH, BlockCobbleWall.EAST, BlockCobbleWall.WEST, BlockCobbleWall.SOUTH, BlockCobbleWall.VARIANT});
+    }
+
+    public static enum EnumCobbleVariant implements INamable {
+
+        NORMAL(0, "cobblestone", "normal"), MOSSY(1, "mossy_cobblestone", "mossy");
+
+        private static final BlockCobbleWall.EnumCobbleVariant[] c = new BlockCobbleWall.EnumCobbleVariant[values().length];
+        private final int d;
+        private final String e;
+        private String f;
+
+        private EnumCobbleVariant(int i, String s, String s1) {
+            this.d = i;
+            this.e = s;
+            this.f = s1;
+        }
+
+        public int a() {
+            return this.d;
+        }
+
+        public String toString() {
+            return this.e;
+        }
+
+        public static BlockCobbleWall.EnumCobbleVariant a(int i) {
+            if (i < 0 || i >= BlockCobbleWall.EnumCobbleVariant.c.length) {
+                i = 0;
+            }
+
+            return BlockCobbleWall.EnumCobbleVariant.c[i];
+        }
+
+        public String getName() {
+            return this.e;
+        }
+
+        public String c() {
+            return this.f;
+        }
+
+        static {
+            BlockCobbleWall.EnumCobbleVariant[] ablockcobblewall_enumcobblevariant = values();
+            int i = ablockcobblewall_enumcobblevariant.length;
+
+            for (int j = 0; j < i; ++j) {
+                BlockCobbleWall.EnumCobbleVariant blockcobblewall_enumcobblevariant = ablockcobblewall_enumcobblevariant[j];
+
+                BlockCobbleWall.EnumCobbleVariant.c[blockcobblewall_enumcobblevariant.a()] = blockcobblewall_enumcobblevariant;
+            }
+
+        }
     }
 }

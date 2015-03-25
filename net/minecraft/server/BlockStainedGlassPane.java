@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockStainedGlassPane extends BlockThin {
 
-    public static final BlockStateEnum COLOR = BlockStateEnum.of("color", EnumColor.class);
+    public static final BlockStateEnum<EnumColor> COLOR = BlockStateEnum.of("color", EnumColor.class);
 
     public BlockStainedGlassPane() {
         super(Material.SHATTERABLE, false);
@@ -12,6 +12,10 @@ public class BlockStainedGlassPane extends BlockThin {
 
     public int getDropData(IBlockData iblockdata) {
         return ((EnumColor) iblockdata.get(BlockStainedGlassPane.COLOR)).getColorIndex();
+    }
+
+    public MaterialMapColor g(IBlockData iblockdata) {
+        return ((EnumColor) iblockdata.get(BlockStainedGlassPane.COLOR)).e();
     }
 
     public IBlockData fromLegacyData(int i) {
@@ -27,15 +31,15 @@ public class BlockStainedGlassPane extends BlockThin {
     }
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.isStatic) {
-            BlockBeacon.d(world, blockposition);
+        if (!world.isClientSide) {
+            BlockBeacon.f(world, blockposition);
         }
 
     }
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.isStatic) {
-            BlockBeacon.d(world, blockposition);
+        if (!world.isClientSide) {
+            BlockBeacon.f(world, blockposition);
         }
 
     }

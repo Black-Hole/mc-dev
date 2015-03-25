@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,14 +18,14 @@ public class RemoteControlListener extends RemoteConnectionThread {
     private String j;
     private ServerSocket k;
     private String l;
-    private Map m;
+    private Map<SocketAddress, RemoteControlSession> m;
 
     public RemoteControlListener(IMinecraftServer iminecraftserver) {
         super(iminecraftserver, "RCON Listener");
         this.h = iminecraftserver.a("rcon.port", 0);
         this.l = iminecraftserver.a("rcon.password", "");
-        this.j = iminecraftserver.C();
-        this.i = iminecraftserver.D();
+        this.j = iminecraftserver.D();
+        this.i = iminecraftserver.E();
         if (0 == this.h) {
             this.h = this.i + 10;
             this.b("Setting default rcon port to " + this.h);

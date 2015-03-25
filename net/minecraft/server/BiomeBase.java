@@ -14,22 +14,22 @@ import org.apache.logging.log4j.Logger;
 public abstract class BiomeBase {
 
     private static final Logger aD = LogManager.getLogger();
-    protected static final BiomeTemperature a = new BiomeTemperature(0.1F, 0.2F);
-    protected static final BiomeTemperature b = new BiomeTemperature(-0.5F, 0.0F);
-    protected static final BiomeTemperature c = new BiomeTemperature(-1.0F, 0.1F);
-    protected static final BiomeTemperature d = new BiomeTemperature(-1.8F, 0.1F);
-    protected static final BiomeTemperature e = new BiomeTemperature(0.125F, 0.05F);
-    protected static final BiomeTemperature f = new BiomeTemperature(0.2F, 0.2F);
-    protected static final BiomeTemperature g = new BiomeTemperature(0.45F, 0.3F);
-    protected static final BiomeTemperature h = new BiomeTemperature(1.5F, 0.025F);
-    protected static final BiomeTemperature i = new BiomeTemperature(1.0F, 0.5F);
-    protected static final BiomeTemperature j = new BiomeTemperature(0.0F, 0.025F);
-    protected static final BiomeTemperature k = new BiomeTemperature(0.1F, 0.8F);
-    protected static final BiomeTemperature l = new BiomeTemperature(0.2F, 0.3F);
-    protected static final BiomeTemperature m = new BiomeTemperature(-0.2F, 0.1F);
+    protected static final BiomeBase.BiomeTemperature a = new BiomeBase.BiomeTemperature(0.1F, 0.2F);
+    protected static final BiomeBase.BiomeTemperature b = new BiomeBase.BiomeTemperature(-0.5F, 0.0F);
+    protected static final BiomeBase.BiomeTemperature c = new BiomeBase.BiomeTemperature(-1.0F, 0.1F);
+    protected static final BiomeBase.BiomeTemperature d = new BiomeBase.BiomeTemperature(-1.8F, 0.1F);
+    protected static final BiomeBase.BiomeTemperature e = new BiomeBase.BiomeTemperature(0.125F, 0.05F);
+    protected static final BiomeBase.BiomeTemperature f = new BiomeBase.BiomeTemperature(0.2F, 0.2F);
+    protected static final BiomeBase.BiomeTemperature g = new BiomeBase.BiomeTemperature(0.45F, 0.3F);
+    protected static final BiomeBase.BiomeTemperature h = new BiomeBase.BiomeTemperature(1.5F, 0.025F);
+    protected static final BiomeBase.BiomeTemperature i = new BiomeBase.BiomeTemperature(1.0F, 0.5F);
+    protected static final BiomeBase.BiomeTemperature j = new BiomeBase.BiomeTemperature(0.0F, 0.025F);
+    protected static final BiomeBase.BiomeTemperature k = new BiomeBase.BiomeTemperature(0.1F, 0.8F);
+    protected static final BiomeBase.BiomeTemperature l = new BiomeBase.BiomeTemperature(0.2F, 0.3F);
+    protected static final BiomeBase.BiomeTemperature m = new BiomeBase.BiomeTemperature(-0.2F, 0.1F);
     private static final BiomeBase[] biomes = new BiomeBase[256];
-    public static final Set n = Sets.newHashSet();
-    public static final Map o = Maps.newHashMap();
+    public static final Set<BiomeBase> n = Sets.newHashSet();
+    public static final Map<String, BiomeBase> o = Maps.newHashMap();
     public static final BiomeBase OCEAN = (new BiomeOcean(0)).b(112).a("Ocean").a(BiomeBase.c);
     public static final BiomeBase PLAINS = (new BiomePlains(1)).b(9286496).a("Plains");
     public static final BiomeBase DESERT = (new BiomeDesert(2)).b(16421912).a("Desert").b().a(2.0F, 0.0F).a(BiomeBase.e);
@@ -86,10 +86,10 @@ public abstract class BiomeBase {
     public float humidity;
     public int ar;
     public BiomeDecorator as;
-    protected List at;
-    protected List au;
-    protected List av;
-    protected List aw;
+    protected List<BiomeBase.BiomeMeta> at;
+    protected List<BiomeBase.BiomeMeta> au;
+    protected List<BiomeBase.BiomeMeta> av;
+    protected List<BiomeBase.BiomeMeta> aw;
     protected boolean ax;
     protected boolean ay;
     public final int id;
@@ -117,20 +117,20 @@ public abstract class BiomeBase {
         this.id = i;
         BiomeBase.biomes[i] = this;
         this.as = this.a();
-        this.au.add(new BiomeMeta(EntitySheep.class, 12, 4, 4));
-        this.au.add(new BiomeMeta(EntityRabbit.class, 10, 3, 3));
-        this.au.add(new BiomeMeta(EntityPig.class, 10, 4, 4));
-        this.au.add(new BiomeMeta(EntityChicken.class, 10, 4, 4));
-        this.au.add(new BiomeMeta(EntityCow.class, 8, 4, 4));
-        this.at.add(new BiomeMeta(EntitySpider.class, 100, 4, 4));
-        this.at.add(new BiomeMeta(EntityZombie.class, 100, 4, 4));
-        this.at.add(new BiomeMeta(EntitySkeleton.class, 100, 4, 4));
-        this.at.add(new BiomeMeta(EntityCreeper.class, 100, 4, 4));
-        this.at.add(new BiomeMeta(EntitySlime.class, 100, 4, 4));
-        this.at.add(new BiomeMeta(EntityEnderman.class, 10, 1, 4));
-        this.at.add(new BiomeMeta(EntityWitch.class, 5, 1, 1));
-        this.av.add(new BiomeMeta(EntitySquid.class, 10, 4, 4));
-        this.aw.add(new BiomeMeta(EntityBat.class, 10, 8, 8));
+        this.au.add(new BiomeBase.BiomeMeta(EntitySheep.class, 12, 4, 4));
+        this.au.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 10, 3, 3));
+        this.au.add(new BiomeBase.BiomeMeta(EntityPig.class, 10, 4, 4));
+        this.au.add(new BiomeBase.BiomeMeta(EntityChicken.class, 10, 4, 4));
+        this.au.add(new BiomeBase.BiomeMeta(EntityCow.class, 8, 4, 4));
+        this.at.add(new BiomeBase.BiomeMeta(EntitySpider.class, 100, 4, 4));
+        this.at.add(new BiomeBase.BiomeMeta(EntityZombie.class, 100, 4, 4));
+        this.at.add(new BiomeBase.BiomeMeta(EntitySkeleton.class, 100, 4, 4));
+        this.at.add(new BiomeBase.BiomeMeta(EntityCreeper.class, 100, 4, 4));
+        this.at.add(new BiomeBase.BiomeMeta(EntitySlime.class, 100, 4, 4));
+        this.at.add(new BiomeBase.BiomeMeta(EntityEnderman.class, 10, 1, 4));
+        this.at.add(new BiomeBase.BiomeMeta(EntityWitch.class, 5, 1, 1));
+        this.av.add(new BiomeBase.BiomeMeta(EntitySquid.class, 10, 4, 4));
+        this.aw.add(new BiomeBase.BiomeMeta(EntityBat.class, 10, 8, 8));
     }
 
     protected BiomeDecorator a() {
@@ -147,9 +147,9 @@ public abstract class BiomeBase {
         }
     }
 
-    protected final BiomeBase a(BiomeTemperature biometemperature) {
-        this.an = biometemperature.a;
-        this.ao = biometemperature.b;
+    protected final BiomeBase a(BiomeBase.BiomeTemperature biomebase_biometemperature) {
+        this.an = biomebase_biometemperature.a;
+        this.ao = biomebase_biometemperature.b;
         return this;
     }
 
@@ -163,11 +163,11 @@ public abstract class BiomeBase {
     }
 
     public WorldGenerator b(Random random) {
-        return new WorldGenGrass(EnumTallGrassType.GRASS);
+        return new WorldGenGrass(BlockLongGrass.EnumTallGrassType.GRASS);
     }
 
-    public EnumFlowerVarient a(Random random, BlockPosition blockposition) {
-        return random.nextInt(3) > 0 ? EnumFlowerVarient.DANDELION : EnumFlowerVarient.POPPY;
+    public BlockFlowers.EnumFlowerVarient a(Random random, BlockPosition blockposition) {
+        return random.nextInt(3) > 0 ? BlockFlowers.EnumFlowerVarient.DANDELION : BlockFlowers.EnumFlowerVarient.POPPY;
     }
 
     protected BiomeBase c() {
@@ -206,8 +206,8 @@ public abstract class BiomeBase {
         return this;
     }
 
-    public List getMobs(EnumCreatureType enumcreaturetype) {
-        switch (SwitchHelperBiomeBase.switchMap[enumcreaturetype.ordinal()]) {
+    public List<BiomeBase.BiomeMeta> getMobs(EnumCreatureType enumcreaturetype) {
+        switch (BiomeBase.SyntheticClass_1.switchMap[enumcreaturetype.ordinal()]) {
         case 1:
             return this.at;
 
@@ -268,56 +268,57 @@ public abstract class BiomeBase {
     }
 
     public final void b(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
-        boolean flag = true;
+        int k = world.F();
         IBlockData iblockdata = this.ak;
         IBlockData iblockdata1 = this.al;
-        int k = -1;
-        int l = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
-        int i1 = i & 15;
-        int j1 = j & 15;
+        int l = -1;
+        int i1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
+        int j1 = i & 15;
+        int k1 = j & 15;
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        for (int k1 = 255; k1 >= 0; --k1) {
-            if (k1 <= random.nextInt(5)) {
-                chunksnapshot.a(j1, k1, i1, Blocks.BEDROCK.getBlockData());
+        for (int l1 = 255; l1 >= 0; --l1) {
+            if (l1 <= random.nextInt(5)) {
+                chunksnapshot.a(k1, l1, j1, Blocks.BEDROCK.getBlockData());
             } else {
-                IBlockData iblockdata2 = chunksnapshot.a(j1, k1, i1);
+                IBlockData iblockdata2 = chunksnapshot.a(k1, l1, j1);
 
                 if (iblockdata2.getBlock().getMaterial() == Material.AIR) {
-                    k = -1;
+                    l = -1;
                 } else if (iblockdata2.getBlock() == Blocks.STONE) {
-                    if (k == -1) {
-                        if (l <= 0) {
+                    if (l == -1) {
+                        if (i1 <= 0) {
                             iblockdata = null;
                             iblockdata1 = Blocks.STONE.getBlockData();
-                        } else if (k1 >= 59 && k1 <= 64) {
+                        } else if (l1 >= k - 4 && l1 <= k + 1) {
                             iblockdata = this.ak;
                             iblockdata1 = this.al;
                         }
 
-                        if (k1 < 63 && (iblockdata == null || iblockdata.getBlock().getMaterial() == Material.AIR)) {
-                            if (this.a(new BlockPosition(i, k1, j)) < 0.15F) {
+                        if (l1 < k && (iblockdata == null || iblockdata.getBlock().getMaterial() == Material.AIR)) {
+                            if (this.a((BlockPosition) blockposition_mutableblockposition.c(i, l1, j)) < 0.15F) {
                                 iblockdata = Blocks.ICE.getBlockData();
                             } else {
                                 iblockdata = Blocks.WATER.getBlockData();
                             }
                         }
 
-                        k = l;
-                        if (k1 >= 62) {
-                            chunksnapshot.a(j1, k1, i1, iblockdata);
-                        } else if (k1 < 56 - l) {
+                        l = i1;
+                        if (l1 >= k - 1) {
+                            chunksnapshot.a(k1, l1, j1, iblockdata);
+                        } else if (l1 < k - 7 - i1) {
                             iblockdata = null;
                             iblockdata1 = Blocks.STONE.getBlockData();
-                            chunksnapshot.a(j1, k1, i1, Blocks.GRAVEL.getBlockData());
+                            chunksnapshot.a(k1, l1, j1, Blocks.GRAVEL.getBlockData());
                         } else {
-                            chunksnapshot.a(j1, k1, i1, iblockdata1);
+                            chunksnapshot.a(k1, l1, j1, iblockdata1);
                         }
-                    } else if (k > 0) {
-                        --k;
-                        chunksnapshot.a(j1, k1, i1, iblockdata1);
-                        if (k == 0 && iblockdata1.getBlock() == Blocks.SAND) {
-                            k = random.nextInt(4) + Math.max(0, k1 - 63);
-                            iblockdata1 = iblockdata1.get(BlockSand.VARIANT) == EnumSandVariant.RED_SAND ? Blocks.RED_SANDSTONE.getBlockData() : Blocks.SANDSTONE.getBlockData();
+                    } else if (l > 0) {
+                        --l;
+                        chunksnapshot.a(k1, l1, j1, iblockdata1);
+                        if (l == 0 && iblockdata1.getBlock() == Blocks.SAND) {
+                            l = random.nextInt(4) + Math.max(0, l1 - 63);
+                            iblockdata1 = iblockdata1.get(BlockSand.VARIANT) == BlockSand.EnumSandVariant.RED_SAND ? Blocks.RED_SANDSTONE.getBlockData() : Blocks.SANDSTONE.getBlockData();
                         }
                     }
                 }
@@ -334,7 +335,7 @@ public abstract class BiomeBase {
         return new BiomeBaseSub(i, this);
     }
 
-    public Class l() {
+    public Class<? extends BiomeBase> l() {
         return this.getClass();
     }
 
@@ -342,8 +343,8 @@ public abstract class BiomeBase {
         return biomebase == this ? true : (biomebase == null ? false : this.l() == biomebase.l());
     }
 
-    public EnumTemperature m() {
-        return (double) this.temperature < 0.2D ? EnumTemperature.COLD : ((double) this.temperature < 1.0D ? EnumTemperature.MEDIUM : EnumTemperature.WARM);
+    public BiomeBase.EnumTemperature m() {
+        return (double) this.temperature < 0.2D ? BiomeBase.EnumTemperature.COLD : ((double) this.temperature < 1.0D ? BiomeBase.EnumTemperature.MEDIUM : BiomeBase.EnumTemperature.WARM);
     }
 
     public static BiomeBase[] getBiomes() {
@@ -412,5 +413,77 @@ public abstract class BiomeBase {
         ae = new NoiseGenerator3(new Random(1234L), 1);
         af = new NoiseGenerator3(new Random(2345L), 1);
         ag = new WorldGenTallPlant();
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] switchMap = new int[EnumCreatureType.values().length];
+
+        static {
+            try {
+                BiomeBase.SyntheticClass_1.switchMap[EnumCreatureType.MONSTER.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                BiomeBase.SyntheticClass_1.switchMap[EnumCreatureType.CREATURE.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                BiomeBase.SyntheticClass_1.switchMap[EnumCreatureType.WATER_CREATURE.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                BiomeBase.SyntheticClass_1.switchMap[EnumCreatureType.AMBIENT.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+        }
+    }
+
+    public static class BiomeMeta extends WeightedRandom.WeightedRandomChoice {
+
+        public Class<? extends EntityInsentient> b;
+        public int c;
+        public int d;
+
+        public BiomeMeta(Class<? extends EntityInsentient> oclass, int i, int j, int k) {
+            super(i);
+            this.b = oclass;
+            this.c = j;
+            this.d = k;
+        }
+
+        public String toString() {
+            return this.b.getSimpleName() + "*(" + this.c + "-" + this.d + "):" + this.a;
+        }
+    }
+
+    public static class BiomeTemperature {
+
+        public float a;
+        public float b;
+
+        public BiomeTemperature(float f, float f1) {
+            this.a = f;
+            this.b = f1;
+        }
+
+        public BiomeBase.BiomeTemperature a() {
+            return new BiomeBase.BiomeTemperature(this.a * 0.8F, this.b * 0.6F);
+        }
+    }
+
+    public static enum EnumTemperature {
+
+        OCEAN, COLD, MEDIUM, WARM;
+
+        private EnumTemperature() {}
     }
 }

@@ -1,9 +1,16 @@
 package net.minecraft.server;
 
+import com.mojang.util.QueueLogAppender;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,7 +34,7 @@ public class ServerGUI extends JComponent {
     private static final Logger b = LogManager.getLogger();
     private DedicatedServer c;
 
-    public static void a(DedicatedServer dedicatedserver) {
+    public static void a(final DedicatedServer dedicatedserver) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception exception) {
@@ -41,7 +48,21 @@ public class ServerGUI extends JComponent {
         jframe.pack();
         jframe.setLocationRelativeTo((Component) null);
         jframe.setVisible(true);
-        jframe.addWindowListener(new ServerWindowAdapter(dedicatedserver));
+        jframe.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent windowevent) {
+                dedicatedserver.safeShutdown();
+
+                while (!dedicatedserver.isStopped()) {
+                    try {
+                        Thread.sleep(100L);
+                    } catch (InterruptedException interruptedexception) {
+                        interruptedexception.printStackTrace();
+                    }
+                }
+
+                System.exit(0);
+            }
+        });
     }
 
     public ServerGUI(DedicatedServer dedicatedserver) {
@@ -58,7 +79,7 @@ public class ServerGUI extends JComponent {
 
     }
 
-    private JComponent a() {
+    private JComponent a() throws Exception {
         JPanel jpanel = new JPanel(new BorderLayout());
 
         jpanel.add(new GuiStatsComponent(this.c), "North");
@@ -67,7 +88,7 @@ public class ServerGUI extends JComponent {
         return jpanel;
     }
 
-    private JComponent b() {
+    private JComponent b() throws Exception {
         PlayerListBox playerlistbox = new PlayerListBox(this.c);
         JScrollPane jscrollpane = new JScrollPane(playerlistbox, 22, 30);
 
@@ -75,30 +96,55 @@ public class ServerGUI extends JComponent {
         return jscrollpane;
     }
 
-    private JComponent c() {
+    private JComponent c() throws Exception {
         JPanel jpanel = new JPanel(new BorderLayout());
-        JTextArea jtextarea = new JTextArea();
-        JScrollPane jscrollpane = new JScrollPane(jtextarea, 22, 30);
+        final JTextArea jtextarea = new JTextArea();
+        final JScrollPane jscrollpane = new JScrollPane(jtextarea, 22, 30);
 
         jtextarea.setEditable(false);
         jtextarea.setFont(ServerGUI.a);
-        JTextField jtextfield = new JTextField();
+        final JTextField jtextfield = new JTextField();
 
-        jtextfield.addActionListener(new ServerGuiCommandListener(this, jtextfield));
-        jtextarea.addFocusListener(new ServerGuiFocusAdapter(this));
+        jtextfield.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionevent) {
+                String s = jtextfield.getText().trim();
+
+                if (s.length() > 0) {
+                    ServerGUI.this.c.issueCommand(s, MinecraftServer.getServer());
+                }
+
+                jtextfield.setText("");
+            }
+        });
+        jtextarea.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent focusevent) {}
+        });
         jpanel.add(jscrollpane, "Center");
         jpanel.add(jtextfield, "South");
         jpanel.setBorder(new TitledBorder(new EtchedBorder(), "Log and chat"));
-        Thread thread = new Thread(new ServerGuiThreadRunnable(this, jtextarea, jscrollpane));
+        Thread thread = new Thread(new Runnable() {
+            public void run() {
+                String s;
+
+                while ((s = QueueLogAppender.getNextLogEvent("ServerGuiConsole")) != null) {
+                    ServerGUI.this.a(jtextarea, jscrollpane, s);
+                }
+
+            }
+        });
 
         thread.setDaemon(true);
         thread.start();
         return jpanel;
     }
 
-    public void a(JTextArea jtextarea, JScrollPane jscrollpane, String s) {
+    public void a(final JTextArea jtextarea, final JScrollPane jscrollpane, final String s) {
         if (!SwingUtilities.isEventDispatchThread()) {
-            SwingUtilities.invokeLater(new ServerGuiInvokeRunnable(this, jtextarea, jscrollpane, s));
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    ServerGUI.this.a(jtextarea, jscrollpane, s);
+                }
+            });
         } else {
             Document document = jtextarea.getDocument();
             JScrollBar jscrollbar = jscrollpane.getVerticalScrollBar();
@@ -119,9 +165,5 @@ public class ServerGUI extends JComponent {
             }
 
         }
-    }
-
-    static DedicatedServer a(ServerGUI servergui) {
-        return servergui.c;
     }
 }

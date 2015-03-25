@@ -17,7 +17,7 @@ public class ItemBucket extends Item {
         if (movingobjectposition == null) {
             return itemstack;
         } else {
-            if (movingobjectposition.type == EnumMovingObjectType.BLOCK) {
+            if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
                 BlockPosition blockposition = movingobjectposition.a();
 
                 if (!world.a(entityhuman, blockposition)) {
@@ -100,7 +100,7 @@ public class ItemBucket extends Item {
                         world.addParticle(EnumParticle.SMOKE_LARGE, (double) i + Math.random(), (double) j + Math.random(), (double) k + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
                     }
                 } else {
-                    if (!world.isStatic && flag && !material.isLiquid()) {
+                    if (!world.isClientSide && flag && !material.isLiquid()) {
                         world.setAir(blockposition, true);
                     }
 

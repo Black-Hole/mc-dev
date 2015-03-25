@@ -57,7 +57,7 @@ public class ItemBow extends Item {
             }
 
             entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
-            if (!world.isStatic) {
+            if (!world.isClientSide) {
                 world.addEntity(entityarrow);
             }
         }

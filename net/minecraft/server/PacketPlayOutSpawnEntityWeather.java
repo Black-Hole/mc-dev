@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutSpawnEntityWeather implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutSpawnEntityWeather implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private int b;
@@ -21,7 +23,7 @@ public class PacketPlayOutSpawnEntityWeather implements Packet {
 
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.e = packetdataserializer.readByte();
         this.b = packetdataserializer.readInt();
@@ -29,7 +31,7 @@ public class PacketPlayOutSpawnEntityWeather implements Packet {
         this.d = packetdataserializer.readInt();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.writeByte(this.e);
         packetdataserializer.writeInt(this.b);

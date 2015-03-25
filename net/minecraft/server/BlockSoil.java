@@ -30,10 +30,10 @@ public class BlockSoil extends Block {
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         int i = ((Integer) iblockdata.get(BlockSoil.MOISTURE)).intValue();
 
-        if (!this.e(world, blockposition) && !world.isRainingAt(blockposition.up())) {
+        if (!this.f(world, blockposition) && !world.isRainingAt(blockposition.up())) {
             if (i > 0) {
                 world.setTypeAndData(blockposition, iblockdata.set(BlockSoil.MOISTURE, Integer.valueOf(i - 1)), 2);
-            } else if (!this.d(world, blockposition)) {
+            } else if (!this.e(world, blockposition)) {
                 world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
             }
         } else if (i < 7) {
@@ -44,7 +44,7 @@ public class BlockSoil extends Block {
 
     public void a(World world, BlockPosition blockposition, Entity entity, float f) {
         if (entity instanceof EntityLiving) {
-            if (!world.isStatic && world.random.nextFloat() < f - 0.5F) {
+            if (!world.isClientSide && world.random.nextFloat() < f - 0.5F) {
                 if (!(entity instanceof EntityHuman) && !world.getGameRules().getBoolean("mobGriefing")) {
                     return;
                 }
@@ -56,24 +56,24 @@ public class BlockSoil extends Block {
         }
     }
 
-    private boolean d(World world, BlockPosition blockposition) {
+    private boolean e(World world, BlockPosition blockposition) {
         Block block = world.getType(blockposition.up()).getBlock();
 
         return block instanceof BlockCrops || block instanceof BlockStem;
     }
 
-    private boolean e(World world, BlockPosition blockposition) {
+    private boolean f(World world, BlockPosition blockposition) {
         Iterator iterator = BlockPosition.b(blockposition.a(-4, 0, -4), blockposition.a(4, 1, 4)).iterator();
 
-        MutableBlockPosition mutableblockposition;
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition;
 
         do {
             if (!iterator.hasNext()) {
                 return false;
             }
 
-            mutableblockposition = (MutableBlockPosition) iterator.next();
-        } while (world.getType(mutableblockposition).getBlock().getMaterial() != Material.WATER);
+            blockposition_mutableblockposition = (BlockPosition.MutableBlockPosition) iterator.next();
+        } while (world.getType(blockposition_mutableblockposition).getBlock().getMaterial() != Material.WATER);
 
         return true;
     }
@@ -87,7 +87,7 @@ public class BlockSoil extends Block {
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, EnumDirtVariant.DIRT), random, i);
+        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
     }
 
     public IBlockData fromLegacyData(int i) {

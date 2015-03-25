@@ -1,8 +1,9 @@
 package net.minecraft.server;
 
+import java.io.IOException;
 import org.apache.commons.lang3.Validate;
 
-public class PacketPlayOutNamedSoundEffect implements Packet {
+public class PacketPlayOutNamedSoundEffect implements Packet<PacketListenerPlayOut> {
 
     private String a;
     private int b;
@@ -24,7 +25,7 @@ public class PacketPlayOutNamedSoundEffect implements Packet {
         f1 = MathHelper.a(f1, 0.0F, 255.0F);
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.c(256);
         this.b = packetdataserializer.readInt();
         this.c = packetdataserializer.readInt();
@@ -33,7 +34,7 @@ public class PacketPlayOutNamedSoundEffect implements Packet {
         this.f = packetdataserializer.readUnsignedByte();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.writeInt(this.b);
         packetdataserializer.writeInt(this.c);

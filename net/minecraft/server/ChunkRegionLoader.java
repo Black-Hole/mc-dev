@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -15,8 +16,8 @@ import org.apache.logging.log4j.Logger;
 public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
     private static final Logger a = LogManager.getLogger();
-    private List b = Lists.newArrayList();
-    private Set c = Sets.newHashSet();
+    private List<ChunkRegionLoader.PendingChunkToSave> b = Lists.newArrayList();
+    private Set<ChunkCoordIntPair> c = Sets.newHashSet();
     private Object d = new Object();
     private final File e;
 
@@ -24,7 +25,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         this.e = file;
     }
 
-    public Chunk a(World world, int i, int j) {
+    public Chunk a(World world, int i, int j) throws IOException {
         NBTTagCompound nbttagcompound = null;
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
         Object object = this.d;
@@ -32,8 +33,8 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         synchronized (this.d) {
             if (this.c.contains(chunkcoordintpair)) {
                 for (int k = 0; k < this.b.size(); ++k) {
-                    if (((PendingChunkToSave) this.b.get(k)).a.equals(chunkcoordintpair)) {
-                        nbttagcompound = ((PendingChunkToSave) this.b.get(k)).b;
+                    if (((ChunkRegionLoader.PendingChunkToSave) this.b.get(k)).a.equals(chunkcoordintpair)) {
+                        nbttagcompound = ((ChunkRegionLoader.PendingChunkToSave) this.b.get(k)).b;
                         break;
                     }
                 }
@@ -57,24 +58,28 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         if (!nbttagcompound.hasKeyOfType("Level", 10)) {
             ChunkRegionLoader.a.error("Chunk file at " + i + "," + j + " is missing level data, skipping");
             return null;
-        } else if (!nbttagcompound.getCompound("Level").hasKeyOfType("Sections", 9)) {
-            ChunkRegionLoader.a.error("Chunk file at " + i + "," + j + " is missing block data, skipping");
-            return null;
         } else {
-            Chunk chunk = this.a(world, nbttagcompound.getCompound("Level"));
+            NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Level");
 
-            if (!chunk.a(i, j)) {
-                ChunkRegionLoader.a.error("Chunk file at " + i + "," + j + " is in the wrong location; relocating. (Expected " + i + ", " + j + ", got " + chunk.locX + ", " + chunk.locZ + ")");
-                nbttagcompound.setInt("xPos", i);
-                nbttagcompound.setInt("zPos", j);
-                chunk = this.a(world, nbttagcompound.getCompound("Level"));
+            if (!nbttagcompound1.hasKeyOfType("Sections", 9)) {
+                ChunkRegionLoader.a.error("Chunk file at " + i + "," + j + " is missing block data, skipping");
+                return null;
+            } else {
+                Chunk chunk = this.a(world, nbttagcompound1);
+
+                if (!chunk.a(i, j)) {
+                    ChunkRegionLoader.a.error("Chunk file at " + i + "," + j + " is in the wrong location; relocating. (Expected " + i + ", " + j + ", got " + chunk.locX + ", " + chunk.locZ + ")");
+                    nbttagcompound1.setInt("xPos", i);
+                    nbttagcompound1.setInt("zPos", j);
+                    chunk = this.a(world, nbttagcompound1);
+                }
+
+                return chunk;
             }
-
-            return chunk;
         }
     }
 
-    public void a(World world, Chunk chunk) {
+    public void a(World world, Chunk chunk) throws IOException, ExceptionWorldConflict {
         world.checkSession();
 
         try {
@@ -96,21 +101,21 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         synchronized (this.d) {
             if (this.c.contains(chunkcoordintpair)) {
                 for (int i = 0; i < this.b.size(); ++i) {
-                    if (((PendingChunkToSave) this.b.get(i)).a.equals(chunkcoordintpair)) {
-                        this.b.set(i, new PendingChunkToSave(chunkcoordintpair, nbttagcompound));
+                    if (((ChunkRegionLoader.PendingChunkToSave) this.b.get(i)).a.equals(chunkcoordintpair)) {
+                        this.b.set(i, new ChunkRegionLoader.PendingChunkToSave(chunkcoordintpair, nbttagcompound));
                         return;
                     }
                 }
             }
 
-            this.b.add(new PendingChunkToSave(chunkcoordintpair, nbttagcompound));
+            this.b.add(new ChunkRegionLoader.PendingChunkToSave(chunkcoordintpair, nbttagcompound));
             this.c.add(chunkcoordintpair);
             FileIOThread.a().a(this);
         }
     }
 
     public boolean c() {
-        PendingChunkToSave pendingchunktosave = null;
+        ChunkRegionLoader.PendingChunkToSave chunkregionloader_pendingchunktosave = null;
         Object object = this.d;
 
         synchronized (this.d) {
@@ -118,13 +123,13 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
                 return false;
             }
 
-            pendingchunktosave = (PendingChunkToSave) this.b.remove(0);
-            this.c.remove(pendingchunktosave.a);
+            chunkregionloader_pendingchunktosave = (ChunkRegionLoader.PendingChunkToSave) this.b.remove(0);
+            this.c.remove(chunkregionloader_pendingchunktosave.a);
         }
 
-        if (pendingchunktosave != null) {
+        if (chunkregionloader_pendingchunktosave != null) {
             try {
-                this.a(pendingchunktosave);
+                this.a(chunkregionloader_pendingchunktosave);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -133,14 +138,14 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         return true;
     }
 
-    public void a(PendingChunkToSave pendingchunktosave) {
-        DataOutputStream dataoutputstream = RegionFileCache.d(this.e, pendingchunktosave.a.x, pendingchunktosave.a.z);
+    private void a(ChunkRegionLoader.PendingChunkToSave chunkregionloader_pendingchunktosave) throws IOException {
+        DataOutputStream dataoutputstream = RegionFileCache.d(this.e, chunkregionloader_pendingchunktosave.a.x, chunkregionloader_pendingchunktosave.a.z);
 
-        NBTCompressedStreamTools.a(pendingchunktosave.b, (DataOutput) dataoutputstream);
+        NBTCompressedStreamTools.a(chunkregionloader_pendingchunktosave.b, (DataOutput) dataoutputstream);
         dataoutputstream.close();
     }
 
-    public void b(World world, Chunk chunk) {}
+    public void b(World world, Chunk chunk) throws IOException {}
 
     public void a() {}
 
@@ -380,5 +385,16 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         }
 
         return chunk;
+    }
+
+    static class PendingChunkToSave {
+
+        public final ChunkCoordIntPair a;
+        public final NBTTagCompound b;
+
+        public PendingChunkToSave(ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) {
+            this.a = chunkcoordintpair;
+            this.b = nbttagcompound;
+        }
     }
 }

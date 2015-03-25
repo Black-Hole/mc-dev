@@ -7,7 +7,15 @@ import java.util.Random;
 public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
 
     public static final BlockStateInteger AGE = BlockStateInteger.of("age", 0, 7);
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) (new BlockStemInnerClass1()));
+    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", new Predicate() {
+        public boolean a(EnumDirection enumdirection) {
+            return enumdirection != EnumDirection.DOWN;
+        }
+
+        public boolean apply(Object object) {
+            return this.a((EnumDirection) object);
+        }
+    });
     private final Block blockFruit;
 
     protected BlockStem(Block block) {
@@ -22,7 +30,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         iblockdata = iblockdata.set(BlockStem.FACING, EnumDirection.UP);
-        Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
         while (iterator.hasNext()) {
             EnumDirection enumdirection = (EnumDirection) iterator.next();
@@ -52,7 +60,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
                     iblockdata = iblockdata.set(BlockStem.AGE, Integer.valueOf(i + 1));
                     world.setTypeAndData(blockposition, iblockdata, 2);
                 } else {
-                    Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+                    Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                     while (iterator.hasNext()) {
                         EnumDirection enumdirection = (EnumDirection) iterator.next();
@@ -62,7 +70,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
                         }
                     }
 
-                    blockposition = blockposition.shift(EnumDirectionLimit.HORIZONTAL.a(random));
+                    blockposition = blockposition.shift(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
                     Block block = world.getType(blockposition.down()).getBlock();
 
                     if (world.getType(blockposition).getBlock().material == Material.AIR && (block == Blocks.FARMLAND || block == Blocks.DIRT || block == Blocks.GRASS)) {
@@ -80,7 +88,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
         world.setTypeAndData(blockposition, iblockdata.set(BlockStem.AGE, Integer.valueOf(Math.min(7, i))), 2);
     }
 
-    public void h() {
+    public void j() {
         float f = 0.125F;
 
         this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
@@ -95,8 +103,8 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         super.dropNaturally(world, blockposition, iblockdata, f, i);
-        if (!world.isStatic) {
-            Item item = this.j();
+        if (!world.isClientSide) {
+            Item item = this.l();
 
             if (item != null) {
                 int j = ((Integer) iblockdata.get(BlockStem.AGE)).intValue();
@@ -111,7 +119,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
         }
     }
 
-    protected Item j() {
+    protected Item l() {
         return this.blockFruit == Blocks.PUMPKIN ? Items.PUMPKIN_SEEDS : (this.blockFruit == Blocks.MELON_BLOCK ? Items.MELON_SEEDS : null);
     }
 

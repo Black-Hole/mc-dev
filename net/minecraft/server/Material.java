@@ -14,7 +14,7 @@ public class Material {
     public static final Material LEAVES = (new Material(MaterialMapColor.i)).g().s().n();
     public static final Material PLANT = (new MaterialDecoration(MaterialMapColor.i)).n();
     public static final Material REPLACEABLE_PLANT = (new MaterialDecoration(MaterialMapColor.i)).g().n().i();
-    public static final Material SPONGE = new Material(MaterialMapColor.e);
+    public static final Material SPONGE = new Material(MaterialMapColor.t);
     public static final Material CLOTH = (new Material(MaterialMapColor.e)).g();
     public static final Material FIRE = (new MaterialGas(MaterialMapColor.b)).n();
     public static final Material SAND = new Material(MaterialMapColor.d);
@@ -34,7 +34,11 @@ public class Material {
     public static final Material DRAGON_EGG = (new Material(MaterialMapColor.i)).n();
     public static final Material PORTAL = (new MaterialPortal(MaterialMapColor.b)).o();
     public static final Material CAKE = (new Material(MaterialMapColor.b)).n();
-    public static final Material WEB = (new MaterialWeb(MaterialMapColor.e)).f().n();
+    public static final Material WEB = (new Material(MaterialMapColor.e) {
+        public boolean isSolid() {
+            return false;
+        }
+    }).f().n();
     public static final Material PISTON = (new Material(MaterialMapColor.m)).o();
     public static final Material BANNER = (new Material(MaterialMapColor.b)).f().o();
     private boolean canBurn;

@@ -10,17 +10,17 @@ import java.util.Set;
 
 public class BlockRedstoneWire extends Block {
 
-    public static final BlockStateEnum NORTH = BlockStateEnum.of("north", EnumRedstoneWireConnection.class);
-    public static final BlockStateEnum EAST = BlockStateEnum.of("east", EnumRedstoneWireConnection.class);
-    public static final BlockStateEnum SOUTH = BlockStateEnum.of("south", EnumRedstoneWireConnection.class);
-    public static final BlockStateEnum WEST = BlockStateEnum.of("west", EnumRedstoneWireConnection.class);
+    public static final BlockStateEnum<BlockRedstoneWire.EnumRedstoneWireConnection> NORTH = BlockStateEnum.of("north", BlockRedstoneWire.EnumRedstoneWireConnection.class);
+    public static final BlockStateEnum<BlockRedstoneWire.EnumRedstoneWireConnection> EAST = BlockStateEnum.of("east", BlockRedstoneWire.EnumRedstoneWireConnection.class);
+    public static final BlockStateEnum<BlockRedstoneWire.EnumRedstoneWireConnection> SOUTH = BlockStateEnum.of("south", BlockRedstoneWire.EnumRedstoneWireConnection.class);
+    public static final BlockStateEnum<BlockRedstoneWire.EnumRedstoneWireConnection> WEST = BlockStateEnum.of("west", BlockRedstoneWire.EnumRedstoneWireConnection.class);
     public static final BlockStateInteger POWER = BlockStateInteger.of("power", 0, 15);
-    private boolean P = true;
-    private final Set Q = Sets.newHashSet();
+    private boolean Q = true;
+    private final Set<BlockPosition> R = Sets.newHashSet();
 
     public BlockRedstoneWire() {
         super(Material.ORIENTABLE);
-        this.j(this.blockStateList.getBlockData().set(BlockRedstoneWire.NORTH, EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.EAST, EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.SOUTH, EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.WEST, EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.POWER, Integer.valueOf(0)));
+        this.j(this.blockStateList.getBlockData().set(BlockRedstoneWire.NORTH, BlockRedstoneWire.EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.EAST, BlockRedstoneWire.EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.SOUTH, BlockRedstoneWire.EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.WEST, BlockRedstoneWire.EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.POWER, Integer.valueOf(0)));
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
     }
 
@@ -32,16 +32,16 @@ public class BlockRedstoneWire extends Block {
         return iblockdata;
     }
 
-    private EnumRedstoneWireConnection c(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+    private BlockRedstoneWire.EnumRedstoneWireConnection c(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         BlockPosition blockposition1 = blockposition.shift(enumdirection);
         Block block = iblockaccess.getType(blockposition.shift(enumdirection)).getBlock();
 
-        if (!a(iblockaccess.getType(blockposition1), enumdirection) && (block.s() || !d(iblockaccess.getType(blockposition1.down())))) {
+        if (!a(iblockaccess.getType(blockposition1), enumdirection) && (block.u() || !d(iblockaccess.getType(blockposition1.down())))) {
             Block block1 = iblockaccess.getType(blockposition.up()).getBlock();
 
-            return !block1.s() && block.s() && d(iblockaccess.getType(blockposition1.up())) ? EnumRedstoneWireConnection.UP : EnumRedstoneWireConnection.NONE;
+            return !block1.u() && block.u() && d(iblockaccess.getType(blockposition1.up())) ? BlockRedstoneWire.EnumRedstoneWireConnection.UP : BlockRedstoneWire.EnumRedstoneWireConnection.NONE;
         } else {
-            return EnumRedstoneWireConnection.SIDE;
+            return BlockRedstoneWire.EnumRedstoneWireConnection.SIDE;
         }
     }
 
@@ -63,9 +63,9 @@ public class BlockRedstoneWire extends Block {
 
     private IBlockData e(World world, BlockPosition blockposition, IBlockData iblockdata) {
         iblockdata = this.a(world, blockposition, blockposition, iblockdata);
-        ArrayList arraylist = Lists.newArrayList(this.Q);
+        ArrayList arraylist = Lists.newArrayList(this.R);
 
-        this.Q.clear();
+        this.R.clear();
         Iterator iterator = arraylist.iterator();
 
         while (iterator.hasNext()) {
@@ -83,16 +83,16 @@ public class BlockRedstoneWire extends Block {
         byte b0 = 0;
         int j = this.getPower(world, blockposition1, b0);
 
-        this.P = false;
+        this.Q = false;
         int k = world.A(blockposition);
 
-        this.P = true;
+        this.Q = true;
         if (k > 0 && k > j - 1) {
             j = k;
         }
 
         int l = 0;
-        Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
         while (iterator.hasNext()) {
             EnumDirection enumdirection = (EnumDirection) iterator.next();
@@ -130,21 +130,21 @@ public class BlockRedstoneWire extends Block {
                 world.setTypeAndData(blockposition, iblockdata, 2);
             }
 
-            this.Q.add(blockposition);
+            this.R.add(blockposition);
             EnumDirection[] aenumdirection = EnumDirection.values();
             int i1 = aenumdirection.length;
 
             for (int j1 = 0; j1 < i1; ++j1) {
                 EnumDirection enumdirection1 = aenumdirection[j1];
 
-                this.Q.add(blockposition.shift(enumdirection1));
+                this.R.add(blockposition.shift(enumdirection1));
             }
         }
 
         return iblockdata;
     }
 
-    private void d(World world, BlockPosition blockposition) {
+    private void e(World world, BlockPosition blockposition) {
         if (world.getType(blockposition).getBlock() == this) {
             world.applyPhysics(blockposition, this);
             EnumDirection[] aenumdirection = EnumDirection.values();
@@ -160,9 +160,9 @@ public class BlockRedstoneWire extends Block {
     }
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             this.e(world, blockposition, iblockdata);
-            Iterator iterator = EnumDirectionLimit.VERTICAL.iterator();
+            Iterator iterator = EnumDirection.EnumDirectionLimit.VERTICAL.iterator();
 
             EnumDirection enumdirection;
 
@@ -171,23 +171,23 @@ public class BlockRedstoneWire extends Block {
                 world.applyPhysics(blockposition.shift(enumdirection), this);
             }
 
-            iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+            iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
             while (iterator.hasNext()) {
                 enumdirection = (EnumDirection) iterator.next();
-                this.d(world, blockposition.shift(enumdirection));
+                this.e(world, blockposition.shift(enumdirection));
             }
 
-            iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+            iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
             while (iterator.hasNext()) {
                 enumdirection = (EnumDirection) iterator.next();
                 BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
                 if (world.getType(blockposition1).getBlock().isOccluding()) {
-                    this.d(world, blockposition1.up());
+                    this.e(world, blockposition1.up());
                 } else {
-                    this.d(world, blockposition1.down());
+                    this.e(world, blockposition1.down());
                 }
             }
 
@@ -196,7 +196,7 @@ public class BlockRedstoneWire extends Block {
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
         super.remove(world, blockposition, iblockdata);
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             EnumDirection[] aenumdirection = EnumDirection.values();
             int i = aenumdirection.length;
 
@@ -207,32 +207,32 @@ public class BlockRedstoneWire extends Block {
             }
 
             this.e(world, blockposition, iblockdata);
-            Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+            Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
             EnumDirection enumdirection1;
 
             while (iterator.hasNext()) {
                 enumdirection1 = (EnumDirection) iterator.next();
-                this.d(world, blockposition.shift(enumdirection1));
+                this.e(world, blockposition.shift(enumdirection1));
             }
 
-            iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+            iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
             while (iterator.hasNext()) {
                 enumdirection1 = (EnumDirection) iterator.next();
                 BlockPosition blockposition1 = blockposition.shift(enumdirection1);
 
                 if (world.getType(blockposition1).getBlock().isOccluding()) {
-                    this.d(world, blockposition1.up());
+                    this.e(world, blockposition1.up());
                 } else {
-                    this.d(world, blockposition1.down());
+                    this.e(world, blockposition1.down());
                 }
             }
 
         }
     }
 
-    public int getPower(World world, BlockPosition blockposition, int i) {
+    private int getPower(World world, BlockPosition blockposition, int i) {
         if (world.getType(blockposition).getBlock() != this) {
             return i;
         } else {
@@ -243,7 +243,7 @@ public class BlockRedstoneWire extends Block {
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             if (this.canPlace(world, blockposition)) {
                 this.e(world, blockposition, iblockdata);
             } else {
@@ -259,11 +259,11 @@ public class BlockRedstoneWire extends Block {
     }
 
     public int b(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, EnumDirection enumdirection) {
-        return !this.P ? 0 : this.a(iblockaccess, blockposition, iblockdata, enumdirection);
+        return !this.Q ? 0 : this.a(iblockaccess, blockposition, iblockdata, enumdirection);
     }
 
     public int a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, EnumDirection enumdirection) {
-        if (!this.P) {
+        if (!this.Q) {
             return 0;
         } else {
             int i = ((Integer) iblockdata.get(BlockRedstoneWire.POWER)).intValue();
@@ -274,7 +274,7 @@ public class BlockRedstoneWire extends Block {
                 return i;
             } else {
                 EnumSet enumset = EnumSet.noneOf(EnumDirection.class);
-                Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+                Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                 while (iterator.hasNext()) {
                     EnumDirection enumdirection1 = (EnumDirection) iterator.next();
@@ -328,7 +328,7 @@ public class BlockRedstoneWire extends Block {
     }
 
     public boolean isPowerSource() {
-        return this.P;
+        return this.Q;
     }
 
     public IBlockData fromLegacyData(int i) {
@@ -341,5 +341,24 @@ public class BlockRedstoneWire extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockRedstoneWire.NORTH, BlockRedstoneWire.EAST, BlockRedstoneWire.SOUTH, BlockRedstoneWire.WEST, BlockRedstoneWire.POWER});
+    }
+
+    static enum EnumRedstoneWireConnection implements INamable {
+
+        UP("up"), SIDE("side"), NONE("none");
+
+        private final String d;
+
+        private EnumRedstoneWireConnection(String s) {
+            this.d = s;
+        }
+
+        public String toString() {
+            return this.getName();
+        }
+
+        public String getName() {
+            return this.d;
+        }
     }
 }

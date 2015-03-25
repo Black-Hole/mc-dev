@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayInChat implements Packet {
+import java.io.IOException;
+
+public class PacketPlayInChat implements Packet<PacketListenerPlayIn> {
 
     private String a;
 
@@ -14,11 +16,11 @@ public class PacketPlayInChat implements Packet {
         this.a = s;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.c(100);
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
     }
 

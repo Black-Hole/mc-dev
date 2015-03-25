@@ -6,12 +6,13 @@ import java.util.List;
 
 public class ChunkProviderDebug implements IChunkProvider {
 
-    private static final List a = Lists.newArrayList();
+    private static final List<IBlockData> a = Lists.newArrayList();
     private static final int b;
-    private final World c;
+    private static final int c;
+    private final World d;
 
     public ChunkProviderDebug(World world) {
-        this.c = world;
+        this.d = world;
     }
 
     public Chunk getOrCreateChunk(int i, int j) {
@@ -33,10 +34,10 @@ public class ChunkProviderDebug implements IChunkProvider {
             }
         }
 
-        Chunk chunk = new Chunk(this.c, chunksnapshot, i, j);
+        Chunk chunk = new Chunk(this.d, chunksnapshot, i, j);
 
         chunk.initLighting();
-        BiomeBase[] abiomebase = this.c.getWorldChunkManager().getBiomeBlock((BiomeBase[]) null, i * 16, j * 16, 16, 16);
+        BiomeBase[] abiomebase = this.d.getWorldChunkManager().getBiomeBlock((BiomeBase[]) null, i * 16, j * 16, 16, 16);
         byte[] abyte = chunk.getBiomeIndex();
 
         for (k = 0; k < abyte.length; ++k) {
@@ -53,7 +54,7 @@ public class ChunkProviderDebug implements IChunkProvider {
         if (i > 0 && j > 0 && i % 2 != 0 && j % 2 != 0) {
             i /= 2;
             j /= 2;
-            if (i <= ChunkProviderDebug.b && j <= ChunkProviderDebug.b) {
+            if (i <= ChunkProviderDebug.b && j <= ChunkProviderDebug.c) {
                 int k = MathHelper.a(i * ChunkProviderDebug.b + j);
 
                 if (k < ChunkProviderDebug.a.size()) {
@@ -93,8 +94,8 @@ public class ChunkProviderDebug implements IChunkProvider {
         return "DebugLevelSource";
     }
 
-    public List getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
-        BiomeBase biomebase = this.c.getBiome(blockposition);
+    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
+        BiomeBase biomebase = this.d.getBiome(blockposition);
 
         return biomebase.getMobs(enumcreaturetype);
     }
@@ -119,9 +120,10 @@ public class ChunkProviderDebug implements IChunkProvider {
         while (iterator.hasNext()) {
             Block block = (Block) iterator.next();
 
-            ChunkProviderDebug.a.addAll(block.O().a());
+            ChunkProviderDebug.a.addAll(block.P().a());
         }
 
         b = MathHelper.f(MathHelper.c((float) ChunkProviderDebug.a.size()));
+        c = MathHelper.f((float) ChunkProviderDebug.a.size() / (float) ChunkProviderDebug.b);
     }
 }

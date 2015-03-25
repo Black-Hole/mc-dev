@@ -1,8 +1,9 @@
 package net.minecraft.server;
 
+import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
 
-public class PacketPlayInTabComplete implements Packet {
+public class PacketPlayInTabComplete implements Packet<PacketListenerPlayIn> {
 
     private String a;
     private BlockPosition b;
@@ -18,7 +19,7 @@ public class PacketPlayInTabComplete implements Packet {
         this.b = blockposition;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.c(32767);
         boolean flag = packetdataserializer.readBoolean();
 
@@ -28,7 +29,7 @@ public class PacketPlayInTabComplete implements Packet {
 
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(StringUtils.substring(this.a, 0, 32767));
         boolean flag = this.b != null;
 

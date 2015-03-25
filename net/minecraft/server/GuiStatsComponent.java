@@ -3,6 +3,8 @@ package net.minecraft.server;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import javax.swing.JComponent;
 import javax.swing.Timer;
@@ -20,7 +22,11 @@ public class GuiStatsComponent extends JComponent {
         this.setPreferredSize(new Dimension(456, 246));
         this.setMinimumSize(new Dimension(456, 246));
         this.setMaximumSize(new Dimension(456, 246));
-        (new Timer(500, new GuiStatsListener(this))).start();
+        (new Timer(500, new ActionListener() {
+            public void actionPerformed(ActionEvent actionevent) {
+                GuiStatsComponent.this.a();
+            }
+        })).start();
         this.setBackground(Color.BLACK);
     }
 
@@ -29,7 +35,7 @@ public class GuiStatsComponent extends JComponent {
 
         System.gc();
         this.d[0] = "Memory use: " + i / 1024L / 1024L + " mb (" + Runtime.getRuntime().freeMemory() * 100L / Runtime.getRuntime().maxMemory() + "% free)";
-        this.d[1] = "Avg tick: " + GuiStatsComponent.a.format(this.a(this.e.g) * 1.0E-6D) + " ms";
+        this.d[1] = "Avg tick: " + GuiStatsComponent.a.format(this.a(this.e.h) * 1.0E-6D) + " ms";
         this.repaint();
     }
 
@@ -66,9 +72,5 @@ public class GuiStatsComponent extends JComponent {
             }
         }
 
-    }
-
-    static void a(GuiStatsComponent guistatscomponent) {
-        guistatscomponent.a();
     }
 }

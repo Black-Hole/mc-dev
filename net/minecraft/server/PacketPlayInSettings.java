@@ -1,24 +1,26 @@
 package net.minecraft.server;
 
-public class PacketPlayInSettings implements Packet {
+import java.io.IOException;
+
+public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
 
     private String a;
     private int b;
-    private EnumChatVisibility c;
+    private EntityHuman.EnumChatVisibility c;
     private boolean d;
     private int e;
 
     public PacketPlayInSettings() {}
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.c(7);
         this.b = packetdataserializer.readByte();
-        this.c = EnumChatVisibility.a(packetdataserializer.readByte());
+        this.c = EntityHuman.EnumChatVisibility.a(packetdataserializer.readByte());
         this.d = packetdataserializer.readBoolean();
         this.e = packetdataserializer.readUnsignedByte();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.writeByte(this.b);
         packetdataserializer.writeByte(this.c.a());
@@ -34,7 +36,7 @@ public class PacketPlayInSettings implements Packet {
         return this.a;
     }
 
-    public EnumChatVisibility c() {
+    public EntityHuman.EnumChatVisibility c() {
         return this.c;
     }
 

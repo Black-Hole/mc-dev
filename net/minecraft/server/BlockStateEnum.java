@@ -10,12 +10,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-public class BlockStateEnum extends BlockState {
+public class BlockStateEnum<T extends Enum<T> & INamable> extends BlockState<T> {
 
-    private final ImmutableSet a;
-    private final Map b = Maps.newHashMap();
+    private final ImmutableSet<T> a;
+    private final Map<String, T> b = Maps.newHashMap();
 
-    protected BlockStateEnum(String s, Class oclass, Collection collection) {
+    protected BlockStateEnum(String s, Class<T> oclass, Collection<T> collection) {
         super(s, oclass);
         this.a = ImmutableSet.copyOf(collection);
         Iterator iterator = collection.iterator();
@@ -33,27 +33,27 @@ public class BlockStateEnum extends BlockState {
 
     }
 
-    public Collection c() {
+    public Collection<T> c() {
         return this.a;
     }
 
-    public String a(Enum oenum) {
-        return ((INamable) oenum).getName();
+    public String a(T t0) {
+        return ((INamable) t0).getName();
     }
 
-    public static BlockStateEnum of(String s, Class oclass) {
+    public static <T extends Enum<T> & INamable> BlockStateEnum<T> of(String s, Class<T> oclass) {
         return a(s, oclass, Predicates.alwaysTrue());
     }
 
-    public static BlockStateEnum a(String s, Class oclass, Predicate predicate) {
+    public static <T extends Enum<T> & INamable> BlockStateEnum<T> a(String s, Class<T> oclass, Predicate<T> predicate) {
         return a(s, oclass, Collections2.filter(Lists.newArrayList(oclass.getEnumConstants()), predicate));
     }
 
-    public static BlockStateEnum of(String s, Class oclass, Enum... aenum) {
-        return a(s, oclass, (Collection) Lists.newArrayList(aenum));
+    public static <T extends Enum<T> & INamable> BlockStateEnum<T> of(String s, Class<T> oclass, T... at) {
+        return a(s, oclass, (Collection) Lists.newArrayList(at));
     }
 
-    public static BlockStateEnum a(String s, Class oclass, Collection collection) {
+    public static <T extends Enum<T> & INamable> BlockStateEnum<T> a(String s, Class<T> oclass, Collection<T> collection) {
         return new BlockStateEnum(s, oclass, collection);
     }
 

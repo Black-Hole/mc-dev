@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
@@ -23,16 +24,16 @@ public class CommandAchievement extends CommandAbstract {
         return "commands.achievement.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.achievement.usage", new Object[0]);
         } else {
-            Statistic statistic = StatisticList.getStatistic(astring[1]);
+            final Statistic statistic = StatisticList.getStatistic(astring[1]);
 
             if (statistic == null && !astring[1].equals("*")) {
                 throw new CommandException("commands.achievement.unknownAchievement", new Object[] { astring[1]});
             } else {
-                EntityPlayer entityplayer = astring.length >= 3 ? a(icommandlistener, astring[2]) : b(icommandlistener);
+                final EntityPlayer entityplayer = astring.length >= 3 ? a(icommandlistener, astring[2]) : b(icommandlistener);
                 boolean flag = astring[0].equalsIgnoreCase("give");
                 boolean flag1 = astring[0].equalsIgnoreCase("take");
 
@@ -65,8 +66,6 @@ public class CommandAchievement extends CommandAbstract {
                         if (statistic instanceof Achievement) {
                             Achievement achievement1 = (Achievement) statistic;
                             ArrayList arraylist;
-                            Iterator iterator1;
-                            Achievement achievement2;
 
                             if (flag) {
                                 if (entityplayer.getStatisticManager().hasAchievement(achievement1)) {
@@ -77,10 +76,11 @@ public class CommandAchievement extends CommandAbstract {
                                     arraylist.add(achievement1.c);
                                 }
 
-                                iterator1 = Lists.reverse(arraylist).iterator();
+                                Iterator iterator1 = Lists.reverse(arraylist).iterator();
 
                                 while (iterator1.hasNext()) {
-                                    achievement2 = (Achievement) iterator1.next();
+                                    Achievement achievement2 = (Achievement) iterator1.next();
+
                                     entityplayer.b((Statistic) achievement2);
                                 }
                             } else if (flag1) {
@@ -88,15 +88,44 @@ public class CommandAchievement extends CommandAbstract {
                                     throw new CommandException("commands.achievement.dontHave", new Object[] { entityplayer.getName(), statistic.j()});
                                 }
 
-                                for (arraylist = Lists.newArrayList(Iterators.filter(AchievementList.e.iterator(), new CommandAchievementFilter(this, entityplayer, statistic))); achievement1.c != null && entityplayer.getStatisticManager().hasAchievement(achievement1.c); achievement1 = achievement1.c) {
-                                    arraylist.remove(achievement1.c);
+                                arraylist = Lists.newArrayList(Iterators.filter(AchievementList.e.iterator(), new Predicate() {
+                                    public boolean a(Achievement achievement) {
+                                        return entityplayer.getStatisticManager().hasAchievement(achievement) && achievement != statistic;
+                                    }
+
+                                    public boolean apply(Object object) {
+                                        return this.a((Achievement) object);
+                                    }
+                                }));
+                                ArrayList arraylist1 = Lists.newArrayList(arraylist);
+                                Iterator iterator2 = arraylist.iterator();
+
+                                Achievement achievement3;
+
+                                while (iterator2.hasNext()) {
+                                    achievement3 = (Achievement) iterator2.next();
+                                    Achievement achievement4 = achievement3;
+
+                                    boolean flag2;
+
+                                    for (flag2 = false; achievement4 != null; achievement4 = achievement4.c) {
+                                        if (achievement4 == statistic) {
+                                            flag2 = true;
+                                        }
+                                    }
+
+                                    if (!flag2) {
+                                        for (achievement4 = achievement3; achievement4 != null; achievement4 = achievement4.c) {
+                                            arraylist1.remove(achievement3);
+                                        }
+                                    }
                                 }
 
-                                iterator1 = arraylist.iterator();
+                                iterator2 = arraylist1.iterator();
 
-                                while (iterator1.hasNext()) {
-                                    achievement2 = (Achievement) iterator1.next();
-                                    entityplayer.a((Statistic) achievement2);
+                                while (iterator2.hasNext()) {
+                                    achievement3 = (Achievement) iterator2.next();
+                                    entityplayer.a((Statistic) achievement3);
                                 }
                             }
                         }
@@ -115,7 +144,7 @@ public class CommandAchievement extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         if (astring.length == 1) {
             return a(astring, new String[] { "give", "take"});
         } else if (astring.length != 2) {

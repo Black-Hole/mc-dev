@@ -5,13 +5,13 @@ import com.mojang.authlib.GameProfile;
 import java.io.File;
 import java.util.Iterator;
 
-public class GameProfileBanList extends JsonList {
+public class GameProfileBanList extends JsonList<GameProfile, GameProfileBanEntry> {
 
     public GameProfileBanList(File file) {
         super(file);
     }
 
-    protected JsonListEntry a(JsonObject jsonobject) {
+    protected JsonListEntry<GameProfile> a(JsonObject jsonobject) {
         return new GameProfileBanEntry(jsonobject);
     }
 

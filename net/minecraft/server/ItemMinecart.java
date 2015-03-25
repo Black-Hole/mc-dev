@@ -2,25 +2,74 @@ package net.minecraft.server;
 
 public class ItemMinecart extends Item {
 
-    private static final IDispenseBehavior a = new DispenseBehaviorMinecart();
-    private final EnumMinecartType b;
+    private static final IDispenseBehavior a = new DispenseBehaviorItem() {
+        private final DispenseBehaviorItem b = new DispenseBehaviorItem();
 
-    public ItemMinecart(EnumMinecartType enumminecarttype) {
+        public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
+            EnumDirection enumdirection = BlockDispenser.b(isourceblock.f());
+            World world = isourceblock.i();
+            double d0 = isourceblock.getX() + (double) enumdirection.getAdjacentX() * 1.125D;
+            double d1 = Math.floor(isourceblock.getY()) + (double) enumdirection.getAdjacentY();
+            double d2 = isourceblock.getZ() + (double) enumdirection.getAdjacentZ() * 1.125D;
+            BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
+            IBlockData iblockdata = world.getType(blockposition);
+            BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition = iblockdata.getBlock() instanceof BlockMinecartTrackAbstract ? (BlockMinecartTrackAbstract.EnumTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).n()) : BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH;
+            double d3;
+
+            if (BlockMinecartTrackAbstract.d(iblockdata)) {
+                if (blockminecarttrackabstract_enumtrackposition.c()) {
+                    d3 = 0.6D;
+                } else {
+                    d3 = 0.1D;
+                }
+            } else {
+                if (iblockdata.getBlock().getMaterial() != Material.AIR || !BlockMinecartTrackAbstract.d(world.getType(blockposition.down()))) {
+                    return this.b.a(isourceblock, itemstack);
+                }
+
+                IBlockData iblockdata1 = world.getType(blockposition.down());
+                BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition1 = iblockdata1.getBlock() instanceof BlockMinecartTrackAbstract ? (BlockMinecartTrackAbstract.EnumTrackPosition) iblockdata1.get(((BlockMinecartTrackAbstract) iblockdata1.getBlock()).n()) : BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH;
+
+                if (enumdirection != EnumDirection.DOWN && blockminecarttrackabstract_enumtrackposition1.c()) {
+                    d3 = -0.4D;
+                } else {
+                    d3 = -0.9D;
+                }
+            }
+
+            EntityMinecartAbstract entityminecartabstract = EntityMinecartAbstract.a(world, d0, d1 + d3, d2, ((ItemMinecart) itemstack.getItem()).b);
+
+            if (itemstack.hasName()) {
+                entityminecartabstract.setCustomName(itemstack.getName());
+            }
+
+            world.addEntity(entityminecartabstract);
+            itemstack.a(1);
+            return itemstack;
+        }
+
+        protected void a(ISourceBlock isourceblock) {
+            isourceblock.i().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
+        }
+    };
+    private final EntityMinecartAbstract.EnumMinecartType b;
+
+    public ItemMinecart(EntityMinecartAbstract.EnumMinecartType entityminecartabstract_enumminecarttype) {
         this.maxStackSize = 1;
-        this.b = enumminecarttype;
+        this.b = entityminecartabstract_enumminecarttype;
         this.a(CreativeModeTab.e);
-        BlockDispenser.M.a(this, ItemMinecart.a);
+        BlockDispenser.N.a(this, ItemMinecart.a);
     }
 
     public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
         IBlockData iblockdata = world.getType(blockposition);
 
         if (BlockMinecartTrackAbstract.d(iblockdata)) {
-            if (!world.isStatic) {
-                EnumTrackPosition enumtrackposition = iblockdata.getBlock() instanceof BlockMinecartTrackAbstract ? (EnumTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).l()) : EnumTrackPosition.NORTH_SOUTH;
+            if (!world.isClientSide) {
+                BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition = iblockdata.getBlock() instanceof BlockMinecartTrackAbstract ? (BlockMinecartTrackAbstract.EnumTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).n()) : BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH;
                 double d0 = 0.0D;
 
-                if (enumtrackposition.c()) {
+                if (blockminecarttrackabstract_enumtrackposition.c()) {
                     d0 = 0.5D;
                 }
 
@@ -38,9 +87,5 @@ public class ItemMinecart extends Item {
         } else {
             return false;
         }
-    }
-
-    static EnumMinecartType a(ItemMinecart itemminecart) {
-        return itemminecart.b;
     }
 }

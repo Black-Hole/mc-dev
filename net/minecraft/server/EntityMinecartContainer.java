@@ -15,7 +15,10 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     public void a(DamageSource damagesource) {
         super.a(damagesource);
-        InventoryUtils.dropEntity(this.world, this, this);
+        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+            InventoryUtils.dropEntity(this.world, this, this);
+        }
+
     }
 
     public ItemStack getItem(int i) {
@@ -132,7 +135,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     }
 
     public boolean e(EntityHuman entityhuman) {
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             entityhuman.openContainer(this);
         }
 
@@ -158,7 +161,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         return 0;
     }
 
-    public boolean q_() {
+    public boolean r_() {
         return false;
     }
 

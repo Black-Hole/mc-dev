@@ -19,7 +19,7 @@ public class CommandClear extends CommandAbstract {
         return 2;
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         EntityPlayer entityplayer = astring.length == 0 ? b(icommandlistener) : a(icommandlistener, astring[0]);
         Item item = astring.length >= 2 ? f(icommandlistener, astring[1]) : null;
         int i = astring.length >= 3 ? a(astring[2], -1) : -1;
@@ -44,7 +44,7 @@ public class CommandClear extends CommandAbstract {
                 entityplayer.broadcastCarriedItem();
             }
 
-            icommandlistener.a(EnumCommandResult.AFFECTED_ITEMS, k);
+            icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, k);
             if (k == 0) {
                 throw new CommandException("commands.clear.failure", new Object[] { entityplayer.getName()});
             } else {
@@ -58,7 +58,7 @@ public class CommandClear extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, this.d()) : (astring.length == 2 ? a(astring, (Collection) Item.REGISTRY.keySet()) : null);
     }
 

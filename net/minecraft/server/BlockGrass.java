@@ -20,8 +20,8 @@ public class BlockGrass extends Block implements IBlockFragilePlantElement {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (!world.isStatic) {
-            if (world.getLightLevel(blockposition.up()) < 4 && world.getType(blockposition.up()).getBlock().n() > 2) {
+        if (!world.isClientSide) {
+            if (world.getLightLevel(blockposition.up()) < 4 && world.getType(blockposition.up()).getBlock().p() > 2) {
                 world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
             } else {
                 if (world.getLightLevel(blockposition.up()) >= 9) {
@@ -30,7 +30,7 @@ public class BlockGrass extends Block implements IBlockFragilePlantElement {
                         Block block = world.getType(blockposition1.up()).getBlock();
                         IBlockData iblockdata1 = world.getType(blockposition1);
 
-                        if (iblockdata1.getBlock() == Blocks.DIRT && iblockdata1.get(BlockDirt.VARIANT) == EnumDirtVariant.DIRT && world.getLightLevel(blockposition1.up()) >= 4 && block.n() <= 2) {
+                        if (iblockdata1.getBlock() == Blocks.DIRT && iblockdata1.get(BlockDirt.VARIANT) == BlockDirt.EnumDirtVariant.DIRT && world.getLightLevel(blockposition1.up()) >= 4 && block.p() <= 2) {
                             world.setTypeUpdate(blockposition1, Blocks.GRASS.getBlockData());
                         }
                     }
@@ -41,7 +41,7 @@ public class BlockGrass extends Block implements IBlockFragilePlantElement {
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, EnumDirtVariant.DIRT), random, i);
+        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
     }
 
     public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
@@ -69,15 +69,15 @@ public class BlockGrass extends Block implements IBlockFragilePlantElement {
                     }
                 } else if (world.getType(blockposition2).getBlock().material == Material.AIR) {
                     if (random.nextInt(8) == 0) {
-                        EnumFlowerVarient enumflowervarient = world.getBiome(blockposition2).a(random, blockposition2);
-                        BlockFlowers blockflowers = enumflowervarient.a().a();
-                        IBlockData iblockdata1 = blockflowers.getBlockData().set(blockflowers.l(), enumflowervarient);
+                        BlockFlowers.EnumFlowerVarient blockflowers_enumflowervarient = world.getBiome(blockposition2).a(random, blockposition2);
+                        BlockFlowers blockflowers = blockflowers_enumflowervarient.a().a();
+                        IBlockData iblockdata1 = blockflowers.getBlockData().set(blockflowers.n(), blockflowers_enumflowervarient);
 
                         if (blockflowers.f(world, blockposition2, iblockdata1)) {
                             world.setTypeAndData(blockposition2, iblockdata1, 3);
                         }
                     } else {
-                        IBlockData iblockdata2 = Blocks.TALLGRASS.getBlockData().set(BlockLongGrass.TYPE, EnumTallGrassType.GRASS);
+                        IBlockData iblockdata2 = Blocks.TALLGRASS.getBlockData().set(BlockLongGrass.TYPE, BlockLongGrass.EnumTallGrassType.GRASS);
 
                         if (Blocks.TALLGRASS.f(world, blockposition2, iblockdata2)) {
                             world.setTypeAndData(blockposition2, iblockdata2, 3);

@@ -49,11 +49,11 @@ public class WorldChunkManagerHell extends WorldChunkManager {
         return this.getBiomeBlock(abiomebase, i, j, k, l);
     }
 
-    public BlockPosition a(int i, int j, int k, List list, Random random) {
+    public BlockPosition a(int i, int j, int k, List<BiomeBase> list, Random random) {
         return list.contains(this.b) ? new BlockPosition(i - k + random.nextInt(k * 2 + 1), 0, j - k + random.nextInt(k * 2 + 1)) : null;
     }
 
-    public boolean a(int i, int j, int k, List list) {
+    public boolean a(int i, int j, int k, List<BiomeBase> list) {
         return list.contains(this.b);
     }
 }

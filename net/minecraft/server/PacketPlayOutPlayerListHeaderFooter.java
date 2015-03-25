@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutPlayerListHeaderFooter implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutPlayerListHeaderFooter implements Packet<PacketListenerPlayOut> {
 
     private IChatBaseComponent a;
     private IChatBaseComponent b;
@@ -11,12 +13,12 @@ public class PacketPlayOutPlayerListHeaderFooter implements Packet {
         this.a = ichatbasecomponent;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.d();
         this.b = packetdataserializer.d();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.a(this.b);
     }

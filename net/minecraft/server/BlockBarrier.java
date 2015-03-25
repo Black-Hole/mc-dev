@@ -4,9 +4,9 @@ public class BlockBarrier extends Block {
 
     protected BlockBarrier() {
         super(Material.BANNER);
-        this.v();
+        this.x();
         this.b(6000001.0F);
-        this.J();
+        this.K();
         this.t = true;
     }
 

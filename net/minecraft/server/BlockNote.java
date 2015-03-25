@@ -5,7 +5,7 @@ import java.util.List;
 
 public class BlockNote extends BlockContainer {
 
-    private static final List a = Lists.newArrayList(new String[] { "harp", "bd", "snare", "hat", "bassattack"});
+    private static final List<String> a = Lists.newArrayList(new String[] { "harp", "bd", "snare", "hat", "bassattack"});
 
     public BlockNote() {
         super(Material.WOOD);
@@ -31,7 +31,7 @@ public class BlockNote extends BlockContainer {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (world.isStatic) {
+        if (world.isClientSide) {
             return true;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
@@ -41,6 +41,7 @@ public class BlockNote extends BlockContainer {
 
                 tileentitynote.b();
                 tileentitynote.play(world, blockposition);
+                entityhuman.b(StatisticList.S);
             }
 
             return true;
@@ -48,11 +49,12 @@ public class BlockNote extends BlockContainer {
     }
 
     public void attack(World world, BlockPosition blockposition, EntityHuman entityhuman) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityNote) {
                 ((TileEntityNote) tileentity).play(world, blockposition);
+                entityhuman.b(StatisticList.R);
             }
 
         }

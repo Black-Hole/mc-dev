@@ -5,8 +5,8 @@ public abstract class EntityAgeable extends EntityCreature {
     protected int a;
     protected int b;
     protected int c;
-    private float bk = -1.0F;
-    private float bl;
+    private float bm = -1.0F;
+    private float bn;
 
     public EntityAgeable(World world) {
         super(world);
@@ -18,7 +18,7 @@ public abstract class EntityAgeable extends EntityCreature {
         ItemStack itemstack = entityhuman.inventory.getItemInHand();
 
         if (itemstack != null && itemstack.getItem() == Items.SPAWN_EGG) {
-            if (!this.world.isStatic) {
+            if (!this.world.isClientSide) {
                 Class oclass = EntityTypes.a(itemstack.getData());
 
                 if (oclass != null && this.getClass() == oclass) {
@@ -54,7 +54,7 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     public int getAge() {
-        return this.world.isStatic ? this.datawatcher.getByte(12) : this.a;
+        return this.world.isClientSide ? this.datawatcher.getByte(12) : this.a;
     }
 
     public void setAge(int i, boolean flag) {
@@ -109,7 +109,7 @@ public abstract class EntityAgeable extends EntityCreature {
 
     public void m() {
         super.m();
-        if (this.world.isStatic) {
+        if (this.world.isClientSide) {
             if (this.c > 0) {
                 if (this.c % 4 == 0) {
                     this.world.addParticle(EnumParticle.VILLAGER_HAPPY, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, 0.0D, 0.0D, 0.0D, new int[0]);
@@ -146,11 +146,11 @@ public abstract class EntityAgeable extends EntityCreature {
         this.a(flag ? 0.5F : 1.0F);
     }
 
-    protected final void a(float f, float f1) {
-        boolean flag = this.bk > 0.0F;
+    protected final void setSize(float f, float f1) {
+        boolean flag = this.bm > 0.0F;
 
-        this.bk = f;
-        this.bl = f1;
+        this.bm = f;
+        this.bn = f1;
         if (!flag) {
             this.a(1.0F);
         }
@@ -158,6 +158,6 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     protected final void a(float f) {
-        super.a(this.bk * f, this.bl * f);
+        super.setSize(this.bm * f, this.bn * f);
     }
 }

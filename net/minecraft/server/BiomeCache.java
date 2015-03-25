@@ -7,27 +7,27 @@ public class BiomeCache {
 
     private final WorldChunkManager a;
     private long b;
-    private LongHashMap c = new LongHashMap();
-    private List d = Lists.newArrayList();
+    private LongHashMap<BiomeCache.BiomeCacheBlock> c = new LongHashMap();
+    private List<BiomeCache.BiomeCacheBlock> d = Lists.newArrayList();
 
     public BiomeCache(WorldChunkManager worldchunkmanager) {
         this.a = worldchunkmanager;
     }
 
-    public BiomeCacheBlock a(int i, int j) {
+    public BiomeCache.BiomeCacheBlock a(int i, int j) {
         i >>= 4;
         j >>= 4;
         long k = (long) i & 4294967295L | ((long) j & 4294967295L) << 32;
-        BiomeCacheBlock biomecacheblock = (BiomeCacheBlock) this.c.getEntry(k);
+        BiomeCache.BiomeCacheBlock biomecache_biomecacheblock = (BiomeCache.BiomeCacheBlock) this.c.getEntry(k);
 
-        if (biomecacheblock == null) {
-            biomecacheblock = new BiomeCacheBlock(this, i, j);
-            this.c.put(k, biomecacheblock);
-            this.d.add(biomecacheblock);
+        if (biomecache_biomecacheblock == null) {
+            biomecache_biomecacheblock = new BiomeCache.BiomeCacheBlock(i, j);
+            this.c.put(k, biomecache_biomecacheblock);
+            this.d.add(biomecache_biomecacheblock);
         }
 
-        biomecacheblock.e = MinecraftServer.ax();
-        return biomecacheblock;
+        biomecache_biomecacheblock.e = MinecraftServer.ay();
+        return biomecache_biomecacheblock;
     }
 
     public BiomeBase a(int i, int j, BiomeBase biomebase) {
@@ -37,19 +37,19 @@ public class BiomeCache {
     }
 
     public void a() {
-        long i = MinecraftServer.ax();
+        long i = MinecraftServer.ay();
         long j = i - this.b;
 
         if (j > 7500L || j < 0L) {
             this.b = i;
 
             for (int k = 0; k < this.d.size(); ++k) {
-                BiomeCacheBlock biomecacheblock = (BiomeCacheBlock) this.d.get(k);
-                long l = i - biomecacheblock.e;
+                BiomeCache.BiomeCacheBlock biomecache_biomecacheblock = (BiomeCache.BiomeCacheBlock) this.d.get(k);
+                long l = i - biomecache_biomecacheblock.e;
 
                 if (l > 30000L || l < 0L) {
                     this.d.remove(k--);
-                    long i1 = (long) biomecacheblock.c & 4294967295L | ((long) biomecacheblock.d & 4294967295L) << 32;
+                    long i1 = (long) biomecache_biomecacheblock.c & 4294967295L | ((long) biomecache_biomecacheblock.d & 4294967295L) << 32;
 
                     this.c.remove(i1);
                 }
@@ -62,7 +62,23 @@ public class BiomeCache {
         return this.a(i, j).b;
     }
 
-    static WorldChunkManager a(BiomeCache biomecache) {
-        return biomecache.a;
+    public class BiomeCacheBlock {
+
+        public float[] a = new float[256];
+        public BiomeBase[] b = new BiomeBase[256];
+        public int c;
+        public int d;
+        public long e;
+
+        public BiomeCacheBlock(int i, int j) {
+            this.c = i;
+            this.d = j;
+            BiomeCache.this.a.getWetness(this.a, i << 4, j << 4, 16, 16);
+            BiomeCache.this.a.a(this.b, i << 4, j << 4, 16, 16, false);
+        }
+
+        public BiomeBase a(int i, int j) {
+            return this.b[i & 15 | (j & 15) << 4];
+        }
     }
 }

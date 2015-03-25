@@ -14,5 +14,5 @@ public interface ISourceBlock extends ILocationSource {
 
     int f();
 
-    TileEntity getTileEntity();
+    <T extends TileEntity> T getTileEntity();
 }

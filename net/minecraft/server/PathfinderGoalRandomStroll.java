@@ -23,11 +23,11 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
 
     public boolean a() {
         if (!this.g) {
-            if (this.a.bg() >= 100) {
+            if (this.a.bh() >= 100) {
                 return false;
             }
 
-            if (this.a.bb().nextInt(this.f) != 0) {
+            if (this.a.bc().nextInt(this.f) != 0) {
                 return false;
             }
         }

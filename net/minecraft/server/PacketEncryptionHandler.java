@@ -3,6 +3,7 @@ package net.minecraft.server;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import javax.crypto.Cipher;
+import javax.crypto.ShortBufferException;
 
 public class PacketEncryptionHandler {
 
@@ -25,7 +26,7 @@ public class PacketEncryptionHandler {
         return this.b;
     }
 
-    protected ByteBuf a(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf) {
+    protected ByteBuf a(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf) throws ShortBufferException {
         int i = bytebuf.readableBytes();
         byte[] abyte = this.a(bytebuf);
         ByteBuf bytebuf1 = channelhandlercontext.alloc().heapBuffer(this.a.getOutputSize(i));
@@ -34,7 +35,7 @@ public class PacketEncryptionHandler {
         return bytebuf1;
     }
 
-    protected void a(ByteBuf bytebuf, ByteBuf bytebuf1) {
+    protected void a(ByteBuf bytebuf, ByteBuf bytebuf1) throws ShortBufferException {
         int i = bytebuf.readableBytes();
         byte[] abyte = this.a(bytebuf);
         int j = this.a.getOutputSize(i);

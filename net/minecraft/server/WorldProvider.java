@@ -97,7 +97,7 @@ public abstract class WorldProvider {
     }
 
     public int getSeaLevel() {
-        return this.type == WorldType.FLAT ? 4 : 64;
+        return this.type == WorldType.FLAT ? 4 : this.b.F() + 1;
     }
 
     public abstract String getName();

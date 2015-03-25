@@ -20,7 +20,7 @@ public class PathfinderGoalBreed extends PathfinderGoal {
     }
 
     public boolean a() {
-        if (!this.d.cp()) {
+        if (!this.d.isInLove()) {
             return false;
         } else {
             this.e = this.f();
@@ -29,7 +29,7 @@ public class PathfinderGoalBreed extends PathfinderGoal {
     }
 
     public boolean b() {
-        return this.e.isAlive() && this.e.cp() && this.b < 60;
+        return this.e.isAlive() && this.e.isInLove() && this.b < 60;
     }
 
     public void d() {
@@ -38,7 +38,7 @@ public class PathfinderGoalBreed extends PathfinderGoal {
     }
 
     public void e() {
-        this.d.getControllerLook().a(this.e, 10.0F, (float) this.d.bP());
+        this.d.getControllerLook().a(this.e, 10.0F, (float) this.d.bQ());
         this.d.getNavigation().a((Entity) this.e, this.c);
         ++this.b;
         if (this.b >= 60 && this.d.h(this.e) < 9.0D) {
@@ -70,10 +70,10 @@ public class PathfinderGoalBreed extends PathfinderGoal {
         EntityAgeable entityageable = this.d.createChild(this.e);
 
         if (entityageable != null) {
-            EntityHuman entityhuman = this.d.co();
+            EntityHuman entityhuman = this.d.cq();
 
-            if (entityhuman == null && this.e.co() != null) {
-                entityhuman = this.e.co();
+            if (entityhuman == null && this.e.cq() != null) {
+                entityhuman = this.e.cq();
             }
 
             if (entityhuman != null) {
@@ -85,19 +85,22 @@ public class PathfinderGoalBreed extends PathfinderGoal {
 
             this.d.setAgeRaw(6000);
             this.e.setAgeRaw(6000);
-            this.d.cq();
-            this.e.cq();
+            this.d.cs();
+            this.e.cs();
             entityageable.setAgeRaw(-24000);
             entityageable.setPositionRotation(this.d.locX, this.d.locY, this.d.locZ, 0.0F, 0.0F);
             this.a.addEntity(entityageable);
-            Random random = this.d.bb();
+            Random random = this.d.bc();
 
             for (int i = 0; i < 7; ++i) {
                 double d0 = random.nextGaussian() * 0.02D;
                 double d1 = random.nextGaussian() * 0.02D;
                 double d2 = random.nextGaussian() * 0.02D;
+                double d3 = random.nextDouble() * (double) this.d.width * 2.0D - (double) this.d.width;
+                double d4 = 0.5D + random.nextDouble() * (double) this.d.length;
+                double d5 = random.nextDouble() * (double) this.d.width * 2.0D - (double) this.d.width;
 
-                this.a.addParticle(EnumParticle.HEART, this.d.locX + (double) (random.nextFloat() * this.d.width * 2.0F) - (double) this.d.width, this.d.locY + 0.5D + (double) (random.nextFloat() * this.d.length), this.d.locZ + (double) (random.nextFloat() * this.d.width * 2.0F) - (double) this.d.width, d0, d1, d2, new int[0]);
+                this.a.addParticle(EnumParticle.HEART, this.d.locX + d3, this.d.locY + d4, this.d.locZ + d5, d0, d1, d2, new int[0]);
             }
 
             if (this.a.getGameRules().getBoolean("doMobLoot")) {

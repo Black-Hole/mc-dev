@@ -6,19 +6,19 @@ import java.util.Random;
 
 public class WeightedRandom {
 
-    public static int a(Collection collection) {
+    public static int a(Collection<? extends WeightedRandom.WeightedRandomChoice> collection) {
         int i = 0;
 
-        WeightedRandomChoice weightedrandomchoice;
+        WeightedRandom.WeightedRandomChoice weightedrandom_weightedrandomchoice;
 
-        for (Iterator iterator = collection.iterator(); iterator.hasNext(); i += weightedrandomchoice.a) {
-            weightedrandomchoice = (WeightedRandomChoice) iterator.next();
+        for (Iterator iterator = collection.iterator(); iterator.hasNext(); i += weightedrandom_weightedrandomchoice.a) {
+            weightedrandom_weightedrandomchoice = (WeightedRandom.WeightedRandomChoice) iterator.next();
         }
 
         return i;
     }
 
-    public static WeightedRandomChoice a(Random random, Collection collection, int i) {
+    public static <T extends WeightedRandom.WeightedRandomChoice> T a(Random random, Collection<T> collection, int i) {
         if (i <= 0) {
             throw new IllegalArgumentException();
         } else {
@@ -28,24 +28,33 @@ public class WeightedRandom {
         }
     }
 
-    public static WeightedRandomChoice a(Collection collection, int i) {
+    public static <T extends WeightedRandom.WeightedRandomChoice> T a(Collection<T> collection, int i) {
         Iterator iterator = collection.iterator();
 
-        WeightedRandomChoice weightedrandomchoice;
+        WeightedRandom.WeightedRandomChoice weightedrandom_weightedrandomchoice;
 
         do {
             if (!iterator.hasNext()) {
                 return null;
             }
 
-            weightedrandomchoice = (WeightedRandomChoice) iterator.next();
-            i -= weightedrandomchoice.a;
+            weightedrandom_weightedrandomchoice = (WeightedRandom.WeightedRandomChoice) iterator.next();
+            i -= weightedrandom_weightedrandomchoice.a;
         } while (i >= 0);
 
-        return weightedrandomchoice;
+        return weightedrandom_weightedrandomchoice;
     }
 
-    public static WeightedRandomChoice a(Random random, Collection collection) {
+    public static <T extends WeightedRandom.WeightedRandomChoice> T a(Random random, Collection<T> collection) {
         return a(random, collection, a(collection));
+    }
+
+    public static class WeightedRandomChoice {
+
+        protected int a;
+
+        public WeightedRandomChoice(int i) {
+            this.a = i;
+        }
     }
 }

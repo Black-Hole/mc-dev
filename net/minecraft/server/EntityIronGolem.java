@@ -1,15 +1,17 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicate;
+
 public class EntityIronGolem extends EntityGolem {
 
     private int b;
     Village a;
     private int c;
-    private int bk;
+    private int bm;
 
     public EntityIronGolem(World world) {
         super(world);
-        this.a(1.4F, 2.9F);
+        this.setSize(1.4F, 2.9F);
         ((Navigation) this.getNavigation()).a(true);
         this.goalSelector.a(1, new PathfinderGoalMeleeAttack(this, 1.0D, true));
         this.goalSelector.a(2, new PathfinderGoalMoveTowardsTarget(this, 0.9D, 32.0F));
@@ -21,7 +23,7 @@ public class EntityIronGolem extends EntityGolem {
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalDefendVillage(this));
         this.targetSelector.a(2, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
-        this.targetSelector.a(3, new PathfinderGoalNearestGolemTarget(this, EntityInsentient.class, 10, false, true, IMonster.e));
+        this.targetSelector.a(3, new EntityIronGolem.PathfinderGoalNearestGolemTarget(this, EntityInsentient.class, 10, false, true, IMonster.e));
     }
 
     protected void h() {
@@ -34,7 +36,7 @@ public class EntityIronGolem extends EntityGolem {
             this.b = 70 + this.random.nextInt(50);
             this.a = this.world.ae().getClosestVillage(new BlockPosition(this), 32);
             if (this.a == null) {
-                this.ch();
+                this.cj();
             } else {
                 BlockPosition blockposition = this.a.a();
 
@@ -45,8 +47,8 @@ public class EntityIronGolem extends EntityGolem {
         super.E();
     }
 
-    protected void aW() {
-        super.aW();
+    protected void initAttributes() {
+        super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(100.0D);
         this.getAttributeInstance(GenericAttributes.d).setValue(0.25D);
     }
@@ -56,7 +58,7 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     protected void s(Entity entity) {
-        if (entity instanceof IMonster && this.bb().nextInt(20) == 0) {
+        if (entity instanceof IMonster && !(entity instanceof EntityCreeper) && this.bc().nextInt(20) == 0) {
             this.setGoalTarget((EntityLiving) entity);
         }
 
@@ -69,8 +71,8 @@ public class EntityIronGolem extends EntityGolem {
             --this.c;
         }
 
-        if (this.bk > 0) {
-            --this.bk;
+        if (this.bm > 0) {
+            --this.bm;
         }
 
         if (this.motX * this.motX + this.motZ * this.motZ > 2.500000277905201E-7D && this.random.nextInt(5) == 0) {
@@ -87,8 +89,8 @@ public class EntityIronGolem extends EntityGolem {
 
     }
 
-    public boolean a(Class oclass) {
-        return this.isPlayerCreated() && EntityHuman.class.isAssignableFrom(oclass) ? false : super.a(oclass);
+    public boolean a(Class<? extends EntityLiving> oclass) {
+        return this.isPlayerCreated() && EntityHuman.class.isAssignableFrom(oclass) ? false : (oclass == EntityCreeper.class ? false : super.a(oclass));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -120,15 +122,15 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     public void a(boolean flag) {
-        this.bk = flag ? 400 : 0;
+        this.bm = flag ? 400 : 0;
         this.world.broadcastEntityEffect(this, (byte) 11);
     }
 
-    protected String bn() {
+    protected String bo() {
         return "mob.irongolem.hit";
     }
 
-    protected String bo() {
+    protected String bp() {
         return "mob.irongolem.death";
     }
 
@@ -142,7 +144,7 @@ public class EntityIronGolem extends EntityGolem {
         int k;
 
         for (k = 0; k < j; ++k) {
-            this.a(Item.getItemOf(Blocks.RED_FLOWER), 1, (float) EnumFlowerVarient.POPPY.b());
+            this.a(Item.getItemOf(Blocks.RED_FLOWER), 1, (float) BlockFlowers.EnumFlowerVarient.POPPY.b());
         }
 
         k = 3 + this.random.nextInt(3);
@@ -153,8 +155,8 @@ public class EntityIronGolem extends EntityGolem {
 
     }
 
-    public int ck() {
-        return this.bk;
+    public int cm() {
+        return this.bm;
     }
 
     public boolean isPlayerCreated() {
@@ -178,5 +180,49 @@ public class EntityIronGolem extends EntityGolem {
         }
 
         super.die(damagesource);
+    }
+
+    static class PathfinderGoalNearestGolemTarget<T extends EntityLiving> extends PathfinderGoalNearestAttackableTarget<T> {
+
+        public PathfinderGoalNearestGolemTarget(final EntityCreature entitycreature, Class<T> oclass, int i, boolean flag, boolean flag1, final Predicate<? super T> predicate) {
+            super(entitycreature, oclass, i, flag, flag1, predicate);
+            this.c = new Predicate() {
+                public boolean a(T t0) {
+                    if (predicate != null && !predicate.apply(t0)) {
+                        return false;
+                    } else if (t0 instanceof EntityCreeper) {
+                        return false;
+                    } else {
+                        if (t0 instanceof EntityHuman) {
+                            double d0 = PathfinderGoalNearestGolemTarget.this.f();
+
+                            if (t0.isSneaking()) {
+                                d0 *= 0.800000011920929D;
+                            }
+
+                            if (t0.isInvisible()) {
+                                float f = ((EntityHuman) t0).bY();
+
+                                if (f < 0.1F) {
+                                    f = 0.1F;
+                                }
+
+                                d0 *= (double) (0.7F * f);
+                            }
+
+                            if ((double) t0.g(entitycreature) > d0) {
+                                return false;
+                            }
+                        }
+
+                        return PathfinderGoalNearestGolemTarget.this.a(t0, false);
+                    }
+                }
+
+                public boolean apply(Object object) {
+                    return this.a((EntityLiving) object);
+                }
+            };
+        }
     }
 }

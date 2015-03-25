@@ -11,8 +11,8 @@ import java.util.Map.Entry;
 
 public class WorldGenFlatInfo {
 
-    private final List layers = Lists.newArrayList();
-    private final Map structures = Maps.newHashMap();
+    private final List<WorldGenFlatLayerInfo> layers = Lists.newArrayList();
+    private final Map<String, Map<String, String>> structures = Maps.newHashMap();
     private int c;
 
     public WorldGenFlatInfo() {}
@@ -25,11 +25,11 @@ public class WorldGenFlatInfo {
         this.c = i;
     }
 
-    public Map b() {
+    public Map<String, Map<String, String>> b() {
         return this.structures;
     }
 
-    public List c() {
+    public List<WorldGenFlatLayerInfo> c() {
         return this.layers;
     }
 
@@ -171,7 +171,7 @@ public class WorldGenFlatInfo {
         return worldgenflatlayerinfo;
     }
 
-    private static List a(int i, String s) {
+    private static List<WorldGenFlatLayerInfo> a(int i, String s) {
         if (s != null && s.length() >= 1) {
             ArrayList arraylist = Lists.newArrayList();
             String[] astring = s.split(",");

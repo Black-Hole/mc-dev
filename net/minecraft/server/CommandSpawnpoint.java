@@ -18,8 +18,8 @@ public class CommandSpawnpoint extends CommandAbstract {
         return "commands.spawnpoint.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
-        if (astring.length > 0 && astring.length < 4) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+        if (astring.length > 1 && astring.length < 4) {
             throw new ExceptionUsage("commands.spawnpoint.usage", new Object[0]);
         } else {
             EntityPlayer entityplayer = astring.length > 0 ? a(icommandlistener, astring[0]) : b(icommandlistener);
@@ -33,7 +33,7 @@ public class CommandSpawnpoint extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : null);
     }
 

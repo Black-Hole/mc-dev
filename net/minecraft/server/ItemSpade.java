@@ -5,10 +5,10 @@ import java.util.Set;
 
 public class ItemSpade extends ItemTool {
 
-    private static final Set c = Sets.newHashSet(new Block[] { Blocks.CLAY, Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.SNOW, Blocks.SNOW_LAYER, Blocks.SOUL_SAND});
+    private static final Set<Block> c = Sets.newHashSet(new Block[] { Blocks.CLAY, Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.SNOW, Blocks.SNOW_LAYER, Blocks.SOUL_SAND});
 
-    public ItemSpade(EnumToolMaterial enumtoolmaterial) {
-        super(1.0F, enumtoolmaterial, ItemSpade.c);
+    public ItemSpade(Item.EnumToolMaterial item_enumtoolmaterial) {
+        super(1.0F, item_enumtoolmaterial, ItemSpade.c);
     }
 
     public boolean canDestroySpecialBlock(Block block) {

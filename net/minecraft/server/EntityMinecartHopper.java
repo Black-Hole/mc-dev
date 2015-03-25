@@ -18,8 +18,8 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
         this.c = BlockPosition.ZERO;
     }
 
-    public EnumMinecartType s() {
-        return EnumMinecartType.HOPPER;
+    public EntityMinecartAbstract.EnumMinecartType s() {
+        return EntityMinecartAbstract.EnumMinecartType.HOPPER;
     }
 
     public IBlockData u() {
@@ -35,7 +35,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     }
 
     public boolean e(EntityHuman entityhuman) {
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             entityhuman.openContainer(this);
         }
 
@@ -68,16 +68,16 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     }
 
     public double B() {
-        return this.locY;
+        return this.locY + 0.5D;
     }
 
     public double C() {
         return this.locZ;
     }
 
-    public void s_() {
-        super.s_();
-        if (!this.world.isStatic && this.isAlive() && this.y()) {
+    public void t_() {
+        super.t_();
+        if (!this.world.isClientSide && this.isAlive() && this.y()) {
             BlockPosition blockposition = new BlockPosition(this);
 
             if (blockposition.equals(this.c)) {
@@ -113,7 +113,10 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 
     public void a(DamageSource damagesource) {
         super.a(damagesource);
-        this.a(Item.getItemOf(Blocks.HOPPER), 1, 0.0F);
+        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+            this.a(Item.getItemOf(Blocks.HOPPER), 1, 0.0F);
+        }
+
     }
 
     protected void b(NBTTagCompound nbttagcompound) {

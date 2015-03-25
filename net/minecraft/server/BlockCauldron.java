@@ -8,11 +8,11 @@ public class BlockCauldron extends Block {
     public static final BlockStateInteger LEVEL = BlockStateInteger.of("level", 0, 3);
 
     public BlockCauldron() {
-        super(Material.ORE);
+        super(Material.ORE, MaterialMapColor.m);
         this.j(this.blockStateList.getBlockData().set(BlockCauldron.LEVEL, Integer.valueOf(0)));
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.3125F, 1.0F);
         super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         float f = 0.125F;
@@ -25,10 +25,10 @@ public class BlockCauldron extends Block {
         super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         this.a(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
         super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
-        this.h();
+        this.j();
     }
 
-    public void h() {
+    public void j() {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
@@ -44,7 +44,7 @@ public class BlockCauldron extends Block {
         int i = ((Integer) iblockdata.get(BlockCauldron.LEVEL)).intValue();
         float f = (float) blockposition.getY() + (6.0F + (float) (3 * i)) / 16.0F;
 
-        if (!world.isStatic && entity.isBurning() && i > 0 && entity.getBoundingBox().b <= (double) f) {
+        if (!world.isClientSide && entity.isBurning() && i > 0 && entity.getBoundingBox().b <= (double) f) {
             entity.extinguish();
             this.a(world, blockposition, iblockdata, i - 1);
         }
@@ -52,7 +52,7 @@ public class BlockCauldron extends Block {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (world.isStatic) {
+        if (world.isClientSide) {
             return true;
         } else {
             ItemStack itemstack = entityhuman.inventory.getItemInHand();
@@ -69,6 +69,7 @@ public class BlockCauldron extends Block {
                             entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, new ItemStack(Items.BUCKET));
                         }
 
+                        entityhuman.b(StatisticList.I);
                         this.a(world, blockposition, iblockdata, 3);
                     }
 
@@ -86,6 +87,7 @@ public class BlockCauldron extends Block {
                                     ((EntityPlayer) entityhuman).updateInventory(entityhuman.defaultContainer);
                                 }
 
+                                entityhuman.b(StatisticList.J);
                                 --itemstack.count;
                                 if (itemstack.count <= 0) {
                                     entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, (ItemStack) null);
@@ -100,9 +102,10 @@ public class BlockCauldron extends Block {
                         if (i > 0 && item instanceof ItemArmor) {
                             ItemArmor itemarmor = (ItemArmor) item;
 
-                            if (itemarmor.w_() == EnumArmorMaterial.LEATHER && itemarmor.d_(itemstack)) {
+                            if (itemarmor.x_() == ItemArmor.EnumArmorMaterial.LEATHER && itemarmor.d_(itemstack)) {
                                 itemarmor.c(itemstack);
                                 this.a(world, blockposition, iblockdata, i - 1);
+                                entityhuman.b(StatisticList.K);
                                 return true;
                             }
                         }
@@ -120,6 +123,7 @@ public class BlockCauldron extends Block {
                                     ((EntityPlayer) entityhuman).updateInventory(entityhuman.defaultContainer);
                                 }
 
+                                entityhuman.b(StatisticList.L);
                                 if (!entityhuman.abilities.canInstantlyBuild) {
                                     --itemstack.count;
                                 }

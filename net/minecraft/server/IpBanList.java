@@ -4,13 +4,13 @@ import com.google.gson.JsonObject;
 import java.io.File;
 import java.net.SocketAddress;
 
-public class IpBanList extends JsonList {
+public class IpBanList extends JsonList<String, IpBanEntry> {
 
     public IpBanList(File file) {
         super(file);
     }
 
-    protected JsonListEntry a(JsonObject jsonobject) {
+    protected JsonListEntry<String> a(JsonObject jsonobject) {
         return new IpBanEntry(jsonobject);
     }
 

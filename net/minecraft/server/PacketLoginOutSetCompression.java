@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketLoginOutSetCompression implements Packet {
+import java.io.IOException;
+
+public class PacketLoginOutSetCompression implements Packet<PacketLoginOutListener> {
 
     private int a;
 
@@ -10,11 +12,11 @@ public class PacketLoginOutSetCompression implements Packet {
         this.a = i;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
     }
 

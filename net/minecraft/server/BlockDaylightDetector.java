@@ -26,7 +26,7 @@ public class BlockDaylightDetector extends BlockContainer {
         return ((Integer) iblockdata.get(BlockDaylightDetector.POWER)).intValue();
     }
 
-    public void d(World world, BlockPosition blockposition) {
+    public void f(World world, BlockPosition blockposition) {
         if (!world.worldProvider.o()) {
             IBlockData iblockdata = world.getType(blockposition);
             int i = world.b(EnumSkyBlock.SKY, blockposition) - world.ab();
@@ -48,16 +48,16 @@ public class BlockDaylightDetector extends BlockContainer {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (entityhuman.cm()) {
-            if (world.isStatic) {
+        if (entityhuman.cn()) {
+            if (world.isClientSide) {
                 return true;
             } else {
                 if (this.b) {
                     world.setTypeAndData(blockposition, Blocks.DAYLIGHT_DETECTOR.getBlockData().set(BlockDaylightDetector.POWER, iblockdata.get(BlockDaylightDetector.POWER)), 4);
-                    Blocks.DAYLIGHT_DETECTOR.d(world, blockposition);
+                    Blocks.DAYLIGHT_DETECTOR.f(world, blockposition);
                 } else {
                     world.setTypeAndData(blockposition, Blocks.DAYLIGHT_DETECTOR_INVERTED.getBlockData().set(BlockDaylightDetector.POWER, iblockdata.get(BlockDaylightDetector.POWER)), 4);
-                    Blocks.DAYLIGHT_DETECTOR_INVERTED.d(world, blockposition);
+                    Blocks.DAYLIGHT_DETECTOR_INVERTED.f(world, blockposition);
                 }
 
                 return true;

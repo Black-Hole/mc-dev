@@ -22,7 +22,7 @@ public class CommandStats extends CommandAbstract {
         return "commands.stats.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 1) {
             throw new ExceptionUsage("commands.stats.usage", new Object[0]);
         } else {
@@ -79,9 +79,9 @@ public class CommandStats extends CommandAbstract {
                 }
             }
 
-            EnumCommandResult enumcommandresult = EnumCommandResult.a(astring[i++]);
+            CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult = CommandObjectiveExecutor.EnumCommandResult.a(astring[i++]);
 
-            if (enumcommandresult == null) {
+            if (commandobjectiveexecutor_enumcommandresult == null) {
                 throw new CommandException("commands.stats.failed", new Object[0]);
             } else {
                 World world = icommandlistener.getWorld();
@@ -108,7 +108,7 @@ public class CommandStats extends CommandAbstract {
                 } else {
                     Entity entity = b(icommandlistener, astring[1]);
 
-                    commandobjectiveexecutor = entity.aT();
+                    commandobjectiveexecutor = entity.aU();
                 }
 
                 if ("set".equals(s)) {
@@ -119,11 +119,11 @@ public class CommandStats extends CommandAbstract {
                         throw new CommandException("commands.stats.failed", new Object[0]);
                     }
 
-                    CommandObjectiveExecutor.a(commandobjectiveexecutor, enumcommandresult, s1, s2);
-                    a(icommandlistener, this, "commands.stats.success", new Object[] { enumcommandresult.b(), s2, s1});
+                    CommandObjectiveExecutor.a(commandobjectiveexecutor, commandobjectiveexecutor_enumcommandresult, s1, s2);
+                    a(icommandlistener, this, "commands.stats.success", new Object[] { commandobjectiveexecutor_enumcommandresult.b(), s2, s1});
                 } else if ("clear".equals(s)) {
-                    CommandObjectiveExecutor.a(commandobjectiveexecutor, enumcommandresult, (String) null, (String) null);
-                    a(icommandlistener, this, "commands.stats.cleared", new Object[] { enumcommandresult.b()});
+                    CommandObjectiveExecutor.a(commandobjectiveexecutor, commandobjectiveexecutor_enumcommandresult, (String) null, (String) null);
+                    a(icommandlistener, this, "commands.stats.cleared", new Object[] { commandobjectiveexecutor_enumcommandresult.b()});
                 }
 
                 if (flag) {
@@ -136,15 +136,15 @@ public class CommandStats extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "entity", "block"}) : (astring.length == 2 && astring[0].equals("entity") ? a(astring, this.d()) : ((astring.length != 3 || !astring[0].equals("entity")) && (astring.length != 5 || !astring[0].equals("block")) ? ((astring.length != 4 || !astring[0].equals("entity")) && (astring.length != 6 || !astring[0].equals("block")) ? ((astring.length != 6 || !astring[0].equals("entity")) && (astring.length != 8 || !astring[0].equals("block")) ? null : a(astring, (Collection) this.e())) : a(astring, EnumCommandResult.c())) : a(astring, new String[] { "set", "clear"})));
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, new String[] { "entity", "block"}) : (astring.length == 2 && astring[0].equals("entity") ? a(astring, this.d()) : (astring.length >= 2 && astring.length <= 4 && astring[0].equals("block") ? a(astring, 1, blockposition) : ((astring.length != 3 || !astring[0].equals("entity")) && (astring.length != 5 || !astring[0].equals("block")) ? ((astring.length != 4 || !astring[0].equals("entity")) && (astring.length != 6 || !astring[0].equals("block")) ? ((astring.length != 6 || !astring[0].equals("entity")) && (astring.length != 8 || !astring[0].equals("block")) ? null : a(astring, (Collection) this.e())) : a(astring, CommandObjectiveExecutor.EnumCommandResult.c())) : a(astring, new String[] { "set", "clear"}))));
     }
 
     protected String[] d() {
         return MinecraftServer.getServer().getPlayers();
     }
 
-    protected List e() {
+    protected List<String> e() {
         Collection collection = MinecraftServer.getServer().getWorldServer(0).getScoreboard().getObjectives();
         ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = collection.iterator();

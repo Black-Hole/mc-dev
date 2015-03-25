@@ -17,8 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 public class ShapeDetectorBuilder {
 
     private static final Joiner a = Joiner.on(",");
-    private final List b = Lists.newArrayList();
-    private final Map c = Maps.newHashMap();
+    private final List<String[]> b = Lists.newArrayList();
+    private final Map<Character, Predicate<ShapeDetectorBlock>> c = Maps.newHashMap();
     private int d;
     private int e;
 
@@ -70,7 +70,7 @@ public class ShapeDetectorBuilder {
         return new ShapeDetectorBuilder();
     }
 
-    public ShapeDetectorBuilder a(char c0, Predicate predicate) {
+    public ShapeDetectorBuilder a(char c0, Predicate<ShapeDetectorBlock> predicate) {
         this.c.put(Character.valueOf(c0), predicate);
         return this;
     }
@@ -79,7 +79,7 @@ public class ShapeDetectorBuilder {
         return new ShapeDetector(this.c());
     }
 
-    private Predicate[][][] c() {
+    private Predicate<ShapeDetectorBlock>[][][] c() {
         this.d();
         Predicate[][][] apredicate = (Predicate[][][]) ((Predicate[][][]) Array.newInstance(Predicate.class, new int[] { this.b.size(), this.d, this.e}));
 

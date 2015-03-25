@@ -43,7 +43,7 @@ public class ChunkCache implements IBlockAccess {
         int i = (blockposition.getX() >> 4) - this.a;
         int j = (blockposition.getZ() >> 4) - this.b;
 
-        return this.c[i][j].a(blockposition, EnumTileEntityState.IMMEDIATE);
+        return this.c[i][j].a(blockposition, Chunk.EnumTileEntityState.IMMEDIATE);
     }
 
     public IBlockData getType(BlockPosition blockposition) {

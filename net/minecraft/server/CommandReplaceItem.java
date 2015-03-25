@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class CommandReplaceItem extends CommandAbstract {
 
-    private static final Map a = Maps.newHashMap();
+    private static final Map<String, Integer> a = Maps.newHashMap();
 
     public CommandReplaceItem() {}
 
@@ -23,7 +23,7 @@ public class CommandReplaceItem extends CommandAbstract {
         return "commands.replaceitem.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 1) {
             throw new ExceptionUsage("commands.replaceitem.usage", new Object[0]);
         } else {
@@ -90,7 +90,7 @@ public class CommandReplaceItem extends CommandAbstract {
             }
 
             if (flag) {
-                icommandlistener.a(EnumCommandResult.AFFECTED_ITEMS, 0);
+                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, 0);
                 BlockPosition blockposition = a(icommandlistener, astring, 1, false);
                 World world = icommandlistener.getWorld();
                 TileEntity tileentity = world.getTileEntity(blockposition);
@@ -107,7 +107,7 @@ public class CommandReplaceItem extends CommandAbstract {
             } else {
                 Entity entity = b(icommandlistener, astring[1]);
 
-                icommandlistener.a(EnumCommandResult.AFFECTED_ITEMS, 0);
+                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, 0);
                 if (entity instanceof EntityHuman) {
                     ((EntityHuman) entity).defaultContainer.b();
                 }
@@ -121,12 +121,12 @@ public class CommandReplaceItem extends CommandAbstract {
                 }
             }
 
-            icommandlistener.a(EnumCommandResult.AFFECTED_ITEMS, k);
+            icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, k);
             a(icommandlistener, this, "commands.replaceitem.success", new Object[] { Integer.valueOf(j), Integer.valueOf(k), itemstack == null ? "Air" : itemstack.C()});
         }
     }
 
-    private int e(String s) {
+    private int e(String s) throws CommandException {
         if (!CommandReplaceItem.a.containsKey(s)) {
             throw new CommandException("commands.generic.parameter.invalid", new Object[] { s});
         } else {
@@ -134,8 +134,8 @@ public class CommandReplaceItem extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "entity", "block"}) : (astring.length == 2 && astring[0].equals("entity") ? a(astring, this.d()) : ((astring.length != 3 || !astring[0].equals("entity")) && (astring.length != 5 || !astring[0].equals("block")) ? ((astring.length != 4 || !astring[0].equals("entity")) && (astring.length != 6 || !astring[0].equals("block")) ? null : a(astring, (Collection) Item.REGISTRY.keySet())) : a(astring, (Collection) CommandReplaceItem.a.keySet())));
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, new String[] { "entity", "block"}) : (astring.length == 2 && astring[0].equals("entity") ? a(astring, this.d()) : (astring.length >= 2 && astring.length <= 4 && astring[0].equals("block") ? a(astring, 1, blockposition) : ((astring.length != 3 || !astring[0].equals("entity")) && (astring.length != 5 || !astring[0].equals("block")) ? ((astring.length != 4 || !astring[0].equals("entity")) && (astring.length != 6 || !astring[0].equals("block")) ? null : a(astring, (Collection) Item.REGISTRY.keySet())) : a(astring, (Collection) CommandReplaceItem.a.keySet()))));
     }
 
     protected String[] d() {

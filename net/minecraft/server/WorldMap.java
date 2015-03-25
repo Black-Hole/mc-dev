@@ -13,9 +13,9 @@ public class WorldMap extends PersistentBase {
     public byte map;
     public byte scale;
     public byte[] colors = new byte[16384];
-    public List g = Lists.newArrayList();
-    private Map i = Maps.newHashMap();
-    public Map decorations = Maps.newLinkedHashMap();
+    public List<WorldMap.WorldMapHumanTracker> g = Lists.newArrayList();
+    private Map<EntityHuman, WorldMap.WorldMapHumanTracker> i = Maps.newHashMap();
+    public Map<String, MapIcon> decorations = Maps.newLinkedHashMap();
 
     public WorldMap(String s) {
         super(s);
@@ -77,10 +77,10 @@ public class WorldMap extends PersistentBase {
 
     public void a(EntityHuman entityhuman, ItemStack itemstack) {
         if (!this.i.containsKey(entityhuman)) {
-            WorldMapHumanTracker worldmaphumantracker = new WorldMapHumanTracker(this, entityhuman);
+            WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker = new WorldMap.WorldMapHumanTracker(entityhuman);
 
-            this.i.put(entityhuman, worldmaphumantracker);
-            this.g.add(worldmaphumantracker);
+            this.i.put(entityhuman, worldmap_worldmaphumantracker);
+            this.g.add(worldmap_worldmaphumantracker);
         }
 
         if (!entityhuman.inventory.c(itemstack)) {
@@ -88,15 +88,15 @@ public class WorldMap extends PersistentBase {
         }
 
         for (int i = 0; i < this.g.size(); ++i) {
-            WorldMapHumanTracker worldmaphumantracker1 = (WorldMapHumanTracker) this.g.get(i);
+            WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker1 = (WorldMap.WorldMapHumanTracker) this.g.get(i);
 
-            if (!worldmaphumantracker1.trackee.dead && (worldmaphumantracker1.trackee.inventory.c(itemstack) || itemstack.y())) {
-                if (!itemstack.y() && worldmaphumantracker1.trackee.dimension == this.map) {
-                    this.a(0, worldmaphumantracker1.trackee.world, worldmaphumantracker1.trackee.getName(), worldmaphumantracker1.trackee.locX, worldmaphumantracker1.trackee.locZ, (double) worldmaphumantracker1.trackee.yaw);
+            if (!worldmap_worldmaphumantracker1.trackee.dead && (worldmap_worldmaphumantracker1.trackee.inventory.c(itemstack) || itemstack.y())) {
+                if (!itemstack.y() && worldmap_worldmaphumantracker1.trackee.dimension == this.map) {
+                    this.a(0, worldmap_worldmaphumantracker1.trackee.world, worldmap_worldmaphumantracker1.trackee.getName(), worldmap_worldmaphumantracker1.trackee.locX, worldmap_worldmaphumantracker1.trackee.locZ, (double) worldmap_worldmaphumantracker1.trackee.yaw);
                 }
             } else {
-                this.i.remove(worldmaphumantracker1.trackee);
-                this.g.remove(worldmaphumantracker1);
+                this.i.remove(worldmap_worldmaphumantracker1.trackee);
+                this.g.remove(worldmap_worldmaphumantracker1);
             }
         }
 
@@ -167,9 +167,9 @@ public class WorldMap extends PersistentBase {
     }
 
     public Packet a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        WorldMapHumanTracker worldmaphumantracker = (WorldMapHumanTracker) this.i.get(entityhuman);
+        WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker = (WorldMap.WorldMapHumanTracker) this.i.get(entityhuman);
 
-        return worldmaphumantracker == null ? null : worldmaphumantracker.a(itemstack);
+        return worldmap_worldmaphumantracker == null ? null : worldmap_worldmaphumantracker.a(itemstack);
     }
 
     public void flagDirty(int i, int j) {
@@ -177,22 +177,63 @@ public class WorldMap extends PersistentBase {
         Iterator iterator = this.g.iterator();
 
         while (iterator.hasNext()) {
-            WorldMapHumanTracker worldmaphumantracker = (WorldMapHumanTracker) iterator.next();
+            WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker = (WorldMap.WorldMapHumanTracker) iterator.next();
 
-            worldmaphumantracker.a(i, j);
+            worldmap_worldmaphumantracker.a(i, j);
         }
 
     }
 
-    public WorldMapHumanTracker a(EntityHuman entityhuman) {
-        WorldMapHumanTracker worldmaphumantracker = (WorldMapHumanTracker) this.i.get(entityhuman);
+    public WorldMap.WorldMapHumanTracker a(EntityHuman entityhuman) {
+        WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker = (WorldMap.WorldMapHumanTracker) this.i.get(entityhuman);
 
-        if (worldmaphumantracker == null) {
-            worldmaphumantracker = new WorldMapHumanTracker(this, entityhuman);
-            this.i.put(entityhuman, worldmaphumantracker);
-            this.g.add(worldmaphumantracker);
+        if (worldmap_worldmaphumantracker == null) {
+            worldmap_worldmaphumantracker = new WorldMap.WorldMapHumanTracker(entityhuman);
+            this.i.put(entityhuman, worldmap_worldmaphumantracker);
+            this.g.add(worldmap_worldmaphumantracker);
         }
 
-        return worldmaphumantracker;
+        return worldmap_worldmaphumantracker;
+    }
+
+    public class WorldMapHumanTracker {
+
+        public final EntityHuman trackee;
+        private boolean d = true;
+        private int e = 0;
+        private int f = 0;
+        private int g = 127;
+        private int h = 127;
+        private int i;
+        public int b;
+
+        public WorldMapHumanTracker(EntityHuman entityhuman) {
+            this.trackee = entityhuman;
+        }
+
+        public Packet a(ItemStack itemstack) {
+            if (this.d) {
+                this.d = false;
+                return new PacketPlayOutMap(itemstack.getData(), WorldMap.this.scale, WorldMap.this.decorations.values(), WorldMap.this.colors, this.e, this.f, this.g + 1 - this.e, this.h + 1 - this.f);
+            } else {
+                return this.i++ % 5 == 0 ? new PacketPlayOutMap(itemstack.getData(), WorldMap.this.scale, WorldMap.this.decorations.values(), WorldMap.this.colors, 0, 0, 0, 0) : null;
+            }
+        }
+
+        public void a(int i, int j) {
+            if (this.d) {
+                this.e = Math.min(this.e, i);
+                this.f = Math.min(this.f, j);
+                this.g = Math.max(this.g, i);
+                this.h = Math.max(this.h, j);
+            } else {
+                this.d = true;
+                this.e = i;
+                this.f = j;
+                this.g = i;
+                this.h = j;
+            }
+
+        }
     }
 }

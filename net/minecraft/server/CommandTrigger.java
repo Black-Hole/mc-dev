@@ -21,7 +21,7 @@ public class CommandTrigger extends CommandAbstract {
         return "commands.trigger.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 3) {
             throw new ExceptionUsage("commands.trigger.usage", new Object[0]);
         } else {
@@ -76,7 +76,7 @@ public class CommandTrigger extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         if (astring.length == 1) {
             Scoreboard scoreboard = MinecraftServer.getServer().getWorldServer(0).getScoreboard();
             ArrayList arraylist = Lists.newArrayList();

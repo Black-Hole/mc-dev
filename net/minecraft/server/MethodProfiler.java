@@ -13,11 +13,11 @@ import org.apache.logging.log4j.Logger;
 public class MethodProfiler {
 
     private static final Logger b = LogManager.getLogger();
-    private final List c = Lists.newArrayList();
-    private final List d = Lists.newArrayList();
+    private final List<String> c = Lists.newArrayList();
+    private final List<Long> d = Lists.newArrayList();
     public boolean a;
     private String e = "";
-    private final Map f = Maps.newHashMap();
+    private final Map<String, Long> f = Maps.newHashMap();
 
     public MethodProfiler() {}
 
@@ -61,7 +61,7 @@ public class MethodProfiler {
         }
     }
 
-    public List b(String s) {
+    public List<MethodProfiler.ProfilerInfo> b(String s) {
         if (!this.a) {
             return null;
         } else {
@@ -106,7 +106,7 @@ public class MethodProfiler {
                     double d1 = (double) l * 100.0D / (double) i;
                     String s3 = s2.substring(s.length());
 
-                    arraylist.add(new ProfilerInfo(s3, d0, d1));
+                    arraylist.add(new MethodProfiler.ProfilerInfo(s3, d0, d1));
                 }
             }
 
@@ -118,11 +118,11 @@ public class MethodProfiler {
             }
 
             if ((float) k > f) {
-                arraylist.add(new ProfilerInfo("unspecified", (double) ((float) k - f) * 100.0D / (double) k, (double) ((float) k - f) * 100.0D / (double) i));
+                arraylist.add(new MethodProfiler.ProfilerInfo("unspecified", (double) ((float) k - f) * 100.0D / (double) k, (double) ((float) k - f) * 100.0D / (double) i));
             }
 
             Collections.sort(arraylist);
-            arraylist.add(0, new ProfilerInfo(s, 100.0D, (double) k * 100.0D / (double) i));
+            arraylist.add(0, new MethodProfiler.ProfilerInfo(s, 100.0D, (double) k * 100.0D / (double) i));
             return arraylist;
         }
     }
@@ -134,5 +134,26 @@ public class MethodProfiler {
 
     public String c() {
         return this.c.size() == 0 ? "[UNKNOWN]" : (String) this.c.get(this.c.size() - 1);
+    }
+
+    public static final class ProfilerInfo implements Comparable<MethodProfiler.ProfilerInfo> {
+
+        public double a;
+        public double b;
+        public String c;
+
+        public ProfilerInfo(String s, double d0, double d1) {
+            this.c = s;
+            this.a = d0;
+            this.b = d1;
+        }
+
+        public int a(MethodProfiler.ProfilerInfo methodprofiler_profilerinfo) {
+            return methodprofiler_profilerinfo.a < this.a ? -1 : (methodprofiler_profilerinfo.a > this.a ? 1 : methodprofiler_profilerinfo.c.compareTo(this.c));
+        }
+
+        public int compareTo(Object object) {
+            return this.a((MethodProfiler.ProfilerInfo) object);
+        }
     }
 }

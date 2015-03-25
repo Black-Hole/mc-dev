@@ -6,8 +6,8 @@ public class BlockDispenser extends BlockContainer {
 
     public static final BlockStateDirection FACING = BlockStateDirection.of("facing");
     public static final BlockStateBoolean TRIGGERED = BlockStateBoolean.of("triggered");
-    public static final RegistryDefault M = new RegistryDefault(new DispenseBehaviorItem());
-    protected Random N = new Random();
+    public static final RegistryDefault<Item, IDispenseBehavior> N = new RegistryDefault(new DispenseBehaviorItem());
+    protected Random O = new Random();
 
     protected BlockDispenser() {
         super(Material.STONE);
@@ -25,18 +25,18 @@ public class BlockDispenser extends BlockContainer {
     }
 
     private void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockDispenser.FACING);
-            boolean flag = world.getType(blockposition.north()).getBlock().m();
-            boolean flag1 = world.getType(blockposition.south()).getBlock().m();
+            boolean flag = world.getType(blockposition.north()).getBlock().o();
+            boolean flag1 = world.getType(blockposition.south()).getBlock().o();
 
             if (enumdirection == EnumDirection.NORTH && flag && !flag1) {
                 enumdirection = EnumDirection.SOUTH;
             } else if (enumdirection == EnumDirection.SOUTH && flag1 && !flag) {
                 enumdirection = EnumDirection.NORTH;
             } else {
-                boolean flag2 = world.getType(blockposition.west()).getBlock().m();
-                boolean flag3 = world.getType(blockposition.east()).getBlock().m();
+                boolean flag2 = world.getType(blockposition.west()).getBlock().o();
+                boolean flag3 = world.getType(blockposition.east()).getBlock().o();
 
                 if (enumdirection == EnumDirection.WEST && flag2 && !flag3) {
                     enumdirection = EnumDirection.EAST;
@@ -50,20 +50,25 @@ public class BlockDispenser extends BlockContainer {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (world.isStatic) {
+        if (world.isClientSide) {
             return true;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityDispenser) {
                 entityhuman.openContainer((TileEntityDispenser) tileentity);
+                if (tileentity instanceof TileEntityDropper) {
+                    entityhuman.b(StatisticList.O);
+                } else {
+                    entityhuman.b(StatisticList.Q);
+                }
             }
 
             return true;
         }
     }
 
-    public void dispense(World world, BlockPosition blockposition) {
+    protected void dispense(World world, BlockPosition blockposition) {
         SourceBlock sourceblock = new SourceBlock(world, blockposition);
         TileEntityDispenser tileentitydispenser = (TileEntityDispenser) sourceblock.getTileEntity();
 
@@ -87,7 +92,7 @@ public class BlockDispenser extends BlockContainer {
     }
 
     protected IDispenseBehavior a(ItemStack itemstack) {
-        return (IDispenseBehavior) BlockDispenser.M.get(itemstack == null ? null : itemstack.getItem());
+        return (IDispenseBehavior) BlockDispenser.N.get(itemstack == null ? null : itemstack.getItem());
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
@@ -104,7 +109,7 @@ public class BlockDispenser extends BlockContainer {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             this.dispense(world, blockposition);
         }
 

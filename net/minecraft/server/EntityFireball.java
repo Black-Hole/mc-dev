@@ -10,22 +10,22 @@ public abstract class EntityFireball extends Entity {
     private Block h;
     private boolean i;
     public EntityLiving shooter;
-    private int ap;
-    private int aq;
+    private int ar;
+    private int as;
     public double dirX;
     public double dirY;
     public double dirZ;
 
     public EntityFireball(World world) {
         super(world);
-        this.a(1.0F, 1.0F);
+        this.setSize(1.0F, 1.0F);
     }
 
     protected void h() {}
 
     public EntityFireball(World world, double d0, double d1, double d2, double d3, double d4, double d5) {
         super(world);
-        this.a(1.0F, 1.0F);
+        this.setSize(1.0F, 1.0F);
         this.setPositionRotation(d0, d1, d2, this.yaw, this.pitch);
         this.setPosition(d0, d1, d2);
         double d6 = (double) MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
@@ -38,7 +38,7 @@ public abstract class EntityFireball extends Entity {
     public EntityFireball(World world, EntityLiving entityliving, double d0, double d1, double d2) {
         super(world);
         this.shooter = entityliving;
-        this.a(1.0F, 1.0F);
+        this.setSize(1.0F, 1.0F);
         this.setPositionRotation(entityliving.locX, entityliving.locY, entityliving.locZ, entityliving.yaw, entityliving.pitch);
         this.setPosition(this.locX, this.locY, this.locZ);
         this.motX = this.motY = this.motZ = 0.0D;
@@ -52,16 +52,16 @@ public abstract class EntityFireball extends Entity {
         this.dirZ = d2 / d3 * 0.1D;
     }
 
-    public void s_() {
-        if (!this.world.isStatic && (this.shooter != null && this.shooter.dead || !this.world.isLoaded(new BlockPosition(this)))) {
+    public void t_() {
+        if (!this.world.isClientSide && (this.shooter != null && this.shooter.dead || !this.world.isLoaded(new BlockPosition(this)))) {
             this.die();
         } else {
-            super.s_();
+            super.t_();
             this.setOnFire(1);
             if (this.i) {
                 if (this.world.getType(new BlockPosition(this.e, this.f, this.g)).getBlock() == this.h) {
-                    ++this.ap;
-                    if (this.ap == 600) {
+                    ++this.ar;
+                    if (this.ar == 600) {
                         this.die();
                     }
 
@@ -72,10 +72,10 @@ public abstract class EntityFireball extends Entity {
                 this.motX *= (double) (this.random.nextFloat() * 0.2F);
                 this.motY *= (double) (this.random.nextFloat() * 0.2F);
                 this.motZ *= (double) (this.random.nextFloat() * 0.2F);
-                this.ap = 0;
-                this.aq = 0;
+                this.ar = 0;
+                this.as = 0;
             } else {
-                ++this.aq;
+                ++this.as;
             }
 
             Vec3D vec3d = new Vec3D(this.locX, this.locY, this.locZ);
@@ -95,13 +95,13 @@ public abstract class EntityFireball extends Entity {
             for (int i = 0; i < list.size(); ++i) {
                 Entity entity1 = (Entity) list.get(i);
 
-                if (entity1.ad() && (!entity1.k(this.shooter) || this.aq >= 25)) {
+                if (entity1.ad() && (!entity1.k(this.shooter) || this.as >= 25)) {
                     float f = 0.3F;
                     AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow((double) f, (double) f, (double) f);
                     MovingObjectPosition movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
 
                     if (movingobjectposition1 != null) {
-                        double d1 = vec3d.f(movingobjectposition1.pos);
+                        double d1 = vec3d.distanceSquared(movingobjectposition1.pos);
 
                         if (d1 < d0 || d0 == 0.0D) {
                             entity = entity1;
@@ -124,9 +124,9 @@ public abstract class EntityFireball extends Entity {
             this.locZ += this.motZ;
             float f1 = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
 
-            this.yaw = (float) (Math.atan2(this.motZ, this.motX) * 180.0D / 3.1415927410125732D) + 90.0F;
+            this.yaw = (float) (MathHelper.b(this.motZ, this.motX) * 180.0D / 3.1415927410125732D) + 90.0F;
 
-            for (this.pitch = (float) (Math.atan2((double) f1, this.motY) * 180.0D / 3.1415927410125732D) - 90.0F; this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
+            for (this.pitch = (float) (MathHelper.b((double) f1, this.motY) * 180.0D / 3.1415927410125732D) - 90.0F; this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
                 ;
             }
 

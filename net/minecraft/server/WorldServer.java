@@ -20,11 +20,11 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     private static final Logger a = LogManager.getLogger();
     private final MinecraftServer server;
-    public EntityTracker tracker;
+    private final EntityTracker tracker;
     private final PlayerChunkMap manager;
-    private final Set L = Sets.newHashSet();
-    private final TreeSet M = new TreeSet();
-    private final Map entitiesByUUID = Maps.newHashMap();
+    private final Set<NextTickListEntry> L = Sets.newHashSet();
+    private final TreeSet<NextTickListEntry> M = new TreeSet();
+    private final Map<UUID, Entity> entitiesByUUID = Maps.newHashMap();
     public ChunkProviderServer chunkProviderServer;
     public boolean savingDisabled;
     private boolean O;
@@ -32,10 +32,10 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     private final PortalTravelAgent Q;
     private final SpawnerCreature R = new SpawnerCreature();
     protected final VillageSiege siegeManager = new VillageSiege(this);
-    private BlockActionDataList[] S = new BlockActionDataList[] { new BlockActionDataList((EntitySelectorLiving2) null), new BlockActionDataList((EntitySelectorLiving2) null)};
+    private WorldServer.BlockActionDataList[] S = new WorldServer.BlockActionDataList[] { new WorldServer.BlockActionDataList(null), new WorldServer.BlockActionDataList(null)};
     private int T;
-    private static final List U = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.STICK, 0, 1, 3, 10), new StructurePieceTreasure(Item.getItemOf(Blocks.PLANKS), 0, 1, 3, 10), new StructurePieceTreasure(Item.getItemOf(Blocks.LOG), 0, 1, 3, 10), new StructurePieceTreasure(Items.STONE_AXE, 0, 1, 1, 3), new StructurePieceTreasure(Items.WOODEN_AXE, 0, 1, 1, 5), new StructurePieceTreasure(Items.STONE_PICKAXE, 0, 1, 1, 3), new StructurePieceTreasure(Items.WOODEN_PICKAXE, 0, 1, 1, 5), new StructurePieceTreasure(Items.APPLE, 0, 2, 3, 5), new StructurePieceTreasure(Items.BREAD, 0, 2, 3, 3), new StructurePieceTreasure(Item.getItemOf(Blocks.LOG2), 0, 1, 3, 10)});
-    private List V = Lists.newArrayList();
+    private static final List<StructurePieceTreasure> U = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.STICK, 0, 1, 3, 10), new StructurePieceTreasure(Item.getItemOf(Blocks.PLANKS), 0, 1, 3, 10), new StructurePieceTreasure(Item.getItemOf(Blocks.LOG), 0, 1, 3, 10), new StructurePieceTreasure(Items.STONE_AXE, 0, 1, 1, 3), new StructurePieceTreasure(Items.WOODEN_AXE, 0, 1, 1, 5), new StructurePieceTreasure(Items.STONE_PICKAXE, 0, 1, 1, 3), new StructurePieceTreasure(Items.WOODEN_PICKAXE, 0, 1, 1, 5), new StructurePieceTreasure(Items.APPLE, 0, 2, 3, 5), new StructurePieceTreasure(Items.BREAD, 0, 2, 3, 3), new StructurePieceTreasure(Item.getItemOf(Blocks.LOG2), 0, 1, 3, 10)});
+    private List<NextTickListEntry> V = Lists.newArrayList();
 
     public WorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, WorldData worlddata, int i, MethodProfiler methodprofiler) {
         super(idatamanager, worlddata, WorldProvider.byDimension(i), methodprofiler, false);
@@ -47,7 +47,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.Q = new PortalTravelAgent(this);
         this.B();
         this.C();
-        this.af().a(minecraftserver.aG());
+        this.getWorldBorder().a(minecraftserver.aH());
     }
 
     public World b() {
@@ -73,15 +73,15 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
         persistentscoreboard.a(this.scoreboard);
         ((ScoreboardServer) this.scoreboard).a(persistentscoreboard);
-        this.af().c(this.worldData.C(), this.worldData.D());
-        this.af().c(this.worldData.I());
-        this.af().b(this.worldData.H());
-        this.af().c(this.worldData.J());
-        this.af().b(this.worldData.K());
+        this.getWorldBorder().setCenter(this.worldData.C(), this.worldData.D());
+        this.getWorldBorder().setDamageAmount(this.worldData.I());
+        this.getWorldBorder().setDamageBuffer(this.worldData.H());
+        this.getWorldBorder().setWarningDistance(this.worldData.J());
+        this.getWorldBorder().setWarningTime(this.worldData.K());
         if (this.worldData.F() > 0L) {
-            this.af().a(this.worldData.E(), this.worldData.G(), this.worldData.F());
+            this.getWorldBorder().transitionSizeBetween(this.worldData.E(), this.worldData.G(), this.worldData.F());
         } else {
-            this.af().a(this.worldData.E());
+            this.getWorldBorder().setSize(this.worldData.E());
         }
 
         return this;
@@ -114,7 +114,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         int j = this.a(1.0F);
 
         if (j != this.ab()) {
-            this.b(j);
+            this.c(j);
         }
 
         this.worldData.setTime(this.worldData.getTime() + 1L);
@@ -137,16 +137,16 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.ak();
     }
 
-    public BiomeMeta a(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
+    public BiomeBase.BiomeMeta a(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         List list = this.N().getMobsFor(enumcreaturetype, blockposition);
 
-        return list != null && !list.isEmpty() ? (BiomeMeta) WeightedRandom.a(this.random, list) : null;
+        return list != null && !list.isEmpty() ? (BiomeBase.BiomeMeta) WeightedRandom.a(this.random, list) : null;
     }
 
-    public boolean a(EnumCreatureType enumcreaturetype, BiomeMeta biomemeta, BlockPosition blockposition) {
+    public boolean a(EnumCreatureType enumcreaturetype, BiomeBase.BiomeMeta biomebase_biomemeta, BlockPosition blockposition) {
         List list = this.N().getMobsFor(enumcreaturetype, blockposition);
 
-        return list != null && !list.isEmpty() ? list.contains(biomemeta) : false;
+        return list != null && !list.isEmpty() ? list.contains(biomebase_biomemeta) : false;
     }
 
     public void everyoneSleeping() {
@@ -194,7 +194,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     public boolean everyoneDeeplySleeping() {
-        if (this.O && !this.isStatic) {
+        if (this.O && !this.isClientSide) {
             Iterator iterator = this.players.iterator();
 
             EntityHuman entityhuman;
@@ -290,13 +290,12 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                                 int l2 = i2 >> 16 & 15;
 
                                 ++j;
-                                BlockPosition blockposition2 = new BlockPosition(j2 + k, l2 + chunksection.getYPosition(), k2 + l);
                                 IBlockData iblockdata = chunksection.getType(j2, l2, k2);
                                 Block block = iblockdata.getBlock();
 
                                 if (block.isTicking()) {
                                     ++i;
-                                    block.a((World) this, blockposition2, iblockdata, this.random);
+                                    block.a((World) this, new BlockPosition(j2 + k, l2 + chunksection.getYPosition(), k2 + l), iblockdata, this.random);
                                 }
                             }
                         }
@@ -310,7 +309,15 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     protected BlockPosition a(BlockPosition blockposition) {
         BlockPosition blockposition1 = this.q(blockposition);
         AxisAlignedBB axisalignedbb = (new AxisAlignedBB(blockposition1, new BlockPosition(blockposition1.getX(), this.getHeight(), blockposition1.getZ()))).grow(3.0D, 3.0D, 3.0D);
-        List list = this.a(EntityLiving.class, axisalignedbb, (Predicate) (new EntitySelectorLiving2(this)));
+        List list = this.a(EntityLiving.class, axisalignedbb, new Predicate() {
+            public boolean a(EntityLiving entityliving) {
+                return entityliving != null && entityliving.isAlive() && WorldServer.this.i(entityliving.getChunkCoordinates());
+            }
+
+            public boolean apply(Object object) {
+                return this.a((EntityLiving) object);
+            }
+        });
 
         return !list.isEmpty() ? ((EntityLiving) list.get(this.random.nextInt(list.size()))).getChunkCoordinates() : blockposition1;
     }
@@ -330,7 +337,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         byte b0 = 0;
 
         if (this.e && block.getMaterial() != Material.AIR) {
-            if (block.M()) {
+            if (block.N()) {
                 b0 = 8;
                 if (this.areChunksLoadedBetween(nextticklistentry.a.a(-b0, -b0, -b0), nextticklistentry.a.a(b0, b0, b0))) {
                     IBlockData iblockdata = this.getType(nextticklistentry.a);
@@ -454,7 +461,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         }
     }
 
-    public List a(Chunk chunk, boolean flag) {
+    public List<NextTickListEntry> a(Chunk chunk, boolean flag) {
         ChunkCoordIntPair chunkcoordintpair = chunk.j();
         int i = (chunkcoordintpair.x << 4) - 2;
         int j = i + 16 + 2;
@@ -464,7 +471,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         return this.a(new StructureBoundingBox(i, 0, k, j, 256, l), flag);
     }
 
-    public List a(StructureBoundingBox structureboundingbox, boolean flag) {
+    public List<NextTickListEntry> a(StructureBoundingBox structureboundingbox, boolean flag) {
         ArrayList arraylist = null;
 
         for (int i = 0; i < 2; ++i) {
@@ -528,7 +535,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         return this.chunkProviderServer;
     }
 
-    public List getTileEntities(int i, int j, int k, int l, int i1, int j1) {
+    public List<TileEntity> getTileEntities(int i, int j, int k, int l, int i1, int j1) {
         ArrayList arraylist = Lists.newArrayList();
 
         for (int k1 = 0; k1 < this.h.size(); ++k1) {
@@ -544,7 +551,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     public boolean a(EntityHuman entityhuman, BlockPosition blockposition) {
-        return !this.server.a(this, blockposition, entityhuman) && this.af().a(blockposition);
+        return !this.server.a(this, blockposition, entityhuman) && this.getWorldBorder().a(blockposition);
     }
 
     public void a(WorldSettings worldsettings) {
@@ -580,7 +587,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.worldData.setThundering(false);
         this.worldData.i(1000000000);
         this.worldData.setDayTime(6000L);
-        this.worldData.setGameType(EnumGamemode.SPECTATOR);
+        this.worldData.setGameType(WorldSettings.EnumGamemode.SPECTATOR);
         this.worldData.g(false);
         this.worldData.setDifficulty(EnumDifficulty.PEACEFUL);
         this.worldData.e(true);
@@ -648,7 +655,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         return this.worldProvider.h();
     }
 
-    public void save(boolean flag, IProgressUpdate iprogressupdate) {
+    public void save(boolean flag, IProgressUpdate iprogressupdate) throws ExceptionWorldConflict {
         if (this.chunkProvider.canSave()) {
             if (iprogressupdate != null) {
                 iprogressupdate.a("Saving level");
@@ -660,13 +667,13 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             }
 
             this.chunkProvider.saveChunks(flag, iprogressupdate);
-            List list = this.chunkProviderServer.a();
-            Iterator iterator = list.iterator();
+            ArrayList arraylist = Lists.newArrayList(this.chunkProviderServer.a());
+            Iterator iterator = arraylist.iterator();
 
             while (iterator.hasNext()) {
                 Chunk chunk = (Chunk) iterator.next();
 
-                if (!this.manager.a(chunk.locX, chunk.locZ)) {
+                if (chunk != null && !this.manager.a(chunk.locX, chunk.locZ)) {
                     this.chunkProviderServer.queueUnload(chunk.locX, chunk.locZ);
                 }
             }
@@ -680,18 +687,18 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         }
     }
 
-    protected void a() {
+    protected void a() throws ExceptionWorldConflict {
         this.checkSession();
-        this.worldData.a(this.af().h());
-        this.worldData.d(this.af().f());
-        this.worldData.c(this.af().g());
-        this.worldData.e(this.af().m());
-        this.worldData.f(this.af().n());
-        this.worldData.j(this.af().q());
-        this.worldData.k(this.af().p());
-        this.worldData.b(this.af().j());
-        this.worldData.e(this.af().i());
-        this.dataManager.saveWorldData(this.worldData, this.server.getPlayerList().u());
+        this.worldData.a(this.getWorldBorder().getSize());
+        this.worldData.d(this.getWorldBorder().getCenterX());
+        this.worldData.c(this.getWorldBorder().getCenterZ());
+        this.worldData.e(this.getWorldBorder().getDamageBuffer());
+        this.worldData.f(this.getWorldBorder().getDamageAmount());
+        this.worldData.j(this.getWorldBorder().getWarningDistance());
+        this.worldData.k(this.getWorldBorder().getWarningTime());
+        this.worldData.b(this.getWorldBorder().j());
+        this.worldData.e(this.getWorldBorder().i());
+        this.dataManager.saveWorldData(this.worldData, this.server.getPlayerList().t());
         this.worldMaps.a();
     }
 
@@ -699,7 +706,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         super.a(entity);
         this.entitiesById.a(entity.getId(), entity);
         this.entitiesByUUID.put(entity.getUniqueID(), entity);
-        Entity[] aentity = entity.aC();
+        Entity[] aentity = entity.aB();
 
         if (aentity != null) {
             for (int i = 0; i < aentity.length; ++i) {
@@ -713,7 +720,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         super.b(entity);
         this.entitiesById.d(entity.getId());
         this.entitiesByUUID.remove(entity.getUniqueID());
-        Entity[] aentity = entity.aC();
+        Entity[] aentity = entity.aB();
 
         if (aentity != null) {
             for (int i = 0; i < aentity.length; ++i) {
@@ -831,7 +838,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     protected int q() {
-        return this.server.getPlayerList().t();
+        return this.server.getPlayerList().s();
     }
 
     public MinecraftServer getMinecraftServer() {
@@ -873,11 +880,20 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         return (Entity) this.entitiesByUUID.get(uuid);
     }
 
-    public ListenableFuture postToMainThread(Runnable runnable) {
+    public ListenableFuture<Object> postToMainThread(Runnable runnable) {
         return this.server.postToMainThread(runnable);
     }
 
     public boolean isMainThread() {
         return this.server.isMainThread();
+    }
+
+    static class BlockActionDataList extends ArrayList<BlockActionData> {
+
+        private BlockActionDataList() {}
+
+        BlockActionDataList(Object object) {
+            this();
+        }
     }
 }

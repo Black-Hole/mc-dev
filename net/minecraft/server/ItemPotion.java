@@ -9,8 +9,8 @@ import java.util.Map;
 
 public class ItemPotion extends Item {
 
-    private Map a = Maps.newHashMap();
-    private static final Map b = Maps.newLinkedHashMap();
+    private Map<Integer, List<MobEffect>> a = Maps.newHashMap();
+    private static final Map<List<MobEffect>, Integer> b = Maps.newLinkedHashMap();
 
     public ItemPotion() {
         this.c(1);
@@ -19,7 +19,7 @@ public class ItemPotion extends Item {
         this.a(CreativeModeTab.k);
     }
 
-    public List h(ItemStack itemstack) {
+    public List<MobEffect> h(ItemStack itemstack) {
         if (itemstack.hasTag() && itemstack.getTag().hasKeyOfType("CustomPotionEffects", 9)) {
             ArrayList arraylist = Lists.newArrayList();
             NBTTagList nbttaglist = itemstack.getTag().getList("CustomPotionEffects", 10);
@@ -46,7 +46,7 @@ public class ItemPotion extends Item {
         }
     }
 
-    public List e(int i) {
+    public List<MobEffect> e(int i) {
         List list = (List) this.a.get(Integer.valueOf(i));
 
         if (list == null) {
@@ -62,7 +62,7 @@ public class ItemPotion extends Item {
             --itemstack.count;
         }
 
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             List list = this.h(itemstack);
 
             if (list != null) {
@@ -103,7 +103,7 @@ public class ItemPotion extends Item {
             }
 
             world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (ItemPotion.g.nextFloat() * 0.4F + 0.8F));
-            if (!world.isStatic) {
+            if (!world.isClientSide) {
                 world.addEntity(new EntityPotion(world, entityhuman, itemstack));
             }
 

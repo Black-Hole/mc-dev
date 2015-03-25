@@ -10,37 +10,37 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     public double a;
     public double b;
     public double c;
-    public double[][] bi = new double[64][3];
-    public int bj = -1;
+    public double[][] bk = new double[64][3];
+    public int bl = -1;
     public EntityComplexPart[] children;
-    public EntityComplexPart bl;
-    public EntityComplexPart bm;
     public EntityComplexPart bn;
     public EntityComplexPart bo;
     public EntityComplexPart bp;
     public EntityComplexPart bq;
     public EntityComplexPart br;
-    public float bs;
-    public float bt;
-    public boolean bu;
-    public boolean bv;
-    private Entity by;
-    public int bw;
-    public EntityEnderCrystal bx;
+    public EntityComplexPart bs;
+    public EntityComplexPart bt;
+    public float bu;
+    public float bv;
+    public boolean bw;
+    public boolean bx;
+    private Entity bA;
+    public int by;
+    public EntityEnderCrystal bz;
 
     public EntityEnderDragon(World world) {
         super(world);
-        this.children = new EntityComplexPart[] { this.bl = new EntityComplexPart(this, "head", 6.0F, 6.0F), this.bm = new EntityComplexPart(this, "body", 8.0F, 8.0F), this.bn = new EntityComplexPart(this, "tail", 4.0F, 4.0F), this.bo = new EntityComplexPart(this, "tail", 4.0F, 4.0F), this.bp = new EntityComplexPart(this, "tail", 4.0F, 4.0F), this.bq = new EntityComplexPart(this, "wing", 4.0F, 4.0F), this.br = new EntityComplexPart(this, "wing", 4.0F, 4.0F)};
+        this.children = new EntityComplexPart[] { this.bn = new EntityComplexPart(this, "head", 6.0F, 6.0F), this.bo = new EntityComplexPart(this, "body", 8.0F, 8.0F), this.bp = new EntityComplexPart(this, "tail", 4.0F, 4.0F), this.bq = new EntityComplexPart(this, "tail", 4.0F, 4.0F), this.br = new EntityComplexPart(this, "tail", 4.0F, 4.0F), this.bs = new EntityComplexPart(this, "wing", 4.0F, 4.0F), this.bt = new EntityComplexPart(this, "wing", 4.0F, 4.0F)};
         this.setHealth(this.getMaxHealth());
-        this.a(16.0F, 8.0F);
-        this.T = true;
+        this.setSize(16.0F, 8.0F);
+        this.noclip = true;
         this.fireProof = true;
         this.b = 100.0D;
         this.ah = true;
     }
 
-    protected void aW() {
-        super.aW();
+    protected void initAttributes() {
+        super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(200.0D);
     }
 
@@ -54,17 +54,17 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         }
 
         f = 1.0F - f;
-        int j = this.bj - i * 1 & 63;
-        int k = this.bj - i * 1 - 1 & 63;
+        int j = this.bl - i * 1 & 63;
+        int k = this.bl - i * 1 - 1 & 63;
         double[] adouble = new double[3];
-        double d0 = this.bi[j][0];
-        double d1 = MathHelper.g(this.bi[k][0] - d0);
+        double d0 = this.bk[j][0];
+        double d1 = MathHelper.g(this.bk[k][0] - d0);
 
         adouble[0] = d0 + d1 * (double) f;
-        d0 = this.bi[j][1];
-        d1 = this.bi[k][1] - d0;
+        d0 = this.bk[j][1];
+        d1 = this.bk[k][1] - d0;
         adouble[1] = d0 + d1 * (double) f;
-        adouble[2] = this.bi[j][2] + (this.bi[k][2] - this.bi[j][2]) * (double) f;
+        adouble[2] = this.bk[j][2] + (this.bk[k][2] - this.bk[j][2]) * (double) f;
         return adouble;
     }
 
@@ -72,15 +72,15 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         float f;
         float f1;
 
-        if (this.world.isStatic) {
-            f = MathHelper.cos(this.bt * 3.1415927F * 2.0F);
-            f1 = MathHelper.cos(this.bs * 3.1415927F * 2.0F);
+        if (this.world.isClientSide) {
+            f = MathHelper.cos(this.bv * 3.1415927F * 2.0F);
+            f1 = MathHelper.cos(this.bu * 3.1415927F * 2.0F);
             if (f1 <= -0.3F && f >= -0.3F && !this.R()) {
                 this.world.a(this.locX, this.locY, this.locZ, "mob.enderdragon.wings", 5.0F, 0.8F + this.random.nextFloat() * 0.3F, false);
             }
         }
 
-        this.bs = this.bt;
+        this.bu = this.bv;
         float f2;
 
         if (this.getHealth() <= 0.0F) {
@@ -92,208 +92,212 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             this.n();
             f = 0.2F / (MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ) * 10.0F + 1.0F);
             f *= (float) Math.pow(2.0D, this.motY);
-            if (this.bv) {
-                this.bt += f * 0.5F;
+            if (this.bx) {
+                this.bv += f * 0.5F;
             } else {
-                this.bt += f;
+                this.bv += f;
             }
 
             this.yaw = MathHelper.g(this.yaw);
-            if (this.bj < 0) {
-                for (int i = 0; i < this.bi.length; ++i) {
-                    this.bi[i][0] = (double) this.yaw;
-                    this.bi[i][1] = this.locY;
-                }
-            }
-
-            if (++this.bj == this.bi.length) {
-                this.bj = 0;
-            }
-
-            this.bi[this.bj][0] = (double) this.yaw;
-            this.bi[this.bj][1] = this.locY;
-            double d0;
-            double d1;
-            double d2;
-            double d3;
-            float f3;
-
-            if (this.world.isStatic) {
-                if (this.ba > 0) {
-                    d3 = this.locX + (this.bb - this.locX) / (double) this.ba;
-                    d0 = this.locY + (this.bc - this.locY) / (double) this.ba;
-                    d1 = this.locZ + (this.bd - this.locZ) / (double) this.ba;
-                    d2 = MathHelper.g(this.be - (double) this.yaw);
-                    this.yaw = (float) ((double) this.yaw + d2 / (double) this.ba);
-                    this.pitch = (float) ((double) this.pitch + (this.bf - (double) this.pitch) / (double) this.ba);
-                    --this.ba;
-                    this.setPosition(d3, d0, d1);
-                    this.setYawPitch(this.yaw, this.pitch);
-                }
+            if (this.ce()) {
+                this.bv = 0.5F;
             } else {
-                d3 = this.a - this.locX;
-                d0 = this.b - this.locY;
-                d1 = this.c - this.locZ;
-                d2 = d3 * d3 + d0 * d0 + d1 * d1;
-                double d4;
+                if (this.bl < 0) {
+                    for (int i = 0; i < this.bk.length; ++i) {
+                        this.bk[i][0] = (double) this.yaw;
+                        this.bk[i][1] = this.locY;
+                    }
+                }
 
-                if (this.by != null) {
-                    this.a = this.by.locX;
-                    this.c = this.by.locZ;
-                    double d5 = this.a - this.locX;
-                    double d6 = this.c - this.locZ;
-                    double d7 = Math.sqrt(d5 * d5 + d6 * d6);
+                if (++this.bl == this.bk.length) {
+                    this.bl = 0;
+                }
 
-                    d4 = 0.4000000059604645D + d7 / 80.0D - 1.0D;
-                    if (d4 > 10.0D) {
-                        d4 = 10.0D;
+                this.bk[this.bl][0] = (double) this.yaw;
+                this.bk[this.bl][1] = this.locY;
+                double d0;
+                double d1;
+                double d2;
+                double d3;
+                float f3;
+
+                if (this.world.isClientSide) {
+                    if (this.bc > 0) {
+                        d3 = this.locX + (this.bd - this.locX) / (double) this.bc;
+                        d0 = this.locY + (this.be - this.locY) / (double) this.bc;
+                        d1 = this.locZ + (this.bf - this.locZ) / (double) this.bc;
+                        d2 = MathHelper.g(this.bg - (double) this.yaw);
+                        this.yaw = (float) ((double) this.yaw + d2 / (double) this.bc);
+                        this.pitch = (float) ((double) this.pitch + (this.bh - (double) this.pitch) / (double) this.bc);
+                        --this.bc;
+                        this.setPosition(d3, d0, d1);
+                        this.setYawPitch(this.yaw, this.pitch);
+                    }
+                } else {
+                    d3 = this.a - this.locX;
+                    d0 = this.b - this.locY;
+                    d1 = this.c - this.locZ;
+                    d2 = d3 * d3 + d0 * d0 + d1 * d1;
+                    double d4;
+
+                    if (this.bA != null) {
+                        this.a = this.bA.locX;
+                        this.c = this.bA.locZ;
+                        double d5 = this.a - this.locX;
+                        double d6 = this.c - this.locZ;
+                        double d7 = Math.sqrt(d5 * d5 + d6 * d6);
+
+                        d4 = 0.4000000059604645D + d7 / 80.0D - 1.0D;
+                        if (d4 > 10.0D) {
+                            d4 = 10.0D;
+                        }
+
+                        this.b = this.bA.getBoundingBox().b + d4;
+                    } else {
+                        this.a += this.random.nextGaussian() * 2.0D;
+                        this.c += this.random.nextGaussian() * 2.0D;
                     }
 
-                    this.b = this.by.getBoundingBox().b + d4;
-                } else {
-                    this.a += this.random.nextGaussian() * 2.0D;
-                    this.c += this.random.nextGaussian() * 2.0D;
+                    if (this.bw || d2 < 100.0D || d2 > 22500.0D || this.positionChanged || this.E) {
+                        this.cf();
+                    }
+
+                    d0 /= (double) MathHelper.sqrt(d3 * d3 + d1 * d1);
+                    f3 = 0.6F;
+                    d0 = MathHelper.a(d0, (double) (-f3), (double) f3);
+                    this.motY += d0 * 0.10000000149011612D;
+                    this.yaw = MathHelper.g(this.yaw);
+                    double d8 = 180.0D - MathHelper.b(d3, d1) * 180.0D / 3.1415927410125732D;
+                    double d9 = MathHelper.g(d8 - (double) this.yaw);
+
+                    if (d9 > 50.0D) {
+                        d9 = 50.0D;
+                    }
+
+                    if (d9 < -50.0D) {
+                        d9 = -50.0D;
+                    }
+
+                    Vec3D vec3d = (new Vec3D(this.a - this.locX, this.b - this.locY, this.c - this.locZ)).a();
+
+                    d4 = (double) (-MathHelper.cos(this.yaw * 3.1415927F / 180.0F));
+                    Vec3D vec3d1 = (new Vec3D((double) MathHelper.sin(this.yaw * 3.1415927F / 180.0F), this.motY, d4)).a();
+                    float f4 = ((float) vec3d1.b(vec3d) + 0.5F) / 1.5F;
+
+                    if (f4 < 0.0F) {
+                        f4 = 0.0F;
+                    }
+
+                    this.bb *= 0.8F;
+                    float f5 = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ) * 1.0F + 1.0F;
+                    double d10 = Math.sqrt(this.motX * this.motX + this.motZ * this.motZ) * 1.0D + 1.0D;
+
+                    if (d10 > 40.0D) {
+                        d10 = 40.0D;
+                    }
+
+                    this.bb = (float) ((double) this.bb + d9 * (0.699999988079071D / d10 / (double) f5));
+                    this.yaw += this.bb * 0.1F;
+                    float f6 = (float) (2.0D / (d10 + 1.0D));
+                    float f7 = 0.06F;
+
+                    this.a(0.0F, -1.0F, f7 * (f4 * f6 + (1.0F - f6)));
+                    if (this.bx) {
+                        this.move(this.motX * 0.800000011920929D, this.motY * 0.800000011920929D, this.motZ * 0.800000011920929D);
+                    } else {
+                        this.move(this.motX, this.motY, this.motZ);
+                    }
+
+                    Vec3D vec3d2 = (new Vec3D(this.motX, this.motY, this.motZ)).a();
+                    float f8 = ((float) vec3d2.b(vec3d1) + 1.0F) / 2.0F;
+
+                    f8 = 0.8F + 0.15F * f8;
+                    this.motX *= (double) f8;
+                    this.motZ *= (double) f8;
+                    this.motY *= 0.9100000262260437D;
                 }
 
-                if (this.bu || d2 < 100.0D || d2 > 22500.0D || this.positionChanged || this.E) {
-                    this.cd();
+                this.aI = this.yaw;
+                this.bn.width = this.bn.length = 3.0F;
+                this.bp.width = this.bp.length = 2.0F;
+                this.bq.width = this.bq.length = 2.0F;
+                this.br.width = this.br.length = 2.0F;
+                this.bo.length = 3.0F;
+                this.bo.width = 5.0F;
+                this.bs.length = 2.0F;
+                this.bs.width = 4.0F;
+                this.bt.length = 3.0F;
+                this.bt.width = 4.0F;
+                f1 = (float) (this.b(5, 1.0F)[1] - this.b(10, 1.0F)[1]) * 10.0F / 180.0F * 3.1415927F;
+                f2 = MathHelper.cos(f1);
+                float f9 = -MathHelper.sin(f1);
+                float f10 = this.yaw * 3.1415927F / 180.0F;
+                float f11 = MathHelper.sin(f10);
+                float f12 = MathHelper.cos(f10);
+
+                this.bo.t_();
+                this.bo.setPositionRotation(this.locX + (double) (f11 * 0.5F), this.locY, this.locZ - (double) (f12 * 0.5F), 0.0F, 0.0F);
+                this.bs.t_();
+                this.bs.setPositionRotation(this.locX + (double) (f12 * 4.5F), this.locY + 2.0D, this.locZ + (double) (f11 * 4.5F), 0.0F, 0.0F);
+                this.bt.t_();
+                this.bt.setPositionRotation(this.locX - (double) (f12 * 4.5F), this.locY + 2.0D, this.locZ - (double) (f11 * 4.5F), 0.0F, 0.0F);
+                if (!this.world.isClientSide && this.hurtTicks == 0) {
+                    this.a(this.world.getEntities(this, this.bs.getBoundingBox().grow(4.0D, 2.0D, 4.0D).c(0.0D, -2.0D, 0.0D)));
+                    this.a(this.world.getEntities(this, this.bt.getBoundingBox().grow(4.0D, 2.0D, 4.0D).c(0.0D, -2.0D, 0.0D)));
+                    this.b(this.world.getEntities(this, this.bn.getBoundingBox().grow(1.0D, 1.0D, 1.0D)));
                 }
 
-                d0 /= (double) MathHelper.sqrt(d3 * d3 + d1 * d1);
-                f3 = 0.6F;
-                d0 = MathHelper.a(d0, (double) (-f3), (double) f3);
-                this.motY += d0 * 0.10000000149011612D;
-                this.yaw = MathHelper.g(this.yaw);
-                double d8 = 180.0D - Math.atan2(d3, d1) * 180.0D / 3.1415927410125732D;
-                double d9 = MathHelper.g(d8 - (double) this.yaw);
+                double[] adouble = this.b(5, 1.0F);
+                double[] adouble1 = this.b(0, 1.0F);
 
-                if (d9 > 50.0D) {
-                    d9 = 50.0D;
+                f3 = MathHelper.sin(this.yaw * 3.1415927F / 180.0F - this.bb * 0.01F);
+                float f13 = MathHelper.cos(this.yaw * 3.1415927F / 180.0F - this.bb * 0.01F);
+
+                this.bn.t_();
+                this.bn.setPositionRotation(this.locX + (double) (f3 * 5.5F * f2), this.locY + (adouble1[1] - adouble[1]) * 1.0D + (double) (f9 * 5.5F), this.locZ - (double) (f13 * 5.5F * f2), 0.0F, 0.0F);
+
+                for (int j = 0; j < 3; ++j) {
+                    EntityComplexPart entitycomplexpart = null;
+
+                    if (j == 0) {
+                        entitycomplexpart = this.bp;
+                    }
+
+                    if (j == 1) {
+                        entitycomplexpart = this.bq;
+                    }
+
+                    if (j == 2) {
+                        entitycomplexpart = this.br;
+                    }
+
+                    double[] adouble2 = this.b(12 + j * 2, 1.0F);
+                    float f14 = this.yaw * 3.1415927F / 180.0F + this.b(adouble2[0] - adouble[0]) * 3.1415927F / 180.0F * 1.0F;
+                    float f15 = MathHelper.sin(f14);
+                    float f16 = MathHelper.cos(f14);
+                    float f17 = 1.5F;
+                    float f18 = (float) (j + 1) * 2.0F;
+
+                    entitycomplexpart.t_();
+                    entitycomplexpart.setPositionRotation(this.locX - (double) ((f11 * f17 + f15 * f18) * f2), this.locY + (adouble2[1] - adouble[1]) * 1.0D - (double) ((f18 + f17) * f9) + 1.5D, this.locZ + (double) ((f12 * f17 + f16 * f18) * f2), 0.0F, 0.0F);
                 }
 
-                if (d9 < -50.0D) {
-                    d9 = -50.0D;
+                if (!this.world.isClientSide) {
+                    this.bx = this.b(this.bn.getBoundingBox()) | this.b(this.bo.getBoundingBox());
                 }
 
-                Vec3D vec3d = (new Vec3D(this.a - this.locX, this.b - this.locY, this.c - this.locZ)).a();
-
-                d4 = (double) (-MathHelper.cos(this.yaw * 3.1415927F / 180.0F));
-                Vec3D vec3d1 = (new Vec3D((double) MathHelper.sin(this.yaw * 3.1415927F / 180.0F), this.motY, d4)).a();
-                float f4 = ((float) vec3d1.b(vec3d) + 0.5F) / 1.5F;
-
-                if (f4 < 0.0F) {
-                    f4 = 0.0F;
-                }
-
-                this.aZ *= 0.8F;
-                float f5 = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ) * 1.0F + 1.0F;
-                double d10 = Math.sqrt(this.motX * this.motX + this.motZ * this.motZ) * 1.0D + 1.0D;
-
-                if (d10 > 40.0D) {
-                    d10 = 40.0D;
-                }
-
-                this.aZ = (float) ((double) this.aZ + d9 * (0.699999988079071D / d10 / (double) f5));
-                this.yaw += this.aZ * 0.1F;
-                float f6 = (float) (2.0D / (d10 + 1.0D));
-                float f7 = 0.06F;
-
-                this.a(0.0F, -1.0F, f7 * (f4 * f6 + (1.0F - f6)));
-                if (this.bv) {
-                    this.move(this.motX * 0.800000011920929D, this.motY * 0.800000011920929D, this.motZ * 0.800000011920929D);
-                } else {
-                    this.move(this.motX, this.motY, this.motZ);
-                }
-
-                Vec3D vec3d2 = (new Vec3D(this.motX, this.motY, this.motZ)).a();
-                float f8 = ((float) vec3d2.b(vec3d1) + 1.0F) / 2.0F;
-
-                f8 = 0.8F + 0.15F * f8;
-                this.motX *= (double) f8;
-                this.motZ *= (double) f8;
-                this.motY *= 0.9100000262260437D;
             }
-
-            this.aG = this.yaw;
-            this.bl.width = this.bl.length = 3.0F;
-            this.bn.width = this.bn.length = 2.0F;
-            this.bo.width = this.bo.length = 2.0F;
-            this.bp.width = this.bp.length = 2.0F;
-            this.bm.length = 3.0F;
-            this.bm.width = 5.0F;
-            this.bq.length = 2.0F;
-            this.bq.width = 4.0F;
-            this.br.length = 3.0F;
-            this.br.width = 4.0F;
-            f1 = (float) (this.b(5, 1.0F)[1] - this.b(10, 1.0F)[1]) * 10.0F / 180.0F * 3.1415927F;
-            f2 = MathHelper.cos(f1);
-            float f9 = -MathHelper.sin(f1);
-            float f10 = this.yaw * 3.1415927F / 180.0F;
-            float f11 = MathHelper.sin(f10);
-            float f12 = MathHelper.cos(f10);
-
-            this.bm.s_();
-            this.bm.setPositionRotation(this.locX + (double) (f11 * 0.5F), this.locY, this.locZ - (double) (f12 * 0.5F), 0.0F, 0.0F);
-            this.bq.s_();
-            this.bq.setPositionRotation(this.locX + (double) (f12 * 4.5F), this.locY + 2.0D, this.locZ + (double) (f11 * 4.5F), 0.0F, 0.0F);
-            this.br.s_();
-            this.br.setPositionRotation(this.locX - (double) (f12 * 4.5F), this.locY + 2.0D, this.locZ - (double) (f11 * 4.5F), 0.0F, 0.0F);
-            if (!this.world.isStatic && this.hurtTicks == 0) {
-                this.a(this.world.getEntities(this, this.bq.getBoundingBox().grow(4.0D, 2.0D, 4.0D).c(0.0D, -2.0D, 0.0D)));
-                this.a(this.world.getEntities(this, this.br.getBoundingBox().grow(4.0D, 2.0D, 4.0D).c(0.0D, -2.0D, 0.0D)));
-                this.b(this.world.getEntities(this, this.bl.getBoundingBox().grow(1.0D, 1.0D, 1.0D)));
-            }
-
-            double[] adouble = this.b(5, 1.0F);
-            double[] adouble1 = this.b(0, 1.0F);
-
-            f3 = MathHelper.sin(this.yaw * 3.1415927F / 180.0F - this.aZ * 0.01F);
-            float f13 = MathHelper.cos(this.yaw * 3.1415927F / 180.0F - this.aZ * 0.01F);
-
-            this.bl.s_();
-            this.bl.setPositionRotation(this.locX + (double) (f3 * 5.5F * f2), this.locY + (adouble1[1] - adouble[1]) * 1.0D + (double) (f9 * 5.5F), this.locZ - (double) (f13 * 5.5F * f2), 0.0F, 0.0F);
-
-            for (int j = 0; j < 3; ++j) {
-                EntityComplexPart entitycomplexpart = null;
-
-                if (j == 0) {
-                    entitycomplexpart = this.bn;
-                }
-
-                if (j == 1) {
-                    entitycomplexpart = this.bo;
-                }
-
-                if (j == 2) {
-                    entitycomplexpart = this.bp;
-                }
-
-                double[] adouble2 = this.b(12 + j * 2, 1.0F);
-                float f14 = this.yaw * 3.1415927F / 180.0F + this.b(adouble2[0] - adouble[0]) * 3.1415927F / 180.0F * 1.0F;
-                float f15 = MathHelper.sin(f14);
-                float f16 = MathHelper.cos(f14);
-                float f17 = 1.5F;
-                float f18 = (float) (j + 1) * 2.0F;
-
-                entitycomplexpart.s_();
-                entitycomplexpart.setPositionRotation(this.locX - (double) ((f11 * f17 + f15 * f18) * f2), this.locY + (adouble2[1] - adouble[1]) * 1.0D - (double) ((f18 + f17) * f9) + 1.5D, this.locZ + (double) ((f12 * f17 + f16 * f18) * f2), 0.0F, 0.0F);
-            }
-
-            if (!this.world.isStatic) {
-                this.bv = this.b(this.bl.getBoundingBox()) | this.b(this.bm.getBoundingBox());
-            }
-
         }
     }
 
     private void n() {
-        if (this.bx != null) {
-            if (this.bx.dead) {
-                if (!this.world.isStatic) {
-                    this.a(this.bl, DamageSource.explosion((Explosion) null), 10.0F);
+        if (this.bz != null) {
+            if (this.bz.dead) {
+                if (!this.world.isClientSide) {
+                    this.a(this.bn, DamageSource.explosion((Explosion) null), 10.0F);
                 }
 
-                this.bx = null;
+                this.bz = null;
             } else if (this.ticksLived % 10 == 0 && this.getHealth() < this.getMaxHealth()) {
                 this.setHealth(this.getHealth() + 1.0F);
             }
@@ -316,14 +320,14 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 }
             }
 
-            this.bx = entityendercrystal;
+            this.bz = entityendercrystal;
         }
 
     }
 
-    private void a(List list) {
-        double d0 = (this.bm.getBoundingBox().a + this.bm.getBoundingBox().d) / 2.0D;
-        double d1 = (this.bm.getBoundingBox().c + this.bm.getBoundingBox().f) / 2.0D;
+    private void a(List<Entity> list) {
+        double d0 = (this.bo.getBoundingBox().a + this.bo.getBoundingBox().d) / 2.0D;
+        double d1 = (this.bo.getBoundingBox().c + this.bo.getBoundingBox().f) / 2.0D;
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -340,7 +344,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     }
 
-    private void b(List list) {
+    private void b(List<Entity> list) {
         for (int i = 0; i < list.size(); ++i) {
             Entity entity = (Entity) list.get(i);
 
@@ -352,8 +356,8 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     }
 
-    private void cd() {
-        this.bu = false;
+    private void cf() {
+        this.bw = false;
         ArrayList arraylist = Lists.newArrayList(this.world.players);
         Iterator iterator = arraylist.iterator();
 
@@ -364,7 +368,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         }
 
         if (this.random.nextInt(2) == 0 && !arraylist.isEmpty()) {
-            this.by = (Entity) arraylist.get(this.random.nextInt(arraylist.size()));
+            this.bA = (Entity) arraylist.get(this.random.nextInt(arraylist.size()));
         } else {
             boolean flag;
 
@@ -381,7 +385,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 flag = d0 * d0 + d1 * d1 + d2 * d2 > 100.0D;
             } while (!flag);
 
-            this.by = null;
+            this.bA = null;
         }
 
     }
@@ -403,11 +407,12 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         for (int k1 = i; k1 <= l; ++k1) {
             for (int l1 = j; l1 <= i1; ++l1) {
                 for (int i2 = k; i2 <= j1; ++i2) {
-                    Block block = this.world.getType(new BlockPosition(k1, l1, i2)).getBlock();
+                    BlockPosition blockposition = new BlockPosition(k1, l1, i2);
+                    Block block = this.world.getType(blockposition).getBlock();
 
                     if (block.getMaterial() != Material.AIR) {
                         if (block != Blocks.BARRIER && block != Blocks.OBSIDIAN && block != Blocks.END_STONE && block != Blocks.BEDROCK && block != Blocks.COMMAND_BLOCK && this.world.getGameRules().getBoolean("mobGriefing")) {
-                            flag1 = this.world.setAir(new BlockPosition(k1, l1, i2)) || flag1;
+                            flag1 = this.world.setAir(blockposition) || flag1;
                         } else {
                             flag = true;
                         }
@@ -428,7 +433,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     public boolean a(EntityComplexPart entitycomplexpart, DamageSource damagesource, float f) {
-        if (entitycomplexpart != this.bl) {
+        if (entitycomplexpart != this.bn) {
             f = f / 4.0F + 1.0F;
         }
 
@@ -439,7 +444,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         this.a = this.locX + (double) (f2 * 5.0F) + (double) ((this.random.nextFloat() - 0.5F) * 2.0F);
         this.b = this.locY + (double) (this.random.nextFloat() * 3.0F) + 1.0D;
         this.c = this.locZ - (double) (f3 * 5.0F) + (double) ((this.random.nextFloat() - 0.5F) * 2.0F);
-        this.by = null;
+        this.bA = null;
         if (damagesource.getEntity() instanceof EntityHuman || damagesource.isExplosion()) {
             this.dealDamage(damagesource, f);
         }
@@ -463,9 +468,9 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         this.die();
     }
 
-    protected void aY() {
-        ++this.bw;
-        if (this.bw >= 180 && this.bw <= 200) {
+    protected void aZ() {
+        ++this.by;
+        if (this.by >= 180 && this.by <= 200) {
             float f = (this.random.nextFloat() - 0.5F) * 8.0F;
             float f1 = (this.random.nextFloat() - 0.5F) * 4.0F;
             float f2 = (this.random.nextFloat() - 0.5F) * 8.0F;
@@ -473,11 +478,12 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             this.world.addParticle(EnumParticle.EXPLOSION_HUGE, this.locX + (double) f, this.locY + 2.0D + (double) f1, this.locZ + (double) f2, 0.0D, 0.0D, 0.0D, new int[0]);
         }
 
+        boolean flag = this.world.getGameRules().getBoolean("doMobLoot");
         int i;
         int j;
 
-        if (!this.world.isStatic) {
-            if (this.bw > 150 && this.bw % 5 == 0 && this.world.getGameRules().getBoolean("doMobLoot")) {
+        if (!this.world.isClientSide) {
+            if (this.by > 150 && this.by % 5 == 0 && flag) {
                 i = 1000;
 
                 while (i > 0) {
@@ -487,20 +493,22 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 }
             }
 
-            if (this.bw == 1) {
+            if (this.by == 1) {
                 this.world.a(1018, new BlockPosition(this), 0);
             }
         }
 
         this.move(0.0D, 0.10000000149011612D, 0.0D);
-        this.aG = this.yaw += 20.0F;
-        if (this.bw == 200 && !this.world.isStatic) {
-            i = 2000;
+        this.aI = this.yaw += 20.0F;
+        if (this.by == 200 && !this.world.isClientSide) {
+            if (flag) {
+                i = 2000;
 
-            while (i > 0) {
-                j = EntityExperienceOrb.getOrbValue(i);
-                i -= j;
-                this.world.addEntity(new EntityExperienceOrb(this.world, this.locX, this.locY, this.locZ, j));
+                while (i > 0) {
+                    j = EntityExperienceOrb.getOrbValue(i);
+                    i -= j;
+                    this.world.addEntity(new EntityExperienceOrb(this.world, this.locX, this.locY, this.locZ, j));
+                }
             }
 
             this.a(new BlockPosition(this.locX, 64.0D, this.locZ));
@@ -553,7 +561,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     protected void D() {}
 
-    public Entity[] aC() {
+    public Entity[] aB() {
         return this.children;
     }
 
@@ -569,11 +577,11 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return "mob.enderdragon.growl";
     }
 
-    protected String bn() {
+    protected String bo() {
         return "mob.enderdragon.hit";
     }
 
-    protected float bA() {
+    protected float bB() {
         return 5.0F;
     }
 }

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,8 +15,8 @@ public class DataWatcher {
 
     private final Entity a;
     private boolean b = true;
-    private static final Map c = Maps.newHashMap();
-    private final Map d = Maps.newHashMap();
+    private static final Map<Class<?>, Integer> c = Maps.newHashMap();
+    private final Map<Integer, DataWatcher.WatchableObject> d = Maps.newHashMap();
     private boolean e;
     private ReadWriteLock f = new ReentrantReadWriteLock();
 
@@ -23,30 +24,30 @@ public class DataWatcher {
         this.a = entity;
     }
 
-    public void a(int i, Object object) {
-        Integer integer = (Integer) DataWatcher.c.get(object.getClass());
+    public <T> void a(int i, T t0) {
+        Integer integer = (Integer) DataWatcher.c.get(t0.getClass());
 
         if (integer == null) {
-            throw new IllegalArgumentException("Unknown data type: " + object.getClass());
+            throw new IllegalArgumentException("Unknown data type: " + t0.getClass());
         } else if (i > 31) {
             throw new IllegalArgumentException("Data value id is too big with " + i + "! (Max is " + 31 + ")");
         } else if (this.d.containsKey(Integer.valueOf(i))) {
             throw new IllegalArgumentException("Duplicate id value for " + i + "!");
         } else {
-            WatchableObject watchableobject = new WatchableObject(integer.intValue(), i, object);
+            DataWatcher.WatchableObject datawatcher_watchableobject = new DataWatcher.WatchableObject(integer.intValue(), i, t0);
 
             this.f.writeLock().lock();
-            this.d.put(Integer.valueOf(i), watchableobject);
+            this.d.put(Integer.valueOf(i), datawatcher_watchableobject);
             this.f.writeLock().unlock();
             this.b = false;
         }
     }
 
     public void add(int i, int j) {
-        WatchableObject watchableobject = new WatchableObject(j, i, (Object) null);
+        DataWatcher.WatchableObject datawatcher_watchableobject = new DataWatcher.WatchableObject(j, i, (Object) null);
 
         this.f.writeLock().lock();
-        this.d.put(Integer.valueOf(i), watchableobject);
+        this.d.put(Integer.valueOf(i), datawatcher_watchableobject);
         this.f.writeLock().unlock();
         this.b = false;
     }
@@ -75,13 +76,13 @@ public class DataWatcher {
         return (ItemStack) this.j(i).b();
     }
 
-    private WatchableObject j(int i) {
+    private DataWatcher.WatchableObject j(int i) {
         this.f.readLock().lock();
 
-        WatchableObject watchableobject;
+        DataWatcher.WatchableObject datawatcher_watchableobject;
 
         try {
-            watchableobject = (WatchableObject) this.d.get(Integer.valueOf(i));
+            datawatcher_watchableobject = (DataWatcher.WatchableObject) this.d.get(Integer.valueOf(i));
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.a(throwable, "Getting synched entity data");
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Synched entity data");
@@ -91,27 +92,27 @@ public class DataWatcher {
         }
 
         this.f.readLock().unlock();
-        return watchableobject;
+        return datawatcher_watchableobject;
     }
 
     public Vector3f h(int i) {
         return (Vector3f) this.j(i).b();
     }
 
-    public void watch(int i, Object object) {
-        WatchableObject watchableobject = this.j(i);
+    public <T> void watch(int i, T t0) {
+        DataWatcher.WatchableObject datawatcher_watchableobject = this.j(i);
 
-        if (ObjectUtils.notEqual(object, watchableobject.b())) {
-            watchableobject.a(object);
+        if (ObjectUtils.notEqual(t0, datawatcher_watchableobject.b())) {
+            datawatcher_watchableobject.a(t0);
             this.a.i(i);
-            watchableobject.a(true);
+            datawatcher_watchableobject.a(true);
             this.e = true;
         }
 
     }
 
     public void update(int i) {
-        WatchableObject.a(this.j(i), true);
+        this.j(i).d = true;
         this.e = true;
     }
 
@@ -119,21 +120,21 @@ public class DataWatcher {
         return this.e;
     }
 
-    public static void a(List list, PacketDataSerializer packetdataserializer) {
+    public static void a(List<DataWatcher.WatchableObject> list, PacketDataSerializer packetdataserializer) throws IOException {
         if (list != null) {
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
-                WatchableObject watchableobject = (WatchableObject) iterator.next();
+                DataWatcher.WatchableObject datawatcher_watchableobject = (DataWatcher.WatchableObject) iterator.next();
 
-                a(packetdataserializer, watchableobject);
+                a(packetdataserializer, datawatcher_watchableobject);
             }
         }
 
         packetdataserializer.writeByte(127);
     }
 
-    public List b() {
+    public List<DataWatcher.WatchableObject> b() {
         ArrayList arraylist = null;
 
         if (this.e) {
@@ -141,15 +142,15 @@ public class DataWatcher {
             Iterator iterator = this.d.values().iterator();
 
             while (iterator.hasNext()) {
-                WatchableObject watchableobject = (WatchableObject) iterator.next();
+                DataWatcher.WatchableObject datawatcher_watchableobject = (DataWatcher.WatchableObject) iterator.next();
 
-                if (watchableobject.d()) {
-                    watchableobject.a(false);
+                if (datawatcher_watchableobject.d()) {
+                    datawatcher_watchableobject.a(false);
                     if (arraylist == null) {
                         arraylist = Lists.newArrayList();
                     }
 
-                    arraylist.add(watchableobject);
+                    arraylist.add(datawatcher_watchableobject);
                 }
             }
 
@@ -160,29 +161,29 @@ public class DataWatcher {
         return arraylist;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.f.readLock().lock();
         Iterator iterator = this.d.values().iterator();
 
         while (iterator.hasNext()) {
-            WatchableObject watchableobject = (WatchableObject) iterator.next();
+            DataWatcher.WatchableObject datawatcher_watchableobject = (DataWatcher.WatchableObject) iterator.next();
 
-            a(packetdataserializer, watchableobject);
+            a(packetdataserializer, datawatcher_watchableobject);
         }
 
         this.f.readLock().unlock();
         packetdataserializer.writeByte(127);
     }
 
-    public List c() {
+    public List<DataWatcher.WatchableObject> c() {
         ArrayList arraylist = null;
 
         this.f.readLock().lock();
 
-        WatchableObject watchableobject;
+        DataWatcher.WatchableObject datawatcher_watchableobject;
 
-        for (Iterator iterator = this.d.values().iterator(); iterator.hasNext(); arraylist.add(watchableobject)) {
-            watchableobject = (WatchableObject) iterator.next();
+        for (Iterator iterator = this.d.values().iterator(); iterator.hasNext(); arraylist.add(datawatcher_watchableobject)) {
+            datawatcher_watchableobject = (DataWatcher.WatchableObject) iterator.next();
             if (arraylist == null) {
                 arraylist = Lists.newArrayList();
             }
@@ -192,39 +193,39 @@ public class DataWatcher {
         return arraylist;
     }
 
-    private static void a(PacketDataSerializer packetdataserializer, WatchableObject watchableobject) {
-        int i = (watchableobject.c() << 5 | watchableobject.a() & 31) & 255;
+    private static void a(PacketDataSerializer packetdataserializer, DataWatcher.WatchableObject datawatcher_watchableobject) throws IOException {
+        int i = (datawatcher_watchableobject.c() << 5 | datawatcher_watchableobject.a() & 31) & 255;
 
         packetdataserializer.writeByte(i);
-        switch (watchableobject.c()) {
+        switch (datawatcher_watchableobject.c()) {
         case 0:
-            packetdataserializer.writeByte(((Byte) watchableobject.b()).byteValue());
+            packetdataserializer.writeByte(((Byte) datawatcher_watchableobject.b()).byteValue());
             break;
 
         case 1:
-            packetdataserializer.writeShort(((Short) watchableobject.b()).shortValue());
+            packetdataserializer.writeShort(((Short) datawatcher_watchableobject.b()).shortValue());
             break;
 
         case 2:
-            packetdataserializer.writeInt(((Integer) watchableobject.b()).intValue());
+            packetdataserializer.writeInt(((Integer) datawatcher_watchableobject.b()).intValue());
             break;
 
         case 3:
-            packetdataserializer.writeFloat(((Float) watchableobject.b()).floatValue());
+            packetdataserializer.writeFloat(((Float) datawatcher_watchableobject.b()).floatValue());
             break;
 
         case 4:
-            packetdataserializer.a((String) watchableobject.b());
+            packetdataserializer.a((String) datawatcher_watchableobject.b());
             break;
 
         case 5:
-            ItemStack itemstack = (ItemStack) watchableobject.b();
+            ItemStack itemstack = (ItemStack) datawatcher_watchableobject.b();
 
             packetdataserializer.a(itemstack);
             break;
 
         case 6:
-            BlockPosition blockposition = (BlockPosition) watchableobject.b();
+            BlockPosition blockposition = (BlockPosition) datawatcher_watchableobject.b();
 
             packetdataserializer.writeInt(blockposition.getX());
             packetdataserializer.writeInt(blockposition.getY());
@@ -232,7 +233,7 @@ public class DataWatcher {
             break;
 
         case 7:
-            Vector3f vector3f = (Vector3f) watchableobject.b();
+            Vector3f vector3f = (Vector3f) datawatcher_watchableobject.b();
 
             packetdataserializer.writeFloat(vector3f.getX());
             packetdataserializer.writeFloat(vector3f.getY());
@@ -241,7 +242,7 @@ public class DataWatcher {
 
     }
 
-    public static List b(PacketDataSerializer packetdataserializer) {
+    public static List<DataWatcher.WatchableObject> b(PacketDataSerializer packetdataserializer) throws IOException {
         ArrayList arraylist = null;
 
         for (byte b0 = packetdataserializer.readByte(); b0 != 127; b0 = packetdataserializer.readByte()) {
@@ -251,31 +252,31 @@ public class DataWatcher {
 
             int i = (b0 & 224) >> 5;
             int j = b0 & 31;
-            WatchableObject watchableobject = null;
+            DataWatcher.WatchableObject datawatcher_watchableobject = null;
 
             switch (i) {
             case 0:
-                watchableobject = new WatchableObject(i, j, Byte.valueOf(packetdataserializer.readByte()));
+                datawatcher_watchableobject = new DataWatcher.WatchableObject(i, j, Byte.valueOf(packetdataserializer.readByte()));
                 break;
 
             case 1:
-                watchableobject = new WatchableObject(i, j, Short.valueOf(packetdataserializer.readShort()));
+                datawatcher_watchableobject = new DataWatcher.WatchableObject(i, j, Short.valueOf(packetdataserializer.readShort()));
                 break;
 
             case 2:
-                watchableobject = new WatchableObject(i, j, Integer.valueOf(packetdataserializer.readInt()));
+                datawatcher_watchableobject = new DataWatcher.WatchableObject(i, j, Integer.valueOf(packetdataserializer.readInt()));
                 break;
 
             case 3:
-                watchableobject = new WatchableObject(i, j, Float.valueOf(packetdataserializer.readFloat()));
+                datawatcher_watchableobject = new DataWatcher.WatchableObject(i, j, Float.valueOf(packetdataserializer.readFloat()));
                 break;
 
             case 4:
-                watchableobject = new WatchableObject(i, j, packetdataserializer.c(32767));
+                datawatcher_watchableobject = new DataWatcher.WatchableObject(i, j, packetdataserializer.c(32767));
                 break;
 
             case 5:
-                watchableobject = new WatchableObject(i, j, packetdataserializer.i());
+                datawatcher_watchableobject = new DataWatcher.WatchableObject(i, j, packetdataserializer.i());
                 break;
 
             case 6:
@@ -283,7 +284,7 @@ public class DataWatcher {
                 int l = packetdataserializer.readInt();
                 int i1 = packetdataserializer.readInt();
 
-                watchableobject = new WatchableObject(i, j, new BlockPosition(k, l, i1));
+                datawatcher_watchableobject = new DataWatcher.WatchableObject(i, j, new BlockPosition(k, l, i1));
                 break;
 
             case 7:
@@ -291,10 +292,10 @@ public class DataWatcher {
                 float f1 = packetdataserializer.readFloat();
                 float f2 = packetdataserializer.readFloat();
 
-                watchableobject = new WatchableObject(i, j, new Vector3f(f, f1, f2));
+                datawatcher_watchableobject = new DataWatcher.WatchableObject(i, j, new Vector3f(f, f1, f2));
             }
 
-            arraylist.add(watchableobject);
+            arraylist.add(datawatcher_watchableobject);
         }
 
         return arraylist;
@@ -317,5 +318,44 @@ public class DataWatcher {
         DataWatcher.c.put(ItemStack.class, Integer.valueOf(5));
         DataWatcher.c.put(BlockPosition.class, Integer.valueOf(6));
         DataWatcher.c.put(Vector3f.class, Integer.valueOf(7));
+    }
+
+    public static class WatchableObject {
+
+        private final int a;
+        private final int b;
+        private Object c;
+        private boolean d;
+
+        public WatchableObject(int i, int j, Object object) {
+            this.b = j;
+            this.c = object;
+            this.a = i;
+            this.d = true;
+        }
+
+        public int a() {
+            return this.b;
+        }
+
+        public void a(Object object) {
+            this.c = object;
+        }
+
+        public Object b() {
+            return this.c;
+        }
+
+        public int c() {
+            return this.a;
+        }
+
+        public boolean d() {
+            return this.d;
+        }
+
+        public void a(boolean flag) {
+            this.d = flag;
+        }
     }
 }

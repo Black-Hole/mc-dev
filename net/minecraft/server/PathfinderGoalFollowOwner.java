@@ -56,13 +56,20 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
         ((Navigation) this.d.getNavigation()).a(true);
     }
 
+    private boolean a(BlockPosition blockposition) {
+        IBlockData iblockdata = this.a.getType(blockposition);
+        Block block = iblockdata.getBlock();
+
+        return block == Blocks.AIR ? true : !block.d();
+    }
+
     public void e() {
-        this.d.getControllerLook().a(this.e, 10.0F, (float) this.d.bP());
+        this.d.getControllerLook().a(this.e, 10.0F, (float) this.d.bQ());
         if (!this.d.isSitting()) {
             if (--this.h <= 0) {
                 this.h = 10;
                 if (!this.g.a((Entity) this.e, this.f)) {
-                    if (!this.d.cb()) {
+                    if (!this.d.cc()) {
                         if (this.d.h(this.e) >= 144.0D) {
                             int i = MathHelper.floor(this.e.locX) - 2;
                             int j = MathHelper.floor(this.e.locZ) - 2;
@@ -70,7 +77,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
                             for (int l = 0; l <= 4; ++l) {
                                 for (int i1 = 0; i1 <= 4; ++i1) {
-                                    if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && World.a((IBlockAccess) this.a, new BlockPosition(i + l, k - 1, j + i1)) && !this.a.getType(new BlockPosition(i + l, k, j + i1)).getBlock().d() && !this.a.getType(new BlockPosition(i + l, k + 1, j + i1)).getBlock().d()) {
+                                    if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && World.a((IBlockAccess) this.a, new BlockPosition(i + l, k - 1, j + i1)) && this.a(new BlockPosition(i + l, k, j + i1)) && this.a(new BlockPosition(i + l, k + 1, j + i1))) {
                                         this.d.setPositionRotation((double) ((float) (i + l) + 0.5F), (double) k, (double) ((float) (j + i1) + 0.5F), this.d.yaw, this.d.pitch);
                                         this.g.n();
                                         return;

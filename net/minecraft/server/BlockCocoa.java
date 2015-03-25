@@ -29,7 +29,7 @@ public class BlockCocoa extends BlockDirectional implements IBlockFragilePlantEl
         blockposition = blockposition.shift((EnumDirection) iblockdata.get(BlockCocoa.FACING));
         IBlockData iblockdata1 = world.getType(blockposition);
 
-        return iblockdata1.getBlock() == Blocks.LOG && iblockdata1.get(BlockWood.VARIANT) == EnumLogVariant.JUNGLE;
+        return iblockdata1.getBlock() == Blocks.LOG && iblockdata1.get(BlockWood.VARIANT) == BlockWood.EnumLogVariant.JUNGLE;
     }
 
     public boolean d() {
@@ -53,7 +53,7 @@ public class BlockCocoa extends BlockDirectional implements IBlockFragilePlantEl
         int k = 5 + i * 2;
         float f = (float) j / 2.0F;
 
-        switch (SwitchHelperBlockCocoa.a[enumdirection.ordinal()]) {
+        switch (BlockCocoa.SyntheticClass_1.a[enumdirection.ordinal()]) {
         case 1:
             this.a((8.0F - f) / 16.0F, (12.0F - (float) k) / 16.0F, (15.0F - (float) j) / 16.0F, (8.0F + f) / 16.0F, 0.75F, 0.9375F);
             break;
@@ -142,5 +142,37 @@ public class BlockCocoa extends BlockDirectional implements IBlockFragilePlantEl
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockCocoa.FACING, BlockCocoa.AGE});
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EnumDirection.values().length];
+
+        static {
+            try {
+                BlockCocoa.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                BlockCocoa.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                BlockCocoa.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                BlockCocoa.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+        }
     }
 }

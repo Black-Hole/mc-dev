@@ -6,13 +6,13 @@ public class EntityExperienceOrb extends Entity {
     public int b;
     public int c;
     private int d = 5;
-    public int value;
+    private int value;
     private EntityHuman targetPlayer;
     private int targetTime;
 
     public EntityExperienceOrb(World world, double d0, double d1, double d2, int i) {
         super(world);
-        this.a(0.5F, 0.5F);
+        this.setSize(0.5F, 0.5F);
         this.setPosition(d0, d1, d2);
         this.yaw = (float) (Math.random() * 360.0D);
         this.motX = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F);
@@ -21,19 +21,19 @@ public class EntityExperienceOrb extends Entity {
         this.value = i;
     }
 
-    protected boolean r_() {
+    protected boolean s_() {
         return false;
     }
 
     public EntityExperienceOrb(World world) {
         super(world);
-        this.a(0.25F, 0.25F);
+        this.setSize(0.25F, 0.25F);
     }
 
     protected void h() {}
 
-    public void s_() {
-        super.s_();
+    public void t_() {
+        super.t_();
         if (this.c > 0) {
             --this.c;
         }
@@ -136,9 +136,9 @@ public class EntityExperienceOrb extends Entity {
     }
 
     public void d(EntityHuman entityhuman) {
-        if (!this.world.isStatic) {
-            if (this.c == 0 && entityhuman.bn == 0) {
-                entityhuman.bn = 2;
+        if (!this.world.isClientSide) {
+            if (this.c == 0 && entityhuman.bp == 0) {
+                entityhuman.bp = 2;
                 this.world.makeSound(entityhuman, "random.orb", 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
                 entityhuman.receive(this, 1);
                 entityhuman.giveExp(this.value);
@@ -156,7 +156,7 @@ public class EntityExperienceOrb extends Entity {
         return i >= 2477 ? 2477 : (i >= 1237 ? 1237 : (i >= 617 ? 617 : (i >= 307 ? 307 : (i >= 149 ? 149 : (i >= 73 ? 73 : (i >= 37 ? 37 : (i >= 17 ? 17 : (i >= 7 ? 7 : (i >= 3 ? 3 : 1)))))))));
     }
 
-    public boolean aE() {
+    public boolean aD() {
         return false;
     }
 }

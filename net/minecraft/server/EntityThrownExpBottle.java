@@ -27,7 +27,7 @@ public class EntityThrownExpBottle extends EntityProjectile {
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             this.world.triggerEffect(2002, new BlockPosition(this), 0);
             int i = 3 + this.world.random.nextInt(5) + this.world.random.nextInt(5);
 

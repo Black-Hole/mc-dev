@@ -9,40 +9,40 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class RegistrySimple implements IRegistry {
+public class RegistrySimple<K, V> implements IRegistry<K, V> {
 
     private static final Logger a = LogManager.getLogger();
-    protected final Map c = this.b();
+    protected final Map<K, V> c = this.b();
 
     public RegistrySimple() {}
 
-    protected Map b() {
+    protected Map<K, V> b() {
         return Maps.newHashMap();
     }
 
-    public Object get(Object object) {
-        return this.c.get(object);
+    public V get(K k0) {
+        return this.c.get(k0);
     }
 
-    public void a(Object object, Object object1) {
-        Validate.notNull(object);
-        Validate.notNull(object1);
-        if (this.c.containsKey(object)) {
-            RegistrySimple.a.debug("Adding duplicate key \'" + object + "\' to registry");
+    public void a(K k0, V v0) {
+        Validate.notNull(k0);
+        Validate.notNull(v0);
+        if (this.c.containsKey(k0)) {
+            RegistrySimple.a.debug("Adding duplicate key \'" + k0 + "\' to registry");
         }
 
-        this.c.put(object, object1);
+        this.c.put(k0, v0);
     }
 
-    public Set keySet() {
+    public Set<K> keySet() {
         return Collections.unmodifiableSet(this.c.keySet());
     }
 
-    public boolean d(Object object) {
-        return this.c.containsKey(object);
+    public boolean d(K k0) {
+        return this.c.containsKey(k0);
     }
 
-    public Iterator iterator() {
+    public Iterator<V> iterator() {
         return this.c.values().iterator();
     }
 }

@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public class EntityPigZombie extends EntityZombie {
 
-    private static final UUID c = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
-    private static final AttributeModifier bk = (new AttributeModifier(EntityPigZombie.c, "Attacking speed boost", 0.05D, 0)).a(false);
-    public int angerLevel;
+    private static final UUID b = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
+    private static final AttributeModifier c = (new AttributeModifier(EntityPigZombie.b, "Attacking speed boost", 0.05D, 0)).a(false);
+    private int angerLevel;
     private int soundDelay;
     private UUID hurtBy;
 
@@ -24,36 +24,36 @@ public class EntityPigZombie extends EntityZombie {
     }
 
     protected void n() {
-        this.targetSelector.a(1, new EntityPigZombieInnerClass1(this));
-        this.targetSelector.a(2, new EntityPigZombieInnerClass2(this));
+        this.targetSelector.a(1, new EntityPigZombie.PathfinderGoalAngerOther(this));
+        this.targetSelector.a(2, new EntityPigZombie.PathfinderGoalAnger(this));
     }
 
-    protected void aW() {
-        super.aW();
-        this.getAttributeInstance(EntityPigZombie.b).setValue(0.0D);
+    protected void initAttributes() {
+        super.initAttributes();
+        this.getAttributeInstance(EntityPigZombie.a).setValue(0.0D);
         this.getAttributeInstance(GenericAttributes.d).setValue(0.23000000417232513D);
         this.getAttributeInstance(GenericAttributes.e).setValue(5.0D);
     }
 
-    public void s_() {
-        super.s_();
+    public void t_() {
+        super.t_();
     }
 
     protected void E() {
         AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.d);
 
-        if (this.ck()) {
-            if (!this.isBaby() && !attributeinstance.a(EntityPigZombie.bk)) {
-                attributeinstance.b(EntityPigZombie.bk);
+        if (this.cm()) {
+            if (!this.isBaby() && !attributeinstance.a(EntityPigZombie.c)) {
+                attributeinstance.b(EntityPigZombie.c);
             }
 
             --this.angerLevel;
-        } else if (attributeinstance.a(EntityPigZombie.bk)) {
-            attributeinstance.c(EntityPigZombie.bk);
+        } else if (attributeinstance.a(EntityPigZombie.c)) {
+            attributeinstance.c(EntityPigZombie.c);
         }
 
         if (this.soundDelay > 0 && --this.soundDelay == 0) {
-            this.makeSound("mob.zombiepig.zpigangry", this.bA() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
+            this.makeSound("mob.zombiepig.zpigangry", this.bB() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
         }
 
         if (this.angerLevel > 0 && this.hurtBy != null && this.getLastDamager() == null) {
@@ -61,13 +61,13 @@ public class EntityPigZombie extends EntityZombie {
 
             this.b((EntityLiving) entityhuman);
             this.killer = entityhuman;
-            this.lastDamageByPlayerTime = this.bd();
+            this.lastDamageByPlayerTime = this.be();
         }
 
         super.E();
     }
 
-    public boolean bQ() {
+    public boolean bR() {
         return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
@@ -98,7 +98,7 @@ public class EntityPigZombie extends EntityZombie {
             this.b((EntityLiving) entityhuman);
             if (entityhuman != null) {
                 this.killer = entityhuman;
-                this.lastDamageByPlayerTime = this.bd();
+                this.lastDamageByPlayerTime = this.be();
             }
         }
 
@@ -127,7 +127,7 @@ public class EntityPigZombie extends EntityZombie {
 
     }
 
-    public boolean ck() {
+    public boolean cm() {
         return this.angerLevel > 0;
     }
 
@@ -135,11 +135,11 @@ public class EntityPigZombie extends EntityZombie {
         return "mob.zombiepig.zpig";
     }
 
-    protected String bn() {
+    protected String bo() {
         return "mob.zombiepig.zpighurt";
     }
 
-    protected String bo() {
+    protected String bp() {
         return "mob.zombiepig.zpigdeath";
     }
 
@@ -178,7 +178,29 @@ public class EntityPigZombie extends EntityZombie {
         return groupdataentity;
     }
 
-    static void a(EntityPigZombie entitypigzombie, Entity entity) {
-        entitypigzombie.b(entity);
+    static class PathfinderGoalAnger extends PathfinderGoalNearestAttackableTarget<EntityHuman> {
+
+        public PathfinderGoalAnger(EntityPigZombie entitypigzombie) {
+            super(entitypigzombie, EntityHuman.class, true);
+        }
+
+        public boolean a() {
+            return ((EntityPigZombie) this.e).cm() && super.a();
+        }
+    }
+
+    static class PathfinderGoalAngerOther extends PathfinderGoalHurtByTarget {
+
+        public PathfinderGoalAngerOther(EntityPigZombie entitypigzombie) {
+            super(entitypigzombie, true, new Class[0]);
+        }
+
+        protected void a(EntityCreature entitycreature, EntityLiving entityliving) {
+            super.a(entitycreature, entityliving);
+            if (entitycreature instanceof EntityPigZombie) {
+                ((EntityPigZombie) entitycreature).b((Entity) entityliving);
+            }
+
+        }
     }
 }

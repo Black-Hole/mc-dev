@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutAbilities implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutAbilities implements Packet<PacketListenerPlayOut> {
 
     private boolean a;
     private boolean b;
@@ -20,7 +22,7 @@ public class PacketPlayOutAbilities implements Packet {
         this.b(playerabilities.b());
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         byte b0 = packetdataserializer.readByte();
 
         this.a((b0 & 1) > 0);
@@ -31,7 +33,7 @@ public class PacketPlayOutAbilities implements Packet {
         this.b(packetdataserializer.readFloat());
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         byte b0 = 0;
 
         if (this.a()) {

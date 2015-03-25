@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.base.Predicate;
 
-public class BlockPredicate implements Predicate {
+public class BlockPredicate implements Predicate<IBlockData> {
 
     private final Block a;
 

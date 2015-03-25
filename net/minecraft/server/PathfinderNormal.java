@@ -25,9 +25,11 @@ public class PathfinderNormal extends PathfinderAbstract {
 
         if (this.i && entity.V()) {
             i = (int) entity.getBoundingBox().b;
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(MathHelper.floor(entity.locX), i, MathHelper.floor(entity.locZ));
 
-            for (Block block = this.a.getType(new BlockPosition(MathHelper.floor(entity.locX), i, MathHelper.floor(entity.locZ))).getBlock(); block == Blocks.FLOWING_WATER || block == Blocks.WATER; block = this.a.getType(new BlockPosition(MathHelper.floor(entity.locX), i, MathHelper.floor(entity.locZ))).getBlock()) {
+            for (Block block = this.a.getType(blockposition_mutableblockposition).getBlock(); block == Blocks.FLOWING_WATER || block == Blocks.WATER; block = this.a.getType(blockposition_mutableblockposition).getBlock()) {
                 ++i;
+                blockposition_mutableblockposition.c(MathHelper.floor(entity.locX), i, MathHelper.floor(entity.locZ));
             }
 
             this.h = false;
@@ -105,7 +107,7 @@ public class PathfinderNormal extends PathfinderAbstract {
                         break;
                     }
 
-                    if (j1++ >= entity.aF()) {
+                    if (j1++ >= entity.aE()) {
                         return null;
                     }
 
@@ -131,12 +133,13 @@ public class PathfinderNormal extends PathfinderAbstract {
     public static int a(IBlockAccess iblockaccess, Entity entity, int i, int j, int k, int l, int i1, int j1, boolean flag, boolean flag1, boolean flag2) {
         boolean flag3 = false;
         BlockPosition blockposition = new BlockPosition(entity);
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
         for (int k1 = i; k1 < i + l; ++k1) {
             for (int l1 = j; l1 < j + i1; ++l1) {
                 for (int i2 = k; i2 < k + j1; ++i2) {
-                    BlockPosition blockposition1 = new BlockPosition(k1, l1, i2);
-                    Block block = iblockaccess.getType(blockposition1).getBlock();
+                    blockposition_mutableblockposition.c(k1, l1, i2);
+                    Block block = iblockaccess.getType(blockposition_mutableblockposition).getBlock();
 
                     if (block.getMaterial() != Material.AIR) {
                         if (block != Blocks.TRAPDOOR && block != Blocks.IRON_TRAPDOOR) {
@@ -155,11 +158,11 @@ public class PathfinderNormal extends PathfinderAbstract {
                             flag3 = true;
                         }
 
-                        if (entity.world.getType(blockposition1).getBlock() instanceof BlockMinecartTrackAbstract) {
+                        if (entity.world.getType(blockposition_mutableblockposition).getBlock() instanceof BlockMinecartTrackAbstract) {
                             if (!(entity.world.getType(blockposition).getBlock() instanceof BlockMinecartTrackAbstract) && !(entity.world.getType(blockposition.down()).getBlock() instanceof BlockMinecartTrackAbstract)) {
                                 return -3;
                             }
-                        } else if (!block.b(iblockaccess, blockposition1) && (!flag1 || !(block instanceof BlockDoor) || block.getMaterial() != Material.WOOD)) {
+                        } else if (!block.b(iblockaccess, blockposition_mutableblockposition) && (!flag1 || !(block instanceof BlockDoor) || block.getMaterial() != Material.WOOD)) {
                             if (block instanceof BlockFence || block instanceof BlockFenceGate || block instanceof BlockCobbleWall) {
                                 return -3;
                             }

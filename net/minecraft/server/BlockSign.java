@@ -28,6 +28,10 @@ public class BlockSign extends BlockContainer {
         return false;
     }
 
+    public boolean g() {
+        return true;
+    }
+
     public TileEntity a(World world, int i) {
         return new TileEntitySign();
     }
@@ -37,12 +41,16 @@ public class BlockSign extends BlockContainer {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (world.isStatic) {
+        if (world.isClientSide) {
             return true;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             return tileentity instanceof TileEntitySign ? ((TileEntitySign) tileentity).b(entityhuman) : false;
         }
+    }
+
+    public boolean canPlace(World world, BlockPosition blockposition) {
+        return !this.e(world, blockposition) && super.canPlace(world, blockposition);
     }
 }

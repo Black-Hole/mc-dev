@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 
 public class WorldGenStronghold extends StructureGenerator {
 
-    private List d;
+    private List<BiomeBase> d;
     private boolean f;
     private ChunkCoordIntPair[] g;
     private double h;
@@ -34,7 +34,7 @@ public class WorldGenStronghold extends StructureGenerator {
 
     }
 
-    public WorldGenStronghold(Map map) {
+    public WorldGenStronghold(Map<String, String> map) {
         this();
         Iterator iterator = map.entrySet().iterator();
 
@@ -100,7 +100,7 @@ public class WorldGenStronghold extends StructureGenerator {
         return false;
     }
 
-    protected List y_() {
+    protected List<BlockPosition> z_() {
         ArrayList arraylist = Lists.newArrayList();
         ChunkCoordIntPair[] achunkcoordintpair = this.g;
         int i = achunkcoordintpair.length;
@@ -117,12 +117,37 @@ public class WorldGenStronghold extends StructureGenerator {
     }
 
     protected StructureStart b(int i, int j) {
-        WorldGenStronghold2Start worldgenstronghold2start;
+        WorldGenStronghold.WorldGenStronghold2Start worldgenstronghold_worldgenstronghold2start;
 
-        for (worldgenstronghold2start = new WorldGenStronghold2Start(this.c, this.b, i, j); worldgenstronghold2start.b().isEmpty() || ((WorldGenStrongholdStart) worldgenstronghold2start.b().get(0)).b == null; worldgenstronghold2start = new WorldGenStronghold2Start(this.c, this.b, i, j)) {
+        for (worldgenstronghold_worldgenstronghold2start = new WorldGenStronghold.WorldGenStronghold2Start(this.c, this.b, i, j); worldgenstronghold_worldgenstronghold2start.b().isEmpty() || ((WorldGenStrongholdPieces.WorldGenStrongholdStart) worldgenstronghold_worldgenstronghold2start.b().get(0)).b == null; worldgenstronghold_worldgenstronghold2start = new WorldGenStronghold.WorldGenStronghold2Start(this.c, this.b, i, j)) {
             ;
         }
 
-        return worldgenstronghold2start;
+        return worldgenstronghold_worldgenstronghold2start;
+    }
+
+    public static class WorldGenStronghold2Start extends StructureStart {
+
+        public WorldGenStronghold2Start() {}
+
+        public WorldGenStronghold2Start(World world, Random random, int i, int j) {
+            super(i, j);
+            WorldGenStrongholdPieces.b();
+            WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart = new WorldGenStrongholdPieces.WorldGenStrongholdStart(0, random, (i << 4) + 2, (j << 4) + 2);
+
+            this.a.add(worldgenstrongholdpieces_worldgenstrongholdstart);
+            worldgenstrongholdpieces_worldgenstrongholdstart.a((StructurePiece) worldgenstrongholdpieces_worldgenstrongholdstart, (List) this.a, random);
+            List list = worldgenstrongholdpieces_worldgenstrongholdstart.c;
+
+            while (!list.isEmpty()) {
+                int k = random.nextInt(list.size());
+                StructurePiece structurepiece = (StructurePiece) list.remove(k);
+
+                structurepiece.a((StructurePiece) worldgenstrongholdpieces_worldgenstrongholdstart, (List) this.a, random);
+            }
+
+            this.c();
+            this.a(world, random, 10);
+        }
     }
 }

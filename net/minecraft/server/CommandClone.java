@@ -23,11 +23,11 @@ public class CommandClone extends CommandAbstract {
         return "commands.clone.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 9) {
             throw new ExceptionUsage("commands.clone.usage", new Object[0]);
         } else {
-            icommandlistener.a(EnumCommandResult.AFFECTED_BLOCKS, 0);
+            icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 0);
             BlockPosition blockposition = a(icommandlistener, astring, 0, false);
             BlockPosition blockposition1 = a(icommandlistener, astring, 3, false);
             BlockPosition blockposition2 = a(icommandlistener, astring, 6, false);
@@ -90,13 +90,13 @@ public class CommandClone extends CommandAbstract {
                                                 NBTTagCompound nbttagcompound = new NBTTagCompound();
 
                                                 tileentity.b(nbttagcompound);
-                                                arraylist1.add(new CommandCloneStoredTileEntity(blockposition5, iblockdata, nbttagcompound));
+                                                arraylist1.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, nbttagcompound));
                                                 linkedlist.addLast(blockposition4);
-                                            } else if (!iblockdata.getBlock().m() && !iblockdata.getBlock().d()) {
-                                                arraylist2.add(new CommandCloneStoredTileEntity(blockposition5, iblockdata, (NBTTagCompound) null));
+                                            } else if (!iblockdata.getBlock().o() && !iblockdata.getBlock().d()) {
+                                                arraylist2.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, (NBTTagCompound) null));
                                                 linkedlist.addFirst(blockposition4);
                                             } else {
-                                                arraylist.add(new CommandCloneStoredTileEntity(blockposition5, iblockdata, (NBTTagCompound) null));
+                                                arraylist.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, (NBTTagCompound) null));
                                                 linkedlist.addLast(blockposition4);
                                             }
                                         }
@@ -133,12 +133,12 @@ public class CommandClone extends CommandAbstract {
                             List list = Lists.reverse(arraylist3);
 
                             Iterator iterator1;
-                            CommandCloneStoredTileEntity commandclonestoredtileentity;
+                            CommandClone.CommandCloneStoredTileEntity commandclone_commandclonestoredtileentity;
                             TileEntity tileentity2;
 
-                            for (iterator1 = list.iterator(); iterator1.hasNext(); world.setTypeAndData(commandclonestoredtileentity.a, Blocks.BARRIER.getBlockData(), 2)) {
-                                commandclonestoredtileentity = (CommandCloneStoredTileEntity) iterator1.next();
-                                tileentity2 = world.getTileEntity(commandclonestoredtileentity.a);
+                            for (iterator1 = list.iterator(); iterator1.hasNext(); world.setTypeAndData(commandclone_commandclonestoredtileentity.a, Blocks.BARRIER.getBlockData(), 2)) {
+                                commandclone_commandclonestoredtileentity = (CommandClone.CommandCloneStoredTileEntity) iterator1.next();
+                                tileentity2 = world.getTileEntity(commandclone_commandclonestoredtileentity.a);
                                 if (tileentity2 instanceof IInventory) {
                                     ((IInventory) tileentity2).l();
                                 }
@@ -148,20 +148,20 @@ public class CommandClone extends CommandAbstract {
                             iterator1 = arraylist3.iterator();
 
                             while (iterator1.hasNext()) {
-                                commandclonestoredtileentity = (CommandCloneStoredTileEntity) iterator1.next();
-                                if (world.setTypeAndData(commandclonestoredtileentity.a, commandclonestoredtileentity.b, 2)) {
+                                commandclone_commandclonestoredtileentity = (CommandClone.CommandCloneStoredTileEntity) iterator1.next();
+                                if (world.setTypeAndData(commandclone_commandclonestoredtileentity.a, commandclone_commandclonestoredtileentity.b, 2)) {
                                     ++i;
                                 }
                             }
 
-                            for (iterator1 = arraylist1.iterator(); iterator1.hasNext(); world.setTypeAndData(commandclonestoredtileentity.a, commandclonestoredtileentity.b, 2)) {
-                                commandclonestoredtileentity = (CommandCloneStoredTileEntity) iterator1.next();
-                                tileentity2 = world.getTileEntity(commandclonestoredtileentity.a);
-                                if (commandclonestoredtileentity.c != null && tileentity2 != null) {
-                                    commandclonestoredtileentity.c.setInt("x", commandclonestoredtileentity.a.getX());
-                                    commandclonestoredtileentity.c.setInt("y", commandclonestoredtileentity.a.getY());
-                                    commandclonestoredtileentity.c.setInt("z", commandclonestoredtileentity.a.getZ());
-                                    tileentity2.a(commandclonestoredtileentity.c);
+                            for (iterator1 = arraylist1.iterator(); iterator1.hasNext(); world.setTypeAndData(commandclone_commandclonestoredtileentity.a, commandclone_commandclonestoredtileentity.b, 2)) {
+                                commandclone_commandclonestoredtileentity = (CommandClone.CommandCloneStoredTileEntity) iterator1.next();
+                                tileentity2 = world.getTileEntity(commandclone_commandclonestoredtileentity.a);
+                                if (commandclone_commandclonestoredtileentity.c != null && tileentity2 != null) {
+                                    commandclone_commandclonestoredtileentity.c.setInt("x", commandclone_commandclonestoredtileentity.a.getX());
+                                    commandclone_commandclonestoredtileentity.c.setInt("y", commandclone_commandclonestoredtileentity.a.getY());
+                                    commandclone_commandclonestoredtileentity.c.setInt("z", commandclone_commandclonestoredtileentity.a.getZ());
+                                    tileentity2.a(commandclone_commandclonestoredtileentity.c);
                                     tileentity2.update();
                                 }
                             }
@@ -169,8 +169,8 @@ public class CommandClone extends CommandAbstract {
                             iterator1 = list.iterator();
 
                             while (iterator1.hasNext()) {
-                                commandclonestoredtileentity = (CommandCloneStoredTileEntity) iterator1.next();
-                                world.update(commandclonestoredtileentity.a, commandclonestoredtileentity.b.getBlock());
+                                commandclone_commandclonestoredtileentity = (CommandClone.CommandCloneStoredTileEntity) iterator1.next();
+                                world.update(commandclone_commandclonestoredtileentity.a, commandclone_commandclonestoredtileentity.b.getBlock());
                             }
 
                             List list1 = world.a(structureboundingbox, false);
@@ -192,7 +192,7 @@ public class CommandClone extends CommandAbstract {
                             if (i <= 0) {
                                 throw new CommandException("commands.clone.failed", new Object[0]);
                             } else {
-                                icommandlistener.a(EnumCommandResult.AFFECTED_BLOCKS, i);
+                                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, i);
                                 a(icommandlistener, this, "commands.clone.success", new Object[] { Integer.valueOf(i)});
                             }
                         } else {
@@ -206,7 +206,20 @@ public class CommandClone extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length > 3 && astring.length <= 6 ? a(astring, 3, blockposition) : (astring.length > 6 && astring.length <= 9 ? a(astring, 6, blockposition) : (astring.length == 10 ? a(astring, new String[] { "replace", "masked", "filtered"}) : (astring.length == 11 ? a(astring, new String[] { "normal", "force", "move"}) : (astring.length == 12 && "filtered".equals(astring[9]) ? a(astring, (Collection) Block.REGISTRY.keySet()) : null)))));
+    }
+
+    static class CommandCloneStoredTileEntity {
+
+        public final BlockPosition a;
+        public final IBlockData b;
+        public final NBTTagCompound c;
+
+        public CommandCloneStoredTileEntity(BlockPosition blockposition, IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+            this.a = blockposition;
+            this.b = iblockdata;
+            this.c = nbttagcompound;
+        }
     }
 }

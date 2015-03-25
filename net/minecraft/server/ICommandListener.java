@@ -20,5 +20,5 @@ public interface ICommandListener {
 
     boolean getSendCommandFeedback();
 
-    void a(EnumCommandResult enumcommandresult, int i);
+    void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i);
 }

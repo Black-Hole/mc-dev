@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayInBlockPlace implements Packet {
+import java.io.IOException;
+
+public class PacketPlayInBlockPlace implements Packet<PacketListenerPlayIn> {
 
     private static final BlockPosition a = new BlockPosition(-1, -1, -1);
     private BlockPosition b;
@@ -25,7 +27,7 @@ public class PacketPlayInBlockPlace implements Packet {
         this.g = f2;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.b = packetdataserializer.c();
         this.c = packetdataserializer.readUnsignedByte();
         this.d = packetdataserializer.i();
@@ -34,7 +36,7 @@ public class PacketPlayInBlockPlace implements Packet {
         this.g = (float) packetdataserializer.readUnsignedByte() / 16.0F;
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.b);
         packetdataserializer.writeByte(this.c);
         packetdataserializer.a(this.d);

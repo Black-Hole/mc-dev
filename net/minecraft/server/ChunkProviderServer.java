@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -13,13 +14,13 @@ import org.apache.logging.log4j.Logger;
 public class ChunkProviderServer implements IChunkProvider {
 
     private static final Logger b = LogManager.getLogger();
-    public Set unloadQueue = Collections.newSetFromMap(new ConcurrentHashMap());
-    public Chunk emptyChunk;
-    public IChunkProvider chunkProvider;
+    private Set<Long> unloadQueue = Collections.newSetFromMap(new ConcurrentHashMap());
+    private Chunk emptyChunk;
+    private IChunkProvider chunkProvider;
     private IChunkLoader chunkLoader;
     public boolean forceChunkLoad = true;
-    public LongHashMap chunks = new LongHashMap();
-    private List chunkList = Lists.newArrayList();
+    private LongHashMap<Chunk> chunks = new LongHashMap();
+    private List<Chunk> chunkList = Lists.newArrayList();
     private WorldServer world;
 
     public ChunkProviderServer(WorldServer worldserver, IChunkLoader ichunkloader, IChunkProvider ichunkprovider) {
@@ -33,7 +34,7 @@ public class ChunkProviderServer implements IChunkProvider {
         return this.chunks.contains(ChunkCoordIntPair.a(i, j));
     }
 
-    public List a() {
+    public List<Chunk> a() {
         return this.chunkList;
     }
 
@@ -100,7 +101,7 @@ public class ChunkProviderServer implements IChunkProvider {
         return chunk == null ? (!this.world.ad() && !this.forceChunkLoad ? this.emptyChunk : this.getChunkAt(i, j)) : chunk;
     }
 
-    public Chunk loadChunk(int i, int j) {
+    private Chunk loadChunk(int i, int j) {
         if (this.chunkLoader == null) {
             return null;
         } else {
@@ -122,7 +123,7 @@ public class ChunkProviderServer implements IChunkProvider {
         }
     }
 
-    public void saveChunkNOP(Chunk chunk) {
+    private void saveChunkNOP(Chunk chunk) {
         if (this.chunkLoader != null) {
             try {
                 this.chunkLoader.b(this.world, chunk);
@@ -133,7 +134,7 @@ public class ChunkProviderServer implements IChunkProvider {
         }
     }
 
-    public void saveChunk(Chunk chunk) {
+    private void saveChunk(Chunk chunk) {
         if (this.chunkLoader != null) {
             try {
                 chunk.setLastSaved(this.world.getTime());
@@ -173,9 +174,10 @@ public class ChunkProviderServer implements IChunkProvider {
 
     public boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate) {
         int i = 0;
+        ArrayList arraylist = Lists.newArrayList(this.chunkList);
 
-        for (int j = 0; j < this.chunkList.size(); ++j) {
-            Chunk chunk = (Chunk) this.chunkList.get(j);
+        for (int j = 0; j < arraylist.size(); ++j) {
+            Chunk chunk = (Chunk) arraylist.get(j);
 
             if (flag) {
                 this.saveChunkNOP(chunk);
@@ -236,7 +238,7 @@ public class ChunkProviderServer implements IChunkProvider {
         return "ServerChunkCache: " + this.chunks.count() + " Drop: " + this.unloadQueue.size();
     }
 
-    public List getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
+    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         return this.chunkProvider.getMobsFor(enumcreaturetype, blockposition);
     }
 

@@ -19,7 +19,7 @@ public class PathfinderGoalPlay extends PathfinderGoal {
     public boolean a() {
         if (this.a.getAge() >= 0) {
             return false;
-        } else if (this.a.bb().nextInt(400) != 0) {
+        } else if (this.a.bc().nextInt(400) != 0) {
             return false;
         } else {
             List list = this.a.world.a(EntityVillager.class, this.a.getBoundingBox().grow(6.0D, 3.0D, 6.0D));
@@ -29,7 +29,7 @@ public class PathfinderGoalPlay extends PathfinderGoal {
             while (iterator.hasNext()) {
                 EntityVillager entityvillager = (EntityVillager) iterator.next();
 
-                if (entityvillager != this.a && !entityvillager.cl() && entityvillager.getAge() < 0) {
+                if (entityvillager != this.a && !entityvillager.cn() && entityvillager.getAge() < 0) {
                     double d1 = entityvillager.h(this.a);
 
                     if (d1 <= d0) {

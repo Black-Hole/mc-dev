@@ -3,11 +3,11 @@ package net.minecraft.server;
 public class EntityFireworks extends Entity {
 
     private int ticksFlown;
-    public int expectedLifespan;
+    private int expectedLifespan;
 
     public EntityFireworks(World world) {
         super(world);
-        this.a(0.25F, 0.25F);
+        this.setSize(0.25F, 0.25F);
     }
 
     protected void h() {
@@ -17,7 +17,7 @@ public class EntityFireworks extends Entity {
     public EntityFireworks(World world, double d0, double d1, double d2, ItemStack itemstack) {
         super(world);
         this.ticksFlown = 0;
-        this.a(0.25F, 0.25F);
+        this.setSize(0.25F, 0.25F);
         this.setPosition(d0, d1, d2);
         int i = 1;
 
@@ -37,20 +37,20 @@ public class EntityFireworks extends Entity {
         this.expectedLifespan = 10 * i + this.random.nextInt(6) + this.random.nextInt(7);
     }
 
-    public void s_() {
+    public void t_() {
         this.P = this.locX;
         this.Q = this.locY;
         this.R = this.locZ;
-        super.s_();
+        super.t_();
         this.motX *= 1.15D;
         this.motZ *= 1.15D;
         this.motY += 0.04D;
         this.move(this.motX, this.motY, this.motZ);
         float f = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
 
-        this.yaw = (float) (Math.atan2(this.motX, this.motZ) * 180.0D / 3.1415927410125732D);
+        this.yaw = (float) (MathHelper.b(this.motX, this.motZ) * 180.0D / 3.1415927410125732D);
 
-        for (this.pitch = (float) (Math.atan2(this.motY, (double) f) * 180.0D / 3.1415927410125732D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
+        for (this.pitch = (float) (MathHelper.b(this.motY, (double) f) * 180.0D / 3.1415927410125732D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
             ;
         }
 
@@ -73,11 +73,11 @@ public class EntityFireworks extends Entity {
         }
 
         ++this.ticksFlown;
-        if (this.world.isStatic && this.ticksFlown % 2 < 2) {
+        if (this.world.isClientSide && this.ticksFlown % 2 < 2) {
             this.world.addParticle(EnumParticle.FIREWORKS_SPARK, this.locX, this.locY - 0.3D, this.locZ, this.random.nextGaussian() * 0.05D, -this.motY * 0.5D, this.random.nextGaussian() * 0.05D, new int[0]);
         }
 
-        if (!this.world.isStatic && this.ticksFlown > this.expectedLifespan) {
+        if (!this.world.isClientSide && this.ticksFlown > this.expectedLifespan) {
             this.world.broadcastEntityEffect(this, (byte) 17);
             this.die();
         }
@@ -117,7 +117,7 @@ public class EntityFireworks extends Entity {
         return super.c(f);
     }
 
-    public boolean aE() {
+    public boolean aD() {
         return false;
     }
 }

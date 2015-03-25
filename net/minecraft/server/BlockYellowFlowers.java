@@ -4,7 +4,7 @@ public class BlockYellowFlowers extends BlockFlowers {
 
     public BlockYellowFlowers() {}
 
-    public EnumFlowerType j() {
-        return EnumFlowerType.YELLOW;
+    public BlockFlowers.EnumFlowerType l() {
+        return BlockFlowers.EnumFlowerType.YELLOW;
     }
 }

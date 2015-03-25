@@ -7,7 +7,7 @@ public class BlockCommand extends BlockContainer {
     public static final BlockStateBoolean TRIGGERED = BlockStateBoolean.of("triggered");
 
     public BlockCommand() {
-        super(Material.ORE);
+        super(Material.ORE, MaterialMapColor.q);
         this.j(this.blockStateList.getBlockData().set(BlockCommand.TRIGGERED, Boolean.valueOf(false)));
     }
 
@@ -16,7 +16,7 @@ public class BlockCommand extends BlockContainer {
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             boolean flag = world.isBlockIndirectlyPowered(blockposition);
             boolean flag1 = ((Boolean) iblockdata.get(BlockCommand.TRIGGERED)).booleanValue();
 
@@ -70,7 +70,7 @@ public class BlockCommand extends BlockContainer {
                 commandblocklistenerabstract.setName(itemstack.getName());
             }
 
-            if (!world.isStatic) {
+            if (!world.isClientSide) {
                 commandblocklistenerabstract.a(world.getGameRules().getBoolean("sendCommandFeedback"));
             }
 

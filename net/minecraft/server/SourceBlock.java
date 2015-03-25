@@ -40,7 +40,7 @@ public class SourceBlock implements ISourceBlock {
         return iblockdata.getBlock().toLegacyData(iblockdata);
     }
 
-    public TileEntity getTileEntity() {
+    public <T extends TileEntity> T getTileEntity() {
         return this.a.getTileEntity(this.b);
     }
 }

@@ -5,16 +5,16 @@ import java.util.Random;
 public abstract class WorldGenMegaTreeAbstract extends WorldGenTreeAbstract {
 
     protected final int a;
-    protected final int b;
-    protected final int c;
+    protected final IBlockData b;
+    protected final IBlockData c;
     protected int d;
 
-    public WorldGenMegaTreeAbstract(boolean flag, int i, int j, int k, int l) {
+    public WorldGenMegaTreeAbstract(boolean flag, int i, int j, IBlockData iblockdata, IBlockData iblockdata1) {
         super(flag);
         this.a = i;
         this.d = j;
-        this.b = k;
-        this.c = l;
+        this.b = iblockdata;
+        this.c = iblockdata1;
     }
 
     protected int a(Random random) {
@@ -87,7 +87,7 @@ public abstract class WorldGenMegaTreeAbstract extends WorldGenTreeAbstract {
                     Material material = world.getType(blockposition1).getBlock().getMaterial();
 
                     if (material == Material.AIR || material == Material.LEAVES) {
-                        this.a(world, blockposition1, (Block) Blocks.LEAVES, this.c);
+                        this.a(world, blockposition1, this.c);
                     }
                 }
             }
@@ -105,7 +105,7 @@ public abstract class WorldGenMegaTreeAbstract extends WorldGenTreeAbstract {
                     Material material = world.getType(blockposition1).getBlock().getMaterial();
 
                     if (material == Material.AIR || material == Material.LEAVES) {
-                        this.a(world, blockposition1, (Block) Blocks.LEAVES, this.c);
+                        this.a(world, blockposition1, this.c);
                     }
                 }
             }

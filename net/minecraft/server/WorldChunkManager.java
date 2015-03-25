@@ -9,7 +9,7 @@ public class WorldChunkManager {
     private GenLayer b;
     private GenLayer c;
     private BiomeCache d;
-    private List e;
+    private List<BiomeBase> e;
     private String f;
 
     protected WorldChunkManager() {
@@ -38,7 +38,7 @@ public class WorldChunkManager {
         this(world.getSeed(), world.getWorldData().getType(), world.getWorldData().getGeneratorOptions());
     }
 
-    public List a() {
+    public List<BiomeBase> a() {
         return this.e;
     }
 
@@ -137,7 +137,7 @@ public class WorldChunkManager {
         }
     }
 
-    public boolean a(int i, int j, int k, List list) {
+    public boolean a(int i, int j, int k, List<BiomeBase> list) {
         IntCache.a();
         int l = i - k >> 2;
         int i1 = j - k >> 2;
@@ -170,7 +170,7 @@ public class WorldChunkManager {
         }
     }
 
-    public BlockPosition a(int i, int j, int k, List list, Random random) {
+    public BlockPosition a(int i, int j, int k, List<BiomeBase> list, Random random) {
         IntCache.a();
         int l = i - k >> 2;
         int i1 = j - k >> 2;

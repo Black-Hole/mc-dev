@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutOpenWindow implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutOpenWindow implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private String b;
@@ -30,7 +32,7 @@ public class PacketPlayOutOpenWindow implements Packet {
         packetlistenerplayout.a(this);
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readUnsignedByte();
         this.b = packetdataserializer.c(32);
         this.c = packetdataserializer.d();
@@ -41,7 +43,7 @@ public class PacketPlayOutOpenWindow implements Packet {
 
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
         packetdataserializer.a(this.b);
         packetdataserializer.a(this.c);

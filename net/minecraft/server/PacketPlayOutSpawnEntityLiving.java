@@ -1,8 +1,9 @@
 package net.minecraft.server;
 
+import java.io.IOException;
 import java.util.List;
 
-public class PacketPlayOutSpawnEntityLiving implements Packet {
+public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private int b;
@@ -16,7 +17,7 @@ public class PacketPlayOutSpawnEntityLiving implements Packet {
     private byte j;
     private byte k;
     private DataWatcher l;
-    private List m;
+    private List<DataWatcher.WatchableObject> m;
 
     public PacketPlayOutSpawnEntityLiving() {}
 
@@ -28,7 +29,7 @@ public class PacketPlayOutSpawnEntityLiving implements Packet {
         this.e = MathHelper.floor(entityliving.locZ * 32.0D);
         this.i = (byte) ((int) (entityliving.yaw * 256.0F / 360.0F));
         this.j = (byte) ((int) (entityliving.pitch * 256.0F / 360.0F));
-        this.k = (byte) ((int) (entityliving.aI * 256.0F / 360.0F));
+        this.k = (byte) ((int) (entityliving.aK * 256.0F / 360.0F));
         double d0 = 3.9D;
         double d1 = entityliving.motX;
         double d2 = entityliving.motY;
@@ -64,7 +65,7 @@ public class PacketPlayOutSpawnEntityLiving implements Packet {
         this.l = entityliving.getDataWatcher();
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = packetdataserializer.readByte() & 255;
         this.c = packetdataserializer.readInt();
@@ -79,7 +80,7 @@ public class PacketPlayOutSpawnEntityLiving implements Packet {
         this.m = DataWatcher.b(packetdataserializer);
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.writeByte(this.b & 255);
         packetdataserializer.writeInt(this.c);

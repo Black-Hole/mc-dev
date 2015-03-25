@@ -55,5 +55,5 @@ public class RemoteControlCommandListener implements ICommandListener {
         return true;
     }
 
-    public void a(EnumCommandResult enumcommandresult, int i) {}
+    public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {}
 }

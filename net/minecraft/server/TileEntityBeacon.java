@@ -8,7 +8,7 @@ import java.util.List;
 public class TileEntityBeacon extends TileEntityContainer implements IUpdatePlayerListBox, IInventory {
 
     public static final MobEffectList[][] a = new MobEffectList[][] { { MobEffectList.FASTER_MOVEMENT, MobEffectList.FASTER_DIG}, { MobEffectList.RESISTANCE, MobEffectList.JUMP}, { MobEffectList.INCREASE_DAMAGE}, { MobEffectList.REGENERATION}};
-    private final List f = Lists.newArrayList();
+    private final List<TileEntityBeacon.BeaconColorTracker> f = Lists.newArrayList();
     private boolean i;
     private int j = -1;
     private int k;
@@ -31,7 +31,7 @@ public class TileEntityBeacon extends TileEntityContainer implements IUpdatePlay
     }
 
     private void A() {
-        if (this.i && this.j > 0 && !this.world.isStatic && this.k > 0) {
+        if (this.i && this.j > 0 && !this.world.isClientSide && this.k > 0) {
             double d0 = (double) (this.j * 10 + 10);
             byte b0 = 0;
 
@@ -74,29 +74,29 @@ public class TileEntityBeacon extends TileEntityContainer implements IUpdatePlay
         this.j = 0;
         this.f.clear();
         this.i = true;
-        BeaconColorTracker beaconcolortracker = new BeaconColorTracker(EntitySheep.a(EnumColor.WHITE));
+        TileEntityBeacon.BeaconColorTracker tileentitybeacon_beaconcolortracker = new TileEntityBeacon.BeaconColorTracker(EntitySheep.a(EnumColor.WHITE));
 
-        this.f.add(beaconcolortracker);
+        this.f.add(tileentitybeacon_beaconcolortracker);
         boolean flag = true;
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
         int i1;
 
-        for (i1 = k + 1; i1 < this.world.V(); ++i1) {
-            BlockPosition blockposition = new BlockPosition(j, i1, l);
-            IBlockData iblockdata = this.world.getType(blockposition);
+        for (i1 = k + 1; i1 < 256; ++i1) {
+            IBlockData iblockdata = this.world.getType(blockposition_mutableblockposition.c(j, i1, l));
             float[] afloat;
 
             if (iblockdata.getBlock() == Blocks.STAINED_GLASS) {
                 afloat = EntitySheep.a((EnumColor) iblockdata.get(BlockStainedGlass.COLOR));
             } else {
                 if (iblockdata.getBlock() != Blocks.STAINED_GLASS_PANE) {
-                    if (iblockdata.getBlock().n() >= 15) {
+                    if (iblockdata.getBlock().p() >= 15 && iblockdata.getBlock() != Blocks.BEDROCK) {
                         this.i = false;
                         this.f.clear();
                         break;
                     }
 
-                    beaconcolortracker.a();
+                    tileentitybeacon_beaconcolortracker.a();
                     continue;
                 }
 
@@ -104,14 +104,14 @@ public class TileEntityBeacon extends TileEntityContainer implements IUpdatePlay
             }
 
             if (!flag) {
-                afloat = new float[] { (beaconcolortracker.b()[0] + afloat[0]) / 2.0F, (beaconcolortracker.b()[1] + afloat[1]) / 2.0F, (beaconcolortracker.b()[2] + afloat[2]) / 2.0F};
+                afloat = new float[] { (tileentitybeacon_beaconcolortracker.b()[0] + afloat[0]) / 2.0F, (tileentitybeacon_beaconcolortracker.b()[1] + afloat[1]) / 2.0F, (tileentitybeacon_beaconcolortracker.b()[2] + afloat[2]) / 2.0F};
             }
 
-            if (Arrays.equals(afloat, beaconcolortracker.b())) {
-                beaconcolortracker.a();
+            if (Arrays.equals(afloat, tileentitybeacon_beaconcolortracker.b())) {
+                tileentitybeacon_beaconcolortracker.a();
             } else {
-                beaconcolortracker = new BeaconColorTracker(afloat);
-                this.f.add(beaconcolortracker);
+                tileentitybeacon_beaconcolortracker = new TileEntityBeacon.BeaconColorTracker(afloat);
+                this.f.add(tileentitybeacon_beaconcolortracker);
             }
 
             flag = false;
@@ -148,7 +148,7 @@ public class TileEntityBeacon extends TileEntityContainer implements IUpdatePlay
             }
         }
 
-        if (!this.world.isStatic && this.j == 4 && i < this.j) {
+        if (!this.world.isClientSide && this.j == 4 && i < this.j) {
             Iterator iterator = this.world.a(EntityHuman.class, (new AxisAlignedBB((double) j, (double) k, (double) l, (double) j, (double) (k - 4), (double) l)).grow(10.0D, 5.0D, 10.0D)).iterator();
 
             while (iterator.hasNext()) {
@@ -305,6 +305,25 @@ public class TileEntityBeacon extends TileEntityContainer implements IUpdatePlay
             return true;
         } else {
             return super.c(i, j);
+        }
+    }
+
+    public static class BeaconColorTracker {
+
+        private final float[] a;
+        private int b;
+
+        public BeaconColorTracker(float[] afloat) {
+            this.a = afloat;
+            this.b = 1;
+        }
+
+        protected void a() {
+            ++this.b;
+        }
+
+        public float[] b() {
+            return this.a;
         }
     }
 }

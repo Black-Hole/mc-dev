@@ -1,9 +1,10 @@
 package net.minecraft.server;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-public class PacketPlayOutNamedEntitySpawn implements Packet {
+public class PacketPlayOutNamedEntitySpawn implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private UUID b;
@@ -14,7 +15,7 @@ public class PacketPlayOutNamedEntitySpawn implements Packet {
     private byte g;
     private int h;
     private DataWatcher i;
-    private List j;
+    private List<DataWatcher.WatchableObject> j;
 
     public PacketPlayOutNamedEntitySpawn() {}
 
@@ -32,7 +33,7 @@ public class PacketPlayOutNamedEntitySpawn implements Packet {
         this.i = entityhuman.getDataWatcher();
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = packetdataserializer.g();
         this.c = packetdataserializer.readInt();
@@ -44,7 +45,7 @@ public class PacketPlayOutNamedEntitySpawn implements Packet {
         this.j = DataWatcher.b(packetdataserializer);
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.a(this.b);
         packetdataserializer.writeInt(this.c);

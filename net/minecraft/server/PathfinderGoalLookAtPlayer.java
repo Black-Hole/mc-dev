@@ -7,9 +7,9 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
     protected float c;
     private int e;
     private float f;
-    protected Class d;
+    protected Class<? extends Entity> d;
 
-    public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class oclass, float f) {
+    public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class<? extends Entity> oclass, float f) {
         this.a = entityinsentient;
         this.d = oclass;
         this.c = f;
@@ -17,7 +17,7 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
         this.a(2);
     }
 
-    public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class oclass, float f, float f1) {
+    public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class<? extends Entity> oclass, float f, float f1) {
         this.a = entityinsentient;
         this.d = oclass;
         this.c = f;
@@ -26,7 +26,7 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
     }
 
     public boolean a() {
-        if (this.a.bb().nextFloat() >= this.f) {
+        if (this.a.bc().nextFloat() >= this.f) {
             return false;
         } else {
             if (this.a.getGoalTarget() != null) {
@@ -48,7 +48,7 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
     }
 
     public void c() {
-        this.e = 40 + this.a.bb().nextInt(40);
+        this.e = 40 + this.a.bc().nextInt(40);
     }
 
     public void d() {
@@ -56,7 +56,7 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
     }
 
     public void e() {
-        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, 10.0F, (float) this.a.bP());
+        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, 10.0F, (float) this.a.bQ());
         --this.e;
     }
 }

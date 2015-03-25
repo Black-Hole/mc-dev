@@ -4,6 +4,9 @@ import java.util.Random;
 
 public class WorldGenTaiga1 extends WorldGenTreeAbstract {
 
+    private static final IBlockData a = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.SPRUCE);
+    private static final IBlockData b = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.SPRUCE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+
     public WorldGenTaiga1() {
         super(false);
     }
@@ -29,10 +32,12 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract {
                     k1 = l;
                 }
 
+                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+
                 for (i1 = blockposition.getX() - k1; i1 <= blockposition.getX() + k1 && flag; ++i1) {
                     for (j1 = blockposition.getZ() - k1; j1 <= blockposition.getZ() + k1 && flag; ++j1) {
                         if (l1 >= 0 && l1 < 256) {
-                            if (!this.a(world.getType(new BlockPosition(i1, l1, j1)).getBlock())) {
+                            if (!this.a(world.getType(blockposition_mutableblockposition.c(i1, l1, j1)).getBlock())) {
                                 flag = false;
                             }
                         } else {
@@ -51,35 +56,37 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract {
                     this.a(world, blockposition.down());
                     k1 = 0;
 
-                    for (i1 = blockposition.getY() + i; i1 >= blockposition.getY() + j; --i1) {
-                        for (j1 = blockposition.getX() - k1; j1 <= blockposition.getX() + k1; ++j1) {
-                            int i2 = j1 - blockposition.getX();
+                    int i2;
+
+                    for (i2 = blockposition.getY() + i; i2 >= blockposition.getY() + j; --i2) {
+                        for (i1 = blockposition.getX() - k1; i1 <= blockposition.getX() + k1; ++i1) {
+                            j1 = i1 - blockposition.getX();
 
                             for (int j2 = blockposition.getZ() - k1; j2 <= blockposition.getZ() + k1; ++j2) {
                                 int k2 = j2 - blockposition.getZ();
 
-                                if (Math.abs(i2) != k1 || Math.abs(k2) != k1 || k1 <= 0) {
-                                    BlockPosition blockposition1 = new BlockPosition(j1, i1, j2);
+                                if (Math.abs(j1) != k1 || Math.abs(k2) != k1 || k1 <= 0) {
+                                    BlockPosition blockposition1 = new BlockPosition(i1, i2, j2);
 
-                                    if (!world.getType(blockposition1).getBlock().m()) {
-                                        this.a(world, blockposition1, Blocks.LEAVES, EnumLogVariant.SPRUCE.a());
+                                    if (!world.getType(blockposition1).getBlock().o()) {
+                                        this.a(world, blockposition1, WorldGenTaiga1.b);
                                     }
                                 }
                             }
                         }
 
-                        if (k1 >= 1 && i1 == blockposition.getY() + j + 1) {
+                        if (k1 >= 1 && i2 == blockposition.getY() + j + 1) {
                             --k1;
                         } else if (k1 < l) {
                             ++k1;
                         }
                     }
 
-                    for (i1 = 0; i1 < i - 1; ++i1) {
-                        Block block1 = world.getType(blockposition.up(i1)).getBlock();
+                    for (i2 = 0; i2 < i - 1; ++i2) {
+                        Block block1 = world.getType(blockposition.up(i2)).getBlock();
 
                         if (block1.getMaterial() == Material.AIR || block1.getMaterial() == Material.LEAVES) {
-                            this.a(world, blockposition.up(i1), Blocks.LOG, EnumLogVariant.SPRUCE.a());
+                            this.a(world, blockposition.up(i2), WorldGenTaiga1.a);
                         }
                     }
 

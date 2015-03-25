@@ -6,12 +6,12 @@ import java.util.Random;
 public class BlockPistonExtension extends Block {
 
     public static final BlockStateDirection FACING = BlockStateDirection.of("facing");
-    public static final BlockStateEnum TYPE = BlockStateEnum.of("type", EnumPistonType.class);
+    public static final BlockStateEnum<BlockPistonExtension.EnumPistonType> TYPE = BlockStateEnum.of("type", BlockPistonExtension.EnumPistonType.class);
     public static final BlockStateBoolean SHORT = BlockStateBoolean.of("short");
 
     public BlockPistonExtension() {
         super(Material.PISTON);
-        this.j(this.blockStateList.getBlockData().set(BlockPistonExtension.FACING, EnumDirection.NORTH).set(BlockPistonExtension.TYPE, EnumPistonType.DEFAULT).set(BlockPistonExtension.SHORT, Boolean.valueOf(false)));
+        this.j(this.blockStateList.getBlockData().set(BlockPistonExtension.FACING, EnumDirection.NORTH).set(BlockPistonExtension.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT).set(BlockPistonExtension.SHORT, Boolean.valueOf(false)));
         this.a(BlockPistonExtension.i);
         this.c(0.5F);
     }
@@ -67,7 +67,7 @@ public class BlockPistonExtension extends Block {
         return 0;
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
         this.d(iblockdata);
         super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         this.e(iblockdata);
@@ -82,7 +82,7 @@ public class BlockPistonExtension extends Block {
         float f3 = 0.25F;
         float f4 = 0.75F;
 
-        switch (SwitchHelperDirection9.a[((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).ordinal()]) {
+        switch (BlockPistonExtension.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).ordinal()]) {
         case 1:
             this.a(0.375F, 0.25F, 0.375F, 0.625F, 1.0F, 0.625F);
             break;
@@ -118,7 +118,7 @@ public class BlockPistonExtension extends Block {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockPistonExtension.FACING);
 
         if (enumdirection != null) {
-            switch (SwitchHelperDirection9.a[enumdirection.ordinal()]) {
+            switch (BlockPistonExtension.SyntheticClass_1.a[enumdirection.ordinal()]) {
             case 1:
                 this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.25F, 1.0F);
                 break;
@@ -166,14 +166,14 @@ public class BlockPistonExtension extends Block {
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockPistonExtension.FACING, b(i)).set(BlockPistonExtension.TYPE, (i & 8) > 0 ? EnumPistonType.STICKY : EnumPistonType.DEFAULT);
+        return this.getBlockData().set(BlockPistonExtension.FACING, b(i)).set(BlockPistonExtension.TYPE, (i & 8) > 0 ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT);
     }
 
     public int toLegacyData(IBlockData iblockdata) {
         byte b0 = 0;
         int i = b0 | ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).a();
 
-        if (iblockdata.get(BlockPistonExtension.TYPE) == EnumPistonType.STICKY) {
+        if (iblockdata.get(BlockPistonExtension.TYPE) == BlockPistonExtension.EnumPistonType.STICKY) {
             i |= 8;
         }
 
@@ -182,5 +182,68 @@ public class BlockPistonExtension extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockPistonExtension.FACING, BlockPistonExtension.TYPE, BlockPistonExtension.SHORT});
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EnumDirection.values().length];
+
+        static {
+            try {
+                BlockPistonExtension.SyntheticClass_1.a[EnumDirection.DOWN.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                BlockPistonExtension.SyntheticClass_1.a[EnumDirection.UP.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                BlockPistonExtension.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                BlockPistonExtension.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            try {
+                BlockPistonExtension.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 5;
+            } catch (NoSuchFieldError nosuchfielderror4) {
+                ;
+            }
+
+            try {
+                BlockPistonExtension.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 6;
+            } catch (NoSuchFieldError nosuchfielderror5) {
+                ;
+            }
+
+        }
+    }
+
+    public static enum EnumPistonType implements INamable {
+
+        DEFAULT("normal"), STICKY("sticky");
+
+        private final String c;
+
+        private EnumPistonType(String s) {
+            this.c = s;
+        }
+
+        public String toString() {
+            return this.c;
+        }
+
+        public String getName() {
+            return this.c;
+        }
     }
 }

@@ -9,7 +9,7 @@ public class CrashReportSystemDetails {
 
     private final CrashReport a;
     private final String b;
-    private final List c = Lists.newArrayList();
+    private final List<CrashReportSystemDetails.CrashReportDetail> c = Lists.newArrayList();
     private StackTraceElement[] d = new StackTraceElement[0];
 
     public CrashReportSystemDetails(CrashReport crashreport, String s) {
@@ -82,7 +82,7 @@ public class CrashReportSystemDetails {
         return stringbuilder.toString();
     }
 
-    public void a(String s, Callable callable) {
+    public void a(String s, Callable<String> callable) {
         try {
             this.a(s, callable.call());
         } catch (Throwable throwable) {
@@ -92,7 +92,7 @@ public class CrashReportSystemDetails {
     }
 
     public void a(String s, Object object) {
-        this.c.add(new CrashReportDetail(s, object));
+        this.c.add(new CrashReportSystemDetails.CrashReportDetail(s, object));
     }
 
     public void a(String s, Throwable throwable) {
@@ -145,12 +145,12 @@ public class CrashReportSystemDetails {
         Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
-            CrashReportDetail crashreportdetail = (CrashReportDetail) iterator.next();
+            CrashReportSystemDetails.CrashReportDetail crashreportsystemdetails_crashreportdetail = (CrashReportSystemDetails.CrashReportDetail) iterator.next();
 
             stringbuilder.append("\n\t");
-            stringbuilder.append(crashreportdetail.a());
+            stringbuilder.append(crashreportsystemdetails_crashreportdetail.a());
             stringbuilder.append(": ");
-            stringbuilder.append(crashreportdetail.b());
+            stringbuilder.append(crashreportsystemdetails_crashreportdetail.b());
         }
 
         if (this.d != null && this.d.length > 0) {
@@ -172,16 +172,94 @@ public class CrashReportSystemDetails {
         return this.d;
     }
 
-    public static void a(CrashReportSystemDetails crashreportsystemdetails, BlockPosition blockposition, Block block, int i) {
-        int j = Block.getId(block);
+    public static void a(CrashReportSystemDetails crashreportsystemdetails, final BlockPosition blockposition, final Block block, final int i) {
+        final int j = Block.getId(block);
 
-        crashreportsystemdetails.a("Block type", (Callable) (new CrashReportBlockType(j, block)));
-        crashreportsystemdetails.a("Block data value", (Callable) (new CrashReportBlockDataValue(i)));
-        crashreportsystemdetails.a("Block location", (Callable) (new CrashReportBlockLocation(blockposition)));
+        crashreportsystemdetails.a("Block type", new Callable() {
+            public String a() throws Exception {
+                try {
+                    return String.format("ID #%d (%s // %s)", new Object[] { Integer.valueOf(i), block.a(), block.getClass().getCanonicalName()});
+                } catch (Throwable throwable) {
+                    return "ID #" + i;
+                }
+            }
+
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
+        crashreportsystemdetails.a("Block data value", new Callable() {
+            public String a() throws Exception {
+                if (i < 0) {
+                    return "Unknown? (Got " + i + ")";
+                } else {
+                    String s = String.format("%4s", new Object[] { Integer.toBinaryString(i)}).replace(" ", "0");
+
+                    return String.format("%1$d / 0x%1$X / 0b%2$s", new Object[] { Integer.valueOf(i), s});
+                }
+            }
+
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
+        crashreportsystemdetails.a("Block location", new Callable() {
+            public String a() throws Exception {
+                return CrashReportSystemDetails.a(blockposition);
+            }
+
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
     }
 
-    public static void a(CrashReportSystemDetails crashreportsystemdetails, BlockPosition blockposition, IBlockData iblockdata) {
-        crashreportsystemdetails.a("Block", (Callable) (new CrashReportIBlockData(iblockdata)));
-        crashreportsystemdetails.a("Block location", (Callable) (new CrashReportBlockPosition(blockposition)));
+    public static void a(CrashReportSystemDetails crashreportsystemdetails, final BlockPosition blockposition, final IBlockData iblockdata) {
+        crashreportsystemdetails.a("Block", new Callable() {
+            public String a() throws Exception {
+                return iblockdata.toString();
+            }
+
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
+        crashreportsystemdetails.a("Block location", new Callable() {
+            public String a() throws Exception {
+                return CrashReportSystemDetails.a(blockposition);
+            }
+
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
+    }
+
+    static class CrashReportDetail {
+
+        private final String a;
+        private final String b;
+
+        public CrashReportDetail(String s, Object object) {
+            this.a = s;
+            if (object == null) {
+                this.b = "~~NULL~~";
+            } else if (object instanceof Throwable) {
+                Throwable throwable = (Throwable) object;
+
+                this.b = "~~ERROR~~ " + throwable.getClass().getSimpleName() + ": " + throwable.getMessage();
+            } else {
+                this.b = object.toString();
+            }
+
+        }
+
+        public String a() {
+            return this.a;
+        }
+
+        public String b() {
+            return this.b;
+        }
     }
 }

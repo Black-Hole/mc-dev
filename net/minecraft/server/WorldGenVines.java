@@ -9,7 +9,7 @@ public class WorldGenVines extends WorldGenerator {
     public boolean generate(World world, Random random, BlockPosition blockposition) {
         for (; blockposition.getY() < 128; blockposition = blockposition.up()) {
             if (world.isEmpty(blockposition)) {
-                EnumDirection[] aenumdirection = EnumDirectionLimit.HORIZONTAL.a();
+                EnumDirection[] aenumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a();
                 int i = aenumdirection.length;
 
                 for (int j = 0; j < i; ++j) {

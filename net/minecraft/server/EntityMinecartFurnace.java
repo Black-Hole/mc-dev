@@ -14,8 +14,8 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public EnumMinecartType s() {
-        return EnumMinecartType.FURNACE;
+    public EntityMinecartAbstract.EnumMinecartType s() {
+        return EntityMinecartAbstract.EnumMinecartType.FURNACE;
     }
 
     protected void h() {
@@ -23,8 +23,8 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         this.datawatcher.a(16, new Byte((byte) 0));
     }
 
-    public void s_() {
-        super.s_();
+    public void t_() {
+        super.t_();
         if (this.c > 0) {
             --this.c;
         }
@@ -46,7 +46,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
 
     public void a(DamageSource damagesource) {
         super.a(damagesource);
-        if (!damagesource.isExplosion()) {
+        if (!damagesource.isExplosion() && this.world.getGameRules().getBoolean("doEntityDrops")) {
             this.a(new ItemStack(Blocks.FURNACE, 1), 0.0F);
         }
 

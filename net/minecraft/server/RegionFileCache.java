@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class RegionFileCache {
 
-    private static final Map a = Maps.newHashMap();
+    private static final Map<File, RegionFile> a = Maps.newHashMap();
 
     public static synchronized RegionFile a(File file, int i, int j) {
         File file1 = new File(file, "region");

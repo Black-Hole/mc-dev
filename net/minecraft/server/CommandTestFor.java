@@ -18,7 +18,7 @@ public class CommandTestFor extends CommandAbstract {
         return "commands.testfor.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 1) {
             throw new ExceptionUsage("commands.testfor.usage", new Object[0]);
         } else {
@@ -37,7 +37,7 @@ public class CommandTestFor extends CommandAbstract {
                 NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
                 entity.e(nbttagcompound1);
-                if (!CommandTestForBlock.a(nbttagcompound, nbttagcompound1, true)) {
+                if (!GameProfileSerializer.a(nbttagcompound, nbttagcompound1, true)) {
                     throw new CommandException("commands.testfor.failure", new Object[] { entity.getName()});
                 }
             }
@@ -50,7 +50,7 @@ public class CommandTestFor extends CommandAbstract {
         return i == 0;
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : null;
     }
 }

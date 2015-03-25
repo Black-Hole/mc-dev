@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 public class EntityFallingBlock extends Entity {
 
-    public IBlockData block;
+    private IBlockData block;
     public int ticksLived;
     public boolean dropItem = true;
     private boolean e;
@@ -23,7 +23,7 @@ public class EntityFallingBlock extends Entity {
         super(world);
         this.block = iblockdata;
         this.k = true;
-        this.a(0.98F, 0.98F);
+        this.setSize(0.98F, 0.98F);
         this.setPosition(d0, d1, d2);
         this.motX = 0.0D;
         this.motY = 0.0D;
@@ -33,7 +33,7 @@ public class EntityFallingBlock extends Entity {
         this.lastZ = d2;
     }
 
-    protected boolean r_() {
+    protected boolean s_() {
         return false;
     }
 
@@ -43,7 +43,7 @@ public class EntityFallingBlock extends Entity {
         return !this.dead;
     }
 
-    public void s_() {
+    public void t_() {
         Block block = this.block.getBlock();
 
         if (block.getMaterial() == Material.AIR) {
@@ -58,7 +58,7 @@ public class EntityFallingBlock extends Entity {
                 blockposition = new BlockPosition(this);
                 if (this.world.getType(blockposition).getBlock() == block) {
                     this.world.setAir(blockposition);
-                } else if (!this.world.isStatic) {
+                } else if (!this.world.isClientSide) {
                     this.die();
                     return;
                 }
@@ -69,7 +69,7 @@ public class EntityFallingBlock extends Entity {
             this.motX *= 0.9800000190734863D;
             this.motY *= 0.9800000190734863D;
             this.motZ *= 0.9800000190734863D;
-            if (!this.world.isStatic) {
+            if (!this.world.isClientSide) {
                 blockposition = new BlockPosition(this);
                 if (this.onGround) {
                     this.motX *= 0.699999988079071D;
@@ -77,39 +77,41 @@ public class EntityFallingBlock extends Entity {
                     this.motY *= -0.5D;
                     if (this.world.getType(blockposition).getBlock() != Blocks.PISTON_EXTENSION) {
                         this.die();
-                        if (!this.e && this.world.a(block, blockposition, true, EnumDirection.UP, (Entity) null, (ItemStack) null) && !BlockFalling.canFall(this.world, blockposition.down()) && this.world.setTypeAndData(blockposition, this.block, 3)) {
-                            if (block instanceof BlockFalling) {
-                                ((BlockFalling) block).a_(this.world, blockposition);
-                            }
-
-                            if (this.tileEntityData != null && block instanceof IContainer) {
-                                TileEntity tileentity = this.world.getTileEntity(blockposition);
-
-                                if (tileentity != null) {
-                                    NBTTagCompound nbttagcompound = new NBTTagCompound();
-
-                                    tileentity.b(nbttagcompound);
-                                    Iterator iterator = this.tileEntityData.c().iterator();
-
-                                    while (iterator.hasNext()) {
-                                        String s = (String) iterator.next();
-                                        NBTBase nbtbase = this.tileEntityData.get(s);
-
-                                        if (!s.equals("x") && !s.equals("y") && !s.equals("z")) {
-                                            nbttagcompound.set(s, nbtbase.clone());
-                                        }
-                                    }
-
-                                    tileentity.a(nbttagcompound);
-                                    tileentity.update();
+                        if (!this.e) {
+                            if (this.world.a(block, blockposition, true, EnumDirection.UP, (Entity) null, (ItemStack) null) && !BlockFalling.canFall(this.world, blockposition.down()) && this.world.setTypeAndData(blockposition, this.block, 3)) {
+                                if (block instanceof BlockFalling) {
+                                    ((BlockFalling) block).a_(this.world, blockposition);
                                 }
+
+                                if (this.tileEntityData != null && block instanceof IContainer) {
+                                    TileEntity tileentity = this.world.getTileEntity(blockposition);
+
+                                    if (tileentity != null) {
+                                        NBTTagCompound nbttagcompound = new NBTTagCompound();
+
+                                        tileentity.b(nbttagcompound);
+                                        Iterator iterator = this.tileEntityData.c().iterator();
+
+                                        while (iterator.hasNext()) {
+                                            String s = (String) iterator.next();
+                                            NBTBase nbtbase = this.tileEntityData.get(s);
+
+                                            if (!s.equals("x") && !s.equals("y") && !s.equals("z")) {
+                                                nbttagcompound.set(s, nbtbase.clone());
+                                            }
+                                        }
+
+                                        tileentity.a(nbttagcompound);
+                                        tileentity.update();
+                                    }
+                                }
+                            } else if (this.dropItem && this.world.getGameRules().getBoolean("doEntityDrops")) {
+                                this.a(new ItemStack(block, 1, block.getDropData(this.block)), 0.0F);
                             }
-                        } else if (this.dropItem && !this.e && this.world.getGameRules().getBoolean("doTileDrops")) {
-                            this.a(new ItemStack(block, 1, block.getDropData(this.block)), 0.0F);
                         }
                     }
-                } else if (this.ticksLived > 100 && !this.world.isStatic && (blockposition.getY() < 1 || blockposition.getY() > 256) || this.ticksLived > 600) {
-                    if (this.dropItem && this.world.getGameRules().getBoolean("doTileDrops")) {
+                } else if (this.ticksLived > 100 && !this.world.isClientSide && (blockposition.getY() < 1 || blockposition.getY() > 256) || this.ticksLived > 600) {
+                    if (this.dropItem && this.world.getGameRules().getBoolean("doEntityDrops")) {
                         this.a(new ItemStack(block, 1, block.getDropData(this.block)), 0.0F);
                     }
 

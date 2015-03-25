@@ -22,7 +22,7 @@ public abstract class CommandAbstract implements ICommand {
         return 4;
     }
 
-    public List b() {
+    public List<String> b() {
         return Collections.emptyList();
     }
 
@@ -30,11 +30,11 @@ public abstract class CommandAbstract implements ICommand {
         return icommandlistener.a(this.a(), this.getCommand());
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return null;
     }
 
-    public static int a(String s) {
+    public static int a(String s) throws ExceptionInvalidNumber {
         try {
             return Integer.parseInt(s);
         } catch (NumberFormatException numberformatexception) {
@@ -42,11 +42,11 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static int a(String s, int i) {
+    public static int a(String s, int i) throws ExceptionInvalidNumber {
         return a(s, i, Integer.MAX_VALUE);
     }
 
-    public static int a(String s, int i, int j) {
+    public static int a(String s, int i, int j) throws ExceptionInvalidNumber {
         int k = a(s);
 
         if (k < i) {
@@ -58,7 +58,7 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static long b(String s) {
+    public static long b(String s) throws ExceptionInvalidNumber {
         try {
             return Long.parseLong(s);
         } catch (NumberFormatException numberformatexception) {
@@ -66,7 +66,7 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static long a(String s, long i, long j) {
+    public static long a(String s, long i, long j) throws ExceptionInvalidNumber {
         long k = b(s);
 
         if (k < i) {
@@ -78,13 +78,13 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static BlockPosition a(ICommandListener icommandlistener, String[] astring, int i, boolean flag) {
+    public static BlockPosition a(ICommandListener icommandlistener, String[] astring, int i, boolean flag) throws ExceptionInvalidNumber {
         BlockPosition blockposition = icommandlistener.getChunkCoordinates();
 
         return new BlockPosition(b((double) blockposition.getX(), astring[i], -30000000, 30000000, flag), b((double) blockposition.getY(), astring[i + 1], 0, 256, false), b((double) blockposition.getZ(), astring[i + 2], -30000000, 30000000, flag));
     }
 
-    public static double c(String s) {
+    public static double c(String s) throws ExceptionInvalidNumber {
         try {
             double d0 = Double.parseDouble(s);
 
@@ -98,11 +98,11 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static double a(String s, double d0) {
+    public static double a(String s, double d0) throws ExceptionInvalidNumber {
         return a(s, d0, Double.MAX_VALUE);
     }
 
-    public static double a(String s, double d0, double d1) {
+    public static double a(String s, double d0, double d1) throws ExceptionInvalidNumber {
         double d2 = c(s);
 
         if (d2 < d0) {
@@ -114,7 +114,7 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static boolean d(String s) {
+    public static boolean d(String s) throws CommandException {
         if (!s.equals("true") && !s.equals("1")) {
             if (!s.equals("false") && !s.equals("0")) {
                 throw new CommandException("commands.generic.boolean.invalid", new Object[] { s});
@@ -126,7 +126,7 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static EntityPlayer b(ICommandListener icommandlistener) {
+    public static EntityPlayer b(ICommandListener icommandlistener) throws ExceptionPlayerNotFound {
         if (icommandlistener instanceof EntityPlayer) {
             return (EntityPlayer) icommandlistener;
         } else {
@@ -134,7 +134,7 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static EntityPlayer a(ICommandListener icommandlistener, String s) {
+    public static EntityPlayer a(ICommandListener icommandlistener, String s) throws ExceptionPlayerNotFound {
         EntityPlayer entityplayer = PlayerSelector.getPlayer(icommandlistener, s);
 
         if (entityplayer == null) {
@@ -156,11 +156,11 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static Entity b(ICommandListener icommandlistener, String s) {
+    public static Entity b(ICommandListener icommandlistener, String s) throws ExceptionEntityNotFound {
         return a(icommandlistener, s, Entity.class);
     }
 
-    public static Entity a(ICommandListener icommandlistener, String s, Class oclass) {
+    public static <T extends Entity> T a(ICommandListener icommandlistener, String s, Class<? extends T> oclass) throws ExceptionEntityNotFound {
         Object object = PlayerSelector.getEntity(icommandlistener, s, oclass);
         MinecraftServer minecraftserver = MinecraftServer.getServer();
 
@@ -188,11 +188,11 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static List c(ICommandListener icommandlistener, String s) {
+    public static List<Entity> c(ICommandListener icommandlistener, String s) throws ExceptionEntityNotFound {
         return (List) (PlayerSelector.isPattern(s) ? PlayerSelector.getPlayers(icommandlistener, s, Entity.class) : Lists.newArrayList(new Entity[] { b(icommandlistener, s)}));
     }
 
-    public static String d(ICommandListener icommandlistener, String s) {
+    public static String d(ICommandListener icommandlistener, String s) throws ExceptionPlayerNotFound {
         try {
             return a(icommandlistener, s).getName();
         } catch (ExceptionPlayerNotFound exceptionplayernotfound) {
@@ -204,7 +204,7 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static String e(ICommandListener icommandlistener, String s) {
+    public static String e(ICommandListener icommandlistener, String s) throws ExceptionEntityNotFound {
         try {
             return a(icommandlistener, s).getName();
         } catch (ExceptionPlayerNotFound exceptionplayernotfound) {
@@ -220,11 +220,11 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static IChatBaseComponent a(ICommandListener icommandlistener, String[] astring, int i) {
+    public static IChatBaseComponent a(ICommandListener icommandlistener, String[] astring, int i) throws ExceptionPlayerNotFound {
         return b(icommandlistener, astring, i, false);
     }
 
-    public static IChatBaseComponent b(ICommandListener icommandlistener, String[] astring, int i, boolean flag) {
+    public static IChatBaseComponent b(ICommandListener icommandlistener, String[] astring, int i, boolean flag) throws ExceptionPlayerNotFound {
         ChatComponentText chatcomponenttext = new ChatComponentText("");
 
         for (int j = i; j < astring.length; ++j) {
@@ -268,11 +268,11 @@ public abstract class CommandAbstract implements ICommand {
         return stringbuilder.toString();
     }
 
-    public static CommandNumber a(double d0, String s, boolean flag) {
+    public static CommandAbstract.CommandNumber a(double d0, String s, boolean flag) throws ExceptionInvalidNumber {
         return a(d0, s, -30000000, 30000000, flag);
     }
 
-    public static CommandNumber a(double d0, String s, int i, int j, boolean flag) {
+    public static CommandAbstract.CommandNumber a(double d0, String s, int i, int j, boolean flag) throws ExceptionInvalidNumber {
         boolean flag1 = s.startsWith("~");
 
         if (flag1 && Double.isNaN(d0)) {
@@ -303,15 +303,15 @@ public abstract class CommandAbstract implements ICommand {
                 }
             }
 
-            return new CommandNumber(d1 + (flag1 ? d0 : 0.0D), d1, flag1);
+            return new CommandAbstract.CommandNumber(d1 + (flag1 ? d0 : 0.0D), d1, flag1);
         }
     }
 
-    public static double b(double d0, String s, boolean flag) {
+    public static double b(double d0, String s, boolean flag) throws ExceptionInvalidNumber {
         return b(d0, s, -30000000, 30000000, flag);
     }
 
-    public static double b(double d0, String s, int i, int j, boolean flag) {
+    public static double b(double d0, String s, int i, int j, boolean flag) throws ExceptionInvalidNumber {
         boolean flag1 = s.startsWith("~");
 
         if (flag1 && Double.isNaN(d0)) {
@@ -346,27 +346,27 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static Item f(ICommandListener icommandlistener, String s) {
+    public static Item f(ICommandListener icommandlistener, String s) throws ExceptionInvalidNumber {
         MinecraftKey minecraftkey = new MinecraftKey(s);
         Item item = (Item) Item.REGISTRY.get(minecraftkey);
 
         if (item == null) {
-            throw new ExceptionInvalidNumber("commands.give.notFound", new Object[] { minecraftkey});
+            throw new ExceptionInvalidNumber("commands.give.item.notFound", new Object[] { minecraftkey});
         } else {
             return item;
         }
     }
 
-    public static Block g(ICommandListener icommandlistener, String s) {
+    public static Block g(ICommandListener icommandlistener, String s) throws ExceptionInvalidNumber {
         MinecraftKey minecraftkey = new MinecraftKey(s);
 
         if (!Block.REGISTRY.d(minecraftkey)) {
-            throw new ExceptionInvalidNumber("commands.give.notFound", new Object[] { minecraftkey});
+            throw new ExceptionInvalidNumber("commands.give.block.notFound", new Object[] { minecraftkey});
         } else {
             Block block = (Block) Block.REGISTRY.get(minecraftkey);
 
             if (block == null) {
-                throw new ExceptionInvalidNumber("commands.give.notFound", new Object[] { minecraftkey});
+                throw new ExceptionInvalidNumber("commands.give.block.notFound", new Object[] { minecraftkey});
             } else {
                 return block;
             }
@@ -393,7 +393,7 @@ public abstract class CommandAbstract implements ICommand {
         return stringbuilder.toString();
     }
 
-    public static IChatBaseComponent a(List list) {
+    public static IChatBaseComponent a(List<IChatBaseComponent> list) {
         ChatComponentText chatcomponenttext = new ChatComponentText("");
 
         for (int i = 0; i < list.size(); ++i) {
@@ -411,22 +411,44 @@ public abstract class CommandAbstract implements ICommand {
         return chatcomponenttext;
     }
 
-    public static String a(Collection collection) {
+    public static String a(Collection<String> collection) {
         return a(collection.toArray(new String[collection.size()]));
     }
 
-    public static List a(String[] astring, int i, BlockPosition blockposition) {
+    public static List<String> a(String[] astring, int i, BlockPosition blockposition) {
         if (blockposition == null) {
             return null;
         } else {
+            int j = astring.length - 1;
             String s;
 
-            if (astring.length - 1 == i) {
+            if (j == i) {
                 s = Integer.toString(blockposition.getX());
-            } else if (astring.length - 1 == i + 1) {
+            } else if (j == i + 1) {
                 s = Integer.toString(blockposition.getY());
             } else {
-                if (astring.length - 1 != i + 2) {
+                if (j != i + 2) {
+                    return null;
+                }
+
+                s = Integer.toString(blockposition.getZ());
+            }
+
+            return Lists.newArrayList(new String[] { s});
+        }
+    }
+
+    public static List<String> b(String[] astring, int i, BlockPosition blockposition) {
+        if (blockposition == null) {
+            return null;
+        } else {
+            int j = astring.length - 1;
+            String s;
+
+            if (j == i) {
+                s = Integer.toString(blockposition.getX());
+            } else {
+                if (j != i + 1) {
                     return null;
                 }
 
@@ -441,11 +463,11 @@ public abstract class CommandAbstract implements ICommand {
         return s1.regionMatches(true, 0, s, 0, s.length());
     }
 
-    public static List a(String[] astring, String... astring1) {
+    public static List<String> a(String[] astring, String... astring1) {
         return a(astring, (Collection) Arrays.asList(astring1));
     }
 
-    public static List a(String[] astring, Collection collection) {
+    public static List<String> a(String[] astring, Collection<?> collection) {
         String s = astring[astring.length - 1];
         ArrayList arraylist = Lists.newArrayList();
 
@@ -501,5 +523,30 @@ public abstract class CommandAbstract implements ICommand {
 
     public int compareTo(Object object) {
         return this.a((ICommand) object);
+    }
+
+    public static class CommandNumber {
+
+        private final double a;
+        private final double b;
+        private final boolean c;
+
+        protected CommandNumber(double d0, double d1, boolean flag) {
+            this.a = d0;
+            this.b = d1;
+            this.c = flag;
+        }
+
+        public double a() {
+            return this.a;
+        }
+
+        public double b() {
+            return this.b;
+        }
+
+        public boolean c() {
+            return this.c;
+        }
     }
 }

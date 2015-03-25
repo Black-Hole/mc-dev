@@ -1,8 +1,10 @@
 package net.minecraft.server;
 
-public class PacketPlayOutWorldBorder implements Packet {
+import java.io.IOException;
 
-    private EnumWorldBorderAction a;
+public class PacketPlayOutWorldBorder implements Packet<PacketListenerPlayOut> {
+
+    private PacketPlayOutWorldBorder.EnumWorldBorderAction a;
     private int b;
     private double c;
     private double d;
@@ -14,21 +16,21 @@ public class PacketPlayOutWorldBorder implements Packet {
 
     public PacketPlayOutWorldBorder() {}
 
-    public PacketPlayOutWorldBorder(WorldBorder worldborder, EnumWorldBorderAction enumworldborderaction) {
-        this.a = enumworldborderaction;
-        this.c = worldborder.f();
-        this.d = worldborder.g();
-        this.f = worldborder.h();
+    public PacketPlayOutWorldBorder(WorldBorder worldborder, PacketPlayOutWorldBorder.EnumWorldBorderAction packetplayoutworldborder_enumworldborderaction) {
+        this.a = packetplayoutworldborder_enumworldborderaction;
+        this.c = worldborder.getCenterX();
+        this.d = worldborder.getCenterZ();
+        this.f = worldborder.getSize();
         this.e = worldborder.j();
         this.g = worldborder.i();
         this.b = worldborder.l();
-        this.i = worldborder.q();
-        this.h = worldborder.p();
+        this.i = worldborder.getWarningDistance();
+        this.h = worldborder.getWarningTime();
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
-        this.a = (EnumWorldBorderAction) packetdataserializer.a(EnumWorldBorderAction.class);
-        switch (SwitchHelperWorldBorder.a[this.a.ordinal()]) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
+        this.a = (PacketPlayOutWorldBorder.EnumWorldBorderAction) packetdataserializer.a(PacketPlayOutWorldBorder.EnumWorldBorderAction.class);
+        switch (PacketPlayOutWorldBorder.SyntheticClass_1.a[this.a.ordinal()]) {
         case 1:
             this.e = packetdataserializer.readDouble();
             break;
@@ -65,9 +67,9 @@ public class PacketPlayOutWorldBorder implements Packet {
 
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.a);
-        switch (SwitchHelperWorldBorder.a[this.a.ordinal()]) {
+        switch (PacketPlayOutWorldBorder.SyntheticClass_1.a[this.a.ordinal()]) {
         case 1:
             packetdataserializer.writeDouble(this.e);
             break;
@@ -110,5 +112,56 @@ public class PacketPlayOutWorldBorder implements Packet {
 
     public void a(PacketListener packetlistener) {
         this.a((PacketListenerPlayOut) packetlistener);
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[PacketPlayOutWorldBorder.EnumWorldBorderAction.values().length];
+
+        static {
+            try {
+                PacketPlayOutWorldBorder.SyntheticClass_1.a[PacketPlayOutWorldBorder.EnumWorldBorderAction.SET_SIZE.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                PacketPlayOutWorldBorder.SyntheticClass_1.a[PacketPlayOutWorldBorder.EnumWorldBorderAction.LERP_SIZE.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                PacketPlayOutWorldBorder.SyntheticClass_1.a[PacketPlayOutWorldBorder.EnumWorldBorderAction.SET_CENTER.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                PacketPlayOutWorldBorder.SyntheticClass_1.a[PacketPlayOutWorldBorder.EnumWorldBorderAction.SET_WARNING_BLOCKS.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            try {
+                PacketPlayOutWorldBorder.SyntheticClass_1.a[PacketPlayOutWorldBorder.EnumWorldBorderAction.SET_WARNING_TIME.ordinal()] = 5;
+            } catch (NoSuchFieldError nosuchfielderror4) {
+                ;
+            }
+
+            try {
+                PacketPlayOutWorldBorder.SyntheticClass_1.a[PacketPlayOutWorldBorder.EnumWorldBorderAction.INITIALIZE.ordinal()] = 6;
+            } catch (NoSuchFieldError nosuchfielderror5) {
+                ;
+            }
+
+        }
+    }
+
+    public static enum EnumWorldBorderAction {
+
+        SET_SIZE, LERP_SIZE, SET_CENTER, INITIALIZE, SET_WARNING_TIME, SET_WARNING_BLOCKS;
+
+        private EnumWorldBorderAction() {}
     }
 }

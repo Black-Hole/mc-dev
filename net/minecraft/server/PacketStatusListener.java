@@ -13,7 +13,7 @@ public class PacketStatusListener implements PacketStatusInListener {
     public void a(IChatBaseComponent ichatbasecomponent) {}
 
     public void a(PacketStatusInStart packetstatusinstart) {
-        this.networkManager.handle(new PacketStatusOutServerInfo(this.minecraftServer.aE()));
+        this.networkManager.handle(new PacketStatusOutServerInfo(this.minecraftServer.aF()));
     }
 
     public void a(PacketStatusInPing packetstatusinping) {

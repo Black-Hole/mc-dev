@@ -4,7 +4,7 @@ public class BlockStep extends BlockDoubleStepAbstract {
 
     public BlockStep() {}
 
-    public boolean j() {
+    public boolean l() {
         return false;
     }
 }

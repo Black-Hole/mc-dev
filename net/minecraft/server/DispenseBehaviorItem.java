@@ -26,7 +26,7 @@ public class DispenseBehaviorItem implements IDispenseBehavior {
         double d1 = iposition.getY();
         double d2 = iposition.getZ();
 
-        if (enumdirection.k() == EnumAxis.Y) {
+        if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
             d1 -= 0.125D;
         } else {
             d1 -= 0.15625D;

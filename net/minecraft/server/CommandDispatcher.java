@@ -84,12 +84,12 @@ public class CommandDispatcher extends CommandHandler implements ICommandDispatc
         chatmessage.getChatModifier().setColor(EnumChatFormat.GRAY);
         chatmessage.getChatModifier().setItalic(Boolean.valueOf(true));
         if (flag) {
-            Iterator iterator = minecraftserver.getPlayerList().players.iterator();
+            Iterator iterator = minecraftserver.getPlayerList().v().iterator();
 
             while (iterator.hasNext()) {
                 EntityHuman entityhuman = (EntityHuman) iterator.next();
 
-                if (entityhuman != icommandlistener && minecraftserver.getPlayerList().isOp(entityhuman.getProfile()) && icommand.canUse(icommandlistener)) {
+                if (entityhuman != icommandlistener && minecraftserver.getPlayerList().isOp(entityhuman.getProfile()) && icommand.canUse(icommandlistener) && (!(icommandlistener instanceof RemoteControlCommandListener) || MinecraftServer.getServer().q())) {
                     entityhuman.sendMessage(chatmessage);
                 }
             }

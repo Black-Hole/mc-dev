@@ -5,7 +5,11 @@ import java.util.Random;
 public abstract class BlockPressurePlateAbstract extends Block {
 
     protected BlockPressurePlateAbstract(Material material) {
-        super(material);
+        this(material, material.r());
+    }
+
+    protected BlockPressurePlateAbstract(Material material, MaterialMapColor materialmapcolor) {
+        super(material, materialmapcolor);
         this.a(CreativeModeTab.d);
         this.a(true);
     }
@@ -46,6 +50,10 @@ public abstract class BlockPressurePlateAbstract extends Block {
         return true;
     }
 
+    public boolean g() {
+        return true;
+    }
+
     public boolean canPlace(World world, BlockPosition blockposition) {
         return this.m(world, blockposition.down());
     }
@@ -65,7 +73,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {}
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             int i = this.e(iblockdata);
 
             if (i > 0) {
@@ -76,7 +84,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             int i = this.e(iblockdata);
 
             if (i == 0) {
@@ -87,14 +95,14 @@ public abstract class BlockPressurePlateAbstract extends Block {
     }
 
     protected void a(World world, BlockPosition blockposition, IBlockData iblockdata, int i) {
-        int j = this.e(world, blockposition);
+        int j = this.f(world, blockposition);
         boolean flag = i > 0;
         boolean flag1 = j > 0;
 
         if (i != j) {
             iblockdata = this.a(iblockdata, j);
             world.setTypeAndData(blockposition, iblockdata, 2);
-            this.d(world, blockposition);
+            this.e(world, blockposition);
             world.b(blockposition, blockposition);
         }
 
@@ -118,13 +126,13 @@ public abstract class BlockPressurePlateAbstract extends Block {
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (this.e(iblockdata) > 0) {
-            this.d(world, blockposition);
+            this.e(world, blockposition);
         }
 
         super.remove(world, blockposition, iblockdata);
     }
 
-    protected void d(World world, BlockPosition blockposition) {
+    protected void e(World world, BlockPosition blockposition) {
         world.applyPhysics(blockposition, this);
         world.applyPhysics(blockposition.down(), this);
     }
@@ -141,7 +149,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
         return true;
     }
 
-    public void h() {
+    public void j() {
         float f = 0.5F;
         float f1 = 0.125F;
         float f2 = 0.5F;
@@ -149,11 +157,11 @@ public abstract class BlockPressurePlateAbstract extends Block {
         this.a(0.0F, 0.375F, 0.0F, 1.0F, 0.625F, 1.0F);
     }
 
-    public int i() {
+    public int k() {
         return 1;
     }
 
-    protected abstract int e(World world, BlockPosition blockposition);
+    protected abstract int f(World world, BlockPosition blockposition);
 
     protected abstract int e(IBlockData iblockdata);
 

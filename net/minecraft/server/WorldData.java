@@ -24,7 +24,7 @@ public class WorldData {
     private int r;
     private boolean s;
     private int t;
-    private EnumGamemode u;
+    private WorldSettings.EnumGamemode u;
     private boolean v;
     private boolean w;
     private boolean x;
@@ -92,7 +92,7 @@ public class WorldData {
             }
         }
 
-        this.u = EnumGamemode.getById(nbttagcompound.getInt("GameType"));
+        this.u = WorldSettings.EnumGamemode.getById(nbttagcompound.getInt("GameType"));
         if (nbttagcompound.hasKeyOfType("MapFeatures", 99)) {
             this.v = nbttagcompound.getBoolean("MapFeatures");
         } else {
@@ -128,7 +128,7 @@ public class WorldData {
         if (nbttagcompound.hasKeyOfType("allowCommands", 99)) {
             this.x = nbttagcompound.getBoolean("allowCommands");
         } else {
-            this.x = this.u == EnumGamemode.CREATIVE;
+            this.x = this.u == WorldSettings.EnumGamemode.CREATIVE;
         }
 
         if (nbttagcompound.hasKeyOfType("Player", 10)) {
@@ -292,7 +292,7 @@ public class WorldData {
         nbttagcompound.setLong("Time", this.h);
         nbttagcompound.setLong("DayTime", this.i);
         nbttagcompound.setLong("SizeOnDisk", this.k);
-        nbttagcompound.setLong("LastPlayed", MinecraftServer.ax());
+        nbttagcompound.setLong("LastPlayed", MinecraftServer.ay());
         nbttagcompound.setString("LevelName", this.n);
         nbttagcompound.setInt("version", this.o);
         nbttagcompound.setInt("clearWeatherTime", this.p);
@@ -422,7 +422,7 @@ public class WorldData {
         this.r = i;
     }
 
-    public EnumGamemode getGameType() {
+    public WorldSettings.EnumGamemode getGameType() {
         return this.u;
     }
 
@@ -434,8 +434,8 @@ public class WorldData {
         this.v = flag;
     }
 
-    public void setGameType(EnumGamemode enumgamemode) {
-        this.u = enumgamemode;
+    public void setGameType(WorldSettings.EnumGamemode worldsettings_enumgamemode) {
+        this.u = worldsettings_enumgamemode;
     }
 
     public boolean isHardcore() {
@@ -567,82 +567,101 @@ public class WorldData {
     }
 
     public void a(CrashReportSystemDetails crashreportsystemdetails) {
-        crashreportsystemdetails.a("Level seed", (Callable) (new CrashReportLevelSeed(this)));
-        crashreportsystemdetails.a("Level generator", (Callable) (new CrashReportLevelGenerator(this)));
-        crashreportsystemdetails.a("Level generator options", (Callable) (new CrashReportLevelGeneratorOptions(this)));
-        crashreportsystemdetails.a("Level spawn location", (Callable) (new CrashReportLevelSpawnLocation(this)));
-        crashreportsystemdetails.a("Level time", (Callable) (new CrashReportLevelTime(this)));
-        crashreportsystemdetails.a("Level dimension", (Callable) (new CrashReportLevelDimension(this)));
-        crashreportsystemdetails.a("Level storage version", (Callable) (new CrashReportLevelStorageVersion(this)));
-        crashreportsystemdetails.a("Level weather", (Callable) (new CrashReportLevelWeather(this)));
-        crashreportsystemdetails.a("Level game mode", (Callable) (new CrashReportLevelGameMode(this)));
-    }
+        crashreportsystemdetails.a("Level seed", new Callable() {
+            public String a() throws Exception {
+                return String.valueOf(WorldData.this.getSeed());
+            }
 
-    static WorldType a(WorldData worlddata) {
-        return worlddata.c;
-    }
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
+        crashreportsystemdetails.a("Level generator", new Callable() {
+            public String a() throws Exception {
+                return String.format("ID %02d - %s, ver %d. Features enabled: %b", new Object[] { Integer.valueOf(WorldData.this.c.g()), WorldData.this.c.name(), Integer.valueOf(WorldData.this.c.getVersion()), Boolean.valueOf(WorldData.this.v)});
+            }
 
-    static boolean b(WorldData worlddata) {
-        return worlddata.v;
-    }
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
+        crashreportsystemdetails.a("Level generator options", new Callable() {
+            public String a() throws Exception {
+                return WorldData.this.d;
+            }
 
-    static String c(WorldData worlddata) {
-        return worlddata.d;
-    }
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
+        crashreportsystemdetails.a("Level spawn location", new Callable() {
+            public String a() throws Exception {
+                return CrashReportSystemDetails.a((double) WorldData.this.e, (double) WorldData.this.f, (double) WorldData.this.g);
+            }
 
-    static int d(WorldData worlddata) {
-        return worlddata.e;
-    }
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
+        crashreportsystemdetails.a("Level time", new Callable() {
+            public String a() throws Exception {
+                return String.format("%d game time, %d day time", new Object[] { Long.valueOf(WorldData.this.h), Long.valueOf(WorldData.this.i)});
+            }
 
-    static int e(WorldData worlddata) {
-        return worlddata.f;
-    }
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
+        crashreportsystemdetails.a("Level dimension", new Callable() {
+            public String a() throws Exception {
+                return String.valueOf(WorldData.this.m);
+            }
 
-    static int f(WorldData worlddata) {
-        return worlddata.g;
-    }
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
+        crashreportsystemdetails.a("Level storage version", new Callable() {
+            public String a() throws Exception {
+                String s = "Unknown?";
 
-    static long g(WorldData worlddata) {
-        return worlddata.h;
-    }
+                try {
+                    switch (WorldData.this.o) {
+                    case 19132:
+                        s = "McRegion";
+                        break;
 
-    static long h(WorldData worlddata) {
-        return worlddata.i;
-    }
+                    case 19133:
+                        s = "Anvil";
+                    }
+                } catch (Throwable throwable) {
+                    ;
+                }
 
-    static int i(WorldData worlddata) {
-        return worlddata.m;
-    }
+                return String.format("0x%05X - %s", new Object[] { Integer.valueOf(WorldData.this.o), s});
+            }
 
-    static int j(WorldData worlddata) {
-        return worlddata.o;
-    }
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
+        crashreportsystemdetails.a("Level weather", new Callable() {
+            public String a() throws Exception {
+                return String.format("Rain time: %d (now: %b), thunder time: %d (now: %b)", new Object[] { Integer.valueOf(WorldData.this.r), Boolean.valueOf(WorldData.this.q), Integer.valueOf(WorldData.this.t), Boolean.valueOf(WorldData.this.s)});
+            }
 
-    static int k(WorldData worlddata) {
-        return worlddata.r;
-    }
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
+        crashreportsystemdetails.a("Level game mode", new Callable() {
+            public String a() throws Exception {
+                return String.format("Game mode: %s (ID %d). Hardcore: %b. Cheats: %b", new Object[] { WorldData.this.u.b(), Integer.valueOf(WorldData.this.u.getId()), Boolean.valueOf(WorldData.this.w), Boolean.valueOf(WorldData.this.x)});
+            }
 
-    static boolean l(WorldData worlddata) {
-        return worlddata.q;
-    }
-
-    static int m(WorldData worlddata) {
-        return worlddata.t;
-    }
-
-    static boolean n(WorldData worlddata) {
-        return worlddata.s;
-    }
-
-    static EnumGamemode o(WorldData worlddata) {
-        return worlddata.u;
-    }
-
-    static boolean p(WorldData worlddata) {
-        return worlddata.w;
-    }
-
-    static boolean q(WorldData worlddata) {
-        return worlddata.x;
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
     }
 }

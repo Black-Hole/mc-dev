@@ -25,7 +25,7 @@ public class BlockSeaLantern extends Block {
         return MaterialMapColor.p;
     }
 
-    protected boolean G() {
+    protected boolean I() {
         return true;
     }
 }

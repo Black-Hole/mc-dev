@@ -5,10 +5,10 @@ import java.util.Random;
 
 public class WorldGenBonusChest extends WorldGenerator {
 
-    private final List a;
+    private final List<StructurePieceTreasure> a;
     private final int b;
 
-    public WorldGenBonusChest(List list, int i) {
+    public WorldGenBonusChest(List<StructurePieceTreasure> list, int i) {
         this.a = list;
         this.b = i;
     }

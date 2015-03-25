@@ -13,7 +13,7 @@ public class ItemLeash extends Item {
         Block block = world.getType(blockposition).getBlock();
 
         if (block instanceof BlockFence) {
-            if (world.isStatic) {
+            if (world.isClientSide) {
                 return true;
             } else {
                 a(entityhuman, world, blockposition);
@@ -37,7 +37,7 @@ public class ItemLeash extends Item {
         while (iterator.hasNext()) {
             EntityInsentient entityinsentient = (EntityInsentient) iterator.next();
 
-            if (entityinsentient.cb() && entityinsentient.getLeashHolder() == entityhuman) {
+            if (entityinsentient.cc() && entityinsentient.getLeashHolder() == entityhuman) {
                 if (entityleash == null) {
                     entityleash = EntityLeash.a(world, blockposition);
                 }

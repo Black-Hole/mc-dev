@@ -4,7 +4,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
 
     public EntitySnowman(World world) {
         super(world);
-        this.a(0.7F, 1.9F);
+        this.setSize(0.7F, 1.9F);
         ((Navigation) this.getNavigation()).a(true);
         this.goalSelector.a(1, new PathfinderGoalArrowAttack(this, 1.25D, 20, 10.0F));
         this.goalSelector.a(2, new PathfinderGoalRandomStroll(this, 1.0D));
@@ -13,15 +13,15 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget(this, EntityInsentient.class, 10, true, false, IMonster.d));
     }
 
-    protected void aW() {
-        super.aW();
+    protected void initAttributes() {
+        super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(4.0D);
         this.getAttributeInstance(GenericAttributes.d).setValue(0.20000000298023224D);
     }
 
     public void m() {
         super.m();
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             int i = MathHelper.floor(this.locX);
             int j = MathHelper.floor(this.locY);
             int k = MathHelper.floor(this.locZ);
@@ -38,8 +38,10 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
                 i = MathHelper.floor(this.locX + (double) ((float) (l % 2 * 2 - 1) * 0.25F));
                 j = MathHelper.floor(this.locY);
                 k = MathHelper.floor(this.locZ + (double) ((float) (l / 2 % 2 * 2 - 1) * 0.25F));
-                if (this.world.getType(new BlockPosition(i, j, k)).getBlock().getMaterial() == Material.AIR && this.world.getBiome(new BlockPosition(i, 0, k)).a(new BlockPosition(i, j, k)) < 0.8F && Blocks.SNOW_LAYER.canPlace(this.world, new BlockPosition(i, j, k))) {
-                    this.world.setTypeUpdate(new BlockPosition(i, j, k), Blocks.SNOW_LAYER.getBlockData());
+                BlockPosition blockposition = new BlockPosition(i, j, k);
+
+                if (this.world.getType(blockposition).getBlock().getMaterial() == Material.AIR && this.world.getBiome(new BlockPosition(i, 0, k)).a(blockposition) < 0.8F && Blocks.SNOW_LAYER.canPlace(this.world, blockposition)) {
+                    this.world.setTypeUpdate(blockposition, Blocks.SNOW_LAYER.getBlockData());
                 }
             }
         }
@@ -68,7 +70,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         float f1 = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
 
         entitysnowball.shoot(d1, d2 + (double) f1, d3, 1.6F, 12.0F);
-        this.makeSound("random.bow", 1.0F, 1.0F / (this.bb().nextFloat() * 0.4F + 0.8F));
+        this.makeSound("random.bow", 1.0F, 1.0F / (this.bc().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(entitysnowball);
     }
 

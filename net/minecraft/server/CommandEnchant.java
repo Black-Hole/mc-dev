@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Collection;
 import java.util.List;
 
 public class CommandEnchant extends CommandAbstract {
@@ -18,13 +19,13 @@ public class CommandEnchant extends CommandAbstract {
         return "commands.enchant.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.enchant.usage", new Object[0]);
         } else {
             EntityPlayer entityplayer = a(icommandlistener, astring[0]);
 
-            icommandlistener.a(EnumCommandResult.AFFECTED_ITEMS, 0);
+            icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, 0);
 
             int i;
 
@@ -41,7 +42,7 @@ public class CommandEnchant extends CommandAbstract {
             }
 
             int j = 1;
-            ItemStack itemstack = entityplayer.bY();
+            ItemStack itemstack = entityplayer.bZ();
 
             if (itemstack == null) {
                 throw new CommandException("commands.enchant.noItem", new Object[0]);
@@ -77,14 +78,14 @@ public class CommandEnchant extends CommandAbstract {
 
                     itemstack.addEnchantment(enchantment1, j);
                     a(icommandlistener, this, "commands.enchant.success", new Object[0]);
-                    icommandlistener.a(EnumCommandResult.AFFECTED_ITEMS, 1);
+                    icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, 1);
                 }
             }
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, this.d()) : (astring.length == 2 ? a(astring, Enchantment.getNames()) : null);
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, this.d()) : (astring.length == 2 ? a(astring, (Collection) Enchantment.getEffects()) : null);
     }
 
     protected String[] d() {

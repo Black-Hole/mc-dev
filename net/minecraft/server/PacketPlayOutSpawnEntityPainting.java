@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutSpawnEntityPainting implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutSpawnEntityPainting implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private BlockPosition b;
@@ -16,14 +18,14 @@ public class PacketPlayOutSpawnEntityPainting implements Packet {
         this.d = entitypainting.art.B;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
-        this.d = packetdataserializer.c(EnumArt.A);
+        this.d = packetdataserializer.c(EntityPainting.EnumArt.A);
         this.b = packetdataserializer.c();
         this.c = EnumDirection.fromType2(packetdataserializer.readUnsignedByte());
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.a(this.d);
         packetdataserializer.a(this.b);

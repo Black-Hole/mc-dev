@@ -11,7 +11,7 @@ import java.util.Set;
 public class ScoreboardServer extends Scoreboard {
 
     private final MinecraftServer a;
-    private final Set b = Sets.newHashSet();
+    private final Set<ScoreboardObjective> b = Sets.newHashSet();
     private PersistentScoreboard c;
 
     public ScoreboardServer(MinecraftServer minecraftserver) {
@@ -132,7 +132,7 @@ public class ScoreboardServer extends Scoreboard {
 
     }
 
-    public List getScoreboardScorePacketsForObjective(ScoreboardObjective scoreboardobjective) {
+    public List<Packet> getScoreboardScorePacketsForObjective(ScoreboardObjective scoreboardobjective) {
         ArrayList arraylist = Lists.newArrayList();
 
         arraylist.add(new PacketPlayOutScoreboardObjective(scoreboardobjective, 0));
@@ -156,7 +156,7 @@ public class ScoreboardServer extends Scoreboard {
 
     public void e(ScoreboardObjective scoreboardobjective) {
         List list = this.getScoreboardScorePacketsForObjective(scoreboardobjective);
-        Iterator iterator = this.a.getPlayerList().players.iterator();
+        Iterator iterator = this.a.getPlayerList().v().iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -172,7 +172,7 @@ public class ScoreboardServer extends Scoreboard {
         this.b.add(scoreboardobjective);
     }
 
-    public List f(ScoreboardObjective scoreboardobjective) {
+    public List<Packet> f(ScoreboardObjective scoreboardobjective) {
         ArrayList arraylist = Lists.newArrayList();
 
         arraylist.add(new PacketPlayOutScoreboardObjective(scoreboardobjective, 1));
@@ -188,7 +188,7 @@ public class ScoreboardServer extends Scoreboard {
 
     public void g(ScoreboardObjective scoreboardobjective) {
         List list = this.f(scoreboardobjective);
-        Iterator iterator = this.a.getPlayerList().players.iterator();
+        Iterator iterator = this.a.getPlayerList().v().iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();

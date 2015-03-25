@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockCarpet extends Block {
 
-    public static final BlockStateEnum COLOR = BlockStateEnum.of("color", EnumColor.class);
+    public static final BlockStateEnum<EnumColor> COLOR = BlockStateEnum.of("color", EnumColor.class);
 
     protected BlockCarpet() {
         super(Material.WOOL);
@@ -13,6 +13,10 @@ public class BlockCarpet extends Block {
         this.b(0);
     }
 
+    public MaterialMapColor g(IBlockData iblockdata) {
+        return ((EnumColor) iblockdata.get(BlockCarpet.COLOR)).e();
+    }
+
     public boolean c() {
         return false;
     }
@@ -21,7 +25,7 @@ public class BlockCarpet extends Block {
         return false;
     }
 
-    public void h() {
+    public void j() {
         this.b(0);
     }
 
@@ -37,7 +41,7 @@ public class BlockCarpet extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return super.canPlace(world, blockposition) && this.d(world, blockposition);
+        return super.canPlace(world, blockposition) && this.e(world, blockposition);
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
@@ -45,7 +49,7 @@ public class BlockCarpet extends Block {
     }
 
     private boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!this.d(world, blockposition)) {
+        if (!this.e(world, blockposition)) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
             return false;
@@ -54,7 +58,7 @@ public class BlockCarpet extends Block {
         }
     }
 
-    private boolean d(World world, BlockPosition blockposition) {
+    private boolean e(World world, BlockPosition blockposition) {
         return !world.isEmpty(blockposition.down());
     }
 

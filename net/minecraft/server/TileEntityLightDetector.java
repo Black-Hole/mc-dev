@@ -5,10 +5,10 @@ public class TileEntityLightDetector extends TileEntity implements IUpdatePlayer
     public TileEntityLightDetector() {}
 
     public void c() {
-        if (this.world != null && !this.world.isStatic && this.world.getTime() % 20L == 0L) {
+        if (this.world != null && !this.world.isClientSide && this.world.getTime() % 20L == 0L) {
             this.e = this.w();
             if (this.e instanceof BlockDaylightDetector) {
-                ((BlockDaylightDetector) this.e).d(this.world, this.position);
+                ((BlockDaylightDetector) this.e).f(this.world, this.position);
             }
         }
 

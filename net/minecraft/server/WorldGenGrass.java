@@ -6,8 +6,8 @@ public class WorldGenGrass extends WorldGenerator {
 
     private final IBlockData a;
 
-    public WorldGenGrass(EnumTallGrassType enumtallgrasstype) {
-        this.a = Blocks.TALLGRASS.getBlockData().set(BlockLongGrass.TYPE, enumtallgrasstype);
+    public WorldGenGrass(BlockLongGrass.EnumTallGrassType blocklonggrass_enumtallgrasstype) {
+        this.a = Blocks.TALLGRASS.getBlockData().set(BlockLongGrass.TYPE, blocklonggrass_enumtallgrasstype);
     }
 
     public boolean generate(World world, Random random, BlockPosition blockposition) {

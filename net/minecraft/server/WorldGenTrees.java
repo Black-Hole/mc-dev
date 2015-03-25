@@ -1,48 +1,54 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
 import java.util.Random;
 
 public class WorldGenTrees extends WorldGenTreeAbstract {
 
-    private final int a;
-    private final boolean b;
+    private static final IBlockData a = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.OAK);
+    private static final IBlockData b = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
     private final int c;
-    private final int d;
+    private final boolean d;
+    private final IBlockData e;
+    private final IBlockData f;
 
     public WorldGenTrees(boolean flag) {
-        this(flag, 4, 0, 0, false);
+        this(flag, 4, WorldGenTrees.a, WorldGenTrees.b, false);
     }
 
-    public WorldGenTrees(boolean flag, int i, int j, int k, boolean flag1) {
+    public WorldGenTrees(boolean flag, int i, IBlockData iblockdata, IBlockData iblockdata1, boolean flag1) {
         super(flag);
-        this.a = i;
-        this.c = j;
-        this.d = k;
-        this.b = flag1;
+        this.c = i;
+        this.e = iblockdata;
+        this.f = iblockdata1;
+        this.d = flag1;
     }
 
     public boolean generate(World world, Random random, BlockPosition blockposition) {
-        int i = random.nextInt(3) + this.a;
+        int i = random.nextInt(3) + this.c;
         boolean flag = true;
 
         if (blockposition.getY() >= 1 && blockposition.getY() + i + 1 <= 256) {
             byte b0;
             int j;
+            int k;
 
-            for (int k = blockposition.getY(); k <= blockposition.getY() + 1 + i; ++k) {
+            for (int l = blockposition.getY(); l <= blockposition.getY() + 1 + i; ++l) {
                 b0 = 1;
-                if (k == blockposition.getY()) {
+                if (l == blockposition.getY()) {
                     b0 = 0;
                 }
 
-                if (k >= blockposition.getY() + 1 + i - 2) {
+                if (l >= blockposition.getY() + 1 + i - 2) {
                     b0 = 2;
                 }
 
-                for (int l = blockposition.getX() - b0; l <= blockposition.getX() + b0 && flag; ++l) {
-                    for (j = blockposition.getZ() - b0; j <= blockposition.getZ() + b0 && flag; ++j) {
-                        if (k >= 0 && k < 256) {
-                            if (!this.a(world.getType(new BlockPosition(l, k, j)).getBlock())) {
+                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+
+                for (j = blockposition.getX() - b0; j <= blockposition.getX() + b0 && flag; ++j) {
+                    for (k = blockposition.getZ() - b0; k <= blockposition.getZ() + b0 && flag; ++k) {
+                        if (l >= 0 && l < 256) {
+                            if (!this.a(world.getType(blockposition_mutableblockposition.c(j, l, k)).getBlock())) {
                                 flag = false;
                             }
                         } else {
@@ -65,25 +71,24 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
                     int i1;
                     int j1;
                     int k1;
-                    int l1;
                     BlockPosition blockposition1;
 
                     for (j = blockposition.getY() - b0 + i; j <= blockposition.getY() + i; ++j) {
-                        i1 = j - (blockposition.getY() + i);
-                        j1 = b1 + 1 - i1 / 2;
+                        k = j - (blockposition.getY() + i);
+                        i1 = b1 + 1 - k / 2;
 
-                        for (k1 = blockposition.getX() - j1; k1 <= blockposition.getX() + j1; ++k1) {
-                            l1 = k1 - blockposition.getX();
+                        for (int l1 = blockposition.getX() - i1; l1 <= blockposition.getX() + i1; ++l1) {
+                            j1 = l1 - blockposition.getX();
 
-                            for (int i2 = blockposition.getZ() - j1; i2 <= blockposition.getZ() + j1; ++i2) {
-                                int j2 = i2 - blockposition.getZ();
+                            for (k1 = blockposition.getZ() - i1; k1 <= blockposition.getZ() + i1; ++k1) {
+                                int i2 = k1 - blockposition.getZ();
 
-                                if (Math.abs(l1) != j1 || Math.abs(j2) != j1 || random.nextInt(2) != 0 && i1 != 0) {
-                                    blockposition1 = new BlockPosition(k1, j, i2);
+                                if (Math.abs(j1) != i1 || Math.abs(i2) != i1 || random.nextInt(2) != 0 && k != 0) {
+                                    blockposition1 = new BlockPosition(l1, j, k1);
                                     Block block1 = world.getType(blockposition1).getBlock();
 
                                     if (block1.getMaterial() == Material.AIR || block1.getMaterial() == Material.LEAVES || block1.getMaterial() == Material.REPLACEABLE_PLANT) {
-                                        this.a(world, blockposition1, Blocks.LEAVES, this.d);
+                                        this.a(world, blockposition1, this.f);
                                     }
                                 }
                             }
@@ -94,57 +99,57 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
                         Block block2 = world.getType(blockposition.up(j)).getBlock();
 
                         if (block2.getMaterial() == Material.AIR || block2.getMaterial() == Material.LEAVES || block2.getMaterial() == Material.REPLACEABLE_PLANT) {
-                            this.a(world, blockposition.up(j), Blocks.LOG, this.c);
-                            if (this.b && j > 0) {
+                            this.a(world, blockposition.up(j), this.e);
+                            if (this.d && j > 0) {
                                 if (random.nextInt(3) > 0 && world.isEmpty(blockposition.a(-1, j, 0))) {
-                                    this.a(world, blockposition.a(-1, j, 0), Blocks.VINE, BlockVine.S);
+                                    this.a(world, blockposition.a(-1, j, 0), BlockVine.EAST);
                                 }
 
                                 if (random.nextInt(3) > 0 && world.isEmpty(blockposition.a(1, j, 0))) {
-                                    this.a(world, blockposition.a(1, j, 0), Blocks.VINE, BlockVine.T);
+                                    this.a(world, blockposition.a(1, j, 0), BlockVine.WEST);
                                 }
 
                                 if (random.nextInt(3) > 0 && world.isEmpty(blockposition.a(0, j, -1))) {
-                                    this.a(world, blockposition.a(0, j, -1), Blocks.VINE, BlockVine.Q);
+                                    this.a(world, blockposition.a(0, j, -1), BlockVine.SOUTH);
                                 }
 
                                 if (random.nextInt(3) > 0 && world.isEmpty(blockposition.a(0, j, 1))) {
-                                    this.a(world, blockposition.a(0, j, 1), Blocks.VINE, BlockVine.R);
+                                    this.a(world, blockposition.a(0, j, 1), BlockVine.NORTH);
                                 }
                             }
                         }
                     }
 
-                    if (this.b) {
+                    if (this.d) {
                         for (j = blockposition.getY() - 3 + i; j <= blockposition.getY() + i; ++j) {
-                            i1 = j - (blockposition.getY() + i);
-                            j1 = 2 - i1 / 2;
+                            k = j - (blockposition.getY() + i);
+                            i1 = 2 - k / 2;
+                            BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = new BlockPosition.MutableBlockPosition();
 
-                            for (k1 = blockposition.getX() - j1; k1 <= blockposition.getX() + j1; ++k1) {
-                                for (l1 = blockposition.getZ() - j1; l1 <= blockposition.getZ() + j1; ++l1) {
-                                    BlockPosition blockposition2 = new BlockPosition(k1, j, l1);
+                            for (j1 = blockposition.getX() - i1; j1 <= blockposition.getX() + i1; ++j1) {
+                                for (k1 = blockposition.getZ() - i1; k1 <= blockposition.getZ() + i1; ++k1) {
+                                    blockposition_mutableblockposition1.c(j1, j, k1);
+                                    if (world.getType(blockposition_mutableblockposition1).getBlock().getMaterial() == Material.LEAVES) {
+                                        BlockPosition blockposition2 = blockposition_mutableblockposition1.west();
 
-                                    if (world.getType(blockposition2).getBlock().getMaterial() == Material.LEAVES) {
-                                        BlockPosition blockposition3 = blockposition2.west();
+                                        blockposition1 = blockposition_mutableblockposition1.east();
+                                        BlockPosition blockposition3 = blockposition_mutableblockposition1.north();
+                                        BlockPosition blockposition4 = blockposition_mutableblockposition1.south();
 
-                                        blockposition1 = blockposition2.east();
-                                        BlockPosition blockposition4 = blockposition2.north();
-                                        BlockPosition blockposition5 = blockposition2.south();
-
-                                        if (random.nextInt(4) == 0 && world.getType(blockposition3).getBlock().getMaterial() == Material.AIR) {
-                                            this.a(world, blockposition3, BlockVine.S);
+                                        if (random.nextInt(4) == 0 && world.getType(blockposition2).getBlock().getMaterial() == Material.AIR) {
+                                            this.b(world, blockposition2, BlockVine.EAST);
                                         }
 
                                         if (random.nextInt(4) == 0 && world.getType(blockposition1).getBlock().getMaterial() == Material.AIR) {
-                                            this.a(world, blockposition1, BlockVine.T);
+                                            this.b(world, blockposition1, BlockVine.WEST);
+                                        }
+
+                                        if (random.nextInt(4) == 0 && world.getType(blockposition3).getBlock().getMaterial() == Material.AIR) {
+                                            this.b(world, blockposition3, BlockVine.SOUTH);
                                         }
 
                                         if (random.nextInt(4) == 0 && world.getType(blockposition4).getBlock().getMaterial() == Material.AIR) {
-                                            this.a(world, blockposition4, BlockVine.Q);
-                                        }
-
-                                        if (random.nextInt(4) == 0 && world.getType(blockposition5).getBlock().getMaterial() == Material.AIR) {
-                                            this.a(world, blockposition5, BlockVine.R);
+                                            this.b(world, blockposition4, BlockVine.NORTH);
                                         }
                                     }
                                 }
@@ -153,12 +158,15 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
 
                         if (random.nextInt(5) == 0 && i > 5) {
                             for (j = 0; j < 2; ++j) {
-                                for (i1 = 0; i1 < 4; ++i1) {
-                                    if (random.nextInt(4 - j) == 0) {
-                                        j1 = random.nextInt(3);
-                                        EnumDirection enumdirection = EnumDirection.fromType2(i1).opposite();
+                                Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-                                        this.a(world, blockposition.a(enumdirection.getAdjacentX(), i - 5 + j, enumdirection.getAdjacentZ()), Blocks.COCOA, j1 << 2 | EnumDirection.fromType2(i1).b());
+                                while (iterator.hasNext()) {
+                                    EnumDirection enumdirection = (EnumDirection) iterator.next();
+
+                                    if (random.nextInt(4 - j) == 0) {
+                                        EnumDirection enumdirection1 = enumdirection.opposite();
+
+                                        this.a(world, random.nextInt(3), blockposition.a(enumdirection1.getAdjacentX(), i - 5 + j, enumdirection1.getAdjacentZ()), enumdirection);
                                     }
                                 }
                             }
@@ -175,12 +183,20 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
         }
     }
 
-    private void a(World world, BlockPosition blockposition, int i) {
-        this.a(world, blockposition, Blocks.VINE, i);
-        int j = 4;
+    private void a(World world, int i, BlockPosition blockposition, EnumDirection enumdirection) {
+        this.a(world, blockposition, Blocks.COCOA.getBlockData().set(BlockCocoa.AGE, Integer.valueOf(i)).set(BlockCocoa.FACING, enumdirection));
+    }
 
-        for (blockposition = blockposition.down(); world.getType(blockposition).getBlock().getMaterial() == Material.AIR && j > 0; --j) {
-            this.a(world, blockposition, Blocks.VINE, i);
+    private void a(World world, BlockPosition blockposition, BlockStateBoolean blockstateboolean) {
+        this.a(world, blockposition, Blocks.VINE.getBlockData().set(blockstateboolean, Boolean.valueOf(true)));
+    }
+
+    private void b(World world, BlockPosition blockposition, BlockStateBoolean blockstateboolean) {
+        this.a(world, blockposition, blockstateboolean);
+        int i = 4;
+
+        for (blockposition = blockposition.down(); world.getType(blockposition).getBlock().getMaterial() == Material.AIR && i > 0; --i) {
+            this.a(world, blockposition, blockstateboolean);
             blockposition = blockposition.down();
         }
 

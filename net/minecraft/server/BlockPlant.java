@@ -4,17 +4,21 @@ import java.util.Random;
 
 public class BlockPlant extends Block {
 
+    protected BlockPlant() {
+        this(Material.PLANT);
+    }
+
     protected BlockPlant(Material material) {
-        super(material);
+        this(material, material.r());
+    }
+
+    protected BlockPlant(Material material, MaterialMapColor materialmapcolor) {
+        super(material, materialmapcolor);
         this.a(true);
         float f = 0.2F;
 
         this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 3.0F, 0.5F + f);
         this.a(CreativeModeTab.c);
-    }
-
-    protected BlockPlant() {
-        this(Material.PLANT);
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {

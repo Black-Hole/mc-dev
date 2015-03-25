@@ -207,7 +207,7 @@ public final class ItemStack {
     public void damage(int i, EntityLiving entityliving) {
         if (!(entityliving instanceof EntityHuman) || !((EntityHuman) entityliving).abilities.canInstantlyBuild) {
             if (this.e()) {
-                if (this.isDamaged(i, entityliving.bb())) {
+                if (this.isDamaged(i, entityliving.bc())) {
                     entityliving.b(this);
                     --this.count;
                     if (entityliving instanceof EntityHuman) {
@@ -215,7 +215,7 @@ public final class ItemStack {
 
                         entityhuman.b(StatisticList.BREAK_ITEM_COUNT[Item.getId(this.item)]);
                         if (this.count == 0 && this.getItem() instanceof ItemBow) {
-                            entityhuman.bZ();
+                            entityhuman.ca();
                         }
                     }
 
@@ -465,7 +465,7 @@ public final class ItemStack {
         this.tag.setInt("RepairCost", i);
     }
 
-    public Multimap B() {
+    public Multimap<String, AttributeModifier> B() {
         Object object;
 
         if (this.hasTag() && this.tag.hasKeyOfType("AttributeModifiers", 9)) {
@@ -504,7 +504,7 @@ public final class ItemStack {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
             this.save(nbttagcompound);
-            ichatbasecomponent.getChatModifier().setChatHoverable(new ChatHoverable(EnumHoverAction.SHOW_ITEM, new ChatComponentText(nbttagcompound.toString())));
+            ichatbasecomponent.getChatModifier().setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_ITEM, new ChatComponentText(nbttagcompound.toString())));
             ichatbasecomponent.getChatModifier().setColor(this.u().e);
         }
 

@@ -4,11 +4,14 @@ import java.util.Random;
 
 public class WorldGenMegaTree extends WorldGenMegaTreeAbstract {
 
-    private boolean e;
+    private static final IBlockData e = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.SPRUCE);
+    private static final IBlockData f = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.SPRUCE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+    private static final IBlockData g = Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.PODZOL);
+    private boolean h;
 
     public WorldGenMegaTree(boolean flag, boolean flag1) {
-        super(flag, 13, 15, EnumLogVariant.SPRUCE.a(), EnumLogVariant.SPRUCE.a());
-        this.e = flag1;
+        super(flag, 13, 15, WorldGenMegaTree.e, WorldGenMegaTree.f);
+        this.h = flag1;
     }
 
     public boolean generate(World world, Random random, BlockPosition blockposition) {
@@ -23,23 +26,23 @@ public class WorldGenMegaTree extends WorldGenMegaTreeAbstract {
                 Block block = world.getType(blockposition.up(j)).getBlock();
 
                 if (block.getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) {
-                    this.a(world, blockposition.up(j), Blocks.LOG, this.b);
+                    this.a(world, blockposition.up(j), this.b);
                 }
 
                 if (j < i - 1) {
                     block = world.getType(blockposition.a(1, j, 0)).getBlock();
                     if (block.getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) {
-                        this.a(world, blockposition.a(1, j, 0), Blocks.LOG, this.b);
+                        this.a(world, blockposition.a(1, j, 0), this.b);
                     }
 
                     block = world.getType(blockposition.a(1, j, 1)).getBlock();
                     if (block.getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) {
-                        this.a(world, blockposition.a(1, j, 1), Blocks.LOG, this.b);
+                        this.a(world, blockposition.a(1, j, 1), this.b);
                     }
 
                     block = world.getType(blockposition.a(0, j, 1)).getBlock();
                     if (block.getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) {
-                        this.a(world, blockposition.a(0, j, 1), Blocks.LOG, this.b);
+                        this.a(world, blockposition.a(0, j, 1), this.b);
                     }
                 }
             }
@@ -49,7 +52,7 @@ public class WorldGenMegaTree extends WorldGenMegaTreeAbstract {
     }
 
     private void a(World world, int i, int j, int k, int l, Random random) {
-        int i1 = random.nextInt(5) + (this.e ? this.a : 3);
+        int i1 = random.nextInt(5) + (this.h ? this.a : 3);
         int j1 = 0;
 
         for (int k1 = k - i1; k1 <= k; ++k1) {
@@ -97,7 +100,7 @@ public class WorldGenMegaTree extends WorldGenMegaTreeAbstract {
             Block block = world.getType(blockposition1).getBlock();
 
             if (block == Blocks.GRASS || block == Blocks.DIRT) {
-                this.a(world, blockposition1, Blocks.DIRT, EnumDirtVariant.PODZOL.a());
+                this.a(world, blockposition1, WorldGenMegaTree.g);
                 break;
             }
 

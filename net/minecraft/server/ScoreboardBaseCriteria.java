@@ -15,7 +15,7 @@ public class ScoreboardBaseCriteria implements IScoreboardCriteria {
         return this.j;
     }
 
-    public int getScoreModifier(List list) {
+    public int getScoreModifier(List<EntityHuman> list) {
         return 0;
     }
 
@@ -23,7 +23,7 @@ public class ScoreboardBaseCriteria implements IScoreboardCriteria {
         return false;
     }
 
-    public EnumScoreboardHealthDisplay c() {
-        return EnumScoreboardHealthDisplay.INTEGER;
+    public IScoreboardCriteria.EnumScoreboardHealthDisplay c() {
+        return IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER;
     }
 }

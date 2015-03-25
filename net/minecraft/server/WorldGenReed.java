@@ -17,7 +17,7 @@ public class WorldGenReed extends WorldGenerator {
                     int j = 2 + random.nextInt(random.nextInt(3) + 1);
 
                     for (int k = 0; k < j; ++k) {
-                        if (Blocks.REEDS.d(world, blockposition1)) {
+                        if (Blocks.REEDS.e(world, blockposition1)) {
                             world.setTypeAndData(blockposition1.up(k), Blocks.REEDS.getBlockData(), 2);
                         }
                     }

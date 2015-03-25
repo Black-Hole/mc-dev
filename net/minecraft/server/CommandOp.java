@@ -21,7 +21,7 @@ public class CommandOp extends CommandAbstract {
         return "commands.op.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length == 1 && astring[0].length() > 0) {
             MinecraftServer minecraftserver = MinecraftServer.getServer();
             GameProfile gameprofile = minecraftserver.getUserCache().getProfile(astring[0]);
@@ -37,11 +37,11 @@ public class CommandOp extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         if (astring.length == 1) {
             String s = astring[astring.length - 1];
             ArrayList arraylist = Lists.newArrayList();
-            GameProfile[] agameprofile = MinecraftServer.getServer().J();
+            GameProfile[] agameprofile = MinecraftServer.getServer().K();
             int i = agameprofile.length;
 
             for (int j = 0; j < i; ++j) {

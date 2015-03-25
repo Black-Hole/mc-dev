@@ -10,12 +10,16 @@ public class BlockFence extends Block {
     public static final BlockStateBoolean WEST = BlockStateBoolean.of("west");
 
     public BlockFence(Material material) {
-        super(material);
+        this(material, material.r());
+    }
+
+    public BlockFence(Material material, MaterialMapColor materialmapcolor) {
+        super(material, materialmapcolor);
         this.j(this.blockStateList.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(false)).set(BlockFence.EAST, Boolean.valueOf(false)).set(BlockFence.SOUTH, Boolean.valueOf(false)).set(BlockFence.WEST, Boolean.valueOf(false)));
         this.a(CreativeModeTab.c);
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
         boolean flag = this.e(world, blockposition.north());
         boolean flag1 = this.e(world, blockposition.south());
         boolean flag2 = this.e(world, blockposition.west());
@@ -112,7 +116,7 @@ public class BlockFence extends Block {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        return world.isStatic ? true : ItemLeash.a(entityhuman, world, blockposition);
+        return world.isClientSide ? true : ItemLeash.a(entityhuman, world, blockposition);
     }
 
     public int toLegacyData(IBlockData iblockdata) {

@@ -59,7 +59,7 @@ public class SlotResult extends Slot {
             this.b.b((Statistic) AchievementList.n);
         }
 
-        if (itemstack.getItem() instanceof ItemPickaxe && ((ItemPickaxe) itemstack.getItem()).g() != EnumToolMaterial.WOOD) {
+        if (itemstack.getItem() instanceof ItemPickaxe && ((ItemPickaxe) itemstack.getItem()).g() != Item.EnumToolMaterial.WOOD) {
             this.b.b((Statistic) AchievementList.o);
         }
 

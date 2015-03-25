@@ -19,11 +19,11 @@ public class CommandSetBlock extends CommandAbstract {
         return "commands.setblock.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 4) {
             throw new ExceptionUsage("commands.setblock.usage", new Object[0]);
         } else {
-            icommandlistener.a(EnumCommandResult.AFFECTED_BLOCKS, 0);
+            icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 0);
             BlockPosition blockposition = a(icommandlistener, astring, 0, false);
             Block block = CommandAbstract.g(icommandlistener, astring[3]);
             int i = 0;
@@ -90,14 +90,14 @@ public class CommandSetBlock extends CommandAbstract {
                     }
 
                     world.update(blockposition, iblockdata.getBlock());
-                    icommandlistener.a(EnumCommandResult.AFFECTED_BLOCKS, 1);
+                    icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 1);
                     a(icommandlistener, this, "commands.setblock.success", new Object[0]);
                 }
             }
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length == 4 ? a(astring, (Collection) Block.REGISTRY.keySet()) : (astring.length == 6 ? a(astring, new String[] { "replace", "destroy", "keep"}) : null));
     }
 }

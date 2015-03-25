@@ -34,7 +34,7 @@ public class BlockThin extends Block {
         return false;
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
         boolean flag = this.c(world.getType(blockposition.north()).getBlock());
         boolean flag1 = this.c(world.getType(blockposition.south()).getBlock());
         boolean flag2 = this.c(world.getType(blockposition.west()).getBlock());
@@ -68,7 +68,7 @@ public class BlockThin extends Block {
 
     }
 
-    public void h() {
+    public void j() {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
@@ -108,10 +108,10 @@ public class BlockThin extends Block {
     }
 
     public final boolean c(Block block) {
-        return block.m() || block == this || block == Blocks.GLASS || block == Blocks.STAINED_GLASS || block == Blocks.STAINED_GLASS_PANE || block instanceof BlockThin;
+        return block.o() || block == this || block == Blocks.GLASS || block == Blocks.STAINED_GLASS || block == Blocks.STAINED_GLASS_PANE || block instanceof BlockThin;
     }
 
-    protected boolean G() {
+    protected boolean I() {
         return true;
     }
 

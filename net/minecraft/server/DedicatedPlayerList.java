@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DedicatedPlayerList extends PlayerList {
 
-    private static final Logger h = LogManager.getLogger();
+    private static final Logger f = LogManager.getLogger();
 
     public DedicatedPlayerList(DedicatedServer dedicatedserver) {
         super(dedicatedserver);
@@ -66,7 +66,7 @@ public class DedicatedPlayerList extends PlayerList {
         try {
             this.getIPBans().save();
         } catch (IOException ioexception) {
-            DedicatedPlayerList.h.warn("Failed to save ip banlist: ", ioexception);
+            DedicatedPlayerList.f.warn("Failed to save ip banlist: ", ioexception);
         }
 
     }
@@ -75,7 +75,7 @@ public class DedicatedPlayerList extends PlayerList {
         try {
             this.getProfileBans().save();
         } catch (IOException ioexception) {
-            DedicatedPlayerList.h.warn("Failed to save user banlist: ", ioexception);
+            DedicatedPlayerList.f.warn("Failed to save user banlist: ", ioexception);
         }
 
     }
@@ -84,7 +84,7 @@ public class DedicatedPlayerList extends PlayerList {
         try {
             this.getIPBans().load();
         } catch (IOException ioexception) {
-            DedicatedPlayerList.h.warn("Failed to load ip banlist: ", ioexception);
+            DedicatedPlayerList.f.warn("Failed to load ip banlist: ", ioexception);
         }
 
     }
@@ -93,7 +93,7 @@ public class DedicatedPlayerList extends PlayerList {
         try {
             this.getProfileBans().load();
         } catch (IOException ioexception) {
-            DedicatedPlayerList.h.warn("Failed to load user banlist: ", ioexception);
+            DedicatedPlayerList.f.warn("Failed to load user banlist: ", ioexception);
         }
 
     }
@@ -102,7 +102,7 @@ public class DedicatedPlayerList extends PlayerList {
         try {
             this.getOPs().load();
         } catch (Exception exception) {
-            DedicatedPlayerList.h.warn("Failed to load operators list: ", exception);
+            DedicatedPlayerList.f.warn("Failed to load operators list: ", exception);
         }
 
     }
@@ -111,7 +111,7 @@ public class DedicatedPlayerList extends PlayerList {
         try {
             this.getOPs().save();
         } catch (Exception exception) {
-            DedicatedPlayerList.h.warn("Failed to save operators list: ", exception);
+            DedicatedPlayerList.f.warn("Failed to save operators list: ", exception);
         }
 
     }
@@ -120,7 +120,7 @@ public class DedicatedPlayerList extends PlayerList {
         try {
             this.getWhitelist().load();
         } catch (Exception exception) {
-            DedicatedPlayerList.h.warn("Failed to load white-list: ", exception);
+            DedicatedPlayerList.f.warn("Failed to load white-list: ", exception);
         }
 
     }
@@ -129,7 +129,7 @@ public class DedicatedPlayerList extends PlayerList {
         try {
             this.getWhitelist().save();
         } catch (Exception exception) {
-            DedicatedPlayerList.h.warn("Failed to save white-list: ", exception);
+            DedicatedPlayerList.f.warn("Failed to save white-list: ", exception);
         }
 
     }

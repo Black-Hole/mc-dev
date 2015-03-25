@@ -1,18 +1,20 @@
 package net.minecraft.server;
 
+import java.util.Random;
+
 public class EntityGhast extends EntityFlying implements IMonster {
 
     private int a = 1;
 
     public EntityGhast(World world) {
         super(world);
-        this.a(4.0F, 4.0F);
+        this.setSize(4.0F, 4.0F);
         this.fireProof = true;
         this.b_ = 5;
-        this.moveController = new ControllerGhast(this);
-        this.goalSelector.a(5, new PathfinderGoalGhastIdleMove(this));
-        this.goalSelector.a(7, new PathfinderGoalGhastMoveTowardsTarget(this));
-        this.goalSelector.a(7, new PathfinderGoalGhastAttackTarget(this));
+        this.moveController = new EntityGhast.ControllerGhast(this);
+        this.goalSelector.a(5, new EntityGhast.PathfinderGoalGhastIdleMove(this));
+        this.goalSelector.a(7, new EntityGhast.PathfinderGoalGhastMoveTowardsTarget(this));
+        this.goalSelector.a(7, new EntityGhast.PathfinderGoalGhastAttackTarget(this));
         this.targetSelector.a(1, new PathfinderGoalTargetNearestPlayer(this));
     }
 
@@ -20,13 +22,13 @@ public class EntityGhast extends EntityFlying implements IMonster {
         this.datawatcher.watch(16, Byte.valueOf((byte) (flag ? 1 : 0)));
     }
 
-    public int cd() {
+    public int cf() {
         return this.a;
     }
 
-    public void s_() {
-        super.s_();
-        if (!this.world.isStatic && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+    public void t_() {
+        super.t_();
+        if (!this.world.isClientSide && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
             this.die();
         }
 
@@ -49,8 +51,8 @@ public class EntityGhast extends EntityFlying implements IMonster {
         this.datawatcher.a(16, Byte.valueOf((byte) 0));
     }
 
-    protected void aW() {
-        super.aW();
+    protected void initAttributes() {
+        super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(10.0D);
         this.getAttributeInstance(GenericAttributes.b).setValue(100.0D);
     }
@@ -59,11 +61,11 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return "mob.ghast.moan";
     }
 
-    protected String bn() {
+    protected String bo() {
         return "mob.ghast.scream";
     }
 
-    protected String bo() {
+    protected String bp() {
         return "mob.ghast.death";
     }
 
@@ -88,15 +90,15 @@ public class EntityGhast extends EntityFlying implements IMonster {
 
     }
 
-    protected float bA() {
+    protected float bB() {
         return 10.0F;
     }
 
-    public boolean bQ() {
-        return this.random.nextInt(20) == 0 && super.bQ() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+    public boolean bR() {
+        return this.random.nextInt(20) == 0 && super.bR() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
-    public int bU() {
+    public int bV() {
         return 1;
     }
 
@@ -115,5 +117,181 @@ public class EntityGhast extends EntityFlying implements IMonster {
 
     public float getHeadHeight() {
         return 2.6F;
+    }
+
+    static class PathfinderGoalGhastAttackTarget extends PathfinderGoal {
+
+        private EntityGhast b;
+        public int a;
+
+        public PathfinderGoalGhastAttackTarget(EntityGhast entityghast) {
+            this.b = entityghast;
+        }
+
+        public boolean a() {
+            return this.b.getGoalTarget() != null;
+        }
+
+        public void c() {
+            this.a = 0;
+        }
+
+        public void d() {
+            this.b.a(false);
+        }
+
+        public void e() {
+            EntityLiving entityliving = this.b.getGoalTarget();
+            double d0 = 64.0D;
+
+            if (entityliving.h(this.b) < d0 * d0 && this.b.hasLineOfSight(entityliving)) {
+                World world = this.b.world;
+
+                ++this.a;
+                if (this.a == 10) {
+                    world.a((EntityHuman) null, 1007, new BlockPosition(this.b), 0);
+                }
+
+                if (this.a == 20) {
+                    double d1 = 4.0D;
+                    Vec3D vec3d = this.b.d(1.0F);
+                    double d2 = entityliving.locX - (this.b.locX + vec3d.a * d1);
+                    double d3 = entityliving.getBoundingBox().b + (double) (entityliving.length / 2.0F) - (0.5D + this.b.locY + (double) (this.b.length / 2.0F));
+                    double d4 = entityliving.locZ - (this.b.locZ + vec3d.c * d1);
+
+                    world.a((EntityHuman) null, 1008, new BlockPosition(this.b), 0);
+                    EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, this.b, d2, d3, d4);
+
+                    entitylargefireball.yield = this.b.cf();
+                    entitylargefireball.locX = this.b.locX + vec3d.a * d1;
+                    entitylargefireball.locY = this.b.locY + (double) (this.b.length / 2.0F) + 0.5D;
+                    entitylargefireball.locZ = this.b.locZ + vec3d.c * d1;
+                    world.addEntity(entitylargefireball);
+                    this.a = -40;
+                }
+            } else if (this.a > 0) {
+                --this.a;
+            }
+
+            this.b.a(this.a > 10);
+        }
+    }
+
+    static class PathfinderGoalGhastMoveTowardsTarget extends PathfinderGoal {
+
+        private EntityGhast a;
+
+        public PathfinderGoalGhastMoveTowardsTarget(EntityGhast entityghast) {
+            this.a = entityghast;
+            this.a(2);
+        }
+
+        public boolean a() {
+            return true;
+        }
+
+        public void e() {
+            if (this.a.getGoalTarget() == null) {
+                this.a.aI = this.a.yaw = -((float) MathHelper.b(this.a.motX, this.a.motZ)) * 180.0F / 3.1415927F;
+            } else {
+                EntityLiving entityliving = this.a.getGoalTarget();
+                double d0 = 64.0D;
+
+                if (entityliving.h(this.a) < d0 * d0) {
+                    double d1 = entityliving.locX - this.a.locX;
+                    double d2 = entityliving.locZ - this.a.locZ;
+
+                    this.a.aI = this.a.yaw = -((float) MathHelper.b(d1, d2)) * 180.0F / 3.1415927F;
+                }
+            }
+
+        }
+    }
+
+    static class PathfinderGoalGhastIdleMove extends PathfinderGoal {
+
+        private EntityGhast a;
+
+        public PathfinderGoalGhastIdleMove(EntityGhast entityghast) {
+            this.a = entityghast;
+            this.a(1);
+        }
+
+        public boolean a() {
+            ControllerMove controllermove = this.a.getControllerMove();
+
+            if (!controllermove.a()) {
+                return true;
+            } else {
+                double d0 = controllermove.d() - this.a.locX;
+                double d1 = controllermove.e() - this.a.locY;
+                double d2 = controllermove.f() - this.a.locZ;
+                double d3 = d0 * d0 + d1 * d1 + d2 * d2;
+
+                return d3 < 1.0D || d3 > 3600.0D;
+            }
+        }
+
+        public boolean b() {
+            return false;
+        }
+
+        public void c() {
+            Random random = this.a.bc();
+            double d0 = this.a.locX + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            double d1 = this.a.locY + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
+            double d2 = this.a.locZ + (double) ((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
+
+            this.a.getControllerMove().a(d0, d1, d2, 1.0D);
+        }
+    }
+
+    static class ControllerGhast extends ControllerMove {
+
+        private EntityGhast g;
+        private int h;
+
+        public ControllerGhast(EntityGhast entityghast) {
+            super(entityghast);
+            this.g = entityghast;
+        }
+
+        public void c() {
+            if (this.f) {
+                double d0 = this.b - this.g.locX;
+                double d1 = this.c - this.g.locY;
+                double d2 = this.d - this.g.locZ;
+                double d3 = d0 * d0 + d1 * d1 + d2 * d2;
+
+                if (this.h-- <= 0) {
+                    this.h += this.g.bc().nextInt(5) + 2;
+                    d3 = (double) MathHelper.sqrt(d3);
+                    if (this.b(this.b, this.c, this.d, d3)) {
+                        this.g.motX += d0 / d3 * 0.1D;
+                        this.g.motY += d1 / d3 * 0.1D;
+                        this.g.motZ += d2 / d3 * 0.1D;
+                    } else {
+                        this.f = false;
+                    }
+                }
+
+            }
+        }
+
+        private boolean b(double d0, double d1, double d2, double d3) {
+            double d4 = (d0 - this.g.locX) / d3;
+            double d5 = (d1 - this.g.locY) / d3;
+            double d6 = (d2 - this.g.locZ) / d3;
+            AxisAlignedBB axisalignedbb = this.g.getBoundingBox();
+
+            for (int i = 1; (double) i < d3; ++i) {
+                axisalignedbb = axisalignedbb.c(d4, d5, d6);
+                if (!this.g.world.getCubes(this.g, axisalignedbb).isEmpty()) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

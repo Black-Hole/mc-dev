@@ -2,13 +2,13 @@ package net.minecraft.server;
 
 import java.util.Collection;
 
-public interface IBlockState {
+public interface IBlockState<T extends Comparable<T>> {
 
     String a();
 
-    Collection c();
+    Collection<T> c();
 
-    Class b();
+    Class<T> b();
 
-    String a(Comparable comparable);
+    String a(T t0);
 }

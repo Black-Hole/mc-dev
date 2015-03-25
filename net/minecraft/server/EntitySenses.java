@@ -6,8 +6,8 @@ import java.util.List;
 public class EntitySenses {
 
     EntityInsentient a;
-    List b = Lists.newArrayList();
-    List c = Lists.newArrayList();
+    List<Entity> b = Lists.newArrayList();
+    List<Entity> c = Lists.newArrayList();
 
     public EntitySenses(EntityInsentient entityinsentient) {
         this.a = entityinsentient;

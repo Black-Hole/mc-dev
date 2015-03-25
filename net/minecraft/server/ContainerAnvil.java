@@ -10,7 +10,12 @@ public class ContainerAnvil extends Container {
 
     private static final Logger f = LogManager.getLogger();
     private IInventory g = new InventoryCraftResult();
-    private IInventory h = new ContainerAnvilInventory(this, "Repair", true, 2);
+    private IInventory h = new InventorySubcontainer("Repair", true, 2) {
+        public void update() {
+            super.update();
+            ContainerAnvil.this.a((IInventory) this);
+        }
+    };
     private World i;
     private BlockPosition j;
     public int a;
@@ -18,13 +23,60 @@ public class ContainerAnvil extends Container {
     private String l;
     private final EntityHuman m;
 
-    public ContainerAnvil(PlayerInventory playerinventory, World world, BlockPosition blockposition, EntityHuman entityhuman) {
+    public ContainerAnvil(PlayerInventory playerinventory, final World world, final BlockPosition blockposition, EntityHuman entityhuman) {
         this.j = blockposition;
         this.i = world;
         this.m = entityhuman;
         this.a(new Slot(this.h, 0, 27, 47));
         this.a(new Slot(this.h, 1, 76, 47));
-        this.a((Slot) (new SlotAnvilResult(this, this.g, 2, 134, 47, world, blockposition)));
+        this.a(new Slot(this.g, 2, 134, 47) {
+            public boolean isAllowed(ItemStack itemstack) {
+                return false;
+            }
+
+            public boolean isAllowed(EntityHuman entityhuman) {
+                return (entityhuman.abilities.canInstantlyBuild || entityhuman.expLevel >= ContainerAnvil.this.a) && ContainerAnvil.this.a > 0 && this.hasItem();
+            }
+
+            public void a(EntityHuman entityhuman, ItemStack itemstack) {
+                if (!entityhuman.abilities.canInstantlyBuild) {
+                    entityhuman.levelDown(-ContainerAnvil.this.a);
+                }
+
+                ContainerAnvil.this.h.setItem(0, (ItemStack) null);
+                if (ContainerAnvil.this.k > 0) {
+                    ItemStack itemstack1 = ContainerAnvil.this.h.getItem(1);
+
+                    if (itemstack1 != null && itemstack1.count > ContainerAnvil.this.k) {
+                        itemstack1.count -= ContainerAnvil.this.k;
+                        ContainerAnvil.this.h.setItem(1, itemstack1);
+                    } else {
+                        ContainerAnvil.this.h.setItem(1, (ItemStack) null);
+                    }
+                } else {
+                    ContainerAnvil.this.h.setItem(1, (ItemStack) null);
+                }
+
+                ContainerAnvil.this.a = 0;
+                IBlockData iblockdata = world.getType(blockposition);
+
+                if (!entityhuman.abilities.canInstantlyBuild && !world.isClientSide && iblockdata.getBlock() == Blocks.ANVIL && entityhuman.bc().nextFloat() < 0.12F) {
+                    int i = ((Integer) iblockdata.get(BlockAnvil.DAMAGE)).intValue();
+
+                    ++i;
+                    if (i > 2) {
+                        world.setAir(blockposition);
+                        world.triggerEffect(1020, blockposition, 0);
+                    } else {
+                        world.setTypeAndData(blockposition, iblockdata.set(BlockAnvil.DAMAGE, Integer.valueOf(i)), 2);
+                        world.triggerEffect(1021, blockposition, 0);
+                    }
+                } else if (!world.isClientSide) {
+                    world.triggerEffect(1021, blockposition, 0);
+                }
+
+            }
+        });
 
         int i;
 
@@ -252,7 +304,7 @@ public class ContainerAnvil extends Container {
 
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        if (!this.i.isStatic) {
+        if (!this.i.isClientSide) {
             for (int i = 0; i < this.h.getSize(); ++i) {
                 ItemStack itemstack = this.h.splitWithoutUpdate(i);
 
@@ -319,13 +371,5 @@ public class ContainerAnvil extends Container {
         }
 
         this.e();
-    }
-
-    static IInventory a(ContainerAnvil containeranvil) {
-        return containeranvil.h;
-    }
-
-    static int b(ContainerAnvil containeranvil) {
-        return containeranvil.k;
     }
 }

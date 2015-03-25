@@ -67,8 +67,9 @@ public class ChunkProviderGenerate implements IChunkProvider {
         }
 
         if (s != null) {
-            this.r = CustomWorldSettings.a(s).b();
+            this.r = CustomWorldSettingsFinal.CustomWorldSettings.a(s).b();
             this.s = this.r.E ? Blocks.LAVA : Blocks.WATER;
+            world.b(this.r.q);
         }
 
     }
@@ -353,7 +354,7 @@ public class ChunkProviderGenerate implements IChunkProvider {
             k1 = this.h.nextInt(16) + 8;
             l1 = this.h.nextInt(this.h.nextInt(248) + 8);
             i2 = this.h.nextInt(16) + 8;
-            if (l1 < 63 || this.h.nextInt(this.r.D / 8) == 0) {
+            if (l1 < this.m.F() || this.h.nextInt(this.r.D / 8) == 0) {
                 (new WorldGenLakes(Blocks.LAVA)).generate(this.m, this.h, blockposition.a(k1, l1, i2));
             }
         }
@@ -418,7 +419,7 @@ public class ChunkProviderGenerate implements IChunkProvider {
         return "RandomLevelSource";
     }
 
-    public List getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
+    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         BiomeBase biomebase = this.m.getBiome(blockposition);
 
         if (this.n) {

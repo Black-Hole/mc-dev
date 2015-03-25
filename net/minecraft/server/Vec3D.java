@@ -24,6 +24,10 @@ public class Vec3D {
         this.c = d2;
     }
 
+    public Vec3D(BaseBlockPosition baseblockposition) {
+        this((double) baseblockposition.getX(), (double) baseblockposition.getY(), (double) baseblockposition.getZ());
+    }
+
     public Vec3D a() {
         double d0 = (double) MathHelper.sqrt(this.a * this.a + this.b * this.b + this.c * this.c);
 
@@ -48,14 +52,6 @@ public class Vec3D {
 
     public Vec3D add(double d0, double d1, double d2) {
         return new Vec3D(this.a + d0, this.b + d1, this.c + d2);
-    }
-
-    public double f(Vec3D vec3d) {
-        double d0 = vec3d.a - this.a;
-        double d1 = vec3d.b - this.b;
-        double d2 = vec3d.c - this.c;
-
-        return (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
     }
 
     public double distanceSquared(Vec3D vec3d) {

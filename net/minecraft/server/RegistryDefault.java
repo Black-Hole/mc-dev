@@ -1,16 +1,16 @@
 package net.minecraft.server;
 
-public class RegistryDefault extends RegistrySimple {
+public class RegistryDefault<K, V> extends RegistrySimple<K, V> {
 
-    private final Object a;
+    private final V a;
 
-    public RegistryDefault(Object object) {
-        this.a = object;
+    public RegistryDefault(V v0) {
+        this.a = v0;
     }
 
-    public Object get(Object object) {
-        Object object1 = super.get(object);
+    public V get(K k0) {
+        Object object = super.get(k0);
 
-        return object1 == null ? this.a : object1;
+        return object == null ? this.a : object;
     }
 }

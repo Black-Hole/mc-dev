@@ -11,9 +11,9 @@ public interface AttributeInstance {
 
     void setValue(double d0);
 
-    Collection a(int i);
+    Collection<AttributeModifier> a(int i);
 
-    Collection c();
+    Collection<AttributeModifier> c();
 
     boolean a(AttributeModifier attributemodifier);
 

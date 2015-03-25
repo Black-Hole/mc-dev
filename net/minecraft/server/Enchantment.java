@@ -3,14 +3,14 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public abstract class Enchantment {
 
     private static final Enchantment[] byId = new Enchantment[256];
     public static final Enchantment[] b;
-    private static final Map E = Maps.newHashMap();
+    private static final Map<MinecraftKey, Enchantment> E = Maps.newHashMap();
     public static final Enchantment PROTECTION_ENVIRONMENTAL = new EnchantmentProtection(0, new MinecraftKey("protection"), 10, 0);
     public static final Enchantment PROTECTION_FIRE = new EnchantmentProtection(1, new MinecraftKey("fire_protection"), 5, 1);
     public static final Enchantment PROTECTION_FALL = new EnchantmentProtection(2, new MinecraftKey("feather_falling"), 5, 2);
@@ -61,17 +61,8 @@ public abstract class Enchantment {
         return (Enchantment) Enchantment.E.get(new MinecraftKey(s));
     }
 
-    public static String[] getNames() {
-        String[] astring = new String[Enchantment.E.size()];
-        int i = 0;
-
-        MinecraftKey minecraftkey;
-
-        for (Iterator iterator = Enchantment.E.keySet().iterator(); iterator.hasNext(); astring[i++] = minecraftkey.toString()) {
-            minecraftkey = (MinecraftKey) iterator.next();
-        }
-
-        return astring;
+    public static Set<MinecraftKey> getEffects() {
+        return Enchantment.E.keySet();
     }
 
     public int getRandomWeight() {

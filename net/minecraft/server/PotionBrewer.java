@@ -24,9 +24,9 @@ public class PotionBrewer {
     public static final String l;
     public static final String m;
     public static final String n;
-    private static final Map effectDurations = Maps.newHashMap();
-    private static final Map effectAmplifiers = Maps.newHashMap();
-    private static final Map q;
+    private static final Map<Integer, String> effectDurations = Maps.newHashMap();
+    private static final Map<Integer, String> effectAmplifiers = Maps.newHashMap();
+    private static final Map<Integer, Integer> q;
     private static final String[] appearances;
 
     public static boolean a(int i, int j) {
@@ -45,7 +45,7 @@ public class PotionBrewer {
         return a(i, 5, 4, 3, 2, 1);
     }
 
-    public static int a(Collection collection) {
+    public static int a(Collection<MobEffect> collection) {
         int i = 3694022;
 
         if (collection != null && !collection.isEmpty()) {
@@ -83,7 +83,7 @@ public class PotionBrewer {
         }
     }
 
-    public static boolean b(Collection collection) {
+    public static boolean b(Collection<MobEffect> collection) {
         Iterator iterator = collection.iterator();
 
         MobEffect mobeffect;
@@ -268,7 +268,7 @@ public class PotionBrewer {
         }
     }
 
-    public static List getEffects(int i, boolean flag) {
+    public static List<MobEffect> getEffects(int i, boolean flag) {
         ArrayList arraylist = null;
         MobEffectList[] amobeffectlist = MobEffectList.byId;
         int j = amobeffectlist.length;
@@ -437,7 +437,7 @@ public class PotionBrewer {
         m = "+0-1+2+3+13&4-4";
         PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.WATER_BREATHING.getId()), "0 & !1 & 2 & 3 & 2+6");
         n = "+0+1-2+3&4-4+13";
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.JUMP.getId()), "0 & 1 & !2 & 3");
+        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.JUMP.getId()), "0 & 1 & !2 & 3 & 3+6");
         j = "+5-6-7";
         PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.FASTER_MOVEMENT.getId()), "5");
         PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.FASTER_DIG.getId()), "5");

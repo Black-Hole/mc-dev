@@ -152,7 +152,7 @@ public class VillageSiege {
         for (int i = 0; i < 10; ++i) {
             BlockPosition blockposition1 = blockposition.a(this.a.random.nextInt(16) - 8, this.a.random.nextInt(6) - 3, this.a.random.nextInt(16) - 8);
 
-            if (this.f.a(blockposition1) && SpawnerCreature.a(EnumEntityPositionType.ON_GROUND, this.a, blockposition1)) {
+            if (this.f.a(blockposition1) && SpawnerCreature.a(EntityInsentient.EnumEntityPositionType.ON_GROUND, this.a, blockposition1)) {
                 return new Vec3D((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
             }
         }

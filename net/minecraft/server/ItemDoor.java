@@ -16,7 +16,7 @@ public class ItemDoor extends Item {
             IBlockData iblockdata = world.getType(blockposition);
             Block block = iblockdata.getBlock();
 
-            if (!block.f(world, blockposition)) {
+            if (!block.a(world, blockposition)) {
                 blockposition = blockposition.shift(enumdirection);
             }
 
@@ -46,10 +46,10 @@ public class ItemDoor extends Item {
         }
 
         BlockPosition blockposition3 = blockposition.up();
-        IBlockData iblockdata = block.getBlockData().set(BlockDoor.FACING, enumdirection).set(BlockDoor.HINGE, flag2 ? EnumDoorHinge.RIGHT : EnumDoorHinge.LEFT);
+        IBlockData iblockdata = block.getBlockData().set(BlockDoor.FACING, enumdirection).set(BlockDoor.HINGE, flag2 ? BlockDoor.EnumDoorHinge.RIGHT : BlockDoor.EnumDoorHinge.LEFT);
 
-        world.setTypeAndData(blockposition, iblockdata.set(BlockDoor.HALF, EnumDoorHalf.LOWER), 2);
-        world.setTypeAndData(blockposition3, iblockdata.set(BlockDoor.HALF, EnumDoorHalf.UPPER), 2);
+        world.setTypeAndData(blockposition, iblockdata.set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER), 2);
+        world.setTypeAndData(blockposition3, iblockdata.set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), 2);
         world.applyPhysics(blockposition, block);
         world.applyPhysics(blockposition3, block);
     }

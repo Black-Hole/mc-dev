@@ -19,7 +19,7 @@ public class ItemSkull extends Item {
         } else {
             IBlockData iblockdata = world.getType(blockposition);
             Block block = iblockdata.getBlock();
-            boolean flag = block.f(world, blockposition);
+            boolean flag = block.a(world, blockposition);
 
             if (!flag) {
                 if (!world.getType(blockposition).getBlock().getMaterial().isBuildable()) {
@@ -34,7 +34,7 @@ public class ItemSkull extends Item {
             } else if (!Blocks.SKULL.canPlace(world, blockposition)) {
                 return false;
             } else {
-                if (!world.isStatic) {
+                if (!world.isClientSide) {
                     world.setTypeAndData(blockposition, Blocks.SKULL.getBlockData().set(BlockSkull.FACING, enumdirection), 3);
                     int i = 0;
 

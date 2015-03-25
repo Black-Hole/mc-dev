@@ -7,13 +7,13 @@ public class WorldGenMinable extends WorldGenerator {
 
     private final IBlockData a;
     private final int b;
-    private final Predicate c;
+    private final Predicate<IBlockData> c;
 
     public WorldGenMinable(IBlockData iblockdata, int i) {
         this(iblockdata, i, BlockPredicate.a(Blocks.STONE));
     }
 
-    public WorldGenMinable(IBlockData iblockdata, int i, Predicate predicate) {
+    public WorldGenMinable(IBlockData iblockdata, int i, Predicate<IBlockData> predicate) {
         this.a = iblockdata;
         this.b = i;
         this.c = predicate;

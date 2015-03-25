@@ -4,12 +4,12 @@ import java.util.Random;
 
 public class WorldGenTallPlant extends WorldGenerator {
 
-    private EnumTallFlowerVariants a;
+    private BlockTallPlant.EnumTallFlowerVariants a;
 
     public WorldGenTallPlant() {}
 
-    public void a(EnumTallFlowerVariants enumtallflowervariants) {
-        this.a = enumtallflowervariants;
+    public void a(BlockTallPlant.EnumTallFlowerVariants blocktallplant_enumtallflowervariants) {
+        this.a = blocktallplant_enumtallflowervariants;
     }
 
     public boolean generate(World world, Random random, BlockPosition blockposition) {

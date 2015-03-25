@@ -51,6 +51,14 @@ public class WorldProviderHell extends WorldProvider {
     }
 
     public WorldBorder getWorldBorder() {
-        return new WorldBorderHell(this);
+        return new WorldBorder() {
+            public double getCenterX() {
+                return super.getCenterX() / 8.0D;
+            }
+
+            public double getCenterZ() {
+                return super.getCenterZ() / 8.0D;
+            }
+        };
     }
 }

@@ -18,7 +18,7 @@ public class CommandPlaySound extends CommandAbstract {
         return "commands.playsound.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 2) {
             throw new ExceptionUsage(this.getUsage(icommandlistener), new Object[0]);
         } else {
@@ -90,7 +90,7 @@ public class CommandPlaySound extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 2 ? a(astring, MinecraftServer.getServer().getPlayers()) : (astring.length > 2 && astring.length <= 5 ? a(astring, 2, blockposition) : null);
     }
 

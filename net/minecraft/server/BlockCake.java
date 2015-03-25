@@ -20,7 +20,7 @@ public class BlockCake extends Block {
         this.a(f1, 0.0F, f, 1.0F - f, f2, 1.0F - f);
     }
 
-    public void h() {
+    public void j() {
         float f = 0.0625F;
         float f1 = 0.5F;
 
@@ -54,6 +54,7 @@ public class BlockCake extends Block {
 
     private void b(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
         if (entityhuman.j(false)) {
+            entityhuman.b(StatisticList.H);
             entityhuman.getFoodData().eat(2, 0.1F);
             int i = ((Integer) iblockdata.get(BlockCake.BITES)).intValue();
 
@@ -67,17 +68,17 @@ public class BlockCake extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return super.canPlace(world, blockposition) ? this.d(world, blockposition) : false;
+        return super.canPlace(world, blockposition) ? this.e(world, blockposition) : false;
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!this.d(world, blockposition)) {
+        if (!this.e(world, blockposition)) {
             world.setAir(blockposition);
         }
 
     }
 
-    private boolean d(World world, BlockPosition blockposition) {
+    private boolean e(World world, BlockPosition blockposition) {
         return world.getType(blockposition.down()).getBlock().getMaterial().isBuildable();
     }
 

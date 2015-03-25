@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ChatComponentUtils {
 
-    public static IChatBaseComponent filterForDisplay(ICommandListener icommandlistener, IChatBaseComponent ichatbasecomponent, Entity entity) {
+    public static IChatBaseComponent filterForDisplay(ICommandListener icommandlistener, IChatBaseComponent ichatbasecomponent, Entity entity) throws CommandException {
         Object object = null;
 
         if (ichatbasecomponent instanceof ChatComponentScore) {

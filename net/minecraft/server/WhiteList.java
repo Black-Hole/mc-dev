@@ -5,13 +5,13 @@ import com.mojang.authlib.GameProfile;
 import java.io.File;
 import java.util.Iterator;
 
-public class WhiteList extends JsonList {
+public class WhiteList extends JsonList<GameProfile, WhiteListEntry> {
 
     public WhiteList(File file) {
         super(file);
     }
 
-    protected JsonListEntry a(JsonObject jsonobject) {
+    protected JsonListEntry<GameProfile> a(JsonObject jsonobject) {
         return new WhiteListEntry(jsonobject);
     }
 

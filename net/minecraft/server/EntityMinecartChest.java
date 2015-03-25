@@ -12,15 +12,18 @@ public class EntityMinecartChest extends EntityMinecartContainer {
 
     public void a(DamageSource damagesource) {
         super.a(damagesource);
-        this.a(Item.getItemOf(Blocks.CHEST), 1, 0.0F);
+        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+            this.a(Item.getItemOf(Blocks.CHEST), 1, 0.0F);
+        }
+
     }
 
     public int getSize() {
         return 27;
     }
 
-    public EnumMinecartType s() {
-        return EnumMinecartType.CHEST;
+    public EntityMinecartAbstract.EnumMinecartType s() {
+        return EntityMinecartAbstract.EnumMinecartType.CHEST;
     }
 
     public IBlockData u() {

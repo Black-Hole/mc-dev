@@ -17,7 +17,7 @@ public class PathfinderGoalBreakDoor extends PathfinderGoalDoorInteract {
         } else {
             BlockDoor blockdoor = this.c;
 
-            return !BlockDoor.f((IBlockAccess) this.a.world, this.b);
+            return !BlockDoor.f(this.a.world, this.b);
         }
     }
 
@@ -33,7 +33,7 @@ public class PathfinderGoalBreakDoor extends PathfinderGoalDoorInteract {
         if (this.g <= 240) {
             BlockDoor blockdoor = this.c;
 
-            if (!BlockDoor.f((IBlockAccess) this.a.world, this.b) && d0 < 4.0D) {
+            if (!BlockDoor.f(this.a.world, this.b) && d0 < 4.0D) {
                 flag = true;
                 return flag;
             }
@@ -50,7 +50,7 @@ public class PathfinderGoalBreakDoor extends PathfinderGoalDoorInteract {
 
     public void e() {
         super.e();
-        if (this.a.bb().nextInt(20) == 0) {
+        if (this.a.bc().nextInt(20) == 0) {
             this.a.world.triggerEffect(1010, this.b, 0);
         }
 

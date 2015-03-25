@@ -28,8 +28,8 @@ public class BlockTNT extends Block {
     }
 
     public void wasExploded(World world, BlockPosition blockposition, Explosion explosion) {
-        if (!world.isStatic) {
-            EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), explosion.c());
+        if (!world.isClientSide) {
+            EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) blockposition.getX() + 0.5F), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + 0.5F), explosion.c());
 
             entitytntprimed.fuseTicks = world.random.nextInt(entitytntprimed.fuseTicks / 4) + entitytntprimed.fuseTicks / 8;
             world.addEntity(entitytntprimed);
@@ -41,9 +41,9 @@ public class BlockTNT extends Block {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             if (((Boolean) iblockdata.get(BlockTNT.EXPLODE)).booleanValue()) {
-                EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), entityliving);
+                EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) blockposition.getX() + 0.5F), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + 0.5F), entityliving);
 
                 world.addEntity(entitytntprimed);
                 world.makeSound(entitytntprimed, "game.tnt.primed", 1.0F, 1.0F);
@@ -53,16 +53,16 @@ public class BlockTNT extends Block {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (entityhuman.bY() != null) {
-            Item item = entityhuman.bY().getItem();
+        if (entityhuman.bZ() != null) {
+            Item item = entityhuman.bZ().getItem();
 
             if (item == Items.FLINT_AND_STEEL || item == Items.FIRE_CHARGE) {
                 this.a(world, blockposition, iblockdata.set(BlockTNT.EXPLODE, Boolean.valueOf(true)), (EntityLiving) entityhuman);
                 world.setAir(blockposition);
                 if (item == Items.FLINT_AND_STEEL) {
-                    entityhuman.bY().damage(1, entityhuman);
+                    entityhuman.bZ().damage(1, entityhuman);
                 } else if (!entityhuman.abilities.canInstantlyBuild) {
-                    --entityhuman.bY().count;
+                    --entityhuman.bZ().count;
                 }
 
                 return true;
@@ -73,7 +73,7 @@ public class BlockTNT extends Block {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (!world.isStatic && entity instanceof EntityArrow) {
+        if (!world.isClientSide && entity instanceof EntityArrow) {
             EntityArrow entityarrow = (EntityArrow) entity;
 
             if (entityarrow.isBurning()) {

@@ -13,14 +13,14 @@ import org.apache.logging.log4j.Logger;
 public class EntityTypes {
 
     private static final Logger b = LogManager.getLogger();
-    private static final Map c = Maps.newHashMap();
-    private static final Map d = Maps.newHashMap();
-    private static final Map e = Maps.newHashMap();
-    private static final Map f = Maps.newHashMap();
-    private static final Map g = Maps.newHashMap();
-    public static final Map eggInfo = Maps.newLinkedHashMap();
+    private static final Map<String, Class<? extends Entity>> c = Maps.newHashMap();
+    private static final Map<Class<? extends Entity>, String> d = Maps.newHashMap();
+    private static final Map<Integer, Class<? extends Entity>> e = Maps.newHashMap();
+    private static final Map<Class<? extends Entity>, Integer> f = Maps.newHashMap();
+    private static final Map<String, Integer> g = Maps.newHashMap();
+    public static final Map<Integer, EntityTypes.MonsterEggInfo> eggInfo = Maps.newLinkedHashMap();
 
-    private static void a(Class oclass, String s, int i) {
+    private static void a(Class<? extends Entity> oclass, String s, int i) {
         if (EntityTypes.c.containsKey(s)) {
             throw new IllegalArgumentException("ID is already registered: " + s);
         } else if (EntityTypes.e.containsKey(Integer.valueOf(i))) {
@@ -38,9 +38,9 @@ public class EntityTypes {
         }
     }
 
-    private static void a(Class oclass, String s, int i, int j, int k) {
+    private static void a(Class<? extends Entity> oclass, String s, int i, int j, int k) {
         a(oclass, s, i);
-        EntityTypes.eggInfo.put(Integer.valueOf(i), new MonsterEggInfo(i, j, k));
+        EntityTypes.eggInfo.put(Integer.valueOf(i), new EntityTypes.MonsterEggInfo(i, j, k));
     }
 
     public static Entity createEntityByName(String s, World world) {
@@ -63,7 +63,7 @@ public class EntityTypes {
         Entity entity = null;
 
         if ("Minecart".equals(nbttagcompound.getString("id"))) {
-            nbttagcompound.setString("id", EnumMinecartType.a(nbttagcompound.getInt("Type")).b());
+            nbttagcompound.setString("id", EntityMinecartAbstract.EnumMinecartType.a(nbttagcompound.getInt("Type")).b());
             nbttagcompound.remove("Type");
         }
 
@@ -112,7 +112,7 @@ public class EntityTypes {
         return integer == null ? 0 : integer.intValue();
     }
 
-    public static Class a(int i) {
+    public static Class<? extends Entity> a(int i) {
         return (Class) EntityTypes.e.get(Integer.valueOf(i));
     }
 
@@ -126,7 +126,7 @@ public class EntityTypes {
 
     public static void a() {}
 
-    public static List b() {
+    public static List<String> b() {
         Set set = EntityTypes.c.keySet();
         ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = set.iterator();
@@ -163,6 +163,7 @@ public class EntityTypes {
     static {
         a(EntityItem.class, "Item", 1);
         a(EntityExperienceOrb.class, "XPOrb", 2);
+        a(EntityEgg.class, "ThrownEgg", 7);
         a(EntityLeash.class, "LeashKnot", 8);
         a(EntityPainting.class, "Painting", 9);
         a(EntityArrow.class, "Arrow", 10);
@@ -180,13 +181,13 @@ public class EntityTypes {
         a(EntityFireworks.class, "FireworksRocketEntity", 22);
         a(EntityArmorStand.class, "ArmorStand", 30);
         a(EntityBoat.class, "Boat", 41);
-        a(EntityMinecartRideable.class, EnumMinecartType.RIDEABLE.b(), 42);
-        a(EntityMinecartChest.class, EnumMinecartType.CHEST.b(), 43);
-        a(EntityMinecartFurnace.class, EnumMinecartType.FURNACE.b(), 44);
-        a(EntityMinecartTNT.class, EnumMinecartType.TNT.b(), 45);
-        a(EntityMinecartHopper.class, EnumMinecartType.HOPPER.b(), 46);
-        a(EntityMinecartMobSpawner.class, EnumMinecartType.SPAWNER.b(), 47);
-        a(EntityMinecartCommandBlock.class, EnumMinecartType.COMMAND_BLOCK.b(), 40);
+        a(EntityMinecartRideable.class, EntityMinecartAbstract.EnumMinecartType.RIDEABLE.b(), 42);
+        a(EntityMinecartChest.class, EntityMinecartAbstract.EnumMinecartType.CHEST.b(), 43);
+        a(EntityMinecartFurnace.class, EntityMinecartAbstract.EnumMinecartType.FURNACE.b(), 44);
+        a(EntityMinecartTNT.class, EntityMinecartAbstract.EnumMinecartType.TNT.b(), 45);
+        a(EntityMinecartHopper.class, EntityMinecartAbstract.EnumMinecartType.HOPPER.b(), 46);
+        a(EntityMinecartMobSpawner.class, EntityMinecartAbstract.EnumMinecartType.SPAWNER.b(), 47);
+        a(EntityMinecartCommandBlock.class, EntityMinecartAbstract.EnumMinecartType.COMMAND_BLOCK.b(), 40);
         a(EntityInsentient.class, "Mob", 48);
         a(EntityMonster.class, "Monster", 49);
         a(EntityCreeper.class, "Creeper", 50, 894731, 0);
@@ -222,5 +223,22 @@ public class EntityTypes {
         a(EntityRabbit.class, "Rabbit", 101, 10051392, 7555121);
         a(EntityVillager.class, "Villager", 120, 5651507, 12422002);
         a(EntityEnderCrystal.class, "EnderCrystal", 200);
+    }
+
+    public static class MonsterEggInfo {
+
+        public final int a;
+        public final int b;
+        public final int c;
+        public final Statistic killEntityStatistic;
+        public final Statistic e;
+
+        public MonsterEggInfo(int i, int j, int k) {
+            this.a = i;
+            this.b = j;
+            this.c = k;
+            this.killEntityStatistic = StatisticList.a(this);
+            this.e = StatisticList.b(this);
+        }
     }
 }

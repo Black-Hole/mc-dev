@@ -5,7 +5,7 @@ import java.util.Random;
 public class BlockDragonEgg extends Block {
 
     public BlockDragonEgg() {
-        super(Material.DRAGON_EGG);
+        super(Material.DRAGON_EGG, MaterialMapColor.E);
         this.a(0.0625F, 0.0F, 0.0625F, 0.9375F, 1.0F, 0.9375F);
     }
 
@@ -18,10 +18,10 @@ public class BlockDragonEgg extends Block {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        this.d(world, blockposition);
+        this.e(world, blockposition);
     }
 
-    private void d(World world, BlockPosition blockposition) {
+    private void e(World world, BlockPosition blockposition) {
         if (BlockFalling.canFall(world, blockposition.down()) && blockposition.getY() >= 0) {
             byte b0 = 32;
 
@@ -45,15 +45,15 @@ public class BlockDragonEgg extends Block {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        this.e(world, blockposition);
+        this.f(world, blockposition);
         return true;
     }
 
     public void attack(World world, BlockPosition blockposition, EntityHuman entityhuman) {
-        this.e(world, blockposition);
+        this.f(world, blockposition);
     }
 
-    private void e(World world, BlockPosition blockposition) {
+    private void f(World world, BlockPosition blockposition) {
         IBlockData iblockdata = world.getType(blockposition);
 
         if (iblockdata.getBlock() == this) {
@@ -61,7 +61,7 @@ public class BlockDragonEgg extends Block {
                 BlockPosition blockposition1 = blockposition.a(world.random.nextInt(16) - world.random.nextInt(16), world.random.nextInt(8) - world.random.nextInt(8), world.random.nextInt(16) - world.random.nextInt(16));
 
                 if (world.getType(blockposition1).getBlock().material == Material.AIR) {
-                    if (world.isStatic) {
+                    if (world.isClientSide) {
                         for (int j = 0; j < 128; ++j) {
                             double d0 = world.random.nextDouble();
                             float f = (world.random.nextFloat() - 0.5F) * 0.2F;

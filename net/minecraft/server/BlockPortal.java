@@ -1,14 +1,15 @@
 package net.minecraft.server;
 
+import com.google.common.cache.LoadingCache;
 import java.util.Random;
 
 public class BlockPortal extends BlockHalfTransparent {
 
-    public static final BlockStateEnum AXIS = BlockStateEnum.of("axis", EnumAxis.class, new EnumAxis[] { EnumAxis.X, EnumAxis.Z});
+    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockStateEnum.of("axis", EnumDirection.EnumAxis.class, new EnumDirection.EnumAxis[] { EnumDirection.EnumAxis.X, EnumDirection.EnumAxis.Z});
 
     public BlockPortal() {
         super(Material.PORTAL, false);
-        this.j(this.blockStateList.getBlockData().set(BlockPortal.AXIS, EnumAxis.X));
+        this.j(this.blockStateList.getBlockData().set(BlockPortal.AXIS, EnumDirection.EnumAxis.X));
         this.a(true);
     }
 
@@ -27,7 +28,7 @@ public class BlockPortal extends BlockHalfTransparent {
                 Entity entity = ItemMonsterEgg.a(world, 57, (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 1.1D, (double) blockposition1.getZ() + 0.5D);
 
                 if (entity != null) {
-                    entity.portalCooldown = entity.ar();
+                    entity.portalCooldown = entity.aq();
                 }
             }
         }
@@ -39,40 +40,40 @@ public class BlockPortal extends BlockHalfTransparent {
     }
 
     public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        EnumAxis enumaxis = (EnumAxis) iblockaccess.getType(blockposition).get(BlockPortal.AXIS);
+        EnumDirection.EnumAxis enumdirection_enumaxis = (EnumDirection.EnumAxis) iblockaccess.getType(blockposition).get(BlockPortal.AXIS);
         float f = 0.125F;
         float f1 = 0.125F;
 
-        if (enumaxis == EnumAxis.X) {
+        if (enumdirection_enumaxis == EnumDirection.EnumAxis.X) {
             f = 0.5F;
         }
 
-        if (enumaxis == EnumAxis.Z) {
+        if (enumdirection_enumaxis == EnumDirection.EnumAxis.Z) {
             f1 = 0.5F;
         }
 
         this.a(0.5F - f, 0.0F, 0.5F - f1, 0.5F + f, 1.0F, 0.5F + f1);
     }
 
-    public static int a(EnumAxis enumaxis) {
-        return enumaxis == EnumAxis.X ? 1 : (enumaxis == EnumAxis.Z ? 2 : 0);
+    public static int a(EnumDirection.EnumAxis enumdirection_enumaxis) {
+        return enumdirection_enumaxis == EnumDirection.EnumAxis.X ? 1 : (enumdirection_enumaxis == EnumDirection.EnumAxis.Z ? 2 : 0);
     }
 
     public boolean d() {
         return false;
     }
 
-    public boolean d(World world, BlockPosition blockposition) {
-        PortalCreator portalcreator = new PortalCreator(world, blockposition, EnumAxis.X);
+    public boolean e(World world, BlockPosition blockposition) {
+        BlockPortal.Shape blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.X);
 
-        if (portalcreator.b() && PortalCreator.a(portalcreator) == 0) {
-            portalcreator.c();
+        if (blockportal_shape.d() && blockportal_shape.e == 0) {
+            blockportal_shape.e();
             return true;
         } else {
-            PortalCreator portalcreator1 = new PortalCreator(world, blockposition, EnumAxis.Z);
+            BlockPortal.Shape blockportal_shape1 = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.Z);
 
-            if (portalcreator1.b() && PortalCreator.a(portalcreator1) == 0) {
-                portalcreator1.c();
+            if (blockportal_shape1.d() && blockportal_shape1.e == 0) {
+                blockportal_shape1.e();
                 return true;
             } else {
                 return false;
@@ -81,17 +82,17 @@ public class BlockPortal extends BlockHalfTransparent {
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        EnumAxis enumaxis = (EnumAxis) iblockdata.get(BlockPortal.AXIS);
-        PortalCreator portalcreator;
+        EnumDirection.EnumAxis enumdirection_enumaxis = (EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS);
+        BlockPortal.Shape blockportal_shape;
 
-        if (enumaxis == EnumAxis.X) {
-            portalcreator = new PortalCreator(world, blockposition, EnumAxis.X);
-            if (!portalcreator.b() || PortalCreator.a(portalcreator) < PortalCreator.b(portalcreator) * PortalCreator.c(portalcreator)) {
+        if (enumdirection_enumaxis == EnumDirection.EnumAxis.X) {
+            blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.X);
+            if (!blockportal_shape.d() || blockportal_shape.e < blockportal_shape.h * blockportal_shape.g) {
                 world.setTypeUpdate(blockposition, Blocks.AIR.getBlockData());
             }
-        } else if (enumaxis == EnumAxis.Z) {
-            portalcreator = new PortalCreator(world, blockposition, EnumAxis.Z);
-            if (!portalcreator.b() || PortalCreator.a(portalcreator) < PortalCreator.b(portalcreator) * PortalCreator.c(portalcreator)) {
+        } else if (enumdirection_enumaxis == EnumDirection.EnumAxis.Z) {
+            blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.Z);
+            if (!blockportal_shape.d() || blockportal_shape.e < blockportal_shape.h * blockportal_shape.g) {
                 world.setTypeUpdate(blockposition, Blocks.AIR.getBlockData());
             }
         }
@@ -104,20 +105,208 @@ public class BlockPortal extends BlockHalfTransparent {
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
         if (entity.vehicle == null && entity.passenger == null) {
-            entity.aq();
+            entity.d(blockposition);
         }
 
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockPortal.AXIS, (i & 3) == 2 ? EnumAxis.Z : EnumAxis.X);
+        return this.getBlockData().set(BlockPortal.AXIS, (i & 3) == 2 ? EnumDirection.EnumAxis.Z : EnumDirection.EnumAxis.X);
     }
 
     public int toLegacyData(IBlockData iblockdata) {
-        return a((EnumAxis) iblockdata.get(BlockPortal.AXIS));
+        return a((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS));
     }
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockPortal.AXIS});
+    }
+
+    public ShapeDetector.ShapeDetectorCollection f(World world, BlockPosition blockposition) {
+        EnumDirection.EnumAxis enumdirection_enumaxis = EnumDirection.EnumAxis.Z;
+        BlockPortal.Shape blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.X);
+        LoadingCache loadingcache = ShapeDetector.a(world, true);
+
+        if (!blockportal_shape.d()) {
+            enumdirection_enumaxis = EnumDirection.EnumAxis.X;
+            blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.Z);
+        }
+
+        if (!blockportal_shape.d()) {
+            return new ShapeDetector.ShapeDetectorCollection(blockposition, EnumDirection.NORTH, EnumDirection.UP, loadingcache, 1, 1, 1);
+        } else {
+            int[] aint = new int[EnumDirection.EnumAxisDirection.values().length];
+            EnumDirection enumdirection = blockportal_shape.c.f();
+            BlockPosition blockposition1 = blockportal_shape.f.up(blockportal_shape.a() - 1);
+            EnumDirection.EnumAxisDirection[] aenumdirection_enumaxisdirection = EnumDirection.EnumAxisDirection.values();
+            int i = aenumdirection_enumaxisdirection.length;
+
+            int j;
+
+            for (j = 0; j < i; ++j) {
+                EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = aenumdirection_enumaxisdirection[j];
+                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = new ShapeDetector.ShapeDetectorCollection(enumdirection.c() == enumdirection_enumaxisdirection ? blockposition1 : blockposition1.shift(blockportal_shape.c, blockportal_shape.b() - 1), EnumDirection.a(enumdirection_enumaxisdirection, enumdirection_enumaxis), EnumDirection.UP, loadingcache, blockportal_shape.b(), blockportal_shape.a(), 1);
+
+                for (int k = 0; k < blockportal_shape.b(); ++k) {
+                    for (int l = 0; l < blockportal_shape.a(); ++l) {
+                        ShapeDetectorBlock shapedetectorblock = shapedetector_shapedetectorcollection.a(k, l, 1);
+
+                        if (shapedetectorblock.a() != null && shapedetectorblock.a().getBlock().getMaterial() != Material.AIR) {
+                            ++aint[enumdirection_enumaxisdirection.ordinal()];
+                        }
+                    }
+                }
+            }
+
+            EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection1 = EnumDirection.EnumAxisDirection.POSITIVE;
+            EnumDirection.EnumAxisDirection[] aenumdirection_enumaxisdirection1 = EnumDirection.EnumAxisDirection.values();
+
+            j = aenumdirection_enumaxisdirection1.length;
+
+            for (int i1 = 0; i1 < j; ++i1) {
+                EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection2 = aenumdirection_enumaxisdirection1[i1];
+
+                if (aint[enumdirection_enumaxisdirection2.ordinal()] < aint[enumdirection_enumaxisdirection1.ordinal()]) {
+                    enumdirection_enumaxisdirection1 = enumdirection_enumaxisdirection2;
+                }
+            }
+
+            return new ShapeDetector.ShapeDetectorCollection(enumdirection.c() == enumdirection_enumaxisdirection1 ? blockposition1 : blockposition1.shift(blockportal_shape.c, blockportal_shape.b() - 1), EnumDirection.a(enumdirection_enumaxisdirection1, enumdirection_enumaxis), EnumDirection.UP, loadingcache, blockportal_shape.b(), blockportal_shape.a(), 1);
+        }
+    }
+
+    public static class Shape {
+
+        private final World a;
+        private final EnumDirection.EnumAxis b;
+        private final EnumDirection c;
+        private final EnumDirection d;
+        private int e = 0;
+        private BlockPosition f;
+        private int g;
+        private int h;
+
+        public Shape(World world, BlockPosition blockposition, EnumDirection.EnumAxis enumdirection_enumaxis) {
+            this.a = world;
+            this.b = enumdirection_enumaxis;
+            if (enumdirection_enumaxis == EnumDirection.EnumAxis.X) {
+                this.d = EnumDirection.EAST;
+                this.c = EnumDirection.WEST;
+            } else {
+                this.d = EnumDirection.NORTH;
+                this.c = EnumDirection.SOUTH;
+            }
+
+            for (BlockPosition blockposition1 = blockposition; blockposition.getY() > blockposition1.getY() - 21 && blockposition.getY() > 0 && this.a(world.getType(blockposition.down()).getBlock()); blockposition = blockposition.down()) {
+                ;
+            }
+
+            int i = this.a(blockposition, this.d) - 1;
+
+            if (i >= 0) {
+                this.f = blockposition.shift(this.d, i);
+                this.h = this.a(this.f, this.c);
+                if (this.h < 2 || this.h > 21) {
+                    this.f = null;
+                    this.h = 0;
+                }
+            }
+
+            if (this.f != null) {
+                this.g = this.c();
+            }
+
+        }
+
+        protected int a(BlockPosition blockposition, EnumDirection enumdirection) {
+            int i;
+
+            for (i = 0; i < 22; ++i) {
+                BlockPosition blockposition1 = blockposition.shift(enumdirection, i);
+
+                if (!this.a(this.a.getType(blockposition1).getBlock()) || this.a.getType(blockposition1.down()).getBlock() != Blocks.OBSIDIAN) {
+                    break;
+                }
+            }
+
+            Block block = this.a.getType(blockposition.shift(enumdirection, i)).getBlock();
+
+            return block == Blocks.OBSIDIAN ? i : 0;
+        }
+
+        public int a() {
+            return this.g;
+        }
+
+        public int b() {
+            return this.h;
+        }
+
+        protected int c() {
+            int i;
+
+            label56:
+            for (this.g = 0; this.g < 21; ++this.g) {
+                for (i = 0; i < this.h; ++i) {
+                    BlockPosition blockposition = this.f.shift(this.c, i).up(this.g);
+                    Block block = this.a.getType(blockposition).getBlock();
+
+                    if (!this.a(block)) {
+                        break label56;
+                    }
+
+                    if (block == Blocks.PORTAL) {
+                        ++this.e;
+                    }
+
+                    if (i == 0) {
+                        block = this.a.getType(blockposition.shift(this.d)).getBlock();
+                        if (block != Blocks.OBSIDIAN) {
+                            break label56;
+                        }
+                    } else if (i == this.h - 1) {
+                        block = this.a.getType(blockposition.shift(this.c)).getBlock();
+                        if (block != Blocks.OBSIDIAN) {
+                            break label56;
+                        }
+                    }
+                }
+            }
+
+            for (i = 0; i < this.h; ++i) {
+                if (this.a.getType(this.f.shift(this.c, i).up(this.g)).getBlock() != Blocks.OBSIDIAN) {
+                    this.g = 0;
+                    break;
+                }
+            }
+
+            if (this.g <= 21 && this.g >= 3) {
+                return this.g;
+            } else {
+                this.f = null;
+                this.h = 0;
+                this.g = 0;
+                return 0;
+            }
+        }
+
+        protected boolean a(Block block) {
+            return block.material == Material.AIR || block == Blocks.FIRE || block == Blocks.PORTAL;
+        }
+
+        public boolean d() {
+            return this.f != null && this.h >= 2 && this.h <= 21 && this.g >= 3 && this.g <= 21;
+        }
+
+        public void e() {
+            for (int i = 0; i < this.h; ++i) {
+                BlockPosition blockposition = this.f.shift(this.c, i);
+
+                for (int j = 0; j < this.g; ++j) {
+                    this.a.setTypeAndData(blockposition.up(j), Blocks.PORTAL.getBlockData().set(BlockPortal.AXIS, this.b), 2);
+                }
+            }
+
+        }
     }
 }

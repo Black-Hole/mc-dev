@@ -4,11 +4,11 @@ import java.util.Random;
 
 public class WorldGenHugeMushroom extends WorldGenerator {
 
-    private int a = -1;
+    private Block a;
 
-    public WorldGenHugeMushroom(int i) {
+    public WorldGenHugeMushroom(Block block) {
         super(true);
-        this.a = i;
+        this.a = block;
     }
 
     public WorldGenHugeMushroom() {
@@ -16,30 +16,30 @@ public class WorldGenHugeMushroom extends WorldGenerator {
     }
 
     public boolean generate(World world, Random random, BlockPosition blockposition) {
-        int i = random.nextInt(2);
-
-        if (this.a >= 0) {
-            i = this.a;
+        if (this.a == null) {
+            this.a = random.nextBoolean() ? Blocks.BROWN_MUSHROOM_BLOCK : Blocks.RED_MUSHROOM_BLOCK;
         }
 
-        int j = random.nextInt(3) + 4;
+        int i = random.nextInt(3) + 4;
         boolean flag = true;
 
-        if (blockposition.getY() >= 1 && blockposition.getY() + j + 1 < 256) {
+        if (blockposition.getY() >= 1 && blockposition.getY() + i + 1 < 256) {
+            int j;
             int k;
-            int l;
 
-            for (int i1 = blockposition.getY(); i1 <= blockposition.getY() + 1 + j; ++i1) {
+            for (int l = blockposition.getY(); l <= blockposition.getY() + 1 + i; ++l) {
                 byte b0 = 3;
 
-                if (i1 <= blockposition.getY() + 3) {
+                if (l <= blockposition.getY() + 3) {
                     b0 = 0;
                 }
 
-                for (k = blockposition.getX() - b0; k <= blockposition.getX() + b0 && flag; ++k) {
-                    for (l = blockposition.getZ() - b0; l <= blockposition.getZ() + b0 && flag; ++l) {
-                        if (i1 >= 0 && i1 < 256) {
-                            Block block = world.getType(new BlockPosition(k, i1, l)).getBlock();
+                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+
+                for (j = blockposition.getX() - b0; j <= blockposition.getX() + b0 && flag; ++j) {
+                    for (k = blockposition.getZ() - b0; k <= blockposition.getZ() + b0 && flag; ++k) {
+                        if (l >= 0 && l < 256) {
+                            Block block = world.getType(blockposition_mutableblockposition.c(j, l, k)).getBlock();
 
                             if (block.getMaterial() != Material.AIR && block.getMaterial() != Material.LEAVES) {
                                 flag = false;
@@ -59,100 +59,105 @@ public class WorldGenHugeMushroom extends WorldGenerator {
                 if (block1 != Blocks.DIRT && block1 != Blocks.GRASS && block1 != Blocks.MYCELIUM) {
                     return false;
                 } else {
-                    int j1 = blockposition.getY() + j;
+                    int i1 = blockposition.getY() + i;
 
-                    if (i == 1) {
-                        j1 = blockposition.getY() + j - 3;
+                    if (this.a == Blocks.RED_MUSHROOM_BLOCK) {
+                        i1 = blockposition.getY() + i - 3;
                     }
 
-                    for (k = j1; k <= blockposition.getY() + j; ++k) {
-                        l = 1;
-                        if (k < blockposition.getY() + j) {
-                            ++l;
+                    int j1;
+
+                    for (j1 = i1; j1 <= blockposition.getY() + i; ++j1) {
+                        j = 1;
+                        if (j1 < blockposition.getY() + i) {
+                            ++j;
                         }
 
-                        if (i == 0) {
-                            l = 3;
+                        if (this.a == Blocks.BROWN_MUSHROOM_BLOCK) {
+                            j = 3;
                         }
 
-                        for (int k1 = blockposition.getX() - l; k1 <= blockposition.getX() + l; ++k1) {
-                            for (int l1 = blockposition.getZ() - l; l1 <= blockposition.getZ() + l; ++l1) {
-                                int i2 = 5;
+                        k = blockposition.getX() - j;
+                        int k1 = blockposition.getX() + j;
+                        int l1 = blockposition.getZ() - j;
+                        int i2 = blockposition.getZ() + j;
 
-                                if (k1 == blockposition.getX() - l) {
-                                    --i2;
+                        for (int j2 = k; j2 <= k1; ++j2) {
+                            for (int k2 = l1; k2 <= i2; ++k2) {
+                                int l2 = 5;
+
+                                if (j2 == k) {
+                                    --l2;
+                                } else if (j2 == k1) {
+                                    ++l2;
                                 }
 
-                                if (k1 == blockposition.getX() + l) {
-                                    ++i2;
+                                if (k2 == l1) {
+                                    l2 -= 3;
+                                } else if (k2 == i2) {
+                                    l2 += 3;
                                 }
 
-                                if (l1 == blockposition.getZ() - l) {
-                                    i2 -= 3;
-                                }
+                                BlockHugeMushroom.EnumHugeMushroomVariant blockhugemushroom_enumhugemushroomvariant = BlockHugeMushroom.EnumHugeMushroomVariant.a(l2);
 
-                                if (l1 == blockposition.getZ() + l) {
-                                    i2 += 3;
-                                }
-
-                                if (i == 0 || k < blockposition.getY() + j) {
-                                    if ((k1 == blockposition.getX() - l || k1 == blockposition.getX() + l) && (l1 == blockposition.getZ() - l || l1 == blockposition.getZ() + l)) {
+                                if (this.a == Blocks.BROWN_MUSHROOM_BLOCK || j1 < blockposition.getY() + i) {
+                                    if ((j2 == k || j2 == k1) && (k2 == l1 || k2 == i2)) {
                                         continue;
                                     }
 
-                                    if (k1 == blockposition.getX() - (l - 1) && l1 == blockposition.getZ() - l) {
-                                        i2 = 1;
+                                    if (j2 == blockposition.getX() - (j - 1) && k2 == l1) {
+                                        blockhugemushroom_enumhugemushroomvariant = BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_WEST;
                                     }
 
-                                    if (k1 == blockposition.getX() - l && l1 == blockposition.getZ() - (l - 1)) {
-                                        i2 = 1;
+                                    if (j2 == k && k2 == blockposition.getZ() - (j - 1)) {
+                                        blockhugemushroom_enumhugemushroomvariant = BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_WEST;
                                     }
 
-                                    if (k1 == blockposition.getX() + (l - 1) && l1 == blockposition.getZ() - l) {
-                                        i2 = 3;
+                                    if (j2 == blockposition.getX() + (j - 1) && k2 == l1) {
+                                        blockhugemushroom_enumhugemushroomvariant = BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_EAST;
                                     }
 
-                                    if (k1 == blockposition.getX() + l && l1 == blockposition.getZ() - (l - 1)) {
-                                        i2 = 3;
+                                    if (j2 == k1 && k2 == blockposition.getZ() - (j - 1)) {
+                                        blockhugemushroom_enumhugemushroomvariant = BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_EAST;
                                     }
 
-                                    if (k1 == blockposition.getX() - (l - 1) && l1 == blockposition.getZ() + l) {
-                                        i2 = 7;
+                                    if (j2 == blockposition.getX() - (j - 1) && k2 == i2) {
+                                        blockhugemushroom_enumhugemushroomvariant = BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_WEST;
                                     }
 
-                                    if (k1 == blockposition.getX() - l && l1 == blockposition.getZ() + (l - 1)) {
-                                        i2 = 7;
+                                    if (j2 == k && k2 == blockposition.getZ() + (j - 1)) {
+                                        blockhugemushroom_enumhugemushroomvariant = BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_WEST;
                                     }
 
-                                    if (k1 == blockposition.getX() + (l - 1) && l1 == blockposition.getZ() + l) {
-                                        i2 = 9;
+                                    if (j2 == blockposition.getX() + (j - 1) && k2 == i2) {
+                                        blockhugemushroom_enumhugemushroomvariant = BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_EAST;
                                     }
 
-                                    if (k1 == blockposition.getX() + l && l1 == blockposition.getZ() + (l - 1)) {
-                                        i2 = 9;
+                                    if (j2 == k1 && k2 == blockposition.getZ() + (j - 1)) {
+                                        blockhugemushroom_enumhugemushroomvariant = BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_EAST;
                                     }
                                 }
 
-                                if (i2 == 5 && k < blockposition.getY() + j) {
-                                    i2 = 0;
+                                if (blockhugemushroom_enumhugemushroomvariant == BlockHugeMushroom.EnumHugeMushroomVariant.CENTER && j1 < blockposition.getY() + i) {
+                                    blockhugemushroom_enumhugemushroomvariant = BlockHugeMushroom.EnumHugeMushroomVariant.ALL_INSIDE;
                                 }
 
-                                if (i2 != 0 || blockposition.getY() >= blockposition.getY() + j - 1) {
-                                    BlockPosition blockposition1 = new BlockPosition(k1, k, l1);
+                                if (blockposition.getY() >= blockposition.getY() + i - 1 || blockhugemushroom_enumhugemushroomvariant != BlockHugeMushroom.EnumHugeMushroomVariant.ALL_INSIDE) {
+                                    BlockPosition blockposition1 = new BlockPosition(j2, j1, k2);
 
-                                    if (!world.getType(blockposition1).getBlock().m()) {
-                                        this.a(world, blockposition1, Block.getById(Block.getId(Blocks.BROWN_MUSHROOM_BLOCK) + i), i2);
+                                    if (!world.getType(blockposition1).getBlock().o()) {
+                                        this.a(world, blockposition1, this.a.getBlockData().set(BlockHugeMushroom.VARIANT, blockhugemushroom_enumhugemushroomvariant));
                                     }
                                 }
                             }
                         }
                     }
 
-                    for (k = 0; k < j; ++k) {
-                        Block block2 = world.getType(blockposition.up(k)).getBlock();
+                    for (j1 = 0; j1 < i; ++j1) {
+                        Block block2 = world.getType(blockposition.up(j1)).getBlock();
 
-                        if (!block2.m()) {
-                            this.a(world, blockposition.up(k), Block.getById(Block.getId(Blocks.BROWN_MUSHROOM_BLOCK) + i), 10);
+                        if (!block2.o()) {
+                            this.a(world, blockposition.up(j1), this.a.getBlockData().set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.STEM));
                         }
                     }
 

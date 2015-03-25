@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class StructurePieceTreasure extends WeightedRandomChoice {
+public class StructurePieceTreasure extends WeightedRandom.WeightedRandomChoice {
 
     private ItemStack b;
     private int c;
@@ -26,7 +26,7 @@ public class StructurePieceTreasure extends WeightedRandomChoice {
         this.d = j;
     }
 
-    public static void a(Random random, List list, IInventory iinventory, int i) {
+    public static void a(Random random, List<StructurePieceTreasure> list, IInventory iinventory, int i) {
         for (int j = 0; j < i; ++j) {
             StructurePieceTreasure structurepiecetreasure = (StructurePieceTreasure) WeightedRandom.a(random, list);
             int k = structurepiecetreasure.c + random.nextInt(structurepiecetreasure.d - structurepiecetreasure.c + 1);
@@ -48,7 +48,7 @@ public class StructurePieceTreasure extends WeightedRandomChoice {
 
     }
 
-    public static void a(Random random, List list, TileEntityDispenser tileentitydispenser, int i) {
+    public static void a(Random random, List<StructurePieceTreasure> list, TileEntityDispenser tileentitydispenser, int i) {
         for (int j = 0; j < i; ++j) {
             StructurePieceTreasure structurepiecetreasure = (StructurePieceTreasure) WeightedRandom.a(random, list);
             int k = structurepiecetreasure.c + random.nextInt(structurepiecetreasure.d - structurepiecetreasure.c + 1);
@@ -70,7 +70,7 @@ public class StructurePieceTreasure extends WeightedRandomChoice {
 
     }
 
-    public static List a(List list, StructurePieceTreasure... astructurepiecetreasure) {
+    public static List<StructurePieceTreasure> a(List<StructurePieceTreasure> list, StructurePieceTreasure... astructurepiecetreasure) {
         ArrayList arraylist = Lists.newArrayList(list);
 
         Collections.addAll(arraylist, astructurepiecetreasure);

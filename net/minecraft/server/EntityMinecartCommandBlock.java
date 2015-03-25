@@ -2,7 +2,28 @@ package net.minecraft.server;
 
 public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
-    private final CommandBlockListenerAbstract a = new EntityMinecartCommandBlockListener(this);
+    private final CommandBlockListenerAbstract a = new CommandBlockListenerAbstract() {
+        public void h() {
+            EntityMinecartCommandBlock.this.getDataWatcher().watch(23, this.getCommand());
+            EntityMinecartCommandBlock.this.getDataWatcher().watch(24, IChatBaseComponent.ChatSerializer.a(this.k()));
+        }
+
+        public BlockPosition getChunkCoordinates() {
+            return new BlockPosition(EntityMinecartCommandBlock.this.locX, EntityMinecartCommandBlock.this.locY + 0.5D, EntityMinecartCommandBlock.this.locZ);
+        }
+
+        public Vec3D d() {
+            return new Vec3D(EntityMinecartCommandBlock.this.locX, EntityMinecartCommandBlock.this.locY, EntityMinecartCommandBlock.this.locZ);
+        }
+
+        public World getWorld() {
+            return EntityMinecartCommandBlock.this.world;
+        }
+
+        public Entity f() {
+            return EntityMinecartCommandBlock.this;
+        }
+    };
     private int b = 0;
 
     public EntityMinecartCommandBlock(World world) {
@@ -23,7 +44,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
         super.a(nbttagcompound);
         this.a.b(nbttagcompound);
         this.getDataWatcher().watch(23, this.getCommandBlock().getCommand());
-        this.getDataWatcher().watch(24, ChatSerializer.a(this.getCommandBlock().k()));
+        this.getDataWatcher().watch(24, IChatBaseComponent.ChatSerializer.a(this.getCommandBlock().k()));
     }
 
     protected void b(NBTTagCompound nbttagcompound) {
@@ -31,8 +52,8 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
         this.a.a(nbttagcompound);
     }
 
-    public EnumMinecartType s() {
-        return EnumMinecartType.COMMAND_BLOCK;
+    public EntityMinecartAbstract.EnumMinecartType s() {
+        return EntityMinecartAbstract.EnumMinecartType.COMMAND_BLOCK;
     }
 
     public IBlockData u() {
@@ -60,7 +81,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
         super.i(i);
         if (i == 24) {
             try {
-                this.a.b(ChatSerializer.a(this.getDataWatcher().getString(24)));
+                this.a.b(IChatBaseComponent.ChatSerializer.a(this.getDataWatcher().getString(24)));
             } catch (Throwable throwable) {
                 ;
             }

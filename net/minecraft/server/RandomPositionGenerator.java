@@ -21,7 +21,7 @@ public class RandomPositionGenerator {
     }
 
     private static Vec3D c(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
-        Random random = entitycreature.bb();
+        Random random = entitycreature.bc();
         boolean flag = false;
         int k = 0;
         int l = 0;
@@ -29,9 +29,9 @@ public class RandomPositionGenerator {
         float f = -99999.0F;
         boolean flag1;
 
-        if (entitycreature.ci()) {
-            double d0 = entitycreature.cf().c((double) MathHelper.floor(entitycreature.locX), (double) MathHelper.floor(entitycreature.locY), (double) MathHelper.floor(entitycreature.locZ)) + 4.0D;
-            double d1 = (double) (entitycreature.cg() + (float) i);
+        if (entitycreature.ck()) {
+            double d0 = entitycreature.ch().c((double) MathHelper.floor(entitycreature.locX), (double) MathHelper.floor(entitycreature.locY), (double) MathHelper.floor(entitycreature.locZ)) + 4.0D;
+            double d1 = (double) (entitycreature.ci() + (float) i);
 
             flag1 = d0 < d1 * d1;
         } else {
@@ -46,8 +46,8 @@ public class RandomPositionGenerator {
             if (vec3d == null || (double) k1 * vec3d.a + (double) i2 * vec3d.c >= 0.0D) {
                 BlockPosition blockposition;
 
-                if (entitycreature.ci() && i > 1) {
-                    blockposition = entitycreature.cf();
+                if (entitycreature.ck() && i > 1) {
+                    blockposition = entitycreature.ch();
                     if (entitycreature.locX > (double) blockposition.getX()) {
                         k1 -= random.nextInt(i / 2);
                     } else {
@@ -65,7 +65,7 @@ public class RandomPositionGenerator {
                 l1 += MathHelper.floor(entitycreature.locY);
                 i2 += MathHelper.floor(entitycreature.locZ);
                 blockposition = new BlockPosition(k1, l1, i2);
-                if (!flag1 || entitycreature.d(blockposition)) {
+                if (!flag1 || entitycreature.e(blockposition)) {
                     float f1 = entitycreature.a(blockposition);
 
                     if (f1 > f) {

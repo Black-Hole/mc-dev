@@ -73,7 +73,7 @@ public abstract class BlockFluids extends Block {
     protected Vec3D h(IBlockAccess iblockaccess, BlockPosition blockposition) {
         Vec3D vec3d = new Vec3D(0.0D, 0.0D, 0.0D);
         int i = this.f(iblockaccess, blockposition);
-        Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
         EnumDirection enumdirection;
         BlockPosition blockposition1;
@@ -99,7 +99,7 @@ public abstract class BlockFluids extends Block {
         }
 
         if (((Integer) iblockaccess.getType(blockposition).get(BlockFluids.LEVEL)).intValue() >= 8) {
-            iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+            iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
             while (iterator.hasNext()) {
                 enumdirection = (EnumDirection) iterator.next();

@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutTabComplete implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutTabComplete implements Packet<PacketListenerPlayOut> {
 
     private String[] a;
 
@@ -10,7 +12,7 @@ public class PacketPlayOutTabComplete implements Packet {
         this.a = astring;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = new String[packetdataserializer.e()];
 
         for (int i = 0; i < this.a.length; ++i) {
@@ -19,7 +21,7 @@ public class PacketPlayOutTabComplete implements Packet {
 
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a.length);
         String[] astring = this.a;
         int i = astring.length;

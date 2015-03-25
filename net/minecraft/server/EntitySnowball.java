@@ -29,7 +29,7 @@ public class EntitySnowball extends EntityProjectile {
             this.world.addParticle(EnumParticle.SNOWBALL, this.locX, this.locY, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
         }
 
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             this.die();
         }
 

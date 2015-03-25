@@ -13,16 +13,16 @@ public class ItemArmorStand extends Item {
         if (enumdirection == EnumDirection.DOWN) {
             return false;
         } else {
-            boolean flag = world.getType(blockposition).getBlock().f(world, blockposition);
+            boolean flag = world.getType(blockposition).getBlock().a(world, blockposition);
             BlockPosition blockposition1 = flag ? blockposition : blockposition.shift(enumdirection);
 
             if (!entityhuman.a(blockposition1, enumdirection, itemstack)) {
                 return false;
             } else {
                 BlockPosition blockposition2 = blockposition1.up();
-                boolean flag1 = !world.isEmpty(blockposition1) && !world.getType(blockposition1).getBlock().f(world, blockposition1);
+                boolean flag1 = !world.isEmpty(blockposition1) && !world.getType(blockposition1).getBlock().a(world, blockposition1);
 
-                flag1 |= !world.isEmpty(blockposition2) && !world.getType(blockposition2).getBlock().f(world, blockposition2);
+                flag1 |= !world.isEmpty(blockposition2) && !world.getType(blockposition2).getBlock().a(world, blockposition2);
                 if (flag1) {
                     return false;
                 } else {
@@ -34,7 +34,7 @@ public class ItemArmorStand extends Item {
                     if (list.size() > 0) {
                         return false;
                     } else {
-                        if (!world.isStatic) {
+                        if (!world.isClientSide) {
                             world.setAir(blockposition1);
                             world.setAir(blockposition2);
                             EntityArmorStand entityarmorstand = new EntityArmorStand(world, d0 + 0.5D, d1, d2 + 0.5D);
@@ -64,13 +64,13 @@ public class ItemArmorStand extends Item {
     }
 
     private void a(EntityArmorStand entityarmorstand, Random random) {
-        Vector3f vector3f = entityarmorstand.s();
+        Vector3f vector3f = entityarmorstand.t();
         float f = random.nextFloat() * 5.0F;
         float f1 = random.nextFloat() * 20.0F - 10.0F;
         Vector3f vector3f1 = new Vector3f(vector3f.getX() + f, vector3f.getY() + f1, vector3f.getZ());
 
         entityarmorstand.setHeadPose(vector3f1);
-        vector3f = entityarmorstand.t();
+        vector3f = entityarmorstand.u();
         f = random.nextFloat() * 10.0F - 5.0F;
         vector3f1 = new Vector3f(vector3f.getX(), vector3f.getY() + f, vector3f.getZ());
         entityarmorstand.setBodyPose(vector3f1);

@@ -46,7 +46,7 @@ public class BiomeDecorator {
     public BiomeDecorator() {
         this.f = new WorldGenSand(Blocks.SAND, 7);
         this.g = new WorldGenSand(Blocks.GRAVEL, 6);
-        this.s = new WorldGenFlowers(Blocks.YELLOW_FLOWER, EnumFlowerVarient.DANDELION);
+        this.s = new WorldGenFlowers(Blocks.YELLOW_FLOWER, BlockFlowers.EnumFlowerVarient.DANDELION);
         this.t = new WorldGenMushrooms(Blocks.BROWN_MUSHROOM);
         this.u = new WorldGenMushrooms(Blocks.RED_MUSHROOM);
         this.v = new WorldGenHugeMushroom();
@@ -69,18 +69,18 @@ public class BiomeDecorator {
             String s = world.getWorldData().getGeneratorOptions();
 
             if (s != null) {
-                this.d = CustomWorldSettings.a(s).b();
+                this.d = CustomWorldSettingsFinal.CustomWorldSettings.a(s).b();
             } else {
-                this.d = CustomWorldSettings.a("").b();
+                this.d = CustomWorldSettingsFinal.CustomWorldSettings.a("").b();
             }
 
             this.b = random;
             this.c = blockposition;
             this.h = new WorldGenMinable(Blocks.DIRT.getBlockData(), this.d.I);
             this.i = new WorldGenMinable(Blocks.GRAVEL.getBlockData(), this.d.M);
-            this.j = new WorldGenMinable(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, EnumStoneVariant.GRANITE), this.d.Q);
-            this.k = new WorldGenMinable(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, EnumStoneVariant.DIORITE), this.d.U);
-            this.l = new WorldGenMinable(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, EnumStoneVariant.ANDESITE), this.d.Y);
+            this.j = new WorldGenMinable(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.GRANITE), this.d.Q);
+            this.k = new WorldGenMinable(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.DIORITE), this.d.U);
+            this.l = new WorldGenMinable(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.ANDESITE), this.d.Y);
             this.m = new WorldGenMinable(Blocks.COAL_ORE.getBlockData(), this.d.ac);
             this.n = new WorldGenMinable(Blocks.IRON_ORE.getBlockData(), this.d.ag);
             this.o = new WorldGenMinable(Blocks.GOLD_ORE.getBlockData(), this.d.ak);
@@ -144,57 +144,64 @@ public class BiomeDecorator {
             this.v.generate(this.a, this.b, this.a.getHighestBlockYAt(this.c.a(k, 0, l)));
         }
 
+        BlockPosition blockposition1;
         int i1;
+        int j1;
 
         for (j = 0; j < this.B; ++j) {
             k = this.b.nextInt(16) + 8;
             l = this.b.nextInt(16) + 8;
-            i1 = this.b.nextInt(this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() + 32);
-            blockposition = this.c.a(k, i1, l);
-            EnumFlowerVarient enumflowervarient = biomebase.a(this.b, blockposition);
-            BlockFlowers blockflowers = enumflowervarient.a().a();
+            i1 = this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() + 32;
+            if (i1 > 0) {
+                j1 = this.b.nextInt(i1);
+                blockposition1 = this.c.a(k, j1, l);
+                BlockFlowers.EnumFlowerVarient blockflowers_enumflowervarient = biomebase.a(this.b, blockposition1);
+                BlockFlowers blockflowers = blockflowers_enumflowervarient.a().a();
 
-            if (blockflowers.getMaterial() != Material.AIR) {
-                this.s.a(blockflowers, enumflowervarient);
-                this.s.generate(this.a, this.b, blockposition);
+                if (blockflowers.getMaterial() != Material.AIR) {
+                    this.s.a(blockflowers, blockflowers_enumflowervarient);
+                    this.s.generate(this.a, this.b, blockposition1);
+                }
             }
         }
 
         for (j = 0; j < this.C; ++j) {
             k = this.b.nextInt(16) + 8;
             l = this.b.nextInt(16) + 8;
-            i1 = this.b.nextInt(this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2);
-            biomebase.b(this.b).generate(this.a, this.b, this.c.a(k, i1, l));
+            i1 = this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2;
+            if (i1 > 0) {
+                j1 = this.b.nextInt(i1);
+                biomebase.b(this.b).generate(this.a, this.b, this.c.a(k, j1, l));
+            }
         }
 
         for (j = 0; j < this.D; ++j) {
             k = this.b.nextInt(16) + 8;
             l = this.b.nextInt(16) + 8;
-            i1 = this.b.nextInt(this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2);
-            (new WorldGenDeadBush()).generate(this.a, this.b, this.c.a(k, i1, l));
+            i1 = this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2;
+            if (i1 > 0) {
+                j1 = this.b.nextInt(i1);
+                (new WorldGenDeadBush()).generate(this.a, this.b, this.c.a(k, j1, l));
+            }
         }
 
-        j = 0;
-
-        while (j < this.z) {
+        for (j = 0; j < this.z; ++j) {
             k = this.b.nextInt(16) + 8;
             l = this.b.nextInt(16) + 8;
-            i1 = this.b.nextInt(this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2);
-            blockposition = this.c.a(k, i1, l);
+            i1 = this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2;
+            if (i1 > 0) {
+                j1 = this.b.nextInt(i1);
 
-            while (true) {
-                if (blockposition.getY() > 0) {
-                    BlockPosition blockposition1 = blockposition.down();
+                BlockPosition blockposition2;
 
-                    if (this.a.isEmpty(blockposition1)) {
-                        blockposition = blockposition1;
-                        continue;
+                for (blockposition1 = this.c.a(k, j1, l); blockposition1.getY() > 0; blockposition1 = blockposition2) {
+                    blockposition2 = blockposition1.down();
+                    if (!this.a.isEmpty(blockposition2)) {
+                        break;
                     }
                 }
 
-                this.y.generate(this.a, this.b, blockposition);
-                ++j;
-                break;
+                this.y.generate(this.a, this.b, blockposition1);
             }
         }
 
@@ -202,73 +209,101 @@ public class BiomeDecorator {
             if (this.b.nextInt(4) == 0) {
                 k = this.b.nextInt(16) + 8;
                 l = this.b.nextInt(16) + 8;
-                BlockPosition blockposition2 = this.a.getHighestBlockYAt(this.c.a(k, 0, l));
+                BlockPosition blockposition3 = this.a.getHighestBlockYAt(this.c.a(k, 0, l));
 
-                this.t.generate(this.a, this.b, blockposition2);
+                this.t.generate(this.a, this.b, blockposition3);
             }
 
             if (this.b.nextInt(8) == 0) {
                 k = this.b.nextInt(16) + 8;
                 l = this.b.nextInt(16) + 8;
-                i1 = this.b.nextInt(this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2);
-                blockposition = this.c.a(k, i1, l);
-                this.u.generate(this.a, this.b, blockposition);
+                i1 = this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2;
+                if (i1 > 0) {
+                    j1 = this.b.nextInt(i1);
+                    blockposition1 = this.c.a(k, j1, l);
+                    this.u.generate(this.a, this.b, blockposition1);
+                }
             }
         }
 
         if (this.b.nextInt(4) == 0) {
             j = this.b.nextInt(16) + 8;
             k = this.b.nextInt(16) + 8;
-            l = this.b.nextInt(this.a.getHighestBlockYAt(this.c.a(j, 0, k)).getY() * 2);
-            this.t.generate(this.a, this.b, this.c.a(j, l, k));
+            l = this.a.getHighestBlockYAt(this.c.a(j, 0, k)).getY() * 2;
+            if (l > 0) {
+                i1 = this.b.nextInt(l);
+                this.t.generate(this.a, this.b, this.c.a(j, i1, k));
+            }
         }
 
         if (this.b.nextInt(8) == 0) {
             j = this.b.nextInt(16) + 8;
             k = this.b.nextInt(16) + 8;
-            l = this.b.nextInt(this.a.getHighestBlockYAt(this.c.a(j, 0, k)).getY() * 2);
-            this.u.generate(this.a, this.b, this.c.a(j, l, k));
+            l = this.a.getHighestBlockYAt(this.c.a(j, 0, k)).getY() * 2;
+            if (l > 0) {
+                i1 = this.b.nextInt(l);
+                this.u.generate(this.a, this.b, this.c.a(j, i1, k));
+            }
         }
 
         for (j = 0; j < this.F; ++j) {
             k = this.b.nextInt(16) + 8;
             l = this.b.nextInt(16) + 8;
-            i1 = this.b.nextInt(this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2);
-            this.w.generate(this.a, this.b, this.c.a(k, i1, l));
+            i1 = this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2;
+            if (i1 > 0) {
+                j1 = this.b.nextInt(i1);
+                this.w.generate(this.a, this.b, this.c.a(k, j1, l));
+            }
         }
 
         for (j = 0; j < 10; ++j) {
             k = this.b.nextInt(16) + 8;
             l = this.b.nextInt(16) + 8;
-            i1 = this.b.nextInt(this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2);
-            this.w.generate(this.a, this.b, this.c.a(k, i1, l));
+            i1 = this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2;
+            if (i1 > 0) {
+                j1 = this.b.nextInt(i1);
+                this.w.generate(this.a, this.b, this.c.a(k, j1, l));
+            }
         }
 
         if (this.b.nextInt(32) == 0) {
             j = this.b.nextInt(16) + 8;
             k = this.b.nextInt(16) + 8;
-            l = this.b.nextInt(this.a.getHighestBlockYAt(this.c.a(j, 0, k)).getY() * 2);
-            (new WorldGenPumpkin()).generate(this.a, this.b, this.c.a(j, l, k));
+            l = this.a.getHighestBlockYAt(this.c.a(j, 0, k)).getY() * 2;
+            if (l > 0) {
+                i1 = this.b.nextInt(l);
+                (new WorldGenPumpkin()).generate(this.a, this.b, this.c.a(j, i1, k));
+            }
         }
 
         for (j = 0; j < this.G; ++j) {
             k = this.b.nextInt(16) + 8;
             l = this.b.nextInt(16) + 8;
-            i1 = this.b.nextInt(this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2);
-            this.x.generate(this.a, this.b, this.c.a(k, i1, l));
+            i1 = this.a.getHighestBlockYAt(this.c.a(k, 0, l)).getY() * 2;
+            if (i1 > 0) {
+                j1 = this.b.nextInt(i1);
+                this.x.generate(this.a, this.b, this.c.a(k, j1, l));
+            }
         }
 
         if (this.L) {
-            BlockPosition blockposition3;
-
             for (j = 0; j < 50; ++j) {
-                blockposition3 = this.c.a(this.b.nextInt(16) + 8, this.b.nextInt(this.b.nextInt(248) + 8), this.b.nextInt(16) + 8);
-                (new WorldGenLiquids(Blocks.FLOWING_WATER)).generate(this.a, this.b, blockposition3);
+                k = this.b.nextInt(16) + 8;
+                l = this.b.nextInt(16) + 8;
+                i1 = this.b.nextInt(248) + 8;
+                if (i1 > 0) {
+                    j1 = this.b.nextInt(i1);
+                    blockposition1 = this.c.a(k, j1, l);
+                    (new WorldGenLiquids(Blocks.FLOWING_WATER)).generate(this.a, this.b, blockposition1);
+                }
             }
 
             for (j = 0; j < 20; ++j) {
-                blockposition3 = this.c.a(this.b.nextInt(16) + 8, this.b.nextInt(this.b.nextInt(this.b.nextInt(240) + 8) + 8), this.b.nextInt(16) + 8);
-                (new WorldGenLiquids(Blocks.FLOWING_LAVA)).generate(this.a, this.b, blockposition3);
+                k = this.b.nextInt(16) + 8;
+                l = this.b.nextInt(16) + 8;
+                i1 = this.b.nextInt(this.b.nextInt(this.b.nextInt(240) + 8) + 8);
+                blockposition = this.c.a(k, i1, l);
+                (new WorldGenLiquids(Blocks.FLOWING_LAVA)).generate(this.a, this.b, blockposition);
             }
         }
 

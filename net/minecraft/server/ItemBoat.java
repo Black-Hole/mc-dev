@@ -51,7 +51,7 @@ public class ItemBoat extends Item {
             if (flag) {
                 return itemstack;
             } else {
-                if (movingobjectposition.type == EnumMovingObjectType.BLOCK) {
+                if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
                     BlockPosition blockposition = movingobjectposition.a();
 
                     if (world.getType(blockposition).getBlock() == Blocks.SNOW_LAYER) {
@@ -65,7 +65,7 @@ public class ItemBoat extends Item {
                         return itemstack;
                     }
 
-                    if (!world.isStatic) {
+                    if (!world.isClientSide) {
                         world.addEntity(entityboat);
                     }
 

@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketLoginOutDisconnect implements Packet {
+import java.io.IOException;
+
+public class PacketLoginOutDisconnect implements Packet<PacketLoginOutListener> {
 
     private IChatBaseComponent a;
 
@@ -10,11 +12,11 @@ public class PacketLoginOutDisconnect implements Packet {
         this.a = ichatbasecomponent;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.d();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
     }
 

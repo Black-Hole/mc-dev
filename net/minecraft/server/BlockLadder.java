@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 public class BlockLadder extends Block {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
 
     protected BlockLadder() {
         super(Material.ORIENTABLE);
@@ -24,7 +24,7 @@ public class BlockLadder extends Block {
         if (iblockdata.getBlock() == this) {
             float f = 0.125F;
 
-            switch (SwitchHelperDirection16.a[((EnumDirection) iblockdata.get(BlockLadder.FACING)).ordinal()]) {
+            switch (BlockLadder.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockLadder.FACING)).ordinal()]) {
             case 1:
                 this.a(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
                 break;
@@ -58,10 +58,10 @@ public class BlockLadder extends Block {
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        if (enumdirection.k().c() && this.b(world, blockposition, enumdirection)) {
+        if (enumdirection.k().c() && this.a(world, blockposition, enumdirection)) {
             return this.getBlockData().set(BlockLadder.FACING, enumdirection);
         } else {
-            Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+            Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
             EnumDirection enumdirection1;
 
@@ -71,7 +71,7 @@ public class BlockLadder extends Block {
                 }
 
                 enumdirection1 = (EnumDirection) iterator.next();
-            } while (!this.b(world, blockposition, enumdirection1));
+            } while (!this.a(world, blockposition, enumdirection1));
 
             return this.getBlockData().set(BlockLadder.FACING, enumdirection1);
         }
@@ -80,7 +80,7 @@ public class BlockLadder extends Block {
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockLadder.FACING);
 
-        if (!this.b(world, blockposition, enumdirection)) {
+        if (!this.a(world, blockposition, enumdirection)) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
         }
@@ -88,14 +88,14 @@ public class BlockLadder extends Block {
         super.doPhysics(world, blockposition, iblockdata, block);
     }
 
-    protected boolean b(World world, BlockPosition blockposition, EnumDirection enumdirection) {
+    protected boolean a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
         return world.getType(blockposition.shift(enumdirection.opposite())).getBlock().isOccluding();
     }
 
     public IBlockData fromLegacyData(int i) {
         EnumDirection enumdirection = EnumDirection.fromType1(i);
 
-        if (enumdirection.k() == EnumAxis.Y) {
+        if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
             enumdirection = EnumDirection.NORTH;
         }
 
@@ -108,5 +108,37 @@ public class BlockLadder extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockLadder.FACING});
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EnumDirection.values().length];
+
+        static {
+            try {
+                BlockLadder.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                BlockLadder.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                BlockLadder.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                BlockLadder.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+        }
     }
 }

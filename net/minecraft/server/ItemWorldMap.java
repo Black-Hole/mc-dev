@@ -14,7 +14,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
         String s = "map_" + itemstack.getData();
         WorldMap worldmap = (WorldMap) world.a(WorldMap.class, s);
 
-        if (worldmap == null && !world.isStatic) {
+        if (worldmap == null && !world.isClientSide) {
             itemstack.setData(world.b("map"));
             s = "map_" + itemstack.getData();
             worldmap = new WorldMap(s);
@@ -41,13 +41,13 @@ public class ItemWorldMap extends ItemWorldMapBase {
                 j1 /= 2;
             }
 
-            WorldMapHumanTracker worldmaphumantracker = worldmap.a((EntityHuman) entity);
+            WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker = worldmap.a((EntityHuman) entity);
 
-            ++worldmaphumantracker.b;
+            ++worldmap_worldmaphumantracker.b;
             boolean flag = false;
 
             for (int k1 = l - j1 + 1; k1 < l + j1; ++k1) {
-                if ((k1 & 15) == (worldmaphumantracker.b & 15) || flag) {
+                if ((k1 & 15) == (worldmap_worldmaphumantracker.b & 15) || flag) {
                     flag = false;
                     double d0 = 0.0D;
 
@@ -66,43 +66,45 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                 int j3 = l2 & 15;
                                 int k3 = 0;
                                 double d1 = 0.0D;
-                                int l3;
 
                                 if (world.worldProvider.o()) {
-                                    l3 = k2 + l2 * 231871;
+                                    int l3 = k2 + l2 * 231871;
+
                                     l3 = l3 * l3 * 31287121 + l3 * 11;
                                     if ((l3 >> 20 & 1) == 0) {
-                                        hashmultiset.add(Blocks.DIRT.g(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, EnumDirtVariant.DIRT)), 10);
+                                        hashmultiset.add(Blocks.DIRT.g(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT)), 10);
                                     } else {
-                                        hashmultiset.add(Blocks.STONE.g(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, EnumStoneVariant.STONE)), 100);
+                                        hashmultiset.add(Blocks.STONE.g(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE)), 100);
                                     }
 
                                     d1 = 100.0D;
                                 } else {
-                                    for (l3 = 0; l3 < i; ++l3) {
-                                        for (int i4 = 0; i4 < i; ++i4) {
-                                            int j4 = chunk.b(l3 + i3, i4 + j3) + 1;
+                                    BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+
+                                    for (int i4 = 0; i4 < i; ++i4) {
+                                        for (int j4 = 0; j4 < i; ++j4) {
+                                            int k4 = chunk.b(i4 + i3, j4 + j3) + 1;
                                             IBlockData iblockdata = Blocks.AIR.getBlockData();
 
-                                            if (j4 > 1) {
+                                            if (k4 > 1) {
                                                 do {
-                                                    --j4;
-                                                    iblockdata = chunk.getBlockData(new BlockPosition(l3 + i3, j4, i4 + j3));
-                                                } while (iblockdata.getBlock().g(iblockdata) == MaterialMapColor.b && j4 > 0);
+                                                    --k4;
+                                                    iblockdata = chunk.getBlockData(blockposition_mutableblockposition.c(i4 + i3, k4, j4 + j3));
+                                                } while (iblockdata.getBlock().g(iblockdata) == MaterialMapColor.b && k4 > 0);
 
-                                                if (j4 > 0 && iblockdata.getBlock().getMaterial().isLiquid()) {
-                                                    int k4 = j4 - 1;
+                                                if (k4 > 0 && iblockdata.getBlock().getMaterial().isLiquid()) {
+                                                    int l4 = k4 - 1;
 
                                                     Block block;
 
                                                     do {
-                                                        block = chunk.getTypeAbs(l3 + i3, k4--, i4 + j3);
+                                                        block = chunk.getTypeAbs(i4 + i3, l4--, j4 + j3);
                                                         ++k3;
-                                                    } while (k4 > 0 && block.getMaterial().isLiquid());
+                                                    } while (l4 > 0 && block.getMaterial().isLiquid());
                                                 }
                                             }
 
-                                            d1 += (double) j4 / (double) (i * i);
+                                            d1 += (double) k4 / (double) (i * i);
                                             hashmultiset.add(iblockdata.getBlock().g(iblockdata));
                                         }
                                     }
@@ -155,7 +157,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
     }
 
     public void a(ItemStack itemstack, World world, Entity entity, int i, boolean flag) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             WorldMap worldmap = this.getSavedMap(itemstack, world);
 
             if (entity instanceof EntityHuman) {

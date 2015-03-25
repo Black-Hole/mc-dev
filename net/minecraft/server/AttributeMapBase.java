@@ -10,9 +10,9 @@ import java.util.Map.Entry;
 
 public abstract class AttributeMapBase {
 
-    protected final Map a = Maps.newHashMap();
-    protected final Map b = new InsensitiveStringMap();
-    protected final Multimap c = HashMultimap.create();
+    protected final Map<IAttribute, AttributeInstance> a = Maps.newHashMap();
+    protected final Map<String, AttributeInstance> b = new InsensitiveStringMap();
+    protected final Multimap<IAttribute, IAttribute> c = HashMultimap.create();
 
     public AttributeMapBase() {}
 
@@ -43,13 +43,13 @@ public abstract class AttributeMapBase {
 
     protected abstract AttributeInstance c(IAttribute iattribute);
 
-    public Collection a() {
+    public Collection<AttributeInstance> a() {
         return this.b.values();
     }
 
     public void a(AttributeInstance attributeinstance) {}
 
-    public void a(Multimap multimap) {
+    public void a(Multimap<String, AttributeModifier> multimap) {
         Iterator iterator = multimap.entries().iterator();
 
         while (iterator.hasNext()) {
@@ -63,7 +63,7 @@ public abstract class AttributeMapBase {
 
     }
 
-    public void b(Multimap multimap) {
+    public void b(Multimap<String, AttributeModifier> multimap) {
         Iterator iterator = multimap.entries().iterator();
 
         while (iterator.hasNext()) {

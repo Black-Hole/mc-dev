@@ -1,5 +1,10 @@
 package net.minecraft.server;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Stack;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +15,7 @@ public class MojangsonParser {
     private static final Logger a = LogManager.getLogger();
     private static final Pattern b = Pattern.compile("\\[[-+\\d|,\\s]+\\]");
 
-    public static NBTTagCompound parse(String s) {
+    public static NBTTagCompound parse(String s) throws MojangsonParseException {
         s = s.trim();
         if (!s.startsWith("{")) {
             throw new MojangsonParseException("Invalid tag encountered, expected \'{\' as first char.");
@@ -21,7 +26,7 @@ public class MojangsonParser {
         }
     }
 
-    static int b(String s) {
+    static int b(String s) throws MojangsonParseException {
         int i = 0;
         boolean flag = false;
         Stack stack = new Stack();
@@ -69,11 +74,11 @@ public class MojangsonParser {
         }
     }
 
-    static MojangsonTypeParser a(String... astring) {
+    static MojangsonParser.MojangsonTypeParser a(String... astring) throws MojangsonParseException {
         return a(astring[0], astring[1]);
     }
 
-    static MojangsonTypeParser a(String s, String s1) {
+    static MojangsonParser.MojangsonTypeParser a(String s, String s1) throws MojangsonParseException {
         s1 = s1.trim();
         String s2;
         boolean flag;
@@ -82,13 +87,13 @@ public class MojangsonParser {
         if (s1.startsWith("{")) {
             s1 = s1.substring(1, s1.length() - 1);
 
-            MojangsonCompoundParser mojangsoncompoundparser;
+            MojangsonParser.MojangsonCompoundParser mojangsonparser_mojangsoncompoundparser;
 
-            for (mojangsoncompoundparser = new MojangsonCompoundParser(s); s1.length() > 0; s1 = s1.substring(s2.length() + 1)) {
+            for (mojangsonparser_mojangsoncompoundparser = new MojangsonParser.MojangsonCompoundParser(s); s1.length() > 0; s1 = s1.substring(s2.length() + 1)) {
                 s2 = b(s1, true);
                 if (s2.length() > 0) {
                     flag = false;
-                    mojangsoncompoundparser.b.add(a(s2, flag));
+                    mojangsonparser_mojangsoncompoundparser.b.add(a(s2, flag));
                 }
 
                 if (s1.length() < s2.length() + 1) {
@@ -101,17 +106,17 @@ public class MojangsonParser {
                 }
             }
 
-            return mojangsoncompoundparser;
+            return mojangsonparser_mojangsoncompoundparser;
         } else if (s1.startsWith("[") && !MojangsonParser.b.matcher(s1).matches()) {
             s1 = s1.substring(1, s1.length() - 1);
 
-            MojangsonListParser mojangsonlistparser;
+            MojangsonParser.MojangsonListParser mojangsonparser_mojangsonlistparser;
 
-            for (mojangsonlistparser = new MojangsonListParser(s); s1.length() > 0; s1 = s1.substring(s2.length() + 1)) {
+            for (mojangsonparser_mojangsonlistparser = new MojangsonParser.MojangsonListParser(s); s1.length() > 0; s1 = s1.substring(s2.length() + 1)) {
                 s2 = b(s1, false);
                 if (s2.length() > 0) {
                     flag = true;
-                    mojangsonlistparser.b.add(a(s2, flag));
+                    mojangsonparser_mojangsonlistparser.b.add(a(s2, flag));
                 }
 
                 if (s1.length() < s2.length() + 1) {
@@ -124,20 +129,20 @@ public class MojangsonParser {
                 }
             }
 
-            return mojangsonlistparser;
+            return mojangsonparser_mojangsonlistparser;
         } else {
-            return new MojangsonPrimitiveParser(s, s1);
+            return new MojangsonParser.MojangsonPrimitiveParser(s, s1);
         }
     }
 
-    private static MojangsonTypeParser a(String s, boolean flag) {
+    private static MojangsonParser.MojangsonTypeParser a(String s, boolean flag) throws MojangsonParseException {
         String s1 = c(s, flag);
         String s2 = d(s, flag);
 
         return a(new String[] { s1, s2});
     }
 
-    private static String b(String s, boolean flag) {
+    private static String b(String s, boolean flag) throws MojangsonParseException {
         int i = a(s, ':');
         int j = a(s, ',');
 
@@ -156,7 +161,7 @@ public class MojangsonParser {
         return a(s, i);
     }
 
-    private static String a(String s, int i) {
+    private static String a(String s, int i) throws MojangsonParseException {
         Stack stack = new Stack();
         int j = i + 1;
         boolean flag = false;
@@ -211,7 +216,7 @@ public class MojangsonParser {
         return s.substring(0, j);
     }
 
-    private static String c(String s, boolean flag) {
+    private static String c(String s, boolean flag) throws MojangsonParseException {
         if (flag) {
             s = s.trim();
             if (s.startsWith("{") || s.startsWith("[")) {
@@ -232,7 +237,7 @@ public class MojangsonParser {
         }
     }
 
-    private static String d(String s, boolean flag) {
+    private static String d(String s, boolean flag) throws MojangsonParseException {
         if (flag) {
             s = s.trim();
             if (s.startsWith("{") || s.startsWith("[")) {
@@ -279,5 +284,150 @@ public class MojangsonParser {
 
     private static boolean b(String s, int i) {
         return i > 0 && s.charAt(i - 1) == 92 && !b(s, i - 1);
+    }
+
+    static class MojangsonPrimitiveParser extends MojangsonParser.MojangsonTypeParser {
+
+        private static final Pattern c = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+[d|D]");
+        private static final Pattern d = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+[f|F]");
+        private static final Pattern e = Pattern.compile("[-+]?[0-9]+[b|B]");
+        private static final Pattern f = Pattern.compile("[-+]?[0-9]+[l|L]");
+        private static final Pattern g = Pattern.compile("[-+]?[0-9]+[s|S]");
+        private static final Pattern h = Pattern.compile("[-+]?[0-9]+");
+        private static final Pattern i = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+");
+        private static final Splitter j = Splitter.on(',').omitEmptyStrings();
+        protected String b;
+
+        public MojangsonPrimitiveParser(String s, String s1) {
+            this.a = s;
+            this.b = s1;
+        }
+
+        public NBTBase a() throws MojangsonParseException {
+            try {
+                if (MojangsonParser.MojangsonPrimitiveParser.c.matcher(this.b).matches()) {
+                    return new NBTTagDouble(Double.parseDouble(this.b.substring(0, this.b.length() - 1)));
+                }
+
+                if (MojangsonParser.MojangsonPrimitiveParser.d.matcher(this.b).matches()) {
+                    return new NBTTagFloat(Float.parseFloat(this.b.substring(0, this.b.length() - 1)));
+                }
+
+                if (MojangsonParser.MojangsonPrimitiveParser.e.matcher(this.b).matches()) {
+                    return new NBTTagByte(Byte.parseByte(this.b.substring(0, this.b.length() - 1)));
+                }
+
+                if (MojangsonParser.MojangsonPrimitiveParser.f.matcher(this.b).matches()) {
+                    return new NBTTagLong(Long.parseLong(this.b.substring(0, this.b.length() - 1)));
+                }
+
+                if (MojangsonParser.MojangsonPrimitiveParser.g.matcher(this.b).matches()) {
+                    return new NBTTagShort(Short.parseShort(this.b.substring(0, this.b.length() - 1)));
+                }
+
+                if (MojangsonParser.MojangsonPrimitiveParser.h.matcher(this.b).matches()) {
+                    return new NBTTagInt(Integer.parseInt(this.b));
+                }
+
+                if (MojangsonParser.MojangsonPrimitiveParser.i.matcher(this.b).matches()) {
+                    return new NBTTagDouble(Double.parseDouble(this.b));
+                }
+
+                if (this.b.equalsIgnoreCase("true") || this.b.equalsIgnoreCase("false")) {
+                    return new NBTTagByte((byte) (Boolean.parseBoolean(this.b) ? 1 : 0));
+                }
+            } catch (NumberFormatException numberformatexception) {
+                this.b = this.b.replaceAll("\\\\\"", "\"");
+                return new NBTTagString(this.b);
+            }
+
+            if (this.b.startsWith("[") && this.b.endsWith("]")) {
+                String s = this.b.substring(1, this.b.length() - 1);
+                String[] astring = (String[]) Iterables.toArray(MojangsonParser.MojangsonPrimitiveParser.j.split(s), String.class);
+
+                try {
+                    int[] aint = new int[astring.length];
+
+                    for (int i = 0; i < astring.length; ++i) {
+                        aint[i] = Integer.parseInt(astring[i].trim());
+                    }
+
+                    return new NBTTagIntArray(aint);
+                } catch (NumberFormatException numberformatexception1) {
+                    return new NBTTagString(this.b);
+                }
+            } else {
+                if (this.b.startsWith("\"") && this.b.endsWith("\"")) {
+                    this.b = this.b.substring(1, this.b.length() - 1);
+                }
+
+                this.b = this.b.replaceAll("\\\\\"", "\"");
+                StringBuilder stringbuilder = new StringBuilder();
+
+                for (int j = 0; j < this.b.length(); ++j) {
+                    if (j < this.b.length() - 1 && this.b.charAt(j) == 92 && this.b.charAt(j + 1) == 92) {
+                        stringbuilder.append('\\');
+                        ++j;
+                    } else {
+                        stringbuilder.append(this.b.charAt(j));
+                    }
+                }
+
+                return new NBTTagString(stringbuilder.toString());
+            }
+        }
+    }
+
+    static class MojangsonListParser extends MojangsonParser.MojangsonTypeParser {
+
+        protected List<MojangsonParser.MojangsonTypeParser> b = Lists.newArrayList();
+
+        public MojangsonListParser(String s) {
+            this.a = s;
+        }
+
+        public NBTBase a() throws MojangsonParseException {
+            NBTTagList nbttaglist = new NBTTagList();
+            Iterator iterator = this.b.iterator();
+
+            while (iterator.hasNext()) {
+                MojangsonParser.MojangsonTypeParser mojangsonparser_mojangsontypeparser = (MojangsonParser.MojangsonTypeParser) iterator.next();
+
+                nbttaglist.add(mojangsonparser_mojangsontypeparser.a());
+            }
+
+            return nbttaglist;
+        }
+    }
+
+    static class MojangsonCompoundParser extends MojangsonParser.MojangsonTypeParser {
+
+        protected List<MojangsonParser.MojangsonTypeParser> b = Lists.newArrayList();
+
+        public MojangsonCompoundParser(String s) {
+            this.a = s;
+        }
+
+        public NBTBase a() throws MojangsonParseException {
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            Iterator iterator = this.b.iterator();
+
+            while (iterator.hasNext()) {
+                MojangsonParser.MojangsonTypeParser mojangsonparser_mojangsontypeparser = (MojangsonParser.MojangsonTypeParser) iterator.next();
+
+                nbttagcompound.set(mojangsonparser_mojangsontypeparser.a, mojangsonparser_mojangsontypeparser.a());
+            }
+
+            return nbttagcompound;
+        }
+    }
+
+    abstract static class MojangsonTypeParser {
+
+        protected String a;
+
+        MojangsonTypeParser() {}
+
+        public abstract NBTBase a() throws MojangsonParseException;
     }
 }

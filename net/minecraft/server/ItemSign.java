@@ -18,7 +18,7 @@ public class ItemSign extends Item {
                 return false;
             } else if (!Blocks.STANDING_SIGN.canPlace(world, blockposition)) {
                 return false;
-            } else if (world.isStatic) {
+            } else if (world.isClientSide) {
                 return true;
             } else {
                 if (enumdirection == EnumDirection.UP) {

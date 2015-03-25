@@ -40,7 +40,7 @@ public class ContainerWorkbench extends Container {
 
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        if (!this.g.isStatic) {
+        if (!this.g.isClientSide) {
             for (int i = 0; i < 9; ++i) {
                 ItemStack itemstack = this.craftInventory.splitWithoutUpdate(i);
 

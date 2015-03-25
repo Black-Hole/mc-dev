@@ -4,11 +4,11 @@ public class EntityCaveSpider extends EntitySpider {
 
     public EntityCaveSpider(World world) {
         super(world);
-        this.a(0.7F, 0.5F);
+        this.setSize(0.7F, 0.5F);
     }
 
-    protected void aW() {
-        super.aW();
+    protected void initAttributes() {
+        super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(12.0D);
     }
 

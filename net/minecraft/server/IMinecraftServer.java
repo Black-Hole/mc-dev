@@ -12,17 +12,17 @@ public interface IMinecraftServer {
 
     String b();
 
-    String C();
+    String D();
 
-    int D();
+    int E();
 
-    String E();
+    String F();
 
     String getVersion();
 
-    int G();
-
     int H();
+
+    int I();
 
     String[] getPlayers();
 
@@ -38,7 +38,7 @@ public interface IMinecraftServer {
 
     void warning(String s);
 
-    void h(String s);
+    void g(String s);
 
-    void i(String s);
+    void h(String s);
 }

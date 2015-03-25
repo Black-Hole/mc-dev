@@ -6,12 +6,12 @@ public class BlockPiston extends Block {
 
     public static final BlockStateDirection FACING = BlockStateDirection.of("facing");
     public static final BlockStateBoolean EXTENDED = BlockStateBoolean.of("extended");
-    private final boolean M;
+    private final boolean N;
 
     public BlockPiston(boolean flag) {
         super(Material.PISTON);
         this.j(this.blockStateList.getBlockData().set(BlockPiston.FACING, EnumDirection.NORTH).set(BlockPiston.EXTENDED, Boolean.valueOf(false)));
-        this.M = flag;
+        this.N = flag;
         this.a(BlockPiston.i);
         this.c(0.5F);
         this.a(CreativeModeTab.d);
@@ -23,21 +23,21 @@ public class BlockPiston extends Block {
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
         world.setTypeAndData(blockposition, iblockdata.set(BlockPiston.FACING, a(world, blockposition, entityliving)), 2);
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             this.e(world, blockposition, iblockdata);
         }
 
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             this.e(world, blockposition, iblockdata);
         }
 
     }
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.isStatic && world.getTileEntity(blockposition) == null) {
+        if (!world.isClientSide && world.getTileEntity(blockposition) == null) {
             this.e(world, blockposition, iblockdata);
         }
 
@@ -49,7 +49,7 @@ public class BlockPiston extends Block {
 
     private void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockPiston.FACING);
-        boolean flag = this.b(world, blockposition, enumdirection);
+        boolean flag = this.a(world, blockposition, enumdirection);
 
         if (flag && !((Boolean) iblockdata.get(BlockPiston.EXTENDED)).booleanValue()) {
             if ((new PistonExtendsChecker(world, blockposition, enumdirection, true)).a()) {
@@ -62,7 +62,7 @@ public class BlockPiston extends Block {
 
     }
 
-    private boolean b(World world, BlockPosition blockposition, EnumDirection enumdirection) {
+    private boolean a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
         EnumDirection[] aenumdirection = EnumDirection.values();
         int i = aenumdirection.length;
 
@@ -76,7 +76,7 @@ public class BlockPiston extends Block {
             }
         }
 
-        if (world.isBlockFacePowered(blockposition, EnumDirection.NORTH)) {
+        if (world.isBlockFacePowered(blockposition, EnumDirection.DOWN)) {
             return true;
         } else {
             BlockPosition blockposition1 = blockposition.up();
@@ -99,8 +99,8 @@ public class BlockPiston extends Block {
     public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, int i, int j) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockPiston.FACING);
 
-        if (!world.isStatic) {
-            boolean flag = this.b(world, blockposition, enumdirection);
+        if (!world.isClientSide) {
+            boolean flag = this.a(world, blockposition, enumdirection);
 
             if (flag && i == 1) {
                 world.setTypeAndData(blockposition, iblockdata.set(BlockPiston.EXTENDED, Boolean.valueOf(true)), 2);
@@ -126,9 +126,9 @@ public class BlockPiston extends Block {
                 ((TileEntityPiston) tileentity).h();
             }
 
-            world.setTypeAndData(blockposition, Blocks.PISTON_EXTENSION.getBlockData().set(BlockPistonMoving.FACING, enumdirection).set(BlockPistonMoving.TYPE, this.M ? EnumPistonType.STICKY : EnumPistonType.DEFAULT), 3);
+            world.setTypeAndData(blockposition, Blocks.PISTON_EXTENSION.getBlockData().set(BlockPistonMoving.FACING, enumdirection).set(BlockPistonMoving.TYPE, this.N ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT), 3);
             world.setTileEntity(blockposition, BlockPistonMoving.a(this.fromLegacyData(j), enumdirection, false, true));
-            if (this.M) {
+            if (this.N) {
                 BlockPosition blockposition1 = blockposition.a(enumdirection.getAdjacentX() * 2, enumdirection.getAdjacentY() * 2, enumdirection.getAdjacentZ() * 2);
                 Block block = world.getType(blockposition1).getBlock();
                 boolean flag1 = false;
@@ -146,7 +146,7 @@ public class BlockPiston extends Block {
                     }
                 }
 
-                if (!flag1 && block.getMaterial() != Material.AIR && a(block, world, blockposition1, enumdirection.opposite(), false) && (block.i() == 0 || block == Blocks.PISTON || block == Blocks.STICKY_PISTON)) {
+                if (!flag1 && block.getMaterial() != Material.AIR && a(block, world, blockposition1, enumdirection.opposite(), false) && (block.k() == 0 || block == Blocks.PISTON || block == Blocks.STICKY_PISTON)) {
                     this.a(world, blockposition, enumdirection, false);
                 }
             } else {
@@ -167,7 +167,7 @@ public class BlockPiston extends Block {
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockPiston.FACING);
 
             if (enumdirection != null) {
-                switch (SwitchHelperDirection10.a[enumdirection.ordinal()]) {
+                switch (BlockPiston.SyntheticClass_1.a[enumdirection.ordinal()]) {
                 case 1:
                     this.a(0.0F, 0.25F, 0.0F, 1.0F, 1.0F, 1.0F);
                     break;
@@ -198,11 +198,11 @@ public class BlockPiston extends Block {
 
     }
 
-    public void h() {
+    public void j() {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
     }
@@ -241,7 +241,7 @@ public class BlockPiston extends Block {
     public static boolean a(Block block, World world, BlockPosition blockposition, EnumDirection enumdirection, boolean flag) {
         if (block == Blocks.OBSIDIAN) {
             return false;
-        } else if (!world.af().a(blockposition)) {
+        } else if (!world.getWorldBorder().a(blockposition)) {
             return false;
         } else if (blockposition.getY() >= 0 && (enumdirection != EnumDirection.DOWN || blockposition.getY() != 0)) {
             if (blockposition.getY() <= world.getHeight() - 1 && (enumdirection != EnumDirection.UP || blockposition.getY() != world.getHeight() - 1)) {
@@ -250,11 +250,11 @@ public class BlockPiston extends Block {
                         return false;
                     }
 
-                    if (block.i() == 2) {
+                    if (block.k() == 2) {
                         return false;
                     }
 
-                    if (block.i() == 1) {
+                    if (block.k() == 1) {
                         if (!flag) {
                             return false;
                         }
@@ -322,10 +322,10 @@ public class BlockPiston extends Block {
             BlockPosition blockposition2 = blockposition.shift(enumdirection);
 
             if (flag) {
-                EnumPistonType enumpistontype = this.M ? EnumPistonType.STICKY : EnumPistonType.DEFAULT;
+                BlockPistonExtension.EnumPistonType blockpistonextension_enumpistontype = this.N ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT;
 
-                iblockdata = Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.FACING, enumdirection).set(BlockPistonExtension.TYPE, enumpistontype);
-                IBlockData iblockdata1 = Blocks.PISTON_EXTENSION.getBlockData().set(BlockPistonMoving.FACING, enumdirection).set(BlockPistonMoving.TYPE, this.M ? EnumPistonType.STICKY : EnumPistonType.DEFAULT);
+                iblockdata = Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.FACING, enumdirection).set(BlockPistonExtension.TYPE, blockpistonextension_enumpistontype);
+                IBlockData iblockdata1 = Blocks.PISTON_EXTENSION.getBlockData().set(BlockPistonMoving.FACING, enumdirection).set(BlockPistonMoving.TYPE, this.N ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT);
 
                 world.setTypeAndData(blockposition2, iblockdata1, 4);
                 world.setTileEntity(blockposition2, BlockPistonMoving.a(iblockdata, enumdirection, true, false));
@@ -367,5 +367,49 @@ public class BlockPiston extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockPiston.FACING, BlockPiston.EXTENDED});
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EnumDirection.values().length];
+
+        static {
+            try {
+                BlockPiston.SyntheticClass_1.a[EnumDirection.DOWN.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                BlockPiston.SyntheticClass_1.a[EnumDirection.UP.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                BlockPiston.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                BlockPiston.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            try {
+                BlockPiston.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 5;
+            } catch (NoSuchFieldError nosuchfielderror4) {
+                ;
+            }
+
+            try {
+                BlockPiston.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 6;
+            } catch (NoSuchFieldError nosuchfielderror5) {
+                ;
+            }
+
+        }
     }
 }

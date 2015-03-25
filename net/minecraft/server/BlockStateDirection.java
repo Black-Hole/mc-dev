@@ -6,9 +6,9 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import java.util.Collection;
 
-public class BlockStateDirection extends BlockStateEnum {
+public class BlockStateDirection extends BlockStateEnum<EnumDirection> {
 
-    protected BlockStateDirection(String s, Collection collection) {
+    protected BlockStateDirection(String s, Collection<EnumDirection> collection) {
         super(s, EnumDirection.class, collection);
     }
 
@@ -16,11 +16,11 @@ public class BlockStateDirection extends BlockStateEnum {
         return of(s, Predicates.alwaysTrue());
     }
 
-    public static BlockStateDirection of(String s, Predicate predicate) {
+    public static BlockStateDirection of(String s, Predicate<EnumDirection> predicate) {
         return a(s, Collections2.filter(Lists.newArrayList(EnumDirection.values()), predicate));
     }
 
-    public static BlockStateDirection a(String s, Collection collection) {
+    public static BlockStateDirection a(String s, Collection<EnumDirection> collection) {
         return new BlockStateDirection(s, collection);
     }
 }

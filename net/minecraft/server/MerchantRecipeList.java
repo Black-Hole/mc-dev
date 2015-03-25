@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.util.ArrayList;
 
-public class MerchantRecipeList extends ArrayList {
+public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
 
     public MerchantRecipeList() {}
 
@@ -14,18 +14,22 @@ public class MerchantRecipeList extends ArrayList {
         if (i > 0 && i < this.size()) {
             MerchantRecipe merchantrecipe = (MerchantRecipe) this.get(i);
 
-            return ItemStack.c(itemstack, merchantrecipe.getBuyItem1()) && (itemstack1 == null && !merchantrecipe.hasSecondItem() || merchantrecipe.hasSecondItem() && ItemStack.c(itemstack1, merchantrecipe.getBuyItem2())) && itemstack.count >= merchantrecipe.getBuyItem1().count && (!merchantrecipe.hasSecondItem() || itemstack1.count >= merchantrecipe.getBuyItem2().count) ? merchantrecipe : null;
+            return this.a(itemstack, merchantrecipe.getBuyItem1()) && (itemstack1 == null && !merchantrecipe.hasSecondItem() || merchantrecipe.hasSecondItem() && this.a(itemstack1, merchantrecipe.getBuyItem2())) && itemstack.count >= merchantrecipe.getBuyItem1().count && (!merchantrecipe.hasSecondItem() || itemstack1.count >= merchantrecipe.getBuyItem2().count) ? merchantrecipe : null;
         } else {
             for (int j = 0; j < this.size(); ++j) {
                 MerchantRecipe merchantrecipe1 = (MerchantRecipe) this.get(j);
 
-                if (ItemStack.c(itemstack, merchantrecipe1.getBuyItem1()) && itemstack.count >= merchantrecipe1.getBuyItem1().count && (!merchantrecipe1.hasSecondItem() && itemstack1 == null || merchantrecipe1.hasSecondItem() && ItemStack.c(itemstack1, merchantrecipe1.getBuyItem2()) && itemstack1.count >= merchantrecipe1.getBuyItem2().count)) {
+                if (this.a(itemstack, merchantrecipe1.getBuyItem1()) && itemstack.count >= merchantrecipe1.getBuyItem1().count && (!merchantrecipe1.hasSecondItem() && itemstack1 == null || merchantrecipe1.hasSecondItem() && this.a(itemstack1, merchantrecipe1.getBuyItem2()) && itemstack1.count >= merchantrecipe1.getBuyItem2().count)) {
                     return merchantrecipe1;
                 }
             }
 
             return null;
         }
+    }
+
+    private boolean a(ItemStack itemstack, ItemStack itemstack1) {
+        return ItemStack.c(itemstack, itemstack1) && (!itemstack1.hasTag() || itemstack.hasTag() && GameProfileSerializer.a(itemstack1.getTag(), itemstack.getTag(), false));
     }
 
     public void a(PacketDataSerializer packetdataserializer) {

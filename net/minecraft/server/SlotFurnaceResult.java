@@ -34,7 +34,7 @@ public class SlotFurnaceResult extends Slot {
 
     protected void c(ItemStack itemstack) {
         itemstack.a(this.a.world, this.a, this.b);
-        if (!this.a.world.isStatic) {
+        if (!this.a.world.isClientSide) {
             int i = this.b;
             float f = RecipesFurnace.getInstance().b(itemstack);
             int j;

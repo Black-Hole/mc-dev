@@ -2,17 +2,17 @@ package net.minecraft.server;
 
 import com.google.common.base.Objects;
 
-public class BaseBlockPosition implements Comparable {
+public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
 
     public static final BaseBlockPosition ZERO = new BaseBlockPosition(0, 0, 0);
     private final int a;
-    private final int b;
     private final int c;
+    private final int d;
 
     public BaseBlockPosition(int i, int j, int k) {
         this.a = i;
-        this.b = j;
-        this.c = k;
+        this.c = j;
+        this.d = k;
     }
 
     public BaseBlockPosition(double d0, double d1, double d2) {
@@ -44,11 +44,11 @@ public class BaseBlockPosition implements Comparable {
     }
 
     public int getY() {
-        return this.b;
+        return this.c;
     }
 
     public int getZ() {
-        return this.c;
+        return this.d;
     }
 
     public BaseBlockPosition d(BaseBlockPosition baseblockposition) {

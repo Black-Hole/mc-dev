@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutServerDifficulty implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutServerDifficulty implements Packet<PacketListenerPlayOut> {
 
     private EnumDifficulty a;
     private boolean b;
@@ -16,11 +18,11 @@ public class PacketPlayOutServerDifficulty implements Packet {
         packetlistenerplayout.a(this);
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a.a());
     }
 

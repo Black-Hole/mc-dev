@@ -48,28 +48,28 @@ public class EntityLeash extends EntityHanging {
     public void a(NBTTagCompound nbttagcompound) {}
 
     public boolean e(EntityHuman entityhuman) {
-        ItemStack itemstack = entityhuman.bz();
+        ItemStack itemstack = entityhuman.bA();
         boolean flag = false;
         double d0;
         List list;
         Iterator iterator;
         EntityInsentient entityinsentient;
 
-        if (itemstack != null && itemstack.getItem() == Items.LEAD && !this.world.isStatic) {
+        if (itemstack != null && itemstack.getItem() == Items.LEAD && !this.world.isClientSide) {
             d0 = 7.0D;
             list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX - d0, this.locY - d0, this.locZ - d0, this.locX + d0, this.locY + d0, this.locZ + d0));
             iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 entityinsentient = (EntityInsentient) iterator.next();
-                if (entityinsentient.cb() && entityinsentient.getLeashHolder() == entityhuman) {
+                if (entityinsentient.cc() && entityinsentient.getLeashHolder() == entityhuman) {
                     entityinsentient.setLeashHolder(this, true);
                     flag = true;
                 }
             }
         }
 
-        if (!this.world.isStatic && !flag) {
+        if (!this.world.isClientSide && !flag) {
             this.die();
             if (entityhuman.abilities.canInstantlyBuild) {
                 d0 = 7.0D;
@@ -78,7 +78,7 @@ public class EntityLeash extends EntityHanging {
 
                 while (iterator.hasNext()) {
                     entityinsentient = (EntityInsentient) iterator.next();
-                    if (entityinsentient.cb() && entityinsentient.getLeashHolder() == this) {
+                    if (entityinsentient.cc() && entityinsentient.getLeashHolder() == this) {
                         entityinsentient.unleash(true, false);
                     }
                 }

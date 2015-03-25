@@ -14,6 +14,6 @@ public class BlockObsidian extends Block {
     }
 
     public MaterialMapColor g(IBlockData iblockdata) {
-        return MaterialMapColor.J;
+        return MaterialMapColor.E;
     }
 }

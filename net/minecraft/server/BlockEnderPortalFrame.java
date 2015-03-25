@@ -6,11 +6,11 @@ import java.util.Random;
 
 public class BlockEnderPortalFrame extends Block {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
     public static final BlockStateBoolean EYE = BlockStateBoolean.of("eye");
 
     public BlockEnderPortalFrame() {
-        super(Material.STONE);
+        super(Material.STONE, MaterialMapColor.C);
         this.j(this.blockStateList.getBlockData().set(BlockEnderPortalFrame.FACING, EnumDirection.NORTH).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(false)));
     }
 
@@ -18,11 +18,11 @@ public class BlockEnderPortalFrame extends Block {
         return false;
     }
 
-    public void h() {
+    public void j() {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.8125F, 1.0F);
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.8125F, 1.0F);
         super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         if (((Boolean) world.getType(blockposition).get(BlockEnderPortalFrame.EYE)).booleanValue()) {
@@ -30,7 +30,7 @@ public class BlockEnderPortalFrame extends Block {
             super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         }
 
-        this.h();
+        this.j();
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {

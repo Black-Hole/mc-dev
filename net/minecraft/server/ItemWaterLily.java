@@ -12,7 +12,7 @@ public class ItemWaterLily extends ItemWithAuxData {
         if (movingobjectposition == null) {
             return itemstack;
         } else {
-            if (movingobjectposition.type == EnumMovingObjectType.BLOCK) {
+            if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
                 BlockPosition blockposition = movingobjectposition.a();
 
                 if (!world.a(entityhuman, blockposition)) {

@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-public class LongHashMap {
+public class LongHashMap<V> {
 
-    private transient LongHashMapEntry[] entries = new LongHashMapEntry[4096];
+    private transient LongHashMap.LongHashMapEntry<V>[] entries = new LongHashMap.LongHashMapEntry[4096];
     private transient int count;
     private int c;
     private int d = 3072;
@@ -30,12 +30,12 @@ public class LongHashMap {
         return this.count;
     }
 
-    public Object getEntry(long i) {
+    public V getEntry(long i) {
         int j = g(i);
 
-        for (LongHashMapEntry longhashmapentry = this.entries[a(j, this.c)]; longhashmapentry != null; longhashmapentry = longhashmapentry.c) {
-            if (longhashmapentry.a == i) {
-                return longhashmapentry.b;
+        for (LongHashMap.LongHashMapEntry longhashmap_longhashmapentry = this.entries[a(j, this.c)]; longhashmap_longhashmapentry != null; longhashmap_longhashmapentry = longhashmap_longhashmapentry.c) {
+            if (longhashmap_longhashmapentry.a == i) {
+                return longhashmap_longhashmapentry.b;
             }
         }
 
@@ -46,119 +46,167 @@ public class LongHashMap {
         return this.c(i) != null;
     }
 
-    final LongHashMapEntry c(long i) {
+    final LongHashMap.LongHashMapEntry<V> c(long i) {
         int j = g(i);
 
-        for (LongHashMapEntry longhashmapentry = this.entries[a(j, this.c)]; longhashmapentry != null; longhashmapentry = longhashmapentry.c) {
-            if (longhashmapentry.a == i) {
-                return longhashmapentry;
+        for (LongHashMap.LongHashMapEntry longhashmap_longhashmapentry = this.entries[a(j, this.c)]; longhashmap_longhashmapentry != null; longhashmap_longhashmapentry = longhashmap_longhashmapentry.c) {
+            if (longhashmap_longhashmapentry.a == i) {
+                return longhashmap_longhashmapentry;
             }
         }
 
         return null;
     }
 
-    public void put(long i, Object object) {
+    public void put(long i, V v0) {
         int j = g(i);
         int k = a(j, this.c);
 
-        for (LongHashMapEntry longhashmapentry = this.entries[k]; longhashmapentry != null; longhashmapentry = longhashmapentry.c) {
-            if (longhashmapentry.a == i) {
-                longhashmapentry.b = object;
+        for (LongHashMap.LongHashMapEntry longhashmap_longhashmapentry = this.entries[k]; longhashmap_longhashmapentry != null; longhashmap_longhashmapentry = longhashmap_longhashmapentry.c) {
+            if (longhashmap_longhashmapentry.a == i) {
+                longhashmap_longhashmapentry.b = v0;
                 return;
             }
         }
 
         ++this.f;
-        this.a(j, i, object, k);
+        this.a(j, i, v0, k);
     }
 
     private void b(int i) {
-        LongHashMapEntry[] alonghashmapentry = this.entries;
-        int j = alonghashmapentry.length;
+        LongHashMap.LongHashMapEntry[] alonghashmap_longhashmapentry = this.entries;
+        int j = alonghashmap_longhashmapentry.length;
 
         if (j == 1073741824) {
             this.d = Integer.MAX_VALUE;
         } else {
-            LongHashMapEntry[] alonghashmapentry1 = new LongHashMapEntry[i];
+            LongHashMap.LongHashMapEntry[] alonghashmap_longhashmapentry1 = new LongHashMap.LongHashMapEntry[i];
 
-            this.a(alonghashmapentry1);
-            this.entries = alonghashmapentry1;
+            this.a(alonghashmap_longhashmapentry1);
+            this.entries = alonghashmap_longhashmapentry1;
             this.c = this.entries.length - 1;
             this.d = (int) ((float) i * this.e);
         }
     }
 
-    private void a(LongHashMapEntry[] alonghashmapentry) {
-        LongHashMapEntry[] alonghashmapentry1 = this.entries;
-        int i = alonghashmapentry.length;
+    private void a(LongHashMap.LongHashMapEntry<V>[] alonghashmap_longhashmapentry) {
+        LongHashMap.LongHashMapEntry[] alonghashmap_longhashmapentry1 = this.entries;
+        int i = alonghashmap_longhashmapentry.length;
 
-        for (int j = 0; j < alonghashmapentry1.length; ++j) {
-            LongHashMapEntry longhashmapentry = alonghashmapentry1[j];
+        for (int j = 0; j < alonghashmap_longhashmapentry1.length; ++j) {
+            LongHashMap.LongHashMapEntry longhashmap_longhashmapentry = alonghashmap_longhashmapentry1[j];
 
-            if (longhashmapentry != null) {
-                alonghashmapentry1[j] = null;
+            if (longhashmap_longhashmapentry != null) {
+                alonghashmap_longhashmapentry1[j] = null;
 
-                LongHashMapEntry longhashmapentry1;
+                LongHashMap.LongHashMapEntry longhashmap_longhashmapentry1;
 
                 do {
-                    longhashmapentry1 = longhashmapentry.c;
-                    int k = a(longhashmapentry.d, i - 1);
+                    longhashmap_longhashmapentry1 = longhashmap_longhashmapentry.c;
+                    int k = a(longhashmap_longhashmapentry.d, i - 1);
 
-                    longhashmapentry.c = alonghashmapentry[k];
-                    alonghashmapentry[k] = longhashmapentry;
-                    longhashmapentry = longhashmapentry1;
-                } while (longhashmapentry1 != null);
+                    longhashmap_longhashmapentry.c = alonghashmap_longhashmapentry[k];
+                    alonghashmap_longhashmapentry[k] = longhashmap_longhashmapentry;
+                    longhashmap_longhashmapentry = longhashmap_longhashmapentry1;
+                } while (longhashmap_longhashmapentry1 != null);
             }
         }
 
     }
 
-    public Object remove(long i) {
-        LongHashMapEntry longhashmapentry = this.e(i);
+    public V remove(long i) {
+        LongHashMap.LongHashMapEntry longhashmap_longhashmapentry = this.e(i);
 
-        return longhashmapentry == null ? null : longhashmapentry.b;
+        return longhashmap_longhashmapentry == null ? null : longhashmap_longhashmapentry.b;
     }
 
-    final LongHashMapEntry e(long i) {
+    final LongHashMap.LongHashMapEntry<V> e(long i) {
         int j = g(i);
         int k = a(j, this.c);
-        LongHashMapEntry longhashmapentry = this.entries[k];
+        LongHashMap.LongHashMapEntry longhashmap_longhashmapentry = this.entries[k];
 
-        LongHashMapEntry longhashmapentry1;
-        LongHashMapEntry longhashmapentry2;
+        LongHashMap.LongHashMapEntry longhashmap_longhashmapentry1;
+        LongHashMap.LongHashMapEntry longhashmap_longhashmapentry2;
 
-        for (longhashmapentry1 = longhashmapentry; longhashmapentry1 != null; longhashmapentry1 = longhashmapentry2) {
-            longhashmapentry2 = longhashmapentry1.c;
-            if (longhashmapentry1.a == i) {
+        for (longhashmap_longhashmapentry1 = longhashmap_longhashmapentry; longhashmap_longhashmapentry1 != null; longhashmap_longhashmapentry1 = longhashmap_longhashmapentry2) {
+            longhashmap_longhashmapentry2 = longhashmap_longhashmapentry1.c;
+            if (longhashmap_longhashmapentry1.a == i) {
                 ++this.f;
                 --this.count;
-                if (longhashmapentry == longhashmapentry1) {
-                    this.entries[k] = longhashmapentry2;
+                if (longhashmap_longhashmapentry == longhashmap_longhashmapentry1) {
+                    this.entries[k] = longhashmap_longhashmapentry2;
                 } else {
-                    longhashmapentry.c = longhashmapentry2;
+                    longhashmap_longhashmapentry.c = longhashmap_longhashmapentry2;
                 }
 
-                return longhashmapentry1;
+                return longhashmap_longhashmapentry1;
             }
 
-            longhashmapentry = longhashmapentry1;
+            longhashmap_longhashmapentry = longhashmap_longhashmapentry1;
         }
 
-        return longhashmapentry1;
+        return longhashmap_longhashmapentry1;
     }
 
-    private void a(int i, long j, Object object, int k) {
-        LongHashMapEntry longhashmapentry = this.entries[k];
+    private void a(int i, long j, V v0, int k) {
+        LongHashMap.LongHashMapEntry longhashmap_longhashmapentry = this.entries[k];
 
-        this.entries[k] = new LongHashMapEntry(i, j, object, longhashmapentry);
+        this.entries[k] = new LongHashMap.LongHashMapEntry(i, j, v0, longhashmap_longhashmapentry);
         if (this.count++ >= this.d) {
             this.b(2 * this.entries.length);
         }
 
     }
 
-    static int f(long i) {
-        return g(i);
+    static class LongHashMapEntry<V> {
+
+        final long a;
+        V b;
+        LongHashMap.LongHashMapEntry<V> c;
+        final int d;
+
+        LongHashMapEntry(int i, long j, V v0, LongHashMap.LongHashMapEntry<V> longhashmap_longhashmapentry) {
+            this.b = v0;
+            this.c = longhashmap_longhashmapentry;
+            this.a = j;
+            this.d = i;
+        }
+
+        public final long a() {
+            return this.a;
+        }
+
+        public final V b() {
+            return this.b;
+        }
+
+        public final boolean equals(Object object) {
+            if (!(object instanceof LongHashMap.LongHashMapEntry)) {
+                return false;
+            } else {
+                LongHashMap.LongHashMapEntry longhashmap_longhashmapentry = (LongHashMap.LongHashMapEntry) object;
+                Long olong = Long.valueOf(this.a());
+                Long olong1 = Long.valueOf(longhashmap_longhashmapentry.a());
+
+                if (olong == olong1 || olong != null && olong.equals(olong1)) {
+                    Object object1 = this.b();
+                    Object object2 = longhashmap_longhashmapentry.b();
+
+                    if (object1 == object2 || object1 != null && object1.equals(object2)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        public final int hashCode() {
+            return LongHashMap.g(this.a);
+        }
+
+        public final String toString() {
+            return this.a() + "=" + this.b();
+        }
     }
 }

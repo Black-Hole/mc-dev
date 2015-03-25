@@ -10,11 +10,11 @@ import java.util.Map;
 
 public class StatisticList {
 
-    protected static Map a = Maps.newHashMap();
-    public static List stats = Lists.newArrayList();
-    public static List c = Lists.newArrayList();
-    public static List d = Lists.newArrayList();
-    public static List e = Lists.newArrayList();
+    protected static Map<String, Statistic> a = Maps.newHashMap();
+    public static List<Statistic> stats = Lists.newArrayList();
+    public static List<Statistic> c = Lists.newArrayList();
+    public static List<CraftingStatistic> d = Lists.newArrayList();
+    public static List<CraftingStatistic> e = Lists.newArrayList();
     public static Statistic f = (new CounterStatistic("stat.leaveGame", new ChatMessage("stat.leaveGame", new Object[0]))).i().h();
     public static Statistic g = (new CounterStatistic("stat.playOneMinute", new ChatMessage("stat.playOneMinute", new Object[0]), Statistic.h)).i().h();
     public static Statistic h = (new CounterStatistic("stat.timeSinceDeath", new ChatMessage("stat.timeSinceDeath", new Object[0]), Statistic.h)).i().h();
@@ -43,6 +43,26 @@ public class StatisticList {
     public static Statistic E = (new CounterStatistic("stat.treasureFished", new ChatMessage("stat.treasureFished", new Object[0]))).h();
     public static Statistic F = (new CounterStatistic("stat.talkedToVillager", new ChatMessage("stat.talkedToVillager", new Object[0]))).h();
     public static Statistic G = (new CounterStatistic("stat.tradedWithVillager", new ChatMessage("stat.tradedWithVillager", new Object[0]))).h();
+    public static Statistic H = (new CounterStatistic("stat.cakeSlicesEaten", new ChatMessage("stat.cakeSlicesEaten", new Object[0]))).h();
+    public static Statistic I = (new CounterStatistic("stat.cauldronFilled", new ChatMessage("stat.cauldronFilled", new Object[0]))).h();
+    public static Statistic J = (new CounterStatistic("stat.cauldronUsed", new ChatMessage("stat.cauldronUsed", new Object[0]))).h();
+    public static Statistic K = (new CounterStatistic("stat.armorCleaned", new ChatMessage("stat.armorCleaned", new Object[0]))).h();
+    public static Statistic L = (new CounterStatistic("stat.bannerCleaned", new ChatMessage("stat.bannerCleaned", new Object[0]))).h();
+    public static Statistic M = (new CounterStatistic("stat.brewingstandInteraction", new ChatMessage("stat.brewingstandInteraction", new Object[0]))).h();
+    public static Statistic N = (new CounterStatistic("stat.beaconInteraction", new ChatMessage("stat.beaconInteraction", new Object[0]))).h();
+    public static Statistic O = (new CounterStatistic("stat.dropperInspected", new ChatMessage("stat.dropperInspected", new Object[0]))).h();
+    public static Statistic P = (new CounterStatistic("stat.hopperInspected", new ChatMessage("stat.hopperInspected", new Object[0]))).h();
+    public static Statistic Q = (new CounterStatistic("stat.dispenserInspected", new ChatMessage("stat.dispenserInspected", new Object[0]))).h();
+    public static Statistic R = (new CounterStatistic("stat.noteblockPlayed", new ChatMessage("stat.noteblockPlayed", new Object[0]))).h();
+    public static Statistic S = (new CounterStatistic("stat.noteblockTuned", new ChatMessage("stat.noteblockTuned", new Object[0]))).h();
+    public static Statistic T = (new CounterStatistic("stat.flowerPotted", new ChatMessage("stat.flowerPotted", new Object[0]))).h();
+    public static Statistic U = (new CounterStatistic("stat.trappedChestTriggered", new ChatMessage("stat.trappedChestTriggered", new Object[0]))).h();
+    public static Statistic V = (new CounterStatistic("stat.enderchestOpened", new ChatMessage("stat.enderchestOpened", new Object[0]))).h();
+    public static Statistic W = (new CounterStatistic("stat.itemEnchanted", new ChatMessage("stat.itemEnchanted", new Object[0]))).h();
+    public static Statistic X = (new CounterStatistic("stat.recordPlayed", new ChatMessage("stat.recordPlayed", new Object[0]))).h();
+    public static Statistic Y = (new CounterStatistic("stat.furnaceInteraction", new ChatMessage("stat.furnaceInteraction", new Object[0]))).h();
+    public static Statistic Z = (new CounterStatistic("stat.craftingTableInteraction", new ChatMessage("stat.workbenchInteraction", new Object[0]))).h();
+    public static Statistic aa = (new CounterStatistic("stat.chestOpened", new ChatMessage("stat.chestOpened", new Object[0]))).h();
     public static final Statistic[] MINE_BLOCK_COUNT = new Statistic[4096];
     public static final Statistic[] CRAFT_BLOCK_COUNT = new Statistic[32000];
     public static final Statistic[] USE_ITEM_COUNT = new Statistic[32000];
@@ -106,7 +126,7 @@ public class StatisticList {
                 int i = Block.getId(block);
                 String s = a(item);
 
-                if (s != null && block.I()) {
+                if (s != null && block.J()) {
                     StatisticList.MINE_BLOCK_COUNT[i] = (new CraftingStatistic("stat.mineBlock.", s, new ChatMessage("stat.mineBlock", new Object[] { (new ItemStack(block)).C()}), item)).h();
                     StatisticList.e.add((CraftingStatistic) StatisticList.MINE_BLOCK_COUNT[i]);
                 }
@@ -194,14 +214,14 @@ public class StatisticList {
         }
     }
 
-    public static Statistic a(MonsterEggInfo monsteregginfo) {
-        String s = EntityTypes.b(monsteregginfo.a);
+    public static Statistic a(EntityTypes.MonsterEggInfo entitytypes_monsteregginfo) {
+        String s = EntityTypes.b(entitytypes_monsteregginfo.a);
 
         return s == null ? null : (new Statistic("stat.killEntity." + s, new ChatMessage("stat.entityKill", new Object[] { new ChatMessage("entity." + s + ".name", new Object[0])}))).h();
     }
 
-    public static Statistic b(MonsterEggInfo monsteregginfo) {
-        String s = EntityTypes.b(monsteregginfo.a);
+    public static Statistic b(EntityTypes.MonsterEggInfo entitytypes_monsteregginfo) {
+        String s = EntityTypes.b(entitytypes_monsteregginfo.a);
 
         return s == null ? null : (new Statistic("stat.entityKilledBy." + s, new ChatMessage("stat.entityKilledBy", new Object[] { new ChatMessage("entity." + s + ".name", new Object[0])}))).h();
     }

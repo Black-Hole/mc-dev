@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class BlockSlowSand extends Block {
 
     public BlockSlowSand() {
-        super(Material.SAND);
+        super(Material.SAND, MaterialMapColor.B);
         this.a(CreativeModeTab.b);
     }
 

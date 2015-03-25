@@ -20,7 +20,7 @@ public class BlockEnderPortal extends BlockContainer {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, f, 1.0F);
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {}
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {}
 
     public boolean c() {
         return false;
@@ -35,13 +35,13 @@ public class BlockEnderPortal extends BlockContainer {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (entity.vehicle == null && entity.passenger == null && !world.isStatic) {
+        if (entity.vehicle == null && entity.passenger == null && !world.isClientSide) {
             entity.c(1);
         }
 
     }
 
     public MaterialMapColor g(IBlockData iblockdata) {
-        return MaterialMapColor.J;
+        return MaterialMapColor.E;
     }
 }

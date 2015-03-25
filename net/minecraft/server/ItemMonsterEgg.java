@@ -19,7 +19,7 @@ public class ItemMonsterEgg extends Item {
     }
 
     public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (world.isStatic) {
+        if (world.isClientSide) {
             return true;
         } else if (!entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
             return false;
@@ -67,7 +67,7 @@ public class ItemMonsterEgg extends Item {
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (world.isStatic) {
+        if (world.isClientSide) {
             return itemstack;
         } else {
             MovingObjectPosition movingobjectposition = this.a(world, entityhuman, true);
@@ -75,7 +75,7 @@ public class ItemMonsterEgg extends Item {
             if (movingobjectposition == null) {
                 return itemstack;
             } else {
-                if (movingobjectposition.type == EnumMovingObjectType.BLOCK) {
+                if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
                     BlockPosition blockposition = movingobjectposition.a();
 
                     if (!world.a(entityhuman, blockposition)) {
@@ -120,8 +120,8 @@ public class ItemMonsterEgg extends Item {
                     EntityInsentient entityinsentient = (EntityInsentient) entity;
 
                     entity.setPositionRotation(d0, d1, d2, MathHelper.g(world.random.nextFloat() * 360.0F), 0.0F);
+                    entityinsentient.aK = entityinsentient.yaw;
                     entityinsentient.aI = entityinsentient.yaw;
-                    entityinsentient.aG = entityinsentient.yaw;
                     entityinsentient.prepare(world.E(new BlockPosition(entityinsentient)), (GroupDataEntity) null);
                     world.addEntity(entity);
                     entityinsentient.x();

@@ -6,16 +6,16 @@ public class BlockFenceGate extends BlockDirectional {
     public static final BlockStateBoolean POWERED = BlockStateBoolean.of("powered");
     public static final BlockStateBoolean IN_WALL = BlockStateBoolean.of("in_wall");
 
-    public BlockFenceGate() {
-        super(Material.WOOD);
+    public BlockFenceGate(BlockWood.EnumLogVariant blockwood_enumlogvariant) {
+        super(Material.WOOD, blockwood_enumlogvariant.c());
         this.j(this.blockStateList.getBlockData().set(BlockFenceGate.OPEN, Boolean.valueOf(false)).set(BlockFenceGate.POWERED, Boolean.valueOf(false)).set(BlockFenceGate.IN_WALL, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        EnumAxis enumaxis = ((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k();
+        EnumDirection.EnumAxis enumdirection_enumaxis = ((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k();
 
-        if (enumaxis == EnumAxis.Z && (iblockaccess.getType(blockposition.west()).getBlock() == Blocks.COBBLESTONE_WALL || iblockaccess.getType(blockposition.east()).getBlock() == Blocks.COBBLESTONE_WALL) || enumaxis == EnumAxis.X && (iblockaccess.getType(blockposition.north()).getBlock() == Blocks.COBBLESTONE_WALL || iblockaccess.getType(blockposition.south()).getBlock() == Blocks.COBBLESTONE_WALL)) {
+        if (enumdirection_enumaxis == EnumDirection.EnumAxis.Z && (iblockaccess.getType(blockposition.west()).getBlock() == Blocks.COBBLESTONE_WALL || iblockaccess.getType(blockposition.east()).getBlock() == Blocks.COBBLESTONE_WALL) || enumdirection_enumaxis == EnumDirection.EnumAxis.X && (iblockaccess.getType(blockposition.north()).getBlock() == Blocks.COBBLESTONE_WALL || iblockaccess.getType(blockposition.south()).getBlock() == Blocks.COBBLESTONE_WALL)) {
             iblockdata = iblockdata.set(BlockFenceGate.IN_WALL, Boolean.valueOf(true));
         }
 
@@ -30,16 +30,16 @@ public class BlockFenceGate extends BlockDirectional {
         if (((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue()) {
             return null;
         } else {
-            EnumAxis enumaxis = ((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k();
+            EnumDirection.EnumAxis enumdirection_enumaxis = ((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k();
 
-            return enumaxis == EnumAxis.Z ? new AxisAlignedBB((double) blockposition.getX(), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + 0.375F), (double) (blockposition.getX() + 1), (double) ((float) blockposition.getY() + 1.5F), (double) ((float) blockposition.getZ() + 0.625F)) : new AxisAlignedBB((double) ((float) blockposition.getX() + 0.375F), (double) blockposition.getY(), (double) blockposition.getZ(), (double) ((float) blockposition.getX() + 0.625F), (double) ((float) blockposition.getY() + 1.5F), (double) (blockposition.getZ() + 1));
+            return enumdirection_enumaxis == EnumDirection.EnumAxis.Z ? new AxisAlignedBB((double) blockposition.getX(), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + 0.375F), (double) (blockposition.getX() + 1), (double) ((float) blockposition.getY() + 1.5F), (double) ((float) blockposition.getZ() + 0.625F)) : new AxisAlignedBB((double) ((float) blockposition.getX() + 0.375F), (double) blockposition.getY(), (double) blockposition.getZ(), (double) ((float) blockposition.getX() + 0.625F), (double) ((float) blockposition.getY() + 1.5F), (double) (blockposition.getZ() + 1));
         }
     }
 
     public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        EnumAxis enumaxis = ((EnumDirection) iblockaccess.getType(blockposition).get(BlockFenceGate.FACING)).k();
+        EnumDirection.EnumAxis enumdirection_enumaxis = ((EnumDirection) iblockaccess.getType(blockposition).get(BlockFenceGate.FACING)).k();
 
-        if (enumaxis == EnumAxis.Z) {
+        if (enumdirection_enumaxis == EnumDirection.EnumAxis.Z) {
             this.a(0.0F, 0.0F, 0.375F, 1.0F, 1.0F, 0.625F);
         } else {
             this.a(0.375F, 0.0F, 0.0F, 0.625F, 1.0F, 1.0F);
@@ -83,7 +83,7 @@ public class BlockFenceGate extends BlockDirectional {
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             boolean flag = world.isBlockIndirectlyPowered(blockposition);
 
             if (flag || block.isPowerSource()) {

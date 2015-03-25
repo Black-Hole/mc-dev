@@ -46,6 +46,6 @@ public class NavigationGuardian extends NavigationAbstract {
     protected boolean a(Vec3D vec3d, Vec3D vec3d1, int i, int j, int k) {
         MovingObjectPosition movingobjectposition = this.c.rayTrace(vec3d, new Vec3D(vec3d1.a, vec3d1.b + (double) this.b.length * 0.5D, vec3d1.c), false, true, false);
 
-        return movingobjectposition == null || movingobjectposition.type == EnumMovingObjectType.MISS;
+        return movingobjectposition == null || movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.MISS;
     }
 }

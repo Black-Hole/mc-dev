@@ -14,7 +14,7 @@ public class ItemReed extends Item {
 
         if (block == Blocks.SNOW_LAYER && ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() < 1) {
             enumdirection = EnumDirection.UP;
-        } else if (!block.f(world, blockposition)) {
+        } else if (!block.a(world, blockposition)) {
             blockposition = blockposition.shift(enumdirection);
         }
 

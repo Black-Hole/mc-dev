@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class ContainerChest extends Container {
 
-    public IInventory container;
+    private IInventory container;
     private int f;
 
     public ContainerChest(IInventory iinventory, IInventory iinventory1, EntityHuman entityhuman) {

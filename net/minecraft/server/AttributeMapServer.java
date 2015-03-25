@@ -9,8 +9,8 @@ import java.util.Set;
 
 public class AttributeMapServer extends AttributeMapBase {
 
-    private final Set e = Sets.newHashSet();
-    protected final Map d = new InsensitiveStringMap();
+    private final Set<AttributeInstance> e = Sets.newHashSet();
+    protected final Map<String, AttributeInstance> d = new InsensitiveStringMap();
 
     public AttributeMapServer() {}
 
@@ -60,11 +60,11 @@ public class AttributeMapServer extends AttributeMapBase {
 
     }
 
-    public Set getAttributes() {
+    public Set<AttributeInstance> getAttributes() {
         return this.e;
     }
 
-    public Collection c() {
+    public Collection<AttributeInstance> c() {
         HashSet hashset = Sets.newHashSet();
         Iterator iterator = this.a().iterator();
 

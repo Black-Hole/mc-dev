@@ -18,7 +18,7 @@ public class CommandParticle extends CommandAbstract {
         return "commands.particle.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 8) {
             throw new ExceptionUsage("commands.particle.usage", new Object[0]);
         } else {
@@ -93,7 +93,7 @@ public class CommandParticle extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, EnumParticle.a()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : (astring.length == 9 ? a(astring, new String[] { "normal", "force"}) : null));
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, EnumParticle.a()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : (astring.length == 10 ? a(astring, new String[] { "normal", "force"}) : null));
     }
 }

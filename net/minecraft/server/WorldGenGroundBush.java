@@ -4,13 +4,13 @@ import java.util.Random;
 
 public class WorldGenGroundBush extends WorldGenTrees {
 
-    private int a;
-    private int b;
+    private final IBlockData a;
+    private final IBlockData b;
 
-    public WorldGenGroundBush(int i, int j) {
+    public WorldGenGroundBush(IBlockData iblockdata, IBlockData iblockdata1) {
         super(false);
-        this.b = i;
-        this.a = j;
+        this.b = iblockdata;
+        this.a = iblockdata1;
     }
 
     public boolean generate(World world, Random random, BlockPosition blockposition) {
@@ -24,7 +24,7 @@ public class WorldGenGroundBush extends WorldGenTrees {
 
         if (block1 == Blocks.DIRT || block1 == Blocks.GRASS) {
             blockposition = blockposition.up();
-            this.a(world, blockposition, Blocks.LOG, this.b);
+            this.a(world, blockposition, this.b);
 
             for (int i = blockposition.getY(); i <= blockposition.getY() + 2; ++i) {
                 int j = i - blockposition.getY();
@@ -39,8 +39,8 @@ public class WorldGenGroundBush extends WorldGenTrees {
                         if (Math.abs(i1) != k || Math.abs(k1) != k || random.nextInt(2) != 0) {
                             BlockPosition blockposition1 = new BlockPosition(l, i, j1);
 
-                            if (!world.getType(blockposition1).getBlock().m()) {
-                                this.a(world, blockposition1, Blocks.LEAVES, this.a);
+                            if (!world.getType(blockposition1).getBlock().o()) {
+                                this.a(world, blockposition1, this.a);
                             }
                         }
                     }

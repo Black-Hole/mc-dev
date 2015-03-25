@@ -18,7 +18,7 @@ public class CommandDifficulty extends CommandAbstract {
         return "commands.difficulty.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length <= 0) {
             throw new ExceptionUsage("commands.difficulty.usage", new Object[0]);
         } else {
@@ -29,11 +29,11 @@ public class CommandDifficulty extends CommandAbstract {
         }
     }
 
-    protected EnumDifficulty e(String s) {
+    protected EnumDifficulty e(String s) throws ExceptionInvalidNumber {
         return !s.equalsIgnoreCase("peaceful") && !s.equalsIgnoreCase("p") ? (!s.equalsIgnoreCase("easy") && !s.equalsIgnoreCase("e") ? (!s.equalsIgnoreCase("normal") && !s.equalsIgnoreCase("n") ? (!s.equalsIgnoreCase("hard") && !s.equalsIgnoreCase("h") ? EnumDifficulty.getById(a(s, 0, 3)) : EnumDifficulty.HARD) : EnumDifficulty.NORMAL) : EnumDifficulty.EASY) : EnumDifficulty.PEACEFUL;
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, new String[] { "peaceful", "easy", "normal", "hard"}) : null;
     }
 }

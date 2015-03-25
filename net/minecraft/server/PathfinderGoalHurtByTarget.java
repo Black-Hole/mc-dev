@@ -17,14 +17,14 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
     }
 
     public boolean a() {
-        int i = this.e.bd();
+        int i = this.e.be();
 
         return i != this.b && this.a(this.e.getLastDamager(), false);
     }
 
     public void c() {
         this.e.setGoalTarget(this.e.getLastDamager());
-        this.b = this.e.bd();
+        this.b = this.e.be();
         if (this.a) {
             double d0 = this.f();
             List list = this.e.world.a(this.e.getClass(), (new AxisAlignedBB(this.e.locX, this.e.locY, this.e.locZ, this.e.locX + 1.0D, this.e.locY + 1.0D, this.e.locZ + 1.0D)).grow(d0, 10.0D, d0));

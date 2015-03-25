@@ -36,7 +36,7 @@ public class ItemWrittenBook extends Item {
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             this.a(itemstack, entityhuman);
         }
 
@@ -60,18 +60,18 @@ public class ItemWrittenBook extends Item {
                         Object object;
 
                         try {
-                            IChatBaseComponent ichatbasecomponent = ChatSerializer.a(s);
+                            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
 
                             object = ChatComponentUtils.filterForDisplay(entityhuman, ichatbasecomponent, entityhuman);
                         } catch (Exception exception) {
                             object = new ChatComponentText(s);
                         }
 
-                        nbttaglist.a(i, new NBTTagString(ChatSerializer.a((IChatBaseComponent) object)));
+                        nbttaglist.a(i, new NBTTagString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object)));
                     }
 
                     nbttagcompound.set("pages", nbttaglist);
-                    if (entityhuman instanceof EntityPlayer && entityhuman.bY() == itemstack) {
+                    if (entityhuman instanceof EntityPlayer && entityhuman.bZ() == itemstack) {
                         Slot slot = entityhuman.activeContainer.getSlot(entityhuman.inventory, entityhuman.inventory.itemInHandIndex);
 
                         ((EntityPlayer) entityhuman).playerConnection.sendPacket(new PacketPlayOutSetSlot(0, slot.rawSlotIndex, itemstack));

@@ -9,9 +9,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
-public class AchievementSet extends ForwardingSet implements IJsonStatistic {
+public class AchievementSet extends ForwardingSet<String> implements IJsonStatistic {
 
-    private final Set a = Sets.newHashSet();
+    private final Set<String> a = Sets.newHashSet();
 
     public AchievementSet() {}
 
@@ -41,7 +41,7 @@ public class AchievementSet extends ForwardingSet implements IJsonStatistic {
         return jsonarray;
     }
 
-    protected Set delegate() {
+    protected Set<String> delegate() {
         return this.a;
     }
 

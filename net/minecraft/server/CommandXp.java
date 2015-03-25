@@ -18,7 +18,7 @@ public class CommandXp extends CommandAbstract {
         return "commands.xp.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length <= 0) {
             throw new ExceptionUsage("commands.xp.usage", new Object[0]);
         } else {
@@ -39,7 +39,7 @@ public class CommandXp extends CommandAbstract {
             EntityPlayer entityplayer = astring.length > 1 ? a(icommandlistener, astring[1]) : b(icommandlistener);
 
             if (flag) {
-                icommandlistener.a(EnumCommandResult.QUERY_RESULT, entityplayer.expLevel);
+                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, entityplayer.expLevel);
                 if (flag1) {
                     entityplayer.levelDown(-i);
                     a(icommandlistener, this, "commands.xp.success.negative.levels", new Object[] { Integer.valueOf(i), entityplayer.getName()});
@@ -48,7 +48,7 @@ public class CommandXp extends CommandAbstract {
                     a(icommandlistener, this, "commands.xp.success.levels", new Object[] { Integer.valueOf(i), entityplayer.getName()});
                 }
             } else {
-                icommandlistener.a(EnumCommandResult.QUERY_RESULT, entityplayer.expTotal);
+                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, entityplayer.expTotal);
                 if (flag1) {
                     throw new CommandException("commands.xp.failure.widthdrawXp", new Object[0]);
                 }
@@ -60,7 +60,7 @@ public class CommandXp extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 2 ? a(astring, this.d()) : null;
     }
 

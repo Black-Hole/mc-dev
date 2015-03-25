@@ -1,10 +1,12 @@
 package net.minecraft.server;
 
-public class PacketPlayOutLogin implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private boolean b;
-    private EnumGamemode c;
+    private WorldSettings.EnumGamemode c;
     private int d;
     private EnumDifficulty e;
     private int f;
@@ -13,25 +15,25 @@ public class PacketPlayOutLogin implements Packet {
 
     public PacketPlayOutLogin() {}
 
-    public PacketPlayOutLogin(int i, EnumGamemode enumgamemode, boolean flag, int j, EnumDifficulty enumdifficulty, int k, WorldType worldtype, boolean flag1) {
+    public PacketPlayOutLogin(int i, WorldSettings.EnumGamemode worldsettings_enumgamemode, boolean flag, int j, EnumDifficulty enumdifficulty, int k, WorldType worldtype, boolean flag1) {
         this.a = i;
         this.d = j;
         this.e = enumdifficulty;
-        this.c = enumgamemode;
+        this.c = worldsettings_enumgamemode;
         this.f = k;
         this.b = flag;
         this.g = worldtype;
         this.h = flag1;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readInt();
         short short0 = packetdataserializer.readUnsignedByte();
 
         this.b = (short0 & 8) == 8;
         int i = short0 & -9;
 
-        this.c = EnumGamemode.getById(i);
+        this.c = WorldSettings.EnumGamemode.getById(i);
         this.d = packetdataserializer.readByte();
         this.e = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
         this.f = packetdataserializer.readUnsignedByte();
@@ -43,7 +45,7 @@ public class PacketPlayOutLogin implements Packet {
         this.h = packetdataserializer.readBoolean();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(this.a);
         int i = this.c.getId();
 

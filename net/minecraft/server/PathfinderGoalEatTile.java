@@ -5,7 +5,7 @@ import com.google.common.base.Predicates;
 
 public class PathfinderGoalEatTile extends PathfinderGoal {
 
-    private static final Predicate b = BlockStatePredicate.a((Block) Blocks.TALLGRASS).a(BlockLongGrass.TYPE, Predicates.equalTo(EnumTallGrassType.GRASS));
+    private static final Predicate<IBlockData> b = BlockStatePredicate.a((Block) Blocks.TALLGRASS).a(BlockLongGrass.TYPE, Predicates.equalTo(BlockLongGrass.EnumTallGrassType.GRASS));
     private EntityInsentient c;
     private World d;
     int a;
@@ -17,7 +17,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
     }
 
     public boolean a() {
-        if (this.c.bb().nextInt(this.c.isBaby() ? 50 : 1000) != 0) {
+        if (this.c.bc().nextInt(this.c.isBaby() ? 50 : 1000) != 0) {
             return false;
         } else {
             BlockPosition blockposition = new BlockPosition(this.c.locX, this.c.locY, this.c.locZ);

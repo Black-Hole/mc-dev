@@ -104,9 +104,4 @@ public class ShapedRecipes implements IRecipe {
     public int a() {
         return this.width * this.height;
     }
-
-    public ShapedRecipes c() {
-        this.e = true;
-        return this;
-    }
 }

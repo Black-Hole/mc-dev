@@ -12,7 +12,7 @@ public class BlockWaterLily extends BlockPlant {
         this.a(CreativeModeTab.c);
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
         if (entity == null || !(entity instanceof EntityBoat)) {
             super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         }

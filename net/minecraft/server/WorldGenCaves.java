@@ -106,17 +106,17 @@ public class WorldGenCaves extends WorldGenBase {
 
                     int j3;
 
-                    for (j3 = l1; !flag2 && j3 < i2; ++j3) {
-                        for (int k3 = l2; !flag2 && k3 < i3; ++k3) {
+                    for (int k3 = l1; !flag2 && k3 < i2; ++k3) {
+                        for (j3 = l2; !flag2 && j3 < i3; ++j3) {
                             for (int l3 = k2 + 1; !flag2 && l3 >= j2 - 1; --l3) {
                                 if (l3 >= 0 && l3 < 256) {
-                                    IBlockData iblockdata = chunksnapshot.a(j3, l3, k3);
+                                    IBlockData iblockdata = chunksnapshot.a(k3, l3, j3);
 
                                     if (iblockdata.getBlock() == Blocks.FLOWING_WATER || iblockdata.getBlock() == Blocks.WATER) {
                                         flag2 = true;
                                     }
 
-                                    if (l3 != j2 - 1 && j3 != l1 && j3 != i2 - 1 && k3 != l2 && k3 != i3 - 1) {
+                                    if (l3 != j2 - 1 && k3 != l1 && k3 != i2 - 1 && j3 != l2 && j3 != i3 - 1) {
                                         l3 = j2;
                                     }
                                 }
@@ -125,6 +125,8 @@ public class WorldGenCaves extends WorldGenBase {
                     }
 
                     if (!flag2) {
+                        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+
                         for (j3 = l1; j3 < i2; ++j3) {
                             double d12 = ((double) (j3 + j * 16) + 0.5D - d0) / d6;
 
@@ -150,11 +152,12 @@ public class WorldGenCaves extends WorldGenBase {
                                                 } else {
                                                     chunksnapshot.a(j3, j4, i4, Blocks.AIR.getBlockData());
                                                     if (iblockdata2.getBlock() == Blocks.SAND) {
-                                                        chunksnapshot.a(j3, j4 + 1, i4, iblockdata2.get(BlockSand.VARIANT) == EnumSandVariant.RED_SAND ? Blocks.RED_SANDSTONE.getBlockData() : Blocks.SANDSTONE.getBlockData());
+                                                        chunksnapshot.a(j3, j4 + 1, i4, iblockdata2.get(BlockSand.VARIANT) == BlockSand.EnumSandVariant.RED_SAND ? Blocks.RED_SANDSTONE.getBlockData() : Blocks.SANDSTONE.getBlockData());
                                                     }
 
                                                     if (flag3 && chunksnapshot.a(j3, j4 - 1, i4).getBlock() == Blocks.DIRT) {
-                                                        chunksnapshot.a(j3, j4 - 1, i4, this.c.getBiome(new BlockPosition(j3 + j * 16, 0, i4 + k * 16)).ak.getBlock().getBlockData());
+                                                        blockposition_mutableblockposition.c(j3 + j * 16, 0, i4 + k * 16);
+                                                        chunksnapshot.a(j3, j4 - 1, i4, this.c.getBiome(blockposition_mutableblockposition).ak.getBlock().getBlockData());
                                                     }
                                                 }
                                             }

@@ -7,8 +7,8 @@ public class InventorySubcontainer implements IInventory {
 
     private String a;
     private int b;
-    public ItemStack[] items;
-    private List d;
+    private ItemStack[] items;
+    private List<IInventoryListener> d;
     private boolean e;
 
     public InventorySubcontainer(String s, boolean flag, int i) {

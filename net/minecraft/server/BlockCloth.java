@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockCloth extends Block {
 
-    public static final BlockStateEnum COLOR = BlockStateEnum.of("color", EnumColor.class);
+    public static final BlockStateEnum<EnumColor> COLOR = BlockStateEnum.of("color", EnumColor.class);
 
     public BlockCloth(Material material) {
         super(material);

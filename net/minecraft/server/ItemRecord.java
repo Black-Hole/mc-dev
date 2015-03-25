@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ItemRecord extends Item {
 
-    private static final Map b = Maps.newHashMap();
+    private static final Map<String, ItemRecord> b = Maps.newHashMap();
     public final String a;
 
     protected ItemRecord(String s) {
@@ -19,12 +19,13 @@ public class ItemRecord extends Item {
         IBlockData iblockdata = world.getType(blockposition);
 
         if (iblockdata.getBlock() == Blocks.JUKEBOX && !((Boolean) iblockdata.get(BlockJukeBox.HAS_RECORD)).booleanValue()) {
-            if (world.isStatic) {
+            if (world.isClientSide) {
                 return true;
             } else {
                 ((BlockJukeBox) Blocks.JUKEBOX).a(world, blockposition, iblockdata, itemstack);
                 world.a((EntityHuman) null, 1005, blockposition, Item.getId(this));
                 --itemstack.count;
+                entityhuman.b(StatisticList.X);
                 return true;
             }
         } else {

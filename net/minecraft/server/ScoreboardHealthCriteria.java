@@ -9,7 +9,7 @@ public class ScoreboardHealthCriteria extends ScoreboardBaseCriteria {
         super(s);
     }
 
-    public int getScoreModifier(List list) {
+    public int getScoreModifier(List<EntityHuman> list) {
         float f = 0.0F;
 
         EntityHuman entityhuman;
@@ -29,7 +29,7 @@ public class ScoreboardHealthCriteria extends ScoreboardBaseCriteria {
         return true;
     }
 
-    public EnumScoreboardHealthDisplay c() {
-        return EnumScoreboardHealthDisplay.HEARTS;
+    public IScoreboardCriteria.EnumScoreboardHealthDisplay c() {
+        return IScoreboardCriteria.EnumScoreboardHealthDisplay.HEARTS;
     }
 }

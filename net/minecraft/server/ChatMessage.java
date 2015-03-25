@@ -15,7 +15,7 @@ public class ChatMessage extends ChatBaseComponent {
     private final Object[] e;
     private final Object f = new Object();
     private long g = -1L;
-    List b = Lists.newArrayList();
+    List<IChatBaseComponent> b = Lists.newArrayList();
     public static final Pattern c = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
 
     public ChatMessage(String s, Object... aobject) {
@@ -160,7 +160,7 @@ public class ChatMessage extends ChatBaseComponent {
         return this;
     }
 
-    public Iterator iterator() {
+    public Iterator<IChatBaseComponent> iterator() {
         this.g();
         return Iterators.concat(a((Iterable) this.b), a((Iterable) this.a));
     }

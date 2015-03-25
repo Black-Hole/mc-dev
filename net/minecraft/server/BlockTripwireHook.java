@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class BlockTripwireHook extends Block {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
     public static final BlockStateBoolean POWERED = BlockStateBoolean.of("powered");
     public static final BlockStateBoolean ATTACHED = BlockStateBoolean.of("attached");
     public static final BlockStateBoolean SUSPENDED = BlockStateBoolean.of("suspended");
@@ -40,7 +40,7 @@ public class BlockTripwireHook extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
         EnumDirection enumdirection;
 
@@ -137,7 +137,7 @@ public class BlockTripwireHook extends Block {
             EnumDirection enumdirection1 = enumdirection.opposite();
 
             world.setTypeAndData(blockposition1, iblockdata3.set(BlockTripwireHook.FACING, enumdirection1), 3);
-            this.b(world, blockposition1, enumdirection1);
+            this.a(world, blockposition1, enumdirection1);
             this.a(world, blockposition1, flag5, flag6, flag2, flag3);
         }
 
@@ -145,7 +145,7 @@ public class BlockTripwireHook extends Block {
         if (!flag) {
             world.setTypeAndData(blockposition, iblockdata3.set(BlockTripwireHook.FACING, enumdirection), 3);
             if (flag1) {
-                this.b(world, blockposition, enumdirection);
+                this.a(world, blockposition, enumdirection);
             }
         }
 
@@ -181,7 +181,7 @@ public class BlockTripwireHook extends Block {
 
     }
 
-    private void b(World world, BlockPosition blockposition, EnumDirection enumdirection) {
+    private void a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
         world.applyPhysics(blockposition, this);
         world.applyPhysics(blockposition.shift(enumdirection.opposite()), this);
     }
@@ -199,7 +199,7 @@ public class BlockTripwireHook extends Block {
     public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
         float f = 0.1875F;
 
-        switch (SwitchHelperDirection1.a[((EnumDirection) iblockaccess.getType(blockposition).get(BlockTripwireHook.FACING)).ordinal()]) {
+        switch (BlockTripwireHook.SyntheticClass_1.a[((EnumDirection) iblockaccess.getType(blockposition).get(BlockTripwireHook.FACING)).ordinal()]) {
         case 1:
             this.a(0.0F, 0.2F, 0.5F - f, f * 2.0F, 0.8F, 0.5F + f);
             break;
@@ -267,5 +267,37 @@ public class BlockTripwireHook extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockTripwireHook.FACING, BlockTripwireHook.POWERED, BlockTripwireHook.ATTACHED, BlockTripwireHook.SUSPENDED});
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EnumDirection.values().length];
+
+        static {
+            try {
+                BlockTripwireHook.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                BlockTripwireHook.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                BlockTripwireHook.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                BlockTripwireHook.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+        }
     }
 }

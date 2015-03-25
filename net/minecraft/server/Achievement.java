@@ -69,7 +69,7 @@ public class Achievement extends Statistic {
         return ichatbasecomponent;
     }
 
-    public Achievement a(Class oclass) {
+    public Achievement a(Class<? extends IJsonStatistic> oclass) {
         return (Achievement) super.b(oclass);
     }
 

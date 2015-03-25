@@ -10,7 +10,7 @@ public class BlockWeb extends Block {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        entity.aB();
+        entity.aA();
     }
 
     public boolean c() {
@@ -29,7 +29,7 @@ public class BlockWeb extends Block {
         return Items.STRING;
     }
 
-    protected boolean G() {
+    protected boolean I() {
         return true;
     }
 }

@@ -18,7 +18,7 @@ public class CommandSay extends CommandAbstract {
         return "commands.say.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length > 0 && astring[0].length() > 0) {
             IChatBaseComponent ichatbasecomponent = b(icommandlistener, astring, 0, true);
 
@@ -28,7 +28,7 @@ public class CommandSay extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length >= 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : null;
     }
 }

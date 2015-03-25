@@ -24,7 +24,7 @@ public class CommandTitle extends CommandAbstract {
         return "commands.title.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.title.usage", new Object[0]);
         } else {
@@ -39,10 +39,10 @@ public class CommandTitle extends CommandAbstract {
             }
 
             EntityPlayer entityplayer = a(icommandlistener, astring[0]);
-            EnumTitleAction enumtitleaction = EnumTitleAction.a(astring[1]);
+            PacketPlayOutTitle.EnumTitleAction packetplayouttitle_enumtitleaction = PacketPlayOutTitle.EnumTitleAction.a(astring[1]);
 
-            if (enumtitleaction != EnumTitleAction.CLEAR && enumtitleaction != EnumTitleAction.RESET) {
-                if (enumtitleaction == EnumTitleAction.TIMES) {
+            if (packetplayouttitle_enumtitleaction != PacketPlayOutTitle.EnumTitleAction.CLEAR && packetplayouttitle_enumtitleaction != PacketPlayOutTitle.EnumTitleAction.RESET) {
+                if (packetplayouttitle_enumtitleaction == PacketPlayOutTitle.EnumTitleAction.TIMES) {
                     if (astring.length != 5) {
                         throw new ExceptionUsage("commands.title.usage", new Object[0]);
                     } else {
@@ -62,14 +62,14 @@ public class CommandTitle extends CommandAbstract {
                     IChatBaseComponent ichatbasecomponent;
 
                     try {
-                        ichatbasecomponent = ChatSerializer.a(s);
+                        ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
                     } catch (JsonParseException jsonparseexception) {
                         Throwable throwable = ExceptionUtils.getRootCause(jsonparseexception);
 
                         throw new ExceptionInvalidSyntax("commands.tellraw.jsonException", new Object[] { throwable == null ? "" : throwable.getMessage()});
                     }
 
-                    PacketPlayOutTitle packetplayouttitle1 = new PacketPlayOutTitle(enumtitleaction, ChatComponentUtils.filterForDisplay(icommandlistener, ichatbasecomponent, entityplayer));
+                    PacketPlayOutTitle packetplayouttitle1 = new PacketPlayOutTitle(packetplayouttitle_enumtitleaction, ChatComponentUtils.filterForDisplay(icommandlistener, ichatbasecomponent, entityplayer));
 
                     entityplayer.playerConnection.sendPacket(packetplayouttitle1);
                     a(icommandlistener, this, "commands.title.success", new Object[0]);
@@ -77,7 +77,7 @@ public class CommandTitle extends CommandAbstract {
             } else if (astring.length != 2) {
                 throw new ExceptionUsage("commands.title.usage", new Object[0]);
             } else {
-                PacketPlayOutTitle packetplayouttitle2 = new PacketPlayOutTitle(enumtitleaction, (IChatBaseComponent) null);
+                PacketPlayOutTitle packetplayouttitle2 = new PacketPlayOutTitle(packetplayouttitle_enumtitleaction, (IChatBaseComponent) null);
 
                 entityplayer.playerConnection.sendPacket(packetplayouttitle2);
                 a(icommandlistener, this, "commands.title.success", new Object[0]);
@@ -85,8 +85,8 @@ public class CommandTitle extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : (astring.length == 2 ? a(astring, EnumTitleAction.a()) : null);
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : (astring.length == 2 ? a(astring, PacketPlayOutTitle.EnumTitleAction.a()) : null);
     }
 
     public boolean isListStart(String[] astring, int i) {

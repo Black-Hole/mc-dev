@@ -5,44 +5,44 @@ import java.util.HashMap;
 
 public class EntityPositionTypes {
 
-    private static final HashMap a = Maps.newHashMap();
+    private static final HashMap<Class, EntityInsentient.EnumEntityPositionType> a = Maps.newHashMap();
 
-    public static EnumEntityPositionType a(Class oclass) {
-        return (EnumEntityPositionType) EntityPositionTypes.a.get(oclass);
+    public static EntityInsentient.EnumEntityPositionType a(Class oclass) {
+        return (EntityInsentient.EnumEntityPositionType) EntityPositionTypes.a.get(oclass);
     }
 
     static {
-        EntityPositionTypes.a.put(EntityBat.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityChicken.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityCow.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityHorse.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityMushroomCow.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityOcelot.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityPig.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityRabbit.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntitySheep.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntitySnowman.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntitySquid.class, EnumEntityPositionType.IN_WATER);
-        EntityPositionTypes.a.put(EntityIronGolem.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityWolf.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityVillager.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityEnderDragon.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityWither.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityBlaze.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityCaveSpider.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityCreeper.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityEnderman.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityEndermite.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityGhast.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityGiantZombie.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityGuardian.class, EnumEntityPositionType.IN_WATER);
-        EntityPositionTypes.a.put(EntityMagmaCube.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityPigZombie.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntitySilverfish.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntitySkeleton.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntitySlime.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntitySpider.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityWitch.class, EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityZombie.class, EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityBat.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityChicken.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityCow.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityHorse.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityMushroomCow.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityOcelot.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityPig.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityRabbit.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntitySheep.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntitySnowman.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntitySquid.class, EntityInsentient.EnumEntityPositionType.IN_WATER);
+        EntityPositionTypes.a.put(EntityIronGolem.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityWolf.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityVillager.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityEnderDragon.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityWither.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityBlaze.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityCaveSpider.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityCreeper.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityEnderman.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityEndermite.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityGhast.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityGiantZombie.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityGuardian.class, EntityInsentient.EnumEntityPositionType.IN_WATER);
+        EntityPositionTypes.a.put(EntityMagmaCube.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityPigZombie.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntitySilverfish.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntitySkeleton.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntitySlime.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntitySpider.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityWitch.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
+        EntityPositionTypes.a.put(EntityZombie.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
     }
 }

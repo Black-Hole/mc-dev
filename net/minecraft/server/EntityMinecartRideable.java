@@ -16,7 +16,7 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
         } else if (this.passenger != null && this.passenger != entityhuman) {
             return false;
         } else {
-            if (!this.world.isStatic) {
+            if (!this.world.isClientSide) {
                 entityhuman.mount(this);
             }
 
@@ -40,7 +40,7 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
 
     }
 
-    public EnumMinecartType s() {
-        return EnumMinecartType.RIDEABLE;
+    public EntityMinecartAbstract.EnumMinecartType s() {
+        return EntityMinecartAbstract.EnumMinecartType.RIDEABLE;
     }
 }

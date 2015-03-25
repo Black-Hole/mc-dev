@@ -4,7 +4,7 @@ public class EntityCow extends EntityAnimal {
 
     public EntityCow(World world) {
         super(world);
-        this.a(0.9F, 1.3F);
+        this.setSize(0.9F, 1.3F);
         ((Navigation) this.getNavigation()).a(true);
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 2.0D));
@@ -16,8 +16,8 @@ public class EntityCow extends EntityAnimal {
         this.goalSelector.a(7, new PathfinderGoalRandomLookaround(this));
     }
 
-    protected void aW() {
-        super.aW();
+    protected void initAttributes() {
+        super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(10.0D);
         this.getAttributeInstance(GenericAttributes.d).setValue(0.20000000298023224D);
     }
@@ -26,11 +26,11 @@ public class EntityCow extends EntityAnimal {
         return "mob.cow.say";
     }
 
-    protected String bn() {
+    protected String bo() {
         return "mob.cow.hurt";
     }
 
-    protected String bo() {
+    protected String bp() {
         return "mob.cow.hurt";
     }
 
@@ -38,7 +38,7 @@ public class EntityCow extends EntityAnimal {
         this.makeSound("mob.cow.step", 0.15F, 1.0F);
     }
 
-    protected float bA() {
+    protected float bB() {
         return 0.4F;
     }
 
@@ -70,7 +70,7 @@ public class EntityCow extends EntityAnimal {
     public boolean a(EntityHuman entityhuman) {
         ItemStack itemstack = entityhuman.inventory.getItemInHand();
 
-        if (itemstack != null && itemstack.getItem() == Items.BUCKET && !entityhuman.abilities.canInstantlyBuild) {
+        if (itemstack != null && itemstack.getItem() == Items.BUCKET && !entityhuman.abilities.canInstantlyBuild && !this.isBaby()) {
             if (itemstack.count-- == 1) {
                 entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, new ItemStack(Items.MILK_BUCKET));
             } else if (!entityhuman.inventory.pickup(new ItemStack(Items.MILK_BUCKET))) {

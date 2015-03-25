@@ -9,14 +9,14 @@ import java.util.Set;
 
 public abstract class Container {
 
-    public List b = Lists.newArrayList();
-    public List c = Lists.newArrayList();
+    public List<ItemStack> b = Lists.newArrayList();
+    public List<Slot> c = Lists.newArrayList();
     public int windowId;
     private int dragType = -1;
-    public int g;
-    private final Set h = Sets.newHashSet();
-    protected List listeners = Lists.newArrayList();
-    private Set i = Sets.newHashSet();
+    private int g;
+    private final Set<Slot> h = Sets.newHashSet();
+    protected List<ICrafting> listeners = Lists.newArrayList();
+    private Set<EntityHuman> i = Sets.newHashSet();
 
     public Container() {}
 
@@ -37,7 +37,7 @@ public abstract class Container {
         }
     }
 
-    public List a() {
+    public List<ItemStack> a() {
         ArrayList arraylist = Lists.newArrayList();
 
         for (int i = 0; i < this.c.size(); ++i) {
@@ -488,7 +488,7 @@ public abstract class Container {
         return flag1;
     }
 
-    public static void a(Set set, int i, ItemStack itemstack, int j) {
+    public static void a(Set<Slot> set, int i, ItemStack itemstack, int j) {
         switch (i) {
         case 0:
             itemstack.count = MathHelper.d((float) itemstack.count / (float) set.size());

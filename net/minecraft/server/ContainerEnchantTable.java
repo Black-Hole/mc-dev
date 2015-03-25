@@ -5,7 +5,16 @@ import java.util.Random;
 
 public class ContainerEnchantTable extends Container {
 
-    public IInventory enchantSlots = new ContainerEnchantTableInventory(this, "Enchant", true, 2);
+    public IInventory enchantSlots = new InventorySubcontainer("Enchant", true, 2) {
+        public int getMaxStackSize() {
+            return 64;
+        }
+
+        public void update() {
+            super.update();
+            ContainerEnchantTable.this.a((IInventory) this);
+        }
+    };
     private World world;
     private BlockPosition position;
     private Random k = new Random();
@@ -16,9 +25,21 @@ public class ContainerEnchantTable extends Container {
     public ContainerEnchantTable(PlayerInventory playerinventory, World world, BlockPosition blockposition) {
         this.world = world;
         this.position = blockposition;
-        this.f = playerinventory.player.ci();
-        this.a((Slot) (new SlotEnchant(this, this.enchantSlots, 0, 15, 47)));
-        this.a((Slot) (new SlotEnchantLapis(this, this.enchantSlots, 1, 35, 47)));
+        this.f = playerinventory.player.cj();
+        this.a(new Slot(this.enchantSlots, 0, 15, 47) {
+            public boolean isAllowed(ItemStack itemstack) {
+                return true;
+            }
+
+            public int getMaxStackSize() {
+                return 1;
+            }
+        });
+        this.a(new Slot(this.enchantSlots, 1, 35, 47) {
+            public boolean isAllowed(ItemStack itemstack) {
+                return itemstack.getItem() == Items.DYE && EnumColor.fromInvColorIndex(itemstack.getData()) == EnumColor.BLUE;
+            }
+        });
 
         int i;
 
@@ -68,7 +89,7 @@ public class ContainerEnchantTable extends Container {
             int i;
 
             if (itemstack != null && itemstack.v()) {
-                if (!this.world.isStatic) {
+                if (!this.world.isClientSide) {
                     i = 0;
 
                     int j;
@@ -147,7 +168,7 @@ public class ContainerEnchantTable extends Container {
         if ((itemstack1 == null || itemstack1.count < j) && !entityhuman.abilities.canInstantlyBuild) {
             return false;
         } else if (this.costs[i] > 0 && itemstack != null && (entityhuman.expLevel >= j && entityhuman.expLevel >= this.costs[i] || entityhuman.abilities.canInstantlyBuild)) {
-            if (!this.world.isStatic) {
+            if (!this.world.isClientSide) {
                 List list = this.a(itemstack, i, this.costs[i]);
                 boolean flag = itemstack.getItem() == Items.BOOK;
 
@@ -174,8 +195,9 @@ public class ContainerEnchantTable extends Container {
                         }
                     }
 
+                    entityhuman.b(StatisticList.W);
                     this.enchantSlots.update();
-                    this.f = entityhuman.ci();
+                    this.f = entityhuman.cj();
                     this.a(this.enchantSlots);
                 }
             }
@@ -186,7 +208,7 @@ public class ContainerEnchantTable extends Container {
         }
     }
 
-    private List a(ItemStack itemstack, int i, int j) {
+    private List<WeightedRandomEnchant> a(ItemStack itemstack, int i, int j) {
         this.k.setSeed((long) (this.f + i));
         List list = EnchantmentManager.b(this.k, itemstack, j);
 
@@ -199,7 +221,7 @@ public class ContainerEnchantTable extends Container {
 
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             for (int i = 0; i < this.enchantSlots.getSize(); ++i) {
                 ItemStack itemstack = this.enchantSlots.splitWithoutUpdate(i);
 

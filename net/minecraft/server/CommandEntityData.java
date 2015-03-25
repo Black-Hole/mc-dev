@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import java.util.List;
-
 public class CommandEntityData extends CommandAbstract {
 
     public CommandEntityData() {}
@@ -18,7 +16,7 @@ public class CommandEntityData extends CommandAbstract {
         return "commands.entitydata.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.entitydata.usage", new Object[0]);
         } else {
@@ -51,10 +49,6 @@ public class CommandEntityData extends CommandAbstract {
                 }
             }
         }
-    }
-
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : null;
     }
 
     public boolean isListStart(String[] astring, int i) {

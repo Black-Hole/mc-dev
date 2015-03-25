@@ -5,7 +5,11 @@ import java.util.Random;
 public class BlockOre extends Block {
 
     public BlockOre() {
-        super(Material.STONE);
+        this(Material.STONE.r());
+    }
+
+    public BlockOre(MaterialMapColor materialmapcolor) {
+        super(Material.STONE, materialmapcolor);
         this.a(CreativeModeTab.b);
     }
 
@@ -18,7 +22,7 @@ public class BlockOre extends Block {
     }
 
     public int getDropCount(int i, Random random) {
-        if (i > 0 && Item.getItemOf(this) != this.getDropType((IBlockData) this.O().a().iterator().next(), random, i)) {
+        if (i > 0 && Item.getItemOf(this) != this.getDropType((IBlockData) this.P().a().iterator().next(), random, i)) {
             int j = random.nextInt(i + 2) - 1;
 
             if (j < 0) {

@@ -15,7 +15,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
         this.a((CreativeModeTab) null);
         this.c(0.0F);
         this.a(BlockCrops.h);
-        this.J();
+        this.K();
     }
 
     protected boolean c(Block block) {
@@ -96,17 +96,17 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
         return (world.k(blockposition) >= 8 || world.i(blockposition)) && this.c(world.getType(blockposition.down()).getBlock());
     }
 
-    protected Item j() {
+    protected Item l() {
         return Items.WHEAT_SEEDS;
     }
 
-    protected Item l() {
+    protected Item n() {
         return Items.WHEAT;
     }
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         super.dropNaturally(world, blockposition, iblockdata, f, 0);
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             int j = ((Integer) iblockdata.get(BlockCrops.AGE)).intValue();
 
             if (j >= 7) {
@@ -114,7 +114,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
 
                 for (int l = 0; l < k; ++l) {
                     if (world.random.nextInt(15) <= j) {
-                        a(world, blockposition, new ItemStack(this.j(), 1, 0));
+                        a(world, blockposition, new ItemStack(this.l(), 1, 0));
                     }
                 }
             }
@@ -123,7 +123,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return ((Integer) iblockdata.get(BlockCrops.AGE)).intValue() == 7 ? this.l() : this.j();
+        return ((Integer) iblockdata.get(BlockCrops.AGE)).intValue() == 7 ? this.n() : this.l();
     }
 
     public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {

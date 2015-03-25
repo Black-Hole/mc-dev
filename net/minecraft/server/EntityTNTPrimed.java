@@ -8,7 +8,7 @@ public class EntityTNTPrimed extends Entity {
     public EntityTNTPrimed(World world) {
         super(world);
         this.k = true;
-        this.a(0.98F, 0.98F);
+        this.setSize(0.98F, 0.98F);
     }
 
     public EntityTNTPrimed(World world, double d0, double d1, double d2, EntityLiving entityliving) {
@@ -28,7 +28,7 @@ public class EntityTNTPrimed extends Entity {
 
     protected void h() {}
 
-    protected boolean r_() {
+    protected boolean s_() {
         return false;
     }
 
@@ -36,7 +36,7 @@ public class EntityTNTPrimed extends Entity {
         return !this.dead;
     }
 
-    public void s_() {
+    public void t_() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
@@ -53,7 +53,7 @@ public class EntityTNTPrimed extends Entity {
 
         if (this.fuseTicks-- <= 0) {
             this.die();
-            if (!this.world.isStatic) {
+            if (!this.world.isClientSide) {
                 this.explode();
             }
         } else {
@@ -66,7 +66,7 @@ public class EntityTNTPrimed extends Entity {
     private void explode() {
         float f = 4.0F;
 
-        this.world.explode(this, this.locX, this.locY + (double) (this.length / 2.0F), this.locZ, f, true);
+        this.world.explode(this, this.locX, this.locY + (double) (this.length / 16.0F), this.locZ, f, true);
     }
 
     protected void b(NBTTagCompound nbttagcompound) {

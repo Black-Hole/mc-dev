@@ -59,19 +59,19 @@ public class PacketDataSerializer extends ByteBuf {
         this.writeLong(blockposition.asLong());
     }
 
-    public IChatBaseComponent d() {
-        return ChatSerializer.a(this.c(32767));
+    public IChatBaseComponent d() throws IOException {
+        return IChatBaseComponent.ChatSerializer.a(this.c(32767));
     }
 
-    public void a(IChatBaseComponent ichatbasecomponent) {
-        this.a(ChatSerializer.a(ichatbasecomponent));
+    public void a(IChatBaseComponent ichatbasecomponent) throws IOException {
+        this.a(IChatBaseComponent.ChatSerializer.a(ichatbasecomponent));
     }
 
-    public Enum a(Class oclass) {
+    public <T extends Enum<T>> T a(Class<T> oclass) {
         return ((Enum[]) oclass.getEnumConstants())[this.e()];
     }
 
-    public void a(Enum oenum) {
+    public void a(Enum<?> oenum) {
         this.b(oenum.ordinal());
     }
 
@@ -149,7 +149,7 @@ public class PacketDataSerializer extends ByteBuf {
 
     }
 
-    public NBTTagCompound h() {
+    public NBTTagCompound h() throws IOException {
         int i = this.readerIndex();
         byte b0 = this.readByte();
 
@@ -179,7 +179,7 @@ public class PacketDataSerializer extends ByteBuf {
 
     }
 
-    public ItemStack i() {
+    public ItemStack i() throws IOException {
         ItemStack itemstack = null;
         short short0 = this.readShort();
 
@@ -416,11 +416,11 @@ public class PacketDataSerializer extends ByteBuf {
         return this.a.getBytes(i, bytebuffer);
     }
 
-    public ByteBuf getBytes(int i, OutputStream outputstream, int j) {
+    public ByteBuf getBytes(int i, OutputStream outputstream, int j) throws IOException {
         return this.a.getBytes(i, outputstream, j);
     }
 
-    public int getBytes(int i, GatheringByteChannel gatheringbytechannel, int j) {
+    public int getBytes(int i, GatheringByteChannel gatheringbytechannel, int j) throws IOException {
         return this.a.getBytes(i, gatheringbytechannel, j);
     }
 
@@ -484,11 +484,11 @@ public class PacketDataSerializer extends ByteBuf {
         return this.a.setBytes(i, bytebuffer);
     }
 
-    public int setBytes(int i, InputStream inputstream, int j) {
+    public int setBytes(int i, InputStream inputstream, int j) throws IOException {
         return this.a.setBytes(i, inputstream, j);
     }
 
-    public int setBytes(int i, ScatteringByteChannel scatteringbytechannel, int j) {
+    public int setBytes(int i, ScatteringByteChannel scatteringbytechannel, int j) throws IOException {
         return this.a.setBytes(i, scatteringbytechannel, j);
     }
 
@@ -580,11 +580,11 @@ public class PacketDataSerializer extends ByteBuf {
         return this.a.readBytes(bytebuffer);
     }
 
-    public ByteBuf readBytes(OutputStream outputstream, int i) {
+    public ByteBuf readBytes(OutputStream outputstream, int i) throws IOException {
         return this.a.readBytes(outputstream, i);
     }
 
-    public int readBytes(GatheringByteChannel gatheringbytechannel, int i) {
+    public int readBytes(GatheringByteChannel gatheringbytechannel, int i) throws IOException {
         return this.a.readBytes(gatheringbytechannel, i);
     }
 
@@ -652,11 +652,11 @@ public class PacketDataSerializer extends ByteBuf {
         return this.a.writeBytes(bytebuffer);
     }
 
-    public int writeBytes(InputStream inputstream, int i) {
+    public int writeBytes(InputStream inputstream, int i) throws IOException {
         return this.a.writeBytes(inputstream, i);
     }
 
-    public int writeBytes(ScatteringByteChannel scatteringbytechannel, int i) {
+    public int writeBytes(ScatteringByteChannel scatteringbytechannel, int i) throws IOException {
         return this.a.writeBytes(scatteringbytechannel, i);
     }
 

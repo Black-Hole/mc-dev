@@ -16,8 +16,8 @@ public abstract class RemoteConnectionThread implements Runnable {
     protected final String c;
     protected Thread d;
     protected int e = 5;
-    protected List f = Lists.newArrayList();
-    protected List g = Lists.newArrayList();
+    protected List<DatagramSocket> f = Lists.newArrayList();
+    protected List<ServerSocket> g = Lists.newArrayList();
 
     protected RemoteConnectionThread(IMinecraftServer iminecraftserver, String s) {
         this.b = iminecraftserver;
@@ -39,7 +39,7 @@ public abstract class RemoteConnectionThread implements Runnable {
     }
 
     protected void a(String s) {
-        this.b.i(s);
+        this.b.h(s);
     }
 
     protected void b(String s) {
@@ -51,11 +51,11 @@ public abstract class RemoteConnectionThread implements Runnable {
     }
 
     protected void d(String s) {
-        this.b.h(s);
+        this.b.g(s);
     }
 
     protected int d() {
-        return this.b.G();
+        return this.b.H();
     }
 
     protected void a(DatagramSocket datagramsocket) {

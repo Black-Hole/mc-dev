@@ -15,6 +15,10 @@ public class BlockSponge extends Block {
         this.a(CreativeModeTab.b);
     }
 
+    public String getName() {
+        return LocaleI18n.get(this.a() + ".dry.name");
+    }
+
     public int getDropData(IBlockData iblockdata) {
         return ((Boolean) iblockdata.get(BlockSponge.WET)).booleanValue() ? 1 : 0;
     }
@@ -29,14 +33,14 @@ public class BlockSponge extends Block {
     }
 
     protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!((Boolean) iblockdata.get(BlockSponge.WET)).booleanValue() && this.d(world, blockposition)) {
+        if (!((Boolean) iblockdata.get(BlockSponge.WET)).booleanValue() && this.e(world, blockposition)) {
             world.setTypeAndData(blockposition, iblockdata.set(BlockSponge.WET, Boolean.valueOf(true)), 2);
             world.triggerEffect(2001, blockposition, Block.getId(Blocks.WATER));
         }
 
     }
 
-    private boolean d(World world, BlockPosition blockposition) {
+    private boolean e(World world, BlockPosition blockposition) {
         LinkedList linkedlist = Lists.newLinkedList();
         ArrayList arraylist = Lists.newArrayList();
 

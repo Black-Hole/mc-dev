@@ -14,6 +14,7 @@ public class WorldGenEnder extends WorldGenerator {
         if (world.isEmpty(blockposition) && world.getType(blockposition.down()).getBlock() == this.a) {
             int i = random.nextInt(32) + 6;
             int j = random.nextInt(4) + 1;
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
             int k;
             int l;
@@ -24,7 +25,7 @@ public class WorldGenEnder extends WorldGenerator {
                 for (l = blockposition.getZ() - j; l <= blockposition.getZ() + j; ++l) {
                     i1 = k - blockposition.getX();
                     j1 = l - blockposition.getZ();
-                    if (i1 * i1 + j1 * j1 <= j * j + 1 && world.getType(new BlockPosition(k, blockposition.getY() - 1, l)).getBlock() != this.a) {
+                    if (i1 * i1 + j1 * j1 <= j * j + 1 && world.getType(blockposition_mutableblockposition.c(k, blockposition.getY() - 1, l)).getBlock() != this.a) {
                         return false;
                     }
                 }

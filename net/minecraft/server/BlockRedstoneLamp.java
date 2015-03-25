@@ -16,7 +16,7 @@ public class BlockRedstoneLamp extends Block {
     }
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             if (this.a && !world.isBlockIndirectlyPowered(blockposition)) {
                 world.setTypeAndData(blockposition, Blocks.REDSTONE_LAMP.getBlockData(), 2);
             } else if (!this.a && world.isBlockIndirectlyPowered(blockposition)) {
@@ -27,7 +27,7 @@ public class BlockRedstoneLamp extends Block {
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             if (this.a && !world.isBlockIndirectlyPowered(blockposition)) {
                 world.a(blockposition, (Block) this, 4);
             } else if (!this.a && world.isBlockIndirectlyPowered(blockposition)) {
@@ -38,7 +38,7 @@ public class BlockRedstoneLamp extends Block {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             if (this.a && !world.isBlockIndirectlyPowered(blockposition)) {
                 world.setTypeAndData(blockposition, Blocks.REDSTONE_LAMP.getBlockData(), 2);
             }

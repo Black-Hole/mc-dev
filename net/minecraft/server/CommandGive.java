@@ -19,7 +19,7 @@ public class CommandGive extends CommandAbstract {
         return "commands.give.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.give.usage", new Object[0]);
         } else {
@@ -42,7 +42,7 @@ public class CommandGive extends CommandAbstract {
             boolean flag = entityplayer.inventory.pickup(itemstack);
 
             if (flag) {
-                entityplayer.world.makeSound(entityplayer, "random.pop", 0.2F, ((entityplayer.bb().nextFloat() - entityplayer.bb().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                entityplayer.world.makeSound(entityplayer, "random.pop", 0.2F, ((entityplayer.bc().nextFloat() - entityplayer.bc().nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 entityplayer.defaultContainer.b();
             }
 
@@ -50,13 +50,13 @@ public class CommandGive extends CommandAbstract {
 
             if (flag && itemstack.count <= 0) {
                 itemstack.count = 1;
-                icommandlistener.a(EnumCommandResult.AFFECTED_ITEMS, i);
+                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, i);
                 entityitem = entityplayer.drop(itemstack, false);
                 if (entityitem != null) {
                     entityitem.v();
                 }
             } else {
-                icommandlistener.a(EnumCommandResult.AFFECTED_ITEMS, i - itemstack.count);
+                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, i - itemstack.count);
                 entityitem = entityplayer.drop(itemstack, false);
                 if (entityitem != null) {
                     entityitem.q();
@@ -68,7 +68,7 @@ public class CommandGive extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, this.d()) : (astring.length == 2 ? a(astring, (Collection) Item.REGISTRY.keySet()) : null);
     }
 

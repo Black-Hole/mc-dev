@@ -6,7 +6,7 @@ import java.util.List;
 
 public class CombatTracker {
 
-    private final List a = Lists.newArrayList();
+    private final List<CombatEntry> a = Lists.newArrayList();
     private final EntityLiving b;
     private int c;
     private int d;
@@ -21,7 +21,7 @@ public class CombatTracker {
 
     public void a() {
         this.j();
-        if (this.b.j_()) {
+        if (this.b.k_()) {
             Block block = this.b.world.getType(new BlockPosition(this.b.locX, this.b.getBoundingBox().b, this.b.locZ)).getBlock();
 
             if (block == Blocks.LADDER) {
@@ -68,7 +68,7 @@ public class CombatTracker {
                 if (combatentry.a() != DamageSource.FALL && combatentry.a() != DamageSource.OUT_OF_WORLD) {
                     if (ichatbasecomponent1 != null && (ichatbasecomponent == null || !ichatbasecomponent1.equals(ichatbasecomponent))) {
                         Entity entity1 = combatentry.a().getEntity();
-                        ItemStack itemstack = entity1 instanceof EntityLiving ? ((EntityLiving) entity1).bz() : null;
+                        ItemStack itemstack = entity1 instanceof EntityLiving ? ((EntityLiving) entity1).bA() : null;
 
                         if (itemstack != null && itemstack.hasName()) {
                             object = new ChatMessage("death.fell.assist.item", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent1, itemstack.C()});
@@ -76,7 +76,7 @@ public class CombatTracker {
                             object = new ChatMessage("death.fell.assist", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent1});
                         }
                     } else if (ichatbasecomponent != null) {
-                        ItemStack itemstack1 = entity instanceof EntityLiving ? ((EntityLiving) entity).bz() : null;
+                        ItemStack itemstack1 = entity instanceof EntityLiving ? ((EntityLiving) entity).bA() : null;
 
                         if (itemstack1 != null && itemstack1.hasName()) {
                             object = new ChatMessage("death.fell.finish.item", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent, itemstack1.C()});

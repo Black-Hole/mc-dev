@@ -48,7 +48,7 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
     }
 
     private Vec3D f() {
-        Random random = this.a.bb();
+        Random random = this.a.bc();
         BlockPosition blockposition = new BlockPosition(this.a.locX, this.a.getBoundingBox().b, this.a.locZ);
 
         for (int i = 0; i < 10; ++i) {

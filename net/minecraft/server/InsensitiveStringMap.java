@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-public class InsensitiveStringMap implements Map {
+public class InsensitiveStringMap<V> implements Map<String, V> {
 
-    private final Map a = Maps.newLinkedHashMap();
+    private final Map<String, V> a = Maps.newLinkedHashMap();
 
     public InsensitiveStringMap() {}
 
@@ -29,19 +29,19 @@ public class InsensitiveStringMap implements Map {
         return this.a.containsKey(object);
     }
 
-    public Object get(Object object) {
+    public V get(Object object) {
         return this.a.get(object.toString().toLowerCase());
     }
 
-    public Object a(String s, Object object) {
-        return this.a.put(s.toLowerCase(), object);
+    public V a(String s, V v0) {
+        return this.a.put(s.toLowerCase(), v0);
     }
 
-    public Object remove(Object object) {
+    public V remove(Object object) {
         return this.a.remove(object.toString().toLowerCase());
     }
 
-    public void putAll(Map map) {
+    public void putAll(Map<? extends String, ? extends V> map) {
         Iterator iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {
@@ -56,15 +56,15 @@ public class InsensitiveStringMap implements Map {
         this.a.clear();
     }
 
-    public Set keySet() {
+    public Set<String> keySet() {
         return this.a.keySet();
     }
 
-    public Collection values() {
+    public Collection<V> values() {
         return this.a.values();
     }
 
-    public Set entrySet() {
+    public Set<Entry<String, V>> entrySet() {
         return this.a.entrySet();
     }
 

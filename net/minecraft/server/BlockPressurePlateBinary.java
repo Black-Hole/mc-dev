@@ -6,12 +6,12 @@ import java.util.List;
 public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     public static final BlockStateBoolean POWERED = BlockStateBoolean.of("powered");
-    private final EnumMobType b;
+    private final BlockPressurePlateBinary.EnumMobType b;
 
-    protected BlockPressurePlateBinary(Material material, EnumMobType enummobtype) {
+    protected BlockPressurePlateBinary(Material material, BlockPressurePlateBinary.EnumMobType blockpressureplatebinary_enummobtype) {
         super(material);
         this.j(this.blockStateList.getBlockData().set(BlockPressurePlateBinary.POWERED, Boolean.valueOf(false)));
-        this.b = enummobtype;
+        this.b = blockpressureplatebinary_enummobtype;
     }
 
     protected int e(IBlockData iblockdata) {
@@ -22,11 +22,11 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
         return iblockdata.set(BlockPressurePlateBinary.POWERED, Boolean.valueOf(i > 0));
     }
 
-    protected int e(World world, BlockPosition blockposition) {
+    protected int f(World world, BlockPosition blockposition) {
         AxisAlignedBB axisalignedbb = this.a(blockposition);
         List list;
 
-        switch (SwitchHelperMobType.a[this.b.ordinal()]) {
+        switch (BlockPressurePlateBinary.SyntheticClass_1.a[this.b.ordinal()]) {
         case 1:
             list = world.getEntities((Entity) null, axisalignedbb);
             break;
@@ -45,7 +45,7 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                if (!entity.aH()) {
+                if (!entity.aI()) {
                     return 15;
                 }
             }
@@ -64,5 +64,32 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockPressurePlateBinary.POWERED});
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[BlockPressurePlateBinary.EnumMobType.values().length];
+
+        static {
+            try {
+                BlockPressurePlateBinary.SyntheticClass_1.a[BlockPressurePlateBinary.EnumMobType.EVERYTHING.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                BlockPressurePlateBinary.SyntheticClass_1.a[BlockPressurePlateBinary.EnumMobType.MOBS.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+        }
+    }
+
+    public static enum EnumMobType {
+
+        EVERYTHING, MOBS;
+
+        private EnumMobType() {}
     }
 }

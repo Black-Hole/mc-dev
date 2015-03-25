@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Collection;
 import java.util.List;
 
 public class CommandEffect extends CommandAbstract {
@@ -18,7 +19,7 @@ public class CommandEffect extends CommandAbstract {
         return "commands.effect.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.effect.usage", new Object[0]);
         } else {
@@ -92,8 +93,8 @@ public class CommandEffect extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, this.d()) : (astring.length == 2 ? a(astring, MobEffectList.c()) : (astring.length == 5 ? a(astring, new String[] { "true", "false"}) : null));
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, this.d()) : (astring.length == 2 ? a(astring, (Collection) MobEffectList.c()) : (astring.length == 5 ? a(astring, new String[] { "true", "false"}) : null));
     }
 
     protected String[] d() {

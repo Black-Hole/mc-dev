@@ -4,17 +4,19 @@ import java.util.Random;
 
 public class WorldGenForest extends WorldGenTreeAbstract {
 
-    private boolean a;
+    private static final IBlockData a = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.BIRCH);
+    private static final IBlockData b = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.BIRCH).set(BlockLeaves1.CHECK_DECAY, Boolean.valueOf(false));
+    private boolean c;
 
     public WorldGenForest(boolean flag, boolean flag1) {
         super(flag);
-        this.a = flag1;
+        this.c = flag1;
     }
 
     public boolean generate(World world, Random random, BlockPosition blockposition) {
         int i = random.nextInt(3) + 5;
 
-        if (this.a) {
+        if (this.c) {
             i += random.nextInt(7);
         }
 
@@ -35,10 +37,12 @@ public class WorldGenForest extends WorldGenTreeAbstract {
                     b0 = 2;
                 }
 
+                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+
                 for (j = blockposition.getX() - b0; j <= blockposition.getX() + b0 && flag; ++j) {
                     for (k = blockposition.getZ() - b0; k <= blockposition.getZ() + b0 && flag; ++k) {
                         if (l >= 0 && l < 256) {
-                            if (!this.a(world.getType(new BlockPosition(j, l, k)).getBlock())) {
+                            if (!this.a(world.getType(blockposition_mutableblockposition.c(j, l, k)).getBlock())) {
                                 flag = false;
                             }
                         } else {
@@ -59,21 +63,22 @@ public class WorldGenForest extends WorldGenTreeAbstract {
                     int i1;
 
                     for (i1 = blockposition.getY() - 3 + i; i1 <= blockposition.getY() + i; ++i1) {
-                        j = i1 - (blockposition.getY() + i);
-                        k = 1 - j / 2;
+                        int j1 = i1 - (blockposition.getY() + i);
 
-                        for (int j1 = blockposition.getX() - k; j1 <= blockposition.getX() + k; ++j1) {
-                            int k1 = j1 - blockposition.getX();
+                        j = 1 - j1 / 2;
 
-                            for (int l1 = blockposition.getZ() - k; l1 <= blockposition.getZ() + k; ++l1) {
+                        for (k = blockposition.getX() - j; k <= blockposition.getX() + j; ++k) {
+                            int k1 = k - blockposition.getX();
+
+                            for (int l1 = blockposition.getZ() - j; l1 <= blockposition.getZ() + j; ++l1) {
                                 int i2 = l1 - blockposition.getZ();
 
-                                if (Math.abs(k1) != k || Math.abs(i2) != k || random.nextInt(2) != 0 && j != 0) {
-                                    BlockPosition blockposition1 = new BlockPosition(j1, i1, l1);
+                                if (Math.abs(k1) != j || Math.abs(i2) != j || random.nextInt(2) != 0 && j1 != 0) {
+                                    BlockPosition blockposition1 = new BlockPosition(k, i1, l1);
                                     Block block1 = world.getType(blockposition1).getBlock();
 
                                     if (block1.getMaterial() == Material.AIR || block1.getMaterial() == Material.LEAVES) {
-                                        this.a(world, blockposition1, Blocks.LEAVES, EnumLogVariant.BIRCH.a());
+                                        this.a(world, blockposition1, WorldGenForest.b);
                                     }
                                 }
                             }
@@ -84,7 +89,7 @@ public class WorldGenForest extends WorldGenTreeAbstract {
                         Block block2 = world.getType(blockposition.up(i1)).getBlock();
 
                         if (block2.getMaterial() == Material.AIR || block2.getMaterial() == Material.LEAVES) {
-                            this.a(world, blockposition.up(i1), Blocks.LOG, EnumLogVariant.BIRCH.a());
+                            this.a(world, blockposition.up(i1), WorldGenForest.a);
                         }
                     }
 

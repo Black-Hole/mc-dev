@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 public class CommandTestForBlock extends CommandAbstract {
@@ -20,11 +19,11 @@ public class CommandTestForBlock extends CommandAbstract {
         return "commands.testforblock.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 4) {
             throw new ExceptionUsage("commands.testforblock.usage", new Object[0]);
         } else {
-            icommandlistener.a(EnumCommandResult.AFFECTED_BLOCKS, 0);
+            icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 0);
             BlockPosition blockposition = a(icommandlistener, astring, 0, false);
             Block block = Block.getByName(astring[3]);
 
@@ -80,12 +79,12 @@ public class CommandTestForBlock extends CommandAbstract {
                             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
                             tileentity.b(nbttagcompound1);
-                            if (!a(nbttagcompound, nbttagcompound1, true)) {
+                            if (!GameProfileSerializer.a(nbttagcompound, nbttagcompound1, true)) {
                                 throw new CommandException("commands.testforblock.failed.nbt", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
                             }
                         }
 
-                        icommandlistener.a(EnumCommandResult.AFFECTED_BLOCKS, 1);
+                        icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 1);
                         a(icommandlistener, this, "commands.testforblock.success", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
                     }
                 }
@@ -93,74 +92,7 @@ public class CommandTestForBlock extends CommandAbstract {
         }
     }
 
-    public static boolean a(NBTBase nbtbase, NBTBase nbtbase1, boolean flag) {
-        if (nbtbase == nbtbase1) {
-            return true;
-        } else if (nbtbase == null) {
-            return true;
-        } else if (nbtbase1 == null) {
-            return false;
-        } else if (!nbtbase.getClass().equals(nbtbase1.getClass())) {
-            return false;
-        } else if (nbtbase instanceof NBTTagCompound) {
-            NBTTagCompound nbttagcompound = (NBTTagCompound) nbtbase;
-            NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbtbase1;
-            Iterator iterator = nbttagcompound.c().iterator();
-
-            String s;
-            NBTBase nbtbase2;
-
-            do {
-                if (!iterator.hasNext()) {
-                    return true;
-                }
-
-                s = (String) iterator.next();
-                nbtbase2 = nbttagcompound.get(s);
-            } while (a(nbtbase2, nbttagcompound1.get(s), flag));
-
-            return false;
-        } else if (nbtbase instanceof NBTTagList && flag) {
-            NBTTagList nbttaglist = (NBTTagList) nbtbase;
-            NBTTagList nbttaglist1 = (NBTTagList) nbtbase1;
-
-            if (nbttaglist.size() == 0) {
-                return nbttaglist1.size() == 0;
-            } else {
-                int i = 0;
-
-                while (i < nbttaglist.size()) {
-                    NBTBase nbtbase3 = nbttaglist.g(i);
-                    boolean flag1 = false;
-                    int j = 0;
-
-                    while (true) {
-                        if (j < nbttaglist1.size()) {
-                            if (!a(nbtbase3, nbttaglist1.g(j), flag)) {
-                                ++j;
-                                continue;
-                            }
-
-                            flag1 = true;
-                        }
-
-                        if (!flag1) {
-                            return false;
-                        }
-
-                        ++i;
-                        break;
-                    }
-                }
-
-                return true;
-            }
-        } else {
-            return nbtbase.equals(nbtbase1);
-        }
-    }
-
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length == 4 ? a(astring, (Collection) Block.REGISTRY.keySet()) : null);
     }
 }

@@ -12,7 +12,7 @@ public class ChunkProviderFlat implements IChunkProvider {
     private Random b;
     private final IBlockData[] c = new IBlockData[256];
     private final WorldGenFlatInfo d;
-    private final List e = Lists.newArrayList();
+    private final List<StructureGenerator> e = Lists.newArrayList();
     private final boolean f;
     private final boolean g;
     private WorldGenLakes h;
@@ -61,22 +61,32 @@ public class ChunkProviderFlat implements IChunkProvider {
         }
 
         this.g = this.d.b().containsKey("dungeon");
+        int j = 0;
+        int k = 0;
         boolean flag1 = true;
         Iterator iterator = this.d.c().iterator();
 
         while (iterator.hasNext()) {
             WorldGenFlatLayerInfo worldgenflatlayerinfo = (WorldGenFlatLayerInfo) iterator.next();
 
-            for (int j = worldgenflatlayerinfo.d(); j < worldgenflatlayerinfo.d() + worldgenflatlayerinfo.b(); ++j) {
+            for (int l = worldgenflatlayerinfo.d(); l < worldgenflatlayerinfo.d() + worldgenflatlayerinfo.b(); ++l) {
                 IBlockData iblockdata = worldgenflatlayerinfo.c();
 
                 if (iblockdata.getBlock() != Blocks.AIR) {
                     flag1 = false;
-                    this.c[j] = iblockdata;
+                    this.c[l] = iblockdata;
                 }
+            }
+
+            if (worldgenflatlayerinfo.c().getBlock() == Blocks.AIR) {
+                k += worldgenflatlayerinfo.b();
+            } else {
+                j += worldgenflatlayerinfo.b() + k;
+                k = 0;
             }
         }
 
+        world.b(j);
         this.f = flag1 ? false : this.d.b().containsKey("decoration");
     }
 
@@ -152,7 +162,7 @@ public class ChunkProviderFlat implements IChunkProvider {
         if (this.i != null && !flag && this.b.nextInt(8) == 0) {
             BlockPosition blockposition1 = blockposition.a(this.b.nextInt(16) + 8, this.b.nextInt(this.b.nextInt(248) + 8), this.b.nextInt(16) + 8);
 
-            if (blockposition1.getY() < 63 || this.b.nextInt(10) == 0) {
+            if (blockposition1.getY() < this.a.F() || this.b.nextInt(10) == 0) {
                 this.i.generate(this.a, this.b, blockposition1);
             }
         }
@@ -164,7 +174,7 @@ public class ChunkProviderFlat implements IChunkProvider {
         }
 
         if (this.f) {
-            biomebase.a(this.a, this.b, new BlockPosition(k, 0, l));
+            biomebase.a(this.a, this.b, blockposition);
         }
 
     }
@@ -191,7 +201,7 @@ public class ChunkProviderFlat implements IChunkProvider {
         return "FlatLevelSource";
     }
 
-    public List getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
+    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         BiomeBase biomebase = this.a.getBiome(blockposition);
 
         return biomebase.getMobs(enumcreaturetype);

@@ -3,7 +3,7 @@ package net.minecraft.server;
 public abstract class PathfinderAbstract {
 
     protected IBlockAccess a;
-    protected IntHashMap b = new IntHashMap();
+    protected IntHashMap<PathPoint> b = new IntHashMap();
     protected int c;
     protected int d;
     protected int e;

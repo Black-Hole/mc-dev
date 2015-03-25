@@ -56,18 +56,18 @@ public class BlockCactus extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return super.canPlace(world, blockposition) ? this.d(world, blockposition) : false;
+        return super.canPlace(world, blockposition) ? this.e(world, blockposition) : false;
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!this.d(world, blockposition)) {
+        if (!this.e(world, blockposition)) {
             world.setAir(blockposition, true);
         }
 
     }
 
-    public boolean d(World world, BlockPosition blockposition) {
-        Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+    public boolean e(World world, BlockPosition blockposition) {
+        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
         while (iterator.hasNext()) {
             EnumDirection enumdirection = (EnumDirection) iterator.next();

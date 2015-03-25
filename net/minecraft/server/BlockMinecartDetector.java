@@ -6,12 +6,20 @@ import java.util.Random;
 
 public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
-    public static final BlockStateEnum SHAPE = BlockStateEnum.a("shape", EnumTrackPosition.class, (Predicate) (new BlockMinecartDetectorInnerClass1()));
+    public static final BlockStateEnum<BlockMinecartTrackAbstract.EnumTrackPosition> SHAPE = BlockStateEnum.a("shape", BlockMinecartTrackAbstract.EnumTrackPosition.class, new Predicate() {
+        public boolean a(BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition) {
+            return blockminecarttrackabstract_enumtrackposition != BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_EAST && blockminecarttrackabstract_enumtrackposition != BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_WEST && blockminecarttrackabstract_enumtrackposition != BlockMinecartTrackAbstract.EnumTrackPosition.SOUTH_EAST && blockminecarttrackabstract_enumtrackposition != BlockMinecartTrackAbstract.EnumTrackPosition.SOUTH_WEST;
+        }
+
+        public boolean apply(Object object) {
+            return this.a((BlockMinecartTrackAbstract.EnumTrackPosition) object);
+        }
+    });
     public static final BlockStateBoolean POWERED = BlockStateBoolean.of("powered");
 
     public BlockMinecartDetector() {
         super(true);
-        this.j(this.blockStateList.getBlockData().set(BlockMinecartDetector.POWERED, Boolean.valueOf(false)).set(BlockMinecartDetector.SHAPE, EnumTrackPosition.NORTH_SOUTH));
+        this.j(this.blockStateList.getBlockData().set(BlockMinecartDetector.POWERED, Boolean.valueOf(false)).set(BlockMinecartDetector.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH));
         this.a(true);
     }
 
@@ -24,7 +32,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             if (!((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)).booleanValue()) {
                 this.e(world, blockposition, iblockdata);
             }
@@ -34,7 +42,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {}
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (!world.isStatic && ((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)).booleanValue()) {
+        if (!world.isClientSide && ((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)).booleanValue()) {
             this.e(world, blockposition, iblockdata);
         }
     }
@@ -82,7 +90,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
         this.e(world, blockposition, iblockdata);
     }
 
-    public IBlockState l() {
+    public IBlockState<BlockMinecartTrackAbstract.EnumTrackPosition> n() {
         return BlockMinecartDetector.SHAPE;
     }
 
@@ -108,7 +116,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
         return 0;
     }
 
-    protected List a(World world, BlockPosition blockposition, Class oclass, Predicate... apredicate) {
+    protected <T extends EntityMinecartAbstract> List<T> a(World world, BlockPosition blockposition, Class<T> oclass, Predicate<Entity>... apredicate) {
         AxisAlignedBB axisalignedbb = this.a(blockposition);
 
         return apredicate.length != 1 ? world.a(oclass, axisalignedbb) : world.a(oclass, axisalignedbb, apredicate[0]);
@@ -121,12 +129,12 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockMinecartDetector.SHAPE, EnumTrackPosition.a(i & 7)).set(BlockMinecartDetector.POWERED, Boolean.valueOf((i & 8) > 0));
+        return this.getBlockData().set(BlockMinecartDetector.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.a(i & 7)).set(BlockMinecartDetector.POWERED, Boolean.valueOf((i & 8) > 0));
     }
 
     public int toLegacyData(IBlockData iblockdata) {
         byte b0 = 0;
-        int i = b0 | ((EnumTrackPosition) iblockdata.get(BlockMinecartDetector.SHAPE)).a();
+        int i = b0 | ((BlockMinecartTrackAbstract.EnumTrackPosition) iblockdata.get(BlockMinecartDetector.SHAPE)).a();
 
         if (((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)).booleanValue()) {
             i |= 8;

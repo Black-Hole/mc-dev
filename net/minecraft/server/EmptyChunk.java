@@ -52,7 +52,7 @@ public class EmptyChunk extends Chunk {
         return false;
     }
 
-    public TileEntity a(BlockPosition blockposition, EnumTileEntityState enumtileentitystate) {
+    public TileEntity a(BlockPosition blockposition, Chunk.EnumTileEntityState chunk_enumtileentitystate) {
         return null;
     }
 
@@ -68,9 +68,9 @@ public class EmptyChunk extends Chunk {
 
     public void e() {}
 
-    public void a(Entity entity, AxisAlignedBB axisalignedbb, List list, Predicate predicate) {}
+    public void a(Entity entity, AxisAlignedBB axisalignedbb, List<Entity> list, Predicate<? super Entity> predicate) {}
 
-    public void a(Class oclass, AxisAlignedBB axisalignedbb, List list, Predicate predicate) {}
+    public <T extends Entity> void a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, List<T> list, Predicate<? super T> predicate) {}
 
     public boolean a(boolean flag) {
         return false;

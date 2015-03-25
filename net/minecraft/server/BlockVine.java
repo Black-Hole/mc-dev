@@ -10,11 +10,7 @@ public class BlockVine extends Block {
     public static final BlockStateBoolean EAST = BlockStateBoolean.of("east");
     public static final BlockStateBoolean SOUTH = BlockStateBoolean.of("south");
     public static final BlockStateBoolean WEST = BlockStateBoolean.of("west");
-    public static final BlockStateBoolean[] P = new BlockStateBoolean[] { BlockVine.UP, BlockVine.NORTH, BlockVine.SOUTH, BlockVine.WEST, BlockVine.EAST};
-    public static final int Q = b(EnumDirection.SOUTH);
-    public static final int R = b(EnumDirection.NORTH);
-    public static final int S = b(EnumDirection.EAST);
-    public static final int T = b(EnumDirection.WEST);
+    public static final BlockStateBoolean[] Q = new BlockStateBoolean[] { BlockVine.UP, BlockVine.NORTH, BlockVine.SOUTH, BlockVine.WEST, BlockVine.EAST};
 
     public BlockVine() {
         super(Material.REPLACEABLE_PLANT);
@@ -24,10 +20,10 @@ public class BlockVine extends Block {
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.set(BlockVine.UP, Boolean.valueOf(iblockaccess.getType(blockposition.up()).getBlock().s()));
+        return iblockdata.set(BlockVine.UP, Boolean.valueOf(iblockaccess.getType(blockposition.up()).getBlock().u()));
     }
 
-    public void h() {
+    public void j() {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
@@ -39,7 +35,7 @@ public class BlockVine extends Block {
         return false;
     }
 
-    public boolean f(World world, BlockPosition blockposition) {
+    public boolean a(World world, BlockPosition blockposition) {
         return true;
     }
 
@@ -110,7 +106,7 @@ public class BlockVine extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        switch (SwitchHelperDirection12.a[enumdirection.ordinal()]) {
+        switch (BlockVine.SyntheticClass_1.a[enumdirection.ordinal()]) {
         case 1:
             return this.c(world.getType(blockposition.up()).getBlock());
 
@@ -131,7 +127,7 @@ public class BlockVine extends Block {
 
     private boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
         IBlockData iblockdata1 = iblockdata;
-        Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
         while (iterator.hasNext()) {
             EnumDirection enumdirection = (EnumDirection) iterator.next();
@@ -158,7 +154,7 @@ public class BlockVine extends Block {
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!world.isStatic && !this.e(world, blockposition, iblockdata)) {
+        if (!world.isClientSide && !this.e(world, blockposition, iblockdata)) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
         }
@@ -166,7 +162,7 @@ public class BlockVine extends Block {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             if (world.random.nextInt(4) == 0) {
                 byte b0 = 4;
                 int i = 5;
@@ -193,7 +189,7 @@ public class BlockVine extends Block {
                 if (enumdirection == EnumDirection.UP && blockposition.getY() < 255 && world.isEmpty(blockposition.up())) {
                     if (!flag) {
                         IBlockData iblockdata1 = iblockdata;
-                        Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+                        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                         while (iterator.hasNext()) {
                             enumdirection1 = (EnumDirection) iterator.next();
@@ -250,7 +246,7 @@ public class BlockVine extends Block {
 
                             if (block1.material == Material.AIR) {
                                 iblockdata3 = iblockdata;
-                                iterator1 = EnumDirectionLimit.HORIZONTAL.iterator();
+                                iterator1 = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                                 while (iterator1.hasNext()) {
                                     enumdirection3 = (EnumDirection) iterator1.next();
@@ -264,7 +260,7 @@ public class BlockVine extends Block {
                                 }
                             } else if (block1 == this) {
                                 iblockdata3 = iblockdata2;
-                                iterator1 = EnumDirectionLimit.HORIZONTAL.iterator();
+                                iterator1 = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                                 while (iterator1.hasNext()) {
                                     enumdirection3 = (EnumDirection) iterator1.next();
@@ -287,10 +283,6 @@ public class BlockVine extends Block {
         }
     }
 
-    private static int b(EnumDirection enumdirection) {
-        return 1 << enumdirection.b();
-    }
-
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
         IBlockData iblockdata = this.getBlockData().set(BlockVine.UP, Boolean.valueOf(false)).set(BlockVine.NORTH, Boolean.valueOf(false)).set(BlockVine.EAST, Boolean.valueOf(false)).set(BlockVine.SOUTH, Boolean.valueOf(false)).set(BlockVine.WEST, Boolean.valueOf(false));
 
@@ -306,7 +298,7 @@ public class BlockVine extends Block {
     }
 
     public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity) {
-        if (!world.isStatic && entityhuman.bY() != null && entityhuman.bY().getItem() == Items.SHEARS) {
+        if (!world.isClientSide && entityhuman.bZ() != null && entityhuman.bZ().getItem() == Items.SHEARS) {
             entityhuman.b(StatisticList.MINE_BLOCK_COUNT[Block.getId(this)]);
             a(world, blockposition, new ItemStack(Blocks.VINE, 1, 0));
         } else {
@@ -316,26 +308,26 @@ public class BlockVine extends Block {
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockVine.NORTH, Boolean.valueOf((i & BlockVine.R) > 0)).set(BlockVine.EAST, Boolean.valueOf((i & BlockVine.S) > 0)).set(BlockVine.SOUTH, Boolean.valueOf((i & BlockVine.Q) > 0)).set(BlockVine.WEST, Boolean.valueOf((i & BlockVine.T) > 0));
+        return this.getBlockData().set(BlockVine.SOUTH, Boolean.valueOf((i & 1) > 0)).set(BlockVine.WEST, Boolean.valueOf((i & 2) > 0)).set(BlockVine.NORTH, Boolean.valueOf((i & 4) > 0)).set(BlockVine.EAST, Boolean.valueOf((i & 8) > 0));
     }
 
     public int toLegacyData(IBlockData iblockdata) {
         int i = 0;
 
-        if (((Boolean) iblockdata.get(BlockVine.NORTH)).booleanValue()) {
-            i |= BlockVine.R;
-        }
-
-        if (((Boolean) iblockdata.get(BlockVine.EAST)).booleanValue()) {
-            i |= BlockVine.S;
-        }
-
         if (((Boolean) iblockdata.get(BlockVine.SOUTH)).booleanValue()) {
-            i |= BlockVine.Q;
+            i |= 1;
         }
 
         if (((Boolean) iblockdata.get(BlockVine.WEST)).booleanValue()) {
-            i |= BlockVine.T;
+            i |= 2;
+        }
+
+        if (((Boolean) iblockdata.get(BlockVine.NORTH)).booleanValue()) {
+            i |= 4;
+        }
+
+        if (((Boolean) iblockdata.get(BlockVine.EAST)).booleanValue()) {
+            i |= 8;
         }
 
         return i;
@@ -346,7 +338,7 @@ public class BlockVine extends Block {
     }
 
     public static BlockStateBoolean a(EnumDirection enumdirection) {
-        switch (SwitchHelperDirection12.a[enumdirection.ordinal()]) {
+        switch (BlockVine.SyntheticClass_1.a[enumdirection.ordinal()]) {
         case 1:
             return BlockVine.UP;
 
@@ -369,7 +361,7 @@ public class BlockVine extends Block {
 
     public static int d(IBlockData iblockdata) {
         int i = 0;
-        BlockStateBoolean[] ablockstateboolean = BlockVine.P;
+        BlockStateBoolean[] ablockstateboolean = BlockVine.Q;
         int j = ablockstateboolean.length;
 
         for (int k = 0; k < j; ++k) {
@@ -381,5 +373,43 @@ public class BlockVine extends Block {
         }
 
         return i;
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EnumDirection.values().length];
+
+        static {
+            try {
+                BlockVine.SyntheticClass_1.a[EnumDirection.UP.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                BlockVine.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                BlockVine.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                BlockVine.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            try {
+                BlockVine.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 5;
+            } catch (NoSuchFieldError nosuchfielderror4) {
+                ;
+            }
+
+        }
     }
 }

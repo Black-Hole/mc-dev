@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
+import java.util.List;
+
 public abstract class NavigationAbstract {
 
     protected EntityInsentient b;
@@ -130,7 +133,19 @@ public abstract class NavigationAbstract {
             if (!this.m()) {
                 vec3d = this.d.a((Entity) this.b);
                 if (vec3d != null) {
-                    this.b.getControllerMove().a(vec3d.a, vec3d.b, vec3d.c, this.e);
+                    AxisAlignedBB axisalignedbb = (new AxisAlignedBB(vec3d.a, vec3d.b, vec3d.c, vec3d.a, vec3d.b, vec3d.c)).grow(0.5D, 0.5D, 0.5D);
+                    List list = this.c.getCubes(this.b, axisalignedbb.a(0.0D, -1.0D, 0.0D));
+                    double d0 = -1.0D;
+
+                    axisalignedbb = axisalignedbb.c(0.0D, 1.0D, 0.0D);
+
+                    AxisAlignedBB axisalignedbb1;
+
+                    for (Iterator iterator = list.iterator(); iterator.hasNext(); d0 = axisalignedbb1.b(axisalignedbb, d0)) {
+                        axisalignedbb1 = (AxisAlignedBB) iterator.next();
+                    }
+
+                    this.b.getControllerMove().a(vec3d.a, vec3d.b + d0, vec3d.c, this.e);
                 }
             }
         }

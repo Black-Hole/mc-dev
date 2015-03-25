@@ -11,12 +11,12 @@ import java.util.Map;
 
 public class Scoreboard {
 
-    private final Map objectivesByName = Maps.newHashMap();
-    private final Map objectivesByCriteria = Maps.newHashMap();
-    private final Map playerScores = Maps.newHashMap();
+    private final Map<String, ScoreboardObjective> objectivesByName = Maps.newHashMap();
+    private final Map<IScoreboardCriteria, List<ScoreboardObjective>> objectivesByCriteria = Maps.newHashMap();
+    private final Map<String, Map<ScoreboardObjective, ScoreboardScore>> playerScores = Maps.newHashMap();
     private final ScoreboardObjective[] displaySlots = new ScoreboardObjective[19];
-    private final Map teamsByName = Maps.newHashMap();
-    private final Map teamsByPlayer = Maps.newHashMap();
+    private final Map<String, ScoreboardTeam> teamsByName = Maps.newHashMap();
+    private final Map<String, ScoreboardTeam> teamsByPlayer = Maps.newHashMap();
     private static String[] g = null;
 
     public Scoreboard() {}
@@ -46,7 +46,7 @@ public class Scoreboard {
         }
     }
 
-    public Collection getObjectivesForCriteria(IScoreboardCriteria iscoreboardcriteria) {
+    public Collection<ScoreboardObjective> getObjectivesForCriteria(IScoreboardCriteria iscoreboardcriteria) {
         Collection collection = (Collection) this.objectivesByCriteria.get(iscoreboardcriteria);
 
         return collection == null ? Lists.newArrayList() : Lists.newArrayList(collection);
@@ -82,7 +82,7 @@ public class Scoreboard {
         return scoreboardscore;
     }
 
-    public Collection getScoresForObjective(ScoreboardObjective scoreboardobjective) {
+    public Collection<ScoreboardScore> getScoresForObjective(ScoreboardObjective scoreboardobjective) {
         ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = this.playerScores.values().iterator();
 
@@ -99,11 +99,11 @@ public class Scoreboard {
         return arraylist;
     }
 
-    public Collection getObjectives() {
+    public Collection<ScoreboardObjective> getObjectives() {
         return this.objectivesByName.values();
     }
 
-    public Collection getPlayers() {
+    public Collection<String> getPlayers() {
         return this.playerScores.keySet();
     }
 
@@ -134,7 +134,7 @@ public class Scoreboard {
 
     }
 
-    public Collection getScores() {
+    public Collection<ScoreboardScore> getScores() {
         Collection collection = this.playerScores.values();
         ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = collection.iterator();
@@ -148,7 +148,7 @@ public class Scoreboard {
         return arraylist;
     }
 
-    public Map getPlayerObjectives(String s) {
+    public Map<ScoreboardObjective, ScoreboardScore> getPlayerObjectives(String s) {
         Object object = (Map) this.playerScores.get(s);
 
         if (object == null) {
@@ -258,11 +258,11 @@ public class Scoreboard {
         }
     }
 
-    public Collection getTeamNames() {
+    public Collection<String> getTeamNames() {
         return this.teamsByName.keySet();
     }
 
-    public Collection getTeams() {
+    public Collection<ScoreboardTeam> getTeams() {
         return this.teamsByName.values();
     }
 
@@ -343,5 +343,14 @@ public class Scoreboard {
         }
 
         return Scoreboard.g;
+    }
+
+    public void a(Entity entity) {
+        if (entity != null && !(entity instanceof EntityHuman) && !entity.isAlive()) {
+            String s = entity.getUniqueID().toString();
+
+            this.resetPlayerScores(s, (ScoreboardObjective) null);
+            this.removePlayerFromTeam(s);
+        }
     }
 }

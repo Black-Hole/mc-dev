@@ -14,8 +14,8 @@ public class BlockFire extends Block {
     public static final BlockStateBoolean SOUTH = BlockStateBoolean.of("south");
     public static final BlockStateBoolean WEST = BlockStateBoolean.of("west");
     public static final BlockStateInteger UPPER = BlockStateInteger.of("upper", 0, 2);
-    private final Map S = Maps.newIdentityHashMap();
-    private final Map T = Maps.newIdentityHashMap();
+    private final Map<Block, Integer> T = Maps.newIdentityHashMap();
+    private final Map<Block, Integer> U = Maps.newIdentityHashMap();
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         int i = blockposition.getX();
@@ -43,7 +43,7 @@ public class BlockFire extends Block {
         this.a(true);
     }
 
-    public static void j() {
+    public static void l() {
         Blocks.FIRE.a(Blocks.PLANKS, 5, 20);
         Blocks.FIRE.a(Blocks.DOUBLE_WOODEN_SLAB, 5, 20);
         Blocks.FIRE.a(Blocks.WOODEN_SLAB, 5, 20);
@@ -82,8 +82,8 @@ public class BlockFire extends Block {
     }
 
     public void a(Block block, int i, int j) {
-        this.S.put(block, Integer.valueOf(i));
-        this.T.put(block, Integer.valueOf(j));
+        this.T.put(block, Integer.valueOf(i));
+        this.U.put(block, Integer.valueOf(j));
     }
 
     public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -119,7 +119,7 @@ public class BlockFire extends Block {
                 flag = true;
             }
 
-            if (!flag && world.S() && this.d(world, blockposition)) {
+            if (!flag && world.S() && this.e(world, blockposition)) {
                 world.setAir(blockposition);
             } else {
                 int i = ((Integer) iblockdata.get(BlockFire.AGE)).intValue();
@@ -131,7 +131,7 @@ public class BlockFire extends Block {
 
                 world.a(blockposition, (Block) this, this.a(world) + random.nextInt(10));
                 if (!flag) {
-                    if (!this.e(world, blockposition)) {
+                    if (!this.f(world, blockposition)) {
                         if (!World.a((IBlockAccess) world, blockposition.down()) || i > 3) {
                             world.setAir(blockposition);
                         }
@@ -179,7 +179,7 @@ public class BlockFire extends Block {
                                         k1 /= 2;
                                     }
 
-                                    if (k1 > 0 && random.nextInt(i1) <= k1 && (!world.S() || !this.d(world, blockposition1))) {
+                                    if (k1 > 0 && random.nextInt(i1) <= k1 && (!world.S() || !this.e(world, blockposition1))) {
                                         int l1 = i + random.nextInt(5) / 4;
 
                                         if (l1 > 15) {
@@ -198,22 +198,22 @@ public class BlockFire extends Block {
         }
     }
 
-    protected boolean d(World world, BlockPosition blockposition) {
+    protected boolean e(World world, BlockPosition blockposition) {
         return world.isRainingAt(blockposition) || world.isRainingAt(blockposition.west()) || world.isRainingAt(blockposition.east()) || world.isRainingAt(blockposition.north()) || world.isRainingAt(blockposition.south());
     }
 
-    public boolean M() {
+    public boolean N() {
         return false;
     }
 
     private int c(Block block) {
-        Integer integer = (Integer) this.T.get(block);
+        Integer integer = (Integer) this.U.get(block);
 
         return integer == null ? 0 : integer.intValue();
     }
 
     private int d(Block block) {
-        Integer integer = (Integer) this.S.get(block);
+        Integer integer = (Integer) this.T.get(block);
 
         return integer == null ? 0 : integer.intValue();
     }
@@ -243,7 +243,7 @@ public class BlockFire extends Block {
 
     }
 
-    private boolean e(World world, BlockPosition blockposition) {
+    private boolean f(World world, BlockPosition blockposition) {
         EnumDirection[] aenumdirection = EnumDirection.values();
         int i = aenumdirection.length;
 
@@ -276,7 +276,7 @@ public class BlockFire extends Block {
         }
     }
 
-    public boolean y() {
+    public boolean A() {
         return false;
     }
 
@@ -285,19 +285,19 @@ public class BlockFire extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return World.a((IBlockAccess) world, blockposition.down()) || this.e(world, blockposition);
+        return World.a((IBlockAccess) world, blockposition.down()) || this.f(world, blockposition);
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!World.a((IBlockAccess) world, blockposition.down()) && !this.e(world, blockposition)) {
+        if (!World.a((IBlockAccess) world, blockposition.down()) && !this.f(world, blockposition)) {
             world.setAir(blockposition);
         }
 
     }
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (world.worldProvider.getDimension() > 0 || !Blocks.PORTAL.d(world, blockposition)) {
-            if (!World.a((IBlockAccess) world, blockposition.down()) && !this.e(world, blockposition)) {
+        if (world.worldProvider.getDimension() > 0 || !Blocks.PORTAL.e(world, blockposition)) {
+            if (!World.a((IBlockAccess) world, blockposition.down()) && !this.f(world, blockposition)) {
                 world.setAir(blockposition);
             } else {
                 world.a(blockposition, (Block) this, this.a(world) + world.random.nextInt(10));

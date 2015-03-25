@@ -79,8 +79,8 @@ public class BlockTripwire extends Block {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        if (!world.isStatic) {
-            if (entityhuman.bY() != null && entityhuman.bY().getItem() == Items.SHEARS) {
+        if (!world.isClientSide) {
+            if (entityhuman.bZ() != null && entityhuman.bZ().getItem() == Items.SHEARS) {
                 world.setTypeAndData(blockposition, iblockdata.set(BlockTripwire.DISARMED, Boolean.valueOf(true)), 4);
             }
 
@@ -119,9 +119,9 @@ public class BlockTripwire extends Block {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             if (!((Boolean) iblockdata.get(BlockTripwire.POWERED)).booleanValue()) {
-                this.d(world, blockposition);
+                this.e(world, blockposition);
             }
         }
     }
@@ -129,14 +129,14 @@ public class BlockTripwire extends Block {
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {}
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             if (((Boolean) world.getType(blockposition).get(BlockTripwire.POWERED)).booleanValue()) {
-                this.d(world, blockposition);
+                this.e(world, blockposition);
             }
         }
     }
 
-    private void d(World world, BlockPosition blockposition) {
+    private void e(World world, BlockPosition blockposition) {
         IBlockData iblockdata = world.getType(blockposition);
         boolean flag = ((Boolean) iblockdata.get(BlockTripwire.POWERED)).booleanValue();
         boolean flag1 = false;
@@ -148,7 +148,7 @@ public class BlockTripwire extends Block {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                if (!entity.aH()) {
+                if (!entity.aI()) {
                     flag1 = true;
                     break;
                 }

@@ -3,8 +3,8 @@ package net.minecraft.server;
 public class InventoryLargeChest implements ITileInventory {
 
     private String a;
-    public ITileInventory left;
-    public ITileInventory right;
+    private ITileInventory left;
+    private ITileInventory right;
 
     public InventoryLargeChest(String s, ITileInventory itileinventory, ITileInventory itileinventory1) {
         this.a = s;
@@ -18,9 +18,9 @@ public class InventoryLargeChest implements ITileInventory {
 
         this.left = itileinventory;
         this.right = itileinventory1;
-        if (itileinventory.q_()) {
+        if (itileinventory.r_()) {
             itileinventory1.a(itileinventory.i());
-        } else if (itileinventory1.q_()) {
+        } else if (itileinventory1.r_()) {
             itileinventory.a(itileinventory1.i());
         }
 
@@ -104,8 +104,8 @@ public class InventoryLargeChest implements ITileInventory {
         return 0;
     }
 
-    public boolean q_() {
-        return this.left.q_() || this.right.q_();
+    public boolean r_() {
+        return this.left.r_() || this.right.r_();
     }
 
     public void a(ChestLock chestlock) {

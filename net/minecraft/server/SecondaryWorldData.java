@@ -68,7 +68,7 @@ public class SecondaryWorldData extends WorldData {
         return this.b.getWeatherDuration();
     }
 
-    public EnumGamemode getGameType() {
+    public WorldSettings.EnumGamemode getGameType() {
         return this.b.getGameType();
     }
 

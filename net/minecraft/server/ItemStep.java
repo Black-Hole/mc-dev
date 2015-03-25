@@ -31,11 +31,11 @@ public class ItemStep extends ItemBlock {
             IBlockData iblockdata = world.getType(blockposition);
 
             if (iblockdata.getBlock() == this.b) {
-                IBlockState iblockstate = this.b.l();
+                IBlockState iblockstate = this.b.n();
                 Comparable comparable = iblockdata.get(iblockstate);
-                EnumSlabHalf enumslabhalf = (EnumSlabHalf) iblockdata.get(BlockStepAbstract.HALF);
+                BlockStepAbstract.EnumSlabHalf blockstepabstract_enumslabhalf = (BlockStepAbstract.EnumSlabHalf) iblockdata.get(BlockStepAbstract.HALF);
 
-                if ((enumdirection == EnumDirection.UP && enumslabhalf == EnumSlabHalf.BOTTOM || enumdirection == EnumDirection.DOWN && enumslabhalf == EnumSlabHalf.TOP) && comparable == object) {
+                if ((enumdirection == EnumDirection.UP && blockstepabstract_enumslabhalf == BlockStepAbstract.EnumSlabHalf.BOTTOM || enumdirection == EnumDirection.DOWN && blockstepabstract_enumslabhalf == BlockStepAbstract.EnumSlabHalf.TOP) && comparable == object) {
                     IBlockData iblockdata1 = this.c.getBlockData().set(iblockstate, comparable);
 
                     if (world.b(this.c.a(world, blockposition, iblockdata1)) && world.setTypeAndData(blockposition, iblockdata1, 3)) {
@@ -55,10 +55,10 @@ public class ItemStep extends ItemBlock {
         IBlockData iblockdata = world.getType(blockposition);
 
         if (iblockdata.getBlock() == this.b) {
-            Comparable comparable = iblockdata.get(this.b.l());
+            Comparable comparable = iblockdata.get(this.b.n());
 
             if (comparable == object) {
-                IBlockData iblockdata1 = this.c.getBlockData().set(this.b.l(), comparable);
+                IBlockData iblockdata1 = this.c.getBlockData().set(this.b.n(), comparable);
 
                 if (world.b(this.c.a(world, blockposition, iblockdata1)) && world.setTypeAndData(blockposition, iblockdata1, 3)) {
                     world.makeSound((double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), this.c.stepSound.getPlaceSound(), (this.c.stepSound.getVolume1() + 1.0F) / 2.0F, this.c.stepSound.getVolume2() * 0.8F);

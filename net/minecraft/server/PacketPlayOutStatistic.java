@@ -1,17 +1,18 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Maps;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class PacketPlayOutStatistic implements Packet {
+public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
 
-    private Map a;
+    private Map<Statistic, Integer> a;
 
     public PacketPlayOutStatistic() {}
 
-    public PacketPlayOutStatistic(Map map) {
+    public PacketPlayOutStatistic(Map<Statistic, Integer> map) {
         this.a = map;
     }
 
@@ -19,7 +20,7 @@ public class PacketPlayOutStatistic implements Packet {
         packetlistenerplayout.a(this);
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         int i = packetdataserializer.e();
 
         this.a = Maps.newHashMap();
@@ -35,7 +36,7 @@ public class PacketPlayOutStatistic implements Packet {
 
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a.size());
         Iterator iterator = this.a.entrySet().iterator();
 

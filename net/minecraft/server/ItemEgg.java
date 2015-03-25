@@ -13,7 +13,7 @@ public class ItemEgg extends Item {
         }
 
         world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (ItemEgg.g.nextFloat() * 0.4F + 0.8F));
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             world.addEntity(new EntityEgg(world, entityhuman));
         }
 

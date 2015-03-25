@@ -2,12 +2,12 @@ package net.minecraft.server;
 
 import com.google.common.base.Objects;
 
-public abstract class BlockState implements IBlockState {
+public abstract class BlockState<T extends Comparable<T>> implements IBlockState<T> {
 
-    private final Class a;
+    private final Class<T> a;
     private final String b;
 
-    protected BlockState(String s, Class oclass) {
+    protected BlockState(String s, Class<T> oclass) {
         this.a = oclass;
         this.b = s;
     }
@@ -16,7 +16,7 @@ public abstract class BlockState implements IBlockState {
         return this.b;
     }
 
-    public Class b() {
+    public Class<T> b() {
         return this.a;
     }
 

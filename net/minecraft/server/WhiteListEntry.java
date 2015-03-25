@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import java.util.UUID;
 
-public class WhiteListEntry extends JsonListEntry {
+public class WhiteListEntry extends JsonListEntry<GameProfile> {
 
     public WhiteListEntry(GameProfile gameprofile) {
         super(gameprofile);

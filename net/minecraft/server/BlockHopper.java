@@ -5,11 +5,19 @@ import java.util.List;
 
 public class BlockHopper extends BlockContainer {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) (new BlockHopperInnerClass1()));
+    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", new Predicate() {
+        public boolean a(EnumDirection enumdirection) {
+            return enumdirection != EnumDirection.UP;
+        }
+
+        public boolean apply(Object object) {
+            return this.a((EnumDirection) object);
+        }
+    });
     public static final BlockStateBoolean ENABLED = BlockStateBoolean.of("enabled");
 
     public BlockHopper() {
-        super(Material.ORE);
+        super(Material.ORE, MaterialMapColor.m);
         this.j(this.blockStateList.getBlockData().set(BlockHopper.FACING, EnumDirection.DOWN).set(BlockHopper.ENABLED, Boolean.valueOf(true)));
         this.a(CreativeModeTab.d);
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
@@ -19,7 +27,7 @@ public class BlockHopper extends BlockContainer {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.625F, 1.0F);
         super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
         float f = 0.125F;
@@ -66,13 +74,14 @@ public class BlockHopper extends BlockContainer {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (world.isStatic) {
+        if (world.isClientSide) {
             return true;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityHopper) {
                 entityhuman.openContainer((TileEntityHopper) tileentity);
+                entityhuman.b(StatisticList.P);
             }
 
             return true;

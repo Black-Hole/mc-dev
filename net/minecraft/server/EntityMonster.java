@@ -2,27 +2,25 @@ package net.minecraft.server;
 
 public abstract class EntityMonster extends EntityCreature implements IMonster {
 
-    protected final PathfinderGoal a = new PathfinderGoalAvoidTarget(this, new EntitySelectorExplodingCreeper(this), 4.0F, 1.0D, 2.0D);
-
     public EntityMonster(World world) {
         super(world);
         this.b_ = 5;
     }
 
     public void m() {
-        this.bw();
+        this.bx();
         float f = this.c(1.0F);
 
         if (f > 0.5F) {
-            this.aO += 2;
+            this.ticksFarFromPlayer += 2;
         }
 
         super.m();
     }
 
-    public void s_() {
-        super.s_();
-        if (!this.world.isStatic && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+    public void t_() {
+        super.t_();
+        if (!this.world.isClientSide && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
             this.die();
         }
 
@@ -48,11 +46,11 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         }
     }
 
-    protected String bn() {
+    protected String bo() {
         return "game.hostile.hurt";
     }
 
-    protected String bo() {
+    protected String bp() {
         return "game.hostile.die";
     }
 
@@ -65,7 +63,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         int i = 0;
 
         if (entity instanceof EntityLiving) {
-            f += EnchantmentManager.a(this.bz(), ((EntityLiving) entity).getMonsterType());
+            f += EnchantmentManager.a(this.bA(), ((EntityLiving) entity).getMonsterType());
             i += EnchantmentManager.a((EntityLiving) this);
         }
 
@@ -94,7 +92,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         return 0.5F - this.world.o(blockposition);
     }
 
-    protected boolean m_() {
+    protected boolean n_() {
         BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
         if (this.world.b(EnumSkyBlock.SKY, blockposition) > this.random.nextInt(32)) {
@@ -105,25 +103,25 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
             if (this.world.R()) {
                 int j = this.world.ab();
 
-                this.world.b(10);
+                this.world.c(10);
                 i = this.world.getLightLevel(blockposition);
-                this.world.b(j);
+                this.world.c(j);
             }
 
             return i <= this.random.nextInt(8);
         }
     }
 
-    public boolean bQ() {
-        return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.m_() && super.bQ();
+    public boolean bR() {
+        return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.n_() && super.bR();
     }
 
-    protected void aW() {
-        super.aW();
+    protected void initAttributes() {
+        super.initAttributes();
         this.getAttributeMap().b(GenericAttributes.e);
     }
 
-    protected boolean aZ() {
+    protected boolean ba() {
         return true;
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class EntityPotion extends EntityProjectile {
 
-    public ItemStack item;
+    private ItemStack item;
 
     public EntityPotion(World world) {
         super(world);
@@ -54,7 +54,7 @@ public class EntityPotion extends EntityProjectile {
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             List list = Items.POTION.h(this.item);
 
             if (list != null && !list.isEmpty()) {

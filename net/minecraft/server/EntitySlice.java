@@ -1,104 +1,134 @@
 package net.minecraft.server;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.util.AbstractSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.ClassUtils.Interfaces;
 
-public class EntitySlice extends AbstractSet {
+public class EntitySlice<T> extends AbstractSet<T> {
 
-    private final Multimap a = HashMultimap.create();
-    private final Set b = Sets.newIdentityHashSet();
-    private final Class c;
+    private static final Set<Class<?>> a = Sets.newHashSet();
+    private final Map<Class<?>, List<T>> b = Maps.newHashMap();
+    private final Set<Class<?>> c = Sets.newIdentityHashSet();
+    private final Class<T> d;
+    private final List<T> e = Lists.newArrayList();
 
-    public EntitySlice(Class oclass) {
-        this.c = oclass;
-        this.b.add(oclass);
+    public EntitySlice(Class<T> oclass) {
+        this.d = oclass;
+        this.c.add(oclass);
+        this.b.put(oclass, this.e);
+        Iterator iterator = EntitySlice.a.iterator();
+
+        while (iterator.hasNext()) {
+            Class oclass1 = (Class) iterator.next();
+
+            this.a(oclass1);
+        }
+
     }
 
-    public void a(Class oclass) {
-        Iterator iterator = this.a.get(this.a(oclass, false)).iterator();
+    protected void a(Class<?> oclass) {
+        EntitySlice.a.add(oclass);
+        Iterator iterator = this.e.iterator();
 
         while (iterator.hasNext()) {
             Object object = iterator.next();
 
             if (oclass.isAssignableFrom(object.getClass())) {
-                this.a.put(oclass, object);
+                this.a(object, oclass);
             }
         }
 
-        this.b.add(oclass);
+        this.c.add(oclass);
     }
 
-    protected Class a(Class oclass, boolean flag) {
-        Iterator iterator = ClassUtils.hierarchy(oclass, Interfaces.INCLUDE).iterator();
-
-        Class oclass1;
-
-        do {
-            if (!iterator.hasNext()) {
-                throw new IllegalArgumentException("Don\'t know how to search for " + oclass);
+    protected Class<?> b(Class<?> oclass) {
+        if (this.d.isAssignableFrom(oclass)) {
+            if (!this.c.contains(oclass)) {
+                this.a(oclass);
             }
 
-            oclass1 = (Class) iterator.next();
-        } while (!this.b.contains(oclass1));
-
-        if (oclass1 == this.c && flag) {
-            this.a(oclass);
+            return oclass;
+        } else {
+            throw new IllegalArgumentException("Don\'t know how to search for " + oclass);
         }
-
-        return oclass1;
     }
 
-    public boolean add(Object object) {
-        Iterator iterator = this.b.iterator();
+    public boolean add(T t0) {
+        Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
             Class oclass = (Class) iterator.next();
 
-            if (oclass.isAssignableFrom(object.getClass())) {
-                this.a.put(oclass, object);
+            if (oclass.isAssignableFrom(t0.getClass())) {
+                this.a(t0, oclass);
             }
         }
 
         return true;
     }
 
+    private void a(T t0, Class<?> oclass) {
+        List list = (List) this.b.get(oclass);
+
+        if (list == null) {
+            this.b.put(oclass, Lists.newArrayList(new Object[] { t0}));
+        } else {
+            list.add(t0);
+        }
+
+    }
+
     public boolean remove(Object object) {
         Object object1 = object;
         boolean flag = false;
-        Iterator iterator = this.b.iterator();
+        Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
             Class oclass = (Class) iterator.next();
 
             if (oclass.isAssignableFrom(object1.getClass())) {
-                flag |= this.a.remove(oclass, object1);
+                List list = (List) this.b.get(oclass);
+
+                if (list != null && list.remove(object1)) {
+                    flag = true;
+                }
             }
         }
 
         return flag;
     }
 
-    public Iterable b(Class oclass) {
-        return new EntitySliceInnerClass1(this, oclass);
+    public boolean contains(Object object) {
+        return Iterators.contains(this.c(object.getClass()).iterator(), object);
     }
 
-    public Iterator iterator() {
-        Iterator iterator = this.a.get(this.c).iterator();
+    public <S> Iterable<S> c(final Class<S> oclass) {
+        return new Iterable() {
+            public Iterator<S> iterator() {
+                List list = (List) EntitySlice.this.b.get(EntitySlice.this.b(oclass));
 
-        return new EntitySliceInnerClass2(this, iterator);
+                if (list == null) {
+                    return Iterators.emptyIterator();
+                } else {
+                    Iterator iterator = list.iterator();
+
+                    return Iterators.filter(iterator, oclass);
+                }
+            }
+        };
+    }
+
+    public Iterator<T> iterator() {
+        return this.e.isEmpty() ? Iterators.emptyIterator() : Iterators.unmodifiableIterator(this.e.iterator());
     }
 
     public int size() {
-        return this.a.get(this.c).size();
-    }
-
-    static Multimap a(EntitySlice entityslice) {
-        return entityslice.a;
+        return this.e.size();
     }
 }

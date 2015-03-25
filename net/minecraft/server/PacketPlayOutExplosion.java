@@ -1,23 +1,24 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-public class PacketPlayOutExplosion implements Packet {
+public class PacketPlayOutExplosion implements Packet<PacketListenerPlayOut> {
 
     private double a;
     private double b;
     private double c;
     private float d;
-    private List e;
+    private List<BlockPosition> e;
     private float f;
     private float g;
     private float h;
 
     public PacketPlayOutExplosion() {}
 
-    public PacketPlayOutExplosion(double d0, double d1, double d2, float f, List list, Vec3D vec3d) {
+    public PacketPlayOutExplosion(double d0, double d1, double d2, float f, List<BlockPosition> list, Vec3D vec3d) {
         this.a = d0;
         this.b = d1;
         this.c = d2;
@@ -31,7 +32,7 @@ public class PacketPlayOutExplosion implements Packet {
 
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = (double) packetdataserializer.readFloat();
         this.b = (double) packetdataserializer.readFloat();
         this.c = (double) packetdataserializer.readFloat();
@@ -56,7 +57,7 @@ public class PacketPlayOutExplosion implements Packet {
         this.h = packetdataserializer.readFloat();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeFloat((float) this.a);
         packetdataserializer.writeFloat((float) this.b);
         packetdataserializer.writeFloat((float) this.c);

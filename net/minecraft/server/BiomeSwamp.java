@@ -17,15 +17,15 @@ public class BiomeSwamp extends BiomeBase {
         this.as.H = 0;
         this.as.C = 5;
         this.ar = 14745518;
-        this.at.add(new BiomeMeta(EntitySlime.class, 1, 1, 1));
+        this.at.add(new BiomeBase.BiomeMeta(EntitySlime.class, 1, 1, 1));
     }
 
     public WorldGenTreeAbstract a(Random random) {
         return this.aC;
     }
 
-    public EnumFlowerVarient a(Random random, BlockPosition blockposition) {
-        return EnumFlowerVarient.BLUE_ORCHID;
+    public BlockFlowers.EnumFlowerVarient a(Random random, BlockPosition blockposition) {
+        return BlockFlowers.EnumFlowerVarient.BLUE_ORCHID;
     }
 
     public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {

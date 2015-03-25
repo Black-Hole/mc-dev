@@ -1,12 +1,14 @@
 package net.minecraft.server;
 
-public class PacketPlayInArmAnimation implements Packet {
+import java.io.IOException;
+
+public class PacketPlayInArmAnimation implements Packet<PacketListenerPlayIn> {
 
     public PacketPlayInArmAnimation() {}
 
-    public void a(PacketDataSerializer packetdataserializer) {}
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {}
 
-    public void b(PacketDataSerializer packetdataserializer) {}
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {}
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
         packetlistenerplayin.a(this);

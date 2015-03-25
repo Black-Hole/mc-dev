@@ -7,7 +7,7 @@ public class BlockMycel extends Block {
     public static final BlockStateBoolean SNOWY = BlockStateBoolean.of("snowy");
 
     protected BlockMycel() {
-        super(Material.GRASS);
+        super(Material.GRASS, MaterialMapColor.z);
         this.j(this.blockStateList.getBlockData().set(BlockMycel.SNOWY, Boolean.valueOf(false)));
         this.a(true);
         this.a(CreativeModeTab.b);
@@ -20,9 +20,9 @@ public class BlockMycel extends Block {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (!world.isStatic) {
-            if (world.getLightLevel(blockposition.up()) < 4 && world.getType(blockposition.up()).getBlock().n() > 2) {
-                world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, EnumDirtVariant.DIRT));
+        if (!world.isClientSide) {
+            if (world.getLightLevel(blockposition.up()) < 4 && world.getType(blockposition.up()).getBlock().p() > 2) {
+                world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT));
             } else {
                 if (world.getLightLevel(blockposition.up()) >= 9) {
                     for (int i = 0; i < 4; ++i) {
@@ -30,7 +30,7 @@ public class BlockMycel extends Block {
                         IBlockData iblockdata1 = world.getType(blockposition1);
                         Block block = world.getType(blockposition1.up()).getBlock();
 
-                        if (iblockdata1.getBlock() == Blocks.DIRT && iblockdata1.get(BlockDirt.VARIANT) == EnumDirtVariant.DIRT && world.getLightLevel(blockposition1.up()) >= 4 && block.n() <= 2) {
+                        if (iblockdata1.getBlock() == Blocks.DIRT && iblockdata1.get(BlockDirt.VARIANT) == BlockDirt.EnumDirtVariant.DIRT && world.getLightLevel(blockposition1.up()) >= 4 && block.p() <= 2) {
                             world.setTypeUpdate(blockposition1, this.getBlockData());
                         }
                     }
@@ -41,7 +41,7 @@ public class BlockMycel extends Block {
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, EnumDirtVariant.DIRT), random, i);
+        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
     }
 
     public int toLegacyData(IBlockData iblockdata) {

@@ -5,15 +5,19 @@ import java.util.Random;
 
 public class BlockDoor extends Block {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
     public static final BlockStateBoolean OPEN = BlockStateBoolean.of("open");
-    public static final BlockStateEnum HINGE = BlockStateEnum.of("hinge", EnumDoorHinge.class);
+    public static final BlockStateEnum<BlockDoor.EnumDoorHinge> HINGE = BlockStateEnum.of("hinge", BlockDoor.EnumDoorHinge.class);
     public static final BlockStateBoolean POWERED = BlockStateBoolean.of("powered");
-    public static final BlockStateEnum HALF = BlockStateEnum.of("half", EnumDoorHalf.class);
+    public static final BlockStateEnum<BlockDoor.EnumDoorHalf> HALF = BlockStateEnum.of("half", BlockDoor.EnumDoorHalf.class);
 
     protected BlockDoor(Material material) {
         super(material);
-        this.j(this.blockStateList.getBlockData().set(BlockDoor.FACING, EnumDirection.NORTH).set(BlockDoor.OPEN, Boolean.valueOf(false)).set(BlockDoor.HINGE, EnumDoorHinge.LEFT).set(BlockDoor.POWERED, Boolean.valueOf(false)).set(BlockDoor.HALF, EnumDoorHalf.LOWER));
+        this.j(this.blockStateList.getBlockData().set(BlockDoor.FACING, EnumDirection.NORTH).set(BlockDoor.OPEN, Boolean.valueOf(false)).set(BlockDoor.HINGE, BlockDoor.EnumDoorHinge.LEFT).set(BlockDoor.POWERED, Boolean.valueOf(false)).set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER));
+    }
+
+    public String getName() {
+        return LocaleI18n.get((this.a() + ".name").replaceAll("tile", "item"));
     }
 
     public boolean c() {
@@ -87,7 +91,7 @@ public class BlockDoor extends Block {
         if (this.material == Material.ORE) {
             return true;
         } else {
-            BlockPosition blockposition1 = iblockdata.get(BlockDoor.HALF) == EnumDoorHalf.LOWER ? blockposition : blockposition.down();
+            BlockPosition blockposition1 = iblockdata.get(BlockDoor.HALF) == BlockDoor.EnumDoorHalf.LOWER ? blockposition : blockposition.down();
             IBlockData iblockdata1 = blockposition.equals(blockposition1) ? iblockdata : world.getType(blockposition1);
 
             if (iblockdata1.getBlock() != this) {
@@ -106,7 +110,7 @@ public class BlockDoor extends Block {
         IBlockData iblockdata = world.getType(blockposition);
 
         if (iblockdata.getBlock() == this) {
-            BlockPosition blockposition1 = iblockdata.get(BlockDoor.HALF) == EnumDoorHalf.LOWER ? blockposition : blockposition.down();
+            BlockPosition blockposition1 = iblockdata.get(BlockDoor.HALF) == BlockDoor.EnumDoorHalf.LOWER ? blockposition : blockposition.down();
             IBlockData iblockdata1 = blockposition == blockposition1 ? iblockdata : world.getType(blockposition1);
 
             if (iblockdata1.getBlock() == this && ((Boolean) iblockdata1.get(BlockDoor.OPEN)).booleanValue() != flag) {
@@ -119,7 +123,7 @@ public class BlockDoor extends Block {
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (iblockdata.get(BlockDoor.HALF) == EnumDoorHalf.UPPER) {
+        if (iblockdata.get(BlockDoor.HALF) == BlockDoor.EnumDoorHalf.UPPER) {
             BlockPosition blockposition1 = blockposition.down();
             IBlockData iblockdata1 = world.getType(blockposition1);
 
@@ -147,7 +151,7 @@ public class BlockDoor extends Block {
             }
 
             if (flag) {
-                if (!world.isStatic) {
+                if (!world.isClientSide) {
                     this.b(world, blockposition, iblockdata, 0);
                 }
             } else {
@@ -167,7 +171,7 @@ public class BlockDoor extends Block {
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return iblockdata.get(BlockDoor.HALF) == EnumDoorHalf.UPPER ? null : this.j();
+        return iblockdata.get(BlockDoor.HALF) == BlockDoor.EnumDoorHalf.UPPER ? null : this.l();
     }
 
     public MovingObjectPosition a(World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
@@ -179,7 +183,7 @@ public class BlockDoor extends Block {
         return blockposition.getY() >= 255 ? false : World.a((IBlockAccess) world, blockposition.down()) && super.canPlace(world, blockposition) && super.canPlace(world, blockposition.up());
     }
 
-    public int i() {
+    public int k() {
         return 1;
     }
 
@@ -199,14 +203,14 @@ public class BlockDoor extends Block {
         return b(k) | (flag ? 8 : 0) | (flag1 ? 16 : 0) | (flag2 ? 32 : 0);
     }
 
-    private Item j() {
+    private Item l() {
         return this == Blocks.IRON_DOOR ? Items.IRON_DOOR : (this == Blocks.SPRUCE_DOOR ? Items.SPRUCE_DOOR : (this == Blocks.BIRCH_DOOR ? Items.BIRCH_DOOR : (this == Blocks.JUNGLE_DOOR ? Items.JUNGLE_DOOR : (this == Blocks.ACACIA_DOOR ? Items.ACACIA_DOOR : (this == Blocks.DARK_OAK_DOOR ? Items.DARK_OAK_DOOR : Items.WOODEN_DOOR)))));
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
         BlockPosition blockposition1 = blockposition.down();
 
-        if (entityhuman.abilities.canInstantlyBuild && iblockdata.get(BlockDoor.HALF) == EnumDoorHalf.UPPER && world.getType(blockposition1).getBlock() == this) {
+        if (entityhuman.abilities.canInstantlyBuild && iblockdata.get(BlockDoor.HALF) == BlockDoor.EnumDoorHalf.UPPER && world.getType(blockposition1).getBlock() == this) {
             world.setAir(blockposition1);
         }
 
@@ -215,7 +219,7 @@ public class BlockDoor extends Block {
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         IBlockData iblockdata1;
 
-        if (iblockdata.get(BlockDoor.HALF) == EnumDoorHalf.LOWER) {
+        if (iblockdata.get(BlockDoor.HALF) == BlockDoor.EnumDoorHalf.LOWER) {
             iblockdata1 = iblockaccess.getType(blockposition.up());
             if (iblockdata1.getBlock() == this) {
                 iblockdata = iblockdata.set(BlockDoor.HINGE, iblockdata1.get(BlockDoor.HINGE)).set(BlockDoor.POWERED, iblockdata1.get(BlockDoor.POWERED));
@@ -231,16 +235,16 @@ public class BlockDoor extends Block {
     }
 
     public IBlockData fromLegacyData(int i) {
-        return (i & 8) > 0 ? this.getBlockData().set(BlockDoor.HALF, EnumDoorHalf.UPPER).set(BlockDoor.HINGE, (i & 1) > 0 ? EnumDoorHinge.RIGHT : EnumDoorHinge.LEFT).set(BlockDoor.POWERED, Boolean.valueOf((i & 2) > 0)) : this.getBlockData().set(BlockDoor.HALF, EnumDoorHalf.LOWER).set(BlockDoor.FACING, EnumDirection.fromType2(i & 3).f()).set(BlockDoor.OPEN, Boolean.valueOf((i & 4) > 0));
+        return (i & 8) > 0 ? this.getBlockData().set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER).set(BlockDoor.HINGE, (i & 1) > 0 ? BlockDoor.EnumDoorHinge.RIGHT : BlockDoor.EnumDoorHinge.LEFT).set(BlockDoor.POWERED, Boolean.valueOf((i & 2) > 0)) : this.getBlockData().set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER).set(BlockDoor.FACING, EnumDirection.fromType2(i & 3).f()).set(BlockDoor.OPEN, Boolean.valueOf((i & 4) > 0));
     }
 
     public int toLegacyData(IBlockData iblockdata) {
         byte b0 = 0;
         int i;
 
-        if (iblockdata.get(BlockDoor.HALF) == EnumDoorHalf.UPPER) {
+        if (iblockdata.get(BlockDoor.HALF) == BlockDoor.EnumDoorHalf.UPPER) {
             i = b0 | 8;
-            if (iblockdata.get(BlockDoor.HINGE) == EnumDoorHinge.RIGHT) {
+            if (iblockdata.get(BlockDoor.HINGE) == BlockDoor.EnumDoorHinge.RIGHT) {
                 i |= 1;
             }
 
@@ -287,5 +291,35 @@ public class BlockDoor extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockDoor.HALF, BlockDoor.FACING, BlockDoor.OPEN, BlockDoor.HINGE, BlockDoor.POWERED});
+    }
+
+    public static enum EnumDoorHinge implements INamable {
+
+        LEFT, RIGHT;
+
+        private EnumDoorHinge() {}
+
+        public String toString() {
+            return this.getName();
+        }
+
+        public String getName() {
+            return this == BlockDoor.EnumDoorHinge.LEFT ? "left" : "right";
+        }
+    }
+
+    public static enum EnumDoorHalf implements INamable {
+
+        UPPER, LOWER;
+
+        private EnumDoorHalf() {}
+
+        public String toString() {
+            return this.getName();
+        }
+
+        public String getName() {
+            return this == BlockDoor.EnumDoorHalf.UPPER ? "upper" : "lower";
+        }
     }
 }

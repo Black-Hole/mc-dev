@@ -22,7 +22,7 @@ public class CommandBanList extends CommandAbstract {
         return "commands.banlist.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length >= 1 && astring[0].equalsIgnoreCase("ips")) {
             icommandlistener.sendMessage(new ChatMessage("commands.banlist.ips", new Object[] { Integer.valueOf(MinecraftServer.getServer().getPlayerList().getIPBans().getEntries().length)}));
             icommandlistener.sendMessage(new ChatComponentText(a((Object[]) MinecraftServer.getServer().getPlayerList().getIPBans().getEntries())));
@@ -33,7 +33,7 @@ public class CommandBanList extends CommandAbstract {
 
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, new String[] { "players", "ips"}) : null;
     }
 }

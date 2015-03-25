@@ -17,17 +17,13 @@ public class ItemBlock extends Item {
         IBlockData iblockdata = world.getType(blockposition);
         Block block = iblockdata.getBlock();
 
-        if (block == Blocks.SNOW_LAYER && ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() < 1) {
-            enumdirection = EnumDirection.UP;
-        } else if (!block.f(world, blockposition)) {
+        if (!block.a(world, blockposition)) {
             blockposition = blockposition.shift(enumdirection);
         }
 
         if (itemstack.count == 0) {
             return false;
         } else if (!entityhuman.a(blockposition, enumdirection, itemstack)) {
-            return false;
-        } else if (blockposition.getY() == 255 && this.a.getMaterial().isBuildable()) {
             return false;
         } else if (world.a(this.a, blockposition, false, enumdirection, (Entity) null, itemstack)) {
             int i = this.filterData(itemstack.getData());

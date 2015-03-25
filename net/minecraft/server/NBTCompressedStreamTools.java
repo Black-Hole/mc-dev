@@ -14,7 +14,7 @@ import java.util.zip.GZIPOutputStream;
 
 public class NBTCompressedStreamTools {
 
-    public static NBTTagCompound a(InputStream inputstream) {
+    public static NBTTagCompound a(InputStream inputstream) throws IOException {
         DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new GZIPInputStream(inputstream)));
 
         NBTTagCompound nbttagcompound;
@@ -28,7 +28,7 @@ public class NBTCompressedStreamTools {
         return nbttagcompound;
     }
 
-    public static void a(NBTTagCompound nbttagcompound, OutputStream outputstream) {
+    public static void a(NBTTagCompound nbttagcompound, OutputStream outputstream) throws IOException {
         DataOutputStream dataoutputstream = new DataOutputStream(new BufferedOutputStream(new GZIPOutputStream(outputstream)));
 
         try {
@@ -39,11 +39,11 @@ public class NBTCompressedStreamTools {
 
     }
 
-    public static NBTTagCompound a(DataInputStream datainputstream) {
+    public static NBTTagCompound a(DataInputStream datainputstream) throws IOException {
         return a((DataInput) datainputstream, NBTReadLimiter.a);
     }
 
-    public static NBTTagCompound a(DataInput datainput, NBTReadLimiter nbtreadlimiter) {
+    public static NBTTagCompound a(DataInput datainput, NBTReadLimiter nbtreadlimiter) throws IOException {
         NBTBase nbtbase = a(datainput, 0, nbtreadlimiter);
 
         if (nbtbase instanceof NBTTagCompound) {
@@ -53,11 +53,11 @@ public class NBTCompressedStreamTools {
         }
     }
 
-    public static void a(NBTTagCompound nbttagcompound, DataOutput dataoutput) {
+    public static void a(NBTTagCompound nbttagcompound, DataOutput dataoutput) throws IOException {
         a((NBTBase) nbttagcompound, dataoutput);
     }
 
-    private static void a(NBTBase nbtbase, DataOutput dataoutput) {
+    private static void a(NBTBase nbtbase, DataOutput dataoutput) throws IOException {
         dataoutput.writeByte(nbtbase.getTypeId());
         if (nbtbase.getTypeId() != 0) {
             dataoutput.writeUTF("");
@@ -65,7 +65,7 @@ public class NBTCompressedStreamTools {
         }
     }
 
-    private static NBTBase a(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) {
+    private static NBTBase a(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
         byte b0 = datainput.readByte();
 
         if (b0 == 0) {

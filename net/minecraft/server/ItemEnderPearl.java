@@ -13,7 +13,7 @@ public class ItemEnderPearl extends Item {
         } else {
             --itemstack.count;
             world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (ItemEnderPearl.g.nextFloat() * 0.4F + 0.8F));
-            if (!world.isStatic) {
+            if (!world.isClientSide) {
                 world.addEntity(new EntityEnderPearl(world, entityhuman));
             }
 

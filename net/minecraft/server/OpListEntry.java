@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import java.util.UUID;
 
-public class OpListEntry extends JsonListEntry {
+public class OpListEntry extends JsonListEntry<GameProfile> {
 
     private final int a;
 

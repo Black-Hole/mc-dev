@@ -40,7 +40,7 @@ public class BlockStationary extends BlockFluids {
                         Block block = world.getType(blockposition1).getBlock();
 
                         if (block.material == Material.AIR) {
-                            if (this.e(world, blockposition1)) {
+                            if (this.f(world, blockposition1)) {
                                 world.setTypeUpdate(blockposition1, Blocks.FIRE.getBlockData());
                                 return;
                             }
@@ -62,7 +62,7 @@ public class BlockStationary extends BlockFluids {
         }
     }
 
-    protected boolean e(World world, BlockPosition blockposition) {
+    protected boolean f(World world, BlockPosition blockposition) {
         EnumDirection[] aenumdirection = EnumDirection.values();
         int i = aenumdirection.length;
 

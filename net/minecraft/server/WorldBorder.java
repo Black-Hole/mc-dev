@@ -6,7 +6,7 @@ import java.util.List;
 
 public class WorldBorder {
 
-    private final List a = Lists.newArrayList();
+    private final List<IWorldBorderListener> a = Lists.newArrayList();
     private double b = 0.0D;
     private double c = 0.0D;
     private double d = 6.0E7D;
@@ -60,7 +60,7 @@ public class WorldBorder {
     }
 
     public double b() {
-        double d0 = this.f() - this.h() / 2.0D;
+        double d0 = this.getCenterX() - this.getSize() / 2.0D;
 
         if (d0 < (double) (-this.h)) {
             d0 = (double) (-this.h);
@@ -70,7 +70,7 @@ public class WorldBorder {
     }
 
     public double c() {
-        double d0 = this.g() - this.h() / 2.0D;
+        double d0 = this.getCenterZ() - this.getSize() / 2.0D;
 
         if (d0 < (double) (-this.h)) {
             d0 = (double) (-this.h);
@@ -80,7 +80,7 @@ public class WorldBorder {
     }
 
     public double d() {
-        double d0 = this.f() + this.h() / 2.0D;
+        double d0 = this.getCenterX() + this.getSize() / 2.0D;
 
         if (d0 > (double) this.h) {
             d0 = (double) this.h;
@@ -90,7 +90,7 @@ public class WorldBorder {
     }
 
     public double e() {
-        double d0 = this.g() + this.h() / 2.0D;
+        double d0 = this.getCenterZ() + this.getSize() / 2.0D;
 
         if (d0 > (double) this.h) {
             d0 = (double) this.h;
@@ -99,15 +99,15 @@ public class WorldBorder {
         return d0;
     }
 
-    public double f() {
+    public double getCenterX() {
         return this.b;
     }
 
-    public double g() {
+    public double getCenterZ() {
         return this.c;
     }
 
-    public void c(double d0, double d1) {
+    public void setCenter(double d0, double d1) {
         this.b = d0;
         this.c = d1;
         Iterator iterator = this.k().iterator();
@@ -120,7 +120,7 @@ public class WorldBorder {
 
     }
 
-    public double h() {
+    public double getSize() {
         if (this.getState() != EnumWorldBorderState.STATIONARY) {
             double d0 = (double) ((float) (System.currentTimeMillis() - this.g) / (float) (this.f - this.g));
 
@@ -128,7 +128,7 @@ public class WorldBorder {
                 return this.d + (this.e - this.d) * d0;
             }
 
-            this.a(this.e);
+            this.setSize(this.e);
         }
 
         return this.d;
@@ -142,7 +142,7 @@ public class WorldBorder {
         return this.e;
     }
 
-    public void a(double d0) {
+    public void setSize(double d0) {
         this.d = d0;
         this.e = d0;
         this.f = System.currentTimeMillis();
@@ -157,7 +157,7 @@ public class WorldBorder {
 
     }
 
-    public void a(double d0, double d1, long i) {
+    public void transitionSizeBetween(double d0, double d1, long i) {
         this.d = d0;
         this.e = d1;
         this.g = System.currentTimeMillis();
@@ -172,7 +172,7 @@ public class WorldBorder {
 
     }
 
-    protected List k() {
+    protected List<IWorldBorderListener> k() {
         return Lists.newArrayList(this.a);
     }
 
@@ -188,11 +188,11 @@ public class WorldBorder {
         return this.h;
     }
 
-    public double m() {
+    public double getDamageBuffer() {
         return this.j;
     }
 
-    public void b(double d0) {
+    public void setDamageBuffer(double d0) {
         this.j = d0;
         Iterator iterator = this.k().iterator();
 
@@ -204,11 +204,11 @@ public class WorldBorder {
 
     }
 
-    public double n() {
+    public double getDamageAmount() {
         return this.i;
     }
 
-    public void c(double d0) {
+    public void setDamageAmount(double d0) {
         this.i = d0;
         Iterator iterator = this.k().iterator();
 
@@ -220,11 +220,11 @@ public class WorldBorder {
 
     }
 
-    public int p() {
+    public int getWarningTime() {
         return this.k;
     }
 
-    public void b(int i) {
+    public void setWarningTime(int i) {
         this.k = i;
         Iterator iterator = this.k().iterator();
 
@@ -236,11 +236,11 @@ public class WorldBorder {
 
     }
 
-    public int q() {
+    public int getWarningDistance() {
         return this.l;
     }
 
-    public void c(int i) {
+    public void setWarningDistance(int i) {
         this.l = i;
         Iterator iterator = this.k().iterator();
 

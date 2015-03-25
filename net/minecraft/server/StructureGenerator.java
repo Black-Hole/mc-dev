@@ -10,13 +10,13 @@ import java.util.concurrent.Callable;
 public abstract class StructureGenerator extends WorldGenBase {
 
     private PersistentStructure d;
-    protected Map e = Maps.newHashMap();
+    protected Map<Long, StructureStart> e = Maps.newHashMap();
 
     public StructureGenerator() {}
 
     public abstract String a();
 
-    protected final void a(World world, int i, int j, int k, int l, ChunkSnapshot chunksnapshot) {
+    protected final void a(World world, final int i, final int j, int k, int l, ChunkSnapshot chunksnapshot) {
         this.a(world);
         if (!this.e.containsKey(Long.valueOf(ChunkCoordIntPair.a(i, j)))) {
             this.b.nextInt();
@@ -33,10 +33,34 @@ public abstract class StructureGenerator extends WorldGenBase {
                 CrashReport crashreport = CrashReport.a(throwable, "Exception preparing structure feature");
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Feature being prepared");
 
-                crashreportsystemdetails.a("Is feature chunk", (Callable) (new CrashReportIsFeatureChunk(this, i, j)));
+                crashreportsystemdetails.a("Is feature chunk", new Callable() {
+                    public String a() throws Exception {
+                        return StructureGenerator.this.a(i, j) ? "True" : "False";
+                    }
+
+                    public Object call() throws Exception {
+                        return this.a();
+                    }
+                });
                 crashreportsystemdetails.a("Chunk location", (Object) String.format("%d,%d", new Object[] { Integer.valueOf(i), Integer.valueOf(j)}));
-                crashreportsystemdetails.a("Chunk pos hash", (Callable) (new CrashReportChunkPosHash(this, i, j)));
-                crashreportsystemdetails.a("Structure type", (Callable) (new CrashReportStructureType(this)));
+                crashreportsystemdetails.a("Chunk pos hash", new Callable() {
+                    public String a() throws Exception {
+                        return String.valueOf(ChunkCoordIntPair.a(i, j));
+                    }
+
+                    public Object call() throws Exception {
+                        return this.a();
+                    }
+                });
+                crashreportsystemdetails.a("Structure type", new Callable() {
+                    public String a() throws Exception {
+                        return StructureGenerator.this.getClass().getCanonicalName();
+                    }
+
+                    public Object call() throws Exception {
+                        return this.a();
+                    }
+                });
                 throw new ReportedException(crashreport);
             }
         }
@@ -143,7 +167,7 @@ public abstract class StructureGenerator extends WorldGenBase {
         if (blockposition1 != null) {
             return blockposition1;
         } else {
-            List list = this.y_();
+            List list = this.z_();
 
             if (list != null) {
                 BlockPosition blockposition3 = null;
@@ -165,7 +189,7 @@ public abstract class StructureGenerator extends WorldGenBase {
         }
     }
 
-    protected List y_() {
+    protected List<BlockPosition> z_() {
         return null;
     }
 

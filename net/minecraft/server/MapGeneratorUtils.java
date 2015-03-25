@@ -7,11 +7,11 @@ import java.util.NoSuchElementException;
 
 public class MapGeneratorUtils {
 
-    public static Map b(Iterable iterable, Iterable iterable1) {
+    public static <K, V> Map<K, V> b(Iterable<K> iterable, Iterable<V> iterable1) {
         return a(iterable, iterable1, Maps.newLinkedHashMap());
     }
 
-    public static Map a(Iterable iterable, Iterable iterable1, Map map) {
+    public static <K, V> Map<K, V> a(Iterable<K> iterable, Iterable<V> iterable1, Map<K, V> map) {
         Iterator iterator = iterable1.iterator();
         Iterator iterator1 = iterable.iterator();
 

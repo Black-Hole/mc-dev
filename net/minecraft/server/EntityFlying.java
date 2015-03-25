@@ -44,7 +44,7 @@ public abstract class EntityFlying extends EntityInsentient {
             this.motZ *= (double) f2;
         }
 
-        this.ay = this.az;
+        this.aA = this.aB;
         double d0 = this.locX - this.lastX;
         double d1 = this.locZ - this.lastZ;
         float f4 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;
@@ -53,11 +53,11 @@ public abstract class EntityFlying extends EntityInsentient {
             f4 = 1.0F;
         }
 
-        this.az += (f4 - this.az) * 0.4F;
-        this.aA += this.az;
+        this.aB += (f4 - this.aB) * 0.4F;
+        this.aC += this.aB;
     }
 
-    public boolean j_() {
+    public boolean k_() {
         return false;
     }
 }

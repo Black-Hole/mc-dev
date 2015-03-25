@@ -7,12 +7,12 @@ import org.apache.commons.lang3.Validate;
 public abstract class EntityHanging extends Entity {
 
     private int c;
-    public BlockPosition blockPosition;
+    protected BlockPosition blockPosition;
     public EnumDirection direction;
 
     public EntityHanging(World world) {
         super(world);
-        this.a(0.5F, 0.5F);
+        this.setSize(0.5F, 0.5F);
     }
 
     public EntityHanging(World world, BlockPosition blockposition) {
@@ -22,15 +22,15 @@ public abstract class EntityHanging extends Entity {
 
     protected void h() {}
 
-    public void setDirection(EnumDirection enumdirection) {
+    protected void setDirection(EnumDirection enumdirection) {
         Validate.notNull(enumdirection);
         Validate.isTrue(enumdirection.k().c());
         this.direction = enumdirection;
         this.lastYaw = this.yaw = (float) (this.direction.b() * 90);
-        this.o();
+        this.updateBoundingBox();
     }
 
-    private void o() {
+    private void updateBoundingBox() {
         if (this.direction != null) {
             double d0 = (double) this.blockPosition.getX() + 0.5D;
             double d1 = (double) this.blockPosition.getY() + 0.5D;
@@ -53,7 +53,7 @@ public abstract class EntityHanging extends Entity {
             double d7 = (double) this.m();
             double d8 = (double) this.l();
 
-            if (this.direction.k() == EnumAxis.Z) {
+            if (this.direction.k() == EnumDirection.EnumAxis.Z) {
                 d8 = 1.0D;
             } else {
                 d6 = 1.0D;
@@ -70,11 +70,11 @@ public abstract class EntityHanging extends Entity {
         return i % 32 == 0 ? 0.5D : 0.0D;
     }
 
-    public void s_() {
+    public void t_() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
-        if (this.c++ == 100 && !this.world.isStatic) {
+        if (this.c++ == 100 && !this.world.isClientSide) {
             this.c = 0;
             if (!this.dead && !this.survives()) {
                 this.die();
@@ -137,7 +137,7 @@ public abstract class EntityHanging extends Entity {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            if (!this.dead && !this.world.isStatic) {
+            if (!this.dead && !this.world.isClientSide) {
                 this.die();
                 this.ac();
                 this.b(damagesource.getEntity());
@@ -148,7 +148,7 @@ public abstract class EntityHanging extends Entity {
     }
 
     public void move(double d0, double d1, double d2) {
-        if (!this.world.isStatic && !this.dead && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
+        if (!this.world.isClientSide && !this.dead && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
             this.die();
             this.b((Entity) null);
         }
@@ -156,7 +156,7 @@ public abstract class EntityHanging extends Entity {
     }
 
     public void g(double d0, double d1, double d2) {
-        if (!this.world.isStatic && !this.dead && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
+        if (!this.world.isClientSide && !this.dead && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
             this.die();
             this.b((Entity) null);
         }
@@ -204,7 +204,7 @@ public abstract class EntityHanging extends Entity {
 
         this.blockPosition = new BlockPosition(d0, d1, d2);
         if (!this.blockPosition.equals(blockposition)) {
-            this.o();
+            this.updateBoundingBox();
             this.ai = true;
         }
 

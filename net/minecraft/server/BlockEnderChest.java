@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class BlockEnderChest extends BlockContainer {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
 
     protected BlockEnderChest() {
         super(Material.STONE);
@@ -34,7 +34,7 @@ public class BlockEnderChest extends BlockContainer {
         return 8;
     }
 
-    protected boolean G() {
+    protected boolean I() {
         return true;
     }
 
@@ -53,11 +53,12 @@ public class BlockEnderChest extends BlockContainer {
         if (inventoryenderchest != null && tileentity instanceof TileEntityEnderChest) {
             if (world.getType(blockposition.up()).getBlock().isOccluding()) {
                 return true;
-            } else if (world.isStatic) {
+            } else if (world.isClientSide) {
                 return true;
             } else {
                 inventoryenderchest.a((TileEntityEnderChest) tileentity);
                 entityhuman.openContainer(inventoryenderchest);
+                entityhuman.b(StatisticList.V);
                 return true;
             }
         } else {
@@ -72,7 +73,7 @@ public class BlockEnderChest extends BlockContainer {
     public IBlockData fromLegacyData(int i) {
         EnumDirection enumdirection = EnumDirection.fromType1(i);
 
-        if (enumdirection.k() == EnumAxis.Y) {
+        if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
             enumdirection = EnumDirection.NORTH;
         }
 

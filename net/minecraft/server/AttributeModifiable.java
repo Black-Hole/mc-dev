@@ -13,9 +13,9 @@ public class AttributeModifiable implements AttributeInstance {
 
     private final AttributeMapBase a;
     private final IAttribute b;
-    private final Map c = Maps.newHashMap();
-    private final Map d = Maps.newHashMap();
-    private final Map e = Maps.newHashMap();
+    private final Map<Integer, Set<AttributeModifier>> c = Maps.newHashMap();
+    private final Map<String, Set<AttributeModifier>> d = Maps.newHashMap();
+    private final Map<UUID, AttributeModifier> e = Maps.newHashMap();
     private double f;
     private boolean g = true;
     private double h;
@@ -46,11 +46,11 @@ public class AttributeModifiable implements AttributeInstance {
         }
     }
 
-    public Collection a(int i) {
+    public Collection<AttributeModifier> a(int i) {
         return (Collection) this.c.get(Integer.valueOf(i));
     }
 
-    public Collection c() {
+    public Collection<AttributeModifier> c() {
         HashSet hashset = Sets.newHashSet();
 
         for (int i = 0; i < 3; ++i) {
@@ -145,7 +145,7 @@ public class AttributeModifiable implements AttributeInstance {
         return this.b.a(d1);
     }
 
-    private Collection b(int i) {
+    private Collection<AttributeModifier> b(int i) {
         HashSet hashset = Sets.newHashSet(this.a(i));
 
         for (IAttribute iattribute = this.b.d(); iattribute != null; iattribute = iattribute.d()) {

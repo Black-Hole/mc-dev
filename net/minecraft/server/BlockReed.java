@@ -48,7 +48,7 @@ public class BlockReed extends Block {
         } else if (block != Blocks.GRASS && block != Blocks.DIRT && block != Blocks.SAND) {
             return false;
         } else {
-            Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+            Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
             EnumDirection enumdirection;
 
@@ -69,7 +69,7 @@ public class BlockReed extends Block {
     }
 
     protected final boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (this.d(world, blockposition)) {
+        if (this.e(world, blockposition)) {
             return true;
         } else {
             this.b(world, blockposition, iblockdata, 0);
@@ -78,7 +78,7 @@ public class BlockReed extends Block {
         }
     }
 
-    public boolean d(World world, BlockPosition blockposition) {
+    public boolean e(World world, BlockPosition blockposition) {
         return this.canPlace(world, blockposition);
     }
 

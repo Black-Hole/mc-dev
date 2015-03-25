@@ -22,10 +22,10 @@ public abstract class GenLayer {
         GenLayerTopSoil genlayertopsoil = new GenLayerTopSoil(2L, genlayericeplains);
 
         genlayerisland = new GenLayerIsland(3L, genlayertopsoil);
-        GenLayerSpecial genlayerspecial = new GenLayerSpecial(2L, genlayerisland, EnumGenLayerSpecial.COOL_WARM);
+        GenLayerSpecial genlayerspecial = new GenLayerSpecial(2L, genlayerisland, GenLayerSpecial.EnumGenLayerSpecial.COOL_WARM);
 
-        genlayerspecial = new GenLayerSpecial(2L, genlayerspecial, EnumGenLayerSpecial.HEAT_ICE);
-        genlayerspecial = new GenLayerSpecial(3L, genlayerspecial, EnumGenLayerSpecial.SPECIAL);
+        genlayerspecial = new GenLayerSpecial(2L, genlayerspecial, GenLayerSpecial.EnumGenLayerSpecial.HEAT_ICE);
+        genlayerspecial = new GenLayerSpecial(3L, genlayerspecial, GenLayerSpecial.EnumGenLayerSpecial.SPECIAL);
         genlayerzoom = new GenLayerZoom(2002L, genlayerspecial);
         genlayerzoom = new GenLayerZoom(2003L, genlayerzoom);
         genlayerisland = new GenLayerIsland(4L, genlayerzoom);
@@ -37,7 +37,7 @@ public abstract class GenLayer {
         int k = j;
 
         if (worldtype == WorldType.CUSTOMIZED && s.length() > 0) {
-            customworldsettingsfinal = CustomWorldSettings.a(s).b();
+            customworldsettingsfinal = CustomWorldSettingsFinal.CustomWorldSettings.a(s).b();
             j = customworldsettingsfinal.G;
             k = customworldsettingsfinal.H;
         }
@@ -134,8 +134,8 @@ public abstract class GenLayer {
         if (i == j) {
             return true;
         } else if (i != BiomeBase.MESA_PLATEAU_F.id && i != BiomeBase.MESA_PLATEAU.id) {
-            BiomeBase biomebase = BiomeBase.getBiome(i);
-            BiomeBase biomebase1 = BiomeBase.getBiome(j);
+            final BiomeBase biomebase = BiomeBase.getBiome(i);
+            final BiomeBase biomebase1 = BiomeBase.getBiome(j);
 
             try {
                 return biomebase != null && biomebase1 != null ? biomebase.a(biomebase1) : false;
@@ -145,8 +145,24 @@ public abstract class GenLayer {
 
                 crashreportsystemdetails.a("Biome A ID", (Object) Integer.valueOf(i));
                 crashreportsystemdetails.a("Biome B ID", (Object) Integer.valueOf(j));
-                crashreportsystemdetails.a("Biome A", (Callable) (new CrashReportGenLayer1(biomebase)));
-                crashreportsystemdetails.a("Biome B", (Callable) (new CrashReportGenLayer2(biomebase1)));
+                crashreportsystemdetails.a("Biome A", new Callable() {
+                    public String a() throws Exception {
+                        return String.valueOf(biomebase);
+                    }
+
+                    public Object call() throws Exception {
+                        return this.a();
+                    }
+                });
+                crashreportsystemdetails.a("Biome B", new Callable() {
+                    public String a() throws Exception {
+                        return String.valueOf(biomebase);
+                    }
+
+                    public Object call() throws Exception {
+                        return this.a();
+                    }
+                });
                 throw new ReportedException(crashreport);
             }
         } else {

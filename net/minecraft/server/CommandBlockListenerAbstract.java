@@ -10,7 +10,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     private int b;
     private boolean c = true;
     private IChatBaseComponent d = null;
-    public String e = "";
+    private String e = "";
     private String f = "@";
     private final CommandObjectiveExecutor g = new CommandObjectiveExecutor();
 
@@ -30,7 +30,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         nbttagcompound.setString("CustomName", this.f);
         nbttagcompound.setBoolean("TrackOutput", this.c);
         if (this.d != null && this.c) {
-            nbttagcompound.setString("LastOutput", ChatSerializer.a(this.d));
+            nbttagcompound.setString("LastOutput", IChatBaseComponent.ChatSerializer.a(this.d));
         }
 
         this.g.b(nbttagcompound);
@@ -48,7 +48,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         }
 
         if (nbttagcompound.hasKeyOfType("LastOutput", 8) && this.c) {
-            this.d = ChatSerializer.a(nbttagcompound.getString("LastOutput"));
+            this.d = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("LastOutput"));
         }
 
         this.g.a(nbttagcompound);
@@ -68,7 +68,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     }
 
     public void a(World world) {
-        if (world.isStatic) {
+        if (world.isClientSide) {
             this.b = 0;
         }
 
@@ -84,8 +84,24 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
                 CrashReport crashreport = CrashReport.a(throwable, "Executing command block");
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Command to be executed");
 
-                crashreportsystemdetails.a("Command", (Callable) (new CrashReportCommandBlockCommand(this)));
-                crashreportsystemdetails.a("Name", (Callable) (new CrashReportCommandBlockName(this)));
+                crashreportsystemdetails.a("Command", new Callable() {
+                    public String a() throws Exception {
+                        return CommandBlockListenerAbstract.this.getCommand();
+                    }
+
+                    public Object call() throws Exception {
+                        return this.a();
+                    }
+                });
+                crashreportsystemdetails.a("Name", new Callable() {
+                    public String a() throws Exception {
+                        return CommandBlockListenerAbstract.this.getName();
+                    }
+
+                    public Object call() throws Exception {
+                        return this.a();
+                    }
+                });
                 throw new ReportedException(crashreport);
             }
         } else {
@@ -107,7 +123,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     }
 
     public void sendMessage(IChatBaseComponent ichatbasecomponent) {
-        if (this.c && this.getWorld() != null && !this.getWorld().isStatic) {
+        if (this.c && this.getWorld() != null && !this.getWorld().isClientSide) {
             this.d = (new ChatComponentText("[" + CommandBlockListenerAbstract.a.format(new Date()) + "] ")).addSibling(ichatbasecomponent);
             this.h();
         }
@@ -120,8 +136,8 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         return minecraftserver == null || !minecraftserver.N() || minecraftserver.worldServer[0].getGameRules().getBoolean("commandBlockOutput");
     }
 
-    public void a(EnumCommandResult enumcommandresult, int i) {
-        this.g.a(this, enumcommandresult, i);
+    public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
+        this.g.a(this, commandobjectiveexecutor_enumcommandresult, i);
     }
 
     public abstract void h();
@@ -142,7 +158,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         if (!entityhuman.abilities.canInstantlyBuild) {
             return false;
         } else {
-            if (entityhuman.getWorld().isStatic) {
+            if (entityhuman.getWorld().isClientSide) {
                 entityhuman.a(this);
             }
 

@@ -51,14 +51,14 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
     }
 
     protected boolean c(Block block) {
-        return block.m();
+        return block.o();
     }
 
     public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (blockposition.getY() >= 0 && blockposition.getY() < 256) {
             IBlockData iblockdata1 = world.getType(blockposition.down());
 
-            return iblockdata1.getBlock() == Blocks.MYCELIUM ? true : (iblockdata1.getBlock() == Blocks.DIRT && iblockdata1.get(BlockDirt.VARIANT) == EnumDirtVariant.PODZOL ? true : world.k(blockposition) < 13 && this.c(iblockdata1.getBlock()));
+            return iblockdata1.getBlock() == Blocks.MYCELIUM ? true : (iblockdata1.getBlock() == Blocks.DIRT && iblockdata1.get(BlockDirt.VARIANT) == BlockDirt.EnumDirtVariant.PODZOL ? true : world.k(blockposition) < 13 && this.c(iblockdata1.getBlock()));
         } else {
             return false;
         }
@@ -69,9 +69,9 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
         WorldGenHugeMushroom worldgenhugemushroom = null;
 
         if (this == Blocks.BROWN_MUSHROOM) {
-            worldgenhugemushroom = new WorldGenHugeMushroom(0);
+            worldgenhugemushroom = new WorldGenHugeMushroom(Blocks.BROWN_MUSHROOM_BLOCK);
         } else if (this == Blocks.RED_MUSHROOM) {
-            worldgenhugemushroom = new WorldGenHugeMushroom(1);
+            worldgenhugemushroom = new WorldGenHugeMushroom(Blocks.RED_MUSHROOM_BLOCK);
         }
 
         if (worldgenhugemushroom != null && worldgenhugemushroom.generate(world, random, blockposition)) {

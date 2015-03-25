@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
 import java.util.Iterator;
+import java.util.Map;
 
 public abstract class EntityMinecartAbstract extends Entity implements INamableTileEntity {
 
@@ -17,11 +19,11 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
     public EntityMinecartAbstract(World world) {
         super(world);
         this.k = true;
-        this.a(0.98F, 0.7F);
+        this.setSize(0.98F, 0.7F);
     }
 
-    public static EntityMinecartAbstract a(World world, double d0, double d1, double d2, EnumMinecartType enumminecarttype) {
-        switch (SwitchHelperEntityMinecartAbstract.a[enumminecarttype.ordinal()]) {
+    public static EntityMinecartAbstract a(World world, double d0, double d1, double d2, EntityMinecartAbstract.EnumMinecartType entityminecartabstract_enumminecarttype) {
+        switch (EntityMinecartAbstract.SyntheticClass_1.a[entityminecartabstract_enumminecarttype.ordinal()]) {
         case 1:
             return new EntityMinecartChest(world, d0, d1, d2);
 
@@ -45,7 +47,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         }
     }
 
-    protected boolean r_() {
+    protected boolean s_() {
         return false;
     }
 
@@ -82,11 +84,11 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
     }
 
     public double an() {
-        return (double) this.length * 0.5D - 0.20000000298023224D;
+        return 0.0D;
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (!this.world.isStatic && !this.dead) {
+        if (!this.world.isClientSide && !this.dead) {
             if (this.isInvulnerable(damagesource)) {
                 return false;
             } else {
@@ -117,13 +119,16 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
 
     public void a(DamageSource damagesource) {
         this.die();
-        ItemStack itemstack = new ItemStack(Items.MINECART, 1);
+        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+            ItemStack itemstack = new ItemStack(Items.MINECART, 1);
 
-        if (this.b != null) {
-            itemstack.c(this.b);
+            if (this.b != null) {
+                itemstack.c(this.b);
+            }
+
+            this.a(itemstack, 0.0F);
         }
 
-        this.a(itemstack, 0.0F);
     }
 
     public boolean ad() {
@@ -134,7 +139,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         super.die();
     }
 
-    public void s_() {
+    public void t_() {
         if (this.getType() > 0) {
             this.j(this.getType() - 1);
         }
@@ -149,7 +154,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
 
         int i;
 
-        if (!this.world.isStatic && this.world instanceof WorldServer) {
+        if (!this.world.isClientSide && this.world instanceof WorldServer) {
             this.world.methodProfiler.a("portal");
             MinecraftServer minecraftserver = ((WorldServer) this.world).getMinecraftServer();
 
@@ -158,7 +163,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
                 if (minecraftserver.getAllowNether()) {
                     if (this.vehicle == null && this.al++ >= i) {
                         this.al = i;
-                        this.portalCooldown = this.ar();
+                        this.portalCooldown = this.aq();
                         byte b0;
 
                         if (this.world.worldProvider.getDimension() == -1) {
@@ -189,7 +194,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             this.world.methodProfiler.b();
         }
 
-        if (this.world.isStatic) {
+        if (this.world.isClientSide) {
             if (this.d > 0) {
                 double d0 = this.locX + (this.e - this.locX) / (double) this.d;
                 double d1 = this.locY + (this.f - this.locY) / (double) this.d;
@@ -216,7 +221,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             i = MathHelper.floor(this.locY);
             int k = MathHelper.floor(this.locZ);
 
-            if (BlockMinecartTrackAbstract.d(this.world, new BlockPosition(j, i - 1, k))) {
+            if (BlockMinecartTrackAbstract.e(this.world, new BlockPosition(j, i - 1, k))) {
                 --i;
             }
 
@@ -238,7 +243,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             double d5 = this.lastZ - this.locZ;
 
             if (d4 * d4 + d5 * d5 > 0.001D) {
-                this.yaw = (float) (Math.atan2(d5, d4) * 180.0D / 3.141592653589793D);
+                this.yaw = (float) (MathHelper.b(d5, d4) * 180.0D / 3.141592653589793D);
                 if (this.a) {
                     this.yaw += 180.0F;
                 }
@@ -315,9 +320,9 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         }
 
         double d0 = 0.0078125D;
-        EnumTrackPosition enumtrackposition = (EnumTrackPosition) iblockdata.get(blockminecarttrackabstract.l());
+        BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition = (BlockMinecartTrackAbstract.EnumTrackPosition) iblockdata.get(blockminecarttrackabstract.n());
 
-        switch (SwitchHelperEntityMinecartAbstract.b[enumtrackposition.ordinal()]) {
+        switch (EntityMinecartAbstract.SyntheticClass_1.b[blockminecarttrackabstract_enumtrackposition.ordinal()]) {
         case 1:
             this.motX -= 0.0078125D;
             ++this.locY;
@@ -338,7 +343,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             ++this.locY;
         }
 
-        int[][] aint = EntityMinecartAbstract.matrix[enumtrackposition.a()];
+        int[][] aint = EntityMinecartAbstract.matrix[blockminecarttrackabstract_enumtrackposition.a()];
         double d1 = (double) (aint[1][0] - aint[0][0]);
         double d2 = (double) (aint[1][2] - aint[0][2]);
         double d3 = Math.sqrt(d1 * d1 + d2 * d2);
@@ -363,7 +368,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         double d9;
 
         if (this.passenger instanceof EntityLiving) {
-            d6 = (double) ((EntityLiving) this.passenger).aY;
+            d6 = (double) ((EntityLiving) this.passenger).ba;
             if (d6 > 0.0D) {
                 d7 = -Math.sin((double) (this.passenger.yaw * 3.1415927F / 180.0F));
                 d8 = Math.cos((double) (this.passenger.yaw * 3.1415927F / 180.0F));
@@ -465,13 +470,13 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
 
                 this.motX += this.motX / d15 * d16;
                 this.motZ += this.motZ / d15 * d16;
-            } else if (enumtrackposition == EnumTrackPosition.EAST_WEST) {
+            } else if (blockminecarttrackabstract_enumtrackposition == BlockMinecartTrackAbstract.EnumTrackPosition.EAST_WEST) {
                 if (this.world.getType(blockposition.west()).getBlock().isOccluding()) {
                     this.motX = 0.02D;
                 } else if (this.world.getType(blockposition.east()).getBlock().isOccluding()) {
                     this.motX = -0.02D;
                 }
-            } else if (enumtrackposition == EnumTrackPosition.NORTH_SOUTH) {
+            } else if (blockminecarttrackabstract_enumtrackposition == BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH) {
                 if (this.world.getType(blockposition.north()).getBlock().isOccluding()) {
                     this.motZ = 0.02D;
                 } else if (this.world.getType(blockposition.south()).getBlock().isOccluding()) {
@@ -510,15 +515,15 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         int j = MathHelper.floor(d1);
         int k = MathHelper.floor(d2);
 
-        if (BlockMinecartTrackAbstract.d(this.world, new BlockPosition(i, j - 1, k))) {
+        if (BlockMinecartTrackAbstract.e(this.world, new BlockPosition(i, j - 1, k))) {
             --j;
         }
 
         IBlockData iblockdata = this.world.getType(new BlockPosition(i, j, k));
 
         if (BlockMinecartTrackAbstract.d(iblockdata)) {
-            EnumTrackPosition enumtrackposition = (EnumTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).l());
-            int[][] aint = EntityMinecartAbstract.matrix[enumtrackposition.a()];
+            BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition = (BlockMinecartTrackAbstract.EnumTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).n());
+            int[][] aint = EntityMinecartAbstract.matrix[blockminecarttrackabstract_enumtrackposition.a()];
             double d3 = 0.0D;
             double d4 = (double) i + 0.5D + (double) aint[0][0] * 0.5D;
             double d5 = (double) j + 0.0625D + (double) aint[0][1] * 0.5D;
@@ -568,20 +573,20 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             if (nbttagcompound.hasKeyOfType("DisplayTile", 8)) {
                 block = Block.getByName(nbttagcompound.getString("DisplayTile"));
                 if (block == null) {
-                    this.a(Blocks.AIR.getBlockData());
+                    this.setDisplayBlock(Blocks.AIR.getBlockData());
                 } else {
-                    this.a(block.fromLegacyData(i));
+                    this.setDisplayBlock(block.fromLegacyData(i));
                 }
             } else {
                 block = Block.getById(nbttagcompound.getInt("DisplayTile"));
                 if (block == null) {
-                    this.a(Blocks.AIR.getBlockData());
+                    this.setDisplayBlock(Blocks.AIR.getBlockData());
                 } else {
-                    this.a(block.fromLegacyData(i));
+                    this.setDisplayBlock(block.fromLegacyData(i));
                 }
             }
 
-            this.l(nbttagcompound.getInt("DisplayOffset"));
+            this.SetDisplayBlockOffset(nbttagcompound.getInt("DisplayOffset"));
         }
 
         if (nbttagcompound.hasKeyOfType("CustomName", 8) && nbttagcompound.getString("CustomName").length() > 0) {
@@ -593,12 +598,12 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
     protected void b(NBTTagCompound nbttagcompound) {
         if (this.x()) {
             nbttagcompound.setBoolean("CustomDisplayTile", true);
-            IBlockData iblockdata = this.t();
+            IBlockData iblockdata = this.getDisplayBlock();
             MinecraftKey minecraftkey = (MinecraftKey) Block.REGISTRY.c(iblockdata.getBlock());
 
             nbttagcompound.setString("DisplayTile", minecraftkey == null ? "" : minecraftkey.toString());
             nbttagcompound.setInt("DisplayData", iblockdata.getBlock().toLegacyData(iblockdata));
-            nbttagcompound.setInt("DisplayOffset", this.v());
+            nbttagcompound.setInt("DisplayOffset", this.getDisplayBlockOffset());
         }
 
         if (this.b != null && this.b.length() > 0) {
@@ -608,10 +613,10 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
     }
 
     public void collide(Entity entity) {
-        if (!this.world.isStatic) {
-            if (!entity.T && !this.T) {
+        if (!this.world.isClientSide) {
+            if (!entity.noclip && !this.noclip) {
                 if (entity != this.passenger) {
-                    if (entity instanceof EntityLiving && !(entity instanceof EntityHuman) && !(entity instanceof EntityIronGolem) && this.s() == EnumMinecartType.RIDEABLE && this.motX * this.motX + this.motZ * this.motZ > 0.01D && this.passenger == null && entity.vehicle == null) {
+                    if (entity instanceof EntityLiving && !(entity instanceof EntityHuman) && !(entity instanceof EntityIronGolem) && this.s() == EntityMinecartAbstract.EnumMinecartType.RIDEABLE && this.motX * this.motX + this.motZ * this.motZ > 0.01D && this.passenger == null && entity.vehicle == null) {
                         entity.mount(this);
                     }
 
@@ -651,13 +656,13 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
                             double d7 = entity.motX + this.motX;
                             double d8 = entity.motZ + this.motZ;
 
-                            if (((EntityMinecartAbstract) entity).s() == EnumMinecartType.FURNACE && this.s() != EnumMinecartType.FURNACE) {
+                            if (((EntityMinecartAbstract) entity).s() == EntityMinecartAbstract.EnumMinecartType.FURNACE && this.s() != EntityMinecartAbstract.EnumMinecartType.FURNACE) {
                                 this.motX *= 0.20000000298023224D;
                                 this.motZ *= 0.20000000298023224D;
                                 this.g(entity.motX - d0, 0.0D, entity.motZ - d1);
                                 entity.motX *= 0.949999988079071D;
                                 entity.motZ *= 0.949999988079071D;
-                            } else if (((EntityMinecartAbstract) entity).s() != EnumMinecartType.FURNACE && this.s() == EnumMinecartType.FURNACE) {
+                            } else if (((EntityMinecartAbstract) entity).s() != EntityMinecartAbstract.EnumMinecartType.FURNACE && this.s() == EntityMinecartAbstract.EnumMinecartType.FURNACE) {
                                 entity.motX *= 0.20000000298023224D;
                                 entity.motZ *= 0.20000000298023224D;
                                 entity.g(this.motX + d0, 0.0D, this.motZ + d1);
@@ -708,9 +713,9 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         return this.datawatcher.getInt(18);
     }
 
-    public abstract EnumMinecartType s();
+    public abstract EntityMinecartAbstract.EnumMinecartType s();
 
-    public IBlockData t() {
+    public IBlockData getDisplayBlock() {
         return !this.x() ? this.u() : Block.getByCombinedId(this.getDataWatcher().getInt(20));
     }
 
@@ -718,7 +723,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         return Blocks.AIR.getBlockData();
     }
 
-    public int v() {
+    public int getDisplayBlockOffset() {
         return !this.x() ? this.w() : this.getDataWatcher().getInt(21);
     }
 
@@ -726,12 +731,12 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         return 6;
     }
 
-    public void a(IBlockData iblockdata) {
+    public void setDisplayBlock(IBlockData iblockdata) {
         this.getDataWatcher().watch(20, Integer.valueOf(Block.getCombinedId(iblockdata)));
         this.a(true);
     }
 
-    public void l(int i) {
+    public void SetDisplayBlockOffset(int i) {
         this.getDataWatcher().watch(21, Integer.valueOf(i));
         this.a(true);
     }
@@ -764,15 +769,126 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         if (this.hasCustomName()) {
             ChatComponentText chatcomponenttext = new ChatComponentText(this.b);
 
-            chatcomponenttext.getChatModifier().setChatHoverable(this.aP());
+            chatcomponenttext.getChatModifier().setChatHoverable(this.aQ());
             chatcomponenttext.getChatModifier().setInsertion(this.getUniqueID().toString());
             return chatcomponenttext;
         } else {
             ChatMessage chatmessage = new ChatMessage(this.getName(), new Object[0]);
 
-            chatmessage.getChatModifier().setChatHoverable(this.aP());
+            chatmessage.getChatModifier().setChatHoverable(this.aQ());
             chatmessage.getChatModifier().setInsertion(this.getUniqueID().toString());
             return chatmessage;
+        }
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a;
+        static final int[] b = new int[BlockMinecartTrackAbstract.EnumTrackPosition.values().length];
+
+        static {
+            try {
+                EntityMinecartAbstract.SyntheticClass_1.b[BlockMinecartTrackAbstract.EnumTrackPosition.ASCENDING_EAST.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                EntityMinecartAbstract.SyntheticClass_1.b[BlockMinecartTrackAbstract.EnumTrackPosition.ASCENDING_WEST.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                EntityMinecartAbstract.SyntheticClass_1.b[BlockMinecartTrackAbstract.EnumTrackPosition.ASCENDING_NORTH.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                EntityMinecartAbstract.SyntheticClass_1.b[BlockMinecartTrackAbstract.EnumTrackPosition.ASCENDING_SOUTH.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            a = new int[EntityMinecartAbstract.EnumMinecartType.values().length];
+
+            try {
+                EntityMinecartAbstract.SyntheticClass_1.a[EntityMinecartAbstract.EnumMinecartType.CHEST.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror4) {
+                ;
+            }
+
+            try {
+                EntityMinecartAbstract.SyntheticClass_1.a[EntityMinecartAbstract.EnumMinecartType.FURNACE.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror5) {
+                ;
+            }
+
+            try {
+                EntityMinecartAbstract.SyntheticClass_1.a[EntityMinecartAbstract.EnumMinecartType.TNT.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror6) {
+                ;
+            }
+
+            try {
+                EntityMinecartAbstract.SyntheticClass_1.a[EntityMinecartAbstract.EnumMinecartType.SPAWNER.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror7) {
+                ;
+            }
+
+            try {
+                EntityMinecartAbstract.SyntheticClass_1.a[EntityMinecartAbstract.EnumMinecartType.HOPPER.ordinal()] = 5;
+            } catch (NoSuchFieldError nosuchfielderror8) {
+                ;
+            }
+
+            try {
+                EntityMinecartAbstract.SyntheticClass_1.a[EntityMinecartAbstract.EnumMinecartType.COMMAND_BLOCK.ordinal()] = 6;
+            } catch (NoSuchFieldError nosuchfielderror9) {
+                ;
+            }
+
+        }
+    }
+
+    public static enum EnumMinecartType {
+
+        RIDEABLE(0, "MinecartRideable"), CHEST(1, "MinecartChest"), FURNACE(2, "MinecartFurnace"), TNT(3, "MinecartTNT"), SPAWNER(4, "MinecartSpawner"), HOPPER(5, "MinecartHopper"), COMMAND_BLOCK(6, "MinecartCommandBlock");
+
+        private static final Map<Integer, EntityMinecartAbstract.EnumMinecartType> h = Maps.newHashMap();
+        private final int i;
+        private final String j;
+
+        private EnumMinecartType(int i, String s) {
+            this.i = i;
+            this.j = s;
+        }
+
+        public int a() {
+            return this.i;
+        }
+
+        public String b() {
+            return this.j;
+        }
+
+        public static EntityMinecartAbstract.EnumMinecartType a(int i) {
+            EntityMinecartAbstract.EnumMinecartType entityminecartabstract_enumminecarttype = (EntityMinecartAbstract.EnumMinecartType) EntityMinecartAbstract.EnumMinecartType.h.get(Integer.valueOf(i));
+
+            return entityminecartabstract_enumminecarttype == null ? EntityMinecartAbstract.EnumMinecartType.RIDEABLE : entityminecartabstract_enumminecarttype;
+        }
+
+        static {
+            EntityMinecartAbstract.EnumMinecartType[] aentityminecartabstract_enumminecarttype = values();
+            int i = aentityminecartabstract_enumminecarttype.length;
+
+            for (int j = 0; j < i; ++j) {
+                EntityMinecartAbstract.EnumMinecartType entityminecartabstract_enumminecarttype = aentityminecartabstract_enumminecarttype[j];
+
+                EntityMinecartAbstract.EnumMinecartType.h.put(Integer.valueOf(entityminecartabstract_enumminecarttype.a()), entityminecartabstract_enumminecarttype);
+            }
+
         }
     }
 }

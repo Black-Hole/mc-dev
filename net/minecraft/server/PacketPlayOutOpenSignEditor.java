@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutOpenSignEditor implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutOpenSignEditor implements Packet<PacketListenerPlayOut> {
 
     private BlockPosition a;
 
@@ -14,11 +16,11 @@ public class PacketPlayOutOpenSignEditor implements Packet {
         packetlistenerplayout.a(this);
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.c();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
     }
 

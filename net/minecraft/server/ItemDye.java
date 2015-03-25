@@ -24,7 +24,7 @@ public class ItemDye extends Item {
 
             if (enumcolor == EnumColor.WHITE) {
                 if (a(itemstack, world, blockposition)) {
-                    if (!world.isStatic) {
+                    if (!world.isClientSide) {
                         world.triggerEffect(2005, blockposition, 0);
                     }
 
@@ -34,7 +34,7 @@ public class ItemDye extends Item {
                 IBlockData iblockdata = world.getType(blockposition);
                 Block block = iblockdata.getBlock();
 
-                if (block == Blocks.LOG && iblockdata.get(BlockWood.VARIANT) == EnumLogVariant.JUNGLE) {
+                if (block == Blocks.LOG && iblockdata.get(BlockWood.VARIANT) == BlockWood.EnumLogVariant.JUNGLE) {
                     if (enumdirection == EnumDirection.DOWN) {
                         return false;
                     }
@@ -67,8 +67,8 @@ public class ItemDye extends Item {
         if (iblockdata.getBlock() instanceof IBlockFragilePlantElement) {
             IBlockFragilePlantElement iblockfragileplantelement = (IBlockFragilePlantElement) iblockdata.getBlock();
 
-            if (iblockfragileplantelement.a(world, blockposition, iblockdata, world.isStatic)) {
-                if (!world.isStatic) {
+            if (iblockfragileplantelement.a(world, blockposition, iblockdata, world.isClientSide)) {
+                if (!world.isClientSide) {
                     if (iblockfragileplantelement.a(world, world.random, blockposition, iblockdata)) {
                         iblockfragileplantelement.b(world, world.random, blockposition, iblockdata);
                     }

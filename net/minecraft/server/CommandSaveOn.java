@@ -12,7 +12,7 @@ public class CommandSaveOn extends CommandAbstract {
         return "commands.save-on.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         MinecraftServer minecraftserver = MinecraftServer.getServer();
         boolean flag = false;
 

@@ -13,7 +13,7 @@ public class BiomeBigHills extends BiomeBase {
 
     protected BiomeBigHills(int i, boolean flag) {
         super(i);
-        this.aD = new WorldGenMinable(Blocks.MONSTER_EGG.getBlockData().set(BlockMonsterEggs.VARIANT, EnumMonsterEggVarient.STONE), 9);
+        this.aD = new WorldGenMinable(Blocks.MONSTER_EGG.getBlockData().set(BlockMonsterEggs.VARIANT, BlockMonsterEggs.EnumMonsterEggVarient.STONE), 9);
         this.aE = new WorldGenTaiga2(false);
         this.aF = 0;
         this.aG = 1;
@@ -76,7 +76,7 @@ public class BiomeBigHills extends BiomeBase {
         this.aI = this.aH;
         this.a(biomebase.ai, true);
         this.a(biomebase.ah + " M");
-        this.a(new BiomeTemperature(biomebase.an, biomebase.ao));
+        this.a(new BiomeBase.BiomeTemperature(biomebase.an, biomebase.ao));
         this.a(biomebase.temperature, biomebase.humidity);
         return this;
     }

@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayInSetCreativeSlot implements Packet {
+import java.io.IOException;
+
+public class PacketPlayInSetCreativeSlot implements Packet<PacketListenerPlayIn> {
 
     private int slot;
     private ItemStack b;
@@ -11,12 +13,12 @@ public class PacketPlayInSetCreativeSlot implements Packet {
         packetlistenerplayin.a(this);
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.slot = packetdataserializer.readShort();
         this.b = packetdataserializer.i();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeShort(this.slot);
         packetdataserializer.a(this.b);
     }

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class BlockStainedGlass extends BlockHalfTransparent {
 
-    public static final BlockStateEnum COLOR = BlockStateEnum.of("color", EnumColor.class);
+    public static final BlockStateEnum<EnumColor> COLOR = BlockStateEnum.of("color", EnumColor.class);
 
     public BlockStainedGlass(Material material) {
         super(material, false);
@@ -24,7 +24,7 @@ public class BlockStainedGlass extends BlockHalfTransparent {
         return 0;
     }
 
-    protected boolean G() {
+    protected boolean I() {
         return true;
     }
 
@@ -37,15 +37,15 @@ public class BlockStainedGlass extends BlockHalfTransparent {
     }
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.isStatic) {
-            BlockBeacon.d(world, blockposition);
+        if (!world.isClientSide) {
+            BlockBeacon.f(world, blockposition);
         }
 
     }
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.isStatic) {
-            BlockBeacon.d(world, blockposition);
+        if (!world.isClientSide) {
+            BlockBeacon.f(world, blockposition);
         }
 
     }

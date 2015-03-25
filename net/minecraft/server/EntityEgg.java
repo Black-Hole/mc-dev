@@ -19,7 +19,7 @@ public class EntityEgg extends EntityProjectile {
             movingobjectposition.entity.damageEntity(DamageSource.projectile(this, this.getShooter()), 0.0F);
         }
 
-        if (!this.world.isStatic && this.random.nextInt(8) == 0) {
+        if (!this.world.isClientSide && this.random.nextInt(8) == 0) {
             byte b0 = 1;
 
             if (this.random.nextInt(32) == 0) {
@@ -41,7 +41,7 @@ public class EntityEgg extends EntityProjectile {
             this.world.addParticle(EnumParticle.ITEM_CRACK, this.locX, this.locY, this.locZ, ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D, new int[] { Item.getId(Items.EGG)});
         }
 
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             this.die();
         }
 

@@ -34,7 +34,7 @@ public class ItemFood extends Item {
     }
 
     protected void c(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (!world.isStatic && this.l > 0 && world.random.nextFloat() < this.o) {
+        if (!world.isClientSide && this.l > 0 && world.random.nextFloat() < this.o) {
             entityhuman.addEffect(new MobEffect(this.l, this.m * 20, this.n));
         }
 

@@ -13,14 +13,14 @@ public class ItemFishingRod extends Item {
             int i = entityhuman.hookedFish.l();
 
             itemstack.damage(i, entityhuman);
-            entityhuman.bv();
+            entityhuman.bw();
         } else {
             world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (ItemFishingRod.g.nextFloat() * 0.4F + 0.8F));
-            if (!world.isStatic) {
+            if (!world.isClientSide) {
                 world.addEntity(new EntityFishingHook(world, entityhuman));
             }
 
-            entityhuman.bv();
+            entityhuman.bw();
             entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
         }
 

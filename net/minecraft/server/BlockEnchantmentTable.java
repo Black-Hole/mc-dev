@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class BlockEnchantmentTable extends BlockContainer {
 
     protected BlockEnchantmentTable() {
-        super(Material.STONE);
+        super(Material.STONE, MaterialMapColor.D);
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.75F, 1.0F);
         this.e(0);
         this.a(CreativeModeTab.c);
@@ -26,7 +26,7 @@ public class BlockEnchantmentTable extends BlockContainer {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (world.isStatic) {
+        if (world.isClientSide) {
             return true;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);

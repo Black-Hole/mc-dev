@@ -1,16 +1,18 @@
 package net.minecraft.server;
 
-public class PacketPlayInHeldItemSlot implements Packet {
+import java.io.IOException;
+
+public class PacketPlayInHeldItemSlot implements Packet<PacketListenerPlayIn> {
 
     private int itemInHandIndex;
 
     public PacketPlayInHeldItemSlot() {}
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.itemInHandIndex = packetdataserializer.readShort();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeShort(this.itemInHandIndex);
     }
 

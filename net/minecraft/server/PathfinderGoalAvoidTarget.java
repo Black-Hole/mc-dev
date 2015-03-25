@@ -4,21 +4,36 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 
-public class PathfinderGoalAvoidTarget extends PathfinderGoal {
+public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal {
 
-    public final Predicate a = new EntitySelectorViewable(this);
-    protected EntityCreature b;
+    private final Predicate<Entity> c;
+    protected EntityCreature a;
     private double d;
     private double e;
-    protected Entity c;
+    protected T b;
     private float f;
     private PathEntity g;
     private NavigationAbstract h;
-    private Predicate i;
+    private Class<T> i;
+    private Predicate<? super T> j;
 
-    public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Predicate predicate, float f, double d0, double d1) {
-        this.b = entitycreature;
-        this.i = predicate;
+    public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, float f, double d0, double d1) {
+        this(entitycreature, oclass, Predicates.alwaysTrue(), f, d0, d1);
+    }
+
+    public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, Predicate<? super T> predicate, float f, double d0, double d1) {
+        this.c = new Predicate() {
+            public boolean a(Entity entity) {
+                return entity.isAlive() && PathfinderGoalAvoidTarget.this.a.getEntitySenses().a(entity);
+            }
+
+            public boolean apply(Object object) {
+                return this.a((Entity) object);
+            }
+        };
+        this.a = entitycreature;
+        this.i = oclass;
+        this.j = predicate;
         this.f = f;
         this.d = d0;
         this.e = d1;
@@ -27,17 +42,17 @@ public class PathfinderGoalAvoidTarget extends PathfinderGoal {
     }
 
     public boolean a() {
-        List list = this.b.world.a((Entity) this.b, this.b.getBoundingBox().grow((double) this.f, 3.0D, (double) this.f), Predicates.and(new Predicate[] { IEntitySelector.d, this.a, this.i}));
+        List list = this.a.world.a(this.i, this.a.getBoundingBox().grow((double) this.f, 3.0D, (double) this.f), Predicates.and(new Predicate[] { IEntitySelector.d, this.c, this.j}));
 
         if (list.isEmpty()) {
             return false;
         } else {
-            this.c = (Entity) list.get(0);
-            Vec3D vec3d = RandomPositionGenerator.b(this.b, 16, 7, new Vec3D(this.c.locX, this.c.locY, this.c.locZ));
+            this.b = (Entity) list.get(0);
+            Vec3D vec3d = RandomPositionGenerator.b(this.a, 16, 7, new Vec3D(this.b.locX, this.b.locY, this.b.locZ));
 
             if (vec3d == null) {
                 return false;
-            } else if (this.c.e(vec3d.a, vec3d.b, vec3d.c) < this.c.h(this.b)) {
+            } else if (this.b.e(vec3d.a, vec3d.b, vec3d.c) < this.b.h(this.a)) {
                 return false;
             } else {
                 this.g = this.h.a(vec3d.a, vec3d.b, vec3d.c);
@@ -55,14 +70,14 @@ public class PathfinderGoalAvoidTarget extends PathfinderGoal {
     }
 
     public void d() {
-        this.c = null;
+        this.b = null;
     }
 
     public void e() {
-        if (this.b.h(this.c) < 49.0D) {
-            this.b.getNavigation().a(this.e);
+        if (this.a.h(this.b) < 49.0D) {
+            this.a.getNavigation().a(this.e);
         } else {
-            this.b.getNavigation().a(this.d);
+            this.a.getNavigation().a(this.d);
         }
 
     }

@@ -11,7 +11,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
     private PathEntity c;
     private VillageDoor d;
     private boolean e;
-    private List f = Lists.newArrayList();
+    private List<VillageDoor> f = Lists.newArrayList();
 
     public PathfinderGoalMoveThroughVillage(EntityCreature entitycreature, double d0, boolean flag) {
         this.a = entitycreature;

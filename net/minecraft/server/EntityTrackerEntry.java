@@ -34,7 +34,7 @@ public class EntityTrackerEntry {
     private boolean x;
     private boolean y;
     public boolean n;
-    public Set trackedPlayers = Sets.newHashSet();
+    public Set<EntityPlayer> trackedPlayers = Sets.newHashSet();
 
     public EntityTrackerEntry(Entity entity, int i, int j, boolean flag) {
         this.tracker = entity;
@@ -58,7 +58,7 @@ public class EntityTrackerEntry {
         return this.tracker.getId();
     }
 
-    public void track(List list) {
+    public void track(List<EntityHuman> list) {
         this.n = false;
         if (!this.isMoving || this.tracker.e(this.q, this.r, this.s) > 16.0D) {
             this.q = this.tracker.locX;
@@ -118,12 +118,14 @@ public class EntityTrackerEntry {
 
                 if (this.m > 0 || this.tracker instanceof EntityArrow) {
                     if (j1 >= -128 && j1 < 128 && k1 >= -128 && k1 < 128 && l1 >= -128 && l1 < 128 && this.v <= 400 && !this.x && this.y == this.tracker.onGround) {
-                        if (flag && flag1) {
-                            object = new PacketPlayOutRelEntityMoveLook(this.tracker.getId(), (byte) j1, (byte) k1, (byte) l1, (byte) l, (byte) i1, this.tracker.onGround);
-                        } else if (flag) {
-                            object = new PacketPlayOutRelEntityMove(this.tracker.getId(), (byte) j1, (byte) k1, (byte) l1, this.tracker.onGround);
-                        } else if (flag1) {
-                            object = new PacketPlayOutEntityLook(this.tracker.getId(), (byte) l, (byte) i1, this.tracker.onGround);
+                        if ((!flag || !flag1) && !(this.tracker instanceof EntityArrow)) {
+                            if (flag) {
+                                object = new PacketPlayOutEntity.PacketPlayOutRelEntityMove(this.tracker.getId(), (byte) j1, (byte) k1, (byte) l1, this.tracker.onGround);
+                            } else if (flag1) {
+                                object = new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) l, (byte) i1, this.tracker.onGround);
+                            }
+                        } else {
+                            object = new PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook(this.tracker.getId(), (byte) j1, (byte) k1, (byte) l1, (byte) l, (byte) i1, this.tracker.onGround);
                         }
                     } else {
                         this.y = this.tracker.onGround;
@@ -170,7 +172,7 @@ public class EntityTrackerEntry {
                 boolean flag2 = Math.abs(i - this.yRot) >= 4 || Math.abs(j - this.xRot) >= 4;
 
                 if (flag2) {
-                    this.broadcast(new PacketPlayOutEntityLook(this.tracker.getId(), (byte) i, (byte) j, this.tracker.onGround));
+                    this.broadcast(new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) i, (byte) j, this.tracker.onGround));
                     this.yRot = i;
                     this.xRot = j;
                 }
@@ -347,7 +349,7 @@ public class EntityTrackerEntry {
         return entityplayer.u().getPlayerChunkMap().a(entityplayer, this.tracker.ae, this.tracker.ag);
     }
 
-    public void scanPlayers(List list) {
+    public void scanPlayers(List<EntityHuman> list) {
         for (int i = 0; i < list.size(); ++i) {
             this.updatePlayer((EntityPlayer) list.get(i));
         }

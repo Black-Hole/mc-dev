@@ -23,7 +23,7 @@ public class CommandPardonIP extends CommandAbstract {
         return "commands.unbanip.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length == 1 && astring[0].length() > 1) {
             Matcher matcher = CommandBanIp.a.matcher(astring[0]);
 
@@ -38,7 +38,7 @@ public class CommandPardonIP extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayerList().getIPBans().getEntries()) : null;
     }
 }

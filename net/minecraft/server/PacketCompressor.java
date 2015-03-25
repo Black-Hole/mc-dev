@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import java.util.zip.Deflater;
 
-public class PacketCompressor extends MessageToByteEncoder {
+public class PacketCompressor extends MessageToByteEncoder<ByteBuf> {
 
     private final byte[] a = new byte[8192];
     private final Deflater b;
@@ -16,7 +16,7 @@ public class PacketCompressor extends MessageToByteEncoder {
         this.b = new Deflater();
     }
 
-    protected void a(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) {
+    protected void a(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) throws Exception {
         int i = bytebuf.readableBytes();
         PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf1);
 
@@ -46,7 +46,7 @@ public class PacketCompressor extends MessageToByteEncoder {
         this.c = i;
     }
 
-    protected void encode(ChannelHandlerContext channelhandlercontext, Object object, ByteBuf bytebuf) {
+    protected void encode(ChannelHandlerContext channelhandlercontext, Object object, ByteBuf bytebuf) throws Exception {
         this.a(channelhandlercontext, (ByteBuf) object, bytebuf);
     }
 }

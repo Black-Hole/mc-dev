@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class TileEntityHopper extends TileEntityContainer implements IHopper, IUpdatePlayerListBox {
@@ -135,7 +136,7 @@ public class TileEntityHopper extends TileEntityContainer implements IHopper, IU
     }
 
     public void c() {
-        if (this.world != null && !this.world.isStatic) {
+        if (this.world != null && !this.world.isClientSide) {
             --this.g;
             if (!this.n()) {
                 this.d(0);
@@ -146,7 +147,7 @@ public class TileEntityHopper extends TileEntityContainer implements IHopper, IU
     }
 
     public boolean m() {
-        if (this.world != null && !this.world.isStatic) {
+        if (this.world != null && !this.world.isClientSide) {
             if (!this.n() && BlockHopper.f(this.u())) {
                 boolean flag = false;
 
@@ -310,10 +311,14 @@ public class TileEntityHopper extends TileEntityContainer implements IHopper, IU
                 }
             }
         } else {
-            EntityItem entityitem = a(ihopper.getWorld(), ihopper.A(), ihopper.B() + 1.0D, ihopper.C());
+            Iterator iterator = a(ihopper.getWorld(), ihopper.A(), ihopper.B() + 1.0D, ihopper.C()).iterator();
 
-            if (entityitem != null) {
-                return a((IInventory) ihopper, entityitem);
+            while (iterator.hasNext()) {
+                EntityItem entityitem = (EntityItem) iterator.next();
+
+                if (a((IInventory) ihopper, entityitem)) {
+                    return true;
+                }
             }
         }
 
@@ -436,10 +441,8 @@ public class TileEntityHopper extends TileEntityContainer implements IHopper, IU
         return b(ihopper.getWorld(), ihopper.A(), ihopper.B() + 1.0D, ihopper.C());
     }
 
-    public static EntityItem a(World world, double d0, double d1, double d2) {
-        List list = world.a(EntityItem.class, new AxisAlignedBB(d0, d1, d2, d0 + 1.0D, d1 + 1.0D, d2 + 1.0D), IEntitySelector.a);
-
-        return list.size() > 0 ? (EntityItem) list.get(0) : null;
+    public static List<EntityItem> a(World world, double d0, double d1, double d2) {
+        return world.a(EntityItem.class, new AxisAlignedBB(d0 - 0.5D, d1 - 0.5D, d2 - 0.5D, d0 + 0.5D, d1 + 0.5D, d2 + 0.5D), IEntitySelector.a);
     }
 
     public static IInventory b(World world, double d0, double d1, double d2) {
@@ -448,21 +451,21 @@ public class TileEntityHopper extends TileEntityContainer implements IHopper, IU
         int j = MathHelper.floor(d1);
         int k = MathHelper.floor(d2);
         BlockPosition blockposition = new BlockPosition(i, j, k);
-        TileEntity tileentity = world.getTileEntity(new BlockPosition(i, j, k));
+        Block block = world.getType(blockposition).getBlock();
 
-        if (tileentity instanceof IInventory) {
-            object = (IInventory) tileentity;
-            if (object instanceof TileEntityChest) {
-                Block block = world.getType(new BlockPosition(i, j, k)).getBlock();
+        if (block.isTileEntity()) {
+            TileEntity tileentity = world.getTileEntity(blockposition);
 
-                if (block instanceof BlockChest) {
-                    object = ((BlockChest) block).d(world, blockposition);
+            if (tileentity instanceof IInventory) {
+                object = (IInventory) tileentity;
+                if (object instanceof TileEntityChest && block instanceof BlockChest) {
+                    object = ((BlockChest) block).f(world, blockposition);
                 }
             }
         }
 
         if (object == null) {
-            List list = world.a((Entity) null, new AxisAlignedBB(d0, d1, d2, d0 + 1.0D, d1 + 1.0D, d2 + 1.0D), IEntitySelector.c);
+            List list = world.a((Entity) null, new AxisAlignedBB(d0 - 0.5D, d1 - 0.5D, d2 - 0.5D, d0 + 0.5D, d1 + 0.5D, d2 + 0.5D), IEntitySelector.c);
 
             if (list.size() > 0) {
                 object = (IInventory) list.get(world.random.nextInt(list.size()));
@@ -477,15 +480,15 @@ public class TileEntityHopper extends TileEntityContainer implements IHopper, IU
     }
 
     public double A() {
-        return (double) this.position.getX();
+        return (double) this.position.getX() + 0.5D;
     }
 
     public double B() {
-        return (double) this.position.getY();
+        return (double) this.position.getY() + 0.5D;
     }
 
     public double C() {
-        return (double) this.position.getZ();
+        return (double) this.position.getZ() + 0.5D;
     }
 
     public void d(int i) {

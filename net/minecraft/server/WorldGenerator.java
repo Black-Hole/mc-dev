@@ -18,14 +18,6 @@ public abstract class WorldGenerator {
 
     public void e() {}
 
-    protected void a(World world, BlockPosition blockposition, Block block) {
-        this.a(world, blockposition, block, 0);
-    }
-
-    protected void a(World world, BlockPosition blockposition, Block block, int i) {
-        this.a(world, blockposition, block.fromLegacyData(i));
-    }
-
     protected void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (this.a) {
             world.setTypeAndData(blockposition, iblockdata, 3);

@@ -10,8 +10,8 @@ public class PistonExtendsChecker {
     private final BlockPosition b;
     private final BlockPosition c;
     private final EnumDirection d;
-    private final List e = Lists.newArrayList();
-    private final List f = Lists.newArrayList();
+    private final List<BlockPosition> e = Lists.newArrayList();
+    private final List<BlockPosition> f = Lists.newArrayList();
 
     public PistonExtendsChecker(World world, BlockPosition blockposition, EnumDirection enumdirection, boolean flag) {
         this.a = world;
@@ -32,7 +32,7 @@ public class PistonExtendsChecker {
         Block block = this.a.getType(this.c).getBlock();
 
         if (!BlockPiston.a(block, this.a, this.c, this.d, false)) {
-            if (block.i() != 1) {
+            if (block.k() != 1) {
                 return false;
             } else {
                 this.f.add(this.c);
@@ -122,7 +122,7 @@ public class PistonExtendsChecker {
                         return false;
                     }
 
-                    if (block.i() == 1) {
+                    if (block.k() == 1) {
                         this.f.add(blockposition2);
                         return true;
                     }
@@ -168,11 +168,11 @@ public class PistonExtendsChecker {
         return true;
     }
 
-    public List getMovedBlocks() {
+    public List<BlockPosition> getMovedBlocks() {
         return this.e;
     }
 
-    public List getBrokenBlocks() {
+    public List<BlockPosition> getBrokenBlocks() {
         return this.f;
     }
 }

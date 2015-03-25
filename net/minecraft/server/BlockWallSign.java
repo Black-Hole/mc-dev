@@ -4,7 +4,7 @@ import com.google.common.base.Predicate;
 
 public class BlockWallSign extends BlockSign {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
 
     public BlockWallSign() {
         this.j(this.blockStateList.getBlockData().set(BlockWallSign.FACING, EnumDirection.NORTH));
@@ -19,7 +19,7 @@ public class BlockWallSign extends BlockSign {
         float f4 = 0.125F;
 
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-        switch (SwitchHelperDirection11.a[enumdirection.ordinal()]) {
+        switch (BlockWallSign.SyntheticClass_1.a[enumdirection.ordinal()]) {
         case 1:
             this.a(f2, f, 1.0F - f4, f3, f1, 1.0F);
             break;
@@ -52,7 +52,7 @@ public class BlockWallSign extends BlockSign {
     public IBlockData fromLegacyData(int i) {
         EnumDirection enumdirection = EnumDirection.fromType1(i);
 
-        if (enumdirection.k() == EnumAxis.Y) {
+        if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
             enumdirection = EnumDirection.NORTH;
         }
 
@@ -65,5 +65,37 @@ public class BlockWallSign extends BlockSign {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockWallSign.FACING});
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EnumDirection.values().length];
+
+        static {
+            try {
+                BlockWallSign.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                BlockWallSign.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                BlockWallSign.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                BlockWallSign.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+        }
     }
 }

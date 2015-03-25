@@ -11,7 +11,7 @@ public class WorldGenPumpkin extends WorldGenerator {
             BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 
             if (world.isEmpty(blockposition1) && world.getType(blockposition1.down()).getBlock() == Blocks.GRASS && Blocks.PUMPKIN.canPlace(world, blockposition1)) {
-                world.setTypeAndData(blockposition1, Blocks.PUMPKIN.getBlockData().set(BlockPumpkin.FACING, EnumDirectionLimit.HORIZONTAL.a(random)), 2);
+                world.setTypeAndData(blockposition1, Blocks.PUMPKIN.getBlockData().set(BlockPumpkin.FACING, EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random)), 2);
             }
         }
 

@@ -11,11 +11,15 @@ public class BlockDeadBush extends BlockPlant {
         this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.8F, 0.5F + f);
     }
 
+    public MaterialMapColor g(IBlockData iblockdata) {
+        return MaterialMapColor.o;
+    }
+
     protected boolean c(Block block) {
         return block == Blocks.SAND || block == Blocks.HARDENED_CLAY || block == Blocks.STAINED_HARDENED_CLAY || block == Blocks.DIRT;
     }
 
-    public boolean f(World world, BlockPosition blockposition) {
+    public boolean a(World world, BlockPosition blockposition) {
         return true;
     }
 
@@ -24,7 +28,7 @@ public class BlockDeadBush extends BlockPlant {
     }
 
     public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity) {
-        if (!world.isStatic && entityhuman.bY() != null && entityhuman.bY().getItem() == Items.SHEARS) {
+        if (!world.isClientSide && entityhuman.bZ() != null && entityhuman.bZ().getItem() == Items.SHEARS) {
             entityhuman.b(StatisticList.MINE_BLOCK_COUNT[Block.getId(this)]);
             a(world, blockposition, new ItemStack(Blocks.DEADBUSH, 1, 0));
         } else {

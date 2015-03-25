@@ -3,31 +3,31 @@ package net.minecraft.server;
 public class BlockHay extends BlockRotatable {
 
     public BlockHay() {
-        super(Material.GRASS);
-        this.j(this.blockStateList.getBlockData().set(BlockHay.AXIS, EnumAxis.Y));
+        super(Material.GRASS, MaterialMapColor.t);
+        this.j(this.blockStateList.getBlockData().set(BlockHay.AXIS, EnumDirection.EnumAxis.Y));
         this.a(CreativeModeTab.b);
     }
 
     public IBlockData fromLegacyData(int i) {
-        EnumAxis enumaxis = EnumAxis.Y;
+        EnumDirection.EnumAxis enumdirection_enumaxis = EnumDirection.EnumAxis.Y;
         int j = i & 12;
 
         if (j == 4) {
-            enumaxis = EnumAxis.X;
+            enumdirection_enumaxis = EnumDirection.EnumAxis.X;
         } else if (j == 8) {
-            enumaxis = EnumAxis.Z;
+            enumdirection_enumaxis = EnumDirection.EnumAxis.Z;
         }
 
-        return this.getBlockData().set(BlockHay.AXIS, enumaxis);
+        return this.getBlockData().set(BlockHay.AXIS, enumdirection_enumaxis);
     }
 
     public int toLegacyData(IBlockData iblockdata) {
         int i = 0;
-        EnumAxis enumaxis = (EnumAxis) iblockdata.get(BlockHay.AXIS);
+        EnumDirection.EnumAxis enumdirection_enumaxis = (EnumDirection.EnumAxis) iblockdata.get(BlockHay.AXIS);
 
-        if (enumaxis == EnumAxis.X) {
+        if (enumdirection_enumaxis == EnumDirection.EnumAxis.X) {
             i |= 4;
-        } else if (enumaxis == EnumAxis.Z) {
+        } else if (enumdirection_enumaxis == EnumDirection.EnumAxis.Z) {
             i |= 8;
         }
 

@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayInWindowClick implements Packet {
+import java.io.IOException;
+
+public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
 
     private int a;
     private int slot;
@@ -15,7 +17,7 @@ public class PacketPlayInWindowClick implements Packet {
         packetlistenerplayin.a(this);
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readByte();
         this.slot = packetdataserializer.readShort();
         this.button = packetdataserializer.readByte();
@@ -24,7 +26,7 @@ public class PacketPlayInWindowClick implements Packet {
         this.item = packetdataserializer.i();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
         packetdataserializer.writeShort(this.slot);
         packetdataserializer.writeByte(this.button);

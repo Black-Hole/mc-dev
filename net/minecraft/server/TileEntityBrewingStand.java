@@ -7,8 +7,8 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IUpda
 
     private static final int[] a = new int[] { 3};
     private static final int[] f = new int[] { 0, 1, 2};
-    public ItemStack[] items = new ItemStack[4];
-    public int brewTime;
+    private ItemStack[] items = new ItemStack[4];
+    private int brewTime;
     private boolean[] i;
     private Item j;
     private String k;
@@ -49,7 +49,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IUpda
             this.j = this.items[3].getItem();
         }
 
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             boolean[] aboolean = this.m();
 
             if (!Arrays.equals(aboolean, this.i)) {

@@ -13,8 +13,8 @@ public class EntityTracker {
 
     private static final Logger a = LogManager.getLogger();
     private final WorldServer world;
-    private Set c = Sets.newHashSet();
-    public IntHashMap trackedEntities = new IntHashMap();
+    private Set<EntityTrackerEntry> c = Sets.newHashSet();
+    private IntHashMap<EntityTrackerEntry> trackedEntities = new IntHashMap();
     private int e;
 
     public EntityTracker(WorldServer worldserver) {
@@ -93,7 +93,7 @@ public class EntityTracker {
         this.addEntity(entity, i, j, false);
     }
 
-    public void addEntity(Entity entity, int i, int j, boolean flag) {
+    public void addEntity(Entity entity, int i, final int j, boolean flag) {
         if (i > this.e) {
             i = this.e;
         }
@@ -113,7 +113,21 @@ public class EntityTracker {
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Entity To Track");
 
             crashreportsystemdetails.a("Tracking range", (Object) (i + " blocks"));
-            crashreportsystemdetails.a("Update interval", (Callable) (new CrashReportEntityTrackerUpdateInterval(this, j)));
+            crashreportsystemdetails.a("Update interval", new Callable() {
+                public String a() throws Exception {
+                    String s = "Once per " + i + " ticks";
+
+                    if (i == Integer.MAX_VALUE) {
+                        s = "Maximum (" + s + ")";
+                    }
+
+                    return s;
+                }
+
+                public Object call() throws Exception {
+                    return this.a();
+                }
+            });
             entity.appendEntityCrashDetails(crashreportsystemdetails);
             CrashReportSystemDetails crashreportsystemdetails1 = crashreport.a("Entity That Is Already Tracked");
 

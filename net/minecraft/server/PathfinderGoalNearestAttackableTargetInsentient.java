@@ -10,20 +10,34 @@ public class PathfinderGoalNearestAttackableTargetInsentient extends PathfinderG
 
     private static final Logger a = LogManager.getLogger();
     private EntityInsentient b;
-    private final Predicate c;
-    private final DistanceComparator d;
+    private final Predicate<EntityLiving> c;
+    private final PathfinderGoalNearestAttackableTarget.DistanceComparator d;
     private EntityLiving e;
-    private Class f;
+    private Class<? extends EntityLiving> f;
 
-    public PathfinderGoalNearestAttackableTargetInsentient(EntityInsentient entityinsentient, Class oclass) {
+    public PathfinderGoalNearestAttackableTargetInsentient(EntityInsentient entityinsentient, Class<? extends EntityLiving> oclass) {
         this.b = entityinsentient;
         this.f = oclass;
         if (entityinsentient instanceof EntityCreature) {
             PathfinderGoalNearestAttackableTargetInsentient.a.warn("Use NearestAttackableTargetGoal.class for PathfinerMob mobs!");
         }
 
-        this.c = new PathfinderGoalNearestAttackableTargetInsentientInnerClass1(this);
-        this.d = new DistanceComparator(entityinsentient);
+        this.c = new Predicate() {
+            public boolean a(EntityLiving entityliving) {
+                double d0 = PathfinderGoalNearestAttackableTargetInsentient.this.f();
+
+                if (entityliving.isSneaking()) {
+                    d0 *= 0.800000011920929D;
+                }
+
+                return entityliving.isInvisible() ? false : ((double) entityliving.g(PathfinderGoalNearestAttackableTargetInsentient.this.b) > d0 ? false : PathfinderGoalTarget.a(PathfinderGoalNearestAttackableTargetInsentient.this.b, entityliving, false, true));
+            }
+
+            public boolean apply(Object object) {
+                return this.a((EntityLiving) object);
+            }
+        };
+        this.d = new PathfinderGoalNearestAttackableTarget.DistanceComparator(entityinsentient);
     }
 
     public boolean a() {
@@ -67,9 +81,5 @@ public class PathfinderGoalNearestAttackableTargetInsentient extends PathfinderG
         AttributeInstance attributeinstance = this.b.getAttributeInstance(GenericAttributes.b);
 
         return attributeinstance == null ? 16.0D : attributeinstance.getValue();
-    }
-
-    static EntityInsentient a(PathfinderGoalNearestAttackableTargetInsentient pathfindergoalnearestattackabletargetinsentient) {
-        return pathfindergoalnearestattackabletargetinsentient.b;
     }
 }

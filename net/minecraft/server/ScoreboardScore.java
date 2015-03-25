@@ -5,7 +5,15 @@ import java.util.List;
 
 public class ScoreboardScore {
 
-    public static final Comparator a = new ScoreboardComparator();
+    public static final Comparator<ScoreboardScore> a = new Comparator() {
+        public int a(ScoreboardScore scoreboardscore, ScoreboardScore scoreboardscore1) {
+            return scoreboardscore.getScore() > scoreboardscore1.getScore() ? 1 : (scoreboardscore.getScore() < scoreboardscore1.getScore() ? -1 : scoreboardscore1.getPlayerName().compareToIgnoreCase(scoreboardscore.getPlayerName()));
+        }
+
+        public int compare(Object object, Object object1) {
+            return this.a((ScoreboardScore) object, (ScoreboardScore) object1);
+        }
+    };
     private final Scoreboard b;
     private final ScoreboardObjective c;
     private final String playerName;
@@ -79,7 +87,7 @@ public class ScoreboardScore {
         this.f = flag;
     }
 
-    public void updateForList(List list) {
+    public void updateForList(List<EntityHuman> list) {
         this.setScore(this.c.getCriteria().getScoreModifier(list));
     }
 }

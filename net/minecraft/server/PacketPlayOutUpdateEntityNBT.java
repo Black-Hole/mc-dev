@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutUpdateEntityNBT implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutUpdateEntityNBT implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private NBTTagCompound b;
@@ -12,12 +14,12 @@ public class PacketPlayOutUpdateEntityNBT implements Packet {
         this.b = nbttagcompound;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = packetdataserializer.h();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.a(this.b);
     }

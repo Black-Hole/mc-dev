@@ -14,9 +14,9 @@ public class EntityLightning extends EntityWeather {
         this.lifeTicks = 2;
         this.a = this.random.nextLong();
         this.c = this.random.nextInt(3) + 1;
-        if (!world.isStatic && world.getGameRules().getBoolean("doFireTick") && (world.getDifficulty() == EnumDifficulty.NORMAL || world.getDifficulty() == EnumDifficulty.HARD) && world.areChunksLoaded(new BlockPosition(this), 10)) {
-            BlockPosition blockposition = new BlockPosition(this);
+        BlockPosition blockposition = new BlockPosition(this);
 
+        if (!world.isClientSide && world.getGameRules().getBoolean("doFireTick") && (world.getDifficulty() == EnumDifficulty.NORMAL || world.getDifficulty() == EnumDifficulty.HARD) && world.areChunksLoaded(blockposition, 10)) {
             if (world.getType(blockposition).getBlock().getMaterial() == Material.AIR && Blocks.FIRE.canPlace(world, blockposition)) {
                 world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
             }
@@ -32,8 +32,8 @@ public class EntityLightning extends EntityWeather {
 
     }
 
-    public void s_() {
-        super.s_();
+    public void t_() {
+        super.t_();
         if (this.lifeTicks == 2) {
             this.world.makeSound(this.locX, this.locY, this.locZ, "ambient.weather.thunder", 10000.0F, 0.8F + this.random.nextFloat() * 0.2F);
             this.world.makeSound(this.locX, this.locY, this.locZ, "random.explode", 2.0F, 0.5F + this.random.nextFloat() * 0.2F);
@@ -49,15 +49,15 @@ public class EntityLightning extends EntityWeather {
                 this.a = this.random.nextLong();
                 BlockPosition blockposition = new BlockPosition(this);
 
-                if (!this.world.isStatic && this.world.getGameRules().getBoolean("doFireTick") && this.world.areChunksLoaded(blockposition, 10) && this.world.getType(blockposition).getBlock().getMaterial() == Material.AIR && Blocks.FIRE.canPlace(this.world, blockposition)) {
+                if (!this.world.isClientSide && this.world.getGameRules().getBoolean("doFireTick") && this.world.areChunksLoaded(blockposition, 10) && this.world.getType(blockposition).getBlock().getMaterial() == Material.AIR && Blocks.FIRE.canPlace(this.world, blockposition)) {
                     this.world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
                 }
             }
         }
 
         if (this.lifeTicks >= 0) {
-            if (this.world.isStatic) {
-                this.world.c(2);
+            if (this.world.isClientSide) {
+                this.world.d(2);
             } else {
                 double d0 = 3.0D;
                 List list = this.world.getEntities(this, new AxisAlignedBB(this.locX - d0, this.locY - d0, this.locZ - d0, this.locX + d0, this.locY + 6.0D + d0, this.locZ + d0));

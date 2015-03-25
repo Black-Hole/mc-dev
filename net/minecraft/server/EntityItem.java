@@ -8,7 +8,7 @@ public class EntityItem extends Entity {
 
     private static final Logger b = LogManager.getLogger();
     private int age;
-    public int pickupDelay;
+    private int pickupDelay;
     private int e;
     private String f;
     private String g;
@@ -18,7 +18,7 @@ public class EntityItem extends Entity {
         super(world);
         this.e = 5;
         this.a = (float) (Math.random() * 3.141592653589793D * 2.0D);
-        this.a(0.25F, 0.25F);
+        this.setSize(0.25F, 0.25F);
         this.setPosition(d0, d1, d2);
         this.yaw = (float) (Math.random() * 360.0D);
         this.motX = (double) ((float) (Math.random() * 0.20000000298023224D - 0.10000000149011612D));
@@ -31,7 +31,7 @@ public class EntityItem extends Entity {
         this.setItemStack(itemstack);
     }
 
-    protected boolean r_() {
+    protected boolean s_() {
         return false;
     }
 
@@ -39,7 +39,7 @@ public class EntityItem extends Entity {
         super(world);
         this.e = 5;
         this.a = (float) (Math.random() * 3.141592653589793D * 2.0D);
-        this.a(0.25F, 0.25F);
+        this.setSize(0.25F, 0.25F);
         this.setItemStack(new ItemStack(Blocks.AIR, 0));
     }
 
@@ -47,11 +47,11 @@ public class EntityItem extends Entity {
         this.getDataWatcher().add(10, 5);
     }
 
-    public void s_() {
+    public void t_() {
         if (this.getItemStack() == null) {
             this.die();
         } else {
-            super.s_();
+            super.t_();
             if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
                 --this.pickupDelay;
             }
@@ -60,7 +60,7 @@ public class EntityItem extends Entity {
             this.lastY = this.locY;
             this.lastZ = this.locZ;
             this.motY -= 0.03999999910593033D;
-            this.T = this.j(this.locX, (this.getBoundingBox().b + this.getBoundingBox().e) / 2.0D, this.locZ);
+            this.noclip = this.j(this.locX, (this.getBoundingBox().b + this.getBoundingBox().e) / 2.0D, this.locZ);
             this.move(this.motX, this.motY, this.motZ);
             boolean flag = (int) this.lastX != (int) this.locX || (int) this.lastY != (int) this.locY || (int) this.lastZ != (int) this.locZ;
 
@@ -72,7 +72,7 @@ public class EntityItem extends Entity {
                     this.makeSound("random.fizz", 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
                 }
 
-                if (!this.world.isStatic) {
+                if (!this.world.isClientSide) {
                     this.w();
                 }
             }
@@ -95,7 +95,7 @@ public class EntityItem extends Entity {
             }
 
             this.W();
-            if (!this.world.isStatic && this.age >= 6000) {
+            if (!this.world.isClientSide && this.age >= 6000) {
                 this.die();
             }
 
@@ -236,7 +236,7 @@ public class EntityItem extends Entity {
     }
 
     public void d(EntityHuman entityhuman) {
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             ItemStack itemstack = this.getItemStack();
             int i = itemstack.count;
 
@@ -286,13 +286,13 @@ public class EntityItem extends Entity {
         return this.hasCustomName() ? this.getCustomName() : LocaleI18n.get("item." + this.getItemStack().a());
     }
 
-    public boolean aE() {
+    public boolean aD() {
         return false;
     }
 
     public void c(int i) {
         super.c(i);
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             this.w();
         }
 

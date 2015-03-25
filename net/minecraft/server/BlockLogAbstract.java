@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 public abstract class BlockLogAbstract extends BlockRotatable {
 
-    public static final BlockStateEnum AXIS = BlockStateEnum.of("axis", EnumLogRotation.class);
+    public static final BlockStateEnum<BlockLogAbstract.EnumLogRotation> AXIS = BlockStateEnum.of("axis", BlockLogAbstract.EnumLogRotation.class);
 
     public BlockLogAbstract() {
         super(Material.WOOD);
@@ -33,6 +33,67 @@ public abstract class BlockLogAbstract extends BlockRotatable {
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        return super.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityliving).set(BlockLogAbstract.AXIS, EnumLogRotation.a(enumdirection.k()));
+        return super.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityliving).set(BlockLogAbstract.AXIS, BlockLogAbstract.EnumLogRotation.a(enumdirection.k()));
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EnumDirection.EnumAxis.values().length];
+
+        static {
+            try {
+                BlockLogAbstract.SyntheticClass_1.a[EnumDirection.EnumAxis.X.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                BlockLogAbstract.SyntheticClass_1.a[EnumDirection.EnumAxis.Y.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                BlockLogAbstract.SyntheticClass_1.a[EnumDirection.EnumAxis.Z.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+        }
+    }
+
+    public static enum EnumLogRotation implements INamable {
+
+        X("x"), Y("y"), Z("z"), NONE("none");
+
+        private final String e;
+
+        private EnumLogRotation(String s) {
+            this.e = s;
+        }
+
+        public String toString() {
+            return this.e;
+        }
+
+        public static BlockLogAbstract.EnumLogRotation a(EnumDirection.EnumAxis enumdirection_enumaxis) {
+            switch (BlockLogAbstract.SyntheticClass_1.a[enumdirection_enumaxis.ordinal()]) {
+            case 1:
+                return BlockLogAbstract.EnumLogRotation.X;
+
+            case 2:
+                return BlockLogAbstract.EnumLogRotation.Y;
+
+            case 3:
+                return BlockLogAbstract.EnumLogRotation.Z;
+
+            default:
+                return BlockLogAbstract.EnumLogRotation.NONE;
+            }
+        }
+
+        public String getName() {
+            return this.e;
+        }
     }
 }

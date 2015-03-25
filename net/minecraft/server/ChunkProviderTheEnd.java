@@ -252,7 +252,7 @@ public class ChunkProviderTheEnd implements IChunkProvider {
         return "RandomLevelSource";
     }
 
-    public List getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
+    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         return this.l.getBiome(blockposition).getMobs(enumcreaturetype);
     }
 

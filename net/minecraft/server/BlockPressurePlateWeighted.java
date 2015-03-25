@@ -5,13 +5,17 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
     public static final BlockStateInteger POWER = BlockStateInteger.of("power", 0, 15);
     private final int b;
 
-    protected BlockPressurePlateWeighted(String s, Material material, int i) {
-        super(material);
+    protected BlockPressurePlateWeighted(Material material, int i) {
+        this(material, i, material.r());
+    }
+
+    protected BlockPressurePlateWeighted(Material material, int i, MaterialMapColor materialmapcolor) {
+        super(material, materialmapcolor);
         this.j(this.blockStateList.getBlockData().set(BlockPressurePlateWeighted.POWER, Integer.valueOf(0)));
         this.b = i;
     }
 
-    protected int e(World world, BlockPosition blockposition) {
+    protected int f(World world, BlockPosition blockposition) {
         int i = Math.min(world.a(Entity.class, this.a(blockposition)).size(), this.b);
 
         if (i > 0) {

@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.io.DataInput;
 import java.io.DataOutput;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -11,12 +12,12 @@ import org.apache.logging.log4j.Logger;
 public class NBTTagList extends NBTBase {
 
     private static final Logger b = LogManager.getLogger();
-    private List list = Lists.newArrayList();
+    private List<NBTBase> list = Lists.newArrayList();
     private byte type = 0;
 
     public NBTTagList() {}
 
-    void write(DataOutput dataoutput) {
+    void write(DataOutput dataoutput) throws IOException {
         if (!this.list.isEmpty()) {
             this.type = ((NBTBase) this.list.get(0)).getTypeId();
         } else {
@@ -32,7 +33,7 @@ public class NBTTagList extends NBTBase {
 
     }
 
-    void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) {
+    void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
         if (i > 512) {
             throw new RuntimeException("Tried to read NBT tag with too high complexity, depth > 512");
         } else {
@@ -57,16 +58,17 @@ public class NBTTagList extends NBTBase {
     }
 
     public String toString() {
-        String s = "[";
-        int i = 0;
+        StringBuilder stringbuilder = new StringBuilder("[");
 
-        for (Iterator iterator = this.list.iterator(); iterator.hasNext(); ++i) {
-            NBTBase nbtbase = (NBTBase) iterator.next();
+        for (int i = 0; i < this.list.size(); ++i) {
+            if (i != 0) {
+                stringbuilder.append(',');
+            }
 
-            s = s + "" + i + ':' + nbtbase + ',';
+            stringbuilder.append(i).append(':').append(this.list.get(i));
         }
 
-        return s + "]";
+        return stringbuilder.append(']').toString();
     }
 
     public void add(NBTBase nbtbase) {

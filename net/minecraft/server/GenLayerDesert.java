@@ -102,10 +102,10 @@ public class GenLayerDesert extends GenLayer {
             BiomeBase biomebase1 = BiomeBase.getBiome(j);
 
             if (biomebase != null && biomebase1 != null) {
-                EnumTemperature enumtemperature = biomebase.m();
-                EnumTemperature enumtemperature1 = biomebase1.m();
+                BiomeBase.EnumTemperature biomebase_enumtemperature = biomebase.m();
+                BiomeBase.EnumTemperature biomebase_enumtemperature1 = biomebase1.m();
 
-                return enumtemperature == enumtemperature1 || enumtemperature == EnumTemperature.MEDIUM || enumtemperature1 == EnumTemperature.MEDIUM;
+                return biomebase_enumtemperature == biomebase_enumtemperature1 || biomebase_enumtemperature == BiomeBase.EnumTemperature.MEDIUM || biomebase_enumtemperature1 == BiomeBase.EnumTemperature.MEDIUM;
             } else {
                 return false;
             }

@@ -12,7 +12,7 @@ public class BlockSnow extends Block {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
         this.a(true);
         this.a(CreativeModeTab.c);
-        this.h();
+        this.j();
     }
 
     public boolean b(IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -34,7 +34,7 @@ public class BlockSnow extends Block {
         return false;
     }
 
-    public void h() {
+    public void j() {
         this.b(0);
     }
 
@@ -52,7 +52,7 @@ public class BlockSnow extends Block {
         IBlockData iblockdata = world.getType(blockposition.down());
         Block block = iblockdata.getBlock();
 
-        return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (block.getMaterial() == Material.LEAVES ? true : (block == this && ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() == 7 ? true : block.c() && block.material.isSolid())) : false;
+        return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (block.getMaterial() == Material.LEAVES ? true : (block == this && ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() >= 7 ? true : block.c() && block.material.isSolid())) : false;
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
@@ -95,7 +95,7 @@ public class BlockSnow extends Block {
         return this.getBlockData().set(BlockSnow.LAYERS, Integer.valueOf((i & 7) + 1));
     }
 
-    public boolean f(World world, BlockPosition blockposition) {
+    public boolean a(World world, BlockPosition blockposition) {
         return ((Integer) world.getType(blockposition).get(BlockSnow.LAYERS)).intValue() == 1;
     }
 

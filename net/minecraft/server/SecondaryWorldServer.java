@@ -7,7 +7,35 @@ public class SecondaryWorldServer extends WorldServer {
     public SecondaryWorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, int i, WorldServer worldserver, MethodProfiler methodprofiler) {
         super(minecraftserver, idatamanager, new SecondaryWorldData(worldserver.getWorldData()), i, methodprofiler);
         this.a = worldserver;
-        worldserver.af().a((IWorldBorderListener) (new SecondaryWorldServerInnerClass1(this)));
+        worldserver.getWorldBorder().a(new IWorldBorderListener() {
+            public void a(WorldBorder worldborder, double d0) {
+                SecondaryWorldServer.this.getWorldBorder().setSize(d0);
+            }
+
+            public void a(WorldBorder worldborder, double d0, double d1, long i) {
+                SecondaryWorldServer.this.getWorldBorder().transitionSizeBetween(d0, d1, i);
+            }
+
+            public void a(WorldBorder worldborder, double d0, double d1) {
+                SecondaryWorldServer.this.getWorldBorder().setCenter(d0, d1);
+            }
+
+            public void a(WorldBorder worldborder, int i) {
+                SecondaryWorldServer.this.getWorldBorder().setWarningTime(i);
+            }
+
+            public void b(WorldBorder worldborder, int i) {
+                SecondaryWorldServer.this.getWorldBorder().setWarningDistance(i);
+            }
+
+            public void b(WorldBorder worldborder, double d0) {
+                SecondaryWorldServer.this.getWorldBorder().setDamageAmount(d0);
+            }
+
+            public void c(WorldBorder worldborder, double d0) {
+                SecondaryWorldServer.this.getWorldBorder().setDamageBuffer(d0);
+            }
+        });
     }
 
     protected void a() {}

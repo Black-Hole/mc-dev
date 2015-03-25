@@ -19,7 +19,7 @@ public class GenLayerBiome extends GenLayer {
             this.c = new BiomeBase[] { BiomeBase.DESERT, BiomeBase.FOREST, BiomeBase.EXTREME_HILLS, BiomeBase.SWAMPLAND, BiomeBase.PLAINS, BiomeBase.TAIGA};
             this.g = null;
         } else if (worldtype == WorldType.CUSTOMIZED) {
-            this.g = CustomWorldSettings.a(s).b();
+            this.g = CustomWorldSettingsFinal.CustomWorldSettings.a(s).b();
         } else {
             this.g = null;
         }

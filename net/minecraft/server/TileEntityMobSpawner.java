@@ -2,7 +2,27 @@ package net.minecraft.server;
 
 public class TileEntityMobSpawner extends TileEntity implements IUpdatePlayerListBox {
 
-    private final MobSpawnerAbstract a = new MobSpawner(this);
+    private final MobSpawnerAbstract a = new MobSpawnerAbstract() {
+        public void a(int i) {
+            TileEntityMobSpawner.this.world.playBlockAction(TileEntityMobSpawner.this.position, Blocks.MOB_SPAWNER, i, 0);
+        }
+
+        public World a() {
+            return TileEntityMobSpawner.this.world;
+        }
+
+        public BlockPosition b() {
+            return TileEntityMobSpawner.this.position;
+        }
+
+        public void a(MobSpawnerAbstract.a mobspawnerabstract_a) {
+            super.a(mobspawnerabstract_a);
+            if (this.a() != null) {
+                this.a().notify(TileEntityMobSpawner.this.position);
+            }
+
+        }
+    };
 
     public TileEntityMobSpawner() {}
 

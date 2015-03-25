@@ -21,7 +21,7 @@ public abstract class TileEntityContainer extends TileEntity implements ITileEnt
 
     }
 
-    public boolean q_() {
+    public boolean r_() {
         return this.a != null && !this.a.a();
     }
 

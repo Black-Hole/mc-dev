@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface IScoreboardCriteria {
 
-    Map criteria = Maps.newHashMap();
+    Map<String, IScoreboardCriteria> criteria = Maps.newHashMap();
     IScoreboardCriteria b = new ScoreboardBaseCriteria("dummy");
     IScoreboardCriteria c = new ScoreboardBaseCriteria("trigger");
     IScoreboardCriteria d = new ScoreboardBaseCriteria("deathCount");
@@ -18,9 +18,43 @@ public interface IScoreboardCriteria {
 
     String getName();
 
-    int getScoreModifier(List list);
+    int getScoreModifier(List<EntityHuman> list);
 
     boolean isReadOnly();
 
-    EnumScoreboardHealthDisplay c();
+    IScoreboardCriteria.EnumScoreboardHealthDisplay c();
+
+    public static enum EnumScoreboardHealthDisplay {
+
+        INTEGER("integer"), HEARTS("hearts");
+
+        private static final Map<String, IScoreboardCriteria.EnumScoreboardHealthDisplay> c = Maps.newHashMap();
+        private final String d;
+
+        private EnumScoreboardHealthDisplay(String s) {
+            this.d = s;
+        }
+
+        public String a() {
+            return this.d;
+        }
+
+        public static IScoreboardCriteria.EnumScoreboardHealthDisplay a(String s) {
+            IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay = (IScoreboardCriteria.EnumScoreboardHealthDisplay) IScoreboardCriteria.EnumScoreboardHealthDisplay.c.get(s);
+
+            return iscoreboardcriteria_enumscoreboardhealthdisplay == null ? IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER : iscoreboardcriteria_enumscoreboardhealthdisplay;
+        }
+
+        static {
+            IScoreboardCriteria.EnumScoreboardHealthDisplay[] aiscoreboardcriteria_enumscoreboardhealthdisplay = values();
+            int i = aiscoreboardcriteria_enumscoreboardhealthdisplay.length;
+
+            for (int j = 0; j < i; ++j) {
+                IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay = aiscoreboardcriteria_enumscoreboardhealthdisplay[j];
+
+                IScoreboardCriteria.EnumScoreboardHealthDisplay.c.put(iscoreboardcriteria_enumscoreboardhealthdisplay.a(), iscoreboardcriteria_enumscoreboardhealthdisplay);
+            }
+
+        }
+    }
 }

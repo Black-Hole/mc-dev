@@ -24,7 +24,7 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
             --this.a;
             return false;
         } else {
-            this.a = 200 + this.c.bb().nextInt(200);
+            this.a = 200 + this.c.bc().nextInt(200);
             return this.g();
         }
     }
@@ -36,7 +36,7 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
     public void c() {
         this.c.getNavigation().a((double) ((float) this.b.getX()) + 0.5D, (double) (this.b.getY() + 1), (double) ((float) this.b.getZ()) + 0.5D, this.d);
         this.e = 0;
-        this.f = this.c.bb().nextInt(this.c.bb().nextInt(1200) + 1200) + 1200;
+        this.f = this.c.bc().nextInt(this.c.bc().nextInt(1200) + 1200) + 1200;
     }
 
     public void d() {}
@@ -70,7 +70,7 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
                     for (int i1 = l < k && l > -k ? k : 0; i1 <= k; i1 = i1 > 0 ? -i1 : 1 - i1) {
                         BlockPosition blockposition1 = blockposition.a(l, j - 1, i1);
 
-                        if (this.c.d(blockposition1) && this.a(this.c.world, blockposition1)) {
+                        if (this.c.e(blockposition1) && this.a(this.c.world, blockposition1)) {
                             this.b = blockposition1;
                             return true;
                         }

@@ -4,11 +4,11 @@ public class BlockCarrots extends BlockCrops {
 
     public BlockCarrots() {}
 
-    protected Item j() {
+    protected Item l() {
         return Items.CARROT;
     }
 
-    protected Item l() {
+    protected Item n() {
         return Items.CARROT;
     }
 }

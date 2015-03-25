@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
@@ -7,7 +8,7 @@ import java.util.List;
 
 public abstract class ChatBaseComponent implements IChatBaseComponent {
 
-    protected List a = Lists.newArrayList();
+    protected List<IChatBaseComponent> a = Lists.newArrayList();
     private ChatModifier b;
 
     public ChatBaseComponent() {}
@@ -18,7 +19,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
         return this;
     }
 
-    public List a() {
+    public List<IChatBaseComponent> a() {
         return this.a;
     }
 
@@ -54,7 +55,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
         return this.b;
     }
 
-    public Iterator iterator() {
+    public Iterator<IChatBaseComponent> iterator() {
         return Iterators.concat(Iterators.forArray(new ChatBaseComponent[] { this}), a((Iterable) this.a));
     }
 
@@ -71,10 +72,29 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
         return stringbuilder.toString();
     }
 
-    public static Iterator a(Iterable iterable) {
-        Iterator iterator = Iterators.concat(Iterators.transform(iterable.iterator(), new ChatFunction1()));
+    public static Iterator<IChatBaseComponent> a(Iterable<IChatBaseComponent> iterable) {
+        Iterator iterator = Iterators.concat(Iterators.transform(iterable.iterator(), new Function() {
+            public Iterator<IChatBaseComponent> a(IChatBaseComponent ichatbasecomponent) {
+                return ichatbasecomponent.iterator();
+            }
 
-        iterator = Iterators.transform(iterator, new ChatFunction2());
+            public Object apply(Object object) {
+                return this.a((IChatBaseComponent) object);
+            }
+        }));
+
+        iterator = Iterators.transform(iterator, new Function() {
+            public IChatBaseComponent a(IChatBaseComponent ichatbasecomponent) {
+                IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent.f();
+
+                ichatbasecomponent1.setChatModifier(ichatbasecomponent1.getChatModifier().n());
+                return ichatbasecomponent1;
+            }
+
+            public Object apply(Object object) {
+                return this.a((IChatBaseComponent) object);
+            }
+        });
         return iterator;
     }
 

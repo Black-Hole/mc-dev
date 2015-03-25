@@ -12,7 +12,7 @@ public class TileEntityPiston extends TileEntity implements IUpdatePlayerListBox
     private boolean h;
     private float i;
     private float j;
-    private List k = Lists.newArrayList();
+    private List<Entity> k = Lists.newArrayList();
 
     public TileEntityPiston() {}
 
@@ -67,7 +67,7 @@ public class TileEntityPiston extends TileEntity implements IUpdatePlayerListBox
                     Entity entity = (Entity) iterator.next();
 
                     if (this.a.getBlock() == Blocks.SLIME && this.g) {
-                        switch (SwitchHelperTileEntityPiston.a[this.f.k().ordinal()]) {
+                        switch (TileEntityPiston.SyntheticClass_1.a[this.f.k().ordinal()]) {
                         case 1:
                             entity.motX = (double) this.f.getAdjacentX();
                             break;
@@ -142,5 +142,31 @@ public class TileEntityPiston extends TileEntity implements IUpdatePlayerListBox
         nbttagcompound.setInt("facing", this.f.a());
         nbttagcompound.setFloat("progress", this.j);
         nbttagcompound.setBoolean("extending", this.g);
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EnumDirection.EnumAxis.values().length];
+
+        static {
+            try {
+                TileEntityPiston.SyntheticClass_1.a[EnumDirection.EnumAxis.X.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                TileEntityPiston.SyntheticClass_1.a[EnumDirection.EnumAxis.Y.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                TileEntityPiston.SyntheticClass_1.a[EnumDirection.EnumAxis.Z.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+        }
     }
 }

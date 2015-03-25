@@ -18,7 +18,7 @@ public class CommandSetWorldSpawn extends CommandAbstract {
         return "commands.setworldspawn.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         BlockPosition blockposition;
 
         if (astring.length == 0) {
@@ -36,7 +36,7 @@ public class CommandSetWorldSpawn extends CommandAbstract {
         a(icommandlistener, this, "commands.setworldspawn.success", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : null;
     }
 }

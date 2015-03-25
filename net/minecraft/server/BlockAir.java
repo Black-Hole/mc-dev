@@ -23,4 +23,8 @@ public class BlockAir extends Block {
     }
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {}
+
+    public boolean a(World world, BlockPosition blockposition) {
+        return true;
+    }
 }

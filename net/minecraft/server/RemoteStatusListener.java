@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.Map.Entry;
 
 public class RemoteStatusListener extends RemoteConnectionThread {
@@ -26,10 +27,10 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     private DatagramSocket n;
     private byte[] o = new byte[1460];
     private DatagramPacket p;
-    private Map q;
+    private Map<SocketAddress, String> q;
     private String r;
     private String s;
-    private Map t;
+    private Map<SocketAddress, RemoteStatusListener.RemoteStatusChallenge> t;
     private long u;
     private RemoteStatusReply v;
     private long w;
@@ -37,10 +38,10 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     public RemoteStatusListener(IMinecraftServer iminecraftserver) {
         super(iminecraftserver, "Query Listener");
         this.i = iminecraftserver.a("query.port", 0);
-        this.s = iminecraftserver.C();
-        this.j = iminecraftserver.D();
-        this.l = iminecraftserver.E();
-        this.k = iminecraftserver.H();
+        this.s = iminecraftserver.D();
+        this.j = iminecraftserver.E();
+        this.l = iminecraftserver.F();
+        this.k = iminecraftserver.I();
         this.m = iminecraftserver.T();
         this.w = 0L;
         this.r = "0.0.0.0";
@@ -72,11 +73,11 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         this.u = (new Date()).getTime();
     }
 
-    private void a(byte[] abyte, DatagramPacket datagrampacket) {
+    private void a(byte[] abyte, DatagramPacket datagrampacket) throws IOException {
         this.n.send(new DatagramPacket(abyte, abyte.length, datagrampacket.getSocketAddress()));
     }
 
-    private boolean a(DatagramPacket datagrampacket) {
+    private boolean a(DatagramPacket datagrampacket) throws IOException {
         byte[] abyte = datagrampacket.getData();
         int i = datagrampacket.getLength();
         SocketAddress socketaddress = datagrampacket.getSocketAddress();
@@ -122,8 +123,8 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         }
     }
 
-    private byte[] b(DatagramPacket datagrampacket) {
-        long i = MinecraftServer.ax();
+    private byte[] b(DatagramPacket datagrampacket) throws IOException {
+        long i = MinecraftServer.ay();
 
         if (i < this.w + 5000L) {
             byte[] abyte = this.v.a();
@@ -182,7 +183,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     }
 
     private byte[] a(SocketAddress socketaddress) {
-        return ((RemoteStatusChallenge) this.t.get(socketaddress)).c();
+        return ((RemoteStatusListener.RemoteStatusChallenge) this.t.get(socketaddress)).c();
     }
 
     private Boolean c(DatagramPacket datagrampacket) {
@@ -193,20 +194,20 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         } else {
             byte[] abyte = datagrampacket.getData();
 
-            return ((RemoteStatusChallenge) this.t.get(socketaddress)).a() != StatusChallengeUtils.c(abyte, 7, datagrampacket.getLength()) ? Boolean.valueOf(false) : Boolean.valueOf(true);
+            return ((RemoteStatusListener.RemoteStatusChallenge) this.t.get(socketaddress)).a() != StatusChallengeUtils.c(abyte, 7, datagrampacket.getLength()) ? Boolean.valueOf(false) : Boolean.valueOf(true);
         }
     }
 
-    private void d(DatagramPacket datagrampacket) {
-        RemoteStatusChallenge remotestatuschallenge = new RemoteStatusChallenge(this, datagrampacket);
+    private void d(DatagramPacket datagrampacket) throws IOException {
+        RemoteStatusListener.RemoteStatusChallenge remotestatuslistener_remotestatuschallenge = new RemoteStatusListener.RemoteStatusChallenge(datagrampacket);
 
-        this.t.put(datagrampacket.getSocketAddress(), remotestatuschallenge);
-        this.a(remotestatuschallenge.b(), datagrampacket);
+        this.t.put(datagrampacket.getSocketAddress(), remotestatuslistener_remotestatuschallenge);
+        this.a(remotestatuslistener_remotestatuschallenge.b(), datagrampacket);
     }
 
     private void f() {
         if (this.a) {
-            long i = MinecraftServer.ax();
+            long i = MinecraftServer.ay();
 
             if (i >= this.h + 30000L) {
                 this.h = i;
@@ -215,7 +216,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
                 while (iterator.hasNext()) {
                     Entry entry = (Entry) iterator.next();
 
-                    if (((RemoteStatusChallenge) entry.getValue()).a(i).booleanValue()) {
+                    if (((RemoteStatusListener.RemoteStatusChallenge) entry.getValue()).a(i).booleanValue()) {
                         iterator.remove();
                     }
                 }
@@ -226,7 +227,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     public void run() {
         this.b("Query running on " + this.s + ":" + this.i);
-        this.h = MinecraftServer.ax();
+        this.h = MinecraftServer.ay();
         this.p = new DatagramPacket(this.o, this.o.length);
 
         try {
@@ -288,5 +289,43 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         }
 
         return false;
+    }
+
+    class RemoteStatusChallenge {
+
+        private long time = (new Date()).getTime();
+        private int token;
+        private byte[] identity;
+        private byte[] response;
+        private String f;
+
+        public RemoteStatusChallenge(DatagramPacket datagrampacket) {
+            byte[] abyte = datagrampacket.getData();
+
+            this.identity = new byte[4];
+            this.identity[0] = abyte[3];
+            this.identity[1] = abyte[4];
+            this.identity[2] = abyte[5];
+            this.identity[3] = abyte[6];
+            this.f = new String(this.identity);
+            this.token = (new Random()).nextInt(16777216);
+            this.response = String.format("\t%s%d\u0000", new Object[] { this.f, Integer.valueOf(this.token)}).getBytes();
+        }
+
+        public Boolean a(long i) {
+            return Boolean.valueOf(this.time < i);
+        }
+
+        public int a() {
+            return this.token;
+        }
+
+        public byte[] b() {
+            return this.response;
+        }
+
+        public byte[] c() {
+            return this.identity;
+        }
     }
 }

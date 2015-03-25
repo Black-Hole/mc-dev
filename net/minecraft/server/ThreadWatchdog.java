@@ -7,6 +7,7 @@ import java.lang.management.ThreadMXBean;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
+import java.util.TimerTask;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,13 +19,13 @@ public class ThreadWatchdog implements Runnable {
 
     public ThreadWatchdog(DedicatedServer dedicatedserver) {
         this.b = dedicatedserver;
-        this.c = dedicatedserver.aQ();
+        this.c = dedicatedserver.aR();
     }
 
     public void run() {
         while (this.b.isRunning()) {
-            long i = this.b.aJ();
-            long j = MinecraftServer.ax();
+            long i = this.b.aK();
+            long j = MinecraftServer.ay();
             long k = j - i;
 
             if (k > this.c) {
@@ -40,7 +41,7 @@ public class ThreadWatchdog implements Runnable {
                 for (int i1 = 0; i1 < l; ++i1) {
                     ThreadInfo threadinfo = athreadinfo1[i1];
 
-                    if (threadinfo.getThreadId() == this.b.aK().getId()) {
+                    if (threadinfo.getThreadId() == this.b.aL().getId()) {
                         error.setStackTrace(threadinfo.getStackTrace());
                     }
 
@@ -54,7 +55,7 @@ public class ThreadWatchdog implements Runnable {
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Thread Dump");
 
                 crashreportsystemdetails.a("Threads", (Object) stringbuilder);
-                File file = new File(new File(this.b.w(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
+                File file = new File(new File(this.b.x(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
 
                 if (crashreport.a(file)) {
                     ThreadWatchdog.a.error("This crash report has been saved to: " + file.getAbsolutePath());
@@ -78,7 +79,11 @@ public class ThreadWatchdog implements Runnable {
         try {
             Timer timer = new Timer();
 
-            timer.schedule(new ThreadWatchdogTimer(this), 10000L);
+            timer.schedule(new TimerTask() {
+                public void run() {
+                    Runtime.getRuntime().halt(1);
+                }
+            }, 10000L);
             System.exit(1);
         } catch (Throwable throwable) {
             Runtime.getRuntime().halt(1);

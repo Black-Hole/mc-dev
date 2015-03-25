@@ -12,7 +12,7 @@ public class CommandSaveAll extends CommandAbstract {
         return "commands.save.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         MinecraftServer minecraftserver = MinecraftServer.getServer();
 
         icommandlistener.sendMessage(new ChatMessage("commands.save.start", new Object[0]));

@@ -5,15 +5,15 @@ import java.util.Collection;
 
 public interface IBlockData {
 
-    Collection a();
+    Collection<IBlockState> a();
 
-    Comparable get(IBlockState iblockstate);
+    <T extends Comparable<T>> T get(IBlockState<T> iblockstate);
 
-    IBlockData set(IBlockState iblockstate, Comparable comparable);
+    <T extends Comparable<T>, V extends T> IBlockData set(IBlockState<T> iblockstate, V v0);
 
-    IBlockData a(IBlockState iblockstate);
+    <T extends Comparable<T>> IBlockData a(IBlockState<T> iblockstate);
 
-    ImmutableMap b();
+    ImmutableMap<IBlockState, Comparable> b();
 
     Block getBlock();
 }

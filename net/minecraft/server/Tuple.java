@@ -1,20 +1,20 @@
 package net.minecraft.server;
 
-public class Tuple {
+public class Tuple<A, B> {
 
-    private Object a;
-    private Object b;
+    private A a;
+    private B b;
 
-    public Tuple(Object object, Object object1) {
-        this.a = object;
-        this.b = object1;
+    public Tuple(A a0, B b0) {
+        this.a = a0;
+        this.b = b0;
     }
 
-    public Object a() {
+    public A a() {
         return this.a;
     }
 
-    public Object b() {
+    public B b() {
         return this.b;
     }
 }

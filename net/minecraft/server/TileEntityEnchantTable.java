@@ -44,7 +44,7 @@ public class TileEntityEnchantTable extends TileEntity implements IUpdatePlayerL
             double d0 = entityhuman.locX - (double) ((float) this.position.getX() + 0.5F);
             double d1 = entityhuman.locZ - (double) ((float) this.position.getZ() + 0.5F);
 
-            this.n = (float) Math.atan2(d1, d0);
+            this.n = (float) MathHelper.b(d1, d0);
             this.j += 0.1F;
             if (this.j < 0.5F || TileEntityEnchantTable.o.nextInt(40) == 0) {
                 float f = this.h;

@@ -1,34 +1,46 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
 public class EntityEnderman extends EntityMonster {
 
-    private static final UUID b = UUID.fromString("020E0DFB-87AE-4653-9556-831010E291A0");
-    private static final AttributeModifier c = (new AttributeModifier(EntityEnderman.b, "Attacking speed boost", 0.15000000596046448D, 0)).a(false);
-    private static final Set bk = Sets.newIdentityHashSet();
-    private boolean bl;
+    private static final UUID a = UUID.fromString("020E0DFB-87AE-4653-9556-831010E291A0");
+    private static final AttributeModifier b = (new AttributeModifier(EntityEnderman.a, "Attacking speed boost", 0.15000000596046448D, 0)).a(false);
+    private static final Set<Block> c = Sets.newIdentityHashSet();
+    private boolean bm;
 
     public EntityEnderman(World world) {
         super(world);
-        this.a(0.6F, 2.9F);
+        this.setSize(0.6F, 2.9F);
         this.S = 1.0F;
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
-        this.goalSelector.a(10, new PathfinderGoalEndermanPlaceBlock(this));
-        this.goalSelector.a(11, new PathfinderGoalEndermanPickupBlock(this));
+        this.goalSelector.a(10, new EntityEnderman.PathfinderGoalEndermanPlaceBlock(this));
+        this.goalSelector.a(11, new EntityEnderman.PathfinderGoalEndermanPickupBlock(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
-        this.targetSelector.a(2, new PathfinderGoalPlayerWhoLookedAtTarget(this));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityEndermite.class, 10, true, false, new EntitySelectorPlayerSpawnedEndermites(this)));
+        this.targetSelector.a(2, new EntityEnderman.PathfinderGoalPlayerWhoLookedAtTarget(this));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityEndermite.class, 10, true, false, new Predicate() {
+            public boolean a(EntityEndermite entityendermite) {
+                return entityendermite.n();
+            }
+
+            public boolean apply(Object object) {
+                return this.a((EntityEndermite) object);
+            }
+        }));
     }
 
-    protected void aW() {
-        super.aW();
+    protected void initAttributes() {
+        super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(40.0D);
         this.getAttributeInstance(GenericAttributes.d).setValue(0.30000001192092896D);
         this.getAttributeInstance(GenericAttributes.e).setValue(7.0D);
@@ -85,13 +97,13 @@ public class EntityEnderman extends EntityMonster {
     }
 
     public void m() {
-        if (this.world.isStatic) {
+        if (this.world.isClientSide) {
             for (int i = 0; i < 2; ++i) {
                 this.world.addParticle(EnumParticle.PORTAL, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length - 0.25D, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D, new int[0]);
             }
         }
 
-        this.aW = false;
+        this.aY = false;
         super.m();
     }
 
@@ -100,7 +112,7 @@ public class EntityEnderman extends EntityMonster {
             this.damageEntity(DamageSource.DROWN, 1.0F);
         }
 
-        if (this.cm() && !this.bl && this.random.nextInt(100) == 0) {
+        if (this.co() && !this.bm && this.random.nextInt(100) == 0) {
             this.a(false);
         }
 
@@ -110,7 +122,7 @@ public class EntityEnderman extends EntityMonster {
             if (f > 0.5F && this.world.i(new BlockPosition(this)) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
                 this.setGoalTarget((EntityLiving) null);
                 this.a(false);
-                this.bl = false;
+                this.bm = false;
                 this.n();
             }
         }
@@ -197,14 +209,14 @@ public class EntityEnderman extends EntityMonster {
     }
 
     protected String z() {
-        return this.cm() ? "mob.endermen.scream" : "mob.endermen.idle";
-    }
-
-    protected String bn() {
-        return "mob.endermen.hit";
+        return this.co() ? "mob.endermen.scream" : "mob.endermen.idle";
     }
 
     protected String bo() {
+        return "mob.endermen.hit";
+    }
+
+    protected String bp() {
         return "mob.endermen.death";
     }
 
@@ -238,7 +250,7 @@ public class EntityEnderman extends EntityMonster {
             return false;
         } else {
             if (damagesource.getEntity() == null || !(damagesource.getEntity() instanceof EntityEndermite)) {
-                if (!this.world.isStatic) {
+                if (!this.world.isClientSide) {
                     this.a(true);
                 }
 
@@ -246,12 +258,12 @@ public class EntityEnderman extends EntityMonster {
                     if (damagesource.getEntity() instanceof EntityPlayer && ((EntityPlayer) damagesource.getEntity()).playerInteractManager.isCreative()) {
                         this.a(false);
                     } else {
-                        this.bl = true;
+                        this.bm = true;
                     }
                 }
 
                 if (damagesource instanceof EntityDamageSourceIndirect) {
-                    this.bl = false;
+                    this.bm = false;
 
                     for (int i = 0; i < 64; ++i) {
                         if (this.n()) {
@@ -273,7 +285,7 @@ public class EntityEnderman extends EntityMonster {
         }
     }
 
-    public boolean cm() {
+    public boolean co() {
         return this.datawatcher.getByte(18) > 0;
     }
 
@@ -281,36 +293,168 @@ public class EntityEnderman extends EntityMonster {
         this.datawatcher.watch(18, Byte.valueOf((byte) (flag ? 1 : 0)));
     }
 
-    static AttributeModifier cn() {
-        return EntityEnderman.c;
-    }
-
-    static boolean a(EntityEnderman entityenderman, EntityHuman entityhuman) {
-        return entityenderman.c(entityhuman);
-    }
-
-    static boolean a(EntityEnderman entityenderman, boolean flag) {
-        return entityenderman.bl = flag;
-    }
-
-    static Set co() {
-        return EntityEnderman.bk;
-    }
-
     static {
-        EntityEnderman.bk.add(Blocks.GRASS);
-        EntityEnderman.bk.add(Blocks.DIRT);
-        EntityEnderman.bk.add(Blocks.SAND);
-        EntityEnderman.bk.add(Blocks.GRAVEL);
-        EntityEnderman.bk.add(Blocks.YELLOW_FLOWER);
-        EntityEnderman.bk.add(Blocks.RED_FLOWER);
-        EntityEnderman.bk.add(Blocks.BROWN_MUSHROOM);
-        EntityEnderman.bk.add(Blocks.RED_MUSHROOM);
-        EntityEnderman.bk.add(Blocks.TNT);
-        EntityEnderman.bk.add(Blocks.CACTUS);
-        EntityEnderman.bk.add(Blocks.CLAY);
-        EntityEnderman.bk.add(Blocks.PUMPKIN);
-        EntityEnderman.bk.add(Blocks.MELON_BLOCK);
-        EntityEnderman.bk.add(Blocks.MYCELIUM);
+        EntityEnderman.c.add(Blocks.GRASS);
+        EntityEnderman.c.add(Blocks.DIRT);
+        EntityEnderman.c.add(Blocks.SAND);
+        EntityEnderman.c.add(Blocks.GRAVEL);
+        EntityEnderman.c.add(Blocks.YELLOW_FLOWER);
+        EntityEnderman.c.add(Blocks.RED_FLOWER);
+        EntityEnderman.c.add(Blocks.BROWN_MUSHROOM);
+        EntityEnderman.c.add(Blocks.RED_MUSHROOM);
+        EntityEnderman.c.add(Blocks.TNT);
+        EntityEnderman.c.add(Blocks.CACTUS);
+        EntityEnderman.c.add(Blocks.CLAY);
+        EntityEnderman.c.add(Blocks.PUMPKIN);
+        EntityEnderman.c.add(Blocks.MELON_BLOCK);
+        EntityEnderman.c.add(Blocks.MYCELIUM);
+    }
+
+    static class PathfinderGoalEndermanPickupBlock extends PathfinderGoal {
+
+        private EntityEnderman enderman;
+
+        public PathfinderGoalEndermanPickupBlock(EntityEnderman entityenderman) {
+            this.enderman = entityenderman;
+        }
+
+        public boolean a() {
+            return !this.enderman.world.getGameRules().getBoolean("mobGriefing") ? false : (this.enderman.getCarried().getBlock().getMaterial() != Material.AIR ? false : this.enderman.bc().nextInt(20) == 0);
+        }
+
+        public void e() {
+            Random random = this.enderman.bc();
+            World world = this.enderman.world;
+            int i = MathHelper.floor(this.enderman.locX - 2.0D + random.nextDouble() * 4.0D);
+            int j = MathHelper.floor(this.enderman.locY + random.nextDouble() * 3.0D);
+            int k = MathHelper.floor(this.enderman.locZ - 2.0D + random.nextDouble() * 4.0D);
+            BlockPosition blockposition = new BlockPosition(i, j, k);
+            IBlockData iblockdata = world.getType(blockposition);
+            Block block = iblockdata.getBlock();
+
+            if (EntityEnderman.c.contains(block)) {
+                this.enderman.setCarried(iblockdata);
+                world.setTypeUpdate(blockposition, Blocks.AIR.getBlockData());
+            }
+
+        }
+    }
+
+    static class PathfinderGoalEndermanPlaceBlock extends PathfinderGoal {
+
+        private EntityEnderman a;
+
+        public PathfinderGoalEndermanPlaceBlock(EntityEnderman entityenderman) {
+            this.a = entityenderman;
+        }
+
+        public boolean a() {
+            return !this.a.world.getGameRules().getBoolean("mobGriefing") ? false : (this.a.getCarried().getBlock().getMaterial() == Material.AIR ? false : this.a.bc().nextInt(2000) == 0);
+        }
+
+        public void e() {
+            Random random = this.a.bc();
+            World world = this.a.world;
+            int i = MathHelper.floor(this.a.locX - 1.0D + random.nextDouble() * 2.0D);
+            int j = MathHelper.floor(this.a.locY + random.nextDouble() * 2.0D);
+            int k = MathHelper.floor(this.a.locZ - 1.0D + random.nextDouble() * 2.0D);
+            BlockPosition blockposition = new BlockPosition(i, j, k);
+            Block block = world.getType(blockposition).getBlock();
+            Block block1 = world.getType(blockposition.down()).getBlock();
+
+            if (this.a(world, blockposition, this.a.getCarried().getBlock(), block, block1)) {
+                world.setTypeAndData(blockposition, this.a.getCarried(), 3);
+                this.a.setCarried(Blocks.AIR.getBlockData());
+            }
+
+        }
+
+        private boolean a(World world, BlockPosition blockposition, Block block, Block block1, Block block2) {
+            return !block.canPlace(world, blockposition) ? false : (block1.getMaterial() != Material.AIR ? false : (block2.getMaterial() == Material.AIR ? false : block2.d()));
+        }
+    }
+
+    static class PathfinderGoalPlayerWhoLookedAtTarget extends PathfinderGoalNearestAttackableTarget {
+
+        private EntityHuman g;
+        private int h;
+        private int i;
+        private EntityEnderman j;
+
+        public PathfinderGoalPlayerWhoLookedAtTarget(EntityEnderman entityenderman) {
+            super(entityenderman, EntityHuman.class, true);
+            this.j = entityenderman;
+        }
+
+        public boolean a() {
+            double d0 = this.f();
+            List list = this.e.world.a(EntityHuman.class, this.e.getBoundingBox().grow(d0, 4.0D, d0), this.c);
+
+            Collections.sort(list, this.b);
+            if (list.isEmpty()) {
+                return false;
+            } else {
+                this.g = (EntityHuman) list.get(0);
+                return true;
+            }
+        }
+
+        public void c() {
+            this.h = 5;
+            this.i = 0;
+        }
+
+        public void d() {
+            this.g = null;
+            this.j.a(false);
+            AttributeInstance attributeinstance = this.j.getAttributeInstance(GenericAttributes.d);
+
+            attributeinstance.c(EntityEnderman.b);
+            super.d();
+        }
+
+        public boolean b() {
+            if (this.g != null) {
+                if (!this.j.c(this.g)) {
+                    return false;
+                } else {
+                    this.j.bm = true;
+                    this.j.a(this.g, 10.0F, 10.0F);
+                    return true;
+                }
+            } else {
+                return super.b();
+            }
+        }
+
+        public void e() {
+            if (this.g != null) {
+                if (--this.h <= 0) {
+                    this.d = this.g;
+                    this.g = null;
+                    super.c();
+                    this.j.makeSound("mob.endermen.stare", 1.0F, 1.0F);
+                    this.j.a(true);
+                    AttributeInstance attributeinstance = this.j.getAttributeInstance(GenericAttributes.d);
+
+                    attributeinstance.b(EntityEnderman.b);
+                }
+            } else {
+                if (this.d != null) {
+                    if (this.d instanceof EntityHuman && this.j.c((EntityHuman) this.d)) {
+                        if (this.d.h(this.j) < 16.0D) {
+                            this.j.n();
+                        }
+
+                        this.i = 0;
+                    } else if (this.d.h(this.j) > 256.0D && this.i++ >= 30 && this.j.b((Entity) this.d)) {
+                        this.i = 0;
+                    }
+                }
+
+                super.e();
+            }
+
+        }
     }
 }

@@ -5,7 +5,7 @@ public class ScoreboardObjective {
     private final Scoreboard a;
     private final String b;
     private final IScoreboardCriteria c;
-    private EnumScoreboardHealthDisplay d;
+    private IScoreboardCriteria.EnumScoreboardHealthDisplay d;
     private String e;
 
     public ScoreboardObjective(Scoreboard scoreboard, String s, IScoreboardCriteria iscoreboardcriteria) {
@@ -33,12 +33,12 @@ public class ScoreboardObjective {
         this.a.handleObjectiveChanged(this);
     }
 
-    public EnumScoreboardHealthDisplay e() {
+    public IScoreboardCriteria.EnumScoreboardHealthDisplay e() {
         return this.d;
     }
 
-    public void a(EnumScoreboardHealthDisplay enumscoreboardhealthdisplay) {
-        this.d = enumscoreboardhealthdisplay;
+    public void a(IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
+        this.d = iscoreboardcriteria_enumscoreboardhealthdisplay;
         this.a.handleObjectiveChanged(this);
     }
 }

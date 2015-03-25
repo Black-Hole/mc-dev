@@ -4,7 +4,7 @@ public class PlayerInteractManager {
 
     public World world;
     public EntityPlayer player;
-    private EnumGamemode gamemode;
+    private WorldSettings.EnumGamemode gamemode;
     private boolean d;
     private int lastDigTick;
     private BlockPosition f;
@@ -15,21 +15,21 @@ public class PlayerInteractManager {
     private int k;
 
     public PlayerInteractManager(World world) {
-        this.gamemode = EnumGamemode.NOT_SET;
+        this.gamemode = WorldSettings.EnumGamemode.NOT_SET;
         this.f = BlockPosition.ZERO;
         this.i = BlockPosition.ZERO;
         this.k = -1;
         this.world = world;
     }
 
-    public void setGameMode(EnumGamemode enumgamemode) {
-        this.gamemode = enumgamemode;
-        enumgamemode.a(this.player.abilities);
+    public void setGameMode(WorldSettings.EnumGamemode worldsettings_enumgamemode) {
+        this.gamemode = worldsettings_enumgamemode;
+        worldsettings_enumgamemode.a(this.player.abilities);
         this.player.updateAbilities();
-        this.player.server.getPlayerList().sendAll(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_GAME_MODE, new EntityPlayer[] { this.player}));
+        this.player.server.getPlayerList().sendAll(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_GAME_MODE, new EntityPlayer[] { this.player}));
     }
 
-    public EnumGamemode getGameMode() {
+    public WorldSettings.EnumGamemode getGameMode() {
         return this.gamemode;
     }
 
@@ -41,9 +41,9 @@ public class PlayerInteractManager {
         return this.gamemode.d();
     }
 
-    public void b(EnumGamemode enumgamemode) {
-        if (this.gamemode == EnumGamemode.NOT_SET) {
-            this.gamemode = enumgamemode;
+    public void b(WorldSettings.EnumGamemode worldsettings_enumgamemode) {
+        if (this.gamemode == WorldSettings.EnumGamemode.NOT_SET) {
+            this.gamemode = worldsettings_enumgamemode;
         }
 
         this.setGameMode(this.gamemode);
@@ -104,12 +104,12 @@ public class PlayerInteractManager {
             Block block = this.world.getType(blockposition).getBlock();
 
             if (this.gamemode.c()) {
-                if (this.gamemode == EnumGamemode.SPECTATOR) {
+                if (this.gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
                     return;
                 }
 
-                if (!this.player.cm()) {
-                    ItemStack itemstack = this.player.bY();
+                if (!this.player.cn()) {
+                    ItemStack itemstack = this.player.bZ();
 
                     if (itemstack == null) {
                         return;
@@ -186,19 +186,19 @@ public class PlayerInteractManager {
     }
 
     public boolean breakBlock(BlockPosition blockposition) {
-        if (this.gamemode.d() && this.player.bz() != null && this.player.bz().getItem() instanceof ItemSword) {
+        if (this.gamemode.d() && this.player.bA() != null && this.player.bA().getItem() instanceof ItemSword) {
             return false;
         } else {
             IBlockData iblockdata = this.world.getType(blockposition);
             TileEntity tileentity = this.world.getTileEntity(blockposition);
 
             if (this.gamemode.c()) {
-                if (this.gamemode == EnumGamemode.SPECTATOR) {
+                if (this.gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
                     return false;
                 }
 
-                if (!this.player.cm()) {
-                    ItemStack itemstack = this.player.bY();
+                if (!this.player.cn()) {
+                    ItemStack itemstack = this.player.bZ();
 
                     if (itemstack == null) {
                         return false;
@@ -216,13 +216,13 @@ public class PlayerInteractManager {
             if (this.isCreative()) {
                 this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(this.world, blockposition));
             } else {
-                ItemStack itemstack1 = this.player.bY();
+                ItemStack itemstack1 = this.player.bZ();
                 boolean flag1 = this.player.b(iblockdata.getBlock());
 
                 if (itemstack1 != null) {
                     itemstack1.a(this.world, iblockdata.getBlock(), blockposition, this.player);
                     if (itemstack1.count == 0) {
-                        this.player.bZ();
+                        this.player.ca();
                     }
                 }
 
@@ -236,7 +236,7 @@ public class PlayerInteractManager {
     }
 
     public boolean useItem(EntityHuman entityhuman, World world, ItemStack itemstack) {
-        if (this.gamemode == EnumGamemode.SPECTATOR) {
+        if (this.gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
             return false;
         } else {
             int i = itemstack.count;
@@ -258,7 +258,7 @@ public class PlayerInteractManager {
                     entityhuman.inventory.items[entityhuman.inventory.itemInHandIndex] = null;
                 }
 
-                if (!entityhuman.bR()) {
+                if (!entityhuman.bS()) {
                     ((EntityPlayer) entityhuman).updateInventory(entityhuman.defaultContainer);
                 }
 
@@ -268,7 +268,7 @@ public class PlayerInteractManager {
     }
 
     public boolean interact(EntityHuman entityhuman, World world, ItemStack itemstack, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (this.gamemode == EnumGamemode.SPECTATOR) {
+        if (this.gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof ITileInventory) {
@@ -276,7 +276,7 @@ public class PlayerInteractManager {
                 ITileInventory itileinventory = (ITileInventory) tileentity;
 
                 if (itileinventory instanceof TileEntityChest && block instanceof BlockChest) {
-                    itileinventory = ((BlockChest) block).d(world, blockposition);
+                    itileinventory = ((BlockChest) block).f(world, blockposition);
                 }
 
                 if (itileinventory != null) {
@@ -290,7 +290,7 @@ public class PlayerInteractManager {
 
             return false;
         } else {
-            if (!entityhuman.isSneaking() || entityhuman.bz() == null) {
+            if (!entityhuman.isSneaking() || entityhuman.bA() == null) {
                 IBlockData iblockdata = world.getType(blockposition);
 
                 if (iblockdata.getBlock().interact(world, blockposition, iblockdata, entityhuman, enumdirection, f, f1, f2)) {

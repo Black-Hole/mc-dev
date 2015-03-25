@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutRemoveEntityEffect implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutRemoveEntityEffect implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private int b;
@@ -12,12 +14,12 @@ public class PacketPlayOutRemoveEntityEffect implements Packet {
         this.b = mobeffect.getEffectId();
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = packetdataserializer.readUnsignedByte();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.writeByte(this.b);
     }

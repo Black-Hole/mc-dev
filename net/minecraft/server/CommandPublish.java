@@ -12,8 +12,8 @@ public class CommandPublish extends CommandAbstract {
         return "commands.publish.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
-        String s = MinecraftServer.getServer().a(EnumGamemode.SURVIVAL, false);
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+        String s = MinecraftServer.getServer().a(WorldSettings.EnumGamemode.SURVIVAL, false);
 
         if (s != null) {
             a(icommandlistener, this, "commands.publish.started", new Object[] { s});

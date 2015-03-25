@@ -19,7 +19,7 @@ public class CommandDeop extends CommandAbstract {
         return "commands.deop.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length == 1 && astring[0].length() > 0) {
             MinecraftServer minecraftserver = MinecraftServer.getServer();
             GameProfile gameprofile = minecraftserver.getPlayerList().getOPs().a(astring[0]);
@@ -35,7 +35,7 @@ public class CommandDeop extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayerList().o()) : null;
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayerList().n()) : null;
     }
 }

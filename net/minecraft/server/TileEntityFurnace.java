@@ -6,9 +6,9 @@ public class TileEntityFurnace extends TileEntityContainer implements IUpdatePla
     private static final int[] f = new int[] { 2, 1};
     private static final int[] g = new int[] { 1};
     private ItemStack[] items = new ItemStack[3];
-    public int burnTime;
+    private int burnTime;
     private int ticksForCurrentFuel;
-    public int cookTime;
+    private int cookTime;
     private int cookTimeTotal;
     private String m;
 
@@ -147,7 +147,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IUpdatePla
             --this.burnTime;
         }
 
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             if (!this.isBurning() && (this.items[1] == null || this.items[0] == null)) {
                 if (!this.isBurning() && this.cookTime > 0) {
                     this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.cookTimeTotal);

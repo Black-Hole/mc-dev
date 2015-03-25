@@ -7,7 +7,7 @@ public class EntityComplexPart extends Entity {
 
     public EntityComplexPart(IComplex icomplex, String s, float f, float f1) {
         super(icomplex.a());
-        this.a(f, f1);
+        this.setSize(f, f1);
         this.owner = icomplex;
         this.b = s;
     }

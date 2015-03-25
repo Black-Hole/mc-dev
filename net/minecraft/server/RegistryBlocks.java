@@ -2,34 +2,34 @@ package net.minecraft.server;
 
 import org.apache.commons.lang3.Validate;
 
-public class RegistryBlocks extends RegistryMaterials {
+public class RegistryBlocks<K, V> extends RegistryMaterials<K, V> {
 
-    private final Object d;
-    private Object e;
+    private final K d;
+    private V e;
 
-    public RegistryBlocks(Object object) {
-        this.d = object;
+    public RegistryBlocks(K k0) {
+        this.d = k0;
     }
 
-    public void a(int i, Object object, Object object1) {
-        if (this.d.equals(object)) {
-            this.e = object1;
+    public void a(int i, K k0, V v0) {
+        if (this.d.equals(k0)) {
+            this.e = v0;
         }
 
-        super.a(i, object, object1);
+        super.a(i, k0, v0);
     }
 
     public void a() {
         Validate.notNull(this.d);
     }
 
-    public Object get(Object object) {
-        Object object1 = super.get(object);
+    public V get(K k0) {
+        Object object = super.get(k0);
 
-        return object1 == null ? this.e : object1;
+        return object == null ? this.e : object;
     }
 
-    public Object a(int i) {
+    public V a(int i) {
         Object object = super.a(i);
 
         return object == null ? this.e : object;

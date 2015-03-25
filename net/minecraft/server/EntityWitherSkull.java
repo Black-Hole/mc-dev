@@ -4,12 +4,12 @@ public class EntityWitherSkull extends EntityFireball {
 
     public EntityWitherSkull(World world) {
         super(world);
-        this.a(0.3125F, 0.3125F);
+        this.setSize(0.3125F, 0.3125F);
     }
 
     public EntityWitherSkull(World world, EntityLiving entityliving, double d0, double d1, double d2) {
         super(world, entityliving, d0, d1, d2);
-        this.a(0.3125F, 0.3125F);
+        this.setSize(0.3125F, 0.3125F);
     }
 
     protected float j() {
@@ -22,8 +22,9 @@ public class EntityWitherSkull extends EntityFireball {
 
     public float a(Explosion explosion, World world, BlockPosition blockposition, IBlockData iblockdata) {
         float f = super.a(explosion, world, blockposition, iblockdata);
+        Block block = iblockdata.getBlock();
 
-        if (this.isCharged() && iblockdata.getBlock() != Blocks.BEDROCK && iblockdata.getBlock() != Blocks.END_PORTAL && iblockdata.getBlock() != Blocks.END_PORTAL_FRAME && iblockdata.getBlock() != Blocks.COMMAND_BLOCK) {
+        if (this.isCharged() && EntityWither.a(block)) {
             f = Math.min(0.8F, f);
         }
 
@@ -31,7 +32,7 @@ public class EntityWitherSkull extends EntityFireball {
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.world.isStatic) {
+        if (!this.world.isClientSide) {
             if (movingobjectposition.entity != null) {
                 if (this.shooter != null) {
                     if (movingobjectposition.entity.damageEntity(DamageSource.mobAttack(this.shooter), 8.0F)) {

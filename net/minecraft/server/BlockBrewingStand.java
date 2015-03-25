@@ -6,11 +6,14 @@ import java.util.Random;
 public class BlockBrewingStand extends BlockContainer {
 
     public static final BlockStateBoolean[] HAS_BOTTLE = new BlockStateBoolean[] { BlockStateBoolean.of("has_bottle_0"), BlockStateBoolean.of("has_bottle_1"), BlockStateBoolean.of("has_bottle_2")};
-    private final Random b = new Random();
 
     public BlockBrewingStand() {
         super(Material.ORE);
         this.j(this.blockStateList.getBlockData().set(BlockBrewingStand.HAS_BOTTLE[0], Boolean.valueOf(false)).set(BlockBrewingStand.HAS_BOTTLE[1], Boolean.valueOf(false)).set(BlockBrewingStand.HAS_BOTTLE[2], Boolean.valueOf(false)));
+    }
+
+    public String getName() {
+        return LocaleI18n.get("item.brewingStand.name");
     }
 
     public boolean c() {
@@ -29,25 +32,26 @@ public class BlockBrewingStand extends BlockContainer {
         return false;
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List list, Entity entity) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
         this.a(0.4375F, 0.0F, 0.4375F, 0.5625F, 0.875F, 0.5625F);
         super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
-        this.h();
+        this.j();
         super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
     }
 
-    public void h() {
+    public void j() {
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (world.isStatic) {
+        if (world.isClientSide) {
             return true;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityBrewingStand) {
                 entityhuman.openContainer((TileEntityBrewingStand) tileentity);
+                entityhuman.b(StatisticList.M);
             }
 
             return true;

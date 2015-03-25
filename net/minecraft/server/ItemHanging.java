@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public class ItemHanging extends Item {
 
-    private final Class a;
+    private final Class<? extends EntityHanging> a;
 
-    public ItemHanging(Class oclass) {
+    public ItemHanging(Class<? extends EntityHanging> oclass) {
         this.a = oclass;
         this.a(CreativeModeTab.c);
     }
@@ -23,7 +23,7 @@ public class ItemHanging extends Item {
                 EntityHanging entityhanging = this.a(world, blockposition1, enumdirection);
 
                 if (entityhanging != null && entityhanging.survives()) {
-                    if (!world.isStatic) {
+                    if (!world.isClientSide) {
                         world.addEntity(entityhanging);
                     }
 

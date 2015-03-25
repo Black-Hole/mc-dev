@@ -11,13 +11,17 @@ public class Statistic {
     public boolean f;
     private final Counter b;
     private final IScoreboardCriteria c;
-    private Class d;
+    private Class<? extends IJsonStatistic> d;
     private static NumberFormat k = NumberFormat.getIntegerInstance(Locale.US);
-    public static Counter g = new UnknownCounter();
+    public static Counter g = new Counter() {
+    };
     private static DecimalFormat l = new DecimalFormat("########0.00");
-    public static Counter h = new TimeCounter();
-    public static Counter i = new DistancesCounter();
-    public static Counter j = new DamageCounter();
+    public static Counter h = new Counter() {
+    };
+    public static Counter i = new Counter() {
+    };
+    public static Counter j = new Counter() {
+    };
 
     public Statistic(String s, IChatBaseComponent ichatbasecomponent, Counter counter) {
         this.name = s;
@@ -54,7 +58,7 @@ public class Statistic {
         IChatBaseComponent ichatbasecomponent = this.a.f();
 
         ichatbasecomponent.getChatModifier().setColor(EnumChatFormat.GRAY);
-        ichatbasecomponent.getChatModifier().setChatHoverable(new ChatHoverable(EnumHoverAction.SHOW_ACHIEVEMENT, new ChatComponentText(this.name)));
+        ichatbasecomponent.getChatModifier().setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_ACHIEVEMENT, new ChatComponentText(this.name)));
         return ichatbasecomponent;
     }
 
@@ -90,11 +94,11 @@ public class Statistic {
         return this.c;
     }
 
-    public Class l() {
+    public Class<? extends IJsonStatistic> l() {
         return this.d;
     }
 
-    public Statistic b(Class oclass) {
+    public Statistic b(Class<? extends IJsonStatistic> oclass) {
         this.d = oclass;
         return this;
     }

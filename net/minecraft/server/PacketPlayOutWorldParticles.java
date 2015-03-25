@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutWorldParticles implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutWorldParticles implements Packet<PacketListenerPlayOut> {
 
     private EnumParticle a;
     private float b;
@@ -30,7 +32,7 @@ public class PacketPlayOutWorldParticles implements Packet {
         this.k = aint;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = EnumParticle.a(packetdataserializer.readInt());
         if (this.a == null) {
             this.a = EnumParticle.BARRIER;
@@ -55,7 +57,7 @@ public class PacketPlayOutWorldParticles implements Packet {
 
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(this.a.c());
         packetdataserializer.writeBoolean(this.j);
         packetdataserializer.writeFloat(this.b);

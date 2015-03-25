@@ -3,11 +3,11 @@ package net.minecraft.server;
 public class ContainerBeacon extends Container {
 
     private IInventory a;
-    private final SlotBeacon f;
+    private final ContainerBeacon.SlotBeacon f;
 
     public ContainerBeacon(IInventory iinventory, IInventory iinventory1) {
         this.a = iinventory1;
-        this.a((Slot) (this.f = new SlotBeacon(this, iinventory1, 0, 136, 110)));
+        this.a((Slot) (this.f = new ContainerBeacon.SlotBeacon(iinventory1, 0, 136, 110)));
         byte b0 = 36;
         short short0 = 137;
 
@@ -32,6 +32,18 @@ public class ContainerBeacon extends Container {
 
     public IInventory e() {
         return this.a;
+    }
+
+    public void b(EntityHuman entityhuman) {
+        super.b(entityhuman);
+        if (entityhuman != null && !entityhuman.world.isClientSide) {
+            ItemStack itemstack = this.f.a(this.f.getMaxStackSize());
+
+            if (itemstack != null) {
+                entityhuman.drop(itemstack, false);
+            }
+
+        }
     }
 
     public boolean a(EntityHuman entityhuman) {
@@ -82,5 +94,20 @@ public class ContainerBeacon extends Container {
         }
 
         return itemstack;
+    }
+
+    class SlotBeacon extends Slot {
+
+        public SlotBeacon(IInventory iinventory, int i, int j, int k) {
+            super(iinventory, i, j, k);
+        }
+
+        public boolean isAllowed(ItemStack itemstack) {
+            return itemstack == null ? false : itemstack.getItem() == Items.EMERALD || itemstack.getItem() == Items.DIAMOND || itemstack.getItem() == Items.GOLD_INGOT || itemstack.getItem() == Items.IRON_INGOT;
+        }
+
+        public int getMaxStackSize() {
+            return 1;
+        }
     }
 }

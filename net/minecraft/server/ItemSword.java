@@ -5,14 +5,14 @@ import com.google.common.collect.Multimap;
 public class ItemSword extends Item {
 
     private float a;
-    private final EnumToolMaterial b;
+    private final Item.EnumToolMaterial b;
 
-    public ItemSword(EnumToolMaterial enumtoolmaterial) {
-        this.b = enumtoolmaterial;
+    public ItemSword(Item.EnumToolMaterial item_enumtoolmaterial) {
+        this.b = item_enumtoolmaterial;
         this.maxStackSize = 1;
-        this.setMaxDurability(enumtoolmaterial.a());
+        this.setMaxDurability(item_enumtoolmaterial.a());
         this.a(CreativeModeTab.j);
-        this.a = 4.0F + enumtoolmaterial.c();
+        this.a = 4.0F + item_enumtoolmaterial.c();
     }
 
     public float g() {
@@ -71,7 +71,7 @@ public class ItemSword extends Item {
         return this.b.f() == itemstack1.getItem() ? true : super.a(itemstack, itemstack1);
     }
 
-    public Multimap i() {
+    public Multimap<String, AttributeModifier> i() {
         Multimap multimap = super.i();
 
         multimap.put(GenericAttributes.e.getName(), new AttributeModifier(ItemSword.f, "Weapon modifier", (double) this.a, 0));

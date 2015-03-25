@@ -18,10 +18,10 @@ public class EntityBoat extends Entity {
         this.a = true;
         this.b = 0.07D;
         this.k = true;
-        this.a(1.5F, 0.6F);
+        this.setSize(1.5F, 0.6F);
     }
 
-    protected boolean r_() {
+    protected boolean s_() {
         return false;
     }
 
@@ -55,13 +55,13 @@ public class EntityBoat extends Entity {
     }
 
     public double an() {
-        return (double) this.length * 0.0D - 0.30000001192092896D;
+        return -0.3D;
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (this.isInvulnerable(damagesource)) {
             return false;
-        } else if (!this.world.isStatic && !this.dead) {
+        } else if (!this.world.isClientSide && !this.dead) {
             if (this.passenger != null && this.passenger == damagesource.getEntity() && damagesource instanceof EntityDamageSourceIndirect) {
                 return false;
             } else {
@@ -76,7 +76,7 @@ public class EntityBoat extends Entity {
                         this.passenger.mount(this);
                     }
 
-                    if (!flag) {
+                    if (!flag && this.world.getGameRules().getBoolean("doEntityDrops")) {
                         this.a(Items.BOAT, 1, 0.0F);
                     }
 
@@ -94,8 +94,8 @@ public class EntityBoat extends Entity {
         return !this.dead;
     }
 
-    public void s_() {
-        super.s_();
+    public void t_() {
+        super.t_();
         if (this.l() > 0) {
             this.a(this.l() - 1);
         }
@@ -150,7 +150,7 @@ public class EntityBoat extends Entity {
         double d10;
         double d11;
 
-        if (this.world.isStatic && this.a) {
+        if (this.world.isClientSide && this.a) {
             if (this.c > 0) {
                 d4 = this.locX + (this.d - this.locX) / (double) this.c;
                 d5 = this.locY + (this.e - this.locY) / (double) this.c;
@@ -191,10 +191,10 @@ public class EntityBoat extends Entity {
 
             if (this.passenger instanceof EntityLiving) {
                 EntityLiving entityliving = (EntityLiving) this.passenger;
-                float f = this.passenger.yaw + -entityliving.aX * 90.0F;
+                float f = this.passenger.yaw + -entityliving.aZ * 90.0F;
 
-                this.motX += -Math.sin((double) (f * 3.1415927F / 180.0F)) * this.b * (double) entityliving.aY * 0.05000000074505806D;
-                this.motZ += Math.cos((double) (f * 3.1415927F / 180.0F)) * this.b * (double) entityliving.aY * 0.05000000074505806D;
+                this.motX += -Math.sin((double) (f * 3.1415927F / 180.0F)) * this.b * (double) entityliving.ba * 0.05000000074505806D;
+                this.motZ += Math.cos((double) (f * 3.1415927F / 180.0F)) * this.b * (double) entityliving.ba * 0.05000000074505806D;
             }
 
             d4 = Math.sqrt(this.motX * this.motX + this.motZ * this.motZ);
@@ -246,16 +246,17 @@ public class EntityBoat extends Entity {
             }
 
             this.move(this.motX, this.motY, this.motZ);
-            if (this.positionChanged && d3 > 0.2D) {
-                if (!this.world.isStatic && !this.dead) {
+            if (this.positionChanged && d3 > 0.2975D) {
+                if (!this.world.isClientSide && !this.dead) {
                     this.die();
+                    if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+                        for (k = 0; k < 3; ++k) {
+                            this.a(Item.getItemOf(Blocks.PLANKS), 1, 0.0F);
+                        }
 
-                    for (k = 0; k < 3; ++k) {
-                        this.a(Item.getItemOf(Blocks.PLANKS), 1, 0.0F);
-                    }
-
-                    for (k = 0; k < 2; ++k) {
-                        this.a(Items.STICK, 1, 0.0F);
+                        for (k = 0; k < 2; ++k) {
+                            this.a(Items.STICK, 1, 0.0F);
+                        }
                     }
                 }
             } else {
@@ -269,7 +270,7 @@ public class EntityBoat extends Entity {
             d10 = this.lastX - this.locX;
             d11 = this.lastZ - this.locZ;
             if (d10 * d10 + d11 * d11 > 0.001D) {
-                d5 = (double) ((float) (Math.atan2(d11, d10) * 180.0D / 3.141592653589793D));
+                d5 = (double) ((float) (MathHelper.b(d11, d10) * 180.0D / 3.141592653589793D));
             }
 
             double d12 = MathHelper.g(d5 - (double) this.yaw);
@@ -284,7 +285,7 @@ public class EntityBoat extends Entity {
 
             this.yaw = (float) ((double) this.yaw + d12);
             this.setYawPitch(this.yaw, this.pitch);
-            if (!this.world.isStatic) {
+            if (!this.world.isClientSide) {
                 List list = this.world.getEntities(this, this.getBoundingBox().grow(0.20000000298023224D, 0.0D, 0.20000000298023224D));
 
                 if (list != null && !list.isEmpty()) {
@@ -322,7 +323,7 @@ public class EntityBoat extends Entity {
         if (this.passenger != null && this.passenger instanceof EntityHuman && this.passenger != entityhuman) {
             return true;
         } else {
-            if (!this.world.isStatic) {
+            if (!this.world.isClientSide) {
                 entityhuman.mount(this);
             }
 
@@ -334,17 +335,18 @@ public class EntityBoat extends Entity {
         if (flag) {
             if (this.fallDistance > 3.0F) {
                 this.e(this.fallDistance, 1.0F);
-                if (!this.world.isStatic && !this.dead) {
+                if (!this.world.isClientSide && !this.dead) {
                     this.die();
+                    if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+                        int i;
 
-                    int i;
+                        for (i = 0; i < 3; ++i) {
+                            this.a(Item.getItemOf(Blocks.PLANKS), 1, 0.0F);
+                        }
 
-                    for (i = 0; i < 3; ++i) {
-                        this.a(Item.getItemOf(Blocks.PLANKS), 1, 0.0F);
-                    }
-
-                    for (i = 0; i < 2; ++i) {
-                        this.a(Items.STICK, 1, 0.0F);
+                        for (i = 0; i < 2; ++i) {
+                            this.a(Items.STICK, 1, 0.0F);
+                        }
                     }
                 }
 

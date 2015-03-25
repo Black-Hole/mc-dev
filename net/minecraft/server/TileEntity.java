@@ -9,8 +9,8 @@ import org.apache.logging.log4j.Logger;
 public abstract class TileEntity {
 
     private static final Logger a = LogManager.getLogger();
-    private static Map f = Maps.newHashMap();
-    private static Map g = Maps.newHashMap();
+    private static Map<String, Class<? extends TileEntity>> f = Maps.newHashMap();
+    private static Map<Class<? extends TileEntity>, String> g = Maps.newHashMap();
     protected World world;
     protected BlockPosition position;
     protected boolean d;
@@ -22,7 +22,7 @@ public abstract class TileEntity {
         this.h = -1;
     }
 
-    private static void a(Class oclass, String s) {
+    private static void a(Class<? extends TileEntity> oclass, String s) {
         if (TileEntity.f.containsKey(s)) {
             throw new IllegalArgumentException("Duplicate id: " + s);
         } else {
@@ -143,11 +143,50 @@ public abstract class TileEntity {
     }
 
     public void a(CrashReportSystemDetails crashreportsystemdetails) {
-        crashreportsystemdetails.a("Name", (Callable) (new CrashReportTileEntityName(this)));
+        crashreportsystemdetails.a("Name", new Callable() {
+            public String a() throws Exception {
+                return (String) TileEntity.g.get(TileEntity.this.getClass()) + " // " + TileEntity.this.getClass().getCanonicalName();
+            }
+
+            public Object call() throws Exception {
+                return this.a();
+            }
+        });
         if (this.world != null) {
             CrashReportSystemDetails.a(crashreportsystemdetails, this.position, this.w(), this.u());
-            crashreportsystemdetails.a("Actual block type", (Callable) (new CrashReportTileEntityType(this)));
-            crashreportsystemdetails.a("Actual block data value", (Callable) (new CrashReportTileEntityData(this)));
+            crashreportsystemdetails.a("Actual block type", new Callable() {
+                public String a() throws Exception {
+                    int i = Block.getId(TileEntity.this.world.getType(TileEntity.this.position).getBlock());
+
+                    try {
+                        return String.format("ID #%d (%s // %s)", new Object[] { Integer.valueOf(i), Block.getById(i).a(), Block.getById(i).getClass().getCanonicalName()});
+                    } catch (Throwable throwable) {
+                        return "ID #" + i;
+                    }
+                }
+
+                public Object call() throws Exception {
+                    return this.a();
+                }
+            });
+            crashreportsystemdetails.a("Actual block data value", new Callable() {
+                public String a() throws Exception {
+                    IBlockData iblockdata = TileEntity.this.world.getType(TileEntity.this.position);
+                    int i = iblockdata.getBlock().toLegacyData(iblockdata);
+
+                    if (i < 0) {
+                        return "Unknown? (Got " + i + ")";
+                    } else {
+                        String s = String.format("%4s", new Object[] { Integer.toBinaryString(i)}).replace(" ", "0");
+
+                        return String.format("%1$d / 0x%1$X / 0b%2$s", new Object[] { Integer.valueOf(i), s});
+                    }
+                }
+
+                public Object call() throws Exception {
+                    return this.a();
+                }
+            });
         }
     }
 
@@ -155,15 +194,11 @@ public abstract class TileEntity {
         this.position = blockposition;
     }
 
-    static Map F() {
-        return TileEntity.g;
-    }
-
     static {
         a(TileEntityFurnace.class, "Furnace");
         a(TileEntityChest.class, "Chest");
         a(TileEntityEnderChest.class, "EnderChest");
-        a(TileEntityRecordPlayer.class, "RecordPlayer");
+        a(BlockJukeBox.TileEntityRecordPlayer.class, "RecordPlayer");
         a(TileEntityDispenser.class, "Trap");
         a(TileEntityDropper.class, "Dropper");
         a(TileEntitySign.class, "Sign");

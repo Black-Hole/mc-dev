@@ -18,7 +18,7 @@ public class Navigation extends NavigationAbstract {
     }
 
     protected boolean b() {
-        return this.b.onGround || this.h() && this.o() || this.b.av() && this.b instanceof EntityZombie && this.b.vehicle instanceof EntityChicken;
+        return this.b.onGround || this.h() && this.o() || this.b.au() && this.b instanceof EntityZombie && this.b.vehicle instanceof EntityChicken;
     }
 
     protected Vec3D c() {

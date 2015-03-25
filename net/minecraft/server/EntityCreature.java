@@ -4,12 +4,12 @@ import java.util.UUID;
 
 public abstract class EntityCreature extends EntityInsentient {
 
-    public static final UUID bi = UUID.fromString("E199AD21-BA8A-4C53-8D13-6182D5C69D3A");
-    public static final AttributeModifier bj = (new AttributeModifier(EntityCreature.bi, "Fleeing speed bonus", 2.0D, 2)).a(false);
+    public static final UUID bk = UUID.fromString("E199AD21-BA8A-4C53-8D13-6182D5C69D3A");
+    public static final AttributeModifier bl = (new AttributeModifier(EntityCreature.bk, "Fleeing speed bonus", 2.0D, 2)).a(false);
     private BlockPosition a;
     private float b;
     private PathfinderGoal c;
-    private boolean bk;
+    private boolean bm;
 
     public EntityCreature(World world) {
         super(world);
@@ -22,19 +22,19 @@ public abstract class EntityCreature extends EntityInsentient {
         return 0.0F;
     }
 
-    public boolean bQ() {
-        return super.bQ() && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ)) >= 0.0F;
+    public boolean bR() {
+        return super.bR() && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ)) >= 0.0F;
     }
 
-    public boolean cd() {
+    public boolean cf() {
         return !this.navigation.m();
     }
 
-    public boolean ce() {
-        return this.d(new BlockPosition(this));
+    public boolean cg() {
+        return this.e(new BlockPosition(this));
     }
 
-    public boolean d(BlockPosition blockposition) {
+    public boolean e(BlockPosition blockposition) {
         return this.b == -1.0F ? true : this.a.i(blockposition) < (double) (this.b * this.b);
     }
 
@@ -43,25 +43,25 @@ public abstract class EntityCreature extends EntityInsentient {
         this.b = (float) i;
     }
 
-    public BlockPosition cf() {
+    public BlockPosition ch() {
         return this.a;
     }
 
-    public float cg() {
+    public float ci() {
         return this.b;
     }
 
-    public void ch() {
+    public void cj() {
         this.b = -1.0F;
     }
 
-    public boolean ci() {
+    public boolean ck() {
         return this.b != -1.0F;
     }
 
-    protected void bZ() {
-        super.bZ();
-        if (this.cb() && this.getLeashHolder() != null && this.getLeashHolder().world == this.world) {
+    protected void ca() {
+        super.ca();
+        if (this.cc() && this.getLeashHolder() != null && this.getLeashHolder().world == this.world) {
             Entity entity = this.getLeashHolder();
 
             this.a(new BlockPosition((int) entity.locX, (int) entity.locY, (int) entity.locZ), 5);
@@ -75,16 +75,16 @@ public abstract class EntityCreature extends EntityInsentient {
                 return;
             }
 
-            if (!this.bk) {
+            if (!this.bm) {
                 this.goalSelector.a(2, this.c);
                 if (this.getNavigation() instanceof Navigation) {
                     ((Navigation) this.getNavigation()).a(false);
                 }
 
-                this.bk = true;
+                this.bm = true;
             }
 
-            this.n(f);
+            this.o(f);
             if (f > 4.0F) {
                 this.getNavigation().a(entity, 1.0D);
             }
@@ -102,17 +102,17 @@ public abstract class EntityCreature extends EntityInsentient {
             if (f > 10.0F) {
                 this.unleash(true, true);
             }
-        } else if (!this.cb() && this.bk) {
-            this.bk = false;
+        } else if (!this.cc() && this.bm) {
+            this.bm = false;
             this.goalSelector.a(this.c);
             if (this.getNavigation() instanceof Navigation) {
                 ((Navigation) this.getNavigation()).a(true);
             }
 
-            this.ch();
+            this.cj();
         }
 
     }
 
-    protected void n(float f) {}
+    protected void o(float f) {}
 }

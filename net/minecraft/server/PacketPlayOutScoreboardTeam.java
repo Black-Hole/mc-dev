@@ -1,10 +1,11 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class PacketPlayOutScoreboardTeam implements Packet {
+public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut> {
 
     private String a = "";
     private String b = "";
@@ -12,18 +13,18 @@ public class PacketPlayOutScoreboardTeam implements Packet {
     private String d = "";
     private String e;
     private int f;
-    private Collection g;
+    private Collection<String> g;
     private int h;
     private int i;
 
     public PacketPlayOutScoreboardTeam() {
-        this.e = EnumNameTagVisibility.ALWAYS.e;
+        this.e = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS.e;
         this.f = -1;
         this.g = Lists.newArrayList();
     }
 
     public PacketPlayOutScoreboardTeam(ScoreboardTeam scoreboardteam, int i) {
-        this.e = EnumNameTagVisibility.ALWAYS.e;
+        this.e = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS.e;
         this.f = -1;
         this.g = Lists.newArrayList();
         this.a = scoreboardteam.getName();
@@ -33,7 +34,7 @@ public class PacketPlayOutScoreboardTeam implements Packet {
             this.c = scoreboardteam.getPrefix();
             this.d = scoreboardteam.getSuffix();
             this.i = scoreboardteam.packOptionData();
-            this.e = scoreboardteam.i().e;
+            this.e = scoreboardteam.getNameTagVisibility().e;
             this.f = scoreboardteam.l().b();
         }
 
@@ -43,8 +44,8 @@ public class PacketPlayOutScoreboardTeam implements Packet {
 
     }
 
-    public PacketPlayOutScoreboardTeam(ScoreboardTeam scoreboardteam, Collection collection, int i) {
-        this.e = EnumNameTagVisibility.ALWAYS.e;
+    public PacketPlayOutScoreboardTeam(ScoreboardTeam scoreboardteam, Collection<String> collection, int i) {
+        this.e = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS.e;
         this.f = -1;
         this.g = Lists.newArrayList();
         if (i != 3 && i != 4) {
@@ -58,7 +59,7 @@ public class PacketPlayOutScoreboardTeam implements Packet {
         }
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.c(16);
         this.h = packetdataserializer.readByte();
         if (this.h == 0 || this.h == 2) {
@@ -80,7 +81,7 @@ public class PacketPlayOutScoreboardTeam implements Packet {
 
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.writeByte(this.h);
         if (this.h == 0 || this.h == 2) {

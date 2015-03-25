@@ -29,7 +29,7 @@ public class BiomeForest extends BiomeBase {
         }
 
         if (this.aG == 0) {
-            this.au.add(new BiomeMeta(EntityWolf.class, 5, 4, 4));
+            this.au.add(new BiomeBase.BiomeMeta(EntityWolf.class, 5, 4, 4));
         }
 
         if (this.aG == 3) {
@@ -56,12 +56,12 @@ public class BiomeForest extends BiomeBase {
         return (WorldGenTreeAbstract) (this.aG == 3 && random.nextInt(3) > 0 ? BiomeForest.aF : (this.aG != 2 && random.nextInt(5) != 0 ? this.aA : BiomeForest.aE));
     }
 
-    public EnumFlowerVarient a(Random random, BlockPosition blockposition) {
+    public BlockFlowers.EnumFlowerVarient a(Random random, BlockPosition blockposition) {
         if (this.aG == 1) {
             double d0 = MathHelper.a((1.0D + BiomeForest.af.a((double) blockposition.getX() / 48.0D, (double) blockposition.getZ() / 48.0D)) / 2.0D, 0.0D, 0.9999D);
-            EnumFlowerVarient enumflowervarient = EnumFlowerVarient.values()[(int) (d0 * (double) EnumFlowerVarient.values().length)];
+            BlockFlowers.EnumFlowerVarient blockflowers_enumflowervarient = BlockFlowers.EnumFlowerVarient.values()[(int) (d0 * (double) BlockFlowers.EnumFlowerVarient.values().length)];
 
-            return enumflowervarient == EnumFlowerVarient.BLUE_ORCHID ? EnumFlowerVarient.POPPY : enumflowervarient;
+            return blockflowers_enumflowervarient == BlockFlowers.EnumFlowerVarient.BLUE_ORCHID ? BlockFlowers.EnumFlowerVarient.POPPY : blockflowers_enumflowervarient;
         } else {
             return super.a(random, blockposition);
         }
@@ -106,11 +106,11 @@ public class BiomeForest extends BiomeBase {
         while (j < i) {
             k = random.nextInt(3);
             if (k == 0) {
-                BiomeForest.ag.a(EnumTallFlowerVariants.SYRINGA);
+                BiomeForest.ag.a(BlockTallPlant.EnumTallFlowerVariants.SYRINGA);
             } else if (k == 1) {
-                BiomeForest.ag.a(EnumTallFlowerVariants.ROSE);
+                BiomeForest.ag.a(BlockTallPlant.EnumTallFlowerVariants.ROSE);
             } else if (k == 2) {
-                BiomeForest.ag.a(EnumTallFlowerVariants.PAEONIA);
+                BiomeForest.ag.a(BlockTallPlant.EnumTallFlowerVariants.PAEONIA);
             }
 
             l = 0;
@@ -135,17 +135,25 @@ public class BiomeForest extends BiomeBase {
         super.a(world, random, blockposition);
     }
 
-    protected BiomeBase d(int i) {
+    protected BiomeBase d(final int i) {
         if (this.id == BiomeBase.FOREST.id) {
             BiomeForest biomeforest = new BiomeForest(i, 1);
 
-            biomeforest.a(new BiomeTemperature(this.an, this.ao + 0.2F));
+            biomeforest.a(new BiomeBase.BiomeTemperature(this.an, this.ao + 0.2F));
             biomeforest.a("Flower Forest");
             biomeforest.a(6976549, true);
             biomeforest.a(8233509);
             return biomeforest;
         } else {
-            return (BiomeBase) (this.id != BiomeBase.BIRCH_FOREST.id && this.id != BiomeBase.BIRCH_FOREST_HILLS.id ? new BiomeBaseSubForest2(this, i, this) : new BiomeBaseSubForest(this, i, this));
+            return this.id != BiomeBase.BIRCH_FOREST.id && this.id != BiomeBase.BIRCH_FOREST_HILLS.id ? new BiomeBaseSub(i, this) {
+                public void a(World world, Random random, BlockPosition blockposition) {
+                    this.aE.a(world, random, blockposition);
+                }
+            } : new BiomeBaseSub(i, this) {
+                public WorldGenTreeAbstract a(Random random) {
+                    return random.nextBoolean() ? BiomeForest.aD : BiomeForest.aE;
+                }
+            };
         }
     }
 }

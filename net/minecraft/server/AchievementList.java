@@ -9,7 +9,7 @@ public class AchievementList {
     public static int b;
     public static int c;
     public static int d;
-    public static List e = Lists.newArrayList();
+    public static List<Achievement> e = Lists.newArrayList();
     public static Achievement f = (new Achievement("achievement.openInventory", "openInventory", 0, 0, Items.BOOK, (Achievement) null)).a().c();
     public static Achievement g = (new Achievement("achievement.mineWood", "mineWood", 2, 1, Blocks.LOG, AchievementList.f)).c();
     public static Achievement h = (new Achievement("achievement.buildWorkBench", "buildWorkBench", 4, -1, Blocks.CRAFTING_TABLE, AchievementList.g)).c();
@@ -43,7 +43,7 @@ public class AchievementList {
     public static Achievement J = (new Achievement("achievement.killWither", "killWither", 7, 10, Items.NETHER_STAR, AchievementList.I)).c();
     public static Achievement K = (new Achievement("achievement.fullBeacon", "fullBeacon", 7, 8, Blocks.BEACON, AchievementList.J)).b().c();
     public static Achievement L = (new Achievement("achievement.exploreAllBiomes", "exploreAllBiomes", 4, 8, Items.DIAMOND_BOOTS, AchievementList.C)).a(AchievementSet.class).b().c();
-    public static Achievement M = (new Achievement("achievement.overpowered", "overpowered", 6, 4, Items.GOLDEN_APPLE, AchievementList.o)).b().c();
+    public static Achievement M = (new Achievement("achievement.overpowered", "overpowered", 6, 4, new ItemStack(Items.GOLDEN_APPLE, 1, 1), AchievementList.o)).b().c();
 
     public static void a() {}
 }

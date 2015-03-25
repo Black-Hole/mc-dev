@@ -6,17 +6,17 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class BlockStatePredicate implements Predicate {
+public class BlockStatePredicate implements Predicate<IBlockData> {
 
     private final BlockStateList a;
-    private final Map b = Maps.newHashMap();
+    private final Map<IBlockState, Predicate> b = Maps.newHashMap();
 
     private BlockStatePredicate(BlockStateList blockstatelist) {
         this.a = blockstatelist;
     }
 
     public static BlockStatePredicate a(Block block) {
-        return new BlockStatePredicate(block.O());
+        return new BlockStatePredicate(block.P());
     }
 
     public boolean a(IBlockData iblockdata) {
@@ -41,7 +41,7 @@ public class BlockStatePredicate implements Predicate {
         }
     }
 
-    public BlockStatePredicate a(IBlockState iblockstate, Predicate predicate) {
+    public <V extends Comparable<V>> BlockStatePredicate a(IBlockState<V> iblockstate, Predicate<? extends V> predicate) {
         if (!this.a.d().contains(iblockstate)) {
             throw new IllegalArgumentException(this.a + " cannot support property " + iblockstate);
         } else {

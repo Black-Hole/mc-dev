@@ -15,7 +15,7 @@ public class StatisticWrapper {
         this.a = i;
     }
 
-    public IJsonStatistic b() {
+    public <T extends IJsonStatistic> T b() {
         return this.b;
     }
 

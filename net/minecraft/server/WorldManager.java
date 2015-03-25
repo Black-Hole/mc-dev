@@ -5,7 +5,7 @@ import java.util.Iterator;
 public class WorldManager implements IWorldAccess {
 
     private MinecraftServer a;
-    public WorldServer world;
+    private WorldServer world;
 
     public WorldManager(MinecraftServer minecraftserver, WorldServer worldserver) {
         this.a = minecraftserver;
@@ -20,6 +20,7 @@ public class WorldManager implements IWorldAccess {
 
     public void b(Entity entity) {
         this.world.getTracker().untrackEntity(entity);
+        this.world.getScoreboard().a(entity);
     }
 
     public void a(String s, double d0, double d1, double d2, float f, float f1) {
@@ -49,7 +50,7 @@ public class WorldManager implements IWorldAccess {
     }
 
     public void b(int i, BlockPosition blockposition, int j) {
-        Iterator iterator = this.a.getPlayerList().players.iterator();
+        Iterator iterator = this.a.getPlayerList().v().iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();

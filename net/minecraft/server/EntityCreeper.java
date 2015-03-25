@@ -2,18 +2,17 @@ package net.minecraft.server;
 
 public class EntityCreeper extends EntityMonster {
 
-    private int b;
+    private int a;
     private int fuseTicks;
     private int maxFuseTicks = 30;
     private int explosionRadius = 3;
-    private int bm = 0;
+    private int bn = 0;
 
     public EntityCreeper(World world) {
         super(world);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, new PathfinderGoalSwell(this));
-        this.goalSelector.a(2, this.a);
-        this.goalSelector.a(3, new PathfinderGoalAvoidTarget(this, new EntitySelectorCreeperOcelot(this), 6.0F, 1.0D, 1.2D));
+        this.goalSelector.a(3, new PathfinderGoalAvoidTarget(this, EntityOcelot.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.goalSelector.a(5, new PathfinderGoalRandomStroll(this, 0.8D));
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
@@ -22,12 +21,12 @@ public class EntityCreeper extends EntityMonster {
         this.targetSelector.a(2, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
     }
 
-    protected void aW() {
-        super.aW();
+    protected void initAttributes() {
+        super.initAttributes();
         this.getAttributeInstance(GenericAttributes.d).setValue(0.25D);
     }
 
-    public int aF() {
+    public int aE() {
         return this.getGoalTarget() == null ? 3 : 3 + (int) (this.getHealth() - 1.0F);
     }
 
@@ -55,7 +54,7 @@ public class EntityCreeper extends EntityMonster {
 
         nbttagcompound.setShort("Fuse", (short) this.maxFuseTicks);
         nbttagcompound.setByte("ExplosionRadius", (byte) this.explosionRadius);
-        nbttagcompound.setBoolean("ignited", this.cl());
+        nbttagcompound.setBoolean("ignited", this.cn());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -70,19 +69,19 @@ public class EntityCreeper extends EntityMonster {
         }
 
         if (nbttagcompound.getBoolean("ignited")) {
-            this.cm();
+            this.co();
         }
 
     }
 
-    public void s_() {
+    public void t_() {
         if (this.isAlive()) {
-            this.b = this.fuseTicks;
-            if (this.cl()) {
+            this.a = this.fuseTicks;
+            if (this.cn()) {
                 this.a(1);
             }
 
-            int i = this.ck();
+            int i = this.cm();
 
             if (i > 0 && this.fuseTicks == 0) {
                 this.makeSound("creeper.primed", 1.0F, 0.5F);
@@ -95,18 +94,18 @@ public class EntityCreeper extends EntityMonster {
 
             if (this.fuseTicks >= this.maxFuseTicks) {
                 this.fuseTicks = this.maxFuseTicks;
-                this.cp();
+                this.cr();
             }
         }
 
-        super.s_();
-    }
-
-    protected String bn() {
-        return "mob.creeper.say";
+        super.t_();
     }
 
     protected String bo() {
+        return "mob.creeper.say";
+    }
+
+    protected String bp() {
         return "mob.creeper.death";
     }
 
@@ -118,8 +117,8 @@ public class EntityCreeper extends EntityMonster {
             int k = i + this.random.nextInt(j - i + 1);
 
             this.a(Item.getById(k), 1);
-        } else if (damagesource.getEntity() instanceof EntityCreeper && damagesource.getEntity() != this && ((EntityCreeper) damagesource.getEntity()).isPowered() && ((EntityCreeper) damagesource.getEntity()).cn()) {
-            ((EntityCreeper) damagesource.getEntity()).co();
+        } else if (damagesource.getEntity() instanceof EntityCreeper && damagesource.getEntity() != this && ((EntityCreeper) damagesource.getEntity()).isPowered() && ((EntityCreeper) damagesource.getEntity()).cp()) {
+            ((EntityCreeper) damagesource.getEntity()).cq();
             this.a(new ItemStack(Items.SKULL, 1, 4), 0.0F);
         }
 
@@ -137,7 +136,7 @@ public class EntityCreeper extends EntityMonster {
         return Items.GUNPOWDER;
     }
 
-    public int ck() {
+    public int cm() {
         return this.datawatcher.getByte(16);
     }
 
@@ -155,9 +154,9 @@ public class EntityCreeper extends EntityMonster {
 
         if (itemstack != null && itemstack.getItem() == Items.FLINT_AND_STEEL) {
             this.world.makeSound(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, "fire.ignite", 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
-            entityhuman.bv();
-            if (!this.world.isStatic) {
-                this.cm();
+            entityhuman.bw();
+            if (!this.world.isClientSide) {
+                this.co();
                 itemstack.damage(1, entityhuman);
                 return true;
             }
@@ -166,8 +165,8 @@ public class EntityCreeper extends EntityMonster {
         return super.a(entityhuman);
     }
 
-    private void cp() {
-        if (!this.world.isStatic) {
+    private void cr() {
+        if (!this.world.isClientSide) {
             boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
             float f = this.isPowered() ? 2.0F : 1.0F;
 
@@ -177,19 +176,19 @@ public class EntityCreeper extends EntityMonster {
 
     }
 
-    public boolean cl() {
+    public boolean cn() {
         return this.datawatcher.getByte(18) != 0;
     }
 
-    public void cm() {
+    public void co() {
         this.datawatcher.watch(18, Byte.valueOf((byte) 1));
     }
 
-    public boolean cn() {
-        return this.bm < 1 && this.world.getGameRules().getBoolean("doMobLoot");
+    public boolean cp() {
+        return this.bn < 1 && this.world.getGameRules().getBoolean("doMobLoot");
     }
 
-    public void co() {
-        ++this.bm;
+    public void cq() {
+        ++this.bn;
     }
 }

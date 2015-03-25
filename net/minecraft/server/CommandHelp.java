@@ -22,11 +22,11 @@ public class CommandHelp extends CommandAbstract {
         return "commands.help.usage";
     }
 
-    public List b() {
+    public List<String> b() {
         return Arrays.asList(new String[] { "?"});
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         List list = this.d(icommandlistener);
         boolean flag = true;
         int i = (list.size() - 1) / 7;
@@ -61,7 +61,7 @@ public class CommandHelp extends CommandAbstract {
             ICommand icommand1 = (ICommand) list.get(l);
             ChatMessage chatmessage1 = new ChatMessage(icommand1.getUsage(icommandlistener), new Object[0]);
 
-            chatmessage1.getChatModifier().setChatClickable(new ChatClickable(EnumClickAction.SUGGEST_COMMAND, "/" + icommand1.getCommand() + " "));
+            chatmessage1.getChatModifier().setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/" + icommand1.getCommand() + " "));
             icommandlistener.sendMessage(chatmessage1);
         }
 
@@ -74,18 +74,18 @@ public class CommandHelp extends CommandAbstract {
 
     }
 
-    protected List d(ICommandListener icommandlistener) {
+    protected List<ICommand> d(ICommandListener icommandlistener) {
         List list = MinecraftServer.getServer().getCommandHandler().a(icommandlistener);
 
         Collections.sort(list);
         return list;
     }
 
-    protected Map d() {
+    protected Map<String, ICommand> d() {
         return MinecraftServer.getServer().getCommandHandler().getCommands();
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         if (astring.length == 1) {
             Set set = this.d().keySet();
 

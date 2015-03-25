@@ -20,7 +20,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
         this.c = enumprotocoldirection;
     }
 
-    protected void decode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, List list) {
+    protected void decode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, List<Object> list) throws Exception {
         if (bytebuf.readableBytes() != 0) {
             PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf);
             int i = packetdataserializer.e();

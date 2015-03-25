@@ -7,9 +7,9 @@ import java.util.List;
 public class PersistentVillage extends PersistentBase {
 
     private World world;
-    private final List c = Lists.newArrayList();
-    private final List d = Lists.newArrayList();
-    private final List villages = Lists.newArrayList();
+    private final List<BlockPosition> c = Lists.newArrayList();
+    private final List<VillageDoor> d = Lists.newArrayList();
+    private final List<Village> villages = Lists.newArrayList();
     private int time;
 
     public PersistentVillage(String s) {
@@ -76,7 +76,7 @@ public class PersistentVillage extends PersistentBase {
 
     }
 
-    public List getVillages() {
+    public List<Village> getVillages() {
         return this.villages;
     }
 

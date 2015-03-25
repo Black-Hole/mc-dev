@@ -26,7 +26,7 @@ public class EntityItemFrame extends EntityHanging {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else if (!damagesource.isExplosion() && this.getItem() != null) {
-            if (!this.world.isStatic) {
+            if (!this.world.isClientSide) {
                 this.a(damagesource.getEntity(), false);
                 this.setItem((ItemStack) null);
             }
@@ -50,7 +50,7 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     public void a(Entity entity, boolean flag) {
-        if (this.world.getGameRules().getBoolean("doTileDrops")) {
+        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
             ItemStack itemstack = this.getItem();
 
             if (entity instanceof EntityHuman) {
@@ -156,15 +156,15 @@ public class EntityItemFrame extends EntityHanging {
 
     public boolean e(EntityHuman entityhuman) {
         if (this.getItem() == null) {
-            ItemStack itemstack = entityhuman.bz();
+            ItemStack itemstack = entityhuman.bA();
 
-            if (itemstack != null && !this.world.isStatic) {
+            if (itemstack != null && !this.world.isClientSide) {
                 this.setItem(itemstack);
                 if (!entityhuman.abilities.canInstantlyBuild && --itemstack.count <= 0) {
                     entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, (ItemStack) null);
                 }
             }
-        } else if (!this.world.isStatic) {
+        } else if (!this.world.isClientSide) {
             this.setRotation(this.getRotation() + 1);
         }
 

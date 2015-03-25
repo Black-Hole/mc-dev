@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class BlockRedstoneTorch extends BlockTorch {
 
-    private static Map b = Maps.newHashMap();
+    private static Map<World, List<BlockRedstoneTorch.RedstoneUpdateInfo>> b = Maps.newHashMap();
     private final boolean isOn;
 
     private boolean a(World world, BlockPosition blockposition, boolean flag) {
@@ -19,15 +19,15 @@ public class BlockRedstoneTorch extends BlockTorch {
         List list = (List) BlockRedstoneTorch.b.get(world);
 
         if (flag) {
-            list.add(new RedstoneUpdateInfo(blockposition, world.getTime()));
+            list.add(new BlockRedstoneTorch.RedstoneUpdateInfo(blockposition, world.getTime()));
         }
 
         int i = 0;
 
         for (int j = 0; j < list.size(); ++j) {
-            RedstoneUpdateInfo redstoneupdateinfo = (RedstoneUpdateInfo) list.get(j);
+            BlockRedstoneTorch.RedstoneUpdateInfo blockredstonetorch_redstoneupdateinfo = (BlockRedstoneTorch.RedstoneUpdateInfo) list.get(j);
 
-            if (redstoneupdateinfo.a.equals(blockposition)) {
+            if (blockredstonetorch_redstoneupdateinfo.a.equals(blockposition)) {
                 ++i;
                 if (i >= 8) {
                     return true;
@@ -92,7 +92,7 @@ public class BlockRedstoneTorch extends BlockTorch {
         boolean flag = this.g(world, blockposition, iblockdata);
         List list = (List) BlockRedstoneTorch.b.get(world);
 
-        while (list != null && !list.isEmpty() && world.getTime() - ((RedstoneUpdateInfo) list.get(0)).b > 60L) {
+        while (list != null && !list.isEmpty() && world.getTime() - ((BlockRedstoneTorch.RedstoneUpdateInfo) list.get(0)).b > 60L) {
             list.remove(0);
         }
 
@@ -142,5 +142,16 @@ public class BlockRedstoneTorch extends BlockTorch {
 
     public boolean b(Block block) {
         return block == Blocks.UNLIT_REDSTONE_TORCH || block == Blocks.REDSTONE_TORCH;
+    }
+
+    static class RedstoneUpdateInfo {
+
+        BlockPosition a;
+        long b;
+
+        public RedstoneUpdateInfo(BlockPosition blockposition, long i) {
+            this.a = blockposition;
+            this.b = i;
+        }
     }
 }

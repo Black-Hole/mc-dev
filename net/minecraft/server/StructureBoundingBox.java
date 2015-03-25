@@ -30,7 +30,7 @@ public class StructureBoundingBox {
     }
 
     public static StructureBoundingBox a(int i, int j, int k, int l, int i1, int j1, int k1, int l1, int i2, EnumDirection enumdirection) {
-        switch (SwitchHelperDirection8.a[enumdirection.ordinal()]) {
+        switch (StructureBoundingBox.SyntheticClass_1.a[enumdirection.ordinal()]) {
         case 1:
             return new StructureBoundingBox(i + l, j + i1, k - i2 + 1 + j1, i + k1 - 1 + l, j + l1 - 1 + i1, k + j1);
 
@@ -144,5 +144,37 @@ public class StructureBoundingBox {
 
     public NBTTagIntArray g() {
         return new NBTTagIntArray(new int[] { this.a, this.b, this.c, this.d, this.e, this.f});
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EnumDirection.values().length];
+
+        static {
+            try {
+                StructureBoundingBox.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                StructureBoundingBox.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                StructureBoundingBox.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                StructureBoundingBox.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+        }
     }
 }

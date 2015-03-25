@@ -6,7 +6,7 @@ import java.util.Random;
 
 public abstract class StructureStart {
 
-    protected LinkedList a = new LinkedList();
+    protected LinkedList<StructurePiece> a = new LinkedList();
     protected StructureBoundingBox b;
     private int c;
     private int d;
@@ -22,7 +22,7 @@ public abstract class StructureStart {
         return this.b;
     }
 
-    public LinkedList b() {
+    public LinkedList<StructurePiece> b() {
         return this.a;
     }
 
@@ -93,7 +93,7 @@ public abstract class StructureStart {
     public void b(NBTTagCompound nbttagcompound) {}
 
     protected void a(World world, Random random, int i) {
-        int j = 63 - i;
+        int j = world.F() - i;
         int k = this.b.d() + 1;
 
         if (k < j) {
@@ -108,7 +108,7 @@ public abstract class StructureStart {
         while (iterator.hasNext()) {
             StructurePiece structurepiece = (StructurePiece) iterator.next();
 
-            structurepiece.c().a(0, l, 0);
+            structurepiece.a(0, l, 0);
         }
 
     }
@@ -132,7 +132,7 @@ public abstract class StructureStart {
         while (iterator.hasNext()) {
             StructurePiece structurepiece = (StructurePiece) iterator.next();
 
-            structurepiece.c().a(0, i1, 0);
+            structurepiece.a(0, i1, 0);
         }
 
     }

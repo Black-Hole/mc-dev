@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayOutEntityHeadRotation implements Packet {
+import java.io.IOException;
+
+public class PacketPlayOutEntityHeadRotation implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private byte b;
@@ -12,12 +14,12 @@ public class PacketPlayOutEntityHeadRotation implements Packet {
         this.b = b0;
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = packetdataserializer.readByte();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.writeByte(this.b);
     }

@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class PossibleFishingResult extends WeightedRandomChoice {
+public class PossibleFishingResult extends WeightedRandom.WeightedRandomChoice {
 
     private final ItemStack b;
     private float c;

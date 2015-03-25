@@ -19,8 +19,8 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
             }
 
             this.f = -1;
-            this.d = this.c.cs();
-            this.e = this.c.cr();
+            this.d = this.c.cu();
+            this.e = this.c.ct();
         }
 
         return super.a();
@@ -40,7 +40,7 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
 
     public void e() {
         super.e();
-        this.c.getControllerLook().a((double) this.b.getX() + 0.5D, (double) (this.b.getY() + 1), (double) this.b.getZ() + 0.5D, 10.0F, (float) this.c.bP());
+        this.c.getControllerLook().a((double) this.b.getX() + 0.5D, (double) (this.b.getY() + 1), (double) this.b.getZ() + 0.5D, 10.0F, (float) this.c.bQ());
         if (this.f()) {
             World world = this.c.world;
             BlockPosition blockposition = this.b.up();
@@ -50,7 +50,7 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
             if (this.f == 0 && block instanceof BlockCrops && ((Integer) iblockdata.get(BlockCrops.AGE)).intValue() == 7) {
                 world.setAir(blockposition, true);
             } else if (this.f == 1 && block == Blocks.AIR) {
-                InventorySubcontainer inventorysubcontainer = this.c.co();
+                InventorySubcontainer inventorysubcontainer = this.c.cq();
 
                 for (int i = 0; i < inventorysubcontainer.getSize(); ++i) {
                     ItemStack itemstack = inventorysubcontainer.getItem(i);

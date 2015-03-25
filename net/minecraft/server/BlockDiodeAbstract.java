@@ -4,11 +4,11 @@ import java.util.Random;
 
 public abstract class BlockDiodeAbstract extends BlockDirectional {
 
-    protected final boolean M;
+    protected final boolean N;
 
     protected BlockDiodeAbstract(boolean flag) {
         super(Material.ORIENTABLE);
-        this.M = flag;
+        this.N = flag;
         this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
     }
 
@@ -20,7 +20,7 @@ public abstract class BlockDiodeAbstract extends BlockDirectional {
         return World.a((IBlockAccess) world, blockposition.down()) ? super.canPlace(world, blockposition) : false;
     }
 
-    public boolean d(World world, BlockPosition blockposition) {
+    public boolean e(World world, BlockPosition blockposition) {
         return World.a((IBlockAccess) world, blockposition.down());
     }
 
@@ -30,9 +30,9 @@ public abstract class BlockDiodeAbstract extends BlockDirectional {
         if (!this.b(world, blockposition, iblockdata)) {
             boolean flag = this.e(world, blockposition, iblockdata);
 
-            if (this.M && !flag) {
+            if (this.N && !flag) {
                 world.setTypeAndData(blockposition, this.k(iblockdata), 2);
-            } else if (!this.M) {
+            } else if (!this.N) {
                 world.setTypeAndData(blockposition, this.e(iblockdata), 2);
                 if (!flag) {
                     world.a(blockposition, this.e(iblockdata).getBlock(), this.m(iblockdata), -1);
@@ -43,7 +43,7 @@ public abstract class BlockDiodeAbstract extends BlockDirectional {
     }
 
     protected boolean l(IBlockData iblockdata) {
-        return this.M;
+        return this.N;
     }
 
     public int b(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, EnumDirection enumdirection) {
@@ -55,7 +55,7 @@ public abstract class BlockDiodeAbstract extends BlockDirectional {
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (this.d(world, blockposition)) {
+        if (this.e(world, blockposition)) {
             this.g(world, blockposition, iblockdata);
         } else {
             this.b(world, blockposition, iblockdata, 0);
@@ -76,12 +76,12 @@ public abstract class BlockDiodeAbstract extends BlockDirectional {
         if (!this.b(world, blockposition, iblockdata)) {
             boolean flag = this.e(world, blockposition, iblockdata);
 
-            if ((this.M && !flag || !this.M && flag) && !world.a(blockposition, (Block) this)) {
+            if ((this.N && !flag || !this.N && flag) && !world.a(blockposition, (Block) this)) {
                 byte b0 = -1;
 
                 if (this.i(world, blockposition, iblockdata)) {
                     b0 = -3;
-                } else if (this.M) {
+                } else if (this.N) {
                     b0 = -2;
                 }
 
@@ -156,7 +156,7 @@ public abstract class BlockDiodeAbstract extends BlockDirectional {
     }
 
     public void postBreak(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (this.M) {
+        if (this.N) {
             EnumDirection[] aenumdirection = EnumDirection.values();
             int i = aenumdirection.length;
 

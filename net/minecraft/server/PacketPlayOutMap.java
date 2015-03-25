@@ -1,8 +1,9 @@
 package net.minecraft.server;
 
+import java.io.IOException;
 import java.util.Collection;
 
-public class PacketPlayOutMap implements Packet {
+public class PacketPlayOutMap implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private byte b;
@@ -15,7 +16,7 @@ public class PacketPlayOutMap implements Packet {
 
     public PacketPlayOutMap() {}
 
-    public PacketPlayOutMap(int i, byte b0, Collection collection, byte[] abyte, int j, int k, int l, int i1) {
+    public PacketPlayOutMap(int i, byte b0, Collection<MapIcon> collection, byte[] abyte, int j, int k, int l, int i1) {
         this.a = i;
         this.b = b0;
         this.c = (MapIcon[]) collection.toArray(new MapIcon[collection.size()]);
@@ -33,7 +34,7 @@ public class PacketPlayOutMap implements Packet {
 
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = packetdataserializer.readByte();
         this.c = new MapIcon[packetdataserializer.e()];
@@ -54,7 +55,7 @@ public class PacketPlayOutMap implements Packet {
 
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.writeByte(this.b);
         packetdataserializer.b(this.c.length);

@@ -1,20 +1,22 @@
 package net.minecraft.server;
 
-public class PacketPlayInEntityAction implements Packet {
+import java.io.IOException;
+
+public class PacketPlayInEntityAction implements Packet<PacketListenerPlayIn> {
 
     private int a;
-    private EnumPlayerAction animation;
+    private PacketPlayInEntityAction.EnumPlayerAction animation;
     private int c;
 
     public PacketPlayInEntityAction() {}
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
-        this.animation = (EnumPlayerAction) packetdataserializer.a(EnumPlayerAction.class);
+        this.animation = (PacketPlayInEntityAction.EnumPlayerAction) packetdataserializer.a(PacketPlayInEntityAction.EnumPlayerAction.class);
         this.c = packetdataserializer.e();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.a((Enum) this.animation);
         packetdataserializer.b(this.c);
@@ -24,7 +26,7 @@ public class PacketPlayInEntityAction implements Packet {
         packetlistenerplayin.a(this);
     }
 
-    public EnumPlayerAction b() {
+    public PacketPlayInEntityAction.EnumPlayerAction b() {
         return this.animation;
     }
 
@@ -34,5 +36,12 @@ public class PacketPlayInEntityAction implements Packet {
 
     public void a(PacketListener packetlistener) {
         this.a((PacketListenerPlayIn) packetlistener);
+    }
+
+    public static enum EnumPlayerAction {
+
+        START_SNEAKING, STOP_SNEAKING, STOP_SLEEPING, START_SPRINTING, STOP_SPRINTING, RIDING_JUMP, OPEN_INVENTORY;
+
+        private EnumPlayerAction() {}
     }
 }

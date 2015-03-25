@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -106,7 +107,7 @@ public class WorldLoaderServer extends WorldLoader {
         }
     }
 
-    private void a(File file, Iterable iterable, WorldChunkManager worldchunkmanager, int i, int j, IProgressUpdate iprogressupdate) {
+    private void a(File file, Iterable<File> iterable, WorldChunkManager worldchunkmanager, int i, int j, IProgressUpdate iprogressupdate) {
         Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {
@@ -141,12 +142,12 @@ public class WorldLoaderServer extends WorldLoader {
 
                             datainputstream.close();
                             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Level");
-                            OldChunk oldchunk = OldChunkLoader.a(nbttagcompound1);
+                            OldChunkLoader.OldChunk oldchunkloader_oldchunk = OldChunkLoader.a(nbttagcompound1);
                             NBTTagCompound nbttagcompound2 = new NBTTagCompound();
                             NBTTagCompound nbttagcompound3 = new NBTTagCompound();
 
                             nbttagcompound2.set("Level", nbttagcompound3);
-                            OldChunkLoader.a(oldchunk, nbttagcompound3, worldchunkmanager);
+                            OldChunkLoader.a(oldchunkloader_oldchunk, nbttagcompound3, worldchunkmanager);
                             DataOutputStream dataoutputstream = regionfile1.b(k, l);
 
                             NBTCompressedStreamTools.a(nbttagcompound2, (DataOutput) dataoutputstream);
@@ -171,9 +172,13 @@ public class WorldLoaderServer extends WorldLoader {
 
     }
 
-    private void a(File file, Collection collection) {
+    private void a(File file, Collection<File> collection) {
         File file1 = new File(file, "region");
-        File[] afile = file1.listFiles(new ChunkFilenameFilter(this));
+        File[] afile = file1.listFiles(new FilenameFilter() {
+            public boolean accept(File file, String s) {
+                return s.endsWith(".mcr");
+            }
+        });
 
         if (afile != null) {
             Collections.addAll(collection, afile);

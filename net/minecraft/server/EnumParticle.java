@@ -13,7 +13,7 @@ public enum EnumParticle {
     private final int R;
     private final boolean S;
     private final int T;
-    private static final Map U = Maps.newHashMap();
+    private static final Map<Integer, EnumParticle> U = Maps.newHashMap();
     private static final String[] V;
 
     private EnumParticle(String s, int i, boolean flag, int j) {

@@ -10,13 +10,13 @@ public class BiomePlains extends BiomeBase {
         super(i);
         this.a(0.8F, 0.4F);
         this.a(BiomePlains.e);
-        this.au.add(new BiomeMeta(EntityHorse.class, 5, 2, 6));
+        this.au.add(new BiomeBase.BiomeMeta(EntityHorse.class, 5, 2, 6));
         this.as.A = -999;
         this.as.B = 4;
         this.as.C = 10;
     }
 
-    public EnumFlowerVarient a(Random random, BlockPosition blockposition) {
+    public BlockFlowers.EnumFlowerVarient a(Random random, BlockPosition blockposition) {
         double d0 = BiomePlains.af.a((double) blockposition.getX() / 200.0D, (double) blockposition.getZ() / 200.0D);
         int i;
 
@@ -24,23 +24,23 @@ public class BiomePlains extends BiomeBase {
             i = random.nextInt(4);
             switch (i) {
             case 0:
-                return EnumFlowerVarient.ORANGE_TULIP;
+                return BlockFlowers.EnumFlowerVarient.ORANGE_TULIP;
 
             case 1:
-                return EnumFlowerVarient.RED_TULIP;
+                return BlockFlowers.EnumFlowerVarient.RED_TULIP;
 
             case 2:
-                return EnumFlowerVarient.PINK_TULIP;
+                return BlockFlowers.EnumFlowerVarient.PINK_TULIP;
 
             case 3:
             default:
-                return EnumFlowerVarient.WHITE_TULIP;
+                return BlockFlowers.EnumFlowerVarient.WHITE_TULIP;
             }
         } else if (random.nextInt(3) > 0) {
             i = random.nextInt(3);
-            return i == 0 ? EnumFlowerVarient.POPPY : (i == 1 ? EnumFlowerVarient.HOUSTONIA : EnumFlowerVarient.OXEYE_DAISY);
+            return i == 0 ? BlockFlowers.EnumFlowerVarient.POPPY : (i == 1 ? BlockFlowers.EnumFlowerVarient.HOUSTONIA : BlockFlowers.EnumFlowerVarient.OXEYE_DAISY);
         } else {
-            return EnumFlowerVarient.DANDELION;
+            return BlockFlowers.EnumFlowerVarient.DANDELION;
         }
     }
 
@@ -57,7 +57,7 @@ public class BiomePlains extends BiomeBase {
         } else {
             this.as.B = 4;
             this.as.C = 10;
-            BiomePlains.ag.a(EnumTallFlowerVariants.GRASS);
+            BiomePlains.ag.a(BlockTallPlant.EnumTallFlowerVariants.GRASS);
 
             for (i = 0; i < 7; ++i) {
                 j = random.nextInt(16) + 8;
@@ -68,7 +68,7 @@ public class BiomePlains extends BiomeBase {
         }
 
         if (this.aD) {
-            BiomePlains.ag.a(EnumTallFlowerVariants.SUNFLOWER);
+            BiomePlains.ag.a(BlockTallPlant.EnumTallFlowerVariants.SUNFLOWER);
 
             for (i = 0; i < 10; ++i) {
                 j = random.nextInt(16) + 8;

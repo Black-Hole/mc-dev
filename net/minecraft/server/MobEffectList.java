@@ -3,13 +3,14 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.Map.Entry;
 
 public class MobEffectList {
 
     public static final MobEffectList[] byId = new MobEffectList[32];
-    private static final Map I = Maps.newHashMap();
+    private static final Map<MinecraftKey, MobEffectList> I = Maps.newHashMap();
     public static final MobEffectList b = null;
     public static final MobEffectList FASTER_MOVEMENT = (new MobEffectList(1, new MinecraftKey("speed"), false, 8171462)).c("potion.moveSpeed").b(0, 0).a(GenericAttributes.d, "91AEAA56-376B-4498-935B-2F7F68070635", 0.20000000298023224D, 2);
     public static final MobEffectList SLOWER_MOVEMENT = (new MobEffectList(2, new MinecraftKey("slowness"), true, 5926017)).c("potion.moveSlowdown").b(1, 0).a(GenericAttributes.d, "7107DE5E-7CE8-4030-940E-514C1F160890", -0.15000000596046448D, 2);
@@ -43,7 +44,7 @@ public class MobEffectList {
     public static final MobEffectList F = null;
     public static final MobEffectList G = null;
     public final int id;
-    private final Map J = Maps.newHashMap();
+    private final Map<IAttribute, AttributeModifier> J = Maps.newHashMap();
     private final boolean K;
     private final int L;
     private String M = "";
@@ -69,17 +70,8 @@ public class MobEffectList {
         return (MobEffectList) MobEffectList.I.get(new MinecraftKey(s));
     }
 
-    public static String[] c() {
-        String[] astring = new String[MobEffectList.I.size()];
-        int i = 0;
-
-        MinecraftKey minecraftkey;
-
-        for (Iterator iterator = MobEffectList.I.keySet().iterator(); iterator.hasNext(); astring[i++] = minecraftkey.toString()) {
-            minecraftkey = (MinecraftKey) iterator.next();
-        }
-
-        return astring;
+    public static Set<MinecraftKey> c() {
+        return MobEffectList.I.keySet();
     }
 
     protected MobEffectList b(int i, int j) {
@@ -105,11 +97,11 @@ public class MobEffectList {
         } else if (this.id == MobEffectList.HUNGER.id && entityliving instanceof EntityHuman) {
             ((EntityHuman) entityliving).applyExhaustion(0.025F * (float) (i + 1));
         } else if (this.id == MobEffectList.SATURATION.id && entityliving instanceof EntityHuman) {
-            if (!entityliving.world.isStatic) {
+            if (!entityliving.world.isClientSide) {
                 ((EntityHuman) entityliving).getFoodData().eat(i + 1, 1.0F);
             }
-        } else if ((this.id != MobEffectList.HEAL.id || entityliving.bl()) && (this.id != MobEffectList.HARM.id || !entityliving.bl())) {
-            if (this.id == MobEffectList.HARM.id && !entityliving.bl() || this.id == MobEffectList.HEAL.id && entityliving.bl()) {
+        } else if ((this.id != MobEffectList.HEAL.id || entityliving.bm()) && (this.id != MobEffectList.HARM.id || !entityliving.bm())) {
+            if (this.id == MobEffectList.HARM.id && !entityliving.bm() || this.id == MobEffectList.HEAL.id && entityliving.bm()) {
                 entityliving.damageEntity(DamageSource.MAGIC, (float) (6 << i));
             }
         } else {
@@ -121,8 +113,8 @@ public class MobEffectList {
     public void applyInstantEffect(Entity entity, Entity entity1, EntityLiving entityliving, int i, double d0) {
         int j;
 
-        if ((this.id != MobEffectList.HEAL.id || entityliving.bl()) && (this.id != MobEffectList.HARM.id || !entityliving.bl())) {
-            if (this.id == MobEffectList.HARM.id && !entityliving.bl() || this.id == MobEffectList.HEAL.id && entityliving.bl()) {
+        if ((this.id != MobEffectList.HEAL.id || entityliving.bm()) && (this.id != MobEffectList.HARM.id || !entityliving.bm())) {
+            if (this.id == MobEffectList.HARM.id && !entityliving.bm() || this.id == MobEffectList.HEAL.id && entityliving.bm()) {
                 j = (int) (d0 * (double) (6 << i) + 0.5D);
                 if (entity == null) {
                     entityliving.damageEntity(DamageSource.MAGIC, (float) j);

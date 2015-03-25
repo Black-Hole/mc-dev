@@ -56,7 +56,7 @@ public class PathfinderGoalJumpOnBlock extends PathfinderGoalGotoTarget {
                     return true;
                 }
 
-                if (block == Blocks.BED && iblockdata.get(BlockBed.PART) != EnumBedPart.HEAD) {
+                if (block == Blocks.BED && iblockdata.get(BlockBed.PART) != BlockBed.EnumBedPart.HEAD) {
                     return true;
                 }
             }

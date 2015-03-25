@@ -18,7 +18,7 @@ public class RecipeArmorDye implements IRecipe {
                 if (itemstack1.getItem() instanceof ItemArmor) {
                     ItemArmor itemarmor = (ItemArmor) itemstack1.getItem();
 
-                    if (itemarmor.w_() != EnumArmorMaterial.LEATHER || itemstack != null) {
+                    if (itemarmor.x_() != ItemArmor.EnumArmorMaterial.LEATHER || itemstack != null) {
                         return false;
                     }
 
@@ -55,7 +55,7 @@ public class RecipeArmorDye implements IRecipe {
             if (itemstack1 != null) {
                 if (itemstack1.getItem() instanceof ItemArmor) {
                     itemarmor = (ItemArmor) itemstack1.getItem();
-                    if (itemarmor.w_() != EnumArmorMaterial.LEATHER || itemstack != null) {
+                    if (itemarmor.x_() != ItemArmor.EnumArmorMaterial.LEATHER || itemstack != null) {
                         return null;
                     }
 

@@ -5,16 +5,18 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 public class MojangStatisticsGenerator {
 
-    private final Map a = Maps.newHashMap();
-    private final Map b = Maps.newHashMap();
+    private final Map<String, Object> a = Maps.newHashMap();
+    private final Map<String, Object> b = Maps.newHashMap();
     private final String c = UUID.randomUUID().toString();
     private final URL d;
     private final IMojangStatistics e;
@@ -39,7 +41,25 @@ public class MojangStatisticsGenerator {
         if (!this.i) {
             this.i = true;
             this.h();
-            this.f.schedule(new MojangStatisticsTask(this), 0L, 900000L);
+            this.f.schedule(new TimerTask() {
+                public void run() {
+                    if (MojangStatisticsGenerator.this.e.getSnooperEnabled()) {
+                        HashMap hashmap;
+
+                        synchronized (MojangStatisticsGenerator.this.g) {
+                            hashmap = Maps.newHashMap(MojangStatisticsGenerator.this.b);
+                            if (MojangStatisticsGenerator.this.j == 0) {
+                                hashmap.putAll(MojangStatisticsGenerator.this.a);
+                            }
+
+                            hashmap.put("snooper_count", Integer.valueOf(MojangStatisticsGenerator.f(MojangStatisticsGenerator.this)));
+                            hashmap.put("snooper_token", MojangStatisticsGenerator.this.c);
+                        }
+
+                        HttpUtilities.a(MojangStatisticsGenerator.this.d, (Map) hashmap, true);
+                    }
+                }
+            }, 0L, 900000L);
         }
     }
 
@@ -51,7 +71,7 @@ public class MojangStatisticsGenerator {
         this.b("os_version", System.getProperty("os.version"));
         this.b("os_architecture", System.getProperty("os.arch"));
         this.b("java_version", System.getProperty("java.version"));
-        this.b("version", "1.8");
+        this.a("version", "1.8.3");
         this.e.b(this);
     }
 
@@ -108,35 +128,7 @@ public class MojangStatisticsGenerator {
         return this.h;
     }
 
-    static IMojangStatistics a(MojangStatisticsGenerator mojangstatisticsgenerator) {
-        return mojangstatisticsgenerator.e;
-    }
-
-    static Object b(MojangStatisticsGenerator mojangstatisticsgenerator) {
-        return mojangstatisticsgenerator.g;
-    }
-
-    static Map c(MojangStatisticsGenerator mojangstatisticsgenerator) {
-        return mojangstatisticsgenerator.b;
-    }
-
-    static int d(MojangStatisticsGenerator mojangstatisticsgenerator) {
-        return mojangstatisticsgenerator.j;
-    }
-
-    static Map e(MojangStatisticsGenerator mojangstatisticsgenerator) {
-        return mojangstatisticsgenerator.a;
-    }
-
     static int f(MojangStatisticsGenerator mojangstatisticsgenerator) {
         return mojangstatisticsgenerator.j++;
-    }
-
-    static String g(MojangStatisticsGenerator mojangstatisticsgenerator) {
-        return mojangstatisticsgenerator.c;
-    }
-
-    static URL h(MojangStatisticsGenerator mojangstatisticsgenerator) {
-        return mojangstatisticsgenerator.d;
     }
 }

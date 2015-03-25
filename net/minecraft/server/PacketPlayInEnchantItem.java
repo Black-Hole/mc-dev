@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
-public class PacketPlayInEnchantItem implements Packet {
+import java.io.IOException;
+
+public class PacketPlayInEnchantItem implements Packet<PacketListenerPlayIn> {
 
     private int a;
     private int b;
@@ -11,12 +13,12 @@ public class PacketPlayInEnchantItem implements Packet {
         packetlistenerplayin.a(this);
     }
 
-    public void a(PacketDataSerializer packetdataserializer) {
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readByte();
         this.b = packetdataserializer.readByte();
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
         packetdataserializer.writeByte(this.b);
     }

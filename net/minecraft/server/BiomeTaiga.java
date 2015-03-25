@@ -14,7 +14,7 @@ public class BiomeTaiga extends BiomeBase {
     public BiomeTaiga(int i, int j) {
         super(i);
         this.aI = j;
-        this.au.add(new BiomeMeta(EntityWolf.class, 8, 4, 4));
+        this.au.add(new BiomeBase.BiomeMeta(EntityWolf.class, 8, 4, 4));
         this.as.A = 10;
         if (j != 1 && j != 2) {
             this.as.C = 1;
@@ -32,7 +32,7 @@ public class BiomeTaiga extends BiomeBase {
     }
 
     public WorldGenerator b(Random random) {
-        return random.nextInt(5) > 0 ? new WorldGenGrass(EnumTallGrassType.FERN) : new WorldGenGrass(EnumTallGrassType.GRASS);
+        return random.nextInt(5) > 0 ? new WorldGenGrass(BlockLongGrass.EnumTallGrassType.FERN) : new WorldGenGrass(BlockLongGrass.EnumTallGrassType.GRASS);
     }
 
     public void a(World world, Random random, BlockPosition blockposition) {
@@ -53,7 +53,7 @@ public class BiomeTaiga extends BiomeBase {
             }
         }
 
-        BiomeTaiga.ag.a(EnumTallFlowerVariants.FERN);
+        BiomeTaiga.ag.a(BlockTallPlant.EnumTallFlowerVariants.FERN);
 
         for (i = 0; i < 7; ++i) {
             j = random.nextInt(16) + 8;
@@ -70,9 +70,9 @@ public class BiomeTaiga extends BiomeBase {
             this.ak = Blocks.GRASS.getBlockData();
             this.al = Blocks.DIRT.getBlockData();
             if (d0 > 1.75D) {
-                this.ak = Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, EnumDirtVariant.COARSE_DIRT);
+                this.ak = Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.COARSE_DIRT);
             } else if (d0 > -0.95D) {
-                this.ak = Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, EnumDirtVariant.PODZOL);
+                this.ak = Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.PODZOL);
             }
         }
 
@@ -80,6 +80,6 @@ public class BiomeTaiga extends BiomeBase {
     }
 
     protected BiomeBase d(int i) {
-        return this.id == BiomeBase.MEGA_TAIGA.id ? (new BiomeTaiga(i, 2)).a(5858897, true).a("Mega Spruce Taiga").a(5159473).a(0.25F, 0.8F).a(new BiomeTemperature(this.an, this.ao)) : super.d(i);
+        return this.id == BiomeBase.MEGA_TAIGA.id ? (new BiomeTaiga(i, 2)).a(5858897, true).a("Mega Spruce Taiga").a(5159473).a(0.25F, 0.8F).a(new BiomeBase.BiomeTemperature(this.an, this.ao)) : super.d(i);
     }
 }

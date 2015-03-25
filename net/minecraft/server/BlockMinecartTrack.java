@@ -2,30 +2,30 @@ package net.minecraft.server;
 
 public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
 
-    public static final BlockStateEnum SHAPE = BlockStateEnum.of("shape", EnumTrackPosition.class);
+    public static final BlockStateEnum<BlockMinecartTrackAbstract.EnumTrackPosition> SHAPE = BlockStateEnum.of("shape", BlockMinecartTrackAbstract.EnumTrackPosition.class);
 
     protected BlockMinecartTrack() {
         super(false);
-        this.j(this.blockStateList.getBlockData().set(BlockMinecartTrack.SHAPE, EnumTrackPosition.NORTH_SOUTH));
+        this.j(this.blockStateList.getBlockData().set(BlockMinecartTrack.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH));
     }
 
     protected void b(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (block.isPowerSource() && (new MinecartTrackLogic(this, world, blockposition, iblockdata)).a() == 3) {
+        if (block.isPowerSource() && (new BlockMinecartTrackAbstract.MinecartTrackLogic(world, blockposition, iblockdata)).a() == 3) {
             this.a(world, blockposition, iblockdata, false);
         }
 
     }
 
-    public IBlockState l() {
+    public IBlockState<BlockMinecartTrackAbstract.EnumTrackPosition> n() {
         return BlockMinecartTrack.SHAPE;
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockMinecartTrack.SHAPE, EnumTrackPosition.a(i));
+        return this.getBlockData().set(BlockMinecartTrack.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.a(i));
     }
 
     public int toLegacyData(IBlockData iblockdata) {
-        return ((EnumTrackPosition) iblockdata.get(BlockMinecartTrack.SHAPE)).a();
+        return ((BlockMinecartTrackAbstract.EnumTrackPosition) iblockdata.get(BlockMinecartTrack.SHAPE)).a();
     }
 
     protected BlockStateList getStateList() {

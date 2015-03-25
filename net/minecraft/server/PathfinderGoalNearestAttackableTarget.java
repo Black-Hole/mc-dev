@@ -3,35 +3,70 @@ package net.minecraft.server;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class PathfinderGoalNearestAttackableTarget extends PathfinderGoalTarget {
+public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> extends PathfinderGoalTarget {
 
-    protected final Class a;
+    protected final Class<T> a;
     private final int g;
-    protected final DistanceComparator b;
-    protected Predicate c;
+    protected final PathfinderGoalNearestAttackableTarget.DistanceComparator b;
+    protected Predicate<? super T> c;
     protected EntityLiving d;
 
-    public PathfinderGoalNearestAttackableTarget(EntityCreature entitycreature, Class oclass, boolean flag) {
+    public PathfinderGoalNearestAttackableTarget(EntityCreature entitycreature, Class<T> oclass, boolean flag) {
         this(entitycreature, oclass, flag, false);
     }
 
-    public PathfinderGoalNearestAttackableTarget(EntityCreature entitycreature, Class oclass, boolean flag, boolean flag1) {
+    public PathfinderGoalNearestAttackableTarget(EntityCreature entitycreature, Class<T> oclass, boolean flag, boolean flag1) {
         this(entitycreature, oclass, 10, flag, flag1, (Predicate) null);
     }
 
-    public PathfinderGoalNearestAttackableTarget(EntityCreature entitycreature, Class oclass, int i, boolean flag, boolean flag1, Predicate predicate) {
+    public PathfinderGoalNearestAttackableTarget(EntityCreature entitycreature, Class<T> oclass, int i, boolean flag, boolean flag1, final Predicate<? super T> predicate) {
         super(entitycreature, flag, flag1);
         this.a = oclass;
         this.g = i;
-        this.b = new DistanceComparator(entitycreature);
+        this.b = new PathfinderGoalNearestAttackableTarget.DistanceComparator(entitycreature);
         this.a(1);
-        this.c = new EntitySelectorNearestAttackableTarget(this, predicate);
+        this.c = new Predicate() {
+            public boolean a(T t0) {
+                if (predicate != null && !predicate.apply(t0)) {
+                    return false;
+                } else {
+                    if (t0 instanceof EntityHuman) {
+                        double d0 = PathfinderGoalNearestAttackableTarget.this.f();
+
+                        if (t0.isSneaking()) {
+                            d0 *= 0.800000011920929D;
+                        }
+
+                        if (t0.isInvisible()) {
+                            float f = ((EntityHuman) t0).bY();
+
+                            if (f < 0.1F) {
+                                f = 0.1F;
+                            }
+
+                            d0 *= (double) (0.7F * f);
+                        }
+
+                        if ((double) t0.g(PathfinderGoalNearestAttackableTarget.this.e) > d0) {
+                            return false;
+                        }
+                    }
+
+                    return PathfinderGoalNearestAttackableTarget.this.a(t0, false);
+                }
+            }
+
+            public boolean apply(Object object) {
+                return this.a((EntityLiving) object);
+            }
+        };
     }
 
     public boolean a() {
-        if (this.g > 0 && this.e.bb().nextInt(this.g) != 0) {
+        if (this.g > 0 && this.e.bc().nextInt(this.g) != 0) {
             return false;
         } else {
             double d0 = this.f();
@@ -50,5 +85,25 @@ public class PathfinderGoalNearestAttackableTarget extends PathfinderGoalTarget 
     public void c() {
         this.e.setGoalTarget(this.d);
         super.c();
+    }
+
+    public static class DistanceComparator implements Comparator<Entity> {
+
+        private final Entity a;
+
+        public DistanceComparator(Entity entity) {
+            this.a = entity;
+        }
+
+        public int a(Entity entity, Entity entity1) {
+            double d0 = this.a.h(entity);
+            double d1 = this.a.h(entity1);
+
+            return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
+        }
+
+        public int compare(Object object, Object object1) {
+            return this.a((Entity) object, (Entity) object1);
+        }
     }
 }

@@ -1,5 +1,15 @@
 package net.minecraft.server;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import java.lang.reflect.Type;
+
 public class ChatModifier {
 
     private ChatModifier a;
@@ -12,7 +22,91 @@ public class ChatModifier {
     private ChatClickable h;
     private ChatHoverable i;
     private String j;
-    private static final ChatModifier k = new ChatStyleRoot();
+    private static final ChatModifier k = new ChatModifier() {
+        public EnumChatFormat getColor() {
+            return null;
+        }
+
+        public boolean isBold() {
+            return false;
+        }
+
+        public boolean isItalic() {
+            return false;
+        }
+
+        public boolean isStrikethrough() {
+            return false;
+        }
+
+        public boolean isUnderlined() {
+            return false;
+        }
+
+        public boolean isRandom() {
+            return false;
+        }
+
+        public ChatClickable h() {
+            return null;
+        }
+
+        public ChatHoverable i() {
+            return null;
+        }
+
+        public String j() {
+            return null;
+        }
+
+        public ChatModifier setColor(EnumChatFormat enumchatformat) {
+            throw new UnsupportedOperationException();
+        }
+
+        public ChatModifier setBold(Boolean obool) {
+            throw new UnsupportedOperationException();
+        }
+
+        public ChatModifier setItalic(Boolean obool) {
+            throw new UnsupportedOperationException();
+        }
+
+        public ChatModifier setStrikethrough(Boolean obool) {
+            throw new UnsupportedOperationException();
+        }
+
+        public ChatModifier setUnderline(Boolean obool) {
+            throw new UnsupportedOperationException();
+        }
+
+        public ChatModifier setRandom(Boolean obool) {
+            throw new UnsupportedOperationException();
+        }
+
+        public ChatModifier setChatClickable(ChatClickable chatclickable) {
+            throw new UnsupportedOperationException();
+        }
+
+        public ChatModifier setChatHoverable(ChatHoverable chathoverable) {
+            throw new UnsupportedOperationException();
+        }
+
+        public ChatModifier setChatModifier(ChatModifier chatmodifier) {
+            throw new UnsupportedOperationException();
+        }
+
+        public String toString() {
+            return "Style.ROOT";
+        }
+
+        public ChatModifier clone() {
+            return this;
+        }
+
+        public ChatModifier n() {
+            return this;
+        }
+    };
 
     public ChatModifier() {}
 
@@ -204,75 +298,143 @@ public class ChatModifier {
         return chatmodifier;
     }
 
-    static Boolean a(ChatModifier chatmodifier, Boolean obool) {
-        return chatmodifier.c = obool;
-    }
+    public static class ChatModifierSerializer implements JsonDeserializer<ChatModifier>, JsonSerializer<ChatModifier> {
 
-    static Boolean b(ChatModifier chatmodifier, Boolean obool) {
-        return chatmodifier.d = obool;
-    }
+        public ChatModifierSerializer() {}
 
-    static Boolean c(ChatModifier chatmodifier, Boolean obool) {
-        return chatmodifier.e = obool;
-    }
+        public ChatModifier a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+            if (jsonelement.isJsonObject()) {
+                ChatModifier chatmodifier = new ChatModifier();
+                JsonObject jsonobject = jsonelement.getAsJsonObject();
 
-    static Boolean d(ChatModifier chatmodifier, Boolean obool) {
-        return chatmodifier.f = obool;
-    }
+                if (jsonobject == null) {
+                    return null;
+                } else {
+                    if (jsonobject.has("bold")) {
+                        chatmodifier.c = Boolean.valueOf(jsonobject.get("bold").getAsBoolean());
+                    }
 
-    static Boolean e(ChatModifier chatmodifier, Boolean obool) {
-        return chatmodifier.g = obool;
-    }
+                    if (jsonobject.has("italic")) {
+                        chatmodifier.d = Boolean.valueOf(jsonobject.get("italic").getAsBoolean());
+                    }
 
-    static EnumChatFormat a(ChatModifier chatmodifier, EnumChatFormat enumchatformat) {
-        return chatmodifier.b = enumchatformat;
-    }
+                    if (jsonobject.has("underlined")) {
+                        chatmodifier.e = Boolean.valueOf(jsonobject.get("underlined").getAsBoolean());
+                    }
 
-    static String a(ChatModifier chatmodifier, String s) {
-        return chatmodifier.j = s;
-    }
+                    if (jsonobject.has("strikethrough")) {
+                        chatmodifier.f = Boolean.valueOf(jsonobject.get("strikethrough").getAsBoolean());
+                    }
 
-    static ChatClickable a(ChatModifier chatmodifier, ChatClickable chatclickable) {
-        return chatmodifier.h = chatclickable;
-    }
+                    if (jsonobject.has("obfuscated")) {
+                        chatmodifier.g = Boolean.valueOf(jsonobject.get("obfuscated").getAsBoolean());
+                    }
 
-    static ChatHoverable a(ChatModifier chatmodifier, ChatHoverable chathoverable) {
-        return chatmodifier.i = chathoverable;
-    }
+                    if (jsonobject.has("color")) {
+                        chatmodifier.b = (EnumChatFormat) jsondeserializationcontext.deserialize(jsonobject.get("color"), EnumChatFormat.class);
+                    }
 
-    static Boolean b(ChatModifier chatmodifier) {
-        return chatmodifier.c;
-    }
+                    if (jsonobject.has("insertion")) {
+                        chatmodifier.j = jsonobject.get("insertion").getAsString();
+                    }
 
-    static Boolean c(ChatModifier chatmodifier) {
-        return chatmodifier.d;
-    }
+                    JsonObject jsonobject1;
+                    JsonPrimitive jsonprimitive;
 
-    static Boolean d(ChatModifier chatmodifier) {
-        return chatmodifier.e;
-    }
+                    if (jsonobject.has("clickEvent")) {
+                        jsonobject1 = jsonobject.getAsJsonObject("clickEvent");
+                        if (jsonobject1 != null) {
+                            jsonprimitive = jsonobject1.getAsJsonPrimitive("action");
+                            ChatClickable.EnumClickAction chatclickable_enumclickaction = jsonprimitive == null ? null : ChatClickable.EnumClickAction.a(jsonprimitive.getAsString());
+                            JsonPrimitive jsonprimitive1 = jsonobject1.getAsJsonPrimitive("value");
+                            String s = jsonprimitive1 == null ? null : jsonprimitive1.getAsString();
 
-    static Boolean e(ChatModifier chatmodifier) {
-        return chatmodifier.f;
-    }
+                            if (chatclickable_enumclickaction != null && s != null && chatclickable_enumclickaction.a()) {
+                                chatmodifier.h = new ChatClickable(chatclickable_enumclickaction, s);
+                            }
+                        }
+                    }
 
-    static Boolean f(ChatModifier chatmodifier) {
-        return chatmodifier.g;
-    }
+                    if (jsonobject.has("hoverEvent")) {
+                        jsonobject1 = jsonobject.getAsJsonObject("hoverEvent");
+                        if (jsonobject1 != null) {
+                            jsonprimitive = jsonobject1.getAsJsonPrimitive("action");
+                            ChatHoverable.EnumHoverAction chathoverable_enumhoveraction = jsonprimitive == null ? null : ChatHoverable.EnumHoverAction.a(jsonprimitive.getAsString());
+                            IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) jsondeserializationcontext.deserialize(jsonobject1.get("value"), IChatBaseComponent.class);
 
-    static EnumChatFormat g(ChatModifier chatmodifier) {
-        return chatmodifier.b;
-    }
+                            if (chathoverable_enumhoveraction != null && ichatbasecomponent != null && chathoverable_enumhoveraction.a()) {
+                                chatmodifier.i = new ChatHoverable(chathoverable_enumhoveraction, ichatbasecomponent);
+                            }
+                        }
+                    }
 
-    static String h(ChatModifier chatmodifier) {
-        return chatmodifier.j;
-    }
+                    return chatmodifier;
+                }
+            } else {
+                return null;
+            }
+        }
 
-    static ChatClickable i(ChatModifier chatmodifier) {
-        return chatmodifier.h;
-    }
+        public JsonElement a(ChatModifier chatmodifier, Type type, JsonSerializationContext jsonserializationcontext) {
+            if (chatmodifier.g()) {
+                return null;
+            } else {
+                JsonObject jsonobject = new JsonObject();
 
-    static ChatHoverable j(ChatModifier chatmodifier) {
-        return chatmodifier.i;
+                if (chatmodifier.c != null) {
+                    jsonobject.addProperty("bold", chatmodifier.c);
+                }
+
+                if (chatmodifier.d != null) {
+                    jsonobject.addProperty("italic", chatmodifier.d);
+                }
+
+                if (chatmodifier.e != null) {
+                    jsonobject.addProperty("underlined", chatmodifier.e);
+                }
+
+                if (chatmodifier.f != null) {
+                    jsonobject.addProperty("strikethrough", chatmodifier.f);
+                }
+
+                if (chatmodifier.g != null) {
+                    jsonobject.addProperty("obfuscated", chatmodifier.g);
+                }
+
+                if (chatmodifier.b != null) {
+                    jsonobject.add("color", jsonserializationcontext.serialize(chatmodifier.b));
+                }
+
+                if (chatmodifier.j != null) {
+                    jsonobject.add("insertion", jsonserializationcontext.serialize(chatmodifier.j));
+                }
+
+                JsonObject jsonobject1;
+
+                if (chatmodifier.h != null) {
+                    jsonobject1 = new JsonObject();
+                    jsonobject1.addProperty("action", chatmodifier.h.a().b());
+                    jsonobject1.addProperty("value", chatmodifier.h.b());
+                    jsonobject.add("clickEvent", jsonobject1);
+                }
+
+                if (chatmodifier.i != null) {
+                    jsonobject1 = new JsonObject();
+                    jsonobject1.addProperty("action", chatmodifier.i.a().b());
+                    jsonobject1.add("value", jsonserializationcontext.serialize(chatmodifier.i.b()));
+                    jsonobject.add("hoverEvent", jsonobject1);
+                }
+
+                return jsonobject;
+            }
+        }
+
+        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
+            return this.a((ChatModifier) object, type, jsonserializationcontext);
+        }
+
+        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+            return this.a(jsonelement, type, jsondeserializationcontext);
+        }
     }
 }

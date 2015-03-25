@@ -8,10 +8,10 @@ public class ContainerBrewingStand extends Container {
 
     public ContainerBrewingStand(PlayerInventory playerinventory, IInventory iinventory) {
         this.brewingStand = iinventory;
-        this.a((Slot) (new SlotPotionBottle(playerinventory.player, iinventory, 0, 56, 46)));
-        this.a((Slot) (new SlotPotionBottle(playerinventory.player, iinventory, 1, 79, 53)));
-        this.a((Slot) (new SlotPotionBottle(playerinventory.player, iinventory, 2, 102, 46)));
-        this.f = this.a((Slot) (new SlotBrewing(this, iinventory, 3, 79, 17)));
+        this.a((Slot) (new ContainerBrewingStand.SlotPotionBottle(playerinventory.player, iinventory, 0, 56, 46)));
+        this.a((Slot) (new ContainerBrewingStand.SlotPotionBottle(playerinventory.player, iinventory, 1, 79, 53)));
+        this.a((Slot) (new ContainerBrewingStand.SlotPotionBottle(playerinventory.player, iinventory, 2, 102, 46)));
+        this.f = this.a((Slot) (new ContainerBrewingStand.SlotBrewing(iinventory, 3, 79, 17)));
 
         int i;
 
@@ -63,7 +63,7 @@ public class ContainerBrewingStand extends Container {
                     if (!this.a(itemstack1, 3, 4, false)) {
                         return null;
                     }
-                } else if (SlotPotionBottle.b_(itemstack)) {
+                } else if (ContainerBrewingStand.SlotPotionBottle.b_(itemstack)) {
                     if (!this.a(itemstack1, 0, 3, false)) {
                         return null;
                     }
@@ -100,5 +100,50 @@ public class ContainerBrewingStand extends Container {
         }
 
         return itemstack;
+    }
+
+    class SlotBrewing extends Slot {
+
+        public SlotBrewing(IInventory iinventory, int i, int j, int k) {
+            super(iinventory, i, j, k);
+        }
+
+        public boolean isAllowed(ItemStack itemstack) {
+            return itemstack != null ? itemstack.getItem().l(itemstack) : false;
+        }
+
+        public int getMaxStackSize() {
+            return 64;
+        }
+    }
+
+    static class SlotPotionBottle extends Slot {
+
+        private EntityHuman a;
+
+        public SlotPotionBottle(EntityHuman entityhuman, IInventory iinventory, int i, int j, int k) {
+            super(iinventory, i, j, k);
+            this.a = entityhuman;
+        }
+
+        public boolean isAllowed(ItemStack itemstack) {
+            return b_(itemstack);
+        }
+
+        public int getMaxStackSize() {
+            return 1;
+        }
+
+        public void a(EntityHuman entityhuman, ItemStack itemstack) {
+            if (itemstack.getItem() == Items.POTION && itemstack.getData() > 0) {
+                this.a.b((Statistic) AchievementList.B);
+            }
+
+            super.a(entityhuman, itemstack);
+        }
+
+        public static boolean b_(ItemStack itemstack) {
+            return itemstack != null && (itemstack.getItem() == Items.POTION || itemstack.getItem() == Items.GLASS_BOTTLE);
+        }
     }
 }

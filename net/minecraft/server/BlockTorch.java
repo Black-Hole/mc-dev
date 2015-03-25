@@ -5,7 +5,15 @@ import java.util.Iterator;
 
 public class BlockTorch extends Block {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) (new BlockTorchInnerClass1()));
+    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", new Predicate() {
+        public boolean a(EnumDirection enumdirection) {
+            return enumdirection != EnumDirection.DOWN;
+        }
+
+        public boolean apply(Object object) {
+            return this.a((EnumDirection) object);
+        }
+    });
 
     protected BlockTorch() {
         super(Material.ORIENTABLE);
@@ -26,7 +34,7 @@ public class BlockTorch extends Block {
         return false;
     }
 
-    private boolean d(World world, BlockPosition blockposition) {
+    private boolean e(World world, BlockPosition blockposition) {
         if (World.a((IBlockAccess) world, blockposition)) {
             return true;
         } else {
@@ -47,23 +55,23 @@ public class BlockTorch extends Block {
             }
 
             enumdirection = (EnumDirection) iterator.next();
-        } while (!this.b(world, blockposition, enumdirection));
+        } while (!this.a(world, blockposition, enumdirection));
 
         return true;
     }
 
-    private boolean b(World world, BlockPosition blockposition, EnumDirection enumdirection) {
+    private boolean a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
         boolean flag = enumdirection.k().c();
 
-        return flag && world.d(blockposition1, true) || enumdirection.equals(EnumDirection.UP) && this.d(world, blockposition1);
+        return flag && world.d(blockposition1, true) || enumdirection.equals(EnumDirection.UP) && this.e(world, blockposition1);
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        if (this.b(world, blockposition, enumdirection)) {
+        if (this.a(world, blockposition, enumdirection)) {
             return this.getBlockData().set(BlockTorch.FACING, enumdirection);
         } else {
-            Iterator iterator = EnumDirectionLimit.HORIZONTAL.iterator();
+            Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
             EnumDirection enumdirection1;
 
@@ -92,13 +100,13 @@ public class BlockTorch extends Block {
             return true;
         } else {
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockTorch.FACING);
-            EnumAxis enumaxis = enumdirection.k();
+            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
             EnumDirection enumdirection1 = enumdirection.opposite();
             boolean flag = false;
 
-            if (enumaxis.c() && !world.d(blockposition.shift(enumdirection1), true)) {
+            if (enumdirection_enumaxis.c() && !world.d(blockposition.shift(enumdirection1), true)) {
                 flag = true;
-            } else if (enumaxis.b() && !this.d(world, blockposition.shift(enumdirection1))) {
+            } else if (enumdirection_enumaxis.b() && !this.e(world, blockposition.shift(enumdirection1))) {
                 flag = true;
             }
 
@@ -113,7 +121,7 @@ public class BlockTorch extends Block {
     }
 
     protected boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (iblockdata.getBlock() == this && this.b(world, blockposition, (EnumDirection) iblockdata.get(BlockTorch.FACING))) {
+        if (iblockdata.getBlock() == this && this.a(world, blockposition, (EnumDirection) iblockdata.get(BlockTorch.FACING))) {
             return true;
         } else {
             if (world.getType(blockposition).getBlock() == this) {
@@ -177,7 +185,7 @@ public class BlockTorch extends Block {
         byte b0 = 0;
         int i;
 
-        switch (SwitchHelperDirection14.a[((EnumDirection) iblockdata.get(BlockTorch.FACING)).ordinal()]) {
+        switch (BlockTorch.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockTorch.FACING)).ordinal()]) {
         case 1:
             i = b0 | 1;
             break;
@@ -205,5 +213,49 @@ public class BlockTorch extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockTorch.FACING});
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EnumDirection.values().length];
+
+        static {
+            try {
+                BlockTorch.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                BlockTorch.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                BlockTorch.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                BlockTorch.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            try {
+                BlockTorch.SyntheticClass_1.a[EnumDirection.DOWN.ordinal()] = 5;
+            } catch (NoSuchFieldError nosuchfielderror4) {
+                ;
+            }
+
+            try {
+                BlockTorch.SyntheticClass_1.a[EnumDirection.UP.ordinal()] = 6;
+            } catch (NoSuchFieldError nosuchfielderror5) {
+                ;
+            }
+
+        }
     }
 }

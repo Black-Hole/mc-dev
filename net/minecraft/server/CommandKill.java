@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.List;
+
 public class CommandKill extends CommandAbstract {
 
     public CommandKill() {}
@@ -16,7 +18,7 @@ public class CommandKill extends CommandAbstract {
         return "commands.kill.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length == 0) {
             EntityPlayer entityplayer = b(icommandlistener);
 
@@ -32,5 +34,9 @@ public class CommandKill extends CommandAbstract {
 
     public boolean isListStart(String[] astring, int i) {
         return i == 0;
+    }
+
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : null;
     }
 }

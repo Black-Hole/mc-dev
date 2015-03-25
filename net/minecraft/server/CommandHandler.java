@@ -15,8 +15,8 @@ import org.apache.logging.log4j.Logger;
 public class CommandHandler implements ICommandHandler {
 
     private static final Logger a = LogManager.getLogger();
-    private final Map b = Maps.newHashMap();
-    private final Set c = Sets.newHashSet();
+    private final Map<String, ICommand> b = Maps.newHashMap();
+    private final Set<ICommand> c = Sets.newHashSet();
 
     public CommandHandler() {}
 
@@ -44,7 +44,7 @@ public class CommandHandler implements ICommandHandler {
                 List list = PlayerSelector.getPlayers(icommandlistener, astring[i], Entity.class);
                 String s2 = astring[i];
 
-                icommandlistener.a(EnumCommandResult.AFFECTED_ENTITIES, list.size());
+                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ENTITIES, list.size());
                 Iterator iterator = list.iterator();
 
                 while (iterator.hasNext()) {
@@ -58,7 +58,7 @@ public class CommandHandler implements ICommandHandler {
 
                 astring[i] = s2;
             } else {
-                icommandlistener.a(EnumCommandResult.AFFECTED_ENTITIES, 1);
+                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ENTITIES, 1);
                 if (this.a(icommandlistener, astring, icommand, s)) {
                     ++j;
                 }
@@ -69,7 +69,7 @@ public class CommandHandler implements ICommandHandler {
             icommandlistener.sendMessage(chatmessage);
         }
 
-        icommandlistener.a(EnumCommandResult.SUCCESS_COUNT, j);
+        icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.SUCCESS_COUNT, j);
         return j;
     }
 
@@ -91,7 +91,7 @@ public class CommandHandler implements ICommandHandler {
             chatmessage = new ChatMessage("commands.generic.exception", new Object[0]);
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             icommandlistener.sendMessage(chatmessage);
-            CommandHandler.a.error("Couldn\'t process command: \'" + s + "\'", throwable);
+            CommandHandler.a.warn("Couldn\'t process command: \'" + s + "\'");
         }
 
         return false;
@@ -121,7 +121,7 @@ public class CommandHandler implements ICommandHandler {
         return astring1;
     }
 
-    public List a(ICommandListener icommandlistener, String s, BlockPosition blockposition) {
+    public List<String> a(ICommandListener icommandlistener, String s, BlockPosition blockposition) {
         String[] astring = s.split(" ", -1);
         String s1 = astring[0];
 
@@ -151,7 +151,7 @@ public class CommandHandler implements ICommandHandler {
         }
     }
 
-    public List a(ICommandListener icommandlistener) {
+    public List<ICommand> a(ICommandListener icommandlistener) {
         ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = this.c.iterator();
 
@@ -166,7 +166,7 @@ public class CommandHandler implements ICommandHandler {
         return arraylist;
     }
 
-    public Map getCommands() {
+    public Map<String, ICommand> getCommands() {
         return this.b;
     }
 

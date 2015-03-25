@@ -18,7 +18,7 @@ public class CommandTime extends CommandAbstract {
         return "commands.time.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length > 1) {
             int i;
 
@@ -46,14 +46,14 @@ public class CommandTime extends CommandAbstract {
             if (astring[0].equals("query")) {
                 if (astring[1].equals("daytime")) {
                     i = (int) (icommandlistener.getWorld().getDayTime() % 2147483647L);
-                    icommandlistener.a(EnumCommandResult.QUERY_RESULT, i);
+                    icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, i);
                     a(icommandlistener, this, "commands.time.query", new Object[] { Integer.valueOf(i)});
                     return;
                 }
 
                 if (astring[1].equals("gametime")) {
                     i = (int) (icommandlistener.getWorld().getTime() % 2147483647L);
-                    icommandlistener.a(EnumCommandResult.QUERY_RESULT, i);
+                    icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, i);
                     a(icommandlistener, this, "commands.time.query", new Object[] { Integer.valueOf(i)});
                     return;
                 }
@@ -63,7 +63,7 @@ public class CommandTime extends CommandAbstract {
         throw new ExceptionUsage("commands.time.usage", new Object[0]);
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, new String[] { "set", "add", "query"}) : (astring.length == 2 && astring[0].equals("set") ? a(astring, new String[] { "day", "night"}) : (astring.length == 2 && astring[0].equals("query") ? a(astring, new String[] { "daytime", "gametime"}) : null));
     }
 

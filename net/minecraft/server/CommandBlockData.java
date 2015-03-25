@@ -18,11 +18,11 @@ public class CommandBlockData extends CommandAbstract {
         return "commands.blockdata.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) {
+    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 4) {
             throw new ExceptionUsage("commands.blockdata.usage", new Object[0]);
         } else {
-            icommandlistener.a(EnumCommandResult.AFFECTED_BLOCKS, 0);
+            icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 0);
             BlockPosition blockposition = a(icommandlistener, astring, 0, false);
             World world = icommandlistener.getWorld();
 
@@ -57,7 +57,7 @@ public class CommandBlockData extends CommandAbstract {
                         tileentity.a(nbttagcompound);
                         tileentity.update();
                         world.notify(blockposition);
-                        icommandlistener.a(EnumCommandResult.AFFECTED_BLOCKS, 1);
+                        icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 1);
                         a(icommandlistener, this, "commands.blockdata.success", new Object[] { nbttagcompound.toString()});
                     }
                 }
@@ -65,7 +65,7 @@ public class CommandBlockData extends CommandAbstract {
         }
     }
 
-    public List tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : null;
     }
 }

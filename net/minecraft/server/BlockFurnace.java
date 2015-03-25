@@ -5,9 +5,9 @@ import java.util.Random;
 
 public class BlockFurnace extends BlockContainer {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
     private final boolean b;
-    private static boolean M;
+    private static boolean N;
 
     protected BlockFurnace(boolean flag) {
         super(Material.STONE);
@@ -24,20 +24,20 @@ public class BlockFurnace extends BlockContainer {
     }
 
     private void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.isStatic) {
+        if (!world.isClientSide) {
             Block block = world.getType(blockposition.north()).getBlock();
             Block block1 = world.getType(blockposition.south()).getBlock();
             Block block2 = world.getType(blockposition.west()).getBlock();
             Block block3 = world.getType(blockposition.east()).getBlock();
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockFurnace.FACING);
 
-            if (enumdirection == EnumDirection.NORTH && block.m() && !block1.m()) {
+            if (enumdirection == EnumDirection.NORTH && block.o() && !block1.o()) {
                 enumdirection = EnumDirection.SOUTH;
-            } else if (enumdirection == EnumDirection.SOUTH && block1.m() && !block.m()) {
+            } else if (enumdirection == EnumDirection.SOUTH && block1.o() && !block.o()) {
                 enumdirection = EnumDirection.NORTH;
-            } else if (enumdirection == EnumDirection.WEST && block2.m() && !block3.m()) {
+            } else if (enumdirection == EnumDirection.WEST && block2.o() && !block3.o()) {
                 enumdirection = EnumDirection.EAST;
-            } else if (enumdirection == EnumDirection.EAST && block3.m() && !block2.m()) {
+            } else if (enumdirection == EnumDirection.EAST && block3.o() && !block2.o()) {
                 enumdirection = EnumDirection.WEST;
             }
 
@@ -46,13 +46,14 @@ public class BlockFurnace extends BlockContainer {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (world.isStatic) {
+        if (world.isClientSide) {
             return true;
         } else {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityFurnace) {
                 entityhuman.openContainer((TileEntityFurnace) tileentity);
+                entityhuman.b(StatisticList.Y);
             }
 
             return true;
@@ -63,7 +64,7 @@ public class BlockFurnace extends BlockContainer {
         IBlockData iblockdata = world.getType(blockposition);
         TileEntity tileentity = world.getTileEntity(blockposition);
 
-        BlockFurnace.M = true;
+        BlockFurnace.N = true;
         if (flag) {
             world.setTypeAndData(blockposition, Blocks.LIT_FURNACE.getBlockData().set(BlockFurnace.FACING, iblockdata.get(BlockFurnace.FACING)), 3);
             world.setTypeAndData(blockposition, Blocks.LIT_FURNACE.getBlockData().set(BlockFurnace.FACING, iblockdata.get(BlockFurnace.FACING)), 3);
@@ -72,7 +73,7 @@ public class BlockFurnace extends BlockContainer {
             world.setTypeAndData(blockposition, Blocks.FURNACE.getBlockData().set(BlockFurnace.FACING, iblockdata.get(BlockFurnace.FACING)), 3);
         }
 
-        BlockFurnace.M = false;
+        BlockFurnace.N = false;
         if (tileentity != null) {
             tileentity.D();
             world.setTileEntity(blockposition, tileentity);
@@ -101,7 +102,7 @@ public class BlockFurnace extends BlockContainer {
     }
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!BlockFurnace.M) {
+        if (!BlockFurnace.N) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityFurnace) {
@@ -128,7 +129,7 @@ public class BlockFurnace extends BlockContainer {
     public IBlockData fromLegacyData(int i) {
         EnumDirection enumdirection = EnumDirection.fromType1(i);
 
-        if (enumdirection.k() == EnumAxis.Y) {
+        if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
             enumdirection = EnumDirection.NORTH;
         }
 

@@ -5,45 +5,45 @@ import com.google.common.collect.HashBiMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class RegistryMaterials extends RegistrySimple implements Registry {
+public class RegistryMaterials<K, V> extends RegistrySimple<K, V> implements Registry<V> {
 
-    protected final RegistryID a = new RegistryID();
-    protected final Map b;
+    protected final RegistryID<V> a = new RegistryID();
+    protected final Map<V, K> b;
 
     public RegistryMaterials() {
         this.b = ((BiMap) this.c).inverse();
     }
 
-    public void a(int i, Object object, Object object1) {
-        this.a.a(object1, i);
-        this.a(object, object1);
+    public void a(int i, K k0, V v0) {
+        this.a.a(v0, i);
+        this.a(k0, v0);
     }
 
-    protected Map b() {
+    protected Map<K, V> b() {
         return HashBiMap.create();
     }
 
-    public Object get(Object object) {
-        return super.get(object);
+    public V get(K k0) {
+        return super.get(k0);
     }
 
-    public Object c(Object object) {
-        return this.b.get(object);
+    public K c(V v0) {
+        return this.b.get(v0);
     }
 
-    public boolean d(Object object) {
-        return super.d(object);
+    public boolean d(K k0) {
+        return super.d(k0);
     }
 
-    public int b(Object object) {
-        return this.a.b(object);
+    public int b(V v0) {
+        return this.a.b(v0);
     }
 
-    public Object a(int i) {
+    public V a(int i) {
         return this.a.a(i);
     }
 
-    public Iterator iterator() {
+    public Iterator<V> iterator() {
         return this.a.iterator();
     }
 }

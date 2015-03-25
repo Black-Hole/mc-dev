@@ -5,7 +5,7 @@ public class ContainerHorse extends Container {
     private IInventory a;
     private EntityHorse f;
 
-    public ContainerHorse(IInventory iinventory, IInventory iinventory1, EntityHorse entityhorse, EntityHuman entityhuman) {
+    public ContainerHorse(IInventory iinventory, final IInventory iinventory1, final EntityHorse entityhorse, EntityHuman entityhuman) {
         this.a = iinventory1;
         this.f = entityhorse;
         byte b0 = 3;
@@ -13,8 +13,16 @@ public class ContainerHorse extends Container {
         iinventory1.startOpen(entityhuman);
         int i = (b0 - 4) * 18;
 
-        this.a((Slot) (new SlotHorseSaddle(this, iinventory1, 0, 8, 18)));
-        this.a((Slot) (new SlotHorseArmor(this, iinventory1, 1, 8, 36, entityhorse)));
+        this.a(new Slot(iinventory1, 0, 8, 18) {
+            public boolean isAllowed(ItemStack itemstack) {
+                return super.isAllowed(itemstack) && itemstack.getItem() == Items.SADDLE && !this.hasItem();
+            }
+        });
+        this.a(new Slot(iinventory1, 1, 8, 36) {
+            public boolean isAllowed(ItemStack itemstack) {
+                return super.isAllowed(itemstack) && entityhorse.cO() && EntityHorse.a(itemstack.getItem());
+            }
+        });
         int j;
         int k;
 

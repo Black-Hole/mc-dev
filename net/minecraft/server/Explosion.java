@@ -18,10 +18,10 @@ public class Explosion {
     private final double posX;
     private final double posY;
     private final double posZ;
-    public final Entity source;
+    private final Entity source;
     private final float size;
-    private final List blocks = Lists.newArrayList();
-    private final Map k = Maps.newHashMap();
+    private final List<BlockPosition> blocks = Lists.newArrayList();
+    private final Map<EntityHuman, Vec3D> k = Maps.newHashMap();
 
     public Explosion(World world, Entity entity, double d0, double d1, double d2, float f, boolean flag, boolean flag1) {
         this.world = world;
@@ -96,7 +96,7 @@ public class Explosion {
         for (int l1 = 0; l1 < list.size(); ++l1) {
             Entity entity = (Entity) list.get(l1);
 
-            if (!entity.aV()) {
+            if (!entity.aW()) {
                 double d7 = entity.f(this.posX, this.posY, this.posZ) / (double) f3;
 
                 if (d7 <= 1.0D) {
@@ -118,7 +118,7 @@ public class Explosion {
                         entity.motX += d8 * d14;
                         entity.motY += d9 * d14;
                         entity.motZ += d10 * d14;
-                        if (entity instanceof EntityHuman) {
+                        if (entity instanceof EntityHuman && !((EntityHuman) entity).abilities.isInvulnerable) {
                             this.k.put((EntityHuman) entity, new Vec3D(d8 * d13, d9 * d13, d10 * d13));
                         }
                     }
@@ -184,7 +184,7 @@ public class Explosion {
 
             while (iterator.hasNext()) {
                 blockposition = (BlockPosition) iterator.next();
-                if (this.world.getType(blockposition).getBlock().getMaterial() == Material.AIR && this.world.getType(blockposition.down()).getBlock().m() && this.c.nextInt(3) == 0) {
+                if (this.world.getType(blockposition).getBlock().getMaterial() == Material.AIR && this.world.getType(blockposition.down()).getBlock().o() && this.c.nextInt(3) == 0) {
                     this.world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
                 }
             }
@@ -192,7 +192,7 @@ public class Explosion {
 
     }
 
-    public Map b() {
+    public Map<EntityHuman, Vec3D> b() {
         return this.k;
     }
 
@@ -204,7 +204,7 @@ public class Explosion {
         this.blocks.clear();
     }
 
-    public List getBlocks() {
+    public List<BlockPosition> getBlocks() {
         return this.blocks;
     }
 }

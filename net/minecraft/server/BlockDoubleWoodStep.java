@@ -4,7 +4,7 @@ public class BlockDoubleWoodStep extends BlockWoodenStep {
 
     public BlockDoubleWoodStep() {}
 
-    public boolean j() {
+    public boolean l() {
         return true;
     }
 }
