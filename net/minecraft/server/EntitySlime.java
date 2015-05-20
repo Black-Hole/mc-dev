@@ -28,7 +28,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         this.setSize(0.51000005F * (float) i, 0.51000005F * (float) i);
         this.setPosition(this.locX, this.locY, this.locZ);
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue((double) (i * i));
-        this.getAttributeInstance(GenericAttributes.d).setValue((double) (0.2F + 0.1F * (float) i));
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue((double) (0.2F + 0.1F * (float) i));
         this.setHealth(this.getMaxHealth());
         this.b_ = i;
     }
@@ -391,7 +391,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
             } else {
                 this.f = false;
                 if (this.a.onGround) {
-                    this.a.k((float) (this.e * this.a.getAttributeInstance(GenericAttributes.d).getValue()));
+                    this.a.k((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
                     if (this.h-- <= 0) {
                         this.h = this.i.cg();
                         if (this.j) {
@@ -407,7 +407,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
                         this.a.k(0.0F);
                     }
                 } else {
-                    this.a.k((float) (this.e * this.a.getAttributeInstance(GenericAttributes.d).getValue()));
+                    this.a.k((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
                 }
 
             }

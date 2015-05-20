@@ -31,8 +31,8 @@ public class EntityPigZombie extends EntityZombie {
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(EntityPigZombie.a).setValue(0.0D);
-        this.getAttributeInstance(GenericAttributes.d).setValue(0.23000000417232513D);
-        this.getAttributeInstance(GenericAttributes.e).setValue(5.0D);
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.23000000417232513D);
+        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(5.0D);
     }
 
     public void t_() {
@@ -40,7 +40,7 @@ public class EntityPigZombie extends EntityZombie {
     }
 
     protected void E() {
-        AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.d);
+        AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
         if (this.cm()) {
             if (!this.isBaby() && !attributeinstance.a(EntityPigZombie.c)) {

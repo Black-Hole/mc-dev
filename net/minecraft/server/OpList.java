@@ -28,7 +28,13 @@ public class OpList extends JsonList<GameProfile, OpListEntry> {
         return astring;
     }
 
-    protected String b(GameProfile gameprofile) {
+    public boolean b(GameProfile gameprofile) {
+        OpListEntry oplistentry = (OpListEntry) this.get(gameprofile);
+
+        return oplistentry != null ? oplistentry.b() : false;
+    }
+
+    protected String c(GameProfile gameprofile) {
         return gameprofile.getId().toString();
     }
 
@@ -49,6 +55,6 @@ public class OpList extends JsonList<GameProfile, OpListEntry> {
     }
 
     protected String a(Object object) {
-        return this.b((GameProfile) object);
+        return this.c((GameProfile) object);
     }
 }

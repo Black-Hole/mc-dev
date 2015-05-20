@@ -41,7 +41,7 @@ public class CommandOp extends CommandAbstract {
         if (astring.length == 1) {
             String s = astring[astring.length - 1];
             ArrayList arraylist = Lists.newArrayList();
-            GameProfile[] agameprofile = MinecraftServer.getServer().K();
+            GameProfile[] agameprofile = MinecraftServer.getServer().L();
             int i = agameprofile.length;
 
             for (int j = 0; j < i; ++j) {

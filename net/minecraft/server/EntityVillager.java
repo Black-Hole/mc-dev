@@ -73,7 +73,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, NPC {
 
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.d).setValue(0.5D);
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.5D);
     }
 
     protected void E() {
@@ -391,7 +391,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, NPC {
         int j = this.by - 1;
         EntityVillager.IMerchantRecipeOption[][] aentityvillager_imerchantrecipeoption1 = aentityvillager_imerchantrecipeoption[i];
 
-        if (j < aentityvillager_imerchantrecipeoption1.length) {
+        if (j >= 0 && j < aentityvillager_imerchantrecipeoption1.length) {
             EntityVillager.IMerchantRecipeOption[] aentityvillager_imerchantrecipeoption2 = aentityvillager_imerchantrecipeoption1[j];
             EntityVillager.IMerchantRecipeOption[] aentityvillager_imerchantrecipeoption3 = aentityvillager_imerchantrecipeoption2;
             int k = aentityvillager_imerchantrecipeoption2.length;

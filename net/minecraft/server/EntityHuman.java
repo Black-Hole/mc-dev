@@ -62,8 +62,8 @@ public abstract class EntityHuman extends EntityLiving {
 
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeMap().b(GenericAttributes.e).setValue(1.0D);
-        this.getAttributeInstance(GenericAttributes.d).setValue(0.10000000149011612D);
+        this.getAttributeMap().b(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.10000000149011612D);
     }
 
     protected void h() {
@@ -100,8 +100,8 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public void t_() {
-        this.noclip = this.v();
-        if (this.v()) {
+        this.noclip = this.isSpectator();
+        if (this.isSpectator()) {
             this.onGround = false;
         }
 
@@ -335,7 +335,7 @@ public abstract class EntityHuman extends EntityLiving {
         this.inventory.k();
         this.bn = this.bo;
         super.m();
-        AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.d);
+        AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
         if (!this.world.isClientSide) {
             attributeinstance.setValue((double) this.abilities.b());
@@ -364,7 +364,7 @@ public abstract class EntityHuman extends EntityLiving {
 
         this.bo += (f - this.bo) * 0.4F;
         this.aF += (f1 - this.aF) * 0.8F;
-        if (this.getHealth() > 0.0F && !this.v()) {
+        if (this.getHealth() > 0.0F && !this.isSpectator()) {
             AxisAlignedBB axisalignedbb = null;
 
             if (this.vehicle != null && !this.vehicle.dead) {
@@ -783,7 +783,7 @@ public abstract class EntityHuman extends EntityLiving {
     public void openBook(ItemStack itemstack) {}
 
     public boolean u(Entity entity) {
-        if (this.v()) {
+        if (this.isSpectator()) {
             if (entity instanceof IInventory) {
                 this.openContainer((IInventory) entity);
             }
@@ -838,7 +838,7 @@ public abstract class EntityHuman extends EntityLiving {
     public void attack(Entity entity) {
         if (entity.aD()) {
             if (!entity.l(this)) {
-                float f = (float) this.getAttributeInstance(GenericAttributes.e).getValue();
+                float f = (float) this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
                 byte b0 = 0;
                 float f1 = 0.0F;
 
@@ -1175,7 +1175,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public float bI() {
-        return (float) this.getAttributeInstance(GenericAttributes.d).getValue();
+        return (float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue();
     }
 
     public void checkMovement(double d0, double d1, double d2) {
@@ -1258,7 +1258,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     protected void X() {
-        if (!this.v()) {
+        if (!this.isSpectator()) {
             super.X();
         }
 
@@ -1461,7 +1461,7 @@ public abstract class EntityHuman extends EntityLiving {
         this.inventory.armor[i] = itemstack;
     }
 
-    public abstract boolean v();
+    public abstract boolean isSpectator();
 
     public ItemStack[] getEquipment() {
         return this.inventory.armor;

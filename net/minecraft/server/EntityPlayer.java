@@ -192,12 +192,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         if (entity != this) {
             if (!entity.isAlive()) {
-                this.e((Entity) this);
+                this.setSpectatorTarget(this);
             } else {
                 this.setLocation(entity.locX, entity.locY, entity.locZ, entity.yaw, entity.pitch);
                 this.server.getPlayerList().d(this);
                 if (this.isSneaking()) {
-                    this.e((Entity) this);
+                    this.setSpectatorTarget(this);
                 }
             }
         }
@@ -345,7 +345,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            boolean flag = this.server.ad() && this.cr() && "fall".equals(damagesource.translationIndex);
+            boolean flag = this.server.ae() && this.cr() && "fall".equals(damagesource.translationIndex);
 
             if (!flag && this.invulnerableTicks > 0 && damagesource != DamageSource.OUT_OF_WORLD) {
                 return false;
@@ -408,7 +408,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public boolean a(EntityPlayer entityplayer) {
-        return entityplayer.v() ? this.C() == this : (this.v() ? false : super.a(entityplayer));
+        return entityplayer.isSpectator() ? this.C() == this : (this.isSpectator() ? false : super.a(entityplayer));
     }
 
     private void a(TileEntity tileentity) {
@@ -510,7 +510,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         if (iinventory instanceof ITileInventory) {
             ITileInventory itileinventory = (ITileInventory) iinventory;
 
-            if (itileinventory.r_() && !this.a(itileinventory.i()) && !this.v()) {
+            if (itileinventory.r_() && !this.a(itileinventory.i()) && !this.isSpectator()) {
                 this.playerConnection.sendPacket(new PacketPlayOutChat(new ChatMessage("container.isLocked", new Object[] { iinventory.getScoreboardDisplayName()}), (byte) 2));
                 this.playerConnection.sendPacket(new PacketPlayOutNamedSoundEffect("random.door_close", this.locX, this.locY, this.locZ, 1.0F, 1.0F));
                 return;
@@ -752,14 +752,14 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         if (worldsettings_enumgamemode == WorldSettings.EnumGamemode.SPECTATOR) {
             this.mount((Entity) null);
         } else {
-            this.e((Entity) this);
+            this.setSpectatorTarget(this);
         }
 
         this.updateAbilities();
         this.bP();
     }
 
-    public boolean v() {
+    public boolean isSpectator() {
         return this.playerInteractManager.getGameMode() == WorldSettings.EnumGamemode.SPECTATOR;
     }
 
@@ -768,7 +768,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public boolean a(int i, String s) {
-        if ("seed".equals(s) && !this.server.ad()) {
+        if ("seed".equals(s) && !this.server.ae()) {
             return true;
         } else if (!"tell".equals(s) && !"help".equals(s) && !"me".equals(s) && !"trigger".equals(s)) {
             if (this.server.getPlayerList().isOp(this.getProfile())) {
@@ -810,8 +810,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         return new BlockPosition(this.locX, this.locY + 0.5D, this.locZ);
     }
 
-    public void z() {
-        this.bT = MinecraftServer.ay();
+    public void resetIdleTimer() {
+        this.bT = MinecraftServer.az();
     }
 
     public ServerStatisticManager getStatisticManager() {
@@ -828,7 +828,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     protected void B() {
-        if (this.v()) {
+        if (this.isSpectator()) {
             this.bj();
             this.setInvisible(true);
         } else {
@@ -842,7 +842,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         return (Entity) (this.bU == null ? this : this.bU);
     }
 
-    public void e(Entity entity) {
+    public void setSpectatorTarget(Entity entity) {
         Entity entity1 = this.C();
 
         this.bU = (Entity) (entity == null ? this : entity);
@@ -855,7 +855,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void attack(Entity entity) {
         if (this.playerInteractManager.getGameMode() == WorldSettings.EnumGamemode.SPECTATOR) {
-            this.e(entity);
+            this.setSpectatorTarget(entity);
         } else {
             super.attack(entity);
         }

@@ -97,7 +97,7 @@ public abstract class EntityLiving extends Entity {
     protected void initAttributes() {
         this.getAttributeMap().b(GenericAttributes.maxHealth);
         this.getAttributeMap().b(GenericAttributes.c);
-        this.getAttributeMap().b(GenericAttributes.d);
+        this.getAttributeMap().b(GenericAttributes.MOVEMENT_SPEED);
     }
 
     protected void a(double d0, boolean flag, Block block, BlockPosition blockposition) {
@@ -771,7 +771,7 @@ public abstract class EntityLiving extends Entity {
         int k = MathHelper.floor(this.locZ);
         Block block = this.world.getType(new BlockPosition(i, j, k)).getBlock();
 
-        return (block == Blocks.LADDER || block == Blocks.VINE) && (!(this instanceof EntityHuman) || !((EntityHuman) this).v());
+        return (block == Blocks.LADDER || block == Blocks.VINE) && (!(this instanceof EntityHuman) || !((EntityHuman) this).isSpectator());
     }
 
     public boolean isAlive() {
@@ -968,7 +968,7 @@ public abstract class EntityLiving extends Entity {
 
     public void setSprinting(boolean flag) {
         super.setSprinting(flag);
-        AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.d);
+        AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
         if (attributeinstance.a(EntityLiving.a) != null) {
             attributeinstance.c(EntityLiving.b);

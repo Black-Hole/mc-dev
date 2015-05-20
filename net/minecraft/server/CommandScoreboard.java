@@ -674,37 +674,42 @@ public class CommandScoreboard extends CommandAbstract {
         String s = astring[i - 1];
         int j = i;
         String s1 = e(icommandlistener, astring[i++]);
-        ScoreboardObjective scoreboardobjective = this.a(astring[i++], true);
-        int k = s.equalsIgnoreCase("set") ? a(astring[i++]) : a(astring[i++], 0);
 
-        if (astring.length > i) {
-            Entity entity = b(icommandlistener, astring[j]);
-
-            try {
-                NBTTagCompound nbttagcompound = MojangsonParser.parse(a(astring, i));
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-
-                entity.e(nbttagcompound1);
-                if (!GameProfileSerializer.a(nbttagcompound, nbttagcompound1, true)) {
-                    throw new CommandException("commands.scoreboard.players.set.tagMismatch", new Object[] { s1});
-                }
-            } catch (MojangsonParseException mojangsonparseexception) {
-                throw new CommandException("commands.scoreboard.players.set.tagError", new Object[] { mojangsonparseexception.getMessage()});
-            }
-        }
-
-        Scoreboard scoreboard = this.d();
-        ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s1, scoreboardobjective);
-
-        if (s.equalsIgnoreCase("set")) {
-            scoreboardscore.setScore(k);
-        } else if (s.equalsIgnoreCase("add")) {
-            scoreboardscore.addScore(k);
+        if (s1.length() > 40) {
+            throw new ExceptionInvalidSyntax("commands.scoreboard.players.name.tooLong", new Object[] { s1, Integer.valueOf(40)});
         } else {
-            scoreboardscore.removeScore(k);
-        }
+            ScoreboardObjective scoreboardobjective = this.a(astring[i++], true);
+            int k = s.equalsIgnoreCase("set") ? a(astring[i++]) : a(astring[i++], 0);
 
-        a(icommandlistener, this, "commands.scoreboard.players.set.success", new Object[] { scoreboardobjective.getName(), s1, Integer.valueOf(scoreboardscore.getScore())});
+            if (astring.length > i) {
+                Entity entity = b(icommandlistener, astring[j]);
+
+                try {
+                    NBTTagCompound nbttagcompound = MojangsonParser.parse(a(astring, i));
+                    NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+
+                    entity.e(nbttagcompound1);
+                    if (!GameProfileSerializer.a(nbttagcompound, nbttagcompound1, true)) {
+                        throw new CommandException("commands.scoreboard.players.set.tagMismatch", new Object[] { s1});
+                    }
+                } catch (MojangsonParseException mojangsonparseexception) {
+                    throw new CommandException("commands.scoreboard.players.set.tagError", new Object[] { mojangsonparseexception.getMessage()});
+                }
+            }
+
+            Scoreboard scoreboard = this.d();
+            ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s1, scoreboardobjective);
+
+            if (s.equalsIgnoreCase("set")) {
+                scoreboardscore.setScore(k);
+            } else if (s.equalsIgnoreCase("add")) {
+                scoreboardscore.addScore(k);
+            } else {
+                scoreboardscore.removeScore(k);
+            }
+
+            a(icommandlistener, this, "commands.scoreboard.players.set.success", new Object[] { scoreboardobjective.getName(), s1, Integer.valueOf(scoreboardscore.getScore())});
+        }
     }
 
     protected void m(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
@@ -726,36 +731,46 @@ public class CommandScoreboard extends CommandAbstract {
     protected void n(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
         Scoreboard scoreboard = this.d();
         String s = d(icommandlistener, astring[i++]);
-        ScoreboardObjective scoreboardobjective = this.a(astring[i], false);
 
-        if (scoreboardobjective.getCriteria() != IScoreboardCriteria.c) {
-            throw new CommandException("commands.scoreboard.players.enable.noTrigger", new Object[] { scoreboardobjective.getName()});
+        if (s.length() > 40) {
+            throw new ExceptionInvalidSyntax("commands.scoreboard.players.name.tooLong", new Object[] { s, Integer.valueOf(40)});
         } else {
-            ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s, scoreboardobjective);
+            ScoreboardObjective scoreboardobjective = this.a(astring[i], false);
 
-            scoreboardscore.a(false);
-            a(icommandlistener, this, "commands.scoreboard.players.enable.success", new Object[] { scoreboardobjective.getName(), s});
+            if (scoreboardobjective.getCriteria() != IScoreboardCriteria.c) {
+                throw new CommandException("commands.scoreboard.players.enable.noTrigger", new Object[] { scoreboardobjective.getName()});
+            } else {
+                ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s, scoreboardobjective);
+
+                scoreboardscore.a(false);
+                a(icommandlistener, this, "commands.scoreboard.players.enable.success", new Object[] { scoreboardobjective.getName(), s});
+            }
         }
     }
 
     protected void o(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
         Scoreboard scoreboard = this.d();
         String s = e(icommandlistener, astring[i++]);
-        ScoreboardObjective scoreboardobjective = this.a(astring[i++], false);
 
-        if (!scoreboard.b(s, scoreboardobjective)) {
-            throw new CommandException("commands.scoreboard.players.test.notFound", new Object[] { scoreboardobjective.getName(), s});
+        if (s.length() > 40) {
+            throw new ExceptionInvalidSyntax("commands.scoreboard.players.name.tooLong", new Object[] { s, Integer.valueOf(40)});
         } else {
-            int j = astring[i].equals("*") ? Integer.MIN_VALUE : a(astring[i]);
+            ScoreboardObjective scoreboardobjective = this.a(astring[i++], false);
 
-            ++i;
-            int k = i < astring.length && !astring[i].equals("*") ? a(astring[i], j) : Integer.MAX_VALUE;
-            ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s, scoreboardobjective);
-
-            if (scoreboardscore.getScore() >= j && scoreboardscore.getScore() <= k) {
-                a(icommandlistener, this, "commands.scoreboard.players.test.success", new Object[] { Integer.valueOf(scoreboardscore.getScore()), Integer.valueOf(j), Integer.valueOf(k)});
+            if (!scoreboard.b(s, scoreboardobjective)) {
+                throw new CommandException("commands.scoreboard.players.test.notFound", new Object[] { scoreboardobjective.getName(), s});
             } else {
-                throw new CommandException("commands.scoreboard.players.test.failed", new Object[] { Integer.valueOf(scoreboardscore.getScore()), Integer.valueOf(j), Integer.valueOf(k)});
+                int j = astring[i].equals("*") ? Integer.MIN_VALUE : a(astring[i]);
+
+                ++i;
+                int k = i < astring.length && !astring[i].equals("*") ? a(astring[i], j) : Integer.MAX_VALUE;
+                ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s, scoreboardobjective);
+
+                if (scoreboardscore.getScore() >= j && scoreboardscore.getScore() <= k) {
+                    a(icommandlistener, this, "commands.scoreboard.players.test.success", new Object[] { Integer.valueOf(scoreboardscore.getScore()), Integer.valueOf(j), Integer.valueOf(k)});
+                } else {
+                    throw new CommandException("commands.scoreboard.players.test.failed", new Object[] { Integer.valueOf(scoreboardscore.getScore()), Integer.valueOf(j), Integer.valueOf(k)});
+                }
             }
         }
     }
@@ -767,45 +782,52 @@ public class CommandScoreboard extends CommandAbstract {
         String s1 = astring[i++];
         String s2 = e(icommandlistener, astring[i++]);
         ScoreboardObjective scoreboardobjective1 = this.a(astring[i], false);
-        ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s, scoreboardobjective);
 
-        if (!scoreboard.b(s2, scoreboardobjective1)) {
-            throw new CommandException("commands.scoreboard.players.operation.notFound", new Object[] { scoreboardobjective1.getName(), s2});
+        if (s.length() > 40) {
+            throw new ExceptionInvalidSyntax("commands.scoreboard.players.name.tooLong", new Object[] { s, Integer.valueOf(40)});
+        } else if (s2.length() > 40) {
+            throw new ExceptionInvalidSyntax("commands.scoreboard.players.name.tooLong", new Object[] { s2, Integer.valueOf(40)});
         } else {
-            ScoreboardScore scoreboardscore1 = scoreboard.getPlayerScoreForObjective(s2, scoreboardobjective1);
+            ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s, scoreboardobjective);
 
-            if (s1.equals("+=")) {
-                scoreboardscore.setScore(scoreboardscore.getScore() + scoreboardscore1.getScore());
-            } else if (s1.equals("-=")) {
-                scoreboardscore.setScore(scoreboardscore.getScore() - scoreboardscore1.getScore());
-            } else if (s1.equals("*=")) {
-                scoreboardscore.setScore(scoreboardscore.getScore() * scoreboardscore1.getScore());
-            } else if (s1.equals("/=")) {
-                if (scoreboardscore1.getScore() != 0) {
-                    scoreboardscore.setScore(scoreboardscore.getScore() / scoreboardscore1.getScore());
-                }
-            } else if (s1.equals("%=")) {
-                if (scoreboardscore1.getScore() != 0) {
-                    scoreboardscore.setScore(scoreboardscore.getScore() % scoreboardscore1.getScore());
-                }
-            } else if (s1.equals("=")) {
-                scoreboardscore.setScore(scoreboardscore1.getScore());
-            } else if (s1.equals("<")) {
-                scoreboardscore.setScore(Math.min(scoreboardscore.getScore(), scoreboardscore1.getScore()));
-            } else if (s1.equals(">")) {
-                scoreboardscore.setScore(Math.max(scoreboardscore.getScore(), scoreboardscore1.getScore()));
+            if (!scoreboard.b(s2, scoreboardobjective1)) {
+                throw new CommandException("commands.scoreboard.players.operation.notFound", new Object[] { scoreboardobjective1.getName(), s2});
             } else {
-                if (!s1.equals("><")) {
-                    throw new CommandException("commands.scoreboard.players.operation.invalidOperation", new Object[] { s1});
+                ScoreboardScore scoreboardscore1 = scoreboard.getPlayerScoreForObjective(s2, scoreboardobjective1);
+
+                if (s1.equals("+=")) {
+                    scoreboardscore.setScore(scoreboardscore.getScore() + scoreboardscore1.getScore());
+                } else if (s1.equals("-=")) {
+                    scoreboardscore.setScore(scoreboardscore.getScore() - scoreboardscore1.getScore());
+                } else if (s1.equals("*=")) {
+                    scoreboardscore.setScore(scoreboardscore.getScore() * scoreboardscore1.getScore());
+                } else if (s1.equals("/=")) {
+                    if (scoreboardscore1.getScore() != 0) {
+                        scoreboardscore.setScore(scoreboardscore.getScore() / scoreboardscore1.getScore());
+                    }
+                } else if (s1.equals("%=")) {
+                    if (scoreboardscore1.getScore() != 0) {
+                        scoreboardscore.setScore(scoreboardscore.getScore() % scoreboardscore1.getScore());
+                    }
+                } else if (s1.equals("=")) {
+                    scoreboardscore.setScore(scoreboardscore1.getScore());
+                } else if (s1.equals("<")) {
+                    scoreboardscore.setScore(Math.min(scoreboardscore.getScore(), scoreboardscore1.getScore()));
+                } else if (s1.equals(">")) {
+                    scoreboardscore.setScore(Math.max(scoreboardscore.getScore(), scoreboardscore1.getScore()));
+                } else {
+                    if (!s1.equals("><")) {
+                        throw new CommandException("commands.scoreboard.players.operation.invalidOperation", new Object[] { s1});
+                    }
+
+                    int j = scoreboardscore.getScore();
+
+                    scoreboardscore.setScore(scoreboardscore1.getScore());
+                    scoreboardscore1.setScore(j);
                 }
 
-                int j = scoreboardscore.getScore();
-
-                scoreboardscore.setScore(scoreboardscore1.getScore());
-                scoreboardscore1.setScore(j);
+                a(icommandlistener, this, "commands.scoreboard.players.operation.success", new Object[0]);
             }
-
-            a(icommandlistener, this, "commands.scoreboard.players.operation.success", new Object[0]);
         }
     }
 

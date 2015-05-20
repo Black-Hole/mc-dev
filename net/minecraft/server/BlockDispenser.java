@@ -84,7 +84,7 @@ public class BlockDispenser extends BlockContainer {
                 if (idispensebehavior != IDispenseBehavior.a) {
                     ItemStack itemstack1 = idispensebehavior.a(sourceblock, itemstack);
 
-                    tileentitydispenser.setItem(i, itemstack1.count == 0 ? null : itemstack1);
+                    tileentitydispenser.setItem(i, itemstack1.count <= 0 ? null : itemstack1);
                 }
 
             }

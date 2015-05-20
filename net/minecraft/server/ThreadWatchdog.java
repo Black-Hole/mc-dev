@@ -19,13 +19,13 @@ public class ThreadWatchdog implements Runnable {
 
     public ThreadWatchdog(DedicatedServer dedicatedserver) {
         this.b = dedicatedserver;
-        this.c = dedicatedserver.aR();
+        this.c = dedicatedserver.aS();
     }
 
     public void run() {
         while (this.b.isRunning()) {
-            long i = this.b.aK();
-            long j = MinecraftServer.ay();
+            long i = this.b.aL();
+            long j = MinecraftServer.az();
             long k = j - i;
 
             if (k > this.c) {
@@ -41,7 +41,7 @@ public class ThreadWatchdog implements Runnable {
                 for (int i1 = 0; i1 < l; ++i1) {
                     ThreadInfo threadinfo = athreadinfo1[i1];
 
-                    if (threadinfo.getThreadId() == this.b.aL().getId()) {
+                    if (threadinfo.getThreadId() == this.b.aM().getId()) {
                         error.setStackTrace(threadinfo.getStackTrace());
                     }
 
@@ -55,7 +55,7 @@ public class ThreadWatchdog implements Runnable {
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Thread Dump");
 
                 crashreportsystemdetails.a("Threads", (Object) stringbuilder);
-                File file = new File(new File(this.b.x(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
+                File file = new File(new File(this.b.y(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
 
                 if (crashreport.a(file)) {
                     ThreadWatchdog.a.error("This crash report has been saved to: " + file.getAbsolutePath());

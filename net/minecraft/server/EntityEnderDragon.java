@@ -362,7 +362,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         Iterator iterator = arraylist.iterator();
 
         while (iterator.hasNext()) {
-            if (((EntityHuman) iterator.next()).v()) {
+            if (((EntityHuman) iterator.next()).isSpectator()) {
                 iterator.remove();
             }
         }

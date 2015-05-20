@@ -300,7 +300,7 @@ public class TileEntityChest extends TileEntityContainer implements IUpdatePlaye
     }
 
     public void startOpen(EntityHuman entityhuman) {
-        if (!entityhuman.v()) {
+        if (!entityhuman.isSpectator()) {
             if (this.l < 0) {
                 this.l = 0;
             }
@@ -314,7 +314,7 @@ public class TileEntityChest extends TileEntityContainer implements IUpdatePlaye
     }
 
     public void closeContainer(EntityHuman entityhuman) {
-        if (!entityhuman.v() && this.w() instanceof BlockChest) {
+        if (!entityhuman.isSpectator() && this.w() instanceof BlockChest) {
             --this.l;
             this.world.playBlockAction(this.position, this.w(), 1, this.l);
             this.world.applyPhysics(this.position, this.w());

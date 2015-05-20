@@ -62,7 +62,7 @@ public class HttpUtilities {
 
     private static String a(URL url, String s, boolean flag) {
         try {
-            Proxy proxy = MinecraftServer.getServer() == null ? null : MinecraftServer.getServer().ax();
+            Proxy proxy = MinecraftServer.getServer() == null ? null : MinecraftServer.getServer().ay();
 
             if (proxy == null) {
                 proxy = Proxy.NO_PROXY;

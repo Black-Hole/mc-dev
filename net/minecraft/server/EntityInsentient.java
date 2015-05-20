@@ -44,7 +44,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeMap().b(GenericAttributes.b).setValue(16.0D);
+        this.getAttributeMap().b(GenericAttributes.FOLLOW_RANGE).setValue(16.0D);
     }
 
     protected NavigationAbstract b(World world) {
@@ -677,7 +677,7 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
-        this.getAttributeInstance(GenericAttributes.b).b(new AttributeModifier("Random spawn bonus", this.random.nextGaussian() * 0.05D, 1));
+        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).b(new AttributeModifier("Random spawn bonus", this.random.nextGaussian() * 0.05D, 1));
         return groupdataentity;
     }
 

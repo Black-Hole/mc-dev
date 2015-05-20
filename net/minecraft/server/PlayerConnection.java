@@ -66,7 +66,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             --this.m;
         }
 
-        if (this.player.D() > 0L && this.minecraftServer.getIdleTimeout() > 0 && MinecraftServer.ay() - this.player.D() > (long) (this.minecraftServer.getIdleTimeout() * 1000 * 60)) {
+        if (this.player.D() > 0L && this.minecraftServer.getIdleTimeout() > 0 && MinecraftServer.az() - this.player.D() > (long) (this.minecraftServer.getIdleTimeout() * 1000 * 60)) {
             this.disconnect("You have been idle for too long!");
         }
 
@@ -212,13 +212,11 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 double d11 = d7 - this.player.locX;
                 double d12 = d8 - this.player.locY;
                 double d13 = d9 - this.player.locZ;
-                double d14 = Math.min(Math.abs(d11), Math.abs(this.player.motX));
-                double d15 = Math.min(Math.abs(d12), Math.abs(this.player.motY));
-                double d16 = Math.min(Math.abs(d13), Math.abs(this.player.motZ));
-                double d17 = d14 * d14 + d15 * d15 + d16 * d16;
+                double d14 = this.player.motX * this.player.motX + this.player.motY * this.player.motY + this.player.motZ * this.player.motZ;
+                double d15 = d11 * d11 + d12 * d12 + d13 * d13;
 
-                if (d17 > 100.0D && (!this.minecraftServer.S() || !this.minecraftServer.R().equals(this.player.getName()))) {
-                    PlayerConnection.c.warn(this.player.getName() + " moved too quickly! " + d11 + "," + d12 + "," + d13 + " (" + d14 + ", " + d15 + ", " + d16 + ")");
+                if (d15 - d14 > 100.0D && (!this.minecraftServer.T() || !this.minecraftServer.S().equals(this.player.getName()))) {
+                    PlayerConnection.c.warn(this.player.getName() + " moved too quickly! " + d11 + "," + d12 + "," + d13 + " (" + d11 + ", " + d12 + ", " + d13 + ")");
                     this.a(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
                     return;
                 }
@@ -232,7 +230,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
                 this.player.move(d11, d12, d13);
                 this.player.onGround = packetplayinflying.f();
-                double d18 = d12;
+                double d16 = d12;
 
                 d11 = d7 - this.player.locX;
                 d12 = d8 - this.player.locY;
@@ -241,10 +239,10 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 }
 
                 d13 = d9 - this.player.locZ;
-                d17 = d11 * d11 + d12 * d12 + d13 * d13;
+                d15 = d11 * d11 + d12 * d12 + d13 * d13;
                 boolean flag1 = false;
 
-                if (d17 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative()) {
+                if (d15 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative()) {
                     flag1 = true;
                     PlayerConnection.c.warn(this.player.getName() + " moved wrongly!");
                 }
@@ -263,7 +261,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 AxisAlignedBB axisalignedbb = this.player.getBoundingBox().grow((double) f4, (double) f4, (double) f4).a(0.0D, -0.55D, 0.0D);
 
                 if (!this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly && !worldserver.c(axisalignedbb)) {
-                    if (d18 >= -0.03125D) {
+                    if (d16 >= -0.03125D) {
                         ++this.g;
                         if (this.g > 80) {
                             PlayerConnection.c.warn(this.player.getName() + " was kicked for floating too long!");
@@ -326,17 +324,17 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
         BlockPosition blockposition = packetplayinblockdig.a();
 
-        this.player.z();
+        this.player.resetIdleTimer();
         switch (PlayerConnection.SyntheticClass_1.a[packetplayinblockdig.c().ordinal()]) {
         case 1:
-            if (!this.player.v()) {
+            if (!this.player.isSpectator()) {
                 this.player.a(false);
             }
 
             return;
 
         case 2:
-            if (!this.player.v()) {
+            if (!this.player.isSpectator()) {
                 this.player.a(true);
             }
 
@@ -393,7 +391,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         BlockPosition blockposition = packetplayinblockplace.a();
         EnumDirection enumdirection = EnumDirection.fromType1(packetplayinblockplace.getFace());
 
-        this.player.z();
+        this.player.resetIdleTimer();
         if (packetplayinblockplace.getFace() == 255) {
             if (itemstack == null) {
                 return;
@@ -441,7 +439,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
     public void a(PacketPlayInSpectate packetplayinspectate) {
         PlayerConnectionUtils.ensureMainThread(packetplayinspectate, this, this.player.u());
-        if (this.player.v()) {
+        if (this.player.isSpectator()) {
             Entity entity = null;
             WorldServer[] aworldserver = this.minecraftServer.worldServer;
             int i = aworldserver.length;
@@ -458,7 +456,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             }
 
             if (entity != null) {
-                this.player.e((Entity) this.player);
+                this.player.setSpectatorTarget(this.player);
                 this.player.mount((Entity) null);
                 if (entity.world != this.player.world) {
                     WorldServer worldserver1 = this.player.u();
@@ -493,14 +491,14 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
     public void a(IChatBaseComponent ichatbasecomponent) {
         PlayerConnection.c.info(this.player.getName() + " lost connection: " + ichatbasecomponent);
-        this.minecraftServer.aG();
+        this.minecraftServer.aH();
         ChatMessage chatmessage = new ChatMessage("multiplayer.player.left", new Object[] { this.player.getScoreboardDisplayName()});
 
         chatmessage.getChatModifier().setColor(EnumChatFormat.YELLOW);
         this.minecraftServer.getPlayerList().sendMessage(chatmessage);
         this.player.q();
         this.minecraftServer.getPlayerList().disconnect(this.player);
-        if (this.minecraftServer.S() && this.player.getName().equals(this.minecraftServer.R())) {
+        if (this.minecraftServer.T() && this.player.getName().equals(this.minecraftServer.S())) {
             PlayerConnection.c.info("Stopping singleplayer server as player logged out");
             this.minecraftServer.safeShutdown();
         }
@@ -544,7 +542,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         PlayerConnectionUtils.ensureMainThread(packetplayinhelditemslot, this, this.player.u());
         if (packetplayinhelditemslot.a() >= 0 && packetplayinhelditemslot.a() < PlayerInventory.getHotbarSize()) {
             this.player.inventory.itemInHandIndex = packetplayinhelditemslot.a();
-            this.player.z();
+            this.player.resetIdleTimer();
         } else {
             PlayerConnection.c.warn(this.player.getName() + " tried to set an invalid carried item");
         }
@@ -558,7 +556,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             this.sendPacket(new PacketPlayOutChat(chatmessage));
         } else {
-            this.player.z();
+            this.player.resetIdleTimer();
             String s = packetplayinchat.a();
 
             s = StringUtils.normalizeSpace(s);
@@ -592,13 +590,13 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
     public void a(PacketPlayInArmAnimation packetplayinarmanimation) {
         PlayerConnectionUtils.ensureMainThread(packetplayinarmanimation, this, this.player.u());
-        this.player.z();
+        this.player.resetIdleTimer();
         this.player.bw();
     }
 
     public void a(PacketPlayInEntityAction packetplayinentityaction) {
         PlayerConnectionUtils.ensureMainThread(packetplayinentityaction, this, this.player.u());
-        this.player.z();
+        this.player.resetIdleTimer();
         switch (PlayerConnection.SyntheticClass_1.b[packetplayinentityaction.b().ordinal()]) {
         case 1:
             this.player.setSneaking(true);
@@ -644,7 +642,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
         Entity entity = packetplayinuseentity.a((World) worldserver);
 
-        this.player.z();
+        this.player.resetIdleTimer();
         if (entity != null) {
             boolean flag = this.player.hasLineOfSight(entity);
             double d0 = 36.0D;
@@ -674,7 +672,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
     public void a(PacketPlayInClientCommand packetplayinclientcommand) {
         PlayerConnectionUtils.ensureMainThread(packetplayinclientcommand, this, this.player.u());
-        this.player.z();
+        this.player.resetIdleTimer();
         PacketPlayInClientCommand.EnumClientCommand packetplayinclientcommand_enumclientcommand = packetplayinclientcommand.a();
 
         switch (PlayerConnection.SyntheticClass_1.c[packetplayinclientcommand_enumclientcommand.ordinal()]) {
@@ -682,9 +680,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             if (this.player.viewingCredits) {
                 this.player = this.minecraftServer.getPlayerList().moveToWorld(this.player, 0, true);
             } else if (this.player.u().getWorldData().isHardcore()) {
-                if (this.minecraftServer.S() && this.player.getName().equals(this.minecraftServer.R())) {
+                if (this.minecraftServer.T() && this.player.getName().equals(this.minecraftServer.S())) {
                     this.player.playerConnection.disconnect("You have died. Game over, man, it\'s game over!");
-                    this.minecraftServer.Z();
+                    this.minecraftServer.aa();
                 } else {
                     GameProfileBanEntry gameprofilebanentry = new GameProfileBanEntry(this.player.getProfile(), (Date) null, "(You just lost the game)", (Date) null, "Death in Hardcore");
 
@@ -717,9 +715,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
     public void a(PacketPlayInWindowClick packetplayinwindowclick) {
         PlayerConnectionUtils.ensureMainThread(packetplayinwindowclick, this, this.player.u());
-        this.player.z();
+        this.player.resetIdleTimer();
         if (this.player.activeContainer.windowId == packetplayinwindowclick.a() && this.player.activeContainer.c(this.player)) {
-            if (this.player.v()) {
+            if (this.player.isSpectator()) {
                 ArrayList arraylist = Lists.newArrayList();
 
                 for (int i = 0; i < this.player.activeContainer.c.size(); ++i) {
@@ -755,8 +753,8 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
     public void a(PacketPlayInEnchantItem packetplayinenchantitem) {
         PlayerConnectionUtils.ensureMainThread(packetplayinenchantitem, this, this.player.u());
-        this.player.z();
-        if (this.player.activeContainer.windowId == packetplayinenchantitem.a() && this.player.activeContainer.c(this.player) && !this.player.v()) {
+        this.player.resetIdleTimer();
+        if (this.player.activeContainer.windowId == packetplayinenchantitem.a() && this.player.activeContainer.c(this.player) && !this.player.isSpectator()) {
             this.player.activeContainer.a(this.player, packetplayinenchantitem.b());
             this.player.activeContainer.b();
         }
@@ -816,7 +814,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         PlayerConnectionUtils.ensureMainThread(packetplayintransaction, this, this.player.u());
         Short oshort = (Short) this.n.get(this.player.activeContainer.windowId);
 
-        if (oshort != null && packetplayintransaction.b() == oshort.shortValue() && this.player.activeContainer.windowId == packetplayintransaction.a() && !this.player.activeContainer.c(this.player) && !this.player.v()) {
+        if (oshort != null && packetplayintransaction.b() == oshort.shortValue() && this.player.activeContainer.windowId == packetplayintransaction.a() && !this.player.activeContainer.c(this.player) && !this.player.isSpectator()) {
             this.player.activeContainer.a(this.player, true);
         }
 
@@ -824,7 +822,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
     public void a(PacketPlayInUpdateSign packetplayinupdatesign) {
         PlayerConnectionUtils.ensureMainThread(packetplayinupdatesign, this, this.player.u());
-        this.player.z();
+        this.player.resetIdleTimer();
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
         BlockPosition blockposition = packetplayinupdatesign.a();
 

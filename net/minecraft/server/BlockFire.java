@@ -14,7 +14,7 @@ public class BlockFire extends Block {
     public static final BlockStateBoolean SOUTH = BlockStateBoolean.of("south");
     public static final BlockStateBoolean WEST = BlockStateBoolean.of("west");
     public static final BlockStateInteger UPPER = BlockStateInteger.of("upper", 0, 2);
-    private final Map<Block, Integer> T = Maps.newIdentityHashMap();
+    private final Map<Block, Integer> flameChances = Maps.newIdentityHashMap();
     private final Map<Block, Integer> U = Maps.newIdentityHashMap();
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -82,7 +82,7 @@ public class BlockFire extends Block {
     }
 
     public void a(Block block, int i, int j) {
-        this.T.put(block, Integer.valueOf(i));
+        this.flameChances.put(block, Integer.valueOf(i));
         this.U.put(block, Integer.valueOf(j));
     }
 
@@ -213,7 +213,7 @@ public class BlockFire extends Block {
     }
 
     private int d(Block block) {
-        Integer integer = (Integer) this.T.get(block);
+        Integer integer = (Integer) this.flameChances.get(block);
 
         return integer == null ? 0 : integer.intValue();
     }

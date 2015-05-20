@@ -50,7 +50,7 @@ public class EntityIronGolem extends EntityGolem {
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(100.0D);
-        this.getAttributeInstance(GenericAttributes.d).setValue(0.25D);
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
     }
 
     protected int j(int i) {

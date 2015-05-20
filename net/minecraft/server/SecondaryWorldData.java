@@ -120,14 +120,14 @@ public class SecondaryWorldData extends WorldData {
         return this.b.x();
     }
 
-    public EnumDifficulty y() {
-        return this.b.y();
+    public EnumDifficulty getDifficulty() {
+        return this.b.getDifficulty();
     }
 
     public void setDifficulty(EnumDifficulty enumdifficulty) {}
 
-    public boolean z() {
-        return this.b.z();
+    public boolean isDifficultyLocked() {
+        return this.b.isDifficultyLocked();
     }
 
     public void e(boolean flag) {}

@@ -34,14 +34,14 @@ public class BlockDropper extends BlockDispenser {
 
                     if (iinventory == null) {
                         itemstack1 = this.P.a(sourceblock, itemstack);
-                        if (itemstack1 != null && itemstack1.count == 0) {
+                        if (itemstack1 != null && itemstack1.count <= 0) {
                             itemstack1 = null;
                         }
                     } else {
                         itemstack1 = TileEntityHopper.addItem(iinventory, itemstack.cloneItemStack().a(1), enumdirection.opposite());
                         if (itemstack1 == null) {
                             itemstack1 = itemstack.cloneItemStack();
-                            if (--itemstack1.count == 0) {
+                            if (--itemstack1.count <= 0) {
                                 itemstack1 = null;
                             }
                         } else {

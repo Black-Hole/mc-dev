@@ -8,7 +8,9 @@ public class NBTTagEnd extends NBTBase {
 
     NBTTagEnd() {}
 
-    void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {}
+    void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+        nbtreadlimiter.a(64L);
+    }
 
     void write(DataOutput dataoutput) throws IOException {}
 

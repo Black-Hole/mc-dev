@@ -47,9 +47,20 @@ public class PersistentScoreboard extends PersistentBase {
     protected void a(NBTTagList nbttaglist) {
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.get(i);
-            ScoreboardTeam scoreboardteam = this.c.createTeam(nbttagcompound.getString("Name"));
+            String s = nbttagcompound.getString("Name");
 
-            scoreboardteam.setDisplayName(nbttagcompound.getString("DisplayName"));
+            if (s.length() > 16) {
+                s = s.substring(0, 16);
+            }
+
+            ScoreboardTeam scoreboardteam = this.c.createTeam(s);
+            String s1 = nbttagcompound.getString("DisplayName");
+
+            if (s1.length() > 32) {
+                s1 = s1.substring(0, 32);
+            }
+
+            scoreboardteam.setDisplayName(s1);
             if (nbttagcompound.hasKeyOfType("TeamColor", 8)) {
                 scoreboardteam.a(EnumChatFormat.b(nbttagcompound.getString("TeamColor")));
             }
@@ -110,7 +121,13 @@ public class PersistentScoreboard extends PersistentBase {
             IScoreboardCriteria iscoreboardcriteria = (IScoreboardCriteria) IScoreboardCriteria.criteria.get(nbttagcompound.getString("CriteriaName"));
 
             if (iscoreboardcriteria != null) {
-                ScoreboardObjective scoreboardobjective = this.c.registerObjective(nbttagcompound.getString("Name"), iscoreboardcriteria);
+                String s = nbttagcompound.getString("Name");
+
+                if (s.length() > 40) {
+                    s = s.substring(0, 40);
+                }
+
+                ScoreboardObjective scoreboardobjective = this.c.registerObjective(s, iscoreboardcriteria);
 
                 scoreboardobjective.setDisplayName(nbttagcompound.getString("DisplayName"));
                 scoreboardobjective.a(IScoreboardCriteria.EnumScoreboardHealthDisplay.a(nbttagcompound.getString("RenderType")));
@@ -123,7 +140,13 @@ public class PersistentScoreboard extends PersistentBase {
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.get(i);
             ScoreboardObjective scoreboardobjective = this.c.getObjective(nbttagcompound.getString("Objective"));
-            ScoreboardScore scoreboardscore = this.c.getPlayerScoreForObjective(nbttagcompound.getString("Name"), scoreboardobjective);
+            String s = nbttagcompound.getString("Name");
+
+            if (s.length() > 16) {
+                s = s.substring(0, 16);
+            }
+
+            ScoreboardScore scoreboardscore = this.c.getPlayerScoreForObjective(s, scoreboardobjective);
 
             scoreboardscore.setScore(nbttagcompound.getInt("Score"));
             if (nbttagcompound.hasKey("Locked")) {

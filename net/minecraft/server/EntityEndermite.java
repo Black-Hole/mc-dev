@@ -25,8 +25,8 @@ public class EntityEndermite extends EntityMonster {
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(8.0D);
-        this.getAttributeInstance(GenericAttributes.d).setValue(0.25D);
-        this.getAttributeInstance(GenericAttributes.e).setValue(2.0D);
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
+        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(2.0D);
     }
 
     protected boolean s_() {

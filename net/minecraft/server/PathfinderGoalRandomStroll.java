@@ -57,7 +57,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
         this.g = true;
     }
 
-    public void b(int i) {
+    public void setTimeBetweenMovement(int i) {
         this.f = i;
     }
 }

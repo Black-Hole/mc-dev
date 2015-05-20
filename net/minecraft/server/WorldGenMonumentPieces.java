@@ -1979,7 +1979,7 @@ public class WorldGenMonumentPieces {
             if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(l, i1, j1)))) {
                 EntityGuardian entityguardian = new EntityGuardian(world);
 
-                entityguardian.a(true);
+                entityguardian.setElder(true);
                 entityguardian.heal(entityguardian.getMaxHealth());
                 entityguardian.setPositionRotation((double) l + 0.5D, (double) i1, (double) j1 + 0.5D, 0.0F, 0.0F);
                 entityguardian.prepare(world.E(new BlockPosition(entityguardian)), (GroupDataEntity) null);

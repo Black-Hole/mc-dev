@@ -54,7 +54,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(10.0D);
-        this.getAttributeInstance(GenericAttributes.b).setValue(100.0D);
+        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(100.0D);
     }
 
     protected String z() {

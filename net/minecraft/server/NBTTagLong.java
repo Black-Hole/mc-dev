@@ -19,7 +19,7 @@ public class NBTTagLong extends NBTBase.NBTNumber {
     }
 
     void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
-        nbtreadlimiter.a(64L);
+        nbtreadlimiter.a(128L);
         this.data = datainput.readLong();
     }
 

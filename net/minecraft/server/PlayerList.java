@@ -81,14 +81,14 @@ public abstract class PlayerList {
 
         playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), worlddata.isHardcore(), worldserver.worldProvider.getDimension(), worldserver.getDifficulty(), this.getMaxPlayers(), worlddata.getType(), worldserver.getGameRules().getBoolean("reducedDebugInfo")));
         playerconnection.sendPacket(new PacketPlayOutCustomPayload("MC|Brand", (new PacketDataSerializer(Unpooled.buffer())).a(this.getServer().getServerModName())));
-        playerconnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.y(), worlddata.z()));
+        playerconnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
         playerconnection.sendPacket(new PacketPlayOutSpawnPosition(blockposition));
         playerconnection.sendPacket(new PacketPlayOutAbilities(entityplayer.abilities));
         playerconnection.sendPacket(new PacketPlayOutHeldItemSlot(entityplayer.inventory.itemInHandIndex));
         entityplayer.getStatisticManager().d();
         entityplayer.getStatisticManager().updateStatistics(entityplayer);
         this.sendScoreboard((ScoreboardServer) worldserver.getScoreboard(), entityplayer);
-        this.server.aG();
+        this.server.aH();
         ChatMessage chatmessage;
 
         if (!entityplayer.getName().equalsIgnoreCase(s)) {
@@ -205,7 +205,7 @@ public abstract class PlayerList {
         NBTTagCompound nbttagcompound = this.server.worldServer[0].getWorldData().i();
         NBTTagCompound nbttagcompound1;
 
-        if (entityplayer.getName().equals(this.server.R()) && nbttagcompound != null) {
+        if (entityplayer.getName().equals(this.server.S()) && nbttagcompound != null) {
             entityplayer.f(nbttagcompound);
             nbttagcompound1 = nbttagcompound;
             PlayerList.f.debug("loading single player");
@@ -295,7 +295,7 @@ public abstract class PlayerList {
 
             return s;
         } else {
-            return this.players.size() >= this.maxPlayers ? "The server is full!" : null;
+            return this.players.size() >= this.maxPlayers && !this.f(gameprofile) ? "The server is full!" : null;
         }
     }
 
@@ -327,7 +327,7 @@ public abstract class PlayerList {
 
         Object object;
 
-        if (this.server.W()) {
+        if (this.server.X()) {
             object = new DemoPlayerInteractManager(this.server.getWorldServer(0));
         } else {
             object = new PlayerInteractManager(this.server.getWorldServer(0));
@@ -348,7 +348,7 @@ public abstract class PlayerList {
         entityplayer.dimension = i;
         Object object;
 
-        if (this.server.W()) {
+        if (this.server.X()) {
             object = new DemoPlayerInteractManager(this.server.getWorldServer(entityplayer.dimension));
         } else {
             object = new PlayerInteractManager(this.server.getWorldServer(entityplayer.dimension));
@@ -588,7 +588,7 @@ public abstract class PlayerList {
     }
 
     public void addOp(GameProfile gameprofile) {
-        this.operators.add(new OpListEntry(gameprofile, this.server.p()));
+        this.operators.add(new OpListEntry(gameprofile, this.server.p(), this.operators.b(gameprofile)));
     }
 
     public void removeOp(GameProfile gameprofile) {
@@ -600,7 +600,7 @@ public abstract class PlayerList {
     }
 
     public boolean isOp(GameProfile gameprofile) {
-        return this.operators.d(gameprofile) || this.server.S() && this.server.worldServer[0].getWorldData().v() && this.server.R().equalsIgnoreCase(gameprofile.getName()) || this.t;
+        return this.operators.d(gameprofile) || this.server.T() && this.server.worldServer[0].getWorldData().v() && this.server.S().equalsIgnoreCase(gameprofile.getName()) || this.t;
     }
 
     public EntityPlayer getPlayer(String s) {
@@ -814,5 +814,9 @@ public abstract class PlayerList {
 
     public EntityPlayer a(UUID uuid) {
         return (EntityPlayer) this.j.get(uuid);
+    }
+
+    public boolean f(GameProfile gameprofile) {
+        return false;
     }
 }

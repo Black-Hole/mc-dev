@@ -28,7 +28,7 @@ public class ChatComponentScore extends ChatBaseComponent {
     public String getText() {
         MinecraftServer minecraftserver = MinecraftServer.getServer();
 
-        if (minecraftserver != null && minecraftserver.N() && UtilColor.b(this.d)) {
+        if (minecraftserver != null && minecraftserver.O() && UtilColor.b(this.d)) {
             Scoreboard scoreboard = minecraftserver.getWorldServer(0).getScoreboard();
             ScoreboardObjective scoreboardobjective = scoreboard.getObjective(this.c);
 

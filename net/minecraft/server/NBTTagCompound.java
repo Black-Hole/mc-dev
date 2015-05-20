@@ -9,12 +9,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class NBTTagCompound extends NBTBase {
 
-    private static final Logger b = LogManager.getLogger();
     private Map<String, NBTBase> map = Maps.newHashMap();
 
     public NBTTagCompound() {}
@@ -33,6 +30,7 @@ public class NBTTagCompound extends NBTBase {
     }
 
     void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+        nbtreadlimiter.a(384L);
         if (i > 512) {
             throw new RuntimeException("Tried to read NBT tag with too high complexity, depth > 512");
         } else {
@@ -43,10 +41,12 @@ public class NBTTagCompound extends NBTBase {
             while ((b0 = a(datainput, nbtreadlimiter)) != 0) {
                 String s = b(datainput, nbtreadlimiter);
 
-                nbtreadlimiter.a((long) (16 * s.length()));
+                nbtreadlimiter.a((long) (224 + 16 * s.length()));
                 NBTBase nbtbase = a(b0, s, datainput, i + 1, nbtreadlimiter);
 
-                this.map.put(s, nbtbase);
+                if (this.map.put(s, nbtbase) != null) {
+                    nbtreadlimiter.a(288L);
+                }
             }
 
         }

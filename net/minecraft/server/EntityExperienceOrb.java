@@ -60,7 +60,7 @@ public class EntityExperienceOrb extends Entity {
             this.targetTime = this.a;
         }
 
-        if (this.targetPlayer != null && this.targetPlayer.v()) {
+        if (this.targetPlayer != null && this.targetPlayer.isSpectator()) {
             this.targetPlayer = null;
         }
 

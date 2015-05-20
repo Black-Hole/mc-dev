@@ -26,23 +26,27 @@ public class Scoreboard {
     }
 
     public ScoreboardObjective registerObjective(String s, IScoreboardCriteria iscoreboardcriteria) {
-        ScoreboardObjective scoreboardobjective = this.getObjective(s);
-
-        if (scoreboardobjective != null) {
-            throw new IllegalArgumentException("An objective with the name \'" + s + "\' already exists!");
+        if (s.length() > 16) {
+            throw new IllegalArgumentException("The objective name \'" + s + "\' is too long!");
         } else {
-            scoreboardobjective = new ScoreboardObjective(this, s, iscoreboardcriteria);
-            Object object = (List) this.objectivesByCriteria.get(iscoreboardcriteria);
+            ScoreboardObjective scoreboardobjective = this.getObjective(s);
 
-            if (object == null) {
-                object = Lists.newArrayList();
-                this.objectivesByCriteria.put(iscoreboardcriteria, object);
+            if (scoreboardobjective != null) {
+                throw new IllegalArgumentException("An objective with the name \'" + s + "\' already exists!");
+            } else {
+                scoreboardobjective = new ScoreboardObjective(this, s, iscoreboardcriteria);
+                Object object = (List) this.objectivesByCriteria.get(iscoreboardcriteria);
+
+                if (object == null) {
+                    object = Lists.newArrayList();
+                    this.objectivesByCriteria.put(iscoreboardcriteria, object);
+                }
+
+                ((List) object).add(scoreboardobjective);
+                this.objectivesByName.put(s, scoreboardobjective);
+                this.handleObjectiveAdded(scoreboardobjective);
+                return scoreboardobjective;
             }
-
-            ((List) object).add(scoreboardobjective);
-            this.objectivesByName.put(s, scoreboardobjective);
-            this.handleObjectiveAdded(scoreboardobjective);
-            return scoreboardobjective;
         }
     }
 
@@ -65,21 +69,25 @@ public class Scoreboard {
     }
 
     public ScoreboardScore getPlayerScoreForObjective(String s, ScoreboardObjective scoreboardobjective) {
-        Object object = (Map) this.playerScores.get(s);
+        if (s.length() > 40) {
+            throw new IllegalArgumentException("The player name \'" + s + "\' is too long!");
+        } else {
+            Object object = (Map) this.playerScores.get(s);
 
-        if (object == null) {
-            object = Maps.newHashMap();
-            this.playerScores.put(s, object);
+            if (object == null) {
+                object = Maps.newHashMap();
+                this.playerScores.put(s, object);
+            }
+
+            ScoreboardScore scoreboardscore = (ScoreboardScore) ((Map) object).get(scoreboardobjective);
+
+            if (scoreboardscore == null) {
+                scoreboardscore = new ScoreboardScore(this, scoreboardobjective, s);
+                ((Map) object).put(scoreboardobjective, scoreboardscore);
+            }
+
+            return scoreboardscore;
         }
-
-        ScoreboardScore scoreboardscore = (ScoreboardScore) ((Map) object).get(scoreboardobjective);
-
-        if (scoreboardscore == null) {
-            scoreboardscore = new ScoreboardScore(this, scoreboardobjective, s);
-            ((Map) object).put(scoreboardobjective, scoreboardscore);
-        }
-
-        return scoreboardscore;
     }
 
     public Collection<ScoreboardScore> getScoresForObjective(ScoreboardObjective scoreboardobjective) {
@@ -197,15 +205,19 @@ public class Scoreboard {
     }
 
     public ScoreboardTeam createTeam(String s) {
-        ScoreboardTeam scoreboardteam = this.getTeam(s);
-
-        if (scoreboardteam != null) {
-            throw new IllegalArgumentException("A team with the name \'" + s + "\' already exists!");
+        if (s.length() > 16) {
+            throw new IllegalArgumentException("The team name \'" + s + "\' is too long!");
         } else {
-            scoreboardteam = new ScoreboardTeam(this, s);
-            this.teamsByName.put(s, scoreboardteam);
-            this.handleTeamAdded(scoreboardteam);
-            return scoreboardteam;
+            ScoreboardTeam scoreboardteam = this.getTeam(s);
+
+            if (scoreboardteam != null) {
+                throw new IllegalArgumentException("A team with the name \'" + s + "\' already exists!");
+            } else {
+                scoreboardteam = new ScoreboardTeam(this, s);
+                this.teamsByName.put(s, scoreboardteam);
+                this.handleTeamAdded(scoreboardteam);
+                return scoreboardteam;
+            }
         }
     }
 
@@ -223,7 +235,9 @@ public class Scoreboard {
     }
 
     public boolean addPlayerToTeam(String s, String s1) {
-        if (!this.teamsByName.containsKey(s1)) {
+        if (s.length() > 40) {
+            throw new IllegalArgumentException("The player name \'" + s + "\' is too long!");
+        } else if (!this.teamsByName.containsKey(s1)) {
             return false;
         } else {
             ScoreboardTeam scoreboardteam = this.getTeam(s1);

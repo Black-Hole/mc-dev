@@ -2512,7 +2512,7 @@ public abstract class World implements IBlockAccess {
 
     public Calendar Y() {
         if (this.getTime() % 600L == 0L) {
-            this.K.setTimeInMillis(MinecraftServer.ay());
+            this.K.setTimeInMillis(MinecraftServer.az());
         }
 
         return this.K;
@@ -2559,7 +2559,7 @@ public abstract class World implements IBlockAccess {
     }
 
     public EnumDifficulty getDifficulty() {
-        return this.getWorldData().y();
+        return this.getWorldData().getDifficulty();
     }
 
     public int ab() {

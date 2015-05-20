@@ -14,7 +14,7 @@ public class EntityGuardian extends EntityMonster {
     private EntityLiving bo;
     private int bp;
     private boolean bq;
-    private PathfinderGoalRandomStroll br;
+    private PathfinderGoalRandomStroll goalRandomStroll;
 
     public EntityGuardian(World world) {
         super(world);
@@ -24,11 +24,11 @@ public class EntityGuardian extends EntityMonster {
         PathfinderGoalMoveTowardsRestriction pathfindergoalmovetowardsrestriction;
 
         this.goalSelector.a(5, pathfindergoalmovetowardsrestriction = new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
-        this.goalSelector.a(7, this.br = new PathfinderGoalRandomStroll(this, 1.0D, 80));
+        this.goalSelector.a(7, this.goalRandomStroll = new PathfinderGoalRandomStroll(this, 1.0D, 80));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityGuardian.class, 12.0F, 0.01F));
         this.goalSelector.a(9, new PathfinderGoalRandomLookaround(this));
-        this.br.a(3);
+        this.goalRandomStroll.a(3);
         pathfindergoalmovetowardsrestriction.a(3);
         this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget(this, EntityLiving.class, 10, true, false, new EntityGuardian.EntitySelectorGuardianTargetHumanSquid(this)));
         this.moveController = new EntityGuardian.ControllerMoveGuardian(this);
@@ -37,20 +37,20 @@ public class EntityGuardian extends EntityMonster {
 
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.e).setValue(6.0D);
-        this.getAttributeInstance(GenericAttributes.d).setValue(0.5D);
-        this.getAttributeInstance(GenericAttributes.b).setValue(16.0D);
+        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(6.0D);
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.5D);
+        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(16.0D);
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(30.0D);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.a(nbttagcompound.getBoolean("Elder"));
+        this.setElder(nbttagcompound.getBoolean("Elder"));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setBoolean("Elder", this.cn());
+        nbttagcompound.setBoolean("Elder", this.isElder());
     }
 
     protected NavigationAbstract b(World world) {
@@ -87,22 +87,22 @@ public class EntityGuardian extends EntityMonster {
     }
 
     public int cm() {
-        return this.cn() ? 60 : 80;
+        return this.isElder() ? 60 : 80;
     }
 
-    public boolean cn() {
+    public boolean isElder() {
         return this.a(4);
     }
 
-    public void a(boolean flag) {
+    public void setElder(boolean flag) {
         this.a(4, flag);
         if (flag) {
             this.setSize(1.9975F, 1.9975F);
-            this.getAttributeInstance(GenericAttributes.d).setValue(0.30000001192092896D);
-            this.getAttributeInstance(GenericAttributes.e).setValue(8.0D);
+            this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.30000001192092896D);
+            this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(8.0D);
             this.getAttributeInstance(GenericAttributes.maxHealth).setValue(80.0D);
             this.bX();
-            this.br.b(400);
+            this.goalRandomStroll.setTimeBetweenMovement(400);
         }
 
     }
@@ -139,7 +139,7 @@ public class EntityGuardian extends EntityMonster {
     public void i(int i) {
         super.i(i);
         if (i == 16) {
-            if (this.cn() && this.width < 1.0F) {
+            if (this.isElder() && this.width < 1.0F) {
                 this.setSize(1.9975F, 1.9975F);
             }
         } else if (i == 17) {
@@ -154,15 +154,15 @@ public class EntityGuardian extends EntityMonster {
     }
 
     protected String z() {
-        return !this.V() ? "mob.guardian.land.idle" : (this.cn() ? "mob.guardian.elder.idle" : "mob.guardian.idle");
+        return !this.V() ? "mob.guardian.land.idle" : (this.isElder() ? "mob.guardian.elder.idle" : "mob.guardian.idle");
     }
 
     protected String bo() {
-        return !this.V() ? "mob.guardian.land.hit" : (this.cn() ? "mob.guardian.elder.hit" : "mob.guardian.hit");
+        return !this.V() ? "mob.guardian.land.hit" : (this.isElder() ? "mob.guardian.elder.hit" : "mob.guardian.hit");
     }
 
     protected String bp() {
-        return !this.V() ? "mob.guardian.land.death" : (this.cn() ? "mob.guardian.elder.death" : "mob.guardian.death");
+        return !this.V() ? "mob.guardian.land.death" : (this.isElder() ? "mob.guardian.elder.death" : "mob.guardian.death");
     }
 
     protected boolean s_() {
@@ -268,7 +268,7 @@ public class EntityGuardian extends EntityMonster {
 
     protected void E() {
         super.E();
-        if (this.cn()) {
+        if (this.isElder()) {
             boolean flag = true;
             boolean flag1 = true;
             boolean flag2 = true;
@@ -317,7 +317,7 @@ public class EntityGuardian extends EntityMonster {
             this.a(new ItemStack(Items.PRISMARINE_CRYSTALS, 1, 0), 1.0F);
         }
 
-        if (flag && this.cn()) {
+        if (flag && this.isElder()) {
             this.a(new ItemStack(Blocks.SPONGE, 1, 1), 1.0F);
         }
 
@@ -351,7 +351,7 @@ public class EntityGuardian extends EntityMonster {
             }
         }
 
-        this.br.f();
+        this.goalRandomStroll.f();
         return super.damageEntity(damagesource, f);
     }
 
@@ -401,7 +401,7 @@ public class EntityGuardian extends EntityMonster {
 
                 this.g.yaw = this.a(this.g.yaw, f, 30.0F);
                 this.g.aI = this.g.yaw;
-                float f1 = (float) (this.e * this.g.getAttributeInstance(GenericAttributes.d).getValue());
+                float f1 = (float) (this.e * this.g.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
 
                 this.g.k(this.g.bI() + (f1 - this.g.bI()) * 0.125F);
                 double d4 = Math.sin((double) (this.g.ticksLived + this.g.getId()) * 0.5D) * 0.05D;
@@ -453,7 +453,7 @@ public class EntityGuardian extends EntityMonster {
         }
 
         public boolean b() {
-            return super.b() && (this.a.cn() || this.a.h(this.a.getGoalTarget()) > 9.0D);
+            return super.b() && (this.a.isElder() || this.a.h(this.a.getGoalTarget()) > 9.0D);
         }
 
         public void c() {
@@ -466,7 +466,7 @@ public class EntityGuardian extends EntityMonster {
         public void d() {
             this.a.b(0);
             this.a.setGoalTarget((EntityLiving) null);
-            this.a.br.f();
+            this.a.goalRandomStroll.f();
         }
 
         public void e() {
@@ -488,12 +488,12 @@ public class EntityGuardian extends EntityMonster {
                         f += 2.0F;
                     }
 
-                    if (this.a.cn()) {
+                    if (this.a.isElder()) {
                         f += 2.0F;
                     }
 
                     entityliving.damageEntity(DamageSource.b(this.a, this.a), f);
-                    entityliving.damageEntity(DamageSource.mobAttack(this.a), (float) this.a.getAttributeInstance(GenericAttributes.e).getValue());
+                    entityliving.damageEntity(DamageSource.mobAttack(this.a), (float) this.a.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue());
                     this.a.setGoalTarget((EntityLiving) null);
                 } else if (this.b >= 60 && this.b % 20 == 0) {
                     ;

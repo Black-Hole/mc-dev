@@ -30,6 +30,8 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
         if (entityliving == null) {
             return false;
+        } else if (entityliving instanceof EntityHuman && ((EntityHuman) entityliving).isSpectator()) {
+            return false;
         } else if (this.d.isSitting()) {
             return false;
         } else if (this.d.h(entityliving) < (double) (this.c * this.c)) {

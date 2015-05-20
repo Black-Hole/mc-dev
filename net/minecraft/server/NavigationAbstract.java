@@ -19,7 +19,7 @@ public abstract class NavigationAbstract {
     public NavigationAbstract(EntityInsentient entityinsentient, World world) {
         this.b = entityinsentient;
         this.c = world;
-        this.a = entityinsentient.getAttributeInstance(GenericAttributes.b);
+        this.a = entityinsentient.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
         this.j = this.a();
     }
 

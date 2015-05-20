@@ -115,14 +115,13 @@ public class UserCache {
             UserCache.UserCacheEntry usercache_usercacheentry1 = (UserCache.UserCacheEntry) this.d.get(uuid);
 
             this.c.remove(usercache_usercacheentry1.a().getName().toLowerCase(Locale.ROOT));
-            this.c.put(gameprofile.getName().toLowerCase(Locale.ROOT), usercache_usercacheentry);
             this.e.remove(gameprofile);
-        } else {
-            this.d.put(uuid, usercache_usercacheentry);
-            this.c.put(s, usercache_usercacheentry);
         }
 
+        this.c.put(gameprofile.getName().toLowerCase(Locale.ROOT), usercache_usercacheentry);
+        this.d.put(uuid, usercache_usercacheentry);
         this.e.addFirst(gameprofile);
+        this.c();
     }
 
     public GameProfile getProfile(String s) {
@@ -180,29 +179,16 @@ public class UserCache {
     }
 
     public void b() {
-        List list = null;
         BufferedReader bufferedreader = null;
 
-        label64: {
-            try {
-                bufferedreader = Files.newReader(this.g, Charsets.UTF_8);
-                list = (List) this.b.fromJson(bufferedreader, UserCache.h);
-                break label64;
-            } catch (FileNotFoundException filenotfoundexception) {
-                ;
-            } finally {
-                IOUtils.closeQuietly(bufferedreader);
-            }
+        try {
+            bufferedreader = Files.newReader(this.g, Charsets.UTF_8);
+            List list = (List) this.b.fromJson(bufferedreader, UserCache.h);
 
-            return;
-        }
-
-        if (list != null) {
             this.c.clear();
             this.d.clear();
             this.e.clear();
-            list = Lists.reverse(list);
-            Iterator iterator = list.iterator();
+            Iterator iterator = Lists.reverse(list).iterator();
 
             while (iterator.hasNext()) {
                 UserCache.UserCacheEntry usercache_usercacheentry = (UserCache.UserCacheEntry) iterator.next();
@@ -211,6 +197,12 @@ public class UserCache {
                     this.a(usercache_usercacheentry.a(), usercache_usercacheentry.b());
                 }
             }
+        } catch (FileNotFoundException filenotfoundexception) {
+            ;
+        } catch (JsonParseException jsonparseexception) {
+            ;
+        } finally {
+            IOUtils.closeQuietly(bufferedreader);
         }
 
     }

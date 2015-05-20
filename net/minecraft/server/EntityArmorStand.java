@@ -253,7 +253,7 @@ public class EntityArmorStand extends EntityLiving {
     public boolean a(EntityHuman entityhuman, Vec3D vec3d) {
         if (this.s()) {
             return false;
-        } else if (!this.world.isClientSide && !entityhuman.v()) {
+        } else if (!this.world.isClientSide && !entityhuman.isSpectator()) {
             byte b0 = 0;
             ItemStack itemstack = entityhuman.bZ();
             boolean flag = itemstack != null;

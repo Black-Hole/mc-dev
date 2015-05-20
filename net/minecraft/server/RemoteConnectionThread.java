@@ -55,7 +55,7 @@ public abstract class RemoteConnectionThread implements Runnable {
     }
 
     protected int d() {
-        return this.b.H();
+        return this.b.I();
     }
 
     protected void a(DatagramSocket datagramsocket) {

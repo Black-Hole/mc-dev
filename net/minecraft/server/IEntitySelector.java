@@ -33,7 +33,7 @@ public final class IEntitySelector {
     };
     public static final Predicate<Entity> d = new Predicate() {
         public boolean a(Entity entity) {
-            return !(entity instanceof EntityHuman) || !((EntityHuman) entity).v();
+            return !(entity instanceof EntityHuman) || !((EntityHuman) entity).isSpectator();
         }
 
         public boolean apply(Object object) {

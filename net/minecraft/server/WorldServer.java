@@ -47,7 +47,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.Q = new PortalTravelAgent(this);
         this.B();
         this.C();
-        this.getWorldBorder().a(minecraftserver.aH());
+        this.getWorldBorder().a(minecraftserver.aI());
     }
 
     public World b() {
@@ -159,7 +159,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             while (iterator.hasNext()) {
                 EntityHuman entityhuman = (EntityHuman) iterator.next();
 
-                if (entityhuman.v()) {
+                if (entityhuman.isSpectator()) {
                     ++i;
                 } else if (entityhuman.isSleeping()) {
                     ++j;
@@ -205,7 +205,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                 }
 
                 entityhuman = (EntityHuman) iterator.next();
-            } while (!entityhuman.v() && entityhuman.isDeeplySleeping());
+            } while (!entityhuman.isSpectator() && entityhuman.isDeeplySleeping());
 
             return false;
         } else {

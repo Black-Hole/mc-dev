@@ -56,7 +56,7 @@ public class ItemTool extends Item {
     public Multimap<String, AttributeModifier> i() {
         Multimap multimap = super.i();
 
-        multimap.put(GenericAttributes.e.getName(), new AttributeModifier(ItemTool.f, "Tool modifier", (double) this.d, 0));
+        multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemTool.f, "Tool modifier", (double) this.d, 0));
         return multimap;
     }
 }

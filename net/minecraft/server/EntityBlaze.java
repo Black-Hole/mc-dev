@@ -20,9 +20,9 @@ public class EntityBlaze extends EntityMonster {
 
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.e).setValue(6.0D);
-        this.getAttributeInstance(GenericAttributes.d).setValue(0.23000000417232513D);
-        this.getAttributeInstance(GenericAttributes.b).setValue(48.0D);
+        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(6.0D);
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.23000000417232513D);
+        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(48.0D);
     }
 
     protected void h() {

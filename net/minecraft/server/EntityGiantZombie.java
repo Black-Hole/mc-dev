@@ -14,8 +14,8 @@ public class EntityGiantZombie extends EntityMonster {
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(100.0D);
-        this.getAttributeInstance(GenericAttributes.d).setValue(0.5D);
-        this.getAttributeInstance(GenericAttributes.e).setValue(50.0D);
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.5D);
+        this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(50.0D);
     }
 
     public float a(BlockPosition blockposition) {
