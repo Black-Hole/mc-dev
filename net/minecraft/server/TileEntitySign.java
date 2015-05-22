@@ -116,7 +116,7 @@ public class TileEntitySign extends TileEntity {
             public void sendMessage(IChatBaseComponent ichatbasecomponent) {}
 
             public boolean a(int i, String s) {
-                return true;
+                return i <= 2;
             }
 
             public BlockPosition getChunkCoordinates() {
@@ -161,5 +161,26 @@ public class TileEntitySign extends TileEntity {
 
     public CommandObjectiveExecutor d() {
         return this.i;
+    }
+
+    public static void d(NBTTagCompound nbttagcompound) {
+        for (int i = 0; i < 4; ++i) {
+            String s = nbttagcompound.getString("Text" + (i + 1));
+
+            ChatComponentText chatcomponenttext;
+
+            try {
+                IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
+
+                chatcomponenttext = new ChatComponentText(ichatbasecomponent.c());
+            } catch (JsonParseException jsonparseexception) {
+                chatcomponenttext = new ChatComponentText(s);
+            }
+
+            String s1 = IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) chatcomponenttext);
+
+            nbttagcompound.setString("Text" + (i + 1), s1);
+        }
+
     }
 }

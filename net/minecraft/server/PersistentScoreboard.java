@@ -123,8 +123,8 @@ public class PersistentScoreboard extends PersistentBase {
             if (iscoreboardcriteria != null) {
                 String s = nbttagcompound.getString("Name");
 
-                if (s.length() > 40) {
-                    s = s.substring(0, 40);
+                if (s.length() > 16) {
+                    s = s.substring(0, 16);
                 }
 
                 ScoreboardObjective scoreboardobjective = this.c.registerObjective(s, iscoreboardcriteria);
@@ -142,8 +142,8 @@ public class PersistentScoreboard extends PersistentBase {
             ScoreboardObjective scoreboardobjective = this.c.getObjective(nbttagcompound.getString("Objective"));
             String s = nbttagcompound.getString("Name");
 
-            if (s.length() > 16) {
-                s = s.substring(0, 16);
+            if (s.length() > 40) {
+                s = s.substring(0, 40);
             }
 
             ScoreboardScore scoreboardscore = this.c.getPlayerScoreForObjective(s, scoreboardobjective);

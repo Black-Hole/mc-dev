@@ -287,7 +287,7 @@ public final class ItemStack {
     }
 
     public String a() {
-        return this.item.e_(this);
+        return this.item.f_(this);
     }
 
     public static ItemStack b(ItemStack itemstack) {
@@ -405,7 +405,7 @@ public final class ItemStack {
     }
 
     public boolean v() {
-        return !this.getItem().f_(this) ? false : !this.hasEnchantments();
+        return !this.getItem().g_(this) ? false : !this.hasEnchantments();
     }
 
     public void addEnchantment(Enchantment enchantment, int i) {

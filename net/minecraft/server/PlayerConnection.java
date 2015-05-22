@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Floats;
 import com.google.common.util.concurrent.Futures;
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
@@ -97,189 +99,197 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         this.player.a(packetplayinsteervehicle.a(), packetplayinsteervehicle.b(), packetplayinsteervehicle.c(), packetplayinsteervehicle.d());
     }
 
+    private boolean b(PacketPlayInFlying packetplayinflying) {
+        return !Doubles.isFinite(packetplayinflying.a()) || !Doubles.isFinite(packetplayinflying.b()) || !Doubles.isFinite(packetplayinflying.c()) || !Floats.isFinite(packetplayinflying.e()) || !Floats.isFinite(packetplayinflying.d());
+    }
+
     public void a(PacketPlayInFlying packetplayinflying) {
         PlayerConnectionUtils.ensureMainThread(packetplayinflying, this, this.player.u());
-        WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
+        if (this.b(packetplayinflying)) {
+            this.disconnect("Invalid move packet received");
+        } else {
+            WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
 
-        this.h = true;
-        if (!this.player.viewingCredits) {
-            double d0 = this.player.locX;
-            double d1 = this.player.locY;
-            double d2 = this.player.locZ;
-            double d3 = 0.0D;
-            double d4 = packetplayinflying.a() - this.o;
-            double d5 = packetplayinflying.b() - this.p;
-            double d6 = packetplayinflying.c() - this.q;
+            this.h = true;
+            if (!this.player.viewingCredits) {
+                double d0 = this.player.locX;
+                double d1 = this.player.locY;
+                double d2 = this.player.locZ;
+                double d3 = 0.0D;
+                double d4 = packetplayinflying.a() - this.o;
+                double d5 = packetplayinflying.b() - this.p;
+                double d6 = packetplayinflying.c() - this.q;
 
-            if (packetplayinflying.g()) {
-                d3 = d4 * d4 + d5 * d5 + d6 * d6;
-                if (!this.checkMovement && d3 < 0.25D) {
-                    this.checkMovement = true;
+                if (packetplayinflying.g()) {
+                    d3 = d4 * d4 + d5 * d5 + d6 * d6;
+                    if (!this.checkMovement && d3 < 0.25D) {
+                        this.checkMovement = true;
+                    }
                 }
-            }
 
-            if (this.checkMovement) {
-                this.f = this.e;
-                double d7;
-                double d8;
-                double d9;
+                if (this.checkMovement) {
+                    this.f = this.e;
+                    double d7;
+                    double d8;
+                    double d9;
 
-                if (this.player.vehicle != null) {
-                    float f = this.player.yaw;
-                    float f1 = this.player.pitch;
+                    if (this.player.vehicle != null) {
+                        float f = this.player.yaw;
+                        float f1 = this.player.pitch;
 
-                    this.player.vehicle.al();
+                        this.player.vehicle.al();
+                        d7 = this.player.locX;
+                        d8 = this.player.locY;
+                        d9 = this.player.locZ;
+                        if (packetplayinflying.h()) {
+                            f = packetplayinflying.d();
+                            f1 = packetplayinflying.e();
+                        }
+
+                        this.player.onGround = packetplayinflying.f();
+                        this.player.l();
+                        this.player.setLocation(d7, d8, d9, f, f1);
+                        if (this.player.vehicle != null) {
+                            this.player.vehicle.al();
+                        }
+
+                        this.minecraftServer.getPlayerList().d(this.player);
+                        if (this.player.vehicle != null) {
+                            if (d3 > 4.0D) {
+                                Entity entity = this.player.vehicle;
+
+                                this.player.playerConnection.sendPacket(new PacketPlayOutEntityTeleport(entity));
+                                this.a(this.player.locX, this.player.locY, this.player.locZ, this.player.yaw, this.player.pitch);
+                            }
+
+                            this.player.vehicle.ai = true;
+                        }
+
+                        if (this.checkMovement) {
+                            this.o = this.player.locX;
+                            this.p = this.player.locY;
+                            this.q = this.player.locZ;
+                        }
+
+                        worldserver.g(this.player);
+                        return;
+                    }
+
+                    if (this.player.isSleeping()) {
+                        this.player.l();
+                        this.player.setLocation(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
+                        worldserver.g(this.player);
+                        return;
+                    }
+
+                    double d10 = this.player.locY;
+
+                    this.o = this.player.locX;
+                    this.p = this.player.locY;
+                    this.q = this.player.locZ;
                     d7 = this.player.locX;
                     d8 = this.player.locY;
                     d9 = this.player.locZ;
-                    if (packetplayinflying.h()) {
-                        f = packetplayinflying.d();
-                        f1 = packetplayinflying.e();
+                    float f2 = this.player.yaw;
+                    float f3 = this.player.pitch;
+
+                    if (packetplayinflying.g() && packetplayinflying.b() == -999.0D) {
+                        packetplayinflying.a(false);
                     }
 
-                    this.player.onGround = packetplayinflying.f();
-                    this.player.l();
-                    this.player.setLocation(d7, d8, d9, f, f1);
-                    if (this.player.vehicle != null) {
-                        this.player.vehicle.al();
-                    }
-
-                    this.minecraftServer.getPlayerList().d(this.player);
-                    if (this.player.vehicle != null) {
-                        if (d3 > 4.0D) {
-                            Entity entity = this.player.vehicle;
-
-                            this.player.playerConnection.sendPacket(new PacketPlayOutEntityTeleport(entity));
-                            this.a(this.player.locX, this.player.locY, this.player.locZ, this.player.yaw, this.player.pitch);
-                        }
-
-                        this.player.vehicle.ai = true;
-                    }
-
-                    if (this.checkMovement) {
-                        this.o = this.player.locX;
-                        this.p = this.player.locY;
-                        this.q = this.player.locZ;
-                    }
-
-                    worldserver.g(this.player);
-                    return;
-                }
-
-                if (this.player.isSleeping()) {
-                    this.player.l();
-                    this.player.setLocation(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
-                    worldserver.g(this.player);
-                    return;
-                }
-
-                double d10 = this.player.locY;
-
-                this.o = this.player.locX;
-                this.p = this.player.locY;
-                this.q = this.player.locZ;
-                d7 = this.player.locX;
-                d8 = this.player.locY;
-                d9 = this.player.locZ;
-                float f2 = this.player.yaw;
-                float f3 = this.player.pitch;
-
-                if (packetplayinflying.g() && packetplayinflying.b() == -999.0D) {
-                    packetplayinflying.a(false);
-                }
-
-                if (packetplayinflying.g()) {
-                    d7 = packetplayinflying.a();
-                    d8 = packetplayinflying.b();
-                    d9 = packetplayinflying.c();
-                    if (Math.abs(packetplayinflying.a()) > 3.0E7D || Math.abs(packetplayinflying.c()) > 3.0E7D) {
-                        this.disconnect("Illegal position");
-                        return;
-                    }
-                }
-
-                if (packetplayinflying.h()) {
-                    f2 = packetplayinflying.d();
-                    f3 = packetplayinflying.e();
-                }
-
-                this.player.l();
-                this.player.setLocation(this.o, this.p, this.q, f2, f3);
-                if (!this.checkMovement) {
-                    return;
-                }
-
-                double d11 = d7 - this.player.locX;
-                double d12 = d8 - this.player.locY;
-                double d13 = d9 - this.player.locZ;
-                double d14 = this.player.motX * this.player.motX + this.player.motY * this.player.motY + this.player.motZ * this.player.motZ;
-                double d15 = d11 * d11 + d12 * d12 + d13 * d13;
-
-                if (d15 - d14 > 100.0D && (!this.minecraftServer.T() || !this.minecraftServer.S().equals(this.player.getName()))) {
-                    PlayerConnection.c.warn(this.player.getName() + " moved too quickly! " + d11 + "," + d12 + "," + d13 + " (" + d11 + ", " + d12 + ", " + d13 + ")");
-                    this.a(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
-                    return;
-                }
-
-                float f4 = 0.0625F;
-                boolean flag = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink((double) f4, (double) f4, (double) f4)).isEmpty();
-
-                if (this.player.onGround && !packetplayinflying.f() && d12 > 0.0D) {
-                    this.player.bF();
-                }
-
-                this.player.move(d11, d12, d13);
-                this.player.onGround = packetplayinflying.f();
-                double d16 = d12;
-
-                d11 = d7 - this.player.locX;
-                d12 = d8 - this.player.locY;
-                if (d12 > -0.5D || d12 < 0.5D) {
-                    d12 = 0.0D;
-                }
-
-                d13 = d9 - this.player.locZ;
-                d15 = d11 * d11 + d12 * d12 + d13 * d13;
-                boolean flag1 = false;
-
-                if (d15 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative()) {
-                    flag1 = true;
-                    PlayerConnection.c.warn(this.player.getName() + " moved wrongly!");
-                }
-
-                this.player.setLocation(d7, d8, d9, f2, f3);
-                this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
-                if (!this.player.noclip) {
-                    boolean flag2 = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink((double) f4, (double) f4, (double) f4)).isEmpty();
-
-                    if (flag && (flag1 || !flag2) && !this.player.isSleeping()) {
-                        this.a(this.o, this.p, this.q, f2, f3);
-                        return;
-                    }
-                }
-
-                AxisAlignedBB axisalignedbb = this.player.getBoundingBox().grow((double) f4, (double) f4, (double) f4).a(0.0D, -0.55D, 0.0D);
-
-                if (!this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly && !worldserver.c(axisalignedbb)) {
-                    if (d16 >= -0.03125D) {
-                        ++this.g;
-                        if (this.g > 80) {
-                            PlayerConnection.c.warn(this.player.getName() + " was kicked for floating too long!");
-                            this.disconnect("Flying is not enabled on this server");
+                    if (packetplayinflying.g()) {
+                        d7 = packetplayinflying.a();
+                        d8 = packetplayinflying.b();
+                        d9 = packetplayinflying.c();
+                        if (Math.abs(packetplayinflying.a()) > 3.0E7D || Math.abs(packetplayinflying.c()) > 3.0E7D) {
+                            this.disconnect("Illegal position");
                             return;
                         }
                     }
-                } else {
-                    this.g = 0;
+
+                    if (packetplayinflying.h()) {
+                        f2 = packetplayinflying.d();
+                        f3 = packetplayinflying.e();
+                    }
+
+                    this.player.l();
+                    this.player.setLocation(this.o, this.p, this.q, f2, f3);
+                    if (!this.checkMovement) {
+                        return;
+                    }
+
+                    double d11 = d7 - this.player.locX;
+                    double d12 = d8 - this.player.locY;
+                    double d13 = d9 - this.player.locZ;
+                    double d14 = this.player.motX * this.player.motX + this.player.motY * this.player.motY + this.player.motZ * this.player.motZ;
+                    double d15 = d11 * d11 + d12 * d12 + d13 * d13;
+
+                    if (d15 - d14 > 100.0D && (!this.minecraftServer.T() || !this.minecraftServer.S().equals(this.player.getName()))) {
+                        PlayerConnection.c.warn(this.player.getName() + " moved too quickly! " + d11 + "," + d12 + "," + d13 + " (" + d11 + ", " + d12 + ", " + d13 + ")");
+                        this.a(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
+                        return;
+                    }
+
+                    float f4 = 0.0625F;
+                    boolean flag = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink((double) f4, (double) f4, (double) f4)).isEmpty();
+
+                    if (this.player.onGround && !packetplayinflying.f() && d12 > 0.0D) {
+                        this.player.bF();
+                    }
+
+                    this.player.move(d11, d12, d13);
+                    this.player.onGround = packetplayinflying.f();
+                    double d16 = d12;
+
+                    d11 = d7 - this.player.locX;
+                    d12 = d8 - this.player.locY;
+                    if (d12 > -0.5D || d12 < 0.5D) {
+                        d12 = 0.0D;
+                    }
+
+                    d13 = d9 - this.player.locZ;
+                    d15 = d11 * d11 + d12 * d12 + d13 * d13;
+                    boolean flag1 = false;
+
+                    if (d15 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative()) {
+                        flag1 = true;
+                        PlayerConnection.c.warn(this.player.getName() + " moved wrongly!");
+                    }
+
+                    this.player.setLocation(d7, d8, d9, f2, f3);
+                    this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
+                    if (!this.player.noclip) {
+                        boolean flag2 = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink((double) f4, (double) f4, (double) f4)).isEmpty();
+
+                        if (flag && (flag1 || !flag2) && !this.player.isSleeping()) {
+                            this.a(this.o, this.p, this.q, f2, f3);
+                            return;
+                        }
+                    }
+
+                    AxisAlignedBB axisalignedbb = this.player.getBoundingBox().grow((double) f4, (double) f4, (double) f4).a(0.0D, -0.55D, 0.0D);
+
+                    if (!this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly && !worldserver.c(axisalignedbb)) {
+                        if (d16 >= -0.03125D) {
+                            ++this.g;
+                            if (this.g > 80) {
+                                PlayerConnection.c.warn(this.player.getName() + " was kicked for floating too long!");
+                                this.disconnect("Flying is not enabled on this server");
+                                return;
+                            }
+                        }
+                    } else {
+                        this.g = 0;
+                    }
+
+                    this.player.onGround = packetplayinflying.f();
+                    this.minecraftServer.getPlayerList().d(this.player);
+                    this.player.a(this.player.locY - d10, packetplayinflying.f());
+                } else if (this.e - this.f > 20) {
+                    this.a(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
                 }
 
-                this.player.onGround = packetplayinflying.f();
-                this.minecraftServer.getPlayerList().d(this.player);
-                this.player.a(this.player.locY - d10, packetplayinflying.f());
-            } else if (this.e - this.f > 20) {
-                this.a(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
             }
-
         }
     }
 
@@ -783,6 +793,18 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                         nbttagcompound1.remove("z");
                         itemstack.a("BlockEntityTag", (NBTBase) nbttagcompound1);
                     }
+                }
+            }
+
+            if (itemstack != null && !this.minecraftServer.getPlayerList().isOp(this.player.getProfile())) {
+                Item item = itemstack.getItem();
+
+                if (item instanceof ItemSign) {
+                    ((ItemSign) item).h(itemstack);
+                }
+
+                if (item instanceof ItemBlock && ((ItemBlock) item).d() == Blocks.COMMAND_BLOCK) {
+                    ItemBlock.d_(itemstack);
                 }
             }
 

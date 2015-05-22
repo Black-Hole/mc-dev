@@ -17,7 +17,7 @@ public class ItemStep extends ItemBlock {
         return i;
     }
 
-    public String e_(ItemStack itemstack) {
+    public String f_(ItemStack itemstack) {
         return this.b.b(itemstack.getData());
     }
 

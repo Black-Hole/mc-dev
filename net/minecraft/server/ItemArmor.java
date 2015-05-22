@@ -59,7 +59,7 @@ public class ItemArmor extends Item {
         return this.m;
     }
 
-    public boolean d_(ItemStack itemstack) {
+    public boolean e_(ItemStack itemstack) {
         return this.m != ItemArmor.EnumArmorMaterial.LEATHER ? false : (!itemstack.hasTag() ? false : (!itemstack.getTag().hasKeyOfType("display", 10) ? false : itemstack.getTag().getCompound("display").hasKeyOfType("color", 3)));
     }
 

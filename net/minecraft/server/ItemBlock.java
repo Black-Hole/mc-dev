@@ -72,7 +72,7 @@ public class ItemBlock extends Item {
         return false;
     }
 
-    public String e_(ItemStack itemstack) {
+    public String f_(ItemStack itemstack) {
         return this.a.a();
     }
 
@@ -82,6 +82,13 @@ public class ItemBlock extends Item {
 
     public Block d() {
         return this.a;
+    }
+
+    public static void d_(ItemStack itemstack) {
+        if (itemstack.hasTag() && itemstack.getTag().hasKeyOfType("BlockEntityTag", 10)) {
+            itemstack.getTag().remove("BlockEntityTag");
+        }
+
     }
 
     public Item c(String s) {

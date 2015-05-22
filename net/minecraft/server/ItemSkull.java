@@ -81,7 +81,7 @@ public class ItemSkull extends Item {
         return i;
     }
 
-    public String e_(ItemStack itemstack) {
+    public String f_(ItemStack itemstack) {
         int i = itemstack.getData();
 
         if (i < 0 || i >= ItemSkull.a.length) {

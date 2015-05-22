@@ -12,7 +12,7 @@ public class ItemCloth extends ItemBlock {
         return i;
     }
 
-    public String e_(ItemStack itemstack) {
+    public String f_(ItemStack itemstack) {
         return super.getName() + "." + EnumColor.fromColorIndex(itemstack.getData()).d();
     }
 }

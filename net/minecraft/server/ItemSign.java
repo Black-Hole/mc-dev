@@ -40,4 +40,18 @@ public class ItemSign extends Item {
             }
         }
     }
+
+    public void h(ItemStack itemstack) {
+        if (itemstack.getItem() == this) {
+            NBTTagCompound nbttagcompound = itemstack.getTag();
+
+            if (nbttagcompound != null) {
+                if (nbttagcompound.hasKeyOfType("BlockEntityTag", 10)) {
+                    NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("BlockEntityTag");
+
+                    TileEntitySign.d(nbttagcompound1);
+                }
+            }
+        }
+    }
 }
