@@ -346,7 +346,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                 long i = 0L;
 
                 this.r.setMOTD(new ChatComponentText(this.motd));
-                this.r.setServerInfo(new ServerPing.ServerData("1.8.5", 47));
+                this.r.setServerInfo(new ServerPing.ServerData("1.8.6", 47));
                 this.a(this.r);
 
                 while (this.isRunning) {
@@ -695,7 +695,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     public String getVersion() {
-        return "1.8.5";
+        return "1.8.6";
     }
 
     public int I() {

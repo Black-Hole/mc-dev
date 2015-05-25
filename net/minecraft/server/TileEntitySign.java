@@ -91,6 +91,10 @@ public class TileEntitySign extends TileEntity {
         return new PacketPlayOutUpdateSign(this.world, this.position, aichatbasecomponent);
     }
 
+    public boolean F() {
+        return true;
+    }
+
     public boolean b() {
         return this.isEditable;
     }
@@ -161,26 +165,5 @@ public class TileEntitySign extends TileEntity {
 
     public CommandObjectiveExecutor d() {
         return this.i;
-    }
-
-    public static void d(NBTTagCompound nbttagcompound) {
-        for (int i = 0; i < 4; ++i) {
-            String s = nbttagcompound.getString("Text" + (i + 1));
-
-            ChatComponentText chatcomponenttext;
-
-            try {
-                IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
-
-                chatcomponenttext = new ChatComponentText(ichatbasecomponent.c());
-            } catch (JsonParseException jsonparseexception) {
-                chatcomponenttext = new ChatComponentText(s);
-            }
-
-            String s1 = IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) chatcomponenttext);
-
-            nbttagcompound.setString("Text" + (i + 1), s1);
-        }
-
     }
 }

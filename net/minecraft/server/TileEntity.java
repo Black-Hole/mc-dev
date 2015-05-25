@@ -194,6 +194,10 @@ public abstract class TileEntity {
         this.position = blockposition;
     }
 
+    public boolean F() {
+        return false;
+    }
+
     static {
         a(TileEntityFurnace.class, "Furnace");
         a(TileEntityChest.class, "Chest");

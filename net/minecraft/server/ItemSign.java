@@ -32,25 +32,11 @@ public class ItemSign extends Item {
                 --itemstack.count;
                 TileEntity tileentity = world.getTileEntity(blockposition);
 
-                if (tileentity instanceof TileEntitySign && !ItemBlock.a(world, blockposition, itemstack)) {
+                if (tileentity instanceof TileEntitySign && !ItemBlock.a(world, entityhuman, blockposition, itemstack)) {
                     entityhuman.openSign((TileEntitySign) tileentity);
                 }
 
                 return true;
-            }
-        }
-    }
-
-    public void h(ItemStack itemstack) {
-        if (itemstack.getItem() == this) {
-            NBTTagCompound nbttagcompound = itemstack.getTag();
-
-            if (nbttagcompound != null) {
-                if (nbttagcompound.hasKeyOfType("BlockEntityTag", 10)) {
-                    NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("BlockEntityTag");
-
-                    TileEntitySign.d(nbttagcompound1);
-                }
             }
         }
     }

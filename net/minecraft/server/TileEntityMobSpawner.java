@@ -52,6 +52,10 @@ public class TileEntityMobSpawner extends TileEntity implements IUpdatePlayerLis
         return this.a.b(i) ? true : super.c(i, j);
     }
 
+    public boolean F() {
+        return true;
+    }
+
     public MobSpawnerAbstract getSpawner() {
         return this.a;
     }

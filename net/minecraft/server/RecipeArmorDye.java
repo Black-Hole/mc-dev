@@ -61,7 +61,7 @@ public class RecipeArmorDye implements IRecipe {
 
                     itemstack = itemstack1.cloneItemStack();
                     itemstack.count = 1;
-                    if (itemarmor.e_(itemstack1)) {
+                    if (itemarmor.d_(itemstack1)) {
                         l = itemarmor.b(itemstack);
                         f = (float) (l >> 16 & 255) / 255.0F;
                         f1 = (float) (l >> 8 & 255) / 255.0F;

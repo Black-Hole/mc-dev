@@ -796,18 +796,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 }
             }
 
-            if (itemstack != null && !this.minecraftServer.getPlayerList().isOp(this.player.getProfile())) {
-                Item item = itemstack.getItem();
-
-                if (item instanceof ItemSign) {
-                    ((ItemSign) item).h(itemstack);
-                }
-
-                if (item instanceof ItemBlock && ((ItemBlock) item).d() == Blocks.COMMAND_BLOCK) {
-                    ItemBlock.d_(itemstack);
-                }
-            }
-
             boolean flag1 = packetplayinsetcreativeslot.a() >= 1 && packetplayinsetcreativeslot.a() < 36 + PlayerInventory.getHotbarSize();
             boolean flag2 = itemstack == null || itemstack.getItem() != null;
             boolean flag3 = itemstack == null || itemstack.getData() >= 0 && itemstack.count <= 64 && itemstack.count > 0;

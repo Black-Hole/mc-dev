@@ -27,8 +27,8 @@ public class ItemFishingRod extends Item {
         return itemstack;
     }
 
-    public boolean g_(ItemStack itemstack) {
-        return super.g_(itemstack);
+    public boolean f_(ItemStack itemstack) {
+        return super.f_(itemstack);
     }
 
     public int b() {

@@ -32,7 +32,7 @@ public class ItemBlock extends Item {
             if (world.setTypeAndData(blockposition, iblockdata1, 3)) {
                 iblockdata1 = world.getType(blockposition);
                 if (iblockdata1.getBlock() == this.a) {
-                    a(world, blockposition, itemstack);
+                    a(world, entityhuman, blockposition, itemstack);
                     this.a.postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
                 }
 
@@ -46,33 +46,43 @@ public class ItemBlock extends Item {
         }
     }
 
-    public static boolean a(World world, BlockPosition blockposition, ItemStack itemstack) {
-        if (itemstack.hasTag() && itemstack.getTag().hasKeyOfType("BlockEntityTag", 10)) {
-            TileEntity tileentity = world.getTileEntity(blockposition);
+    public static boolean a(World world, EntityHuman entityhuman, BlockPosition blockposition, ItemStack itemstack) {
+        MinecraftServer minecraftserver = MinecraftServer.getServer();
 
-            if (tileentity != null) {
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttagcompound.clone();
+        if (minecraftserver == null) {
+            return false;
+        } else {
+            if (itemstack.hasTag() && itemstack.getTag().hasKeyOfType("BlockEntityTag", 10)) {
+                TileEntity tileentity = world.getTileEntity(blockposition);
 
-                tileentity.b(nbttagcompound);
-                NBTTagCompound nbttagcompound2 = (NBTTagCompound) itemstack.getTag().get("BlockEntityTag");
+                if (tileentity != null) {
+                    if (!world.isClientSide && tileentity.F() && !minecraftserver.getPlayerList().isOp(entityhuman.getProfile())) {
+                        return false;
+                    }
 
-                nbttagcompound.a(nbttagcompound2);
-                nbttagcompound.setInt("x", blockposition.getX());
-                nbttagcompound.setInt("y", blockposition.getY());
-                nbttagcompound.setInt("z", blockposition.getZ());
-                if (!nbttagcompound.equals(nbttagcompound1)) {
-                    tileentity.a(nbttagcompound);
-                    tileentity.update();
-                    return true;
+                    NBTTagCompound nbttagcompound = new NBTTagCompound();
+                    NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttagcompound.clone();
+
+                    tileentity.b(nbttagcompound);
+                    NBTTagCompound nbttagcompound2 = (NBTTagCompound) itemstack.getTag().get("BlockEntityTag");
+
+                    nbttagcompound.a(nbttagcompound2);
+                    nbttagcompound.setInt("x", blockposition.getX());
+                    nbttagcompound.setInt("y", blockposition.getY());
+                    nbttagcompound.setInt("z", blockposition.getZ());
+                    if (!nbttagcompound.equals(nbttagcompound1)) {
+                        tileentity.a(nbttagcompound);
+                        tileentity.update();
+                        return true;
+                    }
                 }
             }
-        }
 
-        return false;
+            return false;
+        }
     }
 
-    public String f_(ItemStack itemstack) {
+    public String e_(ItemStack itemstack) {
         return this.a.a();
     }
 
@@ -82,13 +92,6 @@ public class ItemBlock extends Item {
 
     public Block d() {
         return this.a;
-    }
-
-    public static void d_(ItemStack itemstack) {
-        if (itemstack.hasTag() && itemstack.getTag().hasKeyOfType("BlockEntityTag", 10)) {
-            itemstack.getTag().remove("BlockEntityTag");
-        }
-
     }
 
     public Item c(String s) {

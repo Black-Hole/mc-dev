@@ -6,7 +6,7 @@ public class ItemEnchantedBook extends Item {
 
     public ItemEnchantedBook() {}
 
-    public boolean g_(ItemStack itemstack) {
+    public boolean f_(ItemStack itemstack) {
         return false;
     }
 

@@ -30,10 +30,6 @@ public class SourceBlock implements ISourceBlock {
         return this.b;
     }
 
-    public Block e() {
-        return this.a.getType(this.b).getBlock();
-    }
-
     public int f() {
         IBlockData iblockdata = this.a.getType(this.b);
 

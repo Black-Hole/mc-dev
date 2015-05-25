@@ -133,7 +133,7 @@ public class Item {
     }
 
     public String k(ItemStack itemstack) {
-        String s = this.f_(itemstack);
+        String s = this.e_(itemstack);
 
         return s == null ? "" : LocaleI18n.get(s);
     }
@@ -142,7 +142,7 @@ public class Item {
         return "item." + this.name;
     }
 
-    public String f_(ItemStack itemstack) {
+    public String e_(ItemStack itemstack) {
         return "item." + this.name;
     }
 
@@ -202,7 +202,7 @@ public class Item {
         return itemstack.hasEnchantments() ? EnumItemRarity.RARE : EnumItemRarity.COMMON;
     }
 
-    public boolean g_(ItemStack itemstack) {
+    public boolean f_(ItemStack itemstack) {
         return this.getMaxStackSize() == 1 && this.usesDurability();
     }
 

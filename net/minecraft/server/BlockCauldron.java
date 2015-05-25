@@ -102,7 +102,7 @@ public class BlockCauldron extends Block {
                         if (i > 0 && item instanceof ItemArmor) {
                             ItemArmor itemarmor = (ItemArmor) item;
 
-                            if (itemarmor.x_() == ItemArmor.EnumArmorMaterial.LEATHER && itemarmor.e_(itemstack)) {
+                            if (itemarmor.x_() == ItemArmor.EnumArmorMaterial.LEATHER && itemarmor.d_(itemstack)) {
                                 itemarmor.c(itemstack);
                                 this.a(world, blockposition, iblockdata, i - 1);
                                 entityhuman.b(StatisticList.K);

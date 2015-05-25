@@ -29,7 +29,7 @@ public class ItemReed extends Item {
                 if (world.setTypeAndData(blockposition, iblockdata1, 3)) {
                     iblockdata1 = world.getType(blockposition);
                     if (iblockdata1.getBlock() == this.a) {
-                        ItemBlock.a(world, blockposition, itemstack);
+                        ItemBlock.a(world, entityhuman, blockposition, itemstack);
                         iblockdata1.getBlock().postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
                     }
 

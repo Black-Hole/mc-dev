@@ -10,7 +10,7 @@ public class ItemDye extends Item {
         this.a(CreativeModeTab.l);
     }
 
-    public String f_(ItemStack itemstack) {
+    public String e_(ItemStack itemstack) {
         int i = itemstack.getData();
 
         return super.getName() + "." + EnumColor.fromInvColorIndex(i).d();

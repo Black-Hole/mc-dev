@@ -71,7 +71,7 @@ public class MojangStatisticsGenerator {
         this.b("os_version", System.getProperty("os.version"));
         this.b("os_architecture", System.getProperty("os.arch"));
         this.b("java_version", System.getProperty("java.version"));
-        this.a("version", "1.8.5");
+        this.a("version", "1.8.6");
         this.e.b(this);
     }
 
