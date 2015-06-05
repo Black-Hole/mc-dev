@@ -481,9 +481,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                 iterator = this.M.iterator();
             } else {
                 iterator = this.V.iterator();
-                if (!this.V.isEmpty()) {
-                    WorldServer.a.debug("toBeTicked = " + this.V.size());
-                }
             }
 
             while (iterator.hasNext()) {

@@ -59,6 +59,10 @@ public enum EnumChatFormat {
         return this.B;
     }
 
+    public static String a(String s) {
+        return s == null ? null : EnumChatFormat.x.matcher(s).replaceAll("");
+    }
+
     public static EnumChatFormat b(String s) {
         return s == null ? null : (EnumChatFormat) EnumChatFormat.w.get(c(s));
     }

@@ -17,11 +17,11 @@ public class HandshakeListener implements PacketHandshakingInListener {
             ChatComponentText chatcomponenttext;
 
             if (packethandshakinginsetprotocol.b() > 47) {
-                chatcomponenttext = new ChatComponentText("Outdated server! I\'m still on 1.8.6");
+                chatcomponenttext = new ChatComponentText("Outdated server! I\'m still on 1.8.7");
                 this.b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
                 this.b.close(chatcomponenttext);
             } else if (packethandshakinginsetprotocol.b() < 47) {
-                chatcomponenttext = new ChatComponentText("Outdated client! Please use 1.8.6");
+                chatcomponenttext = new ChatComponentText("Outdated client! Please use 1.8.7");
                 this.b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
                 this.b.close(chatcomponenttext);
             } else {

@@ -14,7 +14,10 @@ public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
         this.b = new IChatBaseComponent[4];
 
         for (int i = 0; i < 4; ++i) {
-            this.b[i] = packetdataserializer.d();
+            String s = packetdataserializer.c(384);
+            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
+
+            this.b[i] = ichatbasecomponent;
         }
 
     }
@@ -23,7 +26,10 @@ public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
         packetdataserializer.a(this.a);
 
         for (int i = 0; i < 4; ++i) {
-            packetdataserializer.a(this.b[i]);
+            IChatBaseComponent ichatbasecomponent = this.b[i];
+            String s = IChatBaseComponent.ChatSerializer.a(ichatbasecomponent);
+
+            packetdataserializer.a(s);
         }
 
     }

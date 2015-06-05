@@ -853,7 +853,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             IChatBaseComponent[] aichatbasecomponent = packetplayinupdatesign.b();
 
             for (int i = 0; i < aichatbasecomponent.length; ++i) {
-                tileentitysign.lines[i] = new ChatComponentText(aichatbasecomponent[i].c());
+                tileentitysign.lines[i] = new ChatComponentText(EnumChatFormat.a(aichatbasecomponent[i].c()));
             }
 
             tileentitysign.update();
