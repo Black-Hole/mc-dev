@@ -25,9 +25,9 @@ public abstract class EntityHuman extends EntityLiving {
     public double bt;
     public double bu;
     public double bv;
-    protected boolean sleeping;
+    public boolean sleeping;
     public BlockPosition bx;
-    private int sleepTicks;
+    public int sleepTicks;
     public float by;
     public float bz;
     private BlockPosition c;
@@ -283,7 +283,7 @@ public abstract class EntityHuman extends EntityLiving {
         return this.getHealth() <= 0.0F || this.isSleeping();
     }
 
-    protected void closeInventory() {
+    public void closeInventory() {
         this.activeContainer = this.defaultContainer;
     }
 

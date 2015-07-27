@@ -14,7 +14,7 @@ public class JsonListEntry<T> {
         this.a = t0;
     }
 
-    T getKey() {
+    public T getKey() {
         return this.a;
     }
 

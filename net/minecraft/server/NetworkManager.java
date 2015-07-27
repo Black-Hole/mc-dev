@@ -63,7 +63,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     private final EnumProtocolDirection h;
     private final Queue<NetworkManager.QueuedPacket> i = Queues.newConcurrentLinkedQueue();
     private final ReentrantReadWriteLock j = new ReentrantReadWriteLock();
-    private Channel channel;
+    public Channel channel;
     private SocketAddress l;
     private PacketListener m;
     private IChatBaseComponent n;

@@ -37,7 +37,7 @@ public class CrashReport {
     private void h() {
         this.d.a("Minecraft Version", new Callable() {
             public String a() {
-                return "1.8.7";
+                return "1.8.8";
             }
 
             public Object call() throws Exception {
@@ -47,15 +47,6 @@ public class CrashReport {
         this.d.a("Operating System", new Callable() {
             public String a() {
                 return System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version");
-            }
-
-            public Object call() throws Exception {
-                return this.a();
-            }
-        });
-        this.d.a("CPU", new Callable() {
-            public String a() {
-                return SystemUtils.a();
             }
 
             public Object call() throws Exception {

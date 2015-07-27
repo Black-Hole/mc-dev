@@ -6,7 +6,7 @@ public class EntityPigZombie extends EntityZombie {
 
     private static final UUID b = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
     private static final AttributeModifier c = (new AttributeModifier(EntityPigZombie.b, "Attacking speed boost", 0.05D, 0)).a(false);
-    private int angerLevel;
+    public int angerLevel;
     private int soundDelay;
     private UUID hurtBy;
 

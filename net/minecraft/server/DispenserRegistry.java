@@ -306,7 +306,11 @@ public class DispenserRegistry {
                                     if (nbttagcompound.hasKeyOfType("SkullOwner", 10)) {
                                         gameprofile = GameProfileSerializer.deserialize(nbttagcompound.getCompound("SkullOwner"));
                                     } else if (nbttagcompound.hasKeyOfType("SkullOwner", 8)) {
-                                        gameprofile = new GameProfile((UUID) null, nbttagcompound.getString("SkullOwner"));
+                                        String s = nbttagcompound.getString("SkullOwner");
+
+                                        if (!UtilColor.b(s)) {
+                                            gameprofile = new GameProfile((UUID) null, s);
+                                        }
                                     }
                                 }
 

@@ -20,7 +20,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     private static final Logger a = LogManager.getLogger();
     private final MinecraftServer server;
-    private final EntityTracker tracker;
+    public EntityTracker tracker;
     private final PlayerChunkMap manager;
     private final Set<NextTickListEntry> L = Sets.newHashSet();
     private final TreeSet<NextTickListEntry> M = new TreeSet();

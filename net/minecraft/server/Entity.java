@@ -55,7 +55,7 @@ public abstract class Entity implements ICommandListener {
     protected Random random;
     public int ticksLived;
     public int maxFireTicks;
-    private int fireTicks;
+    public int fireTicks;
     protected boolean inWater;
     public int noDamageTicks;
     protected boolean justCreated;
@@ -137,7 +137,7 @@ public abstract class Entity implements ICommandListener {
         this.dead = true;
     }
 
-    protected void setSize(float f, float f1) {
+    public void setSize(float f, float f1) {
         if (f != this.width || f1 != this.length) {
             float f2 = this.width;
 

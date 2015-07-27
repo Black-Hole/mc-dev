@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public class FoodMetaData {
 
-    private int foodLevel = 20;
-    private float saturationLevel = 5.0F;
-    private float exhaustionLevel;
+    public int foodLevel = 20;
+    public float saturationLevel = 5.0F;
+    public float exhaustionLevel;
     private int foodTickTimer;
     private int e = 20;
 

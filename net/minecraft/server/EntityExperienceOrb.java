@@ -6,7 +6,7 @@ public class EntityExperienceOrb extends Entity {
     public int b;
     public int c;
     private int d = 5;
-    private int value;
+    public int value;
     private EntityHuman targetPlayer;
     private int targetTime;
 

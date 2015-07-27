@@ -15,7 +15,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
             return this.a((Entity) object);
         }
     };
-    private static final IAttribute attributeJumpStrength = (new AttributeRanged((IAttribute) null, "horse.jumpStrength", 0.7D, 0.0D, 2.0D)).a("Jump Strength").a(true);
+    public static final IAttribute attributeJumpStrength = (new AttributeRanged((IAttribute) null, "horse.jumpStrength", 0.7D, 0.0D, 2.0D)).a("Jump Strength").a(true);
     private static final String[] bu = new String[] { null, "textures/entity/horse/armor/horse_armor_iron.png", "textures/entity/horse/armor/horse_armor_gold.png", "textures/entity/horse/armor/horse_armor_diamond.png"};
     private static final String[] bv = new String[] { "", "meo", "goo", "dio"};
     private static final int[] bw = new int[] { 0, 5, 7, 11};
@@ -29,7 +29,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
     public int bm;
     public int bo;
     protected boolean bp;
-    private InventoryHorseChest inventoryChest;
+    public InventoryHorseChest inventoryChest;
     private boolean bF;
     protected int bq;
     protected float br;
@@ -323,7 +323,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
         return this.hasChest() && (i == 1 || i == 2) ? 17 : 2;
     }
 
-    private void loadChest() {
+    public void loadChest() {
         InventoryHorseChest inventoryhorsechest = this.inventoryChest;
 
         this.inventoryChest = new InventoryHorseChest("HorseChest", this.cZ());

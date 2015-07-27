@@ -20,6 +20,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
     private Map<ChunkCoordIntPair, NBTTagCompound> b = new ConcurrentHashMap();
     private Set<ChunkCoordIntPair> c = Collections.newSetFromMap(new ConcurrentHashMap());
     private final File d;
+    private boolean e = false;
 
     public ChunkRegionLoader(File file) {
         this.d = file;
@@ -78,7 +79,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             this.a(chunk, world, nbttagcompound1);
             this.a(chunk.j(), nbttagcompound);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            ChunkRegionLoader.a.error("Failed to save chunk", exception);
         }
 
     }
@@ -93,6 +94,10 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
     public boolean c() {
         if (this.b.isEmpty()) {
+            if (this.e) {
+                ChunkRegionLoader.a.info("ThreadedAnvilChunkStorage ({}): All chunks are saved", new Object[] { this.d.getName()});
+            }
+
             return false;
         } else {
             ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) this.b.keySet().iterator().next();
@@ -107,7 +112,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
                     try {
                         this.b(chunkcoordintpair, nbttagcompound);
                     } catch (Exception exception) {
-                        exception.printStackTrace();
+                        ChunkRegionLoader.a.error("Failed to save chunk", exception);
                     }
                 }
 
@@ -132,8 +137,16 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
     public void a() {}
 
     public void b() {
-        while (this.c()) {
-            ;
+        try {
+            this.e = true;
+
+            while (true) {
+                if (this.c()) {
+                    continue;
+                }
+            }
+        } finally {
+            this.e = false;
         }
 
     }

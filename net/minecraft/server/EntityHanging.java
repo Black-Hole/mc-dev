@@ -7,7 +7,7 @@ import org.apache.commons.lang3.Validate;
 public abstract class EntityHanging extends Entity {
 
     private int c;
-    protected BlockPosition blockPosition;
+    public BlockPosition blockPosition;
     public EnumDirection direction;
 
     public EntityHanging(World world) {
@@ -22,7 +22,7 @@ public abstract class EntityHanging extends Entity {
 
     protected void h() {}
 
-    protected void setDirection(EnumDirection enumdirection) {
+    public void setDirection(EnumDirection enumdirection) {
         Validate.notNull(enumdirection);
         Validate.isTrue(enumdirection.k().c());
         this.direction = enumdirection;

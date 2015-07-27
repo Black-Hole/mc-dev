@@ -12,7 +12,7 @@ import java.util.List;
 public class CraftingManager {
 
     private static final CraftingManager a = new CraftingManager();
-    private final List<IRecipe> recipes = Lists.newArrayList();
+    public List<IRecipe> recipes = Lists.newArrayList();
 
     public static CraftingManager getInstance() {
         return CraftingManager.a;

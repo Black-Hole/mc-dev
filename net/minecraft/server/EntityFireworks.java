@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class EntityFireworks extends Entity {
 
     private int ticksFlown;
-    private int expectedLifespan;
+    public int expectedLifespan;
 
     public EntityFireworks(World world) {
         super(world);

@@ -23,14 +23,14 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public double d;
     public double e;
     public final List<ChunkCoordIntPair> chunkCoordIntPairQueue = Lists.newLinkedList();
-    private final List<Integer> removeQueue = Lists.newLinkedList();
+    public final List<Integer> removeQueue = Lists.newLinkedList();
     private final ServerStatisticManager bK;
     private float bL = Float.MIN_VALUE;
     private float bM = -1.0E8F;
     private int bN = -99999999;
     private boolean bO = true;
-    private int lastSentExp = -99999999;
-    private int invulnerableTicks = 60;
+    public int lastSentExp = -99999999;
+    public int invulnerableTicks = 60;
     private EntityHuman.EnumChatVisibility bR;
     private boolean bS = true;
     private long bT = System.currentTimeMillis();

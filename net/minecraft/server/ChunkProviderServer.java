@@ -15,13 +15,13 @@ public class ChunkProviderServer implements IChunkProvider {
 
     private static final Logger b = LogManager.getLogger();
     private Set<Long> unloadQueue = Collections.newSetFromMap(new ConcurrentHashMap());
-    private Chunk emptyChunk;
-    private IChunkProvider chunkProvider;
+    public Chunk emptyChunk;
+    public IChunkProvider chunkProvider;
     private IChunkLoader chunkLoader;
     public boolean forceChunkLoad = true;
     private LongHashMap<Chunk> chunks = new LongHashMap();
     private List<Chunk> chunkList = Lists.newArrayList();
-    private WorldServer world;
+    public WorldServer world;
 
     public ChunkProviderServer(WorldServer worldserver, IChunkLoader ichunkloader, IChunkProvider ichunkprovider) {
         this.emptyChunk = new EmptyChunk(worldserver, 0, 0);
@@ -101,7 +101,7 @@ public class ChunkProviderServer implements IChunkProvider {
         return chunk == null ? (!this.world.ad() && !this.forceChunkLoad ? this.emptyChunk : this.getChunkAt(i, j)) : chunk;
     }
 
-    private Chunk loadChunk(int i, int j) {
+    public Chunk loadChunk(int i, int j) {
         if (this.chunkLoader == null) {
             return null;
         } else {
@@ -123,7 +123,7 @@ public class ChunkProviderServer implements IChunkProvider {
         }
     }
 
-    private void saveChunkNOP(Chunk chunk) {
+    public void saveChunkNOP(Chunk chunk) {
         if (this.chunkLoader != null) {
             try {
                 this.chunkLoader.b(this.world, chunk);
@@ -134,7 +134,7 @@ public class ChunkProviderServer implements IChunkProvider {
         }
     }
 
-    private void saveChunk(Chunk chunk) {
+    public void saveChunk(Chunk chunk) {
         if (this.chunkLoader != null) {
             try {
                 chunk.setLastSaved(this.world.getTime());

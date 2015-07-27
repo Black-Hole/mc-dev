@@ -32,7 +32,7 @@ public class BlockJukeBox extends BlockContainer {
         }
     }
 
-    private void dropRecord(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public void dropRecord(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (!world.isClientSide) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 

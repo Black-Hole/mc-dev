@@ -68,7 +68,7 @@ public class BlockDispenser extends BlockContainer {
         }
     }
 
-    protected void dispense(World world, BlockPosition blockposition) {
+    public void dispense(World world, BlockPosition blockposition) {
         SourceBlock sourceblock = new SourceBlock(world, blockposition);
         TileEntityDispenser tileentitydispenser = (TileEntityDispenser) sourceblock.getTileEntity();
 

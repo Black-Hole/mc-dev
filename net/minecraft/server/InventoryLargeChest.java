@@ -3,8 +3,8 @@ package net.minecraft.server;
 public class InventoryLargeChest implements ITileInventory {
 
     private String a;
-    private ITileInventory left;
-    private ITileInventory right;
+    public ITileInventory left;
+    public ITileInventory right;
 
     public InventoryLargeChest(String s, ITileInventory itileinventory, ITileInventory itileinventory1) {
         this.a = s;

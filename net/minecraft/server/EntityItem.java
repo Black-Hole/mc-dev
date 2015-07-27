@@ -8,7 +8,7 @@ public class EntityItem extends Entity {
 
     private static final Logger b = LogManager.getLogger();
     private int age;
-    private int pickupDelay;
+    public int pickupDelay;
     private int e;
     private String f;
     private String g;

@@ -22,13 +22,13 @@ public class Chunk {
     private final int[] f;
     private final boolean[] g;
     private boolean h;
-    private final World world;
-    private final int[] heightMap;
+    public final World world;
+    public final int[] heightMap;
     public final int locX;
     public final int locZ;
     private boolean k;
-    private final Map<BlockPosition, TileEntity> tileEntities;
-    private final EntitySlice<Entity>[] entitySlices;
+    public final Map<BlockPosition, TileEntity> tileEntities;
+    public final EntitySlice<Entity>[] entitySlices;
     private boolean done;
     private boolean lit;
     private boolean p;

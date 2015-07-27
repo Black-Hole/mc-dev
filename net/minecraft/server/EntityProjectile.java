@@ -11,8 +11,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
     private Block inBlockId;
     protected boolean inGround;
     public int shake;
-    private EntityLiving shooter;
-    private String shooterName;
+    public EntityLiving shooter;
+    public String shooterName;
     private int i;
     private int ar;
 

@@ -15,12 +15,12 @@ public class EntityArmorStand extends EntityLiving {
     private long i;
     private int bi;
     private boolean bj;
-    private Vector3f headPose;
-    private Vector3f bodyPose;
-    private Vector3f leftArmPose;
-    private Vector3f rightArmPose;
-    private Vector3f leftLegPose;
-    private Vector3f rightLegPose;
+    public Vector3f headPose;
+    public Vector3f bodyPose;
+    public Vector3f leftArmPose;
+    public Vector3f rightArmPose;
+    public Vector3f leftLegPose;
+    public Vector3f rightLegPose;
 
     public EntityArmorStand(World world) {
         super(world);
@@ -552,7 +552,7 @@ public class EntityArmorStand extends EntityLiving {
         return this.isInvisible();
     }
 
-    private void setSmall(boolean flag) {
+    public void setSmall(boolean flag) {
         byte b0 = this.datawatcher.getByte(10);
 
         if (flag) {
@@ -568,7 +568,7 @@ public class EntityArmorStand extends EntityLiving {
         return (this.datawatcher.getByte(10) & 1) != 0;
     }
 
-    private void setGravity(boolean flag) {
+    public void setGravity(boolean flag) {
         byte b0 = this.datawatcher.getByte(10);
 
         if (flag) {
@@ -584,7 +584,7 @@ public class EntityArmorStand extends EntityLiving {
         return (this.datawatcher.getByte(10) & 2) != 0;
     }
 
-    private void setArms(boolean flag) {
+    public void setArms(boolean flag) {
         byte b0 = this.datawatcher.getByte(10);
 
         if (flag) {
@@ -600,7 +600,7 @@ public class EntityArmorStand extends EntityLiving {
         return (this.datawatcher.getByte(10) & 4) != 0;
     }
 
-    private void setBasePlate(boolean flag) {
+    public void setBasePlate(boolean flag) {
         byte b0 = this.datawatcher.getByte(10);
 
         if (flag) {

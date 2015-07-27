@@ -18,7 +18,7 @@ public class Explosion {
     private final double posX;
     private final double posY;
     private final double posZ;
-    private final Entity source;
+    public final Entity source;
     private final float size;
     private final List<BlockPosition> blocks = Lists.newArrayList();
     private final Map<EntityHuman, Vec3D> k = Maps.newHashMap();

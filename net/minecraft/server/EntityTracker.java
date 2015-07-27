@@ -14,7 +14,7 @@ public class EntityTracker {
     private static final Logger a = LogManager.getLogger();
     private final WorldServer world;
     private Set<EntityTrackerEntry> c = Sets.newHashSet();
-    private IntHashMap<EntityTrackerEntry> trackedEntities = new IntHashMap();
+    public IntHashMap<EntityTrackerEntry> trackedEntities = new IntHashMap();
     private int e;
 
     public EntityTracker(WorldServer worldserver) {

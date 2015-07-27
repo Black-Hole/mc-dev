@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class ContainerDispenser extends Container {
 
-    private IInventory items;
+    public IInventory items;
 
     public ContainerDispenser(IInventory iinventory, IInventory iinventory1) {
         this.items = iinventory1;

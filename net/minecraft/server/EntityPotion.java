@@ -5,7 +5,7 @@ import java.util.List;
 
 public class EntityPotion extends EntityProjectile {
 
-    private ItemStack item;
+    public ItemStack item;
 
     public EntityPotion(World world) {
         super(world);

@@ -23,7 +23,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         this.datawatcher.a(16, Byte.valueOf((byte) 1));
     }
 
-    protected void setSize(int i) {
+    public void setSize(int i) {
         this.datawatcher.watch(16, Byte.valueOf((byte) i));
         this.setSize(0.51000005F * (float) i, 0.51000005F * (float) i);
         this.setPosition(this.locX, this.locY, this.locZ);

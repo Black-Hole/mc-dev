@@ -15,8 +15,8 @@ public abstract class EntityLiving extends Entity {
     private static final UUID a = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
     private static final AttributeModifier b = (new AttributeModifier(EntityLiving.a, "Sprinting speed boost", 0.30000001192092896D, 2)).a(false);
     private AttributeMapBase c;
-    private final CombatTracker combatTracker = new CombatTracker(this);
-    private final Map<Integer, MobEffect> effects = Maps.newHashMap();
+    public final CombatTracker combatTracker = new CombatTracker(this);
+    public final Map<Integer, MobEffect> effects = Maps.newHashMap();
     private final ItemStack[] h = new ItemStack[5];
     public boolean ar;
     public int as;
@@ -40,7 +40,7 @@ public abstract class EntityLiving extends Entity {
     public float aK;
     public float aL;
     public float aM = 0.02F;
-    protected EntityHuman killer;
+    public EntityHuman killer;
     protected int lastDamageByPlayerTime;
     protected boolean aP;
     protected int ticksFarFromPlayer;
@@ -50,7 +50,7 @@ public abstract class EntityLiving extends Entity {
     protected float aU;
     protected float aV;
     protected int aW;
-    protected float lastDamage;
+    public float lastDamage;
     protected boolean aY;
     public float aZ;
     public float ba;
@@ -61,9 +61,9 @@ public abstract class EntityLiving extends Entity {
     protected double bf;
     protected double bg;
     protected double bh;
-    private boolean updateEffects = true;
-    private EntityLiving lastDamager;
-    private int hurtTimestamp;
+    public boolean updateEffects = true;
+    public EntityLiving lastDamager;
+    public int hurtTimestamp;
     private EntityLiving bk;
     private int bl;
     private float bm;

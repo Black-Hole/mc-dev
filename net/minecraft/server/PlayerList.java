@@ -27,14 +27,14 @@ public abstract class PlayerList {
     private static final Logger f = LogManager.getLogger();
     private static final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd \'at\' HH:mm:ss z");
     private final MinecraftServer server;
-    private final List<EntityPlayer> players = Lists.newArrayList();
+    public final List<EntityPlayer> players = Lists.newArrayList();
     private final Map<UUID, EntityPlayer> j = Maps.newHashMap();
     private final GameProfileBanList k;
     private final IpBanList l;
     private final OpList operators;
     private final WhiteList whitelist;
     private final Map<UUID, ServerStatisticManager> o;
-    private IPlayerFileData playerFileData;
+    public IPlayerFileData playerFileData;
     private boolean hasWhitelist;
     protected int maxPlayers;
     private int r;
@@ -128,7 +128,7 @@ public abstract class PlayerList {
 
     }
 
-    protected void sendScoreboard(ScoreboardServer scoreboardserver, EntityPlayer entityplayer) {
+    public void sendScoreboard(ScoreboardServer scoreboardserver, EntityPlayer entityplayer) {
         HashSet hashset = Sets.newHashSet();
         Iterator iterator = scoreboardserver.getTeams().iterator();
 

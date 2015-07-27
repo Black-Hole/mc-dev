@@ -5,7 +5,7 @@ import java.io.IOException;
 public class PacketPlayOutBlockChange implements Packet<PacketListenerPlayOut> {
 
     private BlockPosition a;
-    private IBlockData block;
+    public IBlockData block;
 
     public PacketPlayOutBlockChange() {}
 

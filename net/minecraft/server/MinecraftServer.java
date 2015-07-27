@@ -40,12 +40,12 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class MinecraftServer implements Runnable, ICommandListener, IAsyncTaskHandler, IMojangStatistics {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
     public static final File a = new File("usercache.json");
     private static MinecraftServer l;
-    private final Convertable convertable;
+    public Convertable convertable;
     private final MojangStatisticsGenerator n = new MojangStatisticsGenerator("server", this, az());
-    private final File universe;
+    public File universe;
     private final List<IUpdatePlayerListBox> p = Lists.newArrayList();
     protected final ICommandHandler b;
     public final MethodProfiler methodProfiler = new MethodProfiler();
@@ -346,7 +346,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                 long i = 0L;
 
                 this.r.setMOTD(new ChatComponentText(this.motd));
-                this.r.setServerInfo(new ServerPing.ServerData("1.8.7", 47));
+                this.r.setServerInfo(new ServerPing.ServerData("1.8.8", 47));
                 this.a(this.r);
 
                 while (this.isRunning) {
@@ -695,7 +695,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     public String getVersion() {
-        return "1.8.7";
+        return "1.8.8";
     }
 
     public int I() {

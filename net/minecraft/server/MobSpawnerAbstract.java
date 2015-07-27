@@ -6,7 +6,7 @@ import java.util.List;
 
 public abstract class MobSpawnerAbstract {
 
-    private int spawnDelay = 20;
+    public int spawnDelay = 20;
     private String mobName = "Pig";
     private final List<MobSpawnerAbstract.a> mobs = Lists.newArrayList();
     private MobSpawnerAbstract.a spawnData;
@@ -22,7 +22,7 @@ public abstract class MobSpawnerAbstract {
 
     public MobSpawnerAbstract() {}
 
-    private String getMobName() {
+    public String getMobName() {
         if (this.i() == null) {
             if (this.mobName != null && this.mobName.equals("Minecart")) {
                 this.mobName = "MinecartRideable";

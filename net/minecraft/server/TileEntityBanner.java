@@ -4,8 +4,8 @@ import java.util.List;
 
 public class TileEntityBanner extends TileEntity {
 
-    private int color;
-    private NBTTagList patterns;
+    public int color;
+    public NBTTagList patterns;
     private boolean g;
     private List<TileEntityBanner.EnumBannerPatternType> h;
     private List<EnumColor> i;

@@ -232,7 +232,7 @@ public class BlockRedstoneWire extends Block {
         }
     }
 
-    private int getPower(World world, BlockPosition blockposition, int i) {
+    public int getPower(World world, BlockPosition blockposition, int i) {
         if (world.getType(blockposition).getBlock() != this) {
             return i;
         } else {

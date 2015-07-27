@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 public class RecipesFurnace {
 
     private static final RecipesFurnace a = new RecipesFurnace();
-    private Map<ItemStack, ItemStack> recipes = Maps.newHashMap();
+    public Map<ItemStack, ItemStack> recipes = Maps.newHashMap();
     private Map<ItemStack, Float> c = Maps.newHashMap();
 
     public static RecipesFurnace getInstance() {

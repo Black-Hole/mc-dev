@@ -6,9 +6,9 @@ public class TileEntityFurnace extends TileEntityContainer implements IUpdatePla
     private static final int[] f = new int[] { 2, 1};
     private static final int[] g = new int[] { 1};
     private ItemStack[] items = new ItemStack[3];
-    private int burnTime;
+    public int burnTime;
     private int ticksForCurrentFuel;
-    private int cookTime;
+    public int cookTime;
     private int cookTimeTotal;
     private String m;
 

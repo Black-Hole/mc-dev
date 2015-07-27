@@ -14,7 +14,7 @@ public class EntityGuardian extends EntityMonster {
     private EntityLiving bo;
     private int bp;
     private boolean bq;
-    private PathfinderGoalRandomStroll goalRandomStroll;
+    public PathfinderGoalRandomStroll goalRandomStroll;
 
     public EntityGuardian(World world) {
         super(world);
@@ -35,7 +35,7 @@ public class EntityGuardian extends EntityMonster {
         this.b = this.a = this.random.nextFloat();
     }
 
-    protected void initAttributes() {
+    public void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(6.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.5D);

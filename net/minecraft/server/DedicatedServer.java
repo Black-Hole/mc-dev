@@ -21,7 +21,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     private final List<ServerCommand> l = Collections.synchronizedList(Lists.newArrayList());
     private RemoteStatusListener m;
     private RemoteControlListener n;
-    private PropertyManager propertyManager;
+    public PropertyManager propertyManager;
     private EULA p;
     private boolean generateStructures;
     private WorldSettings.EnumGamemode r;
@@ -67,7 +67,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
         thread.setDaemon(true);
         thread.start();
-        DedicatedServer.LOGGER.info("Starting minecraft server version 1.8.7");
+        DedicatedServer.LOGGER.info("Starting minecraft server version 1.8.8");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
             DedicatedServer.LOGGER.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
         }
@@ -227,7 +227,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     public EnumDifficulty getDifficulty() {
-        return EnumDifficulty.getById(this.propertyManager.getInt("difficulty", 1));
+        return EnumDifficulty.getById(this.propertyManager.getInt("difficulty", EnumDifficulty.NORMAL.a()));
     }
 
     public boolean isHardcore() {
