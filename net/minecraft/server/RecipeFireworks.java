@@ -159,7 +159,7 @@ public class RecipeFireworks implements IRecipe {
         }
     }
 
-    public ItemStack a(InventoryCrafting inventorycrafting) {
+    public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         return this.a.cloneItemStack();
     }
 

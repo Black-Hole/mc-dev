@@ -94,8 +94,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.lastSentExp = -1;
     }
 
-    public void b(int i) {
-        super.b(i);
+    public void enchantDone(int i) {
+        super.enchantDone(i);
         this.lastSentExp = -1;
     }
 

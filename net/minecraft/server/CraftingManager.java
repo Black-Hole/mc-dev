@@ -18,7 +18,7 @@ public class CraftingManager {
         return CraftingManager.a;
     }
 
-    private CraftingManager() {
+    public CraftingManager() {
         (new RecipesTools()).a(this);
         (new RecipesWeapons()).a(this);
         (new RecipeIngots()).a(this);
@@ -280,7 +280,7 @@ public class CraftingManager {
             irecipe = (IRecipe) iterator.next();
         } while (!irecipe.a(inventorycrafting, world));
 
-        return irecipe.a(inventorycrafting);
+        return irecipe.craftItem(inventorycrafting);
     }
 
     public ItemStack[] b(InventoryCrafting inventorycrafting, World world) {

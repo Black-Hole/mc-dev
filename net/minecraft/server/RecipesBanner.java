@@ -50,7 +50,7 @@ public class RecipesBanner {
             }
         }
 
-        public ItemStack a(InventoryCrafting inventorycrafting) {
+        public ItemStack craftItem(InventoryCrafting inventorycrafting) {
             ItemStack itemstack = null;
 
             for (int i = 0; i < inventorycrafting.getSize(); ++i) {
@@ -264,7 +264,7 @@ public class RecipesBanner {
             return itemstack != null && itemstack1 != null;
         }
 
-        public ItemStack a(InventoryCrafting inventorycrafting) {
+        public ItemStack craftItem(InventoryCrafting inventorycrafting) {
             for (int i = 0; i < inventorycrafting.getSize(); ++i) {
                 ItemStack itemstack = inventorycrafting.getItem(i);
 

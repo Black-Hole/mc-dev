@@ -173,7 +173,7 @@ public class ContainerEnchantTable extends Container {
                 boolean flag = itemstack.getItem() == Items.BOOK;
 
                 if (list != null) {
-                    entityhuman.b(j);
+                    entityhuman.enchantDone(j);
                     if (flag) {
                         itemstack.setItem(Items.ENCHANTED_BOOK);
                     }

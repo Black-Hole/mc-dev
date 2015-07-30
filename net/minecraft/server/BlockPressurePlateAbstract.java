@@ -118,7 +118,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
 
     }
 
-    protected AxisAlignedBB a(BlockPosition blockposition) {
+    protected AxisAlignedBB getBoundingBox(BlockPosition blockposition) {
         float f = 0.125F;
 
         return new AxisAlignedBB((double) ((float) blockposition.getX() + 0.125F), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + 0.125F), (double) ((float) (blockposition.getX() + 1) - 0.125F), (double) blockposition.getY() + 0.25D, (double) ((float) (blockposition.getZ() + 1) - 0.125F));

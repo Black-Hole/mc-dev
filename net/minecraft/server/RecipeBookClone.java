@@ -31,7 +31,7 @@ public class RecipeBookClone implements IRecipe {
         return itemstack != null && i > 0;
     }
 
-    public ItemStack a(InventoryCrafting inventorycrafting) {
+    public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         int i = 0;
         ItemStack itemstack = null;
 

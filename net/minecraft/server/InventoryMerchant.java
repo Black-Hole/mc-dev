@@ -38,7 +38,7 @@ public class InventoryMerchant implements IInventory {
 
                 return itemstack;
             } else {
-                itemstack = this.itemsInSlots[i].a(j);
+                itemstack = this.itemsInSlots[i].cloneAndSubtract(j);
                 if (this.itemsInSlots[i].count == 0) {
                     this.itemsInSlots[i] = null;
                 }

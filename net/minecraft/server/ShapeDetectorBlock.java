@@ -34,7 +34,7 @@ public class ShapeDetectorBlock {
         return this.e;
     }
 
-    public BlockPosition d() {
+    public BlockPosition getPosition() {
         return this.b;
     }
 

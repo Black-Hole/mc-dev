@@ -7,7 +7,7 @@ public class ItemMinecart extends Item {
 
         public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
             EnumDirection enumdirection = BlockDispenser.b(isourceblock.f());
-            World world = isourceblock.i();
+            World world = isourceblock.getWorld();
             double d0 = isourceblock.getX() + (double) enumdirection.getAdjacentX() * 1.125D;
             double d1 = Math.floor(isourceblock.getY()) + (double) enumdirection.getAdjacentY();
             double d2 = isourceblock.getZ() + (double) enumdirection.getAdjacentZ() * 1.125D;
@@ -44,12 +44,12 @@ public class ItemMinecart extends Item {
             }
 
             world.addEntity(entityminecartabstract);
-            itemstack.a(1);
+            itemstack.cloneAndSubtract(1);
             return itemstack;
         }
 
         protected void a(ISourceBlock isourceblock) {
-            isourceblock.i().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
+            isourceblock.getWorld().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
         }
     };
     private final EntityMinecartAbstract.EnumMinecartType b;
@@ -58,7 +58,7 @@ public class ItemMinecart extends Item {
         this.maxStackSize = 1;
         this.b = entityminecartabstract_enumminecarttype;
         this.a(CreativeModeTab.e);
-        BlockDispenser.N.a(this, ItemMinecart.a);
+        BlockDispenser.REGISTRY.a(this, ItemMinecart.a);
     }
 
     public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {

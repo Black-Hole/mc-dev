@@ -137,20 +137,20 @@ public class BlockSkull extends BlockContainer {
                 for (i = 0; i < 3; ++i) {
                     ShapeDetectorBlock shapedetectorblock = shapedetector_shapedetectorcollection.a(i, 0, 0);
 
-                    world.setTypeAndData(shapedetectorblock.d(), shapedetectorblock.a().set(BlockSkull.NODROP, Boolean.valueOf(true)), 2);
+                    world.setTypeAndData(shapedetectorblock.getPosition(), shapedetectorblock.a().set(BlockSkull.NODROP, Boolean.valueOf(true)), 2);
                 }
 
                 for (i = 0; i < shapedetector.c(); ++i) {
                     for (int j = 0; j < shapedetector.b(); ++j) {
                         ShapeDetectorBlock shapedetectorblock1 = shapedetector_shapedetectorcollection.a(i, j, 0);
 
-                        world.setTypeAndData(shapedetectorblock1.d(), Blocks.AIR.getBlockData(), 2);
+                        world.setTypeAndData(shapedetectorblock1.getPosition(), Blocks.AIR.getBlockData(), 2);
                     }
                 }
 
-                BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a(1, 0, 0).d();
+                BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a(1, 0, 0).getPosition();
                 EntityWither entitywither = new EntityWither(world);
-                BlockPosition blockposition2 = shapedetector_shapedetectorcollection.a(1, 2, 0).d();
+                BlockPosition blockposition2 = shapedetector_shapedetectorcollection.a(1, 2, 0).getPosition();
 
                 entitywither.setPositionRotation((double) blockposition2.getX() + 0.5D, (double) blockposition2.getY() + 0.55D, (double) blockposition2.getZ() + 0.5D, shapedetector_shapedetectorcollection.b().k() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F, 0.0F);
                 entitywither.aI = shapedetector_shapedetectorcollection.b().k() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
@@ -175,7 +175,7 @@ public class BlockSkull extends BlockContainer {
                     for (int l = 0; l < shapedetector.b(); ++l) {
                         ShapeDetectorBlock shapedetectorblock2 = shapedetector_shapedetectorcollection.a(k, l, 0);
 
-                        world.update(shapedetectorblock2.d(), Blocks.AIR);
+                        world.update(shapedetectorblock2.getPosition(), Blocks.AIR);
                     }
                 }
 

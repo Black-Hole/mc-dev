@@ -13,8 +13,8 @@ public abstract class EntityInsentient extends EntityLiving {
     protected ControllerJump g;
     private EntityAIBodyControl b;
     protected NavigationAbstract navigation;
-    public final PathfinderGoalSelector goalSelector;
-    public final PathfinderGoalSelector targetSelector;
+    public PathfinderGoalSelector goalSelector;
+    public PathfinderGoalSelector targetSelector;
     private EntityLiving goalTarget;
     private EntitySenses bk;
     private ItemStack[] equipment = new ItemStack[5];

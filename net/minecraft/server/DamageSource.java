@@ -57,7 +57,7 @@ public class DamageSource {
     }
 
     public static DamageSource explosion(Explosion explosion) {
-        return explosion != null && explosion.c() != null ? (new EntityDamageSource("explosion.player", explosion.c())).q().d() : (new DamageSource("explosion")).q().d();
+        return explosion != null && explosion.getSource() != null ? (new EntityDamageSource("explosion.player", explosion.getSource())).q().d() : (new DamageSource("explosion")).q().d();
     }
 
     public boolean a() {

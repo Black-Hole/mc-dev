@@ -85,7 +85,7 @@ public class ShapedRecipes implements IRecipe {
         return true;
     }
 
-    public ItemStack a(InventoryCrafting inventorycrafting) {
+    public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         ItemStack itemstack = this.b().cloneItemStack();
 
         if (this.e) {

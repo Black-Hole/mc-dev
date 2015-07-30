@@ -38,7 +38,7 @@ public class TileEntityChest extends TileEntityContainer implements IUpdatePlaye
                 this.update();
                 return itemstack;
             } else {
-                itemstack = this.items[i].a(j);
+                itemstack = this.items[i].cloneAndSubtract(j);
                 if (this.items[i].count == 0) {
                     this.items[i] = null;
                 }

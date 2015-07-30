@@ -36,7 +36,7 @@ public class RecipeArmorDye implements IRecipe {
         return itemstack != null && !arraylist.isEmpty();
     }
 
-    public ItemStack a(InventoryCrafting inventorycrafting) {
+    public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         ItemStack itemstack = null;
         int[] aint = new int[3];
         int i = 0;

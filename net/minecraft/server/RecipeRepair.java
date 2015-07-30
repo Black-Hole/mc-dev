@@ -28,7 +28,7 @@ public class RecipeRepair implements IRecipe {
         return arraylist.size() == 2;
     }
 
-    public ItemStack a(InventoryCrafting inventorycrafting) {
+    public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         ArrayList arraylist = Lists.newArrayList();
 
         ItemStack itemstack;

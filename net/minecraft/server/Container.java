@@ -173,7 +173,7 @@ public abstract class Container {
                         }
 
                         if (j == 1) {
-                            entityhuman.drop(playerinventory.getCarried().a(1), true);
+                            entityhuman.drop(playerinventory.getCarried().cloneAndSubtract(1), true);
                             if (playerinventory.getCarried().count == 0) {
                                 playerinventory.setCarried((ItemStack) null);
                             }
@@ -218,7 +218,7 @@ public abstract class Container {
                                 }
 
                                 if (itemstack4.count >= k1) {
-                                    slot2.set(itemstack4.a(k1));
+                                    slot2.set(itemstack4.cloneAndSubtract(k1));
                                 }
 
                                 if (itemstack4.count == 0) {
@@ -246,7 +246,7 @@ public abstract class Container {
                                         k1 = itemstack4.getMaxStackSize() - itemstack1.count;
                                     }
 
-                                    itemstack4.a(k1);
+                                    itemstack4.cloneAndSubtract(k1);
                                     if (itemstack4.count == 0) {
                                         playerinventory.setCarried((ItemStack) null);
                                     }

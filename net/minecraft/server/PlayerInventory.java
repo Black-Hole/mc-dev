@@ -264,7 +264,7 @@ public class PlayerInventory implements IInventory {
                 aitemstack[i] = null;
                 return itemstack;
             } else {
-                itemstack = aitemstack[i].a(j);
+                itemstack = aitemstack[i].cloneAndSubtract(j);
                 if (aitemstack[i].count == 0) {
                     aitemstack[i] = null;
                 }

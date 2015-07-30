@@ -64,7 +64,7 @@ public class ShapelessRecipes implements IRecipe {
         return arraylist.isEmpty();
     }
 
-    public ItemStack a(InventoryCrafting inventorycrafting) {
+    public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         return this.result.cloneItemStack();
     }
 

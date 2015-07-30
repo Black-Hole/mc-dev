@@ -131,7 +131,7 @@ public class BlockVine extends Block {
 
         while (iterator.hasNext()) {
             EnumDirection enumdirection = (EnumDirection) iterator.next();
-            BlockStateBoolean blockstateboolean = a(enumdirection);
+            BlockStateBoolean blockstateboolean = getDirection(enumdirection);
 
             if (((Boolean) iblockdata.get(blockstateboolean)).booleanValue() && !this.c(world.getType(blockposition.shift(enumdirection)).getBlock())) {
                 IBlockData iblockdata2 = world.getType(blockposition.up());
@@ -195,7 +195,7 @@ public class BlockVine extends Block {
                         while (iterator.hasNext()) {
                             enumdirection1 = (EnumDirection) iterator.next();
                             if (random.nextBoolean() || !this.c(world.getType(blockposition1.shift(enumdirection1)).getBlock())) {
-                                iblockdata1 = iblockdata1.set(a(enumdirection1), Boolean.valueOf(false));
+                                iblockdata1 = iblockdata1.set(getDirection(enumdirection1), Boolean.valueOf(false));
                             }
                         }
 
@@ -207,7 +207,7 @@ public class BlockVine extends Block {
                 } else {
                     BlockPosition blockposition2;
 
-                    if (enumdirection.k().c() && !((Boolean) iblockdata.get(a(enumdirection))).booleanValue()) {
+                    if (enumdirection.k().c() && !((Boolean) iblockdata.get(getDirection(enumdirection))).booleanValue()) {
                         if (!flag) {
                             blockposition2 = blockposition.shift(enumdirection);
                             Block block = world.getType(blockposition2).getBlock();
@@ -215,24 +215,24 @@ public class BlockVine extends Block {
                             if (block.material == Material.AIR) {
                                 enumdirection1 = enumdirection.e();
                                 EnumDirection enumdirection2 = enumdirection.f();
-                                boolean flag1 = ((Boolean) iblockdata.get(a(enumdirection1))).booleanValue();
-                                boolean flag2 = ((Boolean) iblockdata.get(a(enumdirection2))).booleanValue();
+                                boolean flag1 = ((Boolean) iblockdata.get(getDirection(enumdirection1))).booleanValue();
+                                boolean flag2 = ((Boolean) iblockdata.get(getDirection(enumdirection2))).booleanValue();
                                 BlockPosition blockposition3 = blockposition2.shift(enumdirection1);
                                 BlockPosition blockposition4 = blockposition2.shift(enumdirection2);
 
                                 if (flag1 && this.c(world.getType(blockposition3).getBlock())) {
-                                    world.setTypeAndData(blockposition2, this.getBlockData().set(a(enumdirection1), Boolean.valueOf(true)), 2);
+                                    world.setTypeAndData(blockposition2, this.getBlockData().set(getDirection(enumdirection1), Boolean.valueOf(true)), 2);
                                 } else if (flag2 && this.c(world.getType(blockposition4).getBlock())) {
-                                    world.setTypeAndData(blockposition2, this.getBlockData().set(a(enumdirection2), Boolean.valueOf(true)), 2);
+                                    world.setTypeAndData(blockposition2, this.getBlockData().set(getDirection(enumdirection2), Boolean.valueOf(true)), 2);
                                 } else if (flag1 && world.isEmpty(blockposition3) && this.c(world.getType(blockposition.shift(enumdirection1)).getBlock())) {
-                                    world.setTypeAndData(blockposition3, this.getBlockData().set(a(enumdirection.opposite()), Boolean.valueOf(true)), 2);
+                                    world.setTypeAndData(blockposition3, this.getBlockData().set(getDirection(enumdirection.opposite()), Boolean.valueOf(true)), 2);
                                 } else if (flag2 && world.isEmpty(blockposition4) && this.c(world.getType(blockposition.shift(enumdirection2)).getBlock())) {
-                                    world.setTypeAndData(blockposition4, this.getBlockData().set(a(enumdirection.opposite()), Boolean.valueOf(true)), 2);
+                                    world.setTypeAndData(blockposition4, this.getBlockData().set(getDirection(enumdirection.opposite()), Boolean.valueOf(true)), 2);
                                 } else if (this.c(world.getType(blockposition2.up()).getBlock())) {
                                     world.setTypeAndData(blockposition2, this.getBlockData(), 2);
                                 }
                             } else if (block.material.k() && block.d()) {
-                                world.setTypeAndData(blockposition, iblockdata.set(a(enumdirection), Boolean.valueOf(true)), 2);
+                                world.setTypeAndData(blockposition, iblockdata.set(getDirection(enumdirection), Boolean.valueOf(true)), 2);
                             }
 
                         }
@@ -252,7 +252,7 @@ public class BlockVine extends Block {
                                 while (iterator1.hasNext()) {
                                     enumdirection3 = (EnumDirection) iterator1.next();
                                     if (random.nextBoolean()) {
-                                        iblockdata3 = iblockdata3.set(a(enumdirection3), Boolean.valueOf(false));
+                                        iblockdata3 = iblockdata3.set(getDirection(enumdirection3), Boolean.valueOf(false));
                                     }
                                 }
 
@@ -265,7 +265,7 @@ public class BlockVine extends Block {
 
                                 while (iterator1.hasNext()) {
                                     enumdirection3 = (EnumDirection) iterator1.next();
-                                    BlockStateBoolean blockstateboolean = a(enumdirection3);
+                                    BlockStateBoolean blockstateboolean = getDirection(enumdirection3);
 
                                     if (random.nextBoolean() && ((Boolean) iblockdata.get(blockstateboolean)).booleanValue()) {
                                         iblockdata3 = iblockdata3.set(blockstateboolean, Boolean.valueOf(true));
@@ -287,7 +287,7 @@ public class BlockVine extends Block {
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
         IBlockData iblockdata = this.getBlockData().set(BlockVine.UP, Boolean.valueOf(false)).set(BlockVine.NORTH, Boolean.valueOf(false)).set(BlockVine.EAST, Boolean.valueOf(false)).set(BlockVine.SOUTH, Boolean.valueOf(false)).set(BlockVine.WEST, Boolean.valueOf(false));
 
-        return enumdirection.k().c() ? iblockdata.set(a(enumdirection.opposite()), Boolean.valueOf(true)) : iblockdata;
+        return enumdirection.k().c() ? iblockdata.set(getDirection(enumdirection.opposite()), Boolean.valueOf(true)) : iblockdata;
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
@@ -338,7 +338,7 @@ public class BlockVine extends Block {
         return new BlockStateList(this, new IBlockState[] { BlockVine.UP, BlockVine.NORTH, BlockVine.EAST, BlockVine.SOUTH, BlockVine.WEST});
     }
 
-    public static BlockStateBoolean a(EnumDirection enumdirection) {
+    public static BlockStateBoolean getDirection(EnumDirection enumdirection) {
         switch (BlockVine.SyntheticClass_1.a[enumdirection.ordinal()]) {
         case 1:
             return BlockVine.UP;

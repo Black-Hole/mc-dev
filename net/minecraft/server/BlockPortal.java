@@ -67,13 +67,13 @@ public class BlockPortal extends BlockHalfTransparent {
         BlockPortal.Shape blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.X);
 
         if (blockportal_shape.d() && blockportal_shape.e == 0) {
-            blockportal_shape.e();
+            blockportal_shape.createPortal();
             return true;
         } else {
             BlockPortal.Shape blockportal_shape1 = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.Z);
 
             if (blockportal_shape1.d() && blockportal_shape1.e == 0) {
-                blockportal_shape1.e();
+                blockportal_shape1.createPortal();
                 return true;
             } else {
                 return false;
@@ -87,12 +87,12 @@ public class BlockPortal extends BlockHalfTransparent {
 
         if (enumdirection_enumaxis == EnumDirection.EnumAxis.X) {
             blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.X);
-            if (!blockportal_shape.d() || blockportal_shape.e < blockportal_shape.h * blockportal_shape.g) {
+            if (!blockportal_shape.d() || blockportal_shape.e < blockportal_shape.width * blockportal_shape.height) {
                 world.setTypeUpdate(blockposition, Blocks.AIR.getBlockData());
             }
         } else if (enumdirection_enumaxis == EnumDirection.EnumAxis.Z) {
             blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.Z);
-            if (!blockportal_shape.d() || blockportal_shape.e < blockportal_shape.h * blockportal_shape.g) {
+            if (!blockportal_shape.d() || blockportal_shape.e < blockportal_shape.width * blockportal_shape.height) {
                 world.setTypeUpdate(blockposition, Blocks.AIR.getBlockData());
             }
         }
@@ -137,7 +137,7 @@ public class BlockPortal extends BlockHalfTransparent {
         } else {
             int[] aint = new int[EnumDirection.EnumAxisDirection.values().length];
             EnumDirection enumdirection = blockportal_shape.c.f();
-            BlockPosition blockposition1 = blockportal_shape.f.up(blockportal_shape.a() - 1);
+            BlockPosition blockposition1 = blockportal_shape.position.up(blockportal_shape.a() - 1);
             EnumDirection.EnumAxisDirection[] aenumdirection_enumaxisdirection = EnumDirection.EnumAxisDirection.values();
             int i = aenumdirection_enumaxisdirection.length;
 
@@ -182,9 +182,9 @@ public class BlockPortal extends BlockHalfTransparent {
         private final EnumDirection c;
         private final EnumDirection d;
         private int e = 0;
-        private BlockPosition f;
-        private int g;
-        private int h;
+        private BlockPosition position;
+        private int height;
+        private int width;
 
         public Shape(World world, BlockPosition blockposition, EnumDirection.EnumAxis enumdirection_enumaxis) {
             this.a = world;
@@ -204,16 +204,16 @@ public class BlockPortal extends BlockHalfTransparent {
             int i = this.a(blockposition, this.d) - 1;
 
             if (i >= 0) {
-                this.f = blockposition.shift(this.d, i);
-                this.h = this.a(this.f, this.c);
-                if (this.h < 2 || this.h > 21) {
-                    this.f = null;
-                    this.h = 0;
+                this.position = blockposition.shift(this.d, i);
+                this.width = this.a(this.position, this.c);
+                if (this.width < 2 || this.width > 21) {
+                    this.position = null;
+                    this.width = 0;
                 }
             }
 
-            if (this.f != null) {
-                this.g = this.c();
+            if (this.position != null) {
+                this.height = this.c();
             }
 
         }
@@ -235,20 +235,20 @@ public class BlockPortal extends BlockHalfTransparent {
         }
 
         public int a() {
-            return this.g;
+            return this.height;
         }
 
         public int b() {
-            return this.h;
+            return this.width;
         }
 
         protected int c() {
             int i;
 
             label56:
-            for (this.g = 0; this.g < 21; ++this.g) {
-                for (i = 0; i < this.h; ++i) {
-                    BlockPosition blockposition = this.f.shift(this.c, i).up(this.g);
+            for (this.height = 0; this.height < 21; ++this.height) {
+                for (i = 0; i < this.width; ++i) {
+                    BlockPosition blockposition = this.position.shift(this.c, i).up(this.height);
                     Block block = this.a.getType(blockposition).getBlock();
 
                     if (!this.a(block)) {
@@ -264,7 +264,7 @@ public class BlockPortal extends BlockHalfTransparent {
                         if (block != Blocks.OBSIDIAN) {
                             break label56;
                         }
-                    } else if (i == this.h - 1) {
+                    } else if (i == this.width - 1) {
                         block = this.a.getType(blockposition.shift(this.c)).getBlock();
                         if (block != Blocks.OBSIDIAN) {
                             break label56;
@@ -273,19 +273,19 @@ public class BlockPortal extends BlockHalfTransparent {
                 }
             }
 
-            for (i = 0; i < this.h; ++i) {
-                if (this.a.getType(this.f.shift(this.c, i).up(this.g)).getBlock() != Blocks.OBSIDIAN) {
-                    this.g = 0;
+            for (i = 0; i < this.width; ++i) {
+                if (this.a.getType(this.position.shift(this.c, i).up(this.height)).getBlock() != Blocks.OBSIDIAN) {
+                    this.height = 0;
                     break;
                 }
             }
 
-            if (this.g <= 21 && this.g >= 3) {
-                return this.g;
+            if (this.height <= 21 && this.height >= 3) {
+                return this.height;
             } else {
-                this.f = null;
-                this.h = 0;
-                this.g = 0;
+                this.position = null;
+                this.width = 0;
+                this.height = 0;
                 return 0;
             }
         }
@@ -295,14 +295,14 @@ public class BlockPortal extends BlockHalfTransparent {
         }
 
         public boolean d() {
-            return this.f != null && this.h >= 2 && this.h <= 21 && this.g >= 3 && this.g <= 21;
+            return this.position != null && this.width >= 2 && this.width <= 21 && this.height >= 3 && this.height <= 21;
         }
 
-        public void e() {
-            for (int i = 0; i < this.h; ++i) {
-                BlockPosition blockposition = this.f.shift(this.c, i);
+        public void createPortal() {
+            for (int i = 0; i < this.width; ++i) {
+                BlockPosition blockposition = this.position.shift(this.c, i);
 
-                for (int j = 0; j < this.g; ++j) {
+                for (int j = 0; j < this.height; ++j) {
                     this.a.setTypeAndData(blockposition.up(j), Blocks.PORTAL.getBlockData().set(BlockPortal.AXIS, this.b), 2);
                 }
             }

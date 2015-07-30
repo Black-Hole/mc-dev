@@ -67,7 +67,7 @@ public final class ItemStack {
         this.k = false;
     }
 
-    public ItemStack a(int i) {
+    public ItemStack cloneAndSubtract(int i) {
         ItemStack itemstack = new ItemStack(this.item, i, this.damage);
 
         if (this.tag != null) {

@@ -5,23 +5,23 @@ import java.io.IOException;
 public class PacketHandshakingInSetProtocol implements Packet<PacketHandshakingInListener> {
 
     private int a;
-    private String b;
-    private int c;
+    public String hostname;
+    public int port;
     private EnumProtocol d;
 
     public PacketHandshakingInSetProtocol() {}
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
-        this.b = packetdataserializer.c(255);
-        this.c = packetdataserializer.readUnsignedShort();
+        this.hostname = packetdataserializer.c(255);
+        this.port = packetdataserializer.readUnsignedShort();
         this.d = EnumProtocol.a(packetdataserializer.e());
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
-        packetdataserializer.a(this.b);
-        packetdataserializer.writeShort(this.c);
+        packetdataserializer.a(this.hostname);
+        packetdataserializer.writeShort(this.port);
         packetdataserializer.b(this.d.a());
     }
 

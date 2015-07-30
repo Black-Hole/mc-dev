@@ -631,7 +631,7 @@ public class Block {
         return this.material.getPushReaction();
     }
 
-    public void a(World world, BlockPosition blockposition, Entity entity, float f) {
+    public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
         entity.e(f, 1.0F);
     }
 

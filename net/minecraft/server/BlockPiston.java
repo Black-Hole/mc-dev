@@ -6,12 +6,12 @@ public class BlockPiston extends Block {
 
     public static final BlockStateDirection FACING = BlockStateDirection.of("facing");
     public static final BlockStateBoolean EXTENDED = BlockStateBoolean.of("extended");
-    private final boolean N;
+    private final boolean sticky;
 
     public BlockPiston(boolean flag) {
         super(Material.PISTON);
         this.j(this.blockStateList.getBlockData().set(BlockPiston.FACING, EnumDirection.NORTH).set(BlockPiston.EXTENDED, Boolean.valueOf(false)));
-        this.N = flag;
+        this.sticky = flag;
         this.a(BlockPiston.i);
         this.c(0.5F);
         this.a(CreativeModeTab.d);
@@ -126,9 +126,9 @@ public class BlockPiston extends Block {
                 ((TileEntityPiston) tileentity).h();
             }
 
-            world.setTypeAndData(blockposition, Blocks.PISTON_EXTENSION.getBlockData().set(BlockPistonMoving.FACING, enumdirection).set(BlockPistonMoving.TYPE, this.N ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT), 3);
+            world.setTypeAndData(blockposition, Blocks.PISTON_EXTENSION.getBlockData().set(BlockPistonMoving.FACING, enumdirection).set(BlockPistonMoving.TYPE, this.sticky ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT), 3);
             world.setTileEntity(blockposition, BlockPistonMoving.a(this.fromLegacyData(j), enumdirection, false, true));
-            if (this.N) {
+            if (this.sticky) {
                 BlockPosition blockposition1 = blockposition.a(enumdirection.getAdjacentX() * 2, enumdirection.getAdjacentY() * 2, enumdirection.getAdjacentZ() * 2);
                 Block block = world.getType(blockposition1).getBlock();
                 boolean flag1 = false;
@@ -322,10 +322,10 @@ public class BlockPiston extends Block {
             BlockPosition blockposition2 = blockposition.shift(enumdirection);
 
             if (flag) {
-                BlockPistonExtension.EnumPistonType blockpistonextension_enumpistontype = this.N ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT;
+                BlockPistonExtension.EnumPistonType blockpistonextension_enumpistontype = this.sticky ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT;
 
                 iblockdata = Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.FACING, enumdirection).set(BlockPistonExtension.TYPE, blockpistonextension_enumpistontype);
-                IBlockData iblockdata1 = Blocks.PISTON_EXTENSION.getBlockData().set(BlockPistonMoving.FACING, enumdirection).set(BlockPistonMoving.TYPE, this.N ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT);
+                IBlockData iblockdata1 = Blocks.PISTON_EXTENSION.getBlockData().set(BlockPistonMoving.FACING, enumdirection).set(BlockPistonMoving.TYPE, this.sticky ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT);
 
                 world.setTypeAndData(blockposition2, iblockdata1, 4);
                 world.setTileEntity(blockposition2, BlockPistonMoving.a(iblockdata, enumdirection, true, false));

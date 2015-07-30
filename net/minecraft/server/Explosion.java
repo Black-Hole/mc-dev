@@ -196,7 +196,7 @@ public class Explosion {
         return this.k;
     }
 
-    public EntityLiving c() {
+    public EntityLiving getSource() {
         return this.source == null ? null : (this.source instanceof EntityTNTPrimed ? ((EntityTNTPrimed) this.source).getSource() : (this.source instanceof EntityLiving ? (EntityLiving) this.source : null));
     }
 

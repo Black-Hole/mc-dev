@@ -43,11 +43,11 @@ public class BlockPumpkin extends BlockDirectional {
             for (i = 0; i < this.getDetectorSnowGolem().b(); ++i) {
                 ShapeDetectorBlock shapedetectorblock = shapedetector_shapedetectorcollection.a(0, i, 0);
 
-                world.setTypeAndData(shapedetectorblock.d(), Blocks.AIR.getBlockData(), 2);
+                world.setTypeAndData(shapedetectorblock.getPosition(), Blocks.AIR.getBlockData(), 2);
             }
 
             EntitySnowman entitysnowman = new EntitySnowman(world);
-            BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a(0, 2, 0).d();
+            BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a(0, 2, 0).getPosition();
 
             entitysnowman.setPositionRotation((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.05D, (double) blockposition1.getZ() + 0.5D, 0.0F, 0.0F);
             world.addEntity(entitysnowman);
@@ -59,16 +59,16 @@ public class BlockPumpkin extends BlockDirectional {
             for (j = 0; j < this.getDetectorSnowGolem().b(); ++j) {
                 ShapeDetectorBlock shapedetectorblock1 = shapedetector_shapedetectorcollection.a(0, j, 0);
 
-                world.update(shapedetectorblock1.d(), Blocks.AIR);
+                world.update(shapedetectorblock1.getPosition(), Blocks.AIR);
             }
         } else if ((shapedetector_shapedetectorcollection = this.getDetectorIronGolem().a(world, blockposition)) != null) {
             for (i = 0; i < this.getDetectorIronGolem().c(); ++i) {
                 for (int k = 0; k < this.getDetectorIronGolem().b(); ++k) {
-                    world.setTypeAndData(shapedetector_shapedetectorcollection.a(i, k, 0).d(), Blocks.AIR.getBlockData(), 2);
+                    world.setTypeAndData(shapedetector_shapedetectorcollection.a(i, k, 0).getPosition(), Blocks.AIR.getBlockData(), 2);
                 }
             }
 
-            BlockPosition blockposition2 = shapedetector_shapedetectorcollection.a(1, 2, 0).d();
+            BlockPosition blockposition2 = shapedetector_shapedetectorcollection.a(1, 2, 0).getPosition();
             EntityIronGolem entityirongolem = new EntityIronGolem(world);
 
             entityirongolem.setPlayerCreated(true);
@@ -83,7 +83,7 @@ public class BlockPumpkin extends BlockDirectional {
                 for (int l = 0; l < this.getDetectorIronGolem().b(); ++l) {
                     ShapeDetectorBlock shapedetectorblock2 = shapedetector_shapedetectorcollection.a(j, l, 0);
 
-                    world.update(shapedetectorblock2.d(), Blocks.AIR);
+                    world.update(shapedetectorblock2.getPosition(), Blocks.AIR);
                 }
             }
         }

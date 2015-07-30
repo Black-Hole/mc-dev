@@ -24,7 +24,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     public float bv;
     public boolean bw;
     public boolean bx;
-    private Entity bA;
+    public Entity target;
     public int by;
     public EntityEnderCrystal bz;
 
@@ -140,9 +140,9 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                     d2 = d3 * d3 + d0 * d0 + d1 * d1;
                     double d4;
 
-                    if (this.bA != null) {
-                        this.a = this.bA.locX;
-                        this.c = this.bA.locZ;
+                    if (this.target != null) {
+                        this.a = this.target.locX;
+                        this.c = this.target.locZ;
                         double d5 = this.a - this.locX;
                         double d6 = this.c - this.locZ;
                         double d7 = Math.sqrt(d5 * d5 + d6 * d6);
@@ -152,7 +152,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                             d4 = 10.0D;
                         }
 
-                        this.b = this.bA.getBoundingBox().b + d4;
+                        this.b = this.target.getBoundingBox().b + d4;
                     } else {
                         this.a += this.random.nextGaussian() * 2.0D;
                         this.c += this.random.nextGaussian() * 2.0D;
@@ -368,7 +368,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         }
 
         if (this.random.nextInt(2) == 0 && !arraylist.isEmpty()) {
-            this.bA = (Entity) arraylist.get(this.random.nextInt(arraylist.size()));
+            this.target = (Entity) arraylist.get(this.random.nextInt(arraylist.size()));
         } else {
             boolean flag;
 
@@ -385,7 +385,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 flag = d0 * d0 + d1 * d1 + d2 * d2 > 100.0D;
             } while (!flag);
 
-            this.bA = null;
+            this.target = null;
         }
 
     }
@@ -444,7 +444,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         this.a = this.locX + (double) (f2 * 5.0F) + (double) ((this.random.nextFloat() - 0.5F) * 2.0F);
         this.b = this.locY + (double) (this.random.nextFloat() * 3.0F) + 1.0D;
         this.c = this.locZ - (double) (f3 * 5.0F) + (double) ((this.random.nextFloat() - 0.5F) * 2.0F);
-        this.bA = null;
+        this.target = null;
         if (damagesource.getEntity() instanceof EntityHuman || damagesource.isExplosion()) {
             this.dealDamage(damagesource, f);
         }

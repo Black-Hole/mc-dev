@@ -14,7 +14,7 @@ public class ItemArmor extends Item {
             int j = blockposition.getY();
             int k = blockposition.getZ();
             AxisAlignedBB axisalignedbb = new AxisAlignedBB((double) i, (double) j, (double) k, (double) (i + 1), (double) (j + 1), (double) (k + 1));
-            List list = isourceblock.i().a(EntityLiving.class, axisalignedbb, Predicates.and(IEntitySelector.d, new IEntitySelector.EntitySelectorEquipable(itemstack)));
+            List list = isourceblock.getWorld().a(EntityLiving.class, axisalignedbb, Predicates.and(IEntitySelector.d, new IEntitySelector.EntitySelectorEquipable(itemstack)));
 
             if (list.size() > 0) {
                 EntityLiving entityliving = (EntityLiving) list.get(0);
@@ -48,7 +48,7 @@ public class ItemArmor extends Item {
         this.setMaxDurability(itemarmor_enumarmormaterial.a(j));
         this.maxStackSize = 1;
         this.a(CreativeModeTab.j);
-        BlockDispenser.N.a(this, ItemArmor.l);
+        BlockDispenser.REGISTRY.a(this, ItemArmor.l);
     }
 
     public int b() {

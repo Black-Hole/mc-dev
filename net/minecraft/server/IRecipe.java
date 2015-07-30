@@ -4,7 +4,7 @@ public interface IRecipe {
 
     boolean a(InventoryCrafting inventorycrafting, World world);
 
-    ItemStack a(InventoryCrafting inventorycrafting);
+    ItemStack craftItem(InventoryCrafting inventorycrafting);
 
     int a();
 

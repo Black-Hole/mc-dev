@@ -1313,7 +1313,7 @@ public abstract class EntityHuman extends EntityLiving {
         return this.f;
     }
 
-    public void b(int i) {
+    public void enchantDone(int i) {
         this.expLevel -= i;
         if (this.expLevel < 0) {
             this.expLevel = 0;

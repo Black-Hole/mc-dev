@@ -6,7 +6,7 @@ public class BlockDispenser extends BlockContainer {
 
     public static final BlockStateDirection FACING = BlockStateDirection.of("facing");
     public static final BlockStateBoolean TRIGGERED = BlockStateBoolean.of("triggered");
-    public static final RegistryDefault<Item, IDispenseBehavior> N = new RegistryDefault(new DispenseBehaviorItem());
+    public static final RegistryDefault<Item, IDispenseBehavior> REGISTRY = new RegistryDefault(new DispenseBehaviorItem());
     protected Random O = new Random();
 
     protected BlockDispenser() {
@@ -81,7 +81,7 @@ public class BlockDispenser extends BlockContainer {
                 ItemStack itemstack = tileentitydispenser.getItem(i);
                 IDispenseBehavior idispensebehavior = this.a(itemstack);
 
-                if (idispensebehavior != IDispenseBehavior.a) {
+                if (idispensebehavior != IDispenseBehavior.NONE) {
                     ItemStack itemstack1 = idispensebehavior.a(sourceblock, itemstack);
 
                     tileentitydispenser.setItem(i, itemstack1.count <= 0 ? null : itemstack1);
@@ -92,7 +92,7 @@ public class BlockDispenser extends BlockContainer {
     }
 
     protected IDispenseBehavior a(ItemStack itemstack) {
-        return (IDispenseBehavior) BlockDispenser.N.get(itemstack == null ? null : itemstack.getItem());
+        return (IDispenseBehavior) BlockDispenser.REGISTRY.get(itemstack == null ? null : itemstack.getItem());
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {

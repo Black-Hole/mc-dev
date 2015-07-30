@@ -18,7 +18,7 @@ public class DispenserRegistry {
     }
 
     static void b() {
-        BlockDispenser.N.a(Items.ARROW, new DispenseBehaviorProjectile() {
+        BlockDispenser.REGISTRY.a(Items.ARROW, new DispenseBehaviorProjectile() {
             protected IProjectile a(World world, IPosition iposition) {
                 EntityArrow entityarrow = new EntityArrow(world, iposition.getX(), iposition.getY(), iposition.getZ());
 
@@ -26,17 +26,17 @@ public class DispenserRegistry {
                 return entityarrow;
             }
         });
-        BlockDispenser.N.a(Items.EGG, new DispenseBehaviorProjectile() {
+        BlockDispenser.REGISTRY.a(Items.EGG, new DispenseBehaviorProjectile() {
             protected IProjectile a(World world, IPosition iposition) {
                 return new EntityEgg(world, iposition.getX(), iposition.getY(), iposition.getZ());
             }
         });
-        BlockDispenser.N.a(Items.SNOWBALL, new DispenseBehaviorProjectile() {
+        BlockDispenser.REGISTRY.a(Items.SNOWBALL, new DispenseBehaviorProjectile() {
             protected IProjectile a(World world, IPosition iposition) {
                 return new EntitySnowball(world, iposition.getX(), iposition.getY(), iposition.getZ());
             }
         });
-        BlockDispenser.N.a(Items.EXPERIENCE_BOTTLE, new DispenseBehaviorProjectile() {
+        BlockDispenser.REGISTRY.a(Items.EXPERIENCE_BOTTLE, new DispenseBehaviorProjectile() {
             protected IProjectile a(World world, IPosition iposition) {
                 return new EntityThrownExpBottle(world, iposition.getX(), iposition.getY(), iposition.getZ());
             }
@@ -45,11 +45,11 @@ public class DispenserRegistry {
                 return super.a() * 0.5F;
             }
 
-            protected float b() {
-                return super.b() * 1.25F;
+            protected float getPower() {
+                return super.getPower() * 1.25F;
             }
         });
-        BlockDispenser.N.a(Items.POTION, new IDispenseBehavior() {
+        BlockDispenser.REGISTRY.a(Items.POTION, new IDispenseBehavior() {
             private final DispenseBehaviorItem b = new DispenseBehaviorItem();
 
             public ItemStack a(ISourceBlock isourceblock, final ItemStack itemstack) {
@@ -62,73 +62,73 @@ public class DispenserRegistry {
                         return super.a() * 0.5F;
                     }
 
-                    protected float b() {
-                        return super.b() * 1.25F;
+                    protected float getPower() {
+                        return super.getPower() * 1.25F;
                     }
                 }).a(isourceblock, itemstack) : this.b.a(isourceblock, itemstack);
             }
         });
-        BlockDispenser.N.a(Items.SPAWN_EGG, new DispenseBehaviorItem() {
+        BlockDispenser.REGISTRY.a(Items.SPAWN_EGG, new DispenseBehaviorItem() {
             public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
                 EnumDirection enumdirection = BlockDispenser.b(isourceblock.f());
                 double d0 = isourceblock.getX() + (double) enumdirection.getAdjacentX();
                 double d1 = (double) ((float) isourceblock.getBlockPosition().getY() + 0.2F);
                 double d2 = isourceblock.getZ() + (double) enumdirection.getAdjacentZ();
-                Entity entity = ItemMonsterEgg.a(isourceblock.i(), itemstack.getData(), d0, d1, d2);
+                Entity entity = ItemMonsterEgg.a(isourceblock.getWorld(), itemstack.getData(), d0, d1, d2);
 
                 if (entity instanceof EntityLiving && itemstack.hasName()) {
                     ((EntityInsentient) entity).setCustomName(itemstack.getName());
                 }
 
-                itemstack.a(1);
+                itemstack.cloneAndSubtract(1);
                 return itemstack;
             }
         });
-        BlockDispenser.N.a(Items.FIREWORKS, new DispenseBehaviorItem() {
+        BlockDispenser.REGISTRY.a(Items.FIREWORKS, new DispenseBehaviorItem() {
             public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
                 EnumDirection enumdirection = BlockDispenser.b(isourceblock.f());
                 double d0 = isourceblock.getX() + (double) enumdirection.getAdjacentX();
                 double d1 = (double) ((float) isourceblock.getBlockPosition().getY() + 0.2F);
                 double d2 = isourceblock.getZ() + (double) enumdirection.getAdjacentZ();
-                EntityFireworks entityfireworks = new EntityFireworks(isourceblock.i(), d0, d1, d2, itemstack);
+                EntityFireworks entityfireworks = new EntityFireworks(isourceblock.getWorld(), d0, d1, d2, itemstack);
 
-                isourceblock.i().addEntity(entityfireworks);
-                itemstack.a(1);
+                isourceblock.getWorld().addEntity(entityfireworks);
+                itemstack.cloneAndSubtract(1);
                 return itemstack;
             }
 
             protected void a(ISourceBlock isourceblock) {
-                isourceblock.i().triggerEffect(1002, isourceblock.getBlockPosition(), 0);
+                isourceblock.getWorld().triggerEffect(1002, isourceblock.getBlockPosition(), 0);
             }
         });
-        BlockDispenser.N.a(Items.FIRE_CHARGE, new DispenseBehaviorItem() {
+        BlockDispenser.REGISTRY.a(Items.FIRE_CHARGE, new DispenseBehaviorItem() {
             public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
                 EnumDirection enumdirection = BlockDispenser.b(isourceblock.f());
                 IPosition iposition = BlockDispenser.a(isourceblock);
                 double d0 = iposition.getX() + (double) ((float) enumdirection.getAdjacentX() * 0.3F);
                 double d1 = iposition.getY() + (double) ((float) enumdirection.getAdjacentY() * 0.3F);
                 double d2 = iposition.getZ() + (double) ((float) enumdirection.getAdjacentZ() * 0.3F);
-                World world = isourceblock.i();
+                World world = isourceblock.getWorld();
                 Random random = world.random;
                 double d3 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentX();
                 double d4 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentY();
                 double d5 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentZ();
 
                 world.addEntity(new EntitySmallFireball(world, d0, d1, d2, d3, d4, d5));
-                itemstack.a(1);
+                itemstack.cloneAndSubtract(1);
                 return itemstack;
             }
 
             protected void a(ISourceBlock isourceblock) {
-                isourceblock.i().triggerEffect(1009, isourceblock.getBlockPosition(), 0);
+                isourceblock.getWorld().triggerEffect(1009, isourceblock.getBlockPosition(), 0);
             }
         });
-        BlockDispenser.N.a(Items.BOAT, new DispenseBehaviorItem() {
+        BlockDispenser.REGISTRY.a(Items.BOAT, new DispenseBehaviorItem() {
             private final DispenseBehaviorItem b = new DispenseBehaviorItem();
 
             public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
                 EnumDirection enumdirection = BlockDispenser.b(isourceblock.f());
-                World world = isourceblock.i();
+                World world = isourceblock.getWorld();
                 double d0 = isourceblock.getX() + (double) ((float) enumdirection.getAdjacentX() * 1.125F);
                 double d1 = isourceblock.getY() + (double) ((float) enumdirection.getAdjacentY() * 1.125F);
                 double d2 = isourceblock.getZ() + (double) ((float) enumdirection.getAdjacentZ() * 1.125F);
@@ -149,12 +149,12 @@ public class DispenserRegistry {
                 EntityBoat entityboat = new EntityBoat(world, d0, d1 + d3, d2);
 
                 world.addEntity(entityboat);
-                itemstack.a(1);
+                itemstack.cloneAndSubtract(1);
                 return itemstack;
             }
 
             protected void a(ISourceBlock isourceblock) {
-                isourceblock.i().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
+                isourceblock.getWorld().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
             }
         });
         DispenseBehaviorItem dispensebehavioritem = new DispenseBehaviorItem() {
@@ -164,7 +164,7 @@ public class DispenserRegistry {
                 ItemBucket itembucket = (ItemBucket) itemstack.getItem();
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.b(isourceblock.f()));
 
-                if (itembucket.a(isourceblock.i(), blockposition)) {
+                if (itembucket.a(isourceblock.getWorld(), blockposition)) {
                     itemstack.setItem(Items.BUCKET);
                     itemstack.count = 1;
                     return itemstack;
@@ -174,13 +174,13 @@ public class DispenserRegistry {
             }
         };
 
-        BlockDispenser.N.a(Items.LAVA_BUCKET, dispensebehavioritem);
-        BlockDispenser.N.a(Items.WATER_BUCKET, dispensebehavioritem);
-        BlockDispenser.N.a(Items.BUCKET, new DispenseBehaviorItem() {
+        BlockDispenser.REGISTRY.a(Items.LAVA_BUCKET, dispensebehavioritem);
+        BlockDispenser.REGISTRY.a(Items.WATER_BUCKET, dispensebehavioritem);
+        BlockDispenser.REGISTRY.a(Items.BUCKET, new DispenseBehaviorItem() {
             private final DispenseBehaviorItem b = new DispenseBehaviorItem();
 
             public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-                World world = isourceblock.i();
+                World world = isourceblock.getWorld();
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.b(isourceblock.f()));
                 IBlockData iblockdata = world.getType(blockposition);
                 Block block = iblockdata.getBlock();
@@ -208,11 +208,11 @@ public class DispenserRegistry {
                 return itemstack;
             }
         });
-        BlockDispenser.N.a(Items.FLINT_AND_STEEL, new DispenseBehaviorItem() {
+        BlockDispenser.REGISTRY.a(Items.FLINT_AND_STEEL, new DispenseBehaviorItem() {
             private boolean b = true;
 
             protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-                World world = isourceblock.i();
+                World world = isourceblock.getWorld();
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.b(isourceblock.f()));
 
                 if (world.isEmpty(blockposition)) {
@@ -232,19 +232,19 @@ public class DispenserRegistry {
 
             protected void a(ISourceBlock isourceblock) {
                 if (this.b) {
-                    isourceblock.i().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
+                    isourceblock.getWorld().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
                 } else {
-                    isourceblock.i().triggerEffect(1001, isourceblock.getBlockPosition(), 0);
+                    isourceblock.getWorld().triggerEffect(1001, isourceblock.getBlockPosition(), 0);
                 }
 
             }
         });
-        BlockDispenser.N.a(Items.DYE, new DispenseBehaviorItem() {
+        BlockDispenser.REGISTRY.a(Items.DYE, new DispenseBehaviorItem() {
             private boolean b = true;
 
             protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
                 if (EnumColor.WHITE == EnumColor.fromInvColorIndex(itemstack.getData())) {
-                    World world = isourceblock.i();
+                    World world = isourceblock.getWorld();
                     BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.b(isourceblock.f()));
 
                     if (ItemDye.a(itemstack, world, blockposition)) {
@@ -263,16 +263,16 @@ public class DispenserRegistry {
 
             protected void a(ISourceBlock isourceblock) {
                 if (this.b) {
-                    isourceblock.i().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
+                    isourceblock.getWorld().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
                 } else {
-                    isourceblock.i().triggerEffect(1001, isourceblock.getBlockPosition(), 0);
+                    isourceblock.getWorld().triggerEffect(1001, isourceblock.getBlockPosition(), 0);
                 }
 
             }
         });
-        BlockDispenser.N.a(Item.getItemOf(Blocks.TNT), new DispenseBehaviorItem() {
+        BlockDispenser.REGISTRY.a(Item.getItemOf(Blocks.TNT), new DispenseBehaviorItem() {
             protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-                World world = isourceblock.i();
+                World world = isourceblock.getWorld();
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.b(isourceblock.f()));
                 EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, (EntityLiving) null);
 
@@ -282,11 +282,11 @@ public class DispenserRegistry {
                 return itemstack;
             }
         });
-        BlockDispenser.N.a(Items.SKULL, new DispenseBehaviorItem() {
+        BlockDispenser.REGISTRY.a(Items.SKULL, new DispenseBehaviorItem() {
             private boolean b = true;
 
             protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-                World world = isourceblock.i();
+                World world = isourceblock.getWorld();
                 EnumDirection enumdirection = BlockDispenser.b(isourceblock.f());
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
                 BlockSkull blockskull = Blocks.SKULL;
@@ -334,18 +334,18 @@ public class DispenserRegistry {
 
             protected void a(ISourceBlock isourceblock) {
                 if (this.b) {
-                    isourceblock.i().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
+                    isourceblock.getWorld().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
                 } else {
-                    isourceblock.i().triggerEffect(1001, isourceblock.getBlockPosition(), 0);
+                    isourceblock.getWorld().triggerEffect(1001, isourceblock.getBlockPosition(), 0);
                 }
 
             }
         });
-        BlockDispenser.N.a(Item.getItemOf(Blocks.PUMPKIN), new DispenseBehaviorItem() {
+        BlockDispenser.REGISTRY.a(Item.getItemOf(Blocks.PUMPKIN), new DispenseBehaviorItem() {
             private boolean b = true;
 
             protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-                World world = isourceblock.i();
+                World world = isourceblock.getWorld();
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.b(isourceblock.f()));
                 BlockPumpkin blockpumpkin = (BlockPumpkin) Blocks.PUMPKIN;
 
@@ -364,9 +364,9 @@ public class DispenserRegistry {
 
             protected void a(ISourceBlock isourceblock) {
                 if (this.b) {
-                    isourceblock.i().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
+                    isourceblock.getWorld().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
                 } else {
-                    isourceblock.i().triggerEffect(1001, isourceblock.getBlockPosition(), 0);
+                    isourceblock.getWorld().triggerEffect(1001, isourceblock.getBlockPosition(), 0);
                 }
 
             }

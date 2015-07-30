@@ -30,7 +30,7 @@ public class RecipeMapExtend extends ShapedRecipes {
         }
     }
 
-    public ItemStack a(InventoryCrafting inventorycrafting) {
+    public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         ItemStack itemstack = null;
 
         for (int i = 0; i < inventorycrafting.getSize() && itemstack == null; ++i) {

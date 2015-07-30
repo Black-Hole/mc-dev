@@ -2,11 +2,11 @@ package net.minecraft.server;
 
 public class ContainerBeacon extends Container {
 
-    private IInventory a;
+    private IInventory beacon;
     private final ContainerBeacon.SlotBeacon f;
 
     public ContainerBeacon(IInventory iinventory, IInventory iinventory1) {
-        this.a = iinventory1;
+        this.beacon = iinventory1;
         this.a((Slot) (this.f = new ContainerBeacon.SlotBeacon(iinventory1, 0, 136, 110)));
         byte b0 = 36;
         short short0 = 137;
@@ -27,11 +27,11 @@ public class ContainerBeacon extends Container {
 
     public void addSlotListener(ICrafting icrafting) {
         super.addSlotListener(icrafting);
-        icrafting.setContainerData(this, this.a);
+        icrafting.setContainerData(this, this.beacon);
     }
 
     public IInventory e() {
-        return this.a;
+        return this.beacon;
     }
 
     public void b(EntityHuman entityhuman) {
@@ -47,7 +47,7 @@ public class ContainerBeacon extends Container {
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.a.a(entityhuman);
+        return this.beacon.a(entityhuman);
     }
 
     public ItemStack b(EntityHuman entityhuman, int i) {

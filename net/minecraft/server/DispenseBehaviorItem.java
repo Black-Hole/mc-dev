@@ -15,9 +15,9 @@ public class DispenseBehaviorItem implements IDispenseBehavior {
     protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
         EnumDirection enumdirection = BlockDispenser.b(isourceblock.f());
         IPosition iposition = BlockDispenser.a(isourceblock);
-        ItemStack itemstack1 = itemstack.a(1);
+        ItemStack itemstack1 = itemstack.cloneAndSubtract(1);
 
-        a(isourceblock.i(), itemstack1, 6, enumdirection, iposition);
+        a(isourceblock.getWorld(), itemstack1, 6, enumdirection, iposition);
         return itemstack;
     }
 
@@ -45,11 +45,11 @@ public class DispenseBehaviorItem implements IDispenseBehavior {
     }
 
     protected void a(ISourceBlock isourceblock) {
-        isourceblock.i().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
+        isourceblock.getWorld().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
     }
 
     protected void a(ISourceBlock isourceblock, EnumDirection enumdirection) {
-        isourceblock.i().triggerEffect(2000, isourceblock.getBlockPosition(), this.a(enumdirection));
+        isourceblock.getWorld().triggerEffect(2000, isourceblock.getBlockPosition(), this.a(enumdirection));
     }
 
     private int a(EnumDirection enumdirection) {

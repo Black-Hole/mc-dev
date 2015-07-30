@@ -23,7 +23,7 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
     }
 
     protected int f(World world, BlockPosition blockposition) {
-        AxisAlignedBB axisalignedbb = this.a(blockposition);
+        AxisAlignedBB axisalignedbb = this.getBoundingBox(blockposition);
         List list;
 
         switch (BlockPressurePlateBinary.SyntheticClass_1.a[this.b.ordinal()]) {

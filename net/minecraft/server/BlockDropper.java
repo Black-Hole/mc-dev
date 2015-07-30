@@ -14,7 +14,7 @@ public class BlockDropper extends BlockDispenser {
         return new TileEntityDropper();
     }
 
-    protected void dispense(World world, BlockPosition blockposition) {
+    public void dispense(World world, BlockPosition blockposition) {
         SourceBlock sourceblock = new SourceBlock(world, blockposition);
         TileEntityDispenser tileentitydispenser = (TileEntityDispenser) sourceblock.getTileEntity();
 
@@ -38,7 +38,7 @@ public class BlockDropper extends BlockDispenser {
                             itemstack1 = null;
                         }
                     } else {
-                        itemstack1 = TileEntityHopper.addItem(iinventory, itemstack.cloneItemStack().a(1), enumdirection.opposite());
+                        itemstack1 = TileEntityHopper.addItem(iinventory, itemstack.cloneItemStack().cloneAndSubtract(1), enumdirection.opposite());
                         if (itemstack1 == null) {
                             itemstack1 = itemstack.cloneItemStack();
                             if (--itemstack1.count <= 0) {

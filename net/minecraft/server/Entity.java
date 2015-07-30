@@ -658,7 +658,7 @@ public abstract class Entity implements ICommandListener {
         if (flag) {
             if (this.fallDistance > 0.0F) {
                 if (block != null) {
-                    block.a(this.world, blockposition, this, this.fallDistance);
+                    block.fallOn(this.world, blockposition, this, this.fallDistance);
                 } else {
                     this.e(this.fallDistance, 1.0F);
                 }

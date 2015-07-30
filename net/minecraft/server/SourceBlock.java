@@ -10,7 +10,7 @@ public class SourceBlock implements ISourceBlock {
         this.b = blockposition;
     }
 
-    public World i() {
+    public World getWorld() {
         return this.a;
     }
 

@@ -42,7 +42,7 @@ public class BlockSoil extends Block {
 
     }
 
-    public void a(World world, BlockPosition blockposition, Entity entity, float f) {
+    public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
         if (entity instanceof EntityLiving) {
             if (!world.isClientSide && world.random.nextFloat() < f - 0.5F) {
                 if (!(entity instanceof EntityHuman) && !world.getGameRules().getBoolean("mobGriefing")) {
@@ -52,7 +52,7 @@ public class BlockSoil extends Block {
                 world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
             }
 
-            super.a(world, blockposition, entity, f);
+            super.fallOn(world, blockposition, entity, f);
         }
     }
 

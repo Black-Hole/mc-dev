@@ -31,7 +31,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IUpdatePla
                 this.items[i] = null;
                 return itemstack;
             } else {
-                itemstack = this.items[i].a(j);
+                itemstack = this.items[i].cloneAndSubtract(j);
                 if (this.items[i].count == 0) {
                     this.items[i] = null;
                 }

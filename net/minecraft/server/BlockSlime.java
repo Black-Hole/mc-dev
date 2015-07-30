@@ -8,9 +8,9 @@ public class BlockSlime extends BlockHalfTransparent {
         this.frictionFactor = 0.8F;
     }
 
-    public void a(World world, BlockPosition blockposition, Entity entity, float f) {
+    public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
         if (entity.isSneaking()) {
-            super.a(world, blockposition, entity, f);
+            super.fallOn(world, blockposition, entity, f);
         } else {
             entity.e(f, 0.0F);
         }
