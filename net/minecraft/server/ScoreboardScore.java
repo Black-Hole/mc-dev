@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Comparator;
-import java.util.List;
 
 public class ScoreboardScore {
 
@@ -85,9 +84,5 @@ public class ScoreboardScore {
 
     public void a(boolean flag) {
         this.f = flag;
-    }
-
-    public void updateForList(List<EntityHuman> list) {
-        this.setScore(this.c.getCriteria().getScoreModifier(list));
     }
 }

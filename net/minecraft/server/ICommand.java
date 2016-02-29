@@ -10,11 +10,11 @@ public interface ICommand extends Comparable<ICommand> {
 
     List<String> b();
 
-    void execute(ICommandListener icommandlistener, String[] astring) throws CommandException;
+    void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException;
 
-    boolean canUse(ICommandListener icommandlistener);
+    boolean canUse(MinecraftServer minecraftserver, ICommandListener icommandlistener);
 
-    List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition);
+    List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition);
 
     boolean isListStart(String[] astring, int i);
 }

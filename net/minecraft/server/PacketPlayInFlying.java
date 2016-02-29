@@ -27,40 +27,28 @@ public class PacketPlayInFlying implements Packet<PacketListenerPlayIn> {
         packetdataserializer.writeByte(this.f ? 1 : 0);
     }
 
-    public double a() {
-        return this.x;
+    public double a(double d0) {
+        return this.hasPos ? this.x : d0;
     }
 
-    public double b() {
-        return this.y;
+    public double b(double d0) {
+        return this.hasPos ? this.y : d0;
     }
 
-    public double c() {
-        return this.z;
+    public double c(double d0) {
+        return this.hasPos ? this.z : d0;
     }
 
-    public float d() {
-        return this.yaw;
+    public float a(float f) {
+        return this.hasLook ? this.yaw : f;
     }
 
-    public float e() {
-        return this.pitch;
+    public float b(float f) {
+        return this.hasLook ? this.pitch : f;
     }
 
-    public boolean f() {
+    public boolean a() {
         return this.f;
-    }
-
-    public boolean g() {
-        return this.hasPos;
-    }
-
-    public boolean h() {
-        return this.hasLook;
-    }
-
-    public void a(boolean flag) {
-        this.hasPos = flag;
     }
 
     public void a(PacketListener packetlistener) {

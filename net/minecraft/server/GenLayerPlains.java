@@ -17,8 +17,8 @@ public class GenLayerPlains extends GenLayer {
                 int k1 = aint[j1 + 1 + (i1 + 1) * (k + 2)];
 
                 if (this.a(57) == 0) {
-                    if (k1 == BiomeBase.PLAINS.id) {
-                        aint1[j1 + i1 * k] = BiomeBase.PLAINS.id + 128;
+                    if (k1 == BiomeBase.a(Biomes.c)) {
+                        aint1[j1 + i1 * k] = BiomeBase.a(Biomes.Q);
                     } else {
                         aint1[j1 + i1 * k] = k1;
                     }

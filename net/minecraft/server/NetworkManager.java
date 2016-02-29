@@ -27,7 +27,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
-public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
+public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     private static final Logger g = LogManager.getLogger();
     public static final Marker a = MarkerManager.getMarker("NETWORK");
@@ -80,14 +80,14 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         this.l = this.channel.remoteAddress();
 
         try {
-            this.a(EnumProtocol.HANDSHAKING);
+            this.setProtocol(EnumProtocol.HANDSHAKING);
         } catch (Throwable throwable) {
             NetworkManager.g.fatal(throwable);
         }
 
     }
 
-    public void a(EnumProtocol enumprotocol) {
+    public void setProtocol(EnumProtocol enumprotocol) {
         this.channel.attr(NetworkManager.c).set(enumprotocol);
         this.channel.config().setAutoRead(true);
         NetworkManager.g.debug("Enabled auto read");
@@ -106,10 +106,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             chatmessage = new ChatMessage("disconnect.genericReason", new Object[] { "Internal Exception: " + throwable});
         }
 
+        NetworkManager.g.debug(throwable);
         this.close(chatmessage);
     }
 
-    protected void a(ChannelHandlerContext channelhandlercontext, Packet packet) throws Exception {
+    protected void a(ChannelHandlerContext channelhandlercontext, Packet<?> packet) throws Exception {
         if (this.channel.isOpen()) {
             try {
                 packet.a(this.m);
@@ -120,14 +121,14 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
     }
 
-    public void a(PacketListener packetlistener) {
+    public void setPacketListener(PacketListener packetlistener) {
         Validate.notNull(packetlistener, "packetListener", new Object[0]);
         NetworkManager.g.debug("Set listener of {} to {}", new Object[] { this, packetlistener});
         this.m = packetlistener;
     }
 
-    public void handle(Packet packet) {
-        if (this.g()) {
+    public void sendPacket(Packet<?> packet) {
+        if (this.isConnected()) {
             this.m();
             this.a(packet, (GenericFutureListener[]) null);
         } else {
@@ -142,8 +143,8 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
     }
 
-    public void a(Packet packet, GenericFutureListener<? extends Future<? super Void>> genericfuturelistener, GenericFutureListener<? extends Future<? super Void>>... agenericfuturelistener) {
-        if (this.g()) {
+    public void sendPacket(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> genericfuturelistener, GenericFutureListener<? extends Future<? super Void>>... agenericfuturelistener) {
+        if (this.isConnected()) {
             this.m();
             this.a(packet, (GenericFutureListener[]) ArrayUtils.add(agenericfuturelistener, 0, genericfuturelistener));
         } else {
@@ -158,7 +159,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
     }
 
-    private void a(final Packet packet, final GenericFutureListener<? extends Future<? super Void>>[] agenericfuturelistener) {
+    private void a(final Packet<?> packet, final GenericFutureListener<? extends Future<? super Void>>[] agenericfuturelistener) {
         final EnumProtocol enumprotocol = EnumProtocol.a(packet);
         final EnumProtocol enumprotocol1 = (EnumProtocol) this.channel.attr(NetworkManager.c).get();
 
@@ -169,7 +170,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
         if (this.channel.eventLoop().inEventLoop()) {
             if (enumprotocol != enumprotocol1) {
-                this.a(enumprotocol);
+                this.setProtocol(enumprotocol);
             }
 
             ChannelFuture channelfuture = this.channel.writeAndFlush(packet);
@@ -183,7 +184,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             this.channel.eventLoop().execute(new Runnable() {
                 public void run() {
                     if (enumprotocol != enumprotocol1) {
-                        NetworkManager.this.a(enumprotocol);
+                        NetworkManager.this.setProtocol(enumprotocol);
                     }
 
                     ChannelFuture channelfuture = NetworkManager.this.channel.writeAndFlush(packet);
@@ -218,8 +219,8 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
     public void a() {
         this.m();
-        if (this.m instanceof IUpdatePlayerListBox) {
-            ((IUpdatePlayerListBox) this.m).c();
+        if (this.m instanceof ITickable) {
+            ((ITickable) this.m).c();
         }
 
         this.channel.flush();
@@ -237,7 +238,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
     }
 
-    public boolean c() {
+    public boolean isLocal() {
         return this.channel instanceof LocalChannel || this.channel instanceof LocalServerChannel;
     }
 
@@ -247,7 +248,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         this.channel.pipeline().addBefore("prepender", "encrypt", new PacketEncrypter(MinecraftEncryption.a(1, secretkey)));
     }
 
-    public boolean g() {
+    public boolean isConnected() {
         return this.channel != null && this.channel.isOpen();
     }
 
@@ -255,7 +256,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         return this.channel == null;
     }
 
-    public PacketListener getPacketListener() {
+    public PacketListener i() {
         return this.m;
     }
 
@@ -263,11 +264,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         return this.n;
     }
 
-    public void k() {
+    public void stopReading() {
         this.channel.config().setAutoRead(false);
     }
 
-    public void a(int i) {
+    public void setCompressionLevel(int i) {
         if (i >= 0) {
             if (this.channel.pipeline().get("decompress") instanceof PacketDecompressor) {
                 ((PacketDecompressor) this.channel.pipeline().get("decompress")).a(i);
@@ -276,7 +277,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             }
 
             if (this.channel.pipeline().get("compress") instanceof PacketCompressor) {
-                ((PacketCompressor) this.channel.pipeline().get("decompress")).a(i);
+                ((PacketCompressor) this.channel.pipeline().get("compress")).a(i);
             } else {
                 this.channel.pipeline().addBefore("encoder", "compress", new PacketCompressor(i));
             }
@@ -292,17 +293,17 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
     }
 
-    public void l() {
+    public void handleDisconnection() {
         if (this.channel != null && !this.channel.isOpen()) {
-            if (!this.p) {
+            if (this.p) {
+                NetworkManager.g.warn("handleDisconnection() called twice");
+            } else {
                 this.p = true;
                 if (this.j() != null) {
-                    this.getPacketListener().a(this.j());
-                } else if (this.getPacketListener() != null) {
-                    this.getPacketListener().a(new ChatComponentText("Disconnected"));
+                    this.i().a(this.j());
+                } else if (this.i() != null) {
+                    this.i().a(new ChatComponentText("Disconnected"));
                 }
-            } else {
-                NetworkManager.g.warn("handleDisconnection() called twice");
             }
 
         }
@@ -314,10 +315,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
     static class QueuedPacket {
 
-        private final Packet a;
+        private final Packet<?> a;
         private final GenericFutureListener<? extends Future<? super Void>>[] b;
 
-        public QueuedPacket(Packet packet, GenericFutureListener<? extends Future<? super Void>>... agenericfuturelistener) {
+        public QueuedPacket(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>>... agenericfuturelistener) {
             this.a = packet;
             this.b = agenericfuturelistener;
         }

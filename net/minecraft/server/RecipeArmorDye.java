@@ -18,7 +18,7 @@ public class RecipeArmorDye implements IRecipe {
                 if (itemstack1.getItem() instanceof ItemArmor) {
                     ItemArmor itemarmor = (ItemArmor) itemstack1.getItem();
 
-                    if (itemarmor.x_() != ItemArmor.EnumArmorMaterial.LEATHER || itemstack != null) {
+                    if (itemarmor.d() != ItemArmor.EnumArmorMaterial.LEATHER || itemstack != null) {
                         return false;
                     }
 
@@ -55,13 +55,13 @@ public class RecipeArmorDye implements IRecipe {
             if (itemstack1 != null) {
                 if (itemstack1.getItem() instanceof ItemArmor) {
                     itemarmor = (ItemArmor) itemstack1.getItem();
-                    if (itemarmor.x_() != ItemArmor.EnumArmorMaterial.LEATHER || itemstack != null) {
+                    if (itemarmor.d() != ItemArmor.EnumArmorMaterial.LEATHER || itemstack != null) {
                         return null;
                     }
 
                     itemstack = itemstack1.cloneItemStack();
                     itemstack.count = 1;
-                    if (itemarmor.d_(itemstack1)) {
+                    if (itemarmor.e_(itemstack1)) {
                         l = itemarmor.b(itemstack);
                         f = (float) (l >> 16 & 255) / 255.0F;
                         f1 = (float) (l >> 8 & 255) / 255.0F;
@@ -106,7 +106,7 @@ public class RecipeArmorDye implements IRecipe {
             l = (int) ((float) l * f / f1);
             i1 = (k << 8) + l1;
             i1 = (i1 << 8) + l;
-            itemarmor.b(itemstack, i1);
+            itemarmor.a(itemstack, i1);
             return itemstack;
         }
     }

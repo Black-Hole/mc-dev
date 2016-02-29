@@ -132,13 +132,13 @@ public final class GameProfileSerializer {
                 int i = 0;
 
                 while (i < nbttaglist.size()) {
-                    NBTBase nbtbase3 = nbttaglist.g(i);
+                    NBTBase nbtbase3 = nbttaglist.h(i);
                     boolean flag1 = false;
                     int j = 0;
 
                     while (true) {
                         if (j < nbttaglist1.size()) {
-                            if (!a(nbtbase3, nbttaglist1.g(j), flag)) {
+                            if (!a(nbtbase3, nbttaglist1.h(j), flag)) {
                                 ++j;
                                 continue;
                             }
@@ -160,5 +160,30 @@ public final class GameProfileSerializer {
         } else {
             return nbtbase.equals(nbtbase1);
         }
+    }
+
+    public static NBTTagCompound a(UUID uuid) {
+        NBTTagCompound nbttagcompound = new NBTTagCompound();
+
+        nbttagcompound.setLong("M", uuid.getMostSignificantBits());
+        nbttagcompound.setLong("L", uuid.getLeastSignificantBits());
+        return nbttagcompound;
+    }
+
+    public static UUID b(NBTTagCompound nbttagcompound) {
+        return new UUID(nbttagcompound.getLong("M"), nbttagcompound.getLong("L"));
+    }
+
+    public static BlockPosition c(NBTTagCompound nbttagcompound) {
+        return new BlockPosition(nbttagcompound.getInt("X"), nbttagcompound.getInt("Y"), nbttagcompound.getInt("Z"));
+    }
+
+    public static NBTTagCompound a(BlockPosition blockposition) {
+        NBTTagCompound nbttagcompound = new NBTTagCompound();
+
+        nbttagcompound.setInt("X", blockposition.getX());
+        nbttagcompound.setInt("Y", blockposition.getY());
+        nbttagcompound.setInt("Z", blockposition.getZ());
+        return nbttagcompound;
     }
 }

@@ -3,18 +3,18 @@ package net.minecraft.server;
 import java.util.Iterator;
 import java.util.Random;
 
-public class BlockBed extends BlockDirectional {
+public class BlockBed extends BlockFacingHorizontal {
 
     public static final BlockStateEnum<BlockBed.EnumBedPart> PART = BlockStateEnum.of("part", BlockBed.EnumBedPart.class);
     public static final BlockStateBoolean OCCUPIED = BlockStateBoolean.of("occupied");
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5625D, 1.0D);
 
     public BlockBed() {
         super(Material.CLOTH);
-        this.j(this.blockStateList.getBlockData().set(BlockBed.PART, BlockBed.EnumBedPart.FOOT).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
-        this.l();
+        this.w(this.blockStateList.getBlockData().set(BlockBed.PART, BlockBed.EnumBedPart.FOOT).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -26,9 +26,9 @@ public class BlockBed extends BlockDirectional {
                 }
             }
 
-            if (world.worldProvider.e() && world.getBiome(blockposition) != BiomeBase.HELL) {
+            if (world.worldProvider.e() && world.getBiome(blockposition) != Biomes.j) {
                 if (((Boolean) iblockdata.get(BlockBed.OCCUPIED)).booleanValue()) {
-                    EntityHuman entityhuman1 = this.f(world, blockposition);
+                    EntityHuman entityhuman1 = this.c(world, blockposition);
 
                     if (entityhuman1 != null) {
                         entityhuman.b((IChatBaseComponent) (new ChatMessage("tile.bed.occupied", new Object[0])));
@@ -68,7 +68,7 @@ public class BlockBed extends BlockDirectional {
         }
     }
 
-    private EntityHuman f(World world, BlockPosition blockposition) {
+    private EntityHuman c(World world, BlockPosition blockposition) {
         Iterator iterator = world.players.iterator();
 
         EntityHuman entityhuman;
@@ -79,21 +79,17 @@ public class BlockBed extends BlockDirectional {
             }
 
             entityhuman = (EntityHuman) iterator.next();
-        } while (!entityhuman.isSleeping() || !entityhuman.bx.equals(blockposition));
+        } while (!entityhuman.isSleeping() || !entityhuman.bedPosition.equals(blockposition));
 
         return entityhuman;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
-    }
-
-    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        this.l();
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
@@ -116,8 +112,8 @@ public class BlockBed extends BlockDirectional {
         return iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.HEAD ? null : Items.BED;
     }
 
-    private void l() {
-        this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5625F, 1.0F);
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockBed.c;
     }
 
     public static BlockPosition a(World world, BlockPosition blockposition, int i) {
@@ -136,7 +132,7 @@ public class BlockBed extends BlockDirectional {
                 for (int k2 = k1; k2 <= i2; ++k2) {
                     BlockPosition blockposition1 = new BlockPosition(j2, k, k2);
 
-                    if (e(world, blockposition1)) {
+                    if (b(world, blockposition1)) {
                         if (i <= 0) {
                             return blockposition1;
                         }
@@ -150,8 +146,8 @@ public class BlockBed extends BlockDirectional {
         return null;
     }
 
-    protected static boolean e(World world, BlockPosition blockposition) {
-        return World.a((IBlockAccess) world, blockposition.down()) && !world.getType(blockposition).getBlock().getMaterial().isBuildable() && !world.getType(blockposition.up()).getBlock().getMaterial().isBuildable();
+    protected static boolean b(World world, BlockPosition blockposition) {
+        return world.getType(blockposition.down()).q() && !world.getType(blockposition).getMaterial().isBuildable() && !world.getType(blockposition.up()).getMaterial().isBuildable();
     }
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
@@ -161,8 +157,12 @@ public class BlockBed extends BlockDirectional {
 
     }
 
-    public int k() {
-        return 1;
+    public EnumPistonReaction h(IBlockData iblockdata) {
+        return EnumPistonReaction.DESTROY;
+    }
+
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Items.BED);
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
@@ -194,9 +194,17 @@ public class BlockBed extends BlockDirectional {
         return iblockdata;
     }
 
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return iblockdata.set(BlockBed.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockBed.FACING)));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockBed.FACING)));
+    }
+
     public int toLegacyData(IBlockData iblockdata) {
         byte b0 = 0;
-        int i = b0 | ((EnumDirection) iblockdata.get(BlockBed.FACING)).b();
+        int i = b0 | ((EnumDirection) iblockdata.get(BlockBed.FACING)).get2DRotationValue();
 
         if (iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.HEAD) {
             i |= 8;

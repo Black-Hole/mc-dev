@@ -18,10 +18,10 @@ public class InventoryLargeChest implements ITileInventory {
 
         this.left = itileinventory;
         this.right = itileinventory1;
-        if (itileinventory.r_()) {
-            itileinventory1.a(itileinventory.i());
-        } else if (itileinventory1.r_()) {
-            itileinventory.a(itileinventory1.i());
+        if (itileinventory.x_()) {
+            itileinventory1.a(itileinventory.y_());
+        } else if (itileinventory1.x_()) {
+            itileinventory.a(itileinventory1.y_());
         }
 
     }
@@ -98,14 +98,14 @@ public class InventoryLargeChest implements ITileInventory {
         return 0;
     }
 
-    public void b(int i, int j) {}
+    public void setProperty(int i, int j) {}
 
     public int g() {
         return 0;
     }
 
-    public boolean r_() {
-        return this.left.r_() || this.right.r_();
+    public boolean x_() {
+        return this.left.x_() || this.right.x_();
     }
 
     public void a(ChestLock chestlock) {
@@ -113,8 +113,8 @@ public class InventoryLargeChest implements ITileInventory {
         this.right.a(chestlock);
     }
 
-    public ChestLock i() {
-        return this.left.i();
+    public ChestLock y_() {
+        return this.left.y_();
     }
 
     public String getContainerName() {

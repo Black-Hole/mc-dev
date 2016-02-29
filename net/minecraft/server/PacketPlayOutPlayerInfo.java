@@ -42,7 +42,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = (PacketPlayOutPlayerInfo.EnumPlayerInfoAction) packetdataserializer.a(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.class);
-        int i = packetdataserializer.e();
+        int i = packetdataserializer.g();
 
         for (int j = 0; j < i; ++j) {
             GameProfile gameprofile = null;
@@ -52,8 +52,8 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
             switch (PacketPlayOutPlayerInfo.SyntheticClass_1.a[this.a.ordinal()]) {
             case 1:
-                gameprofile = new GameProfile(packetdataserializer.g(), packetdataserializer.c(16));
-                int l = packetdataserializer.e();
+                gameprofile = new GameProfile(packetdataserializer.i(), packetdataserializer.c(16));
+                int l = packetdataserializer.g();
 
                 for (int i1 = 0; i1 < l; ++i1) {
                     String s = packetdataserializer.c(32767);
@@ -66,32 +66,32 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
                     }
                 }
 
-                worldsettings_enumgamemode = WorldSettings.EnumGamemode.getById(packetdataserializer.e());
-                k = packetdataserializer.e();
+                worldsettings_enumgamemode = WorldSettings.EnumGamemode.getById(packetdataserializer.g());
+                k = packetdataserializer.g();
                 if (packetdataserializer.readBoolean()) {
-                    ichatbasecomponent = packetdataserializer.d();
+                    ichatbasecomponent = packetdataserializer.f();
                 }
                 break;
 
             case 2:
-                gameprofile = new GameProfile(packetdataserializer.g(), (String) null);
-                worldsettings_enumgamemode = WorldSettings.EnumGamemode.getById(packetdataserializer.e());
+                gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
+                worldsettings_enumgamemode = WorldSettings.EnumGamemode.getById(packetdataserializer.g());
                 break;
 
             case 3:
-                gameprofile = new GameProfile(packetdataserializer.g(), (String) null);
-                k = packetdataserializer.e();
+                gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
+                k = packetdataserializer.g();
                 break;
 
             case 4:
-                gameprofile = new GameProfile(packetdataserializer.g(), (String) null);
+                gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
                 if (packetdataserializer.readBoolean()) {
-                    ichatbasecomponent = packetdataserializer.d();
+                    ichatbasecomponent = packetdataserializer.f();
                 }
                 break;
 
             case 5:
-                gameprofile = new GameProfile(packetdataserializer.g(), (String) null);
+                gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
             }
 
             this.b.add(new PacketPlayOutPlayerInfo.PlayerInfoData(gameprofile, k, worldsettings_enumgamemode, ichatbasecomponent));

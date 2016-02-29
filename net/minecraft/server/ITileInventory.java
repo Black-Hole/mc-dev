@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public interface ITileInventory extends IInventory, ITileEntityContainer {
 
-    boolean r_();
+    boolean x_();
 
     void a(ChestLock chestlock);
 
-    ChestLock i();
+    ChestLock y_();
 }

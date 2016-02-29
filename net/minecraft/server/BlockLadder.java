@@ -1,60 +1,48 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import java.util.Iterator;
 
 public class BlockLadder extends Block {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
+    protected static final AxisAlignedBB b = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.1875D, 1.0D, 1.0D);
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.8125D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
+    protected static final AxisAlignedBB d = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.1875D);
+    protected static final AxisAlignedBB e = new AxisAlignedBB(0.0D, 0.0D, 0.8125D, 1.0D, 1.0D, 1.0D);
 
     protected BlockLadder() {
         super(Material.ORIENTABLE);
-        this.j(this.blockStateList.getBlockData().set(BlockLadder.FACING, EnumDirection.NORTH));
+        this.w(this.blockStateList.getBlockData().set(BlockLadder.FACING, EnumDirection.NORTH));
         this.a(CreativeModeTab.c);
     }
 
-    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        this.updateShape(world, blockposition);
-        return super.a(world, blockposition, iblockdata);
-    }
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        switch (BlockLadder.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockLadder.FACING)).ordinal()]) {
+        case 1:
+            return BlockLadder.e;
 
-    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        IBlockData iblockdata = iblockaccess.getType(blockposition);
+        case 2:
+            return BlockLadder.d;
 
-        if (iblockdata.getBlock() == this) {
-            float f = 0.125F;
+        case 3:
+            return BlockLadder.c;
 
-            switch (BlockLadder.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockLadder.FACING)).ordinal()]) {
-            case 1:
-                this.a(0.0F, 0.0F, 1.0F - f, 1.0F, 1.0F, 1.0F);
-                break;
-
-            case 2:
-                this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, f);
-                break;
-
-            case 3:
-                this.a(1.0F - f, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-                break;
-
-            case 4:
-            default:
-                this.a(0.0F, 0.0F, 0.0F, f, 1.0F, 1.0F);
-            }
-
+        case 4:
+        default:
+            return BlockLadder.b;
         }
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return world.getType(blockposition.west()).getBlock().isOccluding() ? true : (world.getType(blockposition.east()).getBlock().isOccluding() ? true : (world.getType(blockposition.north()).getBlock().isOccluding() ? true : world.getType(blockposition.south()).getBlock().isOccluding()));
+        return world.getType(blockposition.west()).l() ? true : (world.getType(blockposition.east()).l() ? true : (world.getType(blockposition.north()).l() ? true : world.getType(blockposition.south()).l()));
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
@@ -89,7 +77,7 @@ public class BlockLadder extends Block {
     }
 
     protected boolean a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        return world.getType(blockposition.shift(enumdirection.opposite())).getBlock().isOccluding();
+        return world.getType(blockposition.shift(enumdirection.opposite())).l();
     }
 
     public IBlockData fromLegacyData(int i) {
@@ -104,6 +92,14 @@ public class BlockLadder extends Block {
 
     public int toLegacyData(IBlockData iblockdata) {
         return ((EnumDirection) iblockdata.get(BlockLadder.FACING)).a();
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return iblockdata.set(BlockLadder.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockLadder.FACING)));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockLadder.FACING)));
     }
 
     protected BlockStateList getStateList() {

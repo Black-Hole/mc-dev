@@ -10,7 +10,7 @@ public abstract class BlockLogAbstract extends BlockRotatable {
         super(Material.WOOD);
         this.a(CreativeModeTab.b);
         this.c(2.0F);
-        this.a(BlockLogAbstract.f);
+        this.a(SoundEffectType.a);
     }
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -24,7 +24,7 @@ public abstract class BlockLogAbstract extends BlockRotatable {
                 BlockPosition blockposition1 = (BlockPosition) iterator.next();
                 IBlockData iblockdata1 = world.getType(blockposition1);
 
-                if (iblockdata1.getBlock().getMaterial() == Material.LEAVES && !((Boolean) iblockdata1.get(BlockLeaves.CHECK_DECAY)).booleanValue()) {
+                if (iblockdata1.getMaterial() == Material.LEAVES && !((Boolean) iblockdata1.get(BlockLeaves.CHECK_DECAY)).booleanValue()) {
                     world.setTypeAndData(blockposition1, iblockdata1.set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(true)), 4);
                 }
             }
@@ -33,29 +33,79 @@ public abstract class BlockLogAbstract extends BlockRotatable {
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        return super.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityliving).set(BlockLogAbstract.AXIS, BlockLogAbstract.EnumLogRotation.a(enumdirection.k()));
+        return this.fromLegacyData(i).set(BlockLogAbstract.AXIS, BlockLogAbstract.EnumLogRotation.a(enumdirection.k()));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        switch (BlockLogAbstract.SyntheticClass_1.b[enumblockrotation.ordinal()]) {
+        case 1:
+        case 2:
+            switch (BlockLogAbstract.SyntheticClass_1.a[((BlockLogAbstract.EnumLogRotation) iblockdata.get(BlockLogAbstract.AXIS)).ordinal()]) {
+            case 1:
+                return iblockdata.set(BlockLogAbstract.AXIS, BlockLogAbstract.EnumLogRotation.Z);
+
+            case 2:
+                return iblockdata.set(BlockLogAbstract.AXIS, BlockLogAbstract.EnumLogRotation.X);
+
+            default:
+                return iblockdata;
+            }
+
+        default:
+            return iblockdata;
+        }
     }
 
     static class SyntheticClass_1 {
 
-        static final int[] a = new int[EnumDirection.EnumAxis.values().length];
+        static final int[] a;
+        static final int[] b;
+        static final int[] c = new int[EnumDirection.EnumAxis.values().length];
 
         static {
             try {
-                BlockLogAbstract.SyntheticClass_1.a[EnumDirection.EnumAxis.X.ordinal()] = 1;
+                BlockLogAbstract.SyntheticClass_1.c[EnumDirection.EnumAxis.X.ordinal()] = 1;
             } catch (NoSuchFieldError nosuchfielderror) {
                 ;
             }
 
             try {
-                BlockLogAbstract.SyntheticClass_1.a[EnumDirection.EnumAxis.Y.ordinal()] = 2;
+                BlockLogAbstract.SyntheticClass_1.c[EnumDirection.EnumAxis.Y.ordinal()] = 2;
             } catch (NoSuchFieldError nosuchfielderror1) {
                 ;
             }
 
             try {
-                BlockLogAbstract.SyntheticClass_1.a[EnumDirection.EnumAxis.Z.ordinal()] = 3;
+                BlockLogAbstract.SyntheticClass_1.c[EnumDirection.EnumAxis.Z.ordinal()] = 3;
             } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            b = new int[EnumBlockRotation.values().length];
+
+            try {
+                BlockLogAbstract.SyntheticClass_1.b[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            try {
+                BlockLogAbstract.SyntheticClass_1.b[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror4) {
+                ;
+            }
+
+            a = new int[BlockLogAbstract.EnumLogRotation.values().length];
+
+            try {
+                BlockLogAbstract.SyntheticClass_1.a[BlockLogAbstract.EnumLogRotation.X.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror5) {
+                ;
+            }
+
+            try {
+                BlockLogAbstract.SyntheticClass_1.a[BlockLogAbstract.EnumLogRotation.Z.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror6) {
                 ;
             }
 
@@ -77,7 +127,7 @@ public abstract class BlockLogAbstract extends BlockRotatable {
         }
 
         public static BlockLogAbstract.EnumLogRotation a(EnumDirection.EnumAxis enumdirection_enumaxis) {
-            switch (BlockLogAbstract.SyntheticClass_1.a[enumdirection_enumaxis.ordinal()]) {
+            switch (BlockLogAbstract.SyntheticClass_1.c[enumdirection_enumaxis.ordinal()]) {
             case 1:
                 return BlockLogAbstract.EnumLogRotation.X;
 

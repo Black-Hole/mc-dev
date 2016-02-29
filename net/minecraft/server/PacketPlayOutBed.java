@@ -15,8 +15,8 @@ public class PacketPlayOutBed implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-        this.b = packetdataserializer.c();
+        this.a = packetdataserializer.g();
+        this.b = packetdataserializer.e();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

@@ -1,22 +1,16 @@
 package net.minecraft.server;
 
-import java.util.List;
-
 public class ScoreboardBaseCriteria implements IScoreboardCriteria {
 
-    private final String j;
+    private final String o;
 
     public ScoreboardBaseCriteria(String s) {
-        this.j = s;
+        this.o = s;
         IScoreboardCriteria.criteria.put(s, this);
     }
 
     public String getName() {
-        return this.j;
-    }
-
-    public int getScoreModifier(List<EntityHuman> list) {
-        return 0;
+        return this.o;
     }
 
     public boolean isReadOnly() {

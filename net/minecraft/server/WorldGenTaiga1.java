@@ -68,7 +68,7 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract {
                                 if (Math.abs(j1) != k1 || Math.abs(k2) != k1 || k1 <= 0) {
                                     BlockPosition blockposition1 = new BlockPosition(i1, i2, j2);
 
-                                    if (!world.getType(blockposition1).getBlock().o()) {
+                                    if (!world.getType(blockposition1).b()) {
                                         this.a(world, blockposition1, WorldGenTaiga1.b);
                                     }
                                 }
@@ -83,9 +83,9 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract {
                     }
 
                     for (i2 = 0; i2 < i - 1; ++i2) {
-                        Block block1 = world.getType(blockposition.up(i2)).getBlock();
+                        Material material = world.getType(blockposition.up(i2)).getMaterial();
 
-                        if (block1.getMaterial() == Material.AIR || block1.getMaterial() == Material.LEAVES) {
+                        if (material == Material.AIR || material == Material.LEAVES) {
                             this.a(world, blockposition.up(i2), WorldGenTaiga1.a);
                         }
                     }

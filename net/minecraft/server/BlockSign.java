@@ -2,21 +2,23 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class BlockSign extends BlockContainer {
+public class BlockSign extends BlockTileEntity {
+
+    protected static final AxisAlignedBB a = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D);
 
     protected BlockSign() {
         super(Material.WOOD);
-        float f = 0.25F;
-        float f1 = 1.0F;
-
-        this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
     }
 
-    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return null;
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockSign.a;
     }
 
-    public boolean d() {
+    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        return BlockSign.k;
+    }
+
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
@@ -24,11 +26,11 @@ public class BlockSign extends BlockContainer {
         return true;
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean g() {
+    public boolean d() {
         return true;
     }
 
@@ -40,7 +42,11 @@ public class BlockSign extends BlockContainer {
         return Items.SIGN;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Items.SIGN);
+    }
+
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -51,6 +57,6 @@ public class BlockSign extends BlockContainer {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return !this.e(world, blockposition) && super.canPlace(world, blockposition);
+        return !this.b(world, blockposition) && super.canPlace(world, blockposition);
     }
 }

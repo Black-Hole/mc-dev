@@ -7,37 +7,39 @@ public class ItemSign extends Item {
         this.a(CreativeModeTab.c);
     }
 
-    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (enumdirection == EnumDirection.DOWN) {
-            return false;
-        } else if (!world.getType(blockposition).getBlock().getMaterial().isBuildable()) {
-            return false;
-        } else {
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        IBlockData iblockdata = world.getType(blockposition);
+        boolean flag = iblockdata.getBlock().a((IBlockAccess) world, blockposition);
+
+        if (enumdirection != EnumDirection.DOWN && (iblockdata.getMaterial().isBuildable() || flag) && (!flag || enumdirection == EnumDirection.UP)) {
             blockposition = blockposition.shift(enumdirection);
-            if (!entityhuman.a(blockposition, enumdirection, itemstack)) {
-                return false;
-            } else if (!Blocks.STANDING_SIGN.canPlace(world, blockposition)) {
-                return false;
-            } else if (world.isClientSide) {
-                return true;
-            } else {
-                if (enumdirection == EnumDirection.UP) {
-                    int i = MathHelper.floor((double) ((entityhuman.yaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
-
-                    world.setTypeAndData(blockposition, Blocks.STANDING_SIGN.getBlockData().set(BlockFloorSign.ROTATION, Integer.valueOf(i)), 3);
+            if (entityhuman.a(blockposition, enumdirection, itemstack) && Blocks.STANDING_SIGN.canPlace(world, blockposition)) {
+                if (world.isClientSide) {
+                    return EnumInteractionResult.SUCCESS;
                 } else {
-                    world.setTypeAndData(blockposition, Blocks.WALL_SIGN.getBlockData().set(BlockWallSign.FACING, enumdirection), 3);
+                    blockposition = flag ? blockposition.down() : blockposition;
+                    if (enumdirection == EnumDirection.UP) {
+                        int i = MathHelper.floor((double) ((entityhuman.yaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
+
+                        world.setTypeAndData(blockposition, Blocks.STANDING_SIGN.getBlockData().set(BlockFloorSign.ROTATION, Integer.valueOf(i)), 11);
+                    } else {
+                        world.setTypeAndData(blockposition, Blocks.WALL_SIGN.getBlockData().set(BlockWallSign.FACING, enumdirection), 11);
+                    }
+
+                    --itemstack.count;
+                    TileEntity tileentity = world.getTileEntity(blockposition);
+
+                    if (tileentity instanceof TileEntitySign && !ItemBlock.a(world, entityhuman, blockposition, itemstack)) {
+                        entityhuman.openSign((TileEntitySign) tileentity);
+                    }
+
+                    return EnumInteractionResult.SUCCESS;
                 }
-
-                --itemstack.count;
-                TileEntity tileentity = world.getTileEntity(blockposition);
-
-                if (tileentity instanceof TileEntitySign && !ItemBlock.a(world, entityhuman, blockposition, itemstack)) {
-                    entityhuman.openSign((TileEntitySign) tileentity);
-                }
-
-                return true;
+            } else {
+                return EnumInteractionResult.FAIL;
             }
+        } else {
+            return EnumInteractionResult.FAIL;
         }
     }
 }

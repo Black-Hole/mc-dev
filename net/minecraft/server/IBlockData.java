@@ -3,9 +3,9 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableMap;
 import java.util.Collection;
 
-public interface IBlockData {
+public interface IBlockData extends IBlockProperties {
 
-    Collection<IBlockState> a();
+    Collection<IBlockState<?>> r();
 
     <T extends Comparable<T>> T get(IBlockState<T> iblockstate);
 
@@ -13,7 +13,7 @@ public interface IBlockData {
 
     <T extends Comparable<T>> IBlockData a(IBlockState<T> iblockstate);
 
-    ImmutableMap<IBlockState, Comparable> b();
+    ImmutableMap<IBlockState<?>, Comparable<?>> s();
 
     Block getBlock();
 }

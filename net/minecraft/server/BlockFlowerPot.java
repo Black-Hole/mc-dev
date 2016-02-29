@@ -2,49 +2,44 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class BlockFlowerPot extends BlockContainer {
+public class BlockFlowerPot extends BlockTileEntity {
 
     public static final BlockStateInteger LEGACY_DATA = BlockStateInteger.of("legacy_data", 0, 15);
     public static final BlockStateEnum<BlockFlowerPot.EnumFlowerPotContents> CONTENTS = BlockStateEnum.of("contents", BlockFlowerPot.EnumFlowerPotContents.class);
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.3125D, 0.0D, 0.3125D, 0.6875D, 0.375D, 0.6875D);
 
     public BlockFlowerPot() {
         super(Material.ORIENTABLE);
-        this.j(this.blockStateList.getBlockData().set(BlockFlowerPot.CONTENTS, BlockFlowerPot.EnumFlowerPotContents.EMPTY).set(BlockFlowerPot.LEGACY_DATA, Integer.valueOf(0)));
-        this.j();
+        this.w(this.blockStateList.getBlockData().set(BlockFlowerPot.CONTENTS, BlockFlowerPot.EnumFlowerPotContents.EMPTY).set(BlockFlowerPot.LEGACY_DATA, Integer.valueOf(0)));
     }
 
     public String getName() {
         return LocaleI18n.get("item.flowerPot.name");
     }
 
-    public void j() {
-        float f = 0.375F;
-        float f1 = f / 2.0F;
-
-        this.a(0.5F - f1, 0.0F, 0.5F - f1, 0.5F + f1, f, 0.5F + f1);
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockFlowerPot.c;
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public int b() {
-        return 3;
+    public EnumRenderType a(IBlockData iblockdata) {
+        return EnumRenderType.MODEL;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        ItemStack itemstack = entityhuman.inventory.getItemInHand();
-
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (itemstack != null && itemstack.getItem() instanceof ItemBlock) {
-            TileEntityFlowerPot tileentityflowerpot = this.f(world, blockposition);
+            TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
 
             if (tileentityflowerpot == null) {
                 return false;
-            } else if (tileentityflowerpot.b() != null) {
+            } else if (tileentityflowerpot.c() != null) {
                 return false;
             } else {
                 Block block = Block.asBlock(itemstack.getItem());
@@ -54,10 +49,10 @@ public class BlockFlowerPot extends BlockContainer {
                 } else {
                     tileentityflowerpot.a(itemstack.getItem(), itemstack.getData());
                     tileentityflowerpot.update();
-                    world.notify(blockposition);
-                    entityhuman.b(StatisticList.T);
-                    if (!entityhuman.abilities.canInstantlyBuild && --itemstack.count <= 0) {
-                        entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, (ItemStack) null);
+                    world.notify(blockposition, iblockdata, iblockdata, 3);
+                    entityhuman.b(StatisticList.V);
+                    if (!entityhuman.abilities.canInstantlyBuild) {
+                        --itemstack.count;
                     }
 
                     return true;
@@ -72,18 +67,26 @@ public class BlockFlowerPot extends BlockContainer {
         return block != Blocks.YELLOW_FLOWER && block != Blocks.RED_FLOWER && block != Blocks.CACTUS && block != Blocks.BROWN_MUSHROOM && block != Blocks.RED_MUSHROOM && block != Blocks.SAPLING && block != Blocks.DEADBUSH ? block == Blocks.TALLGRASS && i == BlockLongGrass.EnumTallGrassType.FERN.a() : true;
     }
 
-    public int getDropData(World world, BlockPosition blockposition) {
-        TileEntityFlowerPot tileentityflowerpot = this.f(world, blockposition);
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
 
-        return tileentityflowerpot != null && tileentityflowerpot.b() != null ? tileentityflowerpot.c() : 0;
+        if (tileentityflowerpot != null) {
+            ItemStack itemstack = tileentityflowerpot.b();
+
+            if (itemstack != null) {
+                return itemstack;
+            }
+        }
+
+        return new ItemStack(Items.FLOWER_POT);
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return super.canPlace(world, blockposition) && World.a((IBlockAccess) world, blockposition.down());
+        return super.canPlace(world, blockposition) && world.getType(blockposition.down()).q();
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!World.a((IBlockAccess) world, blockposition.down())) {
+        if (!world.getType(blockposition.down()).q()) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
         }
@@ -91,10 +94,10 @@ public class BlockFlowerPot extends BlockContainer {
     }
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        TileEntityFlowerPot tileentityflowerpot = this.f(world, blockposition);
+        TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
 
-        if (tileentityflowerpot != null && tileentityflowerpot.b() != null) {
-            a(world, blockposition, new ItemStack(tileentityflowerpot.b(), 1, tileentityflowerpot.c()));
+        if (tileentityflowerpot != null && tileentityflowerpot.c() != null) {
+            a(world, blockposition, new ItemStack(tileentityflowerpot.c(), 1, tileentityflowerpot.d()));
         }
 
         super.remove(world, blockposition, iblockdata);
@@ -103,7 +106,7 @@ public class BlockFlowerPot extends BlockContainer {
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
         super.a(world, blockposition, iblockdata, entityhuman);
         if (entityhuman.abilities.canInstantlyBuild) {
-            TileEntityFlowerPot tileentityflowerpot = this.f(world, blockposition);
+            TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
 
             if (tileentityflowerpot != null) {
                 tileentityflowerpot.a((Item) null, 0);
@@ -116,7 +119,7 @@ public class BlockFlowerPot extends BlockContainer {
         return Items.FLOWER_POT;
     }
 
-    private TileEntityFlowerPot f(World world, BlockPosition blockposition) {
+    private TileEntityFlowerPot c(World world, BlockPosition blockposition) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         return tileentity instanceof TileEntityFlowerPot ? (TileEntityFlowerPot) tileentity : null;
@@ -204,10 +207,10 @@ public class BlockFlowerPot extends BlockContainer {
 
         if (tileentity instanceof TileEntityFlowerPot) {
             TileEntityFlowerPot tileentityflowerpot = (TileEntityFlowerPot) tileentity;
-            Item item = tileentityflowerpot.b();
+            Item item = tileentityflowerpot.c();
 
             if (item instanceof ItemBlock) {
-                int i = tileentityflowerpot.c();
+                int i = tileentityflowerpot.d();
                 Block block = Block.asBlock(item);
 
                 if (block == Blocks.SAPLING) {

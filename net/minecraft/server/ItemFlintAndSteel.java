@@ -8,18 +8,18 @@ public class ItemFlintAndSteel extends Item {
         this.a(CreativeModeTab.i);
     }
 
-    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         blockposition = blockposition.shift(enumdirection);
         if (!entityhuman.a(blockposition, enumdirection, itemstack)) {
-            return false;
+            return EnumInteractionResult.FAIL;
         } else {
-            if (world.getType(blockposition).getBlock().getMaterial() == Material.AIR) {
-                world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, "fire.ignite", 1.0F, ItemFlintAndSteel.g.nextFloat() * 0.4F + 0.8F);
-                world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
+            if (world.getType(blockposition).getMaterial() == Material.AIR) {
+                world.a(entityhuman, blockposition, SoundEffects.bw, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.i.nextFloat() * 0.4F + 0.8F);
+                world.setTypeAndData(blockposition, Blocks.FIRE.getBlockData(), 11);
             }
 
             itemstack.damage(1, entityhuman);
-            return true;
+            return EnumInteractionResult.SUCCESS;
         }
     }
 }

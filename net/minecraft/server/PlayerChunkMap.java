@@ -1,90 +1,239 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.AbstractIterator;
+import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.Set;
 
 public class PlayerChunkMap {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Predicate<EntityPlayer> a = new Predicate() {
+        public boolean a(EntityPlayer entityplayer) {
+            return entityplayer != null && !entityplayer.isSpectator();
+        }
+
+        public boolean apply(Object object) {
+            return this.a((EntityPlayer) object);
+        }
+    };
+    private static final Predicate<EntityPlayer> b = new Predicate() {
+        public boolean a(EntityPlayer entityplayer) {
+            return entityplayer != null && (!entityplayer.isSpectator() || entityplayer.x().getGameRules().getBoolean("spectatorsGenerateChunks"));
+        }
+
+        public boolean apply(Object object) {
+            return this.a((EntityPlayer) object);
+        }
+    };
     private final WorldServer world;
     private final List<EntityPlayer> managedPlayers = Lists.newArrayList();
-    private final LongHashMap<PlayerChunkMap.PlayerChunk> d = new LongHashMap();
-    private final List<PlayerChunkMap.PlayerChunk> e = Lists.newArrayList();
-    private final List<PlayerChunkMap.PlayerChunk> f = Lists.newArrayList();
-    private int g;
-    private long h;
-    private final int[][] i = new int[][] { { 1, 0}, { 0, 1}, { -1, 0}, { 0, -1}};
+    private final LongHashMap<PlayerChunk> e = new LongHashMap();
+    private final Set<PlayerChunk> f = Sets.newHashSet();
+    private final List<PlayerChunk> g = Lists.newLinkedList();
+    private final List<PlayerChunk> h = Lists.newLinkedList();
+    private final List<PlayerChunk> i = Lists.newArrayList();
+    private int j;
+    private long k;
+    private boolean l = true;
+    private boolean m = true;
 
     public PlayerChunkMap(WorldServer worldserver) {
         this.world = worldserver;
         this.a(worldserver.getMinecraftServer().getPlayerList().s());
     }
 
-    public WorldServer a() {
+    public WorldServer getWorld() {
         return this.world;
+    }
+
+    public Iterator<Chunk> b() {
+        final Iterator iterator = this.i.iterator();
+
+        return new AbstractIterator() {
+            protected Chunk a() {
+                while (true) {
+                    if (iterator.hasNext()) {
+                        PlayerChunk playerchunk = (PlayerChunk) iterator.next();
+                        Chunk chunk = playerchunk.f();
+
+                        if (chunk == null) {
+                            continue;
+                        }
+
+                        if (!chunk.v() && chunk.isDone()) {
+                            return chunk;
+                        }
+
+                        if (!chunk.j()) {
+                            return chunk;
+                        }
+
+                        if (!playerchunk.a(128.0D, PlayerChunkMap.a)) {
+                            continue;
+                        }
+
+                        return chunk;
+                    }
+
+                    return (Chunk) this.endOfData();
+                }
+            }
+
+            protected Object computeNext() {
+                return this.a();
+            }
+        };
     }
 
     public void flush() {
         long i = this.world.getTime();
         int j;
-        PlayerChunkMap.PlayerChunk playerchunkmap_playerchunk;
+        PlayerChunk playerchunk;
 
-        if (i - this.h > 8000L) {
-            this.h = i;
+        if (i - this.k > 8000L) {
+            this.k = i;
 
-            for (j = 0; j < this.f.size(); ++j) {
-                playerchunkmap_playerchunk = (PlayerChunkMap.PlayerChunk) this.f.get(j);
-                playerchunkmap_playerchunk.b();
-                playerchunkmap_playerchunk.a();
-            }
-        } else {
-            for (j = 0; j < this.e.size(); ++j) {
-                playerchunkmap_playerchunk = (PlayerChunkMap.PlayerChunk) this.e.get(j);
-                playerchunkmap_playerchunk.b();
+            for (j = 0; j < this.i.size(); ++j) {
+                playerchunk = (PlayerChunk) this.i.get(j);
+                playerchunk.d();
+                playerchunk.c();
             }
         }
 
-        this.e.clear();
+        if (!this.f.isEmpty()) {
+            Iterator iterator = this.f.iterator();
+
+            while (iterator.hasNext()) {
+                playerchunk = (PlayerChunk) iterator.next();
+                playerchunk.d();
+            }
+
+            this.f.clear();
+        }
+
+        if (this.l && i % 4L == 0L) {
+            this.l = false;
+            Collections.sort(this.h, new Comparator() {
+                public int a(PlayerChunk playerchunk, PlayerChunk playerchunk1) {
+                    return ComparisonChain.start().compare(playerchunk.g(), playerchunk1.g()).result();
+                }
+
+                public int compare(Object object, Object object1) {
+                    return this.a((PlayerChunk) object, (PlayerChunk) object1);
+                }
+            });
+        }
+
+        if (this.m && i % 4L == 2L) {
+            this.m = false;
+            Collections.sort(this.g, new Comparator() {
+                public int a(PlayerChunk playerchunk, PlayerChunk playerchunk1) {
+                    return ComparisonChain.start().compare(playerchunk.g(), playerchunk1.g()).result();
+                }
+
+                public int compare(Object object, Object object1) {
+                    return this.a((PlayerChunk) object, (PlayerChunk) object1);
+                }
+            });
+        }
+
+        if (!this.h.isEmpty()) {
+            long k = System.nanoTime() + 50000000L;
+            int l = 49;
+            Iterator iterator1 = this.h.iterator();
+
+            while (iterator1.hasNext()) {
+                PlayerChunk playerchunk1 = (PlayerChunk) iterator1.next();
+
+                if (playerchunk1.f() == null) {
+                    boolean flag = playerchunk1.a(PlayerChunkMap.b);
+
+                    if (playerchunk1.a(flag)) {
+                        iterator1.remove();
+                        if (playerchunk1.b()) {
+                            this.g.remove(playerchunk1);
+                        }
+
+                        --l;
+                        if (l < 0 || System.nanoTime() > k) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!this.g.isEmpty()) {
+            j = 81;
+            Iterator iterator2 = this.g.iterator();
+
+            while (iterator2.hasNext()) {
+                PlayerChunk playerchunk2 = (PlayerChunk) iterator2.next();
+
+                if (playerchunk2.b()) {
+                    iterator2.remove();
+                    --j;
+                    if (j < 0) {
+                        break;
+                    }
+                }
+            }
+        }
+
         if (this.managedPlayers.isEmpty()) {
             WorldProvider worldprovider = this.world.worldProvider;
 
             if (!worldprovider.e()) {
-                this.world.chunkProviderServer.b();
+                this.world.getChunkProviderServer().b();
             }
         }
 
     }
 
     public boolean a(int i, int j) {
-        long k = (long) i + 2147483647L | (long) j + 2147483647L << 32;
+        long k = d(i, j);
 
-        return this.d.getEntry(k) != null;
+        return this.e.getEntry(k) != null;
     }
 
-    private PlayerChunkMap.PlayerChunk a(int i, int j, boolean flag) {
-        long k = (long) i + 2147483647L | (long) j + 2147483647L << 32;
-        PlayerChunkMap.PlayerChunk playerchunkmap_playerchunk = (PlayerChunkMap.PlayerChunk) this.d.getEntry(k);
+    public PlayerChunk b(int i, int j) {
+        return (PlayerChunk) this.e.getEntry(d(i, j));
+    }
 
-        if (playerchunkmap_playerchunk == null && flag) {
-            playerchunkmap_playerchunk = new PlayerChunkMap.PlayerChunk(i, j);
-            this.d.put(k, playerchunkmap_playerchunk);
-            this.f.add(playerchunkmap_playerchunk);
+    private PlayerChunk c(int i, int j) {
+        long k = d(i, j);
+        PlayerChunk playerchunk = (PlayerChunk) this.e.getEntry(k);
+
+        if (playerchunk == null) {
+            playerchunk = new PlayerChunk(this, i, j);
+            this.e.put(k, playerchunk);
+            this.i.add(playerchunk);
+            if (playerchunk.f() == null) {
+                this.h.add(playerchunk);
+            }
+
+            if (!playerchunk.b()) {
+                this.g.add(playerchunk);
+            }
         }
 
-        return playerchunkmap_playerchunk;
+        return playerchunk;
     }
 
     public void flagDirty(BlockPosition blockposition) {
         int i = blockposition.getX() >> 4;
         int j = blockposition.getZ() >> 4;
-        PlayerChunkMap.PlayerChunk playerchunkmap_playerchunk = this.a(i, j, false);
+        PlayerChunk playerchunk = this.b(i, j);
 
-        if (playerchunkmap_playerchunk != null) {
-            playerchunkmap_playerchunk.a(blockposition.getX() & 15, blockposition.getY(), blockposition.getZ() & 15);
+        if (playerchunk != null) {
+            playerchunk.a(blockposition.getX() & 15, blockposition.getY(), blockposition.getZ() & 15);
         }
 
     }
@@ -96,76 +245,32 @@ public class PlayerChunkMap {
         entityplayer.d = entityplayer.locX;
         entityplayer.e = entityplayer.locZ;
 
-        for (int k = i - this.g; k <= i + this.g; ++k) {
-            for (int l = j - this.g; l <= j + this.g; ++l) {
-                this.a(k, l, true).a(entityplayer);
+        for (int k = i - this.j; k <= i + this.j; ++k) {
+            for (int l = j - this.j; l <= j + this.j; ++l) {
+                this.c(k, l).a(entityplayer);
             }
         }
 
         this.managedPlayers.add(entityplayer);
-        this.b(entityplayer);
-    }
-
-    public void b(EntityPlayer entityplayer) {
-        ArrayList arraylist = Lists.newArrayList(entityplayer.chunkCoordIntPairQueue);
-        int i = 0;
-        int j = this.g;
-        int k = (int) entityplayer.locX >> 4;
-        int l = (int) entityplayer.locZ >> 4;
-        int i1 = 0;
-        int j1 = 0;
-        ChunkCoordIntPair chunkcoordintpair = this.a(k, l, true).location;
-
-        entityplayer.chunkCoordIntPairQueue.clear();
-        if (arraylist.contains(chunkcoordintpair)) {
-            entityplayer.chunkCoordIntPairQueue.add(chunkcoordintpair);
-        }
-
-        int k1;
-
-        for (k1 = 1; k1 <= j * 2; ++k1) {
-            for (int l1 = 0; l1 < 2; ++l1) {
-                int[] aint = this.i[i++ % 4];
-
-                for (int i2 = 0; i2 < k1; ++i2) {
-                    i1 += aint[0];
-                    j1 += aint[1];
-                    chunkcoordintpair = this.a(k + i1, l + j1, true).location;
-                    if (arraylist.contains(chunkcoordintpair)) {
-                        entityplayer.chunkCoordIntPairQueue.add(chunkcoordintpair);
-                    }
-                }
-            }
-        }
-
-        i %= 4;
-
-        for (k1 = 0; k1 < j * 2; ++k1) {
-            i1 += this.i[i][0];
-            j1 += this.i[i][1];
-            chunkcoordintpair = this.a(k + i1, l + j1, true).location;
-            if (arraylist.contains(chunkcoordintpair)) {
-                entityplayer.chunkCoordIntPairQueue.add(chunkcoordintpair);
-            }
-        }
-
+        this.e();
     }
 
     public void removePlayer(EntityPlayer entityplayer) {
         int i = (int) entityplayer.d >> 4;
         int j = (int) entityplayer.e >> 4;
 
-        for (int k = i - this.g; k <= i + this.g; ++k) {
-            for (int l = j - this.g; l <= j + this.g; ++l) {
-                PlayerChunkMap.PlayerChunk playerchunkmap_playerchunk = this.a(k, l, false);
+        for (int k = i - this.j; k <= i + this.j; ++k) {
+            for (int l = j - this.j; l <= j + this.j; ++l) {
+                PlayerChunk playerchunk = this.b(k, l);
 
-                if (playerchunkmap_playerchunk != null) {
-                    playerchunkmap_playerchunk.b(entityplayer);
+                if (playerchunk != null) {
+                    playerchunk.b(entityplayer);
                 }
             }
         }
 
         this.managedPlayers.remove(entityplayer);
+        this.e();
     }
 
     private boolean a(int i, int j, int k, int l, int i1) {
@@ -185,7 +290,7 @@ public class PlayerChunkMap {
         if (d2 >= 64.0D) {
             int k = (int) entityplayer.d >> 4;
             int l = (int) entityplayer.e >> 4;
-            int i1 = this.g;
+            int i1 = this.j;
             int j1 = i - k;
             int k1 = j - l;
 
@@ -193,36 +298,36 @@ public class PlayerChunkMap {
                 for (int l1 = i - i1; l1 <= i + i1; ++l1) {
                     for (int i2 = j - i1; i2 <= j + i1; ++i2) {
                         if (!this.a(l1, i2, k, l, i1)) {
-                            this.a(l1, i2, true).a(entityplayer);
+                            this.c(l1, i2).a(entityplayer);
                         }
 
                         if (!this.a(l1 - j1, i2 - k1, i, j, i1)) {
-                            PlayerChunkMap.PlayerChunk playerchunkmap_playerchunk = this.a(l1 - j1, i2 - k1, false);
+                            PlayerChunk playerchunk = this.b(l1 - j1, i2 - k1);
 
-                            if (playerchunkmap_playerchunk != null) {
-                                playerchunkmap_playerchunk.b(entityplayer);
+                            if (playerchunk != null) {
+                                playerchunk.b(entityplayer);
                             }
                         }
                     }
                 }
 
-                this.b(entityplayer);
                 entityplayer.d = entityplayer.locX;
                 entityplayer.e = entityplayer.locZ;
+                this.e();
             }
         }
     }
 
     public boolean a(EntityPlayer entityplayer, int i, int j) {
-        PlayerChunkMap.PlayerChunk playerchunkmap_playerchunk = this.a(i, j, false);
+        PlayerChunk playerchunk = this.b(i, j);
 
-        return playerchunkmap_playerchunk != null && playerchunkmap_playerchunk.b.contains(entityplayer) && !entityplayer.chunkCoordIntPairQueue.contains(playerchunkmap_playerchunk.location);
+        return playerchunk != null && playerchunk.d(entityplayer) && playerchunk.e();
     }
 
     public void a(int i) {
         i = MathHelper.clamp(i, 3, 32);
-        if (i != this.g) {
-            int j = i - this.g;
+        if (i != this.j) {
+            int j = i - this.j;
             ArrayList arraylist = Lists.newArrayList(this.managedPlayers);
             Iterator iterator = arraylist.iterator();
 
@@ -236,189 +341,56 @@ public class PlayerChunkMap {
                 if (j > 0) {
                     for (i1 = k - i; i1 <= k + i; ++i1) {
                         for (j1 = l - i; j1 <= l + i; ++j1) {
-                            PlayerChunkMap.PlayerChunk playerchunkmap_playerchunk = this.a(i1, j1, true);
+                            PlayerChunk playerchunk = this.c(i1, j1);
 
-                            if (!playerchunkmap_playerchunk.b.contains(entityplayer)) {
-                                playerchunkmap_playerchunk.a(entityplayer);
+                            if (!playerchunk.d(entityplayer)) {
+                                playerchunk.a(entityplayer);
                             }
                         }
                     }
                 } else {
-                    for (i1 = k - this.g; i1 <= k + this.g; ++i1) {
-                        for (j1 = l - this.g; j1 <= l + this.g; ++j1) {
+                    for (i1 = k - this.j; i1 <= k + this.j; ++i1) {
+                        for (j1 = l - this.j; j1 <= l + this.j; ++j1) {
                             if (!this.a(i1, j1, k, l, i)) {
-                                this.a(i1, j1, true).b(entityplayer);
+                                this.c(i1, j1).b(entityplayer);
                             }
                         }
                     }
                 }
             }
 
-            this.g = i;
+            this.j = i;
+            this.e();
         }
+    }
+
+    private void e() {
+        this.l = true;
+        this.m = true;
     }
 
     public static int getFurthestViewableBlock(int i) {
         return i * 16 - 16;
     }
 
-    class PlayerChunk {
+    private static long d(int i, int j) {
+        return (long) i + 2147483647L | (long) j + 2147483647L << 32;
+    }
 
-        private final List<EntityPlayer> b = Lists.newArrayList();
-        private final ChunkCoordIntPair location;
-        private short[] dirtyBlocks = new short[64];
-        private int dirtyCount;
-        private int f;
-        private long g;
+    public void a(PlayerChunk playerchunk) {
+        this.f.add(playerchunk);
+    }
 
-        public PlayerChunk(int i, int j) {
-            this.location = new ChunkCoordIntPair(i, j);
-            PlayerChunkMap.this.a().chunkProviderServer.getChunkAt(i, j);
-        }
+    public void b(PlayerChunk playerchunk) {
+        ChunkCoordIntPair chunkcoordintpair = playerchunk.a();
+        long i = d(chunkcoordintpair.x, chunkcoordintpair.z);
 
-        public void a(EntityPlayer entityplayer) {
-            if (this.b.contains(entityplayer)) {
-                PlayerChunkMap.a.debug("Failed to add player. {} already is in chunk {}, {}", new Object[] { entityplayer, Integer.valueOf(this.location.x), Integer.valueOf(this.location.z)});
-            } else {
-                if (this.b.isEmpty()) {
-                    this.g = PlayerChunkMap.this.world.getTime();
-                }
-
-                this.b.add(entityplayer);
-                entityplayer.chunkCoordIntPairQueue.add(this.location);
-            }
-        }
-
-        public void b(EntityPlayer entityplayer) {
-            if (this.b.contains(entityplayer)) {
-                Chunk chunk = PlayerChunkMap.this.world.getChunkAt(this.location.x, this.location.z);
-
-                if (chunk.isReady()) {
-                    entityplayer.playerConnection.sendPacket(new PacketPlayOutMapChunk(chunk, true, 0));
-                }
-
-                this.b.remove(entityplayer);
-                entityplayer.chunkCoordIntPairQueue.remove(this.location);
-                if (this.b.isEmpty()) {
-                    long i = (long) this.location.x + 2147483647L | (long) this.location.z + 2147483647L << 32;
-
-                    this.a(chunk);
-                    PlayerChunkMap.this.d.remove(i);
-                    PlayerChunkMap.this.f.remove(this);
-                    if (this.dirtyCount > 0) {
-                        PlayerChunkMap.this.e.remove(this);
-                    }
-
-                    PlayerChunkMap.this.a().chunkProviderServer.queueUnload(this.location.x, this.location.z);
-                }
-
-            }
-        }
-
-        public void a() {
-            this.a(PlayerChunkMap.this.world.getChunkAt(this.location.x, this.location.z));
-        }
-
-        private void a(Chunk chunk) {
-            chunk.c(chunk.w() + PlayerChunkMap.this.world.getTime() - this.g);
-            this.g = PlayerChunkMap.this.world.getTime();
-        }
-
-        public void a(int i, int j, int k) {
-            if (this.dirtyCount == 0) {
-                PlayerChunkMap.this.e.add(this);
-            }
-
-            this.f |= 1 << (j >> 4);
-            if (this.dirtyCount < 64) {
-                short short0 = (short) (i << 12 | k << 8 | j);
-
-                for (int l = 0; l < this.dirtyCount; ++l) {
-                    if (this.dirtyBlocks[l] == short0) {
-                        return;
-                    }
-                }
-
-                this.dirtyBlocks[this.dirtyCount++] = short0;
-            }
-
-        }
-
-        public void a(Packet packet) {
-            for (int i = 0; i < this.b.size(); ++i) {
-                EntityPlayer entityplayer = (EntityPlayer) this.b.get(i);
-
-                if (!entityplayer.chunkCoordIntPairQueue.contains(this.location)) {
-                    entityplayer.playerConnection.sendPacket(packet);
-                }
-            }
-
-        }
-
-        public void b() {
-            if (this.dirtyCount != 0) {
-                int i;
-                int j;
-                int k;
-
-                if (this.dirtyCount == 1) {
-                    i = (this.dirtyBlocks[0] >> 12 & 15) + this.location.x * 16;
-                    j = this.dirtyBlocks[0] & 255;
-                    k = (this.dirtyBlocks[0] >> 8 & 15) + this.location.z * 16;
-                    BlockPosition blockposition = new BlockPosition(i, j, k);
-
-                    this.a((Packet) (new PacketPlayOutBlockChange(PlayerChunkMap.this.world, blockposition)));
-                    if (PlayerChunkMap.this.world.getType(blockposition).getBlock().isTileEntity()) {
-                        this.a(PlayerChunkMap.this.world.getTileEntity(blockposition));
-                    }
-                } else {
-                    int l;
-
-                    if (this.dirtyCount == 64) {
-                        i = this.location.x * 16;
-                        j = this.location.z * 16;
-                        this.a((Packet) (new PacketPlayOutMapChunk(PlayerChunkMap.this.world.getChunkAt(this.location.x, this.location.z), false, this.f)));
-
-                        for (k = 0; k < 16; ++k) {
-                            if ((this.f & 1 << k) != 0) {
-                                l = k << 4;
-                                List list = PlayerChunkMap.this.world.getTileEntities(i, l, j, i + 16, l + 16, j + 16);
-
-                                for (int i1 = 0; i1 < list.size(); ++i1) {
-                                    this.a((TileEntity) list.get(i1));
-                                }
-                            }
-                        }
-                    } else {
-                        this.a((Packet) (new PacketPlayOutMultiBlockChange(this.dirtyCount, this.dirtyBlocks, PlayerChunkMap.this.world.getChunkAt(this.location.x, this.location.z))));
-
-                        for (i = 0; i < this.dirtyCount; ++i) {
-                            j = (this.dirtyBlocks[i] >> 12 & 15) + this.location.x * 16;
-                            k = this.dirtyBlocks[i] & 255;
-                            l = (this.dirtyBlocks[i] >> 8 & 15) + this.location.z * 16;
-                            BlockPosition blockposition1 = new BlockPosition(j, k, l);
-
-                            if (PlayerChunkMap.this.world.getType(blockposition1).getBlock().isTileEntity()) {
-                                this.a(PlayerChunkMap.this.world.getTileEntity(blockposition1));
-                            }
-                        }
-                    }
-                }
-
-                this.dirtyCount = 0;
-                this.f = 0;
-            }
-        }
-
-        private void a(TileEntity tileentity) {
-            if (tileentity != null) {
-                Packet packet = tileentity.getUpdatePacket();
-
-                if (packet != null) {
-                    this.a(packet);
-                }
-            }
-
-        }
+        playerchunk.c();
+        this.e.remove(i);
+        this.i.remove(playerchunk);
+        this.f.remove(playerchunk);
+        this.g.remove(playerchunk);
+        this.h.remove(playerchunk);
+        this.getWorld().getChunkProviderServer().queueUnload(chunkcoordintpair.x, chunkcoordintpair.z);
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map.Entry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class CommandHandler implements ICommandHandler {
+public abstract class CommandHandler implements ICommandHandler {
 
     private static final Logger a = LogManager.getLogger();
     private final Map<String, ICommand> b = Maps.newHashMap();
@@ -39,7 +40,7 @@ public class CommandHandler implements ICommandHandler {
             chatmessage = new ChatMessage("commands.generic.notFound", new Object[0]);
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             icommandlistener.sendMessage(chatmessage);
-        } else if (icommand.canUse(icommandlistener)) {
+        } else if (icommand.canUse(this.a(), icommandlistener)) {
             if (i > -1) {
                 List list = PlayerSelector.getPlayers(icommandlistener, astring[i], Entity.class);
                 String s2 = astring[i];
@@ -77,7 +78,7 @@ public class CommandHandler implements ICommandHandler {
         ChatMessage chatmessage;
 
         try {
-            icommand.execute(icommandlistener, astring);
+            icommand.execute(this.a(), icommandlistener, astring);
             return true;
         } catch (ExceptionUsage exceptionusage) {
             chatmessage = new ChatMessage("commands.generic.usage", new Object[] { new ChatMessage(exceptionusage.getMessage(), exceptionusage.getArgs())});
@@ -96,6 +97,8 @@ public class CommandHandler implements ICommandHandler {
 
         return false;
     }
+
+    protected abstract MinecraftServer a();
 
     public ICommand a(ICommand icommand) {
         this.b.put(icommand.getCommand(), icommand);
@@ -132,7 +135,7 @@ public class CommandHandler implements ICommandHandler {
             while (iterator.hasNext()) {
                 Entry entry = (Entry) iterator.next();
 
-                if (CommandAbstract.a(s1, (String) entry.getKey()) && ((ICommand) entry.getValue()).canUse(icommandlistener)) {
+                if (CommandAbstract.a(s1, (String) entry.getKey()) && ((ICommand) entry.getValue()).canUse(this.a(), icommandlistener)) {
                     arraylist.add(entry.getKey());
                 }
             }
@@ -142,12 +145,12 @@ public class CommandHandler implements ICommandHandler {
             if (astring.length > 1) {
                 ICommand icommand = (ICommand) this.b.get(s1);
 
-                if (icommand != null && icommand.canUse(icommandlistener)) {
-                    return icommand.tabComplete(icommandlistener, a(astring), blockposition);
+                if (icommand != null && icommand.canUse(this.a(), icommandlistener)) {
+                    return icommand.tabComplete(this.a(), icommandlistener, a(astring), blockposition);
                 }
             }
 
-            return null;
+            return Collections.emptyList();
         }
     }
 
@@ -158,7 +161,7 @@ public class CommandHandler implements ICommandHandler {
         while (iterator.hasNext()) {
             ICommand icommand = (ICommand) iterator.next();
 
-            if (icommand.canUse(icommandlistener)) {
+            if (icommand.canUse(this.a(), icommandlistener)) {
                 arraylist.add(icommand);
             }
         }

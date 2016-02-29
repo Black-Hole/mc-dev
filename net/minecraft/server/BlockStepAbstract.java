@@ -1,87 +1,56 @@
 package net.minecraft.server;
 
-import java.util.List;
 import java.util.Random;
 
 public abstract class BlockStepAbstract extends Block {
 
     public static final BlockStateEnum<BlockStepAbstract.EnumSlabHalf> HALF = BlockStateEnum.of("half", BlockStepAbstract.EnumSlabHalf.class);
+    protected static final AxisAlignedBB b = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 1.0D, 1.0D, 1.0D);
 
     public BlockStepAbstract(Material material) {
         super(material);
-        if (this.l()) {
-            this.r = true;
-        } else {
-            this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
-        }
-
-        this.e(255);
+        this.l = this.e();
+        this.d(255);
     }
 
-    protected boolean I() {
+    protected boolean o() {
         return false;
     }
 
-    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        if (this.l()) {
-            this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-        } else {
-            IBlockData iblockdata = iblockaccess.getType(blockposition);
-
-            if (iblockdata.getBlock() == this) {
-                if (iblockdata.get(BlockStepAbstract.HALF) == BlockStepAbstract.EnumSlabHalf.TOP) {
-                    this.a(0.0F, 0.5F, 0.0F, 1.0F, 1.0F, 1.0F);
-                } else {
-                    this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
-                }
-            }
-
-        }
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return this.e() ? BlockStepAbstract.j : (iblockdata.get(BlockStepAbstract.HALF) == BlockStepAbstract.EnumSlabHalf.TOP ? BlockStepAbstract.c : BlockStepAbstract.b);
     }
 
-    public void j() {
-        if (this.l()) {
-            this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-        } else {
-            this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
-        }
-
+    public boolean k(IBlockData iblockdata) {
+        return ((BlockStepAbstract) iblockdata.getBlock()).e() || iblockdata.get(BlockStepAbstract.HALF) == BlockStepAbstract.EnumSlabHalf.TOP;
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
-        this.updateShape(world, blockposition);
-        super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
-    }
-
-    public boolean c() {
-        return this.l();
+    public boolean b(IBlockData iblockdata) {
+        return this.e();
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
         IBlockData iblockdata = super.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityliving).set(BlockStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
 
-        return this.l() ? iblockdata : (enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) f1 <= 0.5D) ? iblockdata : iblockdata.set(BlockStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.TOP));
+        return this.e() ? iblockdata : (enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) f1 <= 0.5D) ? iblockdata : iblockdata.set(BlockStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.TOP));
     }
 
     public int a(Random random) {
-        return this.l() ? 2 : 1;
+        return this.e() ? 2 : 1;
     }
 
-    public boolean d() {
-        return this.l();
+    public boolean c(IBlockData iblockdata) {
+        return this.e();
     }
 
-    public abstract String b(int i);
+    public abstract String e(int i);
 
-    public int getDropData(World world, BlockPosition blockposition) {
-        return super.getDropData(world, blockposition) & 7;
-    }
+    public abstract boolean e();
 
-    public abstract boolean l();
+    public abstract IBlockState<?> g();
 
-    public abstract IBlockState<?> n();
-
-    public abstract Object a(ItemStack itemstack);
+    public abstract Comparable<?> a(ItemStack itemstack);
 
     public static enum EnumSlabHalf implements INamable {
 

@@ -2,10 +2,12 @@ package net.minecraft.server;
 
 public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
-    private final CommandBlockListenerAbstract a = new CommandBlockListenerAbstract() {
-        public void h() {
-            EntityMinecartCommandBlock.this.getDataWatcher().watch(23, this.getCommand());
-            EntityMinecartCommandBlock.this.getDataWatcher().watch(24, IChatBaseComponent.ChatSerializer.a(this.k()));
+    private static final DataWatcherObject<String> a = DataWatcher.a(EntityMinecartCommandBlock.class, DataWatcherRegistry.d);
+    private static final DataWatcherObject<IChatBaseComponent> b = DataWatcher.a(EntityMinecartCommandBlock.class, DataWatcherRegistry.e);
+    private final CommandBlockListenerAbstract c = new CommandBlockListenerAbstract() {
+        public void i() {
+            EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.a, this.getCommand());
+            EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.b, this.l());
         }
 
         public BlockPosition getChunkCoordinates() {
@@ -23,8 +25,12 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
         public Entity f() {
             return EntityMinecartCommandBlock.this;
         }
+
+        public MinecraftServer h() {
+            return EntityMinecartCommandBlock.this.world.getMinecraftServer();
+        }
     };
-    private int b = 0;
+    private int d = 0;
 
     public EntityMinecartCommandBlock(World world) {
         super(world);
@@ -34,60 +40,64 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    protected void h() {
-        super.h();
-        this.getDataWatcher().a(23, "");
-        this.getDataWatcher().a(24, "");
+    protected void i() {
+        super.i();
+        this.getDataWatcher().register(EntityMinecartCommandBlock.a, "");
+        this.getDataWatcher().register(EntityMinecartCommandBlock.b, new ChatComponentText(""));
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.a.b(nbttagcompound);
-        this.getDataWatcher().watch(23, this.getCommandBlock().getCommand());
-        this.getDataWatcher().watch(24, IChatBaseComponent.ChatSerializer.a(this.getCommandBlock().k()));
+        this.c.b(nbttagcompound);
+        this.getDataWatcher().set(EntityMinecartCommandBlock.a, this.getCommandBlock().getCommand());
+        this.getDataWatcher().set(EntityMinecartCommandBlock.b, this.getCommandBlock().l());
     }
 
     protected void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        this.a.a(nbttagcompound);
+        this.c.a(nbttagcompound);
     }
 
-    public EntityMinecartAbstract.EnumMinecartType s() {
+    public EntityMinecartAbstract.EnumMinecartType v() {
         return EntityMinecartAbstract.EnumMinecartType.COMMAND_BLOCK;
     }
 
-    public IBlockData u() {
+    public IBlockData x() {
         return Blocks.COMMAND_BLOCK.getBlockData();
     }
 
     public CommandBlockListenerAbstract getCommandBlock() {
-        return this.a;
+        return this.c;
     }
 
     public void a(int i, int j, int k, boolean flag) {
-        if (flag && this.ticksLived - this.b >= 4) {
+        if (flag && this.ticksLived - this.d >= 4) {
             this.getCommandBlock().a(this.world);
-            this.b = this.ticksLived;
+            this.d = this.ticksLived;
         }
 
     }
 
-    public boolean e(EntityHuman entityhuman) {
-        this.a.a(entityhuman);
+    public boolean a(EntityHuman entityhuman, ItemStack itemstack, EnumHand enumhand) {
+        this.c.a(entityhuman);
         return false;
     }
 
-    public void i(int i) {
-        super.i(i);
-        if (i == 24) {
+    public void a(DataWatcherObject<?> datawatcherobject) {
+        super.a(datawatcherobject);
+        if (EntityMinecartCommandBlock.b.equals(datawatcherobject)) {
             try {
-                this.a.b(IChatBaseComponent.ChatSerializer.a(this.getDataWatcher().getString(24)));
+                this.c.b((IChatBaseComponent) this.getDataWatcher().get(EntityMinecartCommandBlock.b));
             } catch (Throwable throwable) {
                 ;
             }
-        } else if (i == 23) {
-            this.a.setCommand(this.getDataWatcher().getString(23));
+        } else if (EntityMinecartCommandBlock.a.equals(datawatcherobject)) {
+            this.c.setCommand((String) this.getDataWatcher().get(EntityMinecartCommandBlock.a));
         }
 
+    }
+
+    public boolean br() {
+        return true;
     }
 }

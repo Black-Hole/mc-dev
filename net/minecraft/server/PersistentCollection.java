@@ -164,9 +164,8 @@ public class PersistentCollection {
 
                     while (iterator.hasNext()) {
                         String s1 = (String) iterator.next();
-                        short short0 = ((Short) this.d.get(s1)).shortValue();
 
-                        nbttagcompound.setShort(s1, short0);
+                        nbttagcompound.setShort(s1, ((Short) this.d.get(s1)).shortValue());
                     }
 
                     DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(file));

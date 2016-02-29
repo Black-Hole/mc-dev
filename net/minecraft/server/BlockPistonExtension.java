@@ -3,30 +3,92 @@ package net.minecraft.server;
 import java.util.List;
 import java.util.Random;
 
-public class BlockPistonExtension extends Block {
+public class BlockPistonExtension extends BlockDirectional {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing");
     public static final BlockStateEnum<BlockPistonExtension.EnumPistonType> TYPE = BlockStateEnum.of("type", BlockPistonExtension.EnumPistonType.class);
     public static final BlockStateBoolean SHORT = BlockStateBoolean.of("short");
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.75D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
+    protected static final AxisAlignedBB d = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.25D, 1.0D, 1.0D);
+    protected static final AxisAlignedBB e = new AxisAlignedBB(0.0D, 0.0D, 0.75D, 1.0D, 1.0D, 1.0D);
+    protected static final AxisAlignedBB f = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.25D);
+    protected static final AxisAlignedBB g = new AxisAlignedBB(0.0D, 0.75D, 0.0D, 1.0D, 1.0D, 1.0D);
+    protected static final AxisAlignedBB B = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D);
+    protected static final AxisAlignedBB C = new AxisAlignedBB(0.375D, -0.25D, 0.375D, 0.625D, 0.75D, 0.625D);
+    protected static final AxisAlignedBB D = new AxisAlignedBB(0.375D, 0.25D, 0.375D, 0.625D, 1.25D, 0.625D);
+    protected static final AxisAlignedBB E = new AxisAlignedBB(0.375D, 0.375D, -0.25D, 0.625D, 0.625D, 0.75D);
+    protected static final AxisAlignedBB F = new AxisAlignedBB(0.375D, 0.375D, 0.25D, 0.625D, 0.625D, 1.25D);
+    protected static final AxisAlignedBB G = new AxisAlignedBB(-0.25D, 0.375D, 0.375D, 0.75D, 0.625D, 0.625D);
+    protected static final AxisAlignedBB I = new AxisAlignedBB(0.25D, 0.375D, 0.375D, 1.25D, 0.625D, 0.625D);
 
     public BlockPistonExtension() {
         super(Material.PISTON);
-        this.j(this.blockStateList.getBlockData().set(BlockPistonExtension.FACING, EnumDirection.NORTH).set(BlockPistonExtension.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT).set(BlockPistonExtension.SHORT, Boolean.valueOf(false)));
-        this.a(BlockPistonExtension.i);
+        this.w(this.blockStateList.getBlockData().set(BlockPistonExtension.FACING, EnumDirection.NORTH).set(BlockPistonExtension.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT).set(BlockPistonExtension.SHORT, Boolean.valueOf(false)));
+        this.a(SoundEffectType.d);
         this.c(0.5F);
+    }
+
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        switch (BlockPistonExtension.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).ordinal()]) {
+        case 1:
+        default:
+            return BlockPistonExtension.B;
+
+        case 2:
+            return BlockPistonExtension.g;
+
+        case 3:
+            return BlockPistonExtension.f;
+
+        case 4:
+            return BlockPistonExtension.e;
+
+        case 5:
+            return BlockPistonExtension.d;
+
+        case 6:
+            return BlockPistonExtension.c;
+        }
+    }
+
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+        a(blockposition, axisalignedbb, list, iblockdata.c(world, blockposition));
+        a(blockposition, axisalignedbb, list, this.i(iblockdata));
+    }
+
+    private AxisAlignedBB i(IBlockData iblockdata) {
+        switch (BlockPistonExtension.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).ordinal()]) {
+        case 1:
+        default:
+            return BlockPistonExtension.D;
+
+        case 2:
+            return BlockPistonExtension.C;
+
+        case 3:
+            return BlockPistonExtension.F;
+
+        case 4:
+            return BlockPistonExtension.E;
+
+        case 5:
+            return BlockPistonExtension.I;
+
+        case 6:
+            return BlockPistonExtension.G;
+        }
+    }
+
+    public boolean k(IBlockData iblockdata) {
+        return iblockdata.get(BlockPistonExtension.FACING) == EnumDirection.UP;
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
         if (entityhuman.abilities.canInstantlyBuild) {
-            EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockPistonExtension.FACING);
+            BlockPosition blockposition1 = blockposition.shift(((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).opposite());
+            Block block = world.getType(blockposition1).getBlock();
 
-            if (enumdirection != null) {
-                BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
-                Block block = world.getType(blockposition1).getBlock();
-
-                if (block == Blocks.PISTON || block == Blocks.STICKY_PISTON) {
-                    world.setAir(blockposition1);
-                }
+            if (block == Blocks.PISTON || block == Blocks.STICKY_PISTON) {
+                world.setAir(blockposition1);
             }
         }
 
@@ -47,11 +109,11 @@ public class BlockPistonExtension extends Block {
 
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
@@ -67,85 +129,6 @@ public class BlockPistonExtension extends Block {
         return 0;
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
-        this.d(iblockdata);
-        super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
-        this.e(iblockdata);
-        super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
-        this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-    }
-
-    private void e(IBlockData iblockdata) {
-        float f = 0.25F;
-        float f1 = 0.375F;
-        float f2 = 0.625F;
-        float f3 = 0.25F;
-        float f4 = 0.75F;
-
-        switch (BlockPistonExtension.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).ordinal()]) {
-        case 1:
-            this.a(0.375F, 0.25F, 0.375F, 0.625F, 1.0F, 0.625F);
-            break;
-
-        case 2:
-            this.a(0.375F, 0.0F, 0.375F, 0.625F, 0.75F, 0.625F);
-            break;
-
-        case 3:
-            this.a(0.25F, 0.375F, 0.25F, 0.75F, 0.625F, 1.0F);
-            break;
-
-        case 4:
-            this.a(0.25F, 0.375F, 0.0F, 0.75F, 0.625F, 0.75F);
-            break;
-
-        case 5:
-            this.a(0.375F, 0.25F, 0.25F, 0.625F, 0.75F, 1.0F);
-            break;
-
-        case 6:
-            this.a(0.0F, 0.375F, 0.25F, 0.75F, 0.625F, 0.75F);
-        }
-
-    }
-
-    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        this.d(iblockaccess.getType(blockposition));
-    }
-
-    public void d(IBlockData iblockdata) {
-        float f = 0.25F;
-        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockPistonExtension.FACING);
-
-        if (enumdirection != null) {
-            switch (BlockPistonExtension.SyntheticClass_1.a[enumdirection.ordinal()]) {
-            case 1:
-                this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.25F, 1.0F);
-                break;
-
-            case 2:
-                this.a(0.0F, 0.75F, 0.0F, 1.0F, 1.0F, 1.0F);
-                break;
-
-            case 3:
-                this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 0.25F);
-                break;
-
-            case 4:
-                this.a(0.0F, 0.0F, 0.75F, 1.0F, 1.0F, 1.0F);
-                break;
-
-            case 5:
-                this.a(0.0F, 0.0F, 0.0F, 0.25F, 1.0F, 1.0F);
-                break;
-
-            case 6:
-                this.a(0.75F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-            }
-
-        }
-    }
-
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockPistonExtension.FACING);
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
@@ -159,14 +142,18 @@ public class BlockPistonExtension extends Block {
 
     }
 
-    public static EnumDirection b(int i) {
+    public static EnumDirection e(int i) {
         int j = i & 7;
 
         return j > 5 ? null : EnumDirection.fromType1(j);
     }
 
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(iblockdata.get(BlockPistonExtension.TYPE) == BlockPistonExtension.EnumPistonType.STICKY ? Blocks.STICKY_PISTON : Blocks.PISTON);
+    }
+
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockPistonExtension.FACING, b(i)).set(BlockPistonExtension.TYPE, (i & 8) > 0 ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT);
+        return this.getBlockData().set(BlockPistonExtension.FACING, e(i)).set(BlockPistonExtension.TYPE, (i & 8) > 0 ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT);
     }
 
     public int toLegacyData(IBlockData iblockdata) {
@@ -178,6 +165,14 @@ public class BlockPistonExtension extends Block {
         }
 
         return i;
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return iblockdata.set(BlockPistonExtension.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)));
     }
 
     protected BlockStateList getStateList() {

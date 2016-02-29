@@ -1,8 +1,10 @@
 package net.minecraft.server;
 
+import java.util.UUID;
+
 public interface EntityOwnable {
 
-    String getOwnerUUID();
+    UUID getOwnerUUID();
 
     Entity getOwner();
 }

@@ -9,7 +9,7 @@ public abstract class WorldGenTreeAbstract extends WorldGenerator {
     }
 
     protected boolean a(Block block) {
-        Material material = block.getMaterial();
+        Material material = block.getBlockData().getMaterial();
 
         return material == Material.AIR || material == Material.LEAVES || block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.LOG || block == Blocks.LOG2 || block == Blocks.SAPLING || block == Blocks.VINE;
     }

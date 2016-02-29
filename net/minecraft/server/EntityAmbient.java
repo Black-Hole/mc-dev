@@ -6,11 +6,7 @@ public abstract class EntityAmbient extends EntityInsentient implements IAnimal 
         super(world);
     }
 
-    public boolean cb() {
-        return false;
-    }
-
-    protected boolean a(EntityHuman entityhuman) {
+    public boolean a(EntityHuman entityhuman) {
         return false;
     }
 }

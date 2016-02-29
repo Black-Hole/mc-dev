@@ -17,7 +17,7 @@ public class PacketPlayOutOpenSignEditor implements Packet<PacketListenerPlayOut
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c();
+        this.a = packetdataserializer.e();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

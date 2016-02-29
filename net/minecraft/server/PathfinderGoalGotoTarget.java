@@ -24,8 +24,8 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
             --this.a;
             return false;
         } else {
-            this.a = 200 + this.c.bc().nextInt(200);
-            return this.g();
+            this.a = 200 + this.c.getRandom().nextInt(200);
+            return this.i();
         }
     }
 
@@ -36,13 +36,13 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
     public void c() {
         this.c.getNavigation().a((double) ((float) this.b.getX()) + 0.5D, (double) (this.b.getY() + 1), (double) ((float) this.b.getZ()) + 0.5D, this.d);
         this.e = 0;
-        this.f = this.c.bc().nextInt(this.c.bc().nextInt(1200) + 1200) + 1200;
+        this.f = this.c.getRandom().nextInt(this.c.getRandom().nextInt(1200) + 1200) + 1200;
     }
 
     public void d() {}
 
     public void e() {
-        if (this.c.c(this.b.up()) > 1.0D) {
+        if (this.c.d(this.b.up()) > 1.0D) {
             this.g = false;
             ++this.e;
             if (this.e % 40 == 0) {
@@ -59,7 +59,7 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
         return this.g;
     }
 
-    private boolean g() {
+    private boolean i() {
         int i = this.h;
         boolean flag = true;
         BlockPosition blockposition = new BlockPosition(this.c);
@@ -70,7 +70,7 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
                     for (int i1 = l < k && l > -k ? k : 0; i1 <= k; i1 = i1 > 0 ? -i1 : 1 - i1) {
                         BlockPosition blockposition1 = blockposition.a(l, j - 1, i1);
 
-                        if (this.c.e(blockposition1) && this.a(this.c.world, blockposition1)) {
+                        if (this.c.f(blockposition1) && this.a(this.c.world, blockposition1)) {
                             this.b = blockposition1;
                             return true;
                         }

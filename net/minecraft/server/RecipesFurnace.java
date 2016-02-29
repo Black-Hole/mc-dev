@@ -15,7 +15,7 @@ public class RecipesFurnace {
         return RecipesFurnace.a;
     }
 
-    private RecipesFurnace() {
+    public RecipesFurnace() {
         this.registerRecipe(Blocks.IRON_ORE, new ItemStack(Items.IRON_INGOT), 0.7F);
         this.registerRecipe(Blocks.GOLD_ORE, new ItemStack(Items.GOLD_INGOT), 1.0F);
         this.registerRecipe(Blocks.DIAMOND_ORE, new ItemStack(Items.DIAMOND), 1.0F);
@@ -26,7 +26,7 @@ public class RecipesFurnace {
         this.a(Items.RABBIT, new ItemStack(Items.COOKED_RABBIT), 0.35F);
         this.a(Items.MUTTON, new ItemStack(Items.COOKED_MUTTON), 0.35F);
         this.registerRecipe(Blocks.COBBLESTONE, new ItemStack(Blocks.STONE), 0.1F);
-        this.a(new ItemStack(Blocks.STONEBRICK, 1, BlockSmoothBrick.b), new ItemStack(Blocks.STONEBRICK, 1, BlockSmoothBrick.O), 0.1F);
+        this.a(new ItemStack(Blocks.STONEBRICK, 1, BlockSmoothBrick.b), new ItemStack(Blocks.STONEBRICK, 1, BlockSmoothBrick.d), 0.1F);
         this.a(Items.CLAY_BALL, new ItemStack(Items.BRICK), 0.3F);
         this.registerRecipe(Blocks.CLAY, new ItemStack(Blocks.HARDENED_CLAY), 0.35F);
         this.registerRecipe(Blocks.CACTUS, new ItemStack(Items.DYE, 1, EnumColor.GREEN.getInvColorIndex()), 0.2F);
@@ -36,6 +36,7 @@ public class RecipesFurnace {
         this.a(Items.POTATO, new ItemStack(Items.BAKED_POTATO), 0.35F);
         this.registerRecipe(Blocks.NETHERRACK, new ItemStack(Items.NETHERBRICK), 0.1F);
         this.a(new ItemStack(Blocks.SPONGE, 1, 1), new ItemStack(Blocks.SPONGE, 1, 0), 0.15F);
+        this.a(Items.CHORUS_FRUIT, new ItemStack(Items.CHORUS_FRUIT_POPPED), 0.1F);
         ItemFish.EnumFish[] aitemfish_enumfish = ItemFish.EnumFish.values();
         int i = aitemfish_enumfish.length;
 

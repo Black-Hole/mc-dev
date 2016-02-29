@@ -9,29 +9,24 @@ public class ItemHanging extends Item {
         this.a(CreativeModeTab.c);
     }
 
-    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (enumdirection == EnumDirection.DOWN) {
-            return false;
-        } else if (enumdirection == EnumDirection.UP) {
-            return false;
-        } else {
-            BlockPosition blockposition1 = blockposition.shift(enumdirection);
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
-            if (!entityhuman.a(blockposition1, enumdirection, itemstack)) {
-                return false;
-            } else {
-                EntityHanging entityhanging = this.a(world, blockposition1, enumdirection);
+        if (enumdirection != EnumDirection.DOWN && enumdirection != EnumDirection.UP && entityhuman.a(blockposition1, enumdirection, itemstack)) {
+            EntityHanging entityhanging = this.a(world, blockposition1, enumdirection);
 
-                if (entityhanging != null && entityhanging.survives()) {
-                    if (!world.isClientSide) {
-                        world.addEntity(entityhanging);
-                    }
-
-                    --itemstack.count;
+            if (entityhanging != null && entityhanging.survives()) {
+                if (!world.isClientSide) {
+                    entityhanging.o();
+                    world.addEntity(entityhanging);
                 }
 
-                return true;
+                --itemstack.count;
             }
+
+            return EnumInteractionResult.SUCCESS;
+        } else {
+            return EnumInteractionResult.FAIL;
         }
     }
 

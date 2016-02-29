@@ -1,23 +1,31 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Sets;
+import java.util.Set;
+
 public class EntityChicken extends EntityAnimal {
 
-    public float bm;
-    public float bo;
-    public float bp;
-    public float bq;
-    public float br = 1.0F;
-    public int bs;
-    public boolean bt;
+    private static final Set<Item> bD = Sets.newHashSet(new Item[] { Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS});
+    public float bv;
+    public float bw;
+    public float bx;
+    public float bz;
+    public float bA = 1.0F;
+    public int bB;
+    public boolean bC;
 
     public EntityChicken(World world) {
         super(world);
         this.setSize(0.4F, 0.7F);
-        this.bs = this.random.nextInt(6000) + 6000;
+        this.bB = this.random.nextInt(6000) + 6000;
+        this.a(PathType.WATER, 0.0F);
+    }
+
+    protected void r() {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.4D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
-        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.0D, Items.WHEAT_SEEDS, false));
+        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.0D, false, EntityChicken.bD));
         this.goalSelector.a(4, new PathfinderGoalFollowParent(this, 1.1D));
         this.goalSelector.a(5, new PathfinderGoalRandomStroll(this, 1.0D));
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
@@ -34,80 +42,65 @@ public class EntityChicken extends EntityAnimal {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
     }
 
-    public void m() {
-        super.m();
-        this.bq = this.bm;
-        this.bp = this.bo;
-        this.bo = (float) ((double) this.bo + (double) (this.onGround ? -1 : 4) * 0.3D);
-        this.bo = MathHelper.a(this.bo, 0.0F, 1.0F);
-        if (!this.onGround && this.br < 1.0F) {
-            this.br = 1.0F;
+    public void n() {
+        super.n();
+        this.bz = this.bv;
+        this.bx = this.bw;
+        this.bw = (float) ((double) this.bw + (double) (this.onGround ? -1 : 4) * 0.3D);
+        this.bw = MathHelper.a(this.bw, 0.0F, 1.0F);
+        if (!this.onGround && this.bA < 1.0F) {
+            this.bA = 1.0F;
         }
 
-        this.br = (float) ((double) this.br * 0.9D);
+        this.bA = (float) ((double) this.bA * 0.9D);
         if (!this.onGround && this.motY < 0.0D) {
             this.motY *= 0.6D;
         }
 
-        this.bm += this.br * 2.0F;
-        if (!this.world.isClientSide && !this.isBaby() && !this.isChickenJockey() && --this.bs <= 0) {
-            this.makeSound("mob.chicken.plop", 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+        this.bv += this.bA * 2.0F;
+        if (!this.world.isClientSide && !this.isBaby() && !this.isChickenJockey() && --this.bB <= 0) {
+            this.a(SoundEffects.aa, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             this.a(Items.EGG, 1);
-            this.bs = this.random.nextInt(6000) + 6000;
+            this.bB = this.random.nextInt(6000) + 6000;
         }
 
     }
 
     public void e(float f, float f1) {}
 
-    protected String z() {
-        return "mob.chicken.say";
+    protected SoundEffect G() {
+        return SoundEffects.Y;
     }
 
-    protected String bo() {
-        return "mob.chicken.hurt";
+    protected SoundEffect bR() {
+        return SoundEffects.ab;
     }
 
-    protected String bp() {
-        return "mob.chicken.hurt";
+    protected SoundEffect bS() {
+        return SoundEffects.Z;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.makeSound("mob.chicken.step", 0.15F, 1.0F);
+        this.a(SoundEffects.ac, 0.15F, 1.0F);
     }
 
-    protected Item getLoot() {
-        return Items.FEATHER;
-    }
-
-    protected void dropDeathLoot(boolean flag, int i) {
-        int j = this.random.nextInt(3) + this.random.nextInt(1 + i);
-
-        for (int k = 0; k < j; ++k) {
-            this.a(Items.FEATHER, 1);
-        }
-
-        if (this.isBurning()) {
-            this.a(Items.COOKED_CHICKEN, 1);
-        } else {
-            this.a(Items.CHICKEN, 1);
-        }
-
+    protected MinecraftKey J() {
+        return LootTables.B;
     }
 
     public EntityChicken b(EntityAgeable entityageable) {
         return new EntityChicken(this.world);
     }
 
-    public boolean d(ItemStack itemstack) {
-        return itemstack != null && itemstack.getItem() == Items.WHEAT_SEEDS;
+    public boolean e(ItemStack itemstack) {
+        return itemstack != null && EntityChicken.bD.contains(itemstack.getItem());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.bt = nbttagcompound.getBoolean("IsChickenJockey");
+        this.bC = nbttagcompound.getBoolean("IsChickenJockey");
         if (nbttagcompound.hasKey("EggLayTime")) {
-            this.bs = nbttagcompound.getInt("EggLayTime");
+            this.bB = nbttagcompound.getInt("EggLayTime");
         }
 
     }
@@ -118,34 +111,34 @@ public class EntityChicken extends EntityAnimal {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setBoolean("IsChickenJockey", this.bt);
-        nbttagcompound.setInt("EggLayTime", this.bs);
+        nbttagcompound.setBoolean("IsChickenJockey", this.bC);
+        nbttagcompound.setInt("EggLayTime", this.bB);
     }
 
     protected boolean isTypeNotPersistent() {
-        return this.isChickenJockey() && this.passenger == null;
+        return this.isChickenJockey() && !this.isVehicle();
     }
 
-    public void al() {
-        super.al();
-        float f = MathHelper.sin(this.aI * 3.1415927F / 180.0F);
-        float f1 = MathHelper.cos(this.aI * 3.1415927F / 180.0F);
+    public void k(Entity entity) {
+        super.k(entity);
+        float f = MathHelper.sin(this.aM * 0.017453292F);
+        float f1 = MathHelper.cos(this.aM * 0.017453292F);
         float f2 = 0.1F;
         float f3 = 0.0F;
 
-        this.passenger.setPosition(this.locX + (double) (f2 * f), this.locY + (double) (this.length * 0.5F) + this.passenger.am() + (double) f3, this.locZ - (double) (f2 * f1));
-        if (this.passenger instanceof EntityLiving) {
-            ((EntityLiving) this.passenger).aI = this.aI;
+        entity.setPosition(this.locX + (double) (f2 * f), this.locY + (double) (this.length * 0.5F) + entity.ax() + (double) f3, this.locZ - (double) (f2 * f1));
+        if (entity instanceof EntityLiving) {
+            ((EntityLiving) entity).aM = this.aM;
         }
 
     }
 
     public boolean isChickenJockey() {
-        return this.bt;
+        return this.bC;
     }
 
-    public void l(boolean flag) {
-        this.bt = flag;
+    public void o(boolean flag) {
+        this.bC = flag;
     }
 
     public EntityAgeable createChild(EntityAgeable entityageable) {

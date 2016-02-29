@@ -10,8 +10,8 @@ public class PathfinderGoalLookAtTradingPlayer extends PathfinderGoalLookAtPlaye
     }
 
     public boolean a() {
-        if (this.e.co()) {
-            this.b = this.e.v_();
+        if (this.e.dc()) {
+            this.b = this.e.t_();
             return true;
         } else {
             return false;

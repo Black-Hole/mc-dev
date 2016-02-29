@@ -196,7 +196,7 @@ public class NameReferencingFileConverter {
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {
                         minecraftserver.getUserCache().a(gameprofile);
-                        oplist.add(new OpListEntry(gameprofile, minecraftserver.p(), false));
+                        oplist.add(new OpListEntry(gameprofile, minecraftserver.q(), false));
                     }
 
                     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
@@ -267,14 +267,13 @@ public class NameReferencingFileConverter {
         }
     }
 
-    public static String a(String s) {
+    public static String a(final MinecraftServer minecraftserver, String s) {
         if (!UtilColor.b(s) && s.length() <= 16) {
-            final MinecraftServer minecraftserver = MinecraftServer.getServer();
             GameProfile gameprofile = minecraftserver.getUserCache().getProfile(s);
 
             if (gameprofile != null && gameprofile.getId() != null) {
                 return gameprofile.getId().toString();
-            } else if (!minecraftserver.T() && minecraftserver.getOnlineMode()) {
+            } else if (!minecraftserver.R() && minecraftserver.getOnlineMode()) {
                 final ArrayList arraylist = Lists.newArrayList();
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {
@@ -288,7 +287,7 @@ public class NameReferencingFileConverter {
                 };
 
                 a(minecraftserver, Lists.newArrayList(new String[] { s}), profilelookupcallback);
-                return arraylist.size() > 0 && ((GameProfile) arraylist.get(0)).getId() != null ? ((GameProfile) arraylist.get(0)).getId().toString() : "";
+                return !arraylist.isEmpty() && ((GameProfile) arraylist.get(0)).getId() != null ? ((GameProfile) arraylist.get(0)).getId().toString() : "";
             } else {
                 return EntityHuman.a(new GameProfile((UUID) null, s)).toString();
             }
@@ -315,7 +314,7 @@ public class NameReferencingFileConverter {
                 if (s.toLowerCase(Locale.ROOT).endsWith(".dat")) {
                     String s1 = s.substring(0, s.length() - ".dat".length());
 
-                    if (s1.length() > 0) {
+                    if (!s1.isEmpty()) {
                         arraylist.add(s1);
                     }
                 }

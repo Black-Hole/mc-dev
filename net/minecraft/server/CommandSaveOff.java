@@ -12,8 +12,7 @@ public class CommandSaveOff extends CommandAbstract {
         return "commands.save-off.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
-        MinecraftServer minecraftserver = MinecraftServer.getServer();
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         boolean flag = false;
 
         for (int i = 0; i < minecraftserver.worldServer.length; ++i) {
@@ -28,7 +27,7 @@ public class CommandSaveOff extends CommandAbstract {
         }
 
         if (flag) {
-            a(icommandlistener, this, "commands.save.disabled", new Object[0]);
+            a(icommandlistener, (ICommand) this, "commands.save.disabled", new Object[0]);
         } else {
             throw new CommandException("commands.save-off.alreadyOff", new Object[0]);
         }

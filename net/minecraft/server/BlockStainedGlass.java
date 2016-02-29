@@ -8,7 +8,7 @@ public class BlockStainedGlass extends BlockHalfTransparent {
 
     public BlockStainedGlass(Material material) {
         super(material, false);
-        this.j(this.blockStateList.getBlockData().set(BlockStainedGlass.COLOR, EnumColor.WHITE));
+        this.w(this.blockStateList.getBlockData().set(BlockStainedGlass.COLOR, EnumColor.WHITE));
         this.a(CreativeModeTab.b);
     }
 
@@ -16,7 +16,7 @@ public class BlockStainedGlass extends BlockHalfTransparent {
         return ((EnumColor) iblockdata.get(BlockStainedGlass.COLOR)).getColorIndex();
     }
 
-    public MaterialMapColor g(IBlockData iblockdata) {
+    public MaterialMapColor r(IBlockData iblockdata) {
         return ((EnumColor) iblockdata.get(BlockStainedGlass.COLOR)).e();
     }
 
@@ -24,11 +24,11 @@ public class BlockStainedGlass extends BlockHalfTransparent {
         return 0;
     }
 
-    protected boolean I() {
+    protected boolean o() {
         return true;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
@@ -38,14 +38,14 @@ public class BlockStainedGlass extends BlockHalfTransparent {
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (!world.isClientSide) {
-            BlockBeacon.f(world, blockposition);
+            BlockBeacon.c(world, blockposition);
         }
 
     }
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (!world.isClientSide) {
-            BlockBeacon.f(world, blockposition);
+            BlockBeacon.c(world, blockposition);
         }
 
     }

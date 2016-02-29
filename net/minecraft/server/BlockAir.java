@@ -6,15 +6,15 @@ public class BlockAir extends Block {
         super(Material.AIR);
     }
 
-    public int b() {
-        return -1;
+    public EnumRenderType a(IBlockData iblockdata) {
+        return EnumRenderType.INVISIBLE;
     }
 
-    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return null;
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
@@ -24,7 +24,11 @@ public class BlockAir extends Block {
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {}
 
-    public boolean a(World world, BlockPosition blockposition) {
+    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         return true;
+    }
+
+    public boolean c(IBlockData iblockdata) {
+        return false;
     }
 }

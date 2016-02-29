@@ -37,8 +37,8 @@ public class TileEntityBanner extends TileEntity {
         this.g = true;
     }
 
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void save(NBTTagCompound nbttagcompound) {
+        super.save(nbttagcompound);
         a(nbttagcompound, this.color, this.patterns);
     }
 
@@ -60,10 +60,10 @@ public class TileEntityBanner extends TileEntity {
         this.g = true;
     }
 
-    public Packet getUpdatePacket() {
+    public Packet<?> getUpdatePacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        this.b(nbttagcompound);
+        this.save(nbttagcompound);
         return new PacketPlayOutTileEntityData(this.position, 6, nbttagcompound);
     }
 
@@ -87,6 +87,12 @@ public class TileEntityBanner extends TileEntity {
         return this.patterns;
     }
 
+    public static void a(ItemStack itemstack, EnumColor enumcolor) {
+        NBTTagCompound nbttagcompound = itemstack.a("BlockEntityTag", true);
+
+        nbttagcompound.setInt("Base", enumcolor.getInvColorIndex());
+    }
+
     public static void e(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.a("BlockEntityTag", false);
 
@@ -94,7 +100,7 @@ public class TileEntityBanner extends TileEntity {
             NBTTagList nbttaglist = nbttagcompound.getList("Patterns", 10);
 
             if (nbttaglist.size() > 0) {
-                nbttaglist.a(nbttaglist.size() - 1);
+                nbttaglist.remove(nbttaglist.size() - 1);
                 if (nbttaglist.isEmpty()) {
                     itemstack.getTag().remove("BlockEntityTag");
                     if (itemstack.getTag().isEmpty()) {

@@ -6,7 +6,7 @@ public class BlockSandStone extends Block {
 
     public BlockSandStone() {
         super(Material.STONE);
-        this.j(this.blockStateList.getBlockData().set(BlockSandStone.TYPE, BlockSandStone.EnumSandstoneVariant.DEFAULT));
+        this.w(this.blockStateList.getBlockData().set(BlockSandStone.TYPE, BlockSandStone.EnumSandstoneVariant.DEFAULT));
         this.a(CreativeModeTab.b);
     }
 
@@ -14,7 +14,7 @@ public class BlockSandStone extends Block {
         return ((BlockSandStone.EnumSandstoneVariant) iblockdata.get(BlockSandStone.TYPE)).a();
     }
 
-    public MaterialMapColor g(IBlockData iblockdata) {
+    public MaterialMapColor r(IBlockData iblockdata) {
         return MaterialMapColor.d;
     }
 

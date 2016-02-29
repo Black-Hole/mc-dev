@@ -5,13 +5,13 @@ public class ChunkSection {
     private int yPos;
     private int nonEmptyBlockCount;
     private int tickingBlockCount;
-    private char[] blockIds;
+    private DataPaletteBlock blockIds;
     private NibbleArray emittedLight;
     private NibbleArray skyLight;
 
     public ChunkSection(int i, boolean flag) {
         this.yPos = i;
-        this.blockIds = new char[4096];
+        this.blockIds = new DataPaletteBlock();
         this.emittedLight = new NibbleArray();
         if (flag) {
             this.skyLight = new NibbleArray();
@@ -20,9 +20,7 @@ public class ChunkSection {
     }
 
     public IBlockData getType(int i, int j, int k) {
-        IBlockData iblockdata = (IBlockData) Block.d.a(this.blockIds[j << 8 | k << 4 | i]);
-
-        return iblockdata != null ? iblockdata : Blocks.AIR.getBlockData();
+        return this.blockIds.a(i, j, k);
     }
 
     public void setType(int i, int j, int k, IBlockData iblockdata) {
@@ -44,17 +42,7 @@ public class ChunkSection {
             }
         }
 
-        this.blockIds[j << 8 | k << 4 | i] = (char) Block.d.b(iblockdata);
-    }
-
-    public Block b(int i, int j, int k) {
-        return this.getType(i, j, k).getBlock();
-    }
-
-    public int c(int i, int j, int k) {
-        IBlockData iblockdata = this.getType(i, j, k);
-
-        return iblockdata.getBlock().toLegacyData(iblockdata);
+        this.blockIds.setBlock(i, j, k, iblockdata);
     }
 
     public boolean a() {
@@ -73,7 +61,7 @@ public class ChunkSection {
         this.skyLight.a(i, j, k, l);
     }
 
-    public int d(int i, int j, int k) {
+    public int b(int i, int j, int k) {
         return this.skyLight.a(i, j, k);
     }
 
@@ -81,7 +69,7 @@ public class ChunkSection {
         this.emittedLight.a(i, j, k, l);
     }
 
-    public int e(int i, int j, int k) {
+    public int c(int i, int j, int k) {
         return this.emittedLight.a(i, j, k);
     }
 
@@ -92,7 +80,7 @@ public class ChunkSection {
         for (int i = 0; i < 16; ++i) {
             for (int j = 0; j < 16; ++j) {
                 for (int k = 0; k < 16; ++k) {
-                    Block block = this.b(i, j, k);
+                    Block block = this.getType(i, j, k).getBlock();
 
                     if (block != Blocks.AIR) {
                         ++this.nonEmptyBlockCount;
@@ -106,12 +94,8 @@ public class ChunkSection {
 
     }
 
-    public char[] getIdArray() {
+    public DataPaletteBlock getBlocks() {
         return this.blockIds;
-    }
-
-    public void a(char[] achar) {
-        this.blockIds = achar;
     }
 
     public NibbleArray getEmittedLightArray() {

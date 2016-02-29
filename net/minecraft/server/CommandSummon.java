@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandSummon extends CommandAbstract {
@@ -19,16 +20,16 @@ public class CommandSummon extends CommandAbstract {
         return "commands.summon.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 1) {
             throw new ExceptionUsage("commands.summon.usage", new Object[0]);
         } else {
             String s = astring[0];
             BlockPosition blockposition = icommandlistener.getChunkCoordinates();
             Vec3D vec3d = icommandlistener.d();
-            double d0 = vec3d.a;
-            double d1 = vec3d.b;
-            double d2 = vec3d.c;
+            double d0 = vec3d.x;
+            double d1 = vec3d.y;
+            double d2 = vec3d.z;
 
             if (astring.length >= 4) {
                 d0 = b(d0, astring[1], true);
@@ -42,8 +43,8 @@ public class CommandSummon extends CommandAbstract {
             if (!world.isLoaded(blockposition)) {
                 throw new CommandException("commands.summon.outOfWorld", new Object[0]);
             } else if ("LightningBolt".equals(s)) {
-                world.strikeLightning(new EntityLightning(world, d0, d1, d2));
-                a(icommandlistener, this, "commands.summon.success", new Object[0]);
+                world.strikeLightning(new EntityLightning(world, d0, d1, d2, false));
+                a(icommandlistener, (ICommand) this, "commands.summon.success", new Object[0]);
             } else {
                 NBTTagCompound nbttagcompound = new NBTTagCompound();
                 boolean flag = false;
@@ -52,7 +53,7 @@ public class CommandSummon extends CommandAbstract {
                     IChatBaseComponent ichatbasecomponent = a(icommandlistener, astring, 4);
 
                     try {
-                        nbttagcompound = MojangsonParser.parse(ichatbasecomponent.c());
+                        nbttagcompound = MojangsonParser.parse(ichatbasecomponent.toPlainText());
                         flag = true;
                     } catch (MojangsonParseException mojangsonparseexception) {
                         throw new CommandException("commands.summon.tagError", new Object[] { mojangsonparseexception.getMessage()});
@@ -60,45 +61,23 @@ public class CommandSummon extends CommandAbstract {
                 }
 
                 nbttagcompound.setString("id", s);
-
-                Entity entity;
-
-                try {
-                    entity = EntityTypes.a(nbttagcompound, world);
-                } catch (RuntimeException runtimeexception) {
-                    throw new CommandException("commands.summon.failed", new Object[0]);
-                }
+                Entity entity = ChunkRegionLoader.a(nbttagcompound, world, d0, d1, d2, true);
 
                 if (entity == null) {
                     throw new CommandException("commands.summon.failed", new Object[0]);
                 } else {
                     entity.setPositionRotation(d0, d1, d2, entity.yaw, entity.pitch);
                     if (!flag && entity instanceof EntityInsentient) {
-                        ((EntityInsentient) entity).prepare(world.E(new BlockPosition(entity)), (GroupDataEntity) null);
+                        ((EntityInsentient) entity).prepare(world.D(new BlockPosition(entity)), (GroupDataEntity) null);
                     }
 
-                    world.addEntity(entity);
-                    Entity entity1 = entity;
-
-                    for (NBTTagCompound nbttagcompound1 = nbttagcompound; entity1 != null && nbttagcompound1.hasKeyOfType("Riding", 10); nbttagcompound1 = nbttagcompound1.getCompound("Riding")) {
-                        Entity entity2 = EntityTypes.a(nbttagcompound1.getCompound("Riding"), world);
-
-                        if (entity2 != null) {
-                            entity2.setPositionRotation(d0, d1, d2, entity2.yaw, entity2.pitch);
-                            world.addEntity(entity2);
-                            entity1.mount(entity2);
-                        }
-
-                        entity1 = entity2;
-                    }
-
-                    a(icommandlistener, this, "commands.summon.success", new Object[0]);
+                    a(icommandlistener, (ICommand) this, "commands.summon.success", new Object[0]);
                 }
             }
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, (Collection) EntityTypes.b()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : null);
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, (Collection) EntityTypes.b()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : Collections.emptyList());
     }
 }

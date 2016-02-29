@@ -72,14 +72,16 @@ public final class WorldSettings {
 
     public static enum EnumGamemode {
 
-        NOT_SET(-1, ""), SURVIVAL(0, "survival"), CREATIVE(1, "creative"), ADVENTURE(2, "adventure"), SPECTATOR(3, "spectator");
+        NOT_SET(-1, "", ""), SURVIVAL(0, "survival", "s"), CREATIVE(1, "creative", "c"), ADVENTURE(2, "adventure", "a"), SPECTATOR(3, "spectator", "sp");
 
         int f;
         String g;
+        String h;
 
-        private EnumGamemode(int i, String s) {
+        private EnumGamemode(int i, String s, String s1) {
             this.f = i;
             this.g = s;
+            this.h = s1;
         }
 
         public int getId() {
@@ -114,7 +116,7 @@ public final class WorldSettings {
             return this == WorldSettings.EnumGamemode.ADVENTURE || this == WorldSettings.EnumGamemode.SPECTATOR;
         }
 
-        public boolean d() {
+        public boolean isCreative() {
             return this == WorldSettings.EnumGamemode.CREATIVE;
         }
 
@@ -123,18 +125,37 @@ public final class WorldSettings {
         }
 
         public static WorldSettings.EnumGamemode getById(int i) {
+            return a(i, WorldSettings.EnumGamemode.SURVIVAL);
+        }
+
+        public static WorldSettings.EnumGamemode a(int i, WorldSettings.EnumGamemode worldsettings_enumgamemode) {
             WorldSettings.EnumGamemode[] aworldsettings_enumgamemode = values();
             int j = aworldsettings_enumgamemode.length;
 
             for (int k = 0; k < j; ++k) {
-                WorldSettings.EnumGamemode worldsettings_enumgamemode = aworldsettings_enumgamemode[k];
+                WorldSettings.EnumGamemode worldsettings_enumgamemode1 = aworldsettings_enumgamemode[k];
 
-                if (worldsettings_enumgamemode.f == i) {
-                    return worldsettings_enumgamemode;
+                if (worldsettings_enumgamemode1.f == i) {
+                    return worldsettings_enumgamemode1;
                 }
             }
 
-            return WorldSettings.EnumGamemode.SURVIVAL;
+            return worldsettings_enumgamemode;
+        }
+
+        public static WorldSettings.EnumGamemode a(String s, WorldSettings.EnumGamemode worldsettings_enumgamemode) {
+            WorldSettings.EnumGamemode[] aworldsettings_enumgamemode = values();
+            int i = aworldsettings_enumgamemode.length;
+
+            for (int j = 0; j < i; ++j) {
+                WorldSettings.EnumGamemode worldsettings_enumgamemode1 = aworldsettings_enumgamemode[j];
+
+                if (worldsettings_enumgamemode1.g.equals(s) || worldsettings_enumgamemode1.h.equals(s)) {
+                    return worldsettings_enumgamemode1;
+                }
+            }
+
+            return worldsettings_enumgamemode;
         }
     }
 }

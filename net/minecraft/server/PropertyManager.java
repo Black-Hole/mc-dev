@@ -116,4 +116,12 @@ public class PropertyManager {
     public void setProperty(String s, Object object) {
         this.properties.setProperty(s, "" + object);
     }
+
+    public boolean a(String s) {
+        return this.properties.containsKey(s);
+    }
+
+    public void b(String s) {
+        this.properties.remove(s);
+    }
 }

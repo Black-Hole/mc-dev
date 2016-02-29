@@ -10,6 +10,10 @@ public class DifficultyDamageScaler {
         this.b = this.a(enumdifficulty, i, j, f);
     }
 
+    public float b() {
+        return this.b;
+    }
+
     public float c() {
         return this.b < 2.0F ? 0.0F : (this.b > 4.0F ? 1.0F : (this.b - 2.0F) / 2.0F);
     }

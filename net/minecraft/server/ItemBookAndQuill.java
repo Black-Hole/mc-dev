@@ -3,13 +3,13 @@ package net.minecraft.server;
 public class ItemBookAndQuill extends Item {
 
     public ItemBookAndQuill() {
-        this.c(1);
+        this.d(1);
     }
 
-    public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        entityhuman.openBook(itemstack);
-        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
-        return itemstack;
+    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+        entityhuman.a(itemstack, enumhand);
+        entityhuman.b(StatisticList.b((Item) this));
+        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
     }
 
     public static boolean b(NBTTagCompound nbttagcompound) {

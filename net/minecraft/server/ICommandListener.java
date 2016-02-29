@@ -21,4 +21,6 @@ public interface ICommandListener {
     boolean getSendCommandFeedback();
 
     void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i);
+
+    MinecraftServer h();
 }

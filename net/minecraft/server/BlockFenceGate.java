@@ -1,15 +1,26 @@
 package net.minecraft.server;
 
-public class BlockFenceGate extends BlockDirectional {
+public class BlockFenceGate extends BlockFacingHorizontal {
 
     public static final BlockStateBoolean OPEN = BlockStateBoolean.of("open");
     public static final BlockStateBoolean POWERED = BlockStateBoolean.of("powered");
     public static final BlockStateBoolean IN_WALL = BlockStateBoolean.of("in_wall");
+    protected static final AxisAlignedBB d = new AxisAlignedBB(0.0D, 0.0D, 0.375D, 1.0D, 1.0D, 0.625D);
+    protected static final AxisAlignedBB e = new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 1.0D, 1.0D);
+    protected static final AxisAlignedBB f = new AxisAlignedBB(0.0D, 0.0D, 0.375D, 1.0D, 0.8125D, 0.625D);
+    protected static final AxisAlignedBB g = new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 0.8125D, 1.0D);
+    protected static final AxisAlignedBB B = new AxisAlignedBB(0.0D, 0.0D, 0.375D, 1.0D, 1.5D, 0.625D);
+    protected static final AxisAlignedBB C = new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 1.5D, 1.0D);
 
     public BlockFenceGate(BlockWood.EnumLogVariant blockwood_enumlogvariant) {
         super(Material.WOOD, blockwood_enumlogvariant.c());
-        this.j(this.blockStateList.getBlockData().set(BlockFenceGate.OPEN, Boolean.valueOf(false)).set(BlockFenceGate.POWERED, Boolean.valueOf(false)).set(BlockFenceGate.IN_WALL, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockFenceGate.OPEN, Boolean.valueOf(false)).set(BlockFenceGate.POWERED, Boolean.valueOf(false)).set(BlockFenceGate.IN_WALL, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
+    }
+
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
+        return ((Boolean) iblockdata.get(BlockFenceGate.IN_WALL)).booleanValue() ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.g : BlockFenceGate.f) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.e : BlockFenceGate.d);
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -22,36 +33,27 @@ public class BlockFenceGate extends BlockDirectional {
         return iblockdata;
     }
 
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return iblockdata.set(BlockFenceGate.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockFenceGate.FACING)));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockFenceGate.FACING)));
+    }
+
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return world.getType(blockposition.down()).getBlock().getMaterial().isBuildable() ? super.canPlace(world, blockposition) : false;
+        return world.getType(blockposition.down()).getMaterial().isBuildable() ? super.canPlace(world, blockposition) : false;
     }
 
-    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue()) {
-            return null;
-        } else {
-            EnumDirection.EnumAxis enumdirection_enumaxis = ((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k();
-
-            return enumdirection_enumaxis == EnumDirection.EnumAxis.Z ? new AxisAlignedBB((double) blockposition.getX(), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + 0.375F), (double) (blockposition.getX() + 1), (double) ((float) blockposition.getY() + 1.5F), (double) ((float) blockposition.getZ() + 0.625F)) : new AxisAlignedBB((double) ((float) blockposition.getX() + 0.375F), (double) blockposition.getY(), (double) blockposition.getZ(), (double) ((float) blockposition.getX() + 0.625F), (double) ((float) blockposition.getY() + 1.5F), (double) (blockposition.getZ() + 1));
-        }
+    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        return ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() ? BlockFenceGate.k : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.Z ? BlockFenceGate.B : BlockFenceGate.C);
     }
 
-    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        EnumDirection.EnumAxis enumdirection_enumaxis = ((EnumDirection) iblockaccess.getType(blockposition).get(BlockFenceGate.FACING)).k();
-
-        if (enumdirection_enumaxis == EnumDirection.EnumAxis.Z) {
-            this.a(0.0F, 0.0F, 0.375F, 1.0F, 1.0F, 0.625F);
-        } else {
-            this.a(0.375F, 0.0F, 0.0F, 0.625F, 1.0F, 1.0F);
-        }
-
-    }
-
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
@@ -63,10 +65,10 @@ public class BlockFenceGate extends BlockDirectional {
         return this.getBlockData().set(BlockFenceGate.FACING, entityliving.getDirection()).set(BlockFenceGate.OPEN, Boolean.valueOf(false)).set(BlockFenceGate.POWERED, Boolean.valueOf(false)).set(BlockFenceGate.IN_WALL, Boolean.valueOf(false));
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue()) {
             iblockdata = iblockdata.set(BlockFenceGate.OPEN, Boolean.valueOf(false));
-            world.setTypeAndData(blockposition, iblockdata, 2);
+            world.setTypeAndData(blockposition, iblockdata, 10);
         } else {
             EnumDirection enumdirection1 = EnumDirection.fromAngle((double) entityhuman.yaw);
 
@@ -75,10 +77,10 @@ public class BlockFenceGate extends BlockDirectional {
             }
 
             iblockdata = iblockdata.set(BlockFenceGate.OPEN, Boolean.valueOf(true));
-            world.setTypeAndData(blockposition, iblockdata, 2);
+            world.setTypeAndData(blockposition, iblockdata, 10);
         }
 
-        world.a(entityhuman, ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() ? 1003 : 1006, blockposition, 0);
+        world.a(entityhuman, ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() ? 1008 : 1014, blockposition, 0);
         return true;
     }
 
@@ -86,13 +88,13 @@ public class BlockFenceGate extends BlockDirectional {
         if (!world.isClientSide) {
             boolean flag = world.isBlockIndirectlyPowered(blockposition);
 
-            if (flag || block.isPowerSource()) {
+            if (flag || block.getBlockData().m()) {
                 if (flag && !((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() && !((Boolean) iblockdata.get(BlockFenceGate.POWERED)).booleanValue()) {
                     world.setTypeAndData(blockposition, iblockdata.set(BlockFenceGate.OPEN, Boolean.valueOf(true)).set(BlockFenceGate.POWERED, Boolean.valueOf(true)), 2);
-                    world.a((EntityHuman) null, 1003, blockposition, 0);
+                    world.a((EntityHuman) null, 1008, blockposition, 0);
                 } else if (!flag && ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() && ((Boolean) iblockdata.get(BlockFenceGate.POWERED)).booleanValue()) {
                     world.setTypeAndData(blockposition, iblockdata.set(BlockFenceGate.OPEN, Boolean.valueOf(false)).set(BlockFenceGate.POWERED, Boolean.valueOf(false)), 2);
-                    world.a((EntityHuman) null, 1006, blockposition, 0);
+                    world.a((EntityHuman) null, 1014, blockposition, 0);
                 } else if (flag != ((Boolean) iblockdata.get(BlockFenceGate.POWERED)).booleanValue()) {
                     world.setTypeAndData(blockposition, iblockdata.set(BlockFenceGate.POWERED, Boolean.valueOf(flag)), 2);
                 }
@@ -107,7 +109,7 @@ public class BlockFenceGate extends BlockDirectional {
 
     public int toLegacyData(IBlockData iblockdata) {
         byte b0 = 0;
-        int i = b0 | ((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).b();
+        int i = b0 | ((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).get2DRotationValue();
 
         if (((Boolean) iblockdata.get(BlockFenceGate.POWERED)).booleanValue()) {
             i |= 8;

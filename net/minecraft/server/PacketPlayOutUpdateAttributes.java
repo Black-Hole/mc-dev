@@ -28,17 +28,17 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
+        this.a = packetdataserializer.g();
         int i = packetdataserializer.readInt();
 
         for (int j = 0; j < i; ++j) {
             String s = packetdataserializer.c(64);
             double d0 = packetdataserializer.readDouble();
             ArrayList arraylist = Lists.newArrayList();
-            int k = packetdataserializer.e();
+            int k = packetdataserializer.g();
 
             for (int l = 0; l < k; ++l) {
-                UUID uuid = packetdataserializer.g();
+                UUID uuid = packetdataserializer.i();
 
                 arraylist.add(new AttributeModifier(uuid, "Unknown synced attribute modifier", packetdataserializer.readDouble(), packetdataserializer.readByte()));
             }

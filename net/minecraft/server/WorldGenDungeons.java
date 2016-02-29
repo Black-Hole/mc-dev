@@ -1,8 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +9,6 @@ public class WorldGenDungeons extends WorldGenerator {
 
     private static final Logger a = LogManager.getLogger();
     private static final String[] b = new String[] { "Skeleton", "Zombie", "Zombie", "Spider"};
-    private static final List<StructurePieceTreasure> c = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.SADDLE, 0, 1, 1, 10), new StructurePieceTreasure(Items.IRON_INGOT, 0, 1, 4, 10), new StructurePieceTreasure(Items.BREAD, 0, 1, 1, 10), new StructurePieceTreasure(Items.WHEAT, 0, 1, 4, 10), new StructurePieceTreasure(Items.GUNPOWDER, 0, 1, 4, 10), new StructurePieceTreasure(Items.STRING, 0, 1, 4, 10), new StructurePieceTreasure(Items.BUCKET, 0, 1, 1, 10), new StructurePieceTreasure(Items.GOLDEN_APPLE, 0, 1, 1, 1), new StructurePieceTreasure(Items.REDSTONE, 0, 1, 4, 10), new StructurePieceTreasure(Items.RECORD_13, 0, 1, 1, 4), new StructurePieceTreasure(Items.RECORD_CAT, 0, 1, 1, 4), new StructurePieceTreasure(Items.NAME_TAG, 0, 1, 1, 10), new StructurePieceTreasure(Items.GOLDEN_HORSE_ARMOR, 0, 1, 1, 2), new StructurePieceTreasure(Items.IRON_HORSE_ARMOR, 0, 1, 1, 5), new StructurePieceTreasure(Items.DIAMOND_HORSE_ARMOR, 0, 1, 1, 1)});
 
     public WorldGenDungeons() {}
 
@@ -36,7 +33,7 @@ public class WorldGenDungeons extends WorldGenerator {
             for (i2 = -1; i2 <= 4; ++i2) {
                 for (j2 = i1; j2 <= j1; ++j2) {
                     blockposition1 = blockposition.a(l1, i2, j2);
-                    Material material = world.getType(blockposition1).getBlock().getMaterial();
+                    Material material = world.getType(blockposition1).getMaterial();
                     boolean flag3 = material.isBuildable();
 
                     if (i2 == -1 && !flag3) {
@@ -63,9 +60,9 @@ public class WorldGenDungeons extends WorldGenerator {
                             if (world.getType(blockposition1).getBlock() != Blocks.CHEST) {
                                 world.setAir(blockposition1);
                             }
-                        } else if (blockposition1.getY() >= 0 && !world.getType(blockposition1.down()).getBlock().getMaterial().isBuildable()) {
+                        } else if (blockposition1.getY() >= 0 && !world.getType(blockposition1.down()).getMaterial().isBuildable()) {
                             world.setAir(blockposition1);
-                        } else if (world.getType(blockposition1).getBlock().getMaterial().isBuildable() && world.getType(blockposition1).getBlock() != Blocks.CHEST) {
+                        } else if (world.getType(blockposition1).getMaterial().isBuildable() && world.getType(blockposition1).getBlock() != Blocks.CHEST) {
                             if (i2 == -1 && random.nextInt(4) != 0) {
                                 world.setTypeAndData(blockposition1, Blocks.MOSSY_COBBLESTONE.getBlockData(), 2);
                             } else {
@@ -96,18 +93,17 @@ public class WorldGenDungeons extends WorldGenerator {
                                 while (iterator.hasNext()) {
                                     EnumDirection enumdirection = (EnumDirection) iterator.next();
 
-                                    if (world.getType(blockposition2.shift(enumdirection)).getBlock().getMaterial().isBuildable()) {
+                                    if (world.getType(blockposition2.shift(enumdirection)).getMaterial().isBuildable()) {
                                         ++i3;
                                     }
                                 }
 
                                 if (i3 == 1) {
                                     world.setTypeAndData(blockposition2, Blocks.CHEST.f(world, blockposition2, Blocks.CHEST.getBlockData()), 2);
-                                    List list = StructurePieceTreasure.a(WorldGenDungeons.c, new StructurePieceTreasure[] { Items.ENCHANTED_BOOK.b(random)});
                                     TileEntity tileentity = world.getTileEntity(blockposition2);
 
                                     if (tileentity instanceof TileEntityChest) {
-                                        StructurePieceTreasure.a(random, list, (IInventory) ((TileEntityChest) tileentity), 8);
+                                        ((TileEntityChest) tileentity).a(LootTables.d, random.nextLong());
                                     }
                                     break label197;
                                 }

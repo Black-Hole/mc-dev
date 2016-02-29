@@ -7,17 +7,20 @@ public class ItemEgg extends Item {
         this.a(CreativeModeTab.l);
     }
 
-    public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
+    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
         if (!entityhuman.abilities.canInstantlyBuild) {
             --itemstack.count;
         }
 
-        world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (ItemEgg.g.nextFloat() * 0.4F + 0.8F));
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.aC, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEgg.i.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
-            world.addEntity(new EntityEgg(world, entityhuman));
+            EntityEgg entityegg = new EntityEgg(world, entityhuman);
+
+            entityegg.a(entityhuman, entityhuman.pitch, entityhuman.yaw, 0.0F, 1.5F, 1.0F);
+            world.addEntity(entityegg);
         }
 
-        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
-        return itemstack;
+        entityhuman.b(StatisticList.b((Item) this));
+        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
     }
 }

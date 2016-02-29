@@ -1,46 +1,41 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EntityBoat extends Entity {
 
-    private boolean a;
-    private double b;
-    private int c;
-    private double d;
-    private double e;
-    private double f;
-    private double g;
-    private double h;
+    private static final DataWatcherObject<Integer> a = DataWatcher.a(EntityBoat.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityBoat.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Float> c = DataWatcher.a(EntityBoat.class, DataWatcherRegistry.c);
+    private static final DataWatcherObject<Integer> d = DataWatcher.a(EntityBoat.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Boolean>[] e = new DataWatcherObject[] { DataWatcher.a(EntityBoat.class, DataWatcherRegistry.h), DataWatcher.a(EntityBoat.class, DataWatcherRegistry.h)};
+    private float[] f;
+    private float g;
+    private float h;
+    private float as;
+    private int at;
+    private double au;
+    private double av;
+    private double aw;
+    private double ax;
+    private double ay;
+    private boolean az;
+    private boolean aA;
+    private boolean aB;
+    private boolean aC;
+    private double aD;
+    private float aE;
+    private EntityBoat.EnumStatus aF;
+    private EntityBoat.EnumStatus aG;
+    private double aH;
 
     public EntityBoat(World world) {
         super(world);
-        this.a = true;
-        this.b = 0.07D;
-        this.k = true;
-        this.setSize(1.5F, 0.6F);
-    }
-
-    protected boolean s_() {
-        return false;
-    }
-
-    protected void h() {
-        this.datawatcher.a(17, new Integer(0));
-        this.datawatcher.a(18, new Integer(1));
-        this.datawatcher.a(19, new Float(0.0F));
-    }
-
-    public AxisAlignedBB j(Entity entity) {
-        return entity.getBoundingBox();
-    }
-
-    public AxisAlignedBB S() {
-        return this.getBoundingBox();
-    }
-
-    public boolean ae() {
-        return true;
+        this.f = new float[2];
+        this.i = true;
+        this.setSize(1.375F, 0.5625F);
     }
 
     public EntityBoat(World world, double d0, double d1, double d2) {
@@ -54,30 +49,54 @@ public class EntityBoat extends Entity {
         this.lastZ = d2;
     }
 
-    public double an() {
-        return -0.3D;
+    protected boolean playStepSound() {
+        return false;
+    }
+
+    protected void i() {
+        this.datawatcher.register(EntityBoat.a, Integer.valueOf(0));
+        this.datawatcher.register(EntityBoat.b, Integer.valueOf(1));
+        this.datawatcher.register(EntityBoat.c, Float.valueOf(0.0F));
+        this.datawatcher.register(EntityBoat.d, Integer.valueOf(EntityBoat.EnumBoatType.OAK.ordinal()));
+
+        for (int i = 0; i < EntityBoat.e.length; ++i) {
+            this.datawatcher.register(EntityBoat.e[i], Boolean.valueOf(false));
+        }
+
+    }
+
+    public AxisAlignedBB j(Entity entity) {
+        return entity.getBoundingBox();
+    }
+
+    public AxisAlignedBB af() {
+        return this.getBoundingBox();
+    }
+
+    public boolean isCollidable() {
+        return true;
+    }
+
+    public double ay() {
+        return -0.1D;
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else if (!this.world.isClientSide && !this.dead) {
-            if (this.passenger != null && this.passenger == damagesource.getEntity() && damagesource instanceof EntityDamageSourceIndirect) {
+            if (damagesource instanceof EntityDamageSourceIndirect && damagesource.getEntity() != null && this.w(damagesource.getEntity())) {
                 return false;
             } else {
-                this.b(-this.m());
-                this.a(10);
-                this.setDamage(this.j() + f * 10.0F);
-                this.ac();
+                this.d(-this.q());
+                this.b(10);
+                this.setDamage(this.n() + f * 10.0F);
+                this.ao();
                 boolean flag = damagesource.getEntity() instanceof EntityHuman && ((EntityHuman) damagesource.getEntity()).abilities.canInstantlyBuild;
 
-                if (flag || this.j() > 40.0F) {
-                    if (this.passenger != null) {
-                        this.passenger.mount(this);
-                    }
-
+                if (flag || this.n() > 40.0F) {
                     if (!flag && this.world.getGameRules().getBoolean("doEntityDrops")) {
-                        this.a(Items.BOAT, 1, 0.0F);
+                        this.a(this.j(), 1, 0.0F);
                     }
 
                     this.die();
@@ -90,295 +109,648 @@ public class EntityBoat extends Entity {
         }
     }
 
-    public boolean ad() {
+    public void collide(Entity entity) {
+        if (entity instanceof EntityBoat) {
+            if (entity.getBoundingBox().b < this.getBoundingBox().e) {
+                super.collide(entity);
+            }
+        } else if (entity.getBoundingBox().b <= this.getBoundingBox().b) {
+            super.collide(entity);
+        }
+
+    }
+
+    public Item j() {
+        switch (EntityBoat.SyntheticClass_1.a[this.r().ordinal()]) {
+        case 1:
+        default:
+            return Items.aG;
+
+        case 2:
+            return Items.aH;
+
+        case 3:
+            return Items.aI;
+
+        case 4:
+            return Items.aJ;
+
+        case 5:
+            return Items.aK;
+
+        case 6:
+            return Items.aL;
+        }
+    }
+
+    public boolean isInteractable() {
         return !this.dead;
     }
 
-    public void t_() {
-        super.t_();
-        if (this.l() > 0) {
-            this.a(this.l() - 1);
+    public EnumDirection bj() {
+        return this.getDirection().e();
+    }
+
+    public void m() {
+        this.aG = this.aF;
+        this.aF = this.t();
+        if (this.aF != EntityBoat.EnumStatus.UNDER_WATER && this.aF != EntityBoat.EnumStatus.UNDER_FLOWING_WATER) {
+            this.h = 0.0F;
+        } else {
+            ++this.h;
         }
 
-        if (this.j() > 0.0F) {
-            this.setDamage(this.j() - 1.0F);
+        if (!this.world.isClientSide && this.h >= 60.0F) {
+            this.az();
+        }
+
+        if (this.o() > 0) {
+            this.b(this.o() - 1);
+        }
+
+        if (this.n() > 0.0F) {
+            this.setDamage(this.n() - 1.0F);
         }
 
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
-        byte b0 = 5;
-        double d0 = 0.0D;
-
-        for (int i = 0; i < b0; ++i) {
-            double d1 = this.getBoundingBox().b + (this.getBoundingBox().e - this.getBoundingBox().b) * (double) (i + 0) / (double) b0 - 0.125D;
-            double d2 = this.getBoundingBox().b + (this.getBoundingBox().e - this.getBoundingBox().b) * (double) (i + 1) / (double) b0 - 0.125D;
-            AxisAlignedBB axisalignedbb = new AxisAlignedBB(this.getBoundingBox().a, d1, this.getBoundingBox().c, this.getBoundingBox().d, d2, this.getBoundingBox().f);
-
-            if (this.world.b(axisalignedbb, Material.WATER)) {
-                d0 += 1.0D / (double) b0;
-            }
-        }
-
-        double d3 = Math.sqrt(this.motX * this.motX + this.motZ * this.motZ);
-        double d4;
-        double d5;
-        int j;
-
-        if (d3 > 0.2975D) {
-            d4 = Math.cos((double) this.yaw * 3.141592653589793D / 180.0D);
-            d5 = Math.sin((double) this.yaw * 3.141592653589793D / 180.0D);
-
-            for (j = 0; (double) j < 1.0D + d3 * 60.0D; ++j) {
-                double d6 = (double) (this.random.nextFloat() * 2.0F - 1.0F);
-                double d7 = (double) (this.random.nextInt(2) * 2 - 1) * 0.7D;
-                double d8;
-                double d9;
-
-                if (this.random.nextBoolean()) {
-                    d8 = this.locX - d4 * d6 * 0.8D + d5 * d7;
-                    d9 = this.locZ - d5 * d6 * 0.8D - d4 * d7;
-                    this.world.addParticle(EnumParticle.WATER_SPLASH, d8, this.locY - 0.125D, d9, this.motX, this.motY, this.motZ, new int[0]);
-                } else {
-                    d8 = this.locX + d4 + d5 * d6 * 0.7D;
-                    d9 = this.locZ + d5 - d4 * d6 * 0.7D;
-                    this.world.addParticle(EnumParticle.WATER_SPLASH, d8, this.locY - 0.125D, d9, this.motX, this.motY, this.motZ, new int[0]);
-                }
-            }
-        }
-
-        double d10;
-        double d11;
-
-        if (this.world.isClientSide && this.a) {
-            if (this.c > 0) {
-                d4 = this.locX + (this.d - this.locX) / (double) this.c;
-                d5 = this.locY + (this.e - this.locY) / (double) this.c;
-                d10 = this.locZ + (this.f - this.locZ) / (double) this.c;
-                d11 = MathHelper.g(this.g - (double) this.yaw);
-                this.yaw = (float) ((double) this.yaw + d11 / (double) this.c);
-                this.pitch = (float) ((double) this.pitch + (this.h - (double) this.pitch) / (double) this.c);
-                --this.c;
-                this.setPosition(d4, d5, d10);
-                this.setYawPitch(this.yaw, this.pitch);
-            } else {
-                d4 = this.locX + this.motX;
-                d5 = this.locY + this.motY;
-                d10 = this.locZ + this.motZ;
-                this.setPosition(d4, d5, d10);
-                if (this.onGround) {
-                    this.motX *= 0.5D;
-                    this.motY *= 0.5D;
-                    this.motZ *= 0.5D;
-                }
-
-                this.motX *= 0.9900000095367432D;
-                this.motY *= 0.949999988079071D;
-                this.motZ *= 0.9900000095367432D;
+        super.m();
+        this.s();
+        if (this.bx()) {
+            if (this.bu().size() == 0 || !(this.bu().get(0) instanceof EntityHuman)) {
+                this.a(false, false);
             }
 
-        } else {
-            if (d0 < 1.0D) {
-                d4 = d0 * 2.0D - 1.0D;
-                this.motY += 0.03999999910593033D * d4;
-            } else {
-                if (this.motY < 0.0D) {
-                    this.motY /= 2.0D;
-                }
-
-                this.motY += 0.007000000216066837D;
-            }
-
-            if (this.passenger instanceof EntityLiving) {
-                EntityLiving entityliving = (EntityLiving) this.passenger;
-                float f = this.passenger.yaw + -entityliving.aZ * 90.0F;
-
-                this.motX += -Math.sin((double) (f * 3.1415927F / 180.0F)) * this.b * (double) entityliving.ba * 0.05000000074505806D;
-                this.motZ += Math.cos((double) (f * 3.1415927F / 180.0F)) * this.b * (double) entityliving.ba * 0.05000000074505806D;
-            }
-
-            d4 = Math.sqrt(this.motX * this.motX + this.motZ * this.motZ);
-            if (d4 > 0.35D) {
-                d5 = 0.35D / d4;
-                this.motX *= d5;
-                this.motZ *= d5;
-                d4 = 0.35D;
-            }
-
-            if (d4 > d3 && this.b < 0.35D) {
-                this.b += (0.35D - this.b) / 35.0D;
-                if (this.b > 0.35D) {
-                    this.b = 0.35D;
-                }
-            } else {
-                this.b -= (this.b - 0.07D) / 35.0D;
-                if (this.b < 0.07D) {
-                    this.b = 0.07D;
-                }
-            }
-
-            int k;
-
-            for (k = 0; k < 4; ++k) {
-                int l = MathHelper.floor(this.locX + ((double) (k % 2) - 0.5D) * 0.8D);
-
-                j = MathHelper.floor(this.locZ + ((double) (k / 2) - 0.5D) * 0.8D);
-
-                for (int i1 = 0; i1 < 2; ++i1) {
-                    int j1 = MathHelper.floor(this.locY) + i1;
-                    BlockPosition blockposition = new BlockPosition(l, j1, j);
-                    Block block = this.world.getType(blockposition).getBlock();
-
-                    if (block == Blocks.SNOW_LAYER) {
-                        this.world.setAir(blockposition);
-                        this.positionChanged = false;
-                    } else if (block == Blocks.WATERLILY) {
-                        this.world.setAir(blockposition, true);
-                        this.positionChanged = false;
-                    }
-                }
-            }
-
-            if (this.onGround) {
-                this.motX *= 0.5D;
-                this.motY *= 0.5D;
-                this.motZ *= 0.5D;
+            this.w();
+            if (this.world.isClientSide) {
+                this.x();
+                this.world.a((Packet) (new PacketPlayInBoatMove(this.a(0), this.a(1))));
             }
 
             this.move(this.motX, this.motY, this.motZ);
-            if (this.positionChanged && d3 > 0.2975D) {
-                if (!this.world.isClientSide && !this.dead) {
-                    this.die();
-                    if (this.world.getGameRules().getBoolean("doEntityDrops")) {
-                        for (k = 0; k < 3; ++k) {
-                            this.a(Item.getItemOf(Blocks.PLANKS), 1, 0.0F);
-                        }
-
-                        for (k = 0; k < 2; ++k) {
-                            this.a(Items.STICK, 1, 0.0F);
-                        }
-                    }
-                }
-            } else {
-                this.motX *= 0.9900000095367432D;
-                this.motY *= 0.949999988079071D;
-                this.motZ *= 0.9900000095367432D;
-            }
-
-            this.pitch = 0.0F;
-            d5 = (double) this.yaw;
-            d10 = this.lastX - this.locX;
-            d11 = this.lastZ - this.locZ;
-            if (d10 * d10 + d11 * d11 > 0.001D) {
-                d5 = (double) ((float) (MathHelper.b(d11, d10) * 180.0D / 3.141592653589793D));
-            }
-
-            double d12 = MathHelper.g(d5 - (double) this.yaw);
-
-            if (d12 > 20.0D) {
-                d12 = 20.0D;
-            }
-
-            if (d12 < -20.0D) {
-                d12 = -20.0D;
-            }
-
-            this.yaw = (float) ((double) this.yaw + d12);
-            this.setYawPitch(this.yaw, this.pitch);
-            if (!this.world.isClientSide) {
-                List list = this.world.getEntities(this, this.getBoundingBox().grow(0.20000000298023224D, 0.0D, 0.20000000298023224D));
-
-                if (list != null && !list.isEmpty()) {
-                    for (int k1 = 0; k1 < list.size(); ++k1) {
-                        Entity entity = (Entity) list.get(k1);
-
-                        if (entity != this.passenger && entity.ae() && entity instanceof EntityBoat) {
-                            entity.collide(this);
-                        }
-                    }
-                }
-
-                if (this.passenger != null && this.passenger.dead) {
-                    this.passenger = null;
-                }
-
-            }
-        }
-    }
-
-    public void al() {
-        if (this.passenger != null) {
-            double d0 = Math.cos((double) this.yaw * 3.141592653589793D / 180.0D) * 0.4D;
-            double d1 = Math.sin((double) this.yaw * 3.141592653589793D / 180.0D) * 0.4D;
-
-            this.passenger.setPosition(this.locX + d0, this.locY + this.an() + this.passenger.am(), this.locZ + d1);
-        }
-    }
-
-    protected void b(NBTTagCompound nbttagcompound) {}
-
-    protected void a(NBTTagCompound nbttagcompound) {}
-
-    public boolean e(EntityHuman entityhuman) {
-        if (this.passenger != null && this.passenger instanceof EntityHuman && this.passenger != entityhuman) {
-            return true;
         } else {
-            if (!this.world.isClientSide) {
-                entityhuman.mount(this);
-            }
+            this.motX = 0.0D;
+            this.motY = 0.0D;
+            this.motZ = 0.0D;
+        }
 
-            return true;
+        for (int i = 0; i <= 1; ++i) {
+            if (this.a(i)) {
+                this.f[i] = (float) ((double) this.f[i] + 0.01D);
+            } else {
+                this.f[i] = 0.0F;
+            }
+        }
+
+        this.checkBlockCollisions();
+        List list = this.world.a((Entity) this, this.getBoundingBox().grow(0.20000000298023224D, -0.009999999776482582D, 0.20000000298023224D), IEntitySelector.a(this));
+
+        if (!list.isEmpty()) {
+            boolean flag = !this.world.isClientSide && !(this.bt() instanceof EntityHuman);
+
+            for (int j = 0; j < list.size(); ++j) {
+                Entity entity = (Entity) list.get(j);
+
+                if (!entity.w(this)) {
+                    if (flag && this.bu().size() < 2 && !entity.isPassenger() && entity.width < this.width && entity instanceof EntityLiving && !(entity instanceof EntityWaterAnimal) && !(entity instanceof EntityHuman)) {
+                        entity.startRiding(this);
+                    } else {
+                        this.collide(entity);
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void s() {
+        if (this.at > 0 && !this.bx()) {
+            double d0 = this.locX + (this.au - this.locX) / (double) this.at;
+            double d1 = this.locY + (this.av - this.locY) / (double) this.at;
+            double d2 = this.locZ + (this.aw - this.locZ) / (double) this.at;
+            double d3 = MathHelper.g(this.ax - (double) this.yaw);
+
+            this.yaw = (float) ((double) this.yaw + d3 / (double) this.at);
+            this.pitch = (float) ((double) this.pitch + (this.ay - (double) this.pitch) / (double) this.at);
+            --this.at;
+            this.setPosition(d0, d1, d2);
+            this.setYawPitch(this.yaw, this.pitch);
         }
     }
 
-    protected void a(double d0, boolean flag, Block block, BlockPosition blockposition) {
-        if (flag) {
-            if (this.fallDistance > 3.0F) {
-                this.e(this.fallDistance, 1.0F);
-                if (!this.world.isClientSide && !this.dead) {
-                    this.die();
-                    if (this.world.getGameRules().getBoolean("doEntityDrops")) {
-                        int i;
+    public void a(boolean flag, boolean flag1) {
+        this.datawatcher.set(EntityBoat.e[0], Boolean.valueOf(flag));
+        this.datawatcher.set(EntityBoat.e[1], Boolean.valueOf(flag1));
+    }
 
-                        for (i = 0; i < 3; ++i) {
-                            this.a(Item.getItemOf(Blocks.PLANKS), 1, 0.0F);
+    private EntityBoat.EnumStatus t() {
+        EntityBoat.EnumStatus entityboat_enumstatus = this.v();
+
+        if (entityboat_enumstatus != null) {
+            this.aD = this.getBoundingBox().e;
+            return entityboat_enumstatus;
+        } else if (this.u()) {
+            return EntityBoat.EnumStatus.IN_WATER;
+        } else {
+            float f = this.l();
+
+            if (f > 0.0F) {
+                this.aE = f;
+                return EntityBoat.EnumStatus.ON_LAND;
+            } else {
+                return EntityBoat.EnumStatus.IN_AIR;
+            }
+        }
+    }
+
+    public float k() {
+        AxisAlignedBB axisalignedbb = this.getBoundingBox();
+        int i = MathHelper.floor(axisalignedbb.a);
+        int j = MathHelper.f(axisalignedbb.d);
+        int k = MathHelper.floor(axisalignedbb.e);
+        int l = MathHelper.f(axisalignedbb.e - this.aH);
+        int i1 = MathHelper.floor(axisalignedbb.c);
+        int j1 = MathHelper.f(axisalignedbb.f);
+        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
+
+        try {
+            label108:
+            for (int k1 = k; k1 < l; ++k1) {
+                float f = 0.0F;
+
+                for (int l1 = i; l1 < j; ++l1) {
+                    for (int i2 = i1; i2 < j1; ++i2) {
+                        blockposition_pooledblockposition.d(l1, k1, i2);
+                        IBlockData iblockdata = this.world.getType(blockposition_pooledblockposition);
+
+                        if (iblockdata.getMaterial() == Material.WATER) {
+                            f = Math.max(f, a(iblockdata, (IBlockAccess) this.world, (BlockPosition) blockposition_pooledblockposition));
                         }
 
-                        for (i = 0; i < 2; ++i) {
-                            this.a(Items.STICK, 1, 0.0F);
+                        if (f >= 1.0F) {
+                            continue label108;
+                        }
+                    }
+                }
+
+                if (f < 1.0F) {
+                    float f1 = (float) blockposition_pooledblockposition.getY() + f;
+
+                    return f1;
+                }
+            }
+
+            float f2 = (float) (l + 1);
+
+            return f2;
+        } finally {
+            blockposition_pooledblockposition.t();
+        }
+    }
+
+    public float l() {
+        AxisAlignedBB axisalignedbb = this.getBoundingBox();
+        AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(axisalignedbb.a, axisalignedbb.b - 0.001D, axisalignedbb.c, axisalignedbb.d, axisalignedbb.b, axisalignedbb.f);
+        int i = MathHelper.floor(axisalignedbb1.a) - 1;
+        int j = MathHelper.f(axisalignedbb1.d) + 1;
+        int k = MathHelper.floor(axisalignedbb1.b) - 1;
+        int l = MathHelper.f(axisalignedbb1.e) + 1;
+        int i1 = MathHelper.floor(axisalignedbb1.c) - 1;
+        int j1 = MathHelper.f(axisalignedbb1.f) + 1;
+        ArrayList arraylist = Lists.newArrayList();
+        float f = 0.0F;
+        int k1 = 0;
+        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
+
+        try {
+            for (int l1 = i; l1 < j; ++l1) {
+                for (int i2 = i1; i2 < j1; ++i2) {
+                    int j2 = (l1 != i && l1 != j - 1 ? 0 : 1) + (i2 != i1 && i2 != j1 - 1 ? 0 : 1);
+
+                    if (j2 != 2) {
+                        for (int k2 = k; k2 < l; ++k2) {
+                            if (j2 <= 0 || k2 != k && k2 != l - 1) {
+                                blockposition_pooledblockposition.d(l1, k2, i2);
+                                IBlockData iblockdata = this.world.getType(blockposition_pooledblockposition);
+
+                                iblockdata.a(this.world, blockposition_pooledblockposition, axisalignedbb1, arraylist, this);
+                                if (!arraylist.isEmpty()) {
+                                    f += iblockdata.getBlock().frictionFactor;
+                                    ++k1;
+                                }
+
+                                arraylist.clear();
+                            }
+                        }
+                    }
+                }
+            }
+        } finally {
+            blockposition_pooledblockposition.t();
+        }
+
+        return f / (float) k1;
+    }
+
+    private boolean u() {
+        AxisAlignedBB axisalignedbb = this.getBoundingBox();
+        int i = MathHelper.floor(axisalignedbb.a);
+        int j = MathHelper.f(axisalignedbb.d);
+        int k = MathHelper.floor(axisalignedbb.b);
+        int l = MathHelper.f(axisalignedbb.b + 0.001D);
+        int i1 = MathHelper.floor(axisalignedbb.c);
+        int j1 = MathHelper.f(axisalignedbb.f);
+        boolean flag = false;
+
+        this.aD = Double.MIN_VALUE;
+        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
+
+        try {
+            for (int k1 = i; k1 < j; ++k1) {
+                for (int l1 = k; l1 < l; ++l1) {
+                    for (int i2 = i1; i2 < j1; ++i2) {
+                        blockposition_pooledblockposition.d(k1, l1, i2);
+                        IBlockData iblockdata = this.world.getType(blockposition_pooledblockposition);
+
+                        if (iblockdata.getMaterial() == Material.WATER) {
+                            float f = b(iblockdata, this.world, blockposition_pooledblockposition);
+
+                            this.aD = Math.max((double) f, this.aD);
+                            flag |= axisalignedbb.b < (double) f;
+                        }
+                    }
+                }
+            }
+        } finally {
+            blockposition_pooledblockposition.t();
+        }
+
+        return flag;
+    }
+
+    private EntityBoat.EnumStatus v() {
+        AxisAlignedBB axisalignedbb = this.getBoundingBox();
+        double d0 = axisalignedbb.e + 0.001D;
+        int i = MathHelper.floor(axisalignedbb.a);
+        int j = MathHelper.f(axisalignedbb.d);
+        int k = MathHelper.floor(axisalignedbb.e);
+        int l = MathHelper.f(d0);
+        int i1 = MathHelper.floor(axisalignedbb.c);
+        int j1 = MathHelper.f(axisalignedbb.f);
+        boolean flag = false;
+        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
+
+        try {
+            for (int k1 = i; k1 < j; ++k1) {
+                for (int l1 = k; l1 < l; ++l1) {
+                    for (int i2 = i1; i2 < j1; ++i2) {
+                        blockposition_pooledblockposition.d(k1, l1, i2);
+                        IBlockData iblockdata = this.world.getType(blockposition_pooledblockposition);
+
+                        if (iblockdata.getMaterial() == Material.WATER && d0 < (double) b(iblockdata, this.world, blockposition_pooledblockposition)) {
+                            if (((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() != 0) {
+                                EntityBoat.EnumStatus entityboat_enumstatus = EntityBoat.EnumStatus.UNDER_FLOWING_WATER;
+
+                                return entityboat_enumstatus;
+                            }
+
+                            flag = true;
+                        }
+                    }
+                }
+            }
+
+            return flag ? EntityBoat.EnumStatus.UNDER_WATER : null;
+        } finally {
+            blockposition_pooledblockposition.t();
+        }
+    }
+
+    public static float a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        int i = ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue();
+
+        return (i & 7) == 0 && iblockaccess.getType(blockposition.up()).getMaterial() == Material.WATER ? 1.0F : 1.0F - BlockFluids.e(i);
+    }
+
+    public static float b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return (float) blockposition.getY() + a(iblockdata, iblockaccess, blockposition);
+    }
+
+    private void w() {
+        double d0 = -0.03999999910593033D;
+        double d1 = d0;
+        double d2 = 0.0D;
+
+        this.g = 0.05F;
+        if (this.aG == EntityBoat.EnumStatus.IN_AIR && this.aF != EntityBoat.EnumStatus.IN_AIR && this.aF != EntityBoat.EnumStatus.ON_LAND) {
+            this.aD = this.getBoundingBox().b + (double) this.length;
+            this.setPosition(this.locX, (double) (this.k() - this.length) + 0.101D, this.locZ);
+            this.motY = 0.0D;
+            this.aH = 0.0D;
+            this.aF = EntityBoat.EnumStatus.IN_WATER;
+        } else {
+            if (this.aF == EntityBoat.EnumStatus.IN_WATER) {
+                d2 = (this.aD - this.getBoundingBox().b) / (double) this.length;
+                this.g = 0.9F;
+            } else if (this.aF == EntityBoat.EnumStatus.UNDER_FLOWING_WATER) {
+                d1 = -7.0E-4D;
+                this.g = 0.9F;
+            } else if (this.aF == EntityBoat.EnumStatus.UNDER_WATER) {
+                d2 = 0.009999999776482582D;
+                this.g = 0.45F;
+            } else if (this.aF == EntityBoat.EnumStatus.IN_AIR) {
+                this.g = 0.9F;
+            } else if (this.aF == EntityBoat.EnumStatus.ON_LAND) {
+                this.g = this.aE;
+                if (this.bt() instanceof EntityHuman) {
+                    this.aE /= 2.0F;
+                }
+            }
+
+            this.motX *= (double) this.g;
+            this.motZ *= (double) this.g;
+            this.as *= this.g;
+            this.motY += d1;
+            if (d2 > 0.0D) {
+                double d3 = 0.65D;
+
+                this.motY += d2 * (-d0 / 0.65D);
+                double d4 = 0.75D;
+
+                this.motY *= 0.75D;
+            }
+        }
+
+    }
+
+    private void x() {
+        if (this.isVehicle()) {
+            float f = 0.0F;
+
+            if (this.az) {
+                this.as += -1.0F;
+            }
+
+            if (this.aA) {
+                ++this.as;
+            }
+
+            if (this.aA != this.az && !this.aB && !this.aC) {
+                f += 0.005F;
+            }
+
+            this.yaw += this.as;
+            if (this.aB) {
+                f += 0.04F;
+            }
+
+            if (this.aC) {
+                f -= 0.005F;
+            }
+
+            this.motX += (double) (MathHelper.sin(-this.yaw * 0.017453292F) * f);
+            this.motZ += (double) (MathHelper.cos(this.yaw * 0.017453292F) * f);
+            this.a(this.aA || this.aB, this.az || this.aB);
+        }
+    }
+
+    public void k(Entity entity) {
+        if (this.w(entity)) {
+            float f = 0.0F;
+            float f1 = (float) ((this.dead ? 0.009999999776482582D : this.ay()) + entity.ax());
+
+            if (this.bu().size() > 1) {
+                int i = this.bu().indexOf(entity);
+
+                if (i == 0) {
+                    f = 0.2F;
+                } else {
+                    f = -0.6F;
+                }
+
+                if (entity instanceof EntityAnimal) {
+                    f = (float) ((double) f + 0.2D);
+                }
+            }
+
+            Vec3D vec3d = (new Vec3D((double) f, 0.0D, 0.0D)).b(-this.yaw * 0.017453292F - 1.5707964F);
+
+            entity.setPosition(this.locX + vec3d.x, this.locY + (double) f1, this.locZ + vec3d.z);
+            entity.yaw += this.as;
+            entity.h(entity.getHeadRotation() + this.as);
+            this.a(entity);
+            if (entity instanceof EntityAnimal && this.bu().size() > 1) {
+                int j = entity.getId() % 2 == 0 ? 90 : 270;
+
+                entity.i(((EntityAnimal) entity).aM + (float) j);
+                entity.h(entity.getHeadRotation() + (float) j);
+            }
+
+        }
+    }
+
+    protected void a(Entity entity) {
+        entity.i(this.yaw);
+        float f = MathHelper.g(entity.yaw - this.yaw);
+        float f1 = MathHelper.a(f, -105.0F, 105.0F);
+
+        entity.lastYaw += f1 - f;
+        entity.yaw += f1 - f;
+        entity.h(entity.yaw);
+    }
+
+    protected void b(NBTTagCompound nbttagcompound) {
+        nbttagcompound.setString("Type", this.r().a());
+    }
+
+    protected void a(NBTTagCompound nbttagcompound) {
+        if (nbttagcompound.hasKeyOfType("Type", 8)) {
+            this.a(EntityBoat.EnumBoatType.a(nbttagcompound.getString("Type")));
+        }
+
+    }
+
+    public boolean a(EntityHuman entityhuman, ItemStack itemstack, EnumHand enumhand) {
+        if (!this.world.isClientSide && !entityhuman.isSneaking() && this.h < 60.0F) {
+            entityhuman.startRiding(this);
+        }
+
+        return true;
+    }
+
+    protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {
+        this.aH = this.motY;
+        if (!this.isPassenger()) {
+            if (flag) {
+                if (this.fallDistance > 3.0F) {
+                    if (this.aF != EntityBoat.EnumStatus.ON_LAND) {
+                        this.fallDistance = 0.0F;
+                        return;
+                    }
+
+                    this.e(this.fallDistance, 1.0F);
+                    if (!this.world.isClientSide && !this.dead) {
+                        this.die();
+                        if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+                            int i;
+
+                            for (i = 0; i < 3; ++i) {
+                                this.a(new ItemStack(Item.getItemOf(Blocks.PLANKS), 1, this.r().b()), 0.0F);
+                            }
+
+                            for (i = 0; i < 2; ++i) {
+                                this.a(Items.STICK, 1, 0.0F);
+                            }
                         }
                     }
                 }
 
                 this.fallDistance = 0.0F;
+            } else if (this.world.getType((new BlockPosition(this)).down()).getMaterial() != Material.WATER && d0 < 0.0D) {
+                this.fallDistance = (float) ((double) this.fallDistance - d0);
             }
-        } else if (this.world.getType((new BlockPosition(this)).down()).getBlock().getMaterial() != Material.WATER && d0 < 0.0D) {
-            this.fallDistance = (float) ((double) this.fallDistance - d0);
-        }
 
+        }
+    }
+
+    public boolean a(int i) {
+        return ((Boolean) this.datawatcher.get(EntityBoat.e[i])).booleanValue() && this.bt() != null;
     }
 
     public void setDamage(float f) {
-        this.datawatcher.watch(19, Float.valueOf(f));
+        this.datawatcher.set(EntityBoat.c, Float.valueOf(f));
     }
 
-    public float j() {
-        return this.datawatcher.getFloat(19);
-    }
-
-    public void a(int i) {
-        this.datawatcher.watch(17, Integer.valueOf(i));
-    }
-
-    public int l() {
-        return this.datawatcher.getInt(17);
+    public float n() {
+        return ((Float) this.datawatcher.get(EntityBoat.c)).floatValue();
     }
 
     public void b(int i) {
-        this.datawatcher.watch(18, Integer.valueOf(i));
+        this.datawatcher.set(EntityBoat.a, Integer.valueOf(i));
     }
 
-    public int m() {
-        return this.datawatcher.getInt(18);
+    public int o() {
+        return ((Integer) this.datawatcher.get(EntityBoat.a)).intValue();
+    }
+
+    public void d(int i) {
+        this.datawatcher.set(EntityBoat.b, Integer.valueOf(i));
+    }
+
+    public int q() {
+        return ((Integer) this.datawatcher.get(EntityBoat.b)).intValue();
+    }
+
+    public void a(EntityBoat.EnumBoatType entityboat_enumboattype) {
+        this.datawatcher.set(EntityBoat.d, Integer.valueOf(entityboat_enumboattype.ordinal()));
+    }
+
+    public EntityBoat.EnumBoatType r() {
+        return EntityBoat.EnumBoatType.a(((Integer) this.datawatcher.get(EntityBoat.d)).intValue());
+    }
+
+    protected boolean q(Entity entity) {
+        return this.bu().size() < 2;
+    }
+
+    public Entity bt() {
+        List list = this.bu();
+
+        return list.isEmpty() ? null : (Entity) list.get(0);
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[EntityBoat.EnumBoatType.values().length];
+
+        static {
+            try {
+                EntityBoat.SyntheticClass_1.a[EntityBoat.EnumBoatType.OAK.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                EntityBoat.SyntheticClass_1.a[EntityBoat.EnumBoatType.SPRUCE.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                EntityBoat.SyntheticClass_1.a[EntityBoat.EnumBoatType.BIRCH.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                EntityBoat.SyntheticClass_1.a[EntityBoat.EnumBoatType.JUNGLE.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            try {
+                EntityBoat.SyntheticClass_1.a[EntityBoat.EnumBoatType.ACACIA.ordinal()] = 5;
+            } catch (NoSuchFieldError nosuchfielderror4) {
+                ;
+            }
+
+            try {
+                EntityBoat.SyntheticClass_1.a[EntityBoat.EnumBoatType.DARK_OAK.ordinal()] = 6;
+            } catch (NoSuchFieldError nosuchfielderror5) {
+                ;
+            }
+
+        }
+    }
+
+    public static enum EnumBoatType {
+
+        OAK(BlockWood.EnumLogVariant.OAK.a(), "oak"), SPRUCE(BlockWood.EnumLogVariant.SPRUCE.a(), "spruce"), BIRCH(BlockWood.EnumLogVariant.BIRCH.a(), "birch"), JUNGLE(BlockWood.EnumLogVariant.JUNGLE.a(), "jungle"), ACACIA(BlockWood.EnumLogVariant.ACACIA.a(), "acacia"), DARK_OAK(BlockWood.EnumLogVariant.DARK_OAK.a(), "dark_oak");
+
+        private final String g;
+        private final int h;
+
+        private EnumBoatType(int i, String s) {
+            this.g = s;
+            this.h = i;
+        }
+
+        public String a() {
+            return this.g;
+        }
+
+        public int b() {
+            return this.h;
+        }
+
+        public String toString() {
+            return this.g;
+        }
+
+        public static EntityBoat.EnumBoatType a(int i) {
+            if (i < 0 || i >= values().length) {
+                i = 0;
+            }
+
+            return values()[i];
+        }
+
+        public static EntityBoat.EnumBoatType a(String s) {
+            for (int i = 0; i < values().length; ++i) {
+                if (values()[i].a().equals(s)) {
+                    return values()[i];
+                }
+            }
+
+            return values()[0];
+        }
+    }
+
+    public static enum EnumStatus {
+
+        IN_WATER, UNDER_WATER, UNDER_FLOWING_WATER, ON_LAND, IN_AIR;
+
+        private EnumStatus() {}
     }
 }

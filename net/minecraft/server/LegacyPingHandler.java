@@ -35,7 +35,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
                 switch (i) {
                 case 0:
                     LegacyPingHandler.a.debug("Ping: (<1.3.x) from {}:{}", new Object[] { inetsocketaddress.getAddress(), Integer.valueOf(inetsocketaddress.getPort())});
-                    s = String.format("%s\u00a7%d\u00a7%d", new Object[] { minecraftserver.getMotd(), Integer.valueOf(minecraftserver.I()), Integer.valueOf(minecraftserver.J())});
+                    s = String.format("%s\u00a7%d\u00a7%d", new Object[] { minecraftserver.getMotd(), Integer.valueOf(minecraftserver.H()), Integer.valueOf(minecraftserver.I())});
                     this.a(channelhandlercontext, this.a(s));
                     break;
 
@@ -45,7 +45,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
                     }
 
                     LegacyPingHandler.a.debug("Ping: (1.4-1.5.x) from {}:{}", new Object[] { inetsocketaddress.getAddress(), Integer.valueOf(inetsocketaddress.getPort())});
-                    s = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", new Object[] { Integer.valueOf(127), minecraftserver.getVersion(), minecraftserver.getMotd(), Integer.valueOf(minecraftserver.I()), Integer.valueOf(minecraftserver.J())});
+                    s = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", new Object[] { Integer.valueOf(127), minecraftserver.getVersion(), minecraftserver.getMotd(), Integer.valueOf(minecraftserver.H()), Integer.valueOf(minecraftserver.I())});
                     this.a(channelhandlercontext, this.a(s));
                     break;
 
@@ -65,7 +65,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
                     }
 
                     LegacyPingHandler.a.debug("Ping: (1.6) from {}:{}", new Object[] { inetsocketaddress.getAddress(), Integer.valueOf(inetsocketaddress.getPort())});
-                    String s1 = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", new Object[] { Integer.valueOf(127), minecraftserver.getVersion(), minecraftserver.getMotd(), Integer.valueOf(minecraftserver.I()), Integer.valueOf(minecraftserver.J())});
+                    String s1 = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", new Object[] { Integer.valueOf(127), minecraftserver.getVersion(), minecraftserver.getMotd(), Integer.valueOf(minecraftserver.H()), Integer.valueOf(minecraftserver.I())});
                     ByteBuf bytebuf1 = this.a(s1);
 
                     try {

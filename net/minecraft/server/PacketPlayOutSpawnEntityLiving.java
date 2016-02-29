@@ -2,34 +2,37 @@ package net.minecraft.server;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlayOut> {
 
     private int a;
-    private int b;
+    private UUID b;
     private int c;
-    private int d;
-    private int e;
-    private int f;
+    private double d;
+    private double e;
+    private double f;
     private int g;
     private int h;
-    private byte i;
+    private int i;
     private byte j;
     private byte k;
-    private DataWatcher l;
-    private List<DataWatcher.WatchableObject> m;
+    private byte l;
+    private DataWatcher m;
+    private List<DataWatcher.Item<?>> n;
 
     public PacketPlayOutSpawnEntityLiving() {}
 
     public PacketPlayOutSpawnEntityLiving(EntityLiving entityliving) {
         this.a = entityliving.getId();
-        this.b = (byte) EntityTypes.a(entityliving);
-        this.c = MathHelper.floor(entityliving.locX * 32.0D);
-        this.d = MathHelper.floor(entityliving.locY * 32.0D);
-        this.e = MathHelper.floor(entityliving.locZ * 32.0D);
-        this.i = (byte) ((int) (entityliving.yaw * 256.0F / 360.0F));
-        this.j = (byte) ((int) (entityliving.pitch * 256.0F / 360.0F));
-        this.k = (byte) ((int) (entityliving.aK * 256.0F / 360.0F));
+        this.b = entityliving.getUniqueID();
+        this.c = (byte) EntityTypes.a((Entity) entityliving);
+        this.d = entityliving.locX;
+        this.e = entityliving.locY;
+        this.f = entityliving.locZ;
+        this.j = (byte) ((int) (entityliving.yaw * 256.0F / 360.0F));
+        this.k = (byte) ((int) (entityliving.pitch * 256.0F / 360.0F));
+        this.l = (byte) ((int) (entityliving.aO * 256.0F / 360.0F));
         double d0 = 3.9D;
         double d1 = entityliving.motX;
         double d2 = entityliving.motY;
@@ -59,40 +62,42 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
             d3 = d0;
         }
 
-        this.f = (int) (d1 * 8000.0D);
-        this.g = (int) (d2 * 8000.0D);
-        this.h = (int) (d3 * 8000.0D);
-        this.l = entityliving.getDataWatcher();
+        this.g = (int) (d1 * 8000.0D);
+        this.h = (int) (d2 * 8000.0D);
+        this.i = (int) (d3 * 8000.0D);
+        this.m = entityliving.getDataWatcher();
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-        this.b = packetdataserializer.readByte() & 255;
-        this.c = packetdataserializer.readInt();
-        this.d = packetdataserializer.readInt();
-        this.e = packetdataserializer.readInt();
-        this.i = packetdataserializer.readByte();
+        this.a = packetdataserializer.g();
+        this.b = packetdataserializer.i();
+        this.c = packetdataserializer.readByte() & 255;
+        this.d = packetdataserializer.readDouble();
+        this.e = packetdataserializer.readDouble();
+        this.f = packetdataserializer.readDouble();
         this.j = packetdataserializer.readByte();
         this.k = packetdataserializer.readByte();
-        this.f = packetdataserializer.readShort();
+        this.l = packetdataserializer.readByte();
         this.g = packetdataserializer.readShort();
         this.h = packetdataserializer.readShort();
-        this.m = DataWatcher.b(packetdataserializer);
+        this.i = packetdataserializer.readShort();
+        this.n = DataWatcher.b(packetdataserializer);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
-        packetdataserializer.writeByte(this.b & 255);
-        packetdataserializer.writeInt(this.c);
-        packetdataserializer.writeInt(this.d);
-        packetdataserializer.writeInt(this.e);
-        packetdataserializer.writeByte(this.i);
+        packetdataserializer.a(this.b);
+        packetdataserializer.writeByte(this.c & 255);
+        packetdataserializer.writeDouble(this.d);
+        packetdataserializer.writeDouble(this.e);
+        packetdataserializer.writeDouble(this.f);
         packetdataserializer.writeByte(this.j);
         packetdataserializer.writeByte(this.k);
-        packetdataserializer.writeShort(this.f);
+        packetdataserializer.writeByte(this.l);
         packetdataserializer.writeShort(this.g);
         packetdataserializer.writeShort(this.h);
-        this.l.a(packetdataserializer);
+        packetdataserializer.writeShort(this.i);
+        this.m.a(packetdataserializer);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

@@ -6,7 +6,7 @@ public class RecipesCrafting {
 
     public void a(CraftingManager craftingmanager) {
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.CHEST), new Object[] { "###", "# #", "###", Character.valueOf('#'), Blocks.PLANKS});
-        craftingmanager.registerShapedRecipe(new ItemStack(Blocks.TRAPPED_CHEST), new Object[] { "#-", Character.valueOf('#'), Blocks.CHEST, Character.valueOf('-'), Blocks.TRIPWIRE_HOOK});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Blocks.TRAPPED_CHEST), new Object[] { Blocks.CHEST, Blocks.TRIPWIRE_HOOK});
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.ENDER_CHEST), new Object[] { "###", "#E#", "###", Character.valueOf('#'), Blocks.OBSIDIAN, Character.valueOf('E'), Items.ENDER_EYE});
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.FURNACE), new Object[] { "###", "# #", "###", Character.valueOf('#'), Blocks.COBBLESTONE});
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.CRAFTING_TABLE), new Object[] { "##", "##", Character.valueOf('#'), Blocks.PLANKS});
@@ -19,8 +19,8 @@ public class RecipesCrafting {
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 1, BlockQuartz.EnumQuartzVariant.CHISELED.a()), new Object[] { "#", "#", Character.valueOf('#'), new ItemStack(Blocks.STONE_SLAB, 1, BlockDoubleStepAbstract.EnumStoneSlabVariant.QUARTZ.a())});
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 2, BlockQuartz.EnumQuartzVariant.LINES_Y.a()), new Object[] { "#", "#", Character.valueOf('#'), new ItemStack(Blocks.QUARTZ_BLOCK, 1, BlockQuartz.EnumQuartzVariant.DEFAULT.a())});
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STONEBRICK, 4), new Object[] { "##", "##", Character.valueOf('#'), new ItemStack(Blocks.STONE, 1, BlockStone.EnumStoneVariant.STONE.a())});
-        craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STONEBRICK, 1, BlockSmoothBrick.P), new Object[] { "#", "#", Character.valueOf('#'), new ItemStack(Blocks.STONE_SLAB, 1, BlockDoubleStepAbstract.EnumStoneSlabVariant.SMOOTHBRICK.a())});
-        craftingmanager.registerShapelessRecipe(new ItemStack(Blocks.STONEBRICK, 1, BlockSmoothBrick.N), new Object[] { Blocks.STONEBRICK, Blocks.VINE});
+        craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STONEBRICK, 1, BlockSmoothBrick.e), new Object[] { "#", "#", Character.valueOf('#'), new ItemStack(Blocks.STONE_SLAB, 1, BlockDoubleStepAbstract.EnumStoneSlabVariant.SMOOTHBRICK.a())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Blocks.STONEBRICK, 1, BlockSmoothBrick.c), new Object[] { Blocks.STONEBRICK, Blocks.VINE});
         craftingmanager.registerShapelessRecipe(new ItemStack(Blocks.MOSSY_COBBLESTONE, 1), new Object[] { Blocks.COBBLESTONE, Blocks.VINE});
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.IRON_BARS, 16), new Object[] { "###", "###", Character.valueOf('#'), Items.IRON_INGOT});
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.GLASS_PANE, 16), new Object[] { "###", "###", Character.valueOf('#'), Blocks.GLASS});
@@ -35,8 +35,12 @@ public class RecipesCrafting {
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STONE, 4, BlockStone.EnumStoneVariant.GRANITE_SMOOTH.a()), new Object[] { "SS", "SS", Character.valueOf('S'), new ItemStack(Blocks.STONE, 1, BlockStone.EnumStoneVariant.GRANITE.a())});
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STONE, 4, BlockStone.EnumStoneVariant.ANDESITE_SMOOTH.a()), new Object[] { "SS", "SS", Character.valueOf('S'), new ItemStack(Blocks.STONE, 1, BlockStone.EnumStoneVariant.ANDESITE.a())});
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.PRISMARINE, 1, BlockPrismarine.b), new Object[] { "SS", "SS", Character.valueOf('S'), Items.PRISMARINE_SHARD});
-        craftingmanager.registerShapedRecipe(new ItemStack(Blocks.PRISMARINE, 1, BlockPrismarine.N), new Object[] { "SSS", "SSS", "SSS", Character.valueOf('S'), Items.PRISMARINE_SHARD});
-        craftingmanager.registerShapedRecipe(new ItemStack(Blocks.PRISMARINE, 1, BlockPrismarine.O), new Object[] { "SSS", "SIS", "SSS", Character.valueOf('S'), Items.PRISMARINE_SHARD, Character.valueOf('I'), new ItemStack(Items.DYE, 1, EnumColor.BLACK.getInvColorIndex())});
+        craftingmanager.registerShapedRecipe(new ItemStack(Blocks.PRISMARINE, 1, BlockPrismarine.c), new Object[] { "SSS", "SSS", "SSS", Character.valueOf('S'), Items.PRISMARINE_SHARD});
+        craftingmanager.registerShapedRecipe(new ItemStack(Blocks.PRISMARINE, 1, BlockPrismarine.d), new Object[] { "SSS", "SIS", "SSS", Character.valueOf('S'), Items.PRISMARINE_SHARD, Character.valueOf('I'), new ItemStack(Items.DYE, 1, EnumColor.BLACK.getInvColorIndex())});
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.SEA_LANTERN, 1, 0), new Object[] { "SCS", "CCC", "SCS", Character.valueOf('S'), Items.PRISMARINE_SHARD, Character.valueOf('C'), Items.PRISMARINE_CRYSTALS});
+        craftingmanager.registerShapedRecipe(new ItemStack(Blocks.PURPUR_BLOCK, 4, 0), new Object[] { "FF", "FF", Character.valueOf('F'), Items.CHORUS_FRUIT_POPPED});
+        craftingmanager.registerShapedRecipe(new ItemStack(Blocks.PURPUR_STAIRS, 4, 0), new Object[] { "#  ", "## ", "###", Character.valueOf('#'), Blocks.PURPUR_BLOCK});
+        craftingmanager.registerShapedRecipe(new ItemStack(Blocks.PURPUR_PILLAR, 1, 0), new Object[] { "#", "#", Character.valueOf('#'), Blocks.PURPUR_SLAB});
+        craftingmanager.registerShapedRecipe(new ItemStack(Blocks.END_BRICKS, 4, 0), new Object[] { "##", "##", Character.valueOf('#'), Blocks.END_STONE});
     }
 }

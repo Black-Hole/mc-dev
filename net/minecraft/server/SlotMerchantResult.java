@@ -46,7 +46,7 @@ public class SlotMerchantResult extends Slot {
 
             if (this.a(merchantrecipe, itemstack1, itemstack2) || this.a(merchantrecipe, itemstack2, itemstack1)) {
                 this.h.a(merchantrecipe);
-                entityhuman.b(StatisticList.G);
+                entityhuman.b(StatisticList.I);
                 if (itemstack1 != null && itemstack1.count <= 0) {
                     itemstack1 = null;
                 }
@@ -66,8 +66,8 @@ public class SlotMerchantResult extends Slot {
         ItemStack itemstack2 = merchantrecipe.getBuyItem1();
         ItemStack itemstack3 = merchantrecipe.getBuyItem2();
 
-        if (itemstack != null && itemstack.getItem() == itemstack2.getItem()) {
-            if (itemstack3 != null && itemstack1 != null && itemstack3.getItem() == itemstack1.getItem()) {
+        if (itemstack != null && itemstack.getItem() == itemstack2.getItem() && itemstack.count >= itemstack2.count) {
+            if (itemstack3 != null && itemstack1 != null && itemstack3.getItem() == itemstack1.getItem() && itemstack1.count >= itemstack3.count) {
                 itemstack.count -= itemstack2.count;
                 itemstack1.count -= itemstack3.count;
                 return true;

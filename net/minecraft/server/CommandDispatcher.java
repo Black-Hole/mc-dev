@@ -4,7 +4,10 @@ import java.util.Iterator;
 
 public class CommandDispatcher extends CommandHandler implements ICommandDispatcher {
 
-    public CommandDispatcher() {
+    private final MinecraftServer a;
+
+    public CommandDispatcher(MinecraftServer minecraftserver) {
+        this.a = minecraftserver;
         this.a((ICommand) (new CommandTime()));
         this.a((ICommand) (new CommandGamemode()));
         this.a((ICommand) (new CommandDifficulty()));
@@ -48,7 +51,7 @@ public class CommandDispatcher extends CommandHandler implements ICommandDispatc
         this.a((ICommand) (new CommandWorldBorder()));
         this.a((ICommand) (new CommandTitle()));
         this.a((ICommand) (new CommandEntityData()));
-        if (MinecraftServer.getServer().ae()) {
+        if (minecraftserver.aa()) {
             this.a((ICommand) (new CommandOp()));
             this.a((ICommand) (new CommandDeop()));
             this.a((ICommand) (new CommandStop()));
@@ -73,7 +76,7 @@ public class CommandDispatcher extends CommandHandler implements ICommandDispatc
 
     public void a(ICommandListener icommandlistener, ICommand icommand, int i, String s, Object... aobject) {
         boolean flag = true;
-        MinecraftServer minecraftserver = MinecraftServer.getServer();
+        MinecraftServer minecraftserver = this.a;
 
         if (!icommandlistener.getSendCommandFeedback()) {
             flag = false;
@@ -89,9 +92,9 @@ public class CommandDispatcher extends CommandHandler implements ICommandDispatc
             while (iterator.hasNext()) {
                 EntityHuman entityhuman = (EntityHuman) iterator.next();
 
-                if (entityhuman != icommandlistener && minecraftserver.getPlayerList().isOp(entityhuman.getProfile()) && icommand.canUse(icommandlistener)) {
-                    boolean flag1 = icommandlistener instanceof MinecraftServer && MinecraftServer.getServer().r();
-                    boolean flag2 = icommandlistener instanceof RemoteControlCommandListener && MinecraftServer.getServer().q();
+                if (entityhuman != icommandlistener && minecraftserver.getPlayerList().isOp(entityhuman.getProfile()) && icommand.canUse(this.a, icommandlistener)) {
+                    boolean flag1 = icommandlistener instanceof MinecraftServer && this.a.s();
+                    boolean flag2 = icommandlistener instanceof RemoteControlCommandListener && this.a.r();
 
                     if (flag1 || flag2 || !(icommandlistener instanceof RemoteControlCommandListener) && !(icommandlistener instanceof MinecraftServer)) {
                         entityhuman.sendMessage(chatmessage);
@@ -107,12 +110,16 @@ public class CommandDispatcher extends CommandHandler implements ICommandDispatc
         boolean flag3 = minecraftserver.worldServer[0].getGameRules().getBoolean("sendCommandFeedback");
 
         if (icommandlistener instanceof CommandBlockListenerAbstract) {
-            flag3 = ((CommandBlockListenerAbstract) icommandlistener).m();
+            flag3 = ((CommandBlockListenerAbstract) icommandlistener).n();
         }
 
         if ((i & 1) != 1 && flag3 || icommandlistener instanceof MinecraftServer) {
             icommandlistener.sendMessage(new ChatMessage(s, aobject));
         }
 
+    }
+
+    protected MinecraftServer a() {
+        return this.a;
     }
 }

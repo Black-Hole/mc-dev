@@ -1,9 +1,11 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Maps;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +15,7 @@ public class RegistrySimple<K, V> implements IRegistry<K, V> {
 
     private static final Logger a = LogManager.getLogger();
     protected final Map<K, V> c = this.b();
+    private Object[] b;
 
     public RegistrySimple() {}
 
@@ -27,6 +30,7 @@ public class RegistrySimple<K, V> implements IRegistry<K, V> {
     public void a(K k0, V v0) {
         Validate.notNull(k0);
         Validate.notNull(v0);
+        this.b = null;
         if (this.c.containsKey(k0)) {
             RegistrySimple.a.debug("Adding duplicate key \'" + k0 + "\' to registry");
         }
@@ -36,6 +40,20 @@ public class RegistrySimple<K, V> implements IRegistry<K, V> {
 
     public Set<K> keySet() {
         return Collections.unmodifiableSet(this.c.keySet());
+    }
+
+    public V a(Random random) {
+        if (this.b == null) {
+            Collection collection = this.c.values();
+
+            if (collection.isEmpty()) {
+                return null;
+            }
+
+            this.b = collection.toArray(new Object[collection.size()]);
+        }
+
+        return this.b[random.nextInt(this.b.length)];
     }
 
     public boolean d(K k0) {

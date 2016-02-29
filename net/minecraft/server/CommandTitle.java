@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
 import com.google.gson.JsonParseException;
+import java.util.Collections;
 import java.util.List;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +24,7 @@ public class CommandTitle extends CommandAbstract {
         return "commands.title.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.title.usage", new Object[0]);
         } else {
@@ -38,7 +38,7 @@ public class CommandTitle extends CommandAbstract {
                 }
             }
 
-            EntityPlayer entityplayer = a(icommandlistener, astring[0]);
+            EntityPlayer entityplayer = a(minecraftserver, icommandlistener, astring[0]);
             PacketPlayOutTitle.EnumTitleAction packetplayouttitle_enumtitleaction = PacketPlayOutTitle.EnumTitleAction.a(astring[1]);
 
             if (packetplayouttitle_enumtitleaction != PacketPlayOutTitle.EnumTitleAction.CLEAR && packetplayouttitle_enumtitleaction != PacketPlayOutTitle.EnumTitleAction.RESET) {
@@ -52,7 +52,7 @@ public class CommandTitle extends CommandAbstract {
                         PacketPlayOutTitle packetplayouttitle = new PacketPlayOutTitle(i, j, k);
 
                         entityplayer.playerConnection.sendPacket(packetplayouttitle);
-                        a(icommandlistener, this, "commands.title.success", new Object[0]);
+                        a(icommandlistener, (ICommand) this, "commands.title.success", new Object[0]);
                     }
                 } else if (astring.length < 3) {
                     throw new ExceptionUsage("commands.title.usage", new Object[0]);
@@ -64,15 +64,13 @@ public class CommandTitle extends CommandAbstract {
                     try {
                         ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
                     } catch (JsonParseException jsonparseexception) {
-                        Throwable throwable = ExceptionUtils.getRootCause(jsonparseexception);
-
-                        throw new ExceptionInvalidSyntax("commands.tellraw.jsonException", new Object[] { throwable == null ? "" : throwable.getMessage()});
+                        throw a(jsonparseexception);
                     }
 
                     PacketPlayOutTitle packetplayouttitle1 = new PacketPlayOutTitle(packetplayouttitle_enumtitleaction, ChatComponentUtils.filterForDisplay(icommandlistener, ichatbasecomponent, entityplayer));
 
                     entityplayer.playerConnection.sendPacket(packetplayouttitle1);
-                    a(icommandlistener, this, "commands.title.success", new Object[0]);
+                    a(icommandlistener, (ICommand) this, "commands.title.success", new Object[0]);
                 }
             } else if (astring.length != 2) {
                 throw new ExceptionUsage("commands.title.usage", new Object[0]);
@@ -80,13 +78,13 @@ public class CommandTitle extends CommandAbstract {
                 PacketPlayOutTitle packetplayouttitle2 = new PacketPlayOutTitle(packetplayouttitle_enumtitleaction, (IChatBaseComponent) null);
 
                 entityplayer.playerConnection.sendPacket(packetplayouttitle2);
-                a(icommandlistener, this, "commands.title.success", new Object[0]);
+                a(icommandlistener, (ICommand) this, "commands.title.success", new Object[0]);
             }
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : (astring.length == 2 ? a(astring, PacketPlayOutTitle.EnumTitleAction.a()) : null);
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : (astring.length == 2 ? a(astring, PacketPlayOutTitle.EnumTitleAction.a()) : Collections.emptyList());
     }
 
     public boolean isListStart(String[] astring, int i) {

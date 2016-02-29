@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonParseException;
-
 public class TileEntitySign extends TileEntity {
 
     public final IChatBaseComponent[] lines = new IChatBaseComponent[] { new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
@@ -12,8 +10,8 @@ public class TileEntitySign extends TileEntity {
 
     public TileEntitySign() {}
 
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void save(NBTTagCompound nbttagcompound) {
+        super.save(nbttagcompound);
 
         for (int i = 0; i < 4; ++i) {
             String s = IChatBaseComponent.ChatSerializer.a(this.lines[i]);
@@ -63,35 +61,34 @@ public class TileEntitySign extends TileEntity {
             }
 
             public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {}
+
+            public MinecraftServer h() {
+                return TileEntitySign.this.world.getMinecraftServer();
+            }
         };
 
         for (int i = 0; i < 4; ++i) {
             String s = nbttagcompound.getString("Text" + (i + 1));
+            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
 
             try {
-                IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
-
-                try {
-                    this.lines[i] = ChatComponentUtils.filterForDisplay(icommandlistener, ichatbasecomponent, (Entity) null);
-                } catch (CommandException commandexception) {
-                    this.lines[i] = ichatbasecomponent;
-                }
-            } catch (JsonParseException jsonparseexception) {
-                this.lines[i] = new ChatComponentText(s);
+                this.lines[i] = ChatComponentUtils.filterForDisplay(icommandlistener, ichatbasecomponent, (Entity) null);
+            } catch (CommandException commandexception) {
+                this.lines[i] = ichatbasecomponent;
             }
         }
 
         this.i.a(nbttagcompound);
     }
 
-    public Packet getUpdatePacket() {
+    public Packet<?> getUpdatePacket() {
         IChatBaseComponent[] aichatbasecomponent = new IChatBaseComponent[4];
 
         System.arraycopy(this.lines, 0, aichatbasecomponent, 0, 4);
         return new PacketPlayOutUpdateSign(this.world, this.position, aichatbasecomponent);
     }
 
-    public boolean F() {
+    public boolean isFilteredNBT() {
         return true;
     }
 
@@ -144,7 +141,14 @@ public class TileEntitySign extends TileEntity {
             }
 
             public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
-                TileEntitySign.this.i.a(this, commandobjectiveexecutor_enumcommandresult, i);
+                if (TileEntitySign.this.world != null && !TileEntitySign.this.world.isClientSide) {
+                    TileEntitySign.this.i.a(TileEntitySign.this.world.getMinecraftServer(), this, commandobjectiveexecutor_enumcommandresult, i);
+                }
+
+            }
+
+            public MinecraftServer h() {
+                return entityhuman.h();
             }
         };
 
@@ -155,7 +159,7 @@ public class TileEntitySign extends TileEntity {
                 ChatClickable chatclickable = chatmodifier.h();
 
                 if (chatclickable.a() == ChatClickable.EnumClickAction.RUN_COMMAND) {
-                    MinecraftServer.getServer().getCommandHandler().a(icommandlistener, chatclickable.b());
+                    entityhuman.h().getCommandHandler().a(icommandlistener, chatclickable.b());
                 }
             }
         }

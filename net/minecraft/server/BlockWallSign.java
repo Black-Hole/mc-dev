@@ -1,47 +1,38 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
-
 public class BlockWallSign extends BlockSign {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.0D, 0.28125D, 0.0D, 0.125D, 0.78125D, 1.0D);
+    protected static final AxisAlignedBB d = new AxisAlignedBB(0.875D, 0.28125D, 0.0D, 1.0D, 0.78125D, 1.0D);
+    protected static final AxisAlignedBB e = new AxisAlignedBB(0.0D, 0.28125D, 0.0D, 1.0D, 0.78125D, 0.125D);
+    protected static final AxisAlignedBB f = new AxisAlignedBB(0.0D, 0.28125D, 0.875D, 1.0D, 0.78125D, 1.0D);
 
     public BlockWallSign() {
-        this.j(this.blockStateList.getBlockData().set(BlockWallSign.FACING, EnumDirection.NORTH));
+        this.w(this.blockStateList.getBlockData().set(BlockWallSign.FACING, EnumDirection.NORTH));
     }
 
-    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        EnumDirection enumdirection = (EnumDirection) iblockaccess.getType(blockposition).get(BlockWallSign.FACING);
-        float f = 0.28125F;
-        float f1 = 0.78125F;
-        float f2 = 0.0F;
-        float f3 = 1.0F;
-        float f4 = 0.125F;
-
-        this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-        switch (BlockWallSign.SyntheticClass_1.a[enumdirection.ordinal()]) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        switch (BlockWallSign.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockWallSign.FACING)).ordinal()]) {
         case 1:
-            this.a(f2, f, 1.0F - f4, f3, f1, 1.0F);
-            break;
+        default:
+            return BlockWallSign.f;
 
         case 2:
-            this.a(f2, f, 0.0F, f3, f1, f4);
-            break;
+            return BlockWallSign.e;
 
         case 3:
-            this.a(1.0F - f4, f, f2, 1.0F, f1, f3);
-            break;
+            return BlockWallSign.d;
 
         case 4:
-            this.a(0.0F, f, f2, f4, f1, f3);
+            return BlockWallSign.c;
         }
-
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockWallSign.FACING);
 
-        if (!world.getType(blockposition.shift(enumdirection.opposite())).getBlock().getMaterial().isBuildable()) {
+        if (!world.getType(blockposition.shift(enumdirection.opposite())).getMaterial().isBuildable()) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
         }
@@ -61,6 +52,14 @@ public class BlockWallSign extends BlockSign {
 
     public int toLegacyData(IBlockData iblockdata) {
         return ((EnumDirection) iblockdata.get(BlockWallSign.FACING)).a();
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return iblockdata.set(BlockWallSign.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockWallSign.FACING)));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockWallSign.FACING)));
     }
 
     protected BlockStateList getStateList() {

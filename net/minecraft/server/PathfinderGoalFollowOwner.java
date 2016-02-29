@@ -10,7 +10,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
     private int h;
     float b;
     float c;
-    private boolean i;
+    private float i;
 
     public PathfinderGoalFollowOwner(EntityTameableAnimal entitytameableanimal, double d0, float f, float f1) {
         this.d = entitytameableanimal;
@@ -43,35 +43,35 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.g.m() && this.d.h(this.e) > (double) (this.b * this.b) && !this.d.isSitting();
+        return !this.g.n() && this.d.h(this.e) > (double) (this.b * this.b) && !this.d.isSitting();
     }
 
     public void c() {
         this.h = 0;
-        this.i = ((Navigation) this.d.getNavigation()).e();
-        ((Navigation) this.d.getNavigation()).a(false);
+        this.i = this.d.a(PathType.WATER);
+        this.d.a(PathType.WATER, 0.0F);
     }
 
     public void d() {
         this.e = null;
-        this.g.n();
-        ((Navigation) this.d.getNavigation()).a(true);
+        this.g.o();
+        this.d.a(PathType.WATER, this.i);
     }
 
     private boolean a(BlockPosition blockposition) {
         IBlockData iblockdata = this.a.getType(blockposition);
         Block block = iblockdata.getBlock();
 
-        return block == Blocks.AIR ? true : !block.d();
+        return block == Blocks.AIR ? true : !iblockdata.h();
     }
 
     public void e() {
-        this.d.getControllerLook().a(this.e, 10.0F, (float) this.d.bQ());
+        this.d.getControllerLook().a(this.e, 10.0F, (float) this.d.N());
         if (!this.d.isSitting()) {
             if (--this.h <= 0) {
                 this.h = 10;
                 if (!this.g.a((Entity) this.e, this.f)) {
-                    if (!this.d.cc()) {
+                    if (!this.d.isLeashed()) {
                         if (this.d.h(this.e) >= 144.0D) {
                             int i = MathHelper.floor(this.e.locX) - 2;
                             int j = MathHelper.floor(this.e.locZ) - 2;
@@ -79,9 +79,9 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
                             for (int l = 0; l <= 4; ++l) {
                                 for (int i1 = 0; i1 <= 4; ++i1) {
-                                    if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && World.a((IBlockAccess) this.a, new BlockPosition(i + l, k - 1, j + i1)) && this.a(new BlockPosition(i + l, k, j + i1)) && this.a(new BlockPosition(i + l, k + 1, j + i1))) {
+                                    if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.a.getType(new BlockPosition(i + l, k - 1, j + i1)).q() && this.a(new BlockPosition(i + l, k, j + i1)) && this.a(new BlockPosition(i + l, k + 1, j + i1))) {
                                         this.d.setPositionRotation((double) ((float) (i + l) + 0.5F), (double) k, (double) ((float) (j + i1) + 0.5F), this.d.yaw, this.d.pitch);
-                                        this.g.n();
+                                        this.g.o();
                                         return;
                                     }
                                 }

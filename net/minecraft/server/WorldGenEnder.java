@@ -1,57 +1,117 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
 import java.util.Random;
 
 public class WorldGenEnder extends WorldGenerator {
 
-    private Block a;
+    private boolean a = false;
+    private WorldGenEnder.Spike b = null;
+    private BlockPosition c;
 
-    public WorldGenEnder(Block block) {
-        this.a = block;
+    public WorldGenEnder() {}
+
+    public void a(WorldGenEnder.Spike worldgenender_spike) {
+        this.b = worldgenender_spike;
+    }
+
+    public void a(boolean flag) {
+        this.a = flag;
     }
 
     public boolean generate(World world, Random random, BlockPosition blockposition) {
-        if (world.isEmpty(blockposition) && world.getType(blockposition.down()).getBlock() == this.a) {
-            int i = random.nextInt(32) + 6;
-            int j = random.nextInt(4) + 1;
-            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+        if (this.b == null) {
+            throw new IllegalStateException("Decoration requires priming with a spike");
+        } else {
+            int i = this.b.c();
+            Iterator iterator = BlockPosition.b(new BlockPosition(blockposition.getX() - i, 0, blockposition.getZ() - i), new BlockPosition(blockposition.getX() + i, this.b.d() + 10, blockposition.getZ() + i)).iterator();
 
-            int k;
-            int l;
-            int i1;
-            int j1;
+            while (iterator.hasNext()) {
+                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = (BlockPosition.MutableBlockPosition) iterator.next();
 
-            for (k = blockposition.getX() - j; k <= blockposition.getX() + j; ++k) {
-                for (l = blockposition.getZ() - j; l <= blockposition.getZ() + j; ++l) {
-                    i1 = k - blockposition.getX();
-                    j1 = l - blockposition.getZ();
-                    if (i1 * i1 + j1 * j1 <= j * j + 1 && world.getType(blockposition_mutableblockposition.c(k, blockposition.getY() - 1, l)).getBlock() != this.a) {
-                        return false;
-                    }
+                if (blockposition_mutableblockposition.distanceSquared((double) blockposition.getX(), (double) blockposition_mutableblockposition.getY(), (double) blockposition.getZ()) <= (double) (i * i + 1) && blockposition_mutableblockposition.getY() < this.b.d()) {
+                    this.a(world, blockposition_mutableblockposition, Blocks.OBSIDIAN.getBlockData());
+                } else if (blockposition_mutableblockposition.getY() > 65) {
+                    this.a(world, blockposition_mutableblockposition, Blocks.AIR.getBlockData());
                 }
             }
 
-            for (k = blockposition.getY(); k < blockposition.getY() + i && k < 256; ++k) {
-                for (l = blockposition.getX() - j; l <= blockposition.getX() + j; ++l) {
-                    for (i1 = blockposition.getZ() - j; i1 <= blockposition.getZ() + j; ++i1) {
-                        j1 = l - blockposition.getX();
-                        int k1 = i1 - blockposition.getZ();
-
-                        if (j1 * j1 + k1 * k1 <= j * j + 1) {
-                            world.setTypeAndData(new BlockPosition(l, k, i1), Blocks.OBSIDIAN.getBlockData(), 2);
+            if (this.b.e()) {
+                for (int j = -2; j <= 2; ++j) {
+                    for (int k = -2; k <= 2; ++k) {
+                        if (MathHelper.a(j) == 2 || MathHelper.a(k) == 2) {
+                            this.a(world, new BlockPosition(blockposition.getX() + j, this.b.d(), blockposition.getZ() + k), Blocks.IRON_BARS.getBlockData());
+                            this.a(world, new BlockPosition(blockposition.getX() + j, this.b.d() + 1, blockposition.getZ() + k), Blocks.IRON_BARS.getBlockData());
+                            this.a(world, new BlockPosition(blockposition.getX() + j, this.b.d() + 2, blockposition.getZ() + k), Blocks.IRON_BARS.getBlockData());
                         }
+
+                        this.a(world, new BlockPosition(blockposition.getX() + j, this.b.d() + 3, blockposition.getZ() + k), Blocks.IRON_BARS.getBlockData());
                     }
                 }
             }
 
             EntityEnderCrystal entityendercrystal = new EntityEnderCrystal(world);
 
-            entityendercrystal.setPositionRotation((double) ((float) blockposition.getX() + 0.5F), (double) (blockposition.getY() + i), (double) ((float) blockposition.getZ() + 0.5F), random.nextFloat() * 360.0F, 0.0F);
+            entityendercrystal.a(this.c);
+            entityendercrystal.h(this.a);
+            entityendercrystal.setPositionRotation((double) ((float) blockposition.getX() + 0.5F), (double) (this.b.d() + 1), (double) ((float) blockposition.getZ() + 0.5F), random.nextFloat() * 360.0F, 0.0F);
             world.addEntity(entityendercrystal);
-            world.setTypeAndData(blockposition.up(i), Blocks.BEDROCK.getBlockData(), 2);
+            this.a(world, new BlockPosition(blockposition.getX(), this.b.d(), blockposition.getZ()), Blocks.BEDROCK.getBlockData());
             return true;
-        } else {
-            return false;
+        }
+    }
+
+    public void a(BlockPosition blockposition) {
+        this.c = blockposition;
+    }
+
+    public static class Spike {
+
+        private final int a;
+        private final int b;
+        private final int c;
+        private final int d;
+        private final boolean e;
+        private final AxisAlignedBB f;
+
+        public Spike(int i, int j, int k, int l, boolean flag) {
+            this.a = i;
+            this.b = j;
+            this.c = k;
+            this.d = l;
+            this.e = flag;
+            this.f = new AxisAlignedBB((double) (i - k), 0.0D, (double) (j - k), (double) (i + k), 256.0D, (double) (j + k));
+        }
+
+        public boolean a(BlockPosition blockposition) {
+            int i = this.a - this.c;
+            int j = this.b - this.c;
+
+            return blockposition.getX() == (i & -16) && blockposition.getZ() == (j & -16);
+        }
+
+        public int a() {
+            return this.a;
+        }
+
+        public int b() {
+            return this.b;
+        }
+
+        public int c() {
+            return this.c;
+        }
+
+        public int d() {
+            return this.d;
+        }
+
+        public boolean e() {
+            return this.e;
+        }
+
+        public AxisAlignedBB f() {
+            return this.f;
         }
     }
 }

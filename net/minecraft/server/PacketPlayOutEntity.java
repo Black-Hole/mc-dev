@@ -5,9 +5,9 @@ import java.io.IOException;
 public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
 
     protected int a;
-    protected byte b;
-    protected byte c;
-    protected byte d;
+    protected int b;
+    protected int c;
+    protected int d;
     protected byte e;
     protected byte f;
     protected boolean g;
@@ -20,7 +20,7 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
+        this.a = packetdataserializer.g();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
@@ -76,27 +76,27 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
 
         public PacketPlayOutRelEntityMove() {}
 
-        public PacketPlayOutRelEntityMove(int i, byte b0, byte b1, byte b2, boolean flag) {
+        public PacketPlayOutRelEntityMove(int i, long j, long k, long l, boolean flag) {
             super(i);
-            this.b = b0;
-            this.c = b1;
-            this.d = b2;
+            this.b = (int) j;
+            this.c = (int) k;
+            this.d = (int) l;
             this.g = flag;
         }
 
         public void a(PacketDataSerializer packetdataserializer) throws IOException {
             super.a(packetdataserializer);
-            this.b = packetdataserializer.readByte();
-            this.c = packetdataserializer.readByte();
-            this.d = packetdataserializer.readByte();
+            this.b = packetdataserializer.readShort();
+            this.c = packetdataserializer.readShort();
+            this.d = packetdataserializer.readShort();
             this.g = packetdataserializer.readBoolean();
         }
 
         public void b(PacketDataSerializer packetdataserializer) throws IOException {
             super.b(packetdataserializer);
-            packetdataserializer.writeByte(this.b);
-            packetdataserializer.writeByte(this.c);
-            packetdataserializer.writeByte(this.d);
+            packetdataserializer.writeShort(this.b);
+            packetdataserializer.writeShort(this.c);
+            packetdataserializer.writeShort(this.d);
             packetdataserializer.writeBoolean(this.g);
         }
 
@@ -111,22 +111,22 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
             this.h = true;
         }
 
-        public PacketPlayOutRelEntityMoveLook(int i, byte b0, byte b1, byte b2, byte b3, byte b4, boolean flag) {
+        public PacketPlayOutRelEntityMoveLook(int i, long j, long k, long l, byte b0, byte b1, boolean flag) {
             super(i);
-            this.b = b0;
-            this.c = b1;
-            this.d = b2;
-            this.e = b3;
-            this.f = b4;
+            this.b = (int) j;
+            this.c = (int) k;
+            this.d = (int) l;
+            this.e = b0;
+            this.f = b1;
             this.g = flag;
             this.h = true;
         }
 
         public void a(PacketDataSerializer packetdataserializer) throws IOException {
             super.a(packetdataserializer);
-            this.b = packetdataserializer.readByte();
-            this.c = packetdataserializer.readByte();
-            this.d = packetdataserializer.readByte();
+            this.b = packetdataserializer.readShort();
+            this.c = packetdataserializer.readShort();
+            this.d = packetdataserializer.readShort();
             this.e = packetdataserializer.readByte();
             this.f = packetdataserializer.readByte();
             this.g = packetdataserializer.readBoolean();
@@ -134,9 +134,9 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
 
         public void b(PacketDataSerializer packetdataserializer) throws IOException {
             super.b(packetdataserializer);
-            packetdataserializer.writeByte(this.b);
-            packetdataserializer.writeByte(this.c);
-            packetdataserializer.writeByte(this.d);
+            packetdataserializer.writeShort(this.b);
+            packetdataserializer.writeShort(this.c);
+            packetdataserializer.writeShort(this.d);
             packetdataserializer.writeByte(this.e);
             packetdataserializer.writeByte(this.f);
             packetdataserializer.writeBoolean(this.g);

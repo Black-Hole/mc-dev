@@ -17,14 +17,11 @@ public class CrashReportSystemDetails {
         this.b = s;
     }
 
-    public static String a(double d0, double d1, double d2) {
-        return String.format("%.2f,%.2f,%.2f - %s", new Object[] { Double.valueOf(d0), Double.valueOf(d1), Double.valueOf(d2), a(new BlockPosition(d0, d1, d2))});
+    public static String a(BlockPosition blockposition) {
+        return a(blockposition.getX(), blockposition.getY(), blockposition.getZ());
     }
 
-    public static String a(BlockPosition blockposition) {
-        int i = blockposition.getX();
-        int j = blockposition.getY();
-        int k = blockposition.getZ();
+    public static String a(int i, int j, int k) {
         StringBuilder stringbuilder = new StringBuilder();
 
         try {

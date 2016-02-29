@@ -6,13 +6,15 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
 
     public static final BlockStateEnum<BlockWood.EnumLogVariant> TYPE = BlockStateEnum.of("type", BlockWood.EnumLogVariant.class);
     public static final BlockStateInteger STAGE = BlockStateInteger.of("stage", 0, 1);
+    protected static final AxisAlignedBB d = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
 
     protected BlockSapling() {
-        this.j(this.blockStateList.getBlockData().set(BlockSapling.TYPE, BlockWood.EnumLogVariant.OAK).set(BlockSapling.STAGE, Integer.valueOf(0)));
-        float f = 0.4F;
-
-        this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 2.0F, 0.5F + f);
+        this.w(this.blockStateList.getBlockData().set(BlockSapling.TYPE, BlockWood.EnumLogVariant.OAK).set(BlockSapling.STAGE, Integer.valueOf(0)));
         this.a(CreativeModeTab.c);
+    }
+
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockSapling.d;
     }
 
     public String getName() {
@@ -31,14 +33,14 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
 
     public void grow(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (((Integer) iblockdata.get(BlockSapling.STAGE)).intValue() == 0) {
-            world.setTypeAndData(blockposition, iblockdata.a(BlockSapling.STAGE), 4);
+            world.setTypeAndData(blockposition, iblockdata.a((IBlockState) BlockSapling.STAGE), 4);
         } else {
-            this.e(world, blockposition, iblockdata, random);
+            this.d(world, blockposition, iblockdata, random);
         }
 
     }
 
-    public void e(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+    public void d(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         Object object = random.nextInt(10) == 0 ? new WorldGenBigTree(true) : new WorldGenTrees(true);
         int i = 0;
         int j = 0;

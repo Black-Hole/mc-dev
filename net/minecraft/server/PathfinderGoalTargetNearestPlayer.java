@@ -34,7 +34,7 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
                     }
 
                     if (entity.isInvisible()) {
-                        float f = ((EntityHuman) entity).bY();
+                        float f = ((EntityHuman) entity).cG();
 
                         if (f < 0.1F) {
                             f = 0.1F;
@@ -77,8 +77,8 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
         } else if (entityliving instanceof EntityHuman && ((EntityHuman) entityliving).abilities.isInvulnerable) {
             return false;
         } else {
-            ScoreboardTeamBase scoreboardteambase = this.b.getScoreboardTeam();
-            ScoreboardTeamBase scoreboardteambase1 = entityliving.getScoreboardTeam();
+            ScoreboardTeamBase scoreboardteambase = this.b.aO();
+            ScoreboardTeamBase scoreboardteambase1 = entityliving.aO();
 
             if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
                 return false;

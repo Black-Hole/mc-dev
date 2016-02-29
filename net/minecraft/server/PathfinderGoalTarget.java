@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import org.apache.commons.lang3.StringUtils;
-
 public abstract class PathfinderGoalTarget extends PathfinderGoal {
 
     protected final EntityCreature e;
@@ -10,12 +8,15 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
     private int b;
     private int c;
     private int d;
+    protected EntityLiving g;
+    protected int h;
 
     public PathfinderGoalTarget(EntityCreature entitycreature, boolean flag) {
         this(entitycreature, flag, false);
     }
 
     public PathfinderGoalTarget(EntityCreature entitycreature, boolean flag, boolean flag1) {
+        this.h = 60;
         this.e = entitycreature;
         this.f = flag;
         this.a = flag1;
@@ -25,12 +26,16 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
         EntityLiving entityliving = this.e.getGoalTarget();
 
         if (entityliving == null) {
+            entityliving = this.g;
+        }
+
+        if (entityliving == null) {
             return false;
         } else if (!entityliving.isAlive()) {
             return false;
         } else {
-            ScoreboardTeamBase scoreboardteambase = this.e.getScoreboardTeam();
-            ScoreboardTeamBase scoreboardteambase1 = entityliving.getScoreboardTeam();
+            ScoreboardTeamBase scoreboardteambase = this.e.aO();
+            ScoreboardTeamBase scoreboardteambase1 = entityliving.aO();
 
             if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
                 return false;
@@ -43,12 +48,17 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
                     if (this.f) {
                         if (this.e.getEntitySenses().a(entityliving)) {
                             this.d = 0;
-                        } else if (++this.d > 60) {
+                        } else if (++this.d > this.h) {
                             return false;
                         }
                     }
 
-                    return !(entityliving instanceof EntityHuman) || !((EntityHuman) entityliving).abilities.isInvulnerable;
+                    if (entityliving instanceof EntityHuman && ((EntityHuman) entityliving).abilities.isInvulnerable) {
+                        return false;
+                    } else {
+                        this.e.setGoalTarget(entityliving);
+                        return true;
+                    }
                 }
             }
         }
@@ -68,6 +78,7 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
 
     public void d() {
         this.e.setGoalTarget((EntityLiving) null);
+        this.g = null;
     }
 
     public static boolean a(EntityInsentient entityinsentient, EntityLiving entityliving, boolean flag, boolean flag1) {
@@ -77,36 +88,31 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
             return false;
         } else if (!entityliving.isAlive()) {
             return false;
-        } else if (!entityinsentient.a(entityliving.getClass())) {
+        } else if (!entityinsentient.d(entityliving.getClass())) {
+            return false;
+        } else if (entityinsentient.r(entityliving)) {
             return false;
         } else {
-            ScoreboardTeamBase scoreboardteambase = entityinsentient.getScoreboardTeam();
-            ScoreboardTeamBase scoreboardteambase1 = entityliving.getScoreboardTeam();
-
-            if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
-                return false;
-            } else {
-                if (entityinsentient instanceof EntityOwnable && StringUtils.isNotEmpty(((EntityOwnable) entityinsentient).getOwnerUUID())) {
-                    if (entityliving instanceof EntityOwnable && ((EntityOwnable) entityinsentient).getOwnerUUID().equals(((EntityOwnable) entityliving).getOwnerUUID())) {
-                        return false;
-                    }
-
-                    if (entityliving == ((EntityOwnable) entityinsentient).getOwner()) {
-                        return false;
-                    }
-                } else if (entityliving instanceof EntityHuman && !flag && ((EntityHuman) entityliving).abilities.isInvulnerable) {
+            if (entityinsentient instanceof EntityOwnable && ((EntityOwnable) entityinsentient).getOwnerUUID() != null) {
+                if (entityliving instanceof EntityOwnable && ((EntityOwnable) entityinsentient).getOwnerUUID().equals(entityliving.getUniqueID())) {
                     return false;
                 }
 
-                return !flag1 || entityinsentient.getEntitySenses().a(entityliving);
+                if (entityliving == ((EntityOwnable) entityinsentient).getOwner()) {
+                    return false;
+                }
+            } else if (entityliving instanceof EntityHuman && !flag && ((EntityHuman) entityliving).abilities.isInvulnerable) {
+                return false;
             }
+
+            return !flag1 || entityinsentient.getEntitySenses().a(entityliving);
         }
     }
 
     protected boolean a(EntityLiving entityliving, boolean flag) {
         if (!a(this.e, entityliving, flag, this.f)) {
             return false;
-        } else if (!this.e.e(new BlockPosition(entityliving))) {
+        } else if (!this.e.f(new BlockPosition(entityliving))) {
             return false;
         } else {
             if (this.a) {
@@ -128,7 +134,7 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
     }
 
     private boolean a(EntityLiving entityliving) {
-        this.c = 10 + this.e.bc().nextInt(5);
+        this.c = 10 + this.e.getRandom().nextInt(5);
         PathEntity pathentity = this.e.getNavigation().a((Entity) entityliving);
 
         if (pathentity == null) {

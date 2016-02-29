@@ -7,19 +7,13 @@ public class LongHashMap<V> {
     private int c;
     private int d = 3072;
     private final float e = 0.75F;
-    private transient volatile int f;
 
     public LongHashMap() {
         this.c = this.entries.length - 1;
     }
 
     private static int g(long i) {
-        return a((int) (i ^ i >>> 32));
-    }
-
-    private static int a(int i) {
-        i ^= i >>> 20 ^ i >>> 12;
-        return i ^ i >>> 7 ^ i >>> 4;
+        return MathHelper.f((int) (i ^ i >>> 32));
     }
 
     private static int a(int i, int j) {
@@ -69,11 +63,10 @@ public class LongHashMap<V> {
             }
         }
 
-        ++this.f;
         this.a(j, i, v0, k);
     }
 
-    private void b(int i) {
+    private void a(int i) {
         LongHashMap.LongHashMapEntry[] alonghashmap_longhashmapentry = this.entries;
         int j = alonghashmap_longhashmapentry.length;
 
@@ -131,7 +124,6 @@ public class LongHashMap<V> {
         for (longhashmap_longhashmapentry1 = longhashmap_longhashmapentry; longhashmap_longhashmapentry1 != null; longhashmap_longhashmapentry1 = longhashmap_longhashmapentry2) {
             longhashmap_longhashmapentry2 = longhashmap_longhashmapentry1.c;
             if (longhashmap_longhashmapentry1.a == i) {
-                ++this.f;
                 --this.count;
                 if (longhashmap_longhashmapentry == longhashmap_longhashmapentry1) {
                     this.entries[k] = longhashmap_longhashmapentry2;
@@ -153,7 +145,7 @@ public class LongHashMap<V> {
 
         this.entries[k] = new LongHashMap.LongHashMapEntry(i, j, v0, longhashmap_longhashmapentry);
         if (this.count++ >= this.d) {
-            this.b(2 * this.entries.length);
+            this.a(2 * this.entries.length);
         }
 
     }
@@ -185,10 +177,8 @@ public class LongHashMap<V> {
                 return false;
             } else {
                 LongHashMap.LongHashMapEntry longhashmap_longhashmapentry = (LongHashMap.LongHashMapEntry) object;
-                Long olong = Long.valueOf(this.a());
-                Long olong1 = Long.valueOf(longhashmap_longhashmapentry.a());
 
-                if (olong == olong1 || olong != null && olong.equals(olong1)) {
+                if (this.a == longhashmap_longhashmapentry.a) {
                     Object object1 = this.b();
                     Object object2 = longhashmap_longhashmapentry.b();
 

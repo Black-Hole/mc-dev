@@ -2,15 +2,15 @@ package net.minecraft.server;
 
 public interface IMerchant {
 
-    void a_(EntityHuman entityhuman);
+    void setTradingPlayer(EntityHuman entityhuman);
 
-    EntityHuman v_();
+    EntityHuman t_();
 
     MerchantRecipeList getOffers(EntityHuman entityhuman);
 
     void a(MerchantRecipe merchantrecipe);
 
-    void a_(ItemStack itemstack);
+    void a(ItemStack itemstack);
 
     IChatBaseComponent getScoreboardDisplayName();
 }

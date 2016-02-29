@@ -6,37 +6,35 @@ public class ItemWaterLily extends ItemWithAuxData {
         super(block, false);
     }
 
-    public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
+    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
         MovingObjectPosition movingobjectposition = this.a(world, entityhuman, true);
 
         if (movingobjectposition == null) {
-            return itemstack;
+            return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
         } else {
             if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
                 BlockPosition blockposition = movingobjectposition.a();
 
-                if (!world.a(entityhuman, blockposition)) {
-                    return itemstack;
-                }
-
-                if (!entityhuman.a(blockposition.shift(movingobjectposition.direction), movingobjectposition.direction, itemstack)) {
-                    return itemstack;
+                if (!world.a(entityhuman, blockposition) || !entityhuman.a(blockposition.shift(movingobjectposition.direction), movingobjectposition.direction, itemstack)) {
+                    return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
                 }
 
                 BlockPosition blockposition1 = blockposition.up();
                 IBlockData iblockdata = world.getType(blockposition);
 
-                if (iblockdata.getBlock().getMaterial() == Material.WATER && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0 && world.isEmpty(blockposition1)) {
-                    world.setTypeUpdate(blockposition1, Blocks.WATERLILY.getBlockData());
+                if (iblockdata.getMaterial() == Material.WATER && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0 && world.isEmpty(blockposition1)) {
+                    world.setTypeAndData(blockposition1, Blocks.WATERLILY.getBlockData(), 11);
                     if (!entityhuman.abilities.canInstantlyBuild) {
                         --itemstack.count;
                     }
 
-                    entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
+                    entityhuman.b(StatisticList.b((Item) this));
+                    world.a(entityhuman, blockposition, SoundEffects.gv, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
                 }
             }
 
-            return itemstack;
+            return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
         }
     }
 }

@@ -64,12 +64,10 @@ public class ChunkCache implements IBlockAccess {
     }
 
     public boolean isEmpty(BlockPosition blockposition) {
-        return this.getType(blockposition).getBlock().getMaterial() == Material.AIR;
+        return this.getType(blockposition).getMaterial() == Material.AIR;
     }
 
     public int getBlockPower(BlockPosition blockposition, EnumDirection enumdirection) {
-        IBlockData iblockdata = this.getType(blockposition);
-
-        return iblockdata.getBlock().b((IBlockAccess) this, blockposition, iblockdata, enumdirection);
+        return this.getType(blockposition).b(this, blockposition, enumdirection);
     }
 }

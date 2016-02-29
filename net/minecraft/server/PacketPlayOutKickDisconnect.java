@@ -13,7 +13,7 @@ public class PacketPlayOutKickDisconnect implements Packet<PacketListenerPlayOut
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.d();
+        this.a = packetdataserializer.f();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

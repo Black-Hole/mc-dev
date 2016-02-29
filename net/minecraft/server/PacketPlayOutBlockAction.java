@@ -19,10 +19,10 @@ public class PacketPlayOutBlockAction implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c();
+        this.a = packetdataserializer.e();
         this.b = packetdataserializer.readUnsignedByte();
         this.c = packetdataserializer.readUnsignedByte();
-        this.d = Block.getById(packetdataserializer.e() & 4095);
+        this.d = Block.getById(packetdataserializer.g() & 4095);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

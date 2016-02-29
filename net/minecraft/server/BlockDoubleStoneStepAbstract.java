@@ -11,13 +11,13 @@ public abstract class BlockDoubleStoneStepAbstract extends BlockStepAbstract {
         super(Material.STONE);
         IBlockData iblockdata = this.blockStateList.getBlockData();
 
-        if (this.l()) {
+        if (this.e()) {
             iblockdata = iblockdata.set(BlockDoubleStoneStepAbstract.SEAMLESS, Boolean.valueOf(false));
         } else {
             iblockdata = iblockdata.set(BlockDoubleStoneStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
         }
 
-        this.j(iblockdata.set(BlockDoubleStoneStepAbstract.VARIANT, BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant.RED_SANDSTONE));
+        this.w(iblockdata.set(BlockDoubleStoneStepAbstract.VARIANT, BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant.RED_SANDSTONE));
         this.a(CreativeModeTab.b);
     }
 
@@ -29,22 +29,26 @@ public abstract class BlockDoubleStoneStepAbstract extends BlockStepAbstract {
         return Item.getItemOf(Blocks.STONE_SLAB2);
     }
 
-    public String b(int i) {
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Blocks.STONE_SLAB2, 1, ((BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant) iblockdata.get(BlockDoubleStoneStepAbstract.VARIANT)).a());
+    }
+
+    public String e(int i) {
         return super.a() + "." + BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant.a(i).d();
     }
 
-    public IBlockState<?> n() {
+    public IBlockState<?> g() {
         return BlockDoubleStoneStepAbstract.VARIANT;
     }
 
-    public Object a(ItemStack itemstack) {
+    public Comparable<?> a(ItemStack itemstack) {
         return BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant.a(itemstack.getData() & 7);
     }
 
     public IBlockData fromLegacyData(int i) {
         IBlockData iblockdata = this.getBlockData().set(BlockDoubleStoneStepAbstract.VARIANT, BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant.a(i & 7));
 
-        if (this.l()) {
+        if (this.e()) {
             iblockdata = iblockdata.set(BlockDoubleStoneStepAbstract.SEAMLESS, Boolean.valueOf((i & 8) != 0));
         } else {
             iblockdata = iblockdata.set(BlockDoubleStoneStepAbstract.HALF, (i & 8) == 0 ? BlockStepAbstract.EnumSlabHalf.BOTTOM : BlockStepAbstract.EnumSlabHalf.TOP);
@@ -57,7 +61,7 @@ public abstract class BlockDoubleStoneStepAbstract extends BlockStepAbstract {
         byte b0 = 0;
         int i = b0 | ((BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant) iblockdata.get(BlockDoubleStoneStepAbstract.VARIANT)).a();
 
-        if (this.l()) {
+        if (this.e()) {
             if (((Boolean) iblockdata.get(BlockDoubleStoneStepAbstract.SEAMLESS)).booleanValue()) {
                 i |= 8;
             }
@@ -69,10 +73,10 @@ public abstract class BlockDoubleStoneStepAbstract extends BlockStepAbstract {
     }
 
     protected BlockStateList getStateList() {
-        return this.l() ? new BlockStateList(this, new IBlockState[] { BlockDoubleStoneStepAbstract.SEAMLESS, BlockDoubleStoneStepAbstract.VARIANT}) : new BlockStateList(this, new IBlockState[] { BlockDoubleStoneStepAbstract.HALF, BlockDoubleStoneStepAbstract.VARIANT});
+        return this.e() ? new BlockStateList(this, new IBlockState[] { BlockDoubleStoneStepAbstract.SEAMLESS, BlockDoubleStoneStepAbstract.VARIANT}) : new BlockStateList(this, new IBlockState[] { BlockDoubleStoneStepAbstract.HALF, BlockDoubleStoneStepAbstract.VARIANT});
     }
 
-    public MaterialMapColor g(IBlockData iblockdata) {
+    public MaterialMapColor r(IBlockData iblockdata) {
         return ((BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant) iblockdata.get(BlockDoubleStoneStepAbstract.VARIANT)).c();
     }
 

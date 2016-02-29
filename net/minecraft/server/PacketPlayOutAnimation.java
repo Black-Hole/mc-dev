@@ -15,7 +15,7 @@ public class PacketPlayOutAnimation implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
+        this.a = packetdataserializer.g();
         this.b = packetdataserializer.readUnsignedByte();
     }
 

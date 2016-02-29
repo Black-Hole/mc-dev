@@ -12,21 +12,21 @@ public interface IMinecraftServer {
 
     String b();
 
-    String E();
+    String d_();
 
-    int F();
+    int e_();
 
-    String G();
+    String f_();
 
     String getVersion();
 
-    int I();
+    int H();
 
-    int J();
+    int I();
 
     String[] getPlayers();
 
-    String U();
+    String S();
 
     String getPlugins();
 

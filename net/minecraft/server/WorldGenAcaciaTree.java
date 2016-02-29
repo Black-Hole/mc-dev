@@ -71,7 +71,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract {
                         }
 
                         BlockPosition blockposition1 = new BlockPosition(k, l1, j1);
-                        Material material = world.getType(blockposition1).getBlock().getMaterial();
+                        Material material = world.getType(blockposition1).getMaterial();
 
                         if (material == Material.AIR || material == Material.LEAVES) {
                             this.b(world, blockposition1);
@@ -120,7 +120,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract {
                                 k += enumdirection1.getAdjacentX();
                                 j1 += enumdirection1.getAdjacentZ();
                                 BlockPosition blockposition3 = new BlockPosition(k, k2, j1);
-                                Material material1 = world.getType(blockposition3).getBlock().getMaterial();
+                                Material material1 = world.getType(blockposition3).getMaterial();
 
                                 if (material1 == Material.AIR || material1 == Material.LEAVES) {
                                     this.b(world, blockposition3);
@@ -169,7 +169,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract {
     }
 
     private void c(World world, BlockPosition blockposition) {
-        Material material = world.getType(blockposition).getBlock().getMaterial();
+        Material material = world.getType(blockposition).getMaterial();
 
         if (material == Material.AIR || material == Material.LEAVES) {
             this.a(world, blockposition, WorldGenAcaciaTree.b);

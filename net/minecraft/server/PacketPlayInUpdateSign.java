@@ -5,19 +5,16 @@ import java.io.IOException;
 public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
 
     private BlockPosition a;
-    private IChatBaseComponent[] b;
+    private String[] b;
 
     public PacketPlayInUpdateSign() {}
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c();
-        this.b = new IChatBaseComponent[4];
+        this.a = packetdataserializer.e();
+        this.b = new String[4];
 
         for (int i = 0; i < 4; ++i) {
-            String s = packetdataserializer.c(384);
-            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
-
-            this.b[i] = ichatbasecomponent;
+            this.b[i] = packetdataserializer.c(384);
         }
 
     }
@@ -26,10 +23,7 @@ public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
         packetdataserializer.a(this.a);
 
         for (int i = 0; i < 4; ++i) {
-            IChatBaseComponent ichatbasecomponent = this.b[i];
-            String s = IChatBaseComponent.ChatSerializer.a(ichatbasecomponent);
-
-            packetdataserializer.a(s);
+            packetdataserializer.a(this.b[i]);
         }
 
     }
@@ -42,7 +36,7 @@ public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
         return this.a;
     }
 
-    public IChatBaseComponent[] b() {
+    public String[] b() {
         return this.b;
     }
 

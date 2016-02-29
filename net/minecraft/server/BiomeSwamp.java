@@ -4,24 +4,25 @@ import java.util.Random;
 
 public class BiomeSwamp extends BiomeBase {
 
-    protected BiomeSwamp(int i) {
-        super(i);
-        this.as.A = 2;
-        this.as.B = 1;
-        this.as.D = 1;
-        this.as.E = 8;
-        this.as.F = 10;
-        this.as.J = 1;
-        this.as.z = 4;
-        this.as.I = 0;
-        this.as.H = 0;
-        this.as.C = 5;
-        this.ar = 14745518;
-        this.at.add(new BiomeBase.BiomeMeta(EntitySlime.class, 1, 1, 1));
+    protected static final IBlockData y = Blocks.WATERLILY.getBlockData();
+
+    protected BiomeSwamp(BiomeBase.a biomebase_a) {
+        super(biomebase_a);
+        this.t.z = 2;
+        this.t.A = 1;
+        this.t.C = 1;
+        this.t.D = 8;
+        this.t.E = 10;
+        this.t.I = 1;
+        this.t.y = 4;
+        this.t.H = 0;
+        this.t.G = 0;
+        this.t.B = 5;
+        this.u.add(new BiomeBase.BiomeMeta(EntitySlime.class, 1, 1, 1));
     }
 
     public WorldGenTreeAbstract a(Random random) {
-        return this.aC;
+        return BiomeSwamp.p;
     }
 
     public BlockFlowers.EnumFlowerVarient a(Random random, BlockPosition blockposition) {
@@ -29,18 +30,18 @@ public class BiomeSwamp extends BiomeBase {
     }
 
     public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
-        double d1 = BiomeSwamp.af.a((double) i * 0.25D, (double) j * 0.25D);
+        double d1 = BiomeSwamp.l.a((double) i * 0.25D, (double) j * 0.25D);
 
         if (d1 > 0.0D) {
             int k = i & 15;
             int l = j & 15;
 
             for (int i1 = 255; i1 >= 0; --i1) {
-                if (chunksnapshot.a(l, i1, k).getBlock().getMaterial() != Material.AIR) {
+                if (chunksnapshot.a(l, i1, k).getMaterial() != Material.AIR) {
                     if (i1 == 62 && chunksnapshot.a(l, i1, k).getBlock() != Blocks.WATER) {
-                        chunksnapshot.a(l, i1, k, Blocks.WATER.getBlockData());
+                        chunksnapshot.a(l, i1, k, BiomeSwamp.h);
                         if (d1 < 0.12D) {
-                            chunksnapshot.a(l, i1 + 1, k, Blocks.WATERLILY.getBlockData());
+                            chunksnapshot.a(l, i1 + 1, k, BiomeSwamp.y);
                         }
                     }
                     break;

@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
-public class PacketEncoder extends MessageToByteEncoder<Packet> {
+public class PacketEncoder extends MessageToByteEncoder<Packet<?>> {
 
     private static final Logger a = LogManager.getLogger();
     private static final Marker b = MarkerManager.getMarker("PACKET_SENT", NetworkManager.b);
@@ -19,7 +19,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
         this.c = enumprotocoldirection;
     }
 
-    protected void a(ChannelHandlerContext channelhandlercontext, Packet packet, ByteBuf bytebuf) throws Exception {
+    protected void a(ChannelHandlerContext channelhandlercontext, Packet<?> packet, ByteBuf bytebuf) throws Exception {
         Integer integer = ((EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get()).a(this.c, packet);
 
         if (PacketEncoder.a.isDebugEnabled()) {
@@ -34,10 +34,6 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
             packetdataserializer.b(integer.intValue());
 
             try {
-                if (packet instanceof PacketPlayOutNamedEntitySpawn) {
-                    packet = packet;
-                }
-
                 packet.b(packetdataserializer);
             } catch (Throwable throwable) {
                 PacketEncoder.a.error(throwable);

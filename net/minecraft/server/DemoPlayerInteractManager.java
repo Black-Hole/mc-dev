@@ -71,21 +71,21 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
         return this.d ? false : super.breakBlock(blockposition);
     }
 
-    public boolean useItem(EntityHuman entityhuman, World world, ItemStack itemstack) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand) {
         if (this.d) {
             this.f();
-            return false;
+            return EnumInteractionResult.PASS;
         } else {
-            return super.useItem(entityhuman, world, itemstack);
+            return super.a(entityhuman, world, itemstack, enumhand);
         }
     }
 
-    public boolean interact(EntityHuman entityhuman, World world, ItemStack itemstack, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
         if (this.d) {
             this.f();
-            return false;
+            return EnumInteractionResult.PASS;
         } else {
-            return super.interact(entityhuman, world, itemstack, blockposition, enumdirection, f, f1, f2);
+            return super.a(entityhuman, world, itemstack, enumhand, blockposition, enumdirection, f, f1, f2);
         }
     }
 }

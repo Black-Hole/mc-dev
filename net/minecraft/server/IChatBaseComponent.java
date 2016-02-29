@@ -28,7 +28,7 @@ public interface IChatBaseComponent extends Iterable<IChatBaseComponent> {
 
     String getText();
 
-    String c();
+    String toPlainText();
 
     List<IChatBaseComponent> a();
 
@@ -145,71 +145,67 @@ public interface IChatBaseComponent extends Iterable<IChatBaseComponent> {
         }
 
         public JsonElement a(IChatBaseComponent ichatbasecomponent, Type type, JsonSerializationContext jsonserializationcontext) {
-            if (ichatbasecomponent instanceof ChatComponentText && ichatbasecomponent.getChatModifier().g() && ichatbasecomponent.a().isEmpty()) {
-                return new JsonPrimitive(((ChatComponentText) ichatbasecomponent).g());
-            } else {
-                JsonObject jsonobject = new JsonObject();
+            JsonObject jsonobject = new JsonObject();
 
-                if (!ichatbasecomponent.getChatModifier().g()) {
-                    this.a(ichatbasecomponent.getChatModifier(), jsonobject, jsonserializationcontext);
-                }
-
-                if (!ichatbasecomponent.a().isEmpty()) {
-                    JsonArray jsonarray = new JsonArray();
-                    Iterator iterator = ichatbasecomponent.a().iterator();
-
-                    while (iterator.hasNext()) {
-                        IChatBaseComponent ichatbasecomponent1 = (IChatBaseComponent) iterator.next();
-
-                        jsonarray.add(this.a(ichatbasecomponent1, (Type) ichatbasecomponent1.getClass(), jsonserializationcontext));
-                    }
-
-                    jsonobject.add("extra", jsonarray);
-                }
-
-                if (ichatbasecomponent instanceof ChatComponentText) {
-                    jsonobject.addProperty("text", ((ChatComponentText) ichatbasecomponent).g());
-                } else if (ichatbasecomponent instanceof ChatMessage) {
-                    ChatMessage chatmessage = (ChatMessage) ichatbasecomponent;
-
-                    jsonobject.addProperty("translate", chatmessage.i());
-                    if (chatmessage.j() != null && chatmessage.j().length > 0) {
-                        JsonArray jsonarray1 = new JsonArray();
-                        Object[] aobject = chatmessage.j();
-                        int i = aobject.length;
-
-                        for (int j = 0; j < i; ++j) {
-                            Object object = aobject[j];
-
-                            if (object instanceof IChatBaseComponent) {
-                                jsonarray1.add(this.a((IChatBaseComponent) object, (Type) object.getClass(), jsonserializationcontext));
-                            } else {
-                                jsonarray1.add(new JsonPrimitive(String.valueOf(object)));
-                            }
-                        }
-
-                        jsonobject.add("with", jsonarray1);
-                    }
-                } else if (ichatbasecomponent instanceof ChatComponentScore) {
-                    ChatComponentScore chatcomponentscore = (ChatComponentScore) ichatbasecomponent;
-                    JsonObject jsonobject1 = new JsonObject();
-
-                    jsonobject1.addProperty("name", chatcomponentscore.g());
-                    jsonobject1.addProperty("objective", chatcomponentscore.h());
-                    jsonobject1.addProperty("value", chatcomponentscore.getText());
-                    jsonobject.add("score", jsonobject1);
-                } else {
-                    if (!(ichatbasecomponent instanceof ChatComponentSelector)) {
-                        throw new IllegalArgumentException("Don\'t know how to serialize " + ichatbasecomponent + " as a Component");
-                    }
-
-                    ChatComponentSelector chatcomponentselector = (ChatComponentSelector) ichatbasecomponent;
-
-                    jsonobject.addProperty("selector", chatcomponentselector.g());
-                }
-
-                return jsonobject;
+            if (!ichatbasecomponent.getChatModifier().g()) {
+                this.a(ichatbasecomponent.getChatModifier(), jsonobject, jsonserializationcontext);
             }
+
+            if (!ichatbasecomponent.a().isEmpty()) {
+                JsonArray jsonarray = new JsonArray();
+                Iterator iterator = ichatbasecomponent.a().iterator();
+
+                while (iterator.hasNext()) {
+                    IChatBaseComponent ichatbasecomponent1 = (IChatBaseComponent) iterator.next();
+
+                    jsonarray.add(this.a(ichatbasecomponent1, (Type) ichatbasecomponent1.getClass(), jsonserializationcontext));
+                }
+
+                jsonobject.add("extra", jsonarray);
+            }
+
+            if (ichatbasecomponent instanceof ChatComponentText) {
+                jsonobject.addProperty("text", ((ChatComponentText) ichatbasecomponent).g());
+            } else if (ichatbasecomponent instanceof ChatMessage) {
+                ChatMessage chatmessage = (ChatMessage) ichatbasecomponent;
+
+                jsonobject.addProperty("translate", chatmessage.i());
+                if (chatmessage.j() != null && chatmessage.j().length > 0) {
+                    JsonArray jsonarray1 = new JsonArray();
+                    Object[] aobject = chatmessage.j();
+                    int i = aobject.length;
+
+                    for (int j = 0; j < i; ++j) {
+                        Object object = aobject[j];
+
+                        if (object instanceof IChatBaseComponent) {
+                            jsonarray1.add(this.a((IChatBaseComponent) object, (Type) object.getClass(), jsonserializationcontext));
+                        } else {
+                            jsonarray1.add(new JsonPrimitive(String.valueOf(object)));
+                        }
+                    }
+
+                    jsonobject.add("with", jsonarray1);
+                }
+            } else if (ichatbasecomponent instanceof ChatComponentScore) {
+                ChatComponentScore chatcomponentscore = (ChatComponentScore) ichatbasecomponent;
+                JsonObject jsonobject1 = new JsonObject();
+
+                jsonobject1.addProperty("name", chatcomponentscore.g());
+                jsonobject1.addProperty("objective", chatcomponentscore.h());
+                jsonobject1.addProperty("value", chatcomponentscore.getText());
+                jsonobject.add("score", jsonobject1);
+            } else {
+                if (!(ichatbasecomponent instanceof ChatComponentSelector)) {
+                    throw new IllegalArgumentException("Don\'t know how to serialize " + ichatbasecomponent + " as a Component");
+                }
+
+                ChatComponentSelector chatcomponentselector = (ChatComponentSelector) ichatbasecomponent;
+
+                jsonobject.addProperty("selector", chatcomponentselector.g());
+            }
+
+            return jsonobject;
         }
 
         public static String a(IChatBaseComponent ichatbasecomponent) {
@@ -217,7 +213,11 @@ public interface IChatBaseComponent extends Iterable<IChatBaseComponent> {
         }
 
         public static IChatBaseComponent a(String s) {
-            return (IChatBaseComponent) IChatBaseComponent.ChatSerializer.a.fromJson(s, IChatBaseComponent.class);
+            return (IChatBaseComponent) ChatDeserializer.a(IChatBaseComponent.ChatSerializer.a, s, IChatBaseComponent.class, false);
+        }
+
+        public static IChatBaseComponent b(String s) {
+            return (IChatBaseComponent) ChatDeserializer.a(IChatBaseComponent.ChatSerializer.a, s, IChatBaseComponent.class, true);
         }
 
         public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {

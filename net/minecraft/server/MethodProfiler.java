@@ -63,7 +63,7 @@ public class MethodProfiler {
 
     public List<MethodProfiler.ProfilerInfo> b(String s) {
         if (!this.a) {
-            return null;
+            return Collections.emptyList();
         } else {
             long i = this.f.containsKey("root") ? ((Long) this.f.get("root")).longValue() : 0L;
             long j = this.f.containsKey(s) ? ((Long) this.f.get(s)).longValue() : -1L;

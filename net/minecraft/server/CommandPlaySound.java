@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandPlaySound extends CommandAbstract {
@@ -18,28 +20,29 @@ public class CommandPlaySound extends CommandAbstract {
         return "commands.playsound.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 2) {
             throw new ExceptionUsage(this.getUsage(icommandlistener), new Object[0]);
         } else {
             byte b0 = 0;
             int i = b0 + 1;
             String s = astring[b0];
-            EntityPlayer entityplayer = a(icommandlistener, astring[i++]);
+            SoundCategory soundcategory = SoundCategory.a(astring[i++]);
+            EntityPlayer entityplayer = a(minecraftserver, icommandlistener, astring[i++]);
             Vec3D vec3d = icommandlistener.d();
-            double d0 = vec3d.a;
+            double d0 = vec3d.x;
 
             if (astring.length > i) {
                 d0 = b(d0, astring[i++], true);
             }
 
-            double d1 = vec3d.b;
+            double d1 = vec3d.y;
 
             if (astring.length > i) {
                 d1 = b(d1, astring[i++], 0, 0, false);
             }
 
-            double d2 = vec3d.c;
+            double d2 = vec3d.z;
 
             if (astring.length > i) {
                 d2 = b(d2, astring[i++], true);
@@ -85,16 +88,16 @@ public class CommandPlaySound extends CommandAbstract {
                 d3 = d5;
             }
 
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutNamedSoundEffect(s, d0, d1, d2, (float) d3, (float) d4));
-            a(icommandlistener, this, "commands.playsound.success", new Object[] { s, entityplayer.getName()});
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutCustomSoundEffect(s, soundcategory, d0, d1, d2, (float) d3, (float) d4));
+            a(icommandlistener, (ICommand) this, "commands.playsound.success", new Object[] { s, entityplayer.getName()});
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 2 ? a(astring, MinecraftServer.getServer().getPlayers()) : (astring.length > 2 && astring.length <= 5 ? a(astring, 2, blockposition) : null);
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, (Collection) SoundEffect.a.keySet()) : (astring.length == 2 ? a(astring, (Collection) SoundCategory.b()) : (astring.length == 3 ? a(astring, minecraftserver.getPlayers()) : (astring.length > 3 && astring.length <= 6 ? a(astring, 2, blockposition) : Collections.emptyList())));
     }
 
     public boolean isListStart(String[] astring, int i) {
-        return i == 1;
+        return i == 2;
     }
 }

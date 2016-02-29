@@ -41,7 +41,7 @@ public class GenLayerDeepOcean extends GenLayer {
                 }
 
                 if (k3 == 0 && l3 > 3) {
-                    aint1[j2 + i2 * k] = BiomeBase.DEEP_OCEAN.id;
+                    aint1[j2 + i2 * k] = BiomeBase.a(Biomes.z);
                 } else {
                     aint1[j2 + i2 * k] = k3;
                 }

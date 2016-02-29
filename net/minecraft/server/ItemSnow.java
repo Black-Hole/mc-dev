@@ -8,17 +8,13 @@ public class ItemSnow extends ItemBlock {
         this.a(true);
     }
 
-    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (itemstack.count == 0) {
-            return false;
-        } else if (!entityhuman.a(blockposition, enumdirection, itemstack)) {
-            return false;
-        } else {
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        if (itemstack.count != 0 && entityhuman.a(blockposition, enumdirection, itemstack)) {
             IBlockData iblockdata = world.getType(blockposition);
             Block block = iblockdata.getBlock();
             BlockPosition blockposition1 = blockposition;
 
-            if ((enumdirection != EnumDirection.UP || block != this.a) && !block.a(world, blockposition)) {
+            if ((enumdirection != EnumDirection.UP || block != this.a) && !block.a((IBlockAccess) world, blockposition)) {
                 blockposition1 = blockposition.shift(enumdirection);
                 iblockdata = world.getType(blockposition1);
                 block = iblockdata.getBlock();
@@ -29,17 +25,21 @@ public class ItemSnow extends ItemBlock {
 
                 if (i <= 7) {
                     IBlockData iblockdata1 = iblockdata.set(BlockSnow.LAYERS, Integer.valueOf(i + 1));
-                    AxisAlignedBB axisalignedbb = this.a.a(world, blockposition1, iblockdata1);
+                    AxisAlignedBB axisalignedbb = iblockdata1.d(world, blockposition1);
 
-                    if (axisalignedbb != null && world.b(axisalignedbb) && world.setTypeAndData(blockposition1, iblockdata1, 2)) {
-                        world.makeSound((double) ((float) blockposition1.getX() + 0.5F), (double) ((float) blockposition1.getY() + 0.5F), (double) ((float) blockposition1.getZ() + 0.5F), this.a.stepSound.getPlaceSound(), (this.a.stepSound.getVolume1() + 1.0F) / 2.0F, this.a.stepSound.getVolume2() * 0.8F);
+                    if (axisalignedbb != Block.k && world.c(axisalignedbb.a(blockposition1)) && world.setTypeAndData(blockposition1, iblockdata1, 10)) {
+                        SoundEffectType soundeffecttype = this.a.w();
+
+                        world.a(entityhuman, blockposition1, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
                         --itemstack.count;
-                        return true;
+                        return EnumInteractionResult.SUCCESS;
                     }
                 }
             }
 
-            return super.interactWith(itemstack, entityhuman, world, blockposition1, enumdirection, f, f1, f2);
+            return super.a(itemstack, entityhuman, world, blockposition1, enumhand, enumdirection, f, f1, f2);
+        } else {
+            return EnumInteractionResult.FAIL;
         }
     }
 

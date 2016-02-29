@@ -4,6 +4,7 @@ import com.google.common.base.Functions;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
+import com.google.gson.JsonParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,12 +12,42 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 public abstract class CommandAbstract implements ICommand {
 
     private static ICommandDispatcher a;
 
     public CommandAbstract() {}
+
+    protected static ExceptionInvalidSyntax a(JsonParseException jsonparseexception) {
+        Throwable throwable = ExceptionUtils.getRootCause(jsonparseexception);
+        String s = "";
+
+        if (throwable != null) {
+            s = throwable.getMessage();
+            if (s.contains("setLenient")) {
+                s = s.substring(s.indexOf("to accept ") + 10);
+            }
+        }
+
+        return new ExceptionInvalidSyntax("commands.tellraw.jsonException", new Object[] { s});
+    }
+
+    protected static NBTTagCompound a(Entity entity) {
+        NBTTagCompound nbttagcompound = new NBTTagCompound();
+
+        entity.e(nbttagcompound);
+        if (entity instanceof EntityHuman) {
+            ItemStack itemstack = ((EntityHuman) entity).inventory.getItemInHand();
+
+            if (itemstack != null && itemstack.getItem() != null) {
+                nbttagcompound.set("SelectedItem", itemstack.save(new NBTTagCompound()));
+            }
+        }
+
+        return nbttagcompound;
+    }
 
     public int a() {
         return 4;
@@ -26,12 +57,12 @@ public abstract class CommandAbstract implements ICommand {
         return Collections.emptyList();
     }
 
-    public boolean canUse(ICommandListener icommandlistener) {
+    public boolean canUse(MinecraftServer minecraftserver, ICommandListener icommandlistener) {
         return icommandlistener.a(this.a(), this.getCommand());
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return null;
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return Collections.emptyList();
     }
 
     public static int a(String s) throws ExceptionInvalidNumber {
@@ -126,7 +157,7 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static EntityPlayer b(ICommandListener icommandlistener) throws ExceptionPlayerNotFound {
+    public static EntityPlayer a(ICommandListener icommandlistener) throws ExceptionPlayerNotFound {
         if (icommandlistener instanceof EntityPlayer) {
             return (EntityPlayer) icommandlistener;
         } else {
@@ -134,19 +165,19 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static EntityPlayer a(ICommandListener icommandlistener, String s) throws ExceptionPlayerNotFound {
+    public static EntityPlayer a(MinecraftServer minecraftserver, ICommandListener icommandlistener, String s) throws ExceptionPlayerNotFound {
         EntityPlayer entityplayer = PlayerSelector.getPlayer(icommandlistener, s);
 
         if (entityplayer == null) {
             try {
-                entityplayer = MinecraftServer.getServer().getPlayerList().a(UUID.fromString(s));
+                entityplayer = minecraftserver.getPlayerList().a(UUID.fromString(s));
             } catch (IllegalArgumentException illegalargumentexception) {
                 ;
             }
         }
 
         if (entityplayer == null) {
-            entityplayer = MinecraftServer.getServer().getPlayerList().getPlayer(s);
+            entityplayer = minecraftserver.getPlayerList().getPlayer(s);
         }
 
         if (entityplayer == null) {
@@ -156,13 +187,12 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static Entity b(ICommandListener icommandlistener, String s) throws ExceptionEntityNotFound {
-        return a(icommandlistener, s, Entity.class);
+    public static Entity b(MinecraftServer minecraftserver, ICommandListener icommandlistener, String s) throws ExceptionEntityNotFound {
+        return a(minecraftserver, icommandlistener, s, Entity.class);
     }
 
-    public static <T extends Entity> T a(ICommandListener icommandlistener, String s, Class<? extends T> oclass) throws ExceptionEntityNotFound {
+    public static <T extends Entity> T a(MinecraftServer minecraftserver, ICommandListener icommandlistener, String s, Class<? extends T> oclass) throws ExceptionEntityNotFound {
         Object object = PlayerSelector.getEntity(icommandlistener, s, oclass);
-        MinecraftServer minecraftserver = MinecraftServer.getServer();
 
         if (object == null) {
             object = minecraftserver.getPlayerList().getPlayer(s);
@@ -188,33 +218,33 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static List<Entity> c(ICommandListener icommandlistener, String s) throws ExceptionEntityNotFound {
-        return (List) (PlayerSelector.isPattern(s) ? PlayerSelector.getPlayers(icommandlistener, s, Entity.class) : Lists.newArrayList(new Entity[] { b(icommandlistener, s)}));
+    public static List<Entity> c(MinecraftServer minecraftserver, ICommandListener icommandlistener, String s) throws ExceptionEntityNotFound {
+        return (List) (PlayerSelector.isPattern(s) ? PlayerSelector.getPlayers(icommandlistener, s, Entity.class) : Lists.newArrayList(new Entity[] { b(minecraftserver, icommandlistener, s)}));
     }
 
-    public static String d(ICommandListener icommandlistener, String s) throws ExceptionPlayerNotFound {
+    public static String d(MinecraftServer minecraftserver, ICommandListener icommandlistener, String s) throws ExceptionPlayerNotFound {
         try {
-            return a(icommandlistener, s).getName();
+            return a(minecraftserver, icommandlistener, s).getName();
         } catch (ExceptionPlayerNotFound exceptionplayernotfound) {
-            if (PlayerSelector.isPattern(s)) {
-                throw exceptionplayernotfound;
-            } else {
+            if (s != null && !s.startsWith("@")) {
                 return s;
+            } else {
+                throw exceptionplayernotfound;
             }
         }
     }
 
-    public static String e(ICommandListener icommandlistener, String s) throws ExceptionEntityNotFound {
+    public static String e(MinecraftServer minecraftserver, ICommandListener icommandlistener, String s) throws ExceptionEntityNotFound {
         try {
-            return a(icommandlistener, s).getName();
+            return a(minecraftserver, icommandlistener, s).getName();
         } catch (ExceptionPlayerNotFound exceptionplayernotfound) {
             try {
-                return b(icommandlistener, s).getUniqueID().toString();
+                return b(minecraftserver, icommandlistener, s).getUniqueID().toString();
             } catch (ExceptionEntityNotFound exceptionentitynotfound) {
-                if (PlayerSelector.isPattern(s)) {
-                    throw exceptionentitynotfound;
-                } else {
+                if (s != null && !s.startsWith("@")) {
                     return s;
+                } else {
+                    throw exceptionentitynotfound;
                 }
             }
         }
@@ -346,7 +376,7 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static Item f(ICommandListener icommandlistener, String s) throws ExceptionInvalidNumber {
+    public static Item a(ICommandListener icommandlistener, String s) throws ExceptionInvalidNumber {
         MinecraftKey minecraftkey = new MinecraftKey(s);
         Item item = (Item) Item.REGISTRY.get(minecraftkey);
 
@@ -357,7 +387,7 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static Block g(ICommandListener icommandlistener, String s) throws ExceptionInvalidNumber {
+    public static Block b(ICommandListener icommandlistener, String s) throws ExceptionInvalidNumber {
         MinecraftKey minecraftkey = new MinecraftKey(s);
 
         if (!Block.REGISTRY.d(minecraftkey)) {
@@ -417,7 +447,7 @@ public abstract class CommandAbstract implements ICommand {
 
     public static List<String> a(String[] astring, int i, BlockPosition blockposition) {
         if (blockposition == null) {
-            return null;
+            return Lists.newArrayList(new String[] { "~"});
         } else {
             int j = astring.length - 1;
             String s;
@@ -428,7 +458,7 @@ public abstract class CommandAbstract implements ICommand {
                 s = Integer.toString(blockposition.getY());
             } else {
                 if (j != i + 2) {
-                    return null;
+                    return Collections.emptyList();
                 }
 
                 s = Integer.toString(blockposition.getZ());
@@ -440,7 +470,7 @@ public abstract class CommandAbstract implements ICommand {
 
     public static List<String> b(String[] astring, int i, BlockPosition blockposition) {
         if (blockposition == null) {
-            return null;
+            return Lists.newArrayList(new String[] { "~"});
         } else {
             int j = astring.length - 1;
             String s;

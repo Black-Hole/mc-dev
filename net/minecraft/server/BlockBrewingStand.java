@@ -3,47 +3,47 @@ package net.minecraft.server;
 import java.util.List;
 import java.util.Random;
 
-public class BlockBrewingStand extends BlockContainer {
+public class BlockBrewingStand extends BlockTileEntity {
 
     public static final BlockStateBoolean[] HAS_BOTTLE = new BlockStateBoolean[] { BlockStateBoolean.of("has_bottle_0"), BlockStateBoolean.of("has_bottle_1"), BlockStateBoolean.of("has_bottle_2")};
+    protected static final AxisAlignedBB b = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D);
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.4375D, 0.0D, 0.4375D, 0.5625D, 0.875D, 0.5625D);
 
     public BlockBrewingStand() {
         super(Material.ORE);
-        this.j(this.blockStateList.getBlockData().set(BlockBrewingStand.HAS_BOTTLE[0], Boolean.valueOf(false)).set(BlockBrewingStand.HAS_BOTTLE[1], Boolean.valueOf(false)).set(BlockBrewingStand.HAS_BOTTLE[2], Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockBrewingStand.HAS_BOTTLE[0], Boolean.valueOf(false)).set(BlockBrewingStand.HAS_BOTTLE[1], Boolean.valueOf(false)).set(BlockBrewingStand.HAS_BOTTLE[2], Boolean.valueOf(false)));
     }
 
     public String getName() {
         return LocaleI18n.get("item.brewingStand.name");
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public int b() {
-        return 3;
+    public EnumRenderType a(IBlockData iblockdata) {
+        return EnumRenderType.MODEL;
     }
 
     public TileEntity a(World world, int i) {
         return new TileEntityBrewingStand();
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
-        this.a(0.4375F, 0.0F, 0.4375F, 0.5625F, 0.875F, 0.5625F);
-        super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
-        this.j();
-        super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+        a(blockposition, axisalignedbb, list, BlockBrewingStand.c);
+        a(blockposition, axisalignedbb, list, BlockBrewingStand.b);
     }
 
-    public void j() {
-        this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockBrewingStand.b;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -51,7 +51,7 @@ public class BlockBrewingStand extends BlockContainer {
 
             if (tileentity instanceof TileEntityBrewingStand) {
                 entityhuman.openContainer((TileEntityBrewingStand) tileentity);
-                entityhuman.b(StatisticList.M);
+                entityhuman.b(StatisticList.O);
             }
 
             return true;
@@ -83,11 +83,15 @@ public class BlockBrewingStand extends BlockContainer {
         return Items.BREWING_STAND;
     }
 
-    public boolean isComplexRedstone() {
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Items.BREWING_STAND);
+    }
+
+    public boolean isComplexRedstone(IBlockData iblockdata) {
         return true;
     }
 
-    public int l(World world, BlockPosition blockposition) {
+    public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return Container.a(world.getTileEntity(blockposition));
     }
 

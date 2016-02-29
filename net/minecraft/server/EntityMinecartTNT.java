@@ -12,28 +12,28 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public EntityMinecartAbstract.EnumMinecartType s() {
+    public EntityMinecartAbstract.EnumMinecartType v() {
         return EntityMinecartAbstract.EnumMinecartType.TNT;
     }
 
-    public IBlockData u() {
+    public IBlockData x() {
         return Blocks.TNT.getBlockData();
     }
 
-    public void t_() {
-        super.t_();
+    public void m() {
+        super.m();
         if (this.a > 0) {
             --this.a;
             this.world.addParticle(EnumParticle.SMOKE_NORMAL, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
         } else if (this.a == 0) {
-            this.b(this.motX * this.motX + this.motZ * this.motZ);
+            this.c(this.motX * this.motX + this.motZ * this.motZ);
         }
 
         if (this.positionChanged) {
             double d0 = this.motX * this.motX + this.motZ * this.motZ;
 
             if (d0 >= 0.009999999776482582D) {
-                this.b(d0);
+                this.c(d0);
             }
         }
 
@@ -46,7 +46,7 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
             EntityArrow entityarrow = (EntityArrow) entity;
 
             if (entityarrow.isBurning()) {
-                this.b(entityarrow.motX * entityarrow.motX + entityarrow.motY * entityarrow.motY + entityarrow.motZ * entityarrow.motZ);
+                this.c(entityarrow.motX * entityarrow.motX + entityarrow.motY * entityarrow.motY + entityarrow.motZ * entityarrow.motZ);
             }
         }
 
@@ -62,12 +62,12 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         }
 
         if (damagesource.o() || damagesource.isExplosion() || d0 >= 0.009999999776482582D) {
-            this.b(d0);
+            this.c(d0);
         }
 
     }
 
-    protected void b(double d0) {
+    protected void c(double d0) {
         if (!this.world.isClientSide) {
             double d1 = Math.sqrt(d0);
 
@@ -85,7 +85,7 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         if (f >= 3.0F) {
             float f2 = f / 10.0F;
 
-            this.b((double) (f2 * f2));
+            this.c((double) (f2 * f2));
         }
 
         super.e(f, f1);
@@ -102,23 +102,23 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         this.a = 80;
         if (!this.world.isClientSide) {
             this.world.broadcastEntityEffect(this, (byte) 10);
-            if (!this.R()) {
-                this.world.makeSound(this, "game.tnt.primed", 1.0F, 1.0F);
+            if (!this.ad()) {
+                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.gj, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
         }
 
     }
 
-    public boolean y() {
+    public boolean l() {
         return this.a > -1;
     }
 
     public float a(Explosion explosion, World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return this.y() && (BlockMinecartTrackAbstract.d(iblockdata) || BlockMinecartTrackAbstract.e(world, blockposition.up())) ? 0.0F : super.a(explosion, world, blockposition, iblockdata);
+        return this.l() && (BlockMinecartTrackAbstract.i(iblockdata) || BlockMinecartTrackAbstract.b(world, blockposition.up())) ? 0.0F : super.a(explosion, world, blockposition, iblockdata);
     }
 
     public boolean a(Explosion explosion, World world, BlockPosition blockposition, IBlockData iblockdata, float f) {
-        return this.y() && (BlockMinecartTrackAbstract.d(iblockdata) || BlockMinecartTrackAbstract.e(world, blockposition.up())) ? false : super.a(explosion, world, blockposition, iblockdata, f);
+        return this.l() && (BlockMinecartTrackAbstract.i(iblockdata) || BlockMinecartTrackAbstract.b(world, blockposition.up())) ? false : super.a(explosion, world, blockposition, iblockdata, f);
     }
 
     protected void a(NBTTagCompound nbttagcompound) {

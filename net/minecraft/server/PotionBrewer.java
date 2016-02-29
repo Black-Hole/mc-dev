@@ -1,456 +1,244 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class PotionBrewer {
 
-    public static final String a = null;
-    public static final String b;
-    public static final String c = "+0-1-2-3&4-4+13";
-    public static final String d;
-    public static final String e;
-    public static final String f;
-    public static final String g;
-    public static final String h;
-    public static final String i;
-    public static final String j;
-    public static final String k;
-    public static final String l;
-    public static final String m;
-    public static final String n;
-    private static final Map<Integer, String> effectDurations = Maps.newHashMap();
-    private static final Map<Integer, String> effectAmplifiers = Maps.newHashMap();
-    private static final Map<Integer, Integer> q;
-    private static final String[] appearances;
+    private static final List<PotionBrewer.PredicatedCombination<PotionRegistry>> a = Lists.newArrayList();
+    private static final List<PotionBrewer.PredicatedCombination<Item>> b = Lists.newArrayList();
+    private static final List<PotionBrewer.PredicateItem> c = Lists.newArrayList();
+    private static final Predicate<ItemStack> d = new Predicate() {
+        public boolean a(ItemStack itemstack) {
+            Iterator iterator = PotionBrewer.c.iterator();
 
-    public static boolean a(int i, int j) {
-        return (i & 1 << j) != 0;
-    }
+            PotionBrewer.PredicateItem potionbrewer_predicateitem;
 
-    private static int c(int i, int j) {
-        return a(i, j) ? 1 : 0;
-    }
-
-    private static int d(int i, int j) {
-        return a(i, j) ? 0 : 1;
-    }
-
-    public static int a(int i) {
-        return a(i, 5, 4, 3, 2, 1);
-    }
-
-    public static int a(Collection<MobEffect> collection) {
-        int i = 3694022;
-
-        if (collection != null && !collection.isEmpty()) {
-            float f = 0.0F;
-            float f1 = 0.0F;
-            float f2 = 0.0F;
-            float f3 = 0.0F;
-            Iterator iterator = collection.iterator();
-
-            while (iterator.hasNext()) {
-                MobEffect mobeffect = (MobEffect) iterator.next();
-
-                if (mobeffect.isShowParticles()) {
-                    int j = MobEffectList.byId[mobeffect.getEffectId()].k();
-
-                    for (int k = 0; k <= mobeffect.getAmplifier(); ++k) {
-                        f += (float) (j >> 16 & 255) / 255.0F;
-                        f1 += (float) (j >> 8 & 255) / 255.0F;
-                        f2 += (float) (j >> 0 & 255) / 255.0F;
-                        ++f3;
-                    }
+            do {
+                if (!iterator.hasNext()) {
+                    return false;
                 }
-            }
 
-            if (f3 == 0.0F) {
-                return 0;
-            } else {
-                f = f / f3 * 255.0F;
-                f1 = f1 / f3 * 255.0F;
-                f2 = f2 / f3 * 255.0F;
-                return (int) f << 16 | (int) f1 << 8 | (int) f2;
-            }
-        } else {
-            return i;
+                potionbrewer_predicateitem = (PotionBrewer.PredicateItem) iterator.next();
+            } while (!potionbrewer_predicateitem.a(itemstack));
+
+            return true;
         }
+
+        public boolean apply(Object object) {
+            return this.a((ItemStack) object);
+        }
+    };
+
+    public static boolean a(ItemStack itemstack) {
+        return b(itemstack) || c(itemstack);
     }
 
-    public static boolean b(Collection<MobEffect> collection) {
-        Iterator iterator = collection.iterator();
+    protected static boolean b(ItemStack itemstack) {
+        int i = 0;
 
-        MobEffect mobeffect;
-
-        do {
-            if (!iterator.hasNext()) {
+        for (int j = PotionBrewer.b.size(); i < j; ++i) {
+            if (((PotionBrewer.PredicatedCombination) PotionBrewer.b.get(i)).b.apply(itemstack)) {
                 return true;
             }
-
-            mobeffect = (MobEffect) iterator.next();
-        } while (mobeffect.isAmbient());
+        }
 
         return false;
     }
 
-    public static String c(int i) {
-        int j = a(i);
+    protected static boolean c(ItemStack itemstack) {
+        int i = 0;
 
-        return PotionBrewer.appearances[j];
-    }
-
-    private static int a(boolean flag, boolean flag1, boolean flag2, int i, int j, int k, int l) {
-        int i1 = 0;
-
-        if (flag) {
-            i1 = d(l, j);
-        } else if (i != -1) {
-            if (i == 0 && h(l) == j) {
-                i1 = 1;
-            } else if (i == 1 && h(l) > j) {
-                i1 = 1;
-            } else if (i == 2 && h(l) < j) {
-                i1 = 1;
+        for (int j = PotionBrewer.a.size(); i < j; ++i) {
+            if (((PotionBrewer.PredicatedCombination) PotionBrewer.a.get(i)).b.apply(itemstack)) {
+                return true;
             }
-        } else {
-            i1 = c(l, j);
         }
 
-        if (flag1) {
-            i1 *= k;
-        }
-
-        if (flag2) {
-            i1 *= -1;
-        }
-
-        return i1;
+        return false;
     }
 
-    private static int h(int i) {
-        int j;
-
-        for (j = 0; i > 0; ++j) {
-            i &= i - 1;
-        }
-
-        return j;
+    public static boolean a(ItemStack itemstack, ItemStack itemstack1) {
+        return !PotionBrewer.d.apply(itemstack) ? false : b(itemstack, itemstack1) || c(itemstack, itemstack1);
     }
 
-    private static int a(String s, int i, int j, int k) {
-        if (i < s.length() && j >= 0 && i < j) {
-            int l = s.indexOf(124, i);
-            int i1;
-            int j1;
+    protected static boolean b(ItemStack itemstack, ItemStack itemstack1) {
+        Item item = itemstack.getItem();
+        int i = 0;
 
-            if (l >= 0 && l < j) {
-                i1 = a(s, i, l - 1, k);
-                if (i1 > 0) {
-                    return i1;
-                } else {
-                    j1 = a(s, l + 1, j, k);
-                    return j1 > 0 ? j1 : 0;
-                }
-            } else {
-                i1 = s.indexOf(38, i);
-                if (i1 >= 0 && i1 < j) {
-                    j1 = a(s, i, i1 - 1, k);
-                    if (j1 <= 0) {
-                        return 0;
-                    } else {
-                        int k1 = a(s, i1 + 1, j, k);
+        for (int j = PotionBrewer.b.size(); i < j; ++i) {
+            PotionBrewer.PredicatedCombination potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.b.get(i);
 
-                        return k1 <= 0 ? 0 : (j1 > k1 ? j1 : k1);
-                    }
-                } else {
-                    boolean flag = false;
-                    boolean flag1 = false;
-                    boolean flag2 = false;
-                    boolean flag3 = false;
-                    boolean flag4 = false;
-                    byte b0 = -1;
-                    int l1 = 0;
-                    int i2 = 0;
-                    int j2 = 0;
+            if (potionbrewer_predicatedcombination.a == item && potionbrewer_predicatedcombination.b.apply(itemstack1)) {
+                return true;
+            }
+        }
 
-                    for (int k2 = i; k2 < j; ++k2) {
-                        char c0 = s.charAt(k2);
+        return false;
+    }
 
-                        if (c0 >= 48 && c0 <= 57) {
-                            if (flag) {
-                                i2 = c0 - 48;
-                                flag1 = true;
-                            } else {
-                                l1 *= 10;
-                                l1 += c0 - 48;
-                                flag2 = true;
-                            }
-                        } else if (c0 == 42) {
-                            flag = true;
-                        } else if (c0 == 33) {
-                            if (flag2) {
-                                j2 += a(flag3, flag1, flag4, b0, l1, i2, k);
-                                flag3 = false;
-                                flag4 = false;
-                                flag = false;
-                                flag1 = false;
-                                flag2 = false;
-                                i2 = 0;
-                                l1 = 0;
-                                b0 = -1;
-                            }
+    protected static boolean c(ItemStack itemstack, ItemStack itemstack1) {
+        PotionRegistry potionregistry = PotionUtil.c(itemstack);
+        int i = 0;
 
-                            flag3 = true;
-                        } else if (c0 == 45) {
-                            if (flag2) {
-                                j2 += a(flag3, flag1, flag4, b0, l1, i2, k);
-                                flag3 = false;
-                                flag4 = false;
-                                flag = false;
-                                flag1 = false;
-                                flag2 = false;
-                                i2 = 0;
-                                l1 = 0;
-                                b0 = -1;
-                            }
+        for (int j = PotionBrewer.a.size(); i < j; ++i) {
+            PotionBrewer.PredicatedCombination potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.a.get(i);
 
-                            flag4 = true;
-                        } else if (c0 != 61 && c0 != 60 && c0 != 62) {
-                            if (c0 == 43 && flag2) {
-                                j2 += a(flag3, flag1, flag4, b0, l1, i2, k);
-                                flag3 = false;
-                                flag4 = false;
-                                flag = false;
-                                flag1 = false;
-                                flag2 = false;
-                                i2 = 0;
-                                l1 = 0;
-                                b0 = -1;
-                            }
-                        } else {
-                            if (flag2) {
-                                j2 += a(flag3, flag1, flag4, b0, l1, i2, k);
-                                flag3 = false;
-                                flag4 = false;
-                                flag = false;
-                                flag1 = false;
-                                flag2 = false;
-                                i2 = 0;
-                                l1 = 0;
-                                b0 = -1;
-                            }
+            if (potionbrewer_predicatedcombination.a == potionregistry && potionbrewer_predicatedcombination.b.apply(itemstack1)) {
+                return true;
+            }
+        }
 
-                            if (c0 == 61) {
-                                b0 = 0;
-                            } else if (c0 == 60) {
-                                b0 = 2;
-                            } else if (c0 == 62) {
-                                b0 = 1;
-                            }
-                        }
-                    }
+        return false;
+    }
 
-                    if (flag2) {
-                        j2 += a(flag3, flag1, flag4, b0, l1, i2, k);
-                    }
+    public static ItemStack d(ItemStack itemstack, ItemStack itemstack1) {
+        if (itemstack1 != null) {
+            PotionRegistry potionregistry = PotionUtil.c(itemstack1);
+            Item item = itemstack1.getItem();
+            int i = 0;
 
-                    return j2;
+            int j;
+            PotionBrewer.PredicatedCombination potionbrewer_predicatedcombination;
+
+            for (j = PotionBrewer.b.size(); i < j; ++i) {
+                potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.b.get(i);
+                if (potionbrewer_predicatedcombination.a == item && potionbrewer_predicatedcombination.b.apply(itemstack)) {
+                    return PotionUtil.a(new ItemStack((Item) potionbrewer_predicatedcombination.c), potionregistry);
                 }
             }
-        } else {
-            return 0;
-        }
-    }
 
-    public static List<MobEffect> getEffects(int i, boolean flag) {
-        ArrayList arraylist = null;
-        MobEffectList[] amobeffectlist = MobEffectList.byId;
-        int j = amobeffectlist.length;
+            i = 0;
 
-        for (int k = 0; k < j; ++k) {
-            MobEffectList mobeffectlist = amobeffectlist[k];
-
-            if (mobeffectlist != null && (!mobeffectlist.j() || flag)) {
-                String s = (String) PotionBrewer.effectDurations.get(Integer.valueOf(mobeffectlist.getId()));
-
-                if (s != null) {
-                    int l = a(s, 0, s.length(), i);
-
-                    if (l > 0) {
-                        int i1 = 0;
-                        String s1 = (String) PotionBrewer.effectAmplifiers.get(Integer.valueOf(mobeffectlist.getId()));
-
-                        if (s1 != null) {
-                            i1 = a(s1, 0, s1.length(), i);
-                            if (i1 < 0) {
-                                i1 = 0;
-                            }
-                        }
-
-                        if (mobeffectlist.isInstant()) {
-                            l = 1;
-                        } else {
-                            l = 1200 * (l * 3 + (l - 1) * 2);
-                            l >>= i1;
-                            l = (int) Math.round((double) l * mobeffectlist.getDurationModifier());
-                            if ((i & 16384) != 0) {
-                                l = (int) Math.round((double) l * 0.75D + 0.5D);
-                            }
-                        }
-
-                        if (arraylist == null) {
-                            arraylist = Lists.newArrayList();
-                        }
-
-                        MobEffect mobeffect = new MobEffect(mobeffectlist.getId(), l, i1);
-
-                        if ((i & 16384) != 0) {
-                            mobeffect.setSplash(true);
-                        }
-
-                        arraylist.add(mobeffect);
-                    }
+            for (j = PotionBrewer.a.size(); i < j; ++i) {
+                potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.a.get(i);
+                if (potionbrewer_predicatedcombination.a == potionregistry && potionbrewer_predicatedcombination.b.apply(itemstack)) {
+                    return PotionUtil.a(new ItemStack(item), (PotionRegistry) potionbrewer_predicatedcombination.c);
                 }
             }
         }
 
-        return arraylist;
+        return itemstack1;
     }
 
-    private static int a(int i, int j, boolean flag, boolean flag1, boolean flag2) {
-        if (flag2) {
-            if (!a(i, j)) {
-                return 0;
-            }
-        } else if (flag) {
-            i &= ~(1 << j);
-        } else if (flag1) {
-            if ((i & 1 << j) == 0) {
-                i |= 1 << j;
-            } else {
-                i &= ~(1 << j);
-            }
-        } else {
-            i |= 1 << j;
+    public static void a() {
+        PotionBrewer.PredicateItem potionbrewer_predicateitem = new PotionBrewer.PredicateItem(Items.NETHER_WART);
+        PotionBrewer.PredicateItem potionbrewer_predicateitem1 = new PotionBrewer.PredicateItem(Items.GOLDEN_CARROT);
+        PotionBrewer.PredicateItem potionbrewer_predicateitem2 = new PotionBrewer.PredicateItem(Items.REDSTONE);
+        PotionBrewer.PredicateItem potionbrewer_predicateitem3 = new PotionBrewer.PredicateItem(Items.FERMENTED_SPIDER_EYE);
+        PotionBrewer.PredicateItem potionbrewer_predicateitem4 = new PotionBrewer.PredicateItem(Items.RABBIT_FOOT);
+        PotionBrewer.PredicateItem potionbrewer_predicateitem5 = new PotionBrewer.PredicateItem(Items.GLOWSTONE_DUST);
+        PotionBrewer.PredicateItem potionbrewer_predicateitem6 = new PotionBrewer.PredicateItem(Items.MAGMA_CREAM);
+        PotionBrewer.PredicateItem potionbrewer_predicateitem7 = new PotionBrewer.PredicateItem(Items.SUGAR);
+        PotionBrewer.PredicateItem potionbrewer_predicateitem8 = new PotionBrewer.PredicateItem(Items.FISH, ItemFish.EnumFish.PUFFERFISH.a());
+        PotionBrewer.PredicateItem potionbrewer_predicateitem9 = new PotionBrewer.PredicateItem(Items.SPECKLED_MELON);
+        PotionBrewer.PredicateItem potionbrewer_predicateitem10 = new PotionBrewer.PredicateItem(Items.SPIDER_EYE);
+        PotionBrewer.PredicateItem potionbrewer_predicateitem11 = new PotionBrewer.PredicateItem(Items.GHAST_TEAR);
+        PotionBrewer.PredicateItem potionbrewer_predicateitem12 = new PotionBrewer.PredicateItem(Items.BLAZE_POWDER);
+
+        a(new PotionBrewer.PredicateItem(Items.POTION));
+        a(new PotionBrewer.PredicateItem(Items.SPLASH_POTION));
+        a(new PotionBrewer.PredicateItem(Items.LINGERING_POTION));
+        a(Items.POTION, new PotionBrewer.PredicateItem(Items.GUNPOWDER), Items.SPLASH_POTION);
+        a(Items.SPLASH_POTION, new PotionBrewer.PredicateItem(Items.DRAGON_BREATH), Items.LINGERING_POTION);
+        a(Potions.b, (Predicate) potionbrewer_predicateitem9, Potions.c);
+        a(Potions.b, (Predicate) potionbrewer_predicateitem11, Potions.c);
+        a(Potions.b, (Predicate) potionbrewer_predicateitem4, Potions.c);
+        a(Potions.b, (Predicate) potionbrewer_predicateitem12, Potions.c);
+        a(Potions.b, (Predicate) potionbrewer_predicateitem10, Potions.c);
+        a(Potions.b, (Predicate) potionbrewer_predicateitem7, Potions.c);
+        a(Potions.b, (Predicate) potionbrewer_predicateitem6, Potions.c);
+        a(Potions.b, (Predicate) potionbrewer_predicateitem5, Potions.d);
+        a(Potions.b, (Predicate) potionbrewer_predicateitem2, Potions.c);
+        a(Potions.b, (Predicate) potionbrewer_predicateitem, Potions.e);
+        a(Potions.e, (Predicate) potionbrewer_predicateitem1, Potions.f);
+        a(Potions.f, (Predicate) potionbrewer_predicateitem2, Potions.g);
+        a(Potions.f, (Predicate) potionbrewer_predicateitem3, Potions.h);
+        a(Potions.g, (Predicate) potionbrewer_predicateitem3, Potions.i);
+        a(Potions.h, (Predicate) potionbrewer_predicateitem2, Potions.i);
+        a(Potions.e, (Predicate) potionbrewer_predicateitem6, Potions.m);
+        a(Potions.m, (Predicate) potionbrewer_predicateitem2, Potions.n);
+        a(Potions.e, (Predicate) potionbrewer_predicateitem4, Potions.j);
+        a(Potions.j, (Predicate) potionbrewer_predicateitem2, Potions.k);
+        a(Potions.j, (Predicate) potionbrewer_predicateitem5, Potions.l);
+        a(Potions.j, (Predicate) potionbrewer_predicateitem3, Potions.r);
+        a(Potions.k, (Predicate) potionbrewer_predicateitem3, Potions.s);
+        a(Potions.r, (Predicate) potionbrewer_predicateitem2, Potions.s);
+        a(Potions.o, (Predicate) potionbrewer_predicateitem3, Potions.r);
+        a(Potions.p, (Predicate) potionbrewer_predicateitem3, Potions.s);
+        a(Potions.e, (Predicate) potionbrewer_predicateitem7, Potions.o);
+        a(Potions.o, (Predicate) potionbrewer_predicateitem2, Potions.p);
+        a(Potions.o, (Predicate) potionbrewer_predicateitem5, Potions.q);
+        a(Potions.e, (Predicate) potionbrewer_predicateitem8, Potions.t);
+        a(Potions.t, (Predicate) potionbrewer_predicateitem2, Potions.u);
+        a(Potions.e, (Predicate) potionbrewer_predicateitem9, Potions.v);
+        a(Potions.v, (Predicate) potionbrewer_predicateitem5, Potions.w);
+        a(Potions.v, (Predicate) potionbrewer_predicateitem3, Potions.x);
+        a(Potions.w, (Predicate) potionbrewer_predicateitem3, Potions.y);
+        a(Potions.x, (Predicate) potionbrewer_predicateitem5, Potions.y);
+        a(Potions.z, (Predicate) potionbrewer_predicateitem3, Potions.x);
+        a(Potions.A, (Predicate) potionbrewer_predicateitem3, Potions.x);
+        a(Potions.B, (Predicate) potionbrewer_predicateitem3, Potions.y);
+        a(Potions.e, (Predicate) potionbrewer_predicateitem10, Potions.z);
+        a(Potions.z, (Predicate) potionbrewer_predicateitem2, Potions.A);
+        a(Potions.z, (Predicate) potionbrewer_predicateitem5, Potions.B);
+        a(Potions.e, (Predicate) potionbrewer_predicateitem11, Potions.C);
+        a(Potions.C, (Predicate) potionbrewer_predicateitem2, Potions.D);
+        a(Potions.C, (Predicate) potionbrewer_predicateitem5, Potions.E);
+        a(Potions.e, (Predicate) potionbrewer_predicateitem12, Potions.F);
+        a(Potions.F, (Predicate) potionbrewer_predicateitem2, Potions.G);
+        a(Potions.F, (Predicate) potionbrewer_predicateitem5, Potions.H);
+        a(Potions.b, (Predicate) potionbrewer_predicateitem3, Potions.I);
+        a(Potions.I, (Predicate) potionbrewer_predicateitem2, Potions.J);
+    }
+
+    private static void a(ItemPotion itempotion, PotionBrewer.PredicateItem potionbrewer_predicateitem, ItemPotion itempotion1) {
+        PotionBrewer.b.add(new PotionBrewer.PredicatedCombination(itempotion, potionbrewer_predicateitem, itempotion1));
+    }
+
+    private static void a(PotionBrewer.PredicateItem potionbrewer_predicateitem) {
+        PotionBrewer.c.add(potionbrewer_predicateitem);
+    }
+
+    private static void a(PotionRegistry potionregistry, Predicate<ItemStack> predicate, PotionRegistry potionregistry1) {
+        PotionBrewer.a.add(new PotionBrewer.PredicatedCombination(potionregistry, predicate, potionregistry1));
+    }
+
+    static class PredicateItem implements Predicate<ItemStack> {
+
+        private final Item a;
+        private final int b;
+
+        public PredicateItem(Item item) {
+            this(item, -1);
         }
 
-        return i;
-    }
-
-    public static int a(int i, String s) {
-        byte b0 = 0;
-        int j = s.length();
-        boolean flag = false;
-        boolean flag1 = false;
-        boolean flag2 = false;
-        boolean flag3 = false;
-        int k = 0;
-
-        for (int l = b0; l < j; ++l) {
-            char c0 = s.charAt(l);
-
-            if (c0 >= 48 && c0 <= 57) {
-                k *= 10;
-                k += c0 - 48;
-                flag = true;
-            } else if (c0 == 33) {
-                if (flag) {
-                    i = a(i, k, flag2, flag1, flag3);
-                    flag3 = false;
-                    flag1 = false;
-                    flag2 = false;
-                    flag = false;
-                    k = 0;
-                }
-
-                flag1 = true;
-            } else if (c0 == 45) {
-                if (flag) {
-                    i = a(i, k, flag2, flag1, flag3);
-                    flag3 = false;
-                    flag1 = false;
-                    flag2 = false;
-                    flag = false;
-                    k = 0;
-                }
-
-                flag2 = true;
-            } else if (c0 == 43) {
-                if (flag) {
-                    i = a(i, k, flag2, flag1, flag3);
-                    flag3 = false;
-                    flag1 = false;
-                    flag2 = false;
-                    flag = false;
-                    k = 0;
-                }
-            } else if (c0 == 38) {
-                if (flag) {
-                    i = a(i, k, flag2, flag1, flag3);
-                    flag3 = false;
-                    flag1 = false;
-                    flag2 = false;
-                    flag = false;
-                    k = 0;
-                }
-
-                flag3 = true;
-            }
+        public PredicateItem(Item item, int i) {
+            this.a = item;
+            this.b = i;
         }
 
-        if (flag) {
-            i = a(i, k, flag2, flag1, flag3);
+        public boolean a(ItemStack itemstack) {
+            return itemstack != null && itemstack.getItem() == this.a && (this.b == -1 || this.b == itemstack.getData());
         }
 
-        return i & 32767;
+        public boolean apply(Object object) {
+            return this.a((ItemStack) object);
+        }
     }
 
-    public static int a(int i, int j, int k, int l, int i1, int j1) {
-        return (a(i, j) ? 16 : 0) | (a(i, k) ? 8 : 0) | (a(i, l) ? 4 : 0) | (a(i, i1) ? 2 : 0) | (a(i, j1) ? 1 : 0);
-    }
+    static class PredicatedCombination<T> {
 
-    static {
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.REGENERATION.getId()), "0 & !1 & !2 & !3 & 0+6");
-        b = "-0+1-2-3&4-4+13";
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.FASTER_MOVEMENT.getId()), "!0 & 1 & !2 & !3 & 1+6");
-        h = "+0+1-2-3&4-4+13";
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.FIRE_RESISTANCE.getId()), "0 & 1 & !2 & !3 & 0+6");
-        f = "+0-1+2-3&4-4+13";
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.HEAL.getId()), "0 & !1 & 2 & !3");
-        d = "-0-1+2-3&4-4+13";
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.POISON.getId()), "!0 & !1 & 2 & !3 & 2+6");
-        e = "-0+3-4+13";
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.WEAKNESS.getId()), "!0 & !1 & !2 & 3 & 3+6");
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.HARM.getId()), "!0 & !1 & 2 & 3");
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.SLOWER_MOVEMENT.getId()), "!0 & 1 & !2 & 3 & 3+6");
-        g = "+0-1-2+3&4-4+13";
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.INCREASE_DAMAGE.getId()), "0 & !1 & !2 & 3 & 3+6");
-        l = "-0+1+2-3+13&4-4";
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.NIGHT_VISION.getId()), "!0 & 1 & 2 & !3 & 2+6");
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.INVISIBILITY.getId()), "!0 & 1 & 2 & 3 & 2+6");
-        m = "+0-1+2+3+13&4-4";
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.WATER_BREATHING.getId()), "0 & !1 & 2 & 3 & 2+6");
-        n = "+0+1-2+3&4-4+13";
-        PotionBrewer.effectDurations.put(Integer.valueOf(MobEffectList.JUMP.getId()), "0 & 1 & !2 & 3 & 3+6");
-        j = "+5-6-7";
-        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.FASTER_MOVEMENT.getId()), "5");
-        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.FASTER_DIG.getId()), "5");
-        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.INCREASE_DAMAGE.getId()), "5");
-        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.REGENERATION.getId()), "5");
-        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.HARM.getId()), "5");
-        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.HEAL.getId()), "5");
-        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.RESISTANCE.getId()), "5");
-        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.POISON.getId()), "5");
-        PotionBrewer.effectAmplifiers.put(Integer.valueOf(MobEffectList.JUMP.getId()), "5");
-        i = "-5+6-7";
-        k = "+14&13-13";
-        q = Maps.newHashMap();
-        appearances = new String[] { "potion.prefix.mundane", "potion.prefix.uninteresting", "potion.prefix.bland", "potion.prefix.clear", "potion.prefix.milky", "potion.prefix.diffuse", "potion.prefix.artless", "potion.prefix.thin", "potion.prefix.awkward", "potion.prefix.flat", "potion.prefix.bulky", "potion.prefix.bungling", "potion.prefix.buttered", "potion.prefix.smooth", "potion.prefix.suave", "potion.prefix.debonair", "potion.prefix.thick", "potion.prefix.elegant", "potion.prefix.fancy", "potion.prefix.charming", "potion.prefix.dashing", "potion.prefix.refined", "potion.prefix.cordial", "potion.prefix.sparkling", "potion.prefix.potent", "potion.prefix.foul", "potion.prefix.odorless", "potion.prefix.rank", "potion.prefix.harsh", "potion.prefix.acrid", "potion.prefix.gross", "potion.prefix.stinky"};
+        final T a;
+        final Predicate<ItemStack> b;
+        final T c;
+
+        public PredicatedCombination(T t0, Predicate<ItemStack> predicate, T t1) {
+            this.a = t0;
+            this.b = predicate;
+            this.c = t1;
+        }
     }
 }

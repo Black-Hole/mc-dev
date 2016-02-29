@@ -109,8 +109,8 @@ public class ServerGUI extends JComponent {
             public void actionPerformed(ActionEvent actionevent) {
                 String s = jtextfield.getText().trim();
 
-                if (s.length() > 0) {
-                    ServerGUI.this.c.issueCommand(s, MinecraftServer.getServer());
+                if (!s.isEmpty()) {
+                    ServerGUI.this.c.issueCommand(s, ServerGUI.this.c);
                 }
 
                 jtextfield.setText("");

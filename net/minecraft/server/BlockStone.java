@@ -8,7 +8,7 @@ public class BlockStone extends Block {
 
     public BlockStone() {
         super(Material.STONE);
-        this.j(this.blockStateList.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE));
+        this.w(this.blockStateList.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE));
         this.a(CreativeModeTab.b);
     }
 
@@ -16,7 +16,7 @@ public class BlockStone extends Block {
         return LocaleI18n.get(this.a() + "." + BlockStone.EnumStoneVariant.STONE.d() + ".name");
     }
 
-    public MaterialMapColor g(IBlockData iblockdata) {
+    public MaterialMapColor r(IBlockData iblockdata) {
         return ((BlockStone.EnumStoneVariant) iblockdata.get(BlockStone.VARIANT)).c();
     }
 

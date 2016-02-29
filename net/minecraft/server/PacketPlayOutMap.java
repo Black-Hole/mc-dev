@@ -7,50 +7,53 @@ public class PacketPlayOutMap implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private byte b;
-    private MapIcon[] c;
-    private int d;
+    private boolean c;
+    private MapIcon[] d;
     private int e;
     private int f;
     private int g;
-    private byte[] h;
+    private int h;
+    private byte[] i;
 
     public PacketPlayOutMap() {}
 
-    public PacketPlayOutMap(int i, byte b0, Collection<MapIcon> collection, byte[] abyte, int j, int k, int l, int i1) {
+    public PacketPlayOutMap(int i, byte b0, boolean flag, Collection<MapIcon> collection, byte[] abyte, int j, int k, int l, int i1) {
         this.a = i;
         this.b = b0;
-        this.c = (MapIcon[]) collection.toArray(new MapIcon[collection.size()]);
-        this.d = j;
-        this.e = k;
-        this.f = l;
-        this.g = i1;
-        this.h = new byte[l * i1];
+        this.c = flag;
+        this.d = (MapIcon[]) collection.toArray(new MapIcon[collection.size()]);
+        this.e = j;
+        this.f = k;
+        this.g = l;
+        this.h = i1;
+        this.i = new byte[l * i1];
 
         for (int j1 = 0; j1 < l; ++j1) {
             for (int k1 = 0; k1 < i1; ++k1) {
-                this.h[j1 + k1 * l] = abyte[j + j1 + (k + k1) * 128];
+                this.i[j1 + k1 * l] = abyte[j + j1 + (k + k1) * 128];
             }
         }
 
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
+        this.a = packetdataserializer.g();
         this.b = packetdataserializer.readByte();
-        this.c = new MapIcon[packetdataserializer.e()];
+        this.c = packetdataserializer.readBoolean();
+        this.d = new MapIcon[packetdataserializer.g()];
 
-        for (int i = 0; i < this.c.length; ++i) {
+        for (int i = 0; i < this.d.length; ++i) {
             short short0 = (short) packetdataserializer.readByte();
 
-            this.c[i] = new MapIcon((byte) (short0 >> 4 & 15), packetdataserializer.readByte(), packetdataserializer.readByte(), (byte) (short0 & 15));
+            this.d[i] = new MapIcon((byte) (short0 >> 4 & 15), packetdataserializer.readByte(), packetdataserializer.readByte(), (byte) (short0 & 15));
         }
 
-        this.f = packetdataserializer.readUnsignedByte();
-        if (this.f > 0) {
-            this.g = packetdataserializer.readUnsignedByte();
-            this.d = packetdataserializer.readUnsignedByte();
+        this.g = packetdataserializer.readUnsignedByte();
+        if (this.g > 0) {
+            this.h = packetdataserializer.readUnsignedByte();
             this.e = packetdataserializer.readUnsignedByte();
-            this.h = packetdataserializer.a();
+            this.f = packetdataserializer.readUnsignedByte();
+            this.i = packetdataserializer.a();
         }
 
     }
@@ -58,8 +61,9 @@ public class PacketPlayOutMap implements Packet<PacketListenerPlayOut> {
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.writeByte(this.b);
-        packetdataserializer.b(this.c.length);
-        MapIcon[] amapicon = this.c;
+        packetdataserializer.writeBoolean(this.c);
+        packetdataserializer.b(this.d.length);
+        MapIcon[] amapicon = this.d;
         int i = amapicon.length;
 
         for (int j = 0; j < i; ++j) {
@@ -70,12 +74,12 @@ public class PacketPlayOutMap implements Packet<PacketListenerPlayOut> {
             packetdataserializer.writeByte(mapicon.getY());
         }
 
-        packetdataserializer.writeByte(this.f);
-        if (this.f > 0) {
-            packetdataserializer.writeByte(this.g);
-            packetdataserializer.writeByte(this.d);
+        packetdataserializer.writeByte(this.g);
+        if (this.g > 0) {
+            packetdataserializer.writeByte(this.h);
             packetdataserializer.writeByte(this.e);
-            packetdataserializer.a(this.h);
+            packetdataserializer.writeByte(this.f);
+            packetdataserializer.a(this.i);
         }
 
     }

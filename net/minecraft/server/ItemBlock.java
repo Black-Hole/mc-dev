@@ -13,41 +13,39 @@ public class ItemBlock extends Item {
         return this;
     }
 
-    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         IBlockData iblockdata = world.getType(blockposition);
         Block block = iblockdata.getBlock();
 
-        if (!block.a(world, blockposition)) {
+        if (!block.a((IBlockAccess) world, blockposition)) {
             blockposition = blockposition.shift(enumdirection);
         }
 
-        if (itemstack.count == 0) {
-            return false;
-        } else if (!entityhuman.a(blockposition, enumdirection, itemstack)) {
-            return false;
-        } else if (world.a(this.a, blockposition, false, enumdirection, (Entity) null, itemstack)) {
+        if (itemstack.count != 0 && entityhuman.a(blockposition, enumdirection, itemstack) && world.a(this.a, blockposition, false, enumdirection, (Entity) null, itemstack)) {
             int i = this.filterData(itemstack.getData());
             IBlockData iblockdata1 = this.a.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityhuman);
 
-            if (world.setTypeAndData(blockposition, iblockdata1, 3)) {
+            if (world.setTypeAndData(blockposition, iblockdata1, 11)) {
                 iblockdata1 = world.getType(blockposition);
                 if (iblockdata1.getBlock() == this.a) {
                     a(world, entityhuman, blockposition, itemstack);
                     this.a.postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
                 }
 
-                world.makeSound((double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), this.a.stepSound.getPlaceSound(), (this.a.stepSound.getVolume1() + 1.0F) / 2.0F, this.a.stepSound.getVolume2() * 0.8F);
+                SoundEffectType soundeffecttype = this.a.w();
+
+                world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
                 --itemstack.count;
             }
 
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
-            return false;
+            return EnumInteractionResult.FAIL;
         }
     }
 
     public static boolean a(World world, EntityHuman entityhuman, BlockPosition blockposition, ItemStack itemstack) {
-        MinecraftServer minecraftserver = MinecraftServer.getServer();
+        MinecraftServer minecraftserver = world.getMinecraftServer();
 
         if (minecraftserver == null) {
             return false;
@@ -56,14 +54,14 @@ public class ItemBlock extends Item {
                 TileEntity tileentity = world.getTileEntity(blockposition);
 
                 if (tileentity != null) {
-                    if (!world.isClientSide && tileentity.F() && !minecraftserver.getPlayerList().isOp(entityhuman.getProfile())) {
+                    if (!world.isClientSide && tileentity.isFilteredNBT() && (entityhuman == null || !minecraftserver.getPlayerList().isOp(entityhuman.getProfile()))) {
                         return false;
                     }
 
                     NBTTagCompound nbttagcompound = new NBTTagCompound();
                     NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttagcompound.clone();
 
-                    tileentity.b(nbttagcompound);
+                    tileentity.save(nbttagcompound);
                     NBTTagCompound nbttagcompound2 = (NBTTagCompound) itemstack.getTag().get("BlockEntityTag");
 
                     nbttagcompound.a(nbttagcompound2);
@@ -82,7 +80,7 @@ public class ItemBlock extends Item {
         }
     }
 
-    public String e_(ItemStack itemstack) {
+    public String f_(ItemStack itemstack) {
         return this.a.a();
     }
 

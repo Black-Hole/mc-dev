@@ -17,51 +17,55 @@ public class ItemStep extends ItemBlock {
         return i;
     }
 
-    public String e_(ItemStack itemstack) {
-        return this.b.b(itemstack.getData());
+    public String f_(ItemStack itemstack) {
+        return this.b.e(itemstack.getData());
     }
 
-    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (itemstack.count == 0) {
-            return false;
-        } else if (!entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
-            return false;
-        } else {
-            Object object = this.b.a(itemstack);
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        if (itemstack.count != 0 && entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
+            Comparable comparable = this.b.a(itemstack);
             IBlockData iblockdata = world.getType(blockposition);
 
             if (iblockdata.getBlock() == this.b) {
-                IBlockState iblockstate = this.b.n();
-                Comparable comparable = iblockdata.get(iblockstate);
+                IBlockState iblockstate = this.b.g();
+                Comparable comparable1 = iblockdata.get(iblockstate);
                 BlockStepAbstract.EnumSlabHalf blockstepabstract_enumslabhalf = (BlockStepAbstract.EnumSlabHalf) iblockdata.get(BlockStepAbstract.HALF);
 
-                if ((enumdirection == EnumDirection.UP && blockstepabstract_enumslabhalf == BlockStepAbstract.EnumSlabHalf.BOTTOM || enumdirection == EnumDirection.DOWN && blockstepabstract_enumslabhalf == BlockStepAbstract.EnumSlabHalf.TOP) && comparable == object) {
-                    IBlockData iblockdata1 = this.c.getBlockData().set(iblockstate, comparable);
+                if ((enumdirection == EnumDirection.UP && blockstepabstract_enumslabhalf == BlockStepAbstract.EnumSlabHalf.BOTTOM || enumdirection == EnumDirection.DOWN && blockstepabstract_enumslabhalf == BlockStepAbstract.EnumSlabHalf.TOP) && comparable1 == comparable) {
+                    IBlockData iblockdata1 = this.a(iblockstate, comparable1);
+                    AxisAlignedBB axisalignedbb = iblockdata1.d(world, blockposition);
 
-                    if (world.b(this.c.a(world, blockposition, iblockdata1)) && world.setTypeAndData(blockposition, iblockdata1, 3)) {
-                        world.makeSound((double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), this.c.stepSound.getPlaceSound(), (this.c.stepSound.getVolume1() + 1.0F) / 2.0F, this.c.stepSound.getVolume2() * 0.8F);
+                    if (axisalignedbb != Block.k && world.c(axisalignedbb.a(blockposition)) && world.setTypeAndData(blockposition, iblockdata1, 11)) {
+                        SoundEffectType soundeffecttype = this.c.w();
+
+                        world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
                         --itemstack.count;
                     }
 
-                    return true;
+                    return EnumInteractionResult.SUCCESS;
                 }
             }
 
-            return this.a(itemstack, world, blockposition.shift(enumdirection), object) ? true : super.interactWith(itemstack, entityhuman, world, blockposition, enumdirection, f, f1, f2);
+            return this.a(entityhuman, itemstack, world, blockposition.shift(enumdirection), (Object) comparable) ? EnumInteractionResult.SUCCESS : super.a(itemstack, entityhuman, world, blockposition, enumhand, enumdirection, f, f1, f2);
+        } else {
+            return EnumInteractionResult.FAIL;
         }
     }
 
-    private boolean a(ItemStack itemstack, World world, BlockPosition blockposition, Object object) {
+    private boolean a(EntityHuman entityhuman, ItemStack itemstack, World world, BlockPosition blockposition, Object object) {
         IBlockData iblockdata = world.getType(blockposition);
 
         if (iblockdata.getBlock() == this.b) {
-            Comparable comparable = iblockdata.get(this.b.n());
+            Comparable comparable = iblockdata.get(this.b.g());
 
             if (comparable == object) {
-                IBlockData iblockdata1 = this.c.getBlockData().set(this.b.n(), comparable);
+                IBlockData iblockdata1 = this.a(this.b.g(), comparable);
+                AxisAlignedBB axisalignedbb = iblockdata1.d(world, blockposition);
 
-                if (world.b(this.c.a(world, blockposition, iblockdata1)) && world.setTypeAndData(blockposition, iblockdata1, 3)) {
-                    world.makeSound((double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), this.c.stepSound.getPlaceSound(), (this.c.stepSound.getVolume1() + 1.0F) / 2.0F, this.c.stepSound.getVolume2() * 0.8F);
+                if (axisalignedbb != Block.k && world.c(axisalignedbb.a(blockposition)) && world.setTypeAndData(blockposition, iblockdata1, 11)) {
+                    SoundEffectType soundeffecttype = this.c.w();
+
+                    world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
                     --itemstack.count;
                 }
 
@@ -70,5 +74,9 @@ public class ItemStep extends ItemBlock {
         }
 
         return false;
+    }
+
+    protected <T extends Comparable<T>> IBlockData a(IBlockState<T> iblockstate, Comparable<?> comparable) {
+        return this.c.getBlockData().set(iblockstate, comparable);
     }
 }

@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandClear extends CommandAbstract {
@@ -19,9 +20,9 @@ public class CommandClear extends CommandAbstract {
         return 2;
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
-        EntityPlayer entityplayer = astring.length == 0 ? b(icommandlistener) : a(icommandlistener, astring[0]);
-        Item item = astring.length >= 2 ? f(icommandlistener, astring[1]) : null;
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
+        EntityPlayer entityplayer = astring.length == 0 ? a(icommandlistener) : a(minecraftserver, icommandlistener, astring[0]);
+        Item item = astring.length >= 2 ? a(icommandlistener, astring[1]) : null;
         int i = astring.length >= 3 ? a(astring[2], -1) : -1;
         int j = astring.length >= 4 ? a(astring[3], -1) : -1;
         NBTTagCompound nbttagcompound = null;
@@ -51,19 +52,15 @@ public class CommandClear extends CommandAbstract {
                 if (j == 0) {
                     icommandlistener.sendMessage(new ChatMessage("commands.clear.testing", new Object[] { entityplayer.getName(), Integer.valueOf(k)}));
                 } else {
-                    a(icommandlistener, this, "commands.clear.success", new Object[] { entityplayer.getName(), Integer.valueOf(k)});
+                    a(icommandlistener, (ICommand) this, "commands.clear.success", new Object[] { entityplayer.getName(), Integer.valueOf(k)});
                 }
 
             }
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, this.d()) : (astring.length == 2 ? a(astring, (Collection) Item.REGISTRY.keySet()) : null);
-    }
-
-    protected String[] d() {
-        return MinecraftServer.getServer().getPlayers();
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : (astring.length == 2 ? a(astring, (Collection) Item.REGISTRY.keySet()) : Collections.emptyList());
     }
 
     public boolean isListStart(String[] astring, int i) {

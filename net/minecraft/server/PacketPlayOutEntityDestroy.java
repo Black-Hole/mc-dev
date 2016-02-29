@@ -13,10 +13,10 @@ public class PacketPlayOutEntityDestroy implements Packet<PacketListenerPlayOut>
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = new int[packetdataserializer.e()];
+        this.a = new int[packetdataserializer.g()];
 
         for (int i = 0; i < this.a.length; ++i) {
-            this.a[i] = packetdataserializer.e();
+            this.a[i] = packetdataserializer.g();
         }
 
     }

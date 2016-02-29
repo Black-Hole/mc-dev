@@ -101,14 +101,15 @@ public class WorldGenNetherPieces {
 
         public WorldGenNetherPiece5(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
             byte b0 = 1;
+            EnumDirection enumdirection = this.e();
 
-            if (this.m == EnumDirection.WEST || this.m == EnumDirection.NORTH) {
+            if (enumdirection == EnumDirection.WEST || enumdirection == EnumDirection.NORTH) {
                 b0 = 5;
             }
 
@@ -159,7 +160,7 @@ public class WorldGenNetherPieces {
 
         public WorldGenNetherPiece4(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
@@ -174,31 +175,31 @@ public class WorldGenNetherPieces {
         }
 
         public boolean a(World world, Random random, StructureBoundingBox structureboundingbox) {
-            int i = this.a(Blocks.NETHER_BRICK_STAIRS, 2);
+            IBlockData iblockdata = Blocks.NETHER_BRICK_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.SOUTH);
 
-            for (int j = 0; j <= 9; ++j) {
-                int k = Math.max(1, 7 - j);
-                int l = Math.min(Math.max(k + 5, 14 - j), 13);
-                int i1 = j;
+            for (int i = 0; i <= 9; ++i) {
+                int j = Math.max(1, 7 - i);
+                int k = Math.min(Math.max(j + 5, 14 - i), 13);
+                int l = i;
 
-                this.a(world, structureboundingbox, 0, 0, j, 4, k, j, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
-                this.a(world, structureboundingbox, 1, k + 1, j, 3, l - 1, j, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
-                if (j <= 6) {
-                    this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(i), 1, k + 1, j, structureboundingbox);
-                    this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(i), 2, k + 1, j, structureboundingbox);
-                    this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(i), 3, k + 1, j, structureboundingbox);
+                this.a(world, structureboundingbox, 0, 0, i, 4, j, i, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
+                this.a(world, structureboundingbox, 1, j + 1, i, 3, k - 1, i, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
+                if (i <= 6) {
+                    this.a(world, iblockdata, 1, j + 1, i, structureboundingbox);
+                    this.a(world, iblockdata, 2, j + 1, i, structureboundingbox);
+                    this.a(world, iblockdata, 3, j + 1, i, structureboundingbox);
                 }
 
-                this.a(world, structureboundingbox, 0, l, j, 4, l, j, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
-                this.a(world, structureboundingbox, 0, k + 1, j, 0, l - 1, j, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
-                this.a(world, structureboundingbox, 4, k + 1, j, 4, l - 1, j, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
-                if ((j & 1) == 0) {
-                    this.a(world, structureboundingbox, 0, k + 2, j, 0, k + 3, j, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK_FENCE.getBlockData(), false);
-                    this.a(world, structureboundingbox, 4, k + 2, j, 4, k + 3, j, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK_FENCE.getBlockData(), false);
+                this.a(world, structureboundingbox, 0, k, i, 4, k, i, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
+                this.a(world, structureboundingbox, 0, j + 1, i, 0, k - 1, i, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
+                this.a(world, structureboundingbox, 4, j + 1, i, 4, k - 1, i, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
+                if ((i & 1) == 0) {
+                    this.a(world, structureboundingbox, 0, j + 2, i, 0, j + 3, i, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK_FENCE.getBlockData(), false);
+                    this.a(world, structureboundingbox, 4, j + 2, i, 4, j + 3, i, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK_FENCE.getBlockData(), false);
                 }
 
-                for (int j1 = 0; j1 <= 4; ++j1) {
-                    this.b(world, Blocks.NETHER_BRICK.getBlockData(), j1, -1, i1, structureboundingbox);
+                for (int i1 = 0; i1 <= 4; ++i1) {
+                    this.b(world, Blocks.NETHER_BRICK.getBlockData(), i1, -1, l, structureboundingbox);
                 }
             }
 
@@ -208,25 +209,25 @@ public class WorldGenNetherPieces {
 
     public static class WorldGenNetherPiece8 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
-        private boolean b;
+        private boolean a;
 
         public WorldGenNetherPiece8() {}
 
         public WorldGenNetherPiece8(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
-            this.b = random.nextInt(3) == 0;
+            this.a = random.nextInt(3) == 0;
         }
 
         protected void b(NBTTagCompound nbttagcompound) {
             super.b(nbttagcompound);
-            this.b = nbttagcompound.getBoolean("Chest");
+            this.a = nbttagcompound.getBoolean("Chest");
         }
 
         protected void a(NBTTagCompound nbttagcompound) {
             super.a(nbttagcompound);
-            nbttagcompound.setBoolean("Chest", this.b);
+            nbttagcompound.setBoolean("Chest", this.a);
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
@@ -249,9 +250,9 @@ public class WorldGenNetherPieces {
             this.a(world, structureboundingbox, 0, 2, 4, 3, 5, 4, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
             this.a(world, structureboundingbox, 1, 3, 4, 1, 4, 4, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
             this.a(world, structureboundingbox, 3, 3, 4, 3, 4, 4, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
-            if (this.b && structureboundingbox.b((BaseBlockPosition) (new BlockPosition(this.a(3, 3), this.d(2), this.b(3, 3))))) {
-                this.b = false;
-                this.a(world, structureboundingbox, random, 3, 2, 3, WorldGenNetherPieces.WorldGenNetherPiece8.a, 2 + random.nextInt(4));
+            if (this.a && structureboundingbox.b((BaseBlockPosition) (new BlockPosition(this.a(3, 3), this.d(2), this.b(3, 3))))) {
+                this.a = false;
+                this.a(world, structureboundingbox, random, 3, 2, 3, LootTables.g);
             }
 
             this.a(world, structureboundingbox, 0, 6, 0, 4, 6, 4, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
@@ -268,25 +269,25 @@ public class WorldGenNetherPieces {
 
     public static class WorldGenNetherPiece10 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
-        private boolean b;
+        private boolean a;
 
         public WorldGenNetherPiece10() {}
 
         public WorldGenNetherPiece10(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
-            this.b = random.nextInt(3) == 0;
+            this.a = random.nextInt(3) == 0;
         }
 
         protected void b(NBTTagCompound nbttagcompound) {
             super.b(nbttagcompound);
-            this.b = nbttagcompound.getBoolean("Chest");
+            this.a = nbttagcompound.getBoolean("Chest");
         }
 
         protected void a(NBTTagCompound nbttagcompound) {
             super.a(nbttagcompound);
-            nbttagcompound.setBoolean("Chest", this.b);
+            nbttagcompound.setBoolean("Chest", this.a);
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
@@ -309,9 +310,9 @@ public class WorldGenNetherPieces {
             this.a(world, structureboundingbox, 1, 2, 4, 4, 5, 4, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
             this.a(world, structureboundingbox, 1, 3, 4, 1, 4, 4, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
             this.a(world, structureboundingbox, 3, 3, 4, 3, 4, 4, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
-            if (this.b && structureboundingbox.b((BaseBlockPosition) (new BlockPosition(this.a(1, 3), this.d(2), this.b(1, 3))))) {
-                this.b = false;
-                this.a(world, structureboundingbox, random, 1, 2, 3, WorldGenNetherPieces.WorldGenNetherPiece10.a, 2 + random.nextInt(4));
+            if (this.a && structureboundingbox.b((BaseBlockPosition) (new BlockPosition(this.a(1, 3), this.d(2), this.b(1, 3))))) {
+                this.a = false;
+                this.a(world, structureboundingbox, random, 1, 2, 3, LootTables.g);
             }
 
             this.a(world, structureboundingbox, 0, 6, 0, 4, 6, 4, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
@@ -332,7 +333,7 @@ public class WorldGenNetherPieces {
 
         public WorldGenNetherPiece7(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
@@ -373,7 +374,7 @@ public class WorldGenNetherPieces {
 
         public WorldGenNetherPiece9(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
@@ -414,7 +415,7 @@ public class WorldGenNetherPieces {
 
         public WorldGenNetherPiece11(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
@@ -469,32 +470,31 @@ public class WorldGenNetherPieces {
                 this.a(world, structureboundingbox, 11, 7, i, 11, 8, i, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK_FENCE.getBlockData(), false);
             }
 
-            i = this.a(Blocks.NETHER_BRICK_STAIRS, 3);
+            IBlockData iblockdata = Blocks.NETHER_BRICK_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.NORTH);
 
             int j;
             int k;
-            int l;
 
             for (j = 0; j <= 6; ++j) {
-                k = j + 4;
+                int l = j + 4;
 
-                for (l = 5; l <= 7; ++l) {
-                    this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(i), l, 5 + j, k, structureboundingbox);
+                for (k = 5; k <= 7; ++k) {
+                    this.a(world, iblockdata, k, 5 + j, l, structureboundingbox);
                 }
 
-                if (k >= 5 && k <= 8) {
-                    this.a(world, structureboundingbox, 5, 5, k, 7, j + 4, k, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
-                } else if (k >= 9 && k <= 10) {
-                    this.a(world, structureboundingbox, 5, 8, k, 7, j + 4, k, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
+                if (l >= 5 && l <= 8) {
+                    this.a(world, structureboundingbox, 5, 5, l, 7, j + 4, l, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
+                } else if (l >= 9 && l <= 10) {
+                    this.a(world, structureboundingbox, 5, 8, l, 7, j + 4, l, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
                 }
 
                 if (j >= 1) {
-                    this.a(world, structureboundingbox, 5, 6 + j, k, 7, 9 + j, k, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
+                    this.a(world, structureboundingbox, 5, 6 + j, l, 7, 9 + j, l, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
                 }
             }
 
             for (j = 5; j <= 7; ++j) {
-                this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(i), j, 12, 11, structureboundingbox);
+                this.a(world, iblockdata, j, 12, 11, structureboundingbox);
             }
 
             this.a(world, structureboundingbox, 5, 6, 7, 5, 7, 7, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK_FENCE.getBlockData(), false);
@@ -506,16 +506,17 @@ public class WorldGenNetherPieces {
             this.a(world, structureboundingbox, 9, 5, 2, 10, 5, 3, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
             this.a(world, structureboundingbox, 9, 5, 9, 10, 5, 10, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
             this.a(world, structureboundingbox, 10, 5, 4, 10, 5, 8, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
-            j = this.a(Blocks.NETHER_BRICK_STAIRS, 0);
-            k = this.a(Blocks.NETHER_BRICK_STAIRS, 1);
-            this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(k), 4, 5, 2, structureboundingbox);
-            this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(k), 4, 5, 3, structureboundingbox);
-            this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(k), 4, 5, 9, structureboundingbox);
-            this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(k), 4, 5, 10, structureboundingbox);
-            this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(j), 8, 5, 2, structureboundingbox);
-            this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(j), 8, 5, 3, structureboundingbox);
-            this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(j), 8, 5, 9, structureboundingbox);
-            this.a(world, Blocks.NETHER_BRICK_STAIRS.fromLegacyData(j), 8, 5, 10, structureboundingbox);
+            IBlockData iblockdata1 = iblockdata.set(BlockStairs.FACING, EnumDirection.EAST);
+            IBlockData iblockdata2 = iblockdata.set(BlockStairs.FACING, EnumDirection.WEST);
+
+            this.a(world, iblockdata2, 4, 5, 2, structureboundingbox);
+            this.a(world, iblockdata2, 4, 5, 3, structureboundingbox);
+            this.a(world, iblockdata2, 4, 5, 9, structureboundingbox);
+            this.a(world, iblockdata2, 4, 5, 10, structureboundingbox);
+            this.a(world, iblockdata1, 8, 5, 2, structureboundingbox);
+            this.a(world, iblockdata1, 8, 5, 3, structureboundingbox);
+            this.a(world, iblockdata1, 8, 5, 9, structureboundingbox);
+            this.a(world, iblockdata1, 8, 5, 10, structureboundingbox);
             this.a(world, structureboundingbox, 3, 4, 4, 4, 4, 8, Blocks.SOUL_SAND.getBlockData(), Blocks.SOUL_SAND.getBlockData(), false);
             this.a(world, structureboundingbox, 8, 4, 4, 9, 4, 8, Blocks.SOUL_SAND.getBlockData(), Blocks.SOUL_SAND.getBlockData(), false);
             this.a(world, structureboundingbox, 3, 5, 4, 4, 5, 8, Blocks.NETHER_WART.getBlockData(), Blocks.NETHER_WART.getBlockData(), false);
@@ -529,17 +530,17 @@ public class WorldGenNetherPieces {
 
             int i1;
 
-            for (l = 4; l <= 8; ++l) {
+            for (k = 4; k <= 8; ++k) {
                 for (i1 = 0; i1 <= 2; ++i1) {
-                    this.b(world, Blocks.NETHER_BRICK.getBlockData(), l, -1, i1, structureboundingbox);
-                    this.b(world, Blocks.NETHER_BRICK.getBlockData(), l, -1, 12 - i1, structureboundingbox);
+                    this.b(world, Blocks.NETHER_BRICK.getBlockData(), k, -1, i1, structureboundingbox);
+                    this.b(world, Blocks.NETHER_BRICK.getBlockData(), k, -1, 12 - i1, structureboundingbox);
                 }
             }
 
-            for (l = 0; l <= 2; ++l) {
+            for (k = 0; k <= 2; ++k) {
                 for (i1 = 4; i1 <= 8; ++i1) {
-                    this.b(world, Blocks.NETHER_BRICK.getBlockData(), l, -1, i1, structureboundingbox);
-                    this.b(world, Blocks.NETHER_BRICK.getBlockData(), 12 - l, -1, i1, structureboundingbox);
+                    this.b(world, Blocks.NETHER_BRICK.getBlockData(), k, -1, i1, structureboundingbox);
+                    this.b(world, Blocks.NETHER_BRICK.getBlockData(), 12 - k, -1, i1, structureboundingbox);
                 }
             }
 
@@ -553,7 +554,7 @@ public class WorldGenNetherPieces {
 
         public WorldGenNetherPiece6(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
@@ -647,24 +648,24 @@ public class WorldGenNetherPieces {
 
     public static class WorldGenNetherPiece12 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
-        private boolean b;
+        private boolean a;
 
         public WorldGenNetherPiece12() {}
 
         public WorldGenNetherPiece12(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
         protected void b(NBTTagCompound nbttagcompound) {
             super.b(nbttagcompound);
-            this.b = nbttagcompound.getBoolean("Mob");
+            this.a = nbttagcompound.getBoolean("Mob");
         }
 
         protected void a(NBTTagCompound nbttagcompound) {
             super.a(nbttagcompound);
-            nbttagcompound.setBoolean("Mob", this.b);
+            nbttagcompound.setBoolean("Mob", this.a);
         }
 
         public static WorldGenNetherPieces.WorldGenNetherPiece12 a(List<StructurePiece> list, Random random, int i, int j, int k, int l, EnumDirection enumdirection) {
@@ -692,11 +693,11 @@ public class WorldGenNetherPieces {
             this.a(world, structureboundingbox, 6, 6, 3, 6, 6, 8, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK_FENCE.getBlockData(), false);
             this.a(world, structureboundingbox, 1, 6, 8, 5, 7, 8, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK_FENCE.getBlockData(), false);
             this.a(world, structureboundingbox, 2, 8, 8, 4, 8, 8, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK_FENCE.getBlockData(), false);
-            if (!this.b) {
+            if (!this.a) {
                 BlockPosition blockposition = new BlockPosition(this.a(3, 5), this.d(5), this.b(3, 5));
 
                 if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
-                    this.b = true;
+                    this.a = true;
                     world.setTypeAndData(blockposition, Blocks.MOB_SPAWNER.getBlockData(), 2);
                     TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -722,7 +723,7 @@ public class WorldGenNetherPieces {
 
         public WorldGenNetherPiece14(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
@@ -773,7 +774,7 @@ public class WorldGenNetherPieces {
 
         public WorldGenNetherPiece13(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
@@ -825,20 +826,16 @@ public class WorldGenNetherPieces {
 
         public WorldGenNetherPiece1(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
         protected WorldGenNetherPiece1(Random random, int i, int j) {
             super(0);
-            this.m = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
-            switch (WorldGenNetherPieces.SyntheticClass_1.a[this.m.ordinal()]) {
-            case 1:
-            case 2:
+            this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
+            if (this.e().k() == EnumDirection.EnumAxis.Z) {
                 this.l = new StructureBoundingBox(i, 64, j, i + 19 - 1, 73, j + 19 - 1);
-                break;
-
-            default:
+            } else {
                 this.l = new StructureBoundingBox(i, 64, j, i + 19 - 1, 73, j + 19 - 1);
             }
 
@@ -902,15 +899,15 @@ public class WorldGenNetherPieces {
 
     public static class WorldGenNetherPiece2 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
-        private int b;
+        private int a;
 
         public WorldGenNetherPiece2() {}
 
         public WorldGenNetherPiece2(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
-            this.b = random.nextInt();
+            this.a = random.nextInt();
         }
 
         public static WorldGenNetherPieces.WorldGenNetherPiece2 a(List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
@@ -921,16 +918,16 @@ public class WorldGenNetherPieces {
 
         protected void b(NBTTagCompound nbttagcompound) {
             super.b(nbttagcompound);
-            this.b = nbttagcompound.getInt("Seed");
+            this.a = nbttagcompound.getInt("Seed");
         }
 
         protected void a(NBTTagCompound nbttagcompound) {
             super.a(nbttagcompound);
-            nbttagcompound.setInt("Seed", this.b);
+            nbttagcompound.setInt("Seed", this.a);
         }
 
         public boolean a(World world, Random random, StructureBoundingBox structureboundingbox) {
-            Random random1 = new Random((long) this.b);
+            Random random1 = new Random((long) this.a);
 
             int i;
             int j;
@@ -970,7 +967,7 @@ public class WorldGenNetherPieces {
 
         public WorldGenNetherPiece3(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
@@ -1015,16 +1012,16 @@ public class WorldGenNetherPieces {
 
     public static class WorldGenNetherPiece15 extends WorldGenNetherPieces.WorldGenNetherPiece1 {
 
-        public WorldGenNetherPieces.WorldGenNetherPieceWeight b;
+        public WorldGenNetherPieces.WorldGenNetherPieceWeight a;
+        public List<WorldGenNetherPieces.WorldGenNetherPieceWeight> b;
         public List<WorldGenNetherPieces.WorldGenNetherPieceWeight> c;
-        public List<WorldGenNetherPieces.WorldGenNetherPieceWeight> d;
-        public List<StructurePiece> e = Lists.newArrayList();
+        public List<StructurePiece> d = Lists.newArrayList();
 
         public WorldGenNetherPiece15() {}
 
         public WorldGenNetherPiece15(Random random, int i, int j) {
             super(random, i, j);
-            this.c = Lists.newArrayList();
+            this.b = Lists.newArrayList();
             WorldGenNetherPieces.WorldGenNetherPieceWeight[] aworldgennetherpieces_worldgennetherpieceweight = WorldGenNetherPieces.a;
             int k = aworldgennetherpieces_worldgennetherpieceweight.length;
 
@@ -1034,17 +1031,17 @@ public class WorldGenNetherPieces {
             for (l = 0; l < k; ++l) {
                 worldgennetherpieces_worldgennetherpieceweight = aworldgennetherpieces_worldgennetherpieceweight[l];
                 worldgennetherpieces_worldgennetherpieceweight.c = 0;
-                this.c.add(worldgennetherpieces_worldgennetherpieceweight);
+                this.b.add(worldgennetherpieces_worldgennetherpieceweight);
             }
 
-            this.d = Lists.newArrayList();
+            this.c = Lists.newArrayList();
             aworldgennetherpieces_worldgennetherpieceweight = WorldGenNetherPieces.b;
             k = aworldgennetherpieces_worldgennetherpieceweight.length;
 
             for (l = 0; l < k; ++l) {
                 worldgennetherpieces_worldgennetherpieceweight = aworldgennetherpieces_worldgennetherpieceweight[l];
                 worldgennetherpieces_worldgennetherpieceweight.c = 0;
-                this.d.add(worldgennetherpieces_worldgennetherpieceweight);
+                this.c.add(worldgennetherpieces_worldgennetherpieceweight);
             }
 
         }
@@ -1059,8 +1056,6 @@ public class WorldGenNetherPieces {
     }
 
     abstract static class WorldGenNetherPiece extends StructurePiece {
-
-        protected static final List<StructurePieceTreasure> a = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.DIAMOND, 0, 1, 3, 5), new StructurePieceTreasure(Items.IRON_INGOT, 0, 1, 5, 5), new StructurePieceTreasure(Items.GOLD_INGOT, 0, 1, 3, 15), new StructurePieceTreasure(Items.GOLDEN_SWORD, 0, 1, 1, 5), new StructurePieceTreasure(Items.GOLDEN_CHESTPLATE, 0, 1, 1, 5), new StructurePieceTreasure(Items.FLINT_AND_STEEL, 0, 1, 1, 5), new StructurePieceTreasure(Items.NETHER_WART, 0, 3, 7, 5), new StructurePieceTreasure(Items.SADDLE, 0, 1, 1, 10), new StructurePieceTreasure(Items.GOLDEN_HORSE_ARMOR, 0, 1, 1, 8), new StructurePieceTreasure(Items.IRON_HORSE_ARMOR, 0, 1, 1, 5), new StructurePieceTreasure(Items.DIAMOND_HORSE_ARMOR, 0, 1, 1, 3), new StructurePieceTreasure(Item.getItemOf(Blocks.OBSIDIAN), 0, 2, 4, 2)});
 
         public WorldGenNetherPiece() {}
 
@@ -1103,7 +1098,7 @@ public class WorldGenNetherPieces {
 
                     k1 -= worldgennetherpieces_worldgennetherpieceweight.b;
                     if (k1 < 0) {
-                        if (!worldgennetherpieces_worldgennetherpieceweight.a(l) || worldgennetherpieces_worldgennetherpieceweight == worldgennetherpieces_worldgennetherpiece15.b && !worldgennetherpieces_worldgennetherpieceweight.e) {
+                        if (!worldgennetherpieces_worldgennetherpieceweight.a(l) || worldgennetherpieces_worldgennetherpieceweight == worldgennetherpieces_worldgennetherpiece15.a && !worldgennetherpieces_worldgennetherpieceweight.e) {
                             break;
                         }
 
@@ -1111,7 +1106,7 @@ public class WorldGenNetherPieces {
 
                         if (worldgennetherpieces_worldgennetherpiece != null) {
                             ++worldgennetherpieces_worldgennetherpieceweight.c;
-                            worldgennetherpieces_worldgennetherpiece15.b = worldgennetherpieces_worldgennetherpieceweight;
+                            worldgennetherpieces_worldgennetherpiece15.a = worldgennetherpieces_worldgennetherpieceweight;
                             if (!worldgennetherpieces_worldgennetherpieceweight.a()) {
                                 list.remove(worldgennetherpieces_worldgennetherpieceweight);
                             }
@@ -1127,17 +1122,17 @@ public class WorldGenNetherPieces {
 
         private StructurePiece a(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l, boolean flag) {
             if (Math.abs(i - worldgennetherpieces_worldgennetherpiece15.c().a) <= 112 && Math.abs(k - worldgennetherpieces_worldgennetherpiece15.c().c) <= 112) {
-                List list1 = worldgennetherpieces_worldgennetherpiece15.c;
+                List list1 = worldgennetherpieces_worldgennetherpiece15.b;
 
                 if (flag) {
-                    list1 = worldgennetherpieces_worldgennetherpiece15.d;
+                    list1 = worldgennetherpieces_worldgennetherpiece15.c;
                 }
 
                 WorldGenNetherPieces.WorldGenNetherPiece worldgennetherpieces_worldgennetherpiece = this.a(worldgennetherpieces_worldgennetherpiece15, list1, list, random, i, j, k, enumdirection, l + 1);
 
                 if (worldgennetherpieces_worldgennetherpiece != null) {
                     list.add(worldgennetherpieces_worldgennetherpiece);
-                    worldgennetherpieces_worldgennetherpiece15.e.add(worldgennetherpieces_worldgennetherpiece);
+                    worldgennetherpieces_worldgennetherpiece15.d.add(worldgennetherpieces_worldgennetherpiece);
                 }
 
                 return worldgennetherpieces_worldgennetherpiece;
@@ -1147,19 +1142,21 @@ public class WorldGenNetherPieces {
         }
 
         protected StructurePiece a(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, boolean flag) {
-            if (this.m != null) {
-                switch (WorldGenNetherPieces.SyntheticClass_1.a[this.m.ordinal()]) {
+            EnumDirection enumdirection = this.e();
+
+            if (enumdirection != null) {
+                switch (WorldGenNetherPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
                 case 1:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + i, this.l.b + j, this.l.c - 1, this.m, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + i, this.l.b + j, this.l.c - 1, enumdirection, this.d(), flag);
 
                 case 2:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + i, this.l.b + j, this.l.f + 1, this.m, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + i, this.l.b + j, this.l.f + 1, enumdirection, this.d(), flag);
 
                 case 3:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + j, this.l.c + i, this.m, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + j, this.l.c + i, enumdirection, this.d(), flag);
 
                 case 4:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + j, this.l.c + i, this.m, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + j, this.l.c + i, enumdirection, this.d(), flag);
                 }
             }
 
@@ -1167,8 +1164,10 @@ public class WorldGenNetherPieces {
         }
 
         protected StructurePiece b(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, boolean flag) {
-            if (this.m != null) {
-                switch (WorldGenNetherPieces.SyntheticClass_1.a[this.m.ordinal()]) {
+            EnumDirection enumdirection = this.e();
+
+            if (enumdirection != null) {
+                switch (WorldGenNetherPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
                 case 1:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.d(), flag);
 
@@ -1187,8 +1186,10 @@ public class WorldGenNetherPieces {
         }
 
         protected StructurePiece c(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, boolean flag) {
-            if (this.m != null) {
-                switch (WorldGenNetherPieces.SyntheticClass_1.a[this.m.ordinal()]) {
+            EnumDirection enumdirection = this.e();
+
+            if (enumdirection != null) {
+                switch (WorldGenNetherPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
                 case 1:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.d(), flag);
 

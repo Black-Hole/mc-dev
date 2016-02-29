@@ -13,7 +13,7 @@ public class PacketPlayOutSpawnPosition implements Packet<PacketListenerPlayOut>
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.position = packetdataserializer.c();
+        this.position = packetdataserializer.e();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

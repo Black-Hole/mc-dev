@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.mojang.authlib.GameProfile;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandWhitelist extends CommandAbstract {
@@ -19,18 +20,16 @@ public class CommandWhitelist extends CommandAbstract {
         return "commands.whitelist.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 1) {
             throw new ExceptionUsage("commands.whitelist.usage", new Object[0]);
         } else {
-            MinecraftServer minecraftserver = MinecraftServer.getServer();
-
             if (astring[0].equals("on")) {
                 minecraftserver.getPlayerList().setHasWhitelist(true);
-                a(icommandlistener, this, "commands.whitelist.enabled", new Object[0]);
+                a(icommandlistener, (ICommand) this, "commands.whitelist.enabled", new Object[0]);
             } else if (astring[0].equals("off")) {
                 minecraftserver.getPlayerList().setHasWhitelist(false);
-                a(icommandlistener, this, "commands.whitelist.disabled", new Object[0]);
+                a(icommandlistener, (ICommand) this, "commands.whitelist.disabled", new Object[0]);
             } else if (astring[0].equals("list")) {
                 icommandlistener.sendMessage(new ChatMessage("commands.whitelist.list", new Object[] { Integer.valueOf(minecraftserver.getPlayerList().getWhitelisted().length), Integer.valueOf(minecraftserver.getPlayerList().getSeenPlayers().length)}));
                 String[] astring1 = minecraftserver.getPlayerList().getWhitelisted();
@@ -50,7 +49,7 @@ public class CommandWhitelist extends CommandAbstract {
                     }
 
                     minecraftserver.getPlayerList().addWhitelist(gameprofile);
-                    a(icommandlistener, this, "commands.whitelist.add.success", new Object[] { astring[1]});
+                    a(icommandlistener, (ICommand) this, "commands.whitelist.add.success", new Object[] { astring[1]});
                 } else if (astring[0].equals("remove")) {
                     if (astring.length < 2) {
                         throw new ExceptionUsage("commands.whitelist.remove.usage", new Object[0]);
@@ -62,31 +61,31 @@ public class CommandWhitelist extends CommandAbstract {
                     }
 
                     minecraftserver.getPlayerList().removeWhitelist(gameprofile);
-                    a(icommandlistener, this, "commands.whitelist.remove.success", new Object[] { astring[1]});
+                    a(icommandlistener, (ICommand) this, "commands.whitelist.remove.success", new Object[] { astring[1]});
                 } else if (astring[0].equals("reload")) {
                     minecraftserver.getPlayerList().reloadWhitelist();
-                    a(icommandlistener, this, "commands.whitelist.reloaded", new Object[0]);
+                    a(icommandlistener, (ICommand) this, "commands.whitelist.reloaded", new Object[0]);
                 }
             }
 
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         if (astring.length == 1) {
             return a(astring, new String[] { "on", "off", "list", "add", "remove", "reload"});
         } else {
             if (astring.length == 2) {
                 if (astring[0].equals("remove")) {
-                    return a(astring, MinecraftServer.getServer().getPlayerList().getWhitelisted());
+                    return a(astring, minecraftserver.getPlayerList().getWhitelisted());
                 }
 
                 if (astring[0].equals("add")) {
-                    return a(astring, MinecraftServer.getServer().getUserCache().a());
+                    return a(astring, minecraftserver.getUserCache().a());
                 }
             }
 
-            return null;
+            return Collections.emptyList();
         }
     }
 }

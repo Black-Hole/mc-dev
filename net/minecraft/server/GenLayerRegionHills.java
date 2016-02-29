@@ -30,74 +30,74 @@ public class GenLayerRegionHills extends GenLayer {
                     GenLayerRegionHills.c.debug("old! " + k1);
                 }
 
-                if (k1 != 0 && l1 >= 2 && (l1 - 2) % 29 == 1 && k1 < 128) {
-                    if (BiomeBase.getBiome(k1 + 128) != null) {
-                        aint2[j1 + i1 * k] = k1 + 128;
-                    } else {
-                        aint2[j1 + i1 * k] = k1;
-                    }
+                BiomeBase biomebase = BiomeBase.a(k1);
+                boolean flag1 = biomebase != null && biomebase.b();
+                BiomeBase biomebase1;
+
+                if (k1 != 0 && l1 >= 2 && (l1 - 2) % 29 == 1 && !flag1) {
+                    biomebase1 = BiomeBase.b(biomebase);
+                    aint2[j1 + i1 * k] = biomebase1 == null ? k1 : BiomeBase.a(biomebase1);
                 } else if (this.a(3) != 0 && !flag) {
                     aint2[j1 + i1 * k] = k1;
                 } else {
-                    int i2 = k1;
-                    int j2;
+                    biomebase1 = biomebase;
+                    int i2;
 
-                    if (k1 == BiomeBase.DESERT.id) {
-                        i2 = BiomeBase.DESERT_HILLS.id;
-                    } else if (k1 == BiomeBase.FOREST.id) {
-                        i2 = BiomeBase.FOREST_HILLS.id;
-                    } else if (k1 == BiomeBase.BIRCH_FOREST.id) {
-                        i2 = BiomeBase.BIRCH_FOREST_HILLS.id;
-                    } else if (k1 == BiomeBase.ROOFED_FOREST.id) {
-                        i2 = BiomeBase.PLAINS.id;
-                    } else if (k1 == BiomeBase.TAIGA.id) {
-                        i2 = BiomeBase.TAIGA_HILLS.id;
-                    } else if (k1 == BiomeBase.MEGA_TAIGA.id) {
-                        i2 = BiomeBase.MEGA_TAIGA_HILLS.id;
-                    } else if (k1 == BiomeBase.COLD_TAIGA.id) {
-                        i2 = BiomeBase.COLD_TAIGA_HILLS.id;
-                    } else if (k1 == BiomeBase.PLAINS.id) {
+                    if (biomebase == Biomes.d) {
+                        biomebase1 = Biomes.s;
+                    } else if (biomebase == Biomes.f) {
+                        biomebase1 = Biomes.t;
+                    } else if (biomebase == Biomes.C) {
+                        biomebase1 = Biomes.D;
+                    } else if (biomebase == Biomes.E) {
+                        biomebase1 = Biomes.c;
+                    } else if (biomebase == Biomes.g) {
+                        biomebase1 = Biomes.u;
+                    } else if (biomebase == Biomes.H) {
+                        biomebase1 = Biomes.I;
+                    } else if (biomebase == Biomes.F) {
+                        biomebase1 = Biomes.G;
+                    } else if (biomebase == Biomes.c) {
                         if (this.a(3) == 0) {
-                            i2 = BiomeBase.FOREST_HILLS.id;
+                            biomebase1 = Biomes.t;
                         } else {
-                            i2 = BiomeBase.FOREST.id;
+                            biomebase1 = Biomes.f;
                         }
-                    } else if (k1 == BiomeBase.ICE_PLAINS.id) {
-                        i2 = BiomeBase.ICE_MOUNTAINS.id;
-                    } else if (k1 == BiomeBase.JUNGLE.id) {
-                        i2 = BiomeBase.JUNGLE_HILLS.id;
-                    } else if (k1 == BiomeBase.OCEAN.id) {
-                        i2 = BiomeBase.DEEP_OCEAN.id;
-                    } else if (k1 == BiomeBase.EXTREME_HILLS.id) {
-                        i2 = BiomeBase.EXTREME_HILLS_PLUS.id;
-                    } else if (k1 == BiomeBase.SAVANNA.id) {
-                        i2 = BiomeBase.SAVANNA_PLATEAU.id;
-                    } else if (a(k1, BiomeBase.MESA_PLATEAU_F.id)) {
-                        i2 = BiomeBase.MESA.id;
-                    } else if (k1 == BiomeBase.DEEP_OCEAN.id && this.a(3) == 0) {
-                        j2 = this.a(2);
-                        if (j2 == 0) {
-                            i2 = BiomeBase.PLAINS.id;
+                    } else if (biomebase == Biomes.n) {
+                        biomebase1 = Biomes.o;
+                    } else if (biomebase == Biomes.w) {
+                        biomebase1 = Biomes.x;
+                    } else if (biomebase == Biomes.a) {
+                        biomebase1 = Biomes.z;
+                    } else if (biomebase == Biomes.e) {
+                        biomebase1 = Biomes.J;
+                    } else if (biomebase == Biomes.K) {
+                        biomebase1 = Biomes.L;
+                    } else if (a(k1, BiomeBase.a(Biomes.N))) {
+                        biomebase1 = Biomes.M;
+                    } else if (biomebase == Biomes.z && this.a(3) == 0) {
+                        i2 = this.a(2);
+                        if (i2 == 0) {
+                            biomebase1 = Biomes.c;
                         } else {
-                            i2 = BiomeBase.FOREST.id;
+                            biomebase1 = Biomes.f;
                         }
                     }
 
+                    i2 = BiomeBase.a(biomebase1);
                     if (flag && i2 != k1) {
-                        if (BiomeBase.getBiome(i2 + 128) != null) {
-                            i2 += 128;
-                        } else {
-                            i2 = k1;
-                        }
+                        BiomeBase biomebase2 = BiomeBase.b(biomebase1);
+
+                        i2 = biomebase2 == null ? k1 : BiomeBase.a(biomebase2);
                     }
 
                     if (i2 == k1) {
                         aint2[j1 + i1 * k] = k1;
                     } else {
-                        j2 = aint[j1 + 1 + (i1 + 1 - 1) * (k + 2)];
-                        int k2 = aint[j1 + 1 + 1 + (i1 + 1) * (k + 2)];
-                        int l2 = aint[j1 + 1 - 1 + (i1 + 1) * (k + 2)];
-                        int i3 = aint[j1 + 1 + (i1 + 1 + 1) * (k + 2)];
+                        int j2 = aint[j1 + 1 + (i1 + 0) * (k + 2)];
+                        int k2 = aint[j1 + 2 + (i1 + 1) * (k + 2)];
+                        int l2 = aint[j1 + 0 + (i1 + 1) * (k + 2)];
+                        int i3 = aint[j1 + 1 + (i1 + 2) * (k + 2)];
                         int j3 = 0;
 
                         if (a(j2, k1)) {

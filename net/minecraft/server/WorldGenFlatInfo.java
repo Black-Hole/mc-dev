@@ -212,7 +212,7 @@ public class WorldGenFlatInfo {
                 if (list != null && !list.isEmpty()) {
                     worldgenflatinfo.c().addAll(list);
                     worldgenflatinfo.d();
-                    int k = BiomeBase.PLAINS.id;
+                    int k = BiomeBase.a(Biomes.c);
 
                     if (i > 0 && astring.length > j) {
                         k = MathHelper.a(astring[j++], k);
@@ -229,7 +229,7 @@ public class WorldGenFlatInfo {
                             String[] astring3 = s1.split("\\(", 2);
                             HashMap hashmap = Maps.newHashMap();
 
-                            if (astring3[0].length() > 0) {
+                            if (!astring3[0].isEmpty()) {
                                 worldgenflatinfo.b().put(astring3[0], hashmap);
                                 if (astring3.length > 1 && astring3[1].endsWith(")") && astring3[1].length() > 1) {
                                     String[] astring4 = astring3[1].substring(0, astring3[1].length() - 1).split(" ");
@@ -261,7 +261,7 @@ public class WorldGenFlatInfo {
     public static WorldGenFlatInfo e() {
         WorldGenFlatInfo worldgenflatinfo = new WorldGenFlatInfo();
 
-        worldgenflatinfo.a(BiomeBase.PLAINS.id);
+        worldgenflatinfo.a(BiomeBase.a(Biomes.c));
         worldgenflatinfo.c().add(new WorldGenFlatLayerInfo(1, Blocks.BEDROCK));
         worldgenflatinfo.c().add(new WorldGenFlatLayerInfo(2, Blocks.DIRT));
         worldgenflatinfo.c().add(new WorldGenFlatLayerInfo(1, Blocks.GRASS));

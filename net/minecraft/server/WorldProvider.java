@@ -5,20 +5,19 @@ public abstract class WorldProvider {
     public static final float[] a = new float[] { 1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
     protected World b;
     private WorldType type;
-    private String i;
+    private String h;
     protected WorldChunkManager c;
     protected boolean d;
     protected boolean e;
     protected final float[] f = new float[16];
-    protected int dimension;
-    private final float[] j = new float[4];
+    private final float[] i = new float[4];
 
     public WorldProvider() {}
 
     public final void a(World world) {
         this.b = world;
         this.type = world.getWorldData().getType();
-        this.i = world.getWorldData().getGeneratorOptions();
+        this.h = world.getWorldData().getGeneratorOptions();
         this.b();
         this.a();
     }
@@ -40,21 +39,23 @@ public abstract class WorldProvider {
         if (worldtype == WorldType.FLAT) {
             WorldGenFlatInfo worldgenflatinfo = WorldGenFlatInfo.a(this.b.getWorldData().getGeneratorOptions());
 
-            this.c = new WorldChunkManagerHell(BiomeBase.getBiome(worldgenflatinfo.a(), BiomeBase.ad), 0.5F);
+            this.c = new WorldChunkManagerHell(BiomeBase.getBiome(worldgenflatinfo.a(), Biomes.b));
         } else if (worldtype == WorldType.DEBUG_ALL_BLOCK_STATES) {
-            this.c = new WorldChunkManagerHell(BiomeBase.PLAINS, 0.0F);
+            this.c = new WorldChunkManagerHell(Biomes.c);
         } else {
-            this.c = new WorldChunkManager(this.b);
+            this.c = new WorldChunkManager(this.b.getWorldData());
         }
 
     }
 
-    public IChunkProvider getChunkProvider() {
-        return (IChunkProvider) (this.type == WorldType.FLAT ? new ChunkProviderFlat(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.i) : (this.type == WorldType.DEBUG_ALL_BLOCK_STATES ? new ChunkProviderDebug(this.b) : (this.type == WorldType.CUSTOMIZED ? new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.i) : new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.i))));
+    public ChunkGenerator getChunkGenerator() {
+        return (ChunkGenerator) (this.type == WorldType.FLAT ? new ChunkProviderFlat(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.h) : (this.type == WorldType.DEBUG_ALL_BLOCK_STATES ? new ChunkProviderDebug(this.b) : (this.type == WorldType.CUSTOMIZED ? new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.h) : new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.h))));
     }
 
     public boolean canSpawn(int i, int j) {
-        return this.b.c(new BlockPosition(i, 0, j)) == Blocks.GRASS;
+        BlockPosition blockposition = new BlockPosition(i, 0, j);
+
+        return this.b.getBiome(blockposition).i() ? true : this.b.c(blockposition).getBlock() == Blocks.GRASS;
     }
 
     public float a(long i, float f) {
@@ -88,43 +89,45 @@ public abstract class WorldProvider {
         return true;
     }
 
-    public static WorldProvider byDimension(int i) {
-        return (WorldProvider) (i == -1 ? new WorldProviderHell() : (i == 0 ? new WorldProviderNormal() : (i == 1 ? new WorldProviderTheEnd() : null)));
-    }
-
     public BlockPosition h() {
         return null;
     }
 
     public int getSeaLevel() {
-        return this.type == WorldType.FLAT ? 4 : this.b.F() + 1;
+        return this.type == WorldType.FLAT ? 4 : this.b.K() + 1;
     }
 
-    public abstract String getName();
-
-    public abstract String getSuffix();
-
-    public WorldChunkManager m() {
+    public WorldChunkManager k() {
         return this.c;
     }
 
-    public boolean n() {
+    public boolean l() {
         return this.d;
     }
 
-    public boolean o() {
+    public boolean m() {
         return this.e;
     }
 
-    public float[] p() {
+    public float[] n() {
         return this.f;
-    }
-
-    public int getDimension() {
-        return this.dimension;
     }
 
     public WorldBorder getWorldBorder() {
         return new WorldBorder();
+    }
+
+    public void a(EntityPlayer entityplayer) {}
+
+    public void b(EntityPlayer entityplayer) {}
+
+    public abstract DimensionManager getDimensionManager();
+
+    public void q() {}
+
+    public void r() {}
+
+    public boolean c(int i, int j) {
+        return true;
     }
 }

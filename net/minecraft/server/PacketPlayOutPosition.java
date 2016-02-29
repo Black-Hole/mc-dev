@@ -13,16 +13,18 @@ public class PacketPlayOutPosition implements Packet<PacketListenerPlayOut> {
     private float d;
     private float e;
     private Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> f;
+    private int g;
 
     public PacketPlayOutPosition() {}
 
-    public PacketPlayOutPosition(double d0, double d1, double d2, float f, float f1, Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> set) {
+    public PacketPlayOutPosition(double d0, double d1, double d2, float f, float f1, Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> set, int i) {
         this.a = d0;
         this.b = d1;
         this.c = d2;
         this.d = f;
         this.e = f1;
         this.f = set;
+        this.g = i;
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
@@ -32,6 +34,7 @@ public class PacketPlayOutPosition implements Packet<PacketListenerPlayOut> {
         this.d = packetdataserializer.readFloat();
         this.e = packetdataserializer.readFloat();
         this.f = PacketPlayOutPosition.EnumPlayerTeleportFlags.a(packetdataserializer.readUnsignedByte());
+        this.g = packetdataserializer.g();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
@@ -41,6 +44,7 @@ public class PacketPlayOutPosition implements Packet<PacketListenerPlayOut> {
         packetdataserializer.writeFloat(this.d);
         packetdataserializer.writeFloat(this.e);
         packetdataserializer.writeByte(PacketPlayOutPosition.EnumPlayerTeleportFlags.a(this.f));
+        packetdataserializer.b(this.g);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
@@ -55,7 +59,7 @@ public class PacketPlayOutPosition implements Packet<PacketListenerPlayOut> {
 
         X(0), Y(1), Z(2), Y_ROT(3), X_ROT(4);
 
-        private int f;
+        private final int f;
 
         private EnumPlayerTeleportFlags(int i) {
             this.f = i;

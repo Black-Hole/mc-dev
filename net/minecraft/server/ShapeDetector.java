@@ -31,6 +31,10 @@ public class ShapeDetector {
 
     }
 
+    public int a() {
+        return this.b;
+    }
+
     public int b() {
         return this.c;
     }
@@ -125,7 +129,7 @@ public class ShapeDetector {
             return this.a;
         }
 
-        public EnumDirection b() {
+        public EnumDirection getFacing() {
             return this.b;
         }
 
@@ -142,7 +146,7 @@ public class ShapeDetector {
         }
 
         public ShapeDetectorBlock a(int i, int j, int k) {
-            return (ShapeDetectorBlock) this.d.getUnchecked(ShapeDetector.a(this.a, this.b(), this.c(), i, j, k));
+            return (ShapeDetectorBlock) this.d.getUnchecked(ShapeDetector.a(this.a, this.getFacing(), this.c(), i, j, k));
         }
 
         public String toString() {

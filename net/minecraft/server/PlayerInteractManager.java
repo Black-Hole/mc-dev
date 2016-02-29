@@ -27,6 +27,7 @@ public class PlayerInteractManager {
         worldsettings_enumgamemode.a(this.player.abilities);
         this.player.updateAbilities();
         this.player.server.getPlayerList().sendAll(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_GAME_MODE, new EntityPlayer[] { this.player}));
+        this.world.everyoneSleeping();
     }
 
     public WorldSettings.EnumGamemode getGameMode() {
@@ -38,7 +39,7 @@ public class PlayerInteractManager {
     }
 
     public boolean isCreative() {
-        return this.gamemode.d();
+        return this.gamemode.isCreative();
     }
 
     public void b(WorldSettings.EnumGamemode worldsettings_enumgamemode) {
@@ -56,12 +57,13 @@ public class PlayerInteractManager {
 
         if (this.h) {
             int j = this.currentTick - this.j;
-            Block block = this.world.getType(this.i).getBlock();
+            IBlockData iblockdata = this.world.getType(this.i);
+            Block block = iblockdata.getBlock();
 
-            if (block.getMaterial() == Material.AIR) {
+            if (iblockdata.getMaterial() == Material.AIR) {
                 this.h = false;
             } else {
-                f = block.getDamage(this.player, this.player.world, this.i) * (float) (j + 1);
+                f = iblockdata.a((EntityHuman) this.player, this.player.world, this.i) * (float) (j + 1);
                 i = (int) (f * 10.0F);
                 if (i != this.k) {
                     this.world.c(this.player.getId(), this.i, i);
@@ -74,16 +76,17 @@ public class PlayerInteractManager {
                 }
             }
         } else if (this.d) {
-            Block block1 = this.world.getType(this.f).getBlock();
+            IBlockData iblockdata1 = this.world.getType(this.f);
+            Block block1 = iblockdata1.getBlock();
 
-            if (block1.getMaterial() == Material.AIR) {
+            if (iblockdata1.getMaterial() == Material.AIR) {
                 this.world.c(this.player.getId(), this.f, -1);
                 this.k = -1;
                 this.d = false;
             } else {
                 int k = this.currentTick - this.lastDigTick;
 
-                f = block1.getDamage(this.player, this.player.world, this.i) * (float) (k + 1);
+                f = iblockdata1.a((EntityHuman) this.player, this.player.world, this.i) * (float) (k + 1);
                 i = (int) (f * 10.0F);
                 if (i != this.k) {
                     this.world.c(this.player.getId(), this.f, i);
@@ -101,21 +104,22 @@ public class PlayerInteractManager {
             }
 
         } else {
-            Block block = this.world.getType(blockposition).getBlock();
+            IBlockData iblockdata = this.world.getType(blockposition);
+            Block block = iblockdata.getBlock();
 
             if (this.gamemode.c()) {
                 if (this.gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
                     return;
                 }
 
-                if (!this.player.cn()) {
-                    ItemStack itemstack = this.player.bZ();
+                if (!this.player.cU()) {
+                    ItemStack itemstack = this.player.getItemInMainHand();
 
                     if (itemstack == null) {
                         return;
                     }
 
-                    if (!itemstack.c(block)) {
+                    if (!itemstack.a(block)) {
                         return;
                     }
                 }
@@ -125,12 +129,12 @@ public class PlayerInteractManager {
             this.lastDigTick = this.currentTick;
             float f = 1.0F;
 
-            if (block.getMaterial() != Material.AIR) {
+            if (iblockdata.getMaterial() != Material.AIR) {
                 block.attack(this.world, blockposition, this.player);
-                f = block.getDamage(this.player, this.player.world, blockposition);
+                f = iblockdata.a((EntityHuman) this.player, this.player.world, blockposition);
             }
 
-            if (block.getMaterial() != Material.AIR && f >= 1.0F) {
+            if (iblockdata.getMaterial() != Material.AIR && f >= 1.0F) {
                 this.breakBlock(blockposition);
             } else {
                 this.d = true;
@@ -147,10 +151,10 @@ public class PlayerInteractManager {
     public void a(BlockPosition blockposition) {
         if (blockposition.equals(this.f)) {
             int i = this.currentTick - this.lastDigTick;
-            Block block = this.world.getType(blockposition).getBlock();
+            IBlockData iblockdata = this.world.getType(blockposition);
 
-            if (block.getMaterial() != Material.AIR) {
-                float f = block.getDamage(this.player, this.player.world, blockposition) * (float) (i + 1);
+            if (iblockdata.getMaterial() != Material.AIR) {
+                float f = iblockdata.a((EntityHuman) this.player, this.player.world, blockposition) * (float) (i + 1);
 
                 if (f >= 0.7F) {
                     this.d = false;
@@ -186,67 +190,76 @@ public class PlayerInteractManager {
     }
 
     public boolean breakBlock(BlockPosition blockposition) {
-        if (this.gamemode.d() && this.player.bA() != null && this.player.bA().getItem() instanceof ItemSword) {
+        if (this.gamemode.isCreative() && this.player.getItemInMainHand() != null && this.player.getItemInMainHand().getItem() instanceof ItemSword) {
             return false;
         } else {
             IBlockData iblockdata = this.world.getType(blockposition);
             TileEntity tileentity = this.world.getTileEntity(blockposition);
 
-            if (this.gamemode.c()) {
-                if (this.gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
-                    return false;
-                }
-
-                if (!this.player.cn()) {
-                    ItemStack itemstack = this.player.bZ();
-
-                    if (itemstack == null) {
-                        return false;
-                    }
-
-                    if (!itemstack.c(iblockdata.getBlock())) {
-                        return false;
-                    }
-                }
-            }
-
-            this.world.a(this.player, 2001, blockposition, Block.getCombinedId(iblockdata));
-            boolean flag = this.c(blockposition);
-
-            if (this.isCreative()) {
-                this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(this.world, blockposition));
+            if (iblockdata.getBlock() instanceof BlockCommand && !this.player.a(2, "")) {
+                this.world.notify(blockposition, iblockdata, iblockdata, 3);
+                return false;
             } else {
-                ItemStack itemstack1 = this.player.bZ();
-                boolean flag1 = this.player.b(iblockdata.getBlock());
+                if (this.gamemode.c()) {
+                    if (this.gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
+                        return false;
+                    }
 
-                if (itemstack1 != null) {
-                    itemstack1.a(this.world, iblockdata.getBlock(), blockposition, this.player);
-                    if (itemstack1.count == 0) {
-                        this.player.ca();
+                    if (!this.player.cU()) {
+                        ItemStack itemstack = this.player.getItemInMainHand();
+
+                        if (itemstack == null) {
+                            return false;
+                        }
+
+                        if (!itemstack.a(iblockdata.getBlock())) {
+                            return false;
+                        }
                     }
                 }
 
-                if (flag && flag1) {
-                    iblockdata.getBlock().a(this.world, this.player, blockposition, iblockdata, tileentity);
-                }
-            }
+                this.world.a(this.player, 2001, blockposition, Block.getCombinedId(iblockdata));
+                boolean flag = this.c(blockposition);
 
-            return flag;
+                if (this.isCreative()) {
+                    this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(this.world, blockposition));
+                } else {
+                    ItemStack itemstack1 = this.player.getItemInMainHand();
+                    ItemStack itemstack2 = itemstack1 == null ? null : itemstack1.cloneItemStack();
+                    boolean flag1 = this.player.hasBlock(iblockdata);
+
+                    if (itemstack1 != null) {
+                        itemstack1.a(this.world, iblockdata, blockposition, this.player);
+                        if (itemstack1.count == 0) {
+                            this.player.a(EnumHand.MAIN_HAND, (ItemStack) null);
+                        }
+                    }
+
+                    if (flag && flag1) {
+                        iblockdata.getBlock().a(this.world, (EntityHuman) this.player, blockposition, iblockdata, tileentity, itemstack2);
+                    }
+                }
+
+                return flag;
+            }
         }
     }
 
-    public boolean useItem(EntityHuman entityhuman, World world, ItemStack itemstack) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand) {
         if (this.gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
-            return false;
+            return EnumInteractionResult.PASS;
+        } else if (entityhuman.da().a(itemstack.getItem())) {
+            return EnumInteractionResult.PASS;
         } else {
             int i = itemstack.count;
             int j = itemstack.getData();
-            ItemStack itemstack1 = itemstack.a(world, entityhuman);
+            InteractionResultWrapper interactionresultwrapper = itemstack.a(world, entityhuman, enumhand);
+            ItemStack itemstack1 = (ItemStack) interactionresultwrapper.b();
 
-            if (itemstack1 == itemstack && (itemstack1 == null || itemstack1.count == i && itemstack1.l() <= 0 && itemstack1.getData() == j)) {
-                return false;
+            if (itemstack1 == itemstack && itemstack1.count == i && itemstack1.l() <= 0 && itemstack1.getData() == j) {
+                return interactionresultwrapper.a();
             } else {
-                entityhuman.inventory.items[entityhuman.inventory.itemInHandIndex] = itemstack1;
+                entityhuman.a(enumhand, itemstack1);
                 if (this.isCreative()) {
                     itemstack1.count = i;
                     if (itemstack1.e()) {
@@ -255,19 +268,19 @@ public class PlayerInteractManager {
                 }
 
                 if (itemstack1.count == 0) {
-                    entityhuman.inventory.items[entityhuman.inventory.itemInHandIndex] = null;
+                    entityhuman.a(enumhand, (ItemStack) null);
                 }
 
-                if (!entityhuman.bS()) {
+                if (!entityhuman.cs()) {
                     ((EntityPlayer) entityhuman).updateInventory(entityhuman.defaultContainer);
                 }
 
-                return true;
+                return interactionresultwrapper.a();
             }
         }
     }
 
-    public boolean interact(EntityHuman entityhuman, World world, ItemStack itemstack, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
         if (this.gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -276,40 +289,44 @@ public class PlayerInteractManager {
                 ITileInventory itileinventory = (ITileInventory) tileentity;
 
                 if (itileinventory instanceof TileEntityChest && block instanceof BlockChest) {
-                    itileinventory = ((BlockChest) block).f(world, blockposition);
+                    itileinventory = ((BlockChest) block).c(world, blockposition);
                 }
 
                 if (itileinventory != null) {
                     entityhuman.openContainer(itileinventory);
-                    return true;
+                    return EnumInteractionResult.SUCCESS;
                 }
             } else if (tileentity instanceof IInventory) {
                 entityhuman.openContainer((IInventory) tileentity);
-                return true;
+                return EnumInteractionResult.SUCCESS;
             }
 
-            return false;
+            return EnumInteractionResult.PASS;
         } else {
-            if (!entityhuman.isSneaking() || entityhuman.bA() == null) {
+            if (!entityhuman.isSneaking() || entityhuman.getItemInMainHand() == null && entityhuman.getItemInOffHand() == null) {
                 IBlockData iblockdata = world.getType(blockposition);
 
-                if (iblockdata.getBlock().interact(world, blockposition, iblockdata, entityhuman, enumdirection, f, f1, f2)) {
-                    return true;
+                if (iblockdata.getBlock().interact(world, blockposition, iblockdata, entityhuman, enumhand, itemstack, enumdirection, f, f1, f2)) {
+                    return EnumInteractionResult.SUCCESS;
                 }
             }
 
             if (itemstack == null) {
-                return false;
+                return EnumInteractionResult.PASS;
+            } else if (entityhuman.da().a(itemstack.getItem())) {
+                return EnumInteractionResult.PASS;
+            } else if (itemstack.getItem() instanceof ItemBlock && ((ItemBlock) itemstack.getItem()).d() instanceof BlockCommand && !entityhuman.a(2, "")) {
+                return EnumInteractionResult.FAIL;
             } else if (this.isCreative()) {
                 int i = itemstack.getData();
                 int j = itemstack.count;
-                boolean flag = itemstack.placeItem(entityhuman, world, blockposition, enumdirection, f, f1, f2);
+                EnumInteractionResult enuminteractionresult = itemstack.placeItem(entityhuman, world, blockposition, enumhand, enumdirection, f, f1, f2);
 
                 itemstack.setData(i);
                 itemstack.count = j;
-                return flag;
+                return enuminteractionresult;
             } else {
-                return itemstack.placeItem(entityhuman, world, blockposition, enumdirection, f, f1, f2);
+                return itemstack.placeItem(entityhuman, world, blockposition, enumhand, enumdirection, f, f1, f2);
             }
         }
     }

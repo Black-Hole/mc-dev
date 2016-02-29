@@ -24,23 +24,19 @@ public class ItemFish extends ItemFood {
         return this.b && itemfish_enumfish.g() ? itemfish_enumfish.f() : itemfish_enumfish.d();
     }
 
-    public String j(ItemStack itemstack) {
-        return ItemFish.EnumFish.a(itemstack) == ItemFish.EnumFish.PUFFERFISH ? PotionBrewer.m : null;
-    }
-
-    protected void c(ItemStack itemstack, World world, EntityHuman entityhuman) {
+    protected void a(ItemStack itemstack, World world, EntityHuman entityhuman) {
         ItemFish.EnumFish itemfish_enumfish = ItemFish.EnumFish.a(itemstack);
 
         if (itemfish_enumfish == ItemFish.EnumFish.PUFFERFISH) {
-            entityhuman.addEffect(new MobEffect(MobEffectList.POISON.id, 1200, 3));
-            entityhuman.addEffect(new MobEffect(MobEffectList.HUNGER.id, 300, 2));
-            entityhuman.addEffect(new MobEffect(MobEffectList.CONFUSION.id, 300, 1));
+            entityhuman.addEffect(new MobEffect(MobEffects.POISON, 1200, 3));
+            entityhuman.addEffect(new MobEffect(MobEffects.HUNGER, 300, 2));
+            entityhuman.addEffect(new MobEffect(MobEffects.CONFUSION, 300, 1));
         }
 
-        super.c(itemstack, world, entityhuman);
+        super.a(itemstack, world, entityhuman);
     }
 
-    public String e_(ItemStack itemstack) {
+    public String f_(ItemStack itemstack) {
         ItemFish.EnumFish itemfish_enumfish = ItemFish.EnumFish.a(itemstack);
 
         return this.getName() + "." + itemfish_enumfish.b() + "." + (this.b && itemfish_enumfish.g() ? "cooked" : "raw");

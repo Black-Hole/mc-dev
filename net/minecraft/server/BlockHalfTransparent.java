@@ -13,7 +13,7 @@ public class BlockHalfTransparent extends Block {
         this.a = flag;
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 }

@@ -13,7 +13,7 @@ public class WorldGenClay extends WorldGenerator {
     }
 
     public boolean generate(World world, Random random, BlockPosition blockposition) {
-        if (world.getType(blockposition).getBlock().getMaterial() != Material.WATER) {
+        if (world.getType(blockposition).getMaterial() != Material.WATER) {
             return false;
         } else {
             int i = random.nextInt(this.b - 2) + 2;

@@ -38,7 +38,7 @@ public class PacketPlayOutWorldBorder implements Packet<PacketListenerPlayOut> {
         case 2:
             this.f = packetdataserializer.readDouble();
             this.e = packetdataserializer.readDouble();
-            this.g = packetdataserializer.f();
+            this.g = packetdataserializer.h();
             break;
 
         case 3:
@@ -47,11 +47,11 @@ public class PacketPlayOutWorldBorder implements Packet<PacketListenerPlayOut> {
             break;
 
         case 4:
-            this.i = packetdataserializer.e();
+            this.i = packetdataserializer.g();
             break;
 
         case 5:
-            this.h = packetdataserializer.e();
+            this.h = packetdataserializer.g();
             break;
 
         case 6:
@@ -59,10 +59,10 @@ public class PacketPlayOutWorldBorder implements Packet<PacketListenerPlayOut> {
             this.d = packetdataserializer.readDouble();
             this.f = packetdataserializer.readDouble();
             this.e = packetdataserializer.readDouble();
-            this.g = packetdataserializer.f();
-            this.b = packetdataserializer.e();
-            this.i = packetdataserializer.e();
-            this.h = packetdataserializer.e();
+            this.g = packetdataserializer.h();
+            this.b = packetdataserializer.g();
+            this.i = packetdataserializer.g();
+            this.h = packetdataserializer.g();
         }
 
     }

@@ -6,10 +6,12 @@ import java.util.Random;
 public class BlockCactus extends Block {
 
     public static final BlockStateInteger AGE = BlockStateInteger.of("age", 0, 15);
+    protected static final AxisAlignedBB b = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.9375D, 0.9375D);
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 1.0D, 0.9375D);
 
     protected BlockCactus() {
         super(Material.CACTUS);
-        this.j(this.blockStateList.getBlockData().set(BlockCactus.AGE, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockCactus.AGE, Integer.valueOf(0)));
         this.a(true);
         this.a(CreativeModeTab.c);
     }
@@ -41,45 +43,47 @@ public class BlockCactus extends Block {
         }
     }
 
-    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        float f = 0.0625F;
-
-        return new AxisAlignedBB((double) ((float) blockposition.getX() + f), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + f), (double) ((float) (blockposition.getX() + 1) - f), (double) ((float) (blockposition.getY() + 1) - f), (double) ((float) (blockposition.getZ() + 1) - f));
+    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        return BlockCactus.b;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return super.canPlace(world, blockposition) ? this.e(world, blockposition) : false;
+        return super.canPlace(world, blockposition) ? this.b(world, blockposition) : false;
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!this.e(world, blockposition)) {
+        if (!this.b(world, blockposition)) {
             world.setAir(blockposition, true);
         }
 
     }
 
-    public boolean e(World world, BlockPosition blockposition) {
+    public boolean b(World world, BlockPosition blockposition) {
         Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-        while (iterator.hasNext()) {
+        Material material;
+
+        do {
+            if (!iterator.hasNext()) {
+                Block block = world.getType(blockposition.down()).getBlock();
+
+                return block == Blocks.CACTUS || block == Blocks.SAND && !world.getType(blockposition.up()).getMaterial().isLiquid();
+            }
+
             EnumDirection enumdirection = (EnumDirection) iterator.next();
 
-            if (world.getType(blockposition.shift(enumdirection)).getBlock().getMaterial().isBuildable()) {
-                return false;
-            }
-        }
+            material = world.getType(blockposition.shift(enumdirection)).getMaterial();
+        } while (!material.isBuildable() && material != Material.LAVA);
 
-        Block block = world.getType(blockposition.down()).getBlock();
-
-        return block == Blocks.CACTUS || block == Blocks.SAND;
+        return false;
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {

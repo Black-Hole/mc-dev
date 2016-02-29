@@ -23,25 +23,25 @@ public class WorldGenMegaTree extends WorldGenMegaTreeAbstract {
             this.a(world, blockposition.getX(), blockposition.getZ(), blockposition.getY() + i, 0, random);
 
             for (int j = 0; j < i; ++j) {
-                Block block = world.getType(blockposition.up(j)).getBlock();
+                IBlockData iblockdata = world.getType(blockposition.up(j));
 
-                if (block.getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) {
+                if (iblockdata.getMaterial() == Material.AIR || iblockdata.getMaterial() == Material.LEAVES) {
                     this.a(world, blockposition.up(j), this.b);
                 }
 
                 if (j < i - 1) {
-                    block = world.getType(blockposition.a(1, j, 0)).getBlock();
-                    if (block.getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) {
+                    iblockdata = world.getType(blockposition.a(1, j, 0));
+                    if (iblockdata.getMaterial() == Material.AIR || iblockdata.getMaterial() == Material.LEAVES) {
                         this.a(world, blockposition.a(1, j, 0), this.b);
                     }
 
-                    block = world.getType(blockposition.a(1, j, 1)).getBlock();
-                    if (block.getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) {
+                    iblockdata = world.getType(blockposition.a(1, j, 1));
+                    if (iblockdata.getMaterial() == Material.AIR || iblockdata.getMaterial() == Material.LEAVES) {
                         this.a(world, blockposition.a(1, j, 1), this.b);
                     }
 
-                    block = world.getType(blockposition.a(0, j, 1)).getBlock();
-                    if (block.getMaterial() == Material.AIR || block.getMaterial() == Material.LEAVES) {
+                    iblockdata = world.getType(blockposition.a(0, j, 1));
+                    if (iblockdata.getMaterial() == Material.AIR || iblockdata.getMaterial() == Material.LEAVES) {
                         this.a(world, blockposition.a(0, j, 1), this.b);
                     }
                 }
@@ -97,14 +97,15 @@ public class WorldGenMegaTree extends WorldGenMegaTreeAbstract {
     private void c(World world, BlockPosition blockposition) {
         for (int i = 2; i >= -3; --i) {
             BlockPosition blockposition1 = blockposition.up(i);
-            Block block = world.getType(blockposition1).getBlock();
+            IBlockData iblockdata = world.getType(blockposition1);
+            Block block = iblockdata.getBlock();
 
             if (block == Blocks.GRASS || block == Blocks.DIRT) {
                 this.a(world, blockposition1, WorldGenMegaTree.g);
                 break;
             }
 
-            if (block.getMaterial() != Material.AIR && i < 0) {
+            if (iblockdata.getMaterial() != Material.AIR && i < 0) {
                 break;
             }
         }

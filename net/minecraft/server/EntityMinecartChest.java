@@ -22,15 +22,15 @@ public class EntityMinecartChest extends EntityMinecartContainer {
         return 27;
     }
 
-    public EntityMinecartAbstract.EnumMinecartType s() {
+    public EntityMinecartAbstract.EnumMinecartType v() {
         return EntityMinecartAbstract.EnumMinecartType.CHEST;
     }
 
-    public IBlockData u() {
+    public IBlockData x() {
         return Blocks.CHEST.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH);
     }
 
-    public int w() {
+    public int A() {
         return 8;
     }
 
@@ -39,6 +39,7 @@ public class EntityMinecartChest extends EntityMinecartContainer {
     }
 
     public Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman) {
+        this.f(entityhuman);
         return new ContainerChest(playerinventory, this, entityhuman);
     }
 }

@@ -10,13 +10,13 @@ public class GenLayerBiome extends GenLayer {
 
     public GenLayerBiome(long i, GenLayer genlayer, WorldType worldtype, String s) {
         super(i);
-        this.c = new BiomeBase[] { BiomeBase.DESERT, BiomeBase.DESERT, BiomeBase.DESERT, BiomeBase.SAVANNA, BiomeBase.SAVANNA, BiomeBase.PLAINS};
-        this.d = new BiomeBase[] { BiomeBase.FOREST, BiomeBase.ROOFED_FOREST, BiomeBase.EXTREME_HILLS, BiomeBase.PLAINS, BiomeBase.BIRCH_FOREST, BiomeBase.SWAMPLAND};
-        this.e = new BiomeBase[] { BiomeBase.FOREST, BiomeBase.EXTREME_HILLS, BiomeBase.TAIGA, BiomeBase.PLAINS};
-        this.f = new BiomeBase[] { BiomeBase.ICE_PLAINS, BiomeBase.ICE_PLAINS, BiomeBase.ICE_PLAINS, BiomeBase.COLD_TAIGA};
+        this.c = new BiomeBase[] { Biomes.d, Biomes.d, Biomes.d, Biomes.K, Biomes.K, Biomes.c};
+        this.d = new BiomeBase[] { Biomes.f, Biomes.E, Biomes.e, Biomes.c, Biomes.C, Biomes.h};
+        this.e = new BiomeBase[] { Biomes.f, Biomes.e, Biomes.g, Biomes.c};
+        this.f = new BiomeBase[] { Biomes.n, Biomes.n, Biomes.n, Biomes.F};
         this.a = genlayer;
         if (worldtype == WorldType.NORMAL_1_1) {
-            this.c = new BiomeBase[] { BiomeBase.DESERT, BiomeBase.FOREST, BiomeBase.EXTREME_HILLS, BiomeBase.SWAMPLAND, BiomeBase.PLAINS, BiomeBase.TAIGA};
+            this.c = new BiomeBase[] { Biomes.d, Biomes.f, Biomes.e, Biomes.h, Biomes.c, Biomes.g};
             this.g = null;
         } else if (worldtype == WorldType.CUSTOMIZED) {
             this.g = CustomWorldSettingsFinal.CustomWorldSettings.a(s).b();
@@ -41,34 +41,34 @@ public class GenLayerBiome extends GenLayer {
                     aint1[j1 + i1 * k] = this.g.F;
                 } else if (b(k1)) {
                     aint1[j1 + i1 * k] = k1;
-                } else if (k1 == BiomeBase.MUSHROOM_ISLAND.id) {
+                } else if (k1 == BiomeBase.a(Biomes.p)) {
                     aint1[j1 + i1 * k] = k1;
                 } else if (k1 == 1) {
                     if (l1 > 0) {
                         if (this.a(3) == 0) {
-                            aint1[j1 + i1 * k] = BiomeBase.MESA_PLATEAU.id;
+                            aint1[j1 + i1 * k] = BiomeBase.a(Biomes.O);
                         } else {
-                            aint1[j1 + i1 * k] = BiomeBase.MESA_PLATEAU_F.id;
+                            aint1[j1 + i1 * k] = BiomeBase.a(Biomes.N);
                         }
                     } else {
-                        aint1[j1 + i1 * k] = this.c[this.a(this.c.length)].id;
+                        aint1[j1 + i1 * k] = BiomeBase.a(this.c[this.a(this.c.length)]);
                     }
                 } else if (k1 == 2) {
                     if (l1 > 0) {
-                        aint1[j1 + i1 * k] = BiomeBase.JUNGLE.id;
+                        aint1[j1 + i1 * k] = BiomeBase.a(Biomes.w);
                     } else {
-                        aint1[j1 + i1 * k] = this.d[this.a(this.d.length)].id;
+                        aint1[j1 + i1 * k] = BiomeBase.a(this.d[this.a(this.d.length)]);
                     }
                 } else if (k1 == 3) {
                     if (l1 > 0) {
-                        aint1[j1 + i1 * k] = BiomeBase.MEGA_TAIGA.id;
+                        aint1[j1 + i1 * k] = BiomeBase.a(Biomes.H);
                     } else {
-                        aint1[j1 + i1 * k] = this.e[this.a(this.e.length)].id;
+                        aint1[j1 + i1 * k] = BiomeBase.a(this.e[this.a(this.e.length)]);
                     }
                 } else if (k1 == 4) {
-                    aint1[j1 + i1 * k] = this.f[this.a(this.f.length)].id;
+                    aint1[j1 + i1 * k] = BiomeBase.a(this.f[this.a(this.f.length)]);
                 } else {
-                    aint1[j1 + i1 * k] = BiomeBase.MUSHROOM_ISLAND.id;
+                    aint1[j1 + i1 * k] = BiomeBase.a(Biomes.p);
                 }
             }
         }

@@ -221,7 +221,7 @@ public class CustomWorldSettingsFinal {
                 customworldsettingsfinal_customworldsettings.F = ChatDeserializer.a(jsonobject, "useLavaOceans", customworldsettingsfinal_customworldsettings.F);
                 customworldsettingsfinal_customworldsettings.G = ChatDeserializer.a(jsonobject, "fixedBiome", customworldsettingsfinal_customworldsettings.G);
                 if (customworldsettingsfinal_customworldsettings.G < 38 && customworldsettingsfinal_customworldsettings.G >= -1) {
-                    if (customworldsettingsfinal_customworldsettings.G >= BiomeBase.HELL.id) {
+                    if (customworldsettingsfinal_customworldsettings.G >= BiomeBase.a(Biomes.j)) {
                         customworldsettingsfinal_customworldsettings.G += 2;
                     }
                 } else {
@@ -457,11 +457,11 @@ public class CustomWorldSettingsFinal {
         public int aA = 16;
 
         public static CustomWorldSettingsFinal.CustomWorldSettings a(String s) {
-            if (s.length() == 0) {
+            if (s.isEmpty()) {
                 return new CustomWorldSettingsFinal.CustomWorldSettings();
             } else {
                 try {
-                    return (CustomWorldSettingsFinal.CustomWorldSettings) CustomWorldSettingsFinal.CustomWorldSettings.a.fromJson(s, CustomWorldSettingsFinal.CustomWorldSettings.class);
+                    return (CustomWorldSettingsFinal.CustomWorldSettings) ChatDeserializer.a(CustomWorldSettingsFinal.CustomWorldSettings.a, s, CustomWorldSettingsFinal.CustomWorldSettings.class);
                 } catch (Exception exception) {
                     return new CustomWorldSettingsFinal.CustomWorldSettings();
                 }

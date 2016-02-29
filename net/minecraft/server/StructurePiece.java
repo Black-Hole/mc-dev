@@ -7,22 +7,26 @@ import java.util.Random;
 public abstract class StructurePiece {
 
     protected StructureBoundingBox l;
-    protected EnumDirection m;
-    protected int n;
+    private EnumDirection a;
+    private EnumBlockMirror b;
+    private EnumBlockRotation c;
+    protected int m;
 
     public StructurePiece() {}
 
     protected StructurePiece(int i) {
-        this.n = i;
+        this.m = i;
     }
 
-    public NBTTagCompound b() {
+    public final NBTTagCompound b() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.setString("id", WorldGenFactory.a(this));
         nbttagcompound.set("BB", this.l.g());
-        nbttagcompound.setInt("O", this.m == null ? -1 : this.m.b());
-        nbttagcompound.setInt("GD", this.n);
+        EnumDirection enumdirection = this.e();
+
+        nbttagcompound.setInt("O", enumdirection == null ? -1 : enumdirection.get2DRotationValue());
+        nbttagcompound.setInt("GD", this.m);
         this.a(nbttagcompound);
         return nbttagcompound;
     }
@@ -36,8 +40,8 @@ public abstract class StructurePiece {
 
         int i = nbttagcompound.getInt("O");
 
-        this.m = i == -1 ? null : EnumDirection.fromType2(i);
-        this.n = nbttagcompound.getInt("GD");
+        this.a(i == -1 ? null : EnumDirection.fromType2(i));
+        this.m = nbttagcompound.getInt("GD");
         this.b(nbttagcompound);
     }
 
@@ -52,7 +56,7 @@ public abstract class StructurePiece {
     }
 
     public int d() {
-        return this.n;
+        return this.m;
     }
 
     public static StructurePiece a(List<StructurePiece> list, StructureBoundingBox structureboundingbox) {
@@ -89,11 +93,11 @@ public abstract class StructurePiece {
 
         for (k1 = i; k1 <= l; ++k1) {
             for (l1 = k; l1 <= j1; ++l1) {
-                if (world.getType(blockposition_mutableblockposition.c(k1, j, l1)).getBlock().getMaterial().isLiquid()) {
+                if (world.getType(blockposition_mutableblockposition.c(k1, j, l1)).getMaterial().isLiquid()) {
                     return true;
                 }
 
-                if (world.getType(blockposition_mutableblockposition.c(k1, i1, l1)).getBlock().getMaterial().isLiquid()) {
+                if (world.getType(blockposition_mutableblockposition.c(k1, i1, l1)).getMaterial().isLiquid()) {
                     return true;
                 }
             }
@@ -101,11 +105,11 @@ public abstract class StructurePiece {
 
         for (k1 = i; k1 <= l; ++k1) {
             for (l1 = j; l1 <= i1; ++l1) {
-                if (world.getType(blockposition_mutableblockposition.c(k1, l1, k)).getBlock().getMaterial().isLiquid()) {
+                if (world.getType(blockposition_mutableblockposition.c(k1, l1, k)).getMaterial().isLiquid()) {
                     return true;
                 }
 
-                if (world.getType(blockposition_mutableblockposition.c(k1, l1, j1)).getBlock().getMaterial().isLiquid()) {
+                if (world.getType(blockposition_mutableblockposition.c(k1, l1, j1)).getMaterial().isLiquid()) {
                     return true;
                 }
             }
@@ -113,11 +117,11 @@ public abstract class StructurePiece {
 
         for (k1 = k; k1 <= j1; ++k1) {
             for (l1 = j; l1 <= i1; ++l1) {
-                if (world.getType(blockposition_mutableblockposition.c(i, l1, k1)).getBlock().getMaterial().isLiquid()) {
+                if (world.getType(blockposition_mutableblockposition.c(i, l1, k1)).getMaterial().isLiquid()) {
                     return true;
                 }
 
-                if (world.getType(blockposition_mutableblockposition.c(l, l1, k1)).getBlock().getMaterial().isLiquid()) {
+                if (world.getType(blockposition_mutableblockposition.c(l, l1, k1)).getMaterial().isLiquid()) {
                     return true;
                 }
             }
@@ -127,10 +131,12 @@ public abstract class StructurePiece {
     }
 
     protected int a(int i, int j) {
-        if (this.m == null) {
+        EnumDirection enumdirection = this.e();
+
+        if (enumdirection == null) {
             return i;
         } else {
-            switch (StructurePiece.SyntheticClass_1.a[this.m.ordinal()]) {
+            switch (StructurePiece.SyntheticClass_1.a[enumdirection.ordinal()]) {
             case 1:
             case 2:
                 return this.l.a + i;
@@ -148,14 +154,16 @@ public abstract class StructurePiece {
     }
 
     protected int d(int i) {
-        return this.m == null ? i : i + this.l.b;
+        return this.e() == null ? i : i + this.l.b;
     }
 
     protected int b(int i, int j) {
-        if (this.m == null) {
+        EnumDirection enumdirection = this.e();
+
+        if (enumdirection == null) {
             return j;
         } else {
-            switch (StructurePiece.SyntheticClass_1.a[this.m.ordinal()]) {
+            switch (StructurePiece.SyntheticClass_1.a[enumdirection.ordinal()]) {
             case 1:
                 return this.l.f - j;
 
@@ -172,248 +180,18 @@ public abstract class StructurePiece {
         }
     }
 
-    protected int a(Block block, int i) {
-        if (block == Blocks.RAIL) {
-            if (this.m == EnumDirection.WEST || this.m == EnumDirection.EAST) {
-                if (i == 1) {
-                    return 0;
-                }
-
-                return 1;
-            }
-        } else if (block instanceof BlockDoor) {
-            if (this.m == EnumDirection.SOUTH) {
-                if (i == 0) {
-                    return 2;
-                }
-
-                if (i == 2) {
-                    return 0;
-                }
-            } else {
-                if (this.m == EnumDirection.WEST) {
-                    return i + 1 & 3;
-                }
-
-                if (this.m == EnumDirection.EAST) {
-                    return i + 3 & 3;
-                }
-            }
-        } else if (block != Blocks.STONE_STAIRS && block != Blocks.OAK_STAIRS && block != Blocks.NETHER_BRICK_STAIRS && block != Blocks.STONE_BRICK_STAIRS && block != Blocks.SANDSTONE_STAIRS) {
-            if (block == Blocks.LADDER) {
-                if (this.m == EnumDirection.SOUTH) {
-                    if (i == EnumDirection.NORTH.a()) {
-                        return EnumDirection.SOUTH.a();
-                    }
-
-                    if (i == EnumDirection.SOUTH.a()) {
-                        return EnumDirection.NORTH.a();
-                    }
-                } else if (this.m == EnumDirection.WEST) {
-                    if (i == EnumDirection.NORTH.a()) {
-                        return EnumDirection.WEST.a();
-                    }
-
-                    if (i == EnumDirection.SOUTH.a()) {
-                        return EnumDirection.EAST.a();
-                    }
-
-                    if (i == EnumDirection.WEST.a()) {
-                        return EnumDirection.NORTH.a();
-                    }
-
-                    if (i == EnumDirection.EAST.a()) {
-                        return EnumDirection.SOUTH.a();
-                    }
-                } else if (this.m == EnumDirection.EAST) {
-                    if (i == EnumDirection.NORTH.a()) {
-                        return EnumDirection.EAST.a();
-                    }
-
-                    if (i == EnumDirection.SOUTH.a()) {
-                        return EnumDirection.WEST.a();
-                    }
-
-                    if (i == EnumDirection.WEST.a()) {
-                        return EnumDirection.NORTH.a();
-                    }
-
-                    if (i == EnumDirection.EAST.a()) {
-                        return EnumDirection.SOUTH.a();
-                    }
-                }
-            } else if (block == Blocks.STONE_BUTTON) {
-                if (this.m == EnumDirection.SOUTH) {
-                    if (i == 3) {
-                        return 4;
-                    }
-
-                    if (i == 4) {
-                        return 3;
-                    }
-                } else if (this.m == EnumDirection.WEST) {
-                    if (i == 3) {
-                        return 1;
-                    }
-
-                    if (i == 4) {
-                        return 2;
-                    }
-
-                    if (i == 2) {
-                        return 3;
-                    }
-
-                    if (i == 1) {
-                        return 4;
-                    }
-                } else if (this.m == EnumDirection.EAST) {
-                    if (i == 3) {
-                        return 2;
-                    }
-
-                    if (i == 4) {
-                        return 1;
-                    }
-
-                    if (i == 2) {
-                        return 3;
-                    }
-
-                    if (i == 1) {
-                        return 4;
-                    }
-                }
-            } else if (block != Blocks.TRIPWIRE_HOOK && !(block instanceof BlockDirectional)) {
-                if (block == Blocks.PISTON || block == Blocks.STICKY_PISTON || block == Blocks.LEVER || block == Blocks.DISPENSER) {
-                    if (this.m == EnumDirection.SOUTH) {
-                        if (i == EnumDirection.NORTH.a() || i == EnumDirection.SOUTH.a()) {
-                            return EnumDirection.fromType1(i).opposite().a();
-                        }
-                    } else if (this.m == EnumDirection.WEST) {
-                        if (i == EnumDirection.NORTH.a()) {
-                            return EnumDirection.WEST.a();
-                        }
-
-                        if (i == EnumDirection.SOUTH.a()) {
-                            return EnumDirection.EAST.a();
-                        }
-
-                        if (i == EnumDirection.WEST.a()) {
-                            return EnumDirection.NORTH.a();
-                        }
-
-                        if (i == EnumDirection.EAST.a()) {
-                            return EnumDirection.SOUTH.a();
-                        }
-                    } else if (this.m == EnumDirection.EAST) {
-                        if (i == EnumDirection.NORTH.a()) {
-                            return EnumDirection.EAST.a();
-                        }
-
-                        if (i == EnumDirection.SOUTH.a()) {
-                            return EnumDirection.WEST.a();
-                        }
-
-                        if (i == EnumDirection.WEST.a()) {
-                            return EnumDirection.NORTH.a();
-                        }
-
-                        if (i == EnumDirection.EAST.a()) {
-                            return EnumDirection.SOUTH.a();
-                        }
-                    }
-                }
-            } else {
-                EnumDirection enumdirection = EnumDirection.fromType2(i);
-
-                if (this.m == EnumDirection.SOUTH) {
-                    if (enumdirection == EnumDirection.SOUTH || enumdirection == EnumDirection.NORTH) {
-                        return enumdirection.opposite().b();
-                    }
-                } else if (this.m == EnumDirection.WEST) {
-                    if (enumdirection == EnumDirection.NORTH) {
-                        return EnumDirection.WEST.b();
-                    }
-
-                    if (enumdirection == EnumDirection.SOUTH) {
-                        return EnumDirection.EAST.b();
-                    }
-
-                    if (enumdirection == EnumDirection.WEST) {
-                        return EnumDirection.NORTH.b();
-                    }
-
-                    if (enumdirection == EnumDirection.EAST) {
-                        return EnumDirection.SOUTH.b();
-                    }
-                } else if (this.m == EnumDirection.EAST) {
-                    if (enumdirection == EnumDirection.NORTH) {
-                        return EnumDirection.EAST.b();
-                    }
-
-                    if (enumdirection == EnumDirection.SOUTH) {
-                        return EnumDirection.WEST.b();
-                    }
-
-                    if (enumdirection == EnumDirection.WEST) {
-                        return EnumDirection.NORTH.b();
-                    }
-
-                    if (enumdirection == EnumDirection.EAST) {
-                        return EnumDirection.SOUTH.b();
-                    }
-                }
-            }
-        } else if (this.m == EnumDirection.SOUTH) {
-            if (i == 2) {
-                return 3;
-            }
-
-            if (i == 3) {
-                return 2;
-            }
-        } else if (this.m == EnumDirection.WEST) {
-            if (i == 0) {
-                return 2;
-            }
-
-            if (i == 1) {
-                return 3;
-            }
-
-            if (i == 2) {
-                return 0;
-            }
-
-            if (i == 3) {
-                return 1;
-            }
-        } else if (this.m == EnumDirection.EAST) {
-            if (i == 0) {
-                return 2;
-            }
-
-            if (i == 1) {
-                return 3;
-            }
-
-            if (i == 2) {
-                return 1;
-            }
-
-            if (i == 3) {
-                return 0;
-            }
-        }
-
-        return i;
-    }
-
     protected void a(World world, IBlockData iblockdata, int i, int j, int k, StructureBoundingBox structureboundingbox) {
         BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
 
         if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
+            if (this.b != EnumBlockMirror.NONE) {
+                iblockdata = iblockdata.a(this.b);
+            }
+
+            if (this.c != EnumBlockRotation.NONE) {
+                iblockdata = iblockdata.a(this.c);
+            }
+
             world.setTypeAndData(blockposition, iblockdata, 2);
         }
     }
@@ -442,7 +220,7 @@ public abstract class StructurePiece {
         for (int k1 = j; k1 <= i1; ++k1) {
             for (int l1 = i; l1 <= l; ++l1) {
                 for (int i2 = k; i2 <= j1; ++i2) {
-                    if (!flag || this.a(world, l1, k1, i2, structureboundingbox).getBlock().getMaterial() != Material.AIR) {
+                    if (!flag || this.a(world, l1, k1, i2, structureboundingbox).getMaterial() != Material.AIR) {
                         if (k1 != j && k1 != i1 && l1 != i && l1 != l && i2 != k && i2 != j1) {
                             this.a(world, iblockdata1, l1, k1, i2, structureboundingbox);
                         } else {
@@ -459,7 +237,7 @@ public abstract class StructurePiece {
         for (int k1 = j; k1 <= i1; ++k1) {
             for (int l1 = i; l1 <= l; ++l1) {
                 for (int i2 = k; i2 <= j1; ++i2) {
-                    if (!flag || this.a(world, l1, k1, i2, structureboundingbox).getBlock().getMaterial() != Material.AIR) {
+                    if (!flag || this.a(world, l1, k1, i2, structureboundingbox).getMaterial() != Material.AIR) {
                         structurepiece_structurepieceblockselector.a(random, l1, k1, i2, k1 == j || k1 == i1 || l1 == i || l1 == l || i2 == k || i2 == j1);
                         this.a(world, structurepiece_structurepieceblockselector.a(), l1, k1, i2, structureboundingbox);
                     }
@@ -473,7 +251,7 @@ public abstract class StructurePiece {
         for (int k1 = j; k1 <= i1; ++k1) {
             for (int l1 = i; l1 <= l; ++l1) {
                 for (int i2 = k; i2 <= j1; ++i2) {
-                    if (random.nextFloat() <= f && (!flag || this.a(world, l1, k1, i2, structureboundingbox).getBlock().getMaterial() != Material.AIR)) {
+                    if (random.nextFloat() <= f && (!flag || this.a(world, l1, k1, i2, structureboundingbox).getMaterial() != Material.AIR)) {
                         if (k1 != j && k1 != i1 && l1 != i && l1 != l && i2 != k && i2 != j1) {
                             this.a(world, iblockdata1, l1, k1, i2, structureboundingbox);
                         } else {
@@ -509,7 +287,7 @@ public abstract class StructurePiece {
                 for (int i2 = k; i2 <= j1; ++i2) {
                     float f7 = ((float) i2 - f4) / (f2 * 0.5F);
 
-                    if (!flag || this.a(world, l1, k1, i2, structureboundingbox).getBlock().getMaterial() != Material.AIR) {
+                    if (!flag || this.a(world, l1, k1, i2, structureboundingbox).getMaterial() != Material.AIR) {
                         float f8 = f6 * f6 + f5 * f5 + f7 * f7;
 
                         if (f8 <= 1.05F) {
@@ -540,7 +318,7 @@ public abstract class StructurePiece {
         int j1 = this.b(i, k);
 
         if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(l, i1, j1)))) {
-            while ((world.isEmpty(new BlockPosition(l, i1, j1)) || world.getType(new BlockPosition(l, i1, j1)).getBlock().getMaterial().isLiquid()) && i1 > 1) {
+            while ((world.isEmpty(new BlockPosition(l, i1, j1)) || world.getType(new BlockPosition(l, i1, j1)).getMaterial().isLiquid()) && i1 > 1) {
                 world.setTypeAndData(new BlockPosition(l, i1, j1), iblockdata, 2);
                 --i1;
             }
@@ -548,7 +326,7 @@ public abstract class StructurePiece {
         }
     }
 
-    protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, List<StructurePieceTreasure> list, int l) {
+    protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, MinecraftKey minecraftkey) {
         BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
 
         if (structureboundingbox.b((BaseBlockPosition) blockposition) && world.getType(blockposition).getBlock() != Blocks.CHEST) {
@@ -558,7 +336,7 @@ public abstract class StructurePiece {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityChest) {
-                StructurePieceTreasure.a(random, list, (IInventory) ((TileEntityChest) tileentity), l);
+                ((TileEntityChest) tileentity).a(minecraftkey, random.nextLong());
             }
 
             return true;
@@ -567,15 +345,15 @@ public abstract class StructurePiece {
         }
     }
 
-    protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, int l, List<StructurePieceTreasure> list, int i1) {
+    protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, EnumDirection enumdirection, List<StructurePieceTreasure> list, int l) {
         BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
 
         if (structureboundingbox.b((BaseBlockPosition) blockposition) && world.getType(blockposition).getBlock() != Blocks.DISPENSER) {
-            world.setTypeAndData(blockposition, Blocks.DISPENSER.fromLegacyData(this.a(Blocks.DISPENSER, l)), 2);
+            this.a(world, Blocks.DISPENSER.getBlockData().set(BlockDispenser.FACING, enumdirection), i, j, k, structureboundingbox);
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityDispenser) {
-                StructurePieceTreasure.a(random, list, (TileEntityDispenser) tileentity, i1);
+                StructurePieceTreasure.a(random, list, (TileEntityDispenser) tileentity, l);
             }
 
             return true;
@@ -585,16 +363,46 @@ public abstract class StructurePiece {
     }
 
     protected void a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, EnumDirection enumdirection) {
-        BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
-
-        if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
-            ItemDoor.a(world, blockposition, enumdirection.f(), Blocks.WOODEN_DOOR);
-        }
-
+        this.a(world, Blocks.WOODEN_DOOR.getBlockData().set(BlockDoor.FACING, enumdirection), i, j, k, structureboundingbox);
+        this.a(world, Blocks.WOODEN_DOOR.getBlockData().set(BlockDoor.FACING, enumdirection).set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), i, j + 1, k, structureboundingbox);
     }
 
     public void a(int i, int j, int k) {
         this.l.a(i, j, k);
+    }
+
+    public EnumDirection e() {
+        return this.a;
+    }
+
+    public void a(EnumDirection enumdirection) {
+        this.a = enumdirection;
+        if (enumdirection == null) {
+            this.c = EnumBlockRotation.NONE;
+            this.b = EnumBlockMirror.NONE;
+        } else {
+            switch (StructurePiece.SyntheticClass_1.a[enumdirection.ordinal()]) {
+            case 2:
+                this.b = EnumBlockMirror.LEFT_RIGHT;
+                this.c = EnumBlockRotation.NONE;
+                break;
+
+            case 3:
+                this.b = EnumBlockMirror.LEFT_RIGHT;
+                this.c = EnumBlockRotation.CLOCKWISE_90;
+                break;
+
+            case 4:
+                this.b = EnumBlockMirror.NONE;
+                this.c = EnumBlockRotation.CLOCKWISE_90;
+                break;
+
+            default:
+                this.b = EnumBlockMirror.NONE;
+                this.c = EnumBlockRotation.NONE;
+            }
+        }
+
     }
 
     static class SyntheticClass_1 {

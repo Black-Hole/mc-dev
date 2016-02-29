@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandTestForBlock extends CommandAbstract {
@@ -19,7 +20,7 @@ public class CommandTestForBlock extends CommandAbstract {
         return "commands.testforblock.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 4) {
             throw new ExceptionUsage("commands.testforblock.usage", new Object[0]);
         } else {
@@ -45,7 +46,7 @@ public class CommandTestForBlock extends CommandAbstract {
                     boolean flag = false;
 
                     if (astring.length >= 6 && block.isTileEntity()) {
-                        String s = a(icommandlistener, astring, 5).c();
+                        String s = a(icommandlistener, astring, 5).toPlainText();
 
                         try {
                             nbttagcompound = MojangsonParser.parse(s);
@@ -78,21 +79,21 @@ public class CommandTestForBlock extends CommandAbstract {
 
                             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-                            tileentity.b(nbttagcompound1);
+                            tileentity.save(nbttagcompound1);
                             if (!GameProfileSerializer.a(nbttagcompound, nbttagcompound1, true)) {
                                 throw new CommandException("commands.testforblock.failed.nbt", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
                             }
                         }
 
                         icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 1);
-                        a(icommandlistener, this, "commands.testforblock.success", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
+                        a(icommandlistener, (ICommand) this, "commands.testforblock.success", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
                     }
                 }
             }
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length == 4 ? a(astring, (Collection) Block.REGISTRY.keySet()) : null);
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length == 4 ? a(astring, (Collection) Block.REGISTRY.keySet()) : Collections.emptyList());
     }
 }

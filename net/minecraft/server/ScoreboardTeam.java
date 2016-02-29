@@ -17,11 +17,13 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
     private ScoreboardTeamBase.EnumNameTagVisibility i;
     private ScoreboardTeamBase.EnumNameTagVisibility j;
     private EnumChatFormat k;
+    private ScoreboardTeamBase.EnumTeamPush l;
 
     public ScoreboardTeam(Scoreboard scoreboard, String s) {
         this.i = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS;
         this.j = ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS;
         this.k = EnumChatFormat.RESET;
+        this.l = ScoreboardTeamBase.EnumTeamPush.ALWAYS;
         this.a = scoreboard;
         this.b = s;
         this.d = s;
@@ -114,6 +116,15 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         this.a.handleTeamChanged(this);
     }
 
+    public ScoreboardTeamBase.EnumTeamPush k() {
+        return this.l;
+    }
+
+    public void a(ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush) {
+        this.l = scoreboardteambase_enumteampush;
+        this.a.handleTeamChanged(this);
+    }
+
     public int packOptionData() {
         int i = 0;
 
@@ -132,7 +143,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         this.k = enumchatformat;
     }
 
-    public EnumChatFormat l() {
+    public EnumChatFormat m() {
         return this.k;
     }
 }

@@ -1,44 +1,49 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ComparisonChain;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class MobEffect {
+public class MobEffect implements Comparable<MobEffect> {
 
     private static final Logger a = LogManager.getLogger();
-    private int effectId;
+    private final MobEffectList b;
     private int duration;
     private int amplification;
     private boolean splash;
     private boolean ambient;
-    private boolean particles;
+    private boolean h;
 
-    public MobEffect(int i, int j) {
-        this(i, j, 0);
+    public MobEffect(MobEffectList mobeffectlist) {
+        this(mobeffectlist, 0, 0);
     }
 
-    public MobEffect(int i, int j, int k) {
-        this(i, j, k, false, true);
+    public MobEffect(MobEffectList mobeffectlist, int i) {
+        this(mobeffectlist, i, 0);
     }
 
-    public MobEffect(int i, int j, int k, boolean flag, boolean flag1) {
-        this.effectId = i;
-        this.duration = j;
-        this.amplification = k;
+    public MobEffect(MobEffectList mobeffectlist, int i, int j) {
+        this(mobeffectlist, i, j, false, true);
+    }
+
+    public MobEffect(MobEffectList mobeffectlist, int i, int j, boolean flag, boolean flag1) {
+        this.b = mobeffectlist;
+        this.duration = i;
+        this.amplification = j;
         this.ambient = flag;
-        this.particles = flag1;
+        this.h = flag1;
     }
 
     public MobEffect(MobEffect mobeffect) {
-        this.effectId = mobeffect.effectId;
+        this.b = mobeffect.b;
         this.duration = mobeffect.duration;
         this.amplification = mobeffect.amplification;
         this.ambient = mobeffect.ambient;
-        this.particles = mobeffect.particles;
+        this.h = mobeffect.h;
     }
 
     public void a(MobEffect mobeffect) {
-        if (this.effectId != mobeffect.effectId) {
+        if (this.b != mobeffect.b) {
             MobEffect.a.warn("This method should only be called for matching effects!");
         }
 
@@ -51,11 +56,11 @@ public class MobEffect {
             this.ambient = mobeffect.ambient;
         }
 
-        this.particles = mobeffect.particles;
+        this.h = mobeffect.h;
     }
 
-    public int getEffectId() {
-        return this.effectId;
+    public MobEffectList getMobEffect() {
+        return this.b;
     }
 
     public int getDuration() {
@@ -66,81 +71,85 @@ public class MobEffect {
         return this.amplification;
     }
 
-    public void setSplash(boolean flag) {
-        this.splash = flag;
-    }
-
     public boolean isAmbient() {
         return this.ambient;
     }
 
     public boolean isShowParticles() {
-        return this.particles;
+        return this.h;
     }
 
     public boolean tick(EntityLiving entityliving) {
         if (this.duration > 0) {
-            if (MobEffectList.byId[this.effectId].a(this.duration, this.amplification)) {
+            if (this.b.a(this.duration, this.amplification)) {
                 this.b(entityliving);
             }
 
-            this.i();
+            this.h();
         }
 
         return this.duration > 0;
     }
 
-    private int i() {
+    private int h() {
         return --this.duration;
     }
 
     public void b(EntityLiving entityliving) {
         if (this.duration > 0) {
-            MobEffectList.byId[this.effectId].tick(entityliving, this.amplification);
+            this.b.tick(entityliving, this.amplification);
         }
 
     }
 
-    public String g() {
-        return MobEffectList.byId[this.effectId].a();
-    }
-
-    public int hashCode() {
-        return this.effectId;
+    public String f() {
+        return this.b.a();
     }
 
     public String toString() {
         String s = "";
 
-        if (this.getAmplifier() > 0) {
-            s = this.g() + " x " + (this.getAmplifier() + 1) + ", Duration: " + this.getDuration();
+        if (this.amplification > 0) {
+            s = this.f() + " x " + (this.amplification + 1) + ", Duration: " + this.duration;
         } else {
-            s = this.g() + ", Duration: " + this.getDuration();
+            s = this.f() + ", Duration: " + this.duration;
         }
 
         if (this.splash) {
             s = s + ", Splash: true";
         }
 
-        if (!this.particles) {
+        if (!this.h) {
             s = s + ", Particles: false";
         }
 
-        return MobEffectList.byId[this.effectId].j() ? "(" + s + ")" : s;
+        return s;
     }
 
     public boolean equals(Object object) {
-        if (!(object instanceof MobEffect)) {
+        if (this == object) {
+            return true;
+        } else if (!(object instanceof MobEffect)) {
             return false;
         } else {
             MobEffect mobeffect = (MobEffect) object;
 
-            return this.effectId == mobeffect.effectId && this.amplification == mobeffect.amplification && this.duration == mobeffect.duration && this.splash == mobeffect.splash && this.ambient == mobeffect.ambient;
+            return this.duration == mobeffect.duration && this.amplification == mobeffect.amplification && this.splash == mobeffect.splash && this.ambient == mobeffect.ambient && this.b.equals(mobeffect.b);
         }
     }
 
+    public int hashCode() {
+        int i = this.b.hashCode();
+
+        i = 31 * i + this.duration;
+        i = 31 * i + this.amplification;
+        i = 31 * i + (this.splash ? 1 : 0);
+        i = 31 * i + (this.ambient ? 1 : 0);
+        return i;
+    }
+
     public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setByte("Id", (byte) this.getEffectId());
+        nbttagcompound.setByte("Id", (byte) MobEffectList.getId(this.getMobEffect()));
         nbttagcompound.setByte("Amplifier", (byte) this.getAmplifier());
         nbttagcompound.setInt("Duration", this.getDuration());
         nbttagcompound.setBoolean("Ambient", this.isAmbient());
@@ -150,8 +159,11 @@ public class MobEffect {
 
     public static MobEffect b(NBTTagCompound nbttagcompound) {
         byte b0 = nbttagcompound.getByte("Id");
+        MobEffectList mobeffectlist = MobEffectList.fromId(b0);
 
-        if (b0 >= 0 && b0 < MobEffectList.byId.length && MobEffectList.byId[b0] != null) {
+        if (mobeffectlist == null) {
+            return null;
+        } else {
             byte b1 = nbttagcompound.getByte("Amplifier");
             int i = nbttagcompound.getInt("Duration");
             boolean flag = nbttagcompound.getBoolean("Ambient");
@@ -161,9 +173,17 @@ public class MobEffect {
                 flag1 = nbttagcompound.getBoolean("ShowParticles");
             }
 
-            return new MobEffect(b0, i, b1, flag, flag1);
-        } else {
-            return null;
+            return new MobEffect(mobeffectlist, i, b1, flag, flag1);
         }
+    }
+
+    public int b(MobEffect mobeffect) {
+        boolean flag = true;
+
+        return (this.getDuration() <= 32147 || mobeffect.getDuration() <= 32147) && (!this.isAmbient() || !mobeffect.isAmbient()) ? ComparisonChain.start().compare(Boolean.valueOf(this.isAmbient()), Boolean.valueOf(mobeffect.isAmbient())).compare(this.getDuration(), mobeffect.getDuration()).compare(this.getMobEffect().getColor(), mobeffect.getMobEffect().getColor()).result() : ComparisonChain.start().compare(Boolean.valueOf(this.isAmbient()), Boolean.valueOf(mobeffect.isAmbient())).compare(this.getMobEffect().getColor(), mobeffect.getMobEffect().getColor()).result();
+    }
+
+    public int compareTo(Object object) {
+        return this.b((MobEffect) object);
     }
 }

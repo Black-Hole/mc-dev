@@ -14,16 +14,8 @@ public class EntityThrownExpBottle extends EntityProjectile {
         super(world, d0, d1, d2);
     }
 
-    protected float m() {
-        return 0.07F;
-    }
-
     protected float j() {
-        return 0.7F;
-    }
-
-    protected float l() {
-        return -20.0F;
+        return 0.07F;
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {

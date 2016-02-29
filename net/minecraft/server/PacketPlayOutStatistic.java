@@ -21,13 +21,13 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        int i = packetdataserializer.e();
+        int i = packetdataserializer.g();
 
         this.a = Maps.newHashMap();
 
         for (int j = 0; j < i; ++j) {
             Statistic statistic = StatisticList.getStatistic(packetdataserializer.c(32767));
-            int k = packetdataserializer.e();
+            int k = packetdataserializer.g();
 
             if (statistic != null) {
                 this.a.put(statistic, Integer.valueOf(k));

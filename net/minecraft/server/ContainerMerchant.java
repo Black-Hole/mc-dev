@@ -50,7 +50,7 @@ public class ContainerMerchant extends Container {
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.merchant.v_() == entityhuman;
+        return this.merchant.t_() == entityhuman;
     }
 
     public ItemStack b(EntityHuman entityhuman, int i) {
@@ -97,7 +97,7 @@ public class ContainerMerchant extends Container {
 
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        this.merchant.a_((EntityHuman) null);
+        this.merchant.setTradingPlayer((EntityHuman) null);
         super.b(entityhuman);
         if (!this.g.isClientSide) {
             ItemStack itemstack = this.f.splitWithoutUpdate(0);

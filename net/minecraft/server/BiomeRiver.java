@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class BiomeRiver extends BiomeBase {
 
-    public BiomeRiver(int i) {
-        super(i);
-        this.au.clear();
+    public BiomeRiver(BiomeBase.a biomebase_a) {
+        super(biomebase_a);
+        this.v.clear();
     }
 }

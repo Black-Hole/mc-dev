@@ -8,7 +8,7 @@ public class BlockMycel extends Block {
 
     protected BlockMycel() {
         super(Material.GRASS, MaterialMapColor.z);
-        this.j(this.blockStateList.getBlockData().set(BlockMycel.SNOWY, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockMycel.SNOWY, Boolean.valueOf(false)));
         this.a(true);
         this.a(CreativeModeTab.b);
     }
@@ -21,16 +21,16 @@ public class BlockMycel extends Block {
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (!world.isClientSide) {
-            if (world.getLightLevel(blockposition.up()) < 4 && world.getType(blockposition.up()).getBlock().p() > 2) {
+            if (world.getLightLevel(blockposition.up()) < 4 && world.getType(blockposition.up()).c() > 2) {
                 world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT));
             } else {
                 if (world.getLightLevel(blockposition.up()) >= 9) {
                     for (int i = 0; i < 4; ++i) {
                         BlockPosition blockposition1 = blockposition.a(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
                         IBlockData iblockdata1 = world.getType(blockposition1);
-                        Block block = world.getType(blockposition1.up()).getBlock();
+                        IBlockData iblockdata2 = world.getType(blockposition1.up());
 
-                        if (iblockdata1.getBlock() == Blocks.DIRT && iblockdata1.get(BlockDirt.VARIANT) == BlockDirt.EnumDirtVariant.DIRT && world.getLightLevel(blockposition1.up()) >= 4 && block.p() <= 2) {
+                        if (iblockdata1.getBlock() == Blocks.DIRT && iblockdata1.get(BlockDirt.VARIANT) == BlockDirt.EnumDirtVariant.DIRT && world.getLightLevel(blockposition1.up()) >= 4 && iblockdata2.c() <= 2) {
                             world.setTypeUpdate(blockposition1, this.getBlockData());
                         }
                     }

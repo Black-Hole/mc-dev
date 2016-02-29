@@ -85,7 +85,8 @@ public class RecipeBookClone implements IRecipe {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
             if (itemstack != null && itemstack.getItem() instanceof ItemWrittenBook) {
-                aitemstack[i] = itemstack;
+                aitemstack[i] = itemstack.cloneItemStack();
+                aitemstack[i].count = 1;
                 break;
             }
         }

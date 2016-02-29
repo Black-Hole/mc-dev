@@ -27,12 +27,12 @@ public abstract class BlockState<T extends Comparable<T>> implements IBlockState
     public boolean equals(Object object) {
         if (this == object) {
             return true;
-        } else if (object != null && this.getClass() == object.getClass()) {
+        } else if (!(object instanceof BlockState)) {
+            return false;
+        } else {
             BlockState blockstate = (BlockState) object;
 
             return this.a.equals(blockstate.a) && this.b.equals(blockstate.b);
-        } else {
-            return false;
         }
     }
 

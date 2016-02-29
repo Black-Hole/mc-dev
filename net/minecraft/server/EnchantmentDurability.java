@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class EnchantmentDurability extends Enchantment {
 
-    protected EnchantmentDurability(int i, MinecraftKey minecraftkey, int j) {
-        super(i, minecraftkey, j, EnchantmentSlotType.BREAKABLE);
+    protected EnchantmentDurability(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
+        super(enchantment_rarity, EnchantmentSlotType.BREAKABLE, aenumitemslot);
         this.c("durability");
     }
 

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.UUID;
+
 public class CommandEntityData extends CommandAbstract {
 
     public CommandEntityData() {}
@@ -16,36 +18,35 @@ public class CommandEntityData extends CommandAbstract {
         return "commands.entitydata.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.entitydata.usage", new Object[0]);
         } else {
-            Entity entity = b(icommandlistener, astring[0]);
+            Entity entity = b(minecraftserver, icommandlistener, astring[0]);
 
             if (entity instanceof EntityHuman) {
                 throw new CommandException("commands.entitydata.noPlayers", new Object[] { entity.getScoreboardDisplayName()});
             } else {
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-
-                entity.e(nbttagcompound);
+                NBTTagCompound nbttagcompound = a(entity);
                 NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttagcompound.clone();
 
                 NBTTagCompound nbttagcompound2;
 
                 try {
-                    nbttagcompound2 = MojangsonParser.parse(a(icommandlistener, astring, 1).c());
+                    nbttagcompound2 = MojangsonParser.parse(a(icommandlistener, astring, 1).toPlainText());
                 } catch (MojangsonParseException mojangsonparseexception) {
                     throw new CommandException("commands.entitydata.tagError", new Object[] { mojangsonparseexception.getMessage()});
                 }
 
-                nbttagcompound2.remove("UUIDMost");
-                nbttagcompound2.remove("UUIDLeast");
+                UUID uuid = entity.getUniqueID();
+
                 nbttagcompound.a(nbttagcompound2);
+                entity.a(uuid);
                 if (nbttagcompound.equals(nbttagcompound1)) {
                     throw new CommandException("commands.entitydata.failed", new Object[] { nbttagcompound.toString()});
                 } else {
                     entity.f(nbttagcompound);
-                    a(icommandlistener, this, "commands.entitydata.success", new Object[] { nbttagcompound.toString()});
+                    a(icommandlistener, (ICommand) this, "commands.entitydata.success", new Object[] { nbttagcompound.toString()});
                 }
             }
         }

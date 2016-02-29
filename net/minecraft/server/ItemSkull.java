@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class ItemSkull extends Item {
 
-    private static final String[] a = new String[] { "skeleton", "wither", "zombie", "char", "creeper"};
+    private static final String[] a = new String[] { "skeleton", "wither", "zombie", "char", "creeper", "dragon"};
 
     public ItemSkull() {
         this.a(CreativeModeTab.c);
@@ -13,29 +13,27 @@ public class ItemSkull extends Item {
         this.a(true);
     }
 
-    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (enumdirection == EnumDirection.DOWN) {
-            return false;
+            return EnumInteractionResult.FAIL;
         } else {
             IBlockData iblockdata = world.getType(blockposition);
             Block block = iblockdata.getBlock();
-            boolean flag = block.a(world, blockposition);
+            boolean flag = block.a((IBlockAccess) world, blockposition);
 
             if (!flag) {
-                if (!world.getType(blockposition).getBlock().getMaterial().isBuildable()) {
-                    return false;
+                if (!world.getType(blockposition).getMaterial().isBuildable()) {
+                    return EnumInteractionResult.FAIL;
                 }
 
                 blockposition = blockposition.shift(enumdirection);
             }
 
-            if (!entityhuman.a(blockposition, enumdirection, itemstack)) {
-                return false;
-            } else if (!Blocks.SKULL.canPlace(world, blockposition)) {
-                return false;
-            } else {
-                if (!world.isClientSide) {
-                    world.setTypeAndData(blockposition, Blocks.SKULL.getBlockData().set(BlockSkull.FACING, enumdirection), 3);
+            if (entityhuman.a(blockposition, enumdirection, itemstack) && Blocks.SKULL.canPlace(world, blockposition)) {
+                if (world.isClientSide) {
+                    return EnumInteractionResult.SUCCESS;
+                } else {
+                    world.setTypeAndData(blockposition, Blocks.SKULL.getBlockData().set(BlockSkull.FACING, enumdirection), 11);
                     int i = 0;
 
                     if (enumdirection == EnumDirection.UP) {
@@ -55,7 +53,7 @@ public class ItemSkull extends Item {
 
                                 if (nbttagcompound.hasKeyOfType("SkullOwner", 10)) {
                                     gameprofile = GameProfileSerializer.deserialize(nbttagcompound.getCompound("SkullOwner"));
-                                } else if (nbttagcompound.hasKeyOfType("SkullOwner", 8) && nbttagcompound.getString("SkullOwner").length() > 0) {
+                                } else if (nbttagcompound.hasKeyOfType("SkullOwner", 8) && !nbttagcompound.getString("SkullOwner").isEmpty()) {
                                     gameprofile = new GameProfile((UUID) null, nbttagcompound.getString("SkullOwner"));
                                 }
                             }
@@ -70,9 +68,10 @@ public class ItemSkull extends Item {
                     }
 
                     --itemstack.count;
+                    return EnumInteractionResult.SUCCESS;
                 }
-
-                return true;
+            } else {
+                return EnumInteractionResult.FAIL;
             }
         }
     }
@@ -81,7 +80,7 @@ public class ItemSkull extends Item {
         return i;
     }
 
-    public String e_(ItemStack itemstack) {
+    public String f_(ItemStack itemstack) {
         int i = itemstack.getData();
 
         if (i < 0 || i >= ItemSkull.a.length) {
@@ -111,7 +110,7 @@ public class ItemSkull extends Item {
 
     public boolean a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        if (nbttagcompound.hasKeyOfType("SkullOwner", 8) && nbttagcompound.getString("SkullOwner").length() > 0) {
+        if (nbttagcompound.hasKeyOfType("SkullOwner", 8) && !nbttagcompound.getString("SkullOwner").isEmpty()) {
             GameProfile gameprofile = new GameProfile((UUID) null, nbttagcompound.getString("SkullOwner"));
 
             gameprofile = TileEntitySkull.b(gameprofile);

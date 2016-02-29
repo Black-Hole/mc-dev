@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class CommandTp extends CommandAbstract {
         return "commands.tp.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 1) {
             throw new ExceptionUsage("commands.tp.usage", new Object[0]);
         } else {
@@ -27,9 +28,9 @@ public class CommandTp extends CommandAbstract {
             Object object;
 
             if (astring.length != 2 && astring.length != 4 && astring.length != 6) {
-                object = b(icommandlistener);
+                object = a(icommandlistener);
             } else {
-                object = b(icommandlistener, astring[0]);
+                object = b(minecraftserver, icommandlistener, astring[0]);
                 b0 = 1;
             }
 
@@ -79,50 +80,41 @@ public class CommandTp extends CommandAbstract {
                             f1 = MathHelper.g(f1);
                         }
 
-                        if (f1 > 90.0F || f1 < -90.0F) {
-                            f1 = MathHelper.g(180.0F - f1);
-                            f = MathHelper.g(f + 180.0F);
-                        }
-
-                        ((Entity) object).mount((Entity) null);
+                        ((Entity) object).stopRiding();
                         ((EntityPlayer) object).playerConnection.a(commandabstract_commandnumber.b(), commandabstract_commandnumber1.b(), commandabstract_commandnumber2.b(), f, f1, enumset);
-                        ((Entity) object).f(f);
+                        ((Entity) object).h(f);
                     } else {
                         float f2 = (float) MathHelper.g(commandabstract_commandnumber3.a());
 
                         f = (float) MathHelper.g(commandabstract_commandnumber4.a());
-                        if (f > 90.0F || f < -90.0F) {
-                            f = MathHelper.g(180.0F - f);
-                            f2 = MathHelper.g(f2 + 180.0F);
-                        }
-
+                        f = MathHelper.a(f, -90.0F, 90.0F);
                         ((Entity) object).setPositionRotation(commandabstract_commandnumber.a(), commandabstract_commandnumber1.a(), commandabstract_commandnumber2.a(), f2, f);
-                        ((Entity) object).f(f2);
+                        ((Entity) object).h(f2);
                     }
 
-                    a(icommandlistener, this, "commands.tp.success.coordinates", new Object[] { ((Entity) object).getName(), Double.valueOf(commandabstract_commandnumber.a()), Double.valueOf(commandabstract_commandnumber1.a()), Double.valueOf(commandabstract_commandnumber2.a())});
+                    a(icommandlistener, (ICommand) this, "commands.tp.success.coordinates", new Object[] { ((Entity) object).getName(), Double.valueOf(commandabstract_commandnumber.a()), Double.valueOf(commandabstract_commandnumber1.a()), Double.valueOf(commandabstract_commandnumber2.a())});
                 }
             } else {
-                Entity entity = b(icommandlistener, astring[astring.length - 1]);
+                Entity entity = b(minecraftserver, icommandlistener, astring[astring.length - 1]);
 
                 if (entity.world != ((Entity) object).world) {
                     throw new CommandException("commands.tp.notSameDimension", new Object[0]);
                 } else {
-                    ((Entity) object).mount((Entity) null);
+                    ((Entity) object).stopRiding();
                     if (object instanceof EntityPlayer) {
                         ((EntityPlayer) object).playerConnection.a(entity.locX, entity.locY, entity.locZ, entity.yaw, entity.pitch);
                     } else {
                         ((Entity) object).setPositionRotation(entity.locX, entity.locY, entity.locZ, entity.yaw, entity.pitch);
                     }
 
-                    a(icommandlistener, this, "commands.tp.success", new Object[] { ((Entity) object).getName(), entity.getName()});
+                    a(icommandlistener, (ICommand) this, "commands.tp.success", new Object[] { ((Entity) object).getName(), entity.getName()});
                 }
             }
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length != 1 && astring.length != 2 ? null : a(astring, MinecraftServer.getServer().getPlayers());
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length != 1 && astring.length != 2 ? Collections.emptyList() : a(astring, minecraftserver.getPlayers());
     }
 
     public boolean isListStart(String[] astring, int i) {

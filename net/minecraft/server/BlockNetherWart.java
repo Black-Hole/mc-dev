@@ -5,23 +5,25 @@ import java.util.Random;
 public class BlockNetherWart extends BlockPlant {
 
     public static final BlockStateInteger AGE = BlockStateInteger.of("age", 0, 3);
+    private static final AxisAlignedBB[] c = new AxisAlignedBB[] { new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.3125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.6875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D)};
 
     protected BlockNetherWart() {
         super(Material.PLANT, MaterialMapColor.D);
-        this.j(this.blockStateList.getBlockData().set(BlockNetherWart.AGE, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockNetherWart.AGE, Integer.valueOf(0)));
         this.a(true);
-        float f = 0.5F;
-
-        this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
         this.a((CreativeModeTab) null);
     }
 
-    protected boolean c(Block block) {
-        return block == Blocks.SOUL_SAND;
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockNetherWart.c[((Integer) iblockdata.get(BlockNetherWart.AGE)).intValue()];
+    }
+
+    protected boolean i(IBlockData iblockdata) {
+        return iblockdata.getBlock() == Blocks.SOUL_SAND;
     }
 
     public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return this.c(world.getType(blockposition.down()).getBlock());
+        return this.i(world.getType(blockposition.down()));
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
@@ -59,6 +61,10 @@ public class BlockNetherWart extends BlockPlant {
 
     public int a(Random random) {
         return 0;
+    }
+
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Items.NETHER_WART);
     }
 
     public IBlockData fromLegacyData(int i) {

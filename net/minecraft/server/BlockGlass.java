@@ -13,11 +13,11 @@ public class BlockGlass extends BlockHalfTransparent {
         return 0;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
-    protected boolean I() {
+    protected boolean o() {
         return true;
     }
 }

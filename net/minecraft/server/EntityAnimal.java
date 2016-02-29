@@ -2,32 +2,32 @@ package net.minecraft.server;
 
 public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
 
-    protected Block bn;
-    private int bm;
-    private EntityHuman bo;
+    protected Block by;
+    private int bv;
+    private EntityHuman bw;
 
     public EntityAnimal(World world) {
         super(world);
-        this.bn = Blocks.GRASS;
+        this.by = Blocks.GRASS;
     }
 
-    protected void E() {
+    protected void M() {
         if (this.getAge() != 0) {
-            this.bm = 0;
+            this.bv = 0;
         }
 
-        super.E();
+        super.M();
     }
 
-    public void m() {
-        super.m();
+    public void n() {
+        super.n();
         if (this.getAge() != 0) {
-            this.bm = 0;
+            this.bv = 0;
         }
 
-        if (this.bm > 0) {
-            --this.bm;
-            if (this.bm % 10 == 0) {
+        if (this.bv > 0) {
+            --this.bv;
+            if (this.bv % 10 == 0) {
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = this.random.nextGaussian() * 0.02D;
                 double d2 = this.random.nextGaussian() * 0.02D;
@@ -42,35 +42,39 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            this.bm = 0;
+            this.bv = 0;
             return super.damageEntity(damagesource, f);
         }
     }
 
     public float a(BlockPosition blockposition) {
-        return this.world.getType(blockposition.down()).getBlock() == Blocks.GRASS ? 10.0F : this.world.o(blockposition) - 0.5F;
+        return this.world.getType(blockposition.down()).getBlock() == Blocks.GRASS ? 10.0F : this.world.n(blockposition) - 0.5F;
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("InLove", this.bm);
+        nbttagcompound.setInt("InLove", this.bv);
+    }
+
+    public double ax() {
+        return 0.29D;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.bm = nbttagcompound.getInt("InLove");
+        this.bv = nbttagcompound.getInt("InLove");
     }
 
-    public boolean bR() {
+    public boolean cF() {
         int i = MathHelper.floor(this.locX);
         int j = MathHelper.floor(this.getBoundingBox().b);
         int k = MathHelper.floor(this.locZ);
         BlockPosition blockposition = new BlockPosition(i, j, k);
 
-        return this.world.getType(blockposition.down()).getBlock() == this.bn && this.world.k(blockposition) > 8 && super.bR();
+        return this.world.getType(blockposition.down()).getBlock() == this.by && this.world.j(blockposition) > 8 && super.cF();
     }
 
-    public int w() {
+    public int C() {
         return 120;
     }
 
@@ -82,56 +86,51 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
         return 1 + this.world.random.nextInt(3);
     }
 
-    public boolean d(ItemStack itemstack) {
+    public boolean e(ItemStack itemstack) {
         return itemstack == null ? false : itemstack.getItem() == Items.WHEAT;
     }
 
-    public boolean a(EntityHuman entityhuman) {
-        ItemStack itemstack = entityhuman.inventory.getItemInHand();
-
+    public boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
         if (itemstack != null) {
-            if (this.d(itemstack) && this.getAge() == 0 && this.bm <= 0) {
+            if (this.e(itemstack) && this.getAge() == 0 && this.bv <= 0) {
                 this.a(entityhuman, itemstack);
                 this.c(entityhuman);
                 return true;
             }
 
-            if (this.isBaby() && this.d(itemstack)) {
+            if (this.isBaby() && this.e(itemstack)) {
                 this.a(entityhuman, itemstack);
                 this.setAge((int) ((float) (-this.getAge() / 20) * 0.1F), true);
                 return true;
             }
         }
 
-        return super.a(entityhuman);
+        return super.a(entityhuman, enumhand, itemstack);
     }
 
     protected void a(EntityHuman entityhuman, ItemStack itemstack) {
         if (!entityhuman.abilities.canInstantlyBuild) {
             --itemstack.count;
-            if (itemstack.count <= 0) {
-                entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, (ItemStack) null);
-            }
         }
 
     }
 
     public void c(EntityHuman entityhuman) {
-        this.bm = 600;
-        this.bo = entityhuman;
+        this.bv = 600;
+        this.bw = entityhuman;
         this.world.broadcastEntityEffect(this, (byte) 18);
     }
 
-    public EntityHuman cq() {
-        return this.bo;
+    public EntityHuman getBreedCause() {
+        return this.bw;
     }
 
     public boolean isInLove() {
-        return this.bm > 0;
+        return this.bv > 0;
     }
 
-    public void cs() {
-        this.bm = 0;
+    public void resetLove() {
+        this.bv = 0;
     }
 
     public boolean mate(EntityAnimal entityanimal) {

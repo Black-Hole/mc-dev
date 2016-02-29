@@ -15,8 +15,8 @@ public class PacketPlayOutCollect implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-        this.b = packetdataserializer.e();
+        this.a = packetdataserializer.g();
+        this.b = packetdataserializer.g();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

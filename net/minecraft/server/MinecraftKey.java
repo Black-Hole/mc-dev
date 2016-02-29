@@ -18,8 +18,12 @@ public class MinecraftKey {
         this(0, a(s));
     }
 
+    public MinecraftKey(String s, String s1) {
+        this(0, new String[] { s, s1});
+    }
+
     protected static String[] a(String s) {
-        String[] astring = new String[] { null, s};
+        String[] astring = new String[] { "minecraft", s};
         int i = s.indexOf(58);
 
         if (i >= 0) {
@@ -34,6 +38,10 @@ public class MinecraftKey {
 
     public String a() {
         return this.b;
+    }
+
+    public String b() {
+        return this.a;
     }
 
     public String toString() {

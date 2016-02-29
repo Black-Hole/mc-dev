@@ -22,35 +22,16 @@ public class InventoryMerchant implements IInventory {
     }
 
     public ItemStack splitStack(int i, int j) {
-        if (this.itemsInSlots[i] != null) {
-            ItemStack itemstack;
-
-            if (i == 2) {
-                itemstack = this.itemsInSlots[i];
-                this.itemsInSlots[i] = null;
-                return itemstack;
-            } else if (this.itemsInSlots[i].count <= j) {
-                itemstack = this.itemsInSlots[i];
-                this.itemsInSlots[i] = null;
-                if (this.e(i)) {
-                    this.h();
-                }
-
-                return itemstack;
-            } else {
-                itemstack = this.itemsInSlots[i].cloneAndSubtract(j);
-                if (this.itemsInSlots[i].count == 0) {
-                    this.itemsInSlots[i] = null;
-                }
-
-                if (this.e(i)) {
-                    this.h();
-                }
-
-                return itemstack;
-            }
+        if (i == 2 && this.itemsInSlots[i] != null) {
+            return ContainerUtil.a(this.itemsInSlots, i, this.itemsInSlots[i].count);
         } else {
-            return null;
+            ItemStack itemstack = ContainerUtil.a(this.itemsInSlots, i, j);
+
+            if (itemstack != null && this.e(i)) {
+                this.h();
+            }
+
+            return itemstack;
         }
     }
 
@@ -59,14 +40,7 @@ public class InventoryMerchant implements IInventory {
     }
 
     public ItemStack splitWithoutUpdate(int i) {
-        if (this.itemsInSlots[i] != null) {
-            ItemStack itemstack = this.itemsInSlots[i];
-
-            this.itemsInSlots[i] = null;
-            return itemstack;
-        } else {
-            return null;
-        }
+        return ContainerUtil.a(this.itemsInSlots, i);
     }
 
     public void setItem(int i, ItemStack itemstack) {
@@ -98,7 +72,7 @@ public class InventoryMerchant implements IInventory {
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.merchant.v_() == entityhuman;
+        return this.merchant.t_() == entityhuman;
     }
 
     public void startOpen(EntityHuman entityhuman) {}
@@ -148,7 +122,7 @@ public class InventoryMerchant implements IInventory {
             }
         }
 
-        this.merchant.a_(this.getItem(2));
+        this.merchant.a(this.getItem(2));
     }
 
     public MerchantRecipe getRecipe() {
@@ -164,7 +138,7 @@ public class InventoryMerchant implements IInventory {
         return 0;
     }
 
-    public void b(int i, int j) {}
+    public void setProperty(int i, int j) {}
 
     public int g() {
         return 0;

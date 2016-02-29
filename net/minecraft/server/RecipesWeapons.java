@@ -22,5 +22,6 @@ public class RecipesWeapons {
 
         craftingmanager.registerShapedRecipe(new ItemStack(Items.BOW, 1), new Object[] { " #X", "# X", " #X", Character.valueOf('X'), Items.STRING, Character.valueOf('#'), Items.STICK});
         craftingmanager.registerShapedRecipe(new ItemStack(Items.ARROW, 4), new Object[] { "X", "#", "Y", Character.valueOf('Y'), Items.FEATHER, Character.valueOf('X'), Items.FLINT, Character.valueOf('#'), Items.STICK});
+        craftingmanager.registerShapedRecipe(new ItemStack(Items.SPECTRAL_ARROW, 2), new Object[] { " # ", "#X#", " # ", Character.valueOf('X'), Items.ARROW, Character.valueOf('#'), Items.GLOWSTONE_DUST});
     }
 }

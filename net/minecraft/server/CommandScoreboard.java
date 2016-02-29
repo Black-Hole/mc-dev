@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -27,8 +28,8 @@ public class CommandScoreboard extends CommandAbstract {
         return "commands.scoreboard.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (!this.b(icommandlistener, astring)) {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
+        if (!this.b(minecraftserver, icommandlistener, astring)) {
             if (astring.length < 1) {
                 throw new ExceptionUsage("commands.scoreboard.usage", new Object[0]);
             } else {
@@ -38,19 +39,19 @@ public class CommandScoreboard extends CommandAbstract {
                     }
 
                     if (astring[1].equalsIgnoreCase("list")) {
-                        this.d(icommandlistener);
+                        this.a(icommandlistener, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("add")) {
                         if (astring.length < 4) {
                             throw new ExceptionUsage("commands.scoreboard.objectives.add.usage", new Object[0]);
                         }
 
-                        this.b(icommandlistener, astring, 2);
+                        this.a(icommandlistener, astring, 2, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("remove")) {
                         if (astring.length != 3) {
                             throw new ExceptionUsage("commands.scoreboard.objectives.remove.usage", new Object[0]);
                         }
 
-                        this.h(icommandlistener, astring[2]);
+                        this.a(icommandlistener, astring[2], minecraftserver);
                     } else {
                         if (!astring[1].equalsIgnoreCase("setdisplay")) {
                             throw new ExceptionUsage("commands.scoreboard.objectives.usage", new Object[0]);
@@ -60,7 +61,7 @@ public class CommandScoreboard extends CommandAbstract {
                             throw new ExceptionUsage("commands.scoreboard.objectives.setdisplay.usage", new Object[0]);
                         }
 
-                        this.j(icommandlistener, astring, 2);
+                        this.i(icommandlistener, astring, 2, minecraftserver);
                     }
                 } else if (astring[0].equalsIgnoreCase("players")) {
                     if (astring.length == 1) {
@@ -72,53 +73,59 @@ public class CommandScoreboard extends CommandAbstract {
                             throw new ExceptionUsage("commands.scoreboard.players.list.usage", new Object[0]);
                         }
 
-                        this.k(icommandlistener, astring, 2);
+                        this.j(icommandlistener, astring, 2, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("add")) {
                         if (astring.length < 5) {
                             throw new ExceptionUsage("commands.scoreboard.players.add.usage", new Object[0]);
                         }
 
-                        this.l(icommandlistener, astring, 2);
+                        this.k(icommandlistener, astring, 2, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("remove")) {
                         if (astring.length < 5) {
                             throw new ExceptionUsage("commands.scoreboard.players.remove.usage", new Object[0]);
                         }
 
-                        this.l(icommandlistener, astring, 2);
+                        this.k(icommandlistener, astring, 2, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("set")) {
                         if (astring.length < 5) {
                             throw new ExceptionUsage("commands.scoreboard.players.set.usage", new Object[0]);
                         }
 
-                        this.l(icommandlistener, astring, 2);
+                        this.k(icommandlistener, astring, 2, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("reset")) {
                         if (astring.length != 3 && astring.length != 4) {
                             throw new ExceptionUsage("commands.scoreboard.players.reset.usage", new Object[0]);
                         }
 
-                        this.m(icommandlistener, astring, 2);
+                        this.l(icommandlistener, astring, 2, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("enable")) {
                         if (astring.length != 4) {
                             throw new ExceptionUsage("commands.scoreboard.players.enable.usage", new Object[0]);
                         }
 
-                        this.n(icommandlistener, astring, 2);
+                        this.m(icommandlistener, astring, 2, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("test")) {
                         if (astring.length != 5 && astring.length != 6) {
                             throw new ExceptionUsage("commands.scoreboard.players.test.usage", new Object[0]);
                         }
 
-                        this.o(icommandlistener, astring, 2);
-                    } else {
-                        if (!astring[1].equalsIgnoreCase("operation")) {
-                            throw new ExceptionUsage("commands.scoreboard.players.usage", new Object[0]);
-                        }
-
+                        this.n(icommandlistener, astring, 2, minecraftserver);
+                    } else if (astring[1].equalsIgnoreCase("operation")) {
                         if (astring.length != 7) {
                             throw new ExceptionUsage("commands.scoreboard.players.operation.usage", new Object[0]);
                         }
 
-                        this.p(icommandlistener, astring, 2);
+                        this.o(icommandlistener, astring, 2, minecraftserver);
+                    } else {
+                        if (!astring[1].equalsIgnoreCase("tag")) {
+                            throw new ExceptionUsage("commands.scoreboard.players.usage", new Object[0]);
+                        }
+
+                        if (astring.length < 4) {
+                            throw new ExceptionUsage("commands.scoreboard.players.tag.usage", new Object[0]);
+                        }
+
+                        this.a(minecraftserver, icommandlistener, astring, 2);
                     }
                 } else {
                     if (!astring[0].equalsIgnoreCase("teams")) {
@@ -134,37 +141,37 @@ public class CommandScoreboard extends CommandAbstract {
                             throw new ExceptionUsage("commands.scoreboard.teams.list.usage", new Object[0]);
                         }
 
-                        this.f(icommandlistener, astring, 2);
+                        this.e(icommandlistener, astring, 2, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("add")) {
                         if (astring.length < 3) {
                             throw new ExceptionUsage("commands.scoreboard.teams.add.usage", new Object[0]);
                         }
 
-                        this.c(icommandlistener, astring, 2);
+                        this.b(icommandlistener, astring, 2, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("remove")) {
                         if (astring.length != 3) {
                             throw new ExceptionUsage("commands.scoreboard.teams.remove.usage", new Object[0]);
                         }
 
-                        this.e(icommandlistener, astring, 2);
+                        this.d(icommandlistener, astring, 2, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("empty")) {
                         if (astring.length != 3) {
                             throw new ExceptionUsage("commands.scoreboard.teams.empty.usage", new Object[0]);
                         }
 
-                        this.i(icommandlistener, astring, 2);
+                        this.h(icommandlistener, astring, 2, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("join")) {
                         if (astring.length < 4 && (astring.length != 3 || !(icommandlistener instanceof EntityHuman))) {
                             throw new ExceptionUsage("commands.scoreboard.teams.join.usage", new Object[0]);
                         }
 
-                        this.g(icommandlistener, astring, 2);
+                        this.f(icommandlistener, astring, 2, minecraftserver);
                     } else if (astring[1].equalsIgnoreCase("leave")) {
                         if (astring.length < 3 && !(icommandlistener instanceof EntityHuman)) {
                             throw new ExceptionUsage("commands.scoreboard.teams.leave.usage", new Object[0]);
                         }
 
-                        this.h(icommandlistener, astring, 2);
+                        this.g(icommandlistener, astring, 2, minecraftserver);
                     } else {
                         if (!astring[1].equalsIgnoreCase("option")) {
                             throw new ExceptionUsage("commands.scoreboard.teams.usage", new Object[0]);
@@ -174,7 +181,7 @@ public class CommandScoreboard extends CommandAbstract {
                             throw new ExceptionUsage("commands.scoreboard.teams.option.usage", new Object[0]);
                         }
 
-                        this.d(icommandlistener, astring, 2);
+                        this.c(icommandlistener, astring, 2, minecraftserver);
                     }
                 }
 
@@ -182,7 +189,7 @@ public class CommandScoreboard extends CommandAbstract {
         }
     }
 
-    private boolean b(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    private boolean b(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         int i = -1;
 
         for (int j = 0; j < astring.length; ++j) {
@@ -198,7 +205,7 @@ public class CommandScoreboard extends CommandAbstract {
         if (i < 0) {
             return false;
         } else {
-            ArrayList arraylist = Lists.newArrayList(this.d().getPlayers());
+            ArrayList arraylist = Lists.newArrayList(this.a(minecraftserver).getPlayers());
             String s = astring[i];
             ArrayList arraylist1 = Lists.newArrayList();
             Iterator iterator = arraylist.iterator();
@@ -209,7 +216,7 @@ public class CommandScoreboard extends CommandAbstract {
                 astring[i] = s1;
 
                 try {
-                    this.execute(icommandlistener, astring);
+                    this.execute(minecraftserver, icommandlistener, astring);
                     arraylist1.add(s1);
                 } catch (CommandException commandexception) {
                     ChatMessage chatmessage = new ChatMessage(commandexception.getMessage(), commandexception.getArgs());
@@ -221,7 +228,7 @@ public class CommandScoreboard extends CommandAbstract {
 
             astring[i] = s;
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ENTITIES, arraylist1.size());
-            if (arraylist1.size() == 0) {
+            if (arraylist1.isEmpty()) {
                 throw new ExceptionUsage("commands.scoreboard.allMatchesFailed", new Object[0]);
             } else {
                 return true;
@@ -229,12 +236,12 @@ public class CommandScoreboard extends CommandAbstract {
         }
     }
 
-    protected Scoreboard d() {
-        return MinecraftServer.getServer().getWorldServer(0).getScoreboard();
+    protected Scoreboard a(MinecraftServer minecraftserver) {
+        return minecraftserver.getWorldServer(0).getScoreboard();
     }
 
-    protected ScoreboardObjective a(String s, boolean flag) throws CommandException {
-        Scoreboard scoreboard = this.d();
+    protected ScoreboardObjective a(String s, boolean flag, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
         ScoreboardObjective scoreboardobjective = scoreboard.getObjective(s);
 
         if (scoreboardobjective == null) {
@@ -246,8 +253,8 @@ public class CommandScoreboard extends CommandAbstract {
         }
     }
 
-    protected ScoreboardTeam e(String s) throws CommandException {
-        Scoreboard scoreboard = this.d();
+    protected ScoreboardTeam a(String s, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
         ScoreboardTeam scoreboardteam = scoreboard.getTeam(s);
 
         if (scoreboardteam == null) {
@@ -257,10 +264,10 @@ public class CommandScoreboard extends CommandAbstract {
         }
     }
 
-    protected void b(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
+    protected void a(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
         String s = astring[i++];
         String s1 = astring[i++];
-        Scoreboard scoreboard = this.d();
+        Scoreboard scoreboard = this.a(minecraftserver);
         IScoreboardCriteria iscoreboardcriteria = (IScoreboardCriteria) IScoreboardCriteria.criteria.get(s1);
 
         if (iscoreboardcriteria == null) {
@@ -269,17 +276,17 @@ public class CommandScoreboard extends CommandAbstract {
             throw new CommandException("commands.scoreboard.objectives.add.alreadyExists", new Object[] { s});
         } else if (s.length() > 16) {
             throw new ExceptionInvalidSyntax("commands.scoreboard.objectives.add.tooLong", new Object[] { s, Integer.valueOf(16)});
-        } else if (s.length() == 0) {
+        } else if (s.isEmpty()) {
             throw new ExceptionUsage("commands.scoreboard.objectives.add.usage", new Object[0]);
         } else {
             if (astring.length > i) {
-                String s2 = a(icommandlistener, astring, i).c();
+                String s2 = a(icommandlistener, astring, i).toPlainText();
 
                 if (s2.length() > 32) {
                     throw new ExceptionInvalidSyntax("commands.scoreboard.objectives.add.displayTooLong", new Object[] { s2, Integer.valueOf(32)});
                 }
 
-                if (s2.length() > 0) {
+                if (!s2.isEmpty()) {
                     scoreboard.registerObjective(s, iscoreboardcriteria).setDisplayName(s2);
                 } else {
                     scoreboard.registerObjective(s, iscoreboardcriteria);
@@ -288,29 +295,29 @@ public class CommandScoreboard extends CommandAbstract {
                 scoreboard.registerObjective(s, iscoreboardcriteria);
             }
 
-            a(icommandlistener, this, "commands.scoreboard.objectives.add.success", new Object[] { s});
+            a(icommandlistener, (ICommand) this, "commands.scoreboard.objectives.add.success", new Object[] { s});
         }
     }
 
-    protected void c(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
+    protected void b(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
         String s = astring[i++];
-        Scoreboard scoreboard = this.d();
+        Scoreboard scoreboard = this.a(minecraftserver);
 
         if (scoreboard.getTeam(s) != null) {
             throw new CommandException("commands.scoreboard.teams.add.alreadyExists", new Object[] { s});
         } else if (s.length() > 16) {
             throw new ExceptionInvalidSyntax("commands.scoreboard.teams.add.tooLong", new Object[] { s, Integer.valueOf(16)});
-        } else if (s.length() == 0) {
+        } else if (s.isEmpty()) {
             throw new ExceptionUsage("commands.scoreboard.teams.add.usage", new Object[0]);
         } else {
             if (astring.length > i) {
-                String s1 = a(icommandlistener, astring, i).c();
+                String s1 = a(icommandlistener, astring, i).toPlainText();
 
                 if (s1.length() > 32) {
                     throw new ExceptionInvalidSyntax("commands.scoreboard.teams.add.displayTooLong", new Object[] { s1, Integer.valueOf(32)});
                 }
 
-                if (s1.length() > 0) {
+                if (!s1.isEmpty()) {
                     scoreboard.createTeam(s).setDisplayName(s1);
                 } else {
                     scoreboard.createTeam(s);
@@ -319,24 +326,28 @@ public class CommandScoreboard extends CommandAbstract {
                 scoreboard.createTeam(s);
             }
 
-            a(icommandlistener, this, "commands.scoreboard.teams.add.success", new Object[] { s});
+            a(icommandlistener, (ICommand) this, "commands.scoreboard.teams.add.success", new Object[] { s});
         }
     }
 
-    protected void d(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        ScoreboardTeam scoreboardteam = this.e(astring[i++]);
+    protected void c(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
+        ScoreboardTeam scoreboardteam = this.a(astring[i++], minecraftserver);
 
         if (scoreboardteam != null) {
             String s = astring[i++].toLowerCase();
 
-            if (!s.equalsIgnoreCase("color") && !s.equalsIgnoreCase("friendlyfire") && !s.equalsIgnoreCase("seeFriendlyInvisibles") && !s.equalsIgnoreCase("nametagVisibility") && !s.equalsIgnoreCase("deathMessageVisibility")) {
+            if (!s.equalsIgnoreCase("color") && !s.equalsIgnoreCase("friendlyfire") && !s.equalsIgnoreCase("seeFriendlyInvisibles") && !s.equalsIgnoreCase("nametagVisibility") && !s.equalsIgnoreCase("deathMessageVisibility") && !s.equalsIgnoreCase("collisionRule")) {
                 throw new ExceptionUsage("commands.scoreboard.teams.option.usage", new Object[0]);
             } else if (astring.length == 4) {
                 if (s.equalsIgnoreCase("color")) {
                     throw new ExceptionUsage("commands.scoreboard.teams.option.noValue", new Object[] { s, a(EnumChatFormat.a(true, false))});
                 } else if (!s.equalsIgnoreCase("friendlyfire") && !s.equalsIgnoreCase("seeFriendlyInvisibles")) {
                     if (!s.equalsIgnoreCase("nametagVisibility") && !s.equalsIgnoreCase("deathMessageVisibility")) {
-                        throw new ExceptionUsage("commands.scoreboard.teams.option.usage", new Object[0]);
+                        if (s.equalsIgnoreCase("collisionRule")) {
+                            throw new ExceptionUsage("commands.scoreboard.teams.option.noValue", new Object[] { s, a((Object[]) ScoreboardTeamBase.EnumTeamPush.a())});
+                        } else {
+                            throw new ExceptionUsage("commands.scoreboard.teams.option.usage", new Object[0]);
+                        }
                     } else {
                         throw new ExceptionUsage("commands.scoreboard.teams.option.noValue", new Object[] { s, a((Object[]) ScoreboardTeamBase.EnumNameTagVisibility.a())});
                     }
@@ -385,29 +396,37 @@ public class CommandScoreboard extends CommandAbstract {
                         }
 
                         scoreboardteam.b(scoreboardteambase_enumnametagvisibility);
+                    } else if (s.equalsIgnoreCase("collisionRule")) {
+                        ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = ScoreboardTeamBase.EnumTeamPush.a(s1);
+
+                        if (scoreboardteambase_enumteampush == null) {
+                            throw new ExceptionUsage("commands.scoreboard.teams.option.noValue", new Object[] { s, a((Object[]) ScoreboardTeamBase.EnumTeamPush.a())});
+                        }
+
+                        scoreboardteam.a(scoreboardteambase_enumteampush);
                     }
                 }
 
-                a(icommandlistener, this, "commands.scoreboard.teams.option.success", new Object[] { s, scoreboardteam.getName(), s1});
+                a(icommandlistener, (ICommand) this, "commands.scoreboard.teams.option.success", new Object[] { s, scoreboardteam.getName(), s1});
             }
         }
     }
 
-    protected void e(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        Scoreboard scoreboard = this.d();
-        ScoreboardTeam scoreboardteam = this.e(astring[i]);
+    protected void d(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
+        ScoreboardTeam scoreboardteam = this.a(astring[i], minecraftserver);
 
         if (scoreboardteam != null) {
             scoreboard.removeTeam(scoreboardteam);
-            a(icommandlistener, this, "commands.scoreboard.teams.remove.success", new Object[] { scoreboardteam.getName()});
+            a(icommandlistener, (ICommand) this, "commands.scoreboard.teams.remove.success", new Object[] { scoreboardteam.getName()});
         }
     }
 
-    protected void f(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        Scoreboard scoreboard = this.d();
+    protected void e(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
 
         if (astring.length > i) {
-            ScoreboardTeam scoreboardteam = this.e(astring[i]);
+            ScoreboardTeam scoreboardteam = this.a(astring[i], minecraftserver);
 
             if (scoreboardteam == null) {
                 return;
@@ -416,7 +435,7 @@ public class CommandScoreboard extends CommandAbstract {
             Collection collection = scoreboardteam.getPlayerNameSet();
 
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, collection.size());
-            if (collection.size() <= 0) {
+            if (collection.isEmpty()) {
                 throw new CommandException("commands.scoreboard.teams.list.player.empty", new Object[] { scoreboardteam.getName()});
             }
 
@@ -429,7 +448,7 @@ public class CommandScoreboard extends CommandAbstract {
             Collection collection1 = scoreboard.getTeams();
 
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, collection1.size());
-            if (collection1.size() <= 0) {
+            if (collection1.isEmpty()) {
                 throw new CommandException("commands.scoreboard.teams.list.empty", new Object[0]);
             }
 
@@ -448,15 +467,15 @@ public class CommandScoreboard extends CommandAbstract {
 
     }
 
-    protected void g(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        Scoreboard scoreboard = this.d();
+    protected void f(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
         String s = astring[i++];
         HashSet hashset = Sets.newHashSet();
         HashSet hashset1 = Sets.newHashSet();
         String s1;
 
         if (icommandlistener instanceof EntityHuman && i == astring.length) {
-            s1 = b(icommandlistener).getName();
+            s1 = a(icommandlistener).getName();
             if (scoreboard.addPlayerToTeam(s1, s)) {
                 hashset.add(s1);
             } else {
@@ -466,12 +485,12 @@ public class CommandScoreboard extends CommandAbstract {
             while (i < astring.length) {
                 s1 = astring[i++];
                 if (s1.startsWith("@")) {
-                    List list = c(icommandlistener, s1);
+                    List list = c(minecraftserver, icommandlistener, s1);
                     Iterator iterator = list.iterator();
 
                     while (iterator.hasNext()) {
                         Entity entity = (Entity) iterator.next();
-                        String s2 = e(icommandlistener, entity.getUniqueID().toString());
+                        String s2 = e(minecraftserver, icommandlistener, entity.getUniqueID().toString());
 
                         if (scoreboard.addPlayerToTeam(s2, s)) {
                             hashset.add(s2);
@@ -480,7 +499,7 @@ public class CommandScoreboard extends CommandAbstract {
                         }
                     }
                 } else {
-                    String s3 = e(icommandlistener, s1);
+                    String s3 = e(minecraftserver, icommandlistener, s1);
 
                     if (scoreboard.addPlayerToTeam(s3, s)) {
                         hashset.add(s3);
@@ -493,7 +512,7 @@ public class CommandScoreboard extends CommandAbstract {
 
         if (!hashset.isEmpty()) {
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ENTITIES, hashset.size());
-            a(icommandlistener, this, "commands.scoreboard.teams.join.success", new Object[] { Integer.valueOf(hashset.size()), s, a(hashset.toArray(new String[hashset.size()]))});
+            a(icommandlistener, (ICommand) this, "commands.scoreboard.teams.join.success", new Object[] { Integer.valueOf(hashset.size()), s, a(hashset.toArray(new String[hashset.size()]))});
         }
 
         if (!hashset1.isEmpty()) {
@@ -501,14 +520,14 @@ public class CommandScoreboard extends CommandAbstract {
         }
     }
 
-    protected void h(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        Scoreboard scoreboard = this.d();
+    protected void g(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
         HashSet hashset = Sets.newHashSet();
         HashSet hashset1 = Sets.newHashSet();
         String s;
 
         if (icommandlistener instanceof EntityHuman && i == astring.length) {
-            s = b(icommandlistener).getName();
+            s = a(icommandlistener).getName();
             if (scoreboard.removePlayerFromTeam(s)) {
                 hashset.add(s);
             } else {
@@ -518,12 +537,12 @@ public class CommandScoreboard extends CommandAbstract {
             while (i < astring.length) {
                 s = astring[i++];
                 if (s.startsWith("@")) {
-                    List list = c(icommandlistener, s);
+                    List list = c(minecraftserver, icommandlistener, s);
                     Iterator iterator = list.iterator();
 
                     while (iterator.hasNext()) {
                         Entity entity = (Entity) iterator.next();
-                        String s1 = e(icommandlistener, entity.getUniqueID().toString());
+                        String s1 = e(minecraftserver, icommandlistener, entity.getUniqueID().toString());
 
                         if (scoreboard.removePlayerFromTeam(s1)) {
                             hashset.add(s1);
@@ -532,7 +551,7 @@ public class CommandScoreboard extends CommandAbstract {
                         }
                     }
                 } else {
-                    String s2 = e(icommandlistener, s);
+                    String s2 = e(minecraftserver, icommandlistener, s);
 
                     if (scoreboard.removePlayerFromTeam(s2)) {
                         hashset.add(s2);
@@ -545,7 +564,7 @@ public class CommandScoreboard extends CommandAbstract {
 
         if (!hashset.isEmpty()) {
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ENTITIES, hashset.size());
-            a(icommandlistener, this, "commands.scoreboard.teams.leave.success", new Object[] { Integer.valueOf(hashset.size()), a(hashset.toArray(new String[hashset.size()]))});
+            a(icommandlistener, (ICommand) this, "commands.scoreboard.teams.leave.success", new Object[] { Integer.valueOf(hashset.size()), a(hashset.toArray(new String[hashset.size()]))});
         }
 
         if (!hashset1.isEmpty()) {
@@ -553,9 +572,9 @@ public class CommandScoreboard extends CommandAbstract {
         }
     }
 
-    protected void i(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        Scoreboard scoreboard = this.d();
-        ScoreboardTeam scoreboardteam = this.e(astring[i]);
+    protected void h(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
+        ScoreboardTeam scoreboardteam = this.a(astring[i], minecraftserver);
 
         if (scoreboardteam != null) {
             ArrayList arraylist = Lists.newArrayList(scoreboardteam.getPlayerNameSet());
@@ -572,24 +591,24 @@ public class CommandScoreboard extends CommandAbstract {
                     scoreboard.removePlayerFromTeam(s, scoreboardteam);
                 }
 
-                a(icommandlistener, this, "commands.scoreboard.teams.empty.success", new Object[] { Integer.valueOf(arraylist.size()), scoreboardteam.getName()});
+                a(icommandlistener, (ICommand) this, "commands.scoreboard.teams.empty.success", new Object[] { Integer.valueOf(arraylist.size()), scoreboardteam.getName()});
             }
         }
     }
 
-    protected void h(ICommandListener icommandlistener, String s) throws CommandException {
-        Scoreboard scoreboard = this.d();
-        ScoreboardObjective scoreboardobjective = this.a(s, false);
+    protected void a(ICommandListener icommandlistener, String s, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
+        ScoreboardObjective scoreboardobjective = this.a(s, false, minecraftserver);
 
         scoreboard.unregisterObjective(scoreboardobjective);
-        a(icommandlistener, this, "commands.scoreboard.objectives.remove.success", new Object[] { s});
+        a(icommandlistener, (ICommand) this, "commands.scoreboard.objectives.remove.success", new Object[] { s});
     }
 
-    protected void d(ICommandListener icommandlistener) throws CommandException {
-        Scoreboard scoreboard = this.d();
+    protected void a(ICommandListener icommandlistener, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
         Collection collection = scoreboard.getObjectives();
 
-        if (collection.size() <= 0) {
+        if (collection.isEmpty()) {
             throw new CommandException("commands.scoreboard.objectives.list.empty", new Object[0]);
         } else {
             ChatMessage chatmessage = new ChatMessage("commands.scoreboard.objectives.list.count", new Object[] { Integer.valueOf(collection.size())});
@@ -607,14 +626,14 @@ public class CommandScoreboard extends CommandAbstract {
         }
     }
 
-    protected void j(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        Scoreboard scoreboard = this.d();
+    protected void i(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
         String s = astring[i++];
         int j = Scoreboard.getSlotForName(s);
         ScoreboardObjective scoreboardobjective = null;
 
         if (astring.length == 4) {
-            scoreboardobjective = this.a(astring[i], false);
+            scoreboardobjective = this.a(astring[i], false, minecraftserver);
         }
 
         if (j < 0) {
@@ -622,23 +641,23 @@ public class CommandScoreboard extends CommandAbstract {
         } else {
             scoreboard.setDisplaySlot(j, scoreboardobjective);
             if (scoreboardobjective != null) {
-                a(icommandlistener, this, "commands.scoreboard.objectives.setdisplay.successSet", new Object[] { Scoreboard.getSlotName(j), scoreboardobjective.getName()});
+                a(icommandlistener, (ICommand) this, "commands.scoreboard.objectives.setdisplay.successSet", new Object[] { Scoreboard.getSlotName(j), scoreboardobjective.getName()});
             } else {
-                a(icommandlistener, this, "commands.scoreboard.objectives.setdisplay.successCleared", new Object[] { Scoreboard.getSlotName(j)});
+                a(icommandlistener, (ICommand) this, "commands.scoreboard.objectives.setdisplay.successCleared", new Object[] { Scoreboard.getSlotName(j)});
             }
 
         }
     }
 
-    protected void k(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        Scoreboard scoreboard = this.d();
+    protected void j(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
 
         if (astring.length > i) {
-            String s = e(icommandlistener, astring[i]);
+            String s = e(minecraftserver, icommandlistener, astring[i]);
             Map map = scoreboard.getPlayerObjectives(s);
 
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, map.size());
-            if (map.size() <= 0) {
+            if (map.isEmpty()) {
                 throw new CommandException("commands.scoreboard.players.list.player.empty", new Object[] { s});
             }
 
@@ -657,7 +676,7 @@ public class CommandScoreboard extends CommandAbstract {
             Collection collection = scoreboard.getPlayers();
 
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, collection.size());
-            if (collection.size() <= 0) {
+            if (collection.isEmpty()) {
                 throw new CommandException("commands.scoreboard.players.list.empty", new Object[0]);
             }
 
@@ -670,25 +689,24 @@ public class CommandScoreboard extends CommandAbstract {
 
     }
 
-    protected void l(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
+    protected void k(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
         String s = astring[i - 1];
         int j = i;
-        String s1 = e(icommandlistener, astring[i++]);
+        String s1 = e(minecraftserver, icommandlistener, astring[i++]);
 
         if (s1.length() > 40) {
             throw new ExceptionInvalidSyntax("commands.scoreboard.players.name.tooLong", new Object[] { s1, Integer.valueOf(40)});
         } else {
-            ScoreboardObjective scoreboardobjective = this.a(astring[i++], true);
+            ScoreboardObjective scoreboardobjective = this.a(astring[i++], true, minecraftserver);
             int k = s.equalsIgnoreCase("set") ? a(astring[i++]) : a(astring[i++], 0);
 
             if (astring.length > i) {
-                Entity entity = b(icommandlistener, astring[j]);
+                Entity entity = b(minecraftserver, icommandlistener, astring[j]);
 
                 try {
                     NBTTagCompound nbttagcompound = MojangsonParser.parse(a(astring, i));
-                    NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                    NBTTagCompound nbttagcompound1 = a(entity);
 
-                    entity.e(nbttagcompound1);
                     if (!GameProfileSerializer.a(nbttagcompound, nbttagcompound1, true)) {
                         throw new CommandException("commands.scoreboard.players.set.tagMismatch", new Object[] { s1});
                     }
@@ -697,7 +715,7 @@ public class CommandScoreboard extends CommandAbstract {
                 }
             }
 
-            Scoreboard scoreboard = this.d();
+            Scoreboard scoreboard = this.a(minecraftserver);
             ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s1, scoreboardobjective);
 
             if (s.equalsIgnoreCase("set")) {
@@ -708,34 +726,34 @@ public class CommandScoreboard extends CommandAbstract {
                 scoreboardscore.removeScore(k);
             }
 
-            a(icommandlistener, this, "commands.scoreboard.players.set.success", new Object[] { scoreboardobjective.getName(), s1, Integer.valueOf(scoreboardscore.getScore())});
+            a(icommandlistener, (ICommand) this, "commands.scoreboard.players.set.success", new Object[] { scoreboardobjective.getName(), s1, Integer.valueOf(scoreboardscore.getScore())});
         }
     }
 
-    protected void m(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        Scoreboard scoreboard = this.d();
-        String s = e(icommandlistener, astring[i++]);
+    protected void l(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
+        String s = e(minecraftserver, icommandlistener, astring[i++]);
 
         if (astring.length > i) {
-            ScoreboardObjective scoreboardobjective = this.a(astring[i++], false);
+            ScoreboardObjective scoreboardobjective = this.a(astring[i++], false, minecraftserver);
 
             scoreboard.resetPlayerScores(s, scoreboardobjective);
-            a(icommandlistener, this, "commands.scoreboard.players.resetscore.success", new Object[] { scoreboardobjective.getName(), s});
+            a(icommandlistener, (ICommand) this, "commands.scoreboard.players.resetscore.success", new Object[] { scoreboardobjective.getName(), s});
         } else {
             scoreboard.resetPlayerScores(s, (ScoreboardObjective) null);
-            a(icommandlistener, this, "commands.scoreboard.players.reset.success", new Object[] { s});
+            a(icommandlistener, (ICommand) this, "commands.scoreboard.players.reset.success", new Object[] { s});
         }
 
     }
 
-    protected void n(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        Scoreboard scoreboard = this.d();
-        String s = d(icommandlistener, astring[i++]);
+    protected void m(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
+        String s = d(minecraftserver, icommandlistener, astring[i++]);
 
         if (s.length() > 40) {
             throw new ExceptionInvalidSyntax("commands.scoreboard.players.name.tooLong", new Object[] { s, Integer.valueOf(40)});
         } else {
-            ScoreboardObjective scoreboardobjective = this.a(astring[i], false);
+            ScoreboardObjective scoreboardobjective = this.a(astring[i], false, minecraftserver);
 
             if (scoreboardobjective.getCriteria() != IScoreboardCriteria.c) {
                 throw new CommandException("commands.scoreboard.players.enable.noTrigger", new Object[] { scoreboardobjective.getName()});
@@ -743,19 +761,19 @@ public class CommandScoreboard extends CommandAbstract {
                 ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s, scoreboardobjective);
 
                 scoreboardscore.a(false);
-                a(icommandlistener, this, "commands.scoreboard.players.enable.success", new Object[] { scoreboardobjective.getName(), s});
+                a(icommandlistener, (ICommand) this, "commands.scoreboard.players.enable.success", new Object[] { scoreboardobjective.getName(), s});
             }
         }
     }
 
-    protected void o(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        Scoreboard scoreboard = this.d();
-        String s = e(icommandlistener, astring[i++]);
+    protected void n(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
+        String s = e(minecraftserver, icommandlistener, astring[i++]);
 
         if (s.length() > 40) {
             throw new ExceptionInvalidSyntax("commands.scoreboard.players.name.tooLong", new Object[] { s, Integer.valueOf(40)});
         } else {
-            ScoreboardObjective scoreboardobjective = this.a(astring[i++], false);
+            ScoreboardObjective scoreboardobjective = this.a(astring[i++], false, minecraftserver);
 
             if (!scoreboard.b(s, scoreboardobjective)) {
                 throw new CommandException("commands.scoreboard.players.test.notFound", new Object[] { scoreboardobjective.getName(), s});
@@ -767,7 +785,7 @@ public class CommandScoreboard extends CommandAbstract {
                 ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s, scoreboardobjective);
 
                 if (scoreboardscore.getScore() >= j && scoreboardscore.getScore() <= k) {
-                    a(icommandlistener, this, "commands.scoreboard.players.test.success", new Object[] { Integer.valueOf(scoreboardscore.getScore()), Integer.valueOf(j), Integer.valueOf(k)});
+                    a(icommandlistener, (ICommand) this, "commands.scoreboard.players.test.success", new Object[] { Integer.valueOf(scoreboardscore.getScore()), Integer.valueOf(j), Integer.valueOf(k)});
                 } else {
                     throw new CommandException("commands.scoreboard.players.test.failed", new Object[] { Integer.valueOf(scoreboardscore.getScore()), Integer.valueOf(j), Integer.valueOf(k)});
                 }
@@ -775,13 +793,13 @@ public class CommandScoreboard extends CommandAbstract {
         }
     }
 
-    protected void p(ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        Scoreboard scoreboard = this.d();
-        String s = e(icommandlistener, astring[i++]);
-        ScoreboardObjective scoreboardobjective = this.a(astring[i++], true);
+    protected void o(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
+        Scoreboard scoreboard = this.a(minecraftserver);
+        String s = e(minecraftserver, icommandlistener, astring[i++]);
+        ScoreboardObjective scoreboardobjective = this.a(astring[i++], true, minecraftserver);
         String s1 = astring[i++];
-        String s2 = e(icommandlistener, astring[i++]);
-        ScoreboardObjective scoreboardobjective1 = this.a(astring[i], false);
+        String s2 = e(minecraftserver, icommandlistener, astring[i++]);
+        ScoreboardObjective scoreboardobjective1 = this.a(astring[i], false, minecraftserver);
 
         if (s.length() > 40) {
             throw new ExceptionInvalidSyntax("commands.scoreboard.players.name.tooLong", new Object[] { s, Integer.valueOf(40)});
@@ -826,12 +844,67 @@ public class CommandScoreboard extends CommandAbstract {
                     scoreboardscore1.setScore(j);
                 }
 
-                a(icommandlistener, this, "commands.scoreboard.players.operation.success", new Object[0]);
+                a(icommandlistener, (ICommand) this, "commands.scoreboard.players.operation.success", new Object[0]);
             }
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    protected void a(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
+        String s = e(minecraftserver, icommandlistener, astring[i]);
+        Entity entity = b(minecraftserver, icommandlistener, astring[i++]);
+        String s1 = astring[i++];
+        Set set = entity.P();
+
+        if ("list".equals(s1)) {
+            if (!set.isEmpty()) {
+                ChatMessage chatmessage = new ChatMessage("commands.scoreboard.players.tag.list", new Object[] { s});
+
+                chatmessage.getChatModifier().setColor(EnumChatFormat.DARK_GREEN);
+                icommandlistener.sendMessage(chatmessage);
+                icommandlistener.sendMessage(new ChatComponentText(a(set.toArray())));
+            }
+
+            icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, set.size());
+        } else if (astring.length < 5) {
+            throw new ExceptionUsage("commands.scoreboard.players.tag.usage", new Object[0]);
+        } else {
+            String s2 = astring[i++];
+
+            if (astring.length > i) {
+                try {
+                    NBTTagCompound nbttagcompound = MojangsonParser.parse(a(astring, i));
+                    NBTTagCompound nbttagcompound1 = a(entity);
+
+                    if (!GameProfileSerializer.a(nbttagcompound, nbttagcompound1, true)) {
+                        throw new CommandException("commands.scoreboard.players.tag.tagMismatch", new Object[] { s});
+                    }
+                } catch (MojangsonParseException mojangsonparseexception) {
+                    throw new CommandException("commands.scoreboard.players.tag.tagError", new Object[] { mojangsonparseexception.getMessage()});
+                }
+            }
+
+            if ("add".equals(s1)) {
+                if (!entity.a(s2)) {
+                    throw new CommandException("commands.scoreboard.players.tag.tooMany", new Object[] { Integer.valueOf(1024)});
+                }
+
+                a(icommandlistener, (ICommand) this, "commands.scoreboard.players.tag.success.add", new Object[] { s2});
+            } else {
+                if (!"remove".equals(s1)) {
+                    throw new ExceptionUsage("commands.scoreboard.players.tag.usage", new Object[0]);
+                }
+
+                if (!entity.b(s2)) {
+                    throw new CommandException("commands.scoreboard.players.tag.notFound", new Object[] { s2});
+                }
+
+                a(icommandlistener, (ICommand) this, "commands.scoreboard.players.tag.success.remove", new Object[] { s2});
+            }
+
+        }
+    }
+
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         if (astring.length == 1) {
             return a(astring, new String[] { "objectives", "players", "teams"});
         } else {
@@ -848,7 +921,7 @@ public class CommandScoreboard extends CommandAbstract {
                     }
                 } else if (astring[1].equalsIgnoreCase("remove")) {
                     if (astring.length == 3) {
-                        return a(astring, (Collection) this.a(false));
+                        return a(astring, (Collection) this.a(false, minecraftserver));
                     }
                 } else if (astring[1].equalsIgnoreCase("setdisplay")) {
                     if (astring.length == 3) {
@@ -856,31 +929,31 @@ public class CommandScoreboard extends CommandAbstract {
                     }
 
                     if (astring.length == 4) {
-                        return a(astring, (Collection) this.a(false));
+                        return a(astring, (Collection) this.a(false, minecraftserver));
                     }
                 }
             } else if (astring[0].equalsIgnoreCase("players")) {
                 if (astring.length == 2) {
-                    return a(astring, new String[] { "set", "add", "remove", "reset", "list", "enable", "test", "operation"});
+                    return a(astring, new String[] { "set", "add", "remove", "reset", "list", "enable", "test", "operation", "tag"});
                 }
 
                 if (!astring[1].equalsIgnoreCase("set") && !astring[1].equalsIgnoreCase("add") && !astring[1].equalsIgnoreCase("remove") && !astring[1].equalsIgnoreCase("reset")) {
                     if (astring[1].equalsIgnoreCase("enable")) {
                         if (astring.length == 3) {
-                            return a(astring, MinecraftServer.getServer().getPlayers());
+                            return a(astring, minecraftserver.getPlayers());
                         }
 
                         if (astring.length == 4) {
-                            return a(astring, (Collection) this.e());
+                            return a(astring, (Collection) this.b(minecraftserver));
                         }
                     } else if (!astring[1].equalsIgnoreCase("list") && !astring[1].equalsIgnoreCase("test")) {
                         if (astring[1].equalsIgnoreCase("operation")) {
                             if (astring.length == 3) {
-                                return a(astring, this.d().getPlayers());
+                                return a(astring, this.a(minecraftserver).getPlayers());
                             }
 
                             if (astring.length == 4) {
-                                return a(astring, (Collection) this.a(true));
+                                return a(astring, (Collection) this.a(true, minecraftserver));
                             }
 
                             if (astring.length == 5) {
@@ -888,29 +961,37 @@ public class CommandScoreboard extends CommandAbstract {
                             }
 
                             if (astring.length == 6) {
-                                return a(astring, MinecraftServer.getServer().getPlayers());
+                                return a(astring, minecraftserver.getPlayers());
                             }
 
                             if (astring.length == 7) {
-                                return a(astring, (Collection) this.a(false));
+                                return a(astring, (Collection) this.a(false, minecraftserver));
+                            }
+                        } else if (astring[1].equalsIgnoreCase("tag")) {
+                            if (astring.length == 3) {
+                                return a(astring, this.a(minecraftserver).getPlayers());
+                            }
+
+                            if (astring.length == 4) {
+                                return a(astring, new String[] { "add", "remove", "list"});
                             }
                         }
                     } else {
                         if (astring.length == 3) {
-                            return a(astring, this.d().getPlayers());
+                            return a(astring, this.a(minecraftserver).getPlayers());
                         }
 
                         if (astring.length == 4 && astring[1].equalsIgnoreCase("test")) {
-                            return a(astring, (Collection) this.a(false));
+                            return a(astring, (Collection) this.a(false, minecraftserver));
                         }
                     }
                 } else {
                     if (astring.length == 3) {
-                        return a(astring, MinecraftServer.getServer().getPlayers());
+                        return a(astring, minecraftserver.getPlayers());
                     }
 
                     if (astring.length == 4) {
-                        return a(astring, (Collection) this.a(true));
+                        return a(astring, (Collection) this.a(true, minecraftserver));
                     }
                 }
             } else if (astring[0].equalsIgnoreCase("teams")) {
@@ -920,25 +1001,25 @@ public class CommandScoreboard extends CommandAbstract {
 
                 if (astring[1].equalsIgnoreCase("join")) {
                     if (astring.length == 3) {
-                        return a(astring, this.d().getTeamNames());
+                        return a(astring, this.a(minecraftserver).getTeamNames());
                     }
 
                     if (astring.length >= 4) {
-                        return a(astring, MinecraftServer.getServer().getPlayers());
+                        return a(astring, minecraftserver.getPlayers());
                     }
                 } else {
                     if (astring[1].equalsIgnoreCase("leave")) {
-                        return a(astring, MinecraftServer.getServer().getPlayers());
+                        return a(astring, minecraftserver.getPlayers());
                     }
 
                     if (!astring[1].equalsIgnoreCase("empty") && !astring[1].equalsIgnoreCase("list") && !astring[1].equalsIgnoreCase("remove")) {
                         if (astring[1].equalsIgnoreCase("option")) {
                             if (astring.length == 3) {
-                                return a(astring, this.d().getTeamNames());
+                                return a(astring, this.a(minecraftserver).getTeamNames());
                             }
 
                             if (astring.length == 4) {
-                                return a(astring, new String[] { "color", "friendlyfire", "seeFriendlyInvisibles", "nametagVisibility", "deathMessageVisibility"});
+                                return a(astring, new String[] { "color", "friendlyfire", "seeFriendlyInvisibles", "nametagVisibility", "deathMessageVisibility", "collisionRule"});
                             }
 
                             if (astring.length == 5) {
@@ -950,23 +1031,27 @@ public class CommandScoreboard extends CommandAbstract {
                                     return a(astring, ScoreboardTeamBase.EnumNameTagVisibility.a());
                                 }
 
+                                if (astring[3].equalsIgnoreCase("collisionRule")) {
+                                    return a(astring, ScoreboardTeamBase.EnumTeamPush.a());
+                                }
+
                                 if (astring[3].equalsIgnoreCase("friendlyfire") || astring[3].equalsIgnoreCase("seeFriendlyInvisibles")) {
                                     return a(astring, new String[] { "true", "false"});
                                 }
                             }
                         }
                     } else if (astring.length == 3) {
-                        return a(astring, this.d().getTeamNames());
+                        return a(astring, this.a(minecraftserver).getTeamNames());
                     }
                 }
             }
 
-            return null;
+            return Collections.emptyList();
         }
     }
 
-    protected List<String> a(boolean flag) {
-        Collection collection = this.d().getObjectives();
+    protected List<String> a(boolean flag, MinecraftServer minecraftserver) {
+        Collection collection = this.a(minecraftserver).getObjectives();
         ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = collection.iterator();
 
@@ -981,8 +1066,8 @@ public class CommandScoreboard extends CommandAbstract {
         return arraylist;
     }
 
-    protected List<String> e() {
-        Collection collection = this.d().getObjectives();
+    protected List<String> b(MinecraftServer minecraftserver) {
+        Collection collection = this.a(minecraftserver).getObjectives();
         ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = collection.iterator();
 

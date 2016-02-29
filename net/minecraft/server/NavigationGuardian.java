@@ -11,27 +11,27 @@ public class NavigationGuardian extends NavigationAbstract {
     }
 
     protected boolean b() {
-        return this.o();
+        return this.p();
     }
 
     protected Vec3D c() {
-        return new Vec3D(this.b.locX, this.b.locY + (double) this.b.length * 0.5D, this.b.locZ);
+        return new Vec3D(this.a.locX, this.a.locY + (double) this.a.length * 0.5D, this.a.locZ);
     }
 
-    protected void l() {
+    protected void m() {
         Vec3D vec3d = this.c();
-        float f = this.b.width * this.b.width;
+        float f = this.a.width * this.a.width;
         byte b0 = 6;
 
-        if (vec3d.distanceSquared(this.d.a(this.b, this.d.e())) < (double) f) {
-            this.d.a();
+        if (vec3d.distanceSquared(this.c.a(this.a, this.c.e())) < (double) f) {
+            this.c.a();
         }
 
-        for (int i = Math.min(this.d.e() + b0, this.d.d() - 1); i > this.d.e(); --i) {
-            Vec3D vec3d1 = this.d.a(this.b, i);
+        for (int i = Math.min(this.c.e() + b0, this.c.d() - 1); i > this.c.e(); --i) {
+            Vec3D vec3d1 = this.c.a(this.a, i);
 
             if (vec3d1.distanceSquared(vec3d) <= 36.0D && this.a(vec3d, vec3d1, 0, 0, 0)) {
-                this.d.c(i);
+                this.c.c(i);
                 break;
             }
         }
@@ -44,8 +44,12 @@ public class NavigationGuardian extends NavigationAbstract {
     }
 
     protected boolean a(Vec3D vec3d, Vec3D vec3d1, int i, int j, int k) {
-        MovingObjectPosition movingobjectposition = this.c.rayTrace(vec3d, new Vec3D(vec3d1.a, vec3d1.b + (double) this.b.length * 0.5D, vec3d1.c), false, true, false);
+        MovingObjectPosition movingobjectposition = this.b.rayTrace(vec3d, new Vec3D(vec3d1.x, vec3d1.y + (double) this.a.length * 0.5D, vec3d1.z), false, true, false);
 
         return movingobjectposition == null || movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.MISS;
+    }
+
+    public boolean b(BlockPosition blockposition) {
+        return !this.b.getType(blockposition).b();
     }
 }

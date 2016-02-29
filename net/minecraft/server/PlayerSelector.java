@@ -64,7 +64,8 @@ public class PlayerSelector {
                 return Collections.emptyList();
             } else {
                 String s1 = matcher.group(1);
-                BlockPosition blockposition = b(map, icommandlistener.getChunkCoordinates());
+                BlockPosition blockposition = a(map, icommandlistener.getChunkCoordinates());
+                Vec3D vec3d = b(map, icommandlistener.d());
                 List list = a(icommandlistener, map);
                 ArrayList arraylist = Lists.newArrayList();
                 Iterator iterator = list.iterator();
@@ -79,9 +80,10 @@ public class PlayerSelector {
                         arraylist1.addAll(b(map));
                         arraylist1.addAll(c(map));
                         arraylist1.addAll(d(map));
+                        arraylist1.addAll(c(icommandlistener, map));
                         arraylist1.addAll(e(map));
                         arraylist1.addAll(f(map));
-                        arraylist1.addAll(a(map, blockposition));
+                        arraylist1.addAll(a(map, vec3d));
                         arraylist1.addAll(g(map));
                         arraylist.addAll(a(map, oclass, (List) arraylist1, s1, world, blockposition));
                     }
@@ -100,7 +102,7 @@ public class PlayerSelector {
         if (h(map)) {
             arraylist.add(icommandlistener.getWorld());
         } else {
-            Collections.addAll(arraylist, MinecraftServer.getServer().worldServer);
+            Collections.addAll(arraylist, icommandlistener.h().worldServer);
         }
 
         return arraylist;
@@ -188,17 +190,36 @@ public class PlayerSelector {
 
     private static List<Predicate<Entity>> c(Map<String, String> map) {
         ArrayList arraylist = Lists.newArrayList();
-        final int i = a(map, "m", WorldSettings.EnumGamemode.NOT_SET.getId());
+        String s = b(map, "m");
 
-        if (i != WorldSettings.EnumGamemode.NOT_SET.getId()) {
+        if (s == null) {
+            return arraylist;
+        } else {
+            final boolean flag = s.startsWith("!");
+
+            if (flag) {
+                s = s.substring(1);
+            }
+
+            final WorldSettings.EnumGamemode worldsettings_enumgamemode;
+
+            try {
+                int i = Integer.parseInt(s);
+
+                worldsettings_enumgamemode = WorldSettings.EnumGamemode.a(i, WorldSettings.EnumGamemode.NOT_SET);
+            } catch (Throwable throwable) {
+                worldsettings_enumgamemode = WorldSettings.EnumGamemode.a(s, WorldSettings.EnumGamemode.NOT_SET);
+            }
+
             arraylist.add(new Predicate() {
                 public boolean a(Entity entity) {
                     if (!(entity instanceof EntityPlayer)) {
                         return false;
                     } else {
                         EntityPlayer entityplayer = (EntityPlayer) entity;
+                        WorldSettings.EnumGamemode worldsettings_enumgamemode = entityplayer.playerInteractManager.getGameMode();
 
-                        return entityplayer.playerInteractManager.getGameMode().getId() == i;
+                        return flag ? worldsettings_enumgamemode != worldsettings_enumgamemode1 : worldsettings_enumgamemode == worldsettings_enumgamemode1;
                     }
                 }
 
@@ -206,9 +227,8 @@ public class PlayerSelector {
                     return this.a((Entity) object);
                 }
             });
+            return arraylist;
         }
-
-        return arraylist;
     }
 
     private static List<Predicate<Entity>> d(Map<String, String> map) {
@@ -227,7 +247,7 @@ public class PlayerSelector {
                         return false;
                     } else {
                         EntityLiving entityliving = (EntityLiving) entity;
-                        ScoreboardTeamBase scoreboardteambase = entityliving.getScoreboardTeam();
+                        ScoreboardTeamBase scoreboardteambase = entityliving.aO();
                         String s = scoreboardteambase == null ? "" : scoreboardteambase.getName();
 
                         return s.equals(s1) != flag;
@@ -243,14 +263,15 @@ public class PlayerSelector {
         return arraylist;
     }
 
-    private static List<Predicate<Entity>> e(Map<String, String> map) {
-        ArrayList arraylist = Lists.newArrayList();
+    private static List<Predicate<Entity>> c(final ICommandListener icommandlistener, Map<String, String> map) {
         final Map map1 = a(map);
 
-        if (map1 != null && map1.size() > 0) {
-            arraylist.add(new Predicate() {
-                public boolean a(Entity entity) {
-                    Scoreboard scoreboard = MinecraftServer.getServer().getWorldServer(0).getScoreboard();
+        return (List) (map1.isEmpty() ? Collections.emptyList() : Lists.newArrayList(new Predicate[] { new Predicate() {
+            public boolean a(Entity entity) {
+                if (entity == null) {
+                    return false;
+                } else {
+                    Scoreboard scoreboard = icommandlistener.h().getWorldServer(0).getScoreboard();
                     Iterator iterator = map.entrySet().iterator();
 
                     Entry entry;
@@ -293,6 +314,28 @@ public class PlayerSelector {
 
                     return false;
                 }
+            }
+
+            public boolean apply(Object object) {
+                return this.a((Entity) object);
+            }
+        }}));
+    }
+
+    private static List<Predicate<Entity>> e(Map<String, String> map) {
+        ArrayList arraylist = Lists.newArrayList();
+        final String s = b(map, "name");
+        final boolean flag = s != null && s.startsWith("!");
+
+        if (flag) {
+            s = s.substring(1);
+        }
+
+        if (s != null) {
+            arraylist.add(new Predicate() {
+                public boolean a(Entity entity) {
+                    return entity != null && entity.getName().equals(s) != flag;
+                }
 
                 public boolean apply(Object object) {
                     return this.a((Entity) object);
@@ -305,7 +348,7 @@ public class PlayerSelector {
 
     private static List<Predicate<Entity>> f(Map<String, String> map) {
         ArrayList arraylist = Lists.newArrayList();
-        final String s = b(map, "name");
+        final String s = b(map, "tag");
         final boolean flag = s != null && s.startsWith("!");
 
         if (flag) {
@@ -315,7 +358,7 @@ public class PlayerSelector {
         if (s != null) {
             arraylist.add(new Predicate() {
                 public boolean a(Entity entity) {
-                    return entity.getName().equals(s) != flag;
+                    return entity == null ? false : ("".equals(s) ? entity.P().isEmpty() != flag : entity.P().contains(s) != flag);
                 }
 
                 public boolean apply(Object object) {
@@ -327,29 +370,36 @@ public class PlayerSelector {
         return arraylist;
     }
 
-    private static List<Predicate<Entity>> a(Map<String, String> map, final BlockPosition blockposition) {
-        ArrayList arraylist = Lists.newArrayList();
-        final int i = a(map, "rm", -1);
-        final int j = a(map, "r", -1);
+    private static List<Predicate<Entity>> a(Map<String, String> map, final Vec3D vec3d) {
+        double d0 = (double) a(map, "rm", -1);
+        double d1 = (double) a(map, "r", -1);
+        final boolean flag = d0 < -0.5D;
+        final boolean flag1 = d1 < -0.5D;
 
-        if (blockposition != null && (i >= 0 || j >= 0)) {
-            final int k = i * i;
-            final int l = j * j;
+        if (flag && flag1) {
+            return Collections.emptyList();
+        } else {
+            double d2 = Math.max(d0, 1.0E-4D);
+            final double d3 = d2 * d2;
+            double d4 = Math.max(d1, 1.0E-4D);
+            final double d5 = d4 * d4;
 
-            arraylist.add(new Predicate() {
+            return Lists.newArrayList(new Predicate[] { new Predicate() {
                 public boolean a(Entity entity) {
-                    int i = (int) entity.c(blockposition);
+                    if (entity == null) {
+                        return false;
+                    } else {
+                        double d0 = vec3d.c(entity.locX, entity.locY, entity.locZ);
 
-                    return (j < 0 || i >= k) && (l < 0 || i <= i1);
+                        return (flag || d0 >= d1) && (flag1 || d0 <= d2);
+                    }
                 }
 
                 public boolean apply(Object object) {
                     return this.a((Entity) object);
                 }
-            });
+            }});
         }
-
-        return arraylist;
     }
 
     private static List<Predicate<Entity>> g(Map<String, String> map) {
@@ -358,13 +408,17 @@ public class PlayerSelector {
         final int j;
 
         if (map.containsKey("rym") || map.containsKey("ry")) {
-            i = a(a(map, "rym", 0));
-            j = a(a(map, "ry", 359));
+            i = MathHelper.b(a(map, "rym", 0));
+            j = MathHelper.b(a(map, "ry", 359));
             arraylist.add(new Predicate() {
                 public boolean a(Entity entity) {
-                    int i = PlayerSelector.a((int) Math.floor((double) entity.yaw));
+                    if (entity == null) {
+                        return false;
+                    } else {
+                        int i = MathHelper.b(MathHelper.d(entity.yaw));
 
-                    return j > k ? i >= j || i <= k : i >= j && i <= k;
+                        return j > k ? i >= j || i <= k : i >= j && i <= k;
+                    }
                 }
 
                 public boolean apply(Object object) {
@@ -374,13 +428,17 @@ public class PlayerSelector {
         }
 
         if (map.containsKey("rxm") || map.containsKey("rx")) {
-            i = a(a(map, "rxm", 0));
-            j = a(a(map, "rx", 359));
+            i = MathHelper.b(a(map, "rxm", 0));
+            j = MathHelper.b(a(map, "rx", 359));
             arraylist.add(new Predicate() {
                 public boolean a(Entity entity) {
-                    int i = PlayerSelector.a((int) Math.floor((double) entity.pitch));
+                    if (entity == null) {
+                        return false;
+                    } else {
+                        int i = MathHelper.b(MathHelper.d(entity.pitch));
 
-                    return j > k ? i >= j || i <= k : i >= j && i <= k;
+                        return j > k ? i >= j || i <= k : i >= j && i <= k;
+                    }
                 }
 
                 public boolean apply(Object object) {
@@ -405,52 +463,43 @@ public class PlayerSelector {
         int l = a(map, "r", -1);
         Predicate predicate = Predicates.and(list);
         Predicate predicate1 = Predicates.and(IEntitySelector.a, predicate);
+        int i1 = world.players.size();
+        int j1 = world.entityList.size();
+        boolean flag2 = i1 < j1 / 16;
+        final AxisAlignedBB axisalignedbb;
 
-        if (blockposition != null) {
-            int i1 = world.players.size();
-            int j1 = world.entityList.size();
-            boolean flag2 = i1 < j1 / 16;
-            final AxisAlignedBB axisalignedbb;
-
-            if (!map.containsKey("dx") && !map.containsKey("dy") && !map.containsKey("dz")) {
-                if (l >= 0) {
-                    axisalignedbb = new AxisAlignedBB((double) (blockposition.getX() - l), (double) (blockposition.getY() - l), (double) (blockposition.getZ() - l), (double) (blockposition.getX() + l + 1), (double) (blockposition.getY() + l + 1), (double) (blockposition.getZ() + l + 1));
-                    if (flag && flag2 && !flag1) {
-                        arraylist.addAll(world.b(oclass, predicate1));
-                    } else {
-                        arraylist.addAll(world.a(oclass, axisalignedbb, predicate1));
-                    }
-                } else if (s.equals("a")) {
-                    arraylist.addAll(world.b(oclass, predicate));
-                } else if (!s.equals("p") && (!s.equals("r") || flag1)) {
-                    arraylist.addAll(world.a(oclass, predicate1));
-                } else {
-                    arraylist.addAll(world.b(oclass, predicate1));
-                }
-            } else {
-                axisalignedbb = a(blockposition, i, j, k);
+        if (!map.containsKey("dx") && !map.containsKey("dy") && !map.containsKey("dz")) {
+            if (l >= 0) {
+                axisalignedbb = new AxisAlignedBB((double) (blockposition.getX() - l), (double) (blockposition.getY() - l), (double) (blockposition.getZ() - l), (double) (blockposition.getX() + l + 1), (double) (blockposition.getY() + l + 1), (double) (blockposition.getZ() + l + 1));
                 if (flag && flag2 && !flag1) {
-                    Predicate predicate2 = new Predicate() {
-                        public boolean a(Entity entity) {
-                            return entity.locX >= axisalignedbb.a && entity.locY >= axisalignedbb.b && entity.locZ >= axisalignedbb.c ? entity.locX < axisalignedbb.d && entity.locY < axisalignedbb.e && entity.locZ < axisalignedbb.f : false;
-                        }
-
-                        public boolean apply(Object object) {
-                            return this.a((Entity) object);
-                        }
-                    };
-
-                    arraylist.addAll(world.b(oclass, Predicates.and(predicate1, predicate2)));
+                    arraylist.addAll(world.b(oclass, predicate1));
                 } else {
                     arraylist.addAll(world.a(oclass, axisalignedbb, predicate1));
                 }
+            } else if (s.equals("a")) {
+                arraylist.addAll(world.b(oclass, predicate));
+            } else if (!s.equals("p") && (!s.equals("r") || flag1)) {
+                arraylist.addAll(world.a(oclass, predicate1));
+            } else {
+                arraylist.addAll(world.b(oclass, predicate1));
             }
-        } else if (s.equals("a")) {
-            arraylist.addAll(world.b(oclass, predicate));
-        } else if (!s.equals("p") && (!s.equals("r") || flag1)) {
-            arraylist.addAll(world.a(oclass, predicate1));
         } else {
-            arraylist.addAll(world.b(oclass, predicate1));
+            axisalignedbb = a(blockposition, i, j, k);
+            if (flag && flag2 && !flag1) {
+                Predicate predicate2 = new Predicate() {
+                    public boolean a(Entity entity) {
+                        return entity != null && axisalignedbb.b(entity.getBoundingBox());
+                    }
+
+                    public boolean apply(Object object) {
+                        return this.a((Entity) object);
+                    }
+                };
+
+                arraylist.addAll(world.b(oclass, Predicates.and(predicate1, predicate2)));
+            } else {
+                arraylist.addAll(world.a(oclass, axisalignedbb, predicate1));
+            }
         }
 
         return arraylist;
@@ -463,10 +512,10 @@ public class PlayerSelector {
             if (s.equals("r")) {
                 Collections.shuffle((List) list);
             }
-        } else if (blockposition != null) {
+        } else {
             Collections.sort((List) list, new Comparator() {
                 public int a(Entity entity, Entity entity1) {
-                    return ComparisonChain.start().compare(entity.b(blockposition), entity1.b(blockposition)).result();
+                    return ComparisonChain.start().compare(entity.c(blockposition), entity1.c(blockposition)).result();
                 }
 
                 public int compare(Object object, Object object1) {
@@ -506,21 +555,16 @@ public class PlayerSelector {
         return new AxisAlignedBB((double) l, (double) i1, (double) j1, (double) k1, (double) l1, (double) i2);
     }
 
-    public static int a(int i) {
-        i %= 360;
-        if (i >= 160) {
-            i -= 360;
-        }
-
-        if (i < 0) {
-            i += 360;
-        }
-
-        return i;
+    private static BlockPosition a(Map<String, String> map, BlockPosition blockposition) {
+        return new BlockPosition(a(map, "x", blockposition.getX()), a(map, "y", blockposition.getY()), a(map, "z", blockposition.getZ()));
     }
 
-    private static BlockPosition b(Map<String, String> map, BlockPosition blockposition) {
-        return new BlockPosition(a(map, "x", blockposition.getX()), a(map, "y", blockposition.getY()), a(map, "z", blockposition.getZ()));
+    private static Vec3D b(Map<String, String> map, Vec3D vec3d) {
+        return new Vec3D(a(map, "x", vec3d.x, true), a(map, "y", vec3d.y, false), a(map, "z", vec3d.z, true));
+    }
+
+    private static double a(Map<String, String> map, String s, double d0, boolean flag) {
+        return map.containsKey(s) ? (double) MathHelper.a((String) map.get(s), MathHelper.floor(d0)) + (flag ? 0.5D : 0.0D) : d0;
     }
 
     private static boolean h(Map<String, String> map) {
@@ -609,7 +653,7 @@ public class PlayerSelector {
                     s1 = "r";
                 }
 
-                if (s1 != null && matcher.group(1).length() > 0) {
+                if (s1 != null && !matcher.group(1).isEmpty()) {
                     hashmap.put(s1, matcher.group(1));
                 }
             }

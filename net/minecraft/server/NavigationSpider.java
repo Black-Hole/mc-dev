@@ -25,20 +25,20 @@ public class NavigationSpider extends Navigation {
             return this.a(pathentity, d0);
         } else {
             this.f = new BlockPosition(entity);
-            this.e = d0;
+            this.d = d0;
             return true;
         }
     }
 
-    public void k() {
-        if (!this.m()) {
-            super.k();
+    public void l() {
+        if (!this.n()) {
+            super.l();
         } else {
             if (this.f != null) {
-                double d0 = (double) (this.b.width * this.b.width);
+                double d0 = (double) (this.a.width * this.a.width);
 
-                if (this.b.c(this.f) >= d0 && (this.b.locY <= (double) this.f.getY() || this.b.c(new BlockPosition(this.f.getX(), MathHelper.floor(this.b.locY), this.f.getZ())) >= d0)) {
-                    this.b.getControllerMove().a((double) this.f.getX(), (double) this.f.getY(), (double) this.f.getZ(), this.e);
+                if (this.a.d(this.f) >= d0 && (this.a.locY <= (double) this.f.getY() || this.a.d(new BlockPosition(this.f.getX(), MathHelper.floor(this.a.locY), this.f.getZ())) >= d0)) {
+                    this.a.getControllerMove().a((double) this.f.getX(), (double) this.f.getY(), (double) this.f.getZ(), this.d);
                 } else {
                     this.f = null;
                 }

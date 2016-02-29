@@ -21,11 +21,11 @@ public class BlockSeaLantern extends Block {
         return Items.PRISMARINE_CRYSTALS;
     }
 
-    public MaterialMapColor g(IBlockData iblockdata) {
+    public MaterialMapColor r(IBlockData iblockdata) {
         return MaterialMapColor.p;
     }
 
-    protected boolean I() {
+    protected boolean o() {
         return true;
     }
 }

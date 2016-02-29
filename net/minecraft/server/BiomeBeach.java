@@ -2,14 +2,14 @@ package net.minecraft.server;
 
 public class BiomeBeach extends BiomeBase {
 
-    public BiomeBeach(int i) {
-        super(i);
-        this.au.clear();
-        this.ak = Blocks.SAND.getBlockData();
-        this.al = Blocks.SAND.getBlockData();
-        this.as.A = -999;
-        this.as.D = 0;
-        this.as.F = 0;
-        this.as.G = 0;
+    public BiomeBeach(BiomeBase.a biomebase_a) {
+        super(biomebase_a);
+        this.v.clear();
+        this.r = Blocks.SAND.getBlockData();
+        this.s = Blocks.SAND.getBlockData();
+        this.t.z = -999;
+        this.t.C = 0;
+        this.t.E = 0;
+        this.t.F = 0;
     }
 }

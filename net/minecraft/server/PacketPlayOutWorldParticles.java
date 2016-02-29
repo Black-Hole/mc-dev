@@ -52,7 +52,7 @@ public class PacketPlayOutWorldParticles implements Packet<PacketListenerPlayOut
         this.k = new int[i];
 
         for (int j = 0; j < i; ++j) {
-            this.k[j] = packetdataserializer.e();
+            this.k[j] = packetdataserializer.g();
         }
 
     }

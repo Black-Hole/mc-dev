@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class EntityEnderPearl extends EntityProjectile {
 
-    private EntityLiving c;
+    private EntityLiving d;
 
     public EntityEnderPearl(World world) {
         super(world);
@@ -10,18 +10,36 @@ public class EntityEnderPearl extends EntityProjectile {
 
     public EntityEnderPearl(World world, EntityLiving entityliving) {
         super(world, entityliving);
-        this.c = entityliving;
+        this.d = entityliving;
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
         EntityLiving entityliving = this.getShooter();
 
         if (movingobjectposition.entity != null) {
-            if (movingobjectposition.entity == this.c) {
+            if (movingobjectposition.entity == this.d) {
                 return;
             }
 
             movingobjectposition.entity.damageEntity(DamageSource.projectile(this, entityliving), 0.0F);
+        }
+
+        if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
+            BlockPosition blockposition = movingobjectposition.a();
+            TileEntity tileentity = this.world.getTileEntity(blockposition);
+
+            if (tileentity instanceof TileEntityEndGateway) {
+                TileEntityEndGateway tileentityendgateway = (TileEntityEndGateway) tileentity;
+
+                if (entityliving != null) {
+                    tileentityendgateway.a((Entity) entityliving);
+                    this.die();
+                    return;
+                }
+
+                tileentityendgateway.a((Entity) this);
+                return;
+            }
         }
 
         for (int i = 0; i < 32; ++i) {
@@ -32,7 +50,7 @@ public class EntityEnderPearl extends EntityProjectile {
             if (entityliving instanceof EntityPlayer) {
                 EntityPlayer entityplayer = (EntityPlayer) entityliving;
 
-                if (entityplayer.playerConnection.a().g() && entityplayer.world == this.world && !entityplayer.isSleeping()) {
+                if (entityplayer.playerConnection.a().isConnected() && entityplayer.world == this.world && !entityplayer.isSleeping()) {
                     if (this.random.nextFloat() < 0.05F && this.world.getGameRules().getBoolean("doMobSpawning")) {
                         EntityEndermite entityendermite = new EntityEndermite(this.world);
 
@@ -41,8 +59,8 @@ public class EntityEnderPearl extends EntityProjectile {
                         this.world.addEntity(entityendermite);
                     }
 
-                    if (entityliving.au()) {
-                        entityliving.mount((Entity) null);
+                    if (entityliving.isPassenger()) {
+                        this.stopRiding();
                     }
 
                     entityliving.enderTeleportTo(this.locX, this.locY, this.locZ);
@@ -59,13 +77,13 @@ public class EntityEnderPearl extends EntityProjectile {
 
     }
 
-    public void t_() {
+    public void m() {
         EntityLiving entityliving = this.getShooter();
 
         if (entityliving != null && entityliving instanceof EntityHuman && !entityliving.isAlive()) {
             this.die();
         } else {
-            super.t_();
+            super.m();
         }
 
     }

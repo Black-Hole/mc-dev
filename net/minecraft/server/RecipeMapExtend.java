@@ -47,7 +47,7 @@ public class RecipeMapExtend extends ShapedRecipes {
             itemstack.setTag(new NBTTagCompound());
         }
 
-        itemstack.getTag().setBoolean("map_is_scaling", true);
+        itemstack.getTag().setInt("map_scale_direction", 1);
         return itemstack;
     }
 }

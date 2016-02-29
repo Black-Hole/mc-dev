@@ -24,6 +24,9 @@ public class GameRules {
         this.a("randomTickSpeed", "3", GameRules.EnumGameRuleType.NUMERICAL_VALUE);
         this.a("sendCommandFeedback", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
         this.a("reducedDebugInfo", "false", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("spectatorsGenerateChunks", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("spawnRadius", "10", GameRules.EnumGameRuleType.NUMERICAL_VALUE);
+        this.a("disableElytraMovementCheck", "false", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
     }
 
     public void a(String s, String s1, GameRules.EnumGameRuleType gamerules_enumgameruletype) {

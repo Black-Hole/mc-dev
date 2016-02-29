@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class TileEntityEnchantTable extends TileEntity implements IUpdatePlayerListBox, ITileEntityContainer {
+public class TileEntityEnchantTable extends TileEntity implements ITickable, ITileEntityContainer {
 
     public int a;
     public float f;
@@ -19,8 +19,8 @@ public class TileEntityEnchantTable extends TileEntity implements IUpdatePlayerL
 
     public TileEntityEnchantTable() {}
 
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void save(NBTTagCompound nbttagcompound) {
+        super.save(nbttagcompound);
         if (this.hasCustomName()) {
             nbttagcompound.setString("CustomName", this.p);
         }
@@ -38,7 +38,7 @@ public class TileEntityEnchantTable extends TileEntity implements IUpdatePlayerL
     public void c() {
         this.k = this.j;
         this.m = this.l;
-        EntityHuman entityhuman = this.world.findNearbyPlayer((double) ((float) this.position.getX() + 0.5F), (double) ((float) this.position.getY() + 0.5F), (double) ((float) this.position.getZ() + 0.5F), 3.0D);
+        EntityHuman entityhuman = this.world.a((double) ((float) this.position.getX() + 0.5F), (double) ((float) this.position.getY() + 0.5F), (double) ((float) this.position.getZ() + 0.5F), 3.0D, false);
 
         if (entityhuman != null) {
             double d0 = entityhuman.locX - (double) ((float) this.position.getX() + 0.5F);
@@ -101,7 +101,7 @@ public class TileEntityEnchantTable extends TileEntity implements IUpdatePlayerL
     }
 
     public boolean hasCustomName() {
-        return this.p != null && this.p.length() > 0;
+        return this.p != null && !this.p.isEmpty();
     }
 
     public void a(String s) {

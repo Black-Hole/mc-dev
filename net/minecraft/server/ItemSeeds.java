@@ -11,17 +11,13 @@ public class ItemSeeds extends Item {
         this.a(CreativeModeTab.l);
     }
 
-    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (enumdirection != EnumDirection.UP) {
-            return false;
-        } else if (!entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
-            return false;
-        } else if (world.getType(blockposition).getBlock() == this.b && world.isEmpty(blockposition.up())) {
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        if (enumdirection == EnumDirection.UP && entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack) && world.getType(blockposition).getBlock() == this.b && world.isEmpty(blockposition.up())) {
             world.setTypeUpdate(blockposition.up(), this.a.getBlockData());
             --itemstack.count;
-            return true;
+            return EnumInteractionResult.SUCCESS;
         } else {
-            return false;
+            return EnumInteractionResult.FAIL;
         }
     }
 }

@@ -3,44 +3,50 @@ package net.minecraft.server;
 public class PathEntity {
 
     private final PathPoint[] a;
-    private int b;
-    private int c;
+    private PathPoint[] b = new PathPoint[0];
+    private PathPoint[] c = new PathPoint[0];
+    private int e;
+    private int f;
 
     public PathEntity(PathPoint[] apathpoint) {
         this.a = apathpoint;
-        this.c = apathpoint.length;
+        this.f = apathpoint.length;
     }
 
     public void a() {
-        ++this.b;
+        ++this.e;
     }
 
     public boolean b() {
-        return this.b >= this.c;
+        return this.e >= this.f;
     }
 
     public PathPoint c() {
-        return this.c > 0 ? this.a[this.c - 1] : null;
+        return this.f > 0 ? this.a[this.f - 1] : null;
     }
 
     public PathPoint a(int i) {
         return this.a[i];
     }
 
+    public void a(int i, PathPoint pathpoint) {
+        this.a[i] = pathpoint;
+    }
+
     public int d() {
-        return this.c;
+        return this.f;
     }
 
     public void b(int i) {
-        this.c = i;
+        this.f = i;
     }
 
     public int e() {
-        return this.b;
+        return this.e;
     }
 
     public void c(int i) {
-        this.b = i;
+        this.e = i;
     }
 
     public Vec3D a(Entity entity, int i) {
@@ -52,7 +58,13 @@ public class PathEntity {
     }
 
     public Vec3D a(Entity entity) {
-        return this.a(entity, this.b);
+        return this.a(entity, this.e);
+    }
+
+    public Vec3D f() {
+        PathPoint pathpoint = this.a[this.e];
+
+        return new Vec3D((double) pathpoint.a, (double) pathpoint.b, (double) pathpoint.c);
     }
 
     public boolean a(PathEntity pathentity) {
@@ -74,6 +86,6 @@ public class PathEntity {
     public boolean b(Vec3D vec3d) {
         PathPoint pathpoint = this.c();
 
-        return pathpoint == null ? false : pathpoint.a == (int) vec3d.a && pathpoint.c == (int) vec3d.c;
+        return pathpoint == null ? false : pathpoint.a == (int) vec3d.x && pathpoint.c == (int) vec3d.z;
     }
 }

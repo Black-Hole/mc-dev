@@ -15,26 +15,29 @@ public class EntityAIBodyControl {
         double d1 = this.a.locZ - this.a.lastZ;
 
         if (d0 * d0 + d1 * d1 > 2.500000277905201E-7D) {
-            this.a.aI = this.a.yaw;
-            this.a.aK = this.a(this.a.aI, this.a.aK, 75.0F);
-            this.c = this.a.aK;
+            this.a.aM = this.a.yaw;
+            this.a.aO = this.a(this.a.aM, this.a.aO, 75.0F);
+            this.c = this.a.aO;
             this.b = 0;
         } else {
-            float f = 75.0F;
+            if (this.a.bu().isEmpty() || !(this.a.bu().get(0) instanceof EntityInsentient)) {
+                float f = 75.0F;
 
-            if (Math.abs(this.a.aK - this.c) > 15.0F) {
-                this.b = 0;
-                this.c = this.a.aK;
-            } else {
-                ++this.b;
-                boolean flag = true;
+                if (Math.abs(this.a.aO - this.c) > 15.0F) {
+                    this.b = 0;
+                    this.c = this.a.aO;
+                } else {
+                    ++this.b;
+                    boolean flag = true;
 
-                if (this.b > 10) {
-                    f = Math.max(1.0F - (float) (this.b - 10) / 10.0F, 0.0F) * 75.0F;
+                    if (this.b > 10) {
+                        f = Math.max(1.0F - (float) (this.b - 10) / 10.0F, 0.0F) * 75.0F;
+                    }
                 }
+
+                this.a.aM = this.a(this.a.aO, this.a.aM, f);
             }
 
-            this.a.aI = this.a(this.a.aK, this.a.aI, f);
         }
     }
 

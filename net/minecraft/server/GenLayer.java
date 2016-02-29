@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import java.util.concurrent.Callable;
-
 public abstract class GenLayer {
 
     private long c;
@@ -36,7 +34,7 @@ public abstract class GenLayer {
         int j = 4;
         int k = j;
 
-        if (worldtype == WorldType.CUSTOMIZED && s.length() > 0) {
+        if (worldtype == WorldType.CUSTOMIZED && !s.isEmpty()) {
             customworldsettingsfinal = CustomWorldSettingsFinal.CustomWorldSettings.a(s).b();
             j = customworldsettingsfinal.G;
             k = customworldsettingsfinal.H;
@@ -133,45 +131,18 @@ public abstract class GenLayer {
     protected static boolean a(int i, int j) {
         if (i == j) {
             return true;
-        } else if (i != BiomeBase.MESA_PLATEAU_F.id && i != BiomeBase.MESA_PLATEAU.id) {
-            final BiomeBase biomebase = BiomeBase.getBiome(i);
-            final BiomeBase biomebase1 = BiomeBase.getBiome(j);
-
-            try {
-                return biomebase != null && biomebase1 != null ? biomebase.a(biomebase1) : false;
-            } catch (Throwable throwable) {
-                CrashReport crashreport = CrashReport.a(throwable, "Comparing biomes");
-                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Biomes being compared");
-
-                crashreportsystemdetails.a("Biome A ID", (Object) Integer.valueOf(i));
-                crashreportsystemdetails.a("Biome B ID", (Object) Integer.valueOf(j));
-                crashreportsystemdetails.a("Biome A", new Callable() {
-                    public String a() throws Exception {
-                        return String.valueOf(biomebase);
-                    }
-
-                    public Object call() throws Exception {
-                        return this.a();
-                    }
-                });
-                crashreportsystemdetails.a("Biome B", new Callable() {
-                    public String a() throws Exception {
-                        return String.valueOf(biomebase);
-                    }
-
-                    public Object call() throws Exception {
-                        return this.a();
-                    }
-                });
-                throw new ReportedException(crashreport);
-            }
         } else {
-            return j == BiomeBase.MESA_PLATEAU_F.id || j == BiomeBase.MESA_PLATEAU.id;
+            BiomeBase biomebase = BiomeBase.getBiome(i);
+            BiomeBase biomebase1 = BiomeBase.getBiome(j);
+
+            return biomebase != null && biomebase1 != null ? (biomebase != Biomes.N && biomebase != Biomes.O ? biomebase == biomebase1 || biomebase.g() == biomebase1.g() : biomebase1 == Biomes.N || biomebase1 == Biomes.O) : false;
         }
     }
 
     protected static boolean b(int i) {
-        return i == BiomeBase.OCEAN.id || i == BiomeBase.DEEP_OCEAN.id || i == BiomeBase.FROZEN_OCEAN.id;
+        BiomeBase biomebase = BiomeBase.getBiome(i);
+
+        return biomebase == Biomes.a || biomebase == Biomes.z || biomebase == Biomes.l;
     }
 
     protected int a(int... aint) {

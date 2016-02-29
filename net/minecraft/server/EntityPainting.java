@@ -59,16 +59,17 @@ public class EntityPainting extends EntityHanging {
         super.a(nbttagcompound);
     }
 
-    public int l() {
+    public int getWidth() {
         return this.art.C;
     }
 
-    public int m() {
+    public int getHeight() {
         return this.art.D;
     }
 
-    public void b(Entity entity) {
+    public void a(Entity entity) {
         if (this.world.getGameRules().getBoolean("doEntityDrops")) {
+            this.a(SoundEffects.dN, 1.0F, 1.0F);
             if (entity instanceof EntityHuman) {
                 EntityHuman entityhuman = (EntityHuman) entity;
 
@@ -81,10 +82,12 @@ public class EntityPainting extends EntityHanging {
         }
     }
 
-    public void setPositionRotation(double d0, double d1, double d2, float f, float f1) {
-        BlockPosition blockposition = this.blockPosition.a(d0 - this.locX, d1 - this.locY, d2 - this.locZ);
+    public void o() {
+        this.a(SoundEffects.dO, 1.0F, 1.0F);
+    }
 
-        this.setPosition((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
+    public void setPositionRotation(double d0, double d1, double d2, float f, float f1) {
+        this.setPosition(d0, d1, d2);
     }
 
     public static enum EnumArt {

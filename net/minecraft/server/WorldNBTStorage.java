@@ -13,28 +13,34 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldNBTStorage implements IDataManager, IPlayerFileData {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger b = LogManager.getLogger();
     private final File baseDir;
     private final File playerDir;
     private final File dataDir;
-    private final long sessionId = MinecraftServer.az();
-    private final String f;
+    private final long sessionId = MinecraftServer.av();
+    private final String g;
+    private final DefinedStructureManager h;
+    protected final DataConverterManager a;
 
-    public WorldNBTStorage(File file, String s, boolean flag) {
+    public WorldNBTStorage(File file, String s, boolean flag, DataConverterManager dataconvertermanager) {
+        this.a = dataconvertermanager;
         this.baseDir = new File(file, s);
         this.baseDir.mkdirs();
         this.playerDir = new File(this.baseDir, "playerdata");
         this.dataDir = new File(this.baseDir, "data");
         this.dataDir.mkdirs();
-        this.f = s;
+        this.g = s;
         if (flag) {
             this.playerDir.mkdirs();
+            this.h = new DefinedStructureManager((new File(this.baseDir, "structures")).toString());
+        } else {
+            this.h = null;
         }
 
-        this.h();
+        this.i();
     }
 
-    private void h() {
+    private void i() {
         try {
             File file = new File(this.baseDir, "session.lock");
             DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(file));
@@ -79,31 +85,17 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
 
     public WorldData getWorldData() {
         File file = new File(this.baseDir, "level.dat");
-        NBTTagCompound nbttagcompound;
-        NBTTagCompound nbttagcompound1;
 
         if (file.exists()) {
-            try {
-                nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));
-                nbttagcompound1 = nbttagcompound.getCompound("Data");
-                return new WorldData(nbttagcompound1);
-            } catch (Exception exception) {
-                exception.printStackTrace();
+            WorldData worlddata = WorldLoader.a(file, this.a);
+
+            if (worlddata != null) {
+                return worlddata;
             }
         }
 
         file = new File(this.baseDir, "level.dat_old");
-        if (file.exists()) {
-            try {
-                nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));
-                nbttagcompound1 = nbttagcompound.getCompound("Data");
-                return new WorldData(nbttagcompound1);
-            } catch (Exception exception1) {
-                exception1.printStackTrace();
-            }
-        }
-
-        return null;
+        return file.exists() ? WorldLoader.a(file, this.a) : null;
     }
 
     public void saveWorldData(WorldData worlddata, NBTTagCompound nbttagcompound) {
@@ -138,34 +130,7 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
     }
 
     public void saveWorldData(WorldData worlddata) {
-        NBTTagCompound nbttagcompound = worlddata.a();
-        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-
-        nbttagcompound1.set("Data", nbttagcompound);
-
-        try {
-            File file = new File(this.baseDir, "level.dat_new");
-            File file1 = new File(this.baseDir, "level.dat_old");
-            File file2 = new File(this.baseDir, "level.dat");
-
-            NBTCompressedStreamTools.a(nbttagcompound1, (OutputStream) (new FileOutputStream(file)));
-            if (file1.exists()) {
-                file1.delete();
-            }
-
-            file2.renameTo(file1);
-            if (file2.exists()) {
-                file2.delete();
-            }
-
-            file.renameTo(file2);
-            if (file.exists()) {
-                file.delete();
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-
+        this.saveWorldData(worlddata, (NBTTagCompound) null);
     }
 
     public void save(EntityHuman entityhuman) {
@@ -183,7 +148,7 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
 
             file.renameTo(file1);
         } catch (Exception exception) {
-            WorldNBTStorage.a.warn("Failed to save player data for " + entityhuman.getName());
+            WorldNBTStorage.b.warn("Failed to save player data for " + entityhuman.getName());
         }
 
     }
@@ -198,11 +163,11 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
                 nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));
             }
         } catch (Exception exception) {
-            WorldNBTStorage.a.warn("Failed to load player data for " + entityhuman.getName());
+            WorldNBTStorage.b.warn("Failed to load player data for " + entityhuman.getName());
         }
 
         if (nbttagcompound != null) {
-            entityhuman.f(nbttagcompound);
+            entityhuman.f(this.a.a((DataConverterType) DataConverterTypes.PLAYER, nbttagcompound));
         }
 
         return nbttagcompound;
@@ -234,7 +199,7 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
         return new File(this.dataDir, s + ".dat");
     }
 
-    public String g() {
-        return this.f;
+    public DefinedStructureManager h() {
+        return this.h;
     }
 }

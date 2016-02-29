@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class EnchantmentLootBonus extends Enchantment {
 
-    protected EnchantmentLootBonus(int i, MinecraftKey minecraftkey, int j, EnchantmentSlotType enchantmentslottype) {
-        super(i, minecraftkey, j, enchantmentslottype);
+    protected EnchantmentLootBonus(Enchantment.Rarity enchantment_rarity, EnchantmentSlotType enchantmentslottype, EnumItemSlot... aenumitemslot) {
+        super(enchantment_rarity, enchantmentslottype, aenumitemslot);
         if (enchantmentslottype == EnchantmentSlotType.DIGGER) {
             this.c("lootBonusDigger");
         } else if (enchantmentslottype == EnchantmentSlotType.FISHING_ROD) {
@@ -27,6 +27,6 @@ public class EnchantmentLootBonus extends Enchantment {
     }
 
     public boolean a(Enchantment enchantment) {
-        return super.a(enchantment) && enchantment.id != EnchantmentLootBonus.SILK_TOUCH.id;
+        return super.a(enchantment) && enchantment != Enchantments.SILK_TOUCH;
     }
 }

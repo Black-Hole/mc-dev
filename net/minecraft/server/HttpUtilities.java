@@ -56,14 +56,12 @@ public class HttpUtilities {
         return stringbuilder.toString();
     }
 
-    public static String a(URL url, Map<String, Object> map, boolean flag) {
-        return a(url, a(map), flag);
+    public static String a(URL url, Map<String, Object> map, boolean flag, Proxy proxy) {
+        return a(url, a(map), flag, proxy);
     }
 
-    private static String a(URL url, String s, boolean flag) {
+    private static String a(URL url, String s, boolean flag, Proxy proxy) {
         try {
-            Proxy proxy = MinecraftServer.getServer() == null ? null : MinecraftServer.getServer().ay();
-
             if (proxy == null) {
                 proxy = Proxy.NO_PROXY;
             }

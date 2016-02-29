@@ -19,12 +19,12 @@ public class PacketStatusListener implements PacketStatusInListener {
             this.networkManager.close(PacketStatusListener.a);
         } else {
             this.d = true;
-            this.networkManager.handle(new PacketStatusOutServerInfo(this.minecraftServer.aG()));
+            this.networkManager.sendPacket(new PacketStatusOutServerInfo(this.minecraftServer.getServerPing()));
         }
     }
 
     public void a(PacketStatusInPing packetstatusinping) {
-        this.networkManager.handle(new PacketStatusOutPong(packetstatusinping.a()));
+        this.networkManager.sendPacket(new PacketStatusOutPong(packetstatusinping.a()));
         this.networkManager.close(PacketStatusListener.a);
     }
 }

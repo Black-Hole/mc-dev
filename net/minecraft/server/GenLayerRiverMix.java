@@ -23,14 +23,14 @@ public class GenLayerRiverMix extends GenLayer {
         int[] aint2 = IntCache.a(k * l);
 
         for (int i1 = 0; i1 < k * l; ++i1) {
-            if (aint[i1] != BiomeBase.OCEAN.id && aint[i1] != BiomeBase.DEEP_OCEAN.id) {
-                if (aint1[i1] == BiomeBase.RIVER.id) {
-                    if (aint[i1] == BiomeBase.ICE_PLAINS.id) {
-                        aint2[i1] = BiomeBase.FROZEN_RIVER.id;
-                    } else if (aint[i1] != BiomeBase.MUSHROOM_ISLAND.id && aint[i1] != BiomeBase.MUSHROOM_SHORE.id) {
+            if (aint[i1] != BiomeBase.a(Biomes.a) && aint[i1] != BiomeBase.a(Biomes.z)) {
+                if (aint1[i1] == BiomeBase.a(Biomes.i)) {
+                    if (aint[i1] == BiomeBase.a(Biomes.n)) {
+                        aint2[i1] = BiomeBase.a(Biomes.m);
+                    } else if (aint[i1] != BiomeBase.a(Biomes.p) && aint[i1] != BiomeBase.a(Biomes.q)) {
                         aint2[i1] = aint1[i1] & 255;
                     } else {
-                        aint2[i1] = BiomeBase.MUSHROOM_SHORE.id;
+                        aint2[i1] = BiomeBase.a(Biomes.q);
                     }
                 } else {
                     aint2[i1] = aint[i1];

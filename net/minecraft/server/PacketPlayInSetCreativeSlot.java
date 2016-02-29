@@ -15,7 +15,7 @@ public class PacketPlayInSetCreativeSlot implements Packet<PacketListenerPlayIn>
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.slot = packetdataserializer.readShort();
-        this.b = packetdataserializer.i();
+        this.b = packetdataserializer.k();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

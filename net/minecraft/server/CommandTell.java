@@ -23,11 +23,11 @@ public class CommandTell extends CommandAbstract {
         return "commands.message.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.message.usage", new Object[0]);
         } else {
-            EntityPlayer entityplayer = a(icommandlistener, astring[0]);
+            EntityPlayer entityplayer = a(minecraftserver, icommandlistener, astring[0]);
 
             if (entityplayer == icommandlistener) {
                 throw new ExceptionPlayerNotFound("commands.message.sameTarget", new Object[0]);
@@ -44,8 +44,8 @@ public class CommandTell extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return a(astring, MinecraftServer.getServer().getPlayers());
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return a(astring, minecraftserver.getPlayers());
     }
 
     public boolean isListStart(String[] astring, int i) {

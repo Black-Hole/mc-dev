@@ -37,7 +37,7 @@ public class ItemMultiTexture extends ItemBlock {
         return i;
     }
 
-    public String e_(ItemStack itemstack) {
+    public String f_(ItemStack itemstack) {
         return super.getName() + "." + (String) this.c.apply(itemstack);
     }
 }

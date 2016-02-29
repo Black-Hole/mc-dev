@@ -23,7 +23,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, List<Object> list) throws Exception {
         if (bytebuf.readableBytes() != 0) {
             PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf);
-            int i = packetdataserializer.e();
+            int i = packetdataserializer.g();
             Packet packet = ((EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get()).a(this.c, i);
 
             if (packet == null) {

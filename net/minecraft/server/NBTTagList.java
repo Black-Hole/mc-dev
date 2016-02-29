@@ -108,7 +108,7 @@ public class NBTTagList extends NBTBase {
         }
     }
 
-    public NBTBase a(int i) {
+    public NBTBase remove(int i) {
         return (NBTBase) this.list.remove(i);
     }
 
@@ -120,40 +120,60 @@ public class NBTTagList extends NBTBase {
         if (i >= 0 && i < this.list.size()) {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
-            return nbtbase.getTypeId() == 10 ? (NBTTagCompound) nbtbase : new NBTTagCompound();
-        } else {
-            return new NBTTagCompound();
+            if (nbtbase.getTypeId() == 10) {
+                return (NBTTagCompound) nbtbase;
+            }
         }
+
+        return new NBTTagCompound();
     }
 
-    public int[] c(int i) {
+    public int c(int i) {
         if (i >= 0 && i < this.list.size()) {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
-            return nbtbase.getTypeId() == 11 ? ((NBTTagIntArray) nbtbase).c() : new int[0];
-        } else {
-            return new int[0];
+            if (nbtbase.getTypeId() == 3) {
+                return ((NBTTagInt) nbtbase).d();
+            }
         }
+
+        return 0;
     }
 
-    public double d(int i) {
+    public int[] d(int i) {
         if (i >= 0 && i < this.list.size()) {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
-            return nbtbase.getTypeId() == 6 ? ((NBTTagDouble) nbtbase).g() : 0.0D;
-        } else {
-            return 0.0D;
+            if (nbtbase.getTypeId() == 11) {
+                return ((NBTTagIntArray) nbtbase).c();
+            }
         }
+
+        return new int[0];
     }
 
-    public float e(int i) {
+    public double e(int i) {
         if (i >= 0 && i < this.list.size()) {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
-            return nbtbase.getTypeId() == 5 ? ((NBTTagFloat) nbtbase).h() : 0.0F;
-        } else {
-            return 0.0F;
+            if (nbtbase.getTypeId() == 6) {
+                return ((NBTTagDouble) nbtbase).g();
+            }
         }
+
+        return 0.0D;
+    }
+
+    public float f(int i) {
+        if (i >= 0 && i < this.list.size()) {
+            NBTBase nbtbase = (NBTBase) this.list.get(i);
+
+            if (nbtbase.getTypeId() == 5) {
+                return ((NBTTagFloat) nbtbase).h();
+            }
+        }
+
+        return 0.0F;
     }
 
     public String getString(int i) {
@@ -166,7 +186,7 @@ public class NBTTagList extends NBTBase {
         }
     }
 
-    public NBTBase g(int i) {
+    public NBTBase h(int i) {
         return (NBTBase) (i >= 0 && i < this.list.size() ? (NBTBase) this.list.get(i) : new NBTTagEnd());
     }
 
@@ -206,7 +226,7 @@ public class NBTTagList extends NBTBase {
         return super.hashCode() ^ this.list.hashCode();
     }
 
-    public int f() {
+    public int d() {
         return this.type;
     }
 }

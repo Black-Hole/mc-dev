@@ -22,10 +22,10 @@ public class EntitySmallFireball extends EntityFireball {
             boolean flag;
 
             if (movingobjectposition.entity != null) {
-                flag = movingobjectposition.entity.damageEntity(DamageSource.fireball(this, this.shooter), 5.0F);
-                if (flag) {
-                    this.a(this.shooter, movingobjectposition.entity);
-                    if (!movingobjectposition.entity.isFireProof()) {
+                if (!movingobjectposition.entity.isFireProof()) {
+                    flag = movingobjectposition.entity.damageEntity(DamageSource.fireball(this, this.shooter), 5.0F);
+                    if (flag) {
+                        this.a(this.shooter, movingobjectposition.entity);
                         movingobjectposition.entity.setOnFire(5);
                     }
                 }
@@ -49,7 +49,7 @@ public class EntitySmallFireball extends EntityFireball {
 
     }
 
-    public boolean ad() {
+    public boolean isInteractable() {
         return false;
     }
 

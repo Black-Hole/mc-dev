@@ -1,52 +1,50 @@
 package net.minecraft.server;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 public class WeightedRandom {
 
-    public static int a(Collection<? extends WeightedRandom.WeightedRandomChoice> collection) {
+    public static int a(List<? extends WeightedRandom.WeightedRandomChoice> list) {
         int i = 0;
+        int j = 0;
 
-        WeightedRandom.WeightedRandomChoice weightedrandom_weightedrandomchoice;
+        for (int k = list.size(); j < k; ++j) {
+            WeightedRandom.WeightedRandomChoice weightedrandom_weightedrandomchoice = (WeightedRandom.WeightedRandomChoice) list.get(j);
 
-        for (Iterator iterator = collection.iterator(); iterator.hasNext(); i += weightedrandom_weightedrandomchoice.a) {
-            weightedrandom_weightedrandomchoice = (WeightedRandom.WeightedRandomChoice) iterator.next();
+            i += weightedrandom_weightedrandomchoice.a;
         }
 
         return i;
     }
 
-    public static <T extends WeightedRandom.WeightedRandomChoice> T a(Random random, Collection<T> collection, int i) {
+    public static <T extends WeightedRandom.WeightedRandomChoice> T a(Random random, List<T> list, int i) {
         if (i <= 0) {
             throw new IllegalArgumentException();
         } else {
             int j = random.nextInt(i);
 
-            return a(collection, j);
+            return a(list, j);
         }
     }
 
-    public static <T extends WeightedRandom.WeightedRandomChoice> T a(Collection<T> collection, int i) {
-        Iterator iterator = collection.iterator();
+    public static <T extends WeightedRandom.WeightedRandomChoice> T a(List<T> list, int i) {
+        int j = 0;
 
-        WeightedRandom.WeightedRandomChoice weightedrandom_weightedrandomchoice;
+        for (int k = list.size(); j < k; ++j) {
+            WeightedRandom.WeightedRandomChoice weightedrandom_weightedrandomchoice = (WeightedRandom.WeightedRandomChoice) list.get(j);
 
-        do {
-            if (!iterator.hasNext()) {
-                return null;
-            }
-
-            weightedrandom_weightedrandomchoice = (WeightedRandom.WeightedRandomChoice) iterator.next();
             i -= weightedrandom_weightedrandomchoice.a;
-        } while (i >= 0);
+            if (i < 0) {
+                return weightedrandom_weightedrandomchoice;
+            }
+        }
 
-        return weightedrandom_weightedrandomchoice;
+        return null;
     }
 
-    public static <T extends WeightedRandom.WeightedRandomChoice> T a(Random random, Collection<T> collection) {
-        return a(random, collection, a(collection));
+    public static <T extends WeightedRandom.WeightedRandomChoice> T a(Random random, List<T> list) {
+        return a(random, list, a(list));
     }
 
     public static class WeightedRandomChoice {

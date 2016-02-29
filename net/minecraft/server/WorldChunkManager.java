@@ -6,40 +6,30 @@ import java.util.Random;
 
 public class WorldChunkManager {
 
+    private GenLayer a;
     private GenLayer b;
-    private GenLayer c;
-    private BiomeCache d;
-    private List<BiomeBase> e;
-    private String f;
+    private final BiomeCache c;
+    private final List<BiomeBase> d;
 
     protected WorldChunkManager() {
-        this.d = new BiomeCache(this);
-        this.f = "";
-        this.e = Lists.newArrayList();
-        this.e.add(BiomeBase.FOREST);
-        this.e.add(BiomeBase.PLAINS);
-        this.e.add(BiomeBase.TAIGA);
-        this.e.add(BiomeBase.TAIGA_HILLS);
-        this.e.add(BiomeBase.FOREST_HILLS);
-        this.e.add(BiomeBase.JUNGLE);
-        this.e.add(BiomeBase.JUNGLE_HILLS);
+        this.c = new BiomeCache(this);
+        this.d = Lists.newArrayList(new BiomeBase[] { Biomes.f, Biomes.c, Biomes.g, Biomes.u, Biomes.t, Biomes.w, Biomes.x});
     }
 
-    public WorldChunkManager(long i, WorldType worldtype, String s) {
+    private WorldChunkManager(long i, WorldType worldtype, String s) {
         this();
-        this.f = s;
         GenLayer[] agenlayer = GenLayer.a(i, worldtype, s);
 
-        this.b = agenlayer[0];
-        this.c = agenlayer[1];
+        this.a = agenlayer[0];
+        this.b = agenlayer[1];
     }
 
-    public WorldChunkManager(World world) {
-        this(world.getSeed(), world.getWorldData().getType(), world.getWorldData().getGeneratorOptions());
+    public WorldChunkManager(WorldData worlddata) {
+        this(worlddata.getSeed(), worlddata.getType(), worlddata.getGeneratorOptions());
     }
 
     public List<BiomeBase> a() {
-        return this.e;
+        return this.d;
     }
 
     public BiomeBase getBiome(BlockPosition blockposition) {
@@ -47,41 +37,11 @@ public class WorldChunkManager {
     }
 
     public BiomeBase getBiome(BlockPosition blockposition, BiomeBase biomebase) {
-        return this.d.a(blockposition.getX(), blockposition.getZ(), biomebase);
+        return this.c.a(blockposition.getX(), blockposition.getZ(), biomebase);
     }
 
-    public float[] getWetness(float[] afloat, int i, int j, int k, int l) {
-        IntCache.a();
-        if (afloat == null || afloat.length < k * l) {
-            afloat = new float[k * l];
-        }
-
-        int[] aint = this.c.a(i, j, k, l);
-
-        for (int i1 = 0; i1 < k * l; ++i1) {
-            try {
-                float f = (float) BiomeBase.getBiome(aint[i1], BiomeBase.ad).h() / 65536.0F;
-
-                if (f > 1.0F) {
-                    f = 1.0F;
-                }
-
-                afloat[i1] = f;
-            } catch (Throwable throwable) {
-                CrashReport crashreport = CrashReport.a(throwable, "Invalid Biome id");
-                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("DownfallBlock");
-
-                crashreportsystemdetails.a("biome id", (Object) Integer.valueOf(i1));
-                crashreportsystemdetails.a("downfalls[] size", (Object) Integer.valueOf(afloat.length));
-                crashreportsystemdetails.a("x", (Object) Integer.valueOf(i));
-                crashreportsystemdetails.a("z", (Object) Integer.valueOf(j));
-                crashreportsystemdetails.a("w", (Object) Integer.valueOf(k));
-                crashreportsystemdetails.a("h", (Object) Integer.valueOf(l));
-                throw new ReportedException(crashreport);
-            }
-        }
-
-        return afloat;
+    public float a(float f, int i) {
+        return f;
     }
 
     public BiomeBase[] getBiomes(BiomeBase[] abiomebase, int i, int j, int k, int l) {
@@ -90,11 +50,11 @@ public class WorldChunkManager {
             abiomebase = new BiomeBase[k * l];
         }
 
-        int[] aint = this.b.a(i, j, k, l);
+        int[] aint = this.a.a(i, j, k, l);
 
         try {
             for (int i1 = 0; i1 < k * l; ++i1) {
-                abiomebase[i1] = BiomeBase.getBiome(aint[i1], BiomeBase.ad);
+                abiomebase[i1] = BiomeBase.getBiome(aint[i1], Biomes.b);
             }
 
             return abiomebase;
@@ -122,15 +82,15 @@ public class WorldChunkManager {
         }
 
         if (flag && k == 16 && l == 16 && (i & 15) == 0 && (j & 15) == 0) {
-            BiomeBase[] abiomebase1 = this.d.c(i, j);
+            BiomeBase[] abiomebase1 = this.c.b(i, j);
 
             System.arraycopy(abiomebase1, 0, abiomebase, 0, k * l);
             return abiomebase;
         } else {
-            int[] aint = this.c.a(i, j, k, l);
+            int[] aint = this.b.a(i, j, k, l);
 
             for (int i1 = 0; i1 < k * l; ++i1) {
-                abiomebase[i1] = BiomeBase.getBiome(aint[i1], BiomeBase.ad);
+                abiomebase[i1] = BiomeBase.getBiome(aint[i1], Biomes.b);
             }
 
             return abiomebase;
@@ -145,7 +105,7 @@ public class WorldChunkManager {
         int k1 = j + k >> 2;
         int l1 = j1 - l + 1;
         int i2 = k1 - i1 + 1;
-        int[] aint = this.b.a(l, i1, l1, i2);
+        int[] aint = this.a.a(l, i1, l1, i2);
 
         try {
             for (int j2 = 0; j2 < l1 * i2; ++j2) {
@@ -161,7 +121,7 @@ public class WorldChunkManager {
             CrashReport crashreport = CrashReport.a(throwable, "Invalid Biome id");
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Layer");
 
-            crashreportsystemdetails.a("Layer", (Object) this.b.toString());
+            crashreportsystemdetails.a("Layer", (Object) this.a.toString());
             crashreportsystemdetails.a("x", (Object) Integer.valueOf(i));
             crashreportsystemdetails.a("z", (Object) Integer.valueOf(j));
             crashreportsystemdetails.a("radius", (Object) Integer.valueOf(k));
@@ -178,7 +138,7 @@ public class WorldChunkManager {
         int k1 = j + k >> 2;
         int l1 = j1 - l + 1;
         int i2 = k1 - i1 + 1;
-        int[] aint = this.b.a(l, i1, l1, i2);
+        int[] aint = this.a.a(l, i1, l1, i2);
         BlockPosition blockposition = null;
         int j2 = 0;
 
@@ -197,6 +157,6 @@ public class WorldChunkManager {
     }
 
     public void b() {
-        this.d.a();
+        this.c.a();
     }
 }

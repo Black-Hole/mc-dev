@@ -85,9 +85,9 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
 
                                 if (Math.abs(j1) != i1 || Math.abs(i2) != i1 || random.nextInt(2) != 0 && k != 0) {
                                     blockposition1 = new BlockPosition(l1, j, k1);
-                                    Block block1 = world.getType(blockposition1).getBlock();
+                                    Material material = world.getType(blockposition1).getMaterial();
 
-                                    if (block1.getMaterial() == Material.AIR || block1.getMaterial() == Material.LEAVES || block1.getMaterial() == Material.REPLACEABLE_PLANT) {
+                                    if (material == Material.AIR || material == Material.LEAVES || material == Material.REPLACEABLE_PLANT) {
                                         this.a(world, blockposition1, this.f);
                                     }
                                 }
@@ -96,9 +96,9 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
                     }
 
                     for (j = 0; j < i; ++j) {
-                        Block block2 = world.getType(blockposition.up(j)).getBlock();
+                        Material material1 = world.getType(blockposition.up(j)).getMaterial();
 
-                        if (block2.getMaterial() == Material.AIR || block2.getMaterial() == Material.LEAVES || block2.getMaterial() == Material.REPLACEABLE_PLANT) {
+                        if (material1 == Material.AIR || material1 == Material.LEAVES || material1 == Material.REPLACEABLE_PLANT) {
                             this.a(world, blockposition.up(j), this.e);
                             if (this.d && j > 0) {
                                 if (random.nextInt(3) > 0 && world.isEmpty(blockposition.a(-1, j, 0))) {
@@ -129,26 +129,26 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
                             for (j1 = blockposition.getX() - i1; j1 <= blockposition.getX() + i1; ++j1) {
                                 for (k1 = blockposition.getZ() - i1; k1 <= blockposition.getZ() + i1; ++k1) {
                                     blockposition_mutableblockposition1.c(j1, j, k1);
-                                    if (world.getType(blockposition_mutableblockposition1).getBlock().getMaterial() == Material.LEAVES) {
+                                    if (world.getType(blockposition_mutableblockposition1).getMaterial() == Material.LEAVES) {
                                         BlockPosition blockposition2 = blockposition_mutableblockposition1.west();
 
                                         blockposition1 = blockposition_mutableblockposition1.east();
                                         BlockPosition blockposition3 = blockposition_mutableblockposition1.north();
                                         BlockPosition blockposition4 = blockposition_mutableblockposition1.south();
 
-                                        if (random.nextInt(4) == 0 && world.getType(blockposition2).getBlock().getMaterial() == Material.AIR) {
+                                        if (random.nextInt(4) == 0 && world.getType(blockposition2).getMaterial() == Material.AIR) {
                                             this.b(world, blockposition2, BlockVine.EAST);
                                         }
 
-                                        if (random.nextInt(4) == 0 && world.getType(blockposition1).getBlock().getMaterial() == Material.AIR) {
+                                        if (random.nextInt(4) == 0 && world.getType(blockposition1).getMaterial() == Material.AIR) {
                                             this.b(world, blockposition1, BlockVine.WEST);
                                         }
 
-                                        if (random.nextInt(4) == 0 && world.getType(blockposition3).getBlock().getMaterial() == Material.AIR) {
+                                        if (random.nextInt(4) == 0 && world.getType(blockposition3).getMaterial() == Material.AIR) {
                                             this.b(world, blockposition3, BlockVine.SOUTH);
                                         }
 
-                                        if (random.nextInt(4) == 0 && world.getType(blockposition4).getBlock().getMaterial() == Material.AIR) {
+                                        if (random.nextInt(4) == 0 && world.getType(blockposition4).getMaterial() == Material.AIR) {
                                             this.b(world, blockposition4, BlockVine.NORTH);
                                         }
                                     }
@@ -195,7 +195,7 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
         this.a(world, blockposition, blockstateboolean);
         int i = 4;
 
-        for (blockposition = blockposition.down(); world.getType(blockposition).getBlock().getMaterial() == Material.AIR && i > 0; --i) {
+        for (blockposition = blockposition.down(); world.getType(blockposition).getMaterial() == Material.AIR && i > 0; --i) {
             this.a(world, blockposition, blockstateboolean);
             blockposition = blockposition.down();
         }

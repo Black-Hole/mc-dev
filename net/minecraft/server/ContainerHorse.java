@@ -20,7 +20,7 @@ public class ContainerHorse extends Container {
         });
         this.a(new Slot(iinventory1, 1, 8, 36) {
             public boolean isAllowed(ItemStack itemstack) {
-                return super.isAllowed(itemstack) && entityhorse.cO() && EntityHorse.a(itemstack.getItem());
+                return super.isAllowed(itemstack) && entityhorse.getType().j() && EnumHorseArmor.b(itemstack.getItem());
             }
         });
         int j;

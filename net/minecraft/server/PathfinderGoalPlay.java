@@ -19,7 +19,7 @@ public class PathfinderGoalPlay extends PathfinderGoal {
     public boolean a() {
         if (this.a.getAge() >= 0) {
             return false;
-        } else if (this.a.bc().nextInt(400) != 0) {
+        } else if (this.a.getRandom().nextInt(400) != 0) {
             return false;
         } else {
             List list = this.a.world.a(EntityVillager.class, this.a.getBoundingBox().grow(6.0D, 3.0D, 6.0D));
@@ -29,7 +29,7 @@ public class PathfinderGoalPlay extends PathfinderGoal {
             while (iterator.hasNext()) {
                 EntityVillager entityvillager = (EntityVillager) iterator.next();
 
-                if (entityvillager != this.a && !entityvillager.cn() && entityvillager.getAge() < 0) {
+                if (entityvillager != this.a && !entityvillager.db() && entityvillager.getAge() < 0) {
                     double d1 = entityvillager.h(this.a);
 
                     if (d1 <= d0) {
@@ -57,14 +57,14 @@ public class PathfinderGoalPlay extends PathfinderGoal {
 
     public void c() {
         if (this.b != null) {
-            this.a.m(true);
+            this.a.p(true);
         }
 
         this.d = 1000;
     }
 
     public void d() {
-        this.a.m(false);
+        this.a.p(false);
         this.b = null;
     }
 
@@ -74,14 +74,14 @@ public class PathfinderGoalPlay extends PathfinderGoal {
             if (this.a.h(this.b) > 4.0D) {
                 this.a.getNavigation().a((Entity) this.b, this.c);
             }
-        } else if (this.a.getNavigation().m()) {
+        } else if (this.a.getNavigation().n()) {
             Vec3D vec3d = RandomPositionGenerator.a(this.a, 16, 3);
 
             if (vec3d == null) {
                 return;
             }
 
-            this.a.getNavigation().a(vec3d.a, vec3d.b, vec3d.c, this.c);
+            this.a.getNavigation().a(vec3d.x, vec3d.y, vec3d.z, this.c);
         }
 
     }

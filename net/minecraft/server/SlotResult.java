@@ -75,10 +75,6 @@ public class SlotResult extends Slot {
             this.b.b((Statistic) AchievementList.G);
         }
 
-        if (itemstack.getItem() == Items.GOLDEN_APPLE && itemstack.getData() == 1) {
-            this.b.b((Statistic) AchievementList.M);
-        }
-
     }
 
     public void a(EntityHuman entityhuman, ItemStack itemstack) {
@@ -91,10 +87,14 @@ public class SlotResult extends Slot {
 
             if (itemstack1 != null) {
                 this.a.splitStack(i, 1);
+                itemstack1 = this.a.getItem(i);
             }
 
             if (itemstack2 != null) {
-                if (this.a.getItem(i) == null) {
+                if (itemstack1 == null) {
+                    this.a.setItem(i, itemstack2);
+                } else if (ItemStack.c(itemstack1, itemstack2) && ItemStack.equals(itemstack1, itemstack2)) {
+                    itemstack2.count += itemstack1.count;
                     this.a.setItem(i, itemstack2);
                 } else if (!this.b.inventory.pickup(itemstack2)) {
                     this.b.drop(itemstack2, false);

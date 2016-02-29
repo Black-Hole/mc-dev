@@ -12,8 +12,8 @@ public class EntityCaveSpider extends EntitySpider {
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(12.0D);
     }
 
-    public boolean r(Entity entity) {
-        if (super.r(entity)) {
+    public boolean B(Entity entity) {
+        if (super.B(entity)) {
             if (entity instanceof EntityLiving) {
                 byte b0 = 0;
 
@@ -24,7 +24,7 @@ public class EntityCaveSpider extends EntitySpider {
                 }
 
                 if (b0 > 0) {
-                    ((EntityLiving) entity).addEffect(new MobEffect(MobEffectList.POISON.id, b0 * 20, 0));
+                    ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.POISON, b0 * 20, 0));
                 }
             }
 
@@ -40,5 +40,9 @@ public class EntityCaveSpider extends EntitySpider {
 
     public float getHeadHeight() {
         return 0.45F;
+    }
+
+    protected MinecraftKey J() {
+        return LootTables.r;
     }
 }

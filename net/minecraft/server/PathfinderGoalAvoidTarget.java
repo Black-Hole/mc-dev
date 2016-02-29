@@ -52,17 +52,17 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
 
             if (vec3d == null) {
                 return false;
-            } else if (this.b.e(vec3d.a, vec3d.b, vec3d.c) < this.b.h(this.a)) {
+            } else if (this.b.e(vec3d.x, vec3d.y, vec3d.z) < this.b.h(this.a)) {
                 return false;
             } else {
-                this.g = this.h.a(vec3d.a, vec3d.b, vec3d.c);
+                this.g = this.h.a(vec3d.x, vec3d.y, vec3d.z);
                 return this.g == null ? false : this.g.b(vec3d);
             }
         }
     }
 
     public boolean b() {
-        return !this.h.m();
+        return !this.h.n();
     }
 
     public void c() {

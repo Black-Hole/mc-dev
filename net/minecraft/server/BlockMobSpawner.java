@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class BlockMobSpawner extends BlockContainer {
+public class BlockMobSpawner extends BlockTileEntity {
 
     protected BlockMobSpawner() {
         super(Material.STONE);
@@ -27,11 +27,15 @@ public class BlockMobSpawner extends BlockContainer {
         this.dropExperience(world, blockposition, j);
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public int b() {
-        return 3;
+    public EnumRenderType a(IBlockData iblockdata) {
+        return EnumRenderType.MODEL;
+    }
+
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return null;
     }
 }

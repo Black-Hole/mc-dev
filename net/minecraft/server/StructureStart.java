@@ -1,12 +1,13 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public abstract class StructureStart {
 
-    protected LinkedList<StructurePiece> a = new LinkedList();
+    protected List<StructurePiece> a = Lists.newLinkedList();
     protected StructureBoundingBox b;
     private int c;
     private int d;
@@ -18,11 +19,11 @@ public abstract class StructureStart {
         this.d = j;
     }
 
-    public StructureBoundingBox a() {
+    public StructureBoundingBox b() {
         return this.b;
     }
 
-    public LinkedList<StructurePiece> b() {
+    public List<StructurePiece> c() {
         return this.a;
     }
 
@@ -39,7 +40,7 @@ public abstract class StructureStart {
 
     }
 
-    protected void c() {
+    protected void d() {
         this.b = StructureBoundingBox.a();
         Iterator iterator = this.a.iterator();
 
@@ -93,7 +94,7 @@ public abstract class StructureStart {
     public void b(NBTTagCompound nbttagcompound) {}
 
     protected void a(World world, Random random, int i) {
-        int j = world.F() - i;
+        int j = world.K() - i;
         int k = this.b.d() + 1;
 
         if (k < j) {
@@ -137,7 +138,7 @@ public abstract class StructureStart {
 
     }
 
-    public boolean d() {
+    public boolean a() {
         return true;
     }
 

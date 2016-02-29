@@ -4,15 +4,17 @@ import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 
-public class ChunkProviderDebug implements IChunkProvider {
+public class ChunkProviderDebug implements ChunkGenerator {
 
-    private static final List<IBlockData> a = Lists.newArrayList();
-    private static final int b;
-    private static final int c;
-    private final World d;
+    private static final List<IBlockData> c = Lists.newArrayList();
+    private static final int d;
+    private static final int e;
+    protected static final IBlockData a = Blocks.AIR.getBlockData();
+    protected static final IBlockData b = Blocks.BARRIER.getBlockData();
+    private final World f;
 
     public ChunkProviderDebug(World world) {
-        this.d = world;
+        this.f = world;
     }
 
     public Chunk getOrCreateChunk(int i, int j) {
@@ -25,8 +27,8 @@ public class ChunkProviderDebug implements IChunkProvider {
                 int j1 = i * 16 + l;
 
                 k = j * 16 + i1;
-                chunksnapshot.a(l, 60, i1, Blocks.BARRIER.getBlockData());
-                IBlockData iblockdata = b(j1, k);
+                chunksnapshot.a(l, 60, i1, ChunkProviderDebug.b);
+                IBlockData iblockdata = c(j1, k);
 
                 if (iblockdata != null) {
                     chunksnapshot.a(l, 70, i1, iblockdata);
@@ -34,31 +36,31 @@ public class ChunkProviderDebug implements IChunkProvider {
             }
         }
 
-        Chunk chunk = new Chunk(this.d, chunksnapshot, i, j);
+        Chunk chunk = new Chunk(this.f, chunksnapshot, i, j);
 
         chunk.initLighting();
-        BiomeBase[] abiomebase = this.d.getWorldChunkManager().getBiomeBlock((BiomeBase[]) null, i * 16, j * 16, 16, 16);
+        BiomeBase[] abiomebase = this.f.getWorldChunkManager().getBiomeBlock((BiomeBase[]) null, i * 16, j * 16, 16, 16);
         byte[] abyte = chunk.getBiomeIndex();
 
         for (k = 0; k < abyte.length; ++k) {
-            abyte[k] = (byte) abiomebase[k].id;
+            abyte[k] = (byte) BiomeBase.a(abiomebase[k]);
         }
 
         chunk.initLighting();
         return chunk;
     }
 
-    public static IBlockData b(int i, int j) {
-        IBlockData iblockdata = null;
+    public static IBlockData c(int i, int j) {
+        IBlockData iblockdata = ChunkProviderDebug.a;
 
         if (i > 0 && j > 0 && i % 2 != 0 && j % 2 != 0) {
             i /= 2;
             j /= 2;
-            if (i <= ChunkProviderDebug.b && j <= ChunkProviderDebug.c) {
-                int k = MathHelper.a(i * ChunkProviderDebug.b + j);
+            if (i <= ChunkProviderDebug.d && j <= ChunkProviderDebug.e) {
+                int k = MathHelper.a(i * ChunkProviderDebug.d + j);
 
-                if (k < ChunkProviderDebug.a.size()) {
-                    iblockdata = (IBlockData) ChunkProviderDebug.a.get(k);
+                if (k < ChunkProviderDebug.c.size()) {
+                    iblockdata = (IBlockData) ChunkProviderDebug.c.get(k);
                 }
             }
         }
@@ -66,36 +68,14 @@ public class ChunkProviderDebug implements IChunkProvider {
         return iblockdata;
     }
 
-    public boolean isChunkLoaded(int i, int j) {
-        return true;
-    }
+    public void recreateStructures(int i, int j) {}
 
-    public void getChunkAt(IChunkProvider ichunkprovider, int i, int j) {}
-
-    public boolean a(IChunkProvider ichunkprovider, Chunk chunk, int i, int j) {
+    public boolean a(Chunk chunk, int i, int j) {
         return false;
-    }
-
-    public boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate) {
-        return true;
-    }
-
-    public void c() {}
-
-    public boolean unloadChunks() {
-        return false;
-    }
-
-    public boolean canSave() {
-        return true;
-    }
-
-    public String getName() {
-        return "DebugLevelSource";
     }
 
     public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
-        BiomeBase biomebase = this.d.getBiome(blockposition);
+        BiomeBase biomebase = this.f.getBiome(blockposition);
 
         return biomebase.getMobs(enumcreaturetype);
     }
@@ -104,15 +84,7 @@ public class ChunkProviderDebug implements IChunkProvider {
         return null;
     }
 
-    public int getLoadedChunks() {
-        return 0;
-    }
-
     public void recreateStructures(Chunk chunk, int i, int j) {}
-
-    public Chunk getChunkAt(BlockPosition blockposition) {
-        return this.getOrCreateChunk(blockposition.getX() >> 4, blockposition.getZ() >> 4);
-    }
 
     static {
         Iterator iterator = Block.REGISTRY.iterator();
@@ -120,10 +92,10 @@ public class ChunkProviderDebug implements IChunkProvider {
         while (iterator.hasNext()) {
             Block block = (Block) iterator.next();
 
-            ChunkProviderDebug.a.addAll(block.P().a());
+            ChunkProviderDebug.c.addAll(block.t().a());
         }
 
-        b = MathHelper.f(MathHelper.c((float) ChunkProviderDebug.a.size()));
-        c = MathHelper.f((float) ChunkProviderDebug.a.size() / (float) ChunkProviderDebug.b);
+        d = MathHelper.f(MathHelper.c((float) ChunkProviderDebug.c.size()));
+        e = MathHelper.f((float) ChunkProviderDebug.c.size() / (float) ChunkProviderDebug.d);
     }
 }

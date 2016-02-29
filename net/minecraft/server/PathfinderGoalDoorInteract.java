@@ -22,9 +22,9 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
             return false;
         } else {
             Navigation navigation = (Navigation) this.a.getNavigation();
-            PathEntity pathentity = navigation.j();
+            PathEntity pathentity = navigation.k();
 
-            if (pathentity != null && !pathentity.b() && navigation.g()) {
+            if (pathentity != null && !pathentity.b() && navigation.f()) {
                 for (int i = 0; i < Math.min(pathentity.e() + 2, pathentity.d()); ++i) {
                     PathPoint pathpoint = pathentity.a(i);
 
@@ -68,8 +68,9 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
     }
 
     private BlockDoor a(BlockPosition blockposition) {
-        Block block = this.a.world.getType(blockposition).getBlock();
+        IBlockData iblockdata = this.a.world.getType(blockposition);
+        Block block = iblockdata.getBlock();
 
-        return block instanceof BlockDoor && block.getMaterial() == Material.WOOD ? (BlockDoor) block : null;
+        return block instanceof BlockDoor && iblockdata.getMaterial() == Material.WOOD ? (BlockDoor) block : null;
     }
 }

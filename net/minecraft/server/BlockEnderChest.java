@@ -1,29 +1,32 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import java.util.Random;
 
-public class BlockEnderChest extends BlockContainer {
+public class BlockEnderChest extends BlockTileEntity {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
+    protected static final AxisAlignedBB b = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.875D, 0.9375D);
 
     protected BlockEnderChest() {
         super(Material.STONE);
-        this.j(this.blockStateList.getBlockData().set(BlockEnderChest.FACING, EnumDirection.NORTH));
+        this.w(this.blockStateList.getBlockData().set(BlockEnderChest.FACING, EnumDirection.NORTH));
         this.a(CreativeModeTab.c);
-        this.a(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
     }
 
-    public boolean c() {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockEnderChest.b;
+    }
+
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
-    public int b() {
-        return 2;
+    public EnumRenderType a(IBlockData iblockdata) {
+        return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
@@ -34,7 +37,7 @@ public class BlockEnderChest extends BlockContainer {
         return 8;
     }
 
-    protected boolean I() {
+    protected boolean o() {
         return true;
     }
 
@@ -46,19 +49,19 @@ public class BlockEnderChest extends BlockContainer {
         world.setTypeAndData(blockposition, iblockdata.set(BlockEnderChest.FACING, entityliving.getDirection().opposite()), 2);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         InventoryEnderChest inventoryenderchest = entityhuman.getEnderChest();
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (inventoryenderchest != null && tileentity instanceof TileEntityEnderChest) {
-            if (world.getType(blockposition.up()).getBlock().isOccluding()) {
+            if (world.getType(blockposition.up()).l()) {
                 return true;
             } else if (world.isClientSide) {
                 return true;
             } else {
                 inventoryenderchest.a((TileEntityEnderChest) tileentity);
                 entityhuman.openContainer(inventoryenderchest);
-                entityhuman.b(StatisticList.V);
+                entityhuman.b(StatisticList.X);
                 return true;
             }
         } else {
@@ -82,6 +85,14 @@ public class BlockEnderChest extends BlockContainer {
 
     public int toLegacyData(IBlockData iblockdata) {
         return ((EnumDirection) iblockdata.get(BlockEnderChest.FACING)).a();
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return iblockdata.set(BlockEnderChest.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockEnderChest.FACING)));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockEnderChest.FACING)));
     }
 
     protected BlockStateList getStateList() {

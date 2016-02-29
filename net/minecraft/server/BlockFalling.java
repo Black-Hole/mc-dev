@@ -25,13 +25,13 @@ public class BlockFalling extends Block {
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (!world.isClientSide) {
-            this.f(world, blockposition);
+            this.b(world, blockposition);
         }
 
     }
 
-    private void f(World world, BlockPosition blockposition) {
-        if (canFall(world, blockposition.down()) && blockposition.getY() >= 0) {
+    private void b(World world, BlockPosition blockposition) {
+        if (i(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
             byte b0 = 32;
 
             if (!BlockFalling.instaFall && world.areChunksLoadedBetween(blockposition.a(-b0, -b0, -b0), blockposition.a(b0, b0, b0))) {
@@ -46,7 +46,7 @@ public class BlockFalling extends Block {
 
                 BlockPosition blockposition1;
 
-                for (blockposition1 = blockposition.down(); canFall(world, blockposition1) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
+                for (blockposition1 = blockposition.down(); i(world.getType(blockposition1)) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
                     ;
                 }
 
@@ -64,9 +64,9 @@ public class BlockFalling extends Block {
         return 2;
     }
 
-    public static boolean canFall(World world, BlockPosition blockposition) {
-        Block block = world.getType(blockposition).getBlock();
-        Material material = block.material;
+    public static boolean i(IBlockData iblockdata) {
+        Block block = iblockdata.getBlock();
+        Material material = iblockdata.getMaterial();
 
         return block == Blocks.FIRE || material == Material.AIR || material == Material.WATER || material == Material.LAVA;
     }

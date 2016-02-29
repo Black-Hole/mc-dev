@@ -15,7 +15,7 @@ public class PacketPlayOutEntityHeadRotation implements Packet<PacketListenerPla
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
+        this.a = packetdataserializer.g();
         this.b = packetdataserializer.readByte();
     }
 

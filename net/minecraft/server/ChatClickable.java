@@ -58,27 +58,27 @@ public class ChatClickable {
 
     public static enum EnumClickAction {
 
-        OPEN_URL("open_url", true), OPEN_FILE("open_file", false), RUN_COMMAND("run_command", true), TWITCH_USER_INFO("twitch_user_info", false), SUGGEST_COMMAND("suggest_command", true), CHANGE_PAGE("change_page", true);
+        OPEN_URL("open_url", true), OPEN_FILE("open_file", false), RUN_COMMAND("run_command", true), SUGGEST_COMMAND("suggest_command", true), CHANGE_PAGE("change_page", true);
 
-        private static final Map<String, ChatClickable.EnumClickAction> g = Maps.newHashMap();
-        private final boolean h;
-        private final String i;
+        private static final Map<String, ChatClickable.EnumClickAction> f = Maps.newHashMap();
+        private final boolean g;
+        private final String h;
 
         private EnumClickAction(String s, boolean flag) {
-            this.i = s;
-            this.h = flag;
+            this.h = s;
+            this.g = flag;
         }
 
         public boolean a() {
-            return this.h;
+            return this.g;
         }
 
         public String b() {
-            return this.i;
+            return this.h;
         }
 
         public static ChatClickable.EnumClickAction a(String s) {
-            return (ChatClickable.EnumClickAction) ChatClickable.EnumClickAction.g.get(s);
+            return (ChatClickable.EnumClickAction) ChatClickable.EnumClickAction.f.get(s);
         }
 
         static {
@@ -88,7 +88,7 @@ public class ChatClickable {
             for (int j = 0; j < i; ++j) {
                 ChatClickable.EnumClickAction chatclickable_enumclickaction = achatclickable_enumclickaction[j];
 
-                ChatClickable.EnumClickAction.g.put(chatclickable_enumclickaction.b(), chatclickable_enumclickaction);
+                ChatClickable.EnumClickAction.f.put(chatclickable_enumclickaction.b(), chatclickable_enumclickaction);
             }
 
         }

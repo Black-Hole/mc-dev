@@ -19,8 +19,8 @@ public class ItemWorldMap extends ItemWorldMapBase {
             s = "map_" + itemstack.getData();
             worldmap = new WorldMap(s);
             worldmap.scale = 3;
-            worldmap.a((double) world.getWorldData().c(), (double) world.getWorldData().e(), worldmap.scale);
-            worldmap.map = (byte) world.worldProvider.getDimension();
+            worldmap.a((double) world.getWorldData().b(), (double) world.getWorldData().d(), worldmap.scale);
+            worldmap.map = (byte) world.worldProvider.getDimensionManager().getDimensionID();
             worldmap.c();
             world.a(s, (PersistentBase) worldmap);
         }
@@ -29,7 +29,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
     }
 
     public void a(World world, Entity entity, WorldMap worldmap) {
-        if (world.worldProvider.getDimension() == worldmap.map && entity instanceof EntityHuman) {
+        if (world.worldProvider.getDimensionManager().getDimensionID() == worldmap.map && entity instanceof EntityHuman) {
             int i = 1 << worldmap.scale;
             int j = worldmap.centerX;
             int k = worldmap.centerZ;
@@ -37,7 +37,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
             int i1 = MathHelper.floor(entity.locZ - (double) k) / i + 64;
             int j1 = 128 / i;
 
-            if (world.worldProvider.o()) {
+            if (world.worldProvider.m()) {
                 j1 /= 2;
             }
 
@@ -67,14 +67,14 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                 int k3 = 0;
                                 double d1 = 0.0D;
 
-                                if (world.worldProvider.o()) {
+                                if (world.worldProvider.m()) {
                                     int l3 = k2 + l2 * 231871;
 
                                     l3 = l3 * l3 * 31287121 + l3 * 11;
                                     if ((l3 >> 20 & 1) == 0) {
-                                        hashmultiset.add(Blocks.DIRT.g(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT)), 10);
+                                        hashmultiset.add(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT).g(), 10);
                                     } else {
-                                        hashmultiset.add(Blocks.STONE.g(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE)), 100);
+                                        hashmultiset.add(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE).g(), 100);
                                     }
 
                                     d1 = 100.0D;
@@ -90,22 +90,22 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                                 do {
                                                     --k4;
                                                     iblockdata = chunk.getBlockData(blockposition_mutableblockposition.c(i4 + i3, k4, j4 + j3));
-                                                } while (iblockdata.getBlock().g(iblockdata) == MaterialMapColor.b && k4 > 0);
+                                                } while (iblockdata.g() == MaterialMapColor.b && k4 > 0);
 
-                                                if (k4 > 0 && iblockdata.getBlock().getMaterial().isLiquid()) {
+                                                if (k4 > 0 && iblockdata.getMaterial().isLiquid()) {
                                                     int l4 = k4 - 1;
 
-                                                    Block block;
+                                                    IBlockData iblockdata1;
 
                                                     do {
-                                                        block = chunk.getTypeAbs(i4 + i3, l4--, j4 + j3);
+                                                        iblockdata1 = chunk.a(i4 + i3, l4--, j4 + j3);
                                                         ++k3;
-                                                    } while (l4 > 0 && block.getMaterial().isLiquid());
+                                                    } while (l4 > 0 && iblockdata1.getMaterial().isLiquid());
                                                 }
                                             }
 
                                             d1 += (double) k4 / (double) (i * i);
-                                            hashmultiset.add(iblockdata.getBlock().g(iblockdata));
+                                            hashmultiset.add(iblockdata.g());
                                         }
                                     }
                                 }
@@ -166,34 +166,58 @@ public class ItemWorldMap extends ItemWorldMapBase {
                 worldmap.a(entityhuman, itemstack);
             }
 
-            if (flag) {
+            if (flag || entity instanceof EntityHuman && ((EntityHuman) entity).getItemInOffHand() == itemstack) {
                 this.a(world, entity, worldmap);
             }
 
         }
     }
 
-    public Packet c(ItemStack itemstack, World world, EntityHuman entityhuman) {
+    public Packet<?> a(ItemStack itemstack, World world, EntityHuman entityhuman) {
         return this.getSavedMap(itemstack, world).a(itemstack, world, entityhuman);
     }
 
-    public void d(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (itemstack.hasTag() && itemstack.getTag().getBoolean("map_is_scaling")) {
-            WorldMap worldmap = Items.FILLED_MAP.getSavedMap(itemstack, world);
+    public void b(ItemStack itemstack, World world, EntityHuman entityhuman) {
+        NBTTagCompound nbttagcompound = itemstack.getTag();
 
-            itemstack.setData(world.b("map"));
-            WorldMap worldmap1 = new WorldMap("map_" + itemstack.getData());
-
-            worldmap1.scale = (byte) (worldmap.scale + 1);
-            if (worldmap1.scale > 4) {
-                worldmap1.scale = 4;
+        if (nbttagcompound != null) {
+            if (nbttagcompound.hasKeyOfType("map_scale_direction", 99)) {
+                a(itemstack, world, nbttagcompound.getInt("map_scale_direction"));
+                nbttagcompound.remove("map_scale_direction");
+            } else if (nbttagcompound.getBoolean("map_tracking_position")) {
+                b(itemstack, world);
+                nbttagcompound.remove("map_tracking_position");
             }
-
-            worldmap1.a((double) worldmap.centerX, (double) worldmap.centerZ, worldmap1.scale);
-            worldmap1.map = worldmap.map;
-            worldmap1.c();
-            world.a("map_" + itemstack.getData(), (PersistentBase) worldmap1);
         }
 
+    }
+
+    protected static void a(ItemStack itemstack, World world, int i) {
+        WorldMap worldmap = Items.FILLED_MAP.getSavedMap(itemstack, world);
+
+        itemstack.setData(world.b("map"));
+        WorldMap worldmap1 = new WorldMap("map_" + itemstack.getData());
+
+        worldmap1.scale = (byte) MathHelper.clamp(worldmap.scale + i, 0, 4);
+        worldmap1.track = worldmap.track;
+        worldmap1.a((double) worldmap.centerX, (double) worldmap.centerZ, worldmap1.scale);
+        worldmap1.map = worldmap.map;
+        worldmap1.c();
+        world.a("map_" + itemstack.getData(), (PersistentBase) worldmap1);
+    }
+
+    protected static void b(ItemStack itemstack, World world) {
+        WorldMap worldmap = Items.FILLED_MAP.getSavedMap(itemstack, world);
+
+        itemstack.setData(world.b("map"));
+        WorldMap worldmap1 = new WorldMap("map_" + itemstack.getData());
+
+        worldmap1.track = true;
+        worldmap1.centerX = worldmap.centerX;
+        worldmap1.centerZ = worldmap.centerZ;
+        worldmap1.scale = worldmap.scale;
+        worldmap1.map = worldmap.map;
+        worldmap1.c();
+        world.a("map_" + itemstack.getData(), (PersistentBase) worldmap1);
     }
 }

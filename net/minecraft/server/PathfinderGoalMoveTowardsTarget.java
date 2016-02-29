@@ -29,16 +29,16 @@ public class PathfinderGoalMoveTowardsTarget extends PathfinderGoal {
             if (vec3d == null) {
                 return false;
             } else {
-                this.c = vec3d.a;
-                this.d = vec3d.b;
-                this.e = vec3d.c;
+                this.c = vec3d.x;
+                this.d = vec3d.y;
+                this.e = vec3d.z;
                 return true;
             }
         }
     }
 
     public boolean b() {
-        return !this.a.getNavigation().m() && this.b.isAlive() && this.b.h(this.a) < (double) (this.g * this.g);
+        return !this.a.getNavigation().n() && this.b.isAlive() && this.b.h(this.a) < (double) (this.g * this.g);
     }
 
     public void d() {

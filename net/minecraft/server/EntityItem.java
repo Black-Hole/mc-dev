@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Optional;
 import java.util.Iterator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,16 +8,17 @@ import org.apache.logging.log4j.Logger;
 public class EntityItem extends Entity {
 
     private static final Logger b = LogManager.getLogger();
+    private static final DataWatcherObject<Optional<ItemStack>> c = DataWatcher.a(EntityItem.class, DataWatcherRegistry.f);
     private int age;
     public int pickupDelay;
-    private int e;
-    private String f;
+    private int f;
     private String g;
+    private String h;
     public float a;
 
     public EntityItem(World world, double d0, double d1, double d2) {
         super(world);
-        this.e = 5;
+        this.f = 5;
         this.a = (float) (Math.random() * 3.141592653589793D * 2.0D);
         this.setSize(0.25F, 0.25F);
         this.setPosition(d0, d1, d2);
@@ -31,27 +33,27 @@ public class EntityItem extends Entity {
         this.setItemStack(itemstack);
     }
 
-    protected boolean s_() {
+    protected boolean playStepSound() {
         return false;
     }
 
     public EntityItem(World world) {
         super(world);
-        this.e = 5;
+        this.f = 5;
         this.a = (float) (Math.random() * 3.141592653589793D * 2.0D);
         this.setSize(0.25F, 0.25F);
         this.setItemStack(new ItemStack(Blocks.AIR, 0));
     }
 
-    protected void h() {
-        this.getDataWatcher().add(10, 5);
+    protected void i() {
+        this.getDataWatcher().register(EntityItem.c, Optional.absent());
     }
 
-    public void t_() {
+    public void m() {
         if (this.getItemStack() == null) {
             this.die();
         } else {
-            super.t_();
+            super.m();
             if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
                 --this.pickupDelay;
             }
@@ -65,15 +67,15 @@ public class EntityItem extends Entity {
             boolean flag = (int) this.lastX != (int) this.locX || (int) this.lastY != (int) this.locY || (int) this.lastZ != (int) this.locZ;
 
             if (flag || this.ticksLived % 25 == 0) {
-                if (this.world.getType(new BlockPosition(this)).getBlock().getMaterial() == Material.LAVA) {
+                if (this.world.getType(new BlockPosition(this)).getMaterial() == Material.LAVA) {
                     this.motY = 0.20000000298023224D;
                     this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
                     this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-                    this.makeSound("random.fizz", 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
+                    this.a(SoundEffects.bz, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
                 }
 
                 if (!this.world.isClientSide) {
-                    this.w();
+                    this.x();
                 }
             }
 
@@ -94,7 +96,7 @@ public class EntityItem extends Entity {
                 ++this.age;
             }
 
-            this.W();
+            this.aj();
             if (!this.world.isClientSide && this.age >= 6000) {
                 this.die();
             }
@@ -102,7 +104,7 @@ public class EntityItem extends Entity {
         }
     }
 
-    private void w() {
+    private void x() {
         Iterator iterator = this.world.a(EntityItem.class, this.getBoundingBox().grow(0.5D, 0.0D, 0.5D)).iterator();
 
         while (iterator.hasNext()) {
@@ -159,10 +161,10 @@ public class EntityItem extends Entity {
         this.age = 4800;
     }
 
-    public boolean W() {
+    public boolean aj() {
         if (this.world.a(this.getBoundingBox(), Material.WATER, (Entity) this)) {
             if (!this.inWater && !this.justCreated) {
-                this.X();
+                this.ak();
             }
 
             this.inWater = true;
@@ -183,9 +185,9 @@ public class EntityItem extends Entity {
         } else if (this.getItemStack() != null && this.getItemStack().getItem() == Items.NETHER_STAR && damagesource.isExplosion()) {
             return false;
         } else {
-            this.ac();
-            this.e = (int) ((float) this.e - f);
-            if (this.e <= 0) {
+            this.ao();
+            this.f = (int) ((float) this.f - f);
+            if (this.f <= 0) {
                 this.die();
             }
 
@@ -194,15 +196,15 @@ public class EntityItem extends Entity {
     }
 
     public void b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setShort("Health", (short) ((byte) this.e));
+        nbttagcompound.setShort("Health", (short) this.f);
         nbttagcompound.setShort("Age", (short) this.age);
         nbttagcompound.setShort("PickupDelay", (short) this.pickupDelay);
         if (this.n() != null) {
-            nbttagcompound.setString("Thrower", this.f);
+            nbttagcompound.setString("Thrower", this.g);
         }
 
-        if (this.m() != null) {
-            nbttagcompound.setString("Owner", this.g);
+        if (this.l() != null) {
+            nbttagcompound.setString("Owner", this.h);
         }
 
         if (this.getItemStack() != null) {
@@ -212,18 +214,18 @@ public class EntityItem extends Entity {
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        this.e = nbttagcompound.getShort("Health") & 255;
+        this.f = nbttagcompound.getShort("Health");
         this.age = nbttagcompound.getShort("Age");
         if (nbttagcompound.hasKey("PickupDelay")) {
             this.pickupDelay = nbttagcompound.getShort("PickupDelay");
         }
 
         if (nbttagcompound.hasKey("Owner")) {
-            this.g = nbttagcompound.getString("Owner");
+            this.h = nbttagcompound.getString("Owner");
         }
 
         if (nbttagcompound.hasKey("Thrower")) {
-            this.f = nbttagcompound.getString("Thrower");
+            this.g = nbttagcompound.getString("Thrower");
         }
 
         NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Item");
@@ -240,7 +242,7 @@ public class EntityItem extends Entity {
             ItemStack itemstack = this.getItemStack();
             int i = itemstack.count;
 
-            if (this.pickupDelay == 0 && (this.g == null || 6000 - this.age <= 200 || this.g.equals(entityhuman.getName())) && entityhuman.inventory.pickup(itemstack)) {
+            if (this.pickupDelay == 0 && (this.h == null || 6000 - this.age <= 200 || this.h.equals(entityhuman.getName())) && entityhuman.inventory.pickup(itemstack)) {
                 if (itemstack.getItem() == Item.getItemOf(Blocks.LOG)) {
                     entityhuman.b((Statistic) AchievementList.g);
                 }
@@ -269,14 +271,16 @@ public class EntityItem extends Entity {
                     }
                 }
 
-                if (!this.R()) {
-                    this.world.makeSound(entityhuman, "random.pop", 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                if (!this.ad()) {
+                    this.world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.cU, SoundCategory.PLAYERS, 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 }
 
                 entityhuman.receive(this, i);
                 if (itemstack.count <= 0) {
                     this.die();
                 }
+
+                entityhuman.a(StatisticList.d(itemstack.getItem()), i);
             }
 
         }
@@ -286,20 +290,22 @@ public class EntityItem extends Entity {
         return this.hasCustomName() ? this.getCustomName() : LocaleI18n.get("item." + this.getItemStack().a());
     }
 
-    public boolean aD() {
+    public boolean aT() {
         return false;
     }
 
-    public void c(int i) {
-        super.c(i);
-        if (!this.world.isClientSide) {
-            this.w();
+    public Entity c(int i) {
+        Entity entity = super.c(i);
+
+        if (!this.world.isClientSide && entity instanceof EntityItem) {
+            ((EntityItem) entity).x();
         }
 
+        return entity;
     }
 
     public ItemStack getItemStack() {
-        ItemStack itemstack = this.getDataWatcher().getItemStack(10);
+        ItemStack itemstack = (ItemStack) ((Optional) this.getDataWatcher().get(EntityItem.c)).orNull();
 
         if (itemstack == null) {
             if (this.world != null) {
@@ -313,35 +319,35 @@ public class EntityItem extends Entity {
     }
 
     public void setItemStack(ItemStack itemstack) {
-        this.getDataWatcher().watch(10, itemstack);
-        this.getDataWatcher().update(10);
+        this.getDataWatcher().set(EntityItem.c, Optional.fromNullable(itemstack));
+        this.getDataWatcher().markDirty(EntityItem.c);
     }
 
-    public String m() {
-        return this.g;
+    public String l() {
+        return this.h;
     }
 
-    public void b(String s) {
-        this.g = s;
+    public void d(String s) {
+        this.h = s;
     }
 
     public String n() {
-        return this.f;
+        return this.g;
     }
 
-    public void c(String s) {
-        this.f = s;
-    }
-
-    public void p() {
-        this.pickupDelay = 10;
+    public void e(String s) {
+        this.g = s;
     }
 
     public void q() {
-        this.pickupDelay = 0;
+        this.pickupDelay = 10;
     }
 
     public void r() {
+        this.pickupDelay = 0;
+    }
+
+    public void s() {
         this.pickupDelay = 32767;
     }
 
@@ -349,16 +355,16 @@ public class EntityItem extends Entity {
         this.pickupDelay = i;
     }
 
-    public boolean s() {
+    public boolean t() {
         return this.pickupDelay > 0;
     }
 
-    public void u() {
+    public void v() {
         this.age = -6000;
     }
 
-    public void v() {
-        this.r();
+    public void w() {
+        this.s();
         this.age = 5999;
     }
 }

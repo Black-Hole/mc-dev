@@ -7,10 +7,11 @@ public class MathHelper {
 
     public static final float a = c(2.0F);
     private static final float[] b = new float[65536];
-    private static final int[] c;
-    private static final double d;
-    private static final double[] e;
+    private static final Random c = new Random();
+    private static final int[] d;
+    private static final double e;
     private static final double[] f;
+    private static final double[] g;
 
     public static float sin(float f) {
         return MathHelper.b[(int) (f * 10430.378F) & '\uffff'];
@@ -146,6 +147,19 @@ public class MathHelper {
         return d0;
     }
 
+    public static int b(int i) {
+        i %= 360;
+        if (i >= 180) {
+            i -= 360;
+        }
+
+        if (i < -180) {
+            i += 360;
+        }
+
+        return i;
+    }
+
     public static int a(String s, int i) {
         try {
             return Integer.parseInt(s);
@@ -170,7 +184,7 @@ public class MathHelper {
         return Math.max(d1, a(s, d0));
     }
 
-    public static int b(int i) {
+    public static int c(int i) {
         int j = i - 1;
 
         j |= j >> 1;
@@ -181,17 +195,17 @@ public class MathHelper {
         return j + 1;
     }
 
-    private static boolean d(int i) {
+    private static boolean g(int i) {
         return i != 0 && (i & i - 1) == 0;
     }
 
-    private static int e(int i) {
-        i = d(i) ? i : b(i);
-        return MathHelper.c[(int) ((long) i * 125613361L >> 27) & 31];
+    public static int d(int i) {
+        i = g(i) ? i : c(i);
+        return MathHelper.d[(int) ((long) i * 125613361L >> 27) & 31];
     }
 
-    public static int c(int i) {
-        return e(i) - (d(i) ? 0 : 1);
+    public static int e(int i) {
+        return d(i) - (g(i) ? 0 : 1);
     }
 
     public static int c(int i, int j) {
@@ -215,6 +229,10 @@ public class MathHelper {
         long j = random.nextLong() & 4611686018427387903L | Long.MIN_VALUE;
 
         return new UUID(i, j);
+    }
+
+    public static UUID a() {
+        return a(MathHelper.c);
     }
 
     public static double c(double d0, double d1, double d2) {
@@ -251,11 +269,11 @@ public class MathHelper {
             d3 = i(d2);
             d1 *= d3;
             d0 *= d3;
-            double d4 = MathHelper.d + d0;
+            double d4 = MathHelper.e + d0;
             int i = (int) Double.doubleToRawLongBits(d4);
-            double d5 = MathHelper.e[i];
-            double d6 = MathHelper.f[i];
-            double d7 = d4 - MathHelper.d;
+            double d5 = MathHelper.f[i];
+            double d6 = MathHelper.g[i];
+            double d7 = d4 - MathHelper.e;
             double d8 = d0 * d6 - d1 * d7;
             double d9 = (6.0D + d8 * d8) * d8 * 0.16666666666666666D;
             double d10 = d5 + d9;
@@ -286,6 +304,15 @@ public class MathHelper {
         return d0;
     }
 
+    public static int f(int i) {
+        i ^= i >>> 16;
+        i *= -2048144789;
+        i ^= i >>> 13;
+        i *= -1028477387;
+        i ^= i >>> 16;
+        return i;
+    }
+
     static {
         int i;
 
@@ -293,17 +320,17 @@ public class MathHelper {
             MathHelper.b[i] = (float) Math.sin((double) i * 3.141592653589793D * 2.0D / 65536.0D);
         }
 
-        c = new int[] { 0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8, 31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9};
-        d = Double.longBitsToDouble(4805340802404319232L);
-        e = new double[257];
+        d = new int[] { 0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8, 31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9};
+        e = Double.longBitsToDouble(4805340802404319232L);
         f = new double[257];
+        g = new double[257];
 
         for (i = 0; i < 257; ++i) {
             double d0 = (double) i / 256.0D;
             double d1 = Math.asin(d0);
 
-            MathHelper.f[i] = Math.cos(d1);
-            MathHelper.e[i] = d1;
+            MathHelper.g[i] = Math.cos(d1);
+            MathHelper.f[i] = d1;
         }
 
     }

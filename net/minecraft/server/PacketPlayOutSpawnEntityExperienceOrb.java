@@ -5,34 +5,34 @@ import java.io.IOException;
 public class PacketPlayOutSpawnEntityExperienceOrb implements Packet<PacketListenerPlayOut> {
 
     private int a;
-    private int b;
-    private int c;
-    private int d;
+    private double b;
+    private double c;
+    private double d;
     private int e;
 
     public PacketPlayOutSpawnEntityExperienceOrb() {}
 
     public PacketPlayOutSpawnEntityExperienceOrb(EntityExperienceOrb entityexperienceorb) {
         this.a = entityexperienceorb.getId();
-        this.b = MathHelper.floor(entityexperienceorb.locX * 32.0D);
-        this.c = MathHelper.floor(entityexperienceorb.locY * 32.0D);
-        this.d = MathHelper.floor(entityexperienceorb.locZ * 32.0D);
+        this.b = entityexperienceorb.locX;
+        this.c = entityexperienceorb.locY;
+        this.d = entityexperienceorb.locZ;
         this.e = entityexperienceorb.j();
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-        this.b = packetdataserializer.readInt();
-        this.c = packetdataserializer.readInt();
-        this.d = packetdataserializer.readInt();
+        this.a = packetdataserializer.g();
+        this.b = packetdataserializer.readDouble();
+        this.c = packetdataserializer.readDouble();
+        this.d = packetdataserializer.readDouble();
         this.e = packetdataserializer.readShort();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
-        packetdataserializer.writeInt(this.b);
-        packetdataserializer.writeInt(this.c);
-        packetdataserializer.writeInt(this.d);
+        packetdataserializer.writeDouble(this.b);
+        packetdataserializer.writeDouble(this.c);
+        packetdataserializer.writeDouble(this.d);
         packetdataserializer.writeShort(this.e);
     }
 

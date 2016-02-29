@@ -10,6 +10,7 @@ public class RecipesFood {
         craftingmanager.registerShapedRecipe(new ItemStack(Items.RABBIT_STEW), new Object[] { " R ", "CPM", " B ", Character.valueOf('R'), new ItemStack(Items.COOKED_RABBIT), Character.valueOf('C'), Items.CARROT, Character.valueOf('P'), Items.BAKED_POTATO, Character.valueOf('M'), Blocks.BROWN_MUSHROOM, Character.valueOf('B'), Items.BOWL});
         craftingmanager.registerShapedRecipe(new ItemStack(Items.RABBIT_STEW), new Object[] { " R ", "CPD", " B ", Character.valueOf('R'), new ItemStack(Items.COOKED_RABBIT), Character.valueOf('C'), Items.CARROT, Character.valueOf('P'), Items.BAKED_POTATO, Character.valueOf('D'), Blocks.RED_MUSHROOM, Character.valueOf('B'), Items.BOWL});
         craftingmanager.registerShapedRecipe(new ItemStack(Blocks.MELON_BLOCK), new Object[] { "MMM", "MMM", "MMM", Character.valueOf('M'), Items.MELON});
+        craftingmanager.registerShapedRecipe(new ItemStack(Items.BEETROOT_SOUP), new Object[] { "OOO", "OOO", " B ", Character.valueOf('O'), Items.BEETROOT, Character.valueOf('B'), Items.BOWL});
         craftingmanager.registerShapedRecipe(new ItemStack(Items.MELON_SEEDS), new Object[] { "M", Character.valueOf('M'), Items.MELON});
         craftingmanager.registerShapedRecipe(new ItemStack(Items.PUMPKIN_SEEDS, 4), new Object[] { "M", Character.valueOf('M'), Blocks.PUMPKIN});
         craftingmanager.registerShapelessRecipe(new ItemStack(Items.PUMPKIN_PIE), new Object[] { Blocks.PUMPKIN, Items.SUGAR, Items.EGG});

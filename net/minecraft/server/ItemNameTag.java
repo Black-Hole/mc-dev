@@ -6,18 +6,18 @@ public class ItemNameTag extends Item {
         this.a(CreativeModeTab.i);
     }
 
-    public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving) {
+    public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
         if (!itemstack.hasName()) {
             return false;
         } else if (entityliving instanceof EntityInsentient) {
             EntityInsentient entityinsentient = (EntityInsentient) entityliving;
 
             entityinsentient.setCustomName(itemstack.getName());
-            entityinsentient.bX();
+            entityinsentient.cL();
             --itemstack.count;
             return true;
         } else {
-            return super.a(itemstack, entityhuman, entityliving);
+            return super.a(itemstack, entityhuman, entityliving, enumhand);
         }
     }
 }

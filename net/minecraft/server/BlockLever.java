@@ -6,22 +6,28 @@ public class BlockLever extends Block {
 
     public static final BlockStateEnum<BlockLever.EnumLeverPosition> FACING = BlockStateEnum.of("facing", BlockLever.EnumLeverPosition.class);
     public static final BlockStateBoolean POWERED = BlockStateBoolean.of("powered");
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.3125D, 0.20000000298023224D, 0.625D, 0.6875D, 0.800000011920929D, 1.0D);
+    protected static final AxisAlignedBB d = new AxisAlignedBB(0.3125D, 0.20000000298023224D, 0.0D, 0.6875D, 0.800000011920929D, 0.375D);
+    protected static final AxisAlignedBB e = new AxisAlignedBB(0.625D, 0.20000000298023224D, 0.3125D, 1.0D, 0.800000011920929D, 0.6875D);
+    protected static final AxisAlignedBB f = new AxisAlignedBB(0.0D, 0.20000000298023224D, 0.3125D, 0.375D, 0.800000011920929D, 0.6875D);
+    protected static final AxisAlignedBB g = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.6000000238418579D, 0.75D);
+    protected static final AxisAlignedBB B = new AxisAlignedBB(0.25D, 0.4000000059604645D, 0.25D, 0.75D, 1.0D, 0.75D);
 
     protected BlockLever() {
         super(Material.ORIENTABLE);
-        this.j(this.blockStateList.getBlockData().set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH).set(BlockLever.POWERED, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH).set(BlockLever.POWERED, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 
-    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return null;
+    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        return BlockLever.k;
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
@@ -60,7 +66,7 @@ public class BlockLever extends Block {
 
             do {
                 if (!iterator.hasNext()) {
-                    if (World.a((IBlockAccess) world, blockposition.down())) {
+                    if (world.getType(blockposition.down()).q()) {
                         return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.a(EnumDirection.UP, entityliving.getDirection()));
                     }
 
@@ -71,31 +77,6 @@ public class BlockLever extends Block {
             } while (enumdirection1 == enumdirection || !a(world, blockposition, enumdirection1.opposite()));
 
             return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.a(enumdirection1, entityliving.getDirection()));
-        }
-    }
-
-    public static int a(EnumDirection enumdirection) {
-        switch (BlockLever.SyntheticClass_1.a[enumdirection.ordinal()]) {
-        case 1:
-            return 0;
-
-        case 2:
-            return 5;
-
-        case 3:
-            return 4;
-
-        case 4:
-            return 3;
-
-        case 5:
-            return 2;
-
-        case 6:
-            return 1;
-
-        default:
-            return -1;
         }
     }
 
@@ -117,47 +98,40 @@ public class BlockLever extends Block {
         }
     }
 
-    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        float f = 0.1875F;
-
-        switch (BlockLever.SyntheticClass_1.b[((BlockLever.EnumLeverPosition) iblockaccess.getType(blockposition).get(BlockLever.FACING)).ordinal()]) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        switch (BlockLever.SyntheticClass_1.b[((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).ordinal()]) {
         case 1:
-            this.a(0.0F, 0.2F, 0.5F - f, f * 2.0F, 0.8F, 0.5F + f);
-            break;
+        default:
+            return BlockLever.f;
 
         case 2:
-            this.a(1.0F - f * 2.0F, 0.2F, 0.5F - f, 1.0F, 0.8F, 0.5F + f);
-            break;
+            return BlockLever.e;
 
         case 3:
-            this.a(0.5F - f, 0.2F, 0.0F, 0.5F + f, 0.8F, f * 2.0F);
-            break;
+            return BlockLever.d;
 
         case 4:
-            this.a(0.5F - f, 0.2F, 1.0F - f * 2.0F, 0.5F + f, 0.8F, 1.0F);
-            break;
+            return BlockLever.c;
 
         case 5:
         case 6:
-            f = 0.25F;
-            this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.6F, 0.5F + f);
-            break;
+            return BlockLever.g;
 
         case 7:
         case 8:
-            f = 0.25F;
-            this.a(0.5F - f, 0.4F, 0.5F - f, 0.5F + f, 1.0F, 0.5F + f);
+            return BlockLever.B;
         }
-
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
-            iblockdata = iblockdata.a(BlockLever.POWERED);
+            iblockdata = iblockdata.a((IBlockState) BlockLever.POWERED);
             world.setTypeAndData(blockposition, iblockdata, 3);
-            world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, "random.click", 0.3F, ((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue() ? 0.6F : 0.5F);
+            float f3 = ((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue() ? 0.6F : 0.5F;
+
+            world.a((EntityHuman) null, blockposition, SoundEffects.df, SoundCategory.BLOCKS, 0.3F, f3);
             world.applyPhysics(blockposition, this);
             EnumDirection enumdirection1 = ((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).c();
 
@@ -177,15 +151,15 @@ public class BlockLever extends Block {
         super.remove(world, blockposition, iblockdata);
     }
 
-    public int a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, EnumDirection enumdirection) {
+    public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return ((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue() ? 15 : 0;
     }
 
-    public int b(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, EnumDirection enumdirection) {
+    public int c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return !((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue() ? 0 : (((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).c() == enumdirection ? 15 : 0);
     }
 
-    public boolean isPowerSource() {
+    public boolean isPowerSource(IBlockData iblockdata) {
         return true;
     }
 
@@ -204,6 +178,89 @@ public class BlockLever extends Block {
         return i;
     }
 
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        switch (BlockLever.SyntheticClass_1.c[enumblockrotation.ordinal()]) {
+        case 1:
+            switch (BlockLever.SyntheticClass_1.b[((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).ordinal()]) {
+            case 1:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.WEST);
+
+            case 2:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.EAST);
+
+            case 3:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH);
+
+            case 4:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.SOUTH);
+
+            default:
+                return iblockdata;
+            }
+
+        case 2:
+            switch (BlockLever.SyntheticClass_1.b[((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).ordinal()]) {
+            case 1:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH);
+
+            case 2:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.SOUTH);
+
+            case 3:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.EAST);
+
+            case 4:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.WEST);
+
+            case 5:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.UP_X);
+
+            case 6:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.UP_Z);
+
+            case 7:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.DOWN_Z);
+
+            case 8:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.DOWN_X);
+            }
+
+        case 3:
+            switch (BlockLever.SyntheticClass_1.b[((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).ordinal()]) {
+            case 1:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.SOUTH);
+
+            case 2:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH);
+
+            case 3:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.WEST);
+
+            case 4:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.EAST);
+
+            case 5:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.UP_X);
+
+            case 6:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.UP_Z);
+
+            case 7:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.DOWN_Z);
+
+            case 8:
+                return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.DOWN_X);
+            }
+
+        default:
+            return iblockdata;
+        }
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.a(enumblockmirror.a(((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).c()));
+    }
+
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockLever.FACING, BlockLever.POWERED});
     }
@@ -212,18 +269,39 @@ public class BlockLever extends Block {
 
         static final int[] a;
         static final int[] b;
-        static final int[] c = new int[EnumDirection.EnumAxis.values().length];
+        static final int[] c;
+        static final int[] d = new int[EnumDirection.EnumAxis.values().length];
 
         static {
             try {
-                BlockLever.SyntheticClass_1.c[EnumDirection.EnumAxis.X.ordinal()] = 1;
+                BlockLever.SyntheticClass_1.d[EnumDirection.EnumAxis.X.ordinal()] = 1;
             } catch (NoSuchFieldError nosuchfielderror) {
                 ;
             }
 
             try {
-                BlockLever.SyntheticClass_1.c[EnumDirection.EnumAxis.Z.ordinal()] = 2;
+                BlockLever.SyntheticClass_1.d[EnumDirection.EnumAxis.Z.ordinal()] = 2;
             } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            c = new int[EnumBlockRotation.values().length];
+
+            try {
+                BlockLever.SyntheticClass_1.c[EnumBlockRotation.CLOCKWISE_180.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                BlockLever.SyntheticClass_1.c[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            try {
+                BlockLever.SyntheticClass_1.c[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror4) {
                 ;
             }
 
@@ -231,49 +309,49 @@ public class BlockLever extends Block {
 
             try {
                 BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.EAST.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.WEST.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.SOUTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.NORTH.ordinal()] = 4;
             } catch (NoSuchFieldError nosuchfielderror5) {
                 ;
             }
 
             try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.UP_Z.ordinal()] = 5;
+                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.WEST.ordinal()] = 2;
             } catch (NoSuchFieldError nosuchfielderror6) {
                 ;
             }
 
             try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.UP_X.ordinal()] = 6;
+                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.SOUTH.ordinal()] = 3;
             } catch (NoSuchFieldError nosuchfielderror7) {
                 ;
             }
 
             try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.DOWN_X.ordinal()] = 7;
+                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.NORTH.ordinal()] = 4;
             } catch (NoSuchFieldError nosuchfielderror8) {
                 ;
             }
 
             try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.DOWN_Z.ordinal()] = 8;
+                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.UP_Z.ordinal()] = 5;
             } catch (NoSuchFieldError nosuchfielderror9) {
+                ;
+            }
+
+            try {
+                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.UP_X.ordinal()] = 6;
+            } catch (NoSuchFieldError nosuchfielderror10) {
+                ;
+            }
+
+            try {
+                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.DOWN_X.ordinal()] = 7;
+            } catch (NoSuchFieldError nosuchfielderror11) {
+                ;
+            }
+
+            try {
+                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.DOWN_Z.ordinal()] = 8;
+            } catch (NoSuchFieldError nosuchfielderror12) {
                 ;
             }
 
@@ -281,37 +359,37 @@ public class BlockLever extends Block {
 
             try {
                 BlockLever.SyntheticClass_1.a[EnumDirection.DOWN.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror10) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.a[EnumDirection.UP.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror11) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror12) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 4;
             } catch (NoSuchFieldError nosuchfielderror13) {
                 ;
             }
 
             try {
-                BlockLever.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 5;
+                BlockLever.SyntheticClass_1.a[EnumDirection.UP.ordinal()] = 2;
             } catch (NoSuchFieldError nosuchfielderror14) {
                 ;
             }
 
             try {
-                BlockLever.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 6;
+                BlockLever.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 3;
             } catch (NoSuchFieldError nosuchfielderror15) {
+                ;
+            }
+
+            try {
+                BlockLever.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror16) {
+                ;
+            }
+
+            try {
+                BlockLever.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 5;
+            } catch (NoSuchFieldError nosuchfielderror17) {
+                ;
+            }
+
+            try {
+                BlockLever.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 6;
+            } catch (NoSuchFieldError nosuchfielderror18) {
                 ;
             }
 
@@ -356,7 +434,7 @@ public class BlockLever extends Block {
         public static BlockLever.EnumLeverPosition a(EnumDirection enumdirection, EnumDirection enumdirection1) {
             switch (BlockLever.SyntheticClass_1.a[enumdirection.ordinal()]) {
             case 1:
-                switch (BlockLever.SyntheticClass_1.c[enumdirection1.k().ordinal()]) {
+                switch (BlockLever.SyntheticClass_1.d[enumdirection1.k().ordinal()]) {
                 case 1:
                     return BlockLever.EnumLeverPosition.DOWN_X;
 
@@ -368,7 +446,7 @@ public class BlockLever extends Block {
                 }
 
             case 2:
-                switch (BlockLever.SyntheticClass_1.c[enumdirection1.k().ordinal()]) {
+                switch (BlockLever.SyntheticClass_1.d[enumdirection1.k().ordinal()]) {
                 case 1:
                     return BlockLever.EnumLeverPosition.UP_X;
 

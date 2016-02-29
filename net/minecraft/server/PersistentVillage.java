@@ -87,7 +87,7 @@ public class PersistentVillage extends PersistentBase {
 
         while (iterator.hasNext()) {
             Village village1 = (Village) iterator.next();
-            double d1 = village1.a().i(blockposition);
+            double d1 = village1.a().k(blockposition);
 
             if (d1 < d0) {
                 float f = (float) (i + village1.b());
@@ -181,7 +181,7 @@ public class PersistentVillage extends PersistentBase {
     }
 
     private void d(BlockPosition blockposition) {
-        EnumDirection enumdirection = BlockDoor.h(this.world, blockposition);
+        EnumDirection enumdirection = BlockDoor.f(this.world, blockposition);
         EnumDirection enumdirection1 = enumdirection.opposite();
         int i = this.a(blockposition, enumdirection, 5);
         int j = this.a(blockposition, enumdirection1, i + 1);
@@ -196,7 +196,7 @@ public class PersistentVillage extends PersistentBase {
         int j = 0;
 
         for (int k = 1; k <= 5; ++k) {
-            if (this.world.i(blockposition.shift(enumdirection, k))) {
+            if (this.world.h(blockposition.shift(enumdirection, k))) {
                 ++j;
                 if (j >= i) {
                     return j;
@@ -224,9 +224,10 @@ public class PersistentVillage extends PersistentBase {
     }
 
     private boolean f(BlockPosition blockposition) {
-        Block block = this.world.getType(blockposition).getBlock();
+        IBlockData iblockdata = this.world.getType(blockposition);
+        Block block = iblockdata.getBlock();
 
-        return block instanceof BlockDoor ? block.getMaterial() == Material.WOOD : false;
+        return block instanceof BlockDoor ? iblockdata.getMaterial() == Material.WOOD : false;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -260,6 +261,6 @@ public class PersistentVillage extends PersistentBase {
     }
 
     public static String a(WorldProvider worldprovider) {
-        return "villages" + worldprovider.getSuffix();
+        return "villages" + worldprovider.getDimensionManager().c();
     }
 }

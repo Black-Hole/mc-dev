@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class CommandTrigger extends CommandAbstract {
         return "commands.trigger.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 3) {
             throw new ExceptionUsage("commands.trigger.usage", new Object[0]);
         } else {
@@ -39,7 +40,7 @@ public class CommandTrigger extends CommandAbstract {
                 entityplayer = (EntityPlayer) entity;
             }
 
-            Scoreboard scoreboard = MinecraftServer.getServer().getWorldServer(0).getScoreboard();
+            Scoreboard scoreboard = minecraftserver.getWorldServer(0).getScoreboard();
             ScoreboardObjective scoreboardobjective = scoreboard.getObjective(astring[0]);
 
             if (scoreboardobjective != null && scoreboardobjective.getCriteria() == IScoreboardCriteria.c) {
@@ -65,7 +66,7 @@ public class CommandTrigger extends CommandAbstract {
 
                         scoreboardscore.a(true);
                         if (entityplayer.playerInteractManager.isCreative()) {
-                            a(icommandlistener, this, "commands.trigger.success", new Object[] { astring[0], astring[1], astring[2]});
+                            a(icommandlistener, (ICommand) this, "commands.trigger.success", new Object[] { astring[0], astring[1], astring[2]});
                         }
 
                     }
@@ -76,9 +77,9 @@ public class CommandTrigger extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         if (astring.length == 1) {
-            Scoreboard scoreboard = MinecraftServer.getServer().getWorldServer(0).getScoreboard();
+            Scoreboard scoreboard = minecraftserver.getWorldServer(0).getScoreboard();
             ArrayList arraylist = Lists.newArrayList();
             Iterator iterator = scoreboard.getObjectives().iterator();
 
@@ -92,7 +93,7 @@ public class CommandTrigger extends CommandAbstract {
 
             return a(astring, (String[]) arraylist.toArray(new String[arraylist.size()]));
         } else {
-            return astring.length == 2 ? a(astring, new String[] { "add", "set"}) : null;
+            return astring.length == 2 ? a(astring, new String[] { "add", "set"}) : Collections.emptyList();
         }
     }
 }

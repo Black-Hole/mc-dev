@@ -1,14 +1,14 @@
 package net.minecraft.server;
 
-public class TileEntityFurnace extends TileEntityContainer implements IUpdatePlayerListBox, IWorldInventory {
+public class TileEntityFurnace extends TileEntityContainer implements ITickable, IWorldInventory {
 
     private static final int[] a = new int[] { 0};
     private static final int[] f = new int[] { 2, 1};
     private static final int[] g = new int[] { 1};
     private ItemStack[] items = new ItemStack[3];
-    public int burnTime;
+    private int burnTime;
     private int ticksForCurrentFuel;
-    public int cookTime;
+    private int cookTime;
     private int cookTimeTotal;
     private String m;
 
@@ -23,35 +23,11 @@ public class TileEntityFurnace extends TileEntityContainer implements IUpdatePla
     }
 
     public ItemStack splitStack(int i, int j) {
-        if (this.items[i] != null) {
-            ItemStack itemstack;
-
-            if (this.items[i].count <= j) {
-                itemstack = this.items[i];
-                this.items[i] = null;
-                return itemstack;
-            } else {
-                itemstack = this.items[i].cloneAndSubtract(j);
-                if (this.items[i].count == 0) {
-                    this.items[i] = null;
-                }
-
-                return itemstack;
-            }
-        } else {
-            return null;
-        }
+        return ContainerUtil.a(this.items, i, j);
     }
 
     public ItemStack splitWithoutUpdate(int i) {
-        if (this.items[i] != null) {
-            ItemStack itemstack = this.items[i];
-
-            this.items[i] = null;
-            return itemstack;
-        } else {
-            return null;
-        }
+        return ContainerUtil.a(this.items, i);
     }
 
     public void setItem(int i, ItemStack itemstack) {
@@ -75,7 +51,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IUpdatePla
     }
 
     public boolean hasCustomName() {
-        return this.m != null && this.m.length() > 0;
+        return this.m != null && !this.m.isEmpty();
     }
 
     public void a(String s) {
@@ -107,8 +83,8 @@ public class TileEntityFurnace extends TileEntityContainer implements IUpdatePla
 
     }
 
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void save(NBTTagCompound nbttagcompound) {
+        super.save(nbttagcompound);
         nbttagcompound.setShort("BurnTime", (short) this.burnTime);
         nbttagcompound.setShort("CookTime", (short) this.cookTime);
         nbttagcompound.setShort("CookTimeTotal", (short) this.cookTimeTotal);
@@ -242,7 +218,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IUpdatePla
                     return 150;
                 }
 
-                if (block.getMaterial() == Material.WOOD) {
+                if (block.getBlockData().getMaterial() == Material.WOOD) {
                     return 300;
                 }
 
@@ -268,7 +244,15 @@ public class TileEntityFurnace extends TileEntityContainer implements IUpdatePla
     public void closeContainer(EntityHuman entityhuman) {}
 
     public boolean b(int i, ItemStack itemstack) {
-        return i == 2 ? false : (i != 1 ? true : isFuel(itemstack) || SlotFurnaceFuel.c_(itemstack));
+        if (i == 2) {
+            return false;
+        } else if (i != 1) {
+            return true;
+        } else {
+            ItemStack itemstack1 = this.items[1];
+
+            return isFuel(itemstack) || SlotFurnaceFuel.d_(itemstack) && (itemstack1 == null || itemstack1.getItem() != Items.BUCKET);
+        }
     }
 
     public int[] getSlotsForFace(EnumDirection enumdirection) {
@@ -318,7 +302,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IUpdatePla
         }
     }
 
-    public void b(int i, int j) {
+    public void setProperty(int i, int j) {
         switch (i) {
         case 0:
             this.burnTime = j;

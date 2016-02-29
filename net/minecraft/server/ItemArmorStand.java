@@ -9,30 +9,30 @@ public class ItemArmorStand extends Item {
         this.a(CreativeModeTab.c);
     }
 
-    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (enumdirection == EnumDirection.DOWN) {
-            return false;
+            return EnumInteractionResult.FAIL;
         } else {
-            boolean flag = world.getType(blockposition).getBlock().a(world, blockposition);
+            boolean flag = world.getType(blockposition).getBlock().a((IBlockAccess) world, blockposition);
             BlockPosition blockposition1 = flag ? blockposition : blockposition.shift(enumdirection);
 
             if (!entityhuman.a(blockposition1, enumdirection, itemstack)) {
-                return false;
+                return EnumInteractionResult.FAIL;
             } else {
                 BlockPosition blockposition2 = blockposition1.up();
-                boolean flag1 = !world.isEmpty(blockposition1) && !world.getType(blockposition1).getBlock().a(world, blockposition1);
+                boolean flag1 = !world.isEmpty(blockposition1) && !world.getType(blockposition1).getBlock().a((IBlockAccess) world, blockposition1);
 
-                flag1 |= !world.isEmpty(blockposition2) && !world.getType(blockposition2).getBlock().a(world, blockposition2);
+                flag1 |= !world.isEmpty(blockposition2) && !world.getType(blockposition2).getBlock().a((IBlockAccess) world, blockposition2);
                 if (flag1) {
-                    return false;
+                    return EnumInteractionResult.FAIL;
                 } else {
                     double d0 = (double) blockposition1.getX();
                     double d1 = (double) blockposition1.getY();
                     double d2 = (double) blockposition1.getZ();
-                    List list = world.getEntities((Entity) null, AxisAlignedBB.a(d0, d1, d2, d0 + 1.0D, d1 + 2.0D, d2 + 1.0D));
+                    List list = world.getEntities((Entity) null, new AxisAlignedBB(d0, d1, d2, d0 + 1.0D, d1 + 2.0D, d2 + 1.0D));
 
-                    if (list.size() > 0) {
-                        return false;
+                    if (!list.isEmpty()) {
+                        return EnumInteractionResult.FAIL;
                     } else {
                         if (!world.isClientSide) {
                             world.setAir(blockposition1);
@@ -42,21 +42,13 @@ public class ItemArmorStand extends Item {
 
                             entityarmorstand.setPositionRotation(d0 + 0.5D, d1, d2 + 0.5D, f3, 0.0F);
                             this.a(entityarmorstand, world.random);
-                            NBTTagCompound nbttagcompound = itemstack.getTag();
-
-                            if (nbttagcompound != null && nbttagcompound.hasKeyOfType("EntityTag", 10)) {
-                                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-
-                                entityarmorstand.d(nbttagcompound1);
-                                nbttagcompound1.a(nbttagcompound.getCompound("EntityTag"));
-                                entityarmorstand.f(nbttagcompound1);
-                            }
-
+                            ItemMonsterEgg.a(world, entityhuman, itemstack, (Entity) entityarmorstand);
                             world.addEntity(entityarmorstand);
+                            world.a((EntityHuman) null, entityarmorstand.locX, entityarmorstand.locY, entityarmorstand.locZ, SoundEffects.m, SoundCategory.BLOCKS, 0.75F, 0.8F);
                         }
 
                         --itemstack.count;
-                        return true;
+                        return EnumInteractionResult.SUCCESS;
                     }
                 }
             }
@@ -64,13 +56,13 @@ public class ItemArmorStand extends Item {
     }
 
     private void a(EntityArmorStand entityarmorstand, Random random) {
-        Vector3f vector3f = entityarmorstand.t();
+        Vector3f vector3f = entityarmorstand.w();
         float f = random.nextFloat() * 5.0F;
         float f1 = random.nextFloat() * 20.0F - 10.0F;
         Vector3f vector3f1 = new Vector3f(vector3f.getX() + f, vector3f.getY() + f1, vector3f.getZ());
 
         entityarmorstand.setHeadPose(vector3f1);
-        vector3f = entityarmorstand.u();
+        vector3f = entityarmorstand.x();
         f = random.nextFloat() * 10.0F - 5.0F;
         vector3f1 = new Vector3f(vector3f.getX(), vector3f.getY() + f, vector3f.getZ());
         entityarmorstand.setBodyPose(vector3f1);

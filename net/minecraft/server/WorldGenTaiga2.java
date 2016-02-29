@@ -36,9 +36,9 @@ public class WorldGenTaiga2 extends WorldGenTreeAbstract {
                 for (int l1 = blockposition.getX() - j1; l1 <= blockposition.getX() + j1 && flag; ++l1) {
                     for (i1 = blockposition.getZ() - j1; i1 <= blockposition.getZ() + j1 && flag; ++i1) {
                         if (k1 >= 0 && k1 < 256) {
-                            Block block = world.getType(blockposition_mutableblockposition.c(l1, k1, i1)).getBlock();
+                            Material material = world.getType(blockposition_mutableblockposition.c(l1, k1, i1)).getMaterial();
 
-                            if (block.getMaterial() != Material.AIR && block.getMaterial() != Material.LEAVES) {
+                            if (material != Material.AIR && material != Material.LEAVES) {
                                 flag = false;
                             }
                         } else {
@@ -51,9 +51,9 @@ public class WorldGenTaiga2 extends WorldGenTreeAbstract {
             if (!flag) {
                 return false;
             } else {
-                Block block1 = world.getType(blockposition.down()).getBlock();
+                Block block = world.getType(blockposition.down()).getBlock();
 
-                if ((block1 == Blocks.GRASS || block1 == Blocks.DIRT || block1 == Blocks.FARMLAND) && blockposition.getY() < 256 - i - 1) {
+                if ((block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.FARMLAND) && blockposition.getY() < 256 - i - 1) {
                     this.a(world, blockposition.down());
                     j1 = random.nextInt(2);
                     int i2 = 1;
@@ -73,7 +73,7 @@ public class WorldGenTaiga2 extends WorldGenTreeAbstract {
                                 if (Math.abs(l2) != j1 || Math.abs(j3) != j1 || j1 <= 0) {
                                     BlockPosition blockposition1 = new BlockPosition(k2, j2, i3);
 
-                                    if (!world.getType(blockposition1).getBlock().o()) {
+                                    if (!world.getType(blockposition1).b()) {
                                         this.a(world, blockposition1, WorldGenTaiga2.b);
                                     }
                                 }
@@ -95,9 +95,9 @@ public class WorldGenTaiga2 extends WorldGenTreeAbstract {
                     i1 = random.nextInt(3);
 
                     for (j2 = 0; j2 < i - i1; ++j2) {
-                        Block block2 = world.getType(blockposition.up(j2)).getBlock();
+                        Material material1 = world.getType(blockposition.up(j2)).getMaterial();
 
-                        if (block2.getMaterial() == Material.AIR || block2.getMaterial() == Material.LEAVES) {
+                        if (material1 == Material.AIR || material1 == Material.LEAVES) {
                             this.a(world, blockposition.up(j2), WorldGenTaiga2.a);
                         }
                     }

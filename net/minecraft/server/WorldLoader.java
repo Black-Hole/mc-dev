@@ -8,18 +8,18 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldLoader implements Convertable {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger c = LogManager.getLogger();
     protected final File a;
+    protected final DataConverterManager b;
 
-    public WorldLoader(File file) {
+    public WorldLoader(File file, DataConverterManager dataconvertermanager) {
+        this.b = dataconvertermanager;
         if (!file.exists()) {
             file.mkdirs();
         }
 
         this.a = file;
     }
-
-    public void d() {}
 
     public WorldData c(String s) {
         File file = new File(this.a, s);
@@ -28,83 +28,34 @@ public class WorldLoader implements Convertable {
             return null;
         } else {
             File file1 = new File(file, "level.dat");
-            NBTTagCompound nbttagcompound;
-            NBTTagCompound nbttagcompound1;
 
             if (file1.exists()) {
-                try {
-                    nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file1)));
-                    nbttagcompound1 = nbttagcompound.getCompound("Data");
-                    return new WorldData(nbttagcompound1);
-                } catch (Exception exception) {
-                    WorldLoader.b.error("Exception reading " + file1, exception);
+                WorldData worlddata = a(file1, this.b);
+
+                if (worlddata != null) {
+                    return worlddata;
                 }
             }
 
             file1 = new File(file, "level.dat_old");
-            if (file1.exists()) {
-                try {
-                    nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file1)));
-                    nbttagcompound1 = nbttagcompound.getCompound("Data");
-                    return new WorldData(nbttagcompound1);
-                } catch (Exception exception1) {
-                    WorldLoader.b.error("Exception reading " + file1, exception1);
-                }
-            }
+            return file1.exists() ? a(file1, this.b) : null;
+        }
+    }
 
+    public static WorldData a(File file, DataConverterManager dataconvertermanager) {
+        try {
+            NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));
+            NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Data");
+
+            return new WorldData(dataconvertermanager.a((DataConverterType) DataConverterTypes.LEVEL, nbttagcompound1));
+        } catch (Exception exception) {
+            WorldLoader.c.error("Exception reading " + file, exception);
             return null;
         }
     }
 
-    public boolean e(String s) {
-        File file = new File(this.a, s);
-
-        if (!file.exists()) {
-            return true;
-        } else {
-            WorldLoader.b.info("Deleting level " + s);
-
-            for (int i = 1; i <= 5; ++i) {
-                WorldLoader.b.info("Attempt " + i + "...");
-                if (a(file.listFiles())) {
-                    break;
-                }
-
-                WorldLoader.b.warn("Unsuccessful in deleting contents.");
-                if (i < 5) {
-                    try {
-                        Thread.sleep(500L);
-                    } catch (InterruptedException interruptedexception) {
-                        ;
-                    }
-                }
-            }
-
-            return file.delete();
-        }
-    }
-
-    protected static boolean a(File[] afile) {
-        for (int i = 0; i < afile.length; ++i) {
-            File file = afile[i];
-
-            WorldLoader.b.debug("Deleting " + file);
-            if (file.isDirectory() && !a(file.listFiles())) {
-                WorldLoader.b.warn("Couldn\'t delete directory " + file);
-                return false;
-            }
-
-            if (!file.delete()) {
-                WorldLoader.b.warn("Couldn\'t delete file " + file);
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public IDataManager a(String s, boolean flag) {
-        return new WorldNBTStorage(this.a, s, flag);
+        return new WorldNBTStorage(this.a, s, flag, this.b);
     }
 
     public boolean isConvertable(String s) {
@@ -113,5 +64,9 @@ public class WorldLoader implements Convertable {
 
     public boolean convert(String s, IProgressUpdate iprogressupdate) {
         return false;
+    }
+
+    public File b(String s, String s1) {
+        return new File(new File(this.a, s), s1);
     }
 }

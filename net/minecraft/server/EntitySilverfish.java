@@ -9,15 +9,18 @@ public class EntitySilverfish extends EntityMonster {
     public EntitySilverfish(World world) {
         super(world);
         this.setSize(0.4F, 0.3F);
+    }
+
+    protected void r() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(3, this.a = new EntitySilverfish.PathfinderGoalSilverfishWakeOthers(this));
-        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, EntityHuman.class, 1.0D, false));
+        this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.goalSelector.a(5, new EntitySilverfish.PathfinderGoalSilverfishHideInBlock(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true));
     }
 
-    public double am() {
+    public double ax() {
         return 0.2D;
     }
 
@@ -32,27 +35,31 @@ public class EntitySilverfish extends EntityMonster {
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
     }
 
-    protected boolean s_() {
+    protected boolean playStepSound() {
         return false;
     }
 
-    protected String z() {
-        return "mob.silverfish.say";
+    protected SoundEffect G() {
+        return SoundEffects.fd;
     }
 
-    protected String bo() {
-        return "mob.silverfish.hit";
+    protected SoundEffect bR() {
+        return SoundEffects.ff;
     }
 
-    protected String bp() {
-        return "mob.silverfish.kill";
+    protected SoundEffect bS() {
+        return SoundEffects.fe;
+    }
+
+    protected void a(BlockPosition blockposition, Block block) {
+        this.a(SoundEffects.fg, 0.15F, 1.0F);
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            if (damagesource instanceof EntityDamageSource || damagesource == DamageSource.MAGIC) {
+            if ((damagesource instanceof EntityDamageSource || damagesource == DamageSource.MAGIC) && this.a != null) {
                 this.a.f();
             }
 
@@ -60,30 +67,26 @@ public class EntitySilverfish extends EntityMonster {
         }
     }
 
-    protected void a(BlockPosition blockposition, Block block) {
-        this.makeSound("mob.silverfish.step", 0.15F, 1.0F);
+    protected MinecraftKey J() {
+        return LootTables.t;
     }
 
-    protected Item getLoot() {
-        return null;
-    }
-
-    public void t_() {
-        this.aI = this.yaw;
-        super.t_();
+    public void m() {
+        this.aM = this.yaw;
+        super.m();
     }
 
     public float a(BlockPosition blockposition) {
         return this.world.getType(blockposition.down()).getBlock() == Blocks.STONE ? 10.0F : super.a(blockposition);
     }
 
-    protected boolean n_() {
+    protected boolean s_() {
         return true;
     }
 
-    public boolean bR() {
-        if (super.bR()) {
-            EntityHuman entityhuman = this.world.findNearbyPlayer(this, 5.0D);
+    public boolean cF() {
+        if (super.cF()) {
+            EntityHuman entityhuman = this.world.b(this, 5.0D);
 
             return entityhuman == null;
         } else {
@@ -108,19 +111,21 @@ public class EntitySilverfish extends EntityMonster {
         }
 
         public boolean a() {
-            if (this.silverfish.getGoalTarget() != null) {
+            if (!this.silverfish.world.getGameRules().getBoolean("mobGriefing")) {
                 return false;
-            } else if (!this.silverfish.getNavigation().m()) {
+            } else if (this.silverfish.getGoalTarget() != null) {
+                return false;
+            } else if (!this.silverfish.getNavigation().n()) {
                 return false;
             } else {
-                Random random = this.silverfish.bc();
+                Random random = this.silverfish.getRandom();
 
                 if (random.nextInt(10) == 0) {
                     this.b = EnumDirection.a(random);
                     BlockPosition blockposition = (new BlockPosition(this.silverfish.locX, this.silverfish.locY + 0.5D, this.silverfish.locZ)).shift(this.b);
                     IBlockData iblockdata = this.silverfish.world.getType(blockposition);
 
-                    if (BlockMonsterEggs.d(iblockdata)) {
+                    if (BlockMonsterEggs.i(iblockdata)) {
                         this.c = true;
                         return true;
                     }
@@ -143,9 +148,9 @@ public class EntitySilverfish extends EntityMonster {
                 BlockPosition blockposition = (new BlockPosition(this.silverfish.locX, this.silverfish.locY + 0.5D, this.silverfish.locZ)).shift(this.b);
                 IBlockData iblockdata = world.getType(blockposition);
 
-                if (BlockMonsterEggs.d(iblockdata)) {
+                if (BlockMonsterEggs.i(iblockdata)) {
                     world.setTypeAndData(blockposition, Blocks.MONSTER_EGG.getBlockData().set(BlockMonsterEggs.VARIANT, BlockMonsterEggs.EnumMonsterEggVarient.a(iblockdata)), 3);
-                    this.silverfish.y();
+                    this.silverfish.doSpawnEffect();
                     this.silverfish.die();
                 }
 
@@ -177,7 +182,7 @@ public class EntitySilverfish extends EntityMonster {
             --this.b;
             if (this.b <= 0) {
                 World world = this.silverfish.world;
-                Random random = this.silverfish.bc();
+                Random random = this.silverfish.getRandom();
                 BlockPosition blockposition = new BlockPosition(this.silverfish);
 
                 for (int i = 0; i <= 5 && i >= -5; i = i <= 0 ? 1 - i : 0 - i) {

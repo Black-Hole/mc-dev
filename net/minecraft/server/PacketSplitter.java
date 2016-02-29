@@ -26,7 +26,7 @@ public class PacketSplitter extends ByteToMessageDecoder {
                 PacketDataSerializer packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(abyte));
 
                 try {
-                    int j = packetdataserializer.e();
+                    int j = packetdataserializer.g();
 
                     if (bytebuf.readableBytes() >= j) {
                         list.add(bytebuf.readBytes(j));

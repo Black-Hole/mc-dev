@@ -2,7 +2,8 @@ package net.minecraft.server;
 
 public class EntityMinecartFurnace extends EntityMinecartAbstract {
 
-    private int c;
+    private static final DataWatcherObject<Boolean> c = DataWatcher.a(EntityMinecartFurnace.class, DataWatcherRegistry.h);
+    private int d;
     public double a;
     public double b;
 
@@ -14,33 +15,33 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public EntityMinecartAbstract.EnumMinecartType s() {
+    public EntityMinecartAbstract.EnumMinecartType v() {
         return EntityMinecartAbstract.EnumMinecartType.FURNACE;
     }
 
-    protected void h() {
-        super.h();
-        this.datawatcher.a(16, new Byte((byte) 0));
+    protected void i() {
+        super.i();
+        this.datawatcher.register(EntityMinecartFurnace.c, Boolean.valueOf(false));
     }
 
-    public void t_() {
-        super.t_();
-        if (this.c > 0) {
-            --this.c;
+    public void m() {
+        super.m();
+        if (this.d > 0) {
+            --this.d;
         }
 
-        if (this.c <= 0) {
+        if (this.d <= 0) {
             this.a = this.b = 0.0D;
         }
 
-        this.i(this.c > 0);
+        this.k(this.d > 0);
         if (this.j() && this.random.nextInt(4) == 0) {
             this.world.addParticle(EnumParticle.SMOKE_LARGE, this.locX, this.locY + 0.8D, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
         }
 
     }
 
-    protected double m() {
+    protected double o() {
         return 0.2D;
     }
 
@@ -64,7 +65,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
                 this.a = 0.0D;
                 this.b = 0.0D;
             } else {
-                double d1 = d0 / this.m();
+                double d1 = d0 / this.o();
 
                 this.a *= d1;
                 this.b *= d1;
@@ -73,7 +74,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
 
     }
 
-    protected void o() {
+    protected void r() {
         double d0 = this.a * this.a + this.b * this.b;
 
         if (d0 > 1.0E-4D) {
@@ -93,18 +94,16 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
             this.motZ *= 0.9800000190734863D;
         }
 
-        super.o();
+        super.r();
     }
 
-    public boolean e(EntityHuman entityhuman) {
-        ItemStack itemstack = entityhuman.inventory.getItemInHand();
-
-        if (itemstack != null && itemstack.getItem() == Items.COAL) {
-            if (!entityhuman.abilities.canInstantlyBuild && --itemstack.count == 0) {
-                entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, (ItemStack) null);
+    public boolean a(EntityHuman entityhuman, ItemStack itemstack, EnumHand enumhand) {
+        if (itemstack != null && itemstack.getItem() == Items.COAL && this.d + 3600 <= 32000) {
+            if (!entityhuman.abilities.canInstantlyBuild) {
+                --itemstack.count;
             }
 
-            this.c += 3600;
+            this.d += 3600;
         }
 
         this.a = this.locX - entityhuman.locX;
@@ -116,30 +115,25 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         super.b(nbttagcompound);
         nbttagcompound.setDouble("PushX", this.a);
         nbttagcompound.setDouble("PushZ", this.b);
-        nbttagcompound.setShort("Fuel", (short) this.c);
+        nbttagcompound.setShort("Fuel", (short) this.d);
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.a = nbttagcompound.getDouble("PushX");
         this.b = nbttagcompound.getDouble("PushZ");
-        this.c = nbttagcompound.getShort("Fuel");
+        this.d = nbttagcompound.getShort("Fuel");
     }
 
     protected boolean j() {
-        return (this.datawatcher.getByte(16) & 1) != 0;
+        return ((Boolean) this.datawatcher.get(EntityMinecartFurnace.c)).booleanValue();
     }
 
-    protected void i(boolean flag) {
-        if (flag) {
-            this.datawatcher.watch(16, Byte.valueOf((byte) (this.datawatcher.getByte(16) | 1)));
-        } else {
-            this.datawatcher.watch(16, Byte.valueOf((byte) (this.datawatcher.getByte(16) & -2)));
-        }
-
+    protected void k(boolean flag) {
+        this.datawatcher.set(EntityMinecartFurnace.c, Boolean.valueOf(flag));
     }
 
-    public IBlockData u() {
+    public IBlockData x() {
         return (this.j() ? Blocks.LIT_FURNACE : Blocks.FURNACE).getBlockData().set(BlockFurnace.FACING, EnumDirection.NORTH);
     }
 }

@@ -6,15 +6,15 @@ import java.util.List;
 public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     public static final BlockStateBoolean POWERED = BlockStateBoolean.of("powered");
-    private final BlockPressurePlateBinary.EnumMobType b;
+    private final BlockPressurePlateBinary.EnumMobType e;
 
     protected BlockPressurePlateBinary(Material material, BlockPressurePlateBinary.EnumMobType blockpressureplatebinary_enummobtype) {
         super(material);
-        this.j(this.blockStateList.getBlockData().set(BlockPressurePlateBinary.POWERED, Boolean.valueOf(false)));
-        this.b = blockpressureplatebinary_enummobtype;
+        this.w(this.blockStateList.getBlockData().set(BlockPressurePlateBinary.POWERED, Boolean.valueOf(false)));
+        this.e = blockpressureplatebinary_enummobtype;
     }
 
-    protected int e(IBlockData iblockdata) {
+    protected int getPower(IBlockData iblockdata) {
         return ((Boolean) iblockdata.get(BlockPressurePlateBinary.POWERED)).booleanValue() ? 15 : 0;
     }
 
@@ -22,11 +22,29 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
         return iblockdata.set(BlockPressurePlateBinary.POWERED, Boolean.valueOf(i > 0));
     }
 
-    protected int f(World world, BlockPosition blockposition) {
-        AxisAlignedBB axisalignedbb = this.getBoundingBox(blockposition);
+    protected void b(World world, BlockPosition blockposition) {
+        if (this.material == Material.WOOD) {
+            world.a((EntityHuman) null, blockposition, SoundEffects.he, SoundCategory.BLOCKS, 0.3F, 0.8F);
+        } else {
+            world.a((EntityHuman) null, blockposition, SoundEffects.gg, SoundCategory.BLOCKS, 0.3F, 0.6F);
+        }
+
+    }
+
+    protected void c(World world, BlockPosition blockposition) {
+        if (this.material == Material.WOOD) {
+            world.a((EntityHuman) null, blockposition, SoundEffects.hd, SoundCategory.BLOCKS, 0.3F, 0.7F);
+        } else {
+            world.a((EntityHuman) null, blockposition, SoundEffects.gf, SoundCategory.BLOCKS, 0.3F, 0.5F);
+        }
+
+    }
+
+    protected int e(World world, BlockPosition blockposition) {
+        AxisAlignedBB axisalignedbb = BlockPressurePlateBinary.c.a(blockposition);
         List list;
 
-        switch (BlockPressurePlateBinary.SyntheticClass_1.a[this.b.ordinal()]) {
+        switch (BlockPressurePlateBinary.SyntheticClass_1.a[this.e.ordinal()]) {
         case 1:
             list = world.getEntities((Entity) null, axisalignedbb);
             break;
@@ -45,7 +63,7 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                if (!entity.aI()) {
+                if (!entity.isIgnoreBlockTrigger()) {
                     return 15;
                 }
             }

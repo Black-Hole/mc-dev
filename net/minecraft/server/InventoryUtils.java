@@ -25,7 +25,7 @@ public class InventoryUtils {
 
     }
 
-    private static void dropItem(World world, double d0, double d1, double d2, ItemStack itemstack) {
+    public static void dropItem(World world, double d0, double d1, double d2, ItemStack itemstack) {
         float f = InventoryUtils.a.nextFloat() * 0.8F + 0.1F;
         float f1 = InventoryUtils.a.nextFloat() * 0.8F + 0.1F;
         float f2 = InventoryUtils.a.nextFloat() * 0.8F + 0.1F;

@@ -1,17 +1,15 @@
 package net.minecraft.server;
 
-import java.util.Random;
-
 public class ItemEnchantedBook extends Item {
 
     public ItemEnchantedBook() {}
 
-    public boolean f_(ItemStack itemstack) {
+    public boolean g_(ItemStack itemstack) {
         return false;
     }
 
     public EnumItemRarity g(ItemStack itemstack) {
-        return this.h(itemstack).size() > 0 ? EnumItemRarity.UNCOMMON : super.g(itemstack);
+        return !this.h(itemstack).isEmpty() ? EnumItemRarity.UNCOMMON : super.g(itemstack);
     }
 
     public NBTTagList h(ItemStack itemstack) {
@@ -27,7 +25,7 @@ public class ItemEnchantedBook extends Item {
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.get(i);
 
-            if (nbttagcompound.getShort("id") == weightedrandomenchant.enchantment.id) {
+            if (Enchantment.c(nbttagcompound.getShort("id")) == weightedrandomenchant.enchantment) {
                 if (nbttagcompound.getShort("lvl") < weightedrandomenchant.level) {
                     nbttagcompound.setShort("lvl", (short) weightedrandomenchant.level);
                 }
@@ -40,7 +38,7 @@ public class ItemEnchantedBook extends Item {
         if (flag) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            nbttagcompound1.setShort("id", (short) weightedrandomenchant.enchantment.id);
+            nbttagcompound1.setShort("id", (short) Enchantment.getId(weightedrandomenchant.enchantment));
             nbttagcompound1.setShort("lvl", (short) weightedrandomenchant.level);
             nbttaglist.add(nbttagcompound1);
         }
@@ -57,16 +55,5 @@ public class ItemEnchantedBook extends Item {
 
         this.a(itemstack, weightedrandomenchant);
         return itemstack;
-    }
-
-    public StructurePieceTreasure b(Random random) {
-        return this.a(random, 1, 1, 1);
-    }
-
-    public StructurePieceTreasure a(Random random, int i, int j, int k) {
-        ItemStack itemstack = new ItemStack(Items.BOOK, 1, 0);
-
-        EnchantmentManager.a(random, itemstack, 30);
-        return new StructurePieceTreasure(itemstack, i, j, k);
     }
 }

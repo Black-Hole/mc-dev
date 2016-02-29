@@ -2,12 +2,10 @@ package net.minecraft.server;
 
 public class ItemWithAuxData extends ItemBlock {
 
-    private final Block b;
-    private String[] c;
+    private String[] b;
 
     public ItemWithAuxData(Block block, boolean flag) {
         super(block);
-        this.b = block;
         if (flag) {
             this.setMaxDurability(0);
             this.a(true);
@@ -20,17 +18,17 @@ public class ItemWithAuxData extends ItemBlock {
     }
 
     public ItemWithAuxData a(String[] astring) {
-        this.c = astring;
+        this.b = astring;
         return this;
     }
 
-    public String e_(ItemStack itemstack) {
-        if (this.c == null) {
-            return super.e_(itemstack);
+    public String f_(ItemStack itemstack) {
+        if (this.b == null) {
+            return super.f_(itemstack);
         } else {
             int i = itemstack.getData();
 
-            return i >= 0 && i < this.c.length ? super.e_(itemstack) + "." + this.c[i] : super.e_(itemstack);
+            return i >= 0 && i < this.b.length ? super.f_(itemstack) + "." + this.b[i] : super.f_(itemstack);
         }
     }
 }

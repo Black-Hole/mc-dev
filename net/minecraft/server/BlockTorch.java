@@ -14,28 +14,52 @@ public class BlockTorch extends Block {
             return this.a((EnumDirection) object);
         }
     });
+    protected static final AxisAlignedBB b = new AxisAlignedBB(0.4000000059604645D, 0.0D, 0.4000000059604645D, 0.6000000238418579D, 0.6000000238418579D, 0.6000000238418579D);
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.3499999940395355D, 0.20000000298023224D, 0.699999988079071D, 0.6499999761581421D, 0.800000011920929D, 1.0D);
+    protected static final AxisAlignedBB d = new AxisAlignedBB(0.3499999940395355D, 0.20000000298023224D, 0.0D, 0.6499999761581421D, 0.800000011920929D, 0.30000001192092896D);
+    protected static final AxisAlignedBB e = new AxisAlignedBB(0.699999988079071D, 0.20000000298023224D, 0.3499999940395355D, 1.0D, 0.800000011920929D, 0.6499999761581421D);
+    protected static final AxisAlignedBB f = new AxisAlignedBB(0.0D, 0.20000000298023224D, 0.3499999940395355D, 0.30000001192092896D, 0.800000011920929D, 0.6499999761581421D);
 
     protected BlockTorch() {
         super(Material.ORIENTABLE);
-        this.j(this.blockStateList.getBlockData().set(BlockTorch.FACING, EnumDirection.UP));
+        this.w(this.blockStateList.getBlockData().set(BlockTorch.FACING, EnumDirection.UP));
         this.a(true);
         this.a(CreativeModeTab.c);
     }
 
-    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return null;
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        switch (BlockTorch.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockTorch.FACING)).ordinal()]) {
+        case 1:
+            return BlockTorch.f;
+
+        case 2:
+            return BlockTorch.e;
+
+        case 3:
+            return BlockTorch.d;
+
+        case 4:
+            return BlockTorch.c;
+
+        default:
+            return BlockTorch.b;
+        }
     }
 
-    public boolean c() {
+    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        return BlockTorch.k;
+    }
+
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
-    private boolean e(World world, BlockPosition blockposition) {
-        if (World.a((IBlockAccess) world, blockposition)) {
+    private boolean b(World world, BlockPosition blockposition) {
+        if (world.getType(blockposition).q()) {
             return true;
         } else {
             Block block = world.getType(blockposition).getBlock();
@@ -64,7 +88,7 @@ public class BlockTorch extends Block {
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
         boolean flag = enumdirection.k().c();
 
-        return flag && world.d(blockposition1, true) || enumdirection.equals(EnumDirection.UP) && this.e(world, blockposition1);
+        return flag && world.d(blockposition1, true) || enumdirection.equals(EnumDirection.UP) && this.b(world, blockposition1);
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
@@ -106,7 +130,7 @@ public class BlockTorch extends Block {
 
             if (enumdirection_enumaxis.c() && !world.d(blockposition.shift(enumdirection1), true)) {
                 flag = true;
-            } else if (enumdirection_enumaxis.b() && !this.e(world, blockposition.shift(enumdirection1))) {
+            } else if (enumdirection_enumaxis.b() && !this.b(world, blockposition.shift(enumdirection1))) {
                 flag = true;
             }
 
@@ -131,26 +155,6 @@ public class BlockTorch extends Block {
 
             return false;
         }
-    }
-
-    public MovingObjectPosition a(World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
-        EnumDirection enumdirection = (EnumDirection) world.getType(blockposition).get(BlockTorch.FACING);
-        float f = 0.15F;
-
-        if (enumdirection == EnumDirection.EAST) {
-            this.a(0.0F, 0.2F, 0.5F - f, f * 2.0F, 0.8F, 0.5F + f);
-        } else if (enumdirection == EnumDirection.WEST) {
-            this.a(1.0F - f * 2.0F, 0.2F, 0.5F - f, 1.0F, 0.8F, 0.5F + f);
-        } else if (enumdirection == EnumDirection.SOUTH) {
-            this.a(0.5F - f, 0.2F, 0.0F, 0.5F + f, 0.8F, f * 2.0F);
-        } else if (enumdirection == EnumDirection.NORTH) {
-            this.a(0.5F - f, 0.2F, 1.0F - f * 2.0F, 0.5F + f, 0.8F, 1.0F);
-        } else {
-            f = 0.1F;
-            this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.6F, 0.5F + f);
-        }
-
-        return super.a(world, blockposition, vec3d, vec3d1);
     }
 
     public IBlockData fromLegacyData(int i) {
@@ -209,6 +213,14 @@ public class BlockTorch extends Block {
         }
 
         return i;
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return iblockdata.set(BlockTorch.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockTorch.FACING)));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockTorch.FACING)));
     }
 
     protected BlockStateList getStateList() {

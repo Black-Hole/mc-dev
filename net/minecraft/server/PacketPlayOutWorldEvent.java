@@ -20,7 +20,7 @@ public class PacketPlayOutWorldEvent implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readInt();
-        this.b = packetdataserializer.c();
+        this.b = packetdataserializer.e();
         this.c = packetdataserializer.readInt();
         this.d = packetdataserializer.readBoolean();
     }

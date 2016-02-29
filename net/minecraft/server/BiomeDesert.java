@@ -4,16 +4,17 @@ import java.util.Random;
 
 public class BiomeDesert extends BiomeBase {
 
-    public BiomeDesert(int i) {
-        super(i);
-        this.au.clear();
-        this.ak = Blocks.SAND.getBlockData();
-        this.al = Blocks.SAND.getBlockData();
-        this.as.A = -999;
-        this.as.D = 2;
-        this.as.F = 50;
-        this.as.G = 10;
-        this.au.clear();
+    public BiomeDesert(BiomeBase.a biomebase_a) {
+        super(biomebase_a);
+        this.v.clear();
+        this.r = Blocks.SAND.getBlockData();
+        this.s = Blocks.SAND.getBlockData();
+        this.t.z = -999;
+        this.t.C = 2;
+        this.t.E = 50;
+        this.t.F = 10;
+        this.v.clear();
+        this.v.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 4, 2, 3));
     }
 
     public void a(World world, Random random, BlockPosition blockposition) {

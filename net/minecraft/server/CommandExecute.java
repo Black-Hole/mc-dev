@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandExecute extends CommandAbstract {
@@ -19,11 +20,11 @@ public class CommandExecute extends CommandAbstract {
         return "commands.execute.usage";
     }
 
-    public void execute(final ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(final MinecraftServer minecraftserver, final ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 5) {
             throw new ExceptionUsage("commands.execute.usage", new Object[0]);
         } else {
-            final Entity entity = a(icommandlistener, astring[0], Entity.class);
+            final Entity entity = a(minecraftserver, icommandlistener, astring[0], Entity.class);
             final double d0 = b(entity.locX, astring[1], false);
             final double d1 = b(entity.locY, astring[2], false);
             final double d2 = b(entity.locZ, astring[3], false);
@@ -35,7 +36,7 @@ public class CommandExecute extends CommandAbstract {
                 double d3 = b(d0, astring[5], false);
                 double d4 = b(d1, astring[6], false);
                 double d5 = b(d2, astring[7], false);
-                Block block = g(icommandlistener, astring[8]);
+                Block block = b(icommandlistener, astring[8]);
                 int i = a(astring[9], -1, 15);
                 BlockPosition blockposition1 = new BlockPosition(d3, d4, d5);
                 IBlockData iblockdata = world.getType(blockposition1);
@@ -82,16 +83,18 @@ public class CommandExecute extends CommandAbstract {
                 }
 
                 public boolean getSendCommandFeedback() {
-                    MinecraftServer minecraftserver = MinecraftServer.getServer();
-
                     return minecraftserver == null || minecraftserver.worldServer[0].getGameRules().getBoolean("commandBlockOutput");
                 }
 
                 public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
                     entity.a(commandobjectiveexecutor_enumcommandresult, i);
                 }
+
+                public MinecraftServer h() {
+                    return entity.h();
+                }
             };
-            ICommandHandler icommandhandler = MinecraftServer.getServer().getCommandHandler();
+            ICommandHandler icommandhandler = minecraftserver.getCommandHandler();
 
             try {
                 int j = icommandhandler.a(icommandlistener1, s);
@@ -105,8 +108,8 @@ public class CommandExecute extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : (astring.length > 5 && astring.length <= 8 && "detect".equals(astring[4]) ? a(astring, 5, blockposition) : (astring.length == 9 && "detect".equals(astring[4]) ? a(astring, (Collection) Block.REGISTRY.keySet()) : null)));
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : (astring.length > 5 && astring.length <= 8 && "detect".equals(astring[4]) ? a(astring, 5, blockposition) : (astring.length == 9 && "detect".equals(astring[4]) ? a(astring, (Collection) Block.REGISTRY.keySet()) : Collections.emptyList())));
     }
 
     public boolean isListStart(String[] astring, int i) {

@@ -14,8 +14,8 @@ public class PacketPlayOutPlayerListHeaderFooter implements Packet<PacketListene
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.d();
-        this.b = packetdataserializer.d();
+        this.a = packetdataserializer.f();
+        this.b = packetdataserializer.f();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

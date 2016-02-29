@@ -16,13 +16,13 @@ public class CommandToggleDownfall extends CommandAbstract {
         return "commands.downfall.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
-        this.d();
-        a(icommandlistener, this, "commands.downfall.success", new Object[0]);
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
+        this.a(minecraftserver);
+        a(icommandlistener, (ICommand) this, "commands.downfall.success", new Object[0]);
     }
 
-    protected void d() {
-        WorldData worlddata = MinecraftServer.getServer().worldServer[0].getWorldData();
+    protected void a(MinecraftServer minecraftserver) {
+        WorldData worlddata = minecraftserver.worldServer[0].getWorldData();
 
         worlddata.setStorm(!worlddata.hasStorm());
     }

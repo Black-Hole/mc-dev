@@ -91,6 +91,14 @@ public class PersistentScoreboard extends PersistentBase {
                 }
             }
 
+            if (nbttagcompound.hasKeyOfType("CollisionRule", 8)) {
+                ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = ScoreboardTeamBase.EnumTeamPush.a(nbttagcompound.getString("CollisionRule"));
+
+                if (scoreboardteambase_enumteampush != null) {
+                    scoreboardteam.a(scoreboardteambase_enumteampush);
+                }
+            }
+
             this.a(scoreboardteam, nbttagcompound.getList("Players", 8));
         }
 
@@ -178,8 +186,8 @@ public class PersistentScoreboard extends PersistentBase {
 
             nbttagcompound.setString("Name", scoreboardteam.getName());
             nbttagcompound.setString("DisplayName", scoreboardteam.getDisplayName());
-            if (scoreboardteam.l().b() >= 0) {
-                nbttagcompound.setString("TeamColor", scoreboardteam.l().e());
+            if (scoreboardteam.m().b() >= 0) {
+                nbttagcompound.setString("TeamColor", scoreboardteam.m().e());
             }
 
             nbttagcompound.setString("Prefix", scoreboardteam.getPrefix());
@@ -188,6 +196,7 @@ public class PersistentScoreboard extends PersistentBase {
             nbttagcompound.setBoolean("SeeFriendlyInvisibles", scoreboardteam.canSeeFriendlyInvisibles());
             nbttagcompound.setString("NameTagVisibility", scoreboardteam.getNameTagVisibility().e);
             nbttagcompound.setString("DeathMessageVisibility", scoreboardteam.j().e);
+            nbttagcompound.setString("CollisionRule", scoreboardteam.k().e);
             NBTTagList nbttaglist1 = new NBTTagList();
             Iterator iterator1 = scoreboardteam.getPlayerNameSet().iterator();
 

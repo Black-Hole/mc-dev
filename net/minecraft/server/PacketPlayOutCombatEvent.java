@@ -8,11 +8,15 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
     public int b;
     public int c;
     public int d;
-    public String e;
+    public IChatBaseComponent e;
 
     public PacketPlayOutCombatEvent() {}
 
     public PacketPlayOutCombatEvent(CombatTracker combattracker, PacketPlayOutCombatEvent.EnumCombatEventType packetplayoutcombatevent_enumcombateventtype) {
+        this(combattracker, packetplayoutcombatevent_enumcombateventtype, true);
+    }
+
+    public PacketPlayOutCombatEvent(CombatTracker combattracker, PacketPlayOutCombatEvent.EnumCombatEventType packetplayoutcombatevent_enumcombateventtype, boolean flag) {
         this.a = packetplayoutcombatevent_enumcombateventtype;
         EntityLiving entityliving = combattracker.c();
 
@@ -25,7 +29,11 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
         case 2:
             this.b = combattracker.h().getId();
             this.c = entityliving == null ? -1 : entityliving.getId();
-            this.e = combattracker.b().c();
+            if (flag) {
+                this.e = combattracker.getDeathMessage();
+            } else {
+                this.e = new ChatComponentText("");
+            }
         }
 
     }
@@ -33,12 +41,12 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = (PacketPlayOutCombatEvent.EnumCombatEventType) packetdataserializer.a(PacketPlayOutCombatEvent.EnumCombatEventType.class);
         if (this.a == PacketPlayOutCombatEvent.EnumCombatEventType.END_COMBAT) {
-            this.d = packetdataserializer.e();
+            this.d = packetdataserializer.g();
             this.c = packetdataserializer.readInt();
         } else if (this.a == PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED) {
-            this.b = packetdataserializer.e();
+            this.b = packetdataserializer.g();
             this.c = packetdataserializer.readInt();
-            this.e = packetdataserializer.c(32767);
+            this.e = packetdataserializer.f();
         }
 
     }

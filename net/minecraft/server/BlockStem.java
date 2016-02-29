@@ -1,41 +1,36 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import java.util.Iterator;
 import java.util.Random;
 
 public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
 
     public static final BlockStateInteger AGE = BlockStateInteger.of("age", 0, 7);
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", new Predicate() {
-        public boolean a(EnumDirection enumdirection) {
-            return enumdirection != EnumDirection.DOWN;
-        }
-
-        public boolean apply(Object object) {
-            return this.a((EnumDirection) object);
-        }
-    });
+    public static final BlockStateDirection FACING = BlockTorch.FACING;
     private final Block blockFruit;
+    protected static final AxisAlignedBB[] d = new AxisAlignedBB[] { new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.125D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.25D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.375D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.5D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.625D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.75D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.875D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D)};
 
     protected BlockStem(Block block) {
-        this.j(this.blockStateList.getBlockData().set(BlockStem.AGE, Integer.valueOf(0)).set(BlockStem.FACING, EnumDirection.UP));
+        this.w(this.blockStateList.getBlockData().set(BlockStem.AGE, Integer.valueOf(0)).set(BlockStem.FACING, EnumDirection.UP));
         this.blockFruit = block;
         this.a(true);
-        float f = 0.125F;
-
-        this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
         this.a((CreativeModeTab) null);
     }
 
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockStem.d[((Integer) iblockdata.get(BlockStem.AGE)).intValue()];
+    }
+
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        int i = ((Integer) iblockdata.get(BlockStem.AGE)).intValue();
+
         iblockdata = iblockdata.set(BlockStem.FACING, EnumDirection.UP);
         Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
         while (iterator.hasNext()) {
             EnumDirection enumdirection = (EnumDirection) iterator.next();
 
-            if (iblockaccess.getType(blockposition.shift(enumdirection)).getBlock() == this.blockFruit) {
+            if (iblockaccess.getType(blockposition.shift(enumdirection)).getBlock() == this.blockFruit && i == 7) {
                 iblockdata = iblockdata.set(BlockStem.FACING, enumdirection);
                 break;
             }
@@ -44,8 +39,8 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
         return iblockdata;
     }
 
-    protected boolean c(Block block) {
-        return block == Blocks.FARMLAND;
+    protected boolean i(IBlockData iblockdata) {
+        return iblockdata.getBlock() == Blocks.FARMLAND;
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
@@ -88,23 +83,10 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
         world.setTypeAndData(blockposition, iblockdata.set(BlockStem.AGE, Integer.valueOf(Math.min(7, i))), 2);
     }
 
-    public void j() {
-        float f = 0.125F;
-
-        this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
-    }
-
-    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        this.maxY = (double) ((float) (((Integer) iblockaccess.getType(blockposition).get(BlockStem.AGE)).intValue() * 2 + 2) / 16.0F);
-        float f = 0.125F;
-
-        this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, (float) this.maxY, 0.5F + f);
-    }
-
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         super.dropNaturally(world, blockposition, iblockdata, f, i);
         if (!world.isClientSide) {
-            Item item = this.l();
+            Item item = this.e();
 
             if (item != null) {
                 int j = ((Integer) iblockdata.get(BlockStem.AGE)).intValue();
@@ -119,12 +101,18 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
         }
     }
 
-    protected Item l() {
+    protected Item e() {
         return this.blockFruit == Blocks.PUMPKIN ? Items.PUMPKIN_SEEDS : (this.blockFruit == Blocks.MELON_BLOCK ? Items.MELON_SEEDS : null);
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return null;
+    }
+
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        Item item = this.e();
+
+        return item == null ? null : new ItemStack(item);
     }
 
     public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {

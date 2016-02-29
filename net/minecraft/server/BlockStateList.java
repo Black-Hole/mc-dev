@@ -1,31 +1,32 @@
 package net.minecraft.server;
 
 import com.google.common.base.Function;
-import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 public class BlockStateList {
 
-    private static final Joiner a = Joiner.on(", ");
-    private static final Function<IBlockState, String> b = new Function() {
-        public String a(IBlockState iblockstate) {
+    private static final Pattern a = Pattern.compile("^[a-z0-9_]+$");
+    private static final Function<IBlockState<?>, String> b = new Function() {
+        public String a(IBlockState<?> iblockstate) {
             return iblockstate == null ? "<NULL>" : iblockstate.a();
         }
 
@@ -34,21 +35,23 @@ public class BlockStateList {
         }
     };
     private final Block c;
-    private final ImmutableList<IBlockState> d;
+    private final ImmutableSortedMap<String, IBlockState<?>> d;
     private final ImmutableList<IBlockData> e;
 
-    public BlockStateList(Block block, IBlockState... aiblockstate) {
+    public BlockStateList(Block block, IBlockState<?>... aiblockstate) {
         this.c = block;
-        Arrays.sort(aiblockstate, new Comparator() {
-            public int a(IBlockState iblockstate, IBlockState iblockstate1) {
-                return iblockstate.a().compareTo(iblockstate1.a());
-            }
+        HashMap hashmap = Maps.newHashMap();
+        IBlockState[] aiblockstate1 = aiblockstate;
+        int i = aiblockstate.length;
 
-            public int compare(Object object, Object object1) {
-                return this.a((IBlockState) object, (IBlockState) object1);
-            }
-        });
-        this.d = ImmutableList.copyOf(aiblockstate);
+        for (int j = 0; j < i; ++j) {
+            IBlockState iblockstate = aiblockstate1[j];
+
+            a(block, iblockstate);
+            hashmap.put(iblockstate.a(), iblockstate);
+        }
+
+        this.d = ImmutableSortedMap.copyOf(hashmap);
         LinkedHashMap linkedhashmap = Maps.newLinkedHashMap();
         ArrayList arraylist = Lists.newArrayList();
         Iterable iterable = IteratorUtils.a(this.e());
@@ -56,7 +59,7 @@ public class BlockStateList {
 
         while (iterator.hasNext()) {
             List list = (List) iterator.next();
-            Map map = MapGeneratorUtils.b(this.d, list);
+            Map map = MapGeneratorUtils.b(this.d.values(), list);
             BlockStateList.BlockData blockstatelist_blockdata = new BlockStateList.BlockData(block, ImmutableMap.copyOf(map), null);
 
             linkedhashmap.put(map, blockstatelist_blockdata);
@@ -74,15 +77,43 @@ public class BlockStateList {
         this.e = ImmutableList.copyOf(arraylist);
     }
 
+    public static <T extends Comparable<T>> String a(Block block, IBlockState<T> iblockstate) {
+        String s = iblockstate.a();
+
+        if (!BlockStateList.a.matcher(s).matches()) {
+            throw new IllegalArgumentException("Block: " + block.getClass() + " has invalidly named property: " + s);
+        } else {
+            Iterator iterator = iblockstate.c().iterator();
+
+            String s1;
+
+            do {
+                if (!iterator.hasNext()) {
+                    return s;
+                }
+
+                Comparable comparable = (Comparable) iterator.next();
+
+                s1 = iblockstate.a(comparable);
+            } while (BlockStateList.a.matcher(s1).matches());
+
+            throw new IllegalArgumentException("Block: " + block.getClass() + " has property: " + s + " with invalidly named value: " + s1);
+        }
+    }
+
     public ImmutableList<IBlockData> a() {
         return this.e;
     }
 
-    private List<Iterable<Comparable>> e() {
+    private List<Iterable<Comparable<?>>> e() {
         ArrayList arraylist = Lists.newArrayList();
+        ImmutableCollection immutablecollection = this.d.values();
+        Iterator iterator = immutablecollection.iterator();
 
-        for (int i = 0; i < this.d.size(); ++i) {
-            arraylist.add(((IBlockState) this.d.get(i)).c());
+        while (iterator.hasNext()) {
+            IBlockState iblockstate = (IBlockState) iterator.next();
+
+            arraylist.add(iblockstate.c());
         }
 
         return arraylist;
@@ -96,32 +127,32 @@ public class BlockStateList {
         return this.c;
     }
 
-    public Collection<IBlockState> d() {
-        return this.d;
+    public Collection<IBlockState<?>> d() {
+        return this.d.values();
     }
 
     public String toString() {
-        return Objects.toStringHelper(this).add("block", Block.REGISTRY.c(this.c)).add("properties", Iterables.transform(this.d, BlockStateList.b)).toString();
+        return Objects.toStringHelper(this).add("block", Block.REGISTRY.b(this.c)).add("properties", Iterables.transform(this.d.values(), BlockStateList.b)).toString();
     }
 
     static class BlockData extends BlockDataAbstract {
 
         private final Block a;
-        private final ImmutableMap<IBlockState, Comparable> b;
-        private ImmutableTable<IBlockState, Comparable, IBlockData> c;
+        private final ImmutableMap<IBlockState<?>, Comparable<?>> b;
+        private ImmutableTable<IBlockState<?>, Comparable<?>, IBlockData> c;
 
-        private BlockData(Block block, ImmutableMap<IBlockState, Comparable> immutablemap) {
+        private BlockData(Block block, ImmutableMap<IBlockState<?>, Comparable<?>> immutablemap) {
             this.a = block;
             this.b = immutablemap;
         }
 
-        public Collection<IBlockState> a() {
+        public Collection<IBlockState<?>> r() {
             return Collections.unmodifiableCollection(this.b.keySet());
         }
 
         public <T extends Comparable<T>> T get(IBlockState<T> iblockstate) {
             if (!this.b.containsKey(iblockstate)) {
-                throw new IllegalArgumentException("Cannot get property " + iblockstate + " as it does not exist in " + this.a.P());
+                throw new IllegalArgumentException("Cannot get property " + iblockstate + " as it does not exist in " + this.a.t());
             } else {
                 return (Comparable) iblockstate.b().cast(this.b.get(iblockstate));
             }
@@ -129,15 +160,15 @@ public class BlockStateList {
 
         public <T extends Comparable<T>, V extends T> IBlockData set(IBlockState<T> iblockstate, V v0) {
             if (!this.b.containsKey(iblockstate)) {
-                throw new IllegalArgumentException("Cannot set property " + iblockstate + " as it does not exist in " + this.a.P());
+                throw new IllegalArgumentException("Cannot set property " + iblockstate + " as it does not exist in " + this.a.t());
             } else if (!iblockstate.c().contains(v0)) {
-                throw new IllegalArgumentException("Cannot set property " + iblockstate + " to " + v0 + " on block " + Block.REGISTRY.c(this.a) + ", it is not an allowed value");
+                throw new IllegalArgumentException("Cannot set property " + iblockstate + " to " + v0 + " on block " + Block.REGISTRY.b(this.a) + ", it is not an allowed value");
             } else {
                 return (IBlockData) (this.b.get(iblockstate) == v0 ? this : (IBlockData) this.c.get(iblockstate, v0));
             }
         }
 
-        public ImmutableMap<IBlockState, Comparable> b() {
+        public ImmutableMap<IBlockState<?>, Comparable<?>> s() {
             return this.b;
         }
 
@@ -153,21 +184,22 @@ public class BlockStateList {
             return this.b.hashCode();
         }
 
-        public void a(Map<Map<IBlockState, Comparable>, BlockStateList.BlockData> map) {
+        public void a(Map<Map<IBlockState<?>, Comparable<?>>, BlockStateList.BlockData> map) {
             if (this.c != null) {
                 throw new IllegalStateException();
             } else {
                 HashBasedTable hashbasedtable = HashBasedTable.create();
-                Iterator iterator = this.b.keySet().iterator();
+                Iterator iterator = this.b.entrySet().iterator();
 
                 while (iterator.hasNext()) {
-                    IBlockState iblockstate = (IBlockState) iterator.next();
+                    Entry entry = (Entry) iterator.next();
+                    IBlockState iblockstate = (IBlockState) entry.getKey();
                     Iterator iterator1 = iblockstate.c().iterator();
 
                     while (iterator1.hasNext()) {
                         Comparable comparable = (Comparable) iterator1.next();
 
-                        if (comparable != this.b.get(iblockstate)) {
+                        if (comparable != entry.getValue()) {
                             hashbasedtable.put(iblockstate, comparable, map.get(this.b(iblockstate, comparable)));
                         }
                     }
@@ -177,11 +209,119 @@ public class BlockStateList {
             }
         }
 
-        private Map<IBlockState, Comparable> b(IBlockState iblockstate, Comparable comparable) {
+        private Map<IBlockState<?>, Comparable<?>> b(IBlockState<?> iblockstate, Comparable<?> comparable) {
             HashMap hashmap = Maps.newHashMap(this.b);
 
             hashmap.put(iblockstate, comparable);
             return hashmap;
+        }
+
+        public Material getMaterial() {
+            return this.a.q(this);
+        }
+
+        public boolean b() {
+            return this.a.l(this);
+        }
+
+        public int c() {
+            return this.a.m(this);
+        }
+
+        public int d() {
+            return this.a.o(this);
+        }
+
+        public boolean f() {
+            return this.a.p(this);
+        }
+
+        public MaterialMapColor g() {
+            return this.a.r(this);
+        }
+
+        public IBlockData a(EnumBlockRotation enumblockrotation) {
+            return this.a.a((IBlockData) this, enumblockrotation);
+        }
+
+        public IBlockData a(EnumBlockMirror enumblockmirror) {
+            return this.a.a((IBlockData) this, enumblockmirror);
+        }
+
+        public boolean h() {
+            return this.a.c((IBlockData) this);
+        }
+
+        public EnumRenderType i() {
+            return this.a.a((IBlockData) this);
+        }
+
+        public boolean k() {
+            return this.a.s(this);
+        }
+
+        public boolean l() {
+            return this.a.isOccluding(this);
+        }
+
+        public boolean m() {
+            return this.a.isPowerSource(this);
+        }
+
+        public int a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+            return this.a.b((IBlockData) this, iblockaccess, blockposition, enumdirection);
+        }
+
+        public boolean n() {
+            return this.a.isComplexRedstone(this);
+        }
+
+        public int a(World world, BlockPosition blockposition) {
+            return this.a.d(this, world, blockposition);
+        }
+
+        public float b(World world, BlockPosition blockposition) {
+            return this.a.b(this, world, blockposition);
+        }
+
+        public float a(EntityHuman entityhuman, World world, BlockPosition blockposition) {
+            return this.a.getDamage(this, entityhuman, world, blockposition);
+        }
+
+        public int b(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+            return this.a.c(this, iblockaccess, blockposition, enumdirection);
+        }
+
+        public EnumPistonReaction o() {
+            return this.a.h(this);
+        }
+
+        public IBlockData b(IBlockAccess iblockaccess, BlockPosition blockposition) {
+            return this.a.updateState(this, iblockaccess, blockposition);
+        }
+
+        public boolean p() {
+            return this.a.b((IBlockData) this);
+        }
+
+        public AxisAlignedBB d(World world, BlockPosition blockposition) {
+            return this.a.a((IBlockData) this, world, blockposition);
+        }
+
+        public void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+            this.a.a((IBlockData) this, world, blockposition, axisalignedbb, list, entity);
+        }
+
+        public AxisAlignedBB c(IBlockAccess iblockaccess, BlockPosition blockposition) {
+            return this.a.a((IBlockData) this, iblockaccess, blockposition);
+        }
+
+        public MovingObjectPosition a(World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
+            return this.a.a(this, world, blockposition, vec3d, vec3d1);
+        }
+
+        public boolean q() {
+            return this.a.k(this);
         }
 
         BlockData(Block block, ImmutableMap immutablemap, Object object) {

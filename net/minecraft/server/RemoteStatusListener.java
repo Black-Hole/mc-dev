@@ -38,14 +38,14 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     public RemoteStatusListener(IMinecraftServer iminecraftserver) {
         super(iminecraftserver, "Query Listener");
         this.i = iminecraftserver.a("query.port", 0);
-        this.s = iminecraftserver.E();
-        this.j = iminecraftserver.F();
-        this.l = iminecraftserver.G();
-        this.k = iminecraftserver.J();
-        this.m = iminecraftserver.U();
+        this.s = iminecraftserver.d_();
+        this.j = iminecraftserver.e_();
+        this.l = iminecraftserver.f_();
+        this.k = iminecraftserver.I();
+        this.m = iminecraftserver.S();
         this.w = 0L;
         this.r = "0.0.0.0";
-        if (0 != this.s.length() && !this.r.equals(this.s)) {
+        if (!this.s.isEmpty() && !this.r.equals(this.s)) {
             this.r = this.s;
         } else {
             this.s = "0.0.0.0";
@@ -124,7 +124,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     }
 
     private byte[] b(DatagramPacket datagrampacket) throws IOException {
-        long i = MinecraftServer.az();
+        long i = MinecraftServer.av();
 
         if (i < this.w + 5000L) {
             byte[] abyte = this.v.a();
@@ -207,7 +207,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     private void f() {
         if (this.a) {
-            long i = MinecraftServer.az();
+            long i = MinecraftServer.av();
 
             if (i >= this.h + 30000L) {
                 this.h = i;
@@ -227,7 +227,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     public void run() {
         this.b("Query running on " + this.s + ":" + this.i);
-        this.h = MinecraftServer.az();
+        this.h = MinecraftServer.av();
         this.p = new DatagramPacket(this.o, this.o.length);
 
         try {

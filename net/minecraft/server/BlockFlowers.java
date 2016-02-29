@@ -10,24 +10,24 @@ public abstract class BlockFlowers extends BlockPlant {
     protected BlockStateEnum<BlockFlowers.EnumFlowerVarient> TYPE;
 
     protected BlockFlowers() {
-        this.j(this.blockStateList.getBlockData().set(this.n(), this.l() == BlockFlowers.EnumFlowerType.RED ? BlockFlowers.EnumFlowerVarient.POPPY : BlockFlowers.EnumFlowerVarient.DANDELION));
+        this.w(this.blockStateList.getBlockData().set(this.g(), this.e() == BlockFlowers.EnumFlowerType.RED ? BlockFlowers.EnumFlowerVarient.POPPY : BlockFlowers.EnumFlowerVarient.DANDELION));
     }
 
     public int getDropData(IBlockData iblockdata) {
-        return ((BlockFlowers.EnumFlowerVarient) iblockdata.get(this.n())).b();
+        return ((BlockFlowers.EnumFlowerVarient) iblockdata.get(this.g())).b();
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(this.n(), BlockFlowers.EnumFlowerVarient.a(this.l(), i));
+        return this.getBlockData().set(this.g(), BlockFlowers.EnumFlowerVarient.a(this.e(), i));
     }
 
-    public abstract BlockFlowers.EnumFlowerType l();
+    public abstract BlockFlowers.EnumFlowerType e();
 
-    public IBlockState<BlockFlowers.EnumFlowerVarient> n() {
+    public IBlockState<BlockFlowers.EnumFlowerVarient> g() {
         if (this.TYPE == null) {
             this.TYPE = BlockStateEnum.a("type", BlockFlowers.EnumFlowerVarient.class, new Predicate() {
                 public boolean a(BlockFlowers.EnumFlowerVarient blockflowers_enumflowervarient) {
-                    return blockflowers_enumflowervarient.a() == BlockFlowers.this.l();
+                    return blockflowers_enumflowervarient.a() == BlockFlowers.this.e();
                 }
 
                 public boolean apply(Object object) {
@@ -40,11 +40,11 @@ public abstract class BlockFlowers extends BlockPlant {
     }
 
     public int toLegacyData(IBlockData iblockdata) {
-        return ((BlockFlowers.EnumFlowerVarient) iblockdata.get(this.n())).b();
+        return ((BlockFlowers.EnumFlowerVarient) iblockdata.get(this.g())).b();
     }
 
     protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { this.n()});
+        return new BlockStateList(this, new IBlockState[] { this.g()});
     }
 
     public static enum EnumFlowerVarient implements INamable {

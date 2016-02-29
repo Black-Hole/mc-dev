@@ -12,9 +12,7 @@ public class CommandSaveAll extends CommandAbstract {
         return "commands.save.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
-        MinecraftServer minecraftserver = MinecraftServer.getServer();
-
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         icommandlistener.sendMessage(new ChatMessage("commands.save.start", new Object[0]));
         if (minecraftserver.getPlayerList() != null) {
             minecraftserver.getPlayerList().savePlayers();
@@ -51,10 +49,10 @@ public class CommandSaveAll extends CommandAbstract {
                 icommandlistener.sendMessage(new ChatMessage("commands.save.flushEnd", new Object[0]));
             }
         } catch (ExceptionWorldConflict exceptionworldconflict) {
-            a(icommandlistener, this, "commands.save.failed", new Object[] { exceptionworldconflict.getMessage()});
+            a(icommandlistener, (ICommand) this, "commands.save.failed", new Object[] { exceptionworldconflict.getMessage()});
             return;
         }
 
-        a(icommandlistener, this, "commands.save.success", new Object[0]);
+        a(icommandlistener, (ICommand) this, "commands.save.success", new Object[0]);
     }
 }

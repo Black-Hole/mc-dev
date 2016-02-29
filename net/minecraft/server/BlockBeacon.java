@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class BlockBeacon extends BlockContainer {
+public class BlockBeacon extends BlockTileEntity {
 
     public BlockBeacon() {
         super(Material.SHATTERABLE, MaterialMapColor.G);
@@ -12,7 +12,7 @@ public class BlockBeacon extends BlockContainer {
         return new TileEntityBeacon();
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -20,23 +20,23 @@ public class BlockBeacon extends BlockContainer {
 
             if (tileentity instanceof TileEntityBeacon) {
                 entityhuman.openContainer((TileEntityBeacon) tileentity);
-                entityhuman.b(StatisticList.N);
+                entityhuman.b(StatisticList.P);
             }
 
             return true;
         }
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
-    public int b() {
-        return 3;
+    public EnumRenderType a(IBlockData iblockdata) {
+        return EnumRenderType.MODEL;
     }
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
@@ -61,7 +61,7 @@ public class BlockBeacon extends BlockContainer {
 
     }
 
-    public static void f(final World world, final BlockPosition blockposition) {
+    public static void c(final World world, final BlockPosition blockposition) {
         HttpUtilities.a.submit(new Runnable() {
             public void run() {
                 Chunk chunk = world.getChunkAtWorldCoords(blockposition);
@@ -69,7 +69,7 @@ public class BlockBeacon extends BlockContainer {
                 for (int i = blockposition.getY() - 1; i >= 0; --i) {
                     final BlockPosition blockposition1 = new BlockPosition(blockposition.getX(), i, blockposition.getZ());
 
-                    if (!chunk.d(blockposition1)) {
+                    if (!chunk.c(blockposition1)) {
                         break;
                     }
 

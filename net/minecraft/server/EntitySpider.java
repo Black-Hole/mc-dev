@@ -4,13 +4,17 @@ import java.util.Random;
 
 public class EntitySpider extends EntityMonster {
 
+    private static final DataWatcherObject<Byte> a = DataWatcher.a(EntitySpider.class, DataWatcherRegistry.a);
+
     public EntitySpider(World world) {
         super(world);
         this.setSize(1.4F, 0.9F);
+    }
+
+    protected void r() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(3, new PathfinderGoalLeapAtTarget(this, 0.4F));
-        this.goalSelector.a(4, new EntitySpider.PathfinderGoalSpiderMeleeAttack(this, EntityHuman.class));
-        this.goalSelector.a(4, new EntitySpider.PathfinderGoalSpiderMeleeAttack(this, EntityIronGolem.class));
+        this.goalSelector.a(4, new EntitySpider.PathfinderGoalSpiderMeleeAttack(this));
         this.goalSelector.a(5, new PathfinderGoalRandomStroll(this, 0.8D));
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(6, new PathfinderGoalRandomLookaround(this));
@@ -19,7 +23,7 @@ public class EntitySpider extends EntityMonster {
         this.targetSelector.a(3, new EntitySpider.PathfinderGoalSpiderNearestAttackableTarget(this, EntityIronGolem.class));
     }
 
-    public double an() {
+    public double ay() {
         return (double) (this.length * 0.5F);
     }
 
@@ -27,13 +31,13 @@ public class EntitySpider extends EntityMonster {
         return new NavigationSpider(this, world);
     }
 
-    protected void h() {
-        super.h();
-        this.datawatcher.a(16, new Byte((byte) 0));
+    protected void i() {
+        super.i();
+        this.datawatcher.register(EntitySpider.a, Byte.valueOf((byte) 0));
     }
 
-    public void t_() {
-        super.t_();
+    public void m() {
+        super.m();
         if (!this.world.isClientSide) {
             this.a(this.positionChanged);
         }
@@ -46,54 +50,46 @@ public class EntitySpider extends EntityMonster {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.30000001192092896D);
     }
 
-    protected String z() {
-        return "mob.spider.say";
+    protected SoundEffect G() {
+        return SoundEffects.fQ;
     }
 
-    protected String bo() {
-        return "mob.spider.say";
+    protected SoundEffect bR() {
+        return SoundEffects.fS;
     }
 
-    protected String bp() {
-        return "mob.spider.death";
+    protected SoundEffect bS() {
+        return SoundEffects.fR;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.makeSound("mob.spider.step", 0.15F, 1.0F);
+        this.a(SoundEffects.fT, 0.15F, 1.0F);
     }
 
-    protected Item getLoot() {
-        return Items.STRING;
+    protected MinecraftKey J() {
+        return LootTables.q;
     }
 
-    protected void dropDeathLoot(boolean flag, int i) {
-        super.dropDeathLoot(flag, i);
-        if (flag && (this.random.nextInt(3) == 0 || this.random.nextInt(1 + i) > 0)) {
-            this.a(Items.SPIDER_EYE, 1);
-        }
-
+    public boolean n_() {
+        return this.o();
     }
 
-    public boolean k_() {
-        return this.n();
-    }
-
-    public void aA() {}
+    public void aQ() {}
 
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.ARTHROPOD;
     }
 
     public boolean d(MobEffect mobeffect) {
-        return mobeffect.getEffectId() == MobEffectList.POISON.id ? false : super.d(mobeffect);
+        return mobeffect.getMobEffect() == MobEffects.POISON ? false : super.d(mobeffect);
     }
 
-    public boolean n() {
-        return (this.datawatcher.getByte(16) & 1) != 0;
+    public boolean o() {
+        return (((Byte) this.datawatcher.get(EntitySpider.a)).byteValue() & 1) != 0;
     }
 
     public void a(boolean flag) {
-        byte b0 = this.datawatcher.getByte(16);
+        byte b0 = ((Byte) this.datawatcher.get(EntitySpider.a)).byteValue();
 
         if (flag) {
             b0 = (byte) (b0 | 1);
@@ -101,7 +97,7 @@ public class EntitySpider extends EntityMonster {
             b0 &= -2;
         }
 
-        this.datawatcher.watch(16, Byte.valueOf(b0));
+        this.datawatcher.set(EntitySpider.a, Byte.valueOf(b0));
     }
 
     public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
@@ -113,7 +109,7 @@ public class EntitySpider extends EntityMonster {
             entityskeleton.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, 0.0F);
             entityskeleton.prepare(difficultydamagescaler, (GroupDataEntity) null);
             this.world.addEntity(entityskeleton);
-            entityskeleton.mount(this);
+            entityskeleton.startRiding(this);
         }
 
         if (object == null) {
@@ -124,10 +120,10 @@ public class EntitySpider extends EntityMonster {
         }
 
         if (object instanceof EntitySpider.GroupDataSpider) {
-            int i = ((EntitySpider.GroupDataSpider) object).a;
+            MobEffectList mobeffectlist = ((EntitySpider.GroupDataSpider) object).a;
 
-            if (i > 0 && MobEffectList.byId[i] != null) {
-                this.addEffect(new MobEffect(i, Integer.MAX_VALUE));
+            if (mobeffectlist != null) {
+                this.addEffect(new MobEffect(mobeffectlist, Integer.MAX_VALUE));
             }
         }
 
@@ -138,14 +134,14 @@ public class EntitySpider extends EntityMonster {
         return 0.65F;
     }
 
-    static class PathfinderGoalSpiderNearestAttackableTarget<T extends EntityLiving> extends PathfinderGoalNearestAttackableTarget {
+    static class PathfinderGoalSpiderNearestAttackableTarget<T extends EntityLiving> extends PathfinderGoalNearestAttackableTarget<T> {
 
         public PathfinderGoalSpiderNearestAttackableTarget(EntitySpider entityspider, Class<T> oclass) {
             super(entityspider, oclass, true);
         }
 
         public boolean a() {
-            float f = this.e.c(1.0F);
+            float f = this.e.e(1.0F);
 
             return f >= 0.5F ? false : super.a();
         }
@@ -153,14 +149,14 @@ public class EntitySpider extends EntityMonster {
 
     static class PathfinderGoalSpiderMeleeAttack extends PathfinderGoalMeleeAttack {
 
-        public PathfinderGoalSpiderMeleeAttack(EntitySpider entityspider, Class<? extends Entity> oclass) {
-            super(entityspider, oclass, 1.0D, true);
+        public PathfinderGoalSpiderMeleeAttack(EntitySpider entityspider) {
+            super(entityspider, 1.0D, true);
         }
 
         public boolean b() {
-            float f = this.b.c(1.0F);
+            float f = this.b.e(1.0F);
 
-            if (f >= 0.5F && this.b.bc().nextInt(100) == 0) {
+            if (f >= 0.5F && this.b.getRandom().nextInt(100) == 0) {
                 this.b.setGoalTarget((EntityLiving) null);
                 return false;
             } else {
@@ -175,7 +171,7 @@ public class EntitySpider extends EntityMonster {
 
     public static class GroupDataSpider implements GroupDataEntity {
 
-        public int a;
+        public MobEffectList a;
 
         public GroupDataSpider() {}
 
@@ -183,13 +179,13 @@ public class EntitySpider extends EntityMonster {
             int i = random.nextInt(5);
 
             if (i <= 1) {
-                this.a = MobEffectList.FASTER_MOVEMENT.id;
+                this.a = MobEffects.FASTER_MOVEMENT;
             } else if (i <= 2) {
-                this.a = MobEffectList.INCREASE_DAMAGE.id;
+                this.a = MobEffects.INCREASE_DAMAGE;
             } else if (i <= 3) {
-                this.a = MobEffectList.REGENERATION.id;
+                this.a = MobEffects.REGENERATION;
             } else if (i <= 4) {
-                this.a = MobEffectList.INVISIBILITY.id;
+                this.a = MobEffects.INVISIBILITY;
             }
 
         }

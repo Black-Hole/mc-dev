@@ -13,9 +13,9 @@ public class Vector3f {
     }
 
     public Vector3f(NBTTagList nbttaglist) {
-        this.x = nbttaglist.e(0);
-        this.y = nbttaglist.e(1);
-        this.z = nbttaglist.e(2);
+        this.x = nbttaglist.f(0);
+        this.y = nbttaglist.f(1);
+        this.z = nbttaglist.f(2);
     }
 
     public NBTTagList a() {

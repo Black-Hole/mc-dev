@@ -2,40 +2,36 @@ package net.minecraft.server;
 
 public class ChunkSnapshot {
 
-    private final short[] a = new short[65536];
-    private final IBlockData b;
+    private static final IBlockData a = Blocks.AIR.getBlockData();
+    private final char[] b = new char[65536];
 
-    public ChunkSnapshot() {
-        this.b = Blocks.AIR.getBlockData();
-    }
+    public ChunkSnapshot() {}
 
     public IBlockData a(int i, int j, int k) {
-        int l = i << 12 | k << 8 | j;
+        IBlockData iblockdata = (IBlockData) Block.REGISTRY_ID.fromId(this.b[b(i, j, k)]);
 
-        return this.a(l);
-    }
-
-    public IBlockData a(int i) {
-        if (i >= 0 && i < this.a.length) {
-            IBlockData iblockdata = (IBlockData) Block.d.a(this.a[i]);
-
-            return iblockdata != null ? iblockdata : this.b;
-        } else {
-            throw new IndexOutOfBoundsException("The coordinate is out of range");
-        }
+        return iblockdata == null ? ChunkSnapshot.a : iblockdata;
     }
 
     public void a(int i, int j, int k, IBlockData iblockdata) {
-        int l = i << 12 | k << 8 | j;
-
-        this.a(l, iblockdata);
+        this.b[b(i, j, k)] = (char) Block.REGISTRY_ID.getId(iblockdata);
     }
 
-    public void a(int i, IBlockData iblockdata) {
-        if (i >= 0 && i < this.a.length) {
-            this.a[i] = (short) Block.d.b(iblockdata);
-        } else {
-            throw new IndexOutOfBoundsException("The coordinate is out of range");
+    private static int b(int i, int j, int k) {
+        return i << 12 | k << 8 | j;
+    }
+
+    public int a(int i, int j) {
+        int k = (i << 12 | j << 8) + 256 - 1;
+
+        for (int l = 255; l >= 0; --l) {
+            IBlockData iblockdata = (IBlockData) Block.REGISTRY_ID.fromId(this.b[k + l]);
+
+            if (iblockdata != null && iblockdata != ChunkSnapshot.a) {
+                return l;
+            }
         }
+
+        return 0;
     }
 }

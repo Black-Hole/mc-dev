@@ -12,7 +12,7 @@ public abstract class PathfinderGoal {
         return this.a();
     }
 
-    public boolean i() {
+    public boolean g() {
         return true;
     }
 
@@ -26,7 +26,7 @@ public abstract class PathfinderGoal {
         this.a = i;
     }
 
-    public int j() {
+    public int h() {
         return this.a;
     }
 }

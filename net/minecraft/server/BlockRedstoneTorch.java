@@ -8,15 +8,15 @@ import java.util.Random;
 
 public class BlockRedstoneTorch extends BlockTorch {
 
-    private static Map<World, List<BlockRedstoneTorch.RedstoneUpdateInfo>> b = Maps.newHashMap();
+    private static Map<World, List<BlockRedstoneTorch.RedstoneUpdateInfo>> g = Maps.newHashMap();
     private final boolean isOn;
 
     private boolean a(World world, BlockPosition blockposition, boolean flag) {
-        if (!BlockRedstoneTorch.b.containsKey(world)) {
-            BlockRedstoneTorch.b.put(world, Lists.newArrayList());
+        if (!BlockRedstoneTorch.g.containsKey(world)) {
+            BlockRedstoneTorch.g.put(world, Lists.newArrayList());
         }
 
-        List list = (List) BlockRedstoneTorch.b.get(world);
+        List list = (List) BlockRedstoneTorch.g.get(world);
 
         if (flag) {
             list.add(new BlockRedstoneTorch.RedstoneUpdateInfo(blockposition, world.getTime()));
@@ -76,7 +76,7 @@ public class BlockRedstoneTorch extends BlockTorch {
 
     }
 
-    public int a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, EnumDirection enumdirection) {
+    public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return this.isOn && iblockdata.get(BlockRedstoneTorch.FACING) != enumdirection ? 15 : 0;
     }
 
@@ -90,7 +90,7 @@ public class BlockRedstoneTorch extends BlockTorch {
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         boolean flag = this.g(world, blockposition, iblockdata);
-        List list = (List) BlockRedstoneTorch.b.get(world);
+        List list = (List) BlockRedstoneTorch.g.get(world);
 
         while (list != null && !list.isEmpty() && world.getTime() - ((BlockRedstoneTorch.RedstoneUpdateInfo) list.get(0)).b > 60L) {
             list.remove(0);
@@ -100,7 +100,7 @@ public class BlockRedstoneTorch extends BlockTorch {
             if (flag) {
                 world.setTypeAndData(blockposition, Blocks.UNLIT_REDSTONE_TORCH.getBlockData().set(BlockRedstoneTorch.FACING, iblockdata.get(BlockRedstoneTorch.FACING)), 3);
                 if (this.a(world, blockposition, true)) {
-                    world.makeSound((double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), "random.fizz", 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+                    world.a((EntityHuman) null, blockposition, SoundEffects.eF, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
 
                     for (int i = 0; i < 5; ++i) {
                         double d0 = (double) blockposition.getX() + random.nextDouble() * 0.6D + 0.2D;
@@ -128,16 +128,20 @@ public class BlockRedstoneTorch extends BlockTorch {
         }
     }
 
-    public int b(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, EnumDirection enumdirection) {
-        return enumdirection == EnumDirection.DOWN ? this.a(iblockaccess, blockposition, iblockdata, enumdirection) : 0;
+    public int c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.DOWN ? iblockdata.a(iblockaccess, blockposition, enumdirection) : 0;
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.REDSTONE_TORCH);
     }
 
-    public boolean isPowerSource() {
+    public boolean isPowerSource(IBlockData iblockdata) {
         return true;
+    }
+
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Blocks.REDSTONE_TORCH);
     }
 
     public boolean b(Block block) {

@@ -15,13 +15,13 @@ public class PacketPlayOutBlockChange implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c();
-        this.block = (IBlockData) Block.d.a(packetdataserializer.e());
+        this.a = packetdataserializer.e();
+        this.block = (IBlockData) Block.REGISTRY_ID.fromId(packetdataserializer.g());
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
-        packetdataserializer.b(Block.d.b(this.block));
+        packetdataserializer.b(Block.REGISTRY_ID.getId(this.block));
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

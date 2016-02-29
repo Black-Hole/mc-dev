@@ -10,6 +10,11 @@ public class ChunkCoordIntPair {
         this.z = j;
     }
 
+    public ChunkCoordIntPair(BlockPosition blockposition) {
+        this.x = blockposition.getX() >> 4;
+        this.z = blockposition.getZ() >> 4;
+    }
+
     public static long a(int i, int j) {
         return (long) i & 4294967295L | ((long) j & 4294967295L) << 32;
     }
@@ -31,6 +36,15 @@ public class ChunkCoordIntPair {
 
             return this.x == chunkcoordintpair.x && this.z == chunkcoordintpair.z;
         }
+    }
+
+    public double a(Entity entity) {
+        double d0 = (double) (this.x * 16 + 8);
+        double d1 = (double) (this.z * 16 + 8);
+        double d2 = d0 - entity.locX;
+        double d3 = d1 - entity.locZ;
+
+        return d2 * d2 + d3 * d3;
     }
 
     public int a() {

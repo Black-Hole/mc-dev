@@ -25,12 +25,12 @@ public class PathfinderGoalOcelotAttack extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.c.isAlive() ? false : (this.b.h(this.c) > 225.0D ? false : !this.b.getNavigation().m() || this.a());
+        return !this.c.isAlive() ? false : (this.b.h(this.c) > 225.0D ? false : !this.b.getNavigation().n() || this.a());
     }
 
     public void d() {
         this.c = null;
-        this.b.getNavigation().n();
+        this.b.getNavigation().o();
     }
 
     public void e() {
@@ -50,7 +50,7 @@ public class PathfinderGoalOcelotAttack extends PathfinderGoal {
         if (d1 <= d0) {
             if (this.d <= 0) {
                 this.d = 20;
-                this.b.r(this.c);
+                this.b.B(this.c);
             }
         }
     }

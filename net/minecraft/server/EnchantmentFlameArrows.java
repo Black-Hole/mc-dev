@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class EnchantmentFlameArrows extends Enchantment {
 
-    public EnchantmentFlameArrows(int i, MinecraftKey minecraftkey, int j) {
-        super(i, minecraftkey, j, EnchantmentSlotType.BOW);
+    public EnchantmentFlameArrows(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
+        super(enchantment_rarity, EnchantmentSlotType.BOW, aenumitemslot);
         this.c("arrowFire");
     }
 

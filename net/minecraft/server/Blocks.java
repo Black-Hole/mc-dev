@@ -1,7 +1,11 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Sets;
+import java.util.Set;
+
 public class Blocks {
 
+    private static final Set<Block> dg;
     public static final Block AIR;
     public static final Block STONE;
     public static final BlockGrass GRASS;
@@ -200,15 +204,38 @@ public class Blocks {
     public static final Block RED_SANDSTONE_STAIRS;
     public static final BlockStepAbstract DOUBLE_STONE_SLAB2;
     public static final BlockStepAbstract STONE_SLAB2;
+    public static final Block END_ROD;
+    public static final Block CHORUS_PLANT;
+    public static final Block CHORUS_FLOWER;
+    public static final Block PURPUR_BLOCK;
+    public static final Block PURPUR_PILLAR;
+    public static final Block PURPUR_STAIRS;
+    public static final BlockStepAbstract PURPUR_DOUBLE_SLAB;
+    public static final BlockStepAbstract PURPUR_SLAB;
+    public static final Block END_BRICKS;
+    public static final Block BEETROOT;
+    public static final Block GRASS_PATH;
+    public static final Block END_GATEWAY;
+    public static final Block dc;
+    public static final Block dd;
+    public static final Block de;
+    public static final Block STRUCTURE_BLOCK;
 
     private static Block get(String s) {
-        return (Block) Block.REGISTRY.get(new MinecraftKey(s));
+        Block block = (Block) Block.REGISTRY.get(new MinecraftKey(s));
+
+        if (!Blocks.dg.add(block)) {
+            throw new IllegalStateException("Invalid Block requested: " + s);
+        } else {
+            return block;
+        }
     }
 
     static {
         if (!DispenserRegistry.a()) {
             throw new RuntimeException("Accessed Blocks before Bootstrap!");
         } else {
+            dg = Sets.newHashSet();
             AIR = get("air");
             STONE = get("stone");
             GRASS = (BlockGrass) get("grass");
@@ -407,6 +434,23 @@ public class Blocks {
             RED_SANDSTONE_STAIRS = get("red_sandstone_stairs");
             DOUBLE_STONE_SLAB2 = (BlockStepAbstract) get("double_stone_slab2");
             STONE_SLAB2 = (BlockStepAbstract) get("stone_slab2");
+            END_ROD = get("end_rod");
+            CHORUS_PLANT = get("chorus_plant");
+            CHORUS_FLOWER = get("chorus_flower");
+            PURPUR_BLOCK = get("purpur_block");
+            PURPUR_PILLAR = get("purpur_pillar");
+            PURPUR_STAIRS = get("purpur_stairs");
+            PURPUR_DOUBLE_SLAB = (BlockStepAbstract) get("purpur_double_slab");
+            PURPUR_SLAB = (BlockStepAbstract) get("purpur_slab");
+            END_BRICKS = get("end_bricks");
+            BEETROOT = get("beetroots");
+            GRASS_PATH = get("grass_path");
+            END_GATEWAY = get("end_gateway");
+            dc = get("repeating_command_block");
+            dd = get("chain_command_block");
+            de = get("frosted_ice");
+            STRUCTURE_BLOCK = get("structure_block");
+            Blocks.dg.clear();
         }
     }
 }

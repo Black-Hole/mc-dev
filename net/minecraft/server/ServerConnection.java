@@ -74,7 +74,7 @@ public class ServerConnection {
             Class oclass;
             LazyInitVar lazyinitvar;
 
-            if (Epoll.isAvailable() && this.f.ai()) {
+            if (Epoll.isAvailable() && this.f.ae()) {
                 oclass = EpollServerSocketChannel.class;
                 lazyinitvar = ServerConnection.b;
                 ServerConnection.e.info("Using epoll channel type");
@@ -97,7 +97,7 @@ public class ServerConnection {
 
                     ServerConnection.this.h.add(networkmanager);
                     channel.pipeline().addLast("packet_handler", networkmanager);
-                    networkmanager.a((PacketListener) (new HandshakeListener(ServerConnection.this.f, networkmanager)));
+                    networkmanager.setPacketListener(new HandshakeListener(ServerConnection.this.f, networkmanager));
                 }
             }).group((EventLoopGroup) lazyinitvar.c()).localAddress(inetaddress, i)).bind().syncUninterruptibly());
         }
@@ -129,14 +129,11 @@ public class ServerConnection {
                 final NetworkManager networkmanager = (NetworkManager) iterator.next();
 
                 if (!networkmanager.h()) {
-                    if (!networkmanager.g()) {
-                        iterator.remove();
-                        networkmanager.l();
-                    } else {
+                    if (networkmanager.isConnected()) {
                         try {
                             networkmanager.a();
                         } catch (Exception exception) {
-                            if (networkmanager.c()) {
+                            if (networkmanager.isLocal()) {
                                 CrashReport crashreport = CrashReport.a(exception, "Ticking memory connection");
                                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Ticking connection");
 
@@ -155,13 +152,16 @@ public class ServerConnection {
                             ServerConnection.e.warn("Failed to handle packet for " + networkmanager.getSocketAddress(), exception);
                             final ChatComponentText chatcomponenttext = new ChatComponentText("Internal server error");
 
-                            networkmanager.a(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener() {
+                            networkmanager.sendPacket(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener() {
                                 public void operationComplete(Future<? super Void> future) throws Exception {
                                     networkmanager.close(chatcomponenttext);
                                 }
                             }, new GenericFutureListener[0]);
-                            networkmanager.k();
+                            networkmanager.stopReading();
                         }
+                    } else {
+                        iterator.remove();
+                        networkmanager.handleDisconnection();
                     }
                 }
             }

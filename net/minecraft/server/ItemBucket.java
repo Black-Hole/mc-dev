@@ -10,58 +10,53 @@ public class ItemBucket extends Item {
         this.a(CreativeModeTab.f);
     }
 
-    public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
+    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
         boolean flag = this.a == Blocks.AIR;
         MovingObjectPosition movingobjectposition = this.a(world, entityhuman, flag);
 
         if (movingobjectposition == null) {
-            return itemstack;
+            return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+        } else if (movingobjectposition.type != MovingObjectPosition.EnumMovingObjectType.BLOCK) {
+            return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
         } else {
-            if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-                BlockPosition blockposition = movingobjectposition.a();
+            BlockPosition blockposition = movingobjectposition.a();
 
-                if (!world.a(entityhuman, blockposition)) {
-                    return itemstack;
-                }
-
-                if (flag) {
-                    if (!entityhuman.a(blockposition.shift(movingobjectposition.direction), movingobjectposition.direction, itemstack)) {
-                        return itemstack;
-                    }
-
+            if (!world.a(entityhuman, blockposition)) {
+                return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+            } else if (flag) {
+                if (!entityhuman.a(blockposition.shift(movingobjectposition.direction), movingobjectposition.direction, itemstack)) {
+                    return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+                } else {
                     IBlockData iblockdata = world.getType(blockposition);
-                    Material material = iblockdata.getBlock().getMaterial();
+                    Material material = iblockdata.getMaterial();
 
                     if (material == Material.WATER && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0) {
-                        world.setAir(blockposition);
-                        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
-                        return this.a(itemstack, entityhuman, Items.WATER_BUCKET);
-                    }
-
-                    if (material == Material.LAVA && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0) {
-                        world.setAir(blockposition);
-                        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
-                        return this.a(itemstack, entityhuman, Items.LAVA_BUCKET);
-                    }
-                } else {
-                    if (this.a == Blocks.AIR) {
-                        return new ItemStack(Items.BUCKET);
-                    }
-
-                    BlockPosition blockposition1 = blockposition.shift(movingobjectposition.direction);
-
-                    if (!entityhuman.a(blockposition1, movingobjectposition.direction, itemstack)) {
-                        return itemstack;
-                    }
-
-                    if (this.a(world, blockposition1) && !entityhuman.abilities.canInstantlyBuild) {
-                        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
-                        return new ItemStack(Items.BUCKET);
+                        world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
+                        entityhuman.b(StatisticList.b((Item) this));
+                        entityhuman.a(SoundEffects.N, 1.0F, 1.0F);
+                        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, Items.WATER_BUCKET));
+                    } else if (material == Material.LAVA && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0) {
+                        entityhuman.a(SoundEffects.O, 1.0F, 1.0F);
+                        world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
+                        entityhuman.b(StatisticList.b((Item) this));
+                        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, Items.LAVA_BUCKET));
+                    } else {
+                        return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
                     }
                 }
-            }
+            } else {
+                boolean flag1 = world.getType(blockposition).getBlock().a((IBlockAccess) world, blockposition);
+                BlockPosition blockposition1 = flag1 && movingobjectposition.direction == EnumDirection.UP ? blockposition : blockposition.shift(movingobjectposition.direction);
 
-            return itemstack;
+                if (!entityhuman.a(blockposition1, movingobjectposition.direction, itemstack)) {
+                    return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+                } else if (this.a(entityhuman, world, blockposition1)) {
+                    entityhuman.b(StatisticList.b((Item) this));
+                    return !entityhuman.abilities.canInstantlyBuild ? new InteractionResultWrapper(EnumInteractionResult.SUCCESS, new ItemStack(Items.BUCKET)) : new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+                } else {
+                    return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+                }
+            }
         }
     }
 
@@ -72,39 +67,44 @@ public class ItemBucket extends Item {
             return new ItemStack(item);
         } else {
             if (!entityhuman.inventory.pickup(new ItemStack(item))) {
-                entityhuman.drop(new ItemStack(item, 1, 0), false);
+                entityhuman.drop(new ItemStack(item), false);
             }
 
             return itemstack;
         }
     }
 
-    public boolean a(World world, BlockPosition blockposition) {
+    public boolean a(EntityHuman entityhuman, World world, BlockPosition blockposition) {
         if (this.a == Blocks.AIR) {
             return false;
         } else {
-            Material material = world.getType(blockposition).getBlock().getMaterial();
+            IBlockData iblockdata = world.getType(blockposition);
+            Material material = iblockdata.getMaterial();
             boolean flag = !material.isBuildable();
+            boolean flag1 = iblockdata.getBlock().a((IBlockAccess) world, blockposition);
 
-            if (!world.isEmpty(blockposition) && !flag) {
+            if (!world.isEmpty(blockposition) && !flag && !flag1) {
                 return false;
             } else {
-                if (world.worldProvider.n() && this.a == Blocks.FLOWING_WATER) {
+                if (world.worldProvider.l() && this.a == Blocks.FLOWING_WATER) {
                     int i = blockposition.getX();
                     int j = blockposition.getY();
                     int k = blockposition.getZ();
 
-                    world.makeSound((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), "random.fizz", 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+                    world.a(entityhuman, blockposition, SoundEffects.bv, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
 
                     for (int l = 0; l < 8; ++l) {
                         world.addParticle(EnumParticle.SMOKE_LARGE, (double) i + Math.random(), (double) j + Math.random(), (double) k + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
                     }
                 } else {
-                    if (!world.isClientSide && flag && !material.isLiquid()) {
+                    if (!world.isClientSide && (flag || flag1) && !material.isLiquid()) {
                         world.setAir(blockposition, true);
                     }
 
-                    world.setTypeAndData(blockposition, this.a.getBlockData(), 3);
+                    SoundEffect soundeffect = this.a == Blocks.FLOWING_LAVA ? SoundEffects.M : SoundEffects.L;
+
+                    world.a(entityhuman, blockposition, soundeffect, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.setTypeAndData(blockposition, this.a.getBlockData(), 11);
                 }
 
                 return true;

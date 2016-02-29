@@ -15,7 +15,7 @@ public class WorldGenLiquids extends WorldGenerator {
             return false;
         } else if (world.getType(blockposition.down()).getBlock() != Blocks.STONE) {
             return false;
-        } else if (world.getType(blockposition).getBlock().getMaterial() != Material.AIR && world.getType(blockposition).getBlock() != Blocks.STONE) {
+        } else if (world.getType(blockposition).getMaterial() != Material.AIR && world.getType(blockposition).getBlock() != Blocks.STONE) {
             return false;
         } else {
             int i = 0;

@@ -12,7 +12,7 @@ public class PacketPlayInBlockDig implements Packet<PacketListenerPlayIn> {
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.c = (PacketPlayInBlockDig.EnumPlayerDigType) packetdataserializer.a(PacketPlayInBlockDig.EnumPlayerDigType.class);
-        this.a = packetdataserializer.c();
+        this.a = packetdataserializer.e();
         this.b = EnumDirection.fromType1(packetdataserializer.readUnsignedByte());
     }
 
@@ -44,7 +44,7 @@ public class PacketPlayInBlockDig implements Packet<PacketListenerPlayIn> {
 
     public static enum EnumPlayerDigType {
 
-        START_DESTROY_BLOCK, ABORT_DESTROY_BLOCK, STOP_DESTROY_BLOCK, DROP_ALL_ITEMS, DROP_ITEM, RELEASE_USE_ITEM;
+        START_DESTROY_BLOCK, ABORT_DESTROY_BLOCK, STOP_DESTROY_BLOCK, DROP_ALL_ITEMS, DROP_ITEM, RELEASE_USE_ITEM, SWAP_HELD_ITEMS;
 
         private EnumPlayerDigType() {}
     }

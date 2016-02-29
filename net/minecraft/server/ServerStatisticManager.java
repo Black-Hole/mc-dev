@@ -63,14 +63,14 @@ public class ServerStatisticManager extends StatisticManager {
         this.e.add(statistic);
         if (statistic.d() && j == 0 && i > 0) {
             this.g = true;
-            if (this.c.aB()) {
+            if (this.c.ax()) {
                 this.c.getPlayerList().sendMessage(new ChatMessage("chat.type.achievement", new Object[] { entityhuman.getScoreboardDisplayName(), statistic.j()}));
             }
         }
 
         if (statistic.d() && j > 0 && i == 0) {
             this.g = true;
-            if (this.c.aB()) {
+            if (this.c.ax()) {
                 this.c.getPlayerList().sendMessage(new ChatMessage("chat.type.achievement.taken", new Object[] { entityhuman.getScoreboardDisplayName(), statistic.j()}));
             }
         }
@@ -173,7 +173,7 @@ public class ServerStatisticManager extends StatisticManager {
     }
 
     public void a(EntityPlayer entityplayer) {
-        int i = this.c.at();
+        int i = this.c.ap();
         HashMap hashmap = Maps.newHashMap();
 
         if (this.g || i - this.f > 300) {

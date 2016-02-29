@@ -10,15 +10,15 @@ public abstract class BlockWoodenStep extends BlockStepAbstract {
         super(Material.WOOD);
         IBlockData iblockdata = this.blockStateList.getBlockData();
 
-        if (!this.l()) {
+        if (!this.e()) {
             iblockdata = iblockdata.set(BlockWoodenStep.HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
         }
 
-        this.j(iblockdata.set(BlockWoodenStep.VARIANT, BlockWood.EnumLogVariant.OAK));
+        this.w(iblockdata.set(BlockWoodenStep.VARIANT, BlockWood.EnumLogVariant.OAK));
         this.a(CreativeModeTab.b);
     }
 
-    public MaterialMapColor g(IBlockData iblockdata) {
+    public MaterialMapColor r(IBlockData iblockdata) {
         return ((BlockWood.EnumLogVariant) iblockdata.get(BlockWoodenStep.VARIANT)).c();
     }
 
@@ -26,22 +26,26 @@ public abstract class BlockWoodenStep extends BlockStepAbstract {
         return Item.getItemOf(Blocks.WOODEN_SLAB);
     }
 
-    public String b(int i) {
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Blocks.WOODEN_SLAB, 1, ((BlockWood.EnumLogVariant) iblockdata.get(BlockWoodenStep.VARIANT)).a());
+    }
+
+    public String e(int i) {
         return super.a() + "." + BlockWood.EnumLogVariant.a(i).d();
     }
 
-    public IBlockState<?> n() {
+    public IBlockState<?> g() {
         return BlockWoodenStep.VARIANT;
     }
 
-    public Object a(ItemStack itemstack) {
+    public Comparable<?> a(ItemStack itemstack) {
         return BlockWood.EnumLogVariant.a(itemstack.getData() & 7);
     }
 
     public IBlockData fromLegacyData(int i) {
         IBlockData iblockdata = this.getBlockData().set(BlockWoodenStep.VARIANT, BlockWood.EnumLogVariant.a(i & 7));
 
-        if (!this.l()) {
+        if (!this.e()) {
             iblockdata = iblockdata.set(BlockWoodenStep.HALF, (i & 8) == 0 ? BlockStepAbstract.EnumSlabHalf.BOTTOM : BlockStepAbstract.EnumSlabHalf.TOP);
         }
 
@@ -52,7 +56,7 @@ public abstract class BlockWoodenStep extends BlockStepAbstract {
         byte b0 = 0;
         int i = b0 | ((BlockWood.EnumLogVariant) iblockdata.get(BlockWoodenStep.VARIANT)).a();
 
-        if (!this.l() && iblockdata.get(BlockWoodenStep.HALF) == BlockStepAbstract.EnumSlabHalf.TOP) {
+        if (!this.e() && iblockdata.get(BlockWoodenStep.HALF) == BlockStepAbstract.EnumSlabHalf.TOP) {
             i |= 8;
         }
 
@@ -60,7 +64,7 @@ public abstract class BlockWoodenStep extends BlockStepAbstract {
     }
 
     protected BlockStateList getStateList() {
-        return this.l() ? new BlockStateList(this, new IBlockState[] { BlockWoodenStep.VARIANT}) : new BlockStateList(this, new IBlockState[] { BlockWoodenStep.HALF, BlockWoodenStep.VARIANT});
+        return this.e() ? new BlockStateList(this, new IBlockState[] { BlockWoodenStep.VARIANT}) : new BlockStateList(this, new IBlockState[] { BlockWoodenStep.HALF, BlockWoodenStep.VARIANT});
     }
 
     public int getDropData(IBlockData iblockdata) {

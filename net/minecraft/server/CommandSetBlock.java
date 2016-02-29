@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandSetBlock extends CommandAbstract {
@@ -19,13 +20,13 @@ public class CommandSetBlock extends CommandAbstract {
         return "commands.setblock.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 4) {
             throw new ExceptionUsage("commands.setblock.usage", new Object[0]);
         } else {
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 0);
             BlockPosition blockposition = a(icommandlistener, astring, 0, false);
-            Block block = CommandAbstract.g(icommandlistener, astring[3]);
+            Block block = CommandAbstract.b(icommandlistener, astring[3]);
             int i = 0;
 
             if (astring.length >= 5) {
@@ -41,7 +42,7 @@ public class CommandSetBlock extends CommandAbstract {
                 boolean flag = false;
 
                 if (astring.length >= 7 && block.isTileEntity()) {
-                    String s = a(icommandlistener, astring, 6).c();
+                    String s = a(icommandlistener, astring, 6).toPlainText();
 
                     try {
                         nbttagcompound = MojangsonParser.parse(s);
@@ -55,7 +56,7 @@ public class CommandSetBlock extends CommandAbstract {
                     if (astring[5].equals("destroy")) {
                         world.setAir(blockposition, true);
                         if (block == Blocks.AIR) {
-                            a(icommandlistener, this, "commands.setblock.success", new Object[0]);
+                            a(icommandlistener, (ICommand) this, "commands.setblock.success", new Object[0]);
                             return;
                         }
                     } else if (astring[5].equals("keep") && !world.isEmpty(blockposition)) {
@@ -91,13 +92,13 @@ public class CommandSetBlock extends CommandAbstract {
 
                     world.update(blockposition, iblockdata.getBlock());
                     icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 1);
-                    a(icommandlistener, this, "commands.setblock.success", new Object[0]);
+                    a(icommandlistener, (ICommand) this, "commands.setblock.success", new Object[0]);
                 }
             }
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length == 4 ? a(astring, (Collection) Block.REGISTRY.keySet()) : (astring.length == 6 ? a(astring, new String[] { "replace", "destroy", "keep"}) : null));
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length == 4 ? a(astring, (Collection) Block.REGISTRY.keySet()) : (astring.length == 6 ? a(astring, new String[] { "replace", "destroy", "keep"}) : Collections.emptyList()));
     }
 }

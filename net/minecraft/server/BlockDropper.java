@@ -2,12 +2,12 @@ package net.minecraft.server;
 
 public class BlockDropper extends BlockDispenser {
 
-    private final IDispenseBehavior P = new DispenseBehaviorItem();
+    private final IDispenseBehavior e = new DispenseBehaviorItem();
 
     public BlockDropper() {}
 
     protected IDispenseBehavior a(ItemStack itemstack) {
-        return this.P;
+        return this.e;
     }
 
     public TileEntity a(World world, int i) {
@@ -33,7 +33,7 @@ public class BlockDropper extends BlockDispenser {
                     ItemStack itemstack1;
 
                     if (iinventory == null) {
-                        itemstack1 = this.P.a(sourceblock, itemstack);
+                        itemstack1 = this.e.a(sourceblock, itemstack);
                         if (itemstack1 != null && itemstack1.count <= 0) {
                             itemstack1 = null;
                         }

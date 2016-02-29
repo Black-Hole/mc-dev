@@ -7,71 +7,67 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         this.b_ = 5;
     }
 
-    public void m() {
-        this.bx();
-        float f = this.c(1.0F);
+    public SoundCategory bz() {
+        return SoundCategory.HOSTILE;
+    }
+
+    public void n() {
+        this.bY();
+        float f = this.e(1.0F);
 
         if (f > 0.5F) {
             this.ticksFarFromPlayer += 2;
         }
 
-        super.m();
+        super.n();
     }
 
-    public void t_() {
-        super.t_();
+    public void m() {
+        super.m();
         if (!this.world.isClientSide && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
             this.die();
         }
 
     }
 
-    protected String P() {
-        return "game.hostile.swim";
+    protected SoundEffect aa() {
+        return SoundEffects.cF;
     }
 
-    protected String aa() {
-        return "game.hostile.swim.splash";
+    protected SoundEffect ab() {
+        return SoundEffects.cE;
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (this.isInvulnerable(damagesource)) {
-            return false;
-        } else if (super.damageEntity(damagesource, f)) {
-            Entity entity = damagesource.getEntity();
-
-            return this.passenger != entity && this.vehicle != entity ? true : true;
-        } else {
-            return false;
-        }
+        return this.isInvulnerable(damagesource) ? false : super.damageEntity(damagesource, f);
     }
 
-    protected String bo() {
-        return "game.hostile.hurt";
+    protected SoundEffect bR() {
+        return SoundEffects.cC;
     }
 
-    protected String bp() {
-        return "game.hostile.die";
+    protected SoundEffect bS() {
+        return SoundEffects.cB;
     }
 
-    protected String n(int i) {
-        return i > 4 ? "game.hostile.hurt.fall.big" : "game.hostile.hurt.fall.small";
+    protected SoundEffect e(int i) {
+        return i > 4 ? SoundEffects.cA : SoundEffects.cD;
     }
 
-    public boolean r(Entity entity) {
+    public boolean B(Entity entity) {
         float f = (float) this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
         int i = 0;
 
         if (entity instanceof EntityLiving) {
-            f += EnchantmentManager.a(this.bA(), ((EntityLiving) entity).getMonsterType());
+            f += EnchantmentManager.a(this.getItemInMainHand(), ((EntityLiving) entity).getMonsterType());
             i += EnchantmentManager.a((EntityLiving) this);
         }
 
         boolean flag = entity.damageEntity(DamageSource.mobAttack(this), f);
 
         if (flag) {
-            if (i > 0) {
-                entity.g((double) (-MathHelper.sin(this.yaw * 3.1415927F / 180.0F) * (float) i * 0.5F), 0.1D, (double) (MathHelper.cos(this.yaw * 3.1415927F / 180.0F) * (float) i * 0.5F));
+            if (i > 0 && entity instanceof EntityLiving) {
+                ((EntityLiving) entity).a(this, (float) i * 0.5F, (double) MathHelper.sin(this.yaw * 0.017453292F), (double) (-MathHelper.cos(this.yaw * 0.017453292F)));
                 this.motX *= 0.6D;
                 this.motZ *= 0.6D;
             }
@@ -82,6 +78,21 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
                 entity.setOnFire(j * 4);
             }
 
+            if (entity instanceof EntityHuman) {
+                EntityHuman entityhuman = (EntityHuman) entity;
+                ItemStack itemstack = this.getItemInMainHand();
+                ItemStack itemstack1 = entityhuman.cs() ? entityhuman.cv() : null;
+
+                if (itemstack != null && itemstack1 != null && itemstack.getItem() instanceof ItemAxe && itemstack1.getItem() == Items.SHIELD) {
+                    float f1 = 0.25F + (float) EnchantmentManager.getDigSpeedEnchantmentLevel(this) * 0.05F;
+
+                    if (this.random.nextFloat() < f1) {
+                        entityhuman.da().a(Items.SHIELD, 100);
+                        this.world.broadcastEntityEffect(entityhuman, (byte) 30);
+                    }
+                }
+            }
+
             this.a((EntityLiving) this, entity);
         }
 
@@ -89,10 +100,10 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     }
 
     public float a(BlockPosition blockposition) {
-        return 0.5F - this.world.o(blockposition);
+        return 0.5F - this.world.n(blockposition);
     }
 
-    protected boolean n_() {
+    protected boolean s_() {
         BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
         if (this.world.b(EnumSkyBlock.SKY, blockposition) > this.random.nextInt(32)) {
@@ -100,8 +111,8 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         } else {
             int i = this.world.getLightLevel(blockposition);
 
-            if (this.world.R()) {
-                int j = this.world.ab();
+            if (this.world.V()) {
+                int j = this.world.af();
 
                 this.world.c(10);
                 i = this.world.getLightLevel(blockposition);
@@ -112,8 +123,8 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         }
     }
 
-    public boolean bR() {
-        return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.n_() && super.bR();
+    public boolean cF() {
+        return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.s_() && super.cF();
     }
 
     protected void initAttributes() {
@@ -121,7 +132,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         this.getAttributeMap().b(GenericAttributes.ATTACK_DAMAGE);
     }
 
-    protected boolean ba() {
+    protected boolean isDropExperience() {
         return true;
     }
 }

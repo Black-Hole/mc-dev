@@ -12,10 +12,10 @@ public class PacketHandshakingInSetProtocol implements Packet<PacketHandshakingI
     public PacketHandshakingInSetProtocol() {}
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
+        this.a = packetdataserializer.g();
         this.hostname = packetdataserializer.c(255);
         this.port = packetdataserializer.readUnsignedShort();
-        this.d = EnumProtocol.a(packetdataserializer.e());
+        this.d = EnumProtocol.a(packetdataserializer.g());
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

@@ -25,9 +25,9 @@ public class PacketPlayOutExplosion implements Packet<PacketListenerPlayOut> {
         this.d = f;
         this.e = Lists.newArrayList(list);
         if (vec3d != null) {
-            this.f = (float) vec3d.a;
-            this.g = (float) vec3d.b;
-            this.h = (float) vec3d.c;
+            this.f = (float) vec3d.x;
+            this.g = (float) vec3d.y;
+            this.h = (float) vec3d.z;
         }
 
     }

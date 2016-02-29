@@ -2,12 +2,12 @@ package net.minecraft.server;
 
 public class MerchantRecipe {
 
-    private ItemStack buyingItem1;
-    private ItemStack buyingItem2;
-    private ItemStack sellingItem;
-    private int uses;
-    private int maxUses;
-    private boolean rewardExp;
+    public ItemStack buyingItem1;
+    public ItemStack buyingItem2;
+    public ItemStack sellingItem;
+    public int uses;
+    public int maxUses;
+    public boolean rewardExp;
 
     public MerchantRecipe(NBTTagCompound nbttagcompound) {
         this.a(nbttagcompound);

@@ -14,7 +14,7 @@ public class ControllerJump {
     }
 
     public void b() {
-        this.b.i(this.a);
+        this.b.k(this.a);
         this.a = false;
     }
 }

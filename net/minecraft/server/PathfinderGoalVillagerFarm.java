@@ -19,8 +19,8 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
             }
 
             this.f = -1;
-            this.d = this.c.cu();
-            this.e = this.c.ct();
+            this.d = this.c.di();
+            this.e = this.c.dh();
         }
 
         return super.a();
@@ -40,17 +40,17 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
 
     public void e() {
         super.e();
-        this.c.getControllerLook().a((double) this.b.getX() + 0.5D, (double) (this.b.getY() + 1), (double) this.b.getZ() + 0.5D, 10.0F, (float) this.c.bQ());
+        this.c.getControllerLook().a((double) this.b.getX() + 0.5D, (double) (this.b.getY() + 1), (double) this.b.getZ() + 0.5D, 10.0F, (float) this.c.N());
         if (this.f()) {
             World world = this.c.world;
             BlockPosition blockposition = this.b.up();
             IBlockData iblockdata = world.getType(blockposition);
             Block block = iblockdata.getBlock();
 
-            if (this.f == 0 && block instanceof BlockCrops && ((Integer) iblockdata.get(BlockCrops.AGE)).intValue() == 7) {
+            if (this.f == 0 && block instanceof BlockCrops && ((BlockCrops) block).y(iblockdata)) {
                 world.setAir(blockposition, true);
             } else if (this.f == 1 && block == Blocks.AIR) {
-                InventorySubcontainer inventorysubcontainer = this.c.cq();
+                InventorySubcontainer inventorysubcontainer = this.c.de();
 
                 for (int i = 0; i < inventorysubcontainer.getSize(); ++i) {
                     ItemStack itemstack = inventorysubcontainer.getItem(i);
@@ -65,6 +65,9 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
                             flag = true;
                         } else if (itemstack.getItem() == Items.CARROT) {
                             world.setTypeAndData(blockposition, Blocks.CARROTS.getBlockData(), 3);
+                            flag = true;
+                        } else if (itemstack.getItem() == Items.BEETROOT_SEEDS) {
+                            world.setTypeAndData(blockposition, Blocks.BEETROOT.getBlockData(), 3);
                             flag = true;
                         }
                     }
@@ -93,7 +96,7 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
             IBlockData iblockdata = world.getType(blockposition);
 
             block = iblockdata.getBlock();
-            if (block instanceof BlockCrops && ((Integer) iblockdata.get(BlockCrops.AGE)).intValue() == 7 && this.e && (this.f == 0 || this.f < 0)) {
+            if (block instanceof BlockCrops && ((BlockCrops) block).y(iblockdata) && this.e && (this.f == 0 || this.f < 0)) {
                 this.f = 0;
                 return true;
             }

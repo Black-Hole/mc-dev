@@ -3,33 +3,36 @@ package net.minecraft.server;
 public class ItemMilkBucket extends Item {
 
     public ItemMilkBucket() {
-        this.c(1);
+        this.d(1);
         this.a(CreativeModeTab.f);
     }
 
-    public ItemStack b(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (!entityhuman.abilities.canInstantlyBuild) {
+    public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
+        if (entityliving instanceof EntityHuman && !((EntityHuman) entityliving).abilities.canInstantlyBuild) {
             --itemstack.count;
         }
 
         if (!world.isClientSide) {
-            entityhuman.removeAllEffects();
+            entityliving.removeAllEffects();
         }
 
-        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
+        if (entityliving instanceof EntityHuman) {
+            ((EntityHuman) entityliving).b(StatisticList.b((Item) this));
+        }
+
         return itemstack.count <= 0 ? new ItemStack(Items.BUCKET) : itemstack;
     }
 
-    public int d(ItemStack itemstack) {
+    public int e(ItemStack itemstack) {
         return 32;
     }
 
-    public EnumAnimation e(ItemStack itemstack) {
+    public EnumAnimation f(ItemStack itemstack) {
         return EnumAnimation.DRINK;
     }
 
-    public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        entityhuman.a(itemstack, this.d(itemstack));
-        return itemstack;
+    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+        entityhuman.c(enumhand);
+        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
     }
 }

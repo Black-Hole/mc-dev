@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,14 +23,14 @@ public class CommandFill extends CommandAbstract {
         return "commands.fill.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 7) {
             throw new ExceptionUsage("commands.fill.usage", new Object[0]);
         } else {
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 0);
             BlockPosition blockposition = a(icommandlistener, astring, 0, false);
             BlockPosition blockposition1 = a(icommandlistener, astring, 3, false);
-            Block block = CommandAbstract.g(icommandlistener, astring[6]);
+            Block block = CommandAbstract.b(icommandlistener, astring[6]);
             int i = 0;
 
             if (astring.length >= 8) {
@@ -45,8 +46,8 @@ public class CommandFill extends CommandAbstract {
             } else if (blockposition2.getY() >= 0 && blockposition3.getY() < 256) {
                 World world = icommandlistener.getWorld();
 
-                for (int k = blockposition2.getZ(); k < blockposition3.getZ() + 16; k += 16) {
-                    for (int l = blockposition2.getX(); l < blockposition3.getX() + 16; l += 16) {
+                for (int k = blockposition2.getZ(); k <= blockposition3.getZ(); k += 16) {
+                    for (int l = blockposition2.getX(); l <= blockposition3.getX(); l += 16) {
                         if (!world.isLoaded(new BlockPosition(l, blockposition3.getY() - blockposition2.getY(), k))) {
                             throw new CommandException("commands.fill.outOfWorld", new Object[0]);
                         }
@@ -57,7 +58,7 @@ public class CommandFill extends CommandAbstract {
                 boolean flag = false;
 
                 if (astring.length >= 10 && block.isTileEntity()) {
-                    String s = a(icommandlistener, astring, 9).c();
+                    String s = a(icommandlistener, astring, 9).toPlainText();
 
                     try {
                         nbttagcompound = MojangsonParser.parse(s);
@@ -87,7 +88,7 @@ public class CommandFill extends CommandAbstract {
                                         }
                                     } else if (astring[8].equals("replace") && !block.isTileEntity()) {
                                         if (astring.length > 9) {
-                                            Block block1 = CommandAbstract.g(icommandlistener, astring[9]);
+                                            Block block1 = CommandAbstract.b(icommandlistener, astring[9]);
 
                                             if (world.getType(blockposition4).getBlock() != block1) {
                                                 continue;
@@ -154,7 +155,7 @@ public class CommandFill extends CommandAbstract {
                     throw new CommandException("commands.fill.failed", new Object[0]);
                 } else {
                     icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, j);
-                    a(icommandlistener, this, "commands.fill.success", new Object[] { Integer.valueOf(j)});
+                    a(icommandlistener, (ICommand) this, "commands.fill.success", new Object[] { Integer.valueOf(j)});
                 }
             } else {
                 throw new CommandException("commands.fill.outOfWorld", new Object[0]);
@@ -162,7 +163,7 @@ public class CommandFill extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length > 3 && astring.length <= 6 ? a(astring, 3, blockposition) : (astring.length == 7 ? a(astring, (Collection) Block.REGISTRY.keySet()) : (astring.length == 9 ? a(astring, new String[] { "replace", "destroy", "keep", "hollow", "outline"}) : (astring.length == 10 && "replace".equals(astring[8]) ? a(astring, (Collection) Block.REGISTRY.keySet()) : null))));
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length > 3 && astring.length <= 6 ? a(astring, 3, blockposition) : (astring.length == 7 ? a(astring, (Collection) Block.REGISTRY.keySet()) : (astring.length == 9 ? a(astring, new String[] { "replace", "destroy", "keep", "hollow", "outline"}) : (astring.length == 10 && "replace".equals(astring[8]) ? a(astring, (Collection) Block.REGISTRY.keySet()) : Collections.emptyList()))));
     }
 }

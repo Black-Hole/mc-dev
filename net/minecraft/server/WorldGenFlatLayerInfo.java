@@ -51,7 +51,7 @@ public class WorldGenFlatLayerInfo {
         String s;
 
         if (this.a >= 3) {
-            MinecraftKey minecraftkey = (MinecraftKey) Block.REGISTRY.c(this.e());
+            MinecraftKey minecraftkey = (MinecraftKey) Block.REGISTRY.b(this.e());
 
             s = minecraftkey == null ? "null" : minecraftkey.toString();
             if (this.c > 1) {

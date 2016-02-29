@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class EnchantmentThorns extends Enchantment {
 
-    public EnchantmentThorns(int i, MinecraftKey minecraftkey, int j) {
-        super(i, minecraftkey, j, EnchantmentSlotType.ARMOR_TORSO);
+    public EnchantmentThorns(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
+        super(enchantment_rarity, EnchantmentSlotType.ARMOR_CHEST, aenumitemslot);
         this.c("thorns");
     }
 
@@ -26,13 +26,12 @@ public class EnchantmentThorns extends Enchantment {
     }
 
     public void b(EntityLiving entityliving, Entity entity, int i) {
-        Random random = entityliving.bc();
-        ItemStack itemstack = EnchantmentManager.a(Enchantment.THORNS, entityliving);
+        Random random = entityliving.getRandom();
+        ItemStack itemstack = EnchantmentManager.b(Enchantments.THORNS, entityliving);
 
         if (a(i, random)) {
             if (entity != null) {
                 entity.damageEntity(DamageSource.a(entityliving), (float) b(i, random));
-                entity.makeSound("damage.thorns", 0.5F, 1.0F);
             }
 
             if (itemstack != null) {

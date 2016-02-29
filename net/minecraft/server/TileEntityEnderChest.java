@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class TileEntityEnderChest extends TileEntity implements IUpdatePlayerListBox {
+public class TileEntityEnderChest extends TileEntity implements ITickable {
 
     public float a;
     public float f;
@@ -25,7 +25,7 @@ public class TileEntityEnderChest extends TileEntity implements IUpdatePlayerLis
             double d1 = (double) i + 0.5D;
 
             d0 = (double) k + 0.5D;
-            this.world.makeSound(d1, (double) j + 0.5D, d0, "random.chestopen", 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            this.world.a((EntityHuman) null, d1, (double) j + 0.5D, d0, SoundEffects.aL, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
         }
 
         if (this.g == 0 && this.a > 0.0F || this.g > 0 && this.a < 1.0F) {
@@ -47,7 +47,7 @@ public class TileEntityEnderChest extends TileEntity implements IUpdatePlayerLis
                 d0 = (double) i + 0.5D;
                 double d2 = (double) k + 0.5D;
 
-                this.world.makeSound(d0, (double) j + 0.5D, d2, "random.chestclosed", 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                this.world.a((EntityHuman) null, d0, (double) j + 0.5D, d2, SoundEffects.aK, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
             }
 
             if (this.a < 0.0F) {
@@ -67,7 +67,7 @@ public class TileEntityEnderChest extends TileEntity implements IUpdatePlayerLis
     }
 
     public void y() {
-        this.E();
+        this.invalidateBlockCache();
         super.y();
     }
 

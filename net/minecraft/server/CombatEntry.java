@@ -38,7 +38,7 @@ public class CombatEntry {
         return this.a().getEntity() == null ? null : this.a().getEntity().getScoreboardDisplayName();
     }
 
-    public float i() {
+    public float j() {
         return this.a == DamageSource.OUT_OF_WORLD ? Float.MAX_VALUE : this.f;
     }
 }

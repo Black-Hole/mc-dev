@@ -2,6 +2,8 @@ package net.minecraft.server;
 
 public class EntityWitherSkull extends EntityFireball {
 
+    private static final DataWatcherObject<Boolean> e = DataWatcher.a(EntityWitherSkull.class, DataWatcherRegistry.h);
+
     public EntityWitherSkull(World world) {
         super(world);
         this.setSize(0.3125F, 0.3125F);
@@ -12,8 +14,8 @@ public class EntityWitherSkull extends EntityFireball {
         this.setSize(0.3125F, 0.3125F);
     }
 
-    protected float j() {
-        return this.isCharged() ? 0.73F : super.j();
+    protected float l() {
+        return this.isCharged() ? 0.73F : super.l();
     }
 
     public boolean isBurning() {
@@ -56,7 +58,7 @@ public class EntityWitherSkull extends EntityFireball {
                     }
 
                     if (b0 > 0) {
-                        ((EntityLiving) movingobjectposition.entity).addEffect(new MobEffect(MobEffectList.WITHER.id, 20 * b0, 1));
+                        ((EntityLiving) movingobjectposition.entity).addEffect(new MobEffect(MobEffects.WITHER, 20 * b0, 1));
                     }
                 }
             }
@@ -67,7 +69,7 @@ public class EntityWitherSkull extends EntityFireball {
 
     }
 
-    public boolean ad() {
+    public boolean isInteractable() {
         return false;
     }
 
@@ -75,15 +77,19 @@ public class EntityWitherSkull extends EntityFireball {
         return false;
     }
 
-    protected void h() {
-        this.datawatcher.a(10, Byte.valueOf((byte) 0));
+    protected void i() {
+        this.datawatcher.register(EntityWitherSkull.e, Boolean.valueOf(false));
     }
 
     public boolean isCharged() {
-        return this.datawatcher.getByte(10) == 1;
+        return ((Boolean) this.datawatcher.get(EntityWitherSkull.e)).booleanValue();
     }
 
     public void setCharged(boolean flag) {
-        this.datawatcher.watch(10, Byte.valueOf((byte) (flag ? 1 : 0)));
+        this.datawatcher.set(EntityWitherSkull.e, Boolean.valueOf(flag));
+    }
+
+    protected boolean k() {
+        return false;
     }
 }

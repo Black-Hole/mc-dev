@@ -3,45 +3,33 @@ package net.minecraft.server;
 public class BlockCarpet extends Block {
 
     public static final BlockStateEnum<EnumColor> COLOR = BlockStateEnum.of("color", EnumColor.class);
+    protected static final AxisAlignedBB b = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.0625D, 1.0D);
 
     protected BlockCarpet() {
         super(Material.WOOL);
-        this.j(this.blockStateList.getBlockData().set(BlockCarpet.COLOR, EnumColor.WHITE));
-        this.a(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
+        this.w(this.blockStateList.getBlockData().set(BlockCarpet.COLOR, EnumColor.WHITE));
         this.a(true);
         this.a(CreativeModeTab.c);
-        this.b(0);
     }
 
-    public MaterialMapColor g(IBlockData iblockdata) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockCarpet.b;
+    }
+
+    public MaterialMapColor r(IBlockData iblockdata) {
         return ((EnumColor) iblockdata.get(BlockCarpet.COLOR)).e();
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
-    }
-
-    public void j() {
-        this.b(0);
-    }
-
-    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        this.b(0);
-    }
-
-    protected void b(int i) {
-        byte b0 = 0;
-        float f = (float) (1 * (1 + b0)) / 16.0F;
-
-        this.a(0.0F, 0.0F, 0.0F, 1.0F, f, 1.0F);
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return super.canPlace(world, blockposition) && this.e(world, blockposition);
+        return super.canPlace(world, blockposition) && this.b(world, blockposition);
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
@@ -49,7 +37,7 @@ public class BlockCarpet extends Block {
     }
 
     private boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!this.e(world, blockposition)) {
+        if (!this.b(world, blockposition)) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
             return false;
@@ -58,7 +46,7 @@ public class BlockCarpet extends Block {
         }
     }
 
-    private boolean e(World world, BlockPosition blockposition) {
+    private boolean b(World world, BlockPosition blockposition) {
         return !world.isEmpty(blockposition.down());
     }
 

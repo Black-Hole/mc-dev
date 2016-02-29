@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class ChunkProviderFlat implements IChunkProvider {
+public class ChunkProviderFlat implements ChunkGenerator {
 
-    private World a;
-    private Random b;
+    private final World a;
+    private final Random b;
     private final IBlockData[] c = new IBlockData[256];
     private final WorldGenFlatInfo d;
     private final List<StructureGenerator> e = Lists.newArrayList();
@@ -87,7 +87,7 @@ public class ChunkProviderFlat implements IChunkProvider {
         }
 
         world.b(j);
-        this.f = flag1 ? false : this.d.b().containsKey("decoration");
+        this.f = flag1 && this.d.a() != BiomeBase.a(Biomes.P) ? false : this.d.b().containsKey("decoration");
     }
 
     public Chunk getOrCreateChunk(int i, int j) {
@@ -112,7 +112,7 @@ public class ChunkProviderFlat implements IChunkProvider {
         while (iterator.hasNext()) {
             WorldGenBase worldgenbase = (WorldGenBase) iterator.next();
 
-            worldgenbase.a(this, this.a, i, j, chunksnapshot);
+            worldgenbase.a(this.a, i, j, chunksnapshot);
         }
 
         Chunk chunk = new Chunk(this.a, chunksnapshot, i, j);
@@ -120,18 +120,14 @@ public class ChunkProviderFlat implements IChunkProvider {
         byte[] abyte = chunk.getBiomeIndex();
 
         for (k = 0; k < abyte.length; ++k) {
-            abyte[k] = (byte) abiomebase[k].id;
+            abyte[k] = (byte) BiomeBase.a(abiomebase[k]);
         }
 
         chunk.initLighting();
         return chunk;
     }
 
-    public boolean isChunkLoaded(int i, int j) {
-        return true;
-    }
-
-    public void getChunkAt(IChunkProvider ichunkprovider, int i, int j) {
+    public void recreateStructures(int i, int j) {
         int k = i * 16;
         int l = j * 16;
         BlockPosition blockposition = new BlockPosition(k, 0, l);
@@ -162,7 +158,7 @@ public class ChunkProviderFlat implements IChunkProvider {
         if (this.i != null && !flag && this.b.nextInt(8) == 0) {
             BlockPosition blockposition1 = blockposition.a(this.b.nextInt(16) + 8, this.b.nextInt(this.b.nextInt(248) + 8), this.b.nextInt(16) + 8);
 
-            if (blockposition1.getY() < this.a.F() || this.b.nextInt(10) == 0) {
+            if (blockposition1.getY() < this.a.K() || this.b.nextInt(10) == 0) {
                 this.i.generate(this.a, this.b, blockposition1);
             }
         }
@@ -179,26 +175,8 @@ public class ChunkProviderFlat implements IChunkProvider {
 
     }
 
-    public boolean a(IChunkProvider ichunkprovider, Chunk chunk, int i, int j) {
+    public boolean a(Chunk chunk, int i, int j) {
         return false;
-    }
-
-    public boolean saveChunks(boolean flag, IProgressUpdate iprogressupdate) {
-        return true;
-    }
-
-    public void c() {}
-
-    public boolean unloadChunks() {
-        return false;
-    }
-
-    public boolean canSave() {
-        return true;
-    }
-
-    public String getName() {
-        return "FlatLevelSource";
     }
 
     public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
@@ -223,22 +201,14 @@ public class ChunkProviderFlat implements IChunkProvider {
         return null;
     }
 
-    public int getLoadedChunks() {
-        return 0;
-    }
-
     public void recreateStructures(Chunk chunk, int i, int j) {
         Iterator iterator = this.e.iterator();
 
         while (iterator.hasNext()) {
             StructureGenerator structuregenerator = (StructureGenerator) iterator.next();
 
-            structuregenerator.a(this, this.a, i, j, (ChunkSnapshot) null);
+            structuregenerator.a(this.a, i, j, (ChunkSnapshot) null);
         }
 
-    }
-
-    public Chunk getChunkAt(BlockPosition blockposition) {
-        return this.getOrCreateChunk(blockposition.getX() >> 4, blockposition.getZ() >> 4);
     }
 }

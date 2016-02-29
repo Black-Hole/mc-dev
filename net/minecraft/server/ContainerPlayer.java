@@ -2,33 +2,42 @@ package net.minecraft.server;
 
 public class ContainerPlayer extends Container {
 
+    private static final EnumItemSlot[] h = new EnumItemSlot[] { EnumItemSlot.HEAD, EnumItemSlot.CHEST, EnumItemSlot.LEGS, EnumItemSlot.FEET};
     public InventoryCrafting craftInventory = new InventoryCrafting(this, 2, 2);
     public IInventory resultInventory = new InventoryCraftResult();
     public boolean g;
-    private final EntityHuman h;
+    private final EntityHuman owner;
 
     public ContainerPlayer(final PlayerInventory playerinventory, boolean flag, EntityHuman entityhuman) {
         this.g = flag;
-        this.h = entityhuman;
-        this.a((Slot) (new SlotResult(playerinventory.player, this.craftInventory, this.resultInventory, 0, 144, 36)));
+        this.owner = entityhuman;
+        this.a((Slot) (new SlotResult(playerinventory.player, this.craftInventory, this.resultInventory, 0, 154, 28)));
 
-        final int i;
+        int i;
         int j;
 
         for (i = 0; i < 2; ++i) {
             for (j = 0; j < 2; ++j) {
-                this.a(new Slot(this.craftInventory, j + i * 2, 88 + j * 18, 26 + i * 18));
+                this.a(new Slot(this.craftInventory, j + i * 2, 98 + j * 18, 18 + i * 18));
             }
         }
 
         for (i = 0; i < 4; ++i) {
-            this.a(new Slot(playerinventory, playerinventory.getSize() - 1 - i, 8, 8 + i * 18) {
+            final EnumItemSlot enumitemslot = ContainerPlayer.h[i];
+
+            this.a(new Slot(playerinventory, 36 + (3 - i), 8, 8 + i * 18) {
                 public int getMaxStackSize() {
                     return 1;
                 }
 
                 public boolean isAllowed(ItemStack itemstack) {
-                    return itemstack == null ? false : (itemstack.getItem() instanceof ItemArmor ? ((ItemArmor) itemstack.getItem()).b == i : (itemstack.getItem() != Item.getItemOf(Blocks.PUMPKIN) && itemstack.getItem() != Items.SKULL ? false : i == 0));
+                    if (itemstack == null) {
+                        return false;
+                    } else {
+                        EnumItemSlot enumitemslot = EntityInsentient.d(itemstack);
+
+                        return enumitemslot == enumitemslot1;
+                    }
                 }
             });
         }
@@ -43,11 +52,16 @@ public class ContainerPlayer extends Container {
             this.a(new Slot(playerinventory, i, 8 + i * 18, 142));
         }
 
+        this.a(new Slot(playerinventory, 40, 77, 62) {
+            public boolean isAllowed(ItemStack itemstack) {
+                return super.isAllowed(itemstack);
+            }
+        });
         this.a((IInventory) this.craftInventory);
     }
 
     public void a(IInventory iinventory) {
-        this.resultInventory.setItem(0, CraftingManager.getInstance().craft(this.craftInventory, this.h.world));
+        this.resultInventory.setItem(0, CraftingManager.getInstance().craft(this.craftInventory, this.owner.world));
     }
 
     public void b(EntityHuman entityhuman) {
@@ -76,6 +90,8 @@ public class ContainerPlayer extends Container {
             ItemStack itemstack1 = slot.getItem();
 
             itemstack = itemstack1.cloneItemStack();
+            EnumItemSlot enumitemslot = EntityInsentient.d(itemstack);
+
             if (i == 0) {
                 if (!this.a(itemstack1, 9, 45, true)) {
                     return null;
@@ -90,8 +106,8 @@ public class ContainerPlayer extends Container {
                 if (!this.a(itemstack1, 9, 45, false)) {
                     return null;
                 }
-            } else if (itemstack.getItem() instanceof ItemArmor && !((Slot) this.c.get(5 + ((ItemArmor) itemstack.getItem()).b)).hasItem()) {
-                int j = 5 + ((ItemArmor) itemstack.getItem()).b;
+            } else if (enumitemslot.a() == EnumItemSlot.Function.ARMOR && !((Slot) this.c.get(8 - enumitemslot.b())).hasItem()) {
+                int j = 8 - enumitemslot.b();
 
                 if (!this.a(itemstack1, j, j + 1, false)) {
                     return null;

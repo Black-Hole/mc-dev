@@ -1,36 +1,66 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
-import java.util.List;
-
 public abstract class NavigationAbstract {
 
-    protected EntityInsentient b;
-    protected World c;
-    protected PathEntity d;
-    protected double e;
-    private final AttributeInstance a;
-    private int f;
-    private int g;
-    private Vec3D h = new Vec3D(0.0D, 0.0D, 0.0D);
-    private float i = 1.0F;
-    private final Pathfinder j;
+    private static int f = 20;
+    protected EntityInsentient a;
+    protected World b;
+    protected PathEntity c;
+    protected double d;
+    private final AttributeInstance g;
+    private int h;
+    private int i;
+    private Vec3D j;
+    private Vec3D k;
+    private long l;
+    private long m;
+    private double n;
+    private float o;
+    private boolean p;
+    private long q;
+    protected PathfinderAbstract e;
+    private BlockPosition r;
+    private final Pathfinder s;
 
     public NavigationAbstract(EntityInsentient entityinsentient, World world) {
-        this.b = entityinsentient;
-        this.c = world;
-        this.a = entityinsentient.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
-        this.j = this.a();
+        this.j = Vec3D.a;
+        this.k = Vec3D.a;
+        this.l = 0L;
+        this.m = 0L;
+        this.o = 0.5F;
+        this.a = entityinsentient;
+        this.b = world;
+        this.g = entityinsentient.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
+        this.s = this.a();
+        this.b.C().a(this);
     }
 
     protected abstract Pathfinder a();
 
     public void a(double d0) {
-        this.e = d0;
+        this.d = d0;
     }
 
-    public float i() {
-        return (float) this.a.getValue();
+    public float h() {
+        return (float) this.g.getValue();
+    }
+
+    public boolean i() {
+        return this.p;
+    }
+
+    public void j() {
+        if (this.b.getTime() - this.q > (long) NavigationAbstract.f) {
+            if (this.r != null) {
+                this.c = null;
+                this.c = this.a(this.r);
+                this.q = this.b.getTime();
+                this.p = false;
+            }
+        } else {
+            this.p = true;
+        }
+
     }
 
     public final PathEntity a(double d0, double d1, double d2) {
@@ -40,17 +70,44 @@ public abstract class NavigationAbstract {
     public PathEntity a(BlockPosition blockposition) {
         if (!this.b()) {
             return null;
+        } else if (this.c != null && !this.c.b() && blockposition.equals(this.r)) {
+            return this.c;
         } else {
-            float f = this.i();
+            this.r = blockposition;
+            float f = this.h();
 
-            this.c.methodProfiler.a("pathfind");
-            BlockPosition blockposition1 = new BlockPosition(this.b);
+            this.b.methodProfiler.a("pathfind");
+            BlockPosition blockposition1 = new BlockPosition(this.a);
             int i = (int) (f + 8.0F);
-            ChunkCache chunkcache = new ChunkCache(this.c, blockposition1.a(-i, -i, -i), blockposition1.a(i, i, i), 0);
-            PathEntity pathentity = this.j.a((IBlockAccess) chunkcache, (Entity) this.b, blockposition, f);
+            ChunkCache chunkcache = new ChunkCache(this.b, blockposition1.a(-i, -i, -i), blockposition1.a(i, i, i), 0);
+            PathEntity pathentity = this.s.a(chunkcache, this.a, this.r, f);
 
-            this.c.methodProfiler.b();
+            this.b.methodProfiler.b();
             return pathentity;
+        }
+    }
+
+    public PathEntity a(Entity entity) {
+        if (!this.b()) {
+            return null;
+        } else {
+            BlockPosition blockposition = new BlockPosition(entity);
+
+            if (this.c != null && !this.c.b() && blockposition.equals(this.r)) {
+                return this.c;
+            } else {
+                this.r = blockposition;
+                float f = this.h();
+
+                this.b.methodProfiler.a("pathfind");
+                BlockPosition blockposition1 = (new BlockPosition(this.a)).up();
+                int i = (int) (f + 16.0F);
+                ChunkCache chunkcache = new ChunkCache(this.b, blockposition1.a(-i, -i, -i), blockposition1.a(i, i, i), 0);
+                PathEntity pathentity = this.s.a(chunkcache, this.a, entity, f);
+
+                this.b.methodProfiler.b();
+                return pathentity;
+            }
         }
     }
 
@@ -58,27 +115,6 @@ public abstract class NavigationAbstract {
         PathEntity pathentity = this.a((double) MathHelper.floor(d0), (double) ((int) d1), (double) MathHelper.floor(d2));
 
         return this.a(pathentity, d3);
-    }
-
-    public void a(float f) {
-        this.i = f;
-    }
-
-    public PathEntity a(Entity entity) {
-        if (!this.b()) {
-            return null;
-        } else {
-            float f = this.i();
-
-            this.c.methodProfiler.a("pathfind");
-            BlockPosition blockposition = (new BlockPosition(this.b)).up();
-            int i = (int) (f + 16.0F);
-            ChunkCache chunkcache = new ChunkCache(this.c, blockposition.a(-i, -i, -i), blockposition.a(i, i, i), 0);
-            PathEntity pathentity = this.j.a((IBlockAccess) chunkcache, (Entity) this.b, entity, f);
-
-            this.c.methodProfiler.b();
-            return pathentity;
-        }
     }
 
     public boolean a(Entity entity, double d0) {
@@ -89,98 +125,89 @@ public abstract class NavigationAbstract {
 
     public boolean a(PathEntity pathentity, double d0) {
         if (pathentity == null) {
-            this.d = null;
+            this.c = null;
             return false;
         } else {
-            if (!pathentity.a(this.d)) {
-                this.d = pathentity;
+            if (!pathentity.a(this.c)) {
+                this.c = pathentity;
             }
 
             this.d();
-            if (this.d.d() == 0) {
+            if (this.c.d() == 0) {
                 return false;
             } else {
-                this.e = d0;
+                this.d = d0;
                 Vec3D vec3d = this.c();
 
-                this.g = this.f;
-                this.h = vec3d;
+                this.i = this.h;
+                this.j = vec3d;
                 return true;
             }
         }
     }
 
-    public PathEntity j() {
-        return this.d;
+    public PathEntity k() {
+        return this.c;
     }
 
-    public void k() {
-        ++this.f;
-        if (!this.m()) {
+    public void l() {
+        ++this.h;
+        if (this.p) {
+            this.j();
+        }
+
+        if (!this.n()) {
             Vec3D vec3d;
 
             if (this.b()) {
-                this.l();
-            } else if (this.d != null && this.d.e() < this.d.d()) {
+                this.m();
+            } else if (this.c != null && this.c.e() < this.c.d()) {
                 vec3d = this.c();
-                Vec3D vec3d1 = this.d.a(this.b, this.d.e());
+                Vec3D vec3d1 = this.c.a(this.a, this.c.e());
 
-                if (vec3d.b > vec3d1.b && !this.b.onGround && MathHelper.floor(vec3d.a) == MathHelper.floor(vec3d1.a) && MathHelper.floor(vec3d.c) == MathHelper.floor(vec3d1.c)) {
-                    this.d.c(this.d.e() + 1);
+                if (vec3d.y > vec3d1.y && !this.a.onGround && MathHelper.floor(vec3d.x) == MathHelper.floor(vec3d1.x) && MathHelper.floor(vec3d.z) == MathHelper.floor(vec3d1.z)) {
+                    this.c.c(this.c.e() + 1);
                 }
             }
 
-            if (!this.m()) {
-                vec3d = this.d.a((Entity) this.b);
+            if (!this.n()) {
+                vec3d = this.c.a((Entity) this.a);
                 if (vec3d != null) {
-                    AxisAlignedBB axisalignedbb = (new AxisAlignedBB(vec3d.a, vec3d.b, vec3d.c, vec3d.a, vec3d.b, vec3d.c)).grow(0.5D, 0.5D, 0.5D);
-                    List list = this.c.getCubes(this.b, axisalignedbb.a(0.0D, -1.0D, 0.0D));
-                    double d0 = -1.0D;
+                    BlockPosition blockposition = (new BlockPosition(vec3d)).down();
+                    AxisAlignedBB axisalignedbb = this.b.getType(blockposition).c(this.b, blockposition);
 
-                    axisalignedbb = axisalignedbb.c(0.0D, 1.0D, 0.0D);
-
-                    AxisAlignedBB axisalignedbb1;
-
-                    for (Iterator iterator = list.iterator(); iterator.hasNext(); d0 = axisalignedbb1.b(axisalignedbb, d0)) {
-                        axisalignedbb1 = (AxisAlignedBB) iterator.next();
-                    }
-
-                    this.b.getControllerMove().a(vec3d.a, vec3d.b + d0, vec3d.c, this.e);
+                    vec3d = vec3d.a(0.0D, 1.0D - axisalignedbb.e, 0.0D);
+                    this.a.getControllerMove().a(vec3d.x, vec3d.y, vec3d.z, this.d);
                 }
             }
         }
     }
 
-    protected void l() {
+    protected void m() {
         Vec3D vec3d = this.c();
-        int i = this.d.d();
+        int i = this.c.d();
 
-        for (int j = this.d.e(); j < this.d.d(); ++j) {
-            if (this.d.a(j).b != (int) vec3d.b) {
+        for (int j = this.c.e(); j < this.c.d(); ++j) {
+            if ((double) this.c.a(j).b != Math.floor(vec3d.y)) {
                 i = j;
                 break;
             }
         }
 
-        float f = this.b.width * this.b.width * this.i;
+        this.o = this.a.width > 0.75F ? this.a.width / 2.0F : 0.75F - this.a.width / 2.0F;
+        Vec3D vec3d1 = this.c.f();
 
-        int k;
-
-        for (k = this.d.e(); k < i; ++k) {
-            Vec3D vec3d1 = this.d.a(this.b, k);
-
-            if (vec3d.distanceSquared(vec3d1) < (double) f) {
-                this.d.c(k + 1);
-            }
+        if (MathHelper.e((float) (this.a.locX - (vec3d1.x + 0.5D))) < this.o && MathHelper.e((float) (this.a.locZ - (vec3d1.z + 0.5D))) < this.o) {
+            this.c.c(this.c.e() + 1);
         }
 
-        k = MathHelper.f(this.b.width);
-        int l = (int) this.b.length + 1;
+        int k = MathHelper.f(this.a.width);
+        int l = (int) this.a.length + 1;
         int i1 = k;
 
-        for (int j1 = i - 1; j1 >= this.d.e(); --j1) {
-            if (this.a(vec3d, this.d.a(this.b, j1), k, l, i1)) {
-                this.d.c(j1);
+        for (int j1 = i - 1; j1 >= this.c.e(); --j1) {
+            if (this.a(vec3d, this.c.a(this.a, j1), k, l, i1)) {
+                this.c.c(j1);
                 break;
             }
         }
@@ -189,34 +216,60 @@ public abstract class NavigationAbstract {
     }
 
     protected void a(Vec3D vec3d) {
-        if (this.f - this.g > 100) {
-            if (vec3d.distanceSquared(this.h) < 2.25D) {
-                this.n();
+        if (this.h - this.i > 100) {
+            if (vec3d.distanceSquared(this.j) < 2.25D) {
+                this.o();
             }
 
-            this.g = this.f;
-            this.h = vec3d;
+            this.i = this.h;
+            this.j = vec3d;
+        }
+
+        if (this.c != null && !this.c.b()) {
+            Vec3D vec3d1 = this.c.f();
+
+            if (!vec3d1.equals(this.k)) {
+                this.k = vec3d1;
+                double d0 = vec3d.f(this.k);
+
+                this.n = this.a.ck() > 0.0F ? d0 / (double) this.a.ck() * 1000.0D : 0.0D;
+            } else {
+                this.l += System.currentTimeMillis() - this.m;
+            }
+
+            if (this.n > 0.0D && (double) this.l > this.n * 3.0D) {
+                this.k = Vec3D.a;
+                this.l = 0L;
+                this.n = 0.0D;
+                this.o();
+            }
+
+            this.m = System.currentTimeMillis();
         }
 
     }
 
-    public boolean m() {
-        return this.d == null || this.d.b();
+    public boolean n() {
+        return this.c == null || this.c.b();
     }
 
-    public void n() {
-        this.d = null;
+    public void o() {
+        this.c = null;
     }
 
     protected abstract Vec3D c();
 
     protected abstract boolean b();
 
-    protected boolean o() {
-        return this.b.V() || this.b.ab();
+    protected boolean p() {
+        return this.a.isInWater() || this.a.an();
     }
 
     protected void d() {}
 
     protected abstract boolean a(Vec3D vec3d, Vec3D vec3d1, int i, int j, int k);
+
+    public boolean b(BlockPosition blockposition) {
+        return this.b.getType(blockposition.down()).b();
+    }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 public class PacketPlayOutEntityMetadata implements Packet<PacketListenerPlayOut> {
 
     private int a;
-    private List<DataWatcher.WatchableObject> b;
+    private List<DataWatcher.Item<?>> b;
 
     public PacketPlayOutEntityMetadata() {}
 
@@ -21,7 +21,7 @@ public class PacketPlayOutEntityMetadata implements Packet<PacketListenerPlayOut
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
+        this.a = packetdataserializer.g();
         this.b = DataWatcher.b(packetdataserializer);
     }
 

@@ -2,11 +2,14 @@ package net.minecraft.server;
 
 public class MobEffectAttackDamage extends MobEffectList {
 
-    protected MobEffectAttackDamage(int i, MinecraftKey minecraftkey, boolean flag, int j) {
-        super(i, minecraftkey, flag, j);
+    protected final double a;
+
+    protected MobEffectAttackDamage(boolean flag, int i, double d0) {
+        super(flag, i);
+        this.a = d0;
     }
 
     public double a(int i, AttributeModifier attributemodifier) {
-        return this.id == MobEffectList.WEAKNESS.id ? (double) (-0.5F * (float) (i + 1)) : 1.3D * (double) (i + 1);
+        return this.a * (double) (i + 1);
     }
 }

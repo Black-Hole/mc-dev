@@ -46,10 +46,11 @@ public class Material {
     private boolean L;
     private final MaterialMapColor M;
     private boolean N = true;
-    private int O;
+    private EnumPistonReaction O;
     private boolean P;
 
     public Material(MaterialMapColor materialmapcolor) {
+        this.O = EnumPistonReaction.NORMAL;
         this.M = materialmapcolor;
     }
 
@@ -105,17 +106,17 @@ public class Material {
         return this.N;
     }
 
-    public int getPushReaction() {
+    public EnumPistonReaction getPushReaction() {
         return this.O;
     }
 
     protected Material n() {
-        this.O = 1;
+        this.O = EnumPistonReaction.DESTROY;
         return this;
     }
 
     protected Material o() {
-        this.O = 2;
+        this.O = EnumPistonReaction.BLOCK;
         return this;
     }
 

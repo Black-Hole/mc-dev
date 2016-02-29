@@ -10,25 +10,24 @@ import java.util.Map.Entry;
 
 public class WorldGenStronghold extends StructureGenerator {
 
-    private List<BiomeBase> d;
-    private boolean f;
-    private ChunkCoordIntPair[] g;
+    private List<BiomeBase> a;
+    private boolean b;
+    private ChunkCoordIntPair[] d;
     private double h;
     private int i;
 
     public WorldGenStronghold() {
-        this.g = new ChunkCoordIntPair[3];
+        this.d = new ChunkCoordIntPair[128];
         this.h = 32.0D;
         this.i = 3;
-        this.d = Lists.newArrayList();
-        BiomeBase[] abiomebase = BiomeBase.getBiomes();
-        int i = abiomebase.length;
+        this.a = Lists.newArrayList();
+        Iterator iterator = BiomeBase.REGISTRY_ID.iterator();
 
-        for (int j = 0; j < i; ++j) {
-            BiomeBase biomebase = abiomebase[j];
+        while (iterator.hasNext()) {
+            BiomeBase biomebase = (BiomeBase) iterator.next();
 
-            if (biomebase != null && biomebase.an > 0.0F) {
-                this.d.add(biomebase);
+            if (biomebase != null && biomebase.j() > 0.0F) {
+                this.a.add(biomebase);
             }
         }
 
@@ -44,7 +43,7 @@ public class WorldGenStronghold extends StructureGenerator {
             if (((String) entry.getKey()).equals("distance")) {
                 this.h = MathHelper.a((String) entry.getValue(), this.h, 1.0D);
             } else if (((String) entry.getKey()).equals("count")) {
-                this.g = new ChunkCoordIntPair[MathHelper.a((String) entry.getValue(), this.g.length, 1)];
+                this.d = new ChunkCoordIntPair[MathHelper.a((String) entry.getValue(), this.d.length, 1)];
             } else if (((String) entry.getKey()).equals("spread")) {
                 this.i = MathHelper.a((String) entry.getValue(), this.i, 1);
             }
@@ -56,41 +55,47 @@ public class WorldGenStronghold extends StructureGenerator {
         return "Stronghold";
     }
 
-    protected boolean a(int i, int j) {
-        if (!this.f) {
-            Random random = new Random();
-
-            random.setSeed(this.c.getSeed());
-            double d0 = random.nextDouble() * 3.141592653589793D * 2.0D;
-            int k = 1;
-
-            for (int l = 0; l < this.g.length; ++l) {
-                double d1 = (1.25D * (double) k + random.nextDouble()) * this.h * (double) k;
-                int i1 = (int) Math.round(Math.cos(d0) * d1);
-                int j1 = (int) Math.round(Math.sin(d0) * d1);
-                BlockPosition blockposition = this.c.getWorldChunkManager().a((i1 << 4) + 8, (j1 << 4) + 8, 112, this.d, random);
-
-                if (blockposition != null) {
-                    i1 = blockposition.getX() >> 4;
-                    j1 = blockposition.getZ() >> 4;
-                }
-
-                this.g[l] = new ChunkCoordIntPair(i1, j1);
-                d0 += 6.283185307179586D * (double) k / (double) this.i;
-                if (l == this.i) {
-                    k += 2 + random.nextInt(5);
-                    this.i += 1 + random.nextInt(2);
-                }
-            }
-
-            this.f = true;
+    public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition) {
+        if (!this.b) {
+            this.c();
+            this.b = true;
         }
 
-        ChunkCoordIntPair[] achunkcoordintpair = this.g;
-        int k1 = achunkcoordintpair.length;
+        BlockPosition blockposition1 = null;
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(0, 0, 0);
+        double d0 = Double.MAX_VALUE;
+        ChunkCoordIntPair[] achunkcoordintpair = this.d;
+        int i = achunkcoordintpair.length;
 
-        for (int l1 = 0; l1 < k1; ++l1) {
-            ChunkCoordIntPair chunkcoordintpair = achunkcoordintpair[l1];
+        for (int j = 0; j < i; ++j) {
+            ChunkCoordIntPair chunkcoordintpair = achunkcoordintpair[j];
+
+            blockposition_mutableblockposition.c((chunkcoordintpair.x << 4) + 8, 32, (chunkcoordintpair.z << 4) + 8);
+            double d1 = blockposition_mutableblockposition.k(blockposition);
+
+            if (blockposition1 == null) {
+                blockposition1 = new BlockPosition(blockposition_mutableblockposition);
+                d0 = d1;
+            } else if (d1 < d0) {
+                blockposition1 = new BlockPosition(blockposition_mutableblockposition);
+                d0 = d1;
+            }
+        }
+
+        return blockposition1;
+    }
+
+    protected boolean a(int i, int j) {
+        if (!this.b) {
+            this.c();
+            this.b = true;
+        }
+
+        ChunkCoordIntPair[] achunkcoordintpair = this.d;
+        int k = achunkcoordintpair.length;
+
+        for (int l = 0; l < k; ++l) {
+            ChunkCoordIntPair chunkcoordintpair = achunkcoordintpair[l];
 
             if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
                 return true;
@@ -100,9 +105,60 @@ public class WorldGenStronghold extends StructureGenerator {
         return false;
     }
 
-    protected List<BlockPosition> z_() {
+    private void c() {
+        this.a(this.g);
+        int i = 0;
+        Iterator iterator = this.c.values().iterator();
+
+        while (iterator.hasNext()) {
+            StructureStart structurestart = (StructureStart) iterator.next();
+
+            if (i < this.d.length) {
+                this.d[i++] = new ChunkCoordIntPair(structurestart.e(), structurestart.f());
+            }
+        }
+
+        Random random = new Random();
+
+        random.setSeed(this.g.getSeed());
+        double d0 = random.nextDouble() * 3.141592653589793D * 2.0D;
+        int j = 0;
+        int k = 0;
+        int l = this.c.size();
+
+        if (l < this.d.length) {
+            for (int i1 = 0; i1 < this.d.length; ++i1) {
+                double d1 = 4.0D * this.h + this.h * (double) j * 6.0D + (random.nextDouble() - 0.5D) * this.h * 2.5D;
+                int j1 = (int) Math.round(Math.cos(d0) * d1);
+                int k1 = (int) Math.round(Math.sin(d0) * d1);
+                BlockPosition blockposition = this.g.getWorldChunkManager().a((j1 << 4) + 8, (k1 << 4) + 8, 112, this.a, random);
+
+                if (blockposition != null) {
+                    j1 = blockposition.getX() >> 4;
+                    k1 = blockposition.getZ() >> 4;
+                }
+
+                if (i1 >= l) {
+                    this.d[i1] = new ChunkCoordIntPair(j1, k1);
+                }
+
+                d0 += 6.283185307179586D / (double) this.i;
+                ++k;
+                if (k == this.i) {
+                    ++j;
+                    k = 0;
+                    this.i += 2 * this.i / (j + 1);
+                    this.i = Math.min(this.i, this.d.length - i1);
+                    d0 += random.nextDouble() * 3.141592653589793D * 2.0D;
+                }
+            }
+        }
+
+    }
+
+    protected List<BlockPosition> E_() {
         ArrayList arraylist = Lists.newArrayList();
-        ChunkCoordIntPair[] achunkcoordintpair = this.g;
+        ChunkCoordIntPair[] achunkcoordintpair = this.d;
         int i = achunkcoordintpair.length;
 
         for (int j = 0; j < i; ++j) {
@@ -119,7 +175,7 @@ public class WorldGenStronghold extends StructureGenerator {
     protected StructureStart b(int i, int j) {
         WorldGenStronghold.WorldGenStronghold2Start worldgenstronghold_worldgenstronghold2start;
 
-        for (worldgenstronghold_worldgenstronghold2start = new WorldGenStronghold.WorldGenStronghold2Start(this.c, this.b, i, j); worldgenstronghold_worldgenstronghold2start.b().isEmpty() || ((WorldGenStrongholdPieces.WorldGenStrongholdStart) worldgenstronghold_worldgenstronghold2start.b().get(0)).b == null; worldgenstronghold_worldgenstronghold2start = new WorldGenStronghold.WorldGenStronghold2Start(this.c, this.b, i, j)) {
+        for (worldgenstronghold_worldgenstronghold2start = new WorldGenStronghold.WorldGenStronghold2Start(this.g, this.f, i, j); worldgenstronghold_worldgenstronghold2start.c().isEmpty() || ((WorldGenStrongholdPieces.WorldGenStrongholdStart) worldgenstronghold_worldgenstronghold2start.c().get(0)).b == null; worldgenstronghold_worldgenstronghold2start = new WorldGenStronghold.WorldGenStronghold2Start(this.g, this.f, i, j)) {
             ;
         }
 
@@ -136,17 +192,17 @@ public class WorldGenStronghold extends StructureGenerator {
             WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart = new WorldGenStrongholdPieces.WorldGenStrongholdStart(0, random, (i << 4) + 2, (j << 4) + 2);
 
             this.a.add(worldgenstrongholdpieces_worldgenstrongholdstart);
-            worldgenstrongholdpieces_worldgenstrongholdstart.a((StructurePiece) worldgenstrongholdpieces_worldgenstrongholdstart, (List) this.a, random);
+            worldgenstrongholdpieces_worldgenstrongholdstart.a((StructurePiece) worldgenstrongholdpieces_worldgenstrongholdstart, this.a, random);
             List list = worldgenstrongholdpieces_worldgenstrongholdstart.c;
 
             while (!list.isEmpty()) {
                 int k = random.nextInt(list.size());
                 StructurePiece structurepiece = (StructurePiece) list.remove(k);
 
-                structurepiece.a((StructurePiece) worldgenstrongholdpieces_worldgenstrongholdstart, (List) this.a, random);
+                structurepiece.a((StructurePiece) worldgenstrongholdpieces_worldgenstrongholdstart, this.a, random);
             }
 
-            this.c();
+            this.d();
             this.a(world, random, 10);
         }
     }

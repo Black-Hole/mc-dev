@@ -8,7 +8,7 @@ public class ItemWorldMapBase extends Item {
         return true;
     }
 
-    public Packet c(ItemStack itemstack, World world, EntityHuman entityhuman) {
+    public Packet<?> a(ItemStack itemstack, World world, EntityHuman entityhuman) {
         return null;
     }
 }

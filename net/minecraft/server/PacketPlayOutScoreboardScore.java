@@ -37,7 +37,7 @@ public class PacketPlayOutScoreboardScore implements Packet<PacketListenerPlayOu
         this.d = (PacketPlayOutScoreboardScore.EnumScoreboardAction) packetdataserializer.a(PacketPlayOutScoreboardScore.EnumScoreboardAction.class);
         this.b = packetdataserializer.c(16);
         if (this.d != PacketPlayOutScoreboardScore.EnumScoreboardAction.REMOVE) {
-            this.c = packetdataserializer.e();
+            this.c = packetdataserializer.g();
         }
 
     }

@@ -8,16 +8,11 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
     double d;
     boolean e;
     PathEntity f;
-    Class<? extends Entity> g;
     private int h;
     private double i;
     private double j;
     private double k;
-
-    public PathfinderGoalMeleeAttack(EntityCreature entitycreature, Class<? extends Entity> oclass, double d0, boolean flag) {
-        this(entitycreature, d0, flag);
-        this.g = oclass;
-    }
+    protected final int g = 20;
 
     public PathfinderGoalMeleeAttack(EntityCreature entitycreature, double d0, boolean flag) {
         this.b = entitycreature;
@@ -34,8 +29,6 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
             return false;
         } else if (!entityliving.isAlive()) {
             return false;
-        } else if (this.g != null && !this.g.isAssignableFrom(entityliving.getClass())) {
-            return false;
         } else {
             this.f = this.b.getNavigation().a((Entity) entityliving);
             return this.f != null;
@@ -45,7 +38,7 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
     public boolean b() {
         EntityLiving entityliving = this.b.getGoalTarget();
 
-        return entityliving == null ? false : (!entityliving.isAlive() ? false : (!this.e ? !this.b.getNavigation().m() : this.b.e(new BlockPosition(entityliving))));
+        return entityliving == null ? false : (!entityliving.isAlive() ? false : (!this.e ? !this.b.getNavigation().n() : (!this.b.f(new BlockPosition(entityliving)) ? false : !(entityliving instanceof EntityHuman) || !((EntityHuman) entityliving).isSpectator() && !((EntityHuman) entityliving).l_())));
     }
 
     public void c() {
@@ -54,7 +47,13 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
     }
 
     public void d() {
-        this.b.getNavigation().n();
+        EntityLiving entityliving = this.b.getGoalTarget();
+
+        if (entityliving instanceof EntityHuman && (((EntityHuman) entityliving).isSpectator() || ((EntityHuman) entityliving).l_())) {
+            this.b.setGoalTarget((EntityLiving) null);
+        }
+
+        this.b.getNavigation().o();
     }
 
     public void e() {
@@ -65,11 +64,11 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
         double d1 = this.a(entityliving);
 
         --this.h;
-        if ((this.e || this.b.getEntitySenses().a(entityliving)) && this.h <= 0 && (this.i == 0.0D && this.j == 0.0D && this.k == 0.0D || entityliving.e(this.i, this.j, this.k) >= 1.0D || this.b.bc().nextFloat() < 0.05F)) {
+        if ((this.e || this.b.getEntitySenses().a(entityliving)) && this.h <= 0 && (this.i == 0.0D && this.j == 0.0D && this.k == 0.0D || entityliving.e(this.i, this.j, this.k) >= 1.0D || this.b.getRandom().nextFloat() < 0.05F)) {
             this.i = entityliving.locX;
             this.j = entityliving.getBoundingBox().b;
             this.k = entityliving.locZ;
-            this.h = 4 + this.b.bc().nextInt(7);
+            this.h = 4 + this.b.getRandom().nextInt(7);
             if (d0 > 1024.0D) {
                 this.h += 10;
             } else if (d0 > 256.0D) {
@@ -84,11 +83,8 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
         this.c = Math.max(this.c - 1, 0);
         if (d0 <= d1 && this.c <= 0) {
             this.c = 20;
-            if (this.b.bA() != null) {
-                this.b.bw();
-            }
-
-            this.b.r(entityliving);
+            this.b.a(EnumHand.MAIN_HAND);
+            this.b.B(entityliving);
         }
 
     }

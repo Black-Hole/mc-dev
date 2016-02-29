@@ -26,7 +26,7 @@ public interface IInventory extends INamableTileEntity {
 
     int getProperty(int i);
 
-    void b(int i, int j);
+    void setProperty(int i, int j);
 
     int g();
 

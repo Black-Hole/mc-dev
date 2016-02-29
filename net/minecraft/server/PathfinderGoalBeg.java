@@ -25,23 +25,39 @@ public class PathfinderGoalBeg extends PathfinderGoal {
     }
 
     public void c() {
-        this.a.p(true);
-        this.e = 40 + this.a.bc().nextInt(40);
+        this.a.s(true);
+        this.e = 40 + this.a.getRandom().nextInt(40);
     }
 
     public void d() {
-        this.a.p(false);
+        this.a.s(false);
         this.b = null;
     }
 
     public void e() {
-        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, 10.0F, (float) this.a.bQ());
+        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, 10.0F, (float) this.a.N());
         --this.e;
     }
 
     private boolean a(EntityHuman entityhuman) {
-        ItemStack itemstack = entityhuman.inventory.getItemInHand();
+        EnumHand[] aenumhand = EnumHand.values();
+        int i = aenumhand.length;
 
-        return itemstack == null ? false : (!this.a.isTamed() && itemstack.getItem() == Items.BONE ? true : this.a.d(itemstack));
+        for (int j = 0; j < i; ++j) {
+            EnumHand enumhand = aenumhand[j];
+            ItemStack itemstack = entityhuman.b(enumhand);
+
+            if (itemstack != null) {
+                if (this.a.isTamed() && itemstack.getItem() == Items.BONE) {
+                    return true;
+                }
+
+                if (this.a.e(itemstack)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

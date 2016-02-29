@@ -23,5 +23,7 @@ public interface AttributeInstance {
 
     void c(AttributeModifier attributemodifier);
 
+    void b(UUID uuid);
+
     double getValue();
 }

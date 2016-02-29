@@ -8,16 +8,16 @@ public abstract class EntityFlying extends EntityInsentient {
 
     public void e(float f, float f1) {}
 
-    protected void a(double d0, boolean flag, Block block, BlockPosition blockposition) {}
+    protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {}
 
     public void g(float f, float f1) {
-        if (this.V()) {
+        if (this.isInWater()) {
             this.a(f, f1, 0.02F);
             this.move(this.motX, this.motY, this.motZ);
             this.motX *= 0.800000011920929D;
             this.motY *= 0.800000011920929D;
             this.motZ *= 0.800000011920929D;
-        } else if (this.ab()) {
+        } else if (this.an()) {
             this.a(f, f1, 0.02F);
             this.move(this.motX, this.motY, this.motZ);
             this.motX *= 0.5D;
@@ -44,7 +44,7 @@ public abstract class EntityFlying extends EntityInsentient {
             this.motZ *= (double) f2;
         }
 
-        this.aA = this.aB;
+        this.aE = this.aF;
         double d0 = this.locX - this.lastX;
         double d1 = this.locZ - this.lastZ;
         float f4 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;
@@ -53,11 +53,11 @@ public abstract class EntityFlying extends EntityInsentient {
             f4 = 1.0F;
         }
 
-        this.aB += (f4 - this.aB) * 0.4F;
-        this.aC += this.aB;
+        this.aF += (f4 - this.aF) * 0.4F;
+        this.aG += this.aF;
     }
 
-    public boolean k_() {
+    public boolean n_() {
         return false;
     }
 }

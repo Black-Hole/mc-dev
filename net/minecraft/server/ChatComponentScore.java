@@ -26,9 +26,13 @@ public class ChatComponentScore extends ChatBaseComponent {
     }
 
     public String getText() {
-        MinecraftServer minecraftserver = MinecraftServer.getServer();
+        return this.d;
+    }
 
-        if (minecraftserver != null && minecraftserver.O() && UtilColor.b(this.d)) {
+    public void a(ICommandListener icommandlistener) {
+        MinecraftServer minecraftserver = icommandlistener.h();
+
+        if (minecraftserver != null && minecraftserver.M() && UtilColor.b(this.d)) {
             Scoreboard scoreboard = minecraftserver.getWorldServer(0).getScoreboard();
             ScoreboardObjective scoreboardobjective = scoreboard.getObjective(this.c);
 
@@ -36,12 +40,11 @@ public class ChatComponentScore extends ChatBaseComponent {
                 ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(this.b, scoreboardobjective);
 
                 this.b(String.format("%d", new Object[] { Integer.valueOf(scoreboardscore.getScore())}));
-            } else {
-                this.d = "";
+                return;
             }
         }
 
-        return this.d;
+        this.d = "";
     }
 
     public ChatComponentScore i() {

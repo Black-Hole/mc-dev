@@ -14,7 +14,7 @@ public class DedicatedPlayerList extends PlayerList {
         this.a(dedicatedserver.a("view-distance", 10));
         this.maxPlayers = dedicatedserver.a("max-players", 20);
         this.setHasWhitelist(dedicatedserver.a("white-list", false));
-        if (!dedicatedserver.T()) {
+        if (!dedicatedserver.R()) {
             this.getProfileBans().a(true);
             this.getIPBans().a(true);
         }

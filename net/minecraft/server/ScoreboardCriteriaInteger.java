@@ -1,22 +1,16 @@
 package net.minecraft.server;
 
-import java.util.List;
-
 public class ScoreboardCriteriaInteger implements IScoreboardCriteria {
 
-    private final String j;
+    private final String o;
 
     public ScoreboardCriteriaInteger(String s, EnumChatFormat enumchatformat) {
-        this.j = s + enumchatformat.e();
-        IScoreboardCriteria.criteria.put(this.j, this);
+        this.o = s + enumchatformat.e();
+        IScoreboardCriteria.criteria.put(this.o, this);
     }
 
     public String getName() {
-        return this.j;
-    }
-
-    public int getScoreModifier(List<EntityHuman> list) {
-        return 0;
+        return this.o;
     }
 
     public boolean isReadOnly() {

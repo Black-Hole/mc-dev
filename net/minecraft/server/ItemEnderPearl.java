@@ -7,18 +7,21 @@ public class ItemEnderPearl extends Item {
         this.a(CreativeModeTab.f);
     }
 
-    public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (entityhuman.abilities.canInstantlyBuild) {
-            return itemstack;
-        } else {
+    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+        if (!entityhuman.abilities.canInstantlyBuild) {
             --itemstack.count;
-            world.makeSound(entityhuman, "random.bow", 0.5F, 0.4F / (ItemEnderPearl.g.nextFloat() * 0.4F + 0.8F));
-            if (!world.isClientSide) {
-                world.addEntity(new EntityEnderPearl(world, entityhuman));
-            }
-
-            entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
-            return itemstack;
         }
+
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.be, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderPearl.i.nextFloat() * 0.4F + 0.8F));
+        entityhuman.da().a(this, 20);
+        if (!world.isClientSide) {
+            EntityEnderPearl entityenderpearl = new EntityEnderPearl(world, entityhuman);
+
+            entityenderpearl.a(entityhuman, entityhuman.pitch, entityhuman.yaw, 0.0F, 1.5F, 1.0F);
+            world.addEntity(entityenderpearl);
+        }
+
+        entityhuman.b(StatisticList.b((Item) this));
+        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
     }
 }

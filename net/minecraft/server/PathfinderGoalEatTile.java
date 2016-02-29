@@ -17,7 +17,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
     }
 
     public boolean a() {
-        if (this.c.bc().nextInt(this.c.isBaby() ? 50 : 1000) != 0) {
+        if (this.c.getRandom().nextInt(this.c.isBaby() ? 50 : 1000) != 0) {
             return false;
         } else {
             BlockPosition blockposition = new BlockPosition(this.c.locX, this.c.locY, this.c.locZ);
@@ -29,7 +29,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
     public void c() {
         this.a = 40;
         this.d.broadcastEntityEffect(this.c, (byte) 10);
-        this.c.getNavigation().n();
+        this.c.getNavigation().o();
     }
 
     public void d() {
@@ -54,7 +54,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
                     this.d.setAir(blockposition, false);
                 }
 
-                this.c.v();
+                this.c.B();
             } else {
                 BlockPosition blockposition1 = blockposition.down();
 
@@ -64,7 +64,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
                         this.d.setTypeAndData(blockposition1, Blocks.DIRT.getBlockData(), 2);
                     }
 
-                    this.c.v();
+                    this.c.B();
                 }
             }
 

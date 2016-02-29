@@ -20,22 +20,22 @@ public class BlockRedstoneOre extends Block {
     }
 
     public void attack(World world, BlockPosition blockposition, EntityHuman entityhuman) {
-        this.e(world, blockposition);
+        this.interact(world, blockposition);
         super.attack(world, blockposition, entityhuman);
     }
 
-    public void a(World world, BlockPosition blockposition, Entity entity) {
-        this.e(world, blockposition);
-        super.a(world, blockposition, entity);
+    public void stepOn(World world, BlockPosition blockposition, Entity entity) {
+        this.interact(world, blockposition);
+        super.stepOn(world, blockposition, entity);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        this.e(world, blockposition);
-        return super.interact(world, blockposition, iblockdata, entityhuman, enumdirection, f, f1, f2);
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+        this.interact(world, blockposition);
+        return super.interact(world, blockposition, iblockdata, entityhuman, enumhand, itemstack, enumdirection, f, f1, f2);
     }
 
-    private void e(World world, BlockPosition blockposition) {
-        this.f(world, blockposition);
+    private void interact(World world, BlockPosition blockposition) {
+        this.playEffect(world, blockposition);
         if (this == Blocks.REDSTONE_ORE) {
             world.setTypeUpdate(blockposition, Blocks.LIT_REDSTONE_ORE.getBlockData());
         }
@@ -71,7 +71,7 @@ public class BlockRedstoneOre extends Block {
 
     }
 
-    private void f(World world, BlockPosition blockposition) {
+    private void playEffect(World world, BlockPosition blockposition) {
         Random random = world.random;
         double d0 = 0.0625D;
 
@@ -80,27 +80,27 @@ public class BlockRedstoneOre extends Block {
             double d2 = (double) ((float) blockposition.getY() + random.nextFloat());
             double d3 = (double) ((float) blockposition.getZ() + random.nextFloat());
 
-            if (i == 0 && !world.getType(blockposition.up()).getBlock().c()) {
+            if (i == 0 && !world.getType(blockposition.up()).p()) {
                 d2 = (double) blockposition.getY() + d0 + 1.0D;
             }
 
-            if (i == 1 && !world.getType(blockposition.down()).getBlock().c()) {
+            if (i == 1 && !world.getType(blockposition.down()).p()) {
                 d2 = (double) blockposition.getY() - d0;
             }
 
-            if (i == 2 && !world.getType(blockposition.south()).getBlock().c()) {
+            if (i == 2 && !world.getType(blockposition.south()).p()) {
                 d3 = (double) blockposition.getZ() + d0 + 1.0D;
             }
 
-            if (i == 3 && !world.getType(blockposition.north()).getBlock().c()) {
+            if (i == 3 && !world.getType(blockposition.north()).p()) {
                 d3 = (double) blockposition.getZ() - d0;
             }
 
-            if (i == 4 && !world.getType(blockposition.east()).getBlock().c()) {
+            if (i == 4 && !world.getType(blockposition.east()).p()) {
                 d1 = (double) blockposition.getX() + d0 + 1.0D;
             }
 
-            if (i == 5 && !world.getType(blockposition.west()).getBlock().c()) {
+            if (i == 5 && !world.getType(blockposition.west()).p()) {
                 d1 = (double) blockposition.getX() - d0;
             }
 
@@ -111,7 +111,11 @@ public class BlockRedstoneOre extends Block {
 
     }
 
-    protected ItemStack i(IBlockData iblockdata) {
+    protected ItemStack u(IBlockData iblockdata) {
         return new ItemStack(Blocks.REDSTONE_ORE);
+    }
+
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Item.getItemOf(Blocks.REDSTONE_ORE), 1, this.getDropData(iblockdata));
     }
 }

@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class EnchantmentFire extends Enchantment {
 
-    protected EnchantmentFire(int i, MinecraftKey minecraftkey, int j) {
-        super(i, minecraftkey, j, EnchantmentSlotType.WEAPON);
+    protected EnchantmentFire(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
+        super(enchantment_rarity, EnchantmentSlotType.WEAPON, aenumitemslot);
         this.c("fire");
     }
 

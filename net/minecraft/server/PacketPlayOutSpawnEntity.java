@@ -1,20 +1,22 @@
 package net.minecraft.server;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class PacketPlayOutSpawnEntity implements Packet<PacketListenerPlayOut> {
 
     private int a;
-    private int b;
-    private int c;
-    private int d;
-    private int e;
+    private UUID b;
+    private double c;
+    private double d;
+    private double e;
     private int f;
     private int g;
     private int h;
     private int i;
     private int j;
     private int k;
+    private int l;
 
     public PacketPlayOutSpawnEntity() {}
 
@@ -24,82 +26,56 @@ public class PacketPlayOutSpawnEntity implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutSpawnEntity(Entity entity, int i, int j) {
         this.a = entity.getId();
-        this.b = MathHelper.floor(entity.locX * 32.0D);
-        this.c = MathHelper.floor(entity.locY * 32.0D);
-        this.d = MathHelper.floor(entity.locZ * 32.0D);
-        this.h = MathHelper.d(entity.pitch * 256.0F / 360.0F);
-        this.i = MathHelper.d(entity.yaw * 256.0F / 360.0F);
-        this.j = i;
-        this.k = j;
-        if (j > 0) {
-            double d0 = entity.motX;
-            double d1 = entity.motY;
-            double d2 = entity.motZ;
-            double d3 = 3.9D;
+        this.b = entity.getUniqueID();
+        this.c = entity.locX;
+        this.d = entity.locY;
+        this.e = entity.locZ;
+        this.i = MathHelper.d(entity.pitch * 256.0F / 360.0F);
+        this.j = MathHelper.d(entity.yaw * 256.0F / 360.0F);
+        this.k = i;
+        this.l = j;
+        double d0 = 3.9D;
 
-            if (d0 < -d3) {
-                d0 = -d3;
-            }
+        this.f = (int) (MathHelper.a(entity.motX, -3.9D, 3.9D) * 8000.0D);
+        this.g = (int) (MathHelper.a(entity.motY, -3.9D, 3.9D) * 8000.0D);
+        this.h = (int) (MathHelper.a(entity.motZ, -3.9D, 3.9D) * 8000.0D);
+    }
 
-            if (d1 < -d3) {
-                d1 = -d3;
-            }
-
-            if (d2 < -d3) {
-                d2 = -d3;
-            }
-
-            if (d0 > d3) {
-                d0 = d3;
-            }
-
-            if (d1 > d3) {
-                d1 = d3;
-            }
-
-            if (d2 > d3) {
-                d2 = d3;
-            }
-
-            this.e = (int) (d0 * 8000.0D);
-            this.f = (int) (d1 * 8000.0D);
-            this.g = (int) (d2 * 8000.0D);
-        }
-
+    public PacketPlayOutSpawnEntity(Entity entity, int i, int j, BlockPosition blockposition) {
+        this(entity, i, j);
+        this.c = (double) blockposition.getX();
+        this.d = (double) blockposition.getY();
+        this.e = (double) blockposition.getZ();
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-        this.j = packetdataserializer.readByte();
-        this.b = packetdataserializer.readInt();
-        this.c = packetdataserializer.readInt();
-        this.d = packetdataserializer.readInt();
-        this.h = packetdataserializer.readByte();
+        this.a = packetdataserializer.g();
+        this.b = packetdataserializer.i();
+        this.k = packetdataserializer.readByte();
+        this.c = packetdataserializer.readDouble();
+        this.d = packetdataserializer.readDouble();
+        this.e = packetdataserializer.readDouble();
         this.i = packetdataserializer.readByte();
-        this.k = packetdataserializer.readInt();
-        if (this.k > 0) {
-            this.e = packetdataserializer.readShort();
-            this.f = packetdataserializer.readShort();
-            this.g = packetdataserializer.readShort();
-        }
-
+        this.j = packetdataserializer.readByte();
+        this.l = packetdataserializer.readInt();
+        this.f = packetdataserializer.readShort();
+        this.g = packetdataserializer.readShort();
+        this.h = packetdataserializer.readShort();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
-        packetdataserializer.writeByte(this.j);
-        packetdataserializer.writeInt(this.b);
-        packetdataserializer.writeInt(this.c);
-        packetdataserializer.writeInt(this.d);
-        packetdataserializer.writeByte(this.h);
+        packetdataserializer.a(this.b);
+        packetdataserializer.writeByte(this.k);
+        packetdataserializer.writeDouble(this.c);
+        packetdataserializer.writeDouble(this.d);
+        packetdataserializer.writeDouble(this.e);
         packetdataserializer.writeByte(this.i);
-        packetdataserializer.writeInt(this.k);
-        if (this.k > 0) {
-            packetdataserializer.writeShort(this.e);
-            packetdataserializer.writeShort(this.f);
-            packetdataserializer.writeShort(this.g);
-        }
-
+        packetdataserializer.writeByte(this.j);
+        packetdataserializer.writeInt(this.l);
+        packetdataserializer.writeShort(this.f);
+        packetdataserializer.writeShort(this.g);
+        packetdataserializer.writeShort(this.h);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
@@ -107,27 +83,15 @@ public class PacketPlayOutSpawnEntity implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(int i) {
-        this.b = i;
-    }
-
-    public void b(int i) {
-        this.c = i;
-    }
-
-    public void c(int i) {
-        this.d = i;
-    }
-
-    public void d(int i) {
-        this.e = i;
-    }
-
-    public void e(int i) {
         this.f = i;
     }
 
-    public void f(int i) {
+    public void b(int i) {
         this.g = i;
+    }
+
+    public void c(int i) {
+        this.h = i;
     }
 
     public void a(PacketListener packetlistener) {

@@ -2,19 +2,20 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public abstract class BlockLeaves extends BlockTransparent {
+public abstract class BlockLeaves extends Block {
 
     public static final BlockStateBoolean DECAYABLE = BlockStateBoolean.of("decayable");
     public static final BlockStateBoolean CHECK_DECAY = BlockStateBoolean.of("check_decay");
-    int[] N;
+    protected boolean c;
+    int[] d;
 
     public BlockLeaves() {
-        super(Material.LEAVES, false);
+        super(Material.LEAVES);
         this.a(true);
         this.a(CreativeModeTab.c);
         this.c(0.2F);
-        this.e(1);
-        this.a(BlockLeaves.h);
+        this.d(1);
+        this.a(SoundEffectType.c);
     }
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -31,7 +32,7 @@ public abstract class BlockLeaves extends BlockTransparent {
                         BlockPosition blockposition1 = blockposition.a(i1, j1, k1);
                         IBlockData iblockdata1 = world.getType(blockposition1);
 
-                        if (iblockdata1.getBlock().getMaterial() == Material.LEAVES && !((Boolean) iblockdata1.get(BlockLeaves.CHECK_DECAY)).booleanValue()) {
+                        if (iblockdata1.getMaterial() == Material.LEAVES && !((Boolean) iblockdata1.get(BlockLeaves.CHECK_DECAY)).booleanValue()) {
                             world.setTypeAndData(blockposition1, iblockdata1.set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(true)), 4);
                         }
                     }
@@ -53,8 +54,8 @@ public abstract class BlockLeaves extends BlockTransparent {
                 int i1 = b1 * b1;
                 int j1 = b1 / 2;
 
-                if (this.N == null) {
-                    this.N = new int[b1 * b1 * b1];
+                if (this.d == null) {
+                    this.d = new int[b1 * b1 * b1];
                 }
 
                 if (world.areChunksLoadedBetween(new BlockPosition(j - i, k - i, l - i), new BlockPosition(j + i, k + i, l + i))) {
@@ -67,16 +68,17 @@ public abstract class BlockLeaves extends BlockTransparent {
                     for (k1 = -b0; k1 <= b0; ++k1) {
                         for (l1 = -b0; l1 <= b0; ++l1) {
                             for (i2 = -b0; i2 <= b0; ++i2) {
-                                Block block = world.getType(blockposition_mutableblockposition.c(j + k1, k + l1, l + i2)).getBlock();
+                                IBlockData iblockdata1 = world.getType(blockposition_mutableblockposition.c(j + k1, k + l1, l + i2));
+                                Block block = iblockdata1.getBlock();
 
                                 if (block != Blocks.LOG && block != Blocks.LOG2) {
-                                    if (block.getMaterial() == Material.LEAVES) {
-                                        this.N[(k1 + j1) * i1 + (l1 + j1) * b1 + i2 + j1] = -2;
+                                    if (iblockdata1.getMaterial() == Material.LEAVES) {
+                                        this.d[(k1 + j1) * i1 + (l1 + j1) * b1 + i2 + j1] = -2;
                                     } else {
-                                        this.N[(k1 + j1) * i1 + (l1 + j1) * b1 + i2 + j1] = -1;
+                                        this.d[(k1 + j1) * i1 + (l1 + j1) * b1 + i2 + j1] = -1;
                                     }
                                 } else {
-                                    this.N[(k1 + j1) * i1 + (l1 + j1) * b1 + i2 + j1] = 0;
+                                    this.d[(k1 + j1) * i1 + (l1 + j1) * b1 + i2 + j1] = 0;
                                 }
                             }
                         }
@@ -86,29 +88,29 @@ public abstract class BlockLeaves extends BlockTransparent {
                         for (l1 = -b0; l1 <= b0; ++l1) {
                             for (i2 = -b0; i2 <= b0; ++i2) {
                                 for (int j2 = -b0; j2 <= b0; ++j2) {
-                                    if (this.N[(l1 + j1) * i1 + (i2 + j1) * b1 + j2 + j1] == k1 - 1) {
-                                        if (this.N[(l1 + j1 - 1) * i1 + (i2 + j1) * b1 + j2 + j1] == -2) {
-                                            this.N[(l1 + j1 - 1) * i1 + (i2 + j1) * b1 + j2 + j1] = k1;
+                                    if (this.d[(l1 + j1) * i1 + (i2 + j1) * b1 + j2 + j1] == k1 - 1) {
+                                        if (this.d[(l1 + j1 - 1) * i1 + (i2 + j1) * b1 + j2 + j1] == -2) {
+                                            this.d[(l1 + j1 - 1) * i1 + (i2 + j1) * b1 + j2 + j1] = k1;
                                         }
 
-                                        if (this.N[(l1 + j1 + 1) * i1 + (i2 + j1) * b1 + j2 + j1] == -2) {
-                                            this.N[(l1 + j1 + 1) * i1 + (i2 + j1) * b1 + j2 + j1] = k1;
+                                        if (this.d[(l1 + j1 + 1) * i1 + (i2 + j1) * b1 + j2 + j1] == -2) {
+                                            this.d[(l1 + j1 + 1) * i1 + (i2 + j1) * b1 + j2 + j1] = k1;
                                         }
 
-                                        if (this.N[(l1 + j1) * i1 + (i2 + j1 - 1) * b1 + j2 + j1] == -2) {
-                                            this.N[(l1 + j1) * i1 + (i2 + j1 - 1) * b1 + j2 + j1] = k1;
+                                        if (this.d[(l1 + j1) * i1 + (i2 + j1 - 1) * b1 + j2 + j1] == -2) {
+                                            this.d[(l1 + j1) * i1 + (i2 + j1 - 1) * b1 + j2 + j1] = k1;
                                         }
 
-                                        if (this.N[(l1 + j1) * i1 + (i2 + j1 + 1) * b1 + j2 + j1] == -2) {
-                                            this.N[(l1 + j1) * i1 + (i2 + j1 + 1) * b1 + j2 + j1] = k1;
+                                        if (this.d[(l1 + j1) * i1 + (i2 + j1 + 1) * b1 + j2 + j1] == -2) {
+                                            this.d[(l1 + j1) * i1 + (i2 + j1 + 1) * b1 + j2 + j1] = k1;
                                         }
 
-                                        if (this.N[(l1 + j1) * i1 + (i2 + j1) * b1 + (j2 + j1 - 1)] == -2) {
-                                            this.N[(l1 + j1) * i1 + (i2 + j1) * b1 + (j2 + j1 - 1)] = k1;
+                                        if (this.d[(l1 + j1) * i1 + (i2 + j1) * b1 + (j2 + j1 - 1)] == -2) {
+                                            this.d[(l1 + j1) * i1 + (i2 + j1) * b1 + (j2 + j1 - 1)] = k1;
                                         }
 
-                                        if (this.N[(l1 + j1) * i1 + (i2 + j1) * b1 + j2 + j1 + 1] == -2) {
-                                            this.N[(l1 + j1) * i1 + (i2 + j1) * b1 + j2 + j1 + 1] = k1;
+                                        if (this.d[(l1 + j1) * i1 + (i2 + j1) * b1 + j2 + j1 + 1] == -2) {
+                                            this.d[(l1 + j1) * i1 + (i2 + j1) * b1 + j2 + j1 + 1] = k1;
                                         }
                                     }
                                 }
@@ -117,19 +119,19 @@ public abstract class BlockLeaves extends BlockTransparent {
                     }
                 }
 
-                int k2 = this.N[j1 * i1 + j1 * b1 + j1];
+                int k2 = this.d[j1 * i1 + j1 * b1 + j1];
 
                 if (k2 >= 0) {
                     world.setTypeAndData(blockposition, iblockdata.set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)), 4);
                 } else {
-                    this.e(world, blockposition);
+                    this.b(world, blockposition);
                 }
             }
 
         }
     }
 
-    private void e(World world, BlockPosition blockposition) {
+    private void b(World world, BlockPosition blockposition) {
         this.b(world, blockposition, world.getType(blockposition), 0);
         world.setAir(blockposition);
     }
@@ -144,7 +146,7 @@ public abstract class BlockLeaves extends BlockTransparent {
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         if (!world.isClientSide) {
-            int j = this.d(iblockdata);
+            int j = this.i(iblockdata);
 
             if (i > 0) {
                 j -= 2 << i;
@@ -174,17 +176,17 @@ public abstract class BlockLeaves extends BlockTransparent {
 
     protected void a(World world, BlockPosition blockposition, IBlockData iblockdata, int i) {}
 
-    protected int d(IBlockData iblockdata) {
+    protected int i(IBlockData iblockdata) {
         return 20;
     }
 
-    public boolean c() {
-        return !this.R;
+    public boolean b(IBlockData iblockdata) {
+        return !this.c;
     }
 
-    public boolean w() {
+    public boolean j() {
         return false;
     }
 
-    public abstract BlockWood.EnumLogVariant b(int i);
+    public abstract BlockWood.EnumLogVariant e(int i);
 }

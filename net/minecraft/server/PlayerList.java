@@ -79,16 +79,17 @@ public abstract class PlayerList {
         this.a(entityplayer, (EntityPlayer) null, worldserver);
         PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
 
-        playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), worlddata.isHardcore(), worldserver.worldProvider.getDimension(), worldserver.getDifficulty(), this.getMaxPlayers(), worlddata.getType(), worldserver.getGameRules().getBoolean("reducedDebugInfo")));
+        playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), worlddata.isHardcore(), worldserver.worldProvider.getDimensionManager().getDimensionID(), worldserver.getDifficulty(), this.getMaxPlayers(), worlddata.getType(), worldserver.getGameRules().getBoolean("reducedDebugInfo")));
         playerconnection.sendPacket(new PacketPlayOutCustomPayload("MC|Brand", (new PacketDataSerializer(Unpooled.buffer())).a(this.getServer().getServerModName())));
         playerconnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
         playerconnection.sendPacket(new PacketPlayOutSpawnPosition(blockposition));
         playerconnection.sendPacket(new PacketPlayOutAbilities(entityplayer.abilities));
         playerconnection.sendPacket(new PacketPlayOutHeldItemSlot(entityplayer.inventory.itemInHandIndex));
+        this.f(entityplayer);
         entityplayer.getStatisticManager().d();
         entityplayer.getStatisticManager().updateStatistics(entityplayer);
         this.sendScoreboard((ScoreboardServer) worldserver.getScoreboard(), entityplayer);
-        this.server.aH();
+        this.server.aC();
         ChatMessage chatmessage;
 
         if (!entityplayer.getName().equalsIgnoreCase(s)) {
@@ -102,7 +103,7 @@ public abstract class PlayerList {
         this.onPlayerJoin(entityplayer);
         playerconnection.a(entityplayer.locX, entityplayer.locY, entityplayer.locZ, entityplayer.yaw, entityplayer.pitch);
         this.b(entityplayer, worldserver);
-        if (this.server.getResourcePack().length() > 0) {
+        if (!this.server.getResourcePack().isEmpty()) {
             entityplayer.setResourcePack(this.server.getResourcePack(), this.server.getResourcePackHash());
         }
 
@@ -114,18 +115,51 @@ public abstract class PlayerList {
             playerconnection.sendPacket(new PacketPlayOutEntityEffect(entityplayer.getId(), mobeffect));
         }
 
-        entityplayer.syncInventory();
-        if (nbttagcompound != null && nbttagcompound.hasKeyOfType("Riding", 10)) {
-            Entity entity = EntityTypes.a(nbttagcompound.getCompound("Riding"), (World) worldserver);
+        if (nbttagcompound != null) {
+            if (nbttagcompound.hasKeyOfType("RootVehicle", 10)) {
+                NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("RootVehicle");
+                Entity entity = ChunkRegionLoader.a(nbttagcompound1.getCompound("Entity"), worldserver, true);
 
-            if (entity != null) {
-                entity.attachedToPlayer = true;
-                worldserver.addEntity(entity);
-                entityplayer.mount(entity);
-                entity.attachedToPlayer = false;
+                if (entity != null) {
+                    UUID uuid = nbttagcompound1.a("Attach");
+                    Iterator iterator1;
+                    Entity entity1;
+
+                    if (entity.getUniqueID().equals(uuid)) {
+                        entityplayer.a(entity, true);
+                    } else {
+                        iterator1 = entity.bv().iterator();
+
+                        while (iterator1.hasNext()) {
+                            entity1 = (Entity) iterator1.next();
+                            if (entity1.getUniqueID().equals(uuid)) {
+                                entityplayer.a(entity1, true);
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!entityplayer.isPassenger()) {
+                        PlayerList.f.warn("Couldn\'t reattach entity to player");
+                        worldserver.removeEntity(entity);
+                        iterator1 = entity.bv().iterator();
+
+                        while (iterator1.hasNext()) {
+                            entity1 = (Entity) iterator1.next();
+                            worldserver.removeEntity(entity1);
+                        }
+                    }
+                }
+            } else if (nbttagcompound.hasKeyOfType("Riding", 10)) {
+                Entity entity2 = ChunkRegionLoader.a(nbttagcompound.getCompound("Riding"), worldserver, true);
+
+                if (entity2 != null) {
+                    entityplayer.a(entity2, true);
+                }
             }
         }
 
+        entityplayer.syncInventory();
     }
 
     public void sendScoreboard(ScoreboardServer scoreboardserver, EntityPlayer entityplayer) {
@@ -187,14 +221,14 @@ public abstract class PlayerList {
     }
 
     public void a(EntityPlayer entityplayer, WorldServer worldserver) {
-        WorldServer worldserver1 = entityplayer.u();
+        WorldServer worldserver1 = entityplayer.x();
 
         if (worldserver != null) {
             worldserver.getPlayerChunkMap().removePlayer(entityplayer);
         }
 
         worldserver1.getPlayerChunkMap().addPlayer(entityplayer);
-        worldserver1.chunkProviderServer.getChunkAt((int) entityplayer.locX >> 4, (int) entityplayer.locZ >> 4);
+        worldserver1.getChunkProviderServer().getChunkAt((int) entityplayer.locX >> 4, (int) entityplayer.locZ >> 4);
     }
 
     public int d() {
@@ -202,12 +236,12 @@ public abstract class PlayerList {
     }
 
     public NBTTagCompound a(EntityPlayer entityplayer) {
-        NBTTagCompound nbttagcompound = this.server.worldServer[0].getWorldData().i();
+        NBTTagCompound nbttagcompound = this.server.worldServer[0].getWorldData().h();
         NBTTagCompound nbttagcompound1;
 
-        if (entityplayer.getName().equals(this.server.S()) && nbttagcompound != null) {
-            entityplayer.f(nbttagcompound);
-            nbttagcompound1 = nbttagcompound;
+        if (entityplayer.getName().equals(this.server.Q()) && nbttagcompound != null) {
+            nbttagcompound1 = this.server.getDataConverterManager().a((DataConverterType) DataConverterTypes.PLAYER, nbttagcompound);
+            entityplayer.f(nbttagcompound1);
             PlayerList.f.debug("loading single player");
         } else {
             nbttagcompound1 = this.playerFileData.load(entityplayer);
@@ -232,29 +266,40 @@ public abstract class PlayerList {
         this.sendAll(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, new EntityPlayer[] { entityplayer}));
         WorldServer worldserver = this.server.getWorldServer(entityplayer.dimension);
 
-        worldserver.addEntity(entityplayer);
-        this.a(entityplayer, (WorldServer) null);
-
         for (int i = 0; i < this.players.size(); ++i) {
-            EntityPlayer entityplayer1 = (EntityPlayer) this.players.get(i);
-
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, new EntityPlayer[] { entityplayer1}));
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, new EntityPlayer[] { (EntityPlayer) this.players.get(i)}));
         }
 
+        worldserver.addEntity(entityplayer);
+        this.a(entityplayer, (WorldServer) null);
     }
 
     public void d(EntityPlayer entityplayer) {
-        entityplayer.u().getPlayerChunkMap().movePlayer(entityplayer);
+        entityplayer.x().getPlayerChunkMap().movePlayer(entityplayer);
     }
 
     public void disconnect(EntityPlayer entityplayer) {
+        WorldServer worldserver = entityplayer.x();
+
         entityplayer.b(StatisticList.f);
         this.savePlayerFile(entityplayer);
-        WorldServer worldserver = entityplayer.u();
+        if (entityplayer.isPassenger()) {
+            Entity entity = entityplayer.getVehicle();
 
-        if (entityplayer.vehicle != null) {
-            worldserver.removeEntity(entityplayer.vehicle);
-            PlayerList.f.debug("removing player mount");
+            if (entity.b(EntityPlayer.class).size() == 1) {
+                PlayerList.f.debug("Removing player mount");
+                entityplayer.stopRiding();
+                worldserver.removeEntity(entity);
+                Iterator iterator = entity.bv().iterator();
+
+                while (iterator.hasNext()) {
+                    Entity entity1 = (Entity) iterator.next();
+
+                    worldserver.removeEntity(entity1);
+                }
+
+                worldserver.getChunkAt(entityplayer.ab, entityplayer.ad).e();
+            }
         }
 
         worldserver.kill(entityplayer);
@@ -327,7 +372,7 @@ public abstract class PlayerList {
 
         Object object;
 
-        if (this.server.X()) {
+        if (this.server.V()) {
             object = new DemoPlayerInteractManager(this.server.getWorldServer(0));
         } else {
             object = new PlayerInteractManager(this.server.getWorldServer(0));
@@ -337,9 +382,9 @@ public abstract class PlayerList {
     }
 
     public EntityPlayer moveToWorld(EntityPlayer entityplayer, int i, boolean flag) {
-        entityplayer.u().getTracker().untrackPlayer(entityplayer);
-        entityplayer.u().getTracker().untrackEntity(entityplayer);
-        entityplayer.u().getPlayerChunkMap().removePlayer(entityplayer);
+        entityplayer.x().getTracker().untrackPlayer(entityplayer);
+        entityplayer.x().getTracker().untrackEntity(entityplayer);
+        entityplayer.x().getPlayerChunkMap().removePlayer(entityplayer);
         this.players.remove(entityplayer);
         this.server.getWorldServer(entityplayer.dimension).removeEntity(entityplayer);
         BlockPosition blockposition = entityplayer.getBed();
@@ -348,7 +393,7 @@ public abstract class PlayerList {
         entityplayer.dimension = i;
         Object object;
 
-        if (this.server.X()) {
+        if (this.server.V()) {
             object = new DemoPlayerInteractManager(this.server.getWorldServer(entityplayer.dimension));
         } else {
             object = new PlayerInteractManager(this.server.getWorldServer(entityplayer.dimension));
@@ -358,8 +403,17 @@ public abstract class PlayerList {
 
         entityplayer1.playerConnection = entityplayer.playerConnection;
         entityplayer1.copyTo(entityplayer, flag);
-        entityplayer1.d(entityplayer.getId());
-        entityplayer1.o(entityplayer);
+        entityplayer1.f(entityplayer.getId());
+        entityplayer1.v(entityplayer);
+        entityplayer1.a(entityplayer.cr());
+        Iterator iterator = entityplayer.P().iterator();
+
+        while (iterator.hasNext()) {
+            String s = (String) iterator.next();
+
+            entityplayer1.a(s);
+        }
+
         WorldServer worldserver = this.server.getWorldServer(entityplayer.dimension);
 
         this.a(entityplayer1, entityplayer, worldserver);
@@ -375,7 +429,7 @@ public abstract class PlayerList {
             }
         }
 
-        worldserver.chunkProviderServer.getChunkAt((int) entityplayer1.locX >> 4, (int) entityplayer1.locZ >> 4);
+        worldserver.getChunkProviderServer().getChunkAt((int) entityplayer1.locX >> 4, (int) entityplayer1.locZ >> 4);
 
         while (!worldserver.getCubes(entityplayer1, entityplayer1.getBoundingBox()).isEmpty() && entityplayer1.locY < 256.0D) {
             entityplayer1.setPosition(entityplayer1.locX, entityplayer1.locY + 1.0D, entityplayer1.locZ);
@@ -387,6 +441,7 @@ public abstract class PlayerList {
         entityplayer1.playerConnection.sendPacket(new PacketPlayOutSpawnPosition(blockposition1));
         entityplayer1.playerConnection.sendPacket(new PacketPlayOutExperience(entityplayer1.exp, entityplayer1.expTotal, entityplayer1.expLevel));
         this.b(entityplayer1, worldserver);
+        this.f(entityplayer1);
         worldserver.getPlayerChunkMap().addPlayer(entityplayer1);
         worldserver.addEntity(entityplayer1);
         this.players.add(entityplayer1);
@@ -396,7 +451,16 @@ public abstract class PlayerList {
         return entityplayer1;
     }
 
-    public void changeDimension(EntityPlayer entityplayer, int i) {
+    public void f(EntityPlayer entityplayer) {
+        GameProfile gameprofile = entityplayer.getProfile();
+        int i = this.isOp(gameprofile) ? this.operators.a(gameprofile) : 0;
+
+        i = this.server.R() && this.server.worldServer[0].getWorldData().u() ? 4 : i;
+        i = this.t ? 4 : i;
+        this.b(entityplayer, i);
+    }
+
+    public void a(EntityPlayer entityplayer, int i) {
         int j = entityplayer.dimension;
         WorldServer worldserver = this.server.getWorldServer(entityplayer.dimension);
 
@@ -404,12 +468,14 @@ public abstract class PlayerList {
         WorldServer worldserver1 = this.server.getWorldServer(entityplayer.dimension);
 
         entityplayer.playerConnection.sendPacket(new PacketPlayOutRespawn(entityplayer.dimension, entityplayer.world.getDifficulty(), entityplayer.world.getWorldData().getType(), entityplayer.playerInteractManager.getGameMode()));
+        this.f(entityplayer);
         worldserver.removeEntity(entityplayer);
         entityplayer.dead = false;
         this.changeWorld(entityplayer, j, worldserver, worldserver1);
         this.a(entityplayer, worldserver);
         entityplayer.playerConnection.a(entityplayer.locX, entityplayer.locY, entityplayer.locZ, entityplayer.yaw, entityplayer.pitch);
         entityplayer.playerInteractManager.a(worldserver1);
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutAbilities(entityplayer.abilities));
         this.b(entityplayer, worldserver1);
         this.updateClient(entityplayer);
         Iterator iterator = entityplayer.getEffects().iterator();
@@ -487,14 +553,14 @@ public abstract class PlayerList {
 
     }
 
-    public void sendAll(Packet packet) {
+    public void sendAll(Packet<?> packet) {
         for (int i = 0; i < this.players.size(); ++i) {
             ((EntityPlayer) this.players.get(i)).playerConnection.sendPacket(packet);
         }
 
     }
 
-    public void a(Packet packet, int i) {
+    public void a(Packet<?> packet, int i) {
         for (int j = 0; j < this.players.size(); ++j) {
             EntityPlayer entityplayer = (EntityPlayer) this.players.get(j);
 
@@ -506,7 +572,7 @@ public abstract class PlayerList {
     }
 
     public void a(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent) {
-        ScoreboardTeamBase scoreboardteambase = entityhuman.getScoreboardTeam();
+        ScoreboardTeamBase scoreboardteambase = entityhuman.aO();
 
         if (scoreboardteambase != null) {
             Collection collection = scoreboardteambase.getPlayerNameSet();
@@ -525,7 +591,7 @@ public abstract class PlayerList {
     }
 
     public void b(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent) {
-        ScoreboardTeamBase scoreboardteambase = entityhuman.getScoreboardTeam();
+        ScoreboardTeamBase scoreboardteambase = entityhuman.aO();
 
         if (scoreboardteambase == null) {
             this.sendMessage(ichatbasecomponent);
@@ -533,7 +599,7 @@ public abstract class PlayerList {
             for (int i = 0; i < this.players.size(); ++i) {
                 EntityPlayer entityplayer = (EntityPlayer) this.players.get(i);
 
-                if (entityplayer.getScoreboardTeam() != scoreboardteambase) {
+                if (entityplayer.aO() != scoreboardteambase) {
                     entityplayer.sendMessage(ichatbasecomponent);
                 }
             }
@@ -588,11 +654,32 @@ public abstract class PlayerList {
     }
 
     public void addOp(GameProfile gameprofile) {
-        this.operators.add(new OpListEntry(gameprofile, this.server.p(), this.operators.b(gameprofile)));
+        int i = this.server.q();
+
+        this.operators.add(new OpListEntry(gameprofile, this.server.q(), this.operators.b(gameprofile)));
+        this.b(this.a(gameprofile.getId()), i);
     }
 
     public void removeOp(GameProfile gameprofile) {
         this.operators.remove(gameprofile);
+        this.b(this.a(gameprofile.getId()), 0);
+    }
+
+    private void b(EntityPlayer entityplayer, int i) {
+        if (entityplayer != null && entityplayer.playerConnection != null) {
+            byte b0;
+
+            if (i <= 0) {
+                b0 = 24;
+            } else if (i >= 4) {
+                b0 = 28;
+            } else {
+                b0 = (byte) (24 + i);
+            }
+
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityStatus(entityplayer, b0));
+        }
+
     }
 
     public boolean isWhitelisted(GameProfile gameprofile) {
@@ -600,7 +687,7 @@ public abstract class PlayerList {
     }
 
     public boolean isOp(GameProfile gameprofile) {
-        return this.operators.d(gameprofile) || this.server.T() && this.server.worldServer[0].getWorldData().v() && this.server.S().equalsIgnoreCase(gameprofile.getName()) || this.t;
+        return this.operators.d(gameprofile) || this.server.R() && this.server.worldServer[0].getWorldData().u() && this.server.Q().equalsIgnoreCase(gameprofile.getName()) || this.t;
     }
 
     public EntityPlayer getPlayer(String s) {
@@ -619,11 +706,7 @@ public abstract class PlayerList {
         return entityplayer;
     }
 
-    public void sendPacketNearby(double d0, double d1, double d2, double d3, int i, Packet packet) {
-        this.sendPacketNearby((EntityHuman) null, d0, d1, d2, d3, i, packet);
-    }
-
-    public void sendPacketNearby(EntityHuman entityhuman, double d0, double d1, double d2, double d3, int i, Packet packet) {
+    public void sendPacketNearby(EntityHuman entityhuman, double d0, double d1, double d2, double d3, int i, Packet<?> packet) {
         for (int j = 0; j < this.players.size(); ++j) {
             EntityPlayer entityplayer = (EntityPlayer) this.players.get(j);
 
@@ -678,7 +761,7 @@ public abstract class PlayerList {
 
         entityplayer.playerConnection.sendPacket(new PacketPlayOutWorldBorder(worldborder, PacketPlayOutWorldBorder.EnumWorldBorderAction.INITIALIZE));
         entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateTime(worldserver.getTime(), worldserver.getDayTime(), worldserver.getGameRules().getBoolean("doDaylightCycle")));
-        if (worldserver.S()) {
+        if (worldserver.W()) {
             entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(1, 0.0F));
             entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(7, worldserver.j(1.0F)));
             entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(8, worldserver.h(1.0F)));
@@ -719,7 +802,7 @@ public abstract class PlayerList {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            if (entityplayer.w().equals(s)) {
+            if (entityplayer.A().equals(s)) {
                 arraylist.add(entityplayer);
             }
         }
@@ -802,6 +885,7 @@ public abstract class PlayerList {
 
                 if (worldserver != null) {
                     worldserver.getPlayerChunkMap().a(i);
+                    worldserver.getTracker().a(i);
                 }
             }
 

@@ -37,7 +37,7 @@ public class ServerPing {
         this.b = serverping_serverpingplayersample;
     }
 
-    public ServerPing.ServerData c() {
+    public ServerPing.ServerData getServerData() {
         return this.c;
     }
 
@@ -58,7 +58,7 @@ public class ServerPing {
         public Serializer() {}
 
         public ServerPing a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            JsonObject jsonobject = ChatDeserializer.l(jsonelement, "status");
+            JsonObject jsonobject = ChatDeserializer.m(jsonelement, "status");
             ServerPing serverping = new ServerPing();
 
             if (jsonobject.has("description")) {
@@ -91,8 +91,8 @@ public class ServerPing {
                 jsonobject.add("players", jsonserializationcontext.serialize(serverping.b()));
             }
 
-            if (serverping.c() != null) {
-                jsonobject.add("version", jsonserializationcontext.serialize(serverping.c()));
+            if (serverping.getServerData() != null) {
+                jsonobject.add("version", jsonserializationcontext.serialize(serverping.getServerData()));
             }
 
             if (serverping.d() != null) {
@@ -125,7 +125,7 @@ public class ServerPing {
             return this.a;
         }
 
-        public int b() {
+        public int getProtocolVersion() {
             return this.b;
         }
 
@@ -134,16 +134,16 @@ public class ServerPing {
             public ServerData$Serializer() {}
 
             public ServerPing.ServerData a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-                JsonObject jsonobject = ChatDeserializer.l(jsonelement, "version");
+                JsonObject jsonobject = ChatDeserializer.m(jsonelement, "version");
 
-                return new ServerPing.ServerData(ChatDeserializer.h(jsonobject, "name"), ChatDeserializer.m(jsonobject, "protocol"));
+                return new ServerPing.ServerData(ChatDeserializer.h(jsonobject, "name"), ChatDeserializer.n(jsonobject, "protocol"));
             }
 
             public JsonElement a(ServerPing.ServerData serverping_serverdata, Type type, JsonSerializationContext jsonserializationcontext) {
                 JsonObject jsonobject = new JsonObject();
 
                 jsonobject.addProperty("name", serverping_serverdata.a());
-                jsonobject.addProperty("protocol", Integer.valueOf(serverping_serverdata.b()));
+                jsonobject.addProperty("protocol", Integer.valueOf(serverping_serverdata.getProtocolVersion()));
                 return jsonobject;
             }
 
@@ -189,17 +189,17 @@ public class ServerPing {
             public ServerPingPlayerSample$Serializer() {}
 
             public ServerPing.ServerPingPlayerSample a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-                JsonObject jsonobject = ChatDeserializer.l(jsonelement, "players");
-                ServerPing.ServerPingPlayerSample serverping_serverpingplayersample = new ServerPing.ServerPingPlayerSample(ChatDeserializer.m(jsonobject, "max"), ChatDeserializer.m(jsonobject, "online"));
+                JsonObject jsonobject = ChatDeserializer.m(jsonelement, "players");
+                ServerPing.ServerPingPlayerSample serverping_serverpingplayersample = new ServerPing.ServerPingPlayerSample(ChatDeserializer.n(jsonobject, "max"), ChatDeserializer.n(jsonobject, "online"));
 
                 if (ChatDeserializer.d(jsonobject, "sample")) {
-                    JsonArray jsonarray = ChatDeserializer.t(jsonobject, "sample");
+                    JsonArray jsonarray = ChatDeserializer.u(jsonobject, "sample");
 
                     if (jsonarray.size() > 0) {
                         GameProfile[] agameprofile = new GameProfile[jsonarray.size()];
 
                         for (int i = 0; i < agameprofile.length; ++i) {
-                            JsonObject jsonobject1 = ChatDeserializer.l(jsonarray.get(i), "player[" + i + "]");
+                            JsonObject jsonobject1 = ChatDeserializer.m(jsonarray.get(i), "player[" + i + "]");
                             String s = ChatDeserializer.h(jsonobject1, "id");
 
                             agameprofile[i] = new GameProfile(UUID.fromString(s), ChatDeserializer.h(jsonobject1, "name"));

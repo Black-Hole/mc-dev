@@ -21,7 +21,7 @@ public class BlockLightStone extends Block {
         return Items.GLOWSTONE_DUST;
     }
 
-    public MaterialMapColor g(IBlockData iblockdata) {
+    public MaterialMapColor r(IBlockData iblockdata) {
         return MaterialMapColor.d;
     }
 }

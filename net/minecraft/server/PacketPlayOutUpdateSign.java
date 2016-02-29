@@ -17,11 +17,11 @@ public class PacketPlayOutUpdateSign implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.b = packetdataserializer.c();
+        this.b = packetdataserializer.e();
         this.c = new IChatBaseComponent[4];
 
         for (int i = 0; i < 4; ++i) {
-            this.c[i] = packetdataserializer.d();
+            this.c[i] = packetdataserializer.f();
         }
 
     }

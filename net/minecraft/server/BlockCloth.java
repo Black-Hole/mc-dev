@@ -6,7 +6,7 @@ public class BlockCloth extends Block {
 
     public BlockCloth(Material material) {
         super(material);
-        this.j(this.blockStateList.getBlockData().set(BlockCloth.COLOR, EnumColor.WHITE));
+        this.w(this.blockStateList.getBlockData().set(BlockCloth.COLOR, EnumColor.WHITE));
         this.a(CreativeModeTab.b);
     }
 
@@ -14,7 +14,7 @@ public class BlockCloth extends Block {
         return ((EnumColor) iblockdata.get(BlockCloth.COLOR)).getColorIndex();
     }
 
-    public MaterialMapColor g(IBlockData iblockdata) {
+    public MaterialMapColor r(IBlockData iblockdata) {
         return ((EnumColor) iblockdata.get(BlockCloth.COLOR)).e();
     }
 

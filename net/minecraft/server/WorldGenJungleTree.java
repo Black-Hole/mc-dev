@@ -17,7 +17,7 @@ public class WorldGenJungleTree extends WorldGenMegaTreeAbstract {
             this.c(world, blockposition.up(i), 2);
 
             for (int j = blockposition.getY() + i - 2 - random.nextInt(4); j > blockposition.getY() + i / 2; j -= 2 + random.nextInt(4)) {
-                float f = random.nextFloat() * 3.1415927F * 2.0F;
+                float f = random.nextFloat() * 6.2831855F;
                 int k = blockposition.getX() + (int) (0.5F + MathHelper.cos(f) * 4.0F);
                 int l = blockposition.getZ() + (int) (0.5F + MathHelper.sin(f) * 4.0F);
 

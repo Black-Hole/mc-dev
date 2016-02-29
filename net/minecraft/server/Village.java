@@ -61,7 +61,7 @@ public class Village {
             if (vec3d != null) {
                 EntityIronGolem entityirongolem = new EntityIronGolem(this.a);
 
-                entityirongolem.setPosition(vec3d.a, vec3d.b, vec3d.c);
+                entityirongolem.setPosition(vec3d.x, vec3d.y, vec3d.z);
                 this.a.addEntity(entityirongolem);
                 ++this.l;
             }
@@ -82,7 +82,7 @@ public class Village {
     }
 
     private boolean a(BlockPosition blockposition, BlockPosition blockposition1) {
-        if (!World.a((IBlockAccess) this.a, blockposition1.down())) {
+        if (!this.a.getType(blockposition1.down()).q()) {
             return false;
         } else {
             int i = blockposition1.getX() - blockposition.getX() / 2;
@@ -91,7 +91,7 @@ public class Village {
             for (int k = i; k < i + blockposition.getX(); ++k) {
                 for (int l = blockposition1.getY(); l < blockposition1.getY() + blockposition.getY(); ++l) {
                     for (int i1 = j; i1 < j + blockposition.getZ(); ++i1) {
-                        if (this.a.getType(new BlockPosition(k, l, i1)).getBlock().isOccluding()) {
+                        if (this.a.getType(new BlockPosition(k, l, i1)).l()) {
                             return false;
                         }
                     }
@@ -139,7 +139,7 @@ public class Village {
     }
 
     public boolean a(BlockPosition blockposition) {
-        return this.d.i(blockposition) < (double) (this.e * this.e);
+        return this.d.k(blockposition) < (double) (this.e * this.e);
     }
 
     public List<VillageDoor> f() {
@@ -180,8 +180,13 @@ public class Village {
             }
 
             if (j < i) {
-                villagedoor = villagedoor1;
-                i = j;
+                BlockPosition blockposition1 = villagedoor1.d();
+                EnumDirection enumdirection = villagedoor1.j();
+
+                if (this.a.getType(blockposition1.shift(enumdirection, 1)).getBlock().b(this.a, blockposition1.shift(enumdirection, 1)) && this.a.getType(blockposition1.shift(enumdirection, -1)).getBlock().b(this.a, blockposition1.shift(enumdirection, -1)) && this.a.getType(blockposition1.up().shift(enumdirection, 1)).getBlock().b(this.a, blockposition1.up().shift(enumdirection, 1)) && this.a.getType(blockposition1.up().shift(enumdirection, -1)).getBlock().b(this.a, blockposition1.up().shift(enumdirection, -1))) {
+                    villagedoor = villagedoor1;
+                    i = j;
+                }
             }
         }
 
@@ -189,7 +194,7 @@ public class Village {
     }
 
     public VillageDoor e(BlockPosition blockposition) {
-        if (this.d.i(blockposition) > (double) (this.e * this.e)) {
+        if (this.d.k(blockposition) > (double) (this.e * this.e)) {
             return null;
         } else {
             Iterator iterator = this.b.iterator();
@@ -318,16 +323,17 @@ public class Village {
     }
 
     private boolean f(BlockPosition blockposition) {
-        Block block = this.a.getType(blockposition).getBlock();
+        IBlockData iblockdata = this.a.getType(blockposition);
+        Block block = iblockdata.getBlock();
 
-        return block instanceof BlockDoor ? block.getMaterial() == Material.WOOD : false;
+        return block instanceof BlockDoor ? iblockdata.getMaterial() == Material.WOOD : false;
     }
 
     private void n() {
         int i = this.b.size();
 
         if (i == 0) {
-            this.d = new BlockPosition(0, 0, 0);
+            this.d = BlockPosition.ZERO;
             this.e = 0;
         } else {
             this.d = new BlockPosition(this.c.getX() / i, this.c.getY() / i, this.c.getZ() / i);
@@ -385,7 +391,7 @@ public class Village {
             NBTTagCompound nbttagcompound2 = nbttaglist1.get(j);
 
             if (nbttagcompound2.hasKey("UUID")) {
-                UserCache usercache = MinecraftServer.getServer().getUserCache();
+                UserCache usercache = this.a.getMinecraftServer().getUserCache();
                 GameProfile gameprofile = usercache.a(UUID.fromString(nbttagcompound2.getString("UUID")));
 
                 if (gameprofile != null) {
@@ -434,7 +440,7 @@ public class Village {
         while (iterator1.hasNext()) {
             String s = (String) iterator1.next();
             NBTTagCompound nbttagcompound2 = new NBTTagCompound();
-            UserCache usercache = MinecraftServer.getServer().getUserCache();
+            UserCache usercache = this.a.getMinecraftServer().getUserCache();
             GameProfile gameprofile = usercache.getProfile(s);
 
             if (gameprofile != null) {

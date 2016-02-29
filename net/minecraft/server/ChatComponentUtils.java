@@ -19,11 +19,17 @@ public class ChatComponentUtils {
                     throw new ExceptionEntityNotFound();
                 }
 
-                s = ((Entity) list.get(0)).getName();
+                Entity entity1 = (Entity) list.get(0);
+
+                if (entity1 instanceof EntityHuman) {
+                    s = entity1.getName();
+                } else {
+                    s = entity1.getUniqueID().toString();
+                }
             }
 
             object = entity != null && s.equals("*") ? new ChatComponentScore(entity.getName(), chatcomponentscore.h()) : new ChatComponentScore(s, chatcomponentscore.h());
-            ((ChatComponentScore) object).b(chatcomponentscore.getText());
+            ((ChatComponentScore) object).a(icommandlistener);
         } else if (ichatbasecomponent instanceof ChatComponentSelector) {
             String s1 = ((ChatComponentSelector) ichatbasecomponent).g();
 

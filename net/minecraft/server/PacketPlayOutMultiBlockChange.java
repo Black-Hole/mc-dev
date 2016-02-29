@@ -21,10 +21,10 @@ public class PacketPlayOutMultiBlockChange implements Packet<PacketListenerPlayO
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = new ChunkCoordIntPair(packetdataserializer.readInt(), packetdataserializer.readInt());
-        this.b = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo[packetdataserializer.e()];
+        this.b = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo[packetdataserializer.g()];
 
         for (int i = 0; i < this.b.length; ++i) {
-            this.b[i] = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo(packetdataserializer.readShort(), (IBlockData) Block.d.a(packetdataserializer.e()));
+            this.b[i] = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo(packetdataserializer.readShort(), (IBlockData) Block.REGISTRY_ID.fromId(packetdataserializer.g()));
         }
 
     }
@@ -40,7 +40,7 @@ public class PacketPlayOutMultiBlockChange implements Packet<PacketListenerPlayO
             PacketPlayOutMultiBlockChange.MultiBlockChangeInfo packetplayoutmultiblockchange_multiblockchangeinfo = apacketplayoutmultiblockchange_multiblockchangeinfo[j];
 
             packetdataserializer.writeShort(packetplayoutmultiblockchange_multiblockchangeinfo.b());
-            packetdataserializer.b(Block.d.b(packetplayoutmultiblockchange_multiblockchangeinfo.c()));
+            packetdataserializer.b(Block.REGISTRY_ID.getId(packetplayoutmultiblockchange_multiblockchangeinfo.c()));
         }
 
     }

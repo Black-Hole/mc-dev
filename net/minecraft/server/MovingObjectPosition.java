@@ -24,7 +24,7 @@ public class MovingObjectPosition {
         this.type = movingobjectposition_enummovingobjecttype;
         this.e = blockposition;
         this.direction = enumdirection;
-        this.pos = new Vec3D(vec3d.a, vec3d.b, vec3d.c);
+        this.pos = new Vec3D(vec3d.x, vec3d.y, vec3d.z);
     }
 
     public MovingObjectPosition(Entity entity, Vec3D vec3d) {

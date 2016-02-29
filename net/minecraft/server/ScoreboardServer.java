@@ -12,7 +12,7 @@ public class ScoreboardServer extends Scoreboard {
 
     private final MinecraftServer a;
     private final Set<ScoreboardObjective> b = Sets.newHashSet();
-    private PersistentScoreboard c;
+    private Runnable[] c = new Runnable[0];
 
     public ScoreboardServer(MinecraftServer minecraftserver) {
         this.a = minecraftserver;
@@ -121,18 +121,19 @@ public class ScoreboardServer extends Scoreboard {
         this.b();
     }
 
-    public void a(PersistentScoreboard persistentscoreboard) {
-        this.c = persistentscoreboard;
+    public void a(Runnable runnable) {
+        this.c = (Runnable[]) Arrays.copyOf(this.c, this.c.length + 1);
+        this.c[this.c.length - 1] = runnable;
     }
 
     protected void b() {
-        if (this.c != null) {
-            this.c.c();
+        for (int i = 0; i < this.c.length; ++i) {
+            this.c[i].run();
         }
 
     }
 
-    public List<Packet> getScoreboardScorePacketsForObjective(ScoreboardObjective scoreboardobjective) {
+    public List<Packet<?>> getScoreboardScorePacketsForObjective(ScoreboardObjective scoreboardobjective) {
         ArrayList arraylist = Lists.newArrayList();
 
         arraylist.add(new PacketPlayOutScoreboardObjective(scoreboardobjective, 0));
@@ -172,7 +173,7 @@ public class ScoreboardServer extends Scoreboard {
         this.b.add(scoreboardobjective);
     }
 
-    public List<Packet> f(ScoreboardObjective scoreboardobjective) {
+    public List<Packet<?>> f(ScoreboardObjective scoreboardobjective) {
         ArrayList arraylist = Lists.newArrayList();
 
         arraylist.add(new PacketPlayOutScoreboardObjective(scoreboardobjective, 1));

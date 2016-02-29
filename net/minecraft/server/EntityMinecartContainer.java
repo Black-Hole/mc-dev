@@ -1,9 +1,13 @@
 package net.minecraft.server;
 
-public abstract class EntityMinecartContainer extends EntityMinecartAbstract implements ITileInventory {
+import java.util.Random;
+
+public abstract class EntityMinecartContainer extends EntityMinecartAbstract implements ITileInventory, ILootable {
 
     private ItemStack[] items = new ItemStack[36];
     private boolean b = true;
+    private MinecraftKey c;
+    private long d;
 
     public EntityMinecartContainer(World world) {
         super(world);
@@ -22,31 +26,17 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     }
 
     public ItemStack getItem(int i) {
+        this.f((EntityHuman) null);
         return this.items[i];
     }
 
     public ItemStack splitStack(int i, int j) {
-        if (this.items[i] != null) {
-            ItemStack itemstack;
-
-            if (this.items[i].count <= j) {
-                itemstack = this.items[i];
-                this.items[i] = null;
-                return itemstack;
-            } else {
-                itemstack = this.items[i].cloneAndSubtract(j);
-                if (this.items[i].count == 0) {
-                    this.items[i] = null;
-                }
-
-                return itemstack;
-            }
-        } else {
-            return null;
-        }
+        this.f((EntityHuman) null);
+        return ContainerUtil.a(this.items, i, j);
     }
 
     public ItemStack splitWithoutUpdate(int i) {
+        this.f((EntityHuman) null);
         if (this.items[i] != null) {
             ItemStack itemstack = this.items[i];
 
@@ -58,6 +48,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     }
 
     public void setItem(int i, ItemStack itemstack) {
+        this.f((EntityHuman) null);
         this.items[i] = itemstack;
         if (itemstack != null && itemstack.count > this.getMaxStackSize()) {
             itemstack.count = this.getMaxStackSize();
@@ -87,9 +78,9 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         return 64;
     }
 
-    public void c(int i) {
+    public Entity c(int i) {
         this.b = false;
-        super.c(i);
+        return super.c(i);
     }
 
     public void die() {
@@ -100,41 +91,57 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         super.die();
     }
 
+    public void b(boolean flag) {
+        this.b = flag;
+    }
+
     protected void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        NBTTagList nbttaglist = new NBTTagList();
-
-        for (int i = 0; i < this.items.length; ++i) {
-            if (this.items[i] != null) {
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-
-                nbttagcompound1.setByte("Slot", (byte) i);
-                this.items[i].save(nbttagcompound1);
-                nbttaglist.add(nbttagcompound1);
+        if (this.c != null) {
+            nbttagcompound.setString("LootTable", this.c.toString());
+            if (this.d != 0L) {
+                nbttagcompound.setLong("LootTableSeed", this.d);
             }
+        } else {
+            NBTTagList nbttaglist = new NBTTagList();
+
+            for (int i = 0; i < this.items.length; ++i) {
+                if (this.items[i] != null) {
+                    NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+
+                    nbttagcompound1.setByte("Slot", (byte) i);
+                    this.items[i].save(nbttagcompound1);
+                    nbttaglist.add(nbttagcompound1);
+                }
+            }
+
+            nbttagcompound.set("Items", nbttaglist);
         }
 
-        nbttagcompound.set("Items", nbttaglist);
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
-
         this.items = new ItemStack[this.getSize()];
+        if (nbttagcompound.hasKeyOfType("LootTable", 8)) {
+            this.c = new MinecraftKey(nbttagcompound.getString("LootTable"));
+            this.d = nbttagcompound.getLong("LootTableSeed");
+        } else {
+            NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
 
-        for (int i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagCompound nbttagcompound1 = nbttaglist.get(i);
-            int j = nbttagcompound1.getByte("Slot") & 255;
+            for (int i = 0; i < nbttaglist.size(); ++i) {
+                NBTTagCompound nbttagcompound1 = nbttaglist.get(i);
+                int j = nbttagcompound1.getByte("Slot") & 255;
 
-            if (j >= 0 && j < this.items.length) {
-                this.items[j] = ItemStack.createStack(nbttagcompound1);
+                if (j >= 0 && j < this.items.length) {
+                    this.items[j] = ItemStack.createStack(nbttagcompound1);
+                }
             }
         }
 
     }
 
-    public boolean e(EntityHuman entityhuman) {
+    public boolean a(EntityHuman entityhuman, ItemStack itemstack, EnumHand enumhand) {
         if (!this.world.isClientSide) {
             entityhuman.openContainer(this);
         }
@@ -142,9 +149,14 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         return true;
     }
 
-    protected void o() {
-        int i = 15 - Container.b((IInventory) this);
-        float f = 0.98F + (float) i * 0.001F;
+    protected void r() {
+        float f = 0.98F;
+
+        if (this.c == null) {
+            int i = 15 - Container.b((IInventory) this);
+
+            f += (float) i * 0.001F;
+        }
 
         this.motX *= (double) f;
         this.motY *= 0.0D;
@@ -155,26 +167,61 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         return 0;
     }
 
-    public void b(int i, int j) {}
+    public void setProperty(int i, int j) {}
 
     public int g() {
         return 0;
     }
 
-    public boolean r_() {
+    public boolean x_() {
         return false;
     }
 
     public void a(ChestLock chestlock) {}
 
-    public ChestLock i() {
+    public ChestLock y_() {
         return ChestLock.a;
     }
 
+    public void f(EntityHuman entityhuman) {
+        if (this.c != null) {
+            LootTable loottable = this.world.ak().a(this.c);
+
+            this.c = null;
+            Random random;
+
+            if (this.d == 0L) {
+                random = new Random();
+            } else {
+                random = new Random(this.d);
+            }
+
+            LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
+
+            if (entityhuman != null) {
+                loottableinfo_a.a(entityhuman.db());
+            }
+
+            loottable.a(this, random, loottableinfo_a.a());
+        }
+
+    }
+
     public void l() {
+        this.f((EntityHuman) null);
+
         for (int i = 0; i < this.items.length; ++i) {
             this.items[i] = null;
         }
 
+    }
+
+    public void a(MinecraftKey minecraftkey, long i) {
+        this.c = minecraftkey;
+        this.d = i;
+    }
+
+    public MinecraftKey b() {
+        return this.c;
     }
 }

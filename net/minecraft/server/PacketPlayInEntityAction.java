@@ -11,9 +11,9 @@ public class PacketPlayInEntityAction implements Packet<PacketListenerPlayIn> {
     public PacketPlayInEntityAction() {}
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
+        this.a = packetdataserializer.g();
         this.animation = (PacketPlayInEntityAction.EnumPlayerAction) packetdataserializer.a(PacketPlayInEntityAction.EnumPlayerAction.class);
-        this.c = packetdataserializer.e();
+        this.c = packetdataserializer.g();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
@@ -40,7 +40,7 @@ public class PacketPlayInEntityAction implements Packet<PacketListenerPlayIn> {
 
     public static enum EnumPlayerAction {
 
-        START_SNEAKING, STOP_SNEAKING, STOP_SLEEPING, START_SPRINTING, STOP_SPRINTING, RIDING_JUMP, OPEN_INVENTORY;
+        START_SNEAKING, STOP_SNEAKING, STOP_SLEEPING, START_SPRINTING, STOP_SPRINTING, START_RIDING_JUMP, STOP_RIDING_JUMP, OPEN_INVENTORY, START_FALL_FLYING;
 
         private EnumPlayerAction() {}
     }

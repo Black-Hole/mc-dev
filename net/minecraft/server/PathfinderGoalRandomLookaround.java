@@ -13,7 +13,7 @@ public class PathfinderGoalRandomLookaround extends PathfinderGoal {
     }
 
     public boolean a() {
-        return this.a.bc().nextFloat() < 0.02F;
+        return this.a.getRandom().nextFloat() < 0.02F;
     }
 
     public boolean b() {
@@ -21,15 +21,15 @@ public class PathfinderGoalRandomLookaround extends PathfinderGoal {
     }
 
     public void c() {
-        double d0 = 6.283185307179586D * this.a.bc().nextDouble();
+        double d0 = 6.283185307179586D * this.a.getRandom().nextDouble();
 
         this.b = Math.cos(d0);
         this.c = Math.sin(d0);
-        this.d = 20 + this.a.bc().nextInt(20);
+        this.d = 20 + this.a.getRandom().nextInt(20);
     }
 
     public void e() {
         --this.d;
-        this.a.getControllerLook().a(this.a.locX + this.b, this.a.locY + (double) this.a.getHeadHeight(), this.a.locZ + this.c, 10.0F, (float) this.a.bQ());
+        this.a.getControllerLook().a(this.a.locX + this.b, this.a.locY + (double) this.a.getHeadHeight(), this.a.locZ + this.c, (float) this.a.cE(), (float) this.a.N());
     }
 }

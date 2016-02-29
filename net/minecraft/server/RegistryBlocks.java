@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Random;
 import org.apache.commons.lang3.Validate;
 
 public class RegistryBlocks<K, V> extends RegistryMaterials<K, V> {
@@ -20,7 +21,19 @@ public class RegistryBlocks<K, V> extends RegistryMaterials<K, V> {
     }
 
     public void a() {
-        Validate.notNull(this.d);
+        Validate.notNull(this.e, "Missing default of DefaultedMappedRegistry: " + this.d, new Object[0]);
+    }
+
+    public int a(V v0) {
+        int i = super.a(v0);
+
+        return i == -1 ? super.a(this.e) : i;
+    }
+
+    public K b(V v0) {
+        Object object = super.b(v0);
+
+        return object == null ? this.d : object;
     }
 
     public V get(K k0) {
@@ -29,8 +42,14 @@ public class RegistryBlocks<K, V> extends RegistryMaterials<K, V> {
         return object == null ? this.e : object;
     }
 
-    public V a(int i) {
-        Object object = super.a(i);
+    public V getId(int i) {
+        Object object = super.getId(i);
+
+        return object == null ? this.e : object;
+    }
+
+    public V a(Random random) {
+        Object object = super.a(random);
 
         return object == null ? this.e : object;
     }

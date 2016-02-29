@@ -1,64 +1,80 @@
 package net.minecraft.server;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Pathfinder {
 
-    private Path a = new Path();
-    private PathPoint[] b = new PathPoint[32];
-    private PathfinderAbstract c;
+    private final Path a = new Path();
+    private final Set<PathPoint> b = new HashSet();
+    private final PathPoint[] c = new PathPoint[32];
+    private final PathfinderAbstract d;
 
     public Pathfinder(PathfinderAbstract pathfinderabstract) {
-        this.c = pathfinderabstract;
+        this.d = pathfinderabstract;
     }
 
-    public PathEntity a(IBlockAccess iblockaccess, Entity entity, Entity entity1, float f) {
-        return this.a(iblockaccess, entity, entity1.locX, entity1.getBoundingBox().b, entity1.locZ, f);
+    public PathEntity a(IBlockAccess iblockaccess, EntityInsentient entityinsentient, Entity entity, float f) {
+        return this.a(iblockaccess, entityinsentient, entity.locX, entity.getBoundingBox().b, entity.locZ, f);
     }
 
-    public PathEntity a(IBlockAccess iblockaccess, Entity entity, BlockPosition blockposition, float f) {
-        return this.a(iblockaccess, entity, (double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), f);
+    public PathEntity a(IBlockAccess iblockaccess, EntityInsentient entityinsentient, BlockPosition blockposition, float f) {
+        return this.a(iblockaccess, entityinsentient, (double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), f);
     }
 
-    private PathEntity a(IBlockAccess iblockaccess, Entity entity, double d0, double d1, double d2, float f) {
+    private PathEntity a(IBlockAccess iblockaccess, EntityInsentient entityinsentient, double d0, double d1, double d2, float f) {
         this.a.a();
-        this.c.a(iblockaccess, entity);
-        PathPoint pathpoint = this.c.a(entity);
-        PathPoint pathpoint1 = this.c.a(entity, d0, d1, d2);
-        PathEntity pathentity = this.a(entity, pathpoint, pathpoint1, f);
+        this.d.a(iblockaccess, entityinsentient);
+        PathPoint pathpoint = this.d.b();
+        PathPoint pathpoint1 = this.d.a(d0, d1, d2);
+        PathEntity pathentity = this.a(pathpoint, pathpoint1, f);
 
-        this.c.a();
+        this.d.a();
         return pathentity;
     }
 
-    private PathEntity a(Entity entity, PathPoint pathpoint, PathPoint pathpoint1, float f) {
+    private PathEntity a(PathPoint pathpoint, PathPoint pathpoint1, float f) {
         pathpoint.e = 0.0F;
-        pathpoint.f = pathpoint.b(pathpoint1);
+        pathpoint.f = pathpoint.c(pathpoint1);
         pathpoint.g = pathpoint.f;
         this.a.a();
+        this.b.clear();
         this.a.a(pathpoint);
         PathPoint pathpoint2 = pathpoint;
+        int i = 0;
 
         while (!this.a.e()) {
+            ++i;
+            if (i >= 2000) {
+                break;
+            }
+
             PathPoint pathpoint3 = this.a.c();
 
             if (pathpoint3.equals(pathpoint1)) {
-                return this.a(pathpoint, pathpoint1);
+                pathpoint2 = pathpoint1;
+                break;
             }
 
-            if (pathpoint3.b(pathpoint1) < pathpoint2.b(pathpoint1)) {
+            if (pathpoint3.c(pathpoint1) < pathpoint2.c(pathpoint1)) {
                 pathpoint2 = pathpoint3;
             }
 
             pathpoint3.i = true;
-            int i = this.c.a(this.b, entity, pathpoint3, pathpoint1, f);
+            int j = this.d.a(this.c, pathpoint3, pathpoint1, f);
 
-            for (int j = 0; j < i; ++j) {
-                PathPoint pathpoint4 = this.b[j];
-                float f1 = pathpoint3.e + pathpoint3.b(pathpoint4);
+            for (int k = 0; k < j; ++k) {
+                PathPoint pathpoint4 = this.c[k];
+                float f1 = pathpoint3.c(pathpoint4);
 
-                if (f1 < f * 2.0F && (!pathpoint4.a() || f1 < pathpoint4.e)) {
+                pathpoint4.j = pathpoint3.j + f1;
+                pathpoint4.k = f1 + pathpoint4.l;
+                float f2 = pathpoint3.e + pathpoint4.k;
+
+                if (pathpoint4.j < f && (!pathpoint4.a() || f2 < pathpoint4.e)) {
                     pathpoint4.h = pathpoint3;
-                    pathpoint4.e = f1;
-                    pathpoint4.f = pathpoint4.b(pathpoint1);
+                    pathpoint4.e = f2;
+                    pathpoint4.f = pathpoint4.c(pathpoint1) + pathpoint4.l;
                     if (pathpoint4.a()) {
                         this.a.a(pathpoint4, pathpoint4.e + pathpoint4.f);
                     } else {
@@ -72,7 +88,9 @@ public class Pathfinder {
         if (pathpoint2 == pathpoint) {
             return null;
         } else {
-            return this.a(pathpoint, pathpoint2);
+            PathEntity pathentity = this.a(pathpoint, pathpoint2);
+
+            return pathentity;
         }
     }
 

@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Collections;
 import java.util.List;
 
 public class CommandKill extends CommandAbstract {
@@ -18,17 +19,17 @@ public class CommandKill extends CommandAbstract {
         return "commands.kill.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length == 0) {
-            EntityPlayer entityplayer = b(icommandlistener);
+            EntityPlayer entityplayer = a(icommandlistener);
 
-            entityplayer.G();
-            a(icommandlistener, this, "commands.kill.successful", new Object[] { entityplayer.getScoreboardDisplayName()});
+            entityplayer.Q();
+            a(icommandlistener, (ICommand) this, "commands.kill.successful", new Object[] { entityplayer.getScoreboardDisplayName()});
         } else {
-            Entity entity = b(icommandlistener, astring[0]);
+            Entity entity = b(minecraftserver, icommandlistener, astring[0]);
 
-            entity.G();
-            a(icommandlistener, this, "commands.kill.successful", new Object[] { entity.getScoreboardDisplayName()});
+            entity.Q();
+            a(icommandlistener, (ICommand) this, "commands.kill.successful", new Object[] { entity.getScoreboardDisplayName()});
         }
     }
 
@@ -36,7 +37,7 @@ public class CommandKill extends CommandAbstract {
         return i == 0;
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, MinecraftServer.getServer().getPlayers()) : null;
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : Collections.emptyList();
     }
 }

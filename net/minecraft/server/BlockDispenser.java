@@ -2,16 +2,16 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class BlockDispenser extends BlockContainer {
+public class BlockDispenser extends BlockTileEntity {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing");
+    public static final BlockStateDirection FACING = BlockDirectional.FACING;
     public static final BlockStateBoolean TRIGGERED = BlockStateBoolean.of("triggered");
     public static final RegistryDefault<Item, IDispenseBehavior> REGISTRY = new RegistryDefault(new DispenseBehaviorItem());
-    protected Random O = new Random();
+    protected Random d = new Random();
 
     protected BlockDispenser() {
         super(Material.STONE);
-        this.j(this.blockStateList.getBlockData().set(BlockDispenser.FACING, EnumDirection.NORTH).set(BlockDispenser.TRIGGERED, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockDispenser.FACING, EnumDirection.NORTH).set(BlockDispenser.TRIGGERED, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 
@@ -27,16 +27,16 @@ public class BlockDispenser extends BlockContainer {
     private void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (!world.isClientSide) {
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockDispenser.FACING);
-            boolean flag = world.getType(blockposition.north()).getBlock().o();
-            boolean flag1 = world.getType(blockposition.south()).getBlock().o();
+            boolean flag = world.getType(blockposition.north()).b();
+            boolean flag1 = world.getType(blockposition.south()).b();
 
             if (enumdirection == EnumDirection.NORTH && flag && !flag1) {
                 enumdirection = EnumDirection.SOUTH;
             } else if (enumdirection == EnumDirection.SOUTH && flag1 && !flag) {
                 enumdirection = EnumDirection.NORTH;
             } else {
-                boolean flag2 = world.getType(blockposition.west()).getBlock().o();
-                boolean flag3 = world.getType(blockposition.east()).getBlock().o();
+                boolean flag2 = world.getType(blockposition.west()).b();
+                boolean flag3 = world.getType(blockposition.east()).b();
 
                 if (enumdirection == EnumDirection.WEST && flag2 && !flag3) {
                     enumdirection = EnumDirection.EAST;
@@ -49,7 +49,7 @@ public class BlockDispenser extends BlockContainer {
         }
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -58,9 +58,9 @@ public class BlockDispenser extends BlockContainer {
             if (tileentity instanceof TileEntityDispenser) {
                 entityhuman.openContainer((TileEntityDispenser) tileentity);
                 if (tileentity instanceof TileEntityDropper) {
-                    entityhuman.b(StatisticList.O);
-                } else {
                     entityhuman.b(StatisticList.Q);
+                } else {
+                    entityhuman.b(StatisticList.S);
                 }
             }
 
@@ -120,11 +120,11 @@ public class BlockDispenser extends BlockContainer {
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        return this.getBlockData().set(BlockDispenser.FACING, BlockPiston.a(world, blockposition, entityliving)).set(BlockDispenser.TRIGGERED, Boolean.valueOf(false));
+        return this.getBlockData().set(BlockDispenser.FACING, BlockPiston.a(blockposition, entityliving)).set(BlockDispenser.TRIGGERED, Boolean.valueOf(false));
     }
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
-        world.setTypeAndData(blockposition, iblockdata.set(BlockDispenser.FACING, BlockPiston.a(world, blockposition, entityliving)), 2);
+        world.setTypeAndData(blockposition, iblockdata.set(BlockDispenser.FACING, BlockPiston.a(blockposition, entityliving)), 2);
         if (itemstack.hasName()) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -147,7 +147,7 @@ public class BlockDispenser extends BlockContainer {
     }
 
     public static IPosition a(ISourceBlock isourceblock) {
-        EnumDirection enumdirection = b(isourceblock.f());
+        EnumDirection enumdirection = e(isourceblock.f());
         double d0 = isourceblock.getX() + 0.7D * (double) enumdirection.getAdjacentX();
         double d1 = isourceblock.getY() + 0.7D * (double) enumdirection.getAdjacentY();
         double d2 = isourceblock.getZ() + 0.7D * (double) enumdirection.getAdjacentZ();
@@ -155,24 +155,24 @@ public class BlockDispenser extends BlockContainer {
         return new Position(d0, d1, d2);
     }
 
-    public static EnumDirection b(int i) {
+    public static EnumDirection e(int i) {
         return EnumDirection.fromType1(i & 7);
     }
 
-    public boolean isComplexRedstone() {
+    public boolean isComplexRedstone(IBlockData iblockdata) {
         return true;
     }
 
-    public int l(World world, BlockPosition blockposition) {
+    public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return Container.a(world.getTileEntity(blockposition));
     }
 
-    public int b() {
-        return 3;
+    public EnumRenderType a(IBlockData iblockdata) {
+        return EnumRenderType.MODEL;
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockDispenser.FACING, b(i)).set(BlockDispenser.TRIGGERED, Boolean.valueOf((i & 8) > 0));
+        return this.getBlockData().set(BlockDispenser.FACING, e(i)).set(BlockDispenser.TRIGGERED, Boolean.valueOf((i & 8) > 0));
     }
 
     public int toLegacyData(IBlockData iblockdata) {
@@ -184,6 +184,14 @@ public class BlockDispenser extends BlockContainer {
         }
 
         return i;
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return iblockdata.set(BlockDispenser.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockDispenser.FACING)));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockDispenser.FACING)));
     }
 
     protected BlockStateList getStateList() {

@@ -15,26 +15,26 @@ public class BlockLeaves1 extends BlockLeaves {
     });
 
     public BlockLeaves1() {
-        this.j(this.blockStateList.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLeaves1.CHECK_DECAY, Boolean.valueOf(true)).set(BlockLeaves1.DECAYABLE, Boolean.valueOf(true)));
+        this.w(this.blockStateList.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLeaves1.CHECK_DECAY, Boolean.valueOf(true)).set(BlockLeaves1.DECAYABLE, Boolean.valueOf(true)));
     }
 
     protected void a(World world, BlockPosition blockposition, IBlockData iblockdata, int i) {
         if (iblockdata.get(BlockLeaves1.VARIANT) == BlockWood.EnumLogVariant.OAK && world.random.nextInt(i) == 0) {
-            a(world, blockposition, new ItemStack(Items.APPLE, 1, 0));
+            a(world, blockposition, new ItemStack(Items.APPLE));
         }
 
     }
 
-    protected int d(IBlockData iblockdata) {
-        return iblockdata.get(BlockLeaves1.VARIANT) == BlockWood.EnumLogVariant.JUNGLE ? 40 : super.d(iblockdata);
+    protected int i(IBlockData iblockdata) {
+        return iblockdata.get(BlockLeaves1.VARIANT) == BlockWood.EnumLogVariant.JUNGLE ? 40 : super.i(iblockdata);
     }
 
-    protected ItemStack i(IBlockData iblockdata) {
+    protected ItemStack u(IBlockData iblockdata) {
         return new ItemStack(Item.getItemOf(this), 1, ((BlockWood.EnumLogVariant) iblockdata.get(BlockLeaves1.VARIANT)).a());
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockLeaves1.VARIANT, this.b(i)).set(BlockLeaves1.DECAYABLE, Boolean.valueOf((i & 4) == 0)).set(BlockLeaves1.CHECK_DECAY, Boolean.valueOf((i & 8) > 0));
+        return this.getBlockData().set(BlockLeaves1.VARIANT, this.e(i)).set(BlockLeaves1.DECAYABLE, Boolean.valueOf((i & 4) == 0)).set(BlockLeaves1.CHECK_DECAY, Boolean.valueOf((i & 8) > 0));
     }
 
     public int toLegacyData(IBlockData iblockdata) {
@@ -52,7 +52,7 @@ public class BlockLeaves1 extends BlockLeaves {
         return i;
     }
 
-    public BlockWood.EnumLogVariant b(int i) {
+    public BlockWood.EnumLogVariant e(int i) {
         return BlockWood.EnumLogVariant.a((i & 3) % 4);
     }
 
@@ -64,12 +64,12 @@ public class BlockLeaves1 extends BlockLeaves {
         return ((BlockWood.EnumLogVariant) iblockdata.get(BlockLeaves1.VARIANT)).a();
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity) {
-        if (!world.isClientSide && entityhuman.bZ() != null && entityhuman.bZ().getItem() == Items.SHEARS) {
-            entityhuman.b(StatisticList.MINE_BLOCK_COUNT[Block.getId(this)]);
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
+        if (!world.isClientSide && itemstack != null && itemstack.getItem() == Items.SHEARS) {
+            entityhuman.b(StatisticList.a((Block) this));
             a(world, blockposition, new ItemStack(Item.getItemOf(this), 1, ((BlockWood.EnumLogVariant) iblockdata.get(BlockLeaves1.VARIANT)).a()));
         } else {
-            super.a(world, entityhuman, blockposition, iblockdata, tileentity);
+            super.a(world, entityhuman, blockposition, iblockdata, tileentity, itemstack);
         }
     }
 }

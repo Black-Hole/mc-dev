@@ -4,8 +4,10 @@ public class EntityCow extends EntityAnimal {
 
     public EntityCow(World world) {
         super(world);
-        this.setSize(0.9F, 1.3F);
-        ((Navigation) this.getNavigation()).a(true);
+        this.setSize(0.9F, 1.4F);
+    }
+
+    protected void r() {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 2.0D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
@@ -22,64 +24,42 @@ public class EntityCow extends EntityAnimal {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
     }
 
-    protected String z() {
-        return "mob.cow.say";
+    protected SoundEffect G() {
+        return SoundEffects.am;
     }
 
-    protected String bo() {
-        return "mob.cow.hurt";
+    protected SoundEffect bR() {
+        return SoundEffects.ao;
     }
 
-    protected String bp() {
-        return "mob.cow.hurt";
+    protected SoundEffect bS() {
+        return SoundEffects.an;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.makeSound("mob.cow.step", 0.15F, 1.0F);
+        this.a(SoundEffects.aq, 0.15F, 1.0F);
     }
 
-    protected float bB() {
+    protected float cd() {
         return 0.4F;
     }
 
-    protected Item getLoot() {
-        return Items.LEATHER;
+    protected MinecraftKey J() {
+        return LootTables.G;
     }
 
-    protected void dropDeathLoot(boolean flag, int i) {
-        int j = this.random.nextInt(3) + this.random.nextInt(1 + i);
-
-        int k;
-
-        for (k = 0; k < j; ++k) {
-            this.a(Items.LEATHER, 1);
-        }
-
-        j = this.random.nextInt(3) + 1 + this.random.nextInt(1 + i);
-
-        for (k = 0; k < j; ++k) {
-            if (this.isBurning()) {
-                this.a(Items.COOKED_BEEF, 1);
-            } else {
-                this.a(Items.BEEF, 1);
-            }
-        }
-
-    }
-
-    public boolean a(EntityHuman entityhuman) {
-        ItemStack itemstack = entityhuman.inventory.getItemInHand();
-
+    public boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
         if (itemstack != null && itemstack.getItem() == Items.BUCKET && !entityhuman.abilities.canInstantlyBuild && !this.isBaby()) {
-            if (itemstack.count-- == 1) {
-                entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, new ItemStack(Items.MILK_BUCKET));
+            entityhuman.a(SoundEffects.ap, 1.0F, 1.0F);
+            if (--itemstack.count == 0) {
+                entityhuman.a(enumhand, new ItemStack(Items.MILK_BUCKET));
             } else if (!entityhuman.inventory.pickup(new ItemStack(Items.MILK_BUCKET))) {
-                entityhuman.drop(new ItemStack(Items.MILK_BUCKET, 1, 0), false);
+                entityhuman.drop(new ItemStack(Items.MILK_BUCKET), false);
             }
 
             return true;
         } else {
-            return super.a(entityhuman);
+            return super.a(entityhuman, enumhand, itemstack);
         }
     }
 
@@ -88,7 +68,7 @@ public class EntityCow extends EntityAnimal {
     }
 
     public float getHeadHeight() {
-        return this.length;
+        return this.isBaby() ? this.length : 1.3F;
     }
 
     public EntityAgeable createChild(EntityAgeable entityageable) {

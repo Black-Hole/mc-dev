@@ -9,7 +9,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
 
     protected BlockRepeater(boolean flag) {
         super(flag);
-        this.j(this.blockStateList.getBlockData().set(BlockRepeater.FACING, EnumDirection.NORTH).set(BlockRepeater.DELAY, Integer.valueOf(1)).set(BlockRepeater.LOCKED, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockRepeater.FACING, EnumDirection.NORTH).set(BlockRepeater.DELAY, Integer.valueOf(1)).set(BlockRepeater.LOCKED, Boolean.valueOf(false)));
     }
 
     public String getName() {
@@ -20,20 +20,28 @@ public class BlockRepeater extends BlockDiodeAbstract {
         return iblockdata.set(BlockRepeater.LOCKED, Boolean.valueOf(this.b(iblockaccess, blockposition, iblockdata)));
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return iblockdata.set(BlockRepeater.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockRepeater.FACING)));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockRepeater.FACING)));
+    }
+
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (!entityhuman.abilities.mayBuild) {
             return false;
         } else {
-            world.setTypeAndData(blockposition, iblockdata.a(BlockRepeater.DELAY), 3);
+            world.setTypeAndData(blockposition, iblockdata.a((IBlockState) BlockRepeater.DELAY), 3);
             return true;
         }
     }
 
-    protected int d(IBlockData iblockdata) {
+    protected int i(IBlockData iblockdata) {
         return ((Integer) iblockdata.get(BlockRepeater.DELAY)).intValue() * 2;
     }
 
-    protected IBlockData e(IBlockData iblockdata) {
+    protected IBlockData x(IBlockData iblockdata) {
         Integer integer = (Integer) iblockdata.get(BlockRepeater.DELAY);
         Boolean obool = (Boolean) iblockdata.get(BlockRepeater.LOCKED);
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockRepeater.FACING);
@@ -41,7 +49,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
         return Blocks.POWERED_REPEATER.getBlockData().set(BlockRepeater.FACING, enumdirection).set(BlockRepeater.DELAY, integer).set(BlockRepeater.LOCKED, obool);
     }
 
-    protected IBlockData k(IBlockData iblockdata) {
+    protected IBlockData y(IBlockData iblockdata) {
         Integer integer = (Integer) iblockdata.get(BlockRepeater.DELAY);
         Boolean obool = (Boolean) iblockdata.get(BlockRepeater.LOCKED);
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockRepeater.FACING);
@@ -53,12 +61,16 @@ public class BlockRepeater extends BlockDiodeAbstract {
         return Items.REPEATER;
     }
 
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Items.REPEATER);
+    }
+
     public boolean b(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
         return this.c(iblockaccess, blockposition, iblockdata) > 0;
     }
 
-    protected boolean c(Block block) {
-        return d(block);
+    protected boolean A(IBlockData iblockdata) {
+        return isDiode(iblockdata);
     }
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -72,7 +84,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
 
     public int toLegacyData(IBlockData iblockdata) {
         byte b0 = 0;
-        int i = b0 | ((EnumDirection) iblockdata.get(BlockRepeater.FACING)).b();
+        int i = b0 | ((EnumDirection) iblockdata.get(BlockRepeater.FACING)).get2DRotationValue();
 
         i |= ((Integer) iblockdata.get(BlockRepeater.DELAY)).intValue() - 1 << 2;
         return i;

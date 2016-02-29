@@ -23,6 +23,22 @@ public class BlockStateBoolean extends BlockState<Boolean> {
         return obool.toString();
     }
 
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        } else if (object instanceof BlockStateBoolean && super.equals(object)) {
+            BlockStateBoolean blockstateboolean = (BlockStateBoolean) object;
+
+            return this.a.equals(blockstateboolean.a);
+        } else {
+            return false;
+        }
+    }
+
+    public int hashCode() {
+        return 31 * super.hashCode() + this.a.hashCode();
+    }
+
     public String a(Comparable comparable) {
         return this.a((Boolean) comparable);
     }

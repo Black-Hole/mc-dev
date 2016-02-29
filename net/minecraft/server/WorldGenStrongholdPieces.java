@@ -238,9 +238,9 @@ public class WorldGenStrongholdPieces {
                 float f = random.nextFloat();
 
                 if (f < 0.2F) {
-                    this.a = Blocks.STONEBRICK.fromLegacyData(BlockSmoothBrick.O);
+                    this.a = Blocks.STONEBRICK.fromLegacyData(BlockSmoothBrick.d);
                 } else if (f < 0.5F) {
-                    this.a = Blocks.STONEBRICK.fromLegacyData(BlockSmoothBrick.N);
+                    this.a = Blocks.STONEBRICK.fromLegacyData(BlockSmoothBrick.c);
                 } else if (f < 0.55F) {
                     this.a = Blocks.MONSTER_EGG.fromLegacyData(BlockMonsterEggs.EnumMonsterEggVarient.STONEBRICK.a());
                 } else {
@@ -265,7 +265,7 @@ public class WorldGenStrongholdPieces {
 
         public WorldGenStrongholdPortalRoom(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
@@ -319,61 +319,59 @@ public class WorldGenStrongholdPieces {
                 this.a(world, structureboundingbox, i, 3, 15, i, 4, 15, Blocks.IRON_BARS.getBlockData(), Blocks.IRON_BARS.getBlockData(), false);
             }
 
-            i = this.a(Blocks.STONE_BRICK_STAIRS, 3);
+            IBlockData iblockdata = Blocks.STONE_BRICK_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.NORTH);
+
             this.a(world, structureboundingbox, 4, 1, 5, 6, 1, 7, false, random, WorldGenStrongholdPieces.e);
             this.a(world, structureboundingbox, 4, 2, 6, 6, 2, 7, false, random, WorldGenStrongholdPieces.e);
             this.a(world, structureboundingbox, 4, 3, 7, 6, 3, 7, false, random, WorldGenStrongholdPieces.e);
 
-            int j;
-
-            for (j = 4; j <= 6; ++j) {
-                this.a(world, Blocks.STONE_BRICK_STAIRS.fromLegacyData(i), j, 1, 4, structureboundingbox);
-                this.a(world, Blocks.STONE_BRICK_STAIRS.fromLegacyData(i), j, 2, 5, structureboundingbox);
-                this.a(world, Blocks.STONE_BRICK_STAIRS.fromLegacyData(i), j, 3, 6, structureboundingbox);
+            for (int j = 4; j <= 6; ++j) {
+                this.a(world, iblockdata, j, 1, 4, structureboundingbox);
+                this.a(world, iblockdata, j, 2, 5, structureboundingbox);
+                this.a(world, iblockdata, j, 3, 6, structureboundingbox);
             }
 
-            j = EnumDirection.NORTH.b();
-            int k = EnumDirection.SOUTH.b();
-            int l = EnumDirection.EAST.b();
-            int i1 = EnumDirection.WEST.b();
+            IBlockData iblockdata1 = Blocks.END_PORTAL_FRAME.getBlockData().set(BlockEnderPortalFrame.FACING, EnumDirection.NORTH);
+            IBlockData iblockdata2 = Blocks.END_PORTAL_FRAME.getBlockData().set(BlockEnderPortalFrame.FACING, EnumDirection.SOUTH);
+            IBlockData iblockdata3 = Blocks.END_PORTAL_FRAME.getBlockData().set(BlockEnderPortalFrame.FACING, EnumDirection.EAST);
+            IBlockData iblockdata4 = Blocks.END_PORTAL_FRAME.getBlockData().set(BlockEnderPortalFrame.FACING, EnumDirection.WEST);
+            boolean flag = true;
+            boolean[] aboolean = new boolean[12];
 
-            if (this.m != null) {
-                switch (WorldGenStrongholdPieces.SyntheticClass_1.b[this.m.ordinal()]) {
-                case 2:
-                    j = EnumDirection.SOUTH.b();
-                    k = EnumDirection.NORTH.b();
-                    break;
-
-                case 3:
-                    j = EnumDirection.WEST.b();
-                    k = EnumDirection.EAST.b();
-                    l = EnumDirection.SOUTH.b();
-                    i1 = EnumDirection.NORTH.b();
-                    break;
-
-                case 4:
-                    j = EnumDirection.EAST.b();
-                    k = EnumDirection.WEST.b();
-                    l = EnumDirection.SOUTH.b();
-                    i1 = EnumDirection.NORTH.b();
-                }
+            for (int k = 0; k < aboolean.length; ++k) {
+                aboolean[k] = random.nextFloat() > 0.9F;
+                flag &= aboolean[k];
             }
 
-            this.a(world, Blocks.END_PORTAL_FRAME.fromLegacyData(j).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(random.nextFloat() > 0.9F)), 4, 3, 8, structureboundingbox);
-            this.a(world, Blocks.END_PORTAL_FRAME.fromLegacyData(j).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(random.nextFloat() > 0.9F)), 5, 3, 8, structureboundingbox);
-            this.a(world, Blocks.END_PORTAL_FRAME.fromLegacyData(j).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(random.nextFloat() > 0.9F)), 6, 3, 8, structureboundingbox);
-            this.a(world, Blocks.END_PORTAL_FRAME.fromLegacyData(k).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(random.nextFloat() > 0.9F)), 4, 3, 12, structureboundingbox);
-            this.a(world, Blocks.END_PORTAL_FRAME.fromLegacyData(k).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(random.nextFloat() > 0.9F)), 5, 3, 12, structureboundingbox);
-            this.a(world, Blocks.END_PORTAL_FRAME.fromLegacyData(k).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(random.nextFloat() > 0.9F)), 6, 3, 12, structureboundingbox);
-            this.a(world, Blocks.END_PORTAL_FRAME.fromLegacyData(l).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(random.nextFloat() > 0.9F)), 3, 3, 9, structureboundingbox);
-            this.a(world, Blocks.END_PORTAL_FRAME.fromLegacyData(l).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(random.nextFloat() > 0.9F)), 3, 3, 10, structureboundingbox);
-            this.a(world, Blocks.END_PORTAL_FRAME.fromLegacyData(l).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(random.nextFloat() > 0.9F)), 3, 3, 11, structureboundingbox);
-            this.a(world, Blocks.END_PORTAL_FRAME.fromLegacyData(i1).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(random.nextFloat() > 0.9F)), 7, 3, 9, structureboundingbox);
-            this.a(world, Blocks.END_PORTAL_FRAME.fromLegacyData(i1).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(random.nextFloat() > 0.9F)), 7, 3, 10, structureboundingbox);
-            this.a(world, Blocks.END_PORTAL_FRAME.fromLegacyData(i1).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(random.nextFloat() > 0.9F)), 7, 3, 11, structureboundingbox);
+            this.a(world, iblockdata1.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(aboolean[0])), 4, 3, 8, structureboundingbox);
+            this.a(world, iblockdata1.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(aboolean[1])), 5, 3, 8, structureboundingbox);
+            this.a(world, iblockdata1.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(aboolean[2])), 6, 3, 8, structureboundingbox);
+            this.a(world, iblockdata2.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(aboolean[3])), 4, 3, 12, structureboundingbox);
+            this.a(world, iblockdata2.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(aboolean[4])), 5, 3, 12, structureboundingbox);
+            this.a(world, iblockdata2.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(aboolean[5])), 6, 3, 12, structureboundingbox);
+            this.a(world, iblockdata3.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(aboolean[6])), 3, 3, 9, structureboundingbox);
+            this.a(world, iblockdata3.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(aboolean[7])), 3, 3, 10, structureboundingbox);
+            this.a(world, iblockdata3.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(aboolean[8])), 3, 3, 11, structureboundingbox);
+            this.a(world, iblockdata4.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(aboolean[9])), 7, 3, 9, structureboundingbox);
+            this.a(world, iblockdata4.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(aboolean[10])), 7, 3, 10, structureboundingbox);
+            this.a(world, iblockdata4.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(aboolean[11])), 7, 3, 11, structureboundingbox);
+            if (flag) {
+                IBlockData iblockdata5 = Blocks.END_PORTAL.getBlockData();
+
+                this.a(world, iblockdata5, 4, 3, 9, structureboundingbox);
+                this.a(world, iblockdata5, 5, 3, 9, structureboundingbox);
+                this.a(world, iblockdata5, 6, 3, 9, structureboundingbox);
+                this.a(world, iblockdata5, 4, 3, 10, structureboundingbox);
+                this.a(world, iblockdata5, 5, 3, 10, structureboundingbox);
+                this.a(world, iblockdata5, 6, 3, 10, structureboundingbox);
+                this.a(world, iblockdata5, 4, 3, 11, structureboundingbox);
+                this.a(world, iblockdata5, 5, 3, 11, structureboundingbox);
+                this.a(world, iblockdata5, 6, 3, 11, structureboundingbox);
+            }
+
             if (!this.a) {
-                int j1 = this.d(3);
-                BlockPosition blockposition = new BlockPosition(this.a(5, 6), j1, this.b(5, 6));
+                int l = this.d(3);
+                BlockPosition blockposition = new BlockPosition(this.a(5, 6), l, this.b(5, 6));
 
                 if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
                     this.a = true;
@@ -401,7 +399,7 @@ public class WorldGenStrongholdPieces {
 
         public WorldGenStrongholdCrossing(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.d = this.a(random);
             this.l = structureboundingbox;
             this.a = random.nextBoolean();
@@ -429,8 +427,9 @@ public class WorldGenStrongholdPieces {
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
             int i = 3;
             int j = 5;
+            EnumDirection enumdirection = this.e();
 
-            if (this.m == EnumDirection.WEST || this.m == EnumDirection.NORTH) {
+            if (enumdirection == EnumDirection.WEST || enumdirection == EnumDirection.NORTH) {
                 i = 8 - i;
                 j = 8 - j;
             }
@@ -496,7 +495,7 @@ public class WorldGenStrongholdPieces {
                 this.a(world, structureboundingbox, 4, 5, 7, 4, 5, 9, Blocks.STONE_SLAB.getBlockData(), Blocks.STONE_SLAB.getBlockData(), false);
                 this.a(world, structureboundingbox, 8, 5, 7, 8, 5, 9, Blocks.STONE_SLAB.getBlockData(), Blocks.STONE_SLAB.getBlockData(), false);
                 this.a(world, structureboundingbox, 5, 5, 7, 7, 5, 9, Blocks.DOUBLE_STONE_SLAB.getBlockData(), Blocks.DOUBLE_STONE_SLAB.getBlockData(), false);
-                this.a(world, Blocks.TORCH.getBlockData(), 6, 5, 6, structureboundingbox);
+                this.a(world, Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.SOUTH), 6, 5, 6, structureboundingbox);
                 return true;
             }
         }
@@ -504,27 +503,26 @@ public class WorldGenStrongholdPieces {
 
     public static class WorldGenStrongholdLibrary extends WorldGenStrongholdPieces.WorldGenStrongholdPiece {
 
-        private static final List<StructurePieceTreasure> a = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.BOOK, 0, 1, 3, 20), new StructurePieceTreasure(Items.PAPER, 0, 2, 7, 20), new StructurePieceTreasure(Items.MAP, 0, 1, 1, 1), new StructurePieceTreasure(Items.COMPASS, 0, 1, 1, 1)});
-        private boolean b;
+        private boolean a;
 
         public WorldGenStrongholdLibrary() {}
 
         public WorldGenStrongholdLibrary(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.d = this.a(random);
             this.l = structureboundingbox;
-            this.b = structureboundingbox.d() > 6;
+            this.a = structureboundingbox.d() > 6;
         }
 
         protected void a(NBTTagCompound nbttagcompound) {
             super.a(nbttagcompound);
-            nbttagcompound.setBoolean("Tall", this.b);
+            nbttagcompound.setBoolean("Tall", this.a);
         }
 
         protected void b(NBTTagCompound nbttagcompound) {
             super.b(nbttagcompound);
-            this.b = nbttagcompound.getBoolean("Tall");
+            this.a = nbttagcompound.getBoolean("Tall");
         }
 
         public static WorldGenStrongholdPieces.WorldGenStrongholdLibrary a(List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
@@ -546,7 +544,7 @@ public class WorldGenStrongholdPieces {
             } else {
                 byte b0 = 11;
 
-                if (!this.b) {
+                if (!this.a) {
                     b0 = 6;
                 }
 
@@ -562,16 +560,16 @@ public class WorldGenStrongholdPieces {
                     if ((i - 1) % 4 == 0) {
                         this.a(world, structureboundingbox, 1, 1, i, 1, 4, i, Blocks.PLANKS.getBlockData(), Blocks.PLANKS.getBlockData(), false);
                         this.a(world, structureboundingbox, 12, 1, i, 12, 4, i, Blocks.PLANKS.getBlockData(), Blocks.PLANKS.getBlockData(), false);
-                        this.a(world, Blocks.TORCH.getBlockData(), 2, 3, i, structureboundingbox);
-                        this.a(world, Blocks.TORCH.getBlockData(), 11, 3, i, structureboundingbox);
-                        if (this.b) {
+                        this.a(world, Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.EAST), 2, 3, i, structureboundingbox);
+                        this.a(world, Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.WEST), 11, 3, i, structureboundingbox);
+                        if (this.a) {
                             this.a(world, structureboundingbox, 1, 6, i, 1, 9, i, Blocks.PLANKS.getBlockData(), Blocks.PLANKS.getBlockData(), false);
                             this.a(world, structureboundingbox, 12, 6, i, 12, 9, i, Blocks.PLANKS.getBlockData(), Blocks.PLANKS.getBlockData(), false);
                         }
                     } else {
                         this.a(world, structureboundingbox, 1, 1, i, 1, 4, i, Blocks.BOOKSHELF.getBlockData(), Blocks.BOOKSHELF.getBlockData(), false);
                         this.a(world, structureboundingbox, 12, 1, i, 12, 4, i, Blocks.BOOKSHELF.getBlockData(), Blocks.BOOKSHELF.getBlockData(), false);
-                        if (this.b) {
+                        if (this.a) {
                             this.a(world, structureboundingbox, 1, 6, i, 1, 9, i, Blocks.BOOKSHELF.getBlockData(), Blocks.BOOKSHELF.getBlockData(), false);
                             this.a(world, structureboundingbox, 12, 6, i, 12, 9, i, Blocks.BOOKSHELF.getBlockData(), Blocks.BOOKSHELF.getBlockData(), false);
                         }
@@ -584,7 +582,7 @@ public class WorldGenStrongholdPieces {
                     this.a(world, structureboundingbox, 9, 1, i, 10, 3, i, Blocks.BOOKSHELF.getBlockData(), Blocks.BOOKSHELF.getBlockData(), false);
                 }
 
-                if (this.b) {
+                if (this.a) {
                     this.a(world, structureboundingbox, 1, 5, 1, 3, 5, 13, Blocks.PLANKS.getBlockData(), Blocks.PLANKS.getBlockData(), false);
                     this.a(world, structureboundingbox, 10, 5, 1, 12, 5, 13, Blocks.PLANKS.getBlockData(), Blocks.PLANKS.getBlockData(), false);
                     this.a(world, structureboundingbox, 4, 5, 1, 9, 5, 2, Blocks.PLANKS.getBlockData(), Blocks.PLANKS.getBlockData(), false);
@@ -599,14 +597,15 @@ public class WorldGenStrongholdPieces {
                     this.a(world, Blocks.FENCE.getBlockData(), 9, 6, 11, structureboundingbox);
                     this.a(world, Blocks.FENCE.getBlockData(), 8, 6, 11, structureboundingbox);
                     this.a(world, Blocks.FENCE.getBlockData(), 9, 6, 10, structureboundingbox);
-                    i = this.a(Blocks.LADDER, 3);
-                    this.a(world, Blocks.LADDER.fromLegacyData(i), 10, 1, 13, structureboundingbox);
-                    this.a(world, Blocks.LADDER.fromLegacyData(i), 10, 2, 13, structureboundingbox);
-                    this.a(world, Blocks.LADDER.fromLegacyData(i), 10, 3, 13, structureboundingbox);
-                    this.a(world, Blocks.LADDER.fromLegacyData(i), 10, 4, 13, structureboundingbox);
-                    this.a(world, Blocks.LADDER.fromLegacyData(i), 10, 5, 13, structureboundingbox);
-                    this.a(world, Blocks.LADDER.fromLegacyData(i), 10, 6, 13, structureboundingbox);
-                    this.a(world, Blocks.LADDER.fromLegacyData(i), 10, 7, 13, structureboundingbox);
+                    IBlockData iblockdata = Blocks.LADDER.getBlockData().set(BlockLadder.FACING, EnumDirection.SOUTH);
+
+                    this.a(world, iblockdata, 10, 1, 13, structureboundingbox);
+                    this.a(world, iblockdata, 10, 2, 13, structureboundingbox);
+                    this.a(world, iblockdata, 10, 3, 13, structureboundingbox);
+                    this.a(world, iblockdata, 10, 4, 13, structureboundingbox);
+                    this.a(world, iblockdata, 10, 5, 13, structureboundingbox);
+                    this.a(world, iblockdata, 10, 6, 13, structureboundingbox);
+                    this.a(world, iblockdata, 10, 7, 13, structureboundingbox);
                     byte b1 = 7;
                     byte b2 = 7;
 
@@ -622,18 +621,20 @@ public class WorldGenStrongholdPieces {
                     this.a(world, Blocks.FENCE.getBlockData(), b1 - 1, 7, b2 + 1, structureboundingbox);
                     this.a(world, Blocks.FENCE.getBlockData(), b1, 7, b2 - 1, structureboundingbox);
                     this.a(world, Blocks.FENCE.getBlockData(), b1, 7, b2 + 1, structureboundingbox);
-                    this.a(world, Blocks.TORCH.getBlockData(), b1 - 2, 8, b2, structureboundingbox);
-                    this.a(world, Blocks.TORCH.getBlockData(), b1 + 1, 8, b2, structureboundingbox);
-                    this.a(world, Blocks.TORCH.getBlockData(), b1 - 1, 8, b2 - 1, structureboundingbox);
-                    this.a(world, Blocks.TORCH.getBlockData(), b1 - 1, 8, b2 + 1, structureboundingbox);
-                    this.a(world, Blocks.TORCH.getBlockData(), b1, 8, b2 - 1, structureboundingbox);
-                    this.a(world, Blocks.TORCH.getBlockData(), b1, 8, b2 + 1, structureboundingbox);
+                    IBlockData iblockdata1 = Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.UP);
+
+                    this.a(world, iblockdata1, b1 - 2, 8, b2, structureboundingbox);
+                    this.a(world, iblockdata1, b1 + 1, 8, b2, structureboundingbox);
+                    this.a(world, iblockdata1, b1 - 1, 8, b2 - 1, structureboundingbox);
+                    this.a(world, iblockdata1, b1 - 1, 8, b2 + 1, structureboundingbox);
+                    this.a(world, iblockdata1, b1, 8, b2 - 1, structureboundingbox);
+                    this.a(world, iblockdata1, b1, 8, b2 + 1, structureboundingbox);
                 }
 
-                this.a(world, structureboundingbox, random, 3, 3, 5, StructurePieceTreasure.a(WorldGenStrongholdPieces.WorldGenStrongholdLibrary.a, new StructurePieceTreasure[] { Items.ENCHANTED_BOOK.a(random, 1, 5, 2)}), 1 + random.nextInt(4));
-                if (this.b) {
+                this.a(world, structureboundingbox, random, 3, 3, 5, LootTables.h);
+                if (this.a) {
                     this.a(world, Blocks.AIR.getBlockData(), 12, 9, 1, structureboundingbox);
-                    this.a(world, structureboundingbox, random, 12, 8, 1, StructurePieceTreasure.a(WorldGenStrongholdPieces.WorldGenStrongholdLibrary.a, new StructurePieceTreasure[] { Items.ENCHANTED_BOOK.a(random, 1, 5, 2)}), 1 + random.nextInt(4));
+                    this.a(world, structureboundingbox, random, 12, 8, 1, LootTables.h);
                 }
 
                 return true;
@@ -647,7 +648,7 @@ public class WorldGenStrongholdPieces {
 
         public WorldGenStrongholdPrison(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.d = this.a(random);
             this.l = structureboundingbox;
         }
@@ -677,10 +678,13 @@ public class WorldGenStrongholdPieces {
                 this.a(world, structureboundingbox, 5, 1, 5, 7, 3, 5, Blocks.IRON_BARS.getBlockData(), Blocks.IRON_BARS.getBlockData(), false);
                 this.a(world, Blocks.IRON_BARS.getBlockData(), 4, 3, 2, structureboundingbox);
                 this.a(world, Blocks.IRON_BARS.getBlockData(), 4, 3, 8, structureboundingbox);
-                this.a(world, Blocks.IRON_DOOR.fromLegacyData(this.a(Blocks.IRON_DOOR, 3)), 4, 1, 2, structureboundingbox);
-                this.a(world, Blocks.IRON_DOOR.fromLegacyData(this.a(Blocks.IRON_DOOR, 3) + 8), 4, 2, 2, structureboundingbox);
-                this.a(world, Blocks.IRON_DOOR.fromLegacyData(this.a(Blocks.IRON_DOOR, 3)), 4, 1, 8, structureboundingbox);
-                this.a(world, Blocks.IRON_DOOR.fromLegacyData(this.a(Blocks.IRON_DOOR, 3) + 8), 4, 2, 8, structureboundingbox);
+                IBlockData iblockdata = Blocks.IRON_DOOR.getBlockData().set(BlockDoor.FACING, EnumDirection.WEST);
+                IBlockData iblockdata1 = Blocks.IRON_DOOR.getBlockData().set(BlockDoor.FACING, EnumDirection.WEST).set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER);
+
+                this.a(world, iblockdata, 4, 1, 2, structureboundingbox);
+                this.a(world, iblockdata1, 4, 2, 2, structureboundingbox);
+                this.a(world, iblockdata, 4, 1, 8, structureboundingbox);
+                this.a(world, iblockdata1, 4, 2, 8, structureboundingbox);
                 return true;
             }
         }
@@ -688,14 +692,13 @@ public class WorldGenStrongholdPieces {
 
     public static class WorldGenStrongholdRoomCrossing extends WorldGenStrongholdPieces.WorldGenStrongholdPiece {
 
-        private static final List<StructurePieceTreasure> b = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.IRON_INGOT, 0, 1, 5, 10), new StructurePieceTreasure(Items.GOLD_INGOT, 0, 1, 3, 5), new StructurePieceTreasure(Items.REDSTONE, 0, 4, 9, 5), new StructurePieceTreasure(Items.COAL, 0, 3, 8, 10), new StructurePieceTreasure(Items.BREAD, 0, 1, 3, 15), new StructurePieceTreasure(Items.APPLE, 0, 1, 3, 15), new StructurePieceTreasure(Items.IRON_PICKAXE, 0, 1, 1, 1)});
         protected int a;
 
         public WorldGenStrongholdRoomCrossing() {}
 
         public WorldGenStrongholdRoomCrossing(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.d = this.a(random);
             this.l = structureboundingbox;
             this.a = random.nextInt(5);
@@ -739,10 +742,10 @@ public class WorldGenStrongholdPieces {
                     this.a(world, Blocks.STONEBRICK.getBlockData(), 5, 1, 5, structureboundingbox);
                     this.a(world, Blocks.STONEBRICK.getBlockData(), 5, 2, 5, structureboundingbox);
                     this.a(world, Blocks.STONEBRICK.getBlockData(), 5, 3, 5, structureboundingbox);
-                    this.a(world, Blocks.TORCH.getBlockData(), 4, 3, 5, structureboundingbox);
-                    this.a(world, Blocks.TORCH.getBlockData(), 6, 3, 5, structureboundingbox);
-                    this.a(world, Blocks.TORCH.getBlockData(), 5, 3, 4, structureboundingbox);
-                    this.a(world, Blocks.TORCH.getBlockData(), 5, 3, 6, structureboundingbox);
+                    this.a(world, Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.WEST), 4, 3, 5, structureboundingbox);
+                    this.a(world, Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.EAST), 6, 3, 5, structureboundingbox);
+                    this.a(world, Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.SOUTH), 5, 3, 4, structureboundingbox);
+                    this.a(world, Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.NORTH), 5, 3, 6, structureboundingbox);
                     this.a(world, Blocks.STONE_SLAB.getBlockData(), 4, 1, 4, structureboundingbox);
                     this.a(world, Blocks.STONE_SLAB.getBlockData(), 4, 1, 5, structureboundingbox);
                     this.a(world, Blocks.STONE_SLAB.getBlockData(), 4, 1, 6, structureboundingbox);
@@ -809,10 +812,12 @@ public class WorldGenStrongholdPieces {
                         this.a(world, Blocks.PLANKS.getBlockData(), 8, 3, i, structureboundingbox);
                     }
 
-                    this.a(world, Blocks.LADDER.fromLegacyData(this.a(Blocks.LADDER, EnumDirection.WEST.a())), 9, 1, 3, structureboundingbox);
-                    this.a(world, Blocks.LADDER.fromLegacyData(this.a(Blocks.LADDER, EnumDirection.WEST.a())), 9, 2, 3, structureboundingbox);
-                    this.a(world, Blocks.LADDER.fromLegacyData(this.a(Blocks.LADDER, EnumDirection.WEST.a())), 9, 3, 3, structureboundingbox);
-                    this.a(world, structureboundingbox, random, 3, 4, 8, StructurePieceTreasure.a(WorldGenStrongholdPieces.WorldGenStrongholdRoomCrossing.b, new StructurePieceTreasure[] { Items.ENCHANTED_BOOK.b(random)}), 1 + random.nextInt(4));
+                    IBlockData iblockdata = Blocks.LADDER.getBlockData().set(BlockLadder.FACING, EnumDirection.WEST);
+
+                    this.a(world, iblockdata, 9, 1, 3, structureboundingbox);
+                    this.a(world, iblockdata, 9, 2, 3, structureboundingbox);
+                    this.a(world, iblockdata, 9, 3, 3, structureboundingbox);
+                    this.a(world, structureboundingbox, random, 3, 4, 8, LootTables.i);
                 }
 
                 return true;
@@ -825,7 +830,9 @@ public class WorldGenStrongholdPieces {
         public WorldGenStrongholdRightTurn() {}
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
-            if (this.m != EnumDirection.NORTH && this.m != EnumDirection.EAST) {
+            EnumDirection enumdirection = this.e();
+
+            if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.EAST) {
                 this.b((WorldGenStrongholdPieces.WorldGenStrongholdStart) structurepiece, list, random, 1, 1);
             } else {
                 this.c((WorldGenStrongholdPieces.WorldGenStrongholdStart) structurepiece, list, random, 1, 1);
@@ -839,7 +846,9 @@ public class WorldGenStrongholdPieces {
             } else {
                 this.a(world, structureboundingbox, 0, 0, 0, 4, 4, 4, true, random, WorldGenStrongholdPieces.e);
                 this.a(world, random, structureboundingbox, this.d, 1, 1, 0);
-                if (this.m != EnumDirection.NORTH && this.m != EnumDirection.EAST) {
+                EnumDirection enumdirection = this.e();
+
+                if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.EAST) {
                     this.a(world, structureboundingbox, 0, 1, 1, 0, 3, 3, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
                 } else {
                     this.a(world, structureboundingbox, 4, 1, 1, 4, 3, 3, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
@@ -856,13 +865,15 @@ public class WorldGenStrongholdPieces {
 
         public WorldGenStrongholdLeftTurn(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.d = this.a(random);
             this.l = structureboundingbox;
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
-            if (this.m != EnumDirection.NORTH && this.m != EnumDirection.EAST) {
+            EnumDirection enumdirection = this.e();
+
+            if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.EAST) {
                 this.c((WorldGenStrongholdPieces.WorldGenStrongholdStart) structurepiece, list, random, 1, 1);
             } else {
                 this.b((WorldGenStrongholdPieces.WorldGenStrongholdStart) structurepiece, list, random, 1, 1);
@@ -882,7 +893,9 @@ public class WorldGenStrongholdPieces {
             } else {
                 this.a(world, structureboundingbox, 0, 0, 0, 4, 4, 4, true, random, WorldGenStrongholdPieces.e);
                 this.a(world, random, structureboundingbox, this.d, 1, 1, 0);
-                if (this.m != EnumDirection.NORTH && this.m != EnumDirection.EAST) {
+                EnumDirection enumdirection = this.e();
+
+                if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.EAST) {
                     this.a(world, structureboundingbox, 4, 1, 1, 4, 3, 3, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
                 } else {
                     this.a(world, structureboundingbox, 0, 1, 1, 0, 3, 3, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
@@ -899,7 +912,7 @@ public class WorldGenStrongholdPieces {
 
         public WorldGenStrongholdStairsStraight(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.d = this.a(random);
             this.l = structureboundingbox;
         }
@@ -921,16 +934,16 @@ public class WorldGenStrongholdPieces {
                 this.a(world, structureboundingbox, 0, 0, 0, 4, 10, 7, true, random, WorldGenStrongholdPieces.e);
                 this.a(world, random, structureboundingbox, this.d, 1, 7, 0);
                 this.a(world, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING, 1, 1, 7);
-                int i = this.a(Blocks.STONE_STAIRS, 2);
+                IBlockData iblockdata = Blocks.STONE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.SOUTH);
 
-                for (int j = 0; j < 6; ++j) {
-                    this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 1, 6 - j, 1 + j, structureboundingbox);
-                    this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 2, 6 - j, 1 + j, structureboundingbox);
-                    this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 3, 6 - j, 1 + j, structureboundingbox);
-                    if (j < 5) {
-                        this.a(world, Blocks.STONEBRICK.getBlockData(), 1, 5 - j, 1 + j, structureboundingbox);
-                        this.a(world, Blocks.STONEBRICK.getBlockData(), 2, 5 - j, 1 + j, structureboundingbox);
-                        this.a(world, Blocks.STONEBRICK.getBlockData(), 3, 5 - j, 1 + j, structureboundingbox);
+                for (int i = 0; i < 6; ++i) {
+                    this.a(world, iblockdata, 1, 6 - i, 1 + i, structureboundingbox);
+                    this.a(world, iblockdata, 2, 6 - i, 1 + i, structureboundingbox);
+                    this.a(world, iblockdata, 3, 6 - i, 1 + i, structureboundingbox);
+                    if (i < 5) {
+                        this.a(world, Blocks.STONEBRICK.getBlockData(), 1, 5 - i, 1 + i, structureboundingbox);
+                        this.a(world, Blocks.STONEBRICK.getBlockData(), 2, 5 - i, 1 + i, structureboundingbox);
+                        this.a(world, Blocks.STONEBRICK.getBlockData(), 3, 5 - i, 1 + i, structureboundingbox);
                     }
                 }
 
@@ -941,26 +954,25 @@ public class WorldGenStrongholdPieces {
 
     public static class WorldGenStrongholdChestCorridor extends WorldGenStrongholdPieces.WorldGenStrongholdPiece {
 
-        private static final List<StructurePieceTreasure> a = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.ENDER_PEARL, 0, 1, 1, 10), new StructurePieceTreasure(Items.DIAMOND, 0, 1, 3, 3), new StructurePieceTreasure(Items.IRON_INGOT, 0, 1, 5, 10), new StructurePieceTreasure(Items.GOLD_INGOT, 0, 1, 3, 5), new StructurePieceTreasure(Items.REDSTONE, 0, 4, 9, 5), new StructurePieceTreasure(Items.BREAD, 0, 1, 3, 15), new StructurePieceTreasure(Items.APPLE, 0, 1, 3, 15), new StructurePieceTreasure(Items.IRON_PICKAXE, 0, 1, 1, 5), new StructurePieceTreasure(Items.IRON_SWORD, 0, 1, 1, 5), new StructurePieceTreasure(Items.IRON_CHESTPLATE, 0, 1, 1, 5), new StructurePieceTreasure(Items.IRON_HELMET, 0, 1, 1, 5), new StructurePieceTreasure(Items.IRON_LEGGINGS, 0, 1, 1, 5), new StructurePieceTreasure(Items.IRON_BOOTS, 0, 1, 1, 5), new StructurePieceTreasure(Items.GOLDEN_APPLE, 0, 1, 1, 1), new StructurePieceTreasure(Items.SADDLE, 0, 1, 1, 1), new StructurePieceTreasure(Items.IRON_HORSE_ARMOR, 0, 1, 1, 1), new StructurePieceTreasure(Items.GOLDEN_HORSE_ARMOR, 0, 1, 1, 1), new StructurePieceTreasure(Items.DIAMOND_HORSE_ARMOR, 0, 1, 1, 1)});
-        private boolean b;
+        private boolean a;
 
         public WorldGenStrongholdChestCorridor() {}
 
         public WorldGenStrongholdChestCorridor(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.d = this.a(random);
             this.l = structureboundingbox;
         }
 
         protected void a(NBTTagCompound nbttagcompound) {
             super.a(nbttagcompound);
-            nbttagcompound.setBoolean("Chest", this.b);
+            nbttagcompound.setBoolean("Chest", this.a);
         }
 
         protected void b(NBTTagCompound nbttagcompound) {
             super.b(nbttagcompound);
-            this.b = nbttagcompound.getBoolean("Chest");
+            this.a = nbttagcompound.getBoolean("Chest");
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
@@ -990,9 +1002,9 @@ public class WorldGenStrongholdPieces {
                     this.a(world, Blocks.STONE_SLAB.fromLegacyData(BlockDoubleStepAbstract.EnumStoneSlabVariant.SMOOTHBRICK.a()), 2, 1, i, structureboundingbox);
                 }
 
-                if (!this.b && structureboundingbox.b((BaseBlockPosition) (new BlockPosition(this.a(3, 3), this.d(2), this.b(3, 3))))) {
-                    this.b = true;
-                    this.a(world, structureboundingbox, random, 3, 2, 3, StructurePieceTreasure.a(WorldGenStrongholdPieces.WorldGenStrongholdChestCorridor.a, new StructurePieceTreasure[] { Items.ENCHANTED_BOOK.b(random)}), 2 + random.nextInt(2));
+                if (!this.a && structureboundingbox.b((BaseBlockPosition) (new BlockPosition(this.a(3, 3), this.d(2), this.b(3, 3))))) {
+                    this.a = true;
+                    this.a(world, structureboundingbox, random, 3, 2, 3, LootTables.j);
                 }
 
                 return true;
@@ -1009,7 +1021,7 @@ public class WorldGenStrongholdPieces {
 
         public WorldGenStrongholdStairs(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.d = this.a(random);
             this.l = structureboundingbox;
             this.a = random.nextInt(2) == 0;
@@ -1053,10 +1065,13 @@ public class WorldGenStrongholdPieces {
                 this.a(world, structureboundingbox, 0, 0, 0, 4, 4, 6, true, random, WorldGenStrongholdPieces.e);
                 this.a(world, random, structureboundingbox, this.d, 1, 1, 0);
                 this.a(world, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING, 1, 1, 6);
-                this.a(world, structureboundingbox, random, 0.1F, 1, 2, 1, Blocks.TORCH.getBlockData());
-                this.a(world, structureboundingbox, random, 0.1F, 3, 2, 1, Blocks.TORCH.getBlockData());
-                this.a(world, structureboundingbox, random, 0.1F, 1, 2, 5, Blocks.TORCH.getBlockData());
-                this.a(world, structureboundingbox, random, 0.1F, 3, 2, 5, Blocks.TORCH.getBlockData());
+                IBlockData iblockdata = Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.EAST);
+                IBlockData iblockdata1 = Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.WEST);
+
+                this.a(world, structureboundingbox, random, 0.1F, 1, 2, 1, iblockdata);
+                this.a(world, structureboundingbox, random, 0.1F, 3, 2, 1, iblockdata1);
+                this.a(world, structureboundingbox, random, 0.1F, 1, 2, 5, iblockdata);
+                this.a(world, structureboundingbox, random, 0.1F, 3, 2, 5, iblockdata1);
                 if (this.a) {
                     this.a(world, structureboundingbox, 0, 1, 2, 0, 3, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
                 }
@@ -1096,15 +1111,11 @@ public class WorldGenStrongholdPieces {
         public WorldGenStrongholdStairs2(int i, Random random, int j, int k) {
             super(i);
             this.a = true;
-            this.m = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
+            this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
             this.d = WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING;
-            switch (WorldGenStrongholdPieces.SyntheticClass_1.b[this.m.ordinal()]) {
-            case 1:
-            case 2:
+            if (this.e().k() == EnumDirection.EnumAxis.Z) {
                 this.l = new StructureBoundingBox(j, 64, k, j + 5 - 1, 74, k + 5 - 1);
-                break;
-
-            default:
+            } else {
                 this.l = new StructureBoundingBox(j, 64, k, j + 5 - 1, 74, k + 5 - 1);
             }
 
@@ -1113,7 +1124,7 @@ public class WorldGenStrongholdPieces {
         public WorldGenStrongholdStairs2(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a = false;
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.d = this.a(random);
             this.l = structureboundingbox;
         }
@@ -1179,7 +1190,7 @@ public class WorldGenStrongholdPieces {
 
         public WorldGenStrongholdCorridor(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
             this.a = enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.SOUTH ? structureboundingbox.c() : structureboundingbox.e();
         }
@@ -1283,7 +1294,7 @@ public class WorldGenStrongholdPieces {
                 this.a(world, Blocks.STONEBRICK.getBlockData(), i + 2, j + 1, k, structureboundingbox);
                 this.a(world, Blocks.STONEBRICK.getBlockData(), i + 2, j, k, structureboundingbox);
                 this.a(world, Blocks.WOODEN_DOOR.getBlockData(), i + 1, j, k, structureboundingbox);
-                this.a(world, Blocks.WOODEN_DOOR.fromLegacyData(8), i + 1, j + 1, k, structureboundingbox);
+                this.a(world, Blocks.WOODEN_DOOR.getBlockData().set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), i + 1, j + 1, k, structureboundingbox);
                 break;
 
             case 3:
@@ -1307,9 +1318,9 @@ public class WorldGenStrongholdPieces {
                 this.a(world, Blocks.STONEBRICK.getBlockData(), i + 2, j + 1, k, structureboundingbox);
                 this.a(world, Blocks.STONEBRICK.getBlockData(), i + 2, j, k, structureboundingbox);
                 this.a(world, Blocks.IRON_DOOR.getBlockData(), i + 1, j, k, structureboundingbox);
-                this.a(world, Blocks.IRON_DOOR.fromLegacyData(8), i + 1, j + 1, k, structureboundingbox);
-                this.a(world, Blocks.STONE_BUTTON.fromLegacyData(this.a(Blocks.STONE_BUTTON, 4)), i + 2, j + 1, k + 1, structureboundingbox);
-                this.a(world, Blocks.STONE_BUTTON.fromLegacyData(this.a(Blocks.STONE_BUTTON, 3)), i + 2, j + 1, k - 1, structureboundingbox);
+                this.a(world, Blocks.IRON_DOOR.getBlockData().set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), i + 1, j + 1, k, structureboundingbox);
+                this.a(world, Blocks.STONE_BUTTON.getBlockData().set(BlockButtonAbstract.FACING, EnumDirection.NORTH), i + 2, j + 1, k + 1, structureboundingbox);
+                this.a(world, Blocks.STONE_BUTTON.getBlockData().set(BlockButtonAbstract.FACING, EnumDirection.SOUTH), i + 2, j + 1, k - 1, structureboundingbox);
             }
 
         }
@@ -1335,19 +1346,21 @@ public class WorldGenStrongholdPieces {
         }
 
         protected StructurePiece a(WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart, List<StructurePiece> list, Random random, int i, int j) {
-            if (this.m != null) {
-                switch (WorldGenStrongholdPieces.SyntheticClass_1.b[this.m.ordinal()]) {
+            EnumDirection enumdirection = this.e();
+
+            if (enumdirection != null) {
+                switch (WorldGenStrongholdPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
                 case 1:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + i, this.l.b + j, this.l.c - 1, this.m, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + i, this.l.b + j, this.l.c - 1, enumdirection, this.d());
 
                 case 2:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + i, this.l.b + j, this.l.f + 1, this.m, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + i, this.l.b + j, this.l.f + 1, enumdirection, this.d());
 
                 case 3:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a - 1, this.l.b + j, this.l.c + i, this.m, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a - 1, this.l.b + j, this.l.c + i, enumdirection, this.d());
 
                 case 4:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.d + 1, this.l.b + j, this.l.c + i, this.m, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.d + 1, this.l.b + j, this.l.c + i, enumdirection, this.d());
                 }
             }
 
@@ -1355,8 +1368,10 @@ public class WorldGenStrongholdPieces {
         }
 
         protected StructurePiece b(WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart, List<StructurePiece> list, Random random, int i, int j) {
-            if (this.m != null) {
-                switch (WorldGenStrongholdPieces.SyntheticClass_1.b[this.m.ordinal()]) {
+            EnumDirection enumdirection = this.e();
+
+            if (enumdirection != null) {
+                switch (WorldGenStrongholdPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
                 case 1:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.d());
 
@@ -1375,8 +1390,10 @@ public class WorldGenStrongholdPieces {
         }
 
         protected StructurePiece c(WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart, List<StructurePiece> list, Random random, int i, int j) {
-            if (this.m != null) {
-                switch (WorldGenStrongholdPieces.SyntheticClass_1.b[this.m.ordinal()]) {
+            EnumDirection enumdirection = this.e();
+
+            if (enumdirection != null) {
+                switch (WorldGenStrongholdPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
                 case 1:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.d());
 

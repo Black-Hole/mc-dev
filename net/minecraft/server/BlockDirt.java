@@ -7,11 +7,11 @@ public class BlockDirt extends Block {
 
     protected BlockDirt() {
         super(Material.EARTH);
-        this.j(this.blockStateList.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT).set(BlockDirt.SNOWY, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT).set(BlockDirt.SNOWY, Boolean.valueOf(false)));
         this.a(CreativeModeTab.b);
     }
 
-    public MaterialMapColor g(IBlockData iblockdata) {
+    public MaterialMapColor r(IBlockData iblockdata) {
         return ((BlockDirt.EnumDirtVariant) iblockdata.get(BlockDirt.VARIANT)).d();
     }
 
@@ -25,10 +25,8 @@ public class BlockDirt extends Block {
         return iblockdata;
     }
 
-    public int getDropData(World world, BlockPosition blockposition) {
-        IBlockData iblockdata = world.getType(blockposition);
-
-        return iblockdata.getBlock() != this ? 0 : ((BlockDirt.EnumDirtVariant) iblockdata.get(BlockDirt.VARIANT)).a();
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(this, 1, ((BlockDirt.EnumDirtVariant) iblockdata.get(BlockDirt.VARIANT)).a());
     }
 
     public IBlockData fromLegacyData(int i) {

@@ -7,27 +7,27 @@ public class BiomeCache {
 
     private final WorldChunkManager a;
     private long b;
-    private LongHashMap<BiomeCache.BiomeCacheBlock> c = new LongHashMap();
-    private List<BiomeCache.BiomeCacheBlock> d = Lists.newArrayList();
+    private final LongHashMap<BiomeCache.a> c = new LongHashMap();
+    private final List<BiomeCache.a> d = Lists.newArrayList();
 
     public BiomeCache(WorldChunkManager worldchunkmanager) {
         this.a = worldchunkmanager;
     }
 
-    public BiomeCache.BiomeCacheBlock a(int i, int j) {
+    public BiomeCache.a a(int i, int j) {
         i >>= 4;
         j >>= 4;
         long k = (long) i & 4294967295L | ((long) j & 4294967295L) << 32;
-        BiomeCache.BiomeCacheBlock biomecache_biomecacheblock = (BiomeCache.BiomeCacheBlock) this.c.getEntry(k);
+        BiomeCache.a biomecache_a = (BiomeCache.a) this.c.getEntry(k);
 
-        if (biomecache_biomecacheblock == null) {
-            biomecache_biomecacheblock = new BiomeCache.BiomeCacheBlock(i, j);
-            this.c.put(k, biomecache_biomecacheblock);
-            this.d.add(biomecache_biomecacheblock);
+        if (biomecache_a == null) {
+            biomecache_a = new BiomeCache.a(i, j);
+            this.c.put(k, biomecache_a);
+            this.d.add(biomecache_a);
         }
 
-        biomecache_biomecacheblock.e = MinecraftServer.az();
-        return biomecache_biomecacheblock;
+        biomecache_a.d = MinecraftServer.av();
+        return biomecache_a;
     }
 
     public BiomeBase a(int i, int j, BiomeBase biomebase) {
@@ -37,19 +37,19 @@ public class BiomeCache {
     }
 
     public void a() {
-        long i = MinecraftServer.az();
+        long i = MinecraftServer.av();
         long j = i - this.b;
 
         if (j > 7500L || j < 0L) {
             this.b = i;
 
             for (int k = 0; k < this.d.size(); ++k) {
-                BiomeCache.BiomeCacheBlock biomecache_biomecacheblock = (BiomeCache.BiomeCacheBlock) this.d.get(k);
-                long l = i - biomecache_biomecacheblock.e;
+                BiomeCache.a biomecache_a = (BiomeCache.a) this.d.get(k);
+                long l = i - biomecache_a.d;
 
                 if (l > 30000L || l < 0L) {
                     this.d.remove(k--);
-                    long i1 = (long) biomecache_biomecacheblock.c & 4294967295L | ((long) biomecache_biomecacheblock.d & 4294967295L) << 32;
+                    long i1 = (long) biomecache_a.b & 4294967295L | ((long) biomecache_a.c & 4294967295L) << 32;
 
                     this.c.remove(i1);
                 }
@@ -58,27 +58,25 @@ public class BiomeCache {
 
     }
 
-    public BiomeBase[] c(int i, int j) {
-        return this.a(i, j).b;
+    public BiomeBase[] b(int i, int j) {
+        return this.a(i, j).a;
     }
 
-    public class BiomeCacheBlock {
+    public class a {
 
-        public float[] a = new float[256];
-        public BiomeBase[] b = new BiomeBase[256];
+        public BiomeBase[] a = new BiomeBase[256];
+        public int b;
         public int c;
-        public int d;
-        public long e;
+        public long d;
 
-        public BiomeCacheBlock(int i, int j) {
-            this.c = i;
-            this.d = j;
-            BiomeCache.this.a.getWetness(this.a, i << 4, j << 4, 16, 16);
-            BiomeCache.this.a.a(this.b, i << 4, j << 4, 16, 16, false);
+        public a(int i, int j) {
+            this.b = i;
+            this.c = j;
+            BiomeCache.this.a.a(this.a, i << 4, j << 4, 16, 16, false);
         }
 
         public BiomeBase a(int i, int j) {
-            return this.b[i & 15 | (j & 15) << 4];
+            return this.a[i & 15 | (j & 15) << 4];
         }
     }
 }

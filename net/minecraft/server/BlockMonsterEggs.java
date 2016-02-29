@@ -8,7 +8,7 @@ public class BlockMonsterEggs extends Block {
 
     public BlockMonsterEggs() {
         super(Material.CLAY);
-        this.j(this.blockStateList.getBlockData().set(BlockMonsterEggs.VARIANT, BlockMonsterEggs.EnumMonsterEggVarient.STONE));
+        this.w(this.blockStateList.getBlockData().set(BlockMonsterEggs.VARIANT, BlockMonsterEggs.EnumMonsterEggVarient.STONE));
         this.c(0.0F);
         this.a(CreativeModeTab.c);
     }
@@ -17,13 +17,13 @@ public class BlockMonsterEggs extends Block {
         return 0;
     }
 
-    public static boolean d(IBlockData iblockdata) {
+    public static boolean i(IBlockData iblockdata) {
         Block block = iblockdata.getBlock();
 
         return iblockdata == Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE) || block == Blocks.COBBLESTONE || block == Blocks.STONEBRICK;
     }
 
-    protected ItemStack i(IBlockData iblockdata) {
+    protected ItemStack u(IBlockData iblockdata) {
         switch (BlockMonsterEggs.SyntheticClass_1.a[((BlockMonsterEggs.EnumMonsterEggVarient) iblockdata.get(BlockMonsterEggs.VARIANT)).ordinal()]) {
         case 1:
             return new ItemStack(Blocks.COBBLESTONE);
@@ -51,15 +51,13 @@ public class BlockMonsterEggs extends Block {
 
             entitysilverfish.setPositionRotation((double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, 0.0F, 0.0F);
             world.addEntity(entitysilverfish);
-            entitysilverfish.y();
+            entitysilverfish.doSpawnEffect();
         }
 
     }
 
-    public int getDropData(World world, BlockPosition blockposition) {
-        IBlockData iblockdata = world.getType(blockposition);
-
-        return iblockdata.getBlock().toLegacyData(iblockdata);
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(this, 1, iblockdata.getBlock().toLegacyData(iblockdata));
     }
 
     public IBlockData fromLegacyData(int i) {

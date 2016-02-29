@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class RegistryMaterials<K, V> extends RegistrySimple<K, V> implements Registry<V> {
 
-    protected final RegistryID<V> a = new RegistryID();
+    protected final RegistryID<V> a = new RegistryID(256);
     protected final Map<V, K> b;
 
     public RegistryMaterials() {
@@ -27,7 +27,7 @@ public class RegistryMaterials<K, V> extends RegistrySimple<K, V> implements Reg
         return super.get(k0);
     }
 
-    public K c(V v0) {
+    public K b(V v0) {
         return this.b.get(v0);
     }
 
@@ -35,12 +35,12 @@ public class RegistryMaterials<K, V> extends RegistrySimple<K, V> implements Reg
         return super.d(k0);
     }
 
-    public int b(V v0) {
-        return this.a.b(v0);
+    public int a(V v0) {
+        return this.a.getId(v0);
     }
 
-    public V a(int i) {
-        return this.a.a(i);
+    public V getId(int i) {
+        return this.a.fromId(i);
     }
 
     public Iterator<V> iterator() {

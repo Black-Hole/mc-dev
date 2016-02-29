@@ -9,13 +9,66 @@ public class BlockThin extends Block {
     public static final BlockStateBoolean EAST = BlockStateBoolean.of("east");
     public static final BlockStateBoolean SOUTH = BlockStateBoolean.of("south");
     public static final BlockStateBoolean WEST = BlockStateBoolean.of("west");
+    protected static final AxisAlignedBB[] f = new AxisAlignedBB[] { new AxisAlignedBB(0.4375D, 0.0D, 0.4375D, 0.5625D, 1.0D, 0.5625D), new AxisAlignedBB(0.4375D, 0.0D, 0.4375D, 0.5625D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.4375D, 0.5625D, 1.0D, 0.5625D), new AxisAlignedBB(0.0D, 0.0D, 0.4375D, 0.5625D, 1.0D, 1.0D), new AxisAlignedBB(0.4375D, 0.0D, 0.0D, 0.5625D, 1.0D, 0.5625D), new AxisAlignedBB(0.4375D, 0.0D, 0.0D, 0.5625D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.5625D, 1.0D, 0.5625D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.5625D, 1.0D, 1.0D), new AxisAlignedBB(0.4375D, 0.0D, 0.4375D, 1.0D, 1.0D, 0.5625D), new AxisAlignedBB(0.4375D, 0.0D, 0.4375D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.4375D, 1.0D, 1.0D, 0.5625D), new AxisAlignedBB(0.0D, 0.0D, 0.4375D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.4375D, 0.0D, 0.0D, 1.0D, 1.0D, 0.5625D), new AxisAlignedBB(0.4375D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.5625D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
     private final boolean a;
 
     protected BlockThin(Material material, boolean flag) {
         super(material);
-        this.j(this.blockStateList.getBlockData().set(BlockThin.NORTH, Boolean.valueOf(false)).set(BlockThin.EAST, Boolean.valueOf(false)).set(BlockThin.SOUTH, Boolean.valueOf(false)).set(BlockThin.WEST, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockThin.NORTH, Boolean.valueOf(false)).set(BlockThin.EAST, Boolean.valueOf(false)).set(BlockThin.SOUTH, Boolean.valueOf(false)).set(BlockThin.WEST, Boolean.valueOf(false)));
         this.a = flag;
         this.a(CreativeModeTab.c);
+    }
+
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+        iblockdata = this.updateState(iblockdata, world, blockposition);
+        a(blockposition, axisalignedbb, list, BlockThin.f[0]);
+        if (((Boolean) iblockdata.get(BlockThin.NORTH)).booleanValue()) {
+            a(blockposition, axisalignedbb, list, BlockThin.f[a(EnumDirection.NORTH)]);
+        }
+
+        if (((Boolean) iblockdata.get(BlockThin.SOUTH)).booleanValue()) {
+            a(blockposition, axisalignedbb, list, BlockThin.f[a(EnumDirection.SOUTH)]);
+        }
+
+        if (((Boolean) iblockdata.get(BlockThin.EAST)).booleanValue()) {
+            a(blockposition, axisalignedbb, list, BlockThin.f[a(EnumDirection.EAST)]);
+        }
+
+        if (((Boolean) iblockdata.get(BlockThin.WEST)).booleanValue()) {
+            a(blockposition, axisalignedbb, list, BlockThin.f[a(EnumDirection.WEST)]);
+        }
+
+    }
+
+    private static int a(EnumDirection enumdirection) {
+        return 1 << enumdirection.get2DRotationValue();
+    }
+
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
+        return BlockThin.f[i(iblockdata)];
+    }
+
+    private static int i(IBlockData iblockdata) {
+        int i = 0;
+
+        if (((Boolean) iblockdata.get(BlockThin.NORTH)).booleanValue()) {
+            i |= a(EnumDirection.NORTH);
+        }
+
+        if (((Boolean) iblockdata.get(BlockThin.EAST)).booleanValue()) {
+            i |= a(EnumDirection.EAST);
+        }
+
+        if (((Boolean) iblockdata.get(BlockThin.SOUTH)).booleanValue()) {
+            i |= a(EnumDirection.SOUTH);
+        }
+
+        if (((Boolean) iblockdata.get(BlockThin.WEST)).booleanValue()) {
+            i |= a(EnumDirection.WEST);
+        }
+
+        return i;
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -26,92 +79,19 @@ public class BlockThin extends Block {
         return !this.a ? null : super.getDropType(iblockdata, random, i);
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
-    }
-
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
-        boolean flag = this.c(world.getType(blockposition.north()).getBlock());
-        boolean flag1 = this.c(world.getType(blockposition.south()).getBlock());
-        boolean flag2 = this.c(world.getType(blockposition.west()).getBlock());
-        boolean flag3 = this.c(world.getType(blockposition.east()).getBlock());
-
-        if ((!flag2 || !flag3) && (flag2 || flag3 || flag || flag1)) {
-            if (flag2) {
-                this.a(0.0F, 0.0F, 0.4375F, 0.5F, 1.0F, 0.5625F);
-                super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
-            } else if (flag3) {
-                this.a(0.5F, 0.0F, 0.4375F, 1.0F, 1.0F, 0.5625F);
-                super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
-            }
-        } else {
-            this.a(0.0F, 0.0F, 0.4375F, 1.0F, 1.0F, 0.5625F);
-            super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
-        }
-
-        if ((!flag || !flag1) && (flag2 || flag3 || flag || flag1)) {
-            if (flag) {
-                this.a(0.4375F, 0.0F, 0.0F, 0.5625F, 1.0F, 0.5F);
-                super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
-            } else if (flag1) {
-                this.a(0.4375F, 0.0F, 0.5F, 0.5625F, 1.0F, 1.0F);
-                super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
-            }
-        } else {
-            this.a(0.4375F, 0.0F, 0.0F, 0.5625F, 1.0F, 1.0F);
-            super.a(world, blockposition, iblockdata, axisalignedbb, list, entity);
-        }
-
-    }
-
-    public void j() {
-        this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-    }
-
-    public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        float f = 0.4375F;
-        float f1 = 0.5625F;
-        float f2 = 0.4375F;
-        float f3 = 0.5625F;
-        boolean flag = this.c(iblockaccess.getType(blockposition.north()).getBlock());
-        boolean flag1 = this.c(iblockaccess.getType(blockposition.south()).getBlock());
-        boolean flag2 = this.c(iblockaccess.getType(blockposition.west()).getBlock());
-        boolean flag3 = this.c(iblockaccess.getType(blockposition.east()).getBlock());
-
-        if ((!flag2 || !flag3) && (flag2 || flag3 || flag || flag1)) {
-            if (flag2) {
-                f = 0.0F;
-            } else if (flag3) {
-                f1 = 1.0F;
-            }
-        } else {
-            f = 0.0F;
-            f1 = 1.0F;
-        }
-
-        if ((!flag || !flag1) && (flag2 || flag3 || flag || flag1)) {
-            if (flag) {
-                f2 = 0.0F;
-            } else if (flag1) {
-                f3 = 1.0F;
-            }
-        } else {
-            f2 = 0.0F;
-            f3 = 1.0F;
-        }
-
-        this.a(f, 0.0F, f2, f1, 1.0F, f3);
     }
 
     public final boolean c(Block block) {
-        return block.o() || block == this || block == Blocks.GLASS || block == Blocks.STAINED_GLASS || block == Blocks.STAINED_GLASS_PANE || block instanceof BlockThin;
+        return block.getBlockData().h() || block == this || block == Blocks.GLASS || block == Blocks.STAINED_GLASS || block == Blocks.STAINED_GLASS_PANE || block instanceof BlockThin;
     }
 
-    protected boolean I() {
+    protected boolean o() {
         return true;
     }
 
@@ -119,7 +99,77 @@ public class BlockThin extends Block {
         return 0;
     }
 
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        switch (BlockThin.SyntheticClass_1.a[enumblockrotation.ordinal()]) {
+        case 1:
+            return iblockdata.set(BlockThin.NORTH, iblockdata.get(BlockThin.SOUTH)).set(BlockThin.EAST, iblockdata.get(BlockThin.WEST)).set(BlockThin.SOUTH, iblockdata.get(BlockThin.NORTH)).set(BlockThin.WEST, iblockdata.get(BlockThin.EAST));
+
+        case 2:
+            return iblockdata.set(BlockThin.NORTH, iblockdata.get(BlockThin.EAST)).set(BlockThin.EAST, iblockdata.get(BlockThin.SOUTH)).set(BlockThin.SOUTH, iblockdata.get(BlockThin.WEST)).set(BlockThin.WEST, iblockdata.get(BlockThin.NORTH));
+
+        case 3:
+            return iblockdata.set(BlockThin.NORTH, iblockdata.get(BlockThin.WEST)).set(BlockThin.EAST, iblockdata.get(BlockThin.NORTH)).set(BlockThin.SOUTH, iblockdata.get(BlockThin.EAST)).set(BlockThin.WEST, iblockdata.get(BlockThin.SOUTH));
+
+        default:
+            return iblockdata;
+        }
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        switch (BlockThin.SyntheticClass_1.b[enumblockmirror.ordinal()]) {
+        case 1:
+            return iblockdata.set(BlockThin.NORTH, iblockdata.get(BlockThin.SOUTH)).set(BlockThin.SOUTH, iblockdata.get(BlockThin.NORTH));
+
+        case 2:
+            return iblockdata.set(BlockThin.EAST, iblockdata.get(BlockThin.WEST)).set(BlockThin.WEST, iblockdata.get(BlockThin.EAST));
+
+        default:
+            return super.a(iblockdata, enumblockmirror);
+        }
+    }
+
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockThin.NORTH, BlockThin.EAST, BlockThin.WEST, BlockThin.SOUTH});
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a;
+        static final int[] b = new int[EnumBlockMirror.values().length];
+
+        static {
+            try {
+                BlockThin.SyntheticClass_1.b[EnumBlockMirror.LEFT_RIGHT.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                BlockThin.SyntheticClass_1.b[EnumBlockMirror.FRONT_BACK.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            a = new int[EnumBlockRotation.values().length];
+
+            try {
+                BlockThin.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_180.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                BlockThin.SyntheticClass_1.a[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            try {
+                BlockThin.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror4) {
+                ;
+            }
+
+        }
     }
 }

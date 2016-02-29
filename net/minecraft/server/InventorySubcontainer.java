@@ -35,26 +35,13 @@ public class InventorySubcontainer implements IInventory {
     }
 
     public ItemStack splitStack(int i, int j) {
-        if (this.items[i] != null) {
-            ItemStack itemstack;
+        ItemStack itemstack = ContainerUtil.a(this.items, i, j);
 
-            if (this.items[i].count <= j) {
-                itemstack = this.items[i];
-                this.items[i] = null;
-                this.update();
-                return itemstack;
-            } else {
-                itemstack = this.items[i].cloneAndSubtract(j);
-                if (this.items[i].count == 0) {
-                    this.items[i] = null;
-                }
-
-                this.update();
-                return itemstack;
-            }
-        } else {
-            return null;
+        if (itemstack != null) {
+            this.update();
         }
+
+        return itemstack;
     }
 
     public ItemStack a(ItemStack itemstack) {
@@ -161,7 +148,7 @@ public class InventorySubcontainer implements IInventory {
         return 0;
     }
 
-    public void b(int i, int j) {}
+    public void setProperty(int i, int j) {}
 
     public int g() {
         return 0;

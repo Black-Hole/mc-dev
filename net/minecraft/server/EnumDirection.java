@@ -36,7 +36,7 @@ public enum EnumDirection implements INamable {
         return this.g;
     }
 
-    public int b() {
+    public int get2DRotationValue() {
         return this.i;
     }
 
@@ -116,6 +116,10 @@ public enum EnumDirection implements INamable {
 
     public static EnumDirection fromAngle(double d0) {
         return fromType2(MathHelper.floor(d0 / 90.0D + 0.5D) & 3);
+    }
+
+    public float l() {
+        return (float) ((this.i & 3) * 90);
     }
 
     public static EnumDirection a(Random random) {

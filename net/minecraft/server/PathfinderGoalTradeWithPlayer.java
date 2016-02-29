@@ -12,24 +12,24 @@ public class PathfinderGoalTradeWithPlayer extends PathfinderGoal {
     public boolean a() {
         if (!this.a.isAlive()) {
             return false;
-        } else if (this.a.V()) {
+        } else if (this.a.isInWater()) {
             return false;
         } else if (!this.a.onGround) {
             return false;
         } else if (this.a.velocityChanged) {
             return false;
         } else {
-            EntityHuman entityhuman = this.a.v_();
+            EntityHuman entityhuman = this.a.t_();
 
             return entityhuman == null ? false : (this.a.h(entityhuman) > 16.0D ? false : entityhuman.activeContainer instanceof Container);
         }
     }
 
     public void c() {
-        this.a.getNavigation().n();
+        this.a.getNavigation().o();
     }
 
     public void d() {
-        this.a.a_((EntityHuman) null);
+        this.a.setTradingPlayer((EntityHuman) null);
     }
 }

@@ -10,15 +10,19 @@ import java.util.Map.Entry;
 public abstract class BlockDataAbstract implements IBlockData {
 
     private static final Joiner a = Joiner.on(',');
-    private static final Function<Entry<IBlockState, Comparable>, String> b = new Function() {
-        public String a(Entry<IBlockState, Comparable> entry) {
+    private static final Function<Entry<IBlockState<?>, Comparable<?>>, String> b = new Function() {
+        public String a(Entry<IBlockState<?>, Comparable<?>> entry) {
             if (entry == null) {
                 return "<NULL>";
             } else {
                 IBlockState iblockstate = (IBlockState) entry.getKey();
 
-                return iblockstate.a() + "=" + iblockstate.a((Comparable) entry.getValue());
+                return iblockstate.a() + "=" + this.a(iblockstate, (Comparable) entry.getValue());
             }
+        }
+
+        private <T extends Comparable<T>> String a(IBlockState<T> iblockstate, Comparable<?> comparable) {
+            return iblockstate.a(comparable);
         }
 
         public Object apply(Object object) {
@@ -29,7 +33,7 @@ public abstract class BlockDataAbstract implements IBlockData {
     public BlockDataAbstract() {}
 
     public <T extends Comparable<T>> IBlockData a(IBlockState<T> iblockstate) {
-        return this.set(iblockstate, (Comparable) a(iblockstate.c(), this.get(iblockstate)));
+        return this.set(iblockstate, (Comparable) a(iblockstate.c(), (Object) this.get(iblockstate)));
     }
 
     protected static <T> T a(Collection<T> collection, T t0) {
@@ -51,10 +55,10 @@ public abstract class BlockDataAbstract implements IBlockData {
     public String toString() {
         StringBuilder stringbuilder = new StringBuilder();
 
-        stringbuilder.append(Block.REGISTRY.c(this.getBlock()));
-        if (!this.b().isEmpty()) {
+        stringbuilder.append(Block.REGISTRY.b(this.getBlock()));
+        if (!this.s().isEmpty()) {
             stringbuilder.append("[");
-            BlockDataAbstract.a.appendTo(stringbuilder, Iterables.transform(this.b().entrySet(), BlockDataAbstract.b));
+            BlockDataAbstract.a.appendTo(stringbuilder, Iterables.transform(this.s().entrySet(), BlockDataAbstract.b));
             stringbuilder.append("]");
         }
 

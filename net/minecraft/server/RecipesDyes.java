@@ -8,7 +8,7 @@ public class RecipesDyes {
         int i;
 
         for (i = 0; i < 16; ++i) {
-            craftingmanager.registerShapelessRecipe(new ItemStack(Blocks.WOOL, 1, i), new Object[] { new ItemStack(Items.DYE, 1, 15 - i), new ItemStack(Item.getItemOf(Blocks.WOOL), 1, 0)});
+            craftingmanager.registerShapelessRecipe(new ItemStack(Blocks.WOOL, 1, i), new Object[] { new ItemStack(Items.DYE, 1, 15 - i), new ItemStack(Item.getItemOf(Blocks.WOOL))});
             craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 8, 15 - i), new Object[] { "###", "#X#", "###", Character.valueOf('#'), new ItemStack(Blocks.HARDENED_CLAY), Character.valueOf('X'), new ItemStack(Items.DYE, 1, i)});
             craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STAINED_GLASS, 8, 15 - i), new Object[] { "###", "#X#", "###", Character.valueOf('#'), new ItemStack(Blocks.GLASS), Character.valueOf('X'), new ItemStack(Items.DYE, 1, i)});
             craftingmanager.registerShapedRecipe(new ItemStack(Blocks.STAINED_GLASS_PANE, 16, i), new Object[] { "###", "###", Character.valueOf('#'), new ItemStack(Blocks.STAINED_GLASS, 1, i)});
@@ -41,6 +41,7 @@ public class RecipesDyes {
         craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.MAGENTA.getInvColorIndex()), new Object[] { new ItemStack(Blocks.DOUBLE_PLANT, 1, BlockTallPlant.EnumTallFlowerVariants.SYRINGA.a())});
         craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.RED.getInvColorIndex()), new Object[] { new ItemStack(Blocks.DOUBLE_PLANT, 1, BlockTallPlant.EnumTallFlowerVariants.ROSE.a())});
         craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 2, EnumColor.PINK.getInvColorIndex()), new Object[] { new ItemStack(Blocks.DOUBLE_PLANT, 1, BlockTallPlant.EnumTallFlowerVariants.PAEONIA.a())});
+        craftingmanager.registerShapelessRecipe(new ItemStack(Items.DYE, 1, EnumColor.RED.getInvColorIndex()), new Object[] { new ItemStack(Items.BEETROOT, 1)});
 
         for (i = 0; i < 16; ++i) {
             craftingmanager.registerShapedRecipe(new ItemStack(Blocks.CARPET, 3, i), new Object[] { "##", Character.valueOf('#'), new ItemStack(Blocks.WOOL, 1, i)});

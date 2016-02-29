@@ -27,25 +27,11 @@ public class InventoryCraftResult implements IInventory {
     }
 
     public ItemStack splitStack(int i, int j) {
-        if (this.items[0] != null) {
-            ItemStack itemstack = this.items[0];
-
-            this.items[0] = null;
-            return itemstack;
-        } else {
-            return null;
-        }
+        return ContainerUtil.a(this.items, 0);
     }
 
     public ItemStack splitWithoutUpdate(int i) {
-        if (this.items[0] != null) {
-            ItemStack itemstack = this.items[0];
-
-            this.items[0] = null;
-            return itemstack;
-        } else {
-            return null;
-        }
+        return ContainerUtil.a(this.items, 0);
     }
 
     public void setItem(int i, ItemStack itemstack) {
@@ -74,7 +60,7 @@ public class InventoryCraftResult implements IInventory {
         return 0;
     }
 
-    public void b(int i, int j) {}
+    public void setProperty(int i, int j) {}
 
     public int g() {
         return 0;

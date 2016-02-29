@@ -18,7 +18,7 @@ public class EntityTypes {
     private static final Map<Integer, Class<? extends Entity>> e = Maps.newHashMap();
     private static final Map<Class<? extends Entity>, Integer> f = Maps.newHashMap();
     private static final Map<String, Integer> g = Maps.newHashMap();
-    public static final Map<Integer, EntityTypes.MonsterEggInfo> eggInfo = Maps.newLinkedHashMap();
+    public static final Map<String, EntityTypes.MonsterEggInfo> eggInfo = Maps.newLinkedHashMap();
 
     private static void a(Class<? extends Entity> oclass, String s, int i) {
         if (EntityTypes.c.containsKey(s)) {
@@ -40,7 +40,7 @@ public class EntityTypes {
 
     private static void a(Class<? extends Entity> oclass, String s, int i, int j, int k) {
         a(oclass, s, i);
-        EntityTypes.eggInfo.put(Integer.valueOf(i), new EntityTypes.MonsterEggInfo(i, j, k));
+        EntityTypes.eggInfo.put(s, new EntityTypes.MonsterEggInfo(s, j, k));
     }
 
     public static Entity createEntityByName(String s, World world) {
@@ -61,11 +61,6 @@ public class EntityTypes {
 
     public static Entity a(NBTTagCompound nbttagcompound, World world) {
         Entity entity = null;
-
-        if ("Minecart".equals(nbttagcompound.getString("id"))) {
-            nbttagcompound.setString("id", EntityMinecartAbstract.EnumMinecartType.a(nbttagcompound.getInt("Type")).b());
-            nbttagcompound.remove("Type");
-        }
 
         try {
             Class oclass = (Class) EntityTypes.c.get(nbttagcompound.getString("id"));
@@ -106,6 +101,10 @@ public class EntityTypes {
         return entity;
     }
 
+    public static Entity b(String s, World world) {
+        return a(a(s), world);
+    }
+
     public static int a(Entity entity) {
         Integer integer = (Integer) EntityTypes.f.get(entity.getClass());
 
@@ -117,11 +116,17 @@ public class EntityTypes {
     }
 
     public static String b(Entity entity) {
-        return (String) EntityTypes.d.get(entity.getClass());
+        return getName(entity.getClass());
     }
 
-    public static String b(int i) {
-        return (String) EntityTypes.d.get(a(i));
+    public static String getName(Class<? extends Entity> oclass) {
+        return (String) EntityTypes.d.get(oclass);
+    }
+
+    public static int a(String s) {
+        Integer integer = (Integer) EntityTypes.g.get(s);
+
+        return integer == null ? 90 : integer.intValue();
     }
 
     public static void a() {}
@@ -163,10 +168,11 @@ public class EntityTypes {
     static {
         a(EntityItem.class, "Item", 1);
         a(EntityExperienceOrb.class, "XPOrb", 2);
+        a(EntityAreaEffectCloud.class, "AreaEffectCloud", 3);
         a(EntityEgg.class, "ThrownEgg", 7);
         a(EntityLeash.class, "LeashKnot", 8);
         a(EntityPainting.class, "Painting", 9);
-        a(EntityArrow.class, "Arrow", 10);
+        a(EntityTippedArrow.class, "Arrow", 10);
         a(EntitySnowball.class, "Snowball", 11);
         a(EntityLargeFireball.class, "Fireball", 12);
         a(EntitySmallFireball.class, "SmallFireball", 13);
@@ -179,6 +185,9 @@ public class EntityTypes {
         a(EntityTNTPrimed.class, "PrimedTnt", 20);
         a(EntityFallingBlock.class, "FallingSand", 21);
         a(EntityFireworks.class, "FireworksRocketEntity", 22);
+        a(EntitySpectralArrow.class, "SpectralArrow", 24);
+        a(EntityShulkerBullet.class, "ShulkerBullet", 25);
+        a(EntityDragonFireball.class, "DragonFireball", 26);
         a(EntityArmorStand.class, "ArmorStand", 30);
         a(EntityBoat.class, "Boat", 41);
         a(EntityMinecartRideable.class, EntityMinecartAbstract.EnumMinecartType.RIDEABLE.b(), 42);
@@ -209,6 +218,7 @@ public class EntityTypes {
         a(EntityWitch.class, "Witch", 66, 3407872, 5349438);
         a(EntityEndermite.class, "Endermite", 67, 1447446, 7237230);
         a(EntityGuardian.class, "Guardian", 68, 5931634, 15826224);
+        a(EntityShulker.class, "Shulker", 69, 9725844, 5060690);
         a(EntityPig.class, "Pig", 90, 15771042, 14377823);
         a(EntitySheep.class, "Sheep", 91, 15198183, 16758197);
         a(EntityCow.class, "Cow", 92, 4470310, 10592673);
@@ -227,16 +237,16 @@ public class EntityTypes {
 
     public static class MonsterEggInfo {
 
-        public final int a;
+        public final String a;
         public final int b;
         public final int c;
         public final Statistic killEntityStatistic;
         public final Statistic e;
 
-        public MonsterEggInfo(int i, int j, int k) {
-            this.a = i;
-            this.b = j;
-            this.c = k;
+        public MonsterEggInfo(String s, int i, int j) {
+            this.a = s;
+            this.b = i;
+            this.c = j;
             this.killEntityStatistic = StatisticList.a(this);
             this.e = StatisticList.b(this);
         }

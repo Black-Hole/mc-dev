@@ -11,12 +11,12 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
 
     protected BlockPressurePlateWeighted(Material material, int i, MaterialMapColor materialmapcolor) {
         super(material, materialmapcolor);
-        this.j(this.blockStateList.getBlockData().set(BlockPressurePlateWeighted.POWER, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockPressurePlateWeighted.POWER, Integer.valueOf(0)));
         this.weight = i;
     }
 
-    protected int f(World world, BlockPosition blockposition) {
-        int i = Math.min(world.a(Entity.class, this.getBoundingBox(blockposition)).size(), this.weight);
+    protected int e(World world, BlockPosition blockposition) {
+        int i = Math.min(world.a(Entity.class, BlockPressurePlateWeighted.c.a(blockposition)).size(), this.weight);
 
         if (i > 0) {
             float f = (float) Math.min(this.weight, i) / (float) this.weight;
@@ -27,7 +27,15 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
         }
     }
 
-    protected int e(IBlockData iblockdata) {
+    protected void b(World world, BlockPosition blockposition) {
+        world.a((EntityHuman) null, blockposition, SoundEffects.ds, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
+    }
+
+    protected void c(World world, BlockPosition blockposition) {
+        world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_METAL_PRESSUREPLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.75F);
+    }
+
+    protected int getPower(IBlockData iblockdata) {
         return ((Integer) iblockdata.get(BlockPressurePlateWeighted.POWER)).intValue();
     }
 

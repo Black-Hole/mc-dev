@@ -10,14 +10,14 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public boolean e(EntityHuman entityhuman) {
-        if (this.passenger != null && this.passenger instanceof EntityHuman && this.passenger != entityhuman) {
-            return true;
-        } else if (this.passenger != null && this.passenger != entityhuman) {
+    public boolean a(EntityHuman entityhuman, ItemStack itemstack, EnumHand enumhand) {
+        if (entityhuman.isSneaking()) {
             return false;
+        } else if (this.isVehicle()) {
+            return true;
         } else {
             if (!this.world.isClientSide) {
-                entityhuman.mount(this);
+                entityhuman.startRiding(this);
             }
 
             return true;
@@ -26,21 +26,21 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
 
     public void a(int i, int j, int k, boolean flag) {
         if (flag) {
-            if (this.passenger != null) {
-                this.passenger.mount((Entity) null);
+            if (this.isVehicle()) {
+                this.az();
             }
 
             if (this.getType() == 0) {
-                this.k(-this.r());
-                this.j(10);
+                this.e(-this.u());
+                this.d(10);
                 this.setDamage(50.0F);
-                this.ac();
+                this.ao();
             }
         }
 
     }
 
-    public EntityMinecartAbstract.EnumMinecartType s() {
+    public EntityMinecartAbstract.EnumMinecartType v() {
         return EntityMinecartAbstract.EnumMinecartType.RIDEABLE;
     }
 }

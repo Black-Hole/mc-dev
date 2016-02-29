@@ -75,9 +75,9 @@ public class WorldGenForest extends WorldGenTreeAbstract {
 
                                 if (Math.abs(k1) != j || Math.abs(i2) != j || random.nextInt(2) != 0 && j1 != 0) {
                                     BlockPosition blockposition1 = new BlockPosition(k, i1, l1);
-                                    Block block1 = world.getType(blockposition1).getBlock();
+                                    Material material = world.getType(blockposition1).getMaterial();
 
-                                    if (block1.getMaterial() == Material.AIR || block1.getMaterial() == Material.LEAVES) {
+                                    if (material == Material.AIR || material == Material.LEAVES) {
                                         this.a(world, blockposition1, WorldGenForest.b);
                                     }
                                 }
@@ -86,9 +86,9 @@ public class WorldGenForest extends WorldGenTreeAbstract {
                     }
 
                     for (i1 = 0; i1 < i; ++i1) {
-                        Block block2 = world.getType(blockposition.up(i1)).getBlock();
+                        Material material1 = world.getType(blockposition.up(i1)).getMaterial();
 
-                        if (block2.getMaterial() == Material.AIR || block2.getMaterial() == Material.LEAVES) {
+                        if (material1 == Material.AIR || material1 == Material.LEAVES) {
                             this.a(world, blockposition.up(i1), WorldGenForest.a);
                         }
                     }

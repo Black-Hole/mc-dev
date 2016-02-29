@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class EnchantmentKnockback extends Enchantment {
 
-    protected EnchantmentKnockback(int i, MinecraftKey minecraftkey, int j) {
-        super(i, minecraftkey, j, EnchantmentSlotType.WEAPON);
+    protected EnchantmentKnockback(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
+        super(enchantment_rarity, EnchantmentSlotType.WEAPON, aenumitemslot);
         this.c("knockback");
     }
 

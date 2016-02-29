@@ -323,17 +323,17 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPiece8 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        private int o;
+        private int n;
 
         public WorldGenMonumentPiece8() {}
 
         public WorldGenMonumentPiece8(EnumDirection enumdirection, StructureBoundingBox structureboundingbox, int i) {
             super(enumdirection, structureboundingbox);
-            this.o = i & 1;
+            this.n = i & 1;
         }
 
         public boolean a(World world, Random random, StructureBoundingBox structureboundingbox) {
-            if (this.o == 0) {
+            if (this.n == 0) {
                 int i;
 
                 for (i = 0; i < 4; ++i) {
@@ -382,7 +382,7 @@ public class WorldGenMonumentPieces {
                 this.a(world, structureboundingbox, 6, 0, 21, 7, 4, 21, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, false);
                 this.a(world, structureboundingbox, 15, 0, 21, 16, 4, 21, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, false);
                 this.a(world, structureboundingbox, 11, 2, 16);
-            } else if (this.o == 1) {
+            } else if (this.n == 1) {
                 this.a(world, structureboundingbox, 9, 3, 18, 13, 3, 20, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, false);
                 this.a(world, structureboundingbox, 9, 0, 18, 9, 2, 18, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, false);
                 this.a(world, structureboundingbox, 13, 0, 18, 13, 2, 18, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, false);
@@ -1034,13 +1034,13 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPieceSimple extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        private int o;
+        private int n;
 
         public WorldGenMonumentPieceSimple() {}
 
         public WorldGenMonumentPieceSimple(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
             super(1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
-            this.o = random.nextInt(3);
+            this.n = random.nextInt(3);
         }
 
         public boolean a(World world, Random random, StructureBoundingBox structureboundingbox) {
@@ -1052,9 +1052,9 @@ public class WorldGenMonumentPieces {
                 this.a(world, structureboundingbox, 1, 4, 1, 6, 4, 6, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a);
             }
 
-            boolean flag = this.o != 0 && random.nextBoolean() && !this.k.c[EnumDirection.DOWN.a()] && !this.k.c[EnumDirection.UP.a()] && this.k.c() > 1;
+            boolean flag = this.n != 0 && random.nextBoolean() && !this.k.c[EnumDirection.DOWN.a()] && !this.k.c[EnumDirection.UP.a()] && this.k.c() > 1;
 
-            if (this.o == 0) {
+            if (this.n == 0) {
                 this.a(world, structureboundingbox, 0, 1, 0, 2, 1, 2, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 this.a(world, structureboundingbox, 0, 3, 0, 2, 3, 2, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 this.a(world, structureboundingbox, 0, 2, 0, 0, 2, 2, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, false);
@@ -1106,7 +1106,7 @@ public class WorldGenMonumentPieces {
                     this.a(world, structureboundingbox, 7, 2, 3, 7, 2, 4, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, false);
                     this.a(world, structureboundingbox, 6, 1, 3, 7, 1, 4, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 }
-            } else if (this.o == 1) {
+            } else if (this.n == 1) {
                 this.a(world, structureboundingbox, 2, 1, 2, 2, 3, 2, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 this.a(world, structureboundingbox, 2, 1, 5, 2, 3, 5, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 this.a(world, structureboundingbox, 5, 1, 5, 5, 3, 5, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
@@ -1154,7 +1154,7 @@ public class WorldGenMonumentPieces {
                     this.a(world, structureboundingbox, 7, 2, 1, 7, 2, 6, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, false);
                     this.a(world, structureboundingbox, 7, 1, 1, 7, 1, 6, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 }
-            } else if (this.o == 2) {
+            } else if (this.n == 2) {
                 this.a(world, structureboundingbox, 0, 1, 0, 0, 1, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 this.a(world, structureboundingbox, 7, 1, 0, 7, 1, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 this.a(world, structureboundingbox, 1, 1, 0, 6, 1, 0, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
@@ -1234,30 +1234,28 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPiece1 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
+        private WorldGenMonumentPieces.WorldGenMonumentStateTracker n;
         private WorldGenMonumentPieces.WorldGenMonumentStateTracker o;
-        private WorldGenMonumentPieces.WorldGenMonumentStateTracker p;
-        private List<WorldGenMonumentPieces.WorldGenMonumentPiece> q = Lists.newArrayList();
+        private List<WorldGenMonumentPieces.WorldGenMonumentPiece> p = Lists.newArrayList();
 
         public WorldGenMonumentPiece1() {}
 
         public WorldGenMonumentPiece1(Random random, int i, int j, EnumDirection enumdirection) {
             super(0);
-            this.m = enumdirection;
-            switch (WorldGenMonumentPieces.SyntheticClass_1.a[this.m.ordinal()]) {
-            case 1:
-            case 2:
-                this.l = new StructureBoundingBox(i, 39, j, i + 58 - 1, 61, j + 58 - 1);
-                break;
+            this.a(enumdirection);
+            EnumDirection enumdirection1 = this.e();
 
-            default:
+            if (enumdirection1.k() == EnumDirection.EnumAxis.Z) {
+                this.l = new StructureBoundingBox(i, 39, j, i + 58 - 1, 61, j + 58 - 1);
+            } else {
                 this.l = new StructureBoundingBox(i, 39, j, i + 58 - 1, 61, j + 58 - 1);
             }
 
             List list = this.a(random);
 
-            this.o.d = true;
-            this.q.add(new WorldGenMonumentPieces.WorldGenMonumentPieceEntry(this.m, this.o));
-            this.q.add(new WorldGenMonumentPieces.WorldGenMonumentPiece2(this.m, this.p, random));
+            this.n.d = true;
+            this.p.add(new WorldGenMonumentPieces.WorldGenMonumentPieceEntry(enumdirection1, this.n));
+            this.p.add(new WorldGenMonumentPieces.WorldGenMonumentPiece2(enumdirection1, this.o, random));
             ArrayList arraylist = Lists.newArrayList();
 
             arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector6((WorldGenMonumentPieces.SyntheticClass_1) null));
@@ -1279,7 +1277,7 @@ public class WorldGenMonumentPieces {
                         WorldGenMonumentPieces.IWorldGenMonumentPieceSelector worldgenmonumentpieces_iworldgenmonumentpieceselector = (WorldGenMonumentPieces.IWorldGenMonumentPieceSelector) iterator1.next();
 
                         if (worldgenmonumentpieces_iworldgenmonumentpieceselector.a(worldgenmonumentpieces_worldgenmonumentstatetracker)) {
-                            this.q.add(worldgenmonumentpieces_iworldgenmonumentpieceselector.a(this.m, worldgenmonumentpieces_worldgenmonumentstatetracker, random));
+                            this.p.add(worldgenmonumentpieces_iworldgenmonumentpieceselector.a(enumdirection1, worldgenmonumentpieces_worldgenmonumentstatetracker, random));
                             break;
                         }
                     }
@@ -1289,7 +1287,7 @@ public class WorldGenMonumentPieces {
             int k = this.l.b;
             int l = this.a(9, 22);
             int i1 = this.b(9, 22);
-            Iterator iterator2 = this.q.iterator();
+            Iterator iterator2 = this.p.iterator();
 
             while (iterator2.hasNext()) {
                 WorldGenMonumentPieces.WorldGenMonumentPiece worldgenmonumentpieces_worldgenmonumentpiece = (WorldGenMonumentPieces.WorldGenMonumentPiece) iterator2.next();
@@ -1302,9 +1300,9 @@ public class WorldGenMonumentPieces {
             StructureBoundingBox structureboundingbox2 = StructureBoundingBox.a(this.a(22, 22), this.d(13), this.b(22, 22), this.a(35, 35), this.d(17), this.b(35, 35));
             int j1 = random.nextInt();
 
-            this.q.add(new WorldGenMonumentPieces.WorldGenMonumentPiece8(this.m, structureboundingbox, j1++));
-            this.q.add(new WorldGenMonumentPieces.WorldGenMonumentPiece8(this.m, structureboundingbox1, j1++));
-            this.q.add(new WorldGenMonumentPieces.WorldGenMonumentPiecePenthouse(this.m, structureboundingbox2));
+            this.p.add(new WorldGenMonumentPieces.WorldGenMonumentPiece8(enumdirection1, structureboundingbox, j1++));
+            this.p.add(new WorldGenMonumentPieces.WorldGenMonumentPiece8(enumdirection1, structureboundingbox1, j1++));
+            this.p.add(new WorldGenMonumentPieces.WorldGenMonumentPiecePenthouse(enumdirection1, structureboundingbox2));
         }
 
         private List<WorldGenMonumentPieces.WorldGenMonumentStateTracker> a(Random random) {
@@ -1339,7 +1337,7 @@ public class WorldGenMonumentPieces {
                 }
             }
 
-            this.o = aworldgenmonumentpieces_worldgenmonumentstatetracker[WorldGenMonumentPieces.WorldGenMonumentPiece1.g];
+            this.n = aworldgenmonumentpieces_worldgenmonumentstatetracker[WorldGenMonumentPieces.WorldGenMonumentPiece1.g];
 
             int l;
             int i1;
@@ -1389,16 +1387,16 @@ public class WorldGenMonumentPieces {
             worldgenmonumentpieces_worldgenmonumentstatetracker.d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker1.d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker2.d = true;
-            this.o.e = true;
-            this.p = aworldgenmonumentpieces_worldgenmonumentstatetracker[b(random.nextInt(4), 0, 2)];
-            this.p.d = true;
-            this.p.b[EnumDirection.EAST.a()].d = true;
-            this.p.b[EnumDirection.NORTH.a()].d = true;
-            this.p.b[EnumDirection.EAST.a()].b[EnumDirection.NORTH.a()].d = true;
-            this.p.b[EnumDirection.UP.a()].d = true;
-            this.p.b[EnumDirection.EAST.a()].b[EnumDirection.UP.a()].d = true;
-            this.p.b[EnumDirection.NORTH.a()].b[EnumDirection.UP.a()].d = true;
-            this.p.b[EnumDirection.EAST.a()].b[EnumDirection.NORTH.a()].b[EnumDirection.UP.a()].d = true;
+            this.n.e = true;
+            this.o = aworldgenmonumentpieces_worldgenmonumentstatetracker[b(random.nextInt(4), 0, 2)];
+            this.o.d = true;
+            this.o.b[EnumDirection.EAST.a()].d = true;
+            this.o.b[EnumDirection.NORTH.a()].d = true;
+            this.o.b[EnumDirection.EAST.a()].b[EnumDirection.NORTH.a()].d = true;
+            this.o.b[EnumDirection.UP.a()].d = true;
+            this.o.b[EnumDirection.EAST.a()].b[EnumDirection.UP.a()].d = true;
+            this.o.b[EnumDirection.NORTH.a()].b[EnumDirection.UP.a()].d = true;
+            this.o.b[EnumDirection.EAST.a()].b[EnumDirection.NORTH.a()].b[EnumDirection.UP.a()].d = true;
             ArrayList arraylist = Lists.newArrayList();
             WorldGenMonumentPieces.WorldGenMonumentStateTracker[] aworldgenmonumentpieces_worldgenmonumentstatetracker1 = aworldgenmonumentpieces_worldgenmonumentstatetracker;
 
@@ -1448,7 +1446,7 @@ public class WorldGenMonumentPieces {
         }
 
         public boolean a(World world, Random random, StructureBoundingBox structureboundingbox) {
-            int i = Math.max(world.F(), 64) - this.l.b;
+            int i = Math.max(world.K(), 64) - this.l.b;
 
             this.a(world, structureboundingbox, 0, 0, 0, 58, i, 58, false);
             this.a(false, 0, world, random, structureboundingbox);
@@ -1495,7 +1493,7 @@ public class WorldGenMonumentPieces {
                 this.a(world, structureboundingbox, 0 - j, 0 + j * 2, 58 + j, 57 + j, 23, 58 + j, false);
             }
 
-            Iterator iterator = this.q.iterator();
+            Iterator iterator = this.p.iterator();
 
             while (iterator.hasNext()) {
                 WorldGenMonumentPieces.WorldGenMonumentPiece worldgenmonumentpieces_worldgenmonumentpiece = (WorldGenMonumentPieces.WorldGenMonumentPiece) iterator.next();
@@ -1849,8 +1847,8 @@ public class WorldGenMonumentPieces {
     public abstract static class WorldGenMonumentPiece extends StructurePiece {
 
         protected static final IBlockData a = Blocks.PRISMARINE.fromLegacyData(BlockPrismarine.b);
-        protected static final IBlockData b = Blocks.PRISMARINE.fromLegacyData(BlockPrismarine.N);
-        protected static final IBlockData c = Blocks.PRISMARINE.fromLegacyData(BlockPrismarine.O);
+        protected static final IBlockData b = Blocks.PRISMARINE.fromLegacyData(BlockPrismarine.c);
+        protected static final IBlockData c = Blocks.PRISMARINE.fromLegacyData(BlockPrismarine.d);
         protected static final IBlockData d = WorldGenMonumentPieces.WorldGenMonumentPiece.b;
         protected static final IBlockData e = Blocks.SEA_LANTERN.getBlockData();
         protected static final IBlockData f = Blocks.WATER.getBlockData();
@@ -1874,13 +1872,13 @@ public class WorldGenMonumentPieces {
 
         public WorldGenMonumentPiece(EnumDirection enumdirection, StructureBoundingBox structureboundingbox) {
             super(1);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
         protected WorldGenMonumentPiece(int i, EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, int j, int k, int l) {
             super(i);
-            this.m = enumdirection;
+            this.a(enumdirection);
             this.k = worldgenmonumentpieces_worldgenmonumentstatetracker;
             int i1 = worldgenmonumentpieces_worldgenmonumentstatetracker.a;
             int j1 = i1 % 5;
@@ -1920,8 +1918,8 @@ public class WorldGenMonumentPieces {
             for (int k1 = j; k1 <= i1; ++k1) {
                 for (int l1 = i; l1 <= l; ++l1) {
                     for (int i2 = k; i2 <= j1; ++i2) {
-                        if (!flag || this.a(world, l1, k1, i2, structureboundingbox).getBlock().getMaterial() != Material.AIR) {
-                            if (this.d(k1) >= world.F()) {
+                        if (!flag || this.a(world, l1, k1, i2, structureboundingbox).getMaterial() != Material.AIR) {
+                            if (this.d(k1) >= world.K()) {
                                 this.a(world, Blocks.AIR.getBlockData(), l1, k1, i2, structureboundingbox);
                             } else {
                                 this.a(world, WorldGenMonumentPieces.WorldGenMonumentPiece.f, l1, k1, i2, structureboundingbox);
@@ -1982,7 +1980,7 @@ public class WorldGenMonumentPieces {
                 entityguardian.setElder(true);
                 entityguardian.heal(entityguardian.getMaxHealth());
                 entityguardian.setPositionRotation((double) l + 0.5D, (double) i1, (double) j1 + 0.5D, 0.0F, 0.0F);
-                entityguardian.prepare(world.E(new BlockPosition(entityguardian)), (GroupDataEntity) null);
+                entityguardian.prepare(world.D(new BlockPosition(entityguardian)), (GroupDataEntity) null);
                 world.addEntity(entityguardian);
                 return true;
             } else {

@@ -49,7 +49,7 @@ public class PacketPlayOutEntityVelocity implements Packet<PacketListenerPlayOut
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
+        this.a = packetdataserializer.g();
         this.b = packetdataserializer.readShort();
         this.c = packetdataserializer.readShort();
         this.d = packetdataserializer.readShort();

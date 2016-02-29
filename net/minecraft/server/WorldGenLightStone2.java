@@ -17,7 +17,7 @@ public class WorldGenLightStone2 extends WorldGenerator {
             for (int i = 0; i < 1500; ++i) {
                 BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), -random.nextInt(12), random.nextInt(8) - random.nextInt(8));
 
-                if (world.getType(blockposition1).getBlock().getMaterial() == Material.AIR) {
+                if (world.getType(blockposition1).getMaterial() == Material.AIR) {
                     int j = 0;
                     EnumDirection[] aenumdirection = EnumDirection.values();
                     int k = aenumdirection.length;

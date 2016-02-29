@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class EnchantmentArrowDamage extends Enchantment {
 
-    public EnchantmentArrowDamage(int i, MinecraftKey minecraftkey, int j) {
-        super(i, minecraftkey, j, EnchantmentSlotType.BOW);
+    public EnchantmentArrowDamage(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
+        super(enchantment_rarity, EnchantmentSlotType.BOW, aenumitemslot);
         this.c("arrowDamage");
     }
 

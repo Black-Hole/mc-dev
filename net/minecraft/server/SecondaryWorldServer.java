@@ -41,8 +41,9 @@ public class SecondaryWorldServer extends WorldServer {
     protected void a() {}
 
     public World b() {
-        this.worldMaps = this.a.T();
+        this.worldMaps = this.a.X();
         this.scoreboard = this.a.getScoreboard();
+        this.B = this.a.ak();
         String s = PersistentVillage.a(this.worldProvider);
         PersistentVillage persistentvillage = (PersistentVillage) this.worldMaps.get(PersistentVillage.class, s);
 
@@ -55,5 +56,9 @@ public class SecondaryWorldServer extends WorldServer {
         }
 
         return this;
+    }
+
+    public void c() {
+        this.worldProvider.q();
     }
 }

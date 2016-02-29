@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import org.apache.logging.log4j.Logger;
@@ -17,5 +18,9 @@ public class SystemUtils {
         }
 
         return null;
+    }
+
+    public static <T> T a(List<T> list) {
+        return list.get(list.size() - 1);
     }
 }

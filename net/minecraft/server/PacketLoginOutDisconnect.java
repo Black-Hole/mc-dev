@@ -13,7 +13,7 @@ public class PacketLoginOutDisconnect implements Packet<PacketLoginOutListener> 
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.d();
+        this.a = IChatBaseComponent.ChatSerializer.b(packetdataserializer.c(32767));
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

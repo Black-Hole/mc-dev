@@ -21,7 +21,7 @@ public class PacketDecompressor extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, List<Object> list) throws Exception {
         if (bytebuf.readableBytes() != 0) {
             PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf);
-            int i = packetdataserializer.e();
+            int i = packetdataserializer.g();
 
             if (i == 0) {
                 list.add(packetdataserializer.readBytes(packetdataserializer.readableBytes()));

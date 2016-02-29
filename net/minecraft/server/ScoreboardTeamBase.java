@@ -18,9 +18,47 @@ public abstract class ScoreboardTeamBase {
 
     public abstract boolean allowFriendlyFire();
 
+    public abstract EnumChatFormat m();
+
     public abstract Collection<String> getPlayerNameSet();
 
     public abstract ScoreboardTeamBase.EnumNameTagVisibility j();
+
+    public abstract ScoreboardTeamBase.EnumTeamPush k();
+
+    public static enum EnumTeamPush {
+
+        ALWAYS("always", 0), NEVER("never", 1), HIDE_FOR_OTHER_TEAMS("pushOtherTeams", 2), HIDE_FOR_OWN_TEAM("pushOwnTeam", 3);
+
+        private static Map<String, ScoreboardTeamBase.EnumTeamPush> g = Maps.newHashMap();
+        public final String e;
+        public final int f;
+
+        public static String[] a() {
+            return (String[]) ScoreboardTeamBase.EnumTeamPush.g.keySet().toArray(new String[ScoreboardTeamBase.EnumTeamPush.g.size()]);
+        }
+
+        public static ScoreboardTeamBase.EnumTeamPush a(String s) {
+            return (ScoreboardTeamBase.EnumTeamPush) ScoreboardTeamBase.EnumTeamPush.g.get(s);
+        }
+
+        private EnumTeamPush(String s, int i) {
+            this.e = s;
+            this.f = i;
+        }
+
+        static {
+            ScoreboardTeamBase.EnumTeamPush[] ascoreboardteambase_enumteampush = values();
+            int i = ascoreboardteambase_enumteampush.length;
+
+            for (int j = 0; j < i; ++j) {
+                ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = ascoreboardteambase_enumteampush[j];
+
+                ScoreboardTeamBase.EnumTeamPush.g.put(scoreboardteambase_enumteampush.e, scoreboardteambase_enumteampush);
+            }
+
+        }
+    }
 
     public static enum EnumNameTagVisibility {
 

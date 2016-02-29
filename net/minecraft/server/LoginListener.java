@@ -18,7 +18,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBox {
+public class LoginListener implements PacketLoginInListener, ITickable {
 
     private static final AtomicInteger b = new AtomicInteger(0);
     private static final Logger c = LogManager.getLogger();
@@ -44,7 +44,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
     public void c() {
         if (this.g == LoginListener.EnumProtocolState.READY_TO_ACCEPT) {
             this.b();
-        } else if (this.g == LoginListener.EnumProtocolState.e) {
+        } else if (this.g == LoginListener.EnumProtocolState.DELAY_ACCEPT) {
             EntityPlayer entityplayer = this.server.getPlayerList().a(this.i.getId());
 
             if (entityplayer == null) {
@@ -65,7 +65,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
             LoginListener.c.info("Disconnecting " + this.d() + ": " + s);
             ChatComponentText chatcomponenttext = new ChatComponentText(s);
 
-            this.networkManager.handle(new PacketLoginOutDisconnect(chatcomponenttext));
+            this.networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
             this.networkManager.close(chatcomponenttext);
         } catch (Exception exception) {
             LoginListener.c.error("Error whilst disconnecting player", exception);
@@ -84,10 +84,10 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
             this.disconnect(s);
         } else {
             this.g = LoginListener.EnumProtocolState.ACCEPTED;
-            if (this.server.aK() >= 0 && !this.networkManager.c()) {
-                this.networkManager.a(new PacketLoginOutSetCompression(this.server.aK()), new ChannelFutureListener() {
+            if (this.server.aF() >= 0 && !this.networkManager.isLocal()) {
+                this.networkManager.sendPacket(new PacketLoginOutSetCompression(this.server.aF()), new ChannelFutureListener() {
                     public void a(ChannelFuture channelfuture) throws Exception {
-                        LoginListener.this.networkManager.a(LoginListener.this.server.aK());
+                        LoginListener.this.networkManager.setCompressionLevel(LoginListener.this.server.aF());
                     }
 
                     public void operationComplete(Future future) throws Exception {
@@ -96,11 +96,11 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
                 }, new GenericFutureListener[0]);
             }
 
-            this.networkManager.handle(new PacketLoginOutSuccess(this.i));
+            this.networkManager.sendPacket(new PacketLoginOutSuccess(this.i));
             EntityPlayer entityplayer = this.server.getPlayerList().a(this.i.getId());
 
             if (entityplayer != null) {
-                this.g = LoginListener.EnumProtocolState.e;
+                this.g = LoginListener.EnumProtocolState.DELAY_ACCEPT;
                 this.l = this.server.getPlayerList().processLogin(this.i);
             } else {
                 this.server.getPlayerList().a(this.networkManager, this.server.getPlayerList().processLogin(this.i));
@@ -110,7 +110,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
     }
 
     public void a(IChatBaseComponent ichatbasecomponent) {
-        LoginListener.c.info(this.d() + " lost connection: " + ichatbasecomponent.c());
+        LoginListener.c.info(this.d() + " lost connection: " + ichatbasecomponent.toPlainText());
     }
 
     public String d() {
@@ -120,9 +120,9 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
     public void a(PacketLoginInStart packetlogininstart) {
         Validate.validState(this.g == LoginListener.EnumProtocolState.HELLO, "Unexpected hello packet", new Object[0]);
         this.i = packetlogininstart.a();
-        if (this.server.getOnlineMode() && !this.networkManager.c()) {
+        if (this.server.getOnlineMode() && !this.networkManager.isLocal()) {
             this.g = LoginListener.EnumProtocolState.KEY;
-            this.networkManager.handle(new PacketLoginOutEncryptionBegin(this.j, this.server.Q().getPublic(), this.e));
+            this.networkManager.sendPacket(new PacketLoginOutEncryptionBegin(this.j, this.server.O().getPublic(), this.e));
         } else {
             this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
         }
@@ -131,7 +131,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
 
     public void a(PacketLoginInEncryptionBegin packetlogininencryptionbegin) {
         Validate.validState(this.g == LoginListener.EnumProtocolState.KEY, "Unexpected key packet", new Object[0]);
-        PrivateKey privatekey = this.server.Q().getPrivate();
+        PrivateKey privatekey = this.server.O().getPrivate();
 
         if (!Arrays.equals(this.e, packetlogininencryptionbegin.b(privatekey))) {
             throw new IllegalStateException("Invalid nonce!");
@@ -144,13 +144,13 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
                     GameProfile gameprofile = LoginListener.this.i;
 
                     try {
-                        String s = (new BigInteger(MinecraftEncryption.a(LoginListener.this.j, LoginListener.this.server.Q().getPublic(), LoginListener.this.loginKey))).toString(16);
+                        String s = (new BigInteger(MinecraftEncryption.a(LoginListener.this.j, LoginListener.this.server.O().getPublic(), LoginListener.this.loginKey))).toString(16);
 
-                        LoginListener.this.i = LoginListener.this.server.aD().hasJoinedServer(new GameProfile((UUID) null, gameprofile.getName()), s);
+                        LoginListener.this.i = LoginListener.this.server.ay().hasJoinedServer(new GameProfile((UUID) null, gameprofile.getName()), s);
                         if (LoginListener.this.i != null) {
                             LoginListener.c.info("UUID of player " + LoginListener.this.i.getName() + " is " + LoginListener.this.i.getId());
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
-                        } else if (LoginListener.this.server.T()) {
+                        } else if (LoginListener.this.server.R()) {
                             LoginListener.c.warn("Failed to verify username but will let them in anyway!");
                             LoginListener.this.i = LoginListener.this.a(gameprofile);
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
@@ -159,7 +159,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
                             LoginListener.c.error("Username \'" + LoginListener.this.i.getName() + "\' tried to join with an invalid session");
                         }
                     } catch (AuthenticationUnavailableException authenticationunavailableexception) {
-                        if (LoginListener.this.server.T()) {
+                        if (LoginListener.this.server.R()) {
                             LoginListener.c.warn("Authentication servers are down but will let them in anyway!");
                             LoginListener.this.i = LoginListener.this.a(gameprofile);
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
@@ -182,7 +182,7 @@ public class LoginListener implements PacketLoginInListener, IUpdatePlayerListBo
 
     static enum EnumProtocolState {
 
-        HELLO, KEY, AUTHENTICATING, READY_TO_ACCEPT, e, ACCEPTED;
+        HELLO, KEY, AUTHENTICATING, READY_TO_ACCEPT, DELAY_ACCEPT, ACCEPTED;
 
         private EnumProtocolState() {}
     }

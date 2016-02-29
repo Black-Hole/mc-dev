@@ -5,10 +5,15 @@ import java.util.Random;
 
 public class WorldGenCaves extends WorldGenBase {
 
+    protected static final IBlockData a = Blocks.LAVA.getBlockData();
+    protected static final IBlockData b = Blocks.AIR.getBlockData();
+    protected static final IBlockData c = Blocks.SANDSTONE.getBlockData();
+    protected static final IBlockData d = Blocks.RED_SANDSTONE.getBlockData();
+
     public WorldGenCaves() {}
 
     protected void a(long i, int j, int k, ChunkSnapshot chunksnapshot, double d0, double d1, double d2) {
-        this.a(i, j, k, chunksnapshot, d0, d1, d2, 1.0F + this.b.nextFloat() * 6.0F, 0.0F, 0.0F, -1, -1, 0.5D);
+        this.a(i, j, k, chunksnapshot, d0, d1, d2, 1.0F + this.f.nextFloat() * 6.0F, 0.0F, 0.0F, -1, -1, 0.5D);
     }
 
     protected void a(long i, int j, int k, ChunkSnapshot chunksnapshot, double d0, double d1, double d2, float f, float f1, float f2, int l, int i1, double d3) {
@@ -19,7 +24,7 @@ public class WorldGenCaves extends WorldGenBase {
         Random random = new Random(i);
 
         if (i1 <= 0) {
-            int j1 = this.a * 16 - 16;
+            int j1 = this.e * 16 - 16;
 
             i1 = j1 - random.nextInt(j1 / 4);
         }
@@ -34,7 +39,7 @@ public class WorldGenCaves extends WorldGenBase {
         int k1 = random.nextInt(i1 / 2) + i1 / 4;
 
         for (boolean flag1 = random.nextInt(6) == 0; l < i1; ++l) {
-            double d6 = 1.5D + (double) (MathHelper.sin((float) l * 3.1415927F / (float) i1) * f * 1.0F);
+            double d6 = 1.5D + (double) (MathHelper.sin((float) l * 3.1415927F / (float) i1) * f);
             double d7 = d6 * d3;
             float f5 = MathHelper.cos(f2);
             float f6 = MathHelper.sin(f2);
@@ -140,7 +145,7 @@ public class WorldGenCaves extends WorldGenBase {
 
                                         if (d14 > -0.7D && d12 * d12 + d14 * d14 + d13 * d13 < 1.0D) {
                                             IBlockData iblockdata1 = chunksnapshot.a(j3, j4, i4);
-                                            IBlockData iblockdata2 = (IBlockData) Objects.firstNonNull(chunksnapshot.a(j3, j4 + 1, i4), Blocks.AIR.getBlockData());
+                                            IBlockData iblockdata2 = (IBlockData) Objects.firstNonNull(chunksnapshot.a(j3, j4 + 1, i4), WorldGenCaves.b);
 
                                             if (iblockdata1.getBlock() == Blocks.GRASS || iblockdata1.getBlock() == Blocks.MYCELIUM) {
                                                 flag3 = true;
@@ -148,16 +153,16 @@ public class WorldGenCaves extends WorldGenBase {
 
                                             if (this.a(iblockdata1, iblockdata2)) {
                                                 if (j4 - 1 < 10) {
-                                                    chunksnapshot.a(j3, j4, i4, Blocks.LAVA.getBlockData());
+                                                    chunksnapshot.a(j3, j4, i4, WorldGenCaves.a);
                                                 } else {
-                                                    chunksnapshot.a(j3, j4, i4, Blocks.AIR.getBlockData());
+                                                    chunksnapshot.a(j3, j4, i4, WorldGenCaves.b);
                                                     if (iblockdata2.getBlock() == Blocks.SAND) {
-                                                        chunksnapshot.a(j3, j4 + 1, i4, iblockdata2.get(BlockSand.VARIANT) == BlockSand.EnumSandVariant.RED_SAND ? Blocks.RED_SANDSTONE.getBlockData() : Blocks.SANDSTONE.getBlockData());
+                                                        chunksnapshot.a(j3, j4 + 1, i4, iblockdata2.get(BlockSand.VARIANT) == BlockSand.EnumSandVariant.RED_SAND ? WorldGenCaves.d : WorldGenCaves.c);
                                                     }
 
                                                     if (flag3 && chunksnapshot.a(j3, j4 - 1, i4).getBlock() == Blocks.DIRT) {
                                                         blockposition_mutableblockposition.c(j3 + j * 16, 0, i4 + k * 16);
-                                                        chunksnapshot.a(j3, j4 - 1, i4, this.c.getBiome(blockposition_mutableblockposition).ak.getBlock().getBlockData());
+                                                        chunksnapshot.a(j3, j4 - 1, i4, this.g.getBiome(blockposition_mutableblockposition).r.getBlock().getBlockData());
                                                     }
                                                 }
                                             }
@@ -178,37 +183,37 @@ public class WorldGenCaves extends WorldGenBase {
     }
 
     protected boolean a(IBlockData iblockdata, IBlockData iblockdata1) {
-        return iblockdata.getBlock() == Blocks.STONE ? true : (iblockdata.getBlock() == Blocks.DIRT ? true : (iblockdata.getBlock() == Blocks.GRASS ? true : (iblockdata.getBlock() == Blocks.HARDENED_CLAY ? true : (iblockdata.getBlock() == Blocks.STAINED_HARDENED_CLAY ? true : (iblockdata.getBlock() == Blocks.SANDSTONE ? true : (iblockdata.getBlock() == Blocks.RED_SANDSTONE ? true : (iblockdata.getBlock() == Blocks.MYCELIUM ? true : (iblockdata.getBlock() == Blocks.SNOW_LAYER ? true : (iblockdata.getBlock() == Blocks.SAND || iblockdata.getBlock() == Blocks.GRAVEL) && iblockdata1.getBlock().getMaterial() != Material.WATER))))))));
+        return iblockdata.getBlock() == Blocks.STONE ? true : (iblockdata.getBlock() == Blocks.DIRT ? true : (iblockdata.getBlock() == Blocks.GRASS ? true : (iblockdata.getBlock() == Blocks.HARDENED_CLAY ? true : (iblockdata.getBlock() == Blocks.STAINED_HARDENED_CLAY ? true : (iblockdata.getBlock() == Blocks.SANDSTONE ? true : (iblockdata.getBlock() == Blocks.RED_SANDSTONE ? true : (iblockdata.getBlock() == Blocks.MYCELIUM ? true : (iblockdata.getBlock() == Blocks.SNOW_LAYER ? true : (iblockdata.getBlock() == Blocks.SAND || iblockdata.getBlock() == Blocks.GRAVEL) && iblockdata1.getMaterial() != Material.WATER))))))));
     }
 
     protected void a(World world, int i, int j, int k, int l, ChunkSnapshot chunksnapshot) {
-        int i1 = this.b.nextInt(this.b.nextInt(this.b.nextInt(15) + 1) + 1);
+        int i1 = this.f.nextInt(this.f.nextInt(this.f.nextInt(15) + 1) + 1);
 
-        if (this.b.nextInt(7) != 0) {
+        if (this.f.nextInt(7) != 0) {
             i1 = 0;
         }
 
         for (int j1 = 0; j1 < i1; ++j1) {
-            double d0 = (double) (i * 16 + this.b.nextInt(16));
-            double d1 = (double) this.b.nextInt(this.b.nextInt(120) + 8);
-            double d2 = (double) (j * 16 + this.b.nextInt(16));
+            double d0 = (double) (i * 16 + this.f.nextInt(16));
+            double d1 = (double) this.f.nextInt(this.f.nextInt(120) + 8);
+            double d2 = (double) (j * 16 + this.f.nextInt(16));
             int k1 = 1;
 
-            if (this.b.nextInt(4) == 0) {
-                this.a(this.b.nextLong(), k, l, chunksnapshot, d0, d1, d2);
-                k1 += this.b.nextInt(4);
+            if (this.f.nextInt(4) == 0) {
+                this.a(this.f.nextLong(), k, l, chunksnapshot, d0, d1, d2);
+                k1 += this.f.nextInt(4);
             }
 
             for (int l1 = 0; l1 < k1; ++l1) {
-                float f = this.b.nextFloat() * 3.1415927F * 2.0F;
-                float f1 = (this.b.nextFloat() - 0.5F) * 2.0F / 8.0F;
-                float f2 = this.b.nextFloat() * 2.0F + this.b.nextFloat();
+                float f = this.f.nextFloat() * 6.2831855F;
+                float f1 = (this.f.nextFloat() - 0.5F) * 2.0F / 8.0F;
+                float f2 = this.f.nextFloat() * 2.0F + this.f.nextFloat();
 
-                if (this.b.nextInt(10) == 0) {
-                    f2 *= this.b.nextFloat() * this.b.nextFloat() * 3.0F + 1.0F;
+                if (this.f.nextInt(10) == 0) {
+                    f2 *= this.f.nextFloat() * this.f.nextFloat() * 3.0F + 1.0F;
                 }
 
-                this.a(this.b.nextLong(), k, l, chunksnapshot, d0, d1, d2, f2, f, f1, 0, 0, 1.0D);
+                this.a(this.f.nextLong(), k, l, chunksnapshot, d0, d1, d2, f2, f, f1, 0, 0, 1.0D);
             }
         }
 

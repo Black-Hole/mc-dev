@@ -76,7 +76,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
                         String s1 = StatusChallengeUtils.a(this.k, k, i);
                         int j1 = k + s1.length();
 
-                        if (0 != s1.length() && s1.equals(this.l)) {
+                        if (!s1.isEmpty() && s1.equals(this.l)) {
                             this.i = true;
                             this.a(l, 2, "");
                             continue;

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -35,19 +36,13 @@ public class RegionFile {
             }
 
             this.c = new RandomAccessFile(file, "rw");
-            int i;
-
             if (this.c.length() < 4096L) {
-                for (i = 0; i < 1024; ++i) {
-                    this.c.writeInt(0);
-                }
-
-                for (i = 0; i < 1024; ++i) {
-                    this.c.writeInt(0);
-                }
-
+                this.c.write(RegionFile.a);
+                this.c.write(RegionFile.a);
                 this.g += 8192;
             }
+
+            int i;
 
             if ((this.c.length() & 4095L) != 0L) {
                 for (i = 0; (long) i < (this.c.length() & 4095L); ++i) {
@@ -138,7 +133,7 @@ public class RegionFile {
     }
 
     public DataOutputStream b(int i, int j) {
-        return this.d(i, j) ? null : new DataOutputStream(new DeflaterOutputStream(new RegionFile.ChunkBuffer(i, j)));
+        return this.d(i, j) ? null : new DataOutputStream(new BufferedOutputStream(new DeflaterOutputStream(new RegionFile.ChunkBuffer(i, j))));
     }
 
     protected synchronized void a(int i, int j, byte[] abyte, int k) {
@@ -208,7 +203,7 @@ public class RegionFile {
                 }
             }
 
-            this.b(i, j, (int) (MinecraftServer.az() / 1000L));
+            this.b(i, j, (int) (MinecraftServer.av() / 1000L));
         } catch (IOException ioexception) {
             ioexception.printStackTrace();
         }

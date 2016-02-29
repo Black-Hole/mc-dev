@@ -31,7 +31,7 @@ public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = (PacketPlayOutTitle.EnumTitleAction) packetdataserializer.a(PacketPlayOutTitle.EnumTitleAction.class);
         if (this.a == PacketPlayOutTitle.EnumTitleAction.TITLE || this.a == PacketPlayOutTitle.EnumTitleAction.SUBTITLE) {
-            this.b = packetdataserializer.d();
+            this.b = packetdataserializer.f();
         }
 
         if (this.a == PacketPlayOutTitle.EnumTitleAction.TIMES) {

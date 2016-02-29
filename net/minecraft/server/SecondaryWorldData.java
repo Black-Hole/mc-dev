@@ -8,16 +8,16 @@ public class SecondaryWorldData extends WorldData {
         this.b = worlddata;
     }
 
-    public NBTTagCompound a() {
-        return this.b.a();
-    }
-
     public NBTTagCompound a(NBTTagCompound nbttagcompound) {
         return this.b.a(nbttagcompound);
     }
 
     public long getSeed() {
         return this.b.getSeed();
+    }
+
+    public int b() {
+        return this.b.b();
     }
 
     public int c() {
@@ -28,10 +28,6 @@ public class SecondaryWorldData extends WorldData {
         return this.b.d();
     }
 
-    public int e() {
-        return this.b.e();
-    }
-
     public long getTime() {
         return this.b.getTime();
     }
@@ -40,16 +36,16 @@ public class SecondaryWorldData extends WorldData {
         return this.b.getDayTime();
     }
 
-    public NBTTagCompound i() {
-        return this.b.i();
+    public NBTTagCompound h() {
+        return this.b.h();
     }
 
     public String getName() {
         return this.b.getName();
     }
 
-    public int l() {
-        return this.b.l();
+    public int k() {
+        return this.b.k();
     }
 
     public boolean isThundering() {
@@ -104,20 +100,20 @@ public class SecondaryWorldData extends WorldData {
 
     public void a(WorldType worldtype) {}
 
-    public boolean v() {
-        return this.b.v();
+    public boolean u() {
+        return this.b.u();
     }
 
     public void c(boolean flag) {}
 
-    public boolean w() {
-        return this.b.w();
+    public boolean v() {
+        return this.b.v();
     }
 
     public void d(boolean flag) {}
 
-    public GameRules x() {
-        return this.b.x();
+    public GameRules w() {
+        return this.b.w();
     }
 
     public EnumDifficulty getDifficulty() {
@@ -131,4 +127,12 @@ public class SecondaryWorldData extends WorldData {
     }
 
     public void e(boolean flag) {}
+
+    public void a(DimensionManager dimensionmanager, NBTTagCompound nbttagcompound) {
+        this.b.a(dimensionmanager, nbttagcompound);
+    }
+
+    public NBTTagCompound a(DimensionManager dimensionmanager) {
+        return this.b.a(dimensionmanager);
+    }
 }

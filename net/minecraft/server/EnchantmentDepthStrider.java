@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class EnchantmentDepthStrider extends Enchantment {
 
-    public EnchantmentDepthStrider(int i, MinecraftKey minecraftkey, int j) {
-        super(i, minecraftkey, j, EnchantmentSlotType.ARMOR_FEET);
+    public EnchantmentDepthStrider(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
+        super(enchantment_rarity, EnchantmentSlotType.ARMOR_FEET, aenumitemslot);
         this.c("waterWalker");
     }
 
@@ -17,5 +17,9 @@ public class EnchantmentDepthStrider extends Enchantment {
 
     public int getMaxLevel() {
         return 3;
+    }
+
+    public boolean a(Enchantment enchantment) {
+        return super.a(enchantment) && enchantment != Enchantments.j;
     }
 }

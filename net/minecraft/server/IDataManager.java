@@ -22,5 +22,5 @@ public interface IDataManager {
 
     File getDataFile(String s);
 
-    String g();
+    DefinedStructureManager h();
 }

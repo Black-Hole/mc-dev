@@ -4,7 +4,7 @@ public class BlockStoneStep2 extends BlockDoubleStoneStepAbstract {
 
     public BlockStoneStep2() {}
 
-    public boolean l() {
+    public boolean e() {
         return false;
     }
 }

@@ -16,28 +16,24 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldLoaderServer extends WorldLoader {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger c = LogManager.getLogger();
 
-    public WorldLoaderServer(File file) {
-        super(file);
+    public WorldLoaderServer(File file, DataConverterManager dataconvertermanager) {
+        super(file, dataconvertermanager);
     }
 
     protected int c() {
         return 19133;
     }
 
-    public void d() {
-        RegionFileCache.a();
-    }
-
     public IDataManager a(String s, boolean flag) {
-        return new ServerNBTManager(this.a, s, flag);
+        return new ServerNBTManager(this.a, s, flag, this.b);
     }
 
     public boolean isConvertable(String s) {
         WorldData worlddata = this.c(s);
 
-        return worlddata != null && worlddata.l() != this.c();
+        return worlddata != null && worlddata.k() != this.c();
     }
 
     public boolean convert(String s, IProgressUpdate iprogressupdate) {
@@ -49,31 +45,31 @@ public class WorldLoaderServer extends WorldLoader {
         File file1 = new File(file, "DIM-1");
         File file2 = new File(file, "DIM1");
 
-        WorldLoaderServer.b.info("Scanning folders...");
-        this.a(file, arraylist);
+        WorldLoaderServer.c.info("Scanning folders...");
+        this.a(file, (Collection) arraylist);
         if (file1.exists()) {
-            this.a(file1, arraylist1);
+            this.a(file1, (Collection) arraylist1);
         }
 
         if (file2.exists()) {
-            this.a(file2, arraylist2);
+            this.a(file2, (Collection) arraylist2);
         }
 
         int i = arraylist.size() + arraylist1.size() + arraylist2.size();
 
-        WorldLoaderServer.b.info("Total conversion count is " + i);
+        WorldLoaderServer.c.info("Total conversion count is " + i);
         WorldData worlddata = this.c(s);
         Object object = null;
 
         if (worlddata.getType() == WorldType.FLAT) {
-            object = new WorldChunkManagerHell(BiomeBase.PLAINS, 0.5F);
+            object = new WorldChunkManagerHell(Biomes.c);
         } else {
-            object = new WorldChunkManager(worlddata.getSeed(), worlddata.getType(), worlddata.getGeneratorOptions());
+            object = new WorldChunkManager(worlddata);
         }
 
         this.a(new File(file, "region"), (Iterable) arraylist, (WorldChunkManager) object, 0, i, iprogressupdate);
-        this.a(new File(file1, "region"), (Iterable) arraylist1, new WorldChunkManagerHell(BiomeBase.HELL, 0.0F), arraylist.size(), i, iprogressupdate);
-        this.a(new File(file2, "region"), (Iterable) arraylist2, new WorldChunkManagerHell(BiomeBase.SKY, 0.0F), arraylist.size() + arraylist1.size(), i, iprogressupdate);
+        this.a(new File(file1, "region"), (Iterable) arraylist1, new WorldChunkManagerHell(Biomes.j), arraylist.size(), i, iprogressupdate);
+        this.a(new File(file2, "region"), (Iterable) arraylist2, new WorldChunkManagerHell(Biomes.k), arraylist.size() + arraylist1.size(), i, iprogressupdate);
         worlddata.e(19133);
         if (worlddata.getType() == WorldType.NORMAL_1_1) {
             worlddata.a(WorldType.NORMAL);
@@ -90,17 +86,17 @@ public class WorldLoaderServer extends WorldLoader {
         File file = new File(this.a, s);
 
         if (!file.exists()) {
-            WorldLoaderServer.b.warn("Unable to create level.dat_mcr backup");
+            WorldLoaderServer.c.warn("Unable to create level.dat_mcr backup");
         } else {
             File file1 = new File(file, "level.dat");
 
             if (!file1.exists()) {
-                WorldLoaderServer.b.warn("Unable to create level.dat_mcr backup");
+                WorldLoaderServer.c.warn("Unable to create level.dat_mcr backup");
             } else {
                 File file2 = new File(file, "level.dat_mcr");
 
                 if (!file1.renameTo(file2)) {
-                    WorldLoaderServer.b.warn("Unable to create level.dat_mcr backup");
+                    WorldLoaderServer.c.warn("Unable to create level.dat_mcr backup");
                 }
 
             }
@@ -136,7 +132,7 @@ public class WorldLoaderServer extends WorldLoader {
                         DataInputStream datainputstream = regionfile.a(k, l);
 
                         if (datainputstream == null) {
-                            WorldLoaderServer.b.warn("Failed to fetch input stream");
+                            WorldLoaderServer.c.warn("Failed to fetch input stream");
                         } else {
                             NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a(datainputstream);
 

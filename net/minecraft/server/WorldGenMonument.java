@@ -12,14 +12,15 @@ import java.util.Map.Entry;
 
 public class WorldGenMonument extends StructureGenerator {
 
-    private int f;
-    private int g;
-    public static final List<BiomeBase> d = Arrays.asList(new BiomeBase[] { BiomeBase.OCEAN, BiomeBase.DEEP_OCEAN, BiomeBase.RIVER, BiomeBase.FROZEN_OCEAN, BiomeBase.FROZEN_RIVER});
-    private static final List<BiomeBase.BiomeMeta> h = Lists.newArrayList();
+    private int d;
+    private int h;
+    public static final List<BiomeBase> a = Arrays.asList(new BiomeBase[] { Biomes.a, Biomes.z, Biomes.i, Biomes.l, Biomes.m});
+    public static final List<BiomeBase> b = Arrays.asList(new BiomeBase[] { Biomes.z});
+    private static final List<BiomeBase.BiomeMeta> i = Lists.newArrayList();
 
     public WorldGenMonument() {
-        this.f = 32;
-        this.g = 5;
+        this.d = 32;
+        this.h = 5;
     }
 
     public WorldGenMonument(Map<String, String> map) {
@@ -30,9 +31,9 @@ public class WorldGenMonument extends StructureGenerator {
             Entry entry = (Entry) iterator.next();
 
             if (((String) entry.getKey()).equals("spacing")) {
-                this.f = MathHelper.a((String) entry.getValue(), this.f, 1);
+                this.d = MathHelper.a((String) entry.getValue(), this.d, 1);
             } else if (((String) entry.getKey()).equals("separation")) {
-                this.g = MathHelper.a((String) entry.getValue(), this.g, 1);
+                this.h = MathHelper.a((String) entry.getValue(), this.h, 1);
             }
         }
 
@@ -47,27 +48,27 @@ public class WorldGenMonument extends StructureGenerator {
         int l = j;
 
         if (i < 0) {
-            i -= this.f - 1;
+            i -= this.d - 1;
         }
 
         if (j < 0) {
-            j -= this.f - 1;
+            j -= this.d - 1;
         }
 
-        int i1 = i / this.f;
-        int j1 = j / this.f;
-        Random random = this.c.a(i1, j1, 10387313);
+        int i1 = i / this.d;
+        int j1 = j / this.d;
+        Random random = this.g.a(i1, j1, 10387313);
 
-        i1 *= this.f;
-        j1 *= this.f;
-        i1 += (random.nextInt(this.f - this.g) + random.nextInt(this.f - this.g)) / 2;
-        j1 += (random.nextInt(this.f - this.g) + random.nextInt(this.f - this.g)) / 2;
+        i1 *= this.d;
+        j1 *= this.d;
+        i1 += (random.nextInt(this.d - this.h) + random.nextInt(this.d - this.h)) / 2;
+        j1 += (random.nextInt(this.d - this.h) + random.nextInt(this.d - this.h)) / 2;
         if (k == i1 && l == j1) {
-            if (this.c.getWorldChunkManager().getBiome(new BlockPosition(k * 16 + 8, 64, l * 16 + 8), (BiomeBase) null) != BiomeBase.DEEP_OCEAN) {
+            if (!this.g.getWorldChunkManager().a(k * 16 + 8, l * 16 + 8, 16, WorldGenMonument.b)) {
                 return false;
             }
 
-            boolean flag = this.c.getWorldChunkManager().a(k * 16 + 8, l * 16 + 8, 29, WorldGenMonument.d);
+            boolean flag = this.g.getWorldChunkManager().a(k * 16 + 8, l * 16 + 8, 29, WorldGenMonument.a);
 
             if (flag) {
                 return true;
@@ -78,15 +79,15 @@ public class WorldGenMonument extends StructureGenerator {
     }
 
     protected StructureStart b(int i, int j) {
-        return new WorldGenMonument.WorldGenMonumentStart(this.c, this.b, i, j);
+        return new WorldGenMonument.WorldGenMonumentStart(this.g, this.f, i, j);
     }
 
     public List<BiomeBase.BiomeMeta> b() {
-        return WorldGenMonument.h;
+        return WorldGenMonument.i;
     }
 
     static {
-        WorldGenMonument.h.add(new BiomeBase.BiomeMeta(EntityGuardian.class, 1, 2, 4));
+        WorldGenMonument.i.add(new BiomeBase.BiomeMeta(EntityGuardian.class, 1, 2, 4));
     }
 
     public static class WorldGenMonumentStart extends StructureStart {
@@ -114,7 +115,7 @@ public class WorldGenMonument extends StructureGenerator {
             EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
 
             this.a.add(new WorldGenMonumentPieces.WorldGenMonumentPiece1(random, k1, l1, enumdirection));
-            this.c();
+            this.d();
             this.d = true;
         }
 

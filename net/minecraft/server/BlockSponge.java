@@ -11,7 +11,7 @@ public class BlockSponge extends Block {
 
     protected BlockSponge() {
         super(Material.SPONGE);
-        this.j(this.blockStateList.getBlockData().set(BlockSponge.WET, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockSponge.WET, Boolean.valueOf(false)));
         this.a(CreativeModeTab.b);
     }
 
@@ -33,14 +33,14 @@ public class BlockSponge extends Block {
     }
 
     protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!((Boolean) iblockdata.get(BlockSponge.WET)).booleanValue() && this.e(world, blockposition)) {
+        if (!((Boolean) iblockdata.get(BlockSponge.WET)).booleanValue() && this.b(world, blockposition)) {
             world.setTypeAndData(blockposition, iblockdata.set(BlockSponge.WET, Boolean.valueOf(true)), 2);
             world.triggerEffect(2001, blockposition, Block.getId(Blocks.WATER));
         }
 
     }
 
-    private boolean e(World world, BlockPosition blockposition) {
+    private boolean b(World world, BlockPosition blockposition) {
         LinkedList linkedlist = Lists.newLinkedList();
         ArrayList arraylist = Lists.newArrayList();
 
@@ -61,7 +61,7 @@ public class BlockSponge extends Block {
                 EnumDirection enumdirection = aenumdirection[l];
                 BlockPosition blockposition2 = blockposition1.shift(enumdirection);
 
-                if (world.getType(blockposition2).getBlock().getMaterial() == Material.WATER) {
+                if (world.getType(blockposition2).getMaterial() == Material.WATER) {
                     world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 2);
                     arraylist.add(blockposition2);
                     ++i;

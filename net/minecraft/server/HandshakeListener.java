@@ -13,25 +13,25 @@ public class HandshakeListener implements PacketHandshakingInListener {
     public void a(PacketHandshakingInSetProtocol packethandshakinginsetprotocol) {
         switch (HandshakeListener.SyntheticClass_1.a[packethandshakinginsetprotocol.a().ordinal()]) {
         case 1:
-            this.b.a(EnumProtocol.LOGIN);
+            this.b.setProtocol(EnumProtocol.LOGIN);
             ChatComponentText chatcomponenttext;
 
-            if (packethandshakinginsetprotocol.b() > 47) {
-                chatcomponenttext = new ChatComponentText("Outdated server! I\'m still on 1.8.8");
-                this.b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
+            if (packethandshakinginsetprotocol.b() > 107) {
+                chatcomponenttext = new ChatComponentText("Outdated server! I\'m still on 1.9");
+                this.b.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
                 this.b.close(chatcomponenttext);
-            } else if (packethandshakinginsetprotocol.b() < 47) {
-                chatcomponenttext = new ChatComponentText("Outdated client! Please use 1.8.8");
-                this.b.handle(new PacketLoginOutDisconnect(chatcomponenttext));
+            } else if (packethandshakinginsetprotocol.b() < 107) {
+                chatcomponenttext = new ChatComponentText("Outdated client! Please use 1.9");
+                this.b.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
                 this.b.close(chatcomponenttext);
             } else {
-                this.b.a((PacketListener) (new LoginListener(this.a, this.b)));
+                this.b.setPacketListener(new LoginListener(this.a, this.b));
             }
             break;
 
         case 2:
-            this.b.a(EnumProtocol.STATUS);
-            this.b.a((PacketListener) (new PacketStatusListener(this.a, this.b)));
+            this.b.setProtocol(EnumProtocol.STATUS);
+            this.b.setPacketListener(new PacketStatusListener(this.a, this.b));
             break;
 
         default:

@@ -6,36 +6,30 @@ import org.apache.commons.lang3.StringUtils;
 public class PacketPlayInTabComplete implements Packet<PacketListenerPlayIn> {
 
     private String a;
-    private BlockPosition b;
+    private boolean b;
+    private BlockPosition c;
 
     public PacketPlayInTabComplete() {}
 
-    public PacketPlayInTabComplete(String s) {
-        this(s, (BlockPosition) null);
-    }
-
-    public PacketPlayInTabComplete(String s, BlockPosition blockposition) {
-        this.a = s;
-        this.b = blockposition;
-    }
-
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.c(32767);
+        this.b = packetdataserializer.readBoolean();
         boolean flag = packetdataserializer.readBoolean();
 
         if (flag) {
-            this.b = packetdataserializer.c();
+            this.c = packetdataserializer.e();
         }
 
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(StringUtils.substring(this.a, 0, 32767));
-        boolean flag = this.b != null;
+        packetdataserializer.writeBoolean(this.b);
+        boolean flag = this.c != null;
 
         packetdataserializer.writeBoolean(flag);
         if (flag) {
-            packetdataserializer.a(this.b);
+            packetdataserializer.a(this.c);
         }
 
     }
@@ -49,6 +43,10 @@ public class PacketPlayInTabComplete implements Packet<PacketListenerPlayIn> {
     }
 
     public BlockPosition b() {
+        return this.c;
+    }
+
+    public boolean c() {
         return this.b;
     }
 

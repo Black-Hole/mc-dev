@@ -13,11 +13,11 @@ public class WorldGenReed extends WorldGenerator {
             if (world.isEmpty(blockposition1)) {
                 BlockPosition blockposition2 = blockposition1.down();
 
-                if (world.getType(blockposition2.west()).getBlock().getMaterial() == Material.WATER || world.getType(blockposition2.east()).getBlock().getMaterial() == Material.WATER || world.getType(blockposition2.north()).getBlock().getMaterial() == Material.WATER || world.getType(blockposition2.south()).getBlock().getMaterial() == Material.WATER) {
+                if (world.getType(blockposition2.west()).getMaterial() == Material.WATER || world.getType(blockposition2.east()).getMaterial() == Material.WATER || world.getType(blockposition2.north()).getMaterial() == Material.WATER || world.getType(blockposition2.south()).getMaterial() == Material.WATER) {
                     int j = 2 + random.nextInt(random.nextInt(3) + 1);
 
                     for (int k = 0; k < j; ++k) {
-                        if (Blocks.REEDS.e(world, blockposition1)) {
+                        if (Blocks.REEDS.b(world, blockposition1)) {
                             world.setTypeAndData(blockposition1.up(k), Blocks.REEDS.getBlockData(), 2);
                         }
                     }

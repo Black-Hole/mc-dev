@@ -4,22 +4,23 @@ import java.util.Random;
 
 public class BiomeIcePlains extends BiomeBase {
 
-    private boolean aD;
-    private WorldGenPackedIce2 aE = new WorldGenPackedIce2();
-    private WorldGenPackedIce1 aF = new WorldGenPackedIce1(4);
+    private boolean y;
+    private WorldGenPackedIce2 z = new WorldGenPackedIce2();
+    private WorldGenPackedIce1 A = new WorldGenPackedIce1(4);
 
-    public BiomeIcePlains(int i, boolean flag) {
-        super(i);
-        this.aD = flag;
+    public BiomeIcePlains(boolean flag, BiomeBase.a biomebase_a) {
+        super(biomebase_a);
+        this.y = flag;
         if (flag) {
-            this.ak = Blocks.SNOW.getBlockData();
+            this.r = Blocks.SNOW.getBlockData();
         }
 
-        this.au.clear();
+        this.v.clear();
+        this.v.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 4, 2, 3));
     }
 
     public void a(World world, Random random, BlockPosition blockposition) {
-        if (this.aD) {
+        if (this.y) {
             int i;
             int j;
             int k;
@@ -27,13 +28,13 @@ public class BiomeIcePlains extends BiomeBase {
             for (i = 0; i < 3; ++i) {
                 j = random.nextInt(16) + 8;
                 k = random.nextInt(16) + 8;
-                this.aE.generate(world, random, world.getHighestBlockYAt(blockposition.a(j, 0, k)));
+                this.z.generate(world, random, world.getHighestBlockYAt(blockposition.a(j, 0, k)));
             }
 
             for (i = 0; i < 2; ++i) {
                 j = random.nextInt(16) + 8;
                 k = random.nextInt(16) + 8;
-                this.aF.generate(world, random, world.getHighestBlockYAt(blockposition.a(j, 0, k)));
+                this.A.generate(world, random, world.getHighestBlockYAt(blockposition.a(j, 0, k)));
             }
         }
 
@@ -42,13 +43,5 @@ public class BiomeIcePlains extends BiomeBase {
 
     public WorldGenTreeAbstract a(Random random) {
         return new WorldGenTaiga2(false);
-    }
-
-    protected BiomeBase d(int i) {
-        BiomeBase biomebase = (new BiomeIcePlains(i, true)).a(13828095, true).a(this.ah + " Spikes").c().a(0.0F, 0.5F).a(new BiomeBase.BiomeTemperature(this.an + 0.1F, this.ao + 0.1F));
-
-        biomebase.an = this.an + 0.3F;
-        biomebase.ao = this.ao + 0.4F;
-        return biomebase;
     }
 }

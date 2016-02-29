@@ -19,7 +19,7 @@ public class PacketPlayOutChat implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.d();
+        this.a = packetdataserializer.f();
         this.b = packetdataserializer.readByte();
     }
 

@@ -49,7 +49,7 @@ public class WorldGenForestTree extends WorldGenTreeAbstract {
 
                     k2 = k + j2;
                     BlockPosition blockposition2 = new BlockPosition(k1, k2, l1);
-                    Material material = world.getType(blockposition2).getBlock().getMaterial();
+                    Material material = world.getType(blockposition2).getMaterial();
 
                     if (material == Material.AIR || material == Material.LEAVES) {
                         this.b(world, blockposition2);
@@ -168,9 +168,9 @@ public class WorldGenForestTree extends WorldGenTreeAbstract {
 
     private void a(World world, int i, int j, int k) {
         BlockPosition blockposition = new BlockPosition(i, j, k);
-        Block block = world.getType(blockposition).getBlock();
+        Material material = world.getType(blockposition).getMaterial();
 
-        if (block.getMaterial() == Material.AIR) {
+        if (material == Material.AIR) {
             this.a(world, blockposition, WorldGenForestTree.b);
         }
 

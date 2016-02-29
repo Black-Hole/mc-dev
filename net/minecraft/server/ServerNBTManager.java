@@ -4,8 +4,8 @@ import java.io.File;
 
 public class ServerNBTManager extends WorldNBTStorage {
 
-    public ServerNBTManager(File file, String s, boolean flag) {
-        super(file, s, flag);
+    public ServerNBTManager(File file, String s, boolean flag, DataConverterManager dataconvertermanager) {
+        super(file, s, flag, dataconvertermanager);
     }
 
     public IChunkLoader createChunkLoader(WorldProvider worldprovider) {
@@ -15,13 +15,13 @@ public class ServerNBTManager extends WorldNBTStorage {
         if (worldprovider instanceof WorldProviderHell) {
             file1 = new File(file, "DIM-1");
             file1.mkdirs();
-            return new ChunkRegionLoader(file1);
+            return new ChunkRegionLoader(file1, this.a);
         } else if (worldprovider instanceof WorldProviderTheEnd) {
             file1 = new File(file, "DIM1");
             file1.mkdirs();
-            return new ChunkRegionLoader(file1);
+            return new ChunkRegionLoader(file1, this.a);
         } else {
-            return new ChunkRegionLoader(file);
+            return new ChunkRegionLoader(file, this.a);
         }
     }
 

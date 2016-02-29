@@ -2,36 +2,40 @@ package net.minecraft.server;
 
 public class EntityDamageSource extends DamageSource {
 
-    protected Entity q;
-    private boolean r = false;
+    protected Entity s;
+    private boolean t = false;
 
     public EntityDamageSource(String s, Entity entity) {
         super(s);
-        this.q = entity;
+        this.s = entity;
     }
 
-    public EntityDamageSource v() {
-        this.r = true;
+    public EntityDamageSource w() {
+        this.t = true;
         return this;
     }
 
-    public boolean w() {
-        return this.r;
+    public boolean x() {
+        return this.t;
     }
 
     public Entity getEntity() {
-        return this.q;
+        return this.s;
     }
 
     public IChatBaseComponent getLocalizedDeathMessage(EntityLiving entityliving) {
-        ItemStack itemstack = this.q instanceof EntityLiving ? ((EntityLiving) this.q).bA() : null;
+        ItemStack itemstack = this.s instanceof EntityLiving ? ((EntityLiving) this.s).getItemInMainHand() : null;
         String s = "death.attack." + this.translationIndex;
         String s1 = s + ".item";
 
-        return itemstack != null && itemstack.hasName() && LocaleI18n.c(s1) ? new ChatMessage(s1, new Object[] { entityliving.getScoreboardDisplayName(), this.q.getScoreboardDisplayName(), itemstack.C()}) : new ChatMessage(s, new Object[] { entityliving.getScoreboardDisplayName(), this.q.getScoreboardDisplayName()});
+        return itemstack != null && itemstack.hasName() && LocaleI18n.c(s1) ? new ChatMessage(s1, new Object[] { entityliving.getScoreboardDisplayName(), this.s.getScoreboardDisplayName(), itemstack.B()}) : new ChatMessage(s, new Object[] { entityliving.getScoreboardDisplayName(), this.s.getScoreboardDisplayName()});
     }
 
     public boolean r() {
-        return this.q != null && this.q instanceof EntityLiving && !(this.q instanceof EntityHuman);
+        return this.s != null && this.s instanceof EntityLiving && !(this.s instanceof EntityHuman);
+    }
+
+    public Vec3D v() {
+        return new Vec3D(this.s.locX, this.s.locY, this.s.locZ);
     }
 }

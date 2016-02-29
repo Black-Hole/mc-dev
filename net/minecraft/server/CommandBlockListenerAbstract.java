@@ -16,12 +16,16 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
 
     public CommandBlockListenerAbstract() {}
 
-    public int j() {
+    public int k() {
         return this.b;
     }
 
-    public IChatBaseComponent k() {
-        return this.d;
+    public void a(int i) {
+        this.b = i;
+    }
+
+    public IChatBaseComponent l() {
+        return (IChatBaseComponent) (this.d == null ? new ChatComponentText("") : this.d);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -48,7 +52,13 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         }
 
         if (nbttagcompound.hasKeyOfType("LastOutput", 8) && this.c) {
-            this.d = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("LastOutput"));
+            try {
+                this.d = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("LastOutput"));
+            } catch (Throwable throwable) {
+                this.d = new ChatComponentText(throwable.getMessage());
+            }
+        } else {
+            this.d = null;
         }
 
         this.g.a(nbttagcompound);
@@ -70,44 +80,47 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     public void a(World world) {
         if (world.isClientSide) {
             this.b = 0;
-        }
-
-        MinecraftServer minecraftserver = MinecraftServer.getServer();
-
-        if (minecraftserver != null && minecraftserver.O() && minecraftserver.getEnableCommandBlock()) {
-            ICommandHandler icommandhandler = minecraftserver.getCommandHandler();
-
-            try {
-                this.d = null;
-                this.b = icommandhandler.a(this, this.e);
-            } catch (Throwable throwable) {
-                CrashReport crashreport = CrashReport.a(throwable, "Executing command block");
-                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Command to be executed");
-
-                crashreportsystemdetails.a("Command", new Callable() {
-                    public String a() throws Exception {
-                        return CommandBlockListenerAbstract.this.getCommand();
-                    }
-
-                    public Object call() throws Exception {
-                        return this.a();
-                    }
-                });
-                crashreportsystemdetails.a("Name", new Callable() {
-                    public String a() throws Exception {
-                        return CommandBlockListenerAbstract.this.getName();
-                    }
-
-                    public Object call() throws Exception {
-                        return this.a();
-                    }
-                });
-                throw new ReportedException(crashreport);
-            }
+        } else if ("Searge".equalsIgnoreCase(this.e)) {
+            this.d = new ChatComponentText("#itzlipofutzli");
+            this.b = 1;
         } else {
-            this.b = 0;
-        }
+            MinecraftServer minecraftserver = this.h();
 
+            if (minecraftserver != null && minecraftserver.M() && minecraftserver.getEnableCommandBlock()) {
+                ICommandHandler icommandhandler = minecraftserver.getCommandHandler();
+
+                try {
+                    this.d = null;
+                    this.b = icommandhandler.a(this, this.e);
+                } catch (Throwable throwable) {
+                    CrashReport crashreport = CrashReport.a(throwable, "Executing command block");
+                    CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Command to be executed");
+
+                    crashreportsystemdetails.a("Command", new Callable() {
+                        public String a() throws Exception {
+                            return CommandBlockListenerAbstract.this.getCommand();
+                        }
+
+                        public Object call() throws Exception {
+                            return this.a();
+                        }
+                    });
+                    crashreportsystemdetails.a("Name", new Callable() {
+                        public String a() throws Exception {
+                            return CommandBlockListenerAbstract.this.getName();
+                        }
+
+                        public Object call() throws Exception {
+                            return this.a();
+                        }
+                    });
+                    throw new ReportedException(crashreport);
+                }
+            } else {
+                this.b = 0;
+            }
+
+        }
     }
 
     public String getName() {
@@ -125,22 +138,22 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     public void sendMessage(IChatBaseComponent ichatbasecomponent) {
         if (this.c && this.getWorld() != null && !this.getWorld().isClientSide) {
             this.d = (new ChatComponentText("[" + CommandBlockListenerAbstract.a.format(new Date()) + "] ")).addSibling(ichatbasecomponent);
-            this.h();
+            this.i();
         }
 
     }
 
     public boolean getSendCommandFeedback() {
-        MinecraftServer minecraftserver = MinecraftServer.getServer();
+        MinecraftServer minecraftserver = this.h();
 
-        return minecraftserver == null || !minecraftserver.O() || minecraftserver.worldServer[0].getGameRules().getBoolean("commandBlockOutput");
+        return minecraftserver == null || !minecraftserver.M() || minecraftserver.worldServer[0].getGameRules().getBoolean("commandBlockOutput");
     }
 
     public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
-        this.g.a(this, commandobjectiveexecutor_enumcommandresult, i);
+        this.g.a(this.h(), this, commandobjectiveexecutor_enumcommandresult, i);
     }
 
-    public abstract void h();
+    public abstract void i();
 
     public void b(IChatBaseComponent ichatbasecomponent) {
         this.d = ichatbasecomponent;
@@ -150,7 +163,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         this.c = flag;
     }
 
-    public boolean m() {
+    public boolean n() {
         return this.c;
     }
 
@@ -166,7 +179,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         }
     }
 
-    public CommandObjectiveExecutor n() {
+    public CommandObjectiveExecutor o() {
         return this.g;
     }
 }

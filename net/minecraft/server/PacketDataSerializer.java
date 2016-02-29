@@ -39,43 +39,75 @@ public class PacketDataSerializer extends ByteBuf {
         return 5;
     }
 
-    public void a(byte[] abyte) {
+    public PacketDataSerializer a(byte[] abyte) {
         this.b(abyte.length);
         this.writeBytes(abyte);
+        return this;
     }
 
     public byte[] a() {
-        byte[] abyte = new byte[this.e()];
+        byte[] abyte = new byte[this.g()];
 
         this.readBytes(abyte);
         return abyte;
     }
 
-    public BlockPosition c() {
+    public PacketDataSerializer a(int[] aint) {
+        this.b(aint.length);
+
+        for (int i = 0; i < aint.length; ++i) {
+            this.b(aint[i]);
+        }
+
+        return this;
+    }
+
+    public int[] b() {
+        int[] aint = new int[this.g()];
+
+        for (int i = 0; i < aint.length; ++i) {
+            aint[i] = this.g();
+        }
+
+        return aint;
+    }
+
+    public PacketDataSerializer a(long[] along) {
+        this.b(along.length);
+
+        for (int i = 0; i < along.length; ++i) {
+            this.writeLong(along[i]);
+        }
+
+        return this;
+    }
+
+    public BlockPosition e() {
         return BlockPosition.fromLong(this.readLong());
     }
 
-    public void a(BlockPosition blockposition) {
+    public PacketDataSerializer a(BlockPosition blockposition) {
         this.writeLong(blockposition.asLong());
+        return this;
     }
 
-    public IChatBaseComponent d() throws IOException {
+    public IChatBaseComponent f() {
         return IChatBaseComponent.ChatSerializer.a(this.c(32767));
     }
 
-    public void a(IChatBaseComponent ichatbasecomponent) throws IOException {
-        this.a(IChatBaseComponent.ChatSerializer.a(ichatbasecomponent));
+    public PacketDataSerializer a(IChatBaseComponent ichatbasecomponent) {
+        return this.a(IChatBaseComponent.ChatSerializer.a(ichatbasecomponent));
     }
 
     public <T extends Enum<T>> T a(Class<T> oclass) {
-        return ((Enum[]) oclass.getEnumConstants())[this.e()];
+        return ((Enum[]) oclass.getEnumConstants())[this.g()];
     }
 
-    public void a(Enum<?> oenum) {
-        this.b(oenum.ordinal());
+    public PacketDataSerializer a(Enum<?> oenum) {
+        return this.b(oenum.ordinal());
     }
 
-    public int e() {
+    public int g() {
         int i = 0;
         int j = 0;
 
@@ -92,7 +124,7 @@ public class PacketDataSerializer extends ByteBuf {
         return i;
     }
 
-    public long f() {
+    public long h() {
         long i = 0L;
         int j = 0;
 
@@ -109,34 +141,37 @@ public class PacketDataSerializer extends ByteBuf {
         return i;
     }
 
-    public void a(UUID uuid) {
+    public PacketDataSerializer a(UUID uuid) {
         this.writeLong(uuid.getMostSignificantBits());
         this.writeLong(uuid.getLeastSignificantBits());
+        return this;
     }
 
-    public UUID g() {
+    public UUID i() {
         return new UUID(this.readLong(), this.readLong());
     }
 
-    public void b(int i) {
+    public PacketDataSerializer b(int i) {
         while ((i & -128) != 0) {
             this.writeByte(i & 127 | 128);
             i >>>= 7;
         }
 
         this.writeByte(i);
+        return this;
     }
 
-    public void b(long i) {
+    public PacketDataSerializer b(long i) {
         while ((i & -128L) != 0L) {
             this.writeByte((int) (i & 127L) | 128);
             i >>>= 7;
         }
 
         this.writeByte((int) i);
+        return this;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
+    public PacketDataSerializer a(NBTTagCompound nbttagcompound) {
         if (nbttagcompound == null) {
             this.writeByte(0);
         } else {
@@ -147,9 +182,10 @@ public class PacketDataSerializer extends ByteBuf {
             }
         }
 
+        return this;
     }
 
-    public NBTTagCompound h() throws IOException {
+    public NBTTagCompound j() {
         int i = this.readerIndex();
         byte b0 = this.readByte();
 
@@ -157,11 +193,16 @@ public class PacketDataSerializer extends ByteBuf {
             return null;
         } else {
             this.readerIndex(i);
-            return NBTCompressedStreamTools.a((DataInput) (new ByteBufInputStream(this)), new NBTReadLimiter(2097152L));
+
+            try {
+                return NBTCompressedStreamTools.a((DataInput) (new ByteBufInputStream(this)), new NBTReadLimiter(2097152L));
+            } catch (IOException ioexception) {
+                throw new EncoderException(ioexception);
+            }
         }
     }
 
-    public void a(ItemStack itemstack) {
+    public PacketDataSerializer a(ItemStack itemstack) {
         if (itemstack == null) {
             this.writeShort(-1);
         } else {
@@ -177,9 +218,10 @@ public class PacketDataSerializer extends ByteBuf {
             this.a(nbttagcompound);
         }
 
+        return this;
     }
 
-    public ItemStack i() throws IOException {
+    public ItemStack k() {
         ItemStack itemstack = null;
         short short0 = this.readShort();
 
@@ -188,14 +230,14 @@ public class PacketDataSerializer extends ByteBuf {
             short short1 = this.readShort();
 
             itemstack = new ItemStack(Item.getById(short0), b0, short1);
-            itemstack.setTag(this.h());
+            itemstack.setTag(this.j());
         }
 
         return itemstack;
     }
 
     public String c(int i) {
-        int j = this.e();
+        int j = this.g();
 
         if (j > i * 4) {
             throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + j + " > " + i * 4 + ")");

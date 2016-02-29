@@ -180,10 +180,8 @@ public class IntHashMap<V> {
                 return false;
             } else {
                 IntHashMap.IntHashMapEntry inthashmap_inthashmapentry = (IntHashMap.IntHashMapEntry) object;
-                Integer integer = Integer.valueOf(this.a());
-                Integer integer1 = Integer.valueOf(inthashmap_inthashmapentry.a());
 
-                if (integer == integer1 || integer != null && integer.equals(integer1)) {
+                if (this.a == inthashmap_inthashmapentry.a) {
                     Object object1 = this.b();
                     Object object2 = inthashmap_inthashmapentry.b();
 

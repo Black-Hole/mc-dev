@@ -41,7 +41,11 @@ public final class SpawnerCreature {
                             if (!this.b.contains(chunkcoordintpair)) {
                                 ++i;
                                 if (!flag3 && worldserver.getWorldBorder().isInBounds(chunkcoordintpair)) {
-                                    this.b.add(chunkcoordintpair);
+                                    PlayerChunk playerchunk = worldserver.getPlayerChunkMap().b(chunkcoordintpair.x, chunkcoordintpair.z);
+
+                                    if (playerchunk != null && playerchunk.e()) {
+                                        this.b.add(chunkcoordintpair);
+                                    }
                                 }
                             }
                         }
@@ -63,18 +67,19 @@ public final class SpawnerCreature {
                     int l1 = enumcreaturetype.b() * i / SpawnerCreature.a;
 
                     if (k <= l1) {
+                        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
                         Iterator iterator1 = this.b.iterator();
 
-                        label115:
+                        label120:
                         while (iterator1.hasNext()) {
                             ChunkCoordIntPair chunkcoordintpair1 = (ChunkCoordIntPair) iterator1.next();
                             BlockPosition blockposition1 = getRandomPosition(worldserver, chunkcoordintpair1.x, chunkcoordintpair1.z);
                             int i2 = blockposition1.getX();
                             int j2 = blockposition1.getY();
                             int k2 = blockposition1.getZ();
-                            Block block = worldserver.getType(blockposition1).getBlock();
+                            IBlockData iblockdata = worldserver.getType(blockposition1);
 
-                            if (!block.isOccluding()) {
+                            if (!iblockdata.l()) {
                                 int l2 = 0;
                                 int i3 = 0;
 
@@ -85,27 +90,28 @@ public final class SpawnerCreature {
                                     byte b1 = 6;
                                     BiomeBase.BiomeMeta biomebase_biomemeta = null;
                                     GroupDataEntity groupdataentity = null;
-                                    int i4 = 0;
+                                    int i4 = MathHelper.f(Math.random() * 4.0D);
+                                    int j4 = 0;
 
                                     while (true) {
-                                        if (i4 < 4) {
-                                            label108: {
+                                        if (j4 < i4) {
+                                            label113: {
                                                 j3 += worldserver.random.nextInt(b1) - worldserver.random.nextInt(b1);
                                                 k3 += worldserver.random.nextInt(1) - worldserver.random.nextInt(1);
                                                 l3 += worldserver.random.nextInt(b1) - worldserver.random.nextInt(b1);
-                                                BlockPosition blockposition2 = new BlockPosition(j3, k3, l3);
+                                                blockposition_mutableblockposition.c(j3, k3, l3);
                                                 float f = (float) j3 + 0.5F;
                                                 float f1 = (float) l3 + 0.5F;
 
-                                                if (!worldserver.isPlayerNearby((double) f, (double) k3, (double) f1, 24.0D) && blockposition.c((double) f, (double) k3, (double) f1) >= 576.0D) {
+                                                if (!worldserver.isPlayerNearby((double) f, (double) k3, (double) f1, 24.0D) && blockposition.distanceSquared((double) f, (double) k3, (double) f1) >= 576.0D) {
                                                     if (biomebase_biomemeta == null) {
-                                                        biomebase_biomemeta = worldserver.a(enumcreaturetype, blockposition2);
+                                                        biomebase_biomemeta = worldserver.a(enumcreaturetype, (BlockPosition) blockposition_mutableblockposition);
                                                         if (biomebase_biomemeta == null) {
-                                                            break label108;
+                                                            break label113;
                                                         }
                                                     }
 
-                                                    if (worldserver.a(enumcreaturetype, biomebase_biomemeta, blockposition2) && a(EntityPositionTypes.a(biomebase_biomemeta.b), worldserver, blockposition2)) {
+                                                    if (worldserver.a(enumcreaturetype, biomebase_biomemeta, (BlockPosition) blockposition_mutableblockposition) && a(EntityPositionTypes.a(biomebase_biomemeta.b), worldserver, blockposition_mutableblockposition)) {
                                                         EntityInsentient entityinsentient;
 
                                                         try {
@@ -116,15 +122,17 @@ public final class SpawnerCreature {
                                                         }
 
                                                         entityinsentient.setPositionRotation((double) f, (double) k3, (double) f1, worldserver.random.nextFloat() * 360.0F, 0.0F);
-                                                        if (entityinsentient.bR() && entityinsentient.canSpawn()) {
-                                                            groupdataentity = entityinsentient.prepare(worldserver.E(new BlockPosition(entityinsentient)), groupdataentity);
+                                                        if (entityinsentient.cF() && entityinsentient.canSpawn()) {
+                                                            groupdataentity = entityinsentient.prepare(worldserver.D(new BlockPosition(entityinsentient)), groupdataentity);
                                                             if (entityinsentient.canSpawn()) {
                                                                 ++l2;
                                                                 worldserver.addEntity(entityinsentient);
+                                                            } else {
+                                                                entityinsentient.die();
                                                             }
 
-                                                            if (l2 >= entityinsentient.bV()) {
-                                                                continue label115;
+                                                            if (l2 >= entityinsentient.cJ()) {
+                                                                continue label120;
                                                             }
                                                         }
 
@@ -132,7 +140,7 @@ public final class SpawnerCreature {
                                                     }
                                                 }
 
-                                                ++i4;
+                                                ++j4;
                                                 continue;
                                             }
                                         }
@@ -155,30 +163,34 @@ public final class SpawnerCreature {
         Chunk chunk = world.getChunkAt(i, j);
         int k = i * 16 + world.random.nextInt(16);
         int l = j * 16 + world.random.nextInt(16);
-        int i1 = MathHelper.c(chunk.f(new BlockPosition(k, 0, l)) + 1, 16);
+        int i1 = MathHelper.c(chunk.e(new BlockPosition(k, 0, l)) + 1, 16);
         int j1 = world.random.nextInt(i1 > 0 ? i1 : chunk.g() + 16 - 1);
 
         return new BlockPosition(k, j1, l);
+    }
+
+    public static boolean a(IBlockData iblockdata) {
+        return iblockdata.k() ? false : (iblockdata.m() ? false : (iblockdata.getMaterial().isLiquid() ? false : !BlockMinecartTrackAbstract.i(iblockdata)));
     }
 
     public static boolean a(EntityInsentient.EnumEntityPositionType entityinsentient_enumentitypositiontype, World world, BlockPosition blockposition) {
         if (!world.getWorldBorder().a(blockposition)) {
             return false;
         } else {
-            Block block = world.getType(blockposition).getBlock();
+            IBlockData iblockdata = world.getType(blockposition);
 
             if (entityinsentient_enumentitypositiontype == EntityInsentient.EnumEntityPositionType.IN_WATER) {
-                return block.getMaterial().isLiquid() && world.getType(blockposition.down()).getBlock().getMaterial().isLiquid() && !world.getType(blockposition.up()).getBlock().isOccluding();
+                return iblockdata.getMaterial().isLiquid() && world.getType(blockposition.down()).getMaterial().isLiquid() && !world.getType(blockposition.up()).l();
             } else {
                 BlockPosition blockposition1 = blockposition.down();
 
-                if (!World.a((IBlockAccess) world, blockposition1)) {
+                if (!world.getType(blockposition1).q()) {
                     return false;
                 } else {
-                    Block block1 = world.getType(blockposition1).getBlock();
-                    boolean flag = block1 != Blocks.BEDROCK && block1 != Blocks.BARRIER;
+                    Block block = world.getType(blockposition1).getBlock();
+                    boolean flag = block != Blocks.BEDROCK && block != Blocks.BARRIER;
 
-                    return flag && !block.isOccluding() && !block.getMaterial().isLiquid() && !world.getType(blockposition.up()).getBlock().isOccluding();
+                    return flag && a(iblockdata) && a(world.getType(blockposition.up()));
                 }
             }
         }
@@ -188,7 +200,7 @@ public final class SpawnerCreature {
         List list = biomebase.getMobs(EnumCreatureType.CREATURE);
 
         if (!list.isEmpty()) {
-            while (random.nextFloat() < biomebase.g()) {
+            while (random.nextFloat() < biomebase.f()) {
                 BiomeBase.BiomeMeta biomebase_biomemeta = (BiomeBase.BiomeMeta) WeightedRandom.a(world.random, list);
                 int i1 = biomebase_biomemeta.c + random.nextInt(1 + biomebase_biomemeta.d - biomebase_biomemeta.c);
                 GroupDataEntity groupdataentity = null;
@@ -201,7 +213,7 @@ public final class SpawnerCreature {
                     boolean flag = false;
 
                     for (int k2 = 0; !flag && k2 < 4; ++k2) {
-                        BlockPosition blockposition = world.r(new BlockPosition(j1, 0, k1));
+                        BlockPosition blockposition = world.q(new BlockPosition(j1, 0, k1));
 
                         if (a(EntityInsentient.EnumEntityPositionType.ON_GROUND, world, blockposition)) {
                             EntityInsentient entityinsentient;
@@ -215,7 +227,7 @@ public final class SpawnerCreature {
 
                             entityinsentient.setPositionRotation((double) ((float) j1 + 0.5F), (double) blockposition.getY(), (double) ((float) k1 + 0.5F), random.nextFloat() * 360.0F, 0.0F);
                             world.addEntity(entityinsentient);
-                            groupdataentity = entityinsentient.prepare(world.E(new BlockPosition(entityinsentient)), groupdataentity);
+                            groupdataentity = entityinsentient.prepare(world.D(new BlockPosition(entityinsentient)), groupdataentity);
                             flag = true;
                         }
 

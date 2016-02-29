@@ -14,7 +14,7 @@ public class PacketPlayInSpectate implements Packet<PacketListenerPlayIn> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

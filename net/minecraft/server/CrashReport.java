@@ -37,7 +37,7 @@ public class CrashReport {
     private void h() {
         this.d.a("Minecraft Version", new Callable() {
             public String a() {
-                return "1.8.8";
+                return "1.9";
             }
 
             public Object call() throws Exception {
@@ -135,7 +135,7 @@ public class CrashReport {
     }
 
     public void a(StringBuilder stringbuilder) {
-        if ((this.h == null || this.h.length <= 0) && this.e.size() > 0) {
+        if ((this.h == null || this.h.length <= 0) && !this.e.isEmpty()) {
             this.h = (StackTraceElement[]) ArrayUtils.subarray(((CrashReportSystemDetails) this.e.get(0)).a(), 0, 1);
         }
 

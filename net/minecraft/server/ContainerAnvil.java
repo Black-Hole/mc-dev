@@ -60,19 +60,19 @@ public class ContainerAnvil extends Container {
                 ContainerAnvil.this.a = 0;
                 IBlockData iblockdata = world.getType(blockposition);
 
-                if (!entityhuman.abilities.canInstantlyBuild && !world.isClientSide && iblockdata.getBlock() == Blocks.ANVIL && entityhuman.bc().nextFloat() < 0.12F) {
+                if (!entityhuman.abilities.canInstantlyBuild && !world.isClientSide && iblockdata.getBlock() == Blocks.ANVIL && entityhuman.getRandom().nextFloat() < 0.12F) {
                     int i = ((Integer) iblockdata.get(BlockAnvil.DAMAGE)).intValue();
 
                     ++i;
                     if (i > 2) {
                         world.setAir(blockposition);
-                        world.triggerEffect(1020, blockposition, 0);
+                        world.triggerEffect(1029, blockposition, 0);
                     } else {
                         world.setTypeAndData(blockposition, iblockdata.set(BlockAnvil.DAMAGE, Integer.valueOf(i)), 2);
-                        world.triggerEffect(1021, blockposition, 0);
+                        world.triggerEffect(1030, blockposition, 0);
                     }
                 } else if (!world.isClientSide) {
-                    world.triggerEffect(1021, blockposition, 0);
+                    world.triggerEffect(1030, blockposition, 0);
                 }
 
             }
@@ -101,13 +101,6 @@ public class ContainerAnvil extends Container {
     }
 
     public void e() {
-        boolean flag = false;
-        boolean flag1 = true;
-        boolean flag2 = true;
-        boolean flag3 = true;
-        boolean flag4 = true;
-        boolean flag5 = true;
-        boolean flag6 = true;
         ItemStack itemstack = this.h.getItem(0);
 
         this.a = 1;
@@ -122,14 +115,12 @@ public class ContainerAnvil extends Container {
             ItemStack itemstack1 = itemstack.cloneItemStack();
             ItemStack itemstack2 = this.h.getItem(1);
             Map map = EnchantmentManager.a(itemstack1);
-            boolean flag7 = false;
             int j = b0 + itemstack.getRepairCost() + (itemstack2 == null ? 0 : itemstack2.getRepairCost());
 
             this.k = 0;
-            int k;
-
             if (itemstack2 != null) {
-                flag7 = itemstack2.getItem() == Items.ENCHANTED_BOOK && Items.ENCHANTED_BOOK.h(itemstack2).size() > 0;
+                boolean flag = itemstack2.getItem() == Items.ENCHANTED_BOOK && !Items.ENCHANTED_BOOK.h(itemstack2).isEmpty();
+                int k;
                 int l;
                 int i1;
 
@@ -150,27 +141,27 @@ public class ContainerAnvil extends Container {
 
                     this.k = l;
                 } else {
-                    if (!flag7 && (itemstack1.getItem() != itemstack2.getItem() || !itemstack1.e())) {
+                    if (!flag && (itemstack1.getItem() != itemstack2.getItem() || !itemstack1.e())) {
                         this.g.setItem(0, (ItemStack) null);
                         this.a = 0;
                         return;
                     }
 
                     int j1;
+                    int k1;
 
-                    if (itemstack1.e() && !flag7) {
+                    if (itemstack1.e() && !flag) {
                         k = itemstack.j() - itemstack.h();
                         l = itemstack2.j() - itemstack2.h();
                         i1 = l + itemstack1.j() * 12 / 100;
-                        int k1 = k + i1;
-
-                        j1 = itemstack1.j() - k1;
-                        if (j1 < 0) {
-                            j1 = 0;
+                        j1 = k + i1;
+                        k1 = itemstack1.j() - j1;
+                        if (k1 < 0) {
+                            k1 = 0;
                         }
 
-                        if (j1 < itemstack1.getData()) {
-                            itemstack1.setData(j1);
+                        if (k1 < itemstack1.getData()) {
+                            itemstack1.setData(k1);
                             i += 2;
                         }
                     }
@@ -179,77 +170,59 @@ public class ContainerAnvil extends Container {
                     Iterator iterator = map1.keySet().iterator();
 
                     while (iterator.hasNext()) {
-                        i1 = ((Integer) iterator.next()).intValue();
-                        Enchantment enchantment = Enchantment.getById(i1);
+                        Enchantment enchantment = (Enchantment) iterator.next();
 
                         if (enchantment != null) {
-                            j1 = map.containsKey(Integer.valueOf(i1)) ? ((Integer) map.get(Integer.valueOf(i1))).intValue() : 0;
-                            int l1 = ((Integer) map1.get(Integer.valueOf(i1))).intValue();
-                            int i2;
-
-                            if (j1 == l1) {
-                                ++l1;
-                                i2 = l1;
-                            } else {
-                                i2 = Math.max(l1, j1);
-                            }
-
-                            l1 = i2;
-                            boolean flag8 = enchantment.canEnchant(itemstack);
+                            j1 = map.containsKey(enchantment) ? ((Integer) map.get(enchantment)).intValue() : 0;
+                            k1 = ((Integer) map1.get(enchantment)).intValue();
+                            k1 = j1 == k1 ? k1 + 1 : Math.max(k1, j1);
+                            boolean flag1 = enchantment.canEnchant(itemstack);
 
                             if (this.m.abilities.canInstantlyBuild || itemstack.getItem() == Items.ENCHANTED_BOOK) {
-                                flag8 = true;
+                                flag1 = true;
                             }
 
                             Iterator iterator1 = map.keySet().iterator();
 
                             while (iterator1.hasNext()) {
-                                int j2 = ((Integer) iterator1.next()).intValue();
+                                Enchantment enchantment1 = (Enchantment) iterator1.next();
 
-                                if (j2 != i1 && !enchantment.a(Enchantment.getById(j2))) {
-                                    flag8 = false;
+                                if (enchantment1 != enchantment && !enchantment.a(enchantment1)) {
+                                    flag1 = false;
                                     ++i;
                                 }
                             }
 
-                            if (flag8) {
-                                if (l1 > enchantment.getMaxLevel()) {
-                                    l1 = enchantment.getMaxLevel();
+                            if (flag1) {
+                                if (k1 > enchantment.getMaxLevel()) {
+                                    k1 = enchantment.getMaxLevel();
                                 }
 
-                                map.put(Integer.valueOf(i1), Integer.valueOf(l1));
-                                int k2 = 0;
+                                map.put(enchantment, Integer.valueOf(k1));
+                                int l1 = 0;
 
-                                switch (enchantment.getRandomWeight()) {
+                                switch (ContainerAnvil.SyntheticClass_1.a[enchantment.c().ordinal()]) {
                                 case 1:
-                                    k2 = 8;
+                                    l1 = 1;
                                     break;
 
                                 case 2:
-                                    k2 = 4;
+                                    l1 = 2;
+                                    break;
 
                                 case 3:
+                                    l1 = 4;
+                                    break;
+
                                 case 4:
-                                case 6:
-                                case 7:
-                                case 8:
-                                case 9:
-                                default:
-                                    break;
-
-                                case 5:
-                                    k2 = 2;
-                                    break;
-
-                                case 10:
-                                    k2 = 1;
+                                    l1 = 8;
                                 }
 
-                                if (flag7) {
-                                    k2 = Math.max(1, k2 / 2);
+                                if (flag) {
+                                    l1 = Math.max(1, l1 / 2);
                                 }
 
-                                i += k2 * l1;
+                                i += l1 * k1;
                             }
                         }
                     }
@@ -282,13 +255,17 @@ public class ContainerAnvil extends Container {
             }
 
             if (itemstack1 != null) {
-                k = itemstack1.getRepairCost();
-                if (itemstack2 != null && k < itemstack2.getRepairCost()) {
-                    k = itemstack2.getRepairCost();
+                int i2 = itemstack1.getRepairCost();
+
+                if (itemstack2 != null && i2 < itemstack2.getRepairCost()) {
+                    i2 = itemstack2.getRepairCost();
                 }
 
-                k = k * 2 + 1;
-                itemstack1.setRepairCost(k);
+                if (b1 != i || b1 == 0) {
+                    i2 = i2 * 2 + 1;
+                }
+
+                itemstack1.setRepairCost(i2);
                 EnchantmentManager.a(map, itemstack1);
             }
 
@@ -371,5 +348,37 @@ public class ContainerAnvil extends Container {
         }
 
         this.e();
+    }
+
+    static class SyntheticClass_1 {
+
+        static final int[] a = new int[Enchantment.Rarity.values().length];
+
+        static {
+            try {
+                ContainerAnvil.SyntheticClass_1.a[Enchantment.Rarity.COMMON.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror) {
+                ;
+            }
+
+            try {
+                ContainerAnvil.SyntheticClass_1.a[Enchantment.Rarity.UNCOMMON.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror1) {
+                ;
+            }
+
+            try {
+                ContainerAnvil.SyntheticClass_1.a[Enchantment.Rarity.RARE.ordinal()] = 3;
+            } catch (NoSuchFieldError nosuchfielderror2) {
+                ;
+            }
+
+            try {
+                ContainerAnvil.SyntheticClass_1.a[Enchantment.Rarity.VERY_RARE.ordinal()] = 4;
+            } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+        }
     }
 }

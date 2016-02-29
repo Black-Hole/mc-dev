@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class CommandReplaceItem extends CommandAbstract {
         return "commands.replaceitem.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 1) {
             throw new ExceptionUsage("commands.replaceitem.usage", new Object[0]);
         } else {
@@ -55,13 +56,14 @@ public class CommandReplaceItem extends CommandAbstract {
                 b0 = 2;
             }
 
+            String s = astring[b0];
             int i = b0 + 1;
             int j = this.e(astring[b0]);
 
             Item item;
 
             try {
-                item = f(icommandlistener, astring[i]);
+                item = a(icommandlistener, astring[i]);
             } catch (ExceptionInvalidNumber exceptioninvalidnumber) {
                 if (Block.getByName(astring[i]) != Blocks.AIR) {
                     throw exceptioninvalidnumber;
@@ -76,10 +78,10 @@ public class CommandReplaceItem extends CommandAbstract {
             ItemStack itemstack = new ItemStack(item, k, l);
 
             if (astring.length > i) {
-                String s = a(icommandlistener, astring, i).c();
+                String s1 = a(icommandlistener, astring, i).toPlainText();
 
                 try {
-                    itemstack.setTag(MojangsonParser.parse(s));
+                    itemstack.setTag(MojangsonParser.parse(s1));
                 } catch (MojangsonParseException mojangsonparseexception) {
                     throw new CommandException("commands.replaceitem.tagError", new Object[] { mojangsonparseexception.getMessage()});
                 }
@@ -105,15 +107,15 @@ public class CommandReplaceItem extends CommandAbstract {
                     iinventory.setItem(j, itemstack);
                 }
             } else {
-                Entity entity = b(icommandlistener, astring[1]);
+                Entity entity = b(minecraftserver, icommandlistener, astring[1]);
 
                 icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, 0);
                 if (entity instanceof EntityHuman) {
                     ((EntityHuman) entity).defaultContainer.b();
                 }
 
-                if (!entity.d(j, itemstack)) {
-                    throw new CommandException("commands.replaceitem.failed", new Object[] { Integer.valueOf(j), Integer.valueOf(k), itemstack == null ? "Air" : itemstack.C()});
+                if (!entity.c(j, itemstack)) {
+                    throw new CommandException("commands.replaceitem.failed", new Object[] { s, Integer.valueOf(k), itemstack == null ? "Air" : itemstack.B()});
                 }
 
                 if (entity instanceof EntityHuman) {
@@ -122,7 +124,7 @@ public class CommandReplaceItem extends CommandAbstract {
             }
 
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, k);
-            a(icommandlistener, this, "commands.replaceitem.success", new Object[] { Integer.valueOf(j), Integer.valueOf(k), itemstack == null ? "Air" : itemstack.C()});
+            a(icommandlistener, (ICommand) this, "commands.replaceitem.success", new Object[] { s, Integer.valueOf(k), itemstack == null ? "Air" : itemstack.B()});
         }
     }
 
@@ -134,12 +136,8 @@ public class CommandReplaceItem extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "entity", "block"}) : (astring.length == 2 && astring[0].equals("entity") ? a(astring, this.d()) : (astring.length >= 2 && astring.length <= 4 && astring[0].equals("block") ? a(astring, 1, blockposition) : ((astring.length != 3 || !astring[0].equals("entity")) && (astring.length != 5 || !astring[0].equals("block")) ? ((astring.length != 4 || !astring[0].equals("entity")) && (astring.length != 6 || !astring[0].equals("block")) ? null : a(astring, (Collection) Item.REGISTRY.keySet())) : a(astring, (Collection) CommandReplaceItem.a.keySet()))));
-    }
-
-    protected String[] d() {
-        return MinecraftServer.getServer().getPlayers();
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length == 1 ? a(astring, new String[] { "entity", "block"}) : (astring.length == 2 && astring[0].equals("entity") ? a(astring, minecraftserver.getPlayers()) : (astring.length >= 2 && astring.length <= 4 && astring[0].equals("block") ? a(astring, 1, blockposition) : ((astring.length != 3 || !astring[0].equals("entity")) && (astring.length != 5 || !astring[0].equals("block")) ? ((astring.length != 4 || !astring[0].equals("entity")) && (astring.length != 6 || !astring[0].equals("block")) ? Collections.emptyList() : a(astring, (Collection) Item.REGISTRY.keySet())) : a(astring, (Collection) CommandReplaceItem.a.keySet()))));
     }
 
     public boolean isListStart(String[] astring, int i) {
@@ -173,11 +171,13 @@ public class CommandReplaceItem extends CommandAbstract {
             CommandReplaceItem.a.put("slot.horse." + i, Integer.valueOf(500 + i));
         }
 
-        CommandReplaceItem.a.put("slot.weapon", Integer.valueOf(99));
-        CommandReplaceItem.a.put("slot.armor.head", Integer.valueOf(103));
-        CommandReplaceItem.a.put("slot.armor.chest", Integer.valueOf(102));
-        CommandReplaceItem.a.put("slot.armor.legs", Integer.valueOf(101));
-        CommandReplaceItem.a.put("slot.armor.feet", Integer.valueOf(100));
+        CommandReplaceItem.a.put("slot.weapon", Integer.valueOf(98));
+        CommandReplaceItem.a.put("slot.weapon.mainhand", Integer.valueOf(98));
+        CommandReplaceItem.a.put("slot.weapon.offhand", Integer.valueOf(99));
+        CommandReplaceItem.a.put("slot.armor.head", Integer.valueOf(100 + EnumItemSlot.HEAD.b()));
+        CommandReplaceItem.a.put("slot.armor.chest", Integer.valueOf(100 + EnumItemSlot.CHEST.b()));
+        CommandReplaceItem.a.put("slot.armor.legs", Integer.valueOf(100 + EnumItemSlot.LEGS.b()));
+        CommandReplaceItem.a.put("slot.armor.feet", Integer.valueOf(100 + EnumItemSlot.FEET.b()));
         CommandReplaceItem.a.put("slot.horse.saddle", Integer.valueOf(400));
         CommandReplaceItem.a.put("slot.horse.armor", Integer.valueOf(401));
         CommandReplaceItem.a.put("slot.horse.chest", Integer.valueOf(499));

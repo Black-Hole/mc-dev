@@ -4,12 +4,12 @@ public class BlockPrismarine extends Block {
 
     public static final BlockStateEnum<BlockPrismarine.EnumPrismarineVariant> VARIANT = BlockStateEnum.of("variant", BlockPrismarine.EnumPrismarineVariant.class);
     public static final int b = BlockPrismarine.EnumPrismarineVariant.ROUGH.a();
-    public static final int N = BlockPrismarine.EnumPrismarineVariant.BRICKS.a();
-    public static final int O = BlockPrismarine.EnumPrismarineVariant.DARK.a();
+    public static final int c = BlockPrismarine.EnumPrismarineVariant.BRICKS.a();
+    public static final int d = BlockPrismarine.EnumPrismarineVariant.DARK.a();
 
     public BlockPrismarine() {
         super(Material.STONE);
-        this.j(this.blockStateList.getBlockData().set(BlockPrismarine.VARIANT, BlockPrismarine.EnumPrismarineVariant.ROUGH));
+        this.w(this.blockStateList.getBlockData().set(BlockPrismarine.VARIANT, BlockPrismarine.EnumPrismarineVariant.ROUGH));
         this.a(CreativeModeTab.b);
     }
 
@@ -17,7 +17,7 @@ public class BlockPrismarine extends Block {
         return LocaleI18n.get(this.a() + "." + BlockPrismarine.EnumPrismarineVariant.ROUGH.c() + ".name");
     }
 
-    public MaterialMapColor g(IBlockData iblockdata) {
+    public MaterialMapColor r(IBlockData iblockdata) {
         return iblockdata.get(BlockPrismarine.VARIANT) == BlockPrismarine.EnumPrismarineVariant.ROUGH ? MaterialMapColor.y : MaterialMapColor.G;
     }
 

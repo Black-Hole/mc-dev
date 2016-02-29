@@ -87,7 +87,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
             for (int k = -i; k <= i; ++k) {
                 if (Math.pow((double) Math.abs(j) + 0.5D, 2.0D) + Math.pow((double) Math.abs(k) + 0.5D, 2.0D) <= (double) (f * f)) {
                     BlockPosition blockposition1 = blockposition.a(j, 0, k);
-                    Material material = this.l.getType(blockposition1).getBlock().getMaterial();
+                    Material material = this.l.getType(blockposition1).getMaterial();
 
                     if (material == Material.AIR || material == Material.LEAVES) {
                         this.a(this.l, blockposition1, iblockdata);
@@ -202,7 +202,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
 
         while (iterator.hasNext()) {
             WorldGenBigTree.Position worldgenbigtree_position = (WorldGenBigTree.Position) iterator.next();
-            int i = worldgenbigtree_position.q();
+            int i = worldgenbigtree_position.s();
             BlockPosition blockposition = new BlockPosition(this.m.getX(), i, this.m.getZ());
 
             if (!blockposition.equals(worldgenbigtree_position) && this.c(i - this.m.getY())) {
@@ -285,7 +285,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
             this.c = i;
         }
 
-        public int q() {
+        public int s() {
             return this.c;
         }
     }

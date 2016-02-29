@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Collections;
 import java.util.List;
 
 public class CommandTestForBlocks extends CommandAbstract {
@@ -18,7 +19,7 @@ public class CommandTestForBlocks extends CommandAbstract {
         return "commands.compare.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 9) {
             throw new ExceptionUsage("commands.compare.usage", new Object[0]);
         } else {
@@ -63,13 +64,13 @@ public class CommandTestForBlocks extends CommandAbstract {
                                         if (tileentity != null && tileentity1 != null) {
                                             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-                                            tileentity.b(nbttagcompound);
+                                            tileentity.save(nbttagcompound);
                                             nbttagcompound.remove("x");
                                             nbttagcompound.remove("y");
                                             nbttagcompound.remove("z");
                                             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-                                            tileentity1.b(nbttagcompound1);
+                                            tileentity1.save(nbttagcompound1);
                                             nbttagcompound1.remove("x");
                                             nbttagcompound1.remove("y");
                                             nbttagcompound1.remove("z");
@@ -93,7 +94,7 @@ public class CommandTestForBlocks extends CommandAbstract {
                     }
 
                     icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, i);
-                    a(icommandlistener, this, "commands.compare.success", new Object[] { Integer.valueOf(i)});
+                    a(icommandlistener, (ICommand) this, "commands.compare.success", new Object[] { Integer.valueOf(i)});
                 } else {
                     throw new CommandException("commands.compare.outOfWorld", new Object[0]);
                 }
@@ -103,7 +104,7 @@ public class CommandTestForBlocks extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length > 3 && astring.length <= 6 ? a(astring, 3, blockposition) : (astring.length > 6 && astring.length <= 9 ? a(astring, 6, blockposition) : (astring.length == 10 ? a(astring, new String[] { "masked", "all"}) : null)));
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length > 3 && astring.length <= 6 ? a(astring, 3, blockposition) : (astring.length > 6 && astring.length <= 9 ? a(astring, 6, blockposition) : (astring.length == 10 ? a(astring, new String[] { "masked", "all"}) : Collections.emptyList())));
     }
 }

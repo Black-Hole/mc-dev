@@ -41,6 +41,26 @@ public class BlockStateEnum<T extends Enum<T> & INamable> extends BlockState<T> 
         return ((INamable) t0).getName();
     }
 
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        } else if (object instanceof BlockStateEnum && super.equals(object)) {
+            BlockStateEnum blockstateenum = (BlockStateEnum) object;
+
+            return this.a.equals(blockstateenum.a) && this.b.equals(blockstateenum.b);
+        } else {
+            return false;
+        }
+    }
+
+    public int hashCode() {
+        int i = super.hashCode();
+
+        i = 31 * i + this.a.hashCode();
+        i = 31 * i + this.b.hashCode();
+        return i;
+    }
+
     public static <T extends Enum<T> & INamable> BlockStateEnum<T> of(String s, Class<T> oclass) {
         return a(s, oclass, Predicates.alwaysTrue());
     }

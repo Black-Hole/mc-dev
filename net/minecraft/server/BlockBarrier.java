@@ -4,17 +4,17 @@ public class BlockBarrier extends Block {
 
     protected BlockBarrier() {
         super(Material.BANNER);
-        this.x();
+        this.k();
         this.b(6000001.0F);
-        this.K();
-        this.t = true;
+        this.q();
+        this.n = true;
     }
 
-    public int b() {
-        return -1;
+    public EnumRenderType a(IBlockData iblockdata) {
+        return EnumRenderType.INVISIBLE;
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 

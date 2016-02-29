@@ -1,16 +1,16 @@
 package net.minecraft.server;
 
-public class BlockJukeBox extends BlockContainer {
+public class BlockJukeBox extends BlockTileEntity {
 
     public static final BlockStateBoolean HAS_RECORD = BlockStateBoolean.of("has_record");
 
     protected BlockJukeBox() {
         super(Material.WOOD, MaterialMapColor.l);
-        this.j(this.blockStateList.getBlockData().set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false)));
         this.a(CreativeModeTab.c);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (((Boolean) iblockdata.get(BlockJukeBox.HAS_RECORD)).booleanValue()) {
             this.dropRecord(world, blockposition, iblockdata);
             iblockdata = iblockdata.set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false));
@@ -26,7 +26,7 @@ public class BlockJukeBox extends BlockContainer {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof BlockJukeBox.TileEntityRecordPlayer) {
-                ((BlockJukeBox.TileEntityRecordPlayer) tileentity).setRecord(new ItemStack(itemstack.getItem(), 1, itemstack.getData()));
+                ((BlockJukeBox.TileEntityRecordPlayer) tileentity).setRecord(itemstack.cloneItemStack());
                 world.setTypeAndData(blockposition, iblockdata.set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(true)), 2);
             }
         }
@@ -41,8 +41,8 @@ public class BlockJukeBox extends BlockContainer {
                 ItemStack itemstack = blockjukebox_tileentityrecordplayer.getRecord();
 
                 if (itemstack != null) {
-                    world.triggerEffect(1005, blockposition, 0);
-                    world.a(blockposition, (String) null);
+                    world.triggerEffect(1010, blockposition, 0);
+                    world.a(blockposition, (SoundEffect) null);
                     blockjukebox_tileentityrecordplayer.setRecord((ItemStack) null);
                     float f = 0.7F;
                     double d0 = (double) (world.random.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
@@ -51,7 +51,7 @@ public class BlockJukeBox extends BlockContainer {
                     ItemStack itemstack1 = itemstack.cloneItemStack();
                     EntityItem entityitem = new EntityItem(world, (double) blockposition.getX() + d0, (double) blockposition.getY() + d1, (double) blockposition.getZ() + d2, itemstack1);
 
-                    entityitem.p();
+                    entityitem.q();
                     world.addEntity(entityitem);
                 }
             }
@@ -73,11 +73,11 @@ public class BlockJukeBox extends BlockContainer {
         return new BlockJukeBox.TileEntityRecordPlayer();
     }
 
-    public boolean isComplexRedstone() {
+    public boolean isComplexRedstone(IBlockData iblockdata) {
         return true;
     }
 
-    public int l(World world, BlockPosition blockposition) {
+    public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof BlockJukeBox.TileEntityRecordPlayer) {
@@ -91,8 +91,8 @@ public class BlockJukeBox extends BlockContainer {
         return 0;
     }
 
-    public int b() {
-        return 3;
+    public EnumRenderType a(IBlockData iblockdata) {
+        return EnumRenderType.MODEL;
     }
 
     public IBlockData fromLegacyData(int i) {
@@ -118,13 +118,13 @@ public class BlockJukeBox extends BlockContainer {
             if (nbttagcompound.hasKeyOfType("RecordItem", 10)) {
                 this.setRecord(ItemStack.createStack(nbttagcompound.getCompound("RecordItem")));
             } else if (nbttagcompound.getInt("Record") > 0) {
-                this.setRecord(new ItemStack(Item.getById(nbttagcompound.getInt("Record")), 1, 0));
+                this.setRecord(new ItemStack(Item.getById(nbttagcompound.getInt("Record"))));
             }
 
         }
 
-        public void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        public void save(NBTTagCompound nbttagcompound) {
+            super.save(nbttagcompound);
             if (this.getRecord() != null) {
                 nbttagcompound.set("RecordItem", this.getRecord().save(new NBTTagCompound()));
             }

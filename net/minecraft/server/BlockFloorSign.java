@@ -5,11 +5,11 @@ public class BlockFloorSign extends BlockSign {
     public static final BlockStateInteger ROTATION = BlockStateInteger.of("rotation", 0, 15);
 
     public BlockFloorSign() {
-        this.j(this.blockStateList.getBlockData().set(BlockFloorSign.ROTATION, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockFloorSign.ROTATION, Integer.valueOf(0)));
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        if (!world.getType(blockposition.down()).getBlock().getMaterial().isBuildable()) {
+        if (!world.getType(blockposition.down()).getMaterial().isBuildable()) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
         }
@@ -23,6 +23,14 @@ public class BlockFloorSign extends BlockSign {
 
     public int toLegacyData(IBlockData iblockdata) {
         return ((Integer) iblockdata.get(BlockFloorSign.ROTATION)).intValue();
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return iblockdata.set(BlockFloorSign.ROTATION, Integer.valueOf(enumblockrotation.a(((Integer) iblockdata.get(BlockFloorSign.ROTATION)).intValue(), 16)));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.set(BlockFloorSign.ROTATION, Integer.valueOf(enumblockmirror.a(((Integer) iblockdata.get(BlockFloorSign.ROTATION)).intValue(), 16)));
     }
 
     protected BlockStateList getStateList() {

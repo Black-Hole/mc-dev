@@ -8,53 +8,47 @@ public class PacketPlayOutNamedEntitySpawn implements Packet<PacketListenerPlayO
 
     private int a;
     private UUID b;
-    private int c;
-    private int d;
-    private int e;
+    private double c;
+    private double d;
+    private double e;
     private byte f;
     private byte g;
-    private int h;
-    private DataWatcher i;
-    private List<DataWatcher.WatchableObject> j;
+    private DataWatcher h;
+    private List<DataWatcher.Item<?>> i;
 
     public PacketPlayOutNamedEntitySpawn() {}
 
     public PacketPlayOutNamedEntitySpawn(EntityHuman entityhuman) {
         this.a = entityhuman.getId();
         this.b = entityhuman.getProfile().getId();
-        this.c = MathHelper.floor(entityhuman.locX * 32.0D);
-        this.d = MathHelper.floor(entityhuman.locY * 32.0D);
-        this.e = MathHelper.floor(entityhuman.locZ * 32.0D);
+        this.c = entityhuman.locX;
+        this.d = entityhuman.locY;
+        this.e = entityhuman.locZ;
         this.f = (byte) ((int) (entityhuman.yaw * 256.0F / 360.0F));
         this.g = (byte) ((int) (entityhuman.pitch * 256.0F / 360.0F));
-        ItemStack itemstack = entityhuman.inventory.getItemInHand();
-
-        this.h = itemstack == null ? 0 : Item.getId(itemstack.getItem());
-        this.i = entityhuman.getDataWatcher();
+        this.h = entityhuman.getDataWatcher();
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-        this.b = packetdataserializer.g();
-        this.c = packetdataserializer.readInt();
-        this.d = packetdataserializer.readInt();
-        this.e = packetdataserializer.readInt();
+        this.a = packetdataserializer.g();
+        this.b = packetdataserializer.i();
+        this.c = packetdataserializer.readDouble();
+        this.d = packetdataserializer.readDouble();
+        this.e = packetdataserializer.readDouble();
         this.f = packetdataserializer.readByte();
         this.g = packetdataserializer.readByte();
-        this.h = packetdataserializer.readShort();
-        this.j = DataWatcher.b(packetdataserializer);
+        this.i = DataWatcher.b(packetdataserializer);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
         packetdataserializer.a(this.b);
-        packetdataserializer.writeInt(this.c);
-        packetdataserializer.writeInt(this.d);
-        packetdataserializer.writeInt(this.e);
+        packetdataserializer.writeDouble(this.c);
+        packetdataserializer.writeDouble(this.d);
+        packetdataserializer.writeDouble(this.e);
         packetdataserializer.writeByte(this.f);
         packetdataserializer.writeByte(this.g);
-        packetdataserializer.writeShort(this.h);
-        this.i.a(packetdataserializer);
+        this.h.a(packetdataserializer);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class ItemWrittenBook extends Item {
 
     public ItemWrittenBook() {
-        this.c(1);
+        this.d(1);
     }
 
     public static boolean b(NBTTagCompound nbttagcompound) {
@@ -35,14 +35,14 @@ public class ItemWrittenBook extends Item {
         return super.a(itemstack);
     }
 
-    public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
+    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
         if (!world.isClientSide) {
             this.a(itemstack, entityhuman);
         }
 
-        entityhuman.openBook(itemstack);
-        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
-        return itemstack;
+        entityhuman.a(itemstack, enumhand);
+        entityhuman.b(StatisticList.b((Item) this));
+        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
     }
 
     private void a(ItemStack itemstack, EntityHuman entityhuman) {
@@ -60,7 +60,7 @@ public class ItemWrittenBook extends Item {
                         Object object;
 
                         try {
-                            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
+                            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.b(s);
 
                             object = ChatComponentUtils.filterForDisplay(entityhuman, ichatbasecomponent, entityhuman);
                         } catch (Exception exception) {
@@ -71,7 +71,7 @@ public class ItemWrittenBook extends Item {
                     }
 
                     nbttagcompound.set("pages", nbttaglist);
-                    if (entityhuman instanceof EntityPlayer && entityhuman.bZ() == itemstack) {
+                    if (entityhuman instanceof EntityPlayer && entityhuman.getItemInMainHand() == itemstack) {
                         Slot slot = entityhuman.activeContainer.getSlot(entityhuman.inventory, entityhuman.inventory.itemInHandIndex);
 
                         ((EntityPlayer) entityhuman).playerConnection.sendPacket(new PacketPlayOutSetSlot(0, slot.rawSlotIndex, itemstack));

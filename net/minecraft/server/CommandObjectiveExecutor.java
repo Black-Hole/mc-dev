@@ -12,7 +12,7 @@ public class CommandObjectiveExecutor {
         this.d = CommandObjectiveExecutor.b;
     }
 
-    public void a(final ICommandListener icommandlistener, CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
+    public void a(MinecraftServer minecraftserver, final ICommandListener icommandlistener, CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
         String s = this.c[commandobjectiveexecutor_enumcommandresult.a()];
 
         if (s != null) {
@@ -56,12 +56,16 @@ public class CommandObjectiveExecutor {
                 public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
                     icommandlistener.a(commandobjectiveexecutor_enumcommandresult, i);
                 }
+
+                public MinecraftServer h() {
+                    return icommandlistener.h();
+                }
             };
 
             String s1;
 
             try {
-                s1 = CommandAbstract.e(icommandlistener1, s);
+                s1 = CommandAbstract.e(minecraftserver, icommandlistener1, s);
             } catch (ExceptionEntityNotFound exceptionentitynotfound) {
                 return;
             }
@@ -128,7 +132,7 @@ public class CommandObjectiveExecutor {
     }
 
     public static void a(CommandObjectiveExecutor commandobjectiveexecutor, CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, String s, String s1) {
-        if (s != null && s.length() != 0 && s1 != null && s1.length() != 0) {
+        if (s != null && !s.isEmpty() && s1 != null && !s1.isEmpty()) {
             if (commandobjectiveexecutor.c == CommandObjectiveExecutor.b || commandobjectiveexecutor.d == CommandObjectiveExecutor.b) {
                 commandobjectiveexecutor.c = new String[CommandObjectiveExecutor.a];
                 commandobjectiveexecutor.d = new String[CommandObjectiveExecutor.a];

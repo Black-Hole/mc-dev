@@ -17,15 +17,16 @@ public class ContainerEnchantTable extends Container {
     };
     private World world;
     private BlockPosition position;
-    private Random k = new Random();
+    private Random l = new Random();
     public int f;
     public int[] costs = new int[3];
     public int[] h = new int[] { -1, -1, -1};
+    public int[] i = new int[] { -1, -1, -1};
 
     public ContainerEnchantTable(PlayerInventory playerinventory, World world, BlockPosition blockposition) {
         this.world = world;
         this.position = blockposition;
-        this.f = playerinventory.player.cj();
+        this.f = playerinventory.player.cQ();
         this.a(new Slot(this.enchantSlots, 0, 15, 47) {
             public boolean isAllowed(ItemStack itemstack) {
                 return true;
@@ -55,8 +56,7 @@ public class ContainerEnchantTable extends Container {
 
     }
 
-    public void addSlotListener(ICrafting icrafting) {
-        super.addSlotListener(icrafting);
+    protected void c(ICrafting icrafting) {
         icrafting.setContainerData(this, 0, this.costs[0]);
         icrafting.setContainerData(this, 1, this.costs[1]);
         icrafting.setContainerData(this, 2, this.costs[2]);
@@ -64,6 +64,14 @@ public class ContainerEnchantTable extends Container {
         icrafting.setContainerData(this, 4, this.h[0]);
         icrafting.setContainerData(this, 5, this.h[1]);
         icrafting.setContainerData(this, 6, this.h[2]);
+        icrafting.setContainerData(this, 7, this.i[0]);
+        icrafting.setContainerData(this, 8, this.i[1]);
+        icrafting.setContainerData(this, 9, this.i[2]);
+    }
+
+    public void addSlotListener(ICrafting icrafting) {
+        super.addSlotListener(icrafting);
+        this.c(icrafting);
     }
 
     public void b() {
@@ -72,13 +80,7 @@ public class ContainerEnchantTable extends Container {
         for (int i = 0; i < this.listeners.size(); ++i) {
             ICrafting icrafting = (ICrafting) this.listeners.get(i);
 
-            icrafting.setContainerData(this, 0, this.costs[0]);
-            icrafting.setContainerData(this, 1, this.costs[1]);
-            icrafting.setContainerData(this, 2, this.costs[2]);
-            icrafting.setContainerData(this, 3, this.f & -16);
-            icrafting.setContainerData(this, 4, this.h[0]);
-            icrafting.setContainerData(this, 5, this.h[1]);
-            icrafting.setContainerData(this, 6, this.h[2]);
+            this.c(icrafting);
         }
 
     }
@@ -126,11 +128,12 @@ public class ContainerEnchantTable extends Container {
                         }
                     }
 
-                    this.k.setSeed((long) this.f);
+                    this.l.setSeed((long) this.f);
 
                     for (j = 0; j < 3; ++j) {
-                        this.costs[j] = EnchantmentManager.a(this.k, j, i, itemstack);
+                        this.costs[j] = EnchantmentManager.a(this.l, j, i, itemstack);
                         this.h[j] = -1;
+                        this.i[j] = -1;
                         if (this.costs[j] < j + 1) {
                             this.costs[j] = 0;
                         }
@@ -141,9 +144,10 @@ public class ContainerEnchantTable extends Container {
                             List list = this.a(itemstack, j, this.costs[j]);
 
                             if (list != null && !list.isEmpty()) {
-                                WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(this.k.nextInt(list.size()));
+                                WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(this.l.nextInt(list.size()));
 
-                                this.h[j] = weightedrandomenchant.enchantment.id | weightedrandomenchant.level << 8;
+                                this.h[j] = Enchantment.getId(weightedrandomenchant.enchantment);
+                                this.i[j] = weightedrandomenchant.level;
                             }
                         }
                     }
@@ -154,6 +158,7 @@ public class ContainerEnchantTable extends Container {
                 for (i = 0; i < 3; ++i) {
                     this.costs[i] = 0;
                     this.h[i] = -1;
+                    this.i[i] = -1;
                 }
             }
         }
@@ -195,9 +200,9 @@ public class ContainerEnchantTable extends Container {
                         }
                     }
 
-                    entityhuman.b(StatisticList.W);
+                    entityhuman.b(StatisticList.Y);
                     this.enchantSlots.update();
-                    this.f = entityhuman.cj();
+                    this.f = entityhuman.cQ();
                     this.a(this.enchantSlots);
                 }
             }
@@ -209,11 +214,11 @@ public class ContainerEnchantTable extends Container {
     }
 
     private List<WeightedRandomEnchant> a(ItemStack itemstack, int i, int j) {
-        this.k.setSeed((long) (this.f + i));
-        List list = EnchantmentManager.b(this.k, itemstack, j);
+        this.l.setSeed((long) (this.f + i));
+        List list = EnchantmentManager.b(this.l, itemstack, j, false);
 
-        if (itemstack.getItem() == Items.BOOK && list != null && list.size() > 1) {
-            list.remove(this.k.nextInt(list.size()));
+        if (itemstack.getItem() == Items.BOOK && list.size() > 1) {
+            list.remove(this.l.nextInt(list.size()));
         }
 
         return list;

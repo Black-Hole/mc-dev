@@ -56,7 +56,9 @@ public class MojangStatisticsGenerator {
                             hashmap.put("snooper_token", MojangStatisticsGenerator.this.c);
                         }
 
-                        HttpUtilities.a(MojangStatisticsGenerator.this.d, (Map) hashmap, true);
+                        MinecraftServer minecraftserver = MojangStatisticsGenerator.this.e instanceof MinecraftServer ? (MinecraftServer) MojangStatisticsGenerator.this.e : null;
+
+                        HttpUtilities.a(MojangStatisticsGenerator.this.d, (Map) hashmap, true, minecraftserver == null ? null : minecraftserver.au());
                     }
                 }
             }, 0L, 900000L);
@@ -71,7 +73,7 @@ public class MojangStatisticsGenerator {
         this.b("os_version", System.getProperty("os.version"));
         this.b("os_architecture", System.getProperty("os.arch"));
         this.b("java_version", System.getProperty("java.version"));
-        this.a("version", "1.8.8");
+        this.a("version", "1.9");
         this.e.b(this);
     }
 

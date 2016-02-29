@@ -5,20 +5,22 @@ import java.util.Random;
 public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElement {
 
     public static final BlockStateEnum<BlockLongGrass.EnumTallGrassType> TYPE = BlockStateEnum.of("type", BlockLongGrass.EnumTallGrassType.class);
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
 
     protected BlockLongGrass() {
         super(Material.REPLACEABLE_PLANT);
-        this.j(this.blockStateList.getBlockData().set(BlockLongGrass.TYPE, BlockLongGrass.EnumTallGrassType.DEAD_BUSH));
-        float f = 0.4F;
+        this.w(this.blockStateList.getBlockData().set(BlockLongGrass.TYPE, BlockLongGrass.EnumTallGrassType.DEAD_BUSH));
+    }
 
-        this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.8F, 0.5F + f);
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockLongGrass.c;
     }
 
     public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return this.c(world.getType(blockposition.down()).getBlock());
+        return this.i(world.getType(blockposition.down()));
     }
 
-    public boolean a(World world, BlockPosition blockposition) {
+    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         return true;
     }
 
@@ -30,20 +32,18 @@ public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElem
         return 1 + random.nextInt(i * 2 + 1);
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity) {
-        if (!world.isClientSide && entityhuman.bZ() != null && entityhuman.bZ().getItem() == Items.SHEARS) {
-            entityhuman.b(StatisticList.MINE_BLOCK_COUNT[Block.getId(this)]);
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
+        if (!world.isClientSide && itemstack != null && itemstack.getItem() == Items.SHEARS) {
+            entityhuman.b(StatisticList.a((Block) this));
             a(world, blockposition, new ItemStack(Blocks.TALLGRASS, 1, ((BlockLongGrass.EnumTallGrassType) iblockdata.get(BlockLongGrass.TYPE)).a()));
         } else {
-            super.a(world, entityhuman, blockposition, iblockdata, tileentity);
+            super.a(world, entityhuman, blockposition, iblockdata, tileentity, itemstack);
         }
 
     }
 
-    public int getDropData(World world, BlockPosition blockposition) {
-        IBlockData iblockdata = world.getType(blockposition);
-
-        return iblockdata.getBlock().toLegacyData(iblockdata);
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(this, 1, iblockdata.getBlock().toLegacyData(iblockdata));
     }
 
     public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {

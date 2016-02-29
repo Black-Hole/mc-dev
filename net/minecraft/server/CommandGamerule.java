@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class CommandGamerule extends CommandAbstract {
         return "commands.gamerule.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
-        GameRules gamerules = this.d();
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
+        GameRules gamerules = this.a(minecraftserver);
         String s = astring.length > 0 ? astring[0] : "";
         String s1 = astring.length > 1 ? a(astring, 1) : "";
 
@@ -46,16 +47,16 @@ public class CommandGamerule extends CommandAbstract {
             }
 
             gamerules.set(s, s1);
-            a(gamerules, s);
-            a(icommandlistener, this, "commands.gamerule.success", new Object[0]);
+            a(gamerules, s, minecraftserver);
+            a(icommandlistener, (ICommand) this, "commands.gamerule.success", new Object[] { s, s1});
         }
 
     }
 
-    public static void a(GameRules gamerules, String s) {
+    public static void a(GameRules gamerules, String s, MinecraftServer minecraftserver) {
         if ("reducedDebugInfo".equals(s)) {
             int i = gamerules.getBoolean(s) ? 22 : 23;
-            Iterator iterator = MinecraftServer.getServer().getPlayerList().v().iterator();
+            Iterator iterator = minecraftserver.getPlayerList().v().iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -66,23 +67,23 @@ public class CommandGamerule extends CommandAbstract {
 
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
         if (astring.length == 1) {
-            return a(astring, this.d().getGameRules());
+            return a(astring, this.a(minecraftserver).getGameRules());
         } else {
             if (astring.length == 2) {
-                GameRules gamerules = this.d();
+                GameRules gamerules = this.a(minecraftserver);
 
                 if (gamerules.a(astring[0], GameRules.EnumGameRuleType.BOOLEAN_VALUE)) {
                     return a(astring, new String[] { "true", "false"});
                 }
             }
 
-            return null;
+            return Collections.emptyList();
         }
     }
 
-    private GameRules d() {
-        return MinecraftServer.getServer().getWorldServer(0).getGameRules();
+    private GameRules a(MinecraftServer minecraftserver) {
+        return minecraftserver.getWorldServer(0).getGameRules();
     }
 }

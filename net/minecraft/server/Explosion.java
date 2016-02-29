@@ -62,7 +62,7 @@ public class Explosion {
                             BlockPosition blockposition = new BlockPosition(d4, d5, d6);
                             IBlockData iblockdata = this.world.getType(blockposition);
 
-                            if (iblockdata.getBlock().getMaterial() != Material.AIR) {
+                            if (iblockdata.getMaterial() != Material.AIR) {
                                 float f2 = this.source != null ? this.source.a(this, this.world, blockposition, iblockdata) : iblockdata.getBlock().a((Entity) null);
 
                                 f -= (f2 + 0.3F) * 0.3F;
@@ -96,7 +96,7 @@ public class Explosion {
         for (int l1 = 0; l1 < list.size(); ++l1) {
             Entity entity = (Entity) list.get(l1);
 
-            if (!entity.aW()) {
+            if (!entity.bq()) {
                 double d7 = entity.f(this.posX, this.posY, this.posZ) / (double) f3;
 
                 if (d7 <= 1.0D) {
@@ -112,14 +112,22 @@ public class Explosion {
                         double d12 = (double) this.world.a(vec3d, entity.getBoundingBox());
                         double d13 = (1.0D - d7) * d12;
 
-                        entity.damageEntity(DamageSource.explosion(this), (float) ((int) ((d13 * d13 + d13) / 2.0D * 8.0D * (double) f3 + 1.0D)));
-                        double d14 = EnchantmentProtection.a(entity, d13);
+                        entity.damageEntity(DamageSource.explosion(this), (float) ((int) ((d13 * d13 + d13) / 2.0D * 7.0D * (double) f3 + 1.0D)));
+                        double d14 = 1.0D;
+
+                        if (entity instanceof EntityLiving) {
+                            d14 = EnchantmentProtection.a((EntityLiving) entity, d13);
+                        }
 
                         entity.motX += d8 * d14;
                         entity.motY += d9 * d14;
                         entity.motZ += d10 * d14;
-                        if (entity instanceof EntityHuman && !((EntityHuman) entity).abilities.isInvulnerable) {
-                            this.k.put((EntityHuman) entity, new Vec3D(d8 * d13, d9 * d13, d10 * d13));
+                        if (entity instanceof EntityHuman) {
+                            EntityHuman entityhuman = (EntityHuman) entity;
+
+                            if (!entityhuman.isSpectator() && (!entityhuman.l_() || !entityhuman.abilities.isFlying)) {
+                                this.k.put(entityhuman, new Vec3D(d8 * d13, d9 * d13, d10 * d13));
+                            }
                         }
                     }
                 }
@@ -129,7 +137,7 @@ public class Explosion {
     }
 
     public void a(boolean flag) {
-        this.world.makeSound(this.posX, this.posY, this.posZ, "random.explode", 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F);
+        this.world.a((EntityHuman) null, this.posX, this.posY, this.posZ, SoundEffects.bD, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F);
         if (this.size >= 2.0F && this.b) {
             this.world.addParticle(EnumParticle.EXPLOSION_HUGE, this.posX, this.posY, this.posZ, 1.0D, 0.0D, 0.0D, new int[0]);
         } else {
@@ -144,7 +152,8 @@ public class Explosion {
 
             while (iterator.hasNext()) {
                 blockposition = (BlockPosition) iterator.next();
-                Block block = this.world.getType(blockposition).getBlock();
+                IBlockData iblockdata = this.world.getType(blockposition);
+                Block block = iblockdata.getBlock();
 
                 if (flag) {
                     double d0 = (double) ((float) blockposition.getX() + this.world.random.nextFloat());
@@ -164,11 +173,11 @@ public class Explosion {
                     d3 *= d7;
                     d4 *= d7;
                     d5 *= d7;
-                    this.world.addParticle(EnumParticle.EXPLOSION_NORMAL, (d0 + this.posX * 1.0D) / 2.0D, (d1 + this.posY * 1.0D) / 2.0D, (d2 + this.posZ * 1.0D) / 2.0D, d3, d4, d5, new int[0]);
+                    this.world.addParticle(EnumParticle.EXPLOSION_NORMAL, (d0 + this.posX) / 2.0D, (d1 + this.posY) / 2.0D, (d2 + this.posZ) / 2.0D, d3, d4, d5, new int[0]);
                     this.world.addParticle(EnumParticle.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
                 }
 
-                if (block.getMaterial() != Material.AIR) {
+                if (iblockdata.getMaterial() != Material.AIR) {
                     if (block.a(this)) {
                         block.dropNaturally(this.world, blockposition, this.world.getType(blockposition), 1.0F / this.size, 0);
                     }
@@ -184,7 +193,7 @@ public class Explosion {
 
             while (iterator.hasNext()) {
                 blockposition = (BlockPosition) iterator.next();
-                if (this.world.getType(blockposition).getBlock().getMaterial() == Material.AIR && this.world.getType(blockposition.down()).getBlock().o() && this.c.nextInt(3) == 0) {
+                if (this.world.getType(blockposition).getMaterial() == Material.AIR && this.world.getType(blockposition.down()).b() && this.c.nextInt(3) == 0) {
                     this.world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
                 }
             }

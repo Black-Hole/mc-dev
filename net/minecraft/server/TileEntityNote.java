@@ -7,15 +7,17 @@ public class TileEntityNote extends TileEntity {
 
     public TileEntityNote() {}
 
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void save(NBTTagCompound nbttagcompound) {
+        super.save(nbttagcompound);
         nbttagcompound.setByte("note", this.note);
+        nbttagcompound.setBoolean("powered", this.f);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.note = nbttagcompound.getByte("note");
         this.note = (byte) MathHelper.clamp(this.note, 0, 24);
+        this.f = nbttagcompound.getBoolean("powered");
     }
 
     public void b() {
@@ -24,8 +26,8 @@ public class TileEntityNote extends TileEntity {
     }
 
     public void play(World world, BlockPosition blockposition) {
-        if (world.getType(blockposition.up()).getBlock().getMaterial() == Material.AIR) {
-            Material material = world.getType(blockposition.down()).getBlock().getMaterial();
+        if (world.getType(blockposition.up()).getMaterial() == Material.AIR) {
+            Material material = world.getType(blockposition.down()).getMaterial();
             byte b0 = 0;
 
             if (material == Material.STONE) {

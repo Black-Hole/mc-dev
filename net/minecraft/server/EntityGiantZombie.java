@@ -19,6 +19,10 @@ public class EntityGiantZombie extends EntityMonster {
     }
 
     public float a(BlockPosition blockposition) {
-        return this.world.o(blockposition) - 0.5F;
+        return this.world.n(blockposition) - 0.5F;
+    }
+
+    protected MinecraftKey J() {
+        return LootTables.s;
     }
 }

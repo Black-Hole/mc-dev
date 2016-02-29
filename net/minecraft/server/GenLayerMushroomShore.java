@@ -21,17 +21,17 @@ public class GenLayerMushroomShore extends GenLayer {
                 int j2;
                 int k2;
 
-                if (k1 == BiomeBase.MUSHROOM_ISLAND.id) {
+                if (k1 == BiomeBase.a(Biomes.p)) {
                     l1 = aint[j1 + 1 + (i1 + 1 - 1) * (k + 2)];
                     i2 = aint[j1 + 1 + 1 + (i1 + 1) * (k + 2)];
                     j2 = aint[j1 + 1 - 1 + (i1 + 1) * (k + 2)];
                     k2 = aint[j1 + 1 + (i1 + 1 + 1) * (k + 2)];
-                    if (l1 != BiomeBase.OCEAN.id && i2 != BiomeBase.OCEAN.id && j2 != BiomeBase.OCEAN.id && k2 != BiomeBase.OCEAN.id) {
+                    if (l1 != BiomeBase.a(Biomes.a) && i2 != BiomeBase.a(Biomes.a) && j2 != BiomeBase.a(Biomes.a) && k2 != BiomeBase.a(Biomes.a)) {
                         aint1[j1 + i1 * k] = k1;
                     } else {
-                        aint1[j1 + i1 * k] = BiomeBase.MUSHROOM_SHORE.id;
+                        aint1[j1 + i1 * k] = BiomeBase.a(Biomes.q);
                     }
-                } else if (biomebase != null && biomebase.l() == BiomeJungle.class) {
+                } else if (biomebase != null && biomebase.g() == BiomeJungle.class) {
                     l1 = aint[j1 + 1 + (i1 + 1 - 1) * (k + 2)];
                     i2 = aint[j1 + 1 + 1 + (i1 + 1) * (k + 2)];
                     j2 = aint[j1 + 1 - 1 + (i1 + 1) * (k + 2)];
@@ -40,16 +40,16 @@ public class GenLayerMushroomShore extends GenLayer {
                         if (!b(l1) && !b(i2) && !b(j2) && !b(k2)) {
                             aint1[j1 + i1 * k] = k1;
                         } else {
-                            aint1[j1 + i1 * k] = BiomeBase.BEACH.id;
+                            aint1[j1 + i1 * k] = BiomeBase.a(Biomes.r);
                         }
                     } else {
-                        aint1[j1 + i1 * k] = BiomeBase.JUNGLE_EDGE.id;
+                        aint1[j1 + i1 * k] = BiomeBase.a(Biomes.y);
                     }
-                } else if (k1 != BiomeBase.EXTREME_HILLS.id && k1 != BiomeBase.EXTREME_HILLS_PLUS.id && k1 != BiomeBase.SMALL_MOUNTAINS.id) {
-                    if (biomebase != null && biomebase.j()) {
-                        this.a(aint, aint1, j1, i1, k, k1, BiomeBase.COLD_BEACH.id);
-                    } else if (k1 != BiomeBase.MESA.id && k1 != BiomeBase.MESA_PLATEAU_F.id) {
-                        if (k1 != BiomeBase.OCEAN.id && k1 != BiomeBase.DEEP_OCEAN.id && k1 != BiomeBase.RIVER.id && k1 != BiomeBase.SWAMPLAND.id) {
+                } else if (k1 != BiomeBase.a(Biomes.e) && k1 != BiomeBase.a(Biomes.J) && k1 != BiomeBase.a(Biomes.v)) {
+                    if (biomebase != null && biomebase.p()) {
+                        this.a(aint, aint1, j1, i1, k, k1, BiomeBase.a(Biomes.B));
+                    } else if (k1 != BiomeBase.a(Biomes.M) && k1 != BiomeBase.a(Biomes.N)) {
+                        if (k1 != BiomeBase.a(Biomes.a) && k1 != BiomeBase.a(Biomes.z) && k1 != BiomeBase.a(Biomes.i) && k1 != BiomeBase.a(Biomes.h)) {
                             l1 = aint[j1 + 1 + (i1 + 1 - 1) * (k + 2)];
                             i2 = aint[j1 + 1 + 1 + (i1 + 1) * (k + 2)];
                             j2 = aint[j1 + 1 - 1 + (i1 + 1) * (k + 2)];
@@ -57,7 +57,7 @@ public class GenLayerMushroomShore extends GenLayer {
                             if (!b(l1) && !b(i2) && !b(j2) && !b(k2)) {
                                 aint1[j1 + i1 * k] = k1;
                             } else {
-                                aint1[j1 + i1 * k] = BiomeBase.BEACH.id;
+                                aint1[j1 + i1 * k] = BiomeBase.a(Biomes.r);
                             }
                         } else {
                             aint1[j1 + i1 * k] = k1;
@@ -71,14 +71,14 @@ public class GenLayerMushroomShore extends GenLayer {
                             if (this.d(l1) && this.d(i2) && this.d(j2) && this.d(k2)) {
                                 aint1[j1 + i1 * k] = k1;
                             } else {
-                                aint1[j1 + i1 * k] = BiomeBase.DESERT.id;
+                                aint1[j1 + i1 * k] = BiomeBase.a(Biomes.d);
                             }
                         } else {
                             aint1[j1 + i1 * k] = k1;
                         }
                     }
                 } else {
-                    this.a(aint, aint1, j1, i1, k, k1, BiomeBase.STONE_BEACH.id);
+                    this.a(aint, aint1, j1, i1, k, k1, BiomeBase.a(Biomes.A));
                 }
             }
         }
@@ -105,7 +105,7 @@ public class GenLayerMushroomShore extends GenLayer {
     }
 
     private boolean c(int i) {
-        return BiomeBase.getBiome(i) != null && BiomeBase.getBiome(i).l() == BiomeJungle.class ? true : i == BiomeBase.JUNGLE_EDGE.id || i == BiomeBase.JUNGLE.id || i == BiomeBase.JUNGLE_HILLS.id || i == BiomeBase.FOREST.id || i == BiomeBase.TAIGA.id || b(i);
+        return BiomeBase.getBiome(i) != null && BiomeBase.getBiome(i).g() == BiomeJungle.class ? true : i == BiomeBase.a(Biomes.y) || i == BiomeBase.a(Biomes.w) || i == BiomeBase.a(Biomes.x) || i == BiomeBase.a(Biomes.f) || i == BiomeBase.a(Biomes.g) || b(i);
     }
 
     private boolean d(int i) {

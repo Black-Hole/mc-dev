@@ -5,11 +5,14 @@ import java.util.Random;
 
 public class BlockMushroom extends BlockPlant implements IBlockFragilePlantElement {
 
-    protected BlockMushroom() {
-        float f = 0.2F;
+    protected static final AxisAlignedBB a = new AxisAlignedBB(0.30000001192092896D, 0.0D, 0.30000001192092896D, 0.699999988079071D, 0.4000000059604645D, 0.699999988079071D);
 
-        this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 2.0F, 0.5F + f);
+    protected BlockMushroom() {
         this.a(true);
+    }
+
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockMushroom.a;
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
@@ -50,21 +53,21 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
         return super.canPlace(world, blockposition) && this.f(world, blockposition, this.getBlockData());
     }
 
-    protected boolean c(Block block) {
-        return block.o();
+    protected boolean i(IBlockData iblockdata) {
+        return iblockdata.b();
     }
 
     public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (blockposition.getY() >= 0 && blockposition.getY() < 256) {
             IBlockData iblockdata1 = world.getType(blockposition.down());
 
-            return iblockdata1.getBlock() == Blocks.MYCELIUM ? true : (iblockdata1.getBlock() == Blocks.DIRT && iblockdata1.get(BlockDirt.VARIANT) == BlockDirt.EnumDirtVariant.PODZOL ? true : world.k(blockposition) < 13 && this.c(iblockdata1.getBlock()));
+            return iblockdata1.getBlock() == Blocks.MYCELIUM ? true : (iblockdata1.getBlock() == Blocks.DIRT && iblockdata1.get(BlockDirt.VARIANT) == BlockDirt.EnumDirtVariant.PODZOL ? true : world.j(blockposition) < 13 && this.i(iblockdata1));
         } else {
             return false;
         }
     }
 
-    public boolean d(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+    public boolean c(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         world.setAir(blockposition);
         WorldGenHugeMushroom worldgenhugemushroom = null;
 
@@ -91,6 +94,6 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
     }
 
     public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        this.d(world, blockposition, iblockdata, random);
+        this.c(world, blockposition, iblockdata, random);
     }
 }

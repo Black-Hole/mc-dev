@@ -15,15 +15,15 @@ public class EntityPigZombie extends EntityZombie {
         this.fireProof = true;
     }
 
-    public void b(EntityLiving entityliving) {
-        super.b(entityliving);
+    public void a(EntityLiving entityliving) {
+        super.a(entityliving);
         if (entityliving != null) {
             this.hurtBy = entityliving.getUniqueID();
         }
 
     }
 
-    protected void n() {
+    protected void o() {
         this.targetSelector.a(1, new EntityPigZombie.PathfinderGoalAngerOther(this));
         this.targetSelector.a(2, new EntityPigZombie.PathfinderGoalAnger(this));
     }
@@ -35,14 +35,14 @@ public class EntityPigZombie extends EntityZombie {
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(5.0D);
     }
 
-    public void t_() {
-        super.t_();
+    public void m() {
+        super.m();
     }
 
-    protected void E() {
+    protected void M() {
         AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
-        if (this.cm()) {
+        if (this.da()) {
             if (!this.isBaby() && !attributeinstance.a(EntityPigZombie.c)) {
                 attributeinstance.b(EntityPigZombie.c);
             }
@@ -53,21 +53,21 @@ public class EntityPigZombie extends EntityZombie {
         }
 
         if (this.soundDelay > 0 && --this.soundDelay == 0) {
-            this.makeSound("mob.zombiepig.zpigangry", this.bB() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
+            this.a(SoundEffects.hr, this.cd() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
         }
 
         if (this.angerLevel > 0 && this.hurtBy != null && this.getLastDamager() == null) {
             EntityHuman entityhuman = this.world.b(this.hurtBy);
 
-            this.b((EntityLiving) entityhuman);
+            this.a((EntityLiving) entityhuman);
             this.killer = entityhuman;
-            this.lastDamageByPlayerTime = this.be();
+            this.lastDamageByPlayerTime = this.bH();
         }
 
-        super.E();
+        super.M();
     }
 
-    public boolean bR() {
+    public boolean cF() {
         return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
@@ -91,14 +91,14 @@ public class EntityPigZombie extends EntityZombie {
         this.angerLevel = nbttagcompound.getShort("Anger");
         String s = nbttagcompound.getString("HurtBy");
 
-        if (s.length() > 0) {
+        if (!s.isEmpty()) {
             this.hurtBy = UUID.fromString(s);
             EntityHuman entityhuman = this.world.b(this.hurtBy);
 
-            this.b((EntityLiving) entityhuman);
+            this.a((EntityLiving) entityhuman);
             if (entityhuman != null) {
                 this.killer = entityhuman;
-                this.lastDamageByPlayerTime = this.be();
+                this.lastDamageByPlayerTime = this.bH();
             }
         }
 
@@ -111,70 +111,53 @@ public class EntityPigZombie extends EntityZombie {
             Entity entity = damagesource.getEntity();
 
             if (entity instanceof EntityHuman) {
-                this.b(entity);
+                this.a(entity);
             }
 
             return super.damageEntity(damagesource, f);
         }
     }
 
-    private void b(Entity entity) {
+    private void a(Entity entity) {
         this.angerLevel = 400 + this.random.nextInt(400);
         this.soundDelay = this.random.nextInt(40);
         if (entity instanceof EntityLiving) {
-            this.b((EntityLiving) entity);
+            this.a((EntityLiving) entity);
         }
 
     }
 
-    public boolean cm() {
+    public boolean da() {
         return this.angerLevel > 0;
     }
 
-    protected String z() {
-        return "mob.zombiepig.zpig";
+    protected SoundEffect G() {
+        return SoundEffects.hq;
     }
 
-    protected String bo() {
-        return "mob.zombiepig.zpighurt";
+    protected SoundEffect bR() {
+        return SoundEffects.ht;
     }
 
-    protected String bp() {
-        return "mob.zombiepig.zpigdeath";
+    protected SoundEffect bS() {
+        return SoundEffects.hs;
     }
 
-    protected void dropDeathLoot(boolean flag, int i) {
-        int j = this.random.nextInt(2 + i);
-
-        int k;
-
-        for (k = 0; k < j; ++k) {
-            this.a(Items.ROTTEN_FLESH, 1);
-        }
-
-        j = this.random.nextInt(2 + i);
-
-        for (k = 0; k < j; ++k) {
-            this.a(Items.GOLD_NUGGET, 1);
-        }
-
+    protected MinecraftKey J() {
+        return LootTables.ai;
     }
 
-    public boolean a(EntityHuman entityhuman) {
+    public boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
         return false;
     }
 
-    protected void getRareDrop() {
-        this.a(Items.GOLD_INGOT, 1);
-    }
-
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
-        this.setEquipment(0, new ItemStack(Items.GOLDEN_SWORD));
+        this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
     }
 
     public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
         super.prepare(difficultydamagescaler, groupdataentity);
-        this.setVillager(false);
+        this.clearVillagerType();
         return groupdataentity;
     }
 
@@ -185,7 +168,7 @@ public class EntityPigZombie extends EntityZombie {
         }
 
         public boolean a() {
-            return ((EntityPigZombie) this.e).cm() && super.a();
+            return ((EntityPigZombie) this.e).da() && super.a();
         }
     }
 
@@ -198,7 +181,7 @@ public class EntityPigZombie extends EntityZombie {
         protected void a(EntityCreature entitycreature, EntityLiving entityliving) {
             super.a(entitycreature, entityliving);
             if (entitycreature instanceof EntityPigZombie) {
-                ((EntityPigZombie) entitycreature).b((Entity) entityliving);
+                ((EntityPigZombie) entitycreature).a((Entity) entityliving);
             }
 
         }

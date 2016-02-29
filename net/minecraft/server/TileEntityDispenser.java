@@ -19,37 +19,17 @@ public class TileEntityDispenser extends TileEntityContainer implements IInvento
     }
 
     public ItemStack splitStack(int i, int j) {
-        if (this.items[i] != null) {
-            ItemStack itemstack;
+        ItemStack itemstack = ContainerUtil.a(this.items, i, j);
 
-            if (this.items[i].count <= j) {
-                itemstack = this.items[i];
-                this.items[i] = null;
-                this.update();
-                return itemstack;
-            } else {
-                itemstack = this.items[i].cloneAndSubtract(j);
-                if (this.items[i].count == 0) {
-                    this.items[i] = null;
-                }
-
-                this.update();
-                return itemstack;
-            }
-        } else {
-            return null;
+        if (itemstack != null) {
+            this.update();
         }
+
+        return itemstack;
     }
 
     public ItemStack splitWithoutUpdate(int i) {
-        if (this.items[i] != null) {
-            ItemStack itemstack = this.items[i];
-
-            this.items[i] = null;
-            return itemstack;
-        } else {
-            return null;
-        }
+        return ContainerUtil.a(this.items, i);
     }
 
     public int m() {
@@ -118,8 +98,8 @@ public class TileEntityDispenser extends TileEntityContainer implements IInvento
 
     }
 
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void save(NBTTagCompound nbttagcompound) {
+        super.save(nbttagcompound);
         NBTTagList nbttaglist = new NBTTagList();
 
         for (int i = 0; i < this.items.length; ++i) {
@@ -167,7 +147,7 @@ public class TileEntityDispenser extends TileEntityContainer implements IInvento
         return 0;
     }
 
-    public void b(int i, int j) {}
+    public void setProperty(int i, int j) {}
 
     public int g() {
         return 0;

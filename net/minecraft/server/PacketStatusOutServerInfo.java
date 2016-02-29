@@ -16,7 +16,7 @@ public class PacketStatusOutServerInfo implements Packet<PacketStatusOutListener
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.b = (ServerPing) PacketStatusOutServerInfo.a.fromJson(packetdataserializer.c(32767), ServerPing.class);
+        this.b = (ServerPing) ChatDeserializer.a(PacketStatusOutServerInfo.a, packetdataserializer.c(32767), ServerPing.class);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

@@ -42,9 +42,17 @@ public interface PacketListenerPlayIn extends PacketListener {
 
     void a(PacketPlayInUpdateSign packetplayinupdatesign);
 
+    void a(PacketPlayInUseItem packetplayinuseitem);
+
     void a(PacketPlayInBlockPlace packetplayinblockplace);
 
     void a(PacketPlayInSpectate packetplayinspectate);
 
     void a(PacketPlayInResourcePackStatus packetplayinresourcepackstatus);
+
+    void a(PacketPlayInBoatMove packetplayinboatmove);
+
+    void a(PacketPlayInVehicleMove packetplayinvehiclemove);
+
+    void a(PacketPlayInTeleportAccept packetplayinteleportaccept);
 }

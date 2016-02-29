@@ -47,7 +47,7 @@ public abstract class TileEntity {
         this.position = new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z"));
     }
 
-    public void b(NBTTagCompound nbttagcompound) {
+    public void save(NBTTagCompound nbttagcompound) {
         String s = (String) TileEntity.g.get(this.getClass());
 
         if (s == null) {
@@ -60,23 +60,29 @@ public abstract class TileEntity {
         }
     }
 
-    public static TileEntity c(NBTTagCompound nbttagcompound) {
+    public static TileEntity a(MinecraftServer minecraftserver, NBTTagCompound nbttagcompound) {
         TileEntity tileentity = null;
+        String s = nbttagcompound.getString("id");
 
         try {
-            Class oclass = (Class) TileEntity.f.get(nbttagcompound.getString("id"));
+            Class oclass = (Class) TileEntity.f.get(s);
 
             if (oclass != null) {
                 tileentity = (TileEntity) oclass.newInstance();
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (Throwable throwable) {
+            TileEntity.a.error("Failed to create block entity " + s, throwable);
         }
 
         if (tileentity != null) {
-            tileentity.a(nbttagcompound);
+            try {
+                tileentity.a(nbttagcompound);
+            } catch (Throwable throwable1) {
+                TileEntity.a.error("Failed to load data for block entity " + s, throwable1);
+                tileentity = null;
+            }
         } else {
-            TileEntity.a.warn("Skipping BlockEntity with id " + nbttagcompound.getString("id"));
+            TileEntity.a.warn("Skipping BlockEntity with id " + s);
         }
 
         return tileentity;
@@ -98,8 +104,8 @@ public abstract class TileEntity {
 
             this.h = iblockdata.getBlock().toLegacyData(iblockdata);
             this.world.b(this.position, this);
-            if (this.w() != Blocks.AIR) {
-                this.world.updateAdjacentComparators(this.position, this.w());
+            if (this.getBlock() != Blocks.AIR) {
+                this.world.updateAdjacentComparators(this.position, this.getBlock());
             }
         }
 
@@ -109,15 +115,15 @@ public abstract class TileEntity {
         return this.position;
     }
 
-    public Block w() {
-        if (this.e == null) {
+    public Block getBlock() {
+        if (this.e == null && this.world != null) {
             this.e = this.world.getType(this.position).getBlock();
         }
 
         return this.e;
     }
 
-    public Packet getUpdatePacket() {
+    public Packet<?> getUpdatePacket() {
         return null;
     }
 
@@ -129,7 +135,7 @@ public abstract class TileEntity {
         this.d = true;
     }
 
-    public void D() {
+    public void z() {
         this.d = false;
     }
 
@@ -137,7 +143,7 @@ public abstract class TileEntity {
         return false;
     }
 
-    public void E() {
+    public void invalidateBlockCache() {
         this.e = null;
         this.h = -1;
     }
@@ -153,7 +159,7 @@ public abstract class TileEntity {
             }
         });
         if (this.world != null) {
-            CrashReportSystemDetails.a(crashreportsystemdetails, this.position, this.w(), this.u());
+            CrashReportSystemDetails.a(crashreportsystemdetails, this.position, this.getBlock(), this.u());
             crashreportsystemdetails.a("Actual block type", new Callable() {
                 public String a() throws Exception {
                     int i = Block.getId(TileEntity.this.world.getType(TileEntity.this.position).getBlock());
@@ -191,10 +197,15 @@ public abstract class TileEntity {
     }
 
     public void a(BlockPosition blockposition) {
+        if (blockposition instanceof BlockPosition.MutableBlockPosition || blockposition instanceof BlockPosition.PooledBlockPosition) {
+            TileEntity.a.warn("Tried to assign a mutable BlockPos to a block entity...", new Error(blockposition.getClass().toString()));
+            blockposition = new BlockPosition(blockposition);
+        }
+
         this.position = blockposition;
     }
 
-    public boolean F() {
+    public boolean isFilteredNBT() {
         return false;
     }
 
@@ -212,7 +223,6 @@ public abstract class TileEntity {
         a(TileEntityBrewingStand.class, "Cauldron");
         a(TileEntityEnchantTable.class, "EnchantTable");
         a(TileEntityEnderPortal.class, "Airportal");
-        a(TileEntityCommand.class, "Control");
         a(TileEntityBeacon.class, "Beacon");
         a(TileEntitySkull.class, "Skull");
         a(TileEntityLightDetector.class, "DLDetector");
@@ -220,5 +230,8 @@ public abstract class TileEntity {
         a(TileEntityComparator.class, "Comparator");
         a(TileEntityFlowerPot.class, "FlowerPot");
         a(TileEntityBanner.class, "Banner");
+        a(TileEntityStructure.class, "Structure");
+        a(TileEntityEndGateway.class, "EndGateway");
+        a(TileEntityCommand.class, "Control");
     }
 }

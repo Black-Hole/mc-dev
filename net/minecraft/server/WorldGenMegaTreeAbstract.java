@@ -84,7 +84,7 @@ public abstract class WorldGenMegaTreeAbstract extends WorldGenTreeAbstract {
 
                 if (k * k + l * l <= j || i1 * i1 + j1 * j1 <= j || k * k + j1 * j1 <= j || i1 * i1 + l * l <= j) {
                     BlockPosition blockposition1 = blockposition.a(k, 0, l);
-                    Material material = world.getType(blockposition1).getBlock().getMaterial();
+                    Material material = world.getType(blockposition1).getMaterial();
 
                     if (material == Material.AIR || material == Material.LEAVES) {
                         this.a(world, blockposition1, this.c);
@@ -102,7 +102,7 @@ public abstract class WorldGenMegaTreeAbstract extends WorldGenTreeAbstract {
             for (int l = -i; l <= i; ++l) {
                 if (k * k + l * l <= j) {
                     BlockPosition blockposition1 = blockposition.a(k, 0, l);
-                    Material material = world.getType(blockposition1).getBlock().getMaterial();
+                    Material material = world.getType(blockposition1).getMaterial();
 
                     if (material == Material.AIR || material == Material.LEAVES) {
                         this.a(world, blockposition1, this.c);

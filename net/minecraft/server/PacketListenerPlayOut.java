@@ -60,6 +60,8 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutAttachEntity packetplayoutattachentity);
 
+    void a(PacketPlayOutMount packetplayoutmount);
+
     void a(PacketPlayOutExplosion packetplayoutexplosion);
 
     void a(PacketPlayOutGameStateChange packetplayoutgamestatechange);
@@ -68,7 +70,7 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutMapChunk packetplayoutmapchunk);
 
-    void a(PacketPlayOutMapChunkBulk packetplayoutmapchunkbulk);
+    void a(PacketPlayOutUnloadChunk packetplayoutunloadchunk);
 
     void a(PacketPlayOutWorldEvent packetplayoutworldevent);
 
@@ -118,6 +120,8 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutNamedSoundEffect packetplayoutnamedsoundeffect);
 
+    void a(PacketPlayOutCustomSoundEffect packetplayoutcustomsoundeffect);
+
     void a(PacketPlayOutCollect packetplayoutcollect);
 
     void a(PacketPlayOutEntityTeleport packetplayoutentityteleport);
@@ -136,11 +140,13 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutTitle packetplayouttitle);
 
-    void a(PacketPlayOutSetCompression packetplayoutsetcompression);
-
     void a(PacketPlayOutPlayerListHeaderFooter packetplayoutplayerlistheaderfooter);
 
     void a(PacketPlayOutResourcePackSend packetplayoutresourcepacksend);
 
-    void a(PacketPlayOutUpdateEntityNBT packetplayoutupdateentitynbt);
+    void a(PacketPlayOutBoss packetplayoutboss);
+
+    void a(PacketPlayOutSetCooldown packetplayoutsetcooldown);
+
+    void a(PacketPlayOutVehicleMove packetplayoutvehiclemove);
 }

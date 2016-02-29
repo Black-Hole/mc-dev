@@ -4,6 +4,8 @@ import java.util.Random;
 
 public class BlockPlant extends Block {
 
+    protected static final AxisAlignedBB b = new AxisAlignedBB(0.30000001192092896D, 0.0D, 0.30000001192092896D, 0.699999988079071D, 0.6000000238418579D, 0.699999988079071D);
+
     protected BlockPlant() {
         this(Material.PLANT);
     }
@@ -15,18 +17,15 @@ public class BlockPlant extends Block {
     protected BlockPlant(Material material, MaterialMapColor materialmapcolor) {
         super(material, materialmapcolor);
         this.a(true);
-        float f = 0.2F;
-
-        this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f * 3.0F, 0.5F + f);
         this.a(CreativeModeTab.c);
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return super.canPlace(world, blockposition) && this.c(world.getType(blockposition.down()).getBlock());
+        return super.canPlace(world, blockposition) && this.i(world.getType(blockposition.down()));
     }
 
-    protected boolean c(Block block) {
-        return block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.FARMLAND;
+    protected boolean i(IBlockData iblockdata) {
+        return iblockdata.getBlock() == Blocks.GRASS || iblockdata.getBlock() == Blocks.DIRT || iblockdata.getBlock() == Blocks.FARMLAND;
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
@@ -47,18 +46,22 @@ public class BlockPlant extends Block {
     }
 
     public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return this.c(world.getType(blockposition.down()).getBlock());
+        return this.i(world.getType(blockposition.down()));
     }
 
-    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return null;
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockPlant.b;
     }
 
-    public boolean c() {
+    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        return BlockPlant.k;
+    }
+
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 }

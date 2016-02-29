@@ -4,17 +4,19 @@ import java.util.UUID;
 
 public abstract class EntityCreature extends EntityInsentient {
 
-    public static final UUID bk = UUID.fromString("E199AD21-BA8A-4C53-8D13-6182D5C69D3A");
-    public static final AttributeModifier bl = (new AttributeModifier(EntityCreature.bk, "Fleeing speed bonus", 2.0D, 2)).a(false);
+    public static final UUID bt = UUID.fromString("E199AD21-BA8A-4C53-8D13-6182D5C69D3A");
+    public static final AttributeModifier bu = (new AttributeModifier(EntityCreature.bt, "Fleeing speed bonus", 2.0D, 2)).a(false);
     private BlockPosition a;
     private float b;
     private PathfinderGoal c;
-    private boolean bm;
+    private boolean bv;
+    private float bw;
 
     public EntityCreature(World world) {
         super(world);
         this.a = BlockPosition.ZERO;
         this.b = -1.0F;
+        this.bw = PathType.WATER.a();
         this.c = new PathfinderGoalMoveTowardsRestriction(this, 1.0D);
     }
 
@@ -22,20 +24,20 @@ public abstract class EntityCreature extends EntityInsentient {
         return 0.0F;
     }
 
-    public boolean bR() {
-        return super.bR() && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ)) >= 0.0F;
+    public boolean cF() {
+        return super.cF() && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ)) >= 0.0F;
     }
 
-    public boolean cf() {
-        return !this.navigation.m();
+    public boolean cT() {
+        return !this.navigation.n();
     }
 
-    public boolean cg() {
-        return this.e(new BlockPosition(this));
+    public boolean cU() {
+        return this.f(new BlockPosition(this));
     }
 
-    public boolean e(BlockPosition blockposition) {
-        return this.b == -1.0F ? true : this.a.i(blockposition) < (double) (this.b * this.b);
+    public boolean f(BlockPosition blockposition) {
+        return this.b == -1.0F ? true : this.a.k(blockposition) < (double) (this.b * this.b);
     }
 
     public void a(BlockPosition blockposition, int i) {
@@ -43,25 +45,25 @@ public abstract class EntityCreature extends EntityInsentient {
         this.b = (float) i;
     }
 
-    public BlockPosition ch() {
+    public BlockPosition cV() {
         return this.a;
     }
 
-    public float ci() {
+    public float cW() {
         return this.b;
     }
 
-    public void cj() {
+    public void cX() {
         this.b = -1.0F;
     }
 
-    public boolean ck() {
+    public boolean cY() {
         return this.b != -1.0F;
     }
 
-    protected void ca() {
-        super.ca();
-        if (this.cc() && this.getLeashHolder() != null && this.getLeashHolder().world == this.world) {
+    protected void cO() {
+        super.cO();
+        if (this.isLeashed() && this.getLeashHolder() != null && this.getLeashHolder().world == this.world) {
             Entity entity = this.getLeashHolder();
 
             this.a(new BlockPosition((int) entity.locX, (int) entity.locY, (int) entity.locZ), 5);
@@ -75,16 +77,17 @@ public abstract class EntityCreature extends EntityInsentient {
                 return;
             }
 
-            if (!this.bm) {
+            if (!this.bv) {
                 this.goalSelector.a(2, this.c);
                 if (this.getNavigation() instanceof Navigation) {
-                    ((Navigation) this.getNavigation()).a(false);
+                    this.bw = this.a(PathType.WATER);
+                    this.a(PathType.WATER, 0.0F);
                 }
 
-                this.bm = true;
+                this.bv = true;
             }
 
-            this.o(f);
+            this.q(f);
             if (f > 4.0F) {
                 this.getNavigation().a(entity, 1.0D);
             }
@@ -102,17 +105,17 @@ public abstract class EntityCreature extends EntityInsentient {
             if (f > 10.0F) {
                 this.unleash(true, true);
             }
-        } else if (!this.cc() && this.bm) {
-            this.bm = false;
+        } else if (!this.isLeashed() && this.bv) {
+            this.bv = false;
             this.goalSelector.a(this.c);
             if (this.getNavigation() instanceof Navigation) {
-                ((Navigation) this.getNavigation()).a(true);
+                this.a(PathType.WATER, this.bw);
             }
 
-            this.cj();
+            this.cX();
         }
 
     }
 
-    protected void o(float f) {}
+    protected void q(float f) {}
 }

@@ -4,13 +4,13 @@ public class BlockSmoothBrick extends Block {
 
     public static final BlockStateEnum<BlockSmoothBrick.EnumStonebrickType> VARIANT = BlockStateEnum.of("variant", BlockSmoothBrick.EnumStonebrickType.class);
     public static final int b = BlockSmoothBrick.EnumStonebrickType.DEFAULT.a();
-    public static final int N = BlockSmoothBrick.EnumStonebrickType.MOSSY.a();
-    public static final int O = BlockSmoothBrick.EnumStonebrickType.CRACKED.a();
-    public static final int P = BlockSmoothBrick.EnumStonebrickType.CHISELED.a();
+    public static final int c = BlockSmoothBrick.EnumStonebrickType.MOSSY.a();
+    public static final int d = BlockSmoothBrick.EnumStonebrickType.CRACKED.a();
+    public static final int e = BlockSmoothBrick.EnumStonebrickType.CHISELED.a();
 
     public BlockSmoothBrick() {
         super(Material.STONE);
-        this.j(this.blockStateList.getBlockData().set(BlockSmoothBrick.VARIANT, BlockSmoothBrick.EnumStonebrickType.DEFAULT));
+        this.w(this.blockStateList.getBlockData().set(BlockSmoothBrick.VARIANT, BlockSmoothBrick.EnumStonebrickType.DEFAULT));
         this.a(CreativeModeTab.b);
     }
 

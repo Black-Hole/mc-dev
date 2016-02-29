@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 
@@ -60,6 +61,10 @@ public class NBTTagCompound extends NBTBase {
         return (byte) 10;
     }
 
+    public int d() {
+        return this.map.size();
+    }
+
     public void set(String s, NBTBase nbtbase) {
         this.map.put(s, nbtbase);
     }
@@ -78,6 +83,19 @@ public class NBTTagCompound extends NBTBase {
 
     public void setLong(String s, long i) {
         this.map.put(s, new NBTTagLong(i));
+    }
+
+    public void a(String s, UUID uuid) {
+        this.setLong(s + "Most", uuid.getMostSignificantBits());
+        this.setLong(s + "Least", uuid.getLeastSignificantBits());
+    }
+
+    public UUID a(String s) {
+        return new UUID(this.getLong(s + "Most"), this.getLong(s + "Least"));
+    }
+
+    public boolean b(String s) {
+        return this.hasKeyOfType(s + "Most", 99) && this.hasKeyOfType(s + "Least", 99);
     }
 
     public void setFloat(String s, float f) {
@@ -108,10 +126,10 @@ public class NBTTagCompound extends NBTBase {
         return (NBTBase) this.map.get(s);
     }
 
-    public byte b(String s) {
+    public byte d(String s) {
         NBTBase nbtbase = (NBTBase) this.map.get(s);
 
-        return nbtbase != null ? nbtbase.getTypeId() : 0;
+        return nbtbase == null ? 0 : nbtbase.getTypeId();
     }
 
     public boolean hasKey(String s) {
@@ -119,113 +137,147 @@ public class NBTTagCompound extends NBTBase {
     }
 
     public boolean hasKeyOfType(String s, int i) {
-        byte b0 = this.b(s);
+        byte b0 = this.d(s);
 
-        if (b0 == i) {
-            return true;
-        } else if (i != 99) {
-            if (b0 > 0) {
-                ;
-            }
-
-            return false;
-        } else {
-            return b0 == 1 || b0 == 2 || b0 == 3 || b0 == 4 || b0 == 5 || b0 == 6;
-        }
+        return b0 == i ? true : (i != 99 ? false : b0 == 1 || b0 == 2 || b0 == 3 || b0 == 4 || b0 == 5 || b0 == 6);
     }
 
     public byte getByte(String s) {
         try {
-            return !this.hasKeyOfType(s, 99) ? 0 : ((NBTBase.NBTNumber) this.map.get(s)).f();
+            if (this.hasKeyOfType(s, 99)) {
+                return ((NBTBase.NBTNumber) this.map.get(s)).f();
+            }
         } catch (ClassCastException classcastexception) {
-            return (byte) 0;
+            ;
         }
+
+        return (byte) 0;
     }
 
     public short getShort(String s) {
         try {
-            return !this.hasKeyOfType(s, 99) ? 0 : ((NBTBase.NBTNumber) this.map.get(s)).e();
+            if (this.hasKeyOfType(s, 99)) {
+                return ((NBTBase.NBTNumber) this.map.get(s)).e();
+            }
         } catch (ClassCastException classcastexception) {
-            return (short) 0;
+            ;
         }
+
+        return (short) 0;
     }
 
     public int getInt(String s) {
         try {
-            return !this.hasKeyOfType(s, 99) ? 0 : ((NBTBase.NBTNumber) this.map.get(s)).d();
+            if (this.hasKeyOfType(s, 99)) {
+                return ((NBTBase.NBTNumber) this.map.get(s)).d();
+            }
         } catch (ClassCastException classcastexception) {
-            return 0;
+            ;
         }
+
+        return 0;
     }
 
     public long getLong(String s) {
         try {
-            return !this.hasKeyOfType(s, 99) ? 0L : ((NBTBase.NBTNumber) this.map.get(s)).c();
+            if (this.hasKeyOfType(s, 99)) {
+                return ((NBTBase.NBTNumber) this.map.get(s)).c();
+            }
         } catch (ClassCastException classcastexception) {
-            return 0L;
+            ;
         }
+
+        return 0L;
     }
 
     public float getFloat(String s) {
         try {
-            return !this.hasKeyOfType(s, 99) ? 0.0F : ((NBTBase.NBTNumber) this.map.get(s)).h();
+            if (this.hasKeyOfType(s, 99)) {
+                return ((NBTBase.NBTNumber) this.map.get(s)).h();
+            }
         } catch (ClassCastException classcastexception) {
-            return 0.0F;
+            ;
         }
+
+        return 0.0F;
     }
 
     public double getDouble(String s) {
         try {
-            return !this.hasKeyOfType(s, 99) ? 0.0D : ((NBTBase.NBTNumber) this.map.get(s)).g();
+            if (this.hasKeyOfType(s, 99)) {
+                return ((NBTBase.NBTNumber) this.map.get(s)).g();
+            }
         } catch (ClassCastException classcastexception) {
-            return 0.0D;
+            ;
         }
+
+        return 0.0D;
     }
 
     public String getString(String s) {
         try {
-            return !this.hasKeyOfType(s, 8) ? "" : ((NBTBase) this.map.get(s)).a_();
+            if (this.hasKeyOfType(s, 8)) {
+                return ((NBTBase) this.map.get(s)).a_();
+            }
         } catch (ClassCastException classcastexception) {
-            return "";
+            ;
         }
+
+        return "";
     }
 
     public byte[] getByteArray(String s) {
         try {
-            return !this.hasKeyOfType(s, 7) ? new byte[0] : ((NBTTagByteArray) this.map.get(s)).c();
+            if (this.hasKeyOfType(s, 7)) {
+                return ((NBTTagByteArray) this.map.get(s)).c();
+            }
         } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s, 7, classcastexception));
         }
+
+        return new byte[0];
     }
 
     public int[] getIntArray(String s) {
         try {
-            return !this.hasKeyOfType(s, 11) ? new int[0] : ((NBTTagIntArray) this.map.get(s)).c();
+            if (this.hasKeyOfType(s, 11)) {
+                return ((NBTTagIntArray) this.map.get(s)).c();
+            }
         } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s, 11, classcastexception));
         }
+
+        return new int[0];
     }
 
     public NBTTagCompound getCompound(String s) {
         try {
-            return !this.hasKeyOfType(s, 10) ? new NBTTagCompound() : (NBTTagCompound) this.map.get(s);
+            if (this.hasKeyOfType(s, 10)) {
+                return (NBTTagCompound) this.map.get(s);
+            }
         } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s, 10, classcastexception));
         }
+
+        return new NBTTagCompound();
     }
 
     public NBTTagList getList(String s, int i) {
         try {
-            if (this.b(s) != 9) {
-                return new NBTTagList();
-            } else {
+            if (this.d(s) == 9) {
                 NBTTagList nbttaglist = (NBTTagList) this.map.get(s);
 
-                return nbttaglist.size() > 0 && nbttaglist.f() != i ? new NBTTagList() : nbttaglist;
+                if (!nbttaglist.isEmpty() && nbttaglist.d() != i) {
+                    return new NBTTagList();
+                }
+
+                return nbttaglist;
             }
         } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s, 9, classcastexception));
         }
+
+        return new NBTTagList();
     }
 
     public boolean getBoolean(String s) {

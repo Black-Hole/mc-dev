@@ -4,12 +4,12 @@ import java.util.Random;
 
 public class BiomeOcean extends BiomeBase {
 
-    public BiomeOcean(int i) {
-        super(i);
-        this.au.clear();
+    public BiomeOcean(BiomeBase.a biomebase_a) {
+        super(biomebase_a);
+        this.v.clear();
     }
 
-    public BiomeBase.EnumTemperature m() {
+    public BiomeBase.EnumTemperature h() {
         return BiomeBase.EnumTemperature.OCEAN;
     }
 

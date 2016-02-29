@@ -12,7 +12,7 @@ public class EntityMagmaCube extends EntitySlime {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
     }
 
-    public boolean bR() {
+    public boolean cF() {
         return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
@@ -20,80 +20,72 @@ public class EntityMagmaCube extends EntitySlime {
         return this.world.a(this.getBoundingBox(), (Entity) this) && this.world.getCubes(this, this.getBoundingBox()).isEmpty() && !this.world.containsLiquid(this.getBoundingBox());
     }
 
-    public int br() {
-        return this.getSize() * 3;
+    protected void setSize(int i) {
+        super.setSize(i);
+        this.getAttributeInstance(GenericAttributes.g).setValue((double) (i * 3));
     }
 
-    public float c(float f) {
+    public float e(float f) {
         return 1.0F;
     }
 
-    protected EnumParticle n() {
+    protected EnumParticle o() {
         return EnumParticle.FLAME;
     }
 
-    protected EntitySlime cf() {
+    protected EntitySlime cT() {
         return new EntityMagmaCube(this.world);
     }
 
-    protected Item getLoot() {
-        return Items.MAGMA_CREAM;
-    }
-
-    protected void dropDeathLoot(boolean flag, int i) {
-        Item item = this.getLoot();
-
-        if (item != null && this.getSize() > 1) {
-            int j = this.random.nextInt(4) - 2;
-
-            if (i > 0) {
-                j += this.random.nextInt(i + 1);
-            }
-
-            for (int k = 0; k < j; ++k) {
-                this.a(item, 1);
-            }
-        }
-
+    protected MinecraftKey J() {
+        return !this.db() ? LootTables.ad : LootTables.a;
     }
 
     public boolean isBurning() {
         return false;
     }
 
-    protected int cg() {
-        return super.cg() * 4;
+    protected int cU() {
+        return super.cU() * 4;
     }
 
-    protected void ch() {
+    protected void cV() {
         this.a *= 0.9F;
     }
 
-    protected void bF() {
+    protected void ch() {
         this.motY = (double) (0.42F + (float) this.getSize() * 0.1F);
-        this.ai = true;
+        this.impulse = true;
     }
 
-    protected void bH() {
+    protected void cj() {
         this.motY = (double) (0.22F + (float) this.getSize() * 0.05F);
-        this.ai = true;
+        this.impulse = true;
     }
 
     public void e(float f, float f1) {}
 
-    protected boolean ci() {
+    protected boolean cW() {
         return true;
     }
 
-    protected int cj() {
-        return super.cj() + 2;
+    protected int cX() {
+        return super.cX() + 2;
     }
 
-    protected String ck() {
-        return this.getSize() > 1 ? "mob.magmacube.big" : "mob.magmacube.small";
+    protected SoundEffect bR() {
+        return this.db() ? SoundEffects.fA : SoundEffects.dk;
     }
 
-    protected boolean cl() {
-        return true;
+    protected SoundEffect bS() {
+        return this.db() ? SoundEffects.fz : SoundEffects.dj;
+    }
+
+    protected SoundEffect cY() {
+        return this.db() ? SoundEffects.fB : SoundEffects.dm;
+    }
+
+    protected SoundEffect cZ() {
+        return SoundEffects.dl;
     }
 }

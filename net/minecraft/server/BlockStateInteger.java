@@ -33,24 +33,17 @@ public class BlockStateInteger extends BlockState<Integer> {
     public boolean equals(Object object) {
         if (this == object) {
             return true;
-        } else if (object != null && this.getClass() == object.getClass()) {
-            if (!super.equals(object)) {
-                return false;
-            } else {
-                BlockStateInteger blockstateinteger = (BlockStateInteger) object;
+        } else if (object instanceof BlockStateInteger && super.equals(object)) {
+            BlockStateInteger blockstateinteger = (BlockStateInteger) object;
 
-                return this.a.equals(blockstateinteger.a);
-            }
+            return this.a.equals(blockstateinteger.a);
         } else {
             return false;
         }
     }
 
     public int hashCode() {
-        int i = super.hashCode();
-
-        i = 31 * i + this.a.hashCode();
-        return i;
+        return 31 * super.hashCode() + this.a.hashCode();
     }
 
     public static BlockStateInteger of(String s, int i, int j) {

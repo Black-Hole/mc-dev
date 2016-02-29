@@ -84,11 +84,13 @@ public class WorldGenFactory {
         b(WorldGenStronghold.WorldGenStronghold2Start.class, "Stronghold");
         b(WorldGenLargeFeature.WorldGenLargeFeatureStart.class, "Temple");
         b(WorldGenMonument.WorldGenMonumentStart.class, "Monument");
+        b(WorldGenEndCity.Start.class, "EndCity");
         WorldGenMineshaftPieces.a();
         WorldGenVillagePieces.a();
         WorldGenNetherPieces.a();
         WorldGenStrongholdPieces.a();
         WorldGenRegistration.a();
         WorldGenMonumentPieces.a();
+        WorldGenEndCityPieces.a();
     }
 }

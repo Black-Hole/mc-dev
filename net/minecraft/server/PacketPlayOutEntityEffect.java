@@ -14,7 +14,7 @@ public class PacketPlayOutEntityEffect implements Packet<PacketListenerPlayOut> 
 
     public PacketPlayOutEntityEffect(int i, MobEffect mobeffect) {
         this.a = i;
-        this.b = (byte) (mobeffect.getEffectId() & 255);
+        this.b = (byte) (MobEffectList.getId(mobeffect.getMobEffect()) & 255);
         this.c = (byte) (mobeffect.getAmplifier() & 255);
         if (mobeffect.getDuration() > 32767) {
             this.d = 32767;
@@ -22,14 +22,22 @@ public class PacketPlayOutEntityEffect implements Packet<PacketListenerPlayOut> 
             this.d = mobeffect.getDuration();
         }
 
-        this.e = (byte) (mobeffect.isShowParticles() ? 1 : 0);
+        this.e = 0;
+        if (mobeffect.isAmbient()) {
+            this.e = (byte) (this.e | 1);
+        }
+
+        if (mobeffect.isShowParticles()) {
+            this.e = (byte) (this.e | 2);
+        }
+
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
+        this.a = packetdataserializer.g();
         this.b = packetdataserializer.readByte();
         this.c = packetdataserializer.readByte();
-        this.d = packetdataserializer.e();
+        this.d = packetdataserializer.g();
         this.e = packetdataserializer.readByte();
     }
 

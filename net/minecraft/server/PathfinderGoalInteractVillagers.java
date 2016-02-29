@@ -12,7 +12,7 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
 
     public void c() {
         super.c();
-        if (this.f.cs() && this.b instanceof EntityVillager && ((EntityVillager) this.b).ct()) {
+        if (this.f.dg() && this.b instanceof EntityVillager && ((EntityVillager) this.b).dh()) {
             this.e = 10;
         } else {
             this.e = 0;
@@ -25,7 +25,7 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
         if (this.e > 0) {
             --this.e;
             if (this.e == 0) {
-                InventorySubcontainer inventorysubcontainer = this.f.cq();
+                InventorySubcontainer inventorysubcontainer = this.f.de();
 
                 for (int i = 0; i < inventorysubcontainer.getSize(); ++i) {
                     ItemStack itemstack = inventorysubcontainer.getItem(i);
@@ -35,7 +35,7 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
                         Item item = itemstack.getItem();
                         int j;
 
-                        if ((item == Items.BREAD || item == Items.POTATO || item == Items.CARROT) && itemstack.count > 3) {
+                        if ((item == Items.BREAD || item == Items.POTATO || item == Items.CARROT || item == Items.BEETROOT) && itemstack.count > 3) {
                             j = itemstack.count / 2;
                             itemstack.count -= j;
                             itemstack1 = new ItemStack(item, j, itemstack.getData());
@@ -56,13 +56,13 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
                         double d0 = this.f.locY - 0.30000001192092896D + (double) this.f.getHeadHeight();
                         EntityItem entityitem = new EntityItem(this.f.world, this.f.locX, d0, this.f.locZ, itemstack1);
                         float f = 0.3F;
-                        float f1 = this.f.aK;
+                        float f1 = this.f.aO;
                         float f2 = this.f.pitch;
 
-                        entityitem.motX = (double) (-MathHelper.sin(f1 / 180.0F * 3.1415927F) * MathHelper.cos(f2 / 180.0F * 3.1415927F) * f);
-                        entityitem.motZ = (double) (MathHelper.cos(f1 / 180.0F * 3.1415927F) * MathHelper.cos(f2 / 180.0F * 3.1415927F) * f);
-                        entityitem.motY = (double) (-MathHelper.sin(f2 / 180.0F * 3.1415927F) * f + 0.1F);
-                        entityitem.p();
+                        entityitem.motX = (double) (-MathHelper.sin(f1 * 0.017453292F) * MathHelper.cos(f2 * 0.017453292F) * f);
+                        entityitem.motZ = (double) (MathHelper.cos(f1 * 0.017453292F) * MathHelper.cos(f2 * 0.017453292F) * f);
+                        entityitem.motY = (double) (-MathHelper.sin(f2 * 0.017453292F) * f + 0.1F);
+                        entityitem.q();
                         this.f.world.addEntity(entityitem);
                         break;
                     }

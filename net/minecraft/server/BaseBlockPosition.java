@@ -35,7 +35,7 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         return (this.getY() + this.getZ() * 31) * 31 + this.getX();
     }
 
-    public int g(BaseBlockPosition baseblockposition) {
+    public int i(BaseBlockPosition baseblockposition) {
         return this.getY() == baseblockposition.getY() ? (this.getZ() == baseblockposition.getZ() ? this.getX() - baseblockposition.getX() : this.getZ() - baseblockposition.getZ()) : this.getY() - baseblockposition.getY();
     }
 
@@ -55,7 +55,15 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         return new BaseBlockPosition(this.getY() * baseblockposition.getZ() - this.getZ() * baseblockposition.getY(), this.getZ() * baseblockposition.getX() - this.getX() * baseblockposition.getZ(), this.getX() * baseblockposition.getY() - this.getY() * baseblockposition.getX());
     }
 
-    public double c(double d0, double d1, double d2) {
+    public double f(int i, int j, int k) {
+        double d0 = (double) (this.getX() - i);
+        double d1 = (double) (this.getY() - j);
+        double d2 = (double) (this.getZ() - k);
+
+        return Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+    }
+
+    public double distanceSquared(double d0, double d1, double d2) {
         double d3 = (double) this.getX() - d0;
         double d4 = (double) this.getY() - d1;
         double d5 = (double) this.getZ() - d2;
@@ -63,7 +71,7 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         return d3 * d3 + d4 * d4 + d5 * d5;
     }
 
-    public double d(double d0, double d1, double d2) {
+    public double f(double d0, double d1, double d2) {
         double d3 = (double) this.getX() + 0.5D - d0;
         double d4 = (double) this.getY() + 0.5D - d1;
         double d5 = (double) this.getZ() + 0.5D - d2;
@@ -71,8 +79,8 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         return d3 * d3 + d4 * d4 + d5 * d5;
     }
 
-    public double i(BaseBlockPosition baseblockposition) {
-        return this.c((double) baseblockposition.getX(), (double) baseblockposition.getY(), (double) baseblockposition.getZ());
+    public double k(BaseBlockPosition baseblockposition) {
+        return this.distanceSquared((double) baseblockposition.getX(), (double) baseblockposition.getY(), (double) baseblockposition.getZ());
     }
 
     public String toString() {
@@ -80,6 +88,6 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
     }
 
     public int compareTo(Object object) {
-        return this.g((BaseBlockPosition) object);
+        return this.i((BaseBlockPosition) object);
     }
 }

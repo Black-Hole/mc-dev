@@ -1,17 +1,16 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import java.util.Random;
 
-public class BlockFurnace extends BlockContainer {
+public class BlockFurnace extends BlockTileEntity {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     private final boolean b;
-    private static boolean N;
+    private static boolean c;
 
     protected BlockFurnace(boolean flag) {
         super(Material.STONE);
-        this.j(this.blockStateList.getBlockData().set(BlockFurnace.FACING, EnumDirection.NORTH));
+        this.w(this.blockStateList.getBlockData().set(BlockFurnace.FACING, EnumDirection.NORTH));
         this.b = flag;
     }
 
@@ -25,19 +24,19 @@ public class BlockFurnace extends BlockContainer {
 
     private void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (!world.isClientSide) {
-            Block block = world.getType(blockposition.north()).getBlock();
-            Block block1 = world.getType(blockposition.south()).getBlock();
-            Block block2 = world.getType(blockposition.west()).getBlock();
-            Block block3 = world.getType(blockposition.east()).getBlock();
+            IBlockData iblockdata1 = world.getType(blockposition.north());
+            IBlockData iblockdata2 = world.getType(blockposition.south());
+            IBlockData iblockdata3 = world.getType(blockposition.west());
+            IBlockData iblockdata4 = world.getType(blockposition.east());
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockFurnace.FACING);
 
-            if (enumdirection == EnumDirection.NORTH && block.o() && !block1.o()) {
+            if (enumdirection == EnumDirection.NORTH && iblockdata1.b() && !iblockdata2.b()) {
                 enumdirection = EnumDirection.SOUTH;
-            } else if (enumdirection == EnumDirection.SOUTH && block1.o() && !block.o()) {
+            } else if (enumdirection == EnumDirection.SOUTH && iblockdata2.b() && !iblockdata1.b()) {
                 enumdirection = EnumDirection.NORTH;
-            } else if (enumdirection == EnumDirection.WEST && block2.o() && !block3.o()) {
+            } else if (enumdirection == EnumDirection.WEST && iblockdata3.b() && !iblockdata4.b()) {
                 enumdirection = EnumDirection.EAST;
-            } else if (enumdirection == EnumDirection.EAST && block3.o() && !block2.o()) {
+            } else if (enumdirection == EnumDirection.EAST && iblockdata4.b() && !iblockdata3.b()) {
                 enumdirection = EnumDirection.WEST;
             }
 
@@ -45,7 +44,7 @@ public class BlockFurnace extends BlockContainer {
         }
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -53,7 +52,7 @@ public class BlockFurnace extends BlockContainer {
 
             if (tileentity instanceof TileEntityFurnace) {
                 entityhuman.openContainer((TileEntityFurnace) tileentity);
-                entityhuman.b(StatisticList.Y);
+                entityhuman.b(StatisticList.aa);
             }
 
             return true;
@@ -64,7 +63,7 @@ public class BlockFurnace extends BlockContainer {
         IBlockData iblockdata = world.getType(blockposition);
         TileEntity tileentity = world.getTileEntity(blockposition);
 
-        BlockFurnace.N = true;
+        BlockFurnace.c = true;
         if (flag) {
             world.setTypeAndData(blockposition, Blocks.LIT_FURNACE.getBlockData().set(BlockFurnace.FACING, iblockdata.get(BlockFurnace.FACING)), 3);
             world.setTypeAndData(blockposition, Blocks.LIT_FURNACE.getBlockData().set(BlockFurnace.FACING, iblockdata.get(BlockFurnace.FACING)), 3);
@@ -73,9 +72,9 @@ public class BlockFurnace extends BlockContainer {
             world.setTypeAndData(blockposition, Blocks.FURNACE.getBlockData().set(BlockFurnace.FACING, iblockdata.get(BlockFurnace.FACING)), 3);
         }
 
-        BlockFurnace.N = false;
+        BlockFurnace.c = false;
         if (tileentity != null) {
-            tileentity.D();
+            tileentity.z();
             world.setTileEntity(blockposition, tileentity);
         }
 
@@ -102,7 +101,7 @@ public class BlockFurnace extends BlockContainer {
     }
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!BlockFurnace.N) {
+        if (!BlockFurnace.c) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityFurnace) {
@@ -114,16 +113,20 @@ public class BlockFurnace extends BlockContainer {
         super.remove(world, blockposition, iblockdata);
     }
 
-    public boolean isComplexRedstone() {
+    public boolean isComplexRedstone(IBlockData iblockdata) {
         return true;
     }
 
-    public int l(World world, BlockPosition blockposition) {
+    public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return Container.a(world.getTileEntity(blockposition));
     }
 
-    public int b() {
-        return 3;
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Blocks.FURNACE);
+    }
+
+    public EnumRenderType a(IBlockData iblockdata) {
+        return EnumRenderType.MODEL;
     }
 
     public IBlockData fromLegacyData(int i) {
@@ -138,6 +141,14 @@ public class BlockFurnace extends BlockContainer {
 
     public int toLegacyData(IBlockData iblockdata) {
         return ((EnumDirection) iblockdata.get(BlockFurnace.FACING)).a();
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return iblockdata.set(BlockFurnace.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockFurnace.FACING)));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockFurnace.FACING)));
     }
 
     protected BlockStateList getStateList() {

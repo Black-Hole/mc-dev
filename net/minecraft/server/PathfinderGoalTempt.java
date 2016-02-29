@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Sets;
+import java.util.Set;
+
 public class PathfinderGoalTempt extends PathfinderGoal {
 
     private EntityCreature a;
@@ -12,14 +15,17 @@ public class PathfinderGoalTempt extends PathfinderGoal {
     private EntityHuman h;
     private int i;
     private boolean j;
-    private Item k;
+    private Set<Item> k;
     private boolean l;
-    private boolean m;
 
     public PathfinderGoalTempt(EntityCreature entitycreature, double d0, Item item, boolean flag) {
+        this(entitycreature, d0, flag, Sets.newHashSet(new Item[] { item}));
+    }
+
+    public PathfinderGoalTempt(EntityCreature entitycreature, double d0, boolean flag, Set<Item> set) {
         this.a = entitycreature;
         this.b = d0;
-        this.k = item;
+        this.k = set;
         this.l = flag;
         this.a(3);
         if (!(entitycreature.getNavigation() instanceof Navigation)) {
@@ -33,14 +39,12 @@ public class PathfinderGoalTempt extends PathfinderGoal {
             return false;
         } else {
             this.h = this.a.world.findNearbyPlayer(this.a, 10.0D);
-            if (this.h == null) {
-                return false;
-            } else {
-                ItemStack itemstack = this.h.bZ();
-
-                return itemstack == null ? false : itemstack.getItem() == this.k;
-            }
+            return this.h == null ? false : this.a(this.h.getItemInMainHand()) || this.a(this.h.getItemInOffHand());
         }
+    }
+
+    protected boolean a(ItemStack itemstack) {
+        return itemstack == null ? false : this.k.contains(itemstack.getItem());
     }
 
     public boolean b() {
@@ -71,22 +75,19 @@ public class PathfinderGoalTempt extends PathfinderGoal {
         this.d = this.h.locY;
         this.e = this.h.locZ;
         this.j = true;
-        this.m = ((Navigation) this.a.getNavigation()).e();
-        ((Navigation) this.a.getNavigation()).a(false);
     }
 
     public void d() {
         this.h = null;
-        this.a.getNavigation().n();
+        this.a.getNavigation().o();
         this.i = 100;
         this.j = false;
-        ((Navigation) this.a.getNavigation()).a(this.m);
     }
 
     public void e() {
-        this.a.getControllerLook().a(this.h, 30.0F, (float) this.a.bQ());
+        this.a.getControllerLook().a(this.h, (float) (this.a.cE() + 20), (float) this.a.N());
         if (this.a.h(this.h) < 6.25D) {
-            this.a.getNavigation().n();
+            this.a.getNavigation().o();
         } else {
             this.a.getNavigation().a((Entity) this.h, this.b);
         }

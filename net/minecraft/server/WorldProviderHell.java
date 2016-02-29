@@ -5,10 +5,9 @@ public class WorldProviderHell extends WorldProvider {
     public WorldProviderHell() {}
 
     public void b() {
-        this.c = new WorldChunkManagerHell(BiomeBase.HELL, 0.0F);
+        this.c = new WorldChunkManagerHell(Biomes.j);
         this.d = true;
         this.e = true;
-        this.dimension = -1;
     }
 
     protected void a() {
@@ -22,7 +21,7 @@ public class WorldProviderHell extends WorldProvider {
 
     }
 
-    public IChunkProvider getChunkProvider() {
+    public ChunkGenerator getChunkGenerator() {
         return new ChunkProviderHell(this.b, this.b.getWorldData().shouldGenerateMapFeatures(), this.b.getSeed());
     }
 
@@ -42,14 +41,6 @@ public class WorldProviderHell extends WorldProvider {
         return false;
     }
 
-    public String getName() {
-        return "Nether";
-    }
-
-    public String getSuffix() {
-        return "_nether";
-    }
-
     public WorldBorder getWorldBorder() {
         return new WorldBorder() {
             public double getCenterX() {
@@ -60,5 +51,9 @@ public class WorldProviderHell extends WorldProvider {
                 return super.getCenterZ() / 8.0D;
             }
         };
+    }
+
+    public DimensionManager getDimensionManager() {
+        return DimensionManager.NETHER;
     }
 }

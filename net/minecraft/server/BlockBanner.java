@@ -1,30 +1,26 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import java.util.Random;
 
-public class BlockBanner extends BlockContainer {
+public class BlockBanner extends BlockTileEntity {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     public static final BlockStateInteger ROTATION = BlockStateInteger.of("rotation", 0, 15);
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D);
 
     protected BlockBanner() {
         super(Material.WOOD);
-        float f = 0.25F;
-        float f1 = 1.0F;
-
-        this.a(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, f1, 0.5F + f);
     }
 
     public String getName() {
         return LocaleI18n.get("item.banner.white.name");
     }
 
-    public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return null;
+    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        return BlockBanner.k;
     }
 
-    public boolean d() {
+    public boolean c(IBlockData iblockdata) {
         return false;
     }
 
@@ -32,11 +28,11 @@ public class BlockBanner extends BlockContainer {
         return true;
     }
 
-    public boolean c() {
+    public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean g() {
+    public boolean d() {
         return true;
     }
 
@@ -48,19 +44,35 @@ public class BlockBanner extends BlockContainer {
         return Items.BANNER;
     }
 
-    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
+    private ItemStack e(World world, BlockPosition blockposition, IBlockData iblockdata) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityBanner) {
             ItemStack itemstack = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).b());
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-            tileentity.b(nbttagcompound);
+            tileentity.save(nbttagcompound);
             nbttagcompound.remove("x");
             nbttagcompound.remove("y");
             nbttagcompound.remove("z");
             nbttagcompound.remove("id");
             itemstack.a("BlockEntityTag", (NBTBase) nbttagcompound);
+            return itemstack;
+        } else {
+            return null;
+        }
+    }
+
+    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        ItemStack itemstack = this.e(world, blockposition, iblockdata);
+
+        return itemstack != null ? itemstack : new ItemStack(Items.BANNER);
+    }
+
+    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
+        ItemStack itemstack = this.e(world, blockposition, iblockdata);
+
+        if (itemstack != null) {
             a(world, blockposition, itemstack);
         } else {
             super.dropNaturally(world, blockposition, iblockdata, f, i);
@@ -69,20 +81,20 @@ public class BlockBanner extends BlockContainer {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return !this.e(world, blockposition) && super.canPlace(world, blockposition);
+        return !this.b(world, blockposition) && super.canPlace(world, blockposition);
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
         if (tileentity instanceof TileEntityBanner) {
             TileEntityBanner tileentitybanner = (TileEntityBanner) tileentity;
-            ItemStack itemstack = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).b());
+            ItemStack itemstack1 = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).b());
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
             TileEntityBanner.a(nbttagcompound, tileentitybanner.b(), tileentitybanner.d());
-            itemstack.a("BlockEntityTag", (NBTBase) nbttagcompound);
-            a(world, blockposition, itemstack);
+            itemstack1.a("BlockEntityTag", (NBTBase) nbttagcompound);
+            a(world, blockposition, itemstack1);
         } else {
-            super.a(world, entityhuman, blockposition, iblockdata, (TileEntity) null);
+            super.a(world, entityhuman, blockposition, iblockdata, (TileEntity) null, itemstack);
         }
 
     }
@@ -122,11 +134,23 @@ public class BlockBanner extends BlockContainer {
     public static class BlockStandingBanner extends BlockBanner {
 
         public BlockStandingBanner() {
-            this.j(this.blockStateList.getBlockData().set(BlockBanner.BlockStandingBanner.ROTATION, Integer.valueOf(0)));
+            this.w(this.blockStateList.getBlockData().set(BlockBanner.BlockStandingBanner.ROTATION, Integer.valueOf(0)));
+        }
+
+        public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+            return BlockBanner.BlockStandingBanner.c;
+        }
+
+        public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+            return iblockdata.set(BlockBanner.BlockStandingBanner.ROTATION, Integer.valueOf(enumblockrotation.a(((Integer) iblockdata.get(BlockBanner.BlockStandingBanner.ROTATION)).intValue(), 16)));
+        }
+
+        public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+            return iblockdata.set(BlockBanner.BlockStandingBanner.ROTATION, Integer.valueOf(enumblockmirror.a(((Integer) iblockdata.get(BlockBanner.BlockStandingBanner.ROTATION)).intValue(), 16)));
         }
 
         public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-            if (!world.getType(blockposition.down()).getBlock().getMaterial().isBuildable()) {
+            if (!world.getType(blockposition.down()).getMaterial().isBuildable()) {
                 this.b(world, blockposition, iblockdata, 0);
                 world.setAir(blockposition);
             }
@@ -149,43 +173,44 @@ public class BlockBanner extends BlockContainer {
 
     public static class BlockWallBanner extends BlockBanner {
 
+        protected static final AxisAlignedBB d = new AxisAlignedBB(0.0D, 0.0D, 0.875D, 1.0D, 0.78125D, 1.0D);
+        protected static final AxisAlignedBB e = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.78125D, 0.125D);
+        protected static final AxisAlignedBB f = new AxisAlignedBB(0.875D, 0.0D, 0.0D, 1.0D, 0.78125D, 1.0D);
+        protected static final AxisAlignedBB g = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.125D, 0.78125D, 1.0D);
+
         public BlockWallBanner() {
-            this.j(this.blockStateList.getBlockData().set(BlockBanner.BlockWallBanner.FACING, EnumDirection.NORTH));
+            this.w(this.blockStateList.getBlockData().set(BlockBanner.BlockWallBanner.FACING, EnumDirection.NORTH));
         }
 
-        public void updateShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
-            EnumDirection enumdirection = (EnumDirection) iblockaccess.getType(blockposition).get(BlockBanner.BlockWallBanner.FACING);
-            float f = 0.0F;
-            float f1 = 0.78125F;
-            float f2 = 0.0F;
-            float f3 = 1.0F;
-            float f4 = 0.125F;
+        public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+            return iblockdata.set(BlockBanner.BlockWallBanner.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockBanner.BlockWallBanner.FACING)));
+        }
 
-            this.a(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-            switch (BlockBanner.SyntheticClass_1.a[enumdirection.ordinal()]) {
+        public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+            return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockBanner.BlockWallBanner.FACING)));
+        }
+
+        public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+            switch (BlockBanner.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockBanner.BlockWallBanner.FACING)).ordinal()]) {
             case 1:
             default:
-                this.a(f2, f, 1.0F - f4, f3, f1, 1.0F);
-                break;
+                return BlockBanner.BlockWallBanner.d;
 
             case 2:
-                this.a(f2, f, 0.0F, f3, f1, f4);
-                break;
+                return BlockBanner.BlockWallBanner.e;
 
             case 3:
-                this.a(1.0F - f4, f, f2, 1.0F, f1, f3);
-                break;
+                return BlockBanner.BlockWallBanner.f;
 
             case 4:
-                this.a(0.0F, f, f2, f4, f1, f3);
+                return BlockBanner.BlockWallBanner.g;
             }
-
         }
 
         public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockBanner.BlockWallBanner.FACING);
 
-            if (!world.getType(blockposition.shift(enumdirection.opposite())).getBlock().getMaterial().isBuildable()) {
+            if (!world.getType(blockposition.shift(enumdirection.opposite())).getMaterial().isBuildable()) {
                 this.b(world, blockposition, iblockdata, 0);
                 world.setAir(blockposition);
             }

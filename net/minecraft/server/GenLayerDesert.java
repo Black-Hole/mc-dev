@@ -16,35 +16,35 @@ public class GenLayerDesert extends GenLayer {
                 this.a((long) (j1 + i), (long) (i1 + j));
                 int k1 = aint[j1 + 1 + (i1 + 1) * (k + 2)];
 
-                if (!this.a(aint, aint1, j1, i1, k, k1, BiomeBase.EXTREME_HILLS.id, BiomeBase.SMALL_MOUNTAINS.id) && !this.b(aint, aint1, j1, i1, k, k1, BiomeBase.MESA_PLATEAU_F.id, BiomeBase.MESA.id) && !this.b(aint, aint1, j1, i1, k, k1, BiomeBase.MESA_PLATEAU.id, BiomeBase.MESA.id) && !this.b(aint, aint1, j1, i1, k, k1, BiomeBase.MEGA_TAIGA.id, BiomeBase.TAIGA.id)) {
+                if (!this.a(aint, aint1, j1, i1, k, k1, BiomeBase.a(Biomes.e), BiomeBase.a(Biomes.v)) && !this.b(aint, aint1, j1, i1, k, k1, BiomeBase.a(Biomes.N), BiomeBase.a(Biomes.M)) && !this.b(aint, aint1, j1, i1, k, k1, BiomeBase.a(Biomes.O), BiomeBase.a(Biomes.M)) && !this.b(aint, aint1, j1, i1, k, k1, BiomeBase.a(Biomes.H), BiomeBase.a(Biomes.g))) {
                     int l1;
                     int i2;
                     int j2;
                     int k2;
 
-                    if (k1 == BiomeBase.DESERT.id) {
+                    if (k1 == BiomeBase.a(Biomes.d)) {
                         l1 = aint[j1 + 1 + (i1 + 1 - 1) * (k + 2)];
                         i2 = aint[j1 + 1 + 1 + (i1 + 1) * (k + 2)];
                         j2 = aint[j1 + 1 - 1 + (i1 + 1) * (k + 2)];
                         k2 = aint[j1 + 1 + (i1 + 1 + 1) * (k + 2)];
-                        if (l1 != BiomeBase.ICE_PLAINS.id && i2 != BiomeBase.ICE_PLAINS.id && j2 != BiomeBase.ICE_PLAINS.id && k2 != BiomeBase.ICE_PLAINS.id) {
+                        if (l1 != BiomeBase.a(Biomes.n) && i2 != BiomeBase.a(Biomes.n) && j2 != BiomeBase.a(Biomes.n) && k2 != BiomeBase.a(Biomes.n)) {
                             aint1[j1 + i1 * k] = k1;
                         } else {
-                            aint1[j1 + i1 * k] = BiomeBase.EXTREME_HILLS_PLUS.id;
+                            aint1[j1 + i1 * k] = BiomeBase.a(Biomes.J);
                         }
-                    } else if (k1 == BiomeBase.SWAMPLAND.id) {
+                    } else if (k1 == BiomeBase.a(Biomes.h)) {
                         l1 = aint[j1 + 1 + (i1 + 1 - 1) * (k + 2)];
                         i2 = aint[j1 + 1 + 1 + (i1 + 1) * (k + 2)];
                         j2 = aint[j1 + 1 - 1 + (i1 + 1) * (k + 2)];
                         k2 = aint[j1 + 1 + (i1 + 1 + 1) * (k + 2)];
-                        if (l1 != BiomeBase.DESERT.id && i2 != BiomeBase.DESERT.id && j2 != BiomeBase.DESERT.id && k2 != BiomeBase.DESERT.id && l1 != BiomeBase.COLD_TAIGA.id && i2 != BiomeBase.COLD_TAIGA.id && j2 != BiomeBase.COLD_TAIGA.id && k2 != BiomeBase.COLD_TAIGA.id && l1 != BiomeBase.ICE_PLAINS.id && i2 != BiomeBase.ICE_PLAINS.id && j2 != BiomeBase.ICE_PLAINS.id && k2 != BiomeBase.ICE_PLAINS.id) {
-                            if (l1 != BiomeBase.JUNGLE.id && k2 != BiomeBase.JUNGLE.id && i2 != BiomeBase.JUNGLE.id && j2 != BiomeBase.JUNGLE.id) {
+                        if (l1 != BiomeBase.a(Biomes.d) && i2 != BiomeBase.a(Biomes.d) && j2 != BiomeBase.a(Biomes.d) && k2 != BiomeBase.a(Biomes.d) && l1 != BiomeBase.a(Biomes.F) && i2 != BiomeBase.a(Biomes.F) && j2 != BiomeBase.a(Biomes.F) && k2 != BiomeBase.a(Biomes.F) && l1 != BiomeBase.a(Biomes.n) && i2 != BiomeBase.a(Biomes.n) && j2 != BiomeBase.a(Biomes.n) && k2 != BiomeBase.a(Biomes.n)) {
+                            if (l1 != BiomeBase.a(Biomes.w) && k2 != BiomeBase.a(Biomes.w) && i2 != BiomeBase.a(Biomes.w) && j2 != BiomeBase.a(Biomes.w)) {
                                 aint1[j1 + i1 * k] = k1;
                             } else {
-                                aint1[j1 + i1 * k] = BiomeBase.JUNGLE_EDGE.id;
+                                aint1[j1 + i1 * k] = BiomeBase.a(Biomes.y);
                             }
                         } else {
-                            aint1[j1 + i1 * k] = BiomeBase.PLAINS.id;
+                            aint1[j1 + i1 * k] = BiomeBase.a(Biomes.c);
                         }
                     } else {
                         aint1[j1 + i1 * k] = k1;
@@ -102,8 +102,8 @@ public class GenLayerDesert extends GenLayer {
             BiomeBase biomebase1 = BiomeBase.getBiome(j);
 
             if (biomebase != null && biomebase1 != null) {
-                BiomeBase.EnumTemperature biomebase_enumtemperature = biomebase.m();
-                BiomeBase.EnumTemperature biomebase_enumtemperature1 = biomebase1.m();
+                BiomeBase.EnumTemperature biomebase_enumtemperature = biomebase.h();
+                BiomeBase.EnumTemperature biomebase_enumtemperature1 = biomebase1.h();
 
                 return biomebase_enumtemperature == biomebase_enumtemperature1 || biomebase_enumtemperature == BiomeBase.EnumTemperature.MEDIUM || biomebase_enumtemperature1 == BiomeBase.EnumTemperature.MEDIUM;
             } else {

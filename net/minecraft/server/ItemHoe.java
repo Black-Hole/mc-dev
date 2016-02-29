@@ -1,7 +1,10 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Multimap;
+
 public class ItemHoe extends Item {
 
+    private final float b;
     protected Item.EnumToolMaterial a;
 
     public ItemHoe(Item.EnumToolMaterial item_enumtoolmaterial) {
@@ -9,48 +12,66 @@ public class ItemHoe extends Item {
         this.maxStackSize = 1;
         this.setMaxDurability(item_enumtoolmaterial.a());
         this.a(CreativeModeTab.i);
+        this.b = item_enumtoolmaterial.c() + 1.0F;
     }
 
-    public boolean interactWith(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (!entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
-            return false;
+            return EnumInteractionResult.FAIL;
         } else {
             IBlockData iblockdata = world.getType(blockposition);
             Block block = iblockdata.getBlock();
 
-            if (enumdirection != EnumDirection.DOWN && world.getType(blockposition.up()).getBlock().getMaterial() == Material.AIR) {
-                if (block == Blocks.GRASS) {
-                    return this.a(itemstack, entityhuman, world, blockposition, Blocks.FARMLAND.getBlockData());
+            if (enumdirection != EnumDirection.DOWN && world.getType(blockposition.up()).getMaterial() == Material.AIR) {
+                if (block == Blocks.GRASS || block == Blocks.GRASS_PATH) {
+                    this.a(itemstack, entityhuman, world, blockposition, Blocks.FARMLAND.getBlockData());
+                    return EnumInteractionResult.SUCCESS;
                 }
 
                 if (block == Blocks.DIRT) {
                     switch (ItemHoe.SyntheticClass_1.a[((BlockDirt.EnumDirtVariant) iblockdata.get(BlockDirt.VARIANT)).ordinal()]) {
                     case 1:
-                        return this.a(itemstack, entityhuman, world, blockposition, Blocks.FARMLAND.getBlockData());
+                        this.a(itemstack, entityhuman, world, blockposition, Blocks.FARMLAND.getBlockData());
+                        return EnumInteractionResult.SUCCESS;
 
                     case 2:
-                        return this.a(itemstack, entityhuman, world, blockposition, Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT));
+                        this.a(itemstack, entityhuman, world, blockposition, Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT));
+                        return EnumInteractionResult.SUCCESS;
                     }
                 }
             }
 
-            return false;
+            return EnumInteractionResult.PASS;
         }
     }
 
-    protected boolean a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, IBlockData iblockdata) {
-        world.makeSound((double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), iblockdata.getBlock().stepSound.getStepSound(), (iblockdata.getBlock().stepSound.getVolume1() + 1.0F) / 2.0F, iblockdata.getBlock().stepSound.getVolume2() * 0.8F);
-        if (world.isClientSide) {
-            return true;
-        } else {
-            world.setTypeUpdate(blockposition, iblockdata);
+    public boolean a(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1) {
+        itemstack.damage(1, entityliving1);
+        return true;
+    }
+
+    protected void a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, IBlockData iblockdata) {
+        world.a(entityhuman, blockposition, SoundEffects.cm, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        if (!world.isClientSide) {
+            world.setTypeAndData(blockposition, iblockdata, 11);
             itemstack.damage(1, entityhuman);
-            return true;
         }
+
     }
 
     public String g() {
         return this.a.toString();
+    }
+
+    public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
+        Multimap multimap = super.a(enumitemslot);
+
+        if (enumitemslot == EnumItemSlot.MAINHAND) {
+            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemHoe.g, "Weapon modifier", 0.0D, 0));
+            multimap.put(GenericAttributes.f.getName(), new AttributeModifier(ItemHoe.h, "Weapon modifier", (double) (this.b - 4.0F), 0));
+        }
+
+        return multimap;
     }
 
     static class SyntheticClass_1 {

@@ -25,15 +25,15 @@ public class VillageDoor {
     }
 
     public int b(int i, int j, int k) {
-        return (int) this.a.c((double) i, (double) j, (double) k);
+        return (int) this.a.distanceSquared((double) i, (double) j, (double) k);
     }
 
     public int a(BlockPosition blockposition) {
-        return (int) blockposition.i(this.d());
+        return (int) blockposition.k(this.d());
     }
 
     public int b(BlockPosition blockposition) {
-        return (int) this.b.i(blockposition);
+        return (int) this.b.k(blockposition);
     }
 
     public boolean c(BlockPosition blockposition) {
@@ -85,5 +85,9 @@ public class VillageDoor {
 
     public void a(boolean flag) {
         this.e = flag;
+    }
+
+    public EnumDirection j() {
+        return this.c;
     }
 }

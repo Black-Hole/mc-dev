@@ -5,37 +5,41 @@ import java.util.Random;
 
 public class BiomeMesa extends BiomeBase {
 
-    private IBlockData[] aD;
-    private long aE;
-    private NoiseGenerator3 aF;
-    private NoiseGenerator3 aG;
-    private NoiseGenerator3 aH;
-    private boolean aI;
-    private boolean aJ;
+    protected static final IBlockData y = Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.COARSE_DIRT);
+    protected static final IBlockData z = Blocks.GRASS.getBlockData();
+    protected static final IBlockData A = Blocks.HARDENED_CLAY.getBlockData();
+    protected static final IBlockData B = Blocks.STAINED_HARDENED_CLAY.getBlockData();
+    protected static final IBlockData C = BiomeMesa.B.set(BlockCloth.COLOR, EnumColor.ORANGE);
+    protected static final IBlockData D = Blocks.SAND.getBlockData().set(BlockSand.VARIANT, BlockSand.EnumSandVariant.RED_SAND);
+    private IBlockData[] E;
+    private long F;
+    private NoiseGenerator3 G;
+    private NoiseGenerator3 H;
+    private NoiseGenerator3 I;
+    private boolean J;
+    private boolean K;
 
-    public BiomeMesa(int i, boolean flag, boolean flag1) {
-        super(i);
-        this.aI = flag;
-        this.aJ = flag1;
-        this.b();
-        this.a(2.0F, 0.0F);
-        this.au.clear();
-        this.ak = Blocks.SAND.getBlockData().set(BlockSand.VARIANT, BlockSand.EnumSandVariant.RED_SAND);
-        this.al = Blocks.STAINED_HARDENED_CLAY.getBlockData();
-        this.as.A = -999;
-        this.as.D = 20;
-        this.as.F = 3;
-        this.as.G = 5;
-        this.as.B = 0;
-        this.au.clear();
+    public BiomeMesa(boolean flag, boolean flag1, BiomeBase.a biomebase_a) {
+        super(biomebase_a);
+        this.J = flag;
+        this.K = flag1;
+        this.v.clear();
+        this.r = BiomeMesa.D;
+        this.s = BiomeMesa.B;
+        this.t.z = -999;
+        this.t.C = 20;
+        this.t.E = 3;
+        this.t.F = 5;
+        this.t.A = 0;
+        this.v.clear();
         if (flag1) {
-            this.as.A = 5;
+            this.t.z = 5;
         }
 
     }
 
     public WorldGenTreeAbstract a(Random random) {
-        return this.aA;
+        return BiomeMesa.n;
     }
 
     public void a(World world, Random random, BlockPosition blockposition) {
@@ -43,30 +47,30 @@ public class BiomeMesa extends BiomeBase {
     }
 
     public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
-        if (this.aD == null || this.aE != world.getSeed()) {
+        if (this.E == null || this.F != world.getSeed()) {
             this.a(world.getSeed());
         }
 
-        if (this.aF == null || this.aG == null || this.aE != world.getSeed()) {
-            Random random1 = new Random(this.aE);
+        if (this.G == null || this.H == null || this.F != world.getSeed()) {
+            Random random1 = new Random(this.F);
 
-            this.aF = new NoiseGenerator3(random1, 4);
-            this.aG = new NoiseGenerator3(random1, 1);
+            this.G = new NoiseGenerator3(random1, 4);
+            this.H = new NoiseGenerator3(random1, 1);
         }
 
-        this.aE = world.getSeed();
+        this.F = world.getSeed();
         double d1 = 0.0D;
         int k;
         int l;
 
-        if (this.aI) {
+        if (this.J) {
             k = (i & -16) + (j & 15);
             l = (j & -16) + (i & 15);
-            double d2 = Math.min(Math.abs(d0), this.aF.a((double) k * 0.25D, (double) l * 0.25D));
+            double d2 = Math.min(Math.abs(d0), this.G.a((double) k * 0.25D, (double) l * 0.25D));
 
             if (d2 > 0.0D) {
                 double d3 = 0.001953125D;
-                double d4 = Math.abs(this.aG.a((double) k * d3, (double) l * d3));
+                double d4 = Math.abs(this.H.a((double) k * d3, (double) l * d3));
 
                 d1 = d2 * d2 * 2.5D;
                 double d5 = Math.ceil(d4 * 50.0D) + 14.0D;
@@ -81,80 +85,79 @@ public class BiomeMesa extends BiomeBase {
 
         k = i & 15;
         l = j & 15;
-        int i1 = world.F();
-        IBlockData iblockdata = Blocks.STAINED_HARDENED_CLAY.getBlockData();
-        IBlockData iblockdata1 = this.al;
+        int i1 = world.K();
+        IBlockData iblockdata = BiomeMesa.B;
+        IBlockData iblockdata1 = this.s;
         int j1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
         boolean flag = Math.cos(d0 / 3.0D * 3.141592653589793D) > 0.0D;
         int k1 = -1;
         boolean flag1 = false;
 
         for (int l1 = 255; l1 >= 0; --l1) {
-            if (chunksnapshot.a(l, l1, k).getBlock().getMaterial() == Material.AIR && l1 < (int) d1) {
-                chunksnapshot.a(l, l1, k, Blocks.STONE.getBlockData());
+            if (chunksnapshot.a(l, l1, k).getMaterial() == Material.AIR && l1 < (int) d1) {
+                chunksnapshot.a(l, l1, k, BiomeMesa.a);
             }
 
             if (l1 <= random.nextInt(5)) {
-                chunksnapshot.a(l, l1, k, Blocks.BEDROCK.getBlockData());
+                chunksnapshot.a(l, l1, k, BiomeMesa.c);
             } else {
                 IBlockData iblockdata2 = chunksnapshot.a(l, l1, k);
 
-                if (iblockdata2.getBlock().getMaterial() == Material.AIR) {
+                if (iblockdata2.getMaterial() == Material.AIR) {
                     k1 = -1;
                 } else if (iblockdata2.getBlock() == Blocks.STONE) {
-                    IBlockData iblockdata3;
-
                     if (k1 == -1) {
                         flag1 = false;
                         if (j1 <= 0) {
-                            iblockdata = null;
-                            iblockdata1 = Blocks.STONE.getBlockData();
+                            iblockdata = BiomeMesa.b;
+                            iblockdata1 = BiomeMesa.a;
                         } else if (l1 >= i1 - 4 && l1 <= i1 + 1) {
-                            iblockdata = Blocks.STAINED_HARDENED_CLAY.getBlockData();
-                            iblockdata1 = this.al;
+                            iblockdata = BiomeMesa.B;
+                            iblockdata1 = this.s;
                         }
 
-                        if (l1 < i1 && (iblockdata == null || iblockdata.getBlock().getMaterial() == Material.AIR)) {
-                            iblockdata = Blocks.WATER.getBlockData();
+                        if (l1 < i1 && (iblockdata == null || iblockdata.getMaterial() == Material.AIR)) {
+                            iblockdata = BiomeMesa.h;
                         }
 
                         k1 = j1 + Math.max(0, l1 - i1);
                         if (l1 >= i1 - 1) {
-                            if (this.aJ && l1 > 86 + j1 * 2) {
+                            if (this.K && l1 > 86 + j1 * 2) {
                                 if (flag) {
-                                    chunksnapshot.a(l, l1, k, Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.COARSE_DIRT));
+                                    chunksnapshot.a(l, l1, k, BiomeMesa.y);
                                 } else {
-                                    chunksnapshot.a(l, l1, k, Blocks.GRASS.getBlockData());
+                                    chunksnapshot.a(l, l1, k, BiomeMesa.z);
                                 }
                             } else if (l1 > i1 + 3 + j1) {
+                                IBlockData iblockdata3;
+
                                 if (l1 >= 64 && l1 <= 127) {
                                     if (flag) {
-                                        iblockdata3 = Blocks.HARDENED_CLAY.getBlockData();
+                                        iblockdata3 = BiomeMesa.A;
                                     } else {
                                         iblockdata3 = this.a(i, l1, j);
                                     }
                                 } else {
-                                    iblockdata3 = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE);
+                                    iblockdata3 = BiomeMesa.C;
                                 }
 
                                 chunksnapshot.a(l, l1, k, iblockdata3);
                             } else {
-                                chunksnapshot.a(l, l1, k, this.ak);
+                                chunksnapshot.a(l, l1, k, this.r);
                                 flag1 = true;
                             }
                         } else {
                             chunksnapshot.a(l, l1, k, iblockdata1);
                             if (iblockdata1.getBlock() == Blocks.STAINED_HARDENED_CLAY) {
-                                chunksnapshot.a(l, l1, k, iblockdata1.getBlock().getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE));
+                                chunksnapshot.a(l, l1, k, BiomeMesa.C);
                             }
                         }
                     } else if (k1 > 0) {
                         --k1;
                         if (flag1) {
-                            chunksnapshot.a(l, l1, k, Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE));
+                            chunksnapshot.a(l, l1, k, BiomeMesa.C);
                         } else {
-                            iblockdata3 = this.a(i, l1, j);
-                            chunksnapshot.a(l, l1, k, iblockdata3);
+                            chunksnapshot.a(l, l1, k, this.a(i, l1, j));
                         }
                     }
                 }
@@ -164,18 +167,18 @@ public class BiomeMesa extends BiomeBase {
     }
 
     private void a(long i) {
-        this.aD = new IBlockData[64];
-        Arrays.fill(this.aD, Blocks.HARDENED_CLAY.getBlockData());
+        this.E = new IBlockData[64];
+        Arrays.fill(this.E, BiomeMesa.A);
         Random random = new Random(i);
 
-        this.aH = new NoiseGenerator3(random, 1);
+        this.I = new NoiseGenerator3(random, 1);
 
         int j;
 
         for (j = 0; j < 64; ++j) {
             j += random.nextInt(5) + 1;
             if (j < 64) {
-                this.aD[j] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.ORANGE);
+                this.E[j] = BiomeMesa.C;
             }
         }
 
@@ -191,7 +194,7 @@ public class BiomeMesa extends BiomeBase {
             i1 = random.nextInt(64);
 
             for (j1 = 0; i1 + j1 < 64 && j1 < l; ++j1) {
-                this.aD[i1 + j1] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.YELLOW);
+                this.E[i1 + j1] = BiomeMesa.B.set(BlockCloth.COLOR, EnumColor.YELLOW);
             }
         }
 
@@ -204,7 +207,7 @@ public class BiomeMesa extends BiomeBase {
             j1 = random.nextInt(64);
 
             for (k1 = 0; j1 + k1 < 64 && k1 < i1; ++k1) {
-                this.aD[j1 + k1] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.BROWN);
+                this.E[j1 + k1] = BiomeMesa.B.set(BlockCloth.COLOR, EnumColor.BROWN);
             }
         }
 
@@ -215,7 +218,7 @@ public class BiomeMesa extends BiomeBase {
             k1 = random.nextInt(64);
 
             for (int l1 = 0; k1 + l1 < 64 && l1 < j1; ++l1) {
-                this.aD[k1 + l1] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.RED);
+                this.E[k1 + l1] = BiomeMesa.B.set(BlockCloth.COLOR, EnumColor.RED);
             }
         }
 
@@ -228,13 +231,13 @@ public class BiomeMesa extends BiomeBase {
             j1 += random.nextInt(16) + 4;
 
             for (int i2 = 0; j1 + i2 < 64 && i2 < b0; ++i2) {
-                this.aD[j1 + i2] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.WHITE);
+                this.E[j1 + i2] = BiomeMesa.B.set(BlockCloth.COLOR, EnumColor.WHITE);
                 if (j1 + i2 > 1 && random.nextBoolean()) {
-                    this.aD[j1 + i2 - 1] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.SILVER);
+                    this.E[j1 + i2 - 1] = BiomeMesa.B.set(BlockCloth.COLOR, EnumColor.SILVER);
                 }
 
                 if (j1 + i2 < 63 && random.nextBoolean()) {
-                    this.aD[j1 + i2 + 1] = Blocks.STAINED_HARDENED_CLAY.getBlockData().set(BlockCloth.COLOR, EnumColor.SILVER);
+                    this.E[j1 + i2 + 1] = BiomeMesa.B.set(BlockCloth.COLOR, EnumColor.SILVER);
                 }
             }
         }
@@ -242,23 +245,8 @@ public class BiomeMesa extends BiomeBase {
     }
 
     private IBlockData a(int i, int j, int k) {
-        int l = (int) Math.round(this.aH.a((double) i * 1.0D / 512.0D, (double) i * 1.0D / 512.0D) * 2.0D);
+        int l = (int) Math.round(this.I.a((double) i / 512.0D, (double) i / 512.0D) * 2.0D);
 
-        return this.aD[(j + l + 64) % 64];
-    }
-
-    protected BiomeBase d(int i) {
-        boolean flag = this.id == BiomeBase.MESA.id;
-        BiomeMesa biomemesa = new BiomeMesa(i, flag, this.aJ);
-
-        if (!flag) {
-            biomemesa.a(BiomeMesa.g);
-            biomemesa.a(this.ah + " M");
-        } else {
-            biomemesa.a(this.ah + " (Bryce)");
-        }
-
-        biomemesa.a(this.ai, true);
-        return biomemesa;
+        return this.E[(j + l + 64) % 64];
     }
 }

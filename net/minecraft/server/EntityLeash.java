@@ -19,17 +19,23 @@ public class EntityLeash extends EntityHanging {
         this.a(new AxisAlignedBB(this.locX - 0.1875D, this.locY - 0.25D + 0.125D, this.locZ - 0.1875D, this.locX + 0.1875D, this.locY + 0.25D + 0.125D, this.locZ + 0.1875D));
     }
 
-    protected void h() {
-        super.h();
+    public void setPosition(double d0, double d1, double d2) {
+        super.setPosition((double) MathHelper.floor(d0) + 0.5D, (double) MathHelper.floor(d1) + 0.5D, (double) MathHelper.floor(d2) + 0.5D);
+    }
+
+    protected void updateBoundingBox() {
+        this.locX = (double) this.blockPosition.getX() + 0.5D;
+        this.locY = (double) this.blockPosition.getY() + 0.5D;
+        this.locZ = (double) this.blockPosition.getZ() + 0.5D;
     }
 
     public void setDirection(EnumDirection enumdirection) {}
 
-    public int l() {
+    public int getWidth() {
         return 9;
     }
 
-    public int m() {
+    public int getHeight() {
         return 9;
     }
 
@@ -37,7 +43,9 @@ public class EntityLeash extends EntityHanging {
         return -0.0625F;
     }
 
-    public void b(Entity entity) {}
+    public void a(Entity entity) {
+        this.a(SoundEffects.dd, 1.0F, 1.0F);
+    }
 
     public boolean d(NBTTagCompound nbttagcompound) {
         return false;
@@ -47,45 +55,48 @@ public class EntityLeash extends EntityHanging {
 
     public void a(NBTTagCompound nbttagcompound) {}
 
-    public boolean e(EntityHuman entityhuman) {
-        ItemStack itemstack = entityhuman.bA();
-        boolean flag = false;
-        double d0;
-        List list;
-        Iterator iterator;
-        EntityInsentient entityinsentient;
+    public boolean a(EntityHuman entityhuman, ItemStack itemstack, EnumHand enumhand) {
+        if (this.world.isClientSide) {
+            return true;
+        } else {
+            boolean flag = false;
+            double d0;
+            List list;
+            Iterator iterator;
+            EntityInsentient entityinsentient;
 
-        if (itemstack != null && itemstack.getItem() == Items.LEAD && !this.world.isClientSide) {
-            d0 = 7.0D;
-            list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX - d0, this.locY - d0, this.locZ - d0, this.locX + d0, this.locY + d0, this.locZ + d0));
-            iterator = list.iterator();
-
-            while (iterator.hasNext()) {
-                entityinsentient = (EntityInsentient) iterator.next();
-                if (entityinsentient.cc() && entityinsentient.getLeashHolder() == entityhuman) {
-                    entityinsentient.setLeashHolder(this, true);
-                    flag = true;
-                }
-            }
-        }
-
-        if (!this.world.isClientSide && !flag) {
-            this.die();
-            if (entityhuman.abilities.canInstantlyBuild) {
+            if (itemstack != null && itemstack.getItem() == Items.LEAD) {
                 d0 = 7.0D;
                 list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX - d0, this.locY - d0, this.locZ - d0, this.locX + d0, this.locY + d0, this.locZ + d0));
                 iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     entityinsentient = (EntityInsentient) iterator.next();
-                    if (entityinsentient.cc() && entityinsentient.getLeashHolder() == this) {
-                        entityinsentient.unleash(true, false);
+                    if (entityinsentient.isLeashed() && entityinsentient.getLeashHolder() == entityhuman) {
+                        entityinsentient.setLeashHolder(this, true);
+                        flag = true;
                     }
                 }
             }
-        }
 
-        return true;
+            if (!flag) {
+                this.die();
+                if (entityhuman.abilities.canInstantlyBuild) {
+                    d0 = 7.0D;
+                    list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX - d0, this.locY - d0, this.locZ - d0, this.locX + d0, this.locY + d0, this.locZ + d0));
+                    iterator = list.iterator();
+
+                    while (iterator.hasNext()) {
+                        entityinsentient = (EntityInsentient) iterator.next();
+                        if (entityinsentient.isLeashed() && entityinsentient.getLeashHolder() == this) {
+                            entityinsentient.unleash(true, false);
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
     }
 
     public boolean survives() {
@@ -97,6 +108,7 @@ public class EntityLeash extends EntityHanging {
 
         entityleash.attachedToPlayer = true;
         world.addEntity(entityleash);
+        entityleash.o();
         return entityleash;
     }
 
@@ -118,5 +130,9 @@ public class EntityLeash extends EntityHanging {
         } while (!entityleash.getBlockPosition().equals(blockposition));
 
         return entityleash;
+    }
+
+    public void o() {
+        this.a(SoundEffects.de, 1.0F, 1.0F);
     }
 }

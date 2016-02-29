@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class CommandClone extends CommandAbstract {
         return "commands.clone.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 9) {
             throw new ExceptionUsage("commands.clone.usage", new Object[0]);
         } else {
@@ -63,7 +64,7 @@ public class CommandClone extends CommandAbstract {
                                         throw new ExceptionUsage("commands.clone.usage", new Object[0]);
                                     }
 
-                                    block = g(icommandlistener, astring[11]);
+                                    block = b(icommandlistener, astring[11]);
                                     if (astring.length >= 13) {
                                         j = a(astring[12], 0, 15);
                                     }
@@ -89,10 +90,10 @@ public class CommandClone extends CommandAbstract {
                                             if (tileentity != null) {
                                                 NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-                                                tileentity.b(nbttagcompound);
+                                                tileentity.save(nbttagcompound);
                                                 arraylist1.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, nbttagcompound));
                                                 linkedlist.addLast(blockposition4);
-                                            } else if (!iblockdata.getBlock().o() && !iblockdata.getBlock().d()) {
+                                            } else if (!iblockdata.b() && !iblockdata.h()) {
                                                 arraylist2.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, (NBTTagCompound) null));
                                                 linkedlist.addFirst(blockposition4);
                                             } else {
@@ -193,7 +194,7 @@ public class CommandClone extends CommandAbstract {
                                 throw new CommandException("commands.clone.failed", new Object[0]);
                             } else {
                                 icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, i);
-                                a(icommandlistener, this, "commands.clone.success", new Object[] { Integer.valueOf(i)});
+                                a(icommandlistener, (ICommand) this, "commands.clone.success", new Object[] { Integer.valueOf(i)});
                             }
                         } else {
                             throw new CommandException("commands.clone.outOfWorld", new Object[0]);
@@ -206,8 +207,8 @@ public class CommandClone extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length > 3 && astring.length <= 6 ? a(astring, 3, blockposition) : (astring.length > 6 && astring.length <= 9 ? a(astring, 6, blockposition) : (astring.length == 10 ? a(astring, new String[] { "replace", "masked", "filtered"}) : (astring.length == 11 ? a(astring, new String[] { "normal", "force", "move"}) : (astring.length == 12 && "filtered".equals(astring[9]) ? a(astring, (Collection) Block.REGISTRY.keySet()) : null)))));
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length > 3 && astring.length <= 6 ? a(astring, 3, blockposition) : (astring.length > 6 && astring.length <= 9 ? a(astring, 6, blockposition) : (astring.length == 10 ? a(astring, new String[] { "replace", "masked", "filtered"}) : (astring.length == 11 ? a(astring, new String[] { "normal", "force", "move"}) : (astring.length == 12 && "filtered".equals(astring[9]) ? a(astring, (Collection) Block.REGISTRY.keySet()) : Collections.emptyList())))));
     }
 
     static class CommandCloneStoredTileEntity {

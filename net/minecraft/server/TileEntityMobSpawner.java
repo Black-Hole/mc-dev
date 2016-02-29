@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class TileEntityMobSpawner extends TileEntity implements IUpdatePlayerListBox {
+public class TileEntityMobSpawner extends TileEntity implements ITickable {
 
     private final MobSpawnerAbstract a = new MobSpawnerAbstract() {
         public void a(int i) {
@@ -15,10 +15,12 @@ public class TileEntityMobSpawner extends TileEntity implements IUpdatePlayerLis
             return TileEntityMobSpawner.this.position;
         }
 
-        public void a(MobSpawnerAbstract.a mobspawnerabstract_a) {
-            super.a(mobspawnerabstract_a);
+        public void a(MobSpawnerData mobspawnerdata) {
+            super.a(mobspawnerdata);
             if (this.a() != null) {
-                this.a().notify(TileEntityMobSpawner.this.position);
+                IBlockData iblockdata = this.a().getType(this.b());
+
+                this.a().notify(TileEntityMobSpawner.this.position, iblockdata, iblockdata, 4);
             }
 
         }
@@ -31,8 +33,8 @@ public class TileEntityMobSpawner extends TileEntity implements IUpdatePlayerLis
         this.a.a(nbttagcompound);
     }
 
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
+    public void save(NBTTagCompound nbttagcompound) {
+        super.save(nbttagcompound);
         this.a.b(nbttagcompound);
     }
 
@@ -40,10 +42,10 @@ public class TileEntityMobSpawner extends TileEntity implements IUpdatePlayerLis
         this.a.c();
     }
 
-    public Packet getUpdatePacket() {
+    public Packet<?> getUpdatePacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        this.b(nbttagcompound);
+        this.save(nbttagcompound);
         nbttagcompound.remove("SpawnPotentials");
         return new PacketPlayOutTileEntityData(this.position, 1, nbttagcompound);
     }
@@ -52,7 +54,7 @@ public class TileEntityMobSpawner extends TileEntity implements IUpdatePlayerLis
         return this.a.b(i) ? true : super.c(i, j);
     }
 
-    public boolean F() {
+    public boolean isFilteredNBT() {
         return true;
     }
 

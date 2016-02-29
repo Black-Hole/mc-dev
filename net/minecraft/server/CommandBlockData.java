@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Collections;
 import java.util.List;
 
 public class CommandBlockData extends CommandAbstract {
@@ -18,7 +19,7 @@ public class CommandBlockData extends CommandAbstract {
         return "commands.blockdata.usage";
     }
 
-    public void execute(ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 4) {
             throw new ExceptionUsage("commands.blockdata.usage", new Object[0]);
         } else {
@@ -29,6 +30,7 @@ public class CommandBlockData extends CommandAbstract {
             if (!world.isLoaded(blockposition)) {
                 throw new CommandException("commands.blockdata.outOfWorld", new Object[0]);
             } else {
+                IBlockData iblockdata = world.getType(blockposition);
                 TileEntity tileentity = world.getTileEntity(blockposition);
 
                 if (tileentity == null) {
@@ -36,13 +38,13 @@ public class CommandBlockData extends CommandAbstract {
                 } else {
                     NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-                    tileentity.b(nbttagcompound);
+                    tileentity.save(nbttagcompound);
                     NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttagcompound.clone();
 
                     NBTTagCompound nbttagcompound2;
 
                     try {
-                        nbttagcompound2 = MojangsonParser.parse(a(icommandlistener, astring, 3).c());
+                        nbttagcompound2 = MojangsonParser.parse(a(icommandlistener, astring, 3).toPlainText());
                     } catch (MojangsonParseException mojangsonparseexception) {
                         throw new CommandException("commands.blockdata.tagError", new Object[] { mojangsonparseexception.getMessage()});
                     }
@@ -56,16 +58,16 @@ public class CommandBlockData extends CommandAbstract {
                     } else {
                         tileentity.a(nbttagcompound);
                         tileentity.update();
-                        world.notify(blockposition);
+                        world.notify(blockposition, iblockdata, iblockdata, 3);
                         icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 1);
-                        a(icommandlistener, this, "commands.blockdata.success", new Object[] { nbttagcompound.toString()});
+                        a(icommandlistener, (ICommand) this, "commands.blockdata.success", new Object[] { nbttagcompound.toString()});
                     }
                 }
             }
         }
     }
 
-    public List<String> tabComplete(ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
-        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : null;
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : Collections.emptyList();
     }
 }

@@ -1,7 +1,11 @@
 package net.minecraft.server;
 
+import io.netty.util.ResourceLeakDetector;
+import io.netty.util.ResourceLeakDetector.Level;
+
 public class SharedConstants {
 
+    public static final Level a = Level.DISABLED;
     public static final char[] allowedCharacters = new char[] { '/', '\n', '\r', '\t', '\u0000', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':'};
 
     public static boolean isAllowedChatCharacter(char c0) {
@@ -22,5 +26,9 @@ public class SharedConstants {
         }
 
         return stringbuilder.toString();
+    }
+
+    static {
+        ResourceLeakDetector.setLevel(SharedConstants.a);
     }
 }

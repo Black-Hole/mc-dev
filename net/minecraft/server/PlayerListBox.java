@@ -3,14 +3,14 @@ package net.minecraft.server;
 import java.util.Vector;
 import javax.swing.JList;
 
-public class PlayerListBox extends JList implements IUpdatePlayerListBox {
+public class PlayerListBox extends JList implements ITickable {
 
     private MinecraftServer a;
     private int b;
 
     public PlayerListBox(MinecraftServer minecraftserver) {
         this.a = minecraftserver;
-        minecraftserver.a((IUpdatePlayerListBox) this);
+        minecraftserver.a((ITickable) this);
     }
 
     public void c() {

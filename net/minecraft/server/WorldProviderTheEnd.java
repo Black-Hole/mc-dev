@@ -2,16 +2,20 @@ package net.minecraft.server;
 
 public class WorldProviderTheEnd extends WorldProvider {
 
+    private EnderDragonBattle g = null;
+
     public WorldProviderTheEnd() {}
 
     public void b() {
-        this.c = new WorldChunkManagerHell(BiomeBase.SKY, 0.0F);
-        this.dimension = 1;
+        this.c = new WorldChunkManagerHell(Biomes.k);
         this.e = true;
+        NBTTagCompound nbttagcompound = this.b.getWorldData().a(DimensionManager.THE_END);
+
+        this.g = this.b instanceof WorldServer ? new EnderDragonBattle((WorldServer) this.b, nbttagcompound.getCompound("DragonFight")) : null;
     }
 
-    public IChunkProvider getChunkProvider() {
-        return new ChunkProviderTheEnd(this.b, this.b.getSeed());
+    public ChunkGenerator getChunkGenerator() {
+        return new ChunkProviderTheEnd(this.b, this.b.getWorldData().shouldGenerateMapFeatures(), this.b.getSeed());
     }
 
     public float a(long i, float f) {
@@ -38,11 +42,28 @@ public class WorldProviderTheEnd extends WorldProvider {
         return 50;
     }
 
-    public String getName() {
-        return "The End";
+    public DimensionManager getDimensionManager() {
+        return DimensionManager.THE_END;
     }
 
-    public String getSuffix() {
-        return "_end";
+    public void q() {
+        NBTTagCompound nbttagcompound = new NBTTagCompound();
+
+        if (this.g != null) {
+            nbttagcompound.set("DragonFight", this.g.a());
+        }
+
+        this.b.getWorldData().a(DimensionManager.THE_END, nbttagcompound);
+    }
+
+    public void r() {
+        if (this.g != null) {
+            this.g.b();
+        }
+
+    }
+
+    public EnderDragonBattle s() {
+        return this.g;
     }
 }

@@ -111,6 +111,15 @@ public class AttributeModifiable implements AttributeInstance {
         this.f();
     }
 
+    public void b(UUID uuid) {
+        AttributeModifier attributemodifier = this.a(uuid);
+
+        if (attributemodifier != null) {
+            this.c(attributemodifier);
+        }
+
+    }
+
     public double getValue() {
         if (this.g) {
             this.h = this.g();

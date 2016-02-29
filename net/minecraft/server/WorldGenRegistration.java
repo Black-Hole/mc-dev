@@ -3,7 +3,9 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Map.Entry;
 
 public class WorldGenRegistration {
 
@@ -11,25 +13,75 @@ public class WorldGenRegistration {
         WorldGenFactory.a(WorldGenRegistration.WorldGenPyramidPiece.class, "TeDP");
         WorldGenFactory.a(WorldGenRegistration.WorldGenJungleTemple.class, "TeJP");
         WorldGenFactory.a(WorldGenRegistration.WorldGenWitchHut.class, "TeSH");
+        WorldGenFactory.a(WorldGenRegistration.b.class, "Iglu");
     }
 
-    static class SyntheticClass_1 {
+    static class SyntheticClass_1 {    }
 
-        static final int[] a = new int[EnumDirection.values().length];
+    public static class b extends WorldGenRegistration.WorldGenScatteredPiece {
 
-        static {
-            try {
-                WorldGenRegistration.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
+        private static final MinecraftKey e = new MinecraftKey("igloo/igloo_top");
+        private static final MinecraftKey f = new MinecraftKey("igloo/igloo_middle");
+        private static final MinecraftKey g = new MinecraftKey("igloo/igloo_bottom");
+
+        public b() {}
+
+        public b(Random random, int i, int j) {
+            super(random, i, 64, j, 7, 5, 8);
+        }
+
+        public boolean a(World world, Random random, StructureBoundingBox structureboundingbox) {
+            if (!this.a(world, structureboundingbox, -1)) {
+                return false;
+            } else {
+                StructureBoundingBox structureboundingbox1 = this.c();
+                BlockPosition blockposition = new BlockPosition(structureboundingbox1.a, structureboundingbox1.b, structureboundingbox1.c);
+                EnumBlockRotation[] aenumblockrotation = EnumBlockRotation.values();
+                MinecraftServer minecraftserver = world.getMinecraftServer();
+                DefinedStructureManager definedstructuremanager = world.getDataManager().h();
+                DefinedStructureInfo definedstructureinfo = new DefinedStructureInfo(EnumBlockMirror.NONE, aenumblockrotation[random.nextInt(aenumblockrotation.length)], false, Blocks.BARRIER, structureboundingbox1);
+                DefinedStructure definedstructure = definedstructuremanager.a(minecraftserver, WorldGenRegistration.b.e);
+
+                definedstructure.a(world, blockposition, definedstructureinfo);
+                if (random.nextDouble() < 0.5D) {
+                    DefinedStructure definedstructure1 = definedstructuremanager.a(minecraftserver, WorldGenRegistration.b.f);
+                    DefinedStructure definedstructure2 = definedstructuremanager.a(minecraftserver, WorldGenRegistration.b.g);
+                    int i = random.nextInt(8) + 4;
+
+                    for (int j = 0; j < i; ++j) {
+                        BlockPosition blockposition1 = definedstructure.a(definedstructureinfo, new BlockPosition(3, -1 - j * 3, 5), definedstructureinfo, new BlockPosition(1, 2, 1));
+
+                        definedstructure1.a(world, blockposition.a(blockposition1), definedstructureinfo);
+                    }
+
+                    BlockPosition blockposition2 = blockposition.a(definedstructure.a(definedstructureinfo, new BlockPosition(3, -1 - i * 3, 5), definedstructureinfo, new BlockPosition(3, 5, 7)));
+
+                    definedstructure2.a(world, blockposition2, definedstructureinfo);
+                    Map map = definedstructure2.a(blockposition2, definedstructureinfo);
+                    Iterator iterator = map.entrySet().iterator();
+
+                    while (iterator.hasNext()) {
+                        Entry entry = (Entry) iterator.next();
+
+                        if ("chest".equals(entry.getValue())) {
+                            BlockPosition blockposition3 = (BlockPosition) entry.getKey();
+
+                            world.setTypeAndData(blockposition3, Blocks.AIR.getBlockData(), 3);
+                            TileEntity tileentity = world.getTileEntity(blockposition3.down());
+
+                            if (tileentity instanceof TileEntityChest) {
+                                ((TileEntityChest) tileentity).a(LootTables.m, random.nextLong());
+                            }
+                        }
+                    }
+                } else {
+                    BlockPosition blockposition4 = DefinedStructure.a(definedstructureinfo, new BlockPosition(3, 0, 5));
+
+                    world.setTypeAndData(blockposition.a(blockposition4), Blocks.SNOW.getBlockData(), 3);
+                }
+
+                return true;
             }
-
-            try {
-                WorldGenRegistration.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
         }
     }
 
@@ -78,36 +130,36 @@ public class WorldGenRegistration {
                 this.a(world, Blocks.cauldron.getBlockData(), 4, 2, 6, structureboundingbox);
                 this.a(world, Blocks.FENCE.getBlockData(), 1, 2, 1, structureboundingbox);
                 this.a(world, Blocks.FENCE.getBlockData(), 5, 2, 1, structureboundingbox);
-                int i = this.a(Blocks.OAK_STAIRS, 3);
-                int j = this.a(Blocks.OAK_STAIRS, 1);
-                int k = this.a(Blocks.OAK_STAIRS, 0);
-                int l = this.a(Blocks.OAK_STAIRS, 2);
+                IBlockData iblockdata = Blocks.SPRUCE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.NORTH);
+                IBlockData iblockdata1 = Blocks.SPRUCE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.EAST);
+                IBlockData iblockdata2 = Blocks.SPRUCE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.WEST);
+                IBlockData iblockdata3 = Blocks.SPRUCE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.SOUTH);
 
-                this.a(world, structureboundingbox, 0, 4, 1, 6, 4, 1, Blocks.SPRUCE_STAIRS.fromLegacyData(i), Blocks.SPRUCE_STAIRS.fromLegacyData(i), false);
-                this.a(world, structureboundingbox, 0, 4, 2, 0, 4, 7, Blocks.SPRUCE_STAIRS.fromLegacyData(k), Blocks.SPRUCE_STAIRS.fromLegacyData(k), false);
-                this.a(world, structureboundingbox, 6, 4, 2, 6, 4, 7, Blocks.SPRUCE_STAIRS.fromLegacyData(j), Blocks.SPRUCE_STAIRS.fromLegacyData(j), false);
-                this.a(world, structureboundingbox, 0, 4, 8, 6, 4, 8, Blocks.SPRUCE_STAIRS.fromLegacyData(l), Blocks.SPRUCE_STAIRS.fromLegacyData(l), false);
+                this.a(world, structureboundingbox, 0, 4, 1, 6, 4, 1, iblockdata, iblockdata, false);
+                this.a(world, structureboundingbox, 0, 4, 2, 0, 4, 7, iblockdata1, iblockdata1, false);
+                this.a(world, structureboundingbox, 6, 4, 2, 6, 4, 7, iblockdata2, iblockdata2, false);
+                this.a(world, structureboundingbox, 0, 4, 8, 6, 4, 8, iblockdata3, iblockdata3, false);
 
-                int i1;
-                int j1;
+                int i;
+                int j;
 
-                for (i1 = 2; i1 <= 7; i1 += 5) {
-                    for (j1 = 1; j1 <= 5; j1 += 4) {
-                        this.b(world, Blocks.LOG.getBlockData(), j1, -1, i1, structureboundingbox);
+                for (i = 2; i <= 7; i += 5) {
+                    for (j = 1; j <= 5; j += 4) {
+                        this.b(world, Blocks.LOG.getBlockData(), j, -1, i, structureboundingbox);
                     }
                 }
 
                 if (!this.e) {
-                    i1 = this.a(2, 5);
-                    j1 = this.d(2);
-                    int k1 = this.b(2, 5);
+                    i = this.a(2, 5);
+                    j = this.d(2);
+                    int k = this.b(2, 5);
 
-                    if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(i1, j1, k1)))) {
+                    if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(i, j, k)))) {
                         this.e = true;
                         EntityWitch entitywitch = new EntityWitch(world);
 
-                        entitywitch.setPositionRotation((double) i1 + 0.5D, (double) j1, (double) k1 + 0.5D, 0.0F, 0.0F);
-                        entitywitch.prepare(world.E(new BlockPosition(i1, j1, k1)), (GroupDataEntity) null);
+                        entitywitch.setPositionRotation((double) i + 0.5D, (double) j, (double) k + 0.5D, 0.0F, 0.0F);
+                        entitywitch.prepare(world.D(new BlockPosition(i, j, k)), (GroupDataEntity) null);
                         world.addEntity(entitywitch);
                     }
                 }
@@ -123,9 +175,8 @@ public class WorldGenRegistration {
         private boolean f;
         private boolean g;
         private boolean h;
-        private static final List<StructurePieceTreasure> i = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.DIAMOND, 0, 1, 3, 3), new StructurePieceTreasure(Items.IRON_INGOT, 0, 1, 5, 10), new StructurePieceTreasure(Items.GOLD_INGOT, 0, 2, 7, 15), new StructurePieceTreasure(Items.EMERALD, 0, 1, 3, 2), new StructurePieceTreasure(Items.BONE, 0, 4, 6, 20), new StructurePieceTreasure(Items.ROTTEN_FLESH, 0, 3, 7, 16), new StructurePieceTreasure(Items.SADDLE, 0, 1, 1, 3), new StructurePieceTreasure(Items.IRON_HORSE_ARMOR, 0, 1, 1, 1), new StructurePieceTreasure(Items.GOLDEN_HORSE_ARMOR, 0, 1, 1, 1), new StructurePieceTreasure(Items.DIAMOND_HORSE_ARMOR, 0, 1, 1, 1)});
-        private static final List<StructurePieceTreasure> j = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.ARROW, 0, 2, 7, 30)});
-        private static WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece k = new WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece((WorldGenRegistration.SyntheticClass_1) null);
+        private static final List<StructurePieceTreasure> i = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.ARROW, 0, 2, 7, 30)});
+        private static WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece j = new WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece((WorldGenRegistration.SyntheticClass_1) null);
 
         public WorldGenJungleTemple() {}
 
@@ -153,24 +204,19 @@ public class WorldGenRegistration {
             if (!this.a(world, structureboundingbox, 0)) {
                 return false;
             } else {
-                int i = this.a(Blocks.STONE_STAIRS, 3);
-                int j = this.a(Blocks.STONE_STAIRS, 2);
-                int k = this.a(Blocks.STONE_STAIRS, 0);
-                int l = this.a(Blocks.STONE_STAIRS, 1);
-
-                this.a(world, structureboundingbox, 0, -4, 0, this.a - 1, 0, this.c - 1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 2, 1, 2, 9, 2, 2, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 2, 1, 12, 9, 2, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 2, 1, 3, 2, 2, 11, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 9, 1, 3, 9, 2, 11, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 1, 3, 1, 10, 6, 1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 1, 3, 13, 10, 6, 13, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 1, 3, 2, 1, 6, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 10, 3, 2, 10, 6, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 2, 3, 2, 9, 3, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 2, 6, 2, 9, 6, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 3, 7, 3, 8, 7, 11, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 4, 8, 4, 7, 8, 10, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
+                this.a(world, structureboundingbox, 0, -4, 0, this.a - 1, 0, this.c - 1, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 2, 1, 2, 9, 2, 2, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 2, 1, 12, 9, 2, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 2, 1, 3, 2, 2, 11, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 9, 1, 3, 9, 2, 11, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 1, 3, 1, 10, 6, 1, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 1, 3, 13, 10, 6, 13, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 1, 3, 2, 1, 6, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 10, 3, 2, 10, 6, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 2, 3, 2, 9, 3, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 2, 6, 2, 9, 6, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 3, 7, 3, 8, 7, 11, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 4, 8, 4, 7, 8, 10, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
                 this.a(world, structureboundingbox, 3, 1, 3, 8, 2, 11);
                 this.a(world, structureboundingbox, 4, 3, 6, 7, 3, 9);
                 this.a(world, structureboundingbox, 2, 4, 2, 9, 5, 12);
@@ -185,80 +231,87 @@ public class WorldGenRegistration {
                 this.a(world, Blocks.AIR.getBlockData(), 1, 5, 9, structureboundingbox);
                 this.a(world, Blocks.AIR.getBlockData(), 10, 5, 9, structureboundingbox);
 
-                int i1;
+                int i;
 
-                for (i1 = 0; i1 <= 14; i1 += 14) {
-                    this.a(world, structureboundingbox, 2, 4, i1, 2, 5, i1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                    this.a(world, structureboundingbox, 4, 4, i1, 4, 5, i1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                    this.a(world, structureboundingbox, 7, 4, i1, 7, 5, i1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                    this.a(world, structureboundingbox, 9, 4, i1, 9, 5, i1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
+                for (i = 0; i <= 14; i += 14) {
+                    this.a(world, structureboundingbox, 2, 4, i, 2, 5, i, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                    this.a(world, structureboundingbox, 4, 4, i, 4, 5, i, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                    this.a(world, structureboundingbox, 7, 4, i, 7, 5, i, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                    this.a(world, structureboundingbox, 9, 4, i, 9, 5, i, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
                 }
 
-                this.a(world, structureboundingbox, 5, 6, 0, 6, 6, 0, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
+                this.a(world, structureboundingbox, 5, 6, 0, 6, 6, 0, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
 
-                for (i1 = 0; i1 <= 11; i1 += 11) {
-                    for (int j1 = 2; j1 <= 12; j1 += 2) {
-                        this.a(world, structureboundingbox, i1, 4, j1, i1, 5, j1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
+                for (i = 0; i <= 11; i += 11) {
+                    for (int j = 2; j <= 12; j += 2) {
+                        this.a(world, structureboundingbox, i, 4, j, i, 5, j, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
                     }
 
-                    this.a(world, structureboundingbox, i1, 6, 5, i1, 6, 5, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                    this.a(world, structureboundingbox, i1, 6, 9, i1, 6, 9, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
+                    this.a(world, structureboundingbox, i, 6, 5, i, 6, 5, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                    this.a(world, structureboundingbox, i, 6, 9, i, 6, 9, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
                 }
 
-                this.a(world, structureboundingbox, 2, 7, 2, 2, 9, 2, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 9, 7, 2, 9, 9, 2, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 2, 7, 12, 2, 9, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 9, 7, 12, 9, 9, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 4, 9, 4, 4, 9, 4, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 7, 9, 4, 7, 9, 4, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 4, 9, 10, 4, 9, 10, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 7, 9, 10, 7, 9, 10, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 5, 9, 7, 6, 9, 7, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 5, 9, 6, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 6, 9, 6, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(j), 5, 9, 8, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(j), 6, 9, 8, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 4, 0, 0, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 5, 0, 0, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 6, 0, 0, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 7, 0, 0, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 4, 1, 8, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 4, 2, 9, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 4, 3, 10, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 7, 1, 8, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 7, 2, 9, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(i), 7, 3, 10, structureboundingbox);
-                this.a(world, structureboundingbox, 4, 1, 9, 4, 1, 9, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 7, 1, 9, 7, 1, 9, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 4, 1, 10, 7, 2, 10, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 5, 4, 5, 6, 4, 5, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(k), 4, 4, 5, structureboundingbox);
-                this.a(world, Blocks.STONE_STAIRS.fromLegacyData(l), 7, 4, 5, structureboundingbox);
+                this.a(world, structureboundingbox, 2, 7, 2, 2, 9, 2, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 9, 7, 2, 9, 9, 2, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 2, 7, 12, 2, 9, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 9, 7, 12, 9, 9, 12, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 4, 9, 4, 4, 9, 4, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 7, 9, 4, 7, 9, 4, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 4, 9, 10, 4, 9, 10, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 7, 9, 10, 7, 9, 10, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 5, 9, 7, 6, 9, 7, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                IBlockData iblockdata = Blocks.STONE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.EAST);
+                IBlockData iblockdata1 = Blocks.STONE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.WEST);
+                IBlockData iblockdata2 = Blocks.STONE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.SOUTH);
+                IBlockData iblockdata3 = Blocks.STONE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.NORTH);
 
-                for (i1 = 0; i1 < 4; ++i1) {
-                    this.a(world, Blocks.STONE_STAIRS.fromLegacyData(j), 5, 0 - i1, 6 + i1, structureboundingbox);
-                    this.a(world, Blocks.STONE_STAIRS.fromLegacyData(j), 6, 0 - i1, 6 + i1, structureboundingbox);
-                    this.a(world, structureboundingbox, 5, 0 - i1, 7 + i1, 6, 0 - i1, 9 + i1);
+                this.a(world, iblockdata3, 5, 9, 6, structureboundingbox);
+                this.a(world, iblockdata3, 6, 9, 6, structureboundingbox);
+                this.a(world, iblockdata2, 5, 9, 8, structureboundingbox);
+                this.a(world, iblockdata2, 6, 9, 8, structureboundingbox);
+                this.a(world, iblockdata3, 4, 0, 0, structureboundingbox);
+                this.a(world, iblockdata3, 5, 0, 0, structureboundingbox);
+                this.a(world, iblockdata3, 6, 0, 0, structureboundingbox);
+                this.a(world, iblockdata3, 7, 0, 0, structureboundingbox);
+                this.a(world, iblockdata3, 4, 1, 8, structureboundingbox);
+                this.a(world, iblockdata3, 4, 2, 9, structureboundingbox);
+                this.a(world, iblockdata3, 4, 3, 10, structureboundingbox);
+                this.a(world, iblockdata3, 7, 1, 8, structureboundingbox);
+                this.a(world, iblockdata3, 7, 2, 9, structureboundingbox);
+                this.a(world, iblockdata3, 7, 3, 10, structureboundingbox);
+                this.a(world, structureboundingbox, 4, 1, 9, 4, 1, 9, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 7, 1, 9, 7, 1, 9, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 4, 1, 10, 7, 2, 10, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 5, 4, 5, 6, 4, 5, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, iblockdata, 4, 4, 5, structureboundingbox);
+                this.a(world, iblockdata1, 7, 4, 5, structureboundingbox);
+
+                int k;
+
+                for (k = 0; k < 4; ++k) {
+                    this.a(world, iblockdata2, 5, 0 - k, 6 + k, structureboundingbox);
+                    this.a(world, iblockdata2, 6, 0 - k, 6 + k, structureboundingbox);
+                    this.a(world, structureboundingbox, 5, 0 - k, 7 + k, 6, 0 - k, 9 + k);
                 }
 
                 this.a(world, structureboundingbox, 1, -3, 12, 10, -1, 13);
                 this.a(world, structureboundingbox, 1, -3, 1, 3, -1, 13);
                 this.a(world, structureboundingbox, 1, -3, 1, 9, -1, 5);
 
-                for (i1 = 1; i1 <= 13; i1 += 2) {
-                    this.a(world, structureboundingbox, 1, -3, i1, 1, -2, i1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
+                for (k = 1; k <= 13; k += 2) {
+                    this.a(world, structureboundingbox, 1, -3, k, 1, -2, k, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
                 }
 
-                for (i1 = 2; i1 <= 12; i1 += 2) {
-                    this.a(world, structureboundingbox, 1, -1, i1, 3, -1, i1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
+                for (k = 2; k <= 12; k += 2) {
+                    this.a(world, structureboundingbox, 1, -1, k, 3, -1, k, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
                 }
 
-                this.a(world, structureboundingbox, 2, -2, 1, 5, -2, 1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 7, -2, 1, 9, -2, 1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 6, -3, 1, 6, -3, 1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 6, -1, 1, 6, -1, 1, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, Blocks.TRIPWIRE_HOOK.fromLegacyData(this.a(Blocks.TRIPWIRE_HOOK, EnumDirection.EAST.b())).set(BlockTripwireHook.ATTACHED, Boolean.valueOf(true)), 1, -3, 8, structureboundingbox);
-                this.a(world, Blocks.TRIPWIRE_HOOK.fromLegacyData(this.a(Blocks.TRIPWIRE_HOOK, EnumDirection.WEST.b())).set(BlockTripwireHook.ATTACHED, Boolean.valueOf(true)), 4, -3, 8, structureboundingbox);
+                this.a(world, structureboundingbox, 2, -2, 1, 5, -2, 1, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 7, -2, 1, 9, -2, 1, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 6, -3, 1, 6, -3, 1, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 6, -1, 1, 6, -1, 1, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, Blocks.TRIPWIRE_HOOK.getBlockData().set(BlockTripwireHook.FACING, EnumDirection.EAST).set(BlockTripwireHook.ATTACHED, Boolean.valueOf(true)), 1, -3, 8, structureboundingbox);
+                this.a(world, Blocks.TRIPWIRE_HOOK.getBlockData().set(BlockTripwireHook.FACING, EnumDirection.WEST).set(BlockTripwireHook.ATTACHED, Boolean.valueOf(true)), 4, -3, 8, structureboundingbox);
                 this.a(world, Blocks.TRIPWIRE.getBlockData().set(BlockTripwire.ATTACHED, Boolean.valueOf(true)), 2, -3, 8, structureboundingbox);
                 this.a(world, Blocks.TRIPWIRE.getBlockData().set(BlockTripwire.ATTACHED, Boolean.valueOf(true)), 3, -3, 8, structureboundingbox);
                 this.a(world, Blocks.REDSTONE_WIRE.getBlockData(), 5, -3, 7, structureboundingbox);
@@ -271,12 +324,12 @@ public class WorldGenRegistration {
                 this.a(world, Blocks.REDSTONE_WIRE.getBlockData(), 4, -3, 1, structureboundingbox);
                 this.a(world, Blocks.MOSSY_COBBLESTONE.getBlockData(), 3, -3, 1, structureboundingbox);
                 if (!this.g) {
-                    this.g = this.a(world, structureboundingbox, random, 3, -2, 1, EnumDirection.NORTH.a(), WorldGenRegistration.WorldGenJungleTemple.j, 2);
+                    this.g = this.a(world, structureboundingbox, random, 3, -2, 1, EnumDirection.NORTH, WorldGenRegistration.WorldGenJungleTemple.i, 2);
                 }
 
-                this.a(world, Blocks.VINE.fromLegacyData(15), 3, -2, 2, structureboundingbox);
-                this.a(world, Blocks.TRIPWIRE_HOOK.fromLegacyData(this.a(Blocks.TRIPWIRE_HOOK, EnumDirection.NORTH.b())).set(BlockTripwireHook.ATTACHED, Boolean.valueOf(true)), 7, -3, 1, structureboundingbox);
-                this.a(world, Blocks.TRIPWIRE_HOOK.fromLegacyData(this.a(Blocks.TRIPWIRE_HOOK, EnumDirection.SOUTH.b())).set(BlockTripwireHook.ATTACHED, Boolean.valueOf(true)), 7, -3, 5, structureboundingbox);
+                this.a(world, Blocks.VINE.getBlockData().set(BlockVine.SOUTH, Boolean.valueOf(true)), 3, -2, 2, structureboundingbox);
+                this.a(world, Blocks.TRIPWIRE_HOOK.getBlockData().set(BlockTripwireHook.FACING, EnumDirection.NORTH).set(BlockTripwireHook.ATTACHED, Boolean.valueOf(true)), 7, -3, 1, structureboundingbox);
+                this.a(world, Blocks.TRIPWIRE_HOOK.getBlockData().set(BlockTripwireHook.FACING, EnumDirection.SOUTH).set(BlockTripwireHook.ATTACHED, Boolean.valueOf(true)), 7, -3, 5, structureboundingbox);
                 this.a(world, Blocks.TRIPWIRE.getBlockData().set(BlockTripwire.ATTACHED, Boolean.valueOf(true)), 7, -3, 2, structureboundingbox);
                 this.a(world, Blocks.TRIPWIRE.getBlockData().set(BlockTripwire.ATTACHED, Boolean.valueOf(true)), 7, -3, 3, structureboundingbox);
                 this.a(world, Blocks.TRIPWIRE.getBlockData().set(BlockTripwire.ATTACHED, Boolean.valueOf(true)), 7, -3, 4, structureboundingbox);
@@ -286,13 +339,13 @@ public class WorldGenRegistration {
                 this.a(world, Blocks.MOSSY_COBBLESTONE.getBlockData(), 9, -3, 4, structureboundingbox);
                 this.a(world, Blocks.REDSTONE_WIRE.getBlockData(), 9, -2, 4, structureboundingbox);
                 if (!this.h) {
-                    this.h = this.a(world, structureboundingbox, random, 9, -2, 3, EnumDirection.WEST.a(), WorldGenRegistration.WorldGenJungleTemple.j, 2);
+                    this.h = this.a(world, structureboundingbox, random, 9, -2, 3, EnumDirection.WEST, WorldGenRegistration.WorldGenJungleTemple.i, 2);
                 }
 
-                this.a(world, Blocks.VINE.fromLegacyData(15), 8, -1, 3, structureboundingbox);
-                this.a(world, Blocks.VINE.fromLegacyData(15), 8, -2, 3, structureboundingbox);
+                this.a(world, Blocks.VINE.getBlockData().set(BlockVine.EAST, Boolean.valueOf(true)), 8, -1, 3, structureboundingbox);
+                this.a(world, Blocks.VINE.getBlockData().set(BlockVine.EAST, Boolean.valueOf(true)), 8, -2, 3, structureboundingbox);
                 if (!this.e) {
-                    this.e = this.a(world, structureboundingbox, random, 8, -3, 3, StructurePieceTreasure.a(WorldGenRegistration.WorldGenJungleTemple.i, new StructurePieceTreasure[] { Items.ENCHANTED_BOOK.b(random)}), 2 + random.nextInt(5));
+                    this.e = this.a(world, structureboundingbox, random, 8, -3, 3, LootTables.l);
                 }
 
                 this.a(world, Blocks.MOSSY_COBBLESTONE.getBlockData(), 9, -3, 2, structureboundingbox);
@@ -304,26 +357,28 @@ public class WorldGenRegistration {
                 this.a(world, Blocks.MOSSY_COBBLESTONE.getBlockData(), 7, -2, 5, structureboundingbox);
                 this.a(world, Blocks.MOSSY_COBBLESTONE.getBlockData(), 7, -1, 5, structureboundingbox);
                 this.a(world, Blocks.MOSSY_COBBLESTONE.getBlockData(), 8, -3, 5, structureboundingbox);
-                this.a(world, structureboundingbox, 9, -1, 1, 9, -1, 5, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
+                this.a(world, structureboundingbox, 9, -1, 1, 9, -1, 5, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
                 this.a(world, structureboundingbox, 8, -3, 8, 10, -1, 10);
-                this.a(world, Blocks.STONEBRICK.fromLegacyData(BlockSmoothBrick.P), 8, -2, 11, structureboundingbox);
-                this.a(world, Blocks.STONEBRICK.fromLegacyData(BlockSmoothBrick.P), 9, -2, 11, structureboundingbox);
-                this.a(world, Blocks.STONEBRICK.fromLegacyData(BlockSmoothBrick.P), 10, -2, 11, structureboundingbox);
-                this.a(world, Blocks.LEVER.fromLegacyData(BlockLever.a(EnumDirection.fromType1(this.a(Blocks.LEVER, EnumDirection.NORTH.a())))), 8, -2, 12, structureboundingbox);
-                this.a(world, Blocks.LEVER.fromLegacyData(BlockLever.a(EnumDirection.fromType1(this.a(Blocks.LEVER, EnumDirection.NORTH.a())))), 9, -2, 12, structureboundingbox);
-                this.a(world, Blocks.LEVER.fromLegacyData(BlockLever.a(EnumDirection.fromType1(this.a(Blocks.LEVER, EnumDirection.NORTH.a())))), 10, -2, 12, structureboundingbox);
-                this.a(world, structureboundingbox, 8, -3, 8, 8, -3, 10, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
-                this.a(world, structureboundingbox, 10, -3, 8, 10, -3, 10, false, random, WorldGenRegistration.WorldGenJungleTemple.k);
+                this.a(world, Blocks.STONEBRICK.fromLegacyData(BlockSmoothBrick.e), 8, -2, 11, structureboundingbox);
+                this.a(world, Blocks.STONEBRICK.fromLegacyData(BlockSmoothBrick.e), 9, -2, 11, structureboundingbox);
+                this.a(world, Blocks.STONEBRICK.fromLegacyData(BlockSmoothBrick.e), 10, -2, 11, structureboundingbox);
+                IBlockData iblockdata4 = Blocks.LEVER.getBlockData().set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH);
+
+                this.a(world, iblockdata4, 8, -2, 12, structureboundingbox);
+                this.a(world, iblockdata4, 9, -2, 12, structureboundingbox);
+                this.a(world, iblockdata4, 10, -2, 12, structureboundingbox);
+                this.a(world, structureboundingbox, 8, -3, 8, 8, -3, 10, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
+                this.a(world, structureboundingbox, 10, -3, 8, 10, -3, 10, false, random, WorldGenRegistration.WorldGenJungleTemple.j);
                 this.a(world, Blocks.MOSSY_COBBLESTONE.getBlockData(), 10, -2, 9, structureboundingbox);
                 this.a(world, Blocks.REDSTONE_WIRE.getBlockData(), 8, -2, 9, structureboundingbox);
                 this.a(world, Blocks.REDSTONE_WIRE.getBlockData(), 8, -2, 10, structureboundingbox);
                 this.a(world, Blocks.REDSTONE_WIRE.getBlockData(), 10, -1, 9, structureboundingbox);
-                this.a(world, Blocks.STICKY_PISTON.fromLegacyData(EnumDirection.UP.a()), 9, -2, 8, structureboundingbox);
-                this.a(world, Blocks.STICKY_PISTON.fromLegacyData(this.a(Blocks.STICKY_PISTON, EnumDirection.WEST.a())), 10, -2, 8, structureboundingbox);
-                this.a(world, Blocks.STICKY_PISTON.fromLegacyData(this.a(Blocks.STICKY_PISTON, EnumDirection.WEST.a())), 10, -1, 8, structureboundingbox);
-                this.a(world, Blocks.UNPOWERED_REPEATER.fromLegacyData(this.a(Blocks.UNPOWERED_REPEATER, EnumDirection.NORTH.b())), 10, -2, 10, structureboundingbox);
+                this.a(world, Blocks.STICKY_PISTON.getBlockData().set(BlockPiston.FACING, EnumDirection.UP), 9, -2, 8, structureboundingbox);
+                this.a(world, Blocks.STICKY_PISTON.getBlockData().set(BlockPiston.FACING, EnumDirection.WEST), 10, -2, 8, structureboundingbox);
+                this.a(world, Blocks.STICKY_PISTON.getBlockData().set(BlockPiston.FACING, EnumDirection.WEST), 10, -1, 8, structureboundingbox);
+                this.a(world, Blocks.UNPOWERED_REPEATER.getBlockData().set(BlockRepeater.FACING, EnumDirection.NORTH), 10, -2, 10, structureboundingbox);
                 if (!this.f) {
-                    this.f = this.a(world, structureboundingbox, random, 9, -3, 10, StructurePieceTreasure.a(WorldGenRegistration.WorldGenJungleTemple.i, new StructurePieceTreasure[] { Items.ENCHANTED_BOOK.b(random)}), 2 + random.nextInt(5));
+                    this.f = this.a(world, structureboundingbox, random, 9, -3, 10, LootTables.l);
                 }
 
                 return true;
@@ -352,7 +407,6 @@ public class WorldGenRegistration {
     public static class WorldGenPyramidPiece extends WorldGenRegistration.WorldGenScatteredPiece {
 
         private boolean[] e = new boolean[4];
-        private static final List<StructurePieceTreasure> f = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.DIAMOND, 0, 1, 3, 3), new StructurePieceTreasure(Items.IRON_INGOT, 0, 1, 5, 10), new StructurePieceTreasure(Items.GOLD_INGOT, 0, 2, 7, 15), new StructurePieceTreasure(Items.EMERALD, 0, 1, 3, 2), new StructurePieceTreasure(Items.BONE, 0, 4, 6, 20), new StructurePieceTreasure(Items.ROTTEN_FLESH, 0, 3, 7, 16), new StructurePieceTreasure(Items.SADDLE, 0, 1, 1, 3), new StructurePieceTreasure(Items.IRON_HORSE_ARMOR, 0, 1, 1, 1), new StructurePieceTreasure(Items.GOLDEN_HORSE_ARMOR, 0, 1, 1, 1), new StructurePieceTreasure(Items.DIAMOND_HORSE_ARMOR, 0, 1, 1, 1)});
 
         public WorldGenPyramidPiece() {}
 
@@ -386,35 +440,33 @@ public class WorldGenRegistration {
                 this.a(world, structureboundingbox, i + 1, i, i + 1, this.a - 2 - i, i, this.c - 2 - i, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             }
 
-            int j;
-
             for (i = 0; i < this.a; ++i) {
-                for (j = 0; j < this.c; ++j) {
+                for (int j = 0; j < this.c; ++j) {
                     byte b0 = -5;
 
                     this.b(world, Blocks.SANDSTONE.getBlockData(), i, b0, j, structureboundingbox);
                 }
             }
 
-            i = this.a(Blocks.SANDSTONE_STAIRS, 3);
-            j = this.a(Blocks.SANDSTONE_STAIRS, 2);
-            int k = this.a(Blocks.SANDSTONE_STAIRS, 0);
-            int l = this.a(Blocks.SANDSTONE_STAIRS, 1);
-            int i1 = ~EnumColor.ORANGE.getInvColorIndex() & 15;
-            int j1 = ~EnumColor.BLUE.getInvColorIndex() & 15;
+            IBlockData iblockdata = Blocks.SANDSTONE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.NORTH);
+            IBlockData iblockdata1 = Blocks.SANDSTONE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.SOUTH);
+            IBlockData iblockdata2 = Blocks.SANDSTONE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.EAST);
+            IBlockData iblockdata3 = Blocks.SANDSTONE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.WEST);
+            int k = ~EnumColor.ORANGE.getInvColorIndex() & 15;
+            int l = ~EnumColor.BLUE.getInvColorIndex() & 15;
 
             this.a(world, structureboundingbox, 0, 0, 0, 4, 9, 4, Blocks.SANDSTONE.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(world, structureboundingbox, 1, 10, 1, 3, 10, 3, Blocks.SANDSTONE.getBlockData(), Blocks.SANDSTONE.getBlockData(), false);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(i), 2, 10, 0, structureboundingbox);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(j), 2, 10, 4, structureboundingbox);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(k), 0, 10, 2, structureboundingbox);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(l), 4, 10, 2, structureboundingbox);
+            this.a(world, iblockdata, 2, 10, 0, structureboundingbox);
+            this.a(world, iblockdata1, 2, 10, 4, structureboundingbox);
+            this.a(world, iblockdata2, 0, 10, 2, structureboundingbox);
+            this.a(world, iblockdata3, 4, 10, 2, structureboundingbox);
             this.a(world, structureboundingbox, this.a - 5, 0, 0, this.a - 1, 9, 4, Blocks.SANDSTONE.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(world, structureboundingbox, this.a - 4, 10, 1, this.a - 2, 10, 3, Blocks.SANDSTONE.getBlockData(), Blocks.SANDSTONE.getBlockData(), false);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(i), this.a - 3, 10, 0, structureboundingbox);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(j), this.a - 3, 10, 4, structureboundingbox);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(k), this.a - 5, 10, 2, structureboundingbox);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(l), this.a - 1, 10, 2, structureboundingbox);
+            this.a(world, iblockdata, this.a - 3, 10, 0, structureboundingbox);
+            this.a(world, iblockdata1, this.a - 3, 10, 4, structureboundingbox);
+            this.a(world, iblockdata2, this.a - 5, 10, 2, structureboundingbox);
+            this.a(world, iblockdata3, this.a - 1, 10, 2, structureboundingbox);
             this.a(world, structureboundingbox, 8, 0, 0, 12, 4, 4, Blocks.SANDSTONE.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(world, structureboundingbox, 9, 1, 0, 11, 3, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), 9, 1, 1, structureboundingbox);
@@ -448,100 +500,100 @@ public class WorldGenRegistration {
             this.a(world, Blocks.AIR.getBlockData(), this.a - 7, 6, 10, structureboundingbox);
             this.a(world, structureboundingbox, 2, 4, 4, 2, 6, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(world, structureboundingbox, this.a - 3, 4, 4, this.a - 3, 6, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(i), 2, 4, 5, structureboundingbox);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(i), 2, 3, 4, structureboundingbox);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(i), this.a - 3, 4, 5, structureboundingbox);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(i), this.a - 3, 3, 4, structureboundingbox);
+            this.a(world, iblockdata, 2, 4, 5, structureboundingbox);
+            this.a(world, iblockdata, 2, 3, 4, structureboundingbox);
+            this.a(world, iblockdata, this.a - 3, 4, 5, structureboundingbox);
+            this.a(world, iblockdata, this.a - 3, 3, 4, structureboundingbox);
             this.a(world, structureboundingbox, 1, 1, 3, 2, 2, 3, Blocks.SANDSTONE.getBlockData(), Blocks.SANDSTONE.getBlockData(), false);
             this.a(world, structureboundingbox, this.a - 3, 1, 3, this.a - 2, 2, 3, Blocks.SANDSTONE.getBlockData(), Blocks.SANDSTONE.getBlockData(), false);
-            this.a(world, Blocks.SANDSTONE_STAIRS.getBlockData(), 1, 1, 2, structureboundingbox);
-            this.a(world, Blocks.SANDSTONE_STAIRS.getBlockData(), this.a - 2, 1, 2, structureboundingbox);
+            this.a(world, Blocks.SANDSTONE.getBlockData(), 1, 1, 2, structureboundingbox);
+            this.a(world, Blocks.SANDSTONE.getBlockData(), this.a - 2, 1, 2, structureboundingbox);
             this.a(world, Blocks.STONE_SLAB.fromLegacyData(BlockDoubleStepAbstract.EnumStoneSlabVariant.SAND.a()), 1, 2, 2, structureboundingbox);
             this.a(world, Blocks.STONE_SLAB.fromLegacyData(BlockDoubleStepAbstract.EnumStoneSlabVariant.SAND.a()), this.a - 2, 2, 2, structureboundingbox);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(l), 2, 1, 2, structureboundingbox);
-            this.a(world, Blocks.SANDSTONE_STAIRS.fromLegacyData(k), this.a - 3, 1, 2, structureboundingbox);
+            this.a(world, iblockdata3, 2, 1, 2, structureboundingbox);
+            this.a(world, iblockdata2, this.a - 3, 1, 2, structureboundingbox);
             this.a(world, structureboundingbox, 4, 3, 5, 4, 3, 18, Blocks.SANDSTONE.getBlockData(), Blocks.SANDSTONE.getBlockData(), false);
             this.a(world, structureboundingbox, this.a - 5, 3, 5, this.a - 5, 3, 17, Blocks.SANDSTONE.getBlockData(), Blocks.SANDSTONE.getBlockData(), false);
             this.a(world, structureboundingbox, 3, 1, 5, 4, 2, 16, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(world, structureboundingbox, this.a - 6, 1, 5, this.a - 5, 2, 16, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
 
-            int k1;
+            int i1;
 
-            for (k1 = 5; k1 <= 17; k1 += 2) {
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), 4, 1, k1, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), 4, 2, k1, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), this.a - 5, 1, k1, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), this.a - 5, 2, k1, structureboundingbox);
+            for (i1 = 5; i1 <= 17; i1 += 2) {
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), 4, 1, i1, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), 4, 2, i1, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), this.a - 5, 1, i1, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), this.a - 5, 2, i1, structureboundingbox);
             }
 
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 10, 0, 7, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 10, 0, 8, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 9, 0, 9, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 11, 0, 9, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 8, 0, 10, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 12, 0, 10, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 7, 0, 10, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 13, 0, 10, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 9, 0, 11, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 11, 0, 11, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 10, 0, 12, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 10, 0, 13, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(j1), 10, 0, 10, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 10, 0, 7, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 10, 0, 8, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 9, 0, 9, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 11, 0, 9, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 8, 0, 10, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 12, 0, 10, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 7, 0, 10, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 13, 0, 10, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 9, 0, 11, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 11, 0, 11, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 10, 0, 12, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 10, 0, 13, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(l), 10, 0, 10, structureboundingbox);
 
-            for (k1 = 0; k1 <= this.a - 1; k1 += this.a - 1) {
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1, 2, 1, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 2, 2, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1, 2, 3, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1, 3, 1, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 3, 2, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1, 3, 3, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 4, 1, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), k1, 4, 2, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 4, 3, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1, 5, 1, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 5, 2, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1, 5, 3, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 6, 1, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), k1, 6, 2, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 6, 3, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 7, 1, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 7, 2, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 7, 3, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1, 8, 1, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1, 8, 2, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1, 8, 3, structureboundingbox);
+            for (i1 = 0; i1 <= this.a - 1; i1 += this.a - 1) {
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1, 2, 1, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 2, 2, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1, 2, 3, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1, 3, 1, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 3, 2, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1, 3, 3, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 4, 1, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), i1, 4, 2, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 4, 3, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1, 5, 1, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 5, 2, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1, 5, 3, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 6, 1, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), i1, 6, 2, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 6, 3, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 7, 1, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 7, 2, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 7, 3, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1, 8, 1, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1, 8, 2, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1, 8, 3, structureboundingbox);
             }
 
-            for (k1 = 2; k1 <= this.a - 3; k1 += this.a - 3 - 2) {
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1 - 1, 2, 0, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 2, 0, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1 + 1, 2, 0, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1 - 1, 3, 0, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 3, 0, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1 + 1, 3, 0, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1 - 1, 4, 0, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), k1, 4, 0, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1 + 1, 4, 0, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1 - 1, 5, 0, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 5, 0, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1 + 1, 5, 0, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1 - 1, 6, 0, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), k1, 6, 0, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1 + 1, 6, 0, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1 - 1, 7, 0, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1, 7, 0, structureboundingbox);
-                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), k1 + 1, 7, 0, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1 - 1, 8, 0, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1, 8, 0, structureboundingbox);
-                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), k1 + 1, 8, 0, structureboundingbox);
+            for (i1 = 2; i1 <= this.a - 3; i1 += this.a - 3 - 2) {
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1 - 1, 2, 0, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 2, 0, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1 + 1, 2, 0, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1 - 1, 3, 0, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 3, 0, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1 + 1, 3, 0, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1 - 1, 4, 0, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), i1, 4, 0, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1 + 1, 4, 0, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1 - 1, 5, 0, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 5, 0, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1 + 1, 5, 0, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1 - 1, 6, 0, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), i1, 6, 0, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1 + 1, 6, 0, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1 - 1, 7, 0, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1, 7, 0, structureboundingbox);
+                this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), i1 + 1, 7, 0, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1 - 1, 8, 0, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1, 8, 0, structureboundingbox);
+                this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), i1 + 1, 8, 0, structureboundingbox);
             }
 
             this.a(world, structureboundingbox, 8, 4, 0, 12, 6, 0, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), false);
             this.a(world, Blocks.AIR.getBlockData(), 8, 6, 0, structureboundingbox);
             this.a(world, Blocks.AIR.getBlockData(), 12, 6, 0, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 9, 5, 0, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 9, 5, 0, structureboundingbox);
             this.a(world, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), 10, 5, 0, structureboundingbox);
-            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(i1), 11, 5, 0, structureboundingbox);
+            this.a(world, Blocks.STAINED_HARDENED_CLAY.fromLegacyData(k), 11, 5, 0, structureboundingbox);
             this.a(world, structureboundingbox, 8, -14, 8, 12, -11, 12, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), false);
             this.a(world, structureboundingbox, 8, -10, 8, 12, -10, 12, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.CHISELED.a()), false);
             this.a(world, structureboundingbox, 8, -9, 8, 12, -9, 12, Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), Blocks.SANDSTONE.fromLegacyData(BlockSandStone.EnumSandstoneVariant.SMOOTH.a()), false);
@@ -570,11 +622,11 @@ public class WorldGenRegistration {
             while (iterator.hasNext()) {
                 EnumDirection enumdirection = (EnumDirection) iterator.next();
 
-                if (!this.e[enumdirection.b()]) {
-                    int l1 = enumdirection.getAdjacentX() * 2;
-                    int i2 = enumdirection.getAdjacentZ() * 2;
+                if (!this.e[enumdirection.get2DRotationValue()]) {
+                    int j1 = enumdirection.getAdjacentX() * 2;
+                    int k1 = enumdirection.getAdjacentZ() * 2;
 
-                    this.e[enumdirection.b()] = this.a(world, structureboundingbox, random, 10 + l1, -11, 10 + i2, StructurePieceTreasure.a(WorldGenRegistration.WorldGenPyramidPiece.f, new StructurePieceTreasure[] { Items.ENCHANTED_BOOK.b(random)}), 2 + random.nextInt(5));
+                    this.e[enumdirection.get2DRotationValue()] = this.a(world, structureboundingbox, random, 10 + j1, -11, 10 + k1, LootTables.k);
                 }
             }
 
@@ -596,14 +648,10 @@ public class WorldGenRegistration {
             this.a = l;
             this.b = i1;
             this.c = j1;
-            this.m = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
-            switch (WorldGenRegistration.SyntheticClass_1.a[this.m.ordinal()]) {
-            case 1:
-            case 2:
+            this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
+            if (this.e().k() == EnumDirection.EnumAxis.Z) {
                 this.l = new StructureBoundingBox(i, j, k, i + l - 1, j + i1 - 1, k + j1 - 1);
-                break;
-
-            default:
+            } else {
                 this.l = new StructureBoundingBox(i, j, k, i + j1 - 1, j + i1 - 1, k + l - 1);
             }
 
@@ -635,7 +683,7 @@ public class WorldGenRegistration {
                     for (int i1 = this.l.a; i1 <= this.l.d; ++i1) {
                         blockposition_mutableblockposition.c(i1, 64, l);
                         if (structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition)) {
-                            j += Math.max(world.r(blockposition_mutableblockposition).getY(), world.worldProvider.getSeaLevel());
+                            j += Math.max(world.q(blockposition_mutableblockposition).getY(), world.worldProvider.getSeaLevel());
                             ++k;
                         }
                     }

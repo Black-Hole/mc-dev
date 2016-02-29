@@ -4,10 +4,12 @@ import java.util.Random;
 
 public class WorldGenCavesHell extends WorldGenBase {
 
+    protected static final IBlockData a = Blocks.AIR.getBlockData();
+
     public WorldGenCavesHell() {}
 
     protected void a(long i, int j, int k, ChunkSnapshot chunksnapshot, double d0, double d1, double d2) {
-        this.a(i, j, k, chunksnapshot, d0, d1, d2, 1.0F + this.b.nextFloat() * 6.0F, 0.0F, 0.0F, -1, -1, 0.5D);
+        this.a(i, j, k, chunksnapshot, d0, d1, d2, 1.0F + this.f.nextFloat() * 6.0F, 0.0F, 0.0F, -1, -1, 0.5D);
     }
 
     protected void a(long i, int j, int k, ChunkSnapshot chunksnapshot, double d0, double d1, double d2, float f, float f1, float f2, int l, int i1, double d3) {
@@ -18,7 +20,7 @@ public class WorldGenCavesHell extends WorldGenBase {
         Random random = new Random(i);
 
         if (i1 <= 0) {
-            int j1 = this.a * 16 - 16;
+            int j1 = this.e * 16 - 16;
 
             i1 = j1 - random.nextInt(j1 / 4);
         }
@@ -33,7 +35,7 @@ public class WorldGenCavesHell extends WorldGenBase {
         int k1 = random.nextInt(i1 / 2) + i1 / 4;
 
         for (boolean flag1 = random.nextInt(6) == 0; l < i1; ++l) {
-            double d6 = 1.5D + (double) (MathHelper.sin((float) l * 3.1415927F / (float) i1) * f * 1.0F);
+            double d6 = 1.5D + (double) (MathHelper.sin((float) l * 3.1415927F / (float) i1) * f);
             double d7 = d6 * d3;
             float f5 = MathHelper.cos(f2);
             float f6 = MathHelper.sin(f2);
@@ -137,7 +139,7 @@ public class WorldGenCavesHell extends WorldGenBase {
                                         IBlockData iblockdata1 = chunksnapshot.a(j3, j4, i4);
 
                                         if (iblockdata1.getBlock() == Blocks.NETHERRACK || iblockdata1.getBlock() == Blocks.DIRT || iblockdata1.getBlock() == Blocks.GRASS) {
-                                            chunksnapshot.a(j3, j4, i4, Blocks.AIR.getBlockData());
+                                            chunksnapshot.a(j3, j4, i4, WorldGenCavesHell.a);
                                         }
                                     }
                                 }
@@ -155,29 +157,29 @@ public class WorldGenCavesHell extends WorldGenBase {
     }
 
     protected void a(World world, int i, int j, int k, int l, ChunkSnapshot chunksnapshot) {
-        int i1 = this.b.nextInt(this.b.nextInt(this.b.nextInt(10) + 1) + 1);
+        int i1 = this.f.nextInt(this.f.nextInt(this.f.nextInt(10) + 1) + 1);
 
-        if (this.b.nextInt(5) != 0) {
+        if (this.f.nextInt(5) != 0) {
             i1 = 0;
         }
 
         for (int j1 = 0; j1 < i1; ++j1) {
-            double d0 = (double) (i * 16 + this.b.nextInt(16));
-            double d1 = (double) this.b.nextInt(128);
-            double d2 = (double) (j * 16 + this.b.nextInt(16));
+            double d0 = (double) (i * 16 + this.f.nextInt(16));
+            double d1 = (double) this.f.nextInt(128);
+            double d2 = (double) (j * 16 + this.f.nextInt(16));
             int k1 = 1;
 
-            if (this.b.nextInt(4) == 0) {
-                this.a(this.b.nextLong(), k, l, chunksnapshot, d0, d1, d2);
-                k1 += this.b.nextInt(4);
+            if (this.f.nextInt(4) == 0) {
+                this.a(this.f.nextLong(), k, l, chunksnapshot, d0, d1, d2);
+                k1 += this.f.nextInt(4);
             }
 
             for (int l1 = 0; l1 < k1; ++l1) {
-                float f = this.b.nextFloat() * 3.1415927F * 2.0F;
-                float f1 = (this.b.nextFloat() - 0.5F) * 2.0F / 8.0F;
-                float f2 = this.b.nextFloat() * 2.0F + this.b.nextFloat();
+                float f = this.f.nextFloat() * 6.2831855F;
+                float f1 = (this.f.nextFloat() - 0.5F) * 2.0F / 8.0F;
+                float f2 = this.f.nextFloat() * 2.0F + this.f.nextFloat();
 
-                this.a(this.b.nextLong(), k, l, chunksnapshot, d0, d1, d2, f2 * 2.0F, f, f1, 0, 0, 0.5D);
+                this.a(this.f.nextLong(), k, l, chunksnapshot, d0, d1, d2, f2 * 2.0F, f, f1, 0, 0, 0.5D);
             }
         }
 

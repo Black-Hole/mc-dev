@@ -9,7 +9,7 @@ public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
     private int button;
     private short d;
     private ItemStack item;
-    private int shift;
+    private InventoryClickType shift;
 
     public PacketPlayInWindowClick() {}
 
@@ -22,8 +22,8 @@ public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
         this.slot = packetdataserializer.readShort();
         this.button = packetdataserializer.readByte();
         this.d = packetdataserializer.readShort();
-        this.shift = packetdataserializer.readByte();
-        this.item = packetdataserializer.i();
+        this.shift = (InventoryClickType) packetdataserializer.a(InventoryClickType.class);
+        this.item = packetdataserializer.k();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
@@ -31,7 +31,7 @@ public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
         packetdataserializer.writeShort(this.slot);
         packetdataserializer.writeByte(this.button);
         packetdataserializer.writeShort(this.d);
-        packetdataserializer.writeByte(this.shift);
+        packetdataserializer.a((Enum) this.shift);
         packetdataserializer.a(this.item);
     }
 
@@ -55,7 +55,7 @@ public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
         return this.item;
     }
 
-    public int f() {
+    public InventoryClickType f() {
         return this.shift;
     }
 

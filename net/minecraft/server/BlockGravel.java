@@ -14,7 +14,7 @@ public class BlockGravel extends BlockFalling {
         return random.nextInt(10 - i * 3) == 0 ? Items.FLINT : Item.getItemOf(this);
     }
 
-    public MaterialMapColor g(IBlockData iblockdata) {
+    public MaterialMapColor r(IBlockData iblockdata) {
         return MaterialMapColor.m;
     }
 }

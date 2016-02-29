@@ -5,23 +5,23 @@ import java.io.IOException;
 public class PacketPlayOutRemoveEntityEffect implements Packet<PacketListenerPlayOut> {
 
     private int a;
-    private int b;
+    private MobEffectList b;
 
     public PacketPlayOutRemoveEntityEffect() {}
 
-    public PacketPlayOutRemoveEntityEffect(int i, MobEffect mobeffect) {
+    public PacketPlayOutRemoveEntityEffect(int i, MobEffectList mobeffectlist) {
         this.a = i;
-        this.b = mobeffect.getEffectId();
+        this.b = mobeffectlist;
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e();
-        this.b = packetdataserializer.readUnsignedByte();
+        this.a = packetdataserializer.g();
+        this.b = MobEffectList.fromId(packetdataserializer.readUnsignedByte());
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.b(this.a);
-        packetdataserializer.writeByte(this.b);
+        packetdataserializer.writeByte(MobEffectList.getId(this.b));
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

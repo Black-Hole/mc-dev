@@ -45,24 +45,24 @@ public class ControllerLook {
             double d1 = this.f - (this.a.locY + (double) this.a.getHeadHeight());
             double d2 = this.g - this.a.locZ;
             double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-            float f = (float) (MathHelper.b(d2, d0) * 180.0D / 3.1415927410125732D) - 90.0F;
-            float f1 = (float) (-(MathHelper.b(d1, d3) * 180.0D / 3.1415927410125732D));
+            float f = (float) (MathHelper.b(d2, d0) * 57.2957763671875D) - 90.0F;
+            float f1 = (float) (-(MathHelper.b(d1, d3) * 57.2957763671875D));
 
             this.a.pitch = this.a(this.a.pitch, f1, this.c);
-            this.a.aK = this.a(this.a.aK, f, this.b);
+            this.a.aO = this.a(this.a.aO, f, this.b);
         } else {
-            this.a.aK = this.a(this.a.aK, this.a.aI, 10.0F);
+            this.a.aO = this.a(this.a.aO, this.a.aM, 10.0F);
         }
 
-        float f2 = MathHelper.g(this.a.aK - this.a.aI);
+        float f2 = MathHelper.g(this.a.aO - this.a.aM);
 
-        if (!this.a.getNavigation().m()) {
+        if (!this.a.getNavigation().n()) {
             if (f2 < -75.0F) {
-                this.a.aK = this.a.aI - 75.0F;
+                this.a.aO = this.a.aM - 75.0F;
             }
 
             if (f2 > 75.0F) {
-                this.a.aK = this.a.aI + 75.0F;
+                this.a.aO = this.a.aM + 75.0F;
             }
         }
 

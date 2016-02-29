@@ -9,6 +9,8 @@ public class Items {
     public static final Item APPLE;
     public static final ItemBow BOW;
     public static final Item ARROW;
+    public static final Item SPECTRAL_ARROW;
+    public static final Item TIPPED_ARROW;
     public static final Item COAL;
     public static final Item DIAMOND;
     public static final Item IRON_INGOT;
@@ -84,7 +86,12 @@ public class Items {
     public static final Item IRON_DOOR;
     public static final Item REDSTONE;
     public static final Item SNOWBALL;
-    public static final Item BOAT;
+    public static final Item aG;
+    public static final Item aH;
+    public static final Item aI;
+    public static final Item aJ;
+    public static final Item aK;
+    public static final Item aL;
     public static final Item LEATHER;
     public static final Item MILK_BUCKET;
     public static final Item BRICK;
@@ -132,7 +139,10 @@ public class Items {
     public static final Item GOLD_NUGGET;
     public static final Item NETHER_WART;
     public static final ItemPotion POTION;
+    public static final ItemPotion SPLASH_POTION;
+    public static final ItemPotion LINGERING_POTION;
     public static final Item GLASS_BOTTLE;
+    public static final Item DRAGON_BREATH;
     public static final Item SPIDER_EYE;
     public static final Item FERMENTED_SPIDER_EYE;
     public static final Item BLAZE_POWDER;
@@ -189,9 +199,23 @@ public class Items {
     public static final Item PRISMARINE_SHARD;
     public static final Item PRISMARINE_CRYSTALS;
     public static final Item BANNER;
+    public static final Item cP;
+    public static final Item SHIELD;
+    public static final Item cR;
+    public static final Item CHORUS_FRUIT;
+    public static final Item CHORUS_FRUIT_POPPED;
+    public static final Item BEETROOT_SEEDS;
+    public static final Item BEETROOT;
+    public static final Item BEETROOT_SOUP;
 
     private static Item get(String s) {
-        return (Item) Item.REGISTRY.get(new MinecraftKey(s));
+        Item item = (Item) Item.REGISTRY.get(new MinecraftKey(s));
+
+        if (item == null) {
+            throw new IllegalStateException("Invalid Item requested: " + s);
+        } else {
+            return item;
+        }
     }
 
     static {
@@ -205,6 +229,8 @@ public class Items {
             APPLE = get("apple");
             BOW = (ItemBow) get("bow");
             ARROW = get("arrow");
+            SPECTRAL_ARROW = get("spectral_arrow");
+            TIPPED_ARROW = get("tipped_arrow");
             COAL = get("coal");
             DIAMOND = get("diamond");
             IRON_INGOT = get("iron_ingot");
@@ -280,7 +306,12 @@ public class Items {
             IRON_DOOR = get("iron_door");
             REDSTONE = get("redstone");
             SNOWBALL = get("snowball");
-            BOAT = get("boat");
+            aG = get("boat");
+            aH = get("spruce_boat");
+            aI = get("birch_boat");
+            aJ = get("jungle_boat");
+            aK = get("acacia_boat");
+            aL = get("dark_oak_boat");
             LEATHER = get("leather");
             MILK_BUCKET = get("milk_bucket");
             BRICK = get("brick");
@@ -328,7 +359,10 @@ public class Items {
             GOLD_NUGGET = get("gold_nugget");
             NETHER_WART = get("nether_wart");
             POTION = (ItemPotion) get("potion");
+            SPLASH_POTION = (ItemPotion) get("splash_potion");
+            LINGERING_POTION = (ItemPotion) get("lingering_potion");
             GLASS_BOTTLE = get("glass_bottle");
+            DRAGON_BREATH = get("dragon_breath");
             SPIDER_EYE = get("spider_eye");
             FERMENTED_SPIDER_EYE = get("fermented_spider_eye");
             BLAZE_POWDER = get("blaze_powder");
@@ -385,6 +419,14 @@ public class Items {
             PRISMARINE_SHARD = get("prismarine_shard");
             PRISMARINE_CRYSTALS = get("prismarine_crystals");
             BANNER = get("banner");
+            cP = get("end_crystal");
+            SHIELD = get("shield");
+            cR = get("elytra");
+            CHORUS_FRUIT = get("chorus_fruit");
+            CHORUS_FRUIT_POPPED = get("chorus_fruit_popped");
+            BEETROOT_SEEDS = get("beetroot_seeds");
+            BEETROOT = get("beetroot");
+            BEETROOT_SOUP = get("beetroot_soup");
         }
     }
 }

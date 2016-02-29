@@ -17,9 +17,9 @@ public class PacketPlayOutTileEntityData implements Packet<PacketListenerPlayOut
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c();
+        this.a = packetdataserializer.e();
         this.b = packetdataserializer.readUnsignedByte();
-        this.c = packetdataserializer.h();
+        this.c = packetdataserializer.j();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
