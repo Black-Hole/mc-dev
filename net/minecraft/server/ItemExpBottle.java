@@ -11,7 +11,7 @@ public class ItemExpBottle extends Item {
             --itemstack.count;
         }
 
-        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bg, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemExpBottle.i.nextFloat() * 0.4F + 0.8F));
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bh, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemExpBottle.j.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
             EntityThrownExpBottle entitythrownexpbottle = new EntityThrownExpBottle(world, entityhuman);
 

@@ -60,10 +60,6 @@ public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
-    }
-
     public static enum EnumTitleAction {
 
         TITLE, SUBTITLE, TIMES, CLEAR, RESET;

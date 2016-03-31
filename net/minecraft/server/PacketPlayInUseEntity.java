@@ -30,7 +30,7 @@ public class PacketPlayInUseEntity implements Packet<PacketListenerPlayIn> {
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.b(this.a);
+        packetdataserializer.d(this.a);
         packetdataserializer.a((Enum) this.action);
         if (this.action == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT_AT) {
             packetdataserializer.writeFloat((float) this.c.x);
@@ -62,10 +62,6 @@ public class PacketPlayInUseEntity implements Packet<PacketListenerPlayIn> {
 
     public Vec3D c() {
         return this.c;
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
     }
 
     public static enum EnumEntityUseAction {

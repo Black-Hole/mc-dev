@@ -34,9 +34,5 @@ public class LootItemConditionRandomChance implements LootItemCondition {
         public LootItemCondition b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             return this.a(jsonobject, jsondeserializationcontext);
         }
-
-        public void a(JsonObject jsonobject, LootItemCondition lootitemcondition, JsonSerializationContext jsonserializationcontext) {
-            this.a(jsonobject, (LootItemConditionRandomChance) lootitemcondition, jsonserializationcontext);
-        }
     }
 }

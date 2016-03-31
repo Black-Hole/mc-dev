@@ -10,7 +10,7 @@ public class PacketPlayInResourcePackStatus implements Packet<PacketListenerPlay
     public PacketPlayInResourcePackStatus() {}
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c(40);
+        this.a = packetdataserializer.e(40);
         this.status = (PacketPlayInResourcePackStatus.EnumResourcePackStatus) packetdataserializer.a(PacketPlayInResourcePackStatus.EnumResourcePackStatus.class);
     }
 
@@ -21,10 +21,6 @@ public class PacketPlayInResourcePackStatus implements Packet<PacketListenerPlay
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
         packetlistenerplayin.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
     }
 
     public static enum EnumResourcePackStatus {

@@ -124,7 +124,7 @@ public class EntityIronGolem extends EntityGolem {
             this.a((EntityLiving) this, entity);
         }
 
-        this.a(SoundEffects.cG, 1.0F, 1.0F);
+        this.a(SoundEffects.cH, 1.0F, 1.0F);
         return flag;
     }
 
@@ -138,19 +138,19 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.cI;
+        return SoundEffects.cJ;
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.cH;
+        return SoundEffects.cI;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.cJ, 1.0F, 1.0F);
+        this.a(SoundEffects.cK, 1.0F, 1.0F);
     }
 
     protected MinecraftKey J() {
-        return LootTables.y;
+        return LootTables.z;
     }
 
     public int da() {

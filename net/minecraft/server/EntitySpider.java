@@ -51,23 +51,23 @@ public class EntitySpider extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.fQ;
-    }
-
-    protected SoundEffect bR() {
-        return SoundEffects.fS;
-    }
-
-    protected SoundEffect bS() {
         return SoundEffects.fR;
     }
 
+    protected SoundEffect bR() {
+        return SoundEffects.fT;
+    }
+
+    protected SoundEffect bS() {
+        return SoundEffects.fS;
+    }
+
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.fT, 0.15F, 1.0F);
+        this.a(SoundEffects.fU, 0.15F, 1.0F);
     }
 
     protected MinecraftKey J() {
-        return LootTables.q;
+        return LootTables.r;
     }
 
     public boolean n_() {

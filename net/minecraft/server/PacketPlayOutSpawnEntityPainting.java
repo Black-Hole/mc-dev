@@ -24,13 +24,13 @@ public class PacketPlayOutSpawnEntityPainting implements Packet<PacketListenerPl
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.g();
         this.b = packetdataserializer.i();
-        this.e = packetdataserializer.c(EntityPainting.EnumArt.A);
+        this.e = packetdataserializer.e(EntityPainting.EnumArt.A);
         this.c = packetdataserializer.e();
         this.d = EnumDirection.fromType2(packetdataserializer.readUnsignedByte());
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.b(this.a);
+        packetdataserializer.d(this.a);
         packetdataserializer.a(this.b);
         packetdataserializer.a(this.e);
         packetdataserializer.a(this.c);
@@ -39,9 +39,5 @@ public class PacketPlayOutSpawnEntityPainting implements Packet<PacketListenerPl
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

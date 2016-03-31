@@ -51,10 +51,6 @@ public class PacketPlayInFlying implements Packet<PacketListenerPlayIn> {
         return this.f;
     }
 
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
-
     public static class PacketPlayInLook extends PacketPlayInFlying {
 
         public PacketPlayInLook() {
@@ -71,10 +67,6 @@ public class PacketPlayInFlying implements Packet<PacketListenerPlayIn> {
             packetdataserializer.writeFloat(this.yaw);
             packetdataserializer.writeFloat(this.pitch);
             super.b(packetdataserializer);
-        }
-
-        public void a(PacketListener packetlistener) {
-            super.a((PacketListenerPlayIn) packetlistener);
         }
     }
 
@@ -96,10 +88,6 @@ public class PacketPlayInFlying implements Packet<PacketListenerPlayIn> {
             packetdataserializer.writeDouble(this.y);
             packetdataserializer.writeDouble(this.z);
             super.b(packetdataserializer);
-        }
-
-        public void a(PacketListener packetlistener) {
-            super.a((PacketListenerPlayIn) packetlistener);
         }
     }
 
@@ -126,10 +114,6 @@ public class PacketPlayInFlying implements Packet<PacketListenerPlayIn> {
             packetdataserializer.writeFloat(this.yaw);
             packetdataserializer.writeFloat(this.pitch);
             super.b(packetdataserializer);
-        }
-
-        public void a(PacketListener packetlistener) {
-            super.a((PacketListenerPlayIn) packetlistener);
         }
     }
 }

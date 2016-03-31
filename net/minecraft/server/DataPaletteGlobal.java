@@ -17,7 +17,7 @@ public class DataPaletteGlobal implements DataPalette {
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.b(0);
+        packetdataserializer.d(0);
     }
 
     public int a() {

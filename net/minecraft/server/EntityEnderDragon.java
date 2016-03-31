@@ -91,11 +91,11 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 f = MathHelper.cos(this.bD * 6.2831855F);
                 f1 = MathHelper.cos(this.bC * 6.2831855F);
                 if (f1 <= -0.3F && f >= -0.3F) {
-                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.aP, this.bz(), 5.0F, 0.8F + this.random.nextFloat() * 0.3F, false);
+                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.aQ, this.bz(), 5.0F, 0.8F + this.random.nextFloat() * 0.3F, false);
                 }
 
                 if (!this.bJ.a().a() && --this.bK < 0) {
-                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.aQ, this.bz(), 2.5F, 0.8F + this.random.nextFloat() * 0.3F, false);
+                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.aR, this.bz(), 2.5F, 0.8F + this.random.nextFloat() * 0.3F, false);
                     this.bK = 200 + this.random.nextInt(200);
                 }
             }
@@ -772,11 +772,11 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     protected SoundEffect G() {
-        return SoundEffects.aM;
+        return SoundEffects.aN;
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.aR;
+        return SoundEffects.aS;
     }
 
     protected float cd() {

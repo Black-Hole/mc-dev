@@ -18,8 +18,8 @@ public class PacketPlayOutResourcePackSend implements Packet<PacketListenerPlayO
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c(32767);
-        this.b = packetdataserializer.c(40);
+        this.a = packetdataserializer.e(32767);
+        this.b = packetdataserializer.e(40);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
@@ -29,9 +29,5 @@ public class PacketPlayOutResourcePackSend implements Packet<PacketListenerPlayO
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

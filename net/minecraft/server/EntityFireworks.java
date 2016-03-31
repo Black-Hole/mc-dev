@@ -70,7 +70,7 @@ public class EntityFireworks extends Entity {
         this.pitch = this.lastPitch + (this.pitch - this.lastPitch) * 0.2F;
         this.yaw = this.lastYaw + (this.yaw - this.lastYaw) * 0.2F;
         if (this.ticksFlown == 0 && !this.ad()) {
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.bq, SoundCategory.AMBIENT, 3.0F, 1.0F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.br, SoundCategory.AMBIENT, 3.0F, 1.0F);
         }
 
         ++this.ticksFlown;

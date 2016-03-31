@@ -227,19 +227,19 @@ public class EntityZombie extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return this.isVillager() ? SoundEffects.hv : SoundEffects.hg;
+        return this.isVillager() ? SoundEffects.hw : SoundEffects.hh;
     }
 
     protected SoundEffect bR() {
-        return this.isVillager() ? SoundEffects.hz : SoundEffects.ho;
+        return this.isVillager() ? SoundEffects.hA : SoundEffects.hp;
     }
 
     protected SoundEffect bS() {
-        return this.isVillager() ? SoundEffects.hy : SoundEffects.hk;
+        return this.isVillager() ? SoundEffects.hz : SoundEffects.hl;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(this.isVillager() ? SoundEffects.hA : SoundEffects.hu, 0.15F, 1.0F);
+        this.a(this.isVillager() ? SoundEffects.hB : SoundEffects.hv, 0.15F, 1.0F);
     }
 
     public EnumMonsterType getMonsterType() {
@@ -247,7 +247,7 @@ public class EntityZombie extends EntityMonster {
     }
 
     protected MinecraftKey J() {
-        return LootTables.ah;
+        return LootTables.ai;
     }
 
     protected void a(DifficultyDamageScaler difficultydamagescaler) {

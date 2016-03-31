@@ -22,13 +22,10 @@ public class DataPaletteLinear implements DataPalette {
             }
         }
 
-        i = this.d++;
+        i = this.d;
         if (i < this.a.length) {
             this.a[i] = iblockdata;
-            if (i == 16) {
-                System.out.println("");
-            }
-
+            ++this.d;
             return i;
         } else {
             return this.b.a(this.c + 1, iblockdata);
@@ -36,14 +33,14 @@ public class DataPaletteLinear implements DataPalette {
     }
 
     public IBlockData a(int i) {
-        return i > 0 && i < this.d ? this.a[i] : null;
+        return i >= 0 && i < this.d ? this.a[i] : null;
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.b(this.d);
+        packetdataserializer.d(this.d);
 
         for (int i = 0; i < this.d; ++i) {
-            packetdataserializer.b(Block.REGISTRY_ID.getId(this.a[i]));
+            packetdataserializer.d(Block.REGISTRY_ID.getId(this.a[i]));
         }
 
     }

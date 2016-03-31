@@ -4,7 +4,7 @@ public class PathfinderGoalBowShoot extends PathfinderGoal {
 
     private final EntitySkeleton a;
     private final double b;
-    private final int c;
+    private int c;
     private final float d;
     private int e = -1;
     private int f;
@@ -18,6 +18,10 @@ public class PathfinderGoalBowShoot extends PathfinderGoal {
         this.c = i;
         this.d = f * f;
         this.a(3);
+    }
+
+    public void b(int i) {
+        this.c = i;
     }
 
     public boolean a() {

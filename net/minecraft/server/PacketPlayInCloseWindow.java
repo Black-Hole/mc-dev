@@ -19,8 +19,4 @@ public class PacketPlayInCloseWindow implements Packet<PacketListenerPlayIn> {
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.id);
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
 }

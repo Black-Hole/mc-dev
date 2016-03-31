@@ -20,15 +20,15 @@ public class Item {
     };
     private static final IDynamicTexture e = new IDynamicTexture() {
     };
-    private final IRegistry<MinecraftKey, IDynamicTexture> m = new RegistrySimple();
-    protected static final UUID g = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-    protected static final UUID h = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
+    private final IRegistry<MinecraftKey, IDynamicTexture> f = new RegistrySimple();
+    protected static final UUID h = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
+    protected static final UUID i = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
     private CreativeModeTab n;
-    protected static Random i = new Random();
+    protected static Random j = new Random();
     protected int maxStackSize = 64;
     private int durability;
-    protected boolean k;
     protected boolean l;
+    protected boolean m;
     private Item craftingResult;
     private String name;
 
@@ -59,7 +59,7 @@ public class Item {
     }
 
     public final void a(MinecraftKey minecraftkey, IDynamicTexture idynamictexture) {
-        this.m.a(minecraftkey, idynamictexture);
+        this.f.a(minecraftkey, idynamictexture);
     }
 
     public boolean a(NBTTagCompound nbttagcompound) {
@@ -101,11 +101,11 @@ public class Item {
     }
 
     public boolean k() {
-        return this.l;
+        return this.m;
     }
 
     protected Item a(boolean flag) {
-        this.l = flag;
+        this.m = flag;
         return this;
     }
 
@@ -124,7 +124,7 @@ public class Item {
     }
 
     public boolean usesDurability() {
-        return this.durability > 0 && (!this.l || this.maxStackSize == 1);
+        return this.durability > 0 && (!this.m || this.maxStackSize == 1);
     }
 
     public boolean a(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1) {
@@ -144,7 +144,7 @@ public class Item {
     }
 
     public Item n() {
-        this.k = true;
+        this.l = true;
         return this;
     }
 
@@ -748,18 +748,18 @@ public class Item {
         a(446, "jungle_boat", new ItemBoat(EntityBoat.EnumBoatType.JUNGLE));
         a(447, "acacia_boat", new ItemBoat(EntityBoat.EnumBoatType.ACACIA));
         a(448, "dark_oak_boat", new ItemBoat(EntityBoat.EnumBoatType.DARK_OAK));
-        a(2256, "record_13", (new ItemRecord("13", SoundEffects.eu)).c("record"));
-        a(2257, "record_cat", (new ItemRecord("cat", SoundEffects.ew)).c("record"));
-        a(2258, "record_blocks", (new ItemRecord("blocks", SoundEffects.ev)).c("record"));
-        a(2259, "record_chirp", (new ItemRecord("chirp", SoundEffects.ex)).c("record"));
-        a(2260, "record_far", (new ItemRecord("far", SoundEffects.ey)).c("record"));
-        a(2261, "record_mall", (new ItemRecord("mall", SoundEffects.ez)).c("record"));
-        a(2262, "record_mellohi", (new ItemRecord("mellohi", SoundEffects.eA)).c("record"));
-        a(2263, "record_stal", (new ItemRecord("stal", SoundEffects.eB)).c("record"));
-        a(2264, "record_strad", (new ItemRecord("strad", SoundEffects.eC)).c("record"));
-        a(2265, "record_ward", (new ItemRecord("ward", SoundEffects.eE)).c("record"));
-        a(2266, "record_11", (new ItemRecord("11", SoundEffects.et)).c("record"));
-        a(2267, "record_wait", (new ItemRecord("wait", SoundEffects.eD)).c("record"));
+        a(2256, "record_13", (new ItemRecord("13", SoundEffects.ev)).c("record"));
+        a(2257, "record_cat", (new ItemRecord("cat", SoundEffects.ex)).c("record"));
+        a(2258, "record_blocks", (new ItemRecord("blocks", SoundEffects.ew)).c("record"));
+        a(2259, "record_chirp", (new ItemRecord("chirp", SoundEffects.ey)).c("record"));
+        a(2260, "record_far", (new ItemRecord("far", SoundEffects.ez)).c("record"));
+        a(2261, "record_mall", (new ItemRecord("mall", SoundEffects.eA)).c("record"));
+        a(2262, "record_mellohi", (new ItemRecord("mellohi", SoundEffects.eB)).c("record"));
+        a(2263, "record_stal", (new ItemRecord("stal", SoundEffects.eC)).c("record"));
+        a(2264, "record_strad", (new ItemRecord("strad", SoundEffects.eD)).c("record"));
+        a(2265, "record_ward", (new ItemRecord("ward", SoundEffects.eF)).c("record"));
+        a(2266, "record_11", (new ItemRecord("11", SoundEffects.eu)).c("record"));
+        a(2267, "record_wait", (new ItemRecord("wait", SoundEffects.eE)).c("record"));
     }
 
     private static void b(Block block) {

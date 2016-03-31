@@ -23,8 +23,4 @@ public class PacketPlayInHeldItemSlot implements Packet<PacketListenerPlayIn> {
     public int a() {
         return this.itemInHandIndex;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
 }

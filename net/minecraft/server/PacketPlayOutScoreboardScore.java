@@ -33,9 +33,9 @@ public class PacketPlayOutScoreboardScore implements Packet<PacketListenerPlayOu
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c(40);
+        this.a = packetdataserializer.e(40);
         this.d = (PacketPlayOutScoreboardScore.EnumScoreboardAction) packetdataserializer.a(PacketPlayOutScoreboardScore.EnumScoreboardAction.class);
-        this.b = packetdataserializer.c(16);
+        this.b = packetdataserializer.e(16);
         if (this.d != PacketPlayOutScoreboardScore.EnumScoreboardAction.REMOVE) {
             this.c = packetdataserializer.g();
         }
@@ -47,17 +47,13 @@ public class PacketPlayOutScoreboardScore implements Packet<PacketListenerPlayOu
         packetdataserializer.a((Enum) this.d);
         packetdataserializer.a(this.b);
         if (this.d != PacketPlayOutScoreboardScore.EnumScoreboardAction.REMOVE) {
-            packetdataserializer.b(this.c);
+            packetdataserializer.d(this.c);
         }
 
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 
     public static enum EnumScoreboardAction {

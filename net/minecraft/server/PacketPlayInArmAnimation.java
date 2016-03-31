@@ -27,8 +27,4 @@ public class PacketPlayInArmAnimation implements Packet<PacketListenerPlayIn> {
     public EnumHand a() {
         return this.a;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
 }

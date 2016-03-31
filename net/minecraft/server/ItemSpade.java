@@ -27,7 +27,7 @@ public class ItemSpade extends ItemTool {
             if (enumdirection != EnumDirection.DOWN && world.getType(blockposition.up()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
                 IBlockData iblockdata1 = Blocks.GRASS_PATH.getBlockData();
 
-                world.a(entityhuman, blockposition, SoundEffects.eS, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.a(entityhuman, blockposition, SoundEffects.eT, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 if (!world.isClientSide) {
                     world.setTypeAndData(blockposition, iblockdata1, 11);
                     itemstack.damage(1, entityhuman);

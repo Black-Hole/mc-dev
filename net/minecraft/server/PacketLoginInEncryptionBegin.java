@@ -32,8 +32,4 @@ public class PacketLoginInEncryptionBegin implements Packet<PacketLoginInListene
     public byte[] b(PrivateKey privatekey) {
         return privatekey == null ? this.b : MinecraftEncryption.b(privatekey, this.b);
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketLoginInListener) packetlistener);
-    }
 }

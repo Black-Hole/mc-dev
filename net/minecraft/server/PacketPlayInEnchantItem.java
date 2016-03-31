@@ -30,8 +30,4 @@ public class PacketPlayInEnchantItem implements Packet<PacketListenerPlayIn> {
     public int b() {
         return this.b;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
 }

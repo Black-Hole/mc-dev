@@ -44,7 +44,7 @@ public class RegistryID<K> implements Registry<K>, Iterable<K> {
             ++this.e;
         }
 
-        return this.e++;
+        return this.e;
     }
 
     private void d(int i) {
@@ -66,7 +66,7 @@ public class RegistryID<K> implements Registry<K>, Iterable<K> {
     }
 
     public void a(K k0, int i) {
-        int j = Math.max(i, ++this.f);
+        int j = Math.max(i, this.f + 1);
         int k;
 
         if ((float) j >= (float) this.b.length * 0.8F) {
@@ -81,6 +81,11 @@ public class RegistryID<K> implements Registry<K>, Iterable<K> {
         this.b[k] = k0;
         this.c[k] = i;
         this.d[i] = k0;
+        ++this.f;
+        if (i == this.e) {
+            ++this.e;
+        }
+
     }
 
     private int d(K k0) {
@@ -142,6 +147,6 @@ public class RegistryID<K> implements Registry<K>, Iterable<K> {
     }
 
     public int b() {
-        return this.f + 1;
+        return this.f;
     }
 }

@@ -29,14 +29,10 @@ public class PacketPlayOutBlockAction implements Packet<PacketListenerPlayOut> {
         packetdataserializer.a(this.a);
         packetdataserializer.writeByte(this.b);
         packetdataserializer.writeByte(this.c);
-        packetdataserializer.b(Block.getId(this.d) & 4095);
+        packetdataserializer.d(Block.getId(this.d) & 4095);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

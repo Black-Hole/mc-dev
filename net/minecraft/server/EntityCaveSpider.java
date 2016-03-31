@@ -43,6 +43,6 @@ public class EntityCaveSpider extends EntitySpider {
     }
 
     protected MinecraftKey J() {
-        return LootTables.r;
+        return LootTables.s;
     }
 }

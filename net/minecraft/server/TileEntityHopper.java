@@ -439,7 +439,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
             if (tileentity instanceof IInventory) {
                 object = (IInventory) tileentity;
                 if (object instanceof TileEntityChest && block instanceof BlockChest) {
-                    object = ((BlockChest) block).c(world, blockposition);
+                    object = ((BlockChest) block).a(world, blockposition, true);
                 }
             }
         }

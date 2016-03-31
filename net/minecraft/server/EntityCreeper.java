@@ -142,7 +142,7 @@ public class EntityCreeper extends EntityMonster {
     }
 
     protected MinecraftKey J() {
-        return LootTables.p;
+        return LootTables.q;
     }
 
     public int da() {
@@ -160,7 +160,7 @@ public class EntityCreeper extends EntityMonster {
 
     protected boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
         if (itemstack != null && itemstack.getItem() == Items.FLINT_AND_STEEL) {
-            this.world.a(entityhuman, this.locX, this.locY, this.locZ, SoundEffects.bw, this.bz(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            this.world.a(entityhuman, this.locX, this.locY, this.locZ, SoundEffects.bx, this.bz(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
             entityhuman.a(enumhand);
             if (!this.world.isClientSide) {
                 this.dc();

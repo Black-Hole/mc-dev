@@ -21,13 +21,13 @@ public class PacketCompressor extends MessageToByteEncoder<ByteBuf> {
         PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf1);
 
         if (i < this.c) {
-            packetdataserializer.b(0);
+            packetdataserializer.d(0);
             packetdataserializer.writeBytes(bytebuf);
         } else {
             byte[] abyte = new byte[i];
 
             bytebuf.readBytes(abyte);
-            packetdataserializer.b(abyte.length);
+            packetdataserializer.d(abyte.length);
             this.b.setInput(abyte, 0, i);
             this.b.finish();
 

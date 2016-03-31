@@ -15,7 +15,7 @@ public class PacketLoginInStart implements Packet<PacketLoginInListener> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = new GameProfile((UUID) null, packetdataserializer.c(16));
+        this.a = new GameProfile((UUID) null, packetdataserializer.e(16));
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
@@ -28,9 +28,5 @@ public class PacketLoginInStart implements Packet<PacketLoginInListener> {
 
     public GameProfile a() {
         return this.a;
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketLoginInListener) packetlistener);
     }
 }

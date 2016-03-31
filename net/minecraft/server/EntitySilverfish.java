@@ -40,19 +40,19 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.fd;
-    }
-
-    protected SoundEffect bR() {
-        return SoundEffects.ff;
-    }
-
-    protected SoundEffect bS() {
         return SoundEffects.fe;
     }
 
+    protected SoundEffect bR() {
+        return SoundEffects.fg;
+    }
+
+    protected SoundEffect bS() {
+        return SoundEffects.ff;
+    }
+
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.fg, 0.15F, 1.0F);
+        this.a(SoundEffects.fh, 0.15F, 1.0F);
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
@@ -68,7 +68,7 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     protected MinecraftKey J() {
-        return LootTables.t;
+        return LootTables.u;
     }
 
     public void m() {

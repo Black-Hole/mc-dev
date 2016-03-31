@@ -23,8 +23,4 @@ public class PacketStatusInPing implements Packet<PacketStatusInListener> {
     public long a() {
         return this.a;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketStatusInListener) packetlistener);
-    }
 }

@@ -59,8 +59,4 @@ public class PacketPlayInVehicleMove implements Packet<PacketListenerPlayIn> {
     public float getPitch() {
         return this.e;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
 }

@@ -65,15 +65,15 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c(16);
+        this.a = packetdataserializer.e(16);
         this.i = packetdataserializer.readByte();
         if (this.i == 0 || this.i == 2) {
-            this.b = packetdataserializer.c(32);
-            this.c = packetdataserializer.c(16);
-            this.d = packetdataserializer.c(16);
+            this.b = packetdataserializer.e(32);
+            this.c = packetdataserializer.e(16);
+            this.d = packetdataserializer.e(16);
             this.j = packetdataserializer.readByte();
-            this.e = packetdataserializer.c(32);
-            this.f = packetdataserializer.c(32);
+            this.e = packetdataserializer.e(32);
+            this.f = packetdataserializer.e(32);
             this.g = packetdataserializer.readByte();
         }
 
@@ -81,7 +81,7 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
             int i = packetdataserializer.g();
 
             for (int j = 0; j < i; ++j) {
-                this.h.add(packetdataserializer.c(40));
+                this.h.add(packetdataserializer.e(40));
             }
         }
 
@@ -101,7 +101,7 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
         }
 
         if (this.i == 0 || this.i == 3 || this.i == 4) {
-            packetdataserializer.b(this.h.size());
+            packetdataserializer.d(this.h.size());
             Iterator iterator = this.h.iterator();
 
             while (iterator.hasNext()) {
@@ -115,9 +115,5 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

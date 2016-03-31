@@ -14,7 +14,7 @@ public class ItemFlintAndSteel extends Item {
             return EnumInteractionResult.FAIL;
         } else {
             if (world.getType(blockposition).getMaterial() == Material.AIR) {
-                world.a(entityhuman, blockposition, SoundEffects.bw, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.i.nextFloat() * 0.4F + 0.8F);
+                world.a(entityhuman, blockposition, SoundEffects.bx, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.j.nextFloat() * 0.4F + 0.8F);
                 world.setTypeAndData(blockposition, Blocks.FIRE.getBlockData(), 11);
             }
 

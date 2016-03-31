@@ -32,10 +32,10 @@ public class DataPaletteHash implements DataPalette {
     public void b(PacketDataSerializer packetdataserializer) {
         int i = this.a.b();
 
-        packetdataserializer.b(i);
+        packetdataserializer.d(i);
 
         for (int j = 0; j < i; ++j) {
-            packetdataserializer.b(Block.REGISTRY_ID.getId(this.a.fromId(j)));
+            packetdataserializer.d(Block.REGISTRY_ID.getId(this.a.fromId(j)));
         }
 
     }

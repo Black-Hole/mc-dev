@@ -70,15 +70,15 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.gE;
+        return SoundEffects.gF;
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.gH;
+        return SoundEffects.gI;
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.gG;
+        return SoundEffects.gH;
     }
 
     public void n() {

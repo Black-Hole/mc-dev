@@ -73,19 +73,19 @@ public class EntityPig extends EntityAnimal {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.dP;
-    }
-
-    protected SoundEffect bR() {
-        return SoundEffects.dR;
-    }
-
-    protected SoundEffect bS() {
         return SoundEffects.dQ;
     }
 
+    protected SoundEffect bR() {
+        return SoundEffects.dS;
+    }
+
+    protected SoundEffect bS() {
+        return SoundEffects.dR;
+    }
+
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.dT, 0.15F, 1.0F);
+        this.a(SoundEffects.dU, 0.15F, 1.0F);
     }
 
     public boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
@@ -110,7 +110,7 @@ public class EntityPig extends EntityAnimal {
     }
 
     protected MinecraftKey J() {
-        return LootTables.C;
+        return LootTables.D;
     }
 
     public boolean hasSaddle() {

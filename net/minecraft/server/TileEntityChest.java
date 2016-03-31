@@ -366,11 +366,6 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
 
     }
 
-    public void a(MinecraftKey minecraftkey, long i) {
-        this.m = minecraftkey;
-        this.n = i;
-    }
-
     static class SyntheticClass_1 {
 
         static final int[] a = new int[EnumDirection.values().length];

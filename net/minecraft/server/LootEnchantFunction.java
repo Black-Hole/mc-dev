@@ -49,9 +49,5 @@ public class LootEnchantFunction extends LootItemFunction {
         public LootItemFunction b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
             return this.a(jsonobject, jsondeserializationcontext, alootitemcondition);
         }
-
-        public void a(JsonObject jsonobject, LootItemFunction lootitemfunction, JsonSerializationContext jsonserializationcontext) {
-            this.a(jsonobject, (LootEnchantFunction) lootitemfunction, jsonserializationcontext);
-        }
     }
 }

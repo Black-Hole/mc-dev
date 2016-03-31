@@ -26,7 +26,7 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
         this.a = Maps.newHashMap();
 
         for (int j = 0; j < i; ++j) {
-            Statistic statistic = StatisticList.getStatistic(packetdataserializer.c(32767));
+            Statistic statistic = StatisticList.getStatistic(packetdataserializer.e(32767));
             int k = packetdataserializer.g();
 
             if (statistic != null) {
@@ -37,19 +37,15 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.b(this.a.size());
+        packetdataserializer.d(this.a.size());
         Iterator iterator = this.a.entrySet().iterator();
 
         while (iterator.hasNext()) {
             Entry entry = (Entry) iterator.next();
 
             packetdataserializer.a(((Statistic) entry.getKey()).name);
-            packetdataserializer.b(((Integer) entry.getValue()).intValue());
+            packetdataserializer.d(((Integer) entry.getValue()).intValue());
         }
 
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

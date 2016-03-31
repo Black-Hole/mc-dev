@@ -13,8 +13,4 @@ public class PacketStatusInStart implements Packet<PacketStatusInListener> {
     public void a(PacketStatusInListener packetstatusinlistener) {
         packetstatusinlistener.a(this);
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketStatusInListener) packetlistener);
-    }
 }

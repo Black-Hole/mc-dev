@@ -70,10 +70,6 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         return true;
     }
 
-    public String getName() {
-        return this.hasCustomName() ? this.getCustomName() : "container.minecart";
-    }
-
     public int getMaxStackSize() {
         return 64;
     }

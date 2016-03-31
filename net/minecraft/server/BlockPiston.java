@@ -159,7 +159,7 @@ public class BlockPiston extends BlockDirectional {
             }
 
             world.setTypeAndData(blockposition, iblockdata.set(BlockPiston.EXTENDED, Boolean.valueOf(true)), 2);
-            world.a((EntityHuman) null, blockposition, SoundEffects.dV, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.25F + 0.6F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.dW, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.25F + 0.6F);
         } else if (i == 1) {
             TileEntity tileentity = world.getTileEntity(blockposition.shift(enumdirection));
 
@@ -195,7 +195,7 @@ public class BlockPiston extends BlockDirectional {
                 world.setAir(blockposition.shift(enumdirection));
             }
 
-            world.a((EntityHuman) null, blockposition, SoundEffects.dU, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.15F + 0.6F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.dV, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.15F + 0.6F);
         }
 
         return true;
@@ -301,7 +301,7 @@ public class BlockPiston extends BlockDirectional {
             for (k = list.size() - 1; k >= 0; --k) {
                 blockposition2 = (BlockPosition) list.get(k);
                 iblockdata = world.getType(blockposition2);
-                world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 4);
+                world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 2);
                 blockposition2 = blockposition2.shift(enumdirection1);
                 world.setTypeAndData(blockposition2, Blocks.PISTON_EXTENSION.getBlockData().set(BlockPiston.FACING, enumdirection), 4);
                 world.setTileEntity(blockposition2, BlockPistonMoving.a((IBlockData) arraylist.get(k), enumdirection, flag, false));

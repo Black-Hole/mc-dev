@@ -186,6 +186,6 @@ public class EntityBat extends EntityAmbient {
     }
 
     protected MinecraftKey J() {
-        return LootTables.ab;
+        return LootTables.ac;
     }
 }

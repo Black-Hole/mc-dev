@@ -49,19 +49,19 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.fh;
-    }
-
-    protected SoundEffect bR() {
-        return SoundEffects.fm;
-    }
-
-    protected SoundEffect bS() {
         return SoundEffects.fi;
     }
 
+    protected SoundEffect bR() {
+        return SoundEffects.fn;
+    }
+
+    protected SoundEffect bS() {
+        return SoundEffects.fj;
+    }
+
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.fo, 0.15F, 1.0F);
+        this.a(SoundEffects.fp, 0.15F, 1.0F);
     }
 
     public boolean B(Entity entity) {
@@ -142,7 +142,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
     }
 
     protected MinecraftKey J() {
-        return this.getSkeletonType() == 1 ? LootTables.ak : LootTables.aj;
+        return this.getSkeletonType() == 1 ? LootTables.al : LootTables.ak;
     }
 
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
@@ -183,6 +183,13 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
             ItemStack itemstack = this.getItemInMainHand();
 
             if (itemstack != null && itemstack.getItem() == Items.BOW) {
+                byte b0 = 20;
+
+                if (this.world.getDifficulty() != EnumDifficulty.HARD) {
+                    b0 = 40;
+                }
+
+                this.c.b(b0);
                 this.goalSelector.a(4, this.c);
             } else {
                 this.goalSelector.a(4, this.bv);
@@ -215,7 +222,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
             entitytippedarrow.setOnFire(100);
         }
 
-        this.a(SoundEffects.fn, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.a(SoundEffects.fo, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(entitytippedarrow);
     }
 

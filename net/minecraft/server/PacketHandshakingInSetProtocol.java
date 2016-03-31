@@ -13,16 +13,16 @@ public class PacketHandshakingInSetProtocol implements Packet<PacketHandshakingI
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.g();
-        this.hostname = packetdataserializer.c(255);
+        this.hostname = packetdataserializer.e(255);
         this.port = packetdataserializer.readUnsignedShort();
         this.d = EnumProtocol.a(packetdataserializer.g());
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.b(this.a);
+        packetdataserializer.d(this.a);
         packetdataserializer.a(this.hostname);
         packetdataserializer.writeShort(this.port);
-        packetdataserializer.b(this.d.a());
+        packetdataserializer.d(this.d.a());
     }
 
     public void a(PacketHandshakingInListener packethandshakinginlistener) {
@@ -35,9 +35,5 @@ public class PacketHandshakingInSetProtocol implements Packet<PacketHandshakingI
 
     public int b() {
         return this.a;
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketHandshakingInListener) packetlistener);
     }
 }

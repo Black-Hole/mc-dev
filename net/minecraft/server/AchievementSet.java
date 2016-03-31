@@ -5,7 +5,6 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -43,13 +42,5 @@ public class AchievementSet extends ForwardingSet<String> implements IJsonStatis
 
     protected Set<String> delegate() {
         return this.a;
-    }
-
-    protected Collection delegate() {
-        return this.delegate();
-    }
-
-    protected Object delegate() {
-        return this.delegate();
     }
 }

@@ -16,13 +16,13 @@ public class PacketPlayOutTabComplete implements Packet<PacketListenerPlayOut> {
         this.a = new String[packetdataserializer.g()];
 
         for (int i = 0; i < this.a.length; ++i) {
-            this.a[i] = packetdataserializer.c(32767);
+            this.a[i] = packetdataserializer.e(32767);
         }
 
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.b(this.a.length);
+        packetdataserializer.d(this.a.length);
         String[] astring = this.a;
         int i = astring.length;
 
@@ -36,9 +36,5 @@ public class PacketPlayOutTabComplete implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

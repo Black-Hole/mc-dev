@@ -59,10 +59,10 @@ public class PacketPlayOutMap implements Packet<PacketListenerPlayOut> {
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.b(this.a);
+        packetdataserializer.d(this.a);
         packetdataserializer.writeByte(this.b);
         packetdataserializer.writeBoolean(this.c);
-        packetdataserializer.b(this.d.length);
+        packetdataserializer.d(this.d.length);
         MapIcon[] amapicon = this.d;
         int i = amapicon.length;
 
@@ -86,9 +86,5 @@ public class PacketPlayOutMap implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

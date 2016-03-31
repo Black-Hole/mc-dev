@@ -11,7 +11,7 @@ public class PacketPlayInCustomPayload implements Packet<PacketListenerPlayIn> {
     public PacketPlayInCustomPayload() {}
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c(20);
+        this.a = packetdataserializer.e(20);
         int i = packetdataserializer.readableBytes();
 
         if (i >= 0 && i <= 32767) {
@@ -36,9 +36,5 @@ public class PacketPlayInCustomPayload implements Packet<PacketListenerPlayIn> {
 
     public PacketDataSerializer b() {
         return this.b;
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

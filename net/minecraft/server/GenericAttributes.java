@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class GenericAttributes {
 
-    private static final Logger i = LogManager.getLogger();
+    private static final Logger j = LogManager.getLogger();
     public static final IAttribute maxHealth = (new AttributeRanged((IAttribute) null, "generic.maxHealth", 20.0D, 0.0D, 1024.0D)).a("Max Health").a(true);
     public static final IAttribute FOLLOW_RANGE = (new AttributeRanged((IAttribute) null, "generic.followRange", 32.0D, 0.0D, 2048.0D)).a("Follow Range");
     public static final IAttribute c = (new AttributeRanged((IAttribute) null, "generic.knockbackResistance", 0.0D, 0.0D, 1.0D)).a("Knockback Resistance");
@@ -16,7 +16,8 @@ public class GenericAttributes {
     public static final IAttribute ATTACK_DAMAGE = new AttributeRanged((IAttribute) null, "generic.attackDamage", 2.0D, 0.0D, 2048.0D);
     public static final IAttribute f = (new AttributeRanged((IAttribute) null, "generic.attackSpeed", 4.0D, 0.0D, 1024.0D)).a(true);
     public static final IAttribute g = (new AttributeRanged((IAttribute) null, "generic.armor", 0.0D, 0.0D, 30.0D)).a(true);
-    public static final IAttribute h = (new AttributeRanged((IAttribute) null, "generic.luck", 0.0D, -1024.0D, 1024.0D)).a(true);
+    public static final IAttribute h = (new AttributeRanged((IAttribute) null, "generic.armorToughness", 0.0D, 0.0D, 20.0D)).a(true);
+    public static final IAttribute i = (new AttributeRanged((IAttribute) null, "generic.luck", 0.0D, -1024.0D, 1024.0D)).a(true);
 
     public static NBTTagList a(AttributeMapBase attributemapbase) {
         NBTTagList nbttaglist = new NBTTagList();
@@ -75,7 +76,7 @@ public class GenericAttributes {
             if (attributeinstance != null) {
                 a(attributeinstance, nbttagcompound);
             } else {
-                GenericAttributes.i.warn("Ignoring unknown attribute \'" + nbttagcompound.getString("Name") + "\'");
+                GenericAttributes.j.warn("Ignoring unknown attribute \'" + nbttagcompound.getString("Name") + "\'");
             }
         }
 
@@ -109,7 +110,7 @@ public class GenericAttributes {
         try {
             return new AttributeModifier(uuid, nbttagcompound.getString("Name"), nbttagcompound.getDouble("Amount"), nbttagcompound.getInt("Operation"));
         } catch (Exception exception) {
-            GenericAttributes.i.warn("Unable to create attribute: " + exception.getMessage());
+            GenericAttributes.j.warn("Unable to create attribute: " + exception.getMessage());
             return null;
         }
     }

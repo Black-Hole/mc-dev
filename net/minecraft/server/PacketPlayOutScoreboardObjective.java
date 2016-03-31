@@ -19,11 +19,11 @@ public class PacketPlayOutScoreboardObjective implements Packet<PacketListenerPl
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c(16);
+        this.a = packetdataserializer.e(16);
         this.d = packetdataserializer.readByte();
         if (this.d == 0 || this.d == 2) {
-            this.b = packetdataserializer.c(32);
-            this.c = IScoreboardCriteria.EnumScoreboardHealthDisplay.a(packetdataserializer.c(16));
+            this.b = packetdataserializer.e(32);
+            this.c = IScoreboardCriteria.EnumScoreboardHealthDisplay.a(packetdataserializer.e(16));
         }
 
     }
@@ -40,9 +40,5 @@ public class PacketPlayOutScoreboardObjective implements Packet<PacketListenerPl
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

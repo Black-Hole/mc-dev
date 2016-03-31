@@ -28,7 +28,7 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
     }
 
     protected void b(World world, BlockPosition blockposition) {
-        world.a((EntityHuman) null, blockposition, SoundEffects.ds, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
+        world.a((EntityHuman) null, blockposition, SoundEffects.dt, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
     }
 
     protected void c(World world, BlockPosition blockposition) {

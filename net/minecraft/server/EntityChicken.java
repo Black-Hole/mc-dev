@@ -85,7 +85,7 @@ public class EntityChicken extends EntityAnimal {
     }
 
     protected MinecraftKey J() {
-        return LootTables.B;
+        return LootTables.C;
     }
 
     public EntityChicken b(EntityAgeable entityageable) {

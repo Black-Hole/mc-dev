@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public enum EnumHorseType {
 
-    HORSE("horse", "horse_white", SoundEffects.cn, SoundEffects.cu, SoundEffects.cr, LootTables.D), DONKEY("donkey", "donkey", SoundEffects.ax, SoundEffects.aB, SoundEffects.aA, LootTables.D), MULE("mule", "mule", SoundEffects.dx, SoundEffects.dz, SoundEffects.dy, LootTables.D), ZOMBIE("zombiehorse", "horse_zombie", SoundEffects.hl, SoundEffects.hn, SoundEffects.hm, LootTables.E), SKELETON("skeletonhorse", "horse_skeleton", SoundEffects.fj, SoundEffects.fl, SoundEffects.fk, LootTables.F);
+    HORSE("horse", "horse_white", SoundEffects.co, SoundEffects.cv, SoundEffects.cs, LootTables.E), DONKEY("donkey", "donkey", SoundEffects.ax, SoundEffects.aB, SoundEffects.aA, LootTables.E), MULE("mule", "mule", SoundEffects.dy, SoundEffects.dA, SoundEffects.dz, LootTables.E), ZOMBIE("zombiehorse", "horse_zombie", SoundEffects.hm, SoundEffects.ho, SoundEffects.hn, LootTables.F), SKELETON("skeletonhorse", "horse_skeleton", SoundEffects.fk, SoundEffects.fm, SoundEffects.fl, LootTables.G);
 
     private final ChatMessage f;
     private final MinecraftKey g;

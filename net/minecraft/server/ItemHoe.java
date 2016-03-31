@@ -51,7 +51,7 @@ public class ItemHoe extends Item {
     }
 
     protected void a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, IBlockData iblockdata) {
-        world.a(entityhuman, blockposition, SoundEffects.cm, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        world.a(entityhuman, blockposition, SoundEffects.cn, SoundCategory.BLOCKS, 1.0F, 1.0F);
         if (!world.isClientSide) {
             world.setTypeAndData(blockposition, iblockdata, 11);
             itemstack.damage(1, entityhuman);
@@ -67,8 +67,8 @@ public class ItemHoe extends Item {
         Multimap multimap = super.a(enumitemslot);
 
         if (enumitemslot == EnumItemSlot.MAINHAND) {
-            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemHoe.g, "Weapon modifier", 0.0D, 0));
-            multimap.put(GenericAttributes.f.getName(), new AttributeModifier(ItemHoe.h, "Weapon modifier", (double) (this.b - 4.0F), 0));
+            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemHoe.h, "Weapon modifier", 0.0D, 0));
+            multimap.put(GenericAttributes.f.getName(), new AttributeModifier(ItemHoe.i, "Weapon modifier", (double) (this.b - 4.0F), 0));
         }
 
         return multimap;

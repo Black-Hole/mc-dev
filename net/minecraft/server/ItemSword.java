@@ -64,8 +64,8 @@ public class ItemSword extends Item {
         Multimap multimap = super.a(enumitemslot);
 
         if (enumitemslot == EnumItemSlot.MAINHAND) {
-            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemSword.g, "Weapon modifier", (double) this.a, 0));
-            multimap.put(GenericAttributes.f.getName(), new AttributeModifier(ItemSword.h, "Weapon modifier", -2.4000000953674316D, 0));
+            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemSword.h, "Weapon modifier", (double) this.a, 0));
+            multimap.put(GenericAttributes.f.getName(), new AttributeModifier(ItemSword.i, "Weapon modifier", -2.4000000953674316D, 0));
         }
 
         return multimap;

@@ -32,15 +32,15 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.gz;
+        return SoundEffects.gA;
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.gC;
+        return SoundEffects.gD;
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.gA;
+        return SoundEffects.gB;
     }
 
     public void a(boolean flag) {
@@ -98,7 +98,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
                     this.setSlot(EnumItemSlot.MAINHAND, PotionUtil.a(new ItemStack(Items.POTION), potionregistry));
                     this.bv = this.getItemInMainHand().l();
                     this.a(true);
-                    this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.gB, this.bz(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+                    this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.gC, this.bz(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
                     AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
                     attributeinstance.c(EntityWitch.b);
@@ -128,7 +128,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
     }
 
     protected MinecraftKey J() {
-        return LootTables.n;
+        return LootTables.o;
     }
 
     public void a(EntityLiving entityliving, float f) {
@@ -152,7 +152,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
 
             entitypotion.pitch -= -20.0F;
             entitypotion.shoot(d1, d2 + (double) (f1 * 0.2F), d3, 0.75F, 8.0F);
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.gD, this.bz(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.gE, this.bz(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
             this.world.addEntity(entitypotion);
         }
     }

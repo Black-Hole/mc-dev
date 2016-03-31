@@ -12,7 +12,7 @@ public class ItemEgg extends Item {
             --itemstack.count;
         }
 
-        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.aC, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEgg.i.nextFloat() * 0.4F + 0.8F));
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.aC, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEgg.j.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
             EntityEgg entityegg = new EntityEgg(world, entityhuman);
 

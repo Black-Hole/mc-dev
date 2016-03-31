@@ -43,8 +43,8 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         packetdataserializer.writeInt(this.a);
         packetdataserializer.writeInt(this.b);
         packetdataserializer.writeBoolean(this.e);
-        packetdataserializer.b(this.c);
-        packetdataserializer.b(this.d.length);
+        packetdataserializer.d(this.c);
+        packetdataserializer.d(this.d.length);
         packetdataserializer.writeBytes(this.d);
     }
 
@@ -106,9 +106,5 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         }
 
         return j;
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

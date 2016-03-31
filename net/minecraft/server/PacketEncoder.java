@@ -31,7 +31,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>> {
         } else {
             PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf);
 
-            packetdataserializer.b(integer.intValue());
+            packetdataserializer.d(integer.intValue());
 
             try {
                 packet.b(packetdataserializer);

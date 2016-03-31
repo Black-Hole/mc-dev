@@ -37,23 +37,23 @@ public class EntityEndermite extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.ba;
-    }
-
-    protected SoundEffect bR() {
-        return SoundEffects.bc;
-    }
-
-    protected SoundEffect bS() {
         return SoundEffects.bb;
     }
 
+    protected SoundEffect bR() {
+        return SoundEffects.bd;
+    }
+
+    protected SoundEffect bS() {
+        return SoundEffects.bc;
+    }
+
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.bd, 0.15F, 1.0F);
+        this.a(SoundEffects.be, 0.15F, 1.0F);
     }
 
     protected MinecraftKey J() {
-        return LootTables.ag;
+        return LootTables.ah;
     }
 
     public void a(NBTTagCompound nbttagcompound) {

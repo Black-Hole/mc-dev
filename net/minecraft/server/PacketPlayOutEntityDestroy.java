@@ -22,19 +22,15 @@ public class PacketPlayOutEntityDestroy implements Packet<PacketListenerPlayOut>
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.b(this.a.length);
+        packetdataserializer.d(this.a.length);
 
         for (int i = 0; i < this.a.length; ++i) {
-            packetdataserializer.b(this.a[i]);
+            packetdataserializer.d(this.a[i]);
         }
 
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

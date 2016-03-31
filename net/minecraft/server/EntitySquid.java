@@ -38,15 +38,15 @@ public class EntitySquid extends EntityWaterAnimal {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.fW;
+        return SoundEffects.fX;
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.fY;
+        return SoundEffects.fZ;
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.fX;
+        return SoundEffects.fY;
     }
 
     protected float cd() {
@@ -58,7 +58,7 @@ public class EntitySquid extends EntityWaterAnimal {
     }
 
     protected MinecraftKey J() {
-        return LootTables.af;
+        return LootTables.ag;
     }
 
     public boolean isInWater() {

@@ -21,10 +21,6 @@ public class PacketPlayOutKeepAlive implements Packet<PacketListenerPlayOut> {
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.b(this.a);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
+        packetdataserializer.d(this.a);
     }
 }

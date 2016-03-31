@@ -21,7 +21,7 @@ public class DataConverterRegistry {
     }
 
     public static DataConverterManager a() {
-        DataConverterManager dataconvertermanager = new DataConverterManager(169);
+        DataConverterManager dataconvertermanager = new DataConverterManager(176);
 
         dataconvertermanager.a(DataConverterTypes.LEVEL, new DataInspector() {
             public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {

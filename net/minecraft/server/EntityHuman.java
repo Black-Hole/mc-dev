@@ -74,7 +74,7 @@ public abstract class EntityHuman extends EntityLiving {
         this.getAttributeMap().b(GenericAttributes.ATTACK_DAMAGE).setValue(1.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.10000000149011612D);
         this.getAttributeMap().b(GenericAttributes.f);
-        this.getAttributeMap().b(GenericAttributes.h);
+        this.getAttributeMap().b(GenericAttributes.i);
     }
 
     protected void i() {
@@ -237,11 +237,11 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     protected SoundEffect aa() {
-        return SoundEffects.ek;
+        return SoundEffects.el;
     }
 
     protected SoundEffect ab() {
-        return SoundEffects.ej;
+        return SoundEffects.ek;
     }
 
     public int aC() {
@@ -410,7 +410,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.ef;
+        return SoundEffects.eg;
     }
 
     public void b(Entity entity, int i) {
@@ -629,7 +629,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("DataVersion", 169);
+        nbttagcompound.setInt("DataVersion", 176);
         nbttagcompound.set("Inventory", this.inventory.a(new NBTTagList()));
         nbttagcompound.setInt("SelectedItemSlot", this.inventory.itemInHandIndex);
         nbttagcompound.setBoolean("Sleeping", this.sleeping);
@@ -706,7 +706,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     protected void k(float f) {
-        if (f > 0.0F && this.bm != null && this.bm.getItem() == Items.SHIELD) {
+        if (f >= 3.0F && this.bm != null && this.bm.getItem() == Items.SHIELD) {
             int i = 1 + MathHelper.d(f);
 
             this.bm.damage(i, this);
@@ -720,7 +720,7 @@ public abstract class EntityHuman extends EntityLiving {
                 }
 
                 this.bm = null;
-                this.a(SoundEffects.eR, 0.8F, 0.8F + this.world.random.nextFloat() * 0.4F);
+                this.a(SoundEffects.eS, 0.8F, 0.8F + this.world.random.nextFloat() * 0.4F);
             }
         }
 
@@ -855,7 +855,7 @@ public abstract class EntityHuman extends EntityLiving {
                     int i = b0 + EnchantmentManager.a((EntityLiving) this);
 
                     if (this.isSprinting() && flag) {
-                        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dX, this.bz(), 1.0F, 1.0F);
+                        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dY, this.bz(), 1.0F, 1.0F);
                         ++i;
                         flag1 = true;
                     }
@@ -920,7 +920,7 @@ public abstract class EntityHuman extends EntityLiving {
                                 }
                             }
 
-                            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ea, this.bz(), 1.0F, 1.0F);
+                            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.eb, this.bz(), 1.0F, 1.0F);
                             this.cH();
                         }
 
@@ -939,9 +939,9 @@ public abstract class EntityHuman extends EntityLiving {
 
                         if (!flag2 && !flag3) {
                             if (flag) {
-                                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dZ, this.bz(), 1.0F, 1.0F);
+                                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ea, this.bz(), 1.0F, 1.0F);
                             } else {
-                                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.eb, this.bz(), 1.0F, 1.0F);
+                                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ec, this.bz(), 1.0F, 1.0F);
                             }
                         }
 
@@ -1013,7 +1013,7 @@ public abstract class EntityHuman extends EntityLiving {
 
                         this.applyExhaustion(0.3F);
                     } else {
-                        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dY, this.bz(), 1.0F, 1.0F);
+                        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dZ, this.bz(), 1.0F, 1.0F);
                         if (flag4) {
                             entity.extinguish();
                         }
@@ -1367,7 +1367,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     protected SoundEffect e(int i) {
-        return i > 4 ? SoundEffects.ec : SoundEffects.ei;
+        return i > 4 ? SoundEffects.ed : SoundEffects.ej;
     }
 
     public void b(EntityLiving entityliving) {
@@ -1433,7 +1433,7 @@ public abstract class EntityHuman extends EntityLiving {
         if (i > 0 && this.expLevel % 5 == 0 && (float) this.bQ < (float) this.ticksLived - 100.0F) {
             float f = this.expLevel > 30 ? 1.0F : (float) this.expLevel / 30.0F;
 
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.eh, this.bz(), f * 0.75F, 1.0F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ei, this.bz(), f * 0.75F, 1.0F);
             this.bQ = this.ticksLived;
         }
 
@@ -1726,7 +1726,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public float db() {
-        return (float) this.getAttributeInstance(GenericAttributes.h).getValue();
+        return (float) this.getAttributeInstance(GenericAttributes.i).getValue();
     }
 
     static class SyntheticClass_1 {

@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class TileEntityDispenser extends TileEntityContainer implements IInventory {
+public class TileEntityDispenser extends TileEntityLootable implements IInventory {
 
     private static final Random f = new Random();
     private ItemStack[] items = new ItemStack[9];
@@ -15,10 +15,12 @@ public class TileEntityDispenser extends TileEntityContainer implements IInvento
     }
 
     public ItemStack getItem(int i) {
+        this.d((EntityHuman) null);
         return this.items[i];
     }
 
     public ItemStack splitStack(int i, int j) {
+        this.d((EntityHuman) null);
         ItemStack itemstack = ContainerUtil.a(this.items, i, j);
 
         if (itemstack != null) {
@@ -29,10 +31,12 @@ public class TileEntityDispenser extends TileEntityContainer implements IInvento
     }
 
     public ItemStack splitWithoutUpdate(int i) {
+        this.d((EntityHuman) null);
         return ContainerUtil.a(this.items, i);
     }
 
     public int m() {
+        this.d((EntityHuman) null);
         int i = -1;
         int j = 1;
 
@@ -46,6 +50,7 @@ public class TileEntityDispenser extends TileEntityContainer implements IInvento
     }
 
     public void setItem(int i, ItemStack itemstack) {
+        this.d((EntityHuman) null);
         this.items[i] = itemstack;
         if (itemstack != null && itemstack.count > this.getMaxStackSize()) {
             itemstack.count = this.getMaxStackSize();
@@ -79,16 +84,18 @@ public class TileEntityDispenser extends TileEntityContainer implements IInvento
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
+        if (!this.c(nbttagcompound)) {
+            NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
 
-        this.items = new ItemStack[this.getSize()];
+            this.items = new ItemStack[this.getSize()];
 
-        for (int i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagCompound nbttagcompound1 = nbttaglist.get(i);
-            int j = nbttagcompound1.getByte("Slot") & 255;
+            for (int i = 0; i < nbttaglist.size(); ++i) {
+                NBTTagCompound nbttagcompound1 = nbttaglist.get(i);
+                int j = nbttagcompound1.getByte("Slot") & 255;
 
-            if (j >= 0 && j < this.items.length) {
-                this.items[j] = ItemStack.createStack(nbttagcompound1);
+                if (j >= 0 && j < this.items.length) {
+                    this.items[j] = ItemStack.createStack(nbttagcompound1);
+                }
             }
         }
 
@@ -100,19 +107,22 @@ public class TileEntityDispenser extends TileEntityContainer implements IInvento
 
     public void save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        NBTTagList nbttaglist = new NBTTagList();
+        if (!this.d(nbttagcompound)) {
+            NBTTagList nbttaglist = new NBTTagList();
 
-        for (int i = 0; i < this.items.length; ++i) {
-            if (this.items[i] != null) {
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+            for (int i = 0; i < this.items.length; ++i) {
+                if (this.items[i] != null) {
+                    NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-                nbttagcompound1.setByte("Slot", (byte) i);
-                this.items[i].save(nbttagcompound1);
-                nbttaglist.add(nbttagcompound1);
+                    nbttagcompound1.setByte("Slot", (byte) i);
+                    this.items[i].save(nbttagcompound1);
+                    nbttaglist.add(nbttagcompound1);
+                }
             }
+
+            nbttagcompound.set("Items", nbttaglist);
         }
 
-        nbttagcompound.set("Items", nbttaglist);
         if (this.hasCustomName()) {
             nbttagcompound.setString("CustomName", this.a);
         }
@@ -140,6 +150,7 @@ public class TileEntityDispenser extends TileEntityContainer implements IInvento
     }
 
     public Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman) {
+        this.d(entityhuman);
         return new ContainerDispenser(playerinventory, this);
     }
 
@@ -154,6 +165,8 @@ public class TileEntityDispenser extends TileEntityContainer implements IInvento
     }
 
     public void l() {
+        this.d((EntityHuman) null);
+
         for (int i = 0; i < this.items.length; ++i) {
             this.items[i] = null;
         }

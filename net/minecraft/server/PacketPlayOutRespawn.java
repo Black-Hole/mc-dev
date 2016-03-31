@@ -26,7 +26,7 @@ public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
         this.a = packetdataserializer.readInt();
         this.b = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
         this.c = WorldSettings.EnumGamemode.getById(packetdataserializer.readUnsignedByte());
-        this.d = WorldType.getType(packetdataserializer.c(16));
+        this.d = WorldType.getType(packetdataserializer.e(16));
         if (this.d == null) {
             this.d = WorldType.NORMAL;
         }
@@ -38,9 +38,5 @@ public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
         packetdataserializer.writeByte(this.b.a());
         packetdataserializer.writeByte(this.c.getId());
         packetdataserializer.a(this.d.name());
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

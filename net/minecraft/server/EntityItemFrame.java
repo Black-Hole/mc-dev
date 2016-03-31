@@ -32,7 +32,7 @@ public class EntityItemFrame extends EntityHanging {
         } else if (!damagesource.isExplosion() && this.getItem() != null) {
             if (!this.world.isClientSide) {
                 this.b(damagesource.getEntity(), false);
-                this.a(SoundEffects.cR, 1.0F, 1.0F);
+                this.a(SoundEffects.cS, 1.0F, 1.0F);
                 this.setItem((ItemStack) null);
             }
 
@@ -51,12 +51,12 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     public void a(Entity entity) {
-        this.a(SoundEffects.cP, 1.0F, 1.0F);
+        this.a(SoundEffects.cQ, 1.0F, 1.0F);
         this.b(entity, true);
     }
 
     public void o() {
-        this.a(SoundEffects.cQ, 1.0F, 1.0F);
+        this.a(SoundEffects.cR, 1.0F, 1.0F);
     }
 
     public void b(Entity entity, boolean flag) {
@@ -115,7 +115,7 @@ public class EntityItemFrame extends EntityHanging {
         this.getDataWatcher().set(EntityItemFrame.c, Optional.fromNullable(itemstack));
         this.getDataWatcher().markDirty(EntityItemFrame.c);
         if (itemstack != null) {
-            this.a(SoundEffects.cO, 1.0F, 1.0F);
+            this.a(SoundEffects.cP, 1.0F, 1.0F);
         }
 
         if (flag && this.blockPosition != null) {
@@ -184,7 +184,7 @@ public class EntityItemFrame extends EntityHanging {
                 }
             }
         } else if (!this.world.isClientSide) {
-            this.a(SoundEffects.cS, 1.0F, 1.0F);
+            this.a(SoundEffects.cT, 1.0F, 1.0F);
             this.setRotation(this.getRotation() + 1);
         }
 

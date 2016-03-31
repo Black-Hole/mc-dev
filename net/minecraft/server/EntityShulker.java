@@ -57,7 +57,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.eT;
+        return SoundEffects.eU;
     }
 
     public void D() {
@@ -68,11 +68,11 @@ public class EntityShulker extends EntityGolem implements IMonster {
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.eX;
+        return SoundEffects.eY;
     }
 
     protected SoundEffect bR() {
-        return this.df() ? SoundEffects.eZ : SoundEffects.eY;
+        return this.df() ? SoundEffects.fa : SoundEffects.eZ;
     }
 
     protected void i() {
@@ -305,7 +305,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
                     }
 
                     if (flag) {
-                        this.a(SoundEffects.fc, 1.0F, 1.0F);
+                        this.a(SoundEffects.fd, 1.0F, 1.0F);
                         this.datawatcher.set(EntityShulker.b, Optional.of(blockposition1));
                         this.datawatcher.set(EntityShulker.c, Byte.valueOf((byte) 0));
                         this.setGoalTarget((EntityLiving) null);
@@ -399,9 +399,9 @@ public class EntityShulker extends EntityGolem implements IMonster {
             this.getAttributeInstance(GenericAttributes.g).c(EntityShulker.bw);
             if (i == 0) {
                 this.getAttributeInstance(GenericAttributes.g).b(EntityShulker.bw);
-                this.a(SoundEffects.eW, 1.0F, 1.0F);
+                this.a(SoundEffects.eX, 1.0F, 1.0F);
             } else {
-                this.a(SoundEffects.fa, 1.0F, 1.0F);
+                this.a(SoundEffects.fb, 1.0F, 1.0F);
             }
         }
 
@@ -427,7 +427,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
     }
 
     protected MinecraftKey J() {
-        return LootTables.x;
+        return LootTables.y;
     }
 
     static class SyntheticClass_1 {
@@ -553,7 +553,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
                         EntityShulkerBullet entityshulkerbullet = new EntityShulkerBullet(EntityShulker.this.world, EntityShulker.this, entityliving, EntityShulker.this.cZ().k());
 
                         EntityShulker.this.world.addEntity(entityshulkerbullet);
-                        EntityShulker.this.a(SoundEffects.fb, 2.0F, (EntityShulker.this.random.nextFloat() - EntityShulker.this.random.nextFloat()) * 0.2F + 1.0F);
+                        EntityShulker.this.a(SoundEffects.fc, 2.0F, (EntityShulker.this.random.nextFloat() - EntityShulker.this.random.nextFloat()) * 0.2F + 1.0F);
                     }
                 } else {
                     EntityShulker.this.setGoalTarget((EntityLiving) null);

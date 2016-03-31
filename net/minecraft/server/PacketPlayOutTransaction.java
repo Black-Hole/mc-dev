@@ -31,8 +31,4 @@ public class PacketPlayOutTransaction implements Packet<PacketListenerPlayOut> {
         packetdataserializer.writeShort(this.b);
         packetdataserializer.writeBoolean(this.c);
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
-    }
 }

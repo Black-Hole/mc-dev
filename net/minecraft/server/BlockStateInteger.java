@@ -53,8 +53,4 @@ public class BlockStateInteger extends BlockState<Integer> {
     public String a(Integer integer) {
         return integer.toString();
     }
-
-    public String a(Comparable comparable) {
-        return this.a((Integer) comparable);
-    }
 }

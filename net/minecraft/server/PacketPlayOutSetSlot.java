@@ -31,8 +31,4 @@ public class PacketPlayOutSetSlot implements Packet<PacketListenerPlayOut> {
         packetdataserializer.writeShort(this.b);
         packetdataserializer.a(this.c);
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
-    }
 }

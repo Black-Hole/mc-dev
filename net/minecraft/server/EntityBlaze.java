@@ -100,7 +100,7 @@ public class EntityBlaze extends EntityMonster {
     }
 
     protected MinecraftKey J() {
-        return LootTables.o;
+        return LootTables.p;
     }
 
     public boolean o() {

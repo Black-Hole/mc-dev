@@ -18,9 +18,9 @@ public class ItemEnderEye extends Item {
                 --itemstack.count;
 
                 for (int i = 0; i < 16; ++i) {
-                    double d0 = (double) ((float) blockposition.getX() + (5.0F + ItemEnderEye.i.nextFloat() * 6.0F) / 16.0F);
+                    double d0 = (double) ((float) blockposition.getX() + (5.0F + ItemEnderEye.j.nextFloat() * 6.0F) / 16.0F);
                     double d1 = (double) ((float) blockposition.getY() + 0.8125F);
-                    double d2 = (double) ((float) blockposition.getZ() + (5.0F + ItemEnderEye.i.nextFloat() * 6.0F) / 16.0F);
+                    double d2 = (double) ((float) blockposition.getZ() + (5.0F + ItemEnderEye.j.nextFloat() * 6.0F) / 16.0F);
                     double d3 = 0.0D;
                     double d4 = 0.0D;
                     double d5 = 0.0D;
@@ -62,7 +62,7 @@ public class ItemEnderEye extends Item {
 
                     entityendersignal.a(blockposition);
                     world.addEntity(entityendersignal);
-                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.aT, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderEye.i.nextFloat() * 0.4F + 0.8F));
+                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.aU, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderEye.j.nextFloat() * 0.4F + 0.8F));
                     world.a((EntityHuman) null, 1003, new BlockPosition(entityhuman), 0);
                     if (!entityhuman.abilities.canInstantlyBuild) {
                         --itemstack.count;

@@ -33,8 +33,4 @@ public class PacketPlayInTransaction implements Packet<PacketListenerPlayIn> {
     public short b() {
         return this.b;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
 }

@@ -137,7 +137,7 @@ public class Explosion {
     }
 
     public void a(boolean flag) {
-        this.world.a((EntityHuman) null, this.posX, this.posY, this.posZ, SoundEffects.bD, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F);
+        this.world.a((EntityHuman) null, this.posX, this.posY, this.posZ, SoundEffects.bE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F);
         if (this.size >= 2.0F && this.b) {
             this.world.addParticle(EnumParticle.EXPLOSION_HUGE, this.posX, this.posY, this.posZ, 1.0D, 0.0D, 0.0D, new int[0]);
         } else {

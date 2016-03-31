@@ -17,7 +17,7 @@ public class PacketPlayInChat implements Packet<PacketListenerPlayIn> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c(100);
+        this.a = packetdataserializer.e(100);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
@@ -30,9 +30,5 @@ public class PacketPlayInChat implements Packet<PacketListenerPlayIn> {
 
     public String a() {
         return this.a;
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

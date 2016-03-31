@@ -38,8 +38,4 @@ public class BlockStateBoolean extends BlockState<Boolean> {
     public int hashCode() {
         return 31 * super.hashCode() + this.a.hashCode();
     }
-
-    public String a(Comparable comparable) {
-        return this.a((Boolean) comparable);
-    }
 }

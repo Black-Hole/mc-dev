@@ -81,7 +81,7 @@ public class EntityWolf extends EntityTameableAnimal {
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.gR, 0.15F, 1.0F);
+        this.a(SoundEffects.gS, 0.15F, 1.0F);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -100,15 +100,15 @@ public class EntityWolf extends EntityTameableAnimal {
     }
 
     protected SoundEffect G() {
-        return this.isAngry() ? SoundEffects.gM : (this.random.nextInt(3) == 0 ? (this.isTamed() && ((Float) this.datawatcher.get(EntityWolf.DATA_HEALTH)).floatValue() < 10.0F ? SoundEffects.gS : SoundEffects.gP) : SoundEffects.gK);
+        return this.isAngry() ? SoundEffects.gN : (this.random.nextInt(3) == 0 ? (this.isTamed() && ((Float) this.datawatcher.get(EntityWolf.DATA_HEALTH)).floatValue() < 10.0F ? SoundEffects.gT : SoundEffects.gQ) : SoundEffects.gL);
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.gO;
+        return SoundEffects.gP;
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.gL;
+        return SoundEffects.gM;
     }
 
     protected float cd() {
@@ -116,7 +116,7 @@ public class EntityWolf extends EntityTameableAnimal {
     }
 
     protected MinecraftKey J() {
-        return LootTables.I;
+        return LootTables.J;
     }
 
     public void n() {
@@ -150,7 +150,7 @@ public class EntityWolf extends EntityTameableAnimal {
             this.bH = 0.0F;
         } else if ((this.bE || this.bF) && this.bF) {
             if (this.bG == 0.0F) {
-                this.a(SoundEffects.gQ, this.cd(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                this.a(SoundEffects.gR, this.cd(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             }
 
             this.bH = this.bG;

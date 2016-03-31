@@ -402,7 +402,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
             }
 
             if (flag) {
-                this.a(SoundEffects.cU, 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                this.a(SoundEffects.cV, 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 entityhuman.receive(this, 1);
                 this.die();
             }

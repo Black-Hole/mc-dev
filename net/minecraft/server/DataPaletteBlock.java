@@ -115,8 +115,6 @@ public class DataPaletteBlock implements DataPaletteExpandable {
     }
 
     public int a() {
-        int i = this.b.b();
-
-        return 1 + this.c.a() + PacketDataSerializer.a(i) + i * 8;
+        return 1 + this.c.a() + PacketDataSerializer.a(this.b.b()) + this.b.a().length * 8;
     }
 }

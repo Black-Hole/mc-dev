@@ -202,24 +202,24 @@ public class EntityRabbit extends EntityAnimal {
     }
 
     protected SoundEffect da() {
-        return SoundEffects.es;
+        return SoundEffects.et;
     }
 
     protected SoundEffect G() {
-        return SoundEffects.eo;
+        return SoundEffects.ep;
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.er;
+        return SoundEffects.es;
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.eq;
+        return SoundEffects.er;
     }
 
     public boolean B(Entity entity) {
         if (this.getRabbitType() == 99) {
-            this.a(SoundEffects.ep, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+            this.a(SoundEffects.eq, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             return entity.damageEntity(DamageSource.mobAttack(this), 8.0F);
         } else {
             return entity.damageEntity(DamageSource.mobAttack(this), 3.0F);
@@ -235,7 +235,7 @@ public class EntityRabbit extends EntityAnimal {
     }
 
     protected MinecraftKey J() {
-        return LootTables.A;
+        return LootTables.B;
     }
 
     private boolean a(Item item) {

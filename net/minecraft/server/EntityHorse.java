@@ -273,14 +273,14 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener, IJu
     private void dH() {
         this.dO();
         if (!this.ad()) {
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.cs, this.bz(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ct, this.bz(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
         }
 
     }
 
     public void e(float f, float f1) {
         if (f > 1.0F) {
-            this.a(SoundEffects.cw, 0.4F, 1.0F);
+            this.a(SoundEffects.cx, 0.4F, 1.0F);
         }
 
         int i = MathHelper.f((f * 0.5F - 3.0F) * f1);
@@ -354,13 +354,13 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener, IJu
         this.dK();
         if (this.ticksLived > 20) {
             if (enumhorsearmor == EnumHorseArmor.NONE && enumhorsearmor != this.dl()) {
-                this.a(SoundEffects.cp, 0.5F, 1.0F);
+                this.a(SoundEffects.cq, 0.5F, 1.0F);
             } else if (enumhorsearmor != this.dl()) {
-                this.a(SoundEffects.cp, 0.5F, 1.0F);
+                this.a(SoundEffects.cq, 0.5F, 1.0F);
             }
 
             if (!flag && this.du()) {
-                this.a(SoundEffects.cx, 0.5F, 1.0F);
+                this.a(SoundEffects.cy, 0.5F, 1.0F);
             }
         }
 
@@ -426,7 +426,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener, IJu
         this.setStanding();
         EnumHorseType enumhorsetype = this.getType();
 
-        return enumhorsetype.h() ? null : (enumhorsetype.g() ? SoundEffects.ay : SoundEffects.co);
+        return enumhorsetype.h() ? null : (enumhorsetype.g() ? SoundEffects.ay : SoundEffects.cp);
     }
 
     protected void a(BlockPosition blockposition, Block block) {
@@ -442,17 +442,17 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener, IJu
             if (this.isVehicle() && !enumhorsetype.g()) {
                 ++this.cc;
                 if (this.cc > 5 && this.cc % 3 == 0) {
-                    this.a(SoundEffects.ct, soundeffecttype.a() * 0.15F, soundeffecttype.b());
+                    this.a(SoundEffects.cu, soundeffecttype.a() * 0.15F, soundeffecttype.b());
                     if (enumhorsetype == EnumHorseType.HORSE && this.random.nextInt(10) == 0) {
-                        this.a(SoundEffects.cq, soundeffecttype.a() * 0.6F, soundeffecttype.b());
+                        this.a(SoundEffects.cr, soundeffecttype.a() * 0.6F, soundeffecttype.b());
                     }
                 } else if (this.cc <= 5) {
-                    this.a(SoundEffects.cz, soundeffecttype.a() * 0.15F, soundeffecttype.b());
+                    this.a(SoundEffects.cA, soundeffecttype.a() * 0.15F, soundeffecttype.b());
                 }
             } else if (soundeffecttype == SoundEffectType.a) {
-                this.a(SoundEffects.cz, soundeffecttype.a() * 0.15F, soundeffecttype.b());
+                this.a(SoundEffects.cA, soundeffecttype.a() * 0.15F, soundeffecttype.b());
             } else {
-                this.a(SoundEffects.cy, soundeffecttype.a() * 0.15F, soundeffecttype.b());
+                this.a(SoundEffects.cz, soundeffecttype.a() * 0.15F, soundeffecttype.b());
             }
         }
 
@@ -864,7 +864,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener, IJu
 
                     this.motX += (double) (-0.4F * f2 * this.jumpPower);
                     this.motZ += (double) (0.4F * f3 * this.jumpPower);
-                    this.a(SoundEffects.cv, 0.4F, 1.0F);
+                    this.a(SoundEffects.cw, 0.4F, 1.0F);
                 }
 
                 this.jumpPower = 0.0F;

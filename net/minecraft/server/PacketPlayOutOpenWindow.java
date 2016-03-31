@@ -34,7 +34,7 @@ public class PacketPlayOutOpenWindow implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readUnsignedByte();
-        this.b = packetdataserializer.c(32);
+        this.b = packetdataserializer.e(32);
         this.c = packetdataserializer.f();
         this.d = packetdataserializer.readUnsignedByte();
         if (this.b.equals("EntityHorse")) {
@@ -52,9 +52,5 @@ public class PacketPlayOutOpenWindow implements Packet<PacketListenerPlayOut> {
             packetdataserializer.writeInt(this.e);
         }
 
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

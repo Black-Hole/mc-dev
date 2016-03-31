@@ -202,7 +202,7 @@ public class DataWatcher {
             throw new EncoderException("Unknown serializer type " + datawatcherobject.b());
         } else {
             packetdataserializer.writeByte(datawatcherobject.a());
-            packetdataserializer.b(i);
+            packetdataserializer.d(i);
             datawatcherobject.b().a(packetdataserializer, datawatcher_item.b());
         }
     }
@@ -217,11 +217,11 @@ public class DataWatcher {
                 arraylist = Lists.newArrayList();
             }
 
-            short short1 = packetdataserializer.readUnsignedByte();
-            DataWatcherSerializer datawatcherserializer = DataWatcherRegistry.a(short1);
+            int i = packetdataserializer.g();
+            DataWatcherSerializer datawatcherserializer = DataWatcherRegistry.a(i);
 
             if (datawatcherserializer == null) {
-                throw new DecoderException("Unknown serializer type " + short1);
+                throw new DecoderException("Unknown serializer type " + i);
             }
 
             arraylist.add(new DataWatcher.Item(datawatcherserializer.a(short0), datawatcherserializer.a(packetdataserializer)));

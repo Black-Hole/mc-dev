@@ -14,7 +14,7 @@ public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
         this.b = new String[4];
 
         for (int i = 0; i < 4; ++i) {
-            this.b[i] = packetdataserializer.c(384);
+            this.b[i] = packetdataserializer.e(384);
         }
 
     }
@@ -38,9 +38,5 @@ public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
 
     public String[] b() {
         return this.b;
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

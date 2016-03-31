@@ -395,7 +395,7 @@ public class EntityFishingHook extends Entity {
                 LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
                 loottableinfo_a.a((float) EnchantmentManager.f(this.owner) + this.owner.db());
-                Iterator iterator = this.world.ak().a(LootTables.al).a(this.random, loottableinfo_a.a()).iterator();
+                Iterator iterator = this.world.ak().a(LootTables.am).a(this.random, loottableinfo_a.a()).iterator();
 
                 while (iterator.hasNext()) {
                     ItemStack itemstack = (ItemStack) iterator.next();

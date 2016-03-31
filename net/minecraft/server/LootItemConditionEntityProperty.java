@@ -76,9 +76,5 @@ public class LootItemConditionEntityProperty implements LootItemCondition {
         public LootItemCondition b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             return this.a(jsonobject, jsondeserializationcontext);
         }
-
-        public void a(JsonObject jsonobject, LootItemCondition lootitemcondition, JsonSerializationContext jsonserializationcontext) {
-            this.a(jsonobject, (LootItemConditionEntityProperty) lootitemcondition, jsonserializationcontext);
-        }
     }
 }

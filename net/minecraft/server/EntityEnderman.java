@@ -82,7 +82,7 @@ public class EntityEnderman extends EntityMonster {
         if (this.ticksLived >= this.bx + 400) {
             this.bx = this.ticksLived;
             if (!this.ad()) {
-                this.world.a(this.locX, this.locY + (double) this.getHeadHeight(), this.locZ, SoundEffects.aY, this.bz(), 2.5F, 1.0F, false);
+                this.world.a(this.locX, this.locY + (double) this.getHeadHeight(), this.locZ, SoundEffects.aZ, this.bz(), 2.5F, 1.0F, false);
             }
         }
 
@@ -197,23 +197,23 @@ public class EntityEnderman extends EntityMonster {
         boolean flag = this.k(d0, d1, d2);
 
         if (flag) {
-            this.world.a((EntityHuman) null, this.lastX, this.lastY, this.lastZ, SoundEffects.aZ, this.bz(), 1.0F, 1.0F);
-            this.a(SoundEffects.aZ, 1.0F, 1.0F);
+            this.world.a((EntityHuman) null, this.lastX, this.lastY, this.lastZ, SoundEffects.ba, this.bz(), 1.0F, 1.0F);
+            this.a(SoundEffects.ba, 1.0F, 1.0F);
         }
 
         return flag;
     }
 
     protected SoundEffect G() {
-        return this.dc() ? SoundEffects.aX : SoundEffects.aU;
+        return this.dc() ? SoundEffects.aY : SoundEffects.aV;
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.aW;
+        return SoundEffects.aX;
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.aV;
+        return SoundEffects.aW;
     }
 
     protected void dropEquipment(boolean flag, int i) {
@@ -227,7 +227,7 @@ public class EntityEnderman extends EntityMonster {
     }
 
     protected MinecraftKey J() {
-        return LootTables.u;
+        return LootTables.v;
     }
 
     public void setCarried(IBlockData iblockdata) {

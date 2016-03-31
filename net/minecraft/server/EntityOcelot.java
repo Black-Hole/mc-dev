@@ -108,7 +108,7 @@ public class EntityOcelot extends EntityTameableAnimal {
     }
 
     protected MinecraftKey J() {
-        return LootTables.J;
+        return LootTables.K;
     }
 
     public boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {

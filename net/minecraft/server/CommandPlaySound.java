@@ -27,69 +27,75 @@ public class CommandPlaySound extends CommandAbstract {
             byte b0 = 0;
             int i = b0 + 1;
             String s = astring[b0];
-            SoundCategory soundcategory = SoundCategory.a(astring[i++]);
-            EntityPlayer entityplayer = a(minecraftserver, icommandlistener, astring[i++]);
-            Vec3D vec3d = icommandlistener.d();
-            double d0 = vec3d.x;
+            String s1 = astring[i++];
+            SoundCategory soundcategory = SoundCategory.a(s1);
 
-            if (astring.length > i) {
-                d0 = b(d0, astring[i++], true);
-            }
+            if (soundcategory == null) {
+                throw new CommandException("commands.playsound.unknownSoundSource", new Object[] { s1});
+            } else {
+                EntityPlayer entityplayer = a(minecraftserver, icommandlistener, astring[i++]);
+                Vec3D vec3d = icommandlistener.d();
+                double d0 = vec3d.x;
 
-            double d1 = vec3d.y;
-
-            if (astring.length > i) {
-                d1 = b(d1, astring[i++], 0, 0, false);
-            }
-
-            double d2 = vec3d.z;
-
-            if (astring.length > i) {
-                d2 = b(d2, astring[i++], true);
-            }
-
-            double d3 = 1.0D;
-
-            if (astring.length > i) {
-                d3 = a(astring[i++], 0.0D, 3.4028234663852886E38D);
-            }
-
-            double d4 = 1.0D;
-
-            if (astring.length > i) {
-                d4 = a(astring[i++], 0.0D, 2.0D);
-            }
-
-            double d5 = 0.0D;
-
-            if (astring.length > i) {
-                d5 = a(astring[i], 0.0D, 1.0D);
-            }
-
-            double d6 = d3 > 1.0D ? d3 * 16.0D : 16.0D;
-            double d7 = entityplayer.f(d0, d1, d2);
-
-            if (d7 > d6) {
-                if (d5 <= 0.0D) {
-                    throw new CommandException("commands.playsound.playerTooFar", new Object[] { entityplayer.getName()});
+                if (astring.length > i) {
+                    d0 = b(d0, astring[i++], true);
                 }
 
-                double d8 = d0 - entityplayer.locX;
-                double d9 = d1 - entityplayer.locY;
-                double d10 = d2 - entityplayer.locZ;
-                double d11 = Math.sqrt(d8 * d8 + d9 * d9 + d10 * d10);
+                double d1 = vec3d.y;
 
-                if (d11 > 0.0D) {
-                    d0 = entityplayer.locX + d8 / d11 * 2.0D;
-                    d1 = entityplayer.locY + d9 / d11 * 2.0D;
-                    d2 = entityplayer.locZ + d10 / d11 * 2.0D;
+                if (astring.length > i) {
+                    d1 = b(d1, astring[i++], 0, 0, false);
                 }
 
-                d3 = d5;
-            }
+                double d2 = vec3d.z;
 
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutCustomSoundEffect(s, soundcategory, d0, d1, d2, (float) d3, (float) d4));
-            a(icommandlistener, (ICommand) this, "commands.playsound.success", new Object[] { s, entityplayer.getName()});
+                if (astring.length > i) {
+                    d2 = b(d2, astring[i++], true);
+                }
+
+                double d3 = 1.0D;
+
+                if (astring.length > i) {
+                    d3 = a(astring[i++], 0.0D, 3.4028234663852886E38D);
+                }
+
+                double d4 = 1.0D;
+
+                if (astring.length > i) {
+                    d4 = a(astring[i++], 0.0D, 2.0D);
+                }
+
+                double d5 = 0.0D;
+
+                if (astring.length > i) {
+                    d5 = a(astring[i], 0.0D, 1.0D);
+                }
+
+                double d6 = d3 > 1.0D ? d3 * 16.0D : 16.0D;
+                double d7 = entityplayer.f(d0, d1, d2);
+
+                if (d7 > d6) {
+                    if (d5 <= 0.0D) {
+                        throw new CommandException("commands.playsound.playerTooFar", new Object[] { entityplayer.getName()});
+                    }
+
+                    double d8 = d0 - entityplayer.locX;
+                    double d9 = d1 - entityplayer.locY;
+                    double d10 = d2 - entityplayer.locZ;
+                    double d11 = Math.sqrt(d8 * d8 + d9 * d9 + d10 * d10);
+
+                    if (d11 > 0.0D) {
+                        d0 = entityplayer.locX + d8 / d11 * 2.0D;
+                        d1 = entityplayer.locY + d9 / d11 * 2.0D;
+                        d2 = entityplayer.locZ + d10 / d11 * 2.0D;
+                    }
+
+                    d3 = d5;
+                }
+
+                entityplayer.playerConnection.sendPacket(new PacketPlayOutCustomSoundEffect(s, soundcategory, d0, d1, d2, (float) d3, (float) d4));
+                a(icommandlistener, (ICommand) this, "commands.playsound.success", new Object[] { s, entityplayer.getName()});
+            }
         }
     }
 

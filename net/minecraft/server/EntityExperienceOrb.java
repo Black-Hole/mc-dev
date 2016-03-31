@@ -46,7 +46,7 @@ public class EntityExperienceOrb extends Entity {
             this.motY = 0.20000000298023224D;
             this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
             this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-            this.a(SoundEffects.bz, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
+            this.a(SoundEffects.bA, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
         }
 
         this.j(this.locX, (this.getBoundingBox().b + this.getBoundingBox().e) / 2.0D, this.locZ);
@@ -139,7 +139,7 @@ public class EntityExperienceOrb extends Entity {
         if (!this.world.isClientSide) {
             if (this.c == 0 && entityhuman.by == 0) {
                 entityhuman.by = 2;
-                this.world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bi, SoundCategory.PLAYERS, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
+                this.world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bj, SoundCategory.PLAYERS, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
                 entityhuman.receive(this, 1);
                 ItemStack itemstack = EnchantmentManager.b(Enchantments.A, (EntityLiving) entityhuman);
 

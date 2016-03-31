@@ -64,8 +64,8 @@ public class ItemTool extends Item {
         Multimap multimap = super.a(enumitemslot);
 
         if (enumitemslot == EnumItemSlot.MAINHAND) {
-            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemTool.g, "Tool modifier", (double) this.b, 0));
-            multimap.put(GenericAttributes.f.getName(), new AttributeModifier(ItemTool.h, "Tool modifier", (double) this.c, 0));
+            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemTool.h, "Tool modifier", (double) this.b, 0));
+            multimap.put(GenericAttributes.f.getName(), new AttributeModifier(ItemTool.i, "Tool modifier", (double) this.c, 0));
         }
 
         return multimap;

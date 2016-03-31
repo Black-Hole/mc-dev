@@ -45,7 +45,7 @@ public class EntityCow extends EntityAnimal {
     }
 
     protected MinecraftKey J() {
-        return LootTables.G;
+        return LootTables.H;
     }
 
     public boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {

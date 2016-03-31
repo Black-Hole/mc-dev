@@ -35,8 +35,4 @@ public class PacketPlayOutChat implements Packet<PacketListenerPlayOut> {
     public boolean b() {
         return this.b == 1 || this.b == 2;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
-    }
 }

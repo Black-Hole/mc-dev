@@ -205,15 +205,15 @@ public class EntityVillager extends EntityAgeable implements IMerchant, NPC {
     }
 
     protected SoundEffect G() {
-        return this.dc() ? SoundEffects.gt : SoundEffects.gp;
+        return this.dc() ? SoundEffects.gu : SoundEffects.gq;
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.gr;
+        return SoundEffects.gs;
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.gq;
+        return SoundEffects.gr;
     }
 
     public void setProfession(int i) {
@@ -329,7 +329,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, NPC {
     public void a(MerchantRecipe merchantrecipe) {
         merchantrecipe.g();
         this.a_ = -this.C();
-        this.a(SoundEffects.gu, this.cd(), this.ce());
+        this.a(SoundEffects.gv, this.cd(), this.ce());
         int i = 3 + this.random.nextInt(4);
 
         if (merchantrecipe.e() == 1 || this.random.nextInt(5) == 0) {
@@ -359,9 +359,9 @@ public class EntityVillager extends EntityAgeable implements IMerchant, NPC {
         if (!this.world.isClientSide && this.a_ > -this.C() + 20) {
             this.a_ = -this.C();
             if (itemstack != null) {
-                this.a(SoundEffects.gu, this.cd(), this.ce());
+                this.a(SoundEffects.gv, this.cd(), this.ce());
             } else {
-                this.a(SoundEffects.gs, this.cd(), this.ce());
+                this.a(SoundEffects.gt, this.cd(), this.ce());
             }
         }
 

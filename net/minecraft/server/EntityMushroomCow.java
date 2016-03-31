@@ -37,7 +37,7 @@ public class EntityMushroomCow extends EntityCow {
                 }
 
                 itemstack.damage(1, entityhuman);
-                this.a(SoundEffects.dw, 1.0F, 1.0F);
+                this.a(SoundEffects.dx, 1.0F, 1.0F);
             }
 
             return true;
@@ -51,7 +51,7 @@ public class EntityMushroomCow extends EntityCow {
     }
 
     protected MinecraftKey J() {
-        return LootTables.H;
+        return LootTables.I;
     }
 
     public EntityCow b(EntityAgeable entityageable) {

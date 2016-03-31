@@ -1143,7 +1143,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             }
                         }
 
-                        String s2 = packetdataserializer.c(packetdataserializer.readableBytes());
+                        String s2 = packetdataserializer.e(packetdataserializer.readableBytes());
                         boolean flag = packetdataserializer.readBoolean();
 
                         if (commandblocklistenerabstract != null) {
@@ -1185,9 +1185,9 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             commandblocklistenerabstract1 = tileentitycommand.getCommandBlock();
                         }
 
-                        s1 = packetdataserializer.c(packetdataserializer.readableBytes());
+                        s1 = packetdataserializer.e(packetdataserializer.readableBytes());
                         boolean flag1 = packetdataserializer.readBoolean();
-                        TileEntityCommand.Type tileentitycommand_type = TileEntityCommand.Type.valueOf(packetdataserializer.c(16));
+                        TileEntityCommand.Type tileentitycommand_type = TileEntityCommand.Type.valueOf(packetdataserializer.e(16));
                         boolean flag2 = packetdataserializer.readBoolean();
                         boolean flag3 = packetdataserializer.readBoolean();
 
@@ -1259,7 +1259,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             ContainerAnvil containeranvil = (ContainerAnvil) this.player.activeContainer;
 
                             if (packetplayincustompayload.b() != null && packetplayincustompayload.b().readableBytes() >= 1) {
-                                String s3 = SharedConstants.a(packetplayincustompayload.b().c(32767));
+                                String s3 = SharedConstants.a(packetplayincustompayload.b().e(32767));
 
                                 if (s3.length() <= 30) {
                                     containeranvil.a(s3);
@@ -1280,19 +1280,19 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                                 if (tileentity instanceof TileEntityStructure) {
                                     TileEntityStructure tileentitystructure = (TileEntityStructure) tileentity;
                                     byte b1 = packetdataserializer.readByte();
-                                    String s4 = packetdataserializer.c(32);
+                                    String s4 = packetdataserializer.e(32);
 
                                     tileentitystructure.a(TileEntityStructure.UsageMode.valueOf(s4));
-                                    tileentitystructure.a(packetdataserializer.c(64));
+                                    tileentitystructure.a(packetdataserializer.e(64));
                                     tileentitystructure.b(new BlockPosition(packetdataserializer.readInt(), packetdataserializer.readInt(), packetdataserializer.readInt()));
                                     tileentitystructure.c(new BlockPosition(packetdataserializer.readInt(), packetdataserializer.readInt(), packetdataserializer.readInt()));
-                                    String s5 = packetdataserializer.c(32);
+                                    String s5 = packetdataserializer.e(32);
 
                                     tileentitystructure.a(EnumBlockMirror.valueOf(s5));
-                                    String s6 = packetdataserializer.c(32);
+                                    String s6 = packetdataserializer.e(32);
 
                                     tileentitystructure.a(EnumBlockRotation.valueOf(s6));
-                                    tileentitystructure.b(packetdataserializer.c(128));
+                                    tileentitystructure.b(packetdataserializer.e(128));
                                     tileentitystructure.a(packetdataserializer.readBoolean());
                                     if (b1 == 2) {
                                         if (tileentitystructure.m()) {

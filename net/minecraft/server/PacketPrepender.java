@@ -18,7 +18,7 @@ public class PacketPrepender extends MessageToByteEncoder<ByteBuf> {
             PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf1);
 
             packetdataserializer.ensureWritable(j + i);
-            packetdataserializer.b(i);
+            packetdataserializer.d(i);
             packetdataserializer.writeBytes(bytebuf, bytebuf.readerIndex(), i);
         }
     }

@@ -59,4 +59,9 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
     public MinecraftKey b() {
         return this.m;
     }
+
+    public void a(MinecraftKey minecraftkey, long i) {
+        this.m = minecraftkey;
+        this.n = i;
+    }
 }

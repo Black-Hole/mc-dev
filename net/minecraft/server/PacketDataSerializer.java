@@ -8,7 +8,6 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.ByteBufProcessor;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-import io.netty.util.ReferenceCounted;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -40,40 +39,60 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public PacketDataSerializer a(byte[] abyte) {
-        this.b(abyte.length);
+        this.d(abyte.length);
         this.writeBytes(abyte);
         return this;
     }
 
     public byte[] a() {
-        byte[] abyte = new byte[this.g()];
+        return this.b(this.readableBytes());
+    }
 
-        this.readBytes(abyte);
-        return abyte;
+    public byte[] b(int i) {
+        int j = this.g();
+
+        if (j > i) {
+            throw new DecoderException("ByteArray with size " + j + " is bigger than allowed " + i);
+        } else {
+            byte[] abyte = new byte[j];
+
+            this.readBytes(abyte);
+            return abyte;
+        }
     }
 
     public PacketDataSerializer a(int[] aint) {
-        this.b(aint.length);
+        this.d(aint.length);
 
         for (int i = 0; i < aint.length; ++i) {
-            this.b(aint[i]);
+            this.d(aint[i]);
         }
 
         return this;
     }
 
     public int[] b() {
-        int[] aint = new int[this.g()];
+        return this.c(this.readableBytes());
+    }
 
-        for (int i = 0; i < aint.length; ++i) {
-            aint[i] = this.g();
+    public int[] c(int i) {
+        int j = this.g();
+
+        if (j > i) {
+            throw new DecoderException("VarIntArray with size " + j + " is bigger than allowed " + i);
+        } else {
+            int[] aint = new int[j];
+
+            for (int k = 0; k < aint.length; ++k) {
+                aint[k] = this.g();
+            }
+
+            return aint;
         }
-
-        return aint;
     }
 
     public PacketDataSerializer a(long[] along) {
-        this.b(along.length);
+        this.d(along.length);
 
         for (int i = 0; i < along.length; ++i) {
             this.writeLong(along[i]);
@@ -92,7 +111,7 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public IChatBaseComponent f() {
-        return IChatBaseComponent.ChatSerializer.a(this.c(32767));
+        return IChatBaseComponent.ChatSerializer.a(this.e(32767));
     }
 
     public PacketDataSerializer a(IChatBaseComponent ichatbasecomponent) {
@@ -104,7 +123,7 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public PacketDataSerializer a(Enum<?> oenum) {
-        return this.b(oenum.ordinal());
+        return this.d(oenum.ordinal());
     }
 
     public int g() {
@@ -151,7 +170,7 @@ public class PacketDataSerializer extends ByteBuf {
         return new UUID(this.readLong(), this.readLong());
     }
 
-    public PacketDataSerializer b(int i) {
+    public PacketDataSerializer d(int i) {
         while ((i & -128) != 0) {
             this.writeByte(i & 127 | 128);
             i >>>= 7;
@@ -236,7 +255,7 @@ public class PacketDataSerializer extends ByteBuf {
         return itemstack;
     }
 
-    public String c(int i) {
+    public String e(int i) {
         int j = this.g();
 
         if (j > i * 4) {
@@ -260,7 +279,7 @@ public class PacketDataSerializer extends ByteBuf {
         if (abyte.length > 32767) {
             throw new EncoderException("String too big (was " + s.length() + " bytes encoded, max " + 32767 + ")");
         } else {
-            this.b(abyte.length);
+            this.d(abyte.length);
             this.writeBytes(abyte);
             return this;
         }
@@ -844,17 +863,5 @@ public class PacketDataSerializer extends ByteBuf {
 
     public boolean release(int i) {
         return this.a.release(i);
-    }
-
-    public ReferenceCounted retain(int i) {
-        return this.retain(i);
-    }
-
-    public ReferenceCounted retain() {
-        return this.retain();
-    }
-
-    public int compareTo(Object object) {
-        return this.compareTo((ByteBuf) object);
     }
 }

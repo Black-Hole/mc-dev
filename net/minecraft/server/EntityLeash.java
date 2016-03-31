@@ -44,7 +44,7 @@ public class EntityLeash extends EntityHanging {
     }
 
     public void a(Entity entity) {
-        this.a(SoundEffects.dd, 1.0F, 1.0F);
+        this.a(SoundEffects.de, 1.0F, 1.0F);
     }
 
     public boolean d(NBTTagCompound nbttagcompound) {
@@ -133,6 +133,6 @@ public class EntityLeash extends EntityHanging {
     }
 
     public void o() {
-        this.a(SoundEffects.de, 1.0F, 1.0F);
+        this.a(SoundEffects.df, 1.0F, 1.0F);
     }
 }

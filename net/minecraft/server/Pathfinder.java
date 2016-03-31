@@ -45,7 +45,7 @@ public class Pathfinder {
 
         while (!this.a.e()) {
             ++i;
-            if (i >= 2000) {
+            if (i >= 200) {
                 break;
             }
 

@@ -161,15 +161,15 @@ public class EntityGuardian extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return this.isElder() ? (this.isInWater() ? SoundEffects.aD : SoundEffects.aE) : (this.isInWater() ? SoundEffects.ce : SoundEffects.cf);
+        return this.isElder() ? (this.isInWater() ? SoundEffects.aD : SoundEffects.aE) : (this.isInWater() ? SoundEffects.cf : SoundEffects.cg);
     }
 
     protected SoundEffect bR() {
-        return this.isElder() ? (this.isInWater() ? SoundEffects.aI : SoundEffects.aJ) : (this.isInWater() ? SoundEffects.ck : SoundEffects.cl);
+        return this.isElder() ? (this.isInWater() ? SoundEffects.aI : SoundEffects.aJ) : (this.isInWater() ? SoundEffects.cl : SoundEffects.cm);
     }
 
     protected SoundEffect bS() {
-        return this.isElder() ? (this.isInWater() ? SoundEffects.aG : SoundEffects.aH) : (this.isInWater() ? SoundEffects.ch : SoundEffects.ci);
+        return this.isElder() ? (this.isInWater() ? SoundEffects.aG : SoundEffects.aH) : (this.isInWater() ? SoundEffects.ci : SoundEffects.cj);
     }
 
     protected boolean playStepSound() {
@@ -190,7 +190,7 @@ public class EntityGuardian extends EntityMonster {
             if (!this.isInWater()) {
                 this.bw = 2.0F;
                 if (this.motY > 0.0D && this.bB && !this.ad()) {
-                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.cj, this.bz(), 1.0F, 1.0F, false);
+                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.ck, this.bz(), 1.0F, 1.0F, false);
                 }
 
                 this.bB = this.motY < 0.0D && this.world.d((new BlockPosition(this)).down(), false);
@@ -312,7 +312,7 @@ public class EntityGuardian extends EntityMonster {
     }
 
     protected MinecraftKey J() {
-        return this.isElder() ? LootTables.w : LootTables.v;
+        return this.isElder() ? LootTables.x : LootTables.w;
     }
 
     protected boolean s_() {

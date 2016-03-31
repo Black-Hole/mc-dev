@@ -44,15 +44,11 @@ public class PacketPlayOutPosition implements Packet<PacketListenerPlayOut> {
         packetdataserializer.writeFloat(this.d);
         packetdataserializer.writeFloat(this.e);
         packetdataserializer.writeByte(PacketPlayOutPosition.EnumPlayerTeleportFlags.a(this.f));
-        packetdataserializer.b(this.g);
+        packetdataserializer.d(this.g);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 
     public static enum EnumPlayerTeleportFlags {

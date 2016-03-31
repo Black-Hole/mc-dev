@@ -52,15 +52,15 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
             switch (PacketPlayOutPlayerInfo.SyntheticClass_1.a[this.a.ordinal()]) {
             case 1:
-                gameprofile = new GameProfile(packetdataserializer.i(), packetdataserializer.c(16));
+                gameprofile = new GameProfile(packetdataserializer.i(), packetdataserializer.e(16));
                 int l = packetdataserializer.g();
 
                 for (int i1 = 0; i1 < l; ++i1) {
-                    String s = packetdataserializer.c(32767);
-                    String s1 = packetdataserializer.c(32767);
+                    String s = packetdataserializer.e(32767);
+                    String s1 = packetdataserializer.e(32767);
 
                     if (packetdataserializer.readBoolean()) {
-                        gameprofile.getProperties().put(s, new Property(s, s1, packetdataserializer.c(32767)));
+                        gameprofile.getProperties().put(s, new Property(s, s1, packetdataserializer.e(32767)));
                     } else {
                         gameprofile.getProperties().put(s, new Property(s, s1));
                     }
@@ -101,7 +101,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.a);
-        packetdataserializer.b(this.b.size());
+        packetdataserializer.d(this.b.size());
         Iterator iterator = this.b.iterator();
 
         while (iterator.hasNext()) {
@@ -111,7 +111,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
             case 1:
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getName());
-                packetdataserializer.b(packetplayoutplayerinfo_playerinfodata.a().getProperties().size());
+                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.a().getProperties().size());
                 Iterator iterator1 = packetplayoutplayerinfo_playerinfodata.a().getProperties().values().iterator();
 
                 while (iterator1.hasNext()) {
@@ -127,8 +127,8 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
                     }
                 }
 
-                packetdataserializer.b(packetplayoutplayerinfo_playerinfodata.c().getId());
-                packetdataserializer.b(packetplayoutplayerinfo_playerinfodata.b());
+                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.c().getId());
+                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.b());
                 if (packetplayoutplayerinfo_playerinfodata.d() == null) {
                     packetdataserializer.writeBoolean(false);
                 } else {
@@ -139,12 +139,12 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
             case 2:
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
-                packetdataserializer.b(packetplayoutplayerinfo_playerinfodata.c().getId());
+                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.c().getId());
                 break;
 
             case 3:
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
-                packetdataserializer.b(packetplayoutplayerinfo_playerinfodata.b());
+                packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.b());
                 break;
 
             case 4:
@@ -170,10 +170,6 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
     public String toString() {
         return Objects.toStringHelper(this).add("action", this.a).add("entries", this.b).toString();
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 
     static class SyntheticClass_1 {

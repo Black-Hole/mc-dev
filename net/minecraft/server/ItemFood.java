@@ -7,7 +7,7 @@ public class ItemFood extends Item {
     private final float c;
     private final boolean d;
     private boolean e;
-    private MobEffect m;
+    private MobEffect f;
     private float n;
 
     public ItemFood(int i, float f, boolean flag) {
@@ -28,7 +28,7 @@ public class ItemFood extends Item {
             EntityHuman entityhuman = (EntityHuman) entityliving;
 
             entityhuman.getFoodData().a(this, itemstack);
-            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ee, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ef, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
             this.a(itemstack, world, entityhuman);
             entityhuman.b(StatisticList.b((Item) this));
         }
@@ -37,8 +37,8 @@ public class ItemFood extends Item {
     }
 
     protected void a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (!world.isClientSide && this.m != null && world.random.nextFloat() < this.n) {
-            entityhuman.addEffect(new MobEffect(this.m));
+        if (!world.isClientSide && this.f != null && world.random.nextFloat() < this.n) {
+            entityhuman.addEffect(new MobEffect(this.f));
         }
 
     }
@@ -73,7 +73,7 @@ public class ItemFood extends Item {
     }
 
     public ItemFood a(MobEffect mobeffect, float f) {
-        this.m = mobeffect;
+        this.f = mobeffect;
         this.n = f;
         return this;
     }

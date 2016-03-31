@@ -28,10 +28,6 @@ public class PacketPlayInClientCommand implements Packet<PacketListenerPlayIn> {
         return this.a;
     }
 
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
-
     public static enum EnumClientCommand {
 
         PERFORM_RESPAWN, REQUEST_STATS, OPEN_INVENTORY_ACHIEVEMENT;

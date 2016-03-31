@@ -23,8 +23,4 @@ public class PacketStatusOutPong implements Packet<PacketStatusOutListener> {
     public void a(PacketStatusOutListener packetstatusoutlistener) {
         packetstatusoutlistener.a(this);
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketStatusOutListener) packetlistener);
-    }
 }

@@ -426,6 +426,7 @@ public class SoundEffect {
         a("item.bucket.fill");
         a("item.bucket.fill_lava");
         a("item.chorus_fruit.teleport");
+        a("item.elytra.flying");
         a("item.firecharge.use");
         a("item.flintandsteel.use");
         a("item.hoe.till");

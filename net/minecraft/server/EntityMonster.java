@@ -31,11 +31,11 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     }
 
     protected SoundEffect aa() {
-        return SoundEffects.cF;
+        return SoundEffects.cG;
     }
 
     protected SoundEffect ab() {
-        return SoundEffects.cE;
+        return SoundEffects.cF;
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
@@ -43,15 +43,15 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.cC;
+        return SoundEffects.cD;
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.cB;
+        return SoundEffects.cC;
     }
 
     protected SoundEffect e(int i) {
-        return i > 4 ? SoundEffects.cA : SoundEffects.cD;
+        return i > 4 ? SoundEffects.cB : SoundEffects.cE;
     }
 
     public boolean B(Entity entity) {

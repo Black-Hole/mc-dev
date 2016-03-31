@@ -17,7 +17,7 @@ public class ItemFishingRod extends Item {
             itemstack.damage(i, entityhuman);
             entityhuman.a(enumhand);
         } else {
-            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.H, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemFishingRod.i.nextFloat() * 0.4F + 0.8F));
+            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.H, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemFishingRod.j.nextFloat() * 0.4F + 0.8F));
             if (!world.isClientSide) {
                 world.addEntity(new EntityFishingHook(world, entityhuman));
             }

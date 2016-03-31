@@ -25,8 +25,4 @@ public class PacketPlayOutServerDifficulty implements Packet<PacketListenerPlayO
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a.a());
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
-    }
 }

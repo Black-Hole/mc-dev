@@ -641,7 +641,7 @@ public abstract class Entity implements ICommandListener {
             }
 
             if (flag2 && this.fireTicks > 0) {
-                this.a(SoundEffects.bE, 0.7F, 1.6F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+                this.a(SoundEffects.bF, 0.7F, 1.6F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
                 this.fireTicks = -this.maxFireTicks;
             }
 
@@ -658,11 +658,11 @@ public abstract class Entity implements ICommandListener {
     }
 
     protected SoundEffect aa() {
-        return SoundEffects.bI;
+        return SoundEffects.bJ;
     }
 
     protected SoundEffect ab() {
-        return SoundEffects.bH;
+        return SoundEffects.bI;
     }
 
     protected void checkBlockCollisions() {

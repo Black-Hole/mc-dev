@@ -35,8 +35,4 @@ public class PacketPlayInBoatMove implements Packet<PacketListenerPlayIn> {
     public boolean b() {
         return this.b;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
 }

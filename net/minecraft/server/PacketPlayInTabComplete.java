@@ -12,7 +12,7 @@ public class PacketPlayInTabComplete implements Packet<PacketListenerPlayIn> {
     public PacketPlayInTabComplete() {}
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.c(32767);
+        this.a = packetdataserializer.e(32767);
         this.b = packetdataserializer.readBoolean();
         boolean flag = packetdataserializer.readBoolean();
 
@@ -48,9 +48,5 @@ public class PacketPlayInTabComplete implements Packet<PacketListenerPlayIn> {
 
     public boolean c() {
         return this.b;
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
     }
 }

@@ -125,10 +125,6 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
-    }
-
     static class SyntheticClass_1 {
 
         static final int[] a = new int[PacketPlayOutBoss.Action.values().length];

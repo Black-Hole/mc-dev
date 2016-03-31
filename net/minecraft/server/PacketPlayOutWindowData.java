@@ -31,8 +31,4 @@ public class PacketPlayOutWindowData implements Packet<PacketListenerPlayOut> {
         packetdataserializer.writeShort(this.b);
         packetdataserializer.writeShort(this.c);
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
-    }
 }

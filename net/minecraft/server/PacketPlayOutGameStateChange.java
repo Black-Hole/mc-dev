@@ -28,8 +28,4 @@ public class PacketPlayOutGameStateChange implements Packet<PacketListenerPlayOu
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
-    }
 }

@@ -89,7 +89,7 @@ public class PlayerSelector {
                     }
                 }
 
-                return a((List) arraylist, map, icommandlistener, oclass, s1, blockposition);
+                return a((List) arraylist, map, icommandlistener, oclass, s1, vec3d);
             }
         } else {
             return Collections.emptyList();
@@ -505,7 +505,7 @@ public class PlayerSelector {
         return arraylist;
     }
 
-    private static <T extends Entity> List<T> a(List<T> list, Map<String, String> map, ICommandListener icommandlistener, Class<? extends T> oclass, String s, final BlockPosition blockposition) {
+    private static <T extends Entity> List<T> a(List<T> list, Map<String, String> map, ICommandListener icommandlistener, Class<? extends T> oclass, String s, final Vec3D vec3d) {
         int i = a(map, "c", !s.equals("a") && !s.equals("e") ? 1 : 0);
 
         if (!s.equals("p") && !s.equals("a") && !s.equals("e")) {
@@ -515,7 +515,7 @@ public class PlayerSelector {
         } else {
             Collections.sort((List) list, new Comparator() {
                 public int a(Entity entity, Entity entity1) {
-                    return ComparisonChain.start().compare(entity.c(blockposition), entity1.c(blockposition)).result();
+                    return ComparisonChain.start().compare(entity.e(vec3d.x, vec3d.y, vec3d.z), entity1.e(vec3d.x, vec3d.y, vec3d.z)).result();
                 }
 
                 public int compare(Object object, Object object1) {

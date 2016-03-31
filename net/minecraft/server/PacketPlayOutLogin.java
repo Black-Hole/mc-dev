@@ -34,10 +34,10 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
         int i = short0 & -9;
 
         this.c = WorldSettings.EnumGamemode.getById(i);
-        this.d = packetdataserializer.readByte();
+        this.d = packetdataserializer.readInt();
         this.e = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
         this.f = packetdataserializer.readUnsignedByte();
-        this.g = WorldType.getType(packetdataserializer.c(16));
+        this.g = WorldType.getType(packetdataserializer.e(16));
         if (this.g == null) {
             this.g = WorldType.NORMAL;
         }
@@ -54,7 +54,7 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
         }
 
         packetdataserializer.writeByte(i);
-        packetdataserializer.writeByte(this.d);
+        packetdataserializer.writeInt(this.d);
         packetdataserializer.writeByte(this.e.a());
         packetdataserializer.writeByte(this.f);
         packetdataserializer.a(this.g.name());
@@ -63,9 +63,5 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

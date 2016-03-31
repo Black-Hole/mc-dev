@@ -66,19 +66,19 @@ public class EntityGhast extends EntityFlying implements IMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.bJ;
-    }
-
-    protected SoundEffect bR() {
-        return SoundEffects.bL;
-    }
-
-    protected SoundEffect bS() {
         return SoundEffects.bK;
     }
 
+    protected SoundEffect bR() {
+        return SoundEffects.bM;
+    }
+
+    protected SoundEffect bS() {
+        return SoundEffects.bL;
+    }
+
     protected MinecraftKey J() {
-        return LootTables.ae;
+        return LootTables.af;
     }
 
     protected float cd() {

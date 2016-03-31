@@ -65,57 +65,57 @@ public class EntitySheep extends EntityAnimal {
 
     protected MinecraftKey J() {
         if (this.isSheared()) {
-            return LootTables.K;
+            return LootTables.L;
         } else {
             switch (EntitySheep.SyntheticClass_1.a[this.getColor().ordinal()]) {
             case 1:
             default:
-                return LootTables.L;
-
-            case 2:
                 return LootTables.M;
 
-            case 3:
+            case 2:
                 return LootTables.N;
 
-            case 4:
+            case 3:
                 return LootTables.O;
 
-            case 5:
+            case 4:
                 return LootTables.P;
 
-            case 6:
+            case 5:
                 return LootTables.Q;
 
-            case 7:
+            case 6:
                 return LootTables.R;
 
-            case 8:
+            case 7:
                 return LootTables.S;
 
-            case 9:
+            case 8:
                 return LootTables.T;
 
-            case 10:
+            case 9:
                 return LootTables.U;
 
-            case 11:
+            case 10:
                 return LootTables.V;
 
-            case 12:
+            case 11:
                 return LootTables.W;
 
-            case 13:
+            case 12:
                 return LootTables.X;
 
-            case 14:
+            case 13:
                 return LootTables.Y;
 
-            case 15:
+            case 14:
                 return LootTables.Z;
 
-            case 16:
+            case 15:
                 return LootTables.aa;
+
+            case 16:
+                return LootTables.ab;
             }
         }
     }
@@ -136,7 +136,7 @@ public class EntitySheep extends EntityAnimal {
             }
 
             itemstack.damage(1, entityhuman);
-            this.a(SoundEffects.eO, 1.0F, 1.0F);
+            this.a(SoundEffects.eP, 1.0F, 1.0F);
         }
 
         return super.a(entityhuman, enumhand, itemstack);
@@ -155,19 +155,19 @@ public class EntitySheep extends EntityAnimal {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.eL;
-    }
-
-    protected SoundEffect bR() {
-        return SoundEffects.eN;
-    }
-
-    protected SoundEffect bS() {
         return SoundEffects.eM;
     }
 
+    protected SoundEffect bR() {
+        return SoundEffects.eO;
+    }
+
+    protected SoundEffect bS() {
+        return SoundEffects.eN;
+    }
+
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.eP, 0.15F, 1.0F);
+        this.a(SoundEffects.eQ, 0.15F, 1.0F);
     }
 
     public EnumColor getColor() {

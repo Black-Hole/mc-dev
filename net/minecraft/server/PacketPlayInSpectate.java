@@ -28,8 +28,4 @@ public class PacketPlayInSpectate implements Packet<PacketListenerPlayIn> {
     public Entity a(WorldServer worldserver) {
         return worldserver.getEntity(this.a);
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
 }

@@ -76,8 +76,4 @@ public class BlockStateEnum<T extends Enum<T> & INamable> extends BlockState<T> 
     public static <T extends Enum<T> & INamable> BlockStateEnum<T> a(String s, Class<T> oclass, Collection<T> collection) {
         return new BlockStateEnum(s, oclass, collection);
     }
-
-    public String a(Comparable comparable) {
-        return this.a((Enum) comparable);
-    }
 }

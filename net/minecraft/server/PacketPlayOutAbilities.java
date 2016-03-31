@@ -100,8 +100,4 @@ public class PacketPlayOutAbilities implements Packet<PacketListenerPlayOut> {
     public void b(float f) {
         this.f = f;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
-    }
 }

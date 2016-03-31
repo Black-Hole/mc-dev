@@ -58,8 +58,4 @@ public class PacketPlayInUseItem implements Packet<PacketListenerPlayIn> {
     public float f() {
         return this.f;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
 }

@@ -55,8 +55,4 @@ public class PacketPlayInSteerVehicle implements Packet<PacketListenerPlayIn> {
     public boolean d() {
         return this.d;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
 }

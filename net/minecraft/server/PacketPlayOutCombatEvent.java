@@ -54,10 +54,10 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.a);
         if (this.a == PacketPlayOutCombatEvent.EnumCombatEventType.END_COMBAT) {
-            packetdataserializer.b(this.d);
+            packetdataserializer.d(this.d);
             packetdataserializer.writeInt(this.c);
         } else if (this.a == PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED) {
-            packetdataserializer.b(this.b);
+            packetdataserializer.d(this.b);
             packetdataserializer.writeInt(this.c);
             packetdataserializer.a(this.e);
         }
@@ -66,10 +66,6 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 
     static class SyntheticClass_1 {

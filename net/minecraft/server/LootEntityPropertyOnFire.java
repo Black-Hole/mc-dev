@@ -35,9 +35,5 @@ public class LootEntityPropertyOnFire implements LootEntityProperty {
         public LootEntityProperty a(JsonElement jsonelement, JsonDeserializationContext jsondeserializationcontext) {
             return this.b(jsonelement, jsondeserializationcontext);
         }
-
-        public JsonElement a(LootEntityProperty lootentityproperty, JsonSerializationContext jsonserializationcontext) {
-            return this.a((LootEntityPropertyOnFire) lootentityproperty, jsonserializationcontext);
-        }
     }
 }

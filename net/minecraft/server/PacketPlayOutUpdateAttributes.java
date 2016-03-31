@@ -32,7 +32,7 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
         int i = packetdataserializer.readInt();
 
         for (int j = 0; j < i; ++j) {
-            String s = packetdataserializer.c(64);
+            String s = packetdataserializer.e(64);
             double d0 = packetdataserializer.readDouble();
             ArrayList arraylist = Lists.newArrayList();
             int k = packetdataserializer.g();
@@ -49,7 +49,7 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.b(this.a);
+        packetdataserializer.d(this.a);
         packetdataserializer.writeInt(this.b.size());
         Iterator iterator = this.b.iterator();
 
@@ -58,7 +58,7 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
 
             packetdataserializer.a(packetplayoutupdateattributes_attributesnapshot.a());
             packetdataserializer.writeDouble(packetplayoutupdateattributes_attributesnapshot.b());
-            packetdataserializer.b(packetplayoutupdateattributes_attributesnapshot.c().size());
+            packetdataserializer.d(packetplayoutupdateattributes_attributesnapshot.c().size());
             Iterator iterator1 = packetplayoutupdateattributes_attributesnapshot.c().iterator();
 
             while (iterator1.hasNext()) {
@@ -74,10 +74,6 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 
     public class AttributeSnapshot {

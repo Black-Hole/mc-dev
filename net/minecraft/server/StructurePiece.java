@@ -345,7 +345,7 @@ public abstract class StructurePiece {
         }
     }
 
-    protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, EnumDirection enumdirection, List<StructurePieceTreasure> list, int l) {
+    protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, EnumDirection enumdirection, MinecraftKey minecraftkey) {
         BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
 
         if (structureboundingbox.b((BaseBlockPosition) blockposition) && world.getType(blockposition).getBlock() != Blocks.DISPENSER) {
@@ -353,7 +353,7 @@ public abstract class StructurePiece {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityDispenser) {
-                StructurePieceTreasure.a(random, list, (TileEntityDispenser) tileentity, l);
+                ((TileEntityDispenser) tileentity).a(minecraftkey, random.nextLong());
             }
 
             return true;

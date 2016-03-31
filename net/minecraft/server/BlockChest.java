@@ -317,6 +317,10 @@ public class BlockChest extends BlockTileEntity {
     }
 
     public ITileInventory c(World world, BlockPosition blockposition) {
+        return this.a(world, blockposition, false);
+    }
+
+    public ITileInventory a(World world, BlockPosition blockposition, boolean flag) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (!(tileentity instanceof TileEntityChest)) {
@@ -324,7 +328,7 @@ public class BlockChest extends BlockTileEntity {
         } else {
             Object object = (TileEntityChest) tileentity;
 
-            if (this.e(world, blockposition)) {
+            if (!flag && this.e(world, blockposition)) {
                 return null;
             } else {
                 Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();

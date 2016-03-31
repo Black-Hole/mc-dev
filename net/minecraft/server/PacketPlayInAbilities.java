@@ -100,8 +100,4 @@ public class PacketPlayInAbilities implements Packet<PacketListenerPlayIn> {
     public void b(float f) {
         this.f = f;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
 }

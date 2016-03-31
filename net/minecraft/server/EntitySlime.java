@@ -175,7 +175,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         int i = this.getSize();
 
         if (this.hasLineOfSight(entityliving) && this.h(entityliving) < 0.6D * (double) i * 0.6D * (double) i && entityliving.damageEntity(DamageSource.mobAttack(this), (float) this.cX())) {
-            this.a(SoundEffects.fp, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+            this.a(SoundEffects.fq, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             this.a((EntityLiving) this, (Entity) entityliving);
         }
 
@@ -194,15 +194,15 @@ public class EntitySlime extends EntityInsentient implements IMonster {
     }
 
     protected SoundEffect bR() {
-        return this.db() ? SoundEffects.fD : SoundEffects.fu;
+        return this.db() ? SoundEffects.fE : SoundEffects.fv;
     }
 
     protected SoundEffect bS() {
-        return this.db() ? SoundEffects.fC : SoundEffects.fr;
+        return this.db() ? SoundEffects.fD : SoundEffects.fs;
     }
 
     protected SoundEffect cY() {
-        return this.db() ? SoundEffects.fF : SoundEffects.fx;
+        return this.db() ? SoundEffects.fG : SoundEffects.fy;
     }
 
     protected Item getLoot() {
@@ -210,7 +210,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
     }
 
     protected MinecraftKey J() {
-        return this.getSize() == 1 ? LootTables.ac : LootTables.a;
+        return this.getSize() == 1 ? LootTables.ad : LootTables.a;
     }
 
     public boolean cF() {
@@ -267,7 +267,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
     }
 
     protected SoundEffect cZ() {
-        return this.db() ? SoundEffects.fE : SoundEffects.fv;
+        return this.db() ? SoundEffects.fF : SoundEffects.fw;
     }
 
     static class PathfinderGoalSlimeIdle extends PathfinderGoal {

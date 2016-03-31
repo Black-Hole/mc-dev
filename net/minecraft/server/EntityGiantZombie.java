@@ -23,6 +23,6 @@ public class EntityGiantZombie extends EntityMonster {
     }
 
     protected MinecraftKey J() {
-        return LootTables.s;
+        return LootTables.t;
     }
 }

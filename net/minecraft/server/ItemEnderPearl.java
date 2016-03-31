@@ -12,7 +12,7 @@ public class ItemEnderPearl extends Item {
             --itemstack.count;
         }
 
-        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.be, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderPearl.i.nextFloat() * 0.4F + 0.8F));
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bf, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderPearl.j.nextFloat() * 0.4F + 0.8F));
         entityhuman.da().a(this, 20);
         if (!world.isClientSide) {
             EntityEnderPearl entityenderpearl = new EntityEnderPearl(world, entityhuman);

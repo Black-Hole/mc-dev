@@ -58,8 +58,4 @@ public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
     public InventoryClickType f() {
         return this.shift;
     }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayIn) packetlistener);
-    }
 }

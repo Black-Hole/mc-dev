@@ -15,7 +15,7 @@ public class ItemFireball extends Item {
                 return EnumInteractionResult.FAIL;
             } else {
                 if (world.getType(blockposition).getMaterial() == Material.AIR) {
-                    world.a((EntityHuman) null, blockposition, SoundEffects.bl, SoundCategory.BLOCKS, 1.0F, (ItemFireball.i.nextFloat() - ItemFireball.i.nextFloat()) * 0.2F + 1.0F);
+                    world.a((EntityHuman) null, blockposition, SoundEffects.bm, SoundCategory.BLOCKS, 1.0F, (ItemFireball.j.nextFloat() - ItemFireball.j.nextFloat()) * 0.2F + 1.0F);
                     world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
                 }
 

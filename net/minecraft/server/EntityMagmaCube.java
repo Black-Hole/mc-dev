@@ -38,7 +38,7 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     protected MinecraftKey J() {
-        return !this.db() ? LootTables.ad : LootTables.a;
+        return !this.db() ? LootTables.ae : LootTables.a;
     }
 
     public boolean isBurning() {
@@ -74,18 +74,18 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     protected SoundEffect bR() {
-        return this.db() ? SoundEffects.fA : SoundEffects.dk;
+        return this.db() ? SoundEffects.fB : SoundEffects.dl;
     }
 
     protected SoundEffect bS() {
-        return this.db() ? SoundEffects.fz : SoundEffects.dj;
+        return this.db() ? SoundEffects.fA : SoundEffects.dk;
     }
 
     protected SoundEffect cY() {
-        return this.db() ? SoundEffects.fB : SoundEffects.dm;
+        return this.db() ? SoundEffects.fC : SoundEffects.dn;
     }
 
     protected SoundEffect cZ() {
-        return SoundEffects.dl;
+        return SoundEffects.dm;
     }
 }

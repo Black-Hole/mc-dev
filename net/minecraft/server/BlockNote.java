@@ -5,7 +5,7 @@ import java.util.List;
 
 public class BlockNote extends BlockTileEntity {
 
-    private static final List<SoundEffect> a = Lists.newArrayList(new SoundEffect[] { SoundEffects.dJ, SoundEffects.dH, SoundEffects.dM, SoundEffects.dK, SoundEffects.dI});
+    private static final List<SoundEffect> a = Lists.newArrayList(new SoundEffect[] { SoundEffects.dK, SoundEffects.dI, SoundEffects.dN, SoundEffects.dL, SoundEffects.dJ});
 
     public BlockNote() {
         super(Material.WOOD);

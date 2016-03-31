@@ -131,7 +131,7 @@ public class BlockLever extends Block {
             world.setTypeAndData(blockposition, iblockdata, 3);
             float f3 = ((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue() ? 0.6F : 0.5F;
 
-            world.a((EntityHuman) null, blockposition, SoundEffects.df, SoundCategory.BLOCKS, 0.3F, f3);
+            world.a((EntityHuman) null, blockposition, SoundEffects.dg, SoundCategory.BLOCKS, 0.3F, f3);
             world.applyPhysics(blockposition, this);
             EnumDirection enumdirection1 = ((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).c();
 

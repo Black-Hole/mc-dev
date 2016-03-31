@@ -38,7 +38,7 @@ public class PacketPlayOutNamedSoundEffect implements Packet<PacketListenerPlayO
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.b(SoundEffect.a.a((Object) this.a));
+        packetdataserializer.d(SoundEffect.a.a((Object) this.a));
         packetdataserializer.a((Enum) this.b);
         packetdataserializer.writeInt(this.c);
         packetdataserializer.writeInt(this.d);
@@ -49,9 +49,5 @@ public class PacketPlayOutNamedSoundEffect implements Packet<PacketListenerPlayO
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 }

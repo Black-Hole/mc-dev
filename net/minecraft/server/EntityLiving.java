@@ -111,6 +111,7 @@ public abstract class EntityLiving extends Entity {
         this.getAttributeMap().b(GenericAttributes.c);
         this.getAttributeMap().b(GenericAttributes.MOVEMENT_SPEED);
         this.getAttributeMap().b(GenericAttributes.g);
+        this.getAttributeMap().b(GenericAttributes.h);
     }
 
     protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {
@@ -149,7 +150,11 @@ public abstract class EntityLiving extends Entity {
                 double d0 = this.world.getWorldBorder().a((Entity) this) + this.world.getWorldBorder().getDamageBuffer();
 
                 if (d0 < 0.0D) {
-                    this.damageEntity(DamageSource.STUCK, (float) Math.max(1, MathHelper.floor(-d0 * this.world.getWorldBorder().getDamageAmount())));
+                    double d1 = this.world.getWorldBorder().getDamageAmount();
+
+                    if (d1 > 0.0D) {
+                        this.damageEntity(DamageSource.STUCK, (float) Math.max(1, MathHelper.floor(-d0 * d1)));
+                    }
                 }
             }
         }
@@ -781,7 +786,7 @@ public abstract class EntityLiving extends Entity {
     }
 
     public void b(ItemStack itemstack) {
-        this.a(SoundEffects.cT, 0.8F, 0.8F + this.world.random.nextFloat() * 0.4F);
+        this.a(SoundEffects.cU, 0.8F, 0.8F + this.world.random.nextFloat() * 0.4F);
 
         for (int i = 0; i < 5; ++i) {
             Vec3D vec3d = new Vec3D(((double) this.random.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
@@ -860,15 +865,15 @@ public abstract class EntityLiving extends Entity {
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.bF;
+        return SoundEffects.bG;
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.bA;
+        return SoundEffects.bB;
     }
 
     protected SoundEffect e(int i) {
-        return i > 4 ? SoundEffects.by : SoundEffects.bG;
+        return i > 4 ? SoundEffects.bz : SoundEffects.bH;
     }
 
     protected void dropDeathLoot(boolean flag, int i) {}
@@ -941,7 +946,7 @@ public abstract class EntityLiving extends Entity {
     protected float applyArmorModifier(DamageSource damagesource, float f) {
         if (!damagesource.ignoresArmor()) {
             this.damageArmor(f);
-            f = CombatMath.a(f, (float) this.getArmorStrength());
+            f = CombatMath.a(f, (float) this.getArmorStrength(), (float) this.getAttributeInstance(GenericAttributes.h).getValue());
         }
 
         return f;
@@ -966,7 +971,7 @@ public abstract class EntityLiving extends Entity {
             } else {
                 i = EnchantmentManager.a(this.getArmorItems(), damagesource);
                 if (i > 0) {
-                    f = CombatMath.b(f, (float) i);
+                    f = CombatMath.a(f, (float) i);
                 }
 
                 return f;
@@ -1887,7 +1892,7 @@ public abstract class EntityLiving extends Entity {
     protected void a(ItemStack itemstack, int i) {
         if (itemstack != null && this.cs()) {
             if (itemstack.m() == EnumAnimation.DRINK) {
-                this.a(SoundEffects.bB, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                this.a(SoundEffects.bC, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
             }
 
             if (itemstack.m() == EnumAnimation.EAT) {
@@ -1909,7 +1914,7 @@ public abstract class EntityLiving extends Entity {
                     }
                 }
 
-                this.a(SoundEffects.bC, 0.5F + 0.5F * (float) this.random.nextInt(2), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                this.a(SoundEffects.bD, 0.5F + 0.5F * (float) this.random.nextInt(2), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             }
 
         }

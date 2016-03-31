@@ -53,7 +53,7 @@ public class EntityPigZombie extends EntityZombie {
         }
 
         if (this.soundDelay > 0 && --this.soundDelay == 0) {
-            this.a(SoundEffects.hr, this.cd() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
+            this.a(SoundEffects.hs, this.cd() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
         }
 
         if (this.angerLevel > 0 && this.hurtBy != null && this.getLastDamager() == null) {
@@ -132,19 +132,19 @@ public class EntityPigZombie extends EntityZombie {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.hq;
+        return SoundEffects.hr;
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.ht;
+        return SoundEffects.hu;
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.hs;
+        return SoundEffects.ht;
     }
 
     protected MinecraftKey J() {
-        return LootTables.ai;
+        return LootTables.aj;
     }
 
     public boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {

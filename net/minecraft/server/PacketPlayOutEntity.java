@@ -24,7 +24,7 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.b(this.a);
+        packetdataserializer.d(this.a);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
@@ -33,10 +33,6 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
 
     public String toString() {
         return "Entity_" + super.toString();
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 
     public static class PacketPlayOutEntityLook extends PacketPlayOutEntity {
@@ -66,10 +62,6 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
             packetdataserializer.writeByte(this.f);
             packetdataserializer.writeBoolean(this.g);
         }
-
-        public void a(PacketListener packetlistener) {
-            super.a((PacketListenerPlayOut) packetlistener);
-        }
     }
 
     public static class PacketPlayOutRelEntityMove extends PacketPlayOutEntity {
@@ -98,10 +90,6 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
             packetdataserializer.writeShort(this.c);
             packetdataserializer.writeShort(this.d);
             packetdataserializer.writeBoolean(this.g);
-        }
-
-        public void a(PacketListener packetlistener) {
-            super.a((PacketListenerPlayOut) packetlistener);
         }
     }
 
@@ -140,10 +128,6 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
             packetdataserializer.writeByte(this.e);
             packetdataserializer.writeByte(this.f);
             packetdataserializer.writeBoolean(this.g);
-        }
-
-        public void a(PacketListener packetlistener) {
-            super.a((PacketListenerPlayOut) packetlistener);
         }
     }
 }

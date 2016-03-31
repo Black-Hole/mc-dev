@@ -385,13 +385,11 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             LogManager.getLogger().warn("Tried to assign a mutable BlockPos to tick data...", new Error(blockposition.getClass().toString()));
         }
 
-        byte b0 = 0;
         Material material = block.getBlockData().getMaterial();
 
         if (this.d && material != Material.AIR) {
             if (block.s()) {
-                b0 = 8;
-                if (this.areChunksLoadedBetween(blockposition.a(-b0, -b0, -b0), blockposition.a(b0, b0, b0))) {
+                if (this.areChunksLoadedBetween(blockposition.a(-8, -8, -8), blockposition.a(8, 8, 8))) {
                     IBlockData iblockdata = this.getType(blockposition);
 
                     if (iblockdata.getMaterial() != Material.AIR && iblockdata.getBlock() == block) {
@@ -407,7 +405,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
         NextTickListEntry nextticklistentry = new NextTickListEntry(blockposition, block);
 
-        if (this.areChunksLoadedBetween(blockposition.a(-b0, -b0, -b0), blockposition.a(b0, b0, b0))) {
+        if (this.isLoaded(blockposition)) {
             if (material != Material.AIR) {
                 nextticklistentry.a((long) i + this.worldData.getTime());
                 nextticklistentry.a(j);
@@ -517,8 +515,8 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             if (i != this.nextTickListHash.size()) {
                 throw new IllegalStateException("TickNextTick list out of synch");
             } else {
-                if (i > 1000) {
-                    i = 1000;
+                if (i > 65536) {
+                    i = 65536;
                 }
 
                 this.methodProfiler.a("cleaning");

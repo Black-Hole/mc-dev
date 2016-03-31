@@ -285,7 +285,7 @@ public class EntityShulkerBullet extends Entity {
     protected void a(MovingObjectPosition movingobjectposition) {
         if (movingobjectposition.entity == null) {
             ((WorldServer) this.world).a(EnumParticle.EXPLOSION_LARGE, this.locX, this.locY, this.locZ, 2, 0.2D, 0.2D, 0.2D, 0.0D, new int[0]);
-            this.a(SoundEffects.eU, 1.0F, 1.0F);
+            this.a(SoundEffects.eV, 1.0F, 1.0F);
         } else {
             boolean flag = movingobjectposition.entity.damageEntity(DamageSource.a(this, this.shooter).b(), 4.0F);
 
@@ -306,7 +306,7 @@ public class EntityShulkerBullet extends Entity {
 
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (!this.world.isClientSide) {
-            this.a(SoundEffects.eV, 1.0F, 1.0F);
+            this.a(SoundEffects.eW, 1.0F, 1.0F);
             ((WorldServer) this.world).a(EnumParticle.CRIT, this.locX, this.locY, this.locZ, 15, 0.2D, 0.2D, 0.2D, 0.0D, new int[0]);
             this.die();
         }

@@ -86,11 +86,11 @@ public class PacketPlayOutWorldBorder implements Packet<PacketListenerPlayOut> {
             break;
 
         case 4:
-            packetdataserializer.b(this.i);
+            packetdataserializer.d(this.i);
             break;
 
         case 5:
-            packetdataserializer.b(this.h);
+            packetdataserializer.d(this.h);
             break;
 
         case 6:
@@ -99,19 +99,15 @@ public class PacketPlayOutWorldBorder implements Packet<PacketListenerPlayOut> {
             packetdataserializer.writeDouble(this.f);
             packetdataserializer.writeDouble(this.e);
             packetdataserializer.b(this.g);
-            packetdataserializer.b(this.b);
-            packetdataserializer.b(this.i);
-            packetdataserializer.b(this.h);
+            packetdataserializer.d(this.b);
+            packetdataserializer.d(this.i);
+            packetdataserializer.d(this.h);
         }
 
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketListener packetlistener) {
-        this.a((PacketListenerPlayOut) packetlistener);
     }
 
     static class SyntheticClass_1 {

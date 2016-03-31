@@ -22,14 +22,10 @@ public class DataWatcherRegistry {
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (Byte) object);
-        }
     };
     public static final DataWatcherSerializer<Integer> b = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, Integer integer) {
-            packetdataserializer.b(integer.intValue());
+            packetdataserializer.d(integer.intValue());
         }
 
         public Integer b(PacketDataSerializer packetdataserializer) {
@@ -42,10 +38,6 @@ public class DataWatcherRegistry {
 
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
-        }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (Integer) object);
         }
     };
     public static final DataWatcherSerializer<Float> c = new DataWatcherSerializer() {
@@ -64,10 +56,6 @@ public class DataWatcherRegistry {
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (Float) object);
-        }
     };
     public static final DataWatcherSerializer<String> d = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, String s) {
@@ -75,7 +63,7 @@ public class DataWatcherRegistry {
         }
 
         public String b(PacketDataSerializer packetdataserializer) {
-            return packetdataserializer.c(32767);
+            return packetdataserializer.e(32767);
         }
 
         public DataWatcherObject<String> a(int i) {
@@ -84,10 +72,6 @@ public class DataWatcherRegistry {
 
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
-        }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (String) object);
         }
     };
     public static final DataWatcherSerializer<IChatBaseComponent> e = new DataWatcherSerializer() {
@@ -106,10 +90,6 @@ public class DataWatcherRegistry {
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (IChatBaseComponent) object);
-        }
     };
     public static final DataWatcherSerializer<Optional<ItemStack>> f = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, Optional<ItemStack> optional) {
@@ -127,17 +107,13 @@ public class DataWatcherRegistry {
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (Optional) object);
-        }
     };
     public static final DataWatcherSerializer<Optional<IBlockData>> g = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, Optional<IBlockData> optional) {
             if (optional.isPresent()) {
-                packetdataserializer.b(Block.getCombinedId((IBlockData) optional.get()));
+                packetdataserializer.d(Block.getCombinedId((IBlockData) optional.get()));
             } else {
-                packetdataserializer.b(0);
+                packetdataserializer.d(0);
             }
 
         }
@@ -155,10 +131,6 @@ public class DataWatcherRegistry {
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (Optional) object);
-        }
     };
     public static final DataWatcherSerializer<Boolean> h = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, Boolean obool) {
@@ -175,10 +147,6 @@ public class DataWatcherRegistry {
 
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
-        }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (Boolean) object);
         }
     };
     public static final DataWatcherSerializer<Vector3f> i = new DataWatcherSerializer() {
@@ -199,10 +167,6 @@ public class DataWatcherRegistry {
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (Vector3f) object);
-        }
     };
     public static final DataWatcherSerializer<BlockPosition> j = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, BlockPosition blockposition) {
@@ -219,10 +183,6 @@ public class DataWatcherRegistry {
 
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
-        }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (BlockPosition) object);
         }
     };
     public static final DataWatcherSerializer<Optional<BlockPosition>> k = new DataWatcherSerializer() {
@@ -245,10 +205,6 @@ public class DataWatcherRegistry {
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (Optional) object);
-        }
     };
     public static final DataWatcherSerializer<EnumDirection> l = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, EnumDirection enumdirection) {
@@ -265,10 +221,6 @@ public class DataWatcherRegistry {
 
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
-        }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (EnumDirection) object);
         }
     };
     public static final DataWatcherSerializer<Optional<UUID>> m = new DataWatcherSerializer() {
@@ -290,10 +242,6 @@ public class DataWatcherRegistry {
 
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
-        }
-
-        public void a(PacketDataSerializer packetdataserializer, Object object) {
-            this.a(packetdataserializer, (Optional) object);
         }
     };
 

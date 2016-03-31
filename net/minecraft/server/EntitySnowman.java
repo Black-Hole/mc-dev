@@ -62,7 +62,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     }
 
     protected MinecraftKey J() {
-        return LootTables.z;
+        return LootTables.A;
     }
 
     public void a(EntityLiving entityliving, float f) {
@@ -74,7 +74,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         float f1 = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
 
         entitysnowball.shoot(d1, d2 + (double) f1, d3, 1.6F, 12.0F);
-        this.a(SoundEffects.fK, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.a(SoundEffects.fL, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(entitysnowball);
     }
 
@@ -107,14 +107,14 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.fH;
+        return SoundEffects.fI;
     }
 
     protected SoundEffect bR() {
-        return SoundEffects.fJ;
+        return SoundEffects.fK;
     }
 
     protected SoundEffect bS() {
-        return SoundEffects.fI;
+        return SoundEffects.fJ;
     }
 }
