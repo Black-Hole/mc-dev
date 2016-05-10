@@ -3,13 +3,14 @@ package net.minecraft.server;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class EntityWitch extends EntityMonster implements IRangedEntity {
 
     private static final UUID a = UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E");
     private static final AttributeModifier b = (new AttributeModifier(EntityWitch.a, "Drinking speed penalty", -0.25D, 0)).a(false);
     private static final DataWatcherObject<Boolean> c = DataWatcher.a(EntityWitch.class, DataWatcherRegistry.h);
-    private int bv;
+    private int bw;
 
     public EntityWitch(World world) {
         super(world);
@@ -35,11 +36,11 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
         return SoundEffects.gA;
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.gD;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.gB;
     }
 
@@ -60,7 +61,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
     public void n() {
         if (!this.world.isClientSide) {
             if (this.o()) {
-                if (this.bv-- <= 0) {
+                if (this.bw-- <= 0) {
                     this.a(false);
                     ItemStack itemstack = this.getItemInMainHand();
 
@@ -96,9 +97,9 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
 
                 if (potionregistry != null) {
                     this.setSlot(EnumItemSlot.MAINHAND, PotionUtil.a(new ItemStack(Items.POTION), potionregistry));
-                    this.bv = this.getItemInMainHand().l();
+                    this.bw = this.getItemInMainHand().l();
                     this.a(true);
-                    this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.gC, this.bz(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+                    this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.gC, this.bA(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
                     AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
                     attributeinstance.c(EntityWitch.b);
@@ -127,6 +128,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
         return f;
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.o;
     }
@@ -152,7 +154,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
 
             entitypotion.pitch -= -20.0F;
             entitypotion.shoot(d1, d2 + (double) (f1 * 0.2F), d3, 0.75F, 8.0F);
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.gE, this.bz(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.gE, this.bA(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
             this.world.addEntity(entitypotion);
         }
     }

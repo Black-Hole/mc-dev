@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 
 public enum EnumChatFormat {
 
@@ -59,14 +60,17 @@ public enum EnumChatFormat {
         return this.B;
     }
 
-    public static String a(String s) {
+    @Nullable
+    public static String a(@Nullable String s) {
         return s == null ? null : EnumChatFormat.x.matcher(s).replaceAll("");
     }
 
-    public static EnumChatFormat b(String s) {
+    @Nullable
+    public static EnumChatFormat b(@Nullable String s) {
         return s == null ? null : (EnumChatFormat) EnumChatFormat.w.get(c(s));
     }
 
+    @Nullable
     public static EnumChatFormat a(int i) {
         if (i < 0) {
             return EnumChatFormat.RESET;

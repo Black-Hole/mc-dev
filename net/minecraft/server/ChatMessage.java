@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import java.util.Arrays;
@@ -15,6 +16,7 @@ public class ChatMessage extends ChatBaseComponent {
     private final Object[] e;
     private final Object f = new Object();
     private long g = -1L;
+    @VisibleForTesting
     List<IChatBaseComponent> b = Lists.newArrayList();
     public static final Pattern c = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
 
@@ -34,6 +36,7 @@ public class ChatMessage extends ChatBaseComponent {
 
     }
 
+    @VisibleForTesting
     synchronized void g() {
         Object object = this.f;
 

@@ -71,12 +71,12 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
         super.y();
     }
 
-    public void b() {
+    public void d() {
         ++this.g;
         this.world.playBlockAction(this.position, Blocks.ENDER_CHEST, 1, this.g);
     }
 
-    public void d() {
+    public void e() {
         --this.g;
         this.world.playBlockAction(this.position, Blocks.ENDER_CHEST, 1, this.g);
     }

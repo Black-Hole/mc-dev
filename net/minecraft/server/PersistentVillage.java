@@ -87,7 +87,7 @@ public class PersistentVillage extends PersistentBase {
 
         while (iterator.hasNext()) {
             Village village1 = (Village) iterator.next();
-            double d1 = village1.a().k(blockposition);
+            double d1 = village1.a().n(blockposition);
 
             if (d1 < d0) {
                 float f = (float) (i + village1.b());
@@ -244,7 +244,7 @@ public class PersistentVillage extends PersistentBase {
 
     }
 
-    public void b(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound b(NBTTagCompound nbttagcompound) {
         nbttagcompound.setInt("Tick", this.time);
         NBTTagList nbttaglist = new NBTTagList();
         Iterator iterator = this.villages.iterator();
@@ -258,6 +258,7 @@ public class PersistentVillage extends PersistentBase {
         }
 
         nbttagcompound.set("Villages", nbttaglist);
+        return nbttagcompound;
     }
 
     public static String a(WorldProvider worldprovider) {

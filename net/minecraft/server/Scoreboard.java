@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 public class Scoreboard {
 
@@ -21,6 +22,7 @@ public class Scoreboard {
 
     public Scoreboard() {}
 
+    @Nullable
     public ScoreboardObjective getObjective(String s) {
         return (ScoreboardObjective) this.objectivesByName.get(s);
     }
@@ -196,6 +198,7 @@ public class Scoreboard {
         this.displaySlots[i] = scoreboardobjective;
     }
 
+    @Nullable
     public ScoreboardObjective getObjectiveForSlot(int i) {
         return this.displaySlots[i];
     }
@@ -280,6 +283,7 @@ public class Scoreboard {
         return this.teamsByName.values();
     }
 
+    @Nullable
     public ScoreboardTeam getPlayerTeam(String s) {
         return (ScoreboardTeam) this.teamsByPlayer.get(s);
     }
@@ -361,7 +365,7 @@ public class Scoreboard {
 
     public void a(Entity entity) {
         if (entity != null && !(entity instanceof EntityHuman) && !entity.isAlive()) {
-            String s = entity.getUniqueID().toString();
+            String s = entity.bd();
 
             this.resetPlayerScores(s, (ScoreboardObjective) null);
             this.removePlayerFromTeam(s);

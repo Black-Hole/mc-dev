@@ -3,6 +3,7 @@ package net.minecraft.server;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 
 public class PathfinderNormal extends PathfinderAbstract {
 
@@ -16,8 +17,8 @@ public class PathfinderNormal extends PathfinderAbstract {
     }
 
     public void a() {
-        super.a();
         this.b.a(PathType.WATER, this.j);
+        super.a();
     }
 
     public PathPoint b() {
@@ -73,19 +74,19 @@ public class PathfinderNormal extends PathfinderAbstract {
 
     public int a(PathPoint[] apathpoint, PathPoint pathpoint, PathPoint pathpoint1, float f) {
         int i = 0;
-        byte b0 = 0;
+        int j = 0;
         PathType pathtype = this.a(this.b, pathpoint.a, pathpoint.b + 1, pathpoint.c);
 
         if (this.b.a(pathtype) >= 0.0F) {
-            b0 = 1;
+            j = MathHelper.d(Math.max(1.0F, this.b.P));
         }
 
         BlockPosition blockposition = (new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c)).down();
         double d0 = (double) pathpoint.b - (1.0D - this.a.getType(blockposition).c(this.a, blockposition).e);
-        PathPoint pathpoint2 = this.a(pathpoint.a, pathpoint.b, pathpoint.c + 1, b0, d0, EnumDirection.SOUTH);
-        PathPoint pathpoint3 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c, b0, d0, EnumDirection.WEST);
-        PathPoint pathpoint4 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c, b0, d0, EnumDirection.EAST);
-        PathPoint pathpoint5 = this.a(pathpoint.a, pathpoint.b, pathpoint.c - 1, b0, d0, EnumDirection.NORTH);
+        PathPoint pathpoint2 = this.a(pathpoint.a, pathpoint.b, pathpoint.c + 1, j, d0, EnumDirection.SOUTH);
+        PathPoint pathpoint3 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c, j, d0, EnumDirection.WEST);
+        PathPoint pathpoint4 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c, j, d0, EnumDirection.EAST);
+        PathPoint pathpoint5 = this.a(pathpoint.a, pathpoint.b, pathpoint.c - 1, j, d0, EnumDirection.NORTH);
 
         if (pathpoint2 != null && !pathpoint2.i && pathpoint2.a(pathpoint1) < f) {
             apathpoint[i++] = pathpoint2;
@@ -110,28 +111,28 @@ public class PathfinderNormal extends PathfinderAbstract {
         PathPoint pathpoint6;
 
         if (flag && flag3) {
-            pathpoint6 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c - 1, b0, d0, EnumDirection.NORTH);
+            pathpoint6 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c - 1, j, d0, EnumDirection.NORTH);
             if (pathpoint6 != null && !pathpoint6.i && pathpoint6.a(pathpoint1) < f) {
                 apathpoint[i++] = pathpoint6;
             }
         }
 
         if (flag && flag2) {
-            pathpoint6 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c - 1, b0, d0, EnumDirection.NORTH);
+            pathpoint6 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c - 1, j, d0, EnumDirection.NORTH);
             if (pathpoint6 != null && !pathpoint6.i && pathpoint6.a(pathpoint1) < f) {
                 apathpoint[i++] = pathpoint6;
             }
         }
 
         if (flag1 && flag3) {
-            pathpoint6 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c + 1, b0, d0, EnumDirection.SOUTH);
+            pathpoint6 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c + 1, j, d0, EnumDirection.SOUTH);
             if (pathpoint6 != null && !pathpoint6.i && pathpoint6.a(pathpoint1) < f) {
                 apathpoint[i++] = pathpoint6;
             }
         }
 
         if (flag1 && flag2) {
-            pathpoint6 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c + 1, b0, d0, EnumDirection.SOUTH);
+            pathpoint6 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c + 1, j, d0, EnumDirection.SOUTH);
             if (pathpoint6 != null && !pathpoint6.i && pathpoint6.a(pathpoint1) < f) {
                 apathpoint[i++] = pathpoint6;
             }
@@ -140,6 +141,7 @@ public class PathfinderNormal extends PathfinderAbstract {
         return i;
     }
 
+    @Nullable
     private PathPoint a(int i, int j, int k, int l, double d0, EnumDirection enumdirection) {
         PathPoint pathpoint = null;
         BlockPosition blockposition = new BlockPosition(i, j, k);
@@ -184,6 +186,17 @@ public class PathfinderNormal extends PathfinderAbstract {
                         return null;
                     }
 
+                    if (this.b.width >= 1.0F) {
+                        PathType pathtype1 = this.a(this.b, i, j - 1, k);
+
+                        if (pathtype1 == PathType.BLOCKED) {
+                            pathpoint = this.a(i, j, k);
+                            pathpoint.m = PathType.WALKABLE;
+                            pathpoint.l = Math.max(pathpoint.l, f);
+                            return pathpoint;
+                        }
+                    }
+
                     int i1 = 0;
 
                     while (j > 0 && pathtype == PathType.OPEN) {
@@ -218,10 +231,13 @@ public class PathfinderNormal extends PathfinderAbstract {
         double d0 = (double) entityinsentient.width / 2.0D;
         BlockPosition blockposition = new BlockPosition(entityinsentient);
 
-        for (int k1 = i; k1 < i + l; ++k1) {
-            for (int l1 = j; l1 < j + i1; ++l1) {
-                for (int i2 = k; i2 < k + j1; ++i2) {
-                    PathType pathtype1 = a(iblockaccess, k1, l1, i2);
+        for (int k1 = 0; k1 < l; ++k1) {
+            for (int l1 = 0; l1 < i1; ++l1) {
+                for (int i2 = 0; i2 < j1; ++i2) {
+                    int j2 = k1 + i;
+                    int k2 = l1 + j;
+                    int l2 = i2 + k;
+                    PathType pathtype1 = this.a(iblockaccess, j2, k2, l2);
 
                     if (pathtype1 == PathType.DOOR_WOOD_CLOSED && flag && flag1) {
                         pathtype1 = PathType.WALKABLE;
@@ -235,16 +251,8 @@ public class PathfinderNormal extends PathfinderAbstract {
                         pathtype1 = PathType.FENCE;
                     }
 
-                    if (k1 == i && l1 == j && i2 == k) {
+                    if (k1 == 0 && l1 == 0 && i2 == 0) {
                         pathtype = pathtype1;
-                    }
-
-                    if (l1 > j && pathtype1 != PathType.OPEN) {
-                        AxisAlignedBB axisalignedbb = new AxisAlignedBB((double) k1 - d0 + 0.5D, (double) j + 0.001D, (double) i2 - d0 + 0.5D, (double) k1 + d0 + 0.5D, (double) ((float) j + entityinsentient.length), (double) i2 + d0 + 0.5D);
-
-                        if (!entityinsentient.world.b(axisalignedbb)) {
-                            pathtype1 = PathType.OPEN;
-                        }
                     }
 
                     enumset.add(pathtype1);
@@ -279,78 +287,50 @@ public class PathfinderNormal extends PathfinderAbstract {
     }
 
     private PathType a(EntityInsentient entityinsentient, BlockPosition blockposition) {
-        return this.a(this.a, blockposition.getX(), blockposition.getY(), blockposition.getZ(), entityinsentient, this.d, this.e, this.f, this.d(), this.c());
+        return this.a(entityinsentient, blockposition.getX(), blockposition.getY(), blockposition.getZ());
     }
 
     private PathType a(EntityInsentient entityinsentient, int i, int j, int k) {
         return this.a(this.a, i, j, k, entityinsentient, this.d, this.e, this.f, this.d(), this.c());
     }
 
-    public static PathType a(IBlockAccess iblockaccess, int i, int j, int k) {
+    public PathType a(IBlockAccess iblockaccess, int i, int j, int k) {
+        PathType pathtype = this.b(iblockaccess, i, j, k);
+
+        if (pathtype == PathType.OPEN && j >= 1) {
+            PathType pathtype1 = this.b(iblockaccess, i, j - 1, k);
+
+            pathtype = pathtype1 != PathType.WALKABLE && pathtype1 != PathType.OPEN && pathtype1 != PathType.WATER && pathtype1 != PathType.LAVA ? PathType.WALKABLE : PathType.OPEN;
+        }
+
+        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
+
+        if (pathtype == PathType.WALKABLE) {
+            for (int l = -1; l <= 1; ++l) {
+                for (int i1 = -1; i1 <= 1; ++i1) {
+                    if (l != 0 || i1 != 0) {
+                        Block block = iblockaccess.getType(blockposition_pooledblockposition.f(l + i, j, i1 + k)).getBlock();
+
+                        if (block == Blocks.CACTUS) {
+                            pathtype = PathType.DANGER_CACTUS;
+                        } else if (block == Blocks.FIRE) {
+                            pathtype = PathType.DANGER_FIRE;
+                        }
+                    }
+                }
+            }
+        }
+
+        blockposition_pooledblockposition.t();
+        return pathtype;
+    }
+
+    private PathType b(IBlockAccess iblockaccess, int i, int j, int k) {
         BlockPosition blockposition = new BlockPosition(i, j, k);
         IBlockData iblockdata = iblockaccess.getType(blockposition);
         Block block = iblockdata.getBlock();
         Material material = iblockdata.getMaterial();
-        PathType pathtype = PathType.BLOCKED;
 
-        if (block != Blocks.TRAPDOOR && block != Blocks.IRON_TRAPDOOR && block != Blocks.WATERLILY) {
-            if (block == Blocks.FIRE) {
-                return PathType.DAMAGE_FIRE;
-            } else if (block == Blocks.CACTUS) {
-                return PathType.DAMAGE_CACTUS;
-            } else if (block instanceof BlockDoor && material == Material.WOOD && !((Boolean) iblockdata.get(BlockDoor.OPEN)).booleanValue()) {
-                return PathType.DOOR_WOOD_CLOSED;
-            } else if (block instanceof BlockDoor && material == Material.ORE && !((Boolean) iblockdata.get(BlockDoor.OPEN)).booleanValue()) {
-                return PathType.DOOR_IRON_CLOSED;
-            } else if (block instanceof BlockDoor && ((Boolean) iblockdata.get(BlockDoor.OPEN)).booleanValue()) {
-                return PathType.DOOR_OPEN;
-            } else if (block instanceof BlockMinecartTrackAbstract) {
-                return PathType.RAIL;
-            } else if (!(block instanceof BlockFence) && !(block instanceof BlockCobbleWall) && (!(block instanceof BlockFenceGate) || ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue())) {
-                if (material == Material.AIR) {
-                    pathtype = PathType.OPEN;
-                } else {
-                    if (material == Material.WATER) {
-                        return PathType.WATER;
-                    }
-
-                    if (material == Material.LAVA) {
-                        return PathType.LAVA;
-                    }
-                }
-
-                if (block.b(iblockaccess, blockposition) && pathtype == PathType.BLOCKED) {
-                    pathtype = PathType.OPEN;
-                }
-
-                if (pathtype == PathType.OPEN && j >= 1) {
-                    PathType pathtype1 = a(iblockaccess, i, j - 1, k);
-
-                    pathtype = pathtype1 != PathType.WALKABLE && pathtype1 != PathType.OPEN && pathtype1 != PathType.WATER && pathtype1 != PathType.LAVA ? PathType.WALKABLE : PathType.OPEN;
-                }
-
-                if (pathtype == PathType.WALKABLE) {
-                    for (int l = i - 1; l <= i + 1; ++l) {
-                        for (int i1 = k - 1; i1 <= k + 1; ++i1) {
-                            if (l != i || i1 != k) {
-                                Block block1 = iblockaccess.getType(new BlockPosition(l, j, i1)).getBlock();
-
-                                if (block1 == Blocks.CACTUS) {
-                                    pathtype = PathType.DANGER_CACTUS;
-                                } else if (block1 == Blocks.FIRE) {
-                                    pathtype = PathType.DANGER_FIRE;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return pathtype;
-            } else {
-                return PathType.FENCE;
-            }
-        } else {
-            return PathType.TRAPDOOR;
-        }
+        return material == Material.AIR ? PathType.OPEN : (block != Blocks.TRAPDOOR && block != Blocks.IRON_TRAPDOOR && block != Blocks.WATERLILY ? (block == Blocks.FIRE ? PathType.DAMAGE_FIRE : (block == Blocks.CACTUS ? PathType.DAMAGE_CACTUS : (block instanceof BlockDoor && material == Material.WOOD && !((Boolean) iblockdata.get(BlockDoor.OPEN)).booleanValue() ? PathType.DOOR_WOOD_CLOSED : (block instanceof BlockDoor && material == Material.ORE && !((Boolean) iblockdata.get(BlockDoor.OPEN)).booleanValue() ? PathType.DOOR_IRON_CLOSED : (block instanceof BlockDoor && ((Boolean) iblockdata.get(BlockDoor.OPEN)).booleanValue() ? PathType.DOOR_OPEN : (block instanceof BlockMinecartTrackAbstract ? PathType.RAIL : (!(block instanceof BlockFence) && !(block instanceof BlockCobbleWall) && (!(block instanceof BlockFenceGate) || ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue()) ? (material == Material.WATER ? PathType.WATER : (material == Material.LAVA ? PathType.LAVA : (block.b(iblockaccess, blockposition) ? PathType.OPEN : PathType.BLOCKED))) : PathType.FENCE))))))) : PathType.TRAPDOOR);
     }
 }

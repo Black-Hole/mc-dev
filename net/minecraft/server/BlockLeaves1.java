@@ -1,11 +1,12 @@
 package net.minecraft.server;
 
 import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
 
 public class BlockLeaves1 extends BlockLeaves {
 
     public static final BlockStateEnum<BlockWood.EnumLogVariant> VARIANT = BlockStateEnum.a("variant", BlockWood.EnumLogVariant.class, new Predicate() {
-        public boolean a(BlockWood.EnumLogVariant blockwood_enumlogvariant) {
+        public boolean a(@Nullable BlockWood.EnumLogVariant blockwood_enumlogvariant) {
             return blockwood_enumlogvariant.a() < 4;
         }
 
@@ -64,7 +65,7 @@ public class BlockLeaves1 extends BlockLeaves {
         return ((BlockWood.EnumLogVariant) iblockdata.get(BlockLeaves1.VARIANT)).a();
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
         if (!world.isClientSide && itemstack != null && itemstack.getItem() == Items.SHEARS) {
             entityhuman.b(StatisticList.a((Block) this));
             a(world, blockposition, new ItemStack(Item.getItemOf(this), 1, ((BlockWood.EnumLogVariant) iblockdata.get(BlockLeaves1.VARIANT)).a()));

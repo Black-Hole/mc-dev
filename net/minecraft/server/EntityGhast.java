@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class EntityGhast extends EntityFlying implements IMonster {
 
@@ -61,7 +62,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
         this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(100.0D);
     }
 
-    public SoundCategory bz() {
+    public SoundCategory bA() {
         return SoundCategory.HOSTILE;
     }
 
@@ -69,27 +70,28 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return SoundEffects.bK;
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.bM;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.bL;
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.af;
     }
 
-    protected float cd() {
+    protected float ce() {
         return 10.0F;
     }
 
-    public boolean cF() {
-        return this.random.nextInt(20) == 0 && super.cF() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+    public boolean cG() {
+        return this.random.nextInt(20) == 0 && super.cG() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
-    public int cJ() {
+    public int cK() {
         return 1;
     }
 
@@ -183,7 +185,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
 
         public void e() {
             if (this.a.getGoalTarget() == null) {
-                this.a.aM = this.a.yaw = -((float) MathHelper.b(this.a.motX, this.a.motZ)) * 57.295776F;
+                this.a.aN = this.a.yaw = -((float) MathHelper.b(this.a.motX, this.a.motZ)) * 57.295776F;
             } else {
                 EntityLiving entityliving = this.a.getGoalTarget();
                 double d0 = 64.0D;
@@ -192,7 +194,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
                     double d1 = entityliving.locX - this.a.locX;
                     double d2 = entityliving.locZ - this.a.locZ;
 
-                    this.a.aM = this.a.yaw = -((float) MathHelper.b(d1, d2)) * 57.295776F;
+                    this.a.aN = this.a.yaw = -((float) MathHelper.b(d1, d2)) * 57.295776F;
                 }
             }
 

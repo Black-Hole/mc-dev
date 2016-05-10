@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ItemHanging extends Item {
 
     private final Class<? extends EntityHanging> a;
@@ -30,6 +32,7 @@ public class ItemHanging extends Item {
         }
     }
 
+    @Nullable
     private EntityHanging a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
         return (EntityHanging) (this.a == EntityPainting.class ? new EntityPainting(world, blockposition, enumdirection) : (this.a == EntityItemFrame.class ? new EntityItemFrame(world, blockposition, enumdirection) : null));
     }

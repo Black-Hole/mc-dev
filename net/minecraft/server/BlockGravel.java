@@ -1,11 +1,13 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockGravel extends BlockFalling {
 
     public BlockGravel() {}
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         if (i > 3) {
             i = 3;

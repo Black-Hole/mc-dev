@@ -1,26 +1,31 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class RandomPositionGenerator {
 
     private static Vec3D a = Vec3D.a;
 
+    @Nullable
     public static Vec3D a(EntityCreature entitycreature, int i, int j) {
         return c(entitycreature, i, j, (Vec3D) null);
     }
 
+    @Nullable
     public static Vec3D a(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
         RandomPositionGenerator.a = vec3d.a(entitycreature.locX, entitycreature.locY, entitycreature.locZ);
         return c(entitycreature, i, j, RandomPositionGenerator.a);
     }
 
+    @Nullable
     public static Vec3D b(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
         RandomPositionGenerator.a = (new Vec3D(entitycreature.locX, entitycreature.locY, entitycreature.locZ)).d(vec3d);
         return c(entitycreature, i, j, RandomPositionGenerator.a);
     }
 
-    private static Vec3D c(EntityCreature entitycreature, int i, int j, Vec3D vec3d) {
+    @Nullable
+    private static Vec3D c(EntityCreature entitycreature, int i, int j, @Nullable Vec3D vec3d) {
         NavigationAbstract navigationabstract = entitycreature.getNavigation();
         Random random = entitycreature.getRandom();
         boolean flag = false;
@@ -30,9 +35,9 @@ public class RandomPositionGenerator {
         float f = -99999.0F;
         boolean flag1;
 
-        if (entitycreature.cY()) {
-            double d0 = entitycreature.cV().distanceSquared((double) MathHelper.floor(entitycreature.locX), (double) MathHelper.floor(entitycreature.locY), (double) MathHelper.floor(entitycreature.locZ)) + 4.0D;
-            double d1 = (double) (entitycreature.cW() + (float) i);
+        if (entitycreature.cZ()) {
+            double d0 = entitycreature.cW().distanceSquared((double) MathHelper.floor(entitycreature.locX), (double) MathHelper.floor(entitycreature.locY), (double) MathHelper.floor(entitycreature.locZ)) + 4.0D;
+            double d1 = (double) (entitycreature.cX() + (float) i);
 
             flag1 = d0 < d1 * d1;
         } else {
@@ -47,8 +52,8 @@ public class RandomPositionGenerator {
             if (vec3d == null || (double) k1 * vec3d.x + (double) i2 * vec3d.z >= 0.0D) {
                 BlockPosition blockposition;
 
-                if (entitycreature.cY() && i > 1) {
-                    blockposition = entitycreature.cV();
+                if (entitycreature.cZ() && i > 1) {
+                    blockposition = entitycreature.cW();
                     if (entitycreature.locX > (double) blockposition.getX()) {
                         k1 -= random.nextInt(i / 2);
                     } else {

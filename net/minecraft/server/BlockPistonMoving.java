@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockPistonMoving extends BlockTileEntity {
 
@@ -25,7 +26,7 @@ public class BlockPistonMoving extends BlockTileEntity {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityPiston) {
-            ((TileEntityPiston) tileentity).h();
+            ((TileEntityPiston) tileentity).i();
         } else {
             super.remove(world, blockposition, iblockdata);
         }
@@ -58,7 +59,7 @@ public class BlockPistonMoving extends BlockTileEntity {
         return false;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (!world.isClientSide && world.getTileEntity(blockposition) == null) {
             world.setAir(blockposition);
             return true;
@@ -67,6 +68,7 @@ public class BlockPistonMoving extends BlockTileEntity {
         }
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return null;
     }
@@ -76,7 +78,7 @@ public class BlockPistonMoving extends BlockTileEntity {
             TileEntityPiston tileentitypiston = this.c(world, blockposition);
 
             if (tileentitypiston != null) {
-                IBlockData iblockdata1 = tileentitypiston.b();
+                IBlockData iblockdata1 = tileentitypiston.d();
 
                 iblockdata1.getBlock().b(world, blockposition, iblockdata1, 0);
             }
@@ -87,13 +89,14 @@ public class BlockPistonMoving extends BlockTileEntity {
         return null;
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!world.isClientSide) {
             world.getTileEntity(blockposition);
         }
 
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         TileEntityPiston tileentitypiston = this.c(world, blockposition);
 
@@ -106,12 +109,14 @@ public class BlockPistonMoving extends BlockTileEntity {
         return tileentitypiston != null ? tileentitypiston.a(iblockaccess, blockposition) : BlockPistonMoving.j;
     }
 
+    @Nullable
     private TileEntityPiston c(IBlockAccess iblockaccess, BlockPosition blockposition) {
         TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
 
         return tileentity instanceof TileEntityPiston ? (TileEntityPiston) tileentity : null;
     }
 
+    @Nullable
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return null;
     }

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class AttributeModifiable implements AttributeInstance {
 
@@ -60,6 +61,7 @@ public class AttributeModifiable implements AttributeInstance {
         return hashset;
     }
 
+    @Nullable
     public AttributeModifier a(UUID uuid) {
         return (AttributeModifier) this.e.get(uuid);
     }

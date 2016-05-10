@@ -137,8 +137,8 @@ public class EntityExperienceOrb extends Entity {
 
     public void d(EntityHuman entityhuman) {
         if (!this.world.isClientSide) {
-            if (this.c == 0 && entityhuman.by == 0) {
-                entityhuman.by = 2;
+            if (this.c == 0 && entityhuman.bz == 0) {
+                entityhuman.bz = 2;
                 this.world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bj, SoundCategory.PLAYERS, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
                 entityhuman.receive(this, 1);
                 ItemStack itemstack = EnchantmentManager.b(Enchantments.A, (EntityLiving) entityhuman);

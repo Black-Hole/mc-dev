@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -70,6 +71,7 @@ public class LootTableRegistry {
             }
         }
 
+        @Nullable
         private LootTable b(MinecraftKey minecraftkey) {
             File file = new File(new File(LootTableRegistry.this.d, minecraftkey.b()), minecraftkey.a() + ".json");
 
@@ -99,6 +101,7 @@ public class LootTableRegistry {
             }
         }
 
+        @Nullable
         private LootTable c(MinecraftKey minecraftkey) {
             URL url = LootTableRegistry.class.getResource("/assets/" + minecraftkey.b() + "/loot_tables/" + minecraftkey.a() + ".json");
 

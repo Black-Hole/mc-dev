@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.base.Predicate;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +24,7 @@ public class PathfinderGoalNearestAttackableTargetInsentient extends PathfinderG
         }
 
         this.c = new Predicate() {
-            public boolean a(EntityLiving entityliving) {
+            public boolean a(@Nullable EntityLiving entityliving) {
                 double d0 = PathfinderGoalNearestAttackableTargetInsentient.this.f();
 
                 if (entityliving.isSneaking()) {

@@ -1,11 +1,12 @@
 package net.minecraft.server;
 
 import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
 
 public class BlockLog1 extends BlockLogAbstract {
 
     public static final BlockStateEnum<BlockWood.EnumLogVariant> VARIANT = BlockStateEnum.a("variant", BlockWood.EnumLogVariant.class, new Predicate() {
-        public boolean a(BlockWood.EnumLogVariant blockwood_enumlogvariant) {
+        public boolean a(@Nullable BlockWood.EnumLogVariant blockwood_enumlogvariant) {
             return blockwood_enumlogvariant.a() < 4;
         }
 

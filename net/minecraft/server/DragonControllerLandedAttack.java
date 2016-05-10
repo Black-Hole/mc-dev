@@ -9,12 +9,12 @@ public class DragonControllerLandedAttack extends AbstractDragonControllerLanded
     }
 
     public void b() {
-        this.a.world.a(this.a.locX, this.a.locY, this.a.locZ, SoundEffects.aR, this.a.bz(), 2.5F, 0.8F + this.a.getRandom().nextFloat() * 0.3F, false);
+        this.a.world.a(this.a.locX, this.a.locY, this.a.locZ, SoundEffects.aR, this.a.bA(), 2.5F, 0.8F + this.a.getRandom().nextFloat() * 0.3F, false);
     }
 
     public void c() {
         if (this.b++ >= 40) {
-            this.a.cT().a(DragonControllerPhase.f);
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.f);
         }
 
     }
@@ -23,7 +23,7 @@ public class DragonControllerLandedAttack extends AbstractDragonControllerLanded
         this.b = 0;
     }
 
-    public DragonControllerPhase<DragonControllerLandedAttack> i() {
+    public DragonControllerPhase<DragonControllerLandedAttack> getControllerPhase() {
         return DragonControllerPhase.h;
     }
 }

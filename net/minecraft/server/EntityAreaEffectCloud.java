@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
+import javax.annotation.Nullable;
 
 public class EntityAreaEffectCloud extends Entity {
 
@@ -22,12 +23,12 @@ public class EntityAreaEffectCloud extends Entity {
     private int h;
     public int waitTime;
     public int reapplicationDelay;
-    private boolean au;
+    private boolean hasColor;
     public int durationOnUse;
     public float radiusOnUse;
     public float radiusPerTick;
-    private EntityLiving ay;
-    private UUID az;
+    private EntityLiving az;
+    private UUID aA;
 
     public EntityAreaEffectCloud(World world) {
         super(world);
@@ -73,7 +74,7 @@ public class EntityAreaEffectCloud extends Entity {
 
     public void a(PotionRegistry potionregistry) {
         this.e = potionregistry;
-        if (!this.au) {
+        if (!this.hasColor) {
             if (potionregistry == Potions.a && this.effects.isEmpty()) {
                 this.getDataWatcher().set(EntityAreaEffectCloud.b, Integer.valueOf(0));
             } else {
@@ -85,7 +86,7 @@ public class EntityAreaEffectCloud extends Entity {
 
     public void a(MobEffect mobeffect) {
         this.effects.add(mobeffect);
-        if (!this.au) {
+        if (!this.hasColor) {
             this.getDataWatcher().set(EntityAreaEffectCloud.b, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.e, (Collection) this.effects))));
         }
 
@@ -96,7 +97,7 @@ public class EntityAreaEffectCloud extends Entity {
     }
 
     public void setColor(int i) {
-        this.au = true;
+        this.hasColor = true;
         this.getDataWatcher().set(EntityAreaEffectCloud.b, Integer.valueOf(i));
     }
 
@@ -240,7 +241,7 @@ public class EntityAreaEffectCloud extends Entity {
                         while (iterator2.hasNext()) {
                             EntityLiving entityliving = (EntityLiving) iterator2.next();
 
-                            if (!this.g.containsKey(entityliving) && entityliving.cD()) {
+                            if (!this.g.containsKey(entityliving) && entityliving.cE()) {
                                 double d0 = entityliving.locX - this.locX;
                                 double d1 = entityliving.locZ - this.locZ;
                                 double d2 = d0 * d0 + d1 * d1;
@@ -298,21 +299,22 @@ public class EntityAreaEffectCloud extends Entity {
         this.waitTime = i;
     }
 
-    public void a(EntityLiving entityliving) {
-        this.ay = entityliving;
-        this.az = entityliving == null ? null : entityliving.getUniqueID();
+    public void setSource(@Nullable EntityLiving entityliving) {
+        this.az = entityliving;
+        this.aA = entityliving == null ? null : entityliving.getUniqueID();
     }
 
+    @Nullable
     public EntityLiving w() {
-        if (this.ay == null && this.az != null && this.world instanceof WorldServer) {
-            Entity entity = ((WorldServer) this.world).getEntity(this.az);
+        if (this.az == null && this.aA != null && this.world instanceof WorldServer) {
+            Entity entity = ((WorldServer) this.world).getEntity(this.aA);
 
             if (entity instanceof EntityLiving) {
-                this.ay = (EntityLiving) entity;
+                this.az = (EntityLiving) entity;
             }
         }
 
-        return this.ay;
+        return this.az;
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
@@ -324,7 +326,7 @@ public class EntityAreaEffectCloud extends Entity {
         this.radiusOnUse = nbttagcompound.getFloat("RadiusOnUse");
         this.radiusPerTick = nbttagcompound.getFloat("RadiusPerTick");
         this.setRadius(nbttagcompound.getFloat("Radius"));
-        this.az = nbttagcompound.a("OwnerUUID");
+        this.aA = nbttagcompound.a("OwnerUUID");
         if (nbttagcompound.hasKeyOfType("Particle", 8)) {
             EnumParticle enumparticle = EnumParticle.a(nbttagcompound.getString("Particle"));
 
@@ -367,11 +369,11 @@ public class EntityAreaEffectCloud extends Entity {
         nbttagcompound.setFloat("RadiusPerTick", this.radiusPerTick);
         nbttagcompound.setFloat("Radius", this.getRadius());
         nbttagcompound.setString("Particle", this.getParticle().b());
-        if (this.az != null) {
-            nbttagcompound.a("OwnerUUID", this.az);
+        if (this.aA != null) {
+            nbttagcompound.a("OwnerUUID", this.aA);
         }
 
-        if (this.au) {
+        if (this.hasColor) {
             nbttagcompound.setInt("Color", this.getColor());
         }
 

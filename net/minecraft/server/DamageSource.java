@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class DamageSource {
 
     public static DamageSource FIRE = (new DamageSource("inFire")).setExplosion();
@@ -11,7 +13,7 @@ public class DamageSource {
     public static DamageSource STARVE = (new DamageSource("starve")).setIgnoreArmor().m();
     public static DamageSource CACTUS = new DamageSource("cactus");
     public static DamageSource FALL = (new DamageSource("fall")).setIgnoreArmor();
-    public static DamageSource j = (new DamageSource("flyIntoWall")).setIgnoreArmor();
+    public static DamageSource FLY_INTO_WALL = (new DamageSource("flyIntoWall")).setIgnoreArmor();
     public static DamageSource OUT_OF_WORLD = (new DamageSource("outOfWorld")).setIgnoreArmor().l();
     public static DamageSource GENERIC = (new DamageSource("generic")).setIgnoreArmor();
     public static DamageSource MAGIC = (new DamageSource("magic")).setIgnoreArmor().setMagic();
@@ -42,19 +44,19 @@ public class DamageSource {
         return new EntityDamageSource("player", entityhuman);
     }
 
-    public static DamageSource arrow(EntityArrow entityarrow, Entity entity) {
+    public static DamageSource arrow(EntityArrow entityarrow, @Nullable Entity entity) {
         return (new EntityDamageSourceIndirect("arrow", entityarrow, entity)).b();
     }
 
-    public static DamageSource fireball(EntityFireball entityfireball, Entity entity) {
+    public static DamageSource fireball(EntityFireball entityfireball, @Nullable Entity entity) {
         return entity == null ? (new EntityDamageSourceIndirect("onFire", entityfireball, entityfireball)).setExplosion().b() : (new EntityDamageSourceIndirect("fireball", entityfireball, entity)).setExplosion().b();
     }
 
-    public static DamageSource projectile(Entity entity, Entity entity1) {
+    public static DamageSource projectile(Entity entity, @Nullable Entity entity1) {
         return (new EntityDamageSourceIndirect("thrown", entity, entity1)).b();
     }
 
-    public static DamageSource b(Entity entity, Entity entity1) {
+    public static DamageSource b(Entity entity, @Nullable Entity entity1) {
         return (new EntityDamageSourceIndirect("indirectMagic", entity, entity1)).setIgnoreArmor().setMagic();
     }
 
@@ -62,11 +64,11 @@ public class DamageSource {
         return (new EntityDamageSource("thorns", entity)).w().setMagic();
     }
 
-    public static DamageSource explosion(Explosion explosion) {
+    public static DamageSource explosion(@Nullable Explosion explosion) {
         return explosion != null && explosion.getSource() != null ? (new EntityDamageSource("explosion.player", explosion.getSource())).q().d() : (new DamageSource("explosion")).q().d();
     }
 
-    public static DamageSource b(EntityLiving entityliving) {
+    public static DamageSource b(@Nullable EntityLiving entityliving) {
         return entityliving != null ? (new EntityDamageSource("explosion.player", entityliving)).q().d() : (new DamageSource("explosion")).q().d();
     }
 
@@ -108,10 +110,12 @@ public class DamageSource {
         this.translationIndex = s;
     }
 
+    @Nullable
     public Entity i() {
         return this.getEntity();
     }
 
+    @Nullable
     public Entity getEntity() {
         return null;
     }
@@ -139,7 +143,7 @@ public class DamageSource {
     }
 
     public IChatBaseComponent getLocalizedDeathMessage(EntityLiving entityliving) {
-        EntityLiving entityliving1 = entityliving.bV();
+        EntityLiving entityliving1 = entityliving.bW();
         String s = "death.attack." + this.translationIndex;
         String s1 = s + ".player";
 
@@ -178,6 +182,7 @@ public class DamageSource {
         return entity instanceof EntityHuman && ((EntityHuman) entity).abilities.canInstantlyBuild;
     }
 
+    @Nullable
     public Vec3D v() {
         return null;
     }

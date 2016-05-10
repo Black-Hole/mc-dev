@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class InventoryCrafting implements IInventory {
 
     private final ItemStack[] items;
@@ -20,10 +22,12 @@ public class InventoryCrafting implements IInventory {
         return this.items.length;
     }
 
+    @Nullable
     public ItemStack getItem(int i) {
         return i >= this.getSize() ? null : this.items[i];
     }
 
+    @Nullable
     public ItemStack c(int i, int j) {
         return i >= 0 && i < this.b && j >= 0 && j <= this.c ? this.getItem(i + j * this.b) : null;
     }
@@ -40,10 +44,12 @@ public class InventoryCrafting implements IInventory {
         return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
     }
 
+    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         return ContainerUtil.a(this.items, i);
     }
 
+    @Nullable
     public ItemStack splitStack(int i, int j) {
         ItemStack itemstack = ContainerUtil.a(this.items, i, j);
 
@@ -54,7 +60,7 @@ public class InventoryCrafting implements IInventory {
         return itemstack;
     }
 
-    public void setItem(int i, ItemStack itemstack) {
+    public void setItem(int i, @Nullable ItemStack itemstack) {
         this.items[i] = itemstack;
         this.d.a((IInventory) this);
     }

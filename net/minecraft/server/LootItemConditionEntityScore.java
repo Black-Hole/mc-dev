@@ -51,7 +51,7 @@ public class LootItemConditionEntityScore implements LootItemCondition {
         if (scoreboardobjective == null) {
             return false;
         } else {
-            String s1 = entity instanceof EntityPlayer ? entity.getName() : entity.getUniqueID().toString();
+            String s1 = entity instanceof EntityPlayer ? entity.getName() : entity.bd();
 
             return !scoreboard.b(s1, scoreboardobjective) ? false : lootvaluebounds.a(scoreboard.getPlayerScoreForObjective(s1, scoreboardobjective).getScore());
         }

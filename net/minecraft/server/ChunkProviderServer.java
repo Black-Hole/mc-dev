@@ -1,24 +1,26 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ChunkProviderServer implements IChunkProvider {
 
     private static final Logger a = LogManager.getLogger();
-    private final Set<Long> unloadQueue = Collections.newSetFromMap(new ConcurrentHashMap());
-    private final ChunkGenerator chunkGenerator;
+    private final Set<Long> unloadQueue = Sets.newHashSet();
+    public final ChunkGenerator chunkGenerator;
     private final IChunkLoader chunkLoader;
-    private final LongHashMap<Chunk> chunks = new LongHashMap();
-    private final List<Chunk> chunkList = Lists.newArrayList();
+    public final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap(8192);
     public final WorldServer world;
 
     public ChunkProviderServer(WorldServer worldserver, IChunkLoader ichunkloader, ChunkGenerator chunkgenerator) {
@@ -27,36 +29,42 @@ public class ChunkProviderServer implements IChunkProvider {
         this.chunkGenerator = chunkgenerator;
     }
 
-    public List<Chunk> a() {
-        return this.chunkList;
+    public Collection<Chunk> a() {
+        return this.chunks.values();
     }
 
-    public void queueUnload(int i, int j) {
-        if (this.world.worldProvider.c(i, j)) {
-            this.unloadQueue.add(Long.valueOf(ChunkCoordIntPair.a(i, j)));
+    public void unload(Chunk chunk) {
+        if (this.world.worldProvider.c(chunk.locX, chunk.locZ)) {
+            this.unloadQueue.add(Long.valueOf(ChunkCoordIntPair.a(chunk.locX, chunk.locZ)));
+            chunk.d = true;
         }
 
     }
 
     public void b() {
-        Iterator iterator = this.chunkList.iterator();
+        Iterator iterator = this.chunks.values().iterator();
 
         while (iterator.hasNext()) {
             Chunk chunk = (Chunk) iterator.next();
 
-            this.queueUnload(chunk.locX, chunk.locZ);
+            this.unload(chunk);
         }
 
     }
 
+    @Nullable
     public Chunk getLoadedChunkAt(int i, int j) {
         long k = ChunkCoordIntPair.a(i, j);
-        Chunk chunk = (Chunk) this.chunks.getEntry(k);
+        Chunk chunk = (Chunk) this.chunks.get(k);
 
-        this.unloadQueue.remove(Long.valueOf(k));
+        if (chunk != null) {
+            chunk.d = false;
+        }
+
         return chunk;
     }
 
+    @Nullable
     public Chunk getOrLoadChunkAt(int i, int j) {
         Chunk chunk = this.getLoadedChunkAt(i, j);
 
@@ -64,7 +72,6 @@ public class ChunkProviderServer implements IChunkProvider {
             chunk = this.loadChunk(i, j);
             if (chunk != null) {
                 this.chunks.put(ChunkCoordIntPair.a(i, j), chunk);
-                this.chunkList.add(chunk);
                 chunk.addEntities();
                 chunk.loadNearby(this, this.chunkGenerator);
             }
@@ -79,23 +86,19 @@ public class ChunkProviderServer implements IChunkProvider {
         if (chunk == null) {
             long k = ChunkCoordIntPair.a(i, j);
 
-            chunk = this.loadChunk(i, j);
-            if (chunk == null) {
-                try {
-                    chunk = this.chunkGenerator.getOrCreateChunk(i, j);
-                } catch (Throwable throwable) {
-                    CrashReport crashreport = CrashReport.a(throwable, "Exception generating new chunk");
-                    CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Chunk to be generated");
+            try {
+                chunk = this.chunkGenerator.getOrCreateChunk(i, j);
+            } catch (Throwable throwable) {
+                CrashReport crashreport = CrashReport.a(throwable, "Exception generating new chunk");
+                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Chunk to be generated");
 
-                    crashreportsystemdetails.a("Location", (Object) String.format("%d,%d", new Object[] { Integer.valueOf(i), Integer.valueOf(j)}));
-                    crashreportsystemdetails.a("Position hash", (Object) Long.valueOf(k));
-                    crashreportsystemdetails.a("Generator", (Object) this.chunkGenerator);
-                    throw new ReportedException(crashreport);
-                }
+                crashreportsystemdetails.a("Location", (Object) String.format("%d,%d", new Object[] { Integer.valueOf(i), Integer.valueOf(j)}));
+                crashreportsystemdetails.a("Position hash", (Object) Long.valueOf(k));
+                crashreportsystemdetails.a("Generator", (Object) this.chunkGenerator);
+                throw new ReportedException(crashreport);
             }
 
             this.chunks.put(k, chunk);
-            this.chunkList.add(chunk);
             chunk.addEntities();
             chunk.loadNearby(this, this.chunkGenerator);
         }
@@ -103,6 +106,7 @@ public class ChunkProviderServer implements IChunkProvider {
         return chunk;
     }
 
+    @Nullable
     public Chunk loadChunk(int i, int j) {
         try {
             Chunk chunk = this.chunkLoader.a(this.world, i, j);
@@ -142,7 +146,7 @@ public class ChunkProviderServer implements IChunkProvider {
 
     public boolean a(boolean flag) {
         int i = 0;
-        ArrayList arraylist = Lists.newArrayList(this.chunkList);
+        ArrayList arraylist = Lists.newArrayList(this.chunks.values());
 
         for (int j = 0; j < arraylist.size(); ++j) {
             Chunk chunk = (Chunk) arraylist.get(j);
@@ -170,20 +174,20 @@ public class ChunkProviderServer implements IChunkProvider {
 
     public boolean unloadChunks() {
         if (!this.world.savingDisabled) {
-            for (int i = 0; i < 100; ++i) {
-                if (!this.unloadQueue.isEmpty()) {
-                    Long olong = (Long) this.unloadQueue.iterator().next();
-                    Chunk chunk = (Chunk) this.chunks.getEntry(olong.longValue());
+            if (!this.unloadQueue.isEmpty()) {
+                Iterator iterator = this.unloadQueue.iterator();
 
-                    if (chunk != null) {
+                for (int i = 0; i < 100 && iterator.hasNext(); iterator.remove()) {
+                    Long olong = (Long) iterator.next();
+                    Chunk chunk = (Chunk) this.chunks.get(olong);
+
+                    if (chunk != null && chunk.d) {
                         chunk.removeEntities();
                         this.saveChunk(chunk);
                         this.saveChunkNOP(chunk);
-                        this.chunks.remove(olong.longValue());
-                        this.chunkList.remove(chunk);
+                        this.chunks.remove(olong);
+                        ++i;
                     }
-
-                    this.unloadQueue.remove(olong);
                 }
             }
 
@@ -198,22 +202,23 @@ public class ChunkProviderServer implements IChunkProvider {
     }
 
     public String getName() {
-        return "ServerChunkCache: " + this.chunks.count() + " Drop: " + this.unloadQueue.size();
+        return "ServerChunkCache: " + this.chunks.size() + " Drop: " + this.unloadQueue.size();
     }
 
     public List<BiomeBase.BiomeMeta> a(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         return this.chunkGenerator.getMobsFor(enumcreaturetype, blockposition);
     }
 
+    @Nullable
     public BlockPosition a(World world, String s, BlockPosition blockposition) {
         return this.chunkGenerator.findNearestMapFeature(world, s, blockposition);
     }
 
     public int g() {
-        return this.chunks.count();
+        return this.chunks.size();
     }
 
-    public boolean e(int i, int j) {
-        return this.chunks.contains(ChunkCoordIntPair.a(i, j));
+    public boolean isLoaded(int i, int j) {
+        return this.chunks.containsKey(ChunkCoordIntPair.a(i, j));
     }
 }

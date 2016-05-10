@@ -23,7 +23,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
 
     public boolean a() {
         if (!this.g) {
-            if (this.a.bK() >= 100) {
+            if (this.a.bL() >= 100) {
                 return false;
             }
 

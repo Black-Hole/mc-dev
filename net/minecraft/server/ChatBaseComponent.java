@@ -5,6 +5,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public abstract class ChatBaseComponent implements IChatBaseComponent {
 
@@ -74,7 +75,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
 
     public static Iterator<IChatBaseComponent> a(Iterable<IChatBaseComponent> iterable) {
         Iterator iterator = Iterators.concat(Iterators.transform(iterable.iterator(), new Function() {
-            public Iterator<IChatBaseComponent> a(IChatBaseComponent ichatbasecomponent) {
+            public Iterator<IChatBaseComponent> a(@Nullable IChatBaseComponent ichatbasecomponent) {
                 return ichatbasecomponent.iterator();
             }
 
@@ -84,7 +85,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
         }));
 
         iterator = Iterators.transform(iterator, new Function() {
-            public IChatBaseComponent a(IChatBaseComponent ichatbasecomponent) {
+            public IChatBaseComponent a(@Nullable IChatBaseComponent ichatbasecomponent) {
                 IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent.f();
 
                 ichatbasecomponent1.setChatModifier(ichatbasecomponent1.getChatModifier().n());

@@ -38,7 +38,7 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
             this.d = scoreboardteam.getSuffix();
             this.j = scoreboardteam.packOptionData();
             this.e = scoreboardteam.getNameTagVisibility().e;
-            this.f = scoreboardteam.k().e;
+            this.f = scoreboardteam.getCollisionRule().e;
             this.g = scoreboardteam.m().b();
         }
 

@@ -5,7 +5,6 @@ import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -117,7 +116,7 @@ public class EntityTracker {
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Entity To Track");
 
             crashreportsystemdetails.a("Tracking range", (Object) (i + " blocks"));
-            crashreportsystemdetails.a("Update interval", new Callable() {
+            crashreportsystemdetails.a("Update interval", new CrashReportCallable() {
                 public String a() throws Exception {
                     String s = "Once per " + i + " ticks";
 
@@ -256,7 +255,7 @@ public class EntityTracker {
                     arraylist.add(entity);
                 }
 
-                if (!entity.bu().isEmpty()) {
+                if (!entity.bv().isEmpty()) {
                     arraylist1.add(entity);
                 }
             }

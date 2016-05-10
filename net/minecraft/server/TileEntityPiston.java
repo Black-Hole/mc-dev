@@ -20,7 +20,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         this.h = flag1;
     }
 
-    public IBlockData b() {
+    public IBlockData d() {
         return this.a;
     }
 
@@ -28,11 +28,11 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         return 0;
     }
 
-    public boolean d() {
+    public boolean e() {
         return this.g;
     }
 
-    public EnumDirection e() {
+    public EnumDirection g() {
         return this.f;
     }
 
@@ -49,7 +49,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         return this.a.c(iblockaccess, blockposition).c((double) (f * (float) this.f.getAdjacentX()), (double) (f * (float) this.f.getAdjacentY()), (double) (f * (float) this.f.getAdjacentZ()));
     }
 
-    private void i() {
+    private void j() {
         AxisAlignedBB axisalignedbb = this.a((IBlockAccess) this.world, this.position).a(this.position);
         List list = this.world.getEntities((Entity) null, axisalignedbb);
 
@@ -118,7 +118,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         }
     }
 
-    public void h() {
+    public void i() {
         if (this.j < 1.0F && this.world != null) {
             this.j = this.i = 1.0F;
             this.world.s(this.position);
@@ -134,7 +134,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
     public void c() {
         this.j = this.i;
         if (this.j >= 1.0F) {
-            this.i();
+            this.j();
             this.world.s(this.position);
             this.y();
             if (this.world.getType(this.position).getBlock() == Blocks.PISTON_EXTENSION) {
@@ -148,7 +148,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
                 this.i = 1.0F;
             }
 
-            this.i();
+            this.j();
         }
     }
 
@@ -160,13 +160,14 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         this.g = nbttagcompound.getBoolean("extending");
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         nbttagcompound.setInt("blockId", Block.getId(this.a.getBlock()));
         nbttagcompound.setInt("blockData", this.a.getBlock().toLegacyData(this.a));
         nbttagcompound.setInt("facing", this.f.a());
         nbttagcompound.setFloat("progress", this.j);
         nbttagcompound.setBoolean("extending", this.g);
+        return nbttagcompound;
     }
 
     static class SyntheticClass_1 {

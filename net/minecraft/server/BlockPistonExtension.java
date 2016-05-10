@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockPistonExtension extends BlockDirectional {
 
@@ -50,7 +51,7 @@ public class BlockPistonExtension extends BlockDirectional {
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
         a(blockposition, axisalignedbb, list, iblockdata.c(world, blockposition));
         a(blockposition, axisalignedbb, list, this.i(iblockdata));
     }
@@ -129,7 +130,7 @@ public class BlockPistonExtension extends BlockDirectional {
         return 0;
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockPistonExtension.FACING);
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
         IBlockData iblockdata1 = world.getType(blockposition1);
@@ -137,11 +138,12 @@ public class BlockPistonExtension extends BlockDirectional {
         if (iblockdata1.getBlock() != Blocks.PISTON && iblockdata1.getBlock() != Blocks.STICKY_PISTON) {
             world.setAir(blockposition);
         } else {
-            iblockdata1.getBlock().doPhysics(world, blockposition1, iblockdata1, block);
+            iblockdata1.doPhysics(world, blockposition1, block);
         }
 
     }
 
+    @Nullable
     public static EnumDirection e(int i) {
         int j = i & 7;
 

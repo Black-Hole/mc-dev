@@ -45,8 +45,8 @@ public class BlockFlowing extends BlockFluids {
                 i1 = -1;
             }
 
-            if (this.c((IBlockAccess) world, blockposition.up()) >= 0) {
-                k = this.c((IBlockAccess) world, blockposition.up());
+            k = this.i(world.getType(blockposition.up()));
+            if (k >= 0) {
                 if (k >= 8) {
                     i1 = k;
                 } else {
@@ -211,7 +211,7 @@ public class BlockFlowing extends BlockFluids {
     }
 
     protected int a(World world, BlockPosition blockposition, int i) {
-        int j = this.c((IBlockAccess) world, blockposition);
+        int j = this.i(world.getType(blockposition));
 
         if (j < 0) {
             return i;

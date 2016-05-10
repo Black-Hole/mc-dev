@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class DefinedStructure {
 
@@ -34,7 +35,7 @@ public class DefinedStructure {
         return this.d;
     }
 
-    public void a(World world, BlockPosition blockposition, BlockPosition blockposition1, boolean flag, Block block) {
+    public void a(World world, BlockPosition blockposition, BlockPosition blockposition1, boolean flag, @Nullable Block block) {
         if (blockposition1.getX() >= 1 && blockposition1.getY() >= 1 && blockposition1.getZ() >= 1) {
             BlockPosition blockposition2 = blockposition.a(blockposition1).a(-1, -1, -1);
             ArrayList arraylist = Lists.newArrayList();
@@ -55,9 +56,8 @@ public class DefinedStructure {
                     TileEntity tileentity = world.getTileEntity(blockposition_mutableblockposition);
 
                     if (tileentity != null) {
-                        NBTTagCompound nbttagcompound = new NBTTagCompound();
+                        NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
 
-                        tileentity.save(nbttagcompound);
                         nbttagcompound.remove("x");
                         nbttagcompound.remove("y");
                         nbttagcompound.remove("z");
@@ -85,7 +85,7 @@ public class DefinedStructure {
 
     private void a(World world, BlockPosition blockposition, BlockPosition blockposition1) {
         List list = world.a(Entity.class, new AxisAlignedBB(blockposition, blockposition1), new Predicate() {
-            public boolean a(Entity entity) {
+            public boolean a(@Nullable Entity entity) {
                 return !(entity instanceof EntityHuman);
             }
 
@@ -227,7 +227,7 @@ public class DefinedStructure {
         }
     }
 
-    private void a(World world, BlockPosition blockposition, EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation, StructureBoundingBox structureboundingbox) {
+    private void a(World world, BlockPosition blockposition, EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation, @Nullable StructureBoundingBox structureboundingbox) {
         Iterator iterator = this.b.iterator();
 
         while (iterator.hasNext()) {
@@ -353,7 +353,7 @@ public class DefinedStructure {
         }
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
         NBTTagList nbttaglist = new NBTTagList();
 
         NBTTagCompound nbttagcompound1;
@@ -389,6 +389,7 @@ public class DefinedStructure {
         nbttagcompound.set("size", this.a(new int[] { this.c.getX(), this.c.getY(), this.c.getZ()}));
         nbttagcompound.setInt("version", 1);
         nbttagcompound.setString("author", this.d);
+        return nbttagcompound;
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -527,7 +528,7 @@ public class DefinedStructure {
         public final IBlockData b;
         public final NBTTagCompound c;
 
-        private BlockInfo(BlockPosition blockposition, IBlockData iblockdata, NBTTagCompound nbttagcompound) {
+        private BlockInfo(BlockPosition blockposition, IBlockData iblockdata, @Nullable NBTTagCompound nbttagcompound) {
             this.a = blockposition;
             this.b = iblockdata;
             this.c = nbttagcompound;

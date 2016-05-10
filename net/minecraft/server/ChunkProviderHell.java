@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class ChunkProviderHell implements ChunkGenerator {
 
@@ -359,6 +360,7 @@ public class ChunkProviderHell implements ChunkGenerator {
         return biomebase.getMobs(enumcreaturetype);
     }
 
+    @Nullable
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
         return null;
     }

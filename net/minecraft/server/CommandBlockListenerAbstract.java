@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.Callable;
+import javax.annotation.Nullable;
 
 public abstract class CommandBlockListenerAbstract implements ICommandListener {
 
@@ -28,7 +28,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         return (IChatBaseComponent) (this.d == null ? new ChatComponentText("") : this.d);
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
         nbttagcompound.setString("Command", this.e);
         nbttagcompound.setInt("SuccessCount", this.b);
         nbttagcompound.setString("CustomName", this.f);
@@ -38,6 +38,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
         }
 
         this.g.b(nbttagcompound);
+        return nbttagcompound;
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -96,7 +97,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
                     CrashReport crashreport = CrashReport.a(throwable, "Executing command block");
                     CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Command to be executed");
 
-                    crashreportsystemdetails.a("Command", new Callable() {
+                    crashreportsystemdetails.a("Command", new CrashReportCallable() {
                         public String a() throws Exception {
                             return CommandBlockListenerAbstract.this.getCommand();
                         }
@@ -105,7 +106,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
                             return this.a();
                         }
                     });
-                    crashreportsystemdetails.a("Name", new Callable() {
+                    crashreportsystemdetails.a("Name", new CrashReportCallable() {
                         public String a() throws Exception {
                             return CommandBlockListenerAbstract.this.getName();
                         }
@@ -155,7 +156,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
 
     public abstract void i();
 
-    public void b(IChatBaseComponent ichatbasecomponent) {
+    public void b(@Nullable IChatBaseComponent ichatbasecomponent) {
         this.d = ichatbasecomponent;
     }
 

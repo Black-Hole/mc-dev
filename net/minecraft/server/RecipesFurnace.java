@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.annotation.Nullable;
 
 public class RecipesFurnace {
 
@@ -67,6 +68,7 @@ public class RecipesFurnace {
         this.c.put(itemstack1, Float.valueOf(f));
     }
 
+    @Nullable
     public ItemStack getResult(ItemStack itemstack) {
         Iterator iterator = this.recipes.entrySet().iterator();
 

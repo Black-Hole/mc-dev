@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public enum EnumDirection implements INamable {
 
@@ -271,7 +272,7 @@ public enum EnumDirection implements INamable {
             return aenumdirection[random.nextInt(aenumdirection.length)];
         }
 
-        public boolean a(EnumDirection enumdirection) {
+        public boolean a(@Nullable EnumDirection enumdirection) {
             return enumdirection != null && enumdirection.k().d() == this;
         }
 
@@ -334,7 +335,7 @@ public enum EnumDirection implements INamable {
             return this.e;
         }
 
-        public boolean a(EnumDirection enumdirection) {
+        public boolean a(@Nullable EnumDirection enumdirection) {
             return enumdirection != null && enumdirection.k() == this;
         }
 

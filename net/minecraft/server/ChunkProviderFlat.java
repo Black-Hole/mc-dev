@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class ChunkProviderFlat implements ChunkGenerator {
 
@@ -185,6 +186,7 @@ public class ChunkProviderFlat implements ChunkGenerator {
         return biomebase.getMobs(enumcreaturetype);
     }
 
+    @Nullable
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
         if ("Stronghold".equals(s)) {
             Iterator iterator = this.e.iterator();

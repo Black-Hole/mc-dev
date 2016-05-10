@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class ChunkProviderDebug implements ChunkGenerator {
 
@@ -80,6 +81,7 @@ public class ChunkProviderDebug implements ChunkGenerator {
         return biomebase.getMobs(enumcreaturetype);
     }
 
+    @Nullable
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
         return null;
     }

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public class Pathfinder {
 
@@ -14,14 +15,17 @@ public class Pathfinder {
         this.d = pathfinderabstract;
     }
 
+    @Nullable
     public PathEntity a(IBlockAccess iblockaccess, EntityInsentient entityinsentient, Entity entity, float f) {
         return this.a(iblockaccess, entityinsentient, entity.locX, entity.getBoundingBox().b, entity.locZ, f);
     }
 
+    @Nullable
     public PathEntity a(IBlockAccess iblockaccess, EntityInsentient entityinsentient, BlockPosition blockposition, float f) {
         return this.a(iblockaccess, entityinsentient, (double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), f);
     }
 
+    @Nullable
     private PathEntity a(IBlockAccess iblockaccess, EntityInsentient entityinsentient, double d0, double d1, double d2, float f) {
         this.a.a();
         this.d.a(iblockaccess, entityinsentient);
@@ -33,6 +37,7 @@ public class Pathfinder {
         return pathentity;
     }
 
+    @Nullable
     private PathEntity a(PathPoint pathpoint, PathPoint pathpoint1, float f) {
         pathpoint.e = 0.0F;
         pathpoint.f = pathpoint.c(pathpoint1);

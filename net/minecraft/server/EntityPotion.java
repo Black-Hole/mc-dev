@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.base.Optional;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +21,7 @@ public class EntityPotion extends EntityProjectile {
         this.setItem(itemstack);
     }
 
-    public EntityPotion(World world, double d0, double d1, double d2, ItemStack itemstack) {
+    public EntityPotion(World world, double d0, double d1, double d2, @Nullable ItemStack itemstack) {
         super(world, d0, d1, d2);
         if (itemstack != null) {
             this.setItem(itemstack);
@@ -46,7 +47,7 @@ public class EntityPotion extends EntityProjectile {
         }
     }
 
-    public void setItem(ItemStack itemstack) {
+    public void setItem(@Nullable ItemStack itemstack) {
         this.getDataWatcher().set(EntityPotion.d, Optional.fromNullable(itemstack));
         this.getDataWatcher().markDirty(EntityPotion.d);
     }
@@ -78,10 +79,10 @@ public class EntityPotion extends EntityProjectile {
                 this.die();
             } else {
                 if (!list.isEmpty()) {
-                    if (this.n()) {
+                    if (this.isLingering()) {
                         EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX, this.locY, this.locZ);
 
-                        entityareaeffectcloud.a(this.getShooter());
+                        entityareaeffectcloud.setSource(this.getShooter());
                         entityareaeffectcloud.setRadius(3.0F);
                         entityareaeffectcloud.setRadiusOnUse(-0.5F);
                         entityareaeffectcloud.setWaitTime(10);
@@ -106,7 +107,7 @@ public class EntityPotion extends EntityProjectile {
                             while (iterator1.hasNext()) {
                                 EntityLiving entityliving = (EntityLiving) iterator1.next();
 
-                                if (entityliving.cD()) {
+                                if (entityliving.cE()) {
                                     double d0 = this.h(entityliving);
 
                                     if (d0 < 16.0D) {
@@ -145,7 +146,7 @@ public class EntityPotion extends EntityProjectile {
         }
     }
 
-    private boolean n() {
+    public boolean isLingering() {
         return this.getItem().getItem() == Items.LINGERING_POTION;
     }
 

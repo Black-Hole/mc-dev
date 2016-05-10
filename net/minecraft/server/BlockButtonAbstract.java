@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public abstract class BlockButtonAbstract extends BlockDirectional {
 
@@ -28,6 +29,7 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
         this.I = flag;
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockButtonAbstract.k;
     }
@@ -73,7 +75,7 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
         return a(world, blockposition, enumdirection.opposite()) ? this.getBlockData().set(BlockButtonAbstract.FACING, enumdirection).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false)) : this.getBlockData().set(BlockButtonAbstract.FACING, EnumDirection.DOWN).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false));
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (this.e(world, blockposition, iblockdata) && !a(world, blockposition, ((EnumDirection) iblockdata.get(BlockButtonAbstract.FACING)).opposite())) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
@@ -117,7 +119,7 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
         }
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)).booleanValue()) {
             return true;
         } else {
@@ -130,7 +132,7 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
         }
     }
 
-    protected abstract void a(EntityHuman entityhuman, World world, BlockPosition blockposition);
+    protected abstract void a(@Nullable EntityHuman entityhuman, World world, BlockPosition blockposition);
 
     protected abstract void b(World world, BlockPosition blockposition);
 

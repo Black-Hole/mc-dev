@@ -6,10 +6,10 @@ public abstract class EntityFireball extends Entity {
     private int f = -1;
     private int g = -1;
     private Block h;
-    private boolean as;
+    private boolean at;
     public EntityLiving shooter;
-    private int at;
     private int au;
+    private int av;
     public double dirX;
     public double dirY;
     public double dirZ;
@@ -59,27 +59,27 @@ public abstract class EntityFireball extends Entity {
                 this.setOnFire(1);
             }
 
-            if (this.as) {
+            if (this.at) {
                 if (this.world.getType(new BlockPosition(this.e, this.f, this.g)).getBlock() == this.h) {
-                    ++this.at;
-                    if (this.at == 600) {
+                    ++this.au;
+                    if (this.au == 600) {
                         this.die();
                     }
 
                     return;
                 }
 
-                this.as = false;
+                this.at = false;
                 this.motX *= (double) (this.random.nextFloat() * 0.2F);
                 this.motY *= (double) (this.random.nextFloat() * 0.2F);
                 this.motZ *= (double) (this.random.nextFloat() * 0.2F);
-                this.at = 0;
                 this.au = 0;
+                this.av = 0;
             } else {
-                ++this.au;
+                ++this.av;
             }
 
-            MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, true, this.au >= 25, this.shooter);
+            MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, true, this.av >= 25, this.shooter);
 
             if (movingobjectposition != null) {
                 this.a(movingobjectposition);
@@ -133,10 +133,10 @@ public abstract class EntityFireball extends Entity {
         MinecraftKey minecraftkey = (MinecraftKey) Block.REGISTRY.b(this.h);
 
         nbttagcompound.setString("inTile", minecraftkey == null ? "" : minecraftkey.toString());
-        nbttagcompound.setByte("inGround", (byte) (this.as ? 1 : 0));
+        nbttagcompound.setByte("inGround", (byte) (this.at ? 1 : 0));
         nbttagcompound.set("direction", this.a(new double[] { this.motX, this.motY, this.motZ}));
         nbttagcompound.set("power", this.a(new double[] { this.dirX, this.dirY, this.dirZ}));
-        nbttagcompound.setInt("life", this.at);
+        nbttagcompound.setInt("life", this.au);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -149,7 +149,7 @@ public abstract class EntityFireball extends Entity {
             this.h = Block.getById(nbttagcompound.getByte("inTile") & 255);
         }
 
-        this.as = nbttagcompound.getByte("inGround") == 1;
+        this.at = nbttagcompound.getByte("inGround") == 1;
         NBTTagList nbttaglist;
 
         if (nbttagcompound.hasKeyOfType("power", 9)) {
@@ -161,7 +161,7 @@ public abstract class EntityFireball extends Entity {
             }
         }
 
-        this.at = nbttagcompound.getInt("life");
+        this.au = nbttagcompound.getInt("life");
         if (nbttagcompound.hasKeyOfType("direction", 9) && nbttagcompound.getList("direction", 6).size() == 3) {
             nbttaglist = nbttagcompound.getList("direction", 6);
             this.motX = nbttaglist.e(0);

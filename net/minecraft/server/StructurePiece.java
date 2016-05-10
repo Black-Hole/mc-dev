@@ -3,10 +3,12 @@ package net.minecraft.server;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public abstract class StructurePiece {
 
     protected StructureBoundingBox l;
+    @Nullable
     private EnumDirection a;
     private EnumBlockMirror b;
     private EnumBlockRotation c;
@@ -371,11 +373,12 @@ public abstract class StructurePiece {
         this.l.a(i, j, k);
     }
 
+    @Nullable
     public EnumDirection e() {
         return this.a;
     }
 
-    public void a(EnumDirection enumdirection) {
+    public void a(@Nullable EnumDirection enumdirection) {
         this.a = enumdirection;
         if (enumdirection == null) {
             this.c = EnumBlockRotation.NONE;

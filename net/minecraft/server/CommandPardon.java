@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.mojang.authlib.GameProfile;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandPardon extends CommandAbstract {
 
@@ -39,7 +40,7 @@ public class CommandPardon extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, minecraftserver.getPlayerList().getProfileBans().getEntries()) : Collections.emptyList();
     }
 }

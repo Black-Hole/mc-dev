@@ -6,18 +6,22 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public class LootTableInfo {
 
     private final float a;
     private final WorldServer b;
     private final LootTableRegistry c;
+    @Nullable
     private final Entity d;
+    @Nullable
     private final EntityHuman e;
+    @Nullable
     private final DamageSource f;
     private final Set<LootTable> g = Sets.newLinkedHashSet();
 
-    public LootTableInfo(float f, WorldServer worldserver, LootTableRegistry loottableregistry, Entity entity, EntityHuman entityhuman, DamageSource damagesource) {
+    public LootTableInfo(float f, WorldServer worldserver, LootTableRegistry loottableregistry, @Nullable Entity entity, @Nullable EntityHuman entityhuman, @Nullable DamageSource damagesource) {
         this.a = f;
         this.b = worldserver;
         this.c = loottableregistry;
@@ -26,14 +30,17 @@ public class LootTableInfo {
         this.f = damagesource;
     }
 
+    @Nullable
     public Entity a() {
         return this.d;
     }
 
+    @Nullable
     public Entity b() {
         return this.e;
     }
 
+    @Nullable
     public Entity c() {
         return this.f == null ? null : this.f.getEntity();
     }
@@ -54,6 +61,7 @@ public class LootTableInfo {
         return this.a;
     }
 
+    @Nullable
     public Entity a(LootTableInfo.EntityTarget loottableinfo_entitytarget) {
         switch (LootTableInfo.SyntheticClass_1.a[loottableinfo_entitytarget.ordinal()]) {
         case 1:

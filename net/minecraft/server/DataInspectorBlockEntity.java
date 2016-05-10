@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import java.util.Map;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +13,7 @@ public class DataInspectorBlockEntity implements DataInspector {
 
     public DataInspectorBlockEntity() {}
 
+    @Nullable
     private static String a(String s) {
         return (String) DataInspectorBlockEntity.b.get((new MinecraftKey(s)).toString());
     }

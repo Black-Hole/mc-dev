@@ -90,7 +90,7 @@ public abstract class MobSpawnerAbstract {
                     EntityInsentient entityinsentient = entity instanceof EntityInsentient ? (EntityInsentient) entity : null;
 
                     entity.setPositionRotation(entity.locX, entity.locY, entity.locZ, world.random.nextFloat() * 360.0F, 0.0F);
-                    if (entityinsentient == null || entityinsentient.cF() && entityinsentient.canSpawn()) {
+                    if (entityinsentient == null || entityinsentient.cG() && entityinsentient.canSpawn()) {
                         if (this.spawnData.b().d() == 1 && this.spawnData.b().hasKeyOfType("id", 8) && entity instanceof EntityInsentient) {
                             ((EntityInsentient) entity).prepare(world.D(new BlockPosition(entity)), (GroupDataEntity) null);
                         }
@@ -168,10 +168,12 @@ public abstract class MobSpawnerAbstract {
 
     }
 
-    public void b(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound b(NBTTagCompound nbttagcompound) {
         String s = this.getMobName();
 
-        if (!UtilColor.b(s)) {
+        if (UtilColor.b(s)) {
+            return nbttagcompound;
+        } else {
             nbttagcompound.setShort("Delay", (short) this.spawnDelay);
             nbttagcompound.setShort("MinSpawnDelay", (short) this.minSpawnDelay);
             nbttagcompound.setShort("MaxSpawnDelay", (short) this.maxSpawnDelay);
@@ -195,6 +197,7 @@ public abstract class MobSpawnerAbstract {
             }
 
             nbttagcompound.set("SpawnPotentials", nbttaglist);
+            return nbttagcompound;
         }
     }
 

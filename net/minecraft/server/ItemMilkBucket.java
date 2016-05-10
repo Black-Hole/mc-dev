@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ItemMilkBucket extends Item {
 
     public ItemMilkBucket() {
@@ -7,6 +9,7 @@ public class ItemMilkBucket extends Item {
         this.a(CreativeModeTab.f);
     }
 
+    @Nullable
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
         if (entityliving instanceof EntityHuman && !((EntityHuman) entityliving).abilities.canInstantlyBuild) {
             --itemstack.count;

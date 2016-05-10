@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import javax.annotation.Nullable;
 import org.apache.commons.io.IOUtils;
 
 public class UserCache {
@@ -134,6 +135,7 @@ public class UserCache {
         this.c();
     }
 
+    @Nullable
     public GameProfile getProfile(String s) {
         String s1 = s.toLowerCase(Locale.ROOT);
         UserCache.UserCacheEntry usercache_usercacheentry = (UserCache.UserCacheEntry) this.d.get(s1);
@@ -169,6 +171,7 @@ public class UserCache {
         return (String[]) arraylist.toArray(new String[arraylist.size()]);
     }
 
+    @Nullable
     public GameProfile a(UUID uuid) {
         UserCache.UserCacheEntry usercache_usercacheentry = (UserCache.UserCacheEntry) this.e.get(uuid);
 
@@ -321,9 +324,7 @@ public class UserCache {
                             return null;
                         }
 
-                        UserCache.UserCacheEntry usercache_usercacheentry = UserCache.this.new UserCacheEntry(new GameProfile(uuid, s1), date, null);
-
-                        return usercache_usercacheentry;
+                        return UserCache.this.new UserCacheEntry(new GameProfile(uuid, s1), date, null);
                     } else {
                         return null;
                     }

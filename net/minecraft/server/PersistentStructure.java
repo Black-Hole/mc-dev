@@ -12,8 +12,9 @@ public class PersistentStructure extends PersistentBase {
         this.b = nbttagcompound.getCompound("Features");
     }
 
-    public void b(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound b(NBTTagCompound nbttagcompound) {
         nbttagcompound.set("Features", this.b);
+        return nbttagcompound;
     }
 
     public void a(NBTTagCompound nbttagcompound, int i, int j) {

@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterators;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 
 public class RegistryID<K> implements Registry<K>, Iterable<K> {
 
@@ -24,6 +25,7 @@ public class RegistryID<K> implements Registry<K>, Iterable<K> {
         return this.c(this.b(k0, this.d(k0)));
     }
 
+    @Nullable
     public K fromId(int i) {
         return i >= 0 && i < this.d.length ? this.d[i] : null;
     }
@@ -119,24 +121,18 @@ public class RegistryID<K> implements Registry<K>, Iterable<K> {
     }
 
     private int e(int i) {
-        StringBuilder stringbuilder = new StringBuilder("");
-
         int j;
 
         for (j = i; j < this.b.length; ++j) {
             if (this.b[j] == RegistryID.a) {
                 return j;
             }
-
-            stringbuilder.append(j).append(' ');
         }
 
         for (j = 0; j < i; ++j) {
             if (this.b[j] == RegistryID.a) {
                 return j;
             }
-
-            stringbuilder.append(j).append(' ');
         }
 
         throw new RuntimeException("Overflowed :(");

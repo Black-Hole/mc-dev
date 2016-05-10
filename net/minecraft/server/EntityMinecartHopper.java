@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class EntityMinecartHopper extends EntityMinecartContainer implements IHopper {
 
@@ -34,7 +35,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
         return 5;
     }
 
-    public boolean a(EntityHuman entityhuman, ItemStack itemstack, EnumHand enumhand) {
+    public boolean a(EntityHuman entityhuman, @Nullable ItemStack itemstack, EnumHand enumhand) {
         if (!this.world.isClientSide) {
             entityhuman.openContainer(this);
         }
@@ -45,17 +46,17 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     public void a(int i, int j, int k, boolean flag) {
         boolean flag1 = !flag;
 
-        if (flag1 != this.C()) {
-            this.k(flag1);
+        if (flag1 != this.isEnabled()) {
+            this.setEnabled(flag1);
         }
 
     }
 
-    public boolean C() {
+    public boolean isEnabled() {
         return this.a;
     }
 
-    public void k(boolean flag) {
+    public void setEnabled(boolean flag) {
         this.a = flag;
     }
 
@@ -77,7 +78,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 
     public void m() {
         super.m();
-        if (!this.world.isClientSide && this.isAlive() && this.C()) {
+        if (!this.world.isClientSide && this.isAlive() && this.isEnabled()) {
             BlockPosition blockposition = new BlockPosition(this);
 
             if (blockposition.equals(this.c)) {

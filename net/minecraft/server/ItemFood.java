@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ItemFood extends Item {
 
     public final int a;
@@ -22,6 +24,7 @@ public class ItemFood extends Item {
         this(i, 0.6F, flag);
     }
 
+    @Nullable
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
         --itemstack.count;
         if (entityliving instanceof EntityHuman) {

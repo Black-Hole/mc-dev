@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +24,8 @@ public class RegistrySimple<K, V> implements IRegistry<K, V> {
         return Maps.newHashMap();
     }
 
-    public V get(K k0) {
+    @Nullable
+    public V get(@Nullable K k0) {
         return this.c.get(k0);
     }
 
@@ -42,6 +44,7 @@ public class RegistrySimple<K, V> implements IRegistry<K, V> {
         return Collections.unmodifiableSet(this.c.keySet());
     }
 
+    @Nullable
     public V a(Random random) {
         if (this.b == null) {
             Collection collection = this.c.values();

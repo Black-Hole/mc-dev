@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.io.File;
+import javax.annotation.Nullable;
 
 public class ServerNBTManager extends WorldNBTStorage {
 
@@ -25,7 +26,7 @@ public class ServerNBTManager extends WorldNBTStorage {
         }
     }
 
-    public void saveWorldData(WorldData worlddata, NBTTagCompound nbttagcompound) {
+    public void saveWorldData(WorldData worlddata, @Nullable NBTTagCompound nbttagcompound) {
         worlddata.e(19133);
         super.saveWorldData(worlddata, nbttagcompound);
     }

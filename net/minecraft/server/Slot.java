@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class Slot {
 
     public final int index;
@@ -36,10 +38,11 @@ public class Slot {
         this.f();
     }
 
-    public boolean isAllowed(ItemStack itemstack) {
+    public boolean isAllowed(@Nullable ItemStack itemstack) {
         return true;
     }
 
+    @Nullable
     public ItemStack getItem() {
         return this.inventory.getItem(this.index);
     }
@@ -48,7 +51,7 @@ public class Slot {
         return this.getItem() != null;
     }
 
-    public void set(ItemStack itemstack) {
+    public void set(@Nullable ItemStack itemstack) {
         this.inventory.setItem(this.index, itemstack);
         this.f();
     }

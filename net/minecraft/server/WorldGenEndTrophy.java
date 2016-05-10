@@ -18,7 +18,7 @@ public class WorldGenEndTrophy extends WorldGenerator {
 
         while (iterator.hasNext()) {
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = (BlockPosition.MutableBlockPosition) iterator.next();
-            double d0 = blockposition_mutableblockposition.f(blockposition.getX(), blockposition_mutableblockposition.getY(), blockposition.getZ());
+            double d0 = blockposition_mutableblockposition.h(blockposition.getX(), blockposition_mutableblockposition.getY(), blockposition.getZ());
 
             if (d0 <= 3.5D) {
                 if (blockposition_mutableblockposition.getY() < blockposition.getY()) {

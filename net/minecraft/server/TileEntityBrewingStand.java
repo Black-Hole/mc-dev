@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Arrays;
+import javax.annotation.Nullable;
 
 public class TileEntityBrewingStand extends TileEntityContainer implements ITickable, IWorldInventory {
 
@@ -173,7 +174,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         this.m = nbttagcompound.getByte("Fuel");
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         nbttagcompound.setShort("BrewTime", (short) this.brewTime);
         NBTTagList nbttaglist = new NBTTagList();
@@ -194,21 +195,25 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         }
 
         nbttagcompound.setByte("Fuel", (byte) this.m);
+        return nbttagcompound;
     }
 
+    @Nullable
     public ItemStack getItem(int i) {
         return i >= 0 && i < this.items.length ? this.items[i] : null;
     }
 
+    @Nullable
     public ItemStack splitStack(int i, int j) {
         return ContainerUtil.a(this.items, i, j);
     }
 
+    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         return ContainerUtil.a(this.items, i);
     }
 
-    public void setItem(int i, ItemStack itemstack) {
+    public void setItem(int i, @Nullable ItemStack itemstack) {
         if (i >= 0 && i < this.items.length) {
             this.items[i] = itemstack;
         }

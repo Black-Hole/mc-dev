@@ -71,7 +71,7 @@ public class WorldGenStronghold extends StructureGenerator {
             ChunkCoordIntPair chunkcoordintpair = achunkcoordintpair[j];
 
             blockposition_mutableblockposition.c((chunkcoordintpair.x << 4) + 8, 32, (chunkcoordintpair.z << 4) + 8);
-            double d1 = blockposition_mutableblockposition.k(blockposition);
+            double d1 = blockposition_mutableblockposition.n(blockposition);
 
             if (blockposition1 == null) {
                 blockposition1 = new BlockPosition(blockposition_mutableblockposition);
@@ -156,7 +156,7 @@ public class WorldGenStronghold extends StructureGenerator {
 
     }
 
-    protected List<BlockPosition> E_() {
+    protected List<BlockPosition> F_() {
         ArrayList arraylist = Lists.newArrayList();
         ChunkCoordIntPair[] achunkcoordintpair = this.d;
         int i = achunkcoordintpair.length;

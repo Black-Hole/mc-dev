@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public abstract class AttributeBase implements IAttribute {
 
     private final IAttribute a;
@@ -7,7 +9,7 @@ public abstract class AttributeBase implements IAttribute {
     private final double c;
     private boolean d;
 
-    protected AttributeBase(IAttribute iattribute, String s, double d0) {
+    protected AttributeBase(@Nullable IAttribute iattribute, String s, double d0) {
         this.a = iattribute;
         this.b = s;
         this.c = d0;
@@ -33,6 +35,7 @@ public abstract class AttributeBase implements IAttribute {
         return this;
     }
 
+    @Nullable
     public IAttribute d() {
         return this.a;
     }

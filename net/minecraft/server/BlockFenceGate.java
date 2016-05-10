@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class BlockFenceGate extends BlockFacingHorizontal {
 
     public static final BlockStateBoolean OPEN = BlockStateBoolean.of("open");
@@ -45,6 +47,7 @@ public class BlockFenceGate extends BlockFacingHorizontal {
         return world.getType(blockposition.down()).getMaterial().isBuildable() ? super.canPlace(world, blockposition) : false;
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() ? BlockFenceGate.k : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.Z ? BlockFenceGate.B : BlockFenceGate.C);
     }
@@ -65,7 +68,7 @@ public class BlockFenceGate extends BlockFacingHorizontal {
         return this.getBlockData().set(BlockFenceGate.FACING, entityliving.getDirection()).set(BlockFenceGate.OPEN, Boolean.valueOf(false)).set(BlockFenceGate.POWERED, Boolean.valueOf(false)).set(BlockFenceGate.IN_WALL, Boolean.valueOf(false));
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue()) {
             iblockdata = iblockdata.set(BlockFenceGate.OPEN, Boolean.valueOf(false));
             world.setTypeAndData(blockposition, iblockdata, 10);
@@ -84,7 +87,7 @@ public class BlockFenceGate extends BlockFacingHorizontal {
         return true;
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!world.isClientSide) {
             boolean flag = world.isBlockIndirectlyPowered(blockposition);
 

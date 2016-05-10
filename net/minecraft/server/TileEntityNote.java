@@ -7,10 +7,11 @@ public class TileEntityNote extends TileEntity {
 
     public TileEntityNote() {}
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         nbttagcompound.setByte("note", this.note);
         nbttagcompound.setBoolean("powered", this.f);
+        return nbttagcompound;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -20,7 +21,7 @@ public class TileEntityNote extends TileEntity {
         this.f = nbttagcompound.getBoolean("powered");
     }
 
-    public void b() {
+    public void c() {
         this.note = (byte) ((this.note + 1) % 25);
         this.update();
     }

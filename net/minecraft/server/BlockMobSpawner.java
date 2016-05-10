@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockMobSpawner extends BlockTileEntity {
 
@@ -12,6 +13,7 @@ public class BlockMobSpawner extends BlockTileEntity {
         return new TileEntityMobSpawner();
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return null;
     }
@@ -35,6 +37,7 @@ public class BlockMobSpawner extends BlockTileEntity {
         return EnumRenderType.MODEL;
     }
 
+    @Nullable
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return null;
     }

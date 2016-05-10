@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public abstract class BlockWoodenStep extends BlockStepAbstract {
 
@@ -22,6 +23,7 @@ public abstract class BlockWoodenStep extends BlockStepAbstract {
         return ((BlockWood.EnumLogVariant) iblockdata.get(BlockWoodenStep.VARIANT)).c();
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.WOODEN_SLAB);
     }

@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -128,7 +129,7 @@ public abstract class PlayerList {
                     if (entity.getUniqueID().equals(uuid)) {
                         entityplayer.a(entity, true);
                     } else {
-                        iterator1 = entity.bv().iterator();
+                        iterator1 = entity.bw().iterator();
 
                         while (iterator1.hasNext()) {
                             entity1 = (Entity) iterator1.next();
@@ -142,7 +143,7 @@ public abstract class PlayerList {
                     if (!entityplayer.isPassenger()) {
                         PlayerList.f.warn("Couldn\'t reattach entity to player");
                         worldserver.removeEntity(entity);
-                        iterator1 = entity.bv().iterator();
+                        iterator1 = entity.bw().iterator();
 
                         while (iterator1.hasNext()) {
                             entity1 = (Entity) iterator1.next();
@@ -290,7 +291,7 @@ public abstract class PlayerList {
                 PlayerList.f.debug("Removing player mount");
                 entityplayer.stopRiding();
                 worldserver.removeEntity(entity);
-                Iterator iterator = entity.bv().iterator();
+                Iterator iterator = entity.bw().iterator();
 
                 while (iterator.hasNext()) {
                     Entity entity1 = (Entity) iterator.next();
@@ -405,7 +406,7 @@ public abstract class PlayerList {
         entityplayer1.copyTo(entityplayer, flag);
         entityplayer1.f(entityplayer.getId());
         entityplayer1.v(entityplayer);
-        entityplayer1.a(entityplayer.cr());
+        entityplayer1.a(entityplayer.getMainHand());
         Iterator iterator = entityplayer.P().iterator();
 
         while (iterator.hasNext()) {
@@ -618,7 +619,7 @@ public abstract class PlayerList {
 
             s = s + ((EntityPlayer) arraylist.get(i)).getName();
             if (flag) {
-                s = s + " (" + ((EntityPlayer) arraylist.get(i)).getUniqueID().toString() + ")";
+                s = s + " (" + ((EntityPlayer) arraylist.get(i)).bd() + ")";
             }
         }
 
@@ -690,6 +691,7 @@ public abstract class PlayerList {
         return this.operators.d(gameprofile) || this.server.R() && this.server.worldServer[0].getWorldData().u() && this.server.Q().equalsIgnoreCase(gameprofile.getName()) || this.t;
     }
 
+    @Nullable
     public EntityPlayer getPlayer(String s) {
         Iterator iterator = this.players.iterator();
 
@@ -706,7 +708,7 @@ public abstract class PlayerList {
         return entityplayer;
     }
 
-    public void sendPacketNearby(EntityHuman entityhuman, double d0, double d1, double d2, double d3, int i, Packet<?> packet) {
+    public void sendPacketNearby(@Nullable EntityHuman entityhuman, double d0, double d1, double d2, double d3, int i, Packet<?> packet) {
         for (int j = 0; j < this.players.size(); ++j) {
             EntityPlayer entityplayer = (EntityPlayer) this.players.get(j);
 

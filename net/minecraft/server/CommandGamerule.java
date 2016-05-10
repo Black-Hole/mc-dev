@@ -3,6 +3,7 @@ package net.minecraft.server;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandGamerule extends CommandAbstract {
 
@@ -67,7 +68,7 @@ public class CommandGamerule extends CommandAbstract {
 
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         if (astring.length == 1) {
             return a(astring, this.a(minecraftserver).getGameRules());
         } else {

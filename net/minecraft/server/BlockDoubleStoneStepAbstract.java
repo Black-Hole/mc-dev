@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public abstract class BlockDoubleStoneStepAbstract extends BlockStepAbstract {
 
@@ -25,6 +26,7 @@ public abstract class BlockDoubleStoneStepAbstract extends BlockStepAbstract {
         return LocaleI18n.get(this.a() + ".red_sandstone.name");
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.STONE_SLAB2);
     }

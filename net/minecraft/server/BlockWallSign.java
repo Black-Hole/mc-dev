@@ -29,7 +29,7 @@ public class BlockWallSign extends BlockSign {
         }
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockWallSign.FACING);
 
         if (!world.getType(blockposition.shift(enumdirection.opposite())).getMaterial().isBuildable()) {
@@ -37,7 +37,7 @@ public class BlockWallSign extends BlockSign {
             world.setAir(blockposition);
         }
 
-        super.doPhysics(world, blockposition, iblockdata, block);
+        super.a(iblockdata, world, blockposition, block);
     }
 
     public IBlockData fromLegacyData(int i) {

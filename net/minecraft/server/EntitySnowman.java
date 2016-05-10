@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntitySnowman extends EntityGolem implements IRangedEntity {
 
     private static final DataWatcherObject<Byte> a = DataWatcher.a(EntitySnowman.class, DataWatcherRegistry.a);
@@ -61,6 +63,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
 
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.A;
     }
@@ -82,7 +85,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         return 1.7F;
     }
 
-    protected boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
+    protected boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {
         if (itemstack != null && itemstack.getItem() == Items.SHEARS && !this.o() && !this.world.isClientSide) {
             this.a(true);
             itemstack.damage(1, entityhuman);
@@ -106,15 +109,18 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
 
     }
 
+    @Nullable
     protected SoundEffect G() {
         return SoundEffects.fI;
     }
 
-    protected SoundEffect bR() {
+    @Nullable
+    protected SoundEffect bS() {
         return SoundEffects.fK;
     }
 
-    protected SoundEffect bS() {
+    @Nullable
+    protected SoundEffect bT() {
         return SoundEffects.fJ;
     }
 }

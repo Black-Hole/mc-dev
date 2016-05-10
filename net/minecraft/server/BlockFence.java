@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class BlockFence extends Block {
 
@@ -21,7 +22,7 @@ public class BlockFence extends Block {
         this.a(CreativeModeTab.c);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
         iblockdata = iblockdata.b((IBlockAccess) world, blockposition);
         a(blockposition, axisalignedbb, list, BlockFence.f);
         if (((Boolean) iblockdata.get(BlockFence.NORTH)).booleanValue()) {
@@ -88,7 +89,7 @@ public class BlockFence extends Block {
         return block == Blocks.BARRIER ? false : ((!(block instanceof BlockFence) || block.material != this.material) && !(block instanceof BlockFenceGate) ? (block.material.k() && iblockdata.h() ? block.material != Material.PUMPKIN : false) : true);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         return world.isClientSide ? true : ItemLeash.a(entityhuman, world, blockposition);
     }
 

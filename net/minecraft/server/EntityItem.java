@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.base.Optional;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -294,6 +295,7 @@ public class EntityItem extends Entity {
         return false;
     }
 
+    @Nullable
     public Entity c(int i) {
         Entity entity = super.c(i);
 
@@ -318,7 +320,7 @@ public class EntityItem extends Entity {
         }
     }
 
-    public void setItemStack(ItemStack itemstack) {
+    public void setItemStack(@Nullable ItemStack itemstack) {
         this.getDataWatcher().set(EntityItem.c, Optional.fromNullable(itemstack));
         this.getDataWatcher().markDirty(EntityItem.c);
     }

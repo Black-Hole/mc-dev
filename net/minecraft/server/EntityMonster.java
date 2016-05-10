@@ -7,12 +7,12 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         this.b_ = 5;
     }
 
-    public SoundCategory bz() {
+    public SoundCategory bA() {
         return SoundCategory.HOSTILE;
     }
 
     public void n() {
-        this.bY();
+        this.bZ();
         float f = this.e(1.0F);
 
         if (f > 0.5F) {
@@ -42,11 +42,11 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         return this.isInvulnerable(damagesource) ? false : super.damageEntity(damagesource, f);
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.cD;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.cC;
     }
 
@@ -81,13 +81,13 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
             if (entity instanceof EntityHuman) {
                 EntityHuman entityhuman = (EntityHuman) entity;
                 ItemStack itemstack = this.getItemInMainHand();
-                ItemStack itemstack1 = entityhuman.cs() ? entityhuman.cv() : null;
+                ItemStack itemstack1 = entityhuman.ct() ? entityhuman.cw() : null;
 
                 if (itemstack != null && itemstack1 != null && itemstack.getItem() instanceof ItemAxe && itemstack1.getItem() == Items.SHIELD) {
                     float f1 = 0.25F + (float) EnchantmentManager.getDigSpeedEnchantmentLevel(this) * 0.05F;
 
                     if (this.random.nextFloat() < f1) {
-                        entityhuman.da().a(Items.SHIELD, 100);
+                        entityhuman.db().a(Items.SHIELD, 100);
                         this.world.broadcastEntityEffect(entityhuman, (byte) 30);
                     }
                 }
@@ -123,8 +123,8 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         }
     }
 
-    public boolean cF() {
-        return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.s_() && super.cF();
+    public boolean cG() {
+        return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.s_() && super.cG();
     }
 
     protected void initAttributes() {

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class TileEntityChest extends TileEntityLootable implements ITickable, IInventory {
 
@@ -28,11 +29,13 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
         return 27;
     }
 
+    @Nullable
     public ItemStack getItem(int i) {
         this.d((EntityHuman) null);
         return this.items[i];
     }
 
+    @Nullable
     public ItemStack splitStack(int i, int j) {
         this.d((EntityHuman) null);
         ItemStack itemstack = ContainerUtil.a(this.items, i, j);
@@ -44,12 +47,13 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
         return itemstack;
     }
 
+    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         this.d((EntityHuman) null);
         return ContainerUtil.a(this.items, i);
     }
 
-    public void setItem(int i, ItemStack itemstack) {
+    public void setItem(int i, @Nullable ItemStack itemstack) {
         this.d((EntityHuman) null);
         this.items[i] = itemstack;
         if (itemstack != null && itemstack.count > this.getMaxStackSize()) {
@@ -78,7 +82,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
             this.r = nbttagcompound.getString("CustomName");
         }
 
-        if (!this.c(nbttagcompound)) {
+        if (!this.d(nbttagcompound)) {
             NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -93,9 +97,9 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
 
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (!this.d(nbttagcompound)) {
+        if (!this.e(nbttagcompound)) {
             NBTTagList nbttaglist = new NBTTagList();
 
             for (int i = 0; i < this.items.length; ++i) {
@@ -115,6 +119,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
             nbttagcompound.setString("CustomName", this.r);
         }
 
+        return nbttagcompound;
     }
 
     public int getMaxStackSize() {
@@ -172,6 +177,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
         }
     }
 
+    @Nullable
     protected TileEntityChest a(EnumDirection enumdirection) {
         BlockPosition blockposition = this.position.shift(enumdirection);
 

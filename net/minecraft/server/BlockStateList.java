@@ -21,12 +21,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 
 public class BlockStateList {
 
     private static final Pattern a = Pattern.compile("^[a-z0-9_]+$");
     private static final Function<IBlockState<?>, String> b = new Function() {
-        public String a(IBlockState<?> iblockstate) {
+        @Nullable
+        public String a(@Nullable IBlockState<?> iblockstate) {
             return iblockstate == null ? "<NULL>" : iblockstate.a();
         }
 
@@ -151,20 +153,30 @@ public class BlockStateList {
         }
 
         public <T extends Comparable<T>> T get(IBlockState<T> iblockstate) {
-            if (!this.b.containsKey(iblockstate)) {
+            Comparable comparable = (Comparable) this.b.get(iblockstate);
+
+            if (comparable == null) {
                 throw new IllegalArgumentException("Cannot get property " + iblockstate + " as it does not exist in " + this.a.t());
             } else {
-                return (Comparable) iblockstate.b().cast(this.b.get(iblockstate));
+                return (Comparable) iblockstate.b().cast(comparable);
             }
         }
 
         public <T extends Comparable<T>, V extends T> IBlockData set(IBlockState<T> iblockstate, V v0) {
-            if (!this.b.containsKey(iblockstate)) {
+            Comparable comparable = (Comparable) this.b.get(iblockstate);
+
+            if (comparable == null) {
                 throw new IllegalArgumentException("Cannot set property " + iblockstate + " as it does not exist in " + this.a.t());
-            } else if (!iblockstate.c().contains(v0)) {
-                throw new IllegalArgumentException("Cannot set property " + iblockstate + " to " + v0 + " on block " + Block.REGISTRY.b(this.a) + ", it is not an allowed value");
+            } else if (comparable == v0) {
+                return this;
             } else {
-                return (IBlockData) (this.b.get(iblockstate) == v0 ? this : (IBlockData) this.c.get(iblockstate, v0));
+                IBlockData iblockdata = (IBlockData) this.c.get(iblockstate, v0);
+
+                if (iblockdata == null) {
+                    throw new IllegalArgumentException("Cannot set property " + iblockstate + " to " + v0 + " on block " + Block.REGISTRY.b(this.a) + ", it is not an allowed value");
+                } else {
+                    return iblockdata;
+                }
             }
         }
 
@@ -304,11 +316,12 @@ public class BlockStateList {
             return this.a.b((IBlockData) this);
         }
 
+        @Nullable
         public AxisAlignedBB d(World world, BlockPosition blockposition) {
             return this.a.a((IBlockData) this, world, blockposition);
         }
 
-        public void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+        public void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
             this.a.a((IBlockData) this, world, blockposition, axisalignedbb, list, entity);
         }
 
@@ -322,6 +335,14 @@ public class BlockStateList {
 
         public boolean q() {
             return this.a.k(this);
+        }
+
+        public boolean a(World world, BlockPosition blockposition, int i, int j) {
+            return this.a.a(this, world, blockposition, i, j);
+        }
+
+        public void doPhysics(World world, BlockPosition blockposition, Block block) {
+            this.a.a((IBlockData) this, world, blockposition, block);
         }
 
         BlockData(Block block, ImmutableMap immutablemap, Object object) {

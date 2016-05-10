@@ -3,12 +3,13 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import java.util.Collection;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 public abstract class ScoreboardTeamBase {
 
     public ScoreboardTeamBase() {}
 
-    public boolean isAlly(ScoreboardTeamBase scoreboardteambase) {
+    public boolean isAlly(@Nullable ScoreboardTeamBase scoreboardteambase) {
         return scoreboardteambase == null ? false : this == scoreboardteambase;
     }
 
@@ -22,9 +23,9 @@ public abstract class ScoreboardTeamBase {
 
     public abstract Collection<String> getPlayerNameSet();
 
-    public abstract ScoreboardTeamBase.EnumNameTagVisibility j();
+    public abstract ScoreboardTeamBase.EnumNameTagVisibility getDeathMessageVisibility();
 
-    public abstract ScoreboardTeamBase.EnumTeamPush k();
+    public abstract ScoreboardTeamBase.EnumTeamPush getCollisionRule();
 
     public static enum EnumTeamPush {
 

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class BlockAir extends Block {
 
     protected BlockAir() {
@@ -10,6 +12,7 @@ public class BlockAir extends Block {
         return EnumRenderType.INVISIBLE;
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return null;
     }

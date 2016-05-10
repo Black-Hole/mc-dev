@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 
 public class PlayerSelector {
 
@@ -25,16 +26,19 @@ public class PlayerSelector {
     private static final Pattern c = Pattern.compile("\\G(\\w+)=([-!]?[\\w-]*)(?:$|,)");
     private static final Set<String> d = Sets.newHashSet(new String[] { "x", "y", "z", "dx", "dy", "dz", "rm", "r"});
 
+    @Nullable
     public static EntityPlayer getPlayer(ICommandListener icommandlistener, String s) {
         return (EntityPlayer) getEntity(icommandlistener, s, EntityPlayer.class);
     }
 
+    @Nullable
     public static <T extends Entity> T getEntity(ICommandListener icommandlistener, String s, Class<? extends T> oclass) {
         List list = getPlayers(icommandlistener, s, oclass);
 
         return list.size() == 1 ? (Entity) list.get(0) : null;
     }
 
+    @Nullable
     public static IChatBaseComponent getPlayerNames(ICommandListener icommandlistener, String s) {
         List list = getPlayers(icommandlistener, s, Entity.class);
 
@@ -138,7 +142,7 @@ public class PlayerSelector {
         if ((s1 == null || !s.equals("e")) && !flag2) {
             if (flag1) {
                 arraylist.add(new Predicate() {
-                    public boolean a(Entity entity) {
+                    public boolean a(@Nullable Entity entity) {
                         return entity instanceof EntityHuman;
                     }
 
@@ -149,7 +153,7 @@ public class PlayerSelector {
             }
         } else {
             arraylist.add(new Predicate() {
-                public boolean a(Entity entity) {
+                public boolean a(@Nullable Entity entity) {
                     return EntityTypes.a(entity, s) != flag;
                 }
 
@@ -169,7 +173,7 @@ public class PlayerSelector {
 
         if (i > -1 || j > -1) {
             arraylist.add(new Predicate() {
-                public boolean a(Entity entity) {
+                public boolean a(@Nullable Entity entity) {
                     if (!(entity instanceof EntityPlayer)) {
                         return false;
                     } else {
@@ -212,7 +216,7 @@ public class PlayerSelector {
             }
 
             arraylist.add(new Predicate() {
-                public boolean a(Entity entity) {
+                public boolean a(@Nullable Entity entity) {
                     if (!(entity instanceof EntityPlayer)) {
                         return false;
                     } else {
@@ -242,7 +246,7 @@ public class PlayerSelector {
 
         if (s != null) {
             arraylist.add(new Predicate() {
-                public boolean a(Entity entity) {
+                public boolean a(@Nullable Entity entity) {
                     if (!(entity instanceof EntityLiving)) {
                         return false;
                     } else {
@@ -267,7 +271,7 @@ public class PlayerSelector {
         final Map map1 = a(map);
 
         return (List) (map1.isEmpty() ? Collections.emptyList() : Lists.newArrayList(new Predicate[] { new Predicate() {
-            public boolean a(Entity entity) {
+            public boolean a(@Nullable Entity entity) {
                 if (entity == null) {
                     return false;
                 } else {
@@ -298,7 +302,7 @@ public class PlayerSelector {
                             return false;
                         }
 
-                        String s1 = entity instanceof EntityPlayer ? entity.getName() : entity.getUniqueID().toString();
+                        String s1 = entity instanceof EntityPlayer ? entity.getName() : entity.bd();
 
                         if (!scoreboard.b(s1, scoreboardobjective)) {
                             return false;
@@ -333,7 +337,7 @@ public class PlayerSelector {
 
         if (s != null) {
             arraylist.add(new Predicate() {
-                public boolean a(Entity entity) {
+                public boolean a(@Nullable Entity entity) {
                     return entity != null && entity.getName().equals(s) != flag;
                 }
 
@@ -357,7 +361,7 @@ public class PlayerSelector {
 
         if (s != null) {
             arraylist.add(new Predicate() {
-                public boolean a(Entity entity) {
+                public boolean a(@Nullable Entity entity) {
                     return entity == null ? false : ("".equals(s) ? entity.P().isEmpty() != flag : entity.P().contains(s) != flag);
                 }
 
@@ -385,7 +389,7 @@ public class PlayerSelector {
             final double d5 = d4 * d4;
 
             return Lists.newArrayList(new Predicate[] { new Predicate() {
-                public boolean a(Entity entity) {
+                public boolean a(@Nullable Entity entity) {
                     if (entity == null) {
                         return false;
                     } else {
@@ -411,7 +415,7 @@ public class PlayerSelector {
             i = MathHelper.b(a(map, "rym", 0));
             j = MathHelper.b(a(map, "ry", 359));
             arraylist.add(new Predicate() {
-                public boolean a(Entity entity) {
+                public boolean a(@Nullable Entity entity) {
                     if (entity == null) {
                         return false;
                     } else {
@@ -431,7 +435,7 @@ public class PlayerSelector {
             i = MathHelper.b(a(map, "rxm", 0));
             j = MathHelper.b(a(map, "rx", 359));
             arraylist.add(new Predicate() {
-                public boolean a(Entity entity) {
+                public boolean a(@Nullable Entity entity) {
                     if (entity == null) {
                         return false;
                     } else {
@@ -487,7 +491,7 @@ public class PlayerSelector {
             axisalignedbb = a(blockposition, i, j, k);
             if (flag && flag2 && !flag1) {
                 Predicate predicate2 = new Predicate() {
-                    public boolean a(Entity entity) {
+                    public boolean a(@Nullable Entity entity) {
                         return entity != null && axisalignedbb.b(entity.getBoundingBox());
                     }
 
@@ -587,6 +591,7 @@ public class PlayerSelector {
         return map.containsKey(s) ? MathHelper.a((String) map.get(s), i) : i;
     }
 
+    @Nullable
     private static String b(Map<String, String> map, String s) {
         return (String) map.get(s);
     }
@@ -624,7 +629,7 @@ public class PlayerSelector {
         return PlayerSelector.a.matcher(s).matches();
     }
 
-    private static Map<String, String> c(String s) {
+    private static Map<String, String> c(@Nullable String s) {
         HashMap hashmap = Maps.newHashMap();
 
         if (s == null) {

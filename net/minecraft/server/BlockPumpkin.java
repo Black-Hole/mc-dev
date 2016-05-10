@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
 
 public class BlockPumpkin extends BlockFacingHorizontal {
 
@@ -9,7 +10,7 @@ public class BlockPumpkin extends BlockFacingHorizontal {
     private ShapeDetector ironGolemPart;
     private ShapeDetector ironGolem;
     private static final Predicate<IBlockData> e = new Predicate() {
-        public boolean a(IBlockData iblockdata) {
+        public boolean a(@Nullable IBlockData iblockdata) {
             return iblockdata != null && (iblockdata.getBlock() == Blocks.PUMPKIN || iblockdata.getBlock() == Blocks.LIT_PUMPKIN);
         }
 

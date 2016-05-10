@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class RecipiesShield {
 
     public RecipiesShield() {}
@@ -54,6 +56,7 @@ public class RecipiesShield {
             }
         }
 
+        @Nullable
         public ItemStack craftItem(InventoryCrafting inventorycrafting) {
             ItemStack itemstack = null;
 
@@ -86,6 +89,7 @@ public class RecipiesShield {
             return 2;
         }
 
+        @Nullable
         public ItemStack b() {
             return null;
         }

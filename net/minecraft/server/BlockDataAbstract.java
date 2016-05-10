@@ -6,12 +6,14 @@ import com.google.common.collect.Iterables;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import javax.annotation.Nullable;
 
 public abstract class BlockDataAbstract implements IBlockData {
 
     private static final Joiner a = Joiner.on(',');
     private static final Function<Entry<IBlockState<?>, Comparable<?>>, String> b = new Function() {
-        public String a(Entry<IBlockState<?>, Comparable<?>> entry) {
+        @Nullable
+        public String a(@Nullable Entry<IBlockState<?>, Comparable<?>> entry) {
             if (entry == null) {
                 return "<NULL>";
             } else {

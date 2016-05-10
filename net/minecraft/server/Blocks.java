@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Sets;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public class Blocks {
 
@@ -218,9 +219,10 @@ public class Blocks {
     public static final Block END_GATEWAY;
     public static final Block dc;
     public static final Block dd;
-    public static final Block de;
+    public static final Block FROSTED_ICE;
     public static final Block STRUCTURE_BLOCK;
 
+    @Nullable
     private static Block get(String s) {
         Block block = (Block) Block.REGISTRY.get(new MinecraftKey(s));
 
@@ -448,7 +450,7 @@ public class Blocks {
             END_GATEWAY = get("end_gateway");
             dc = get("repeating_command_block");
             dd = get("chain_command_block");
-            de = get("frosted_ice");
+            FROSTED_ICE = get("frosted_ice");
             STRUCTURE_BLOCK = get("structure_block");
             Blocks.dg.clear();
         }

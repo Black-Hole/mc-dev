@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityMinecartFurnace extends EntityMinecartAbstract {
 
     private static final DataWatcherObject<Boolean> c = DataWatcher.a(EntityMinecartFurnace.class, DataWatcherRegistry.h);
@@ -97,7 +99,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         super.r();
     }
 
-    public boolean a(EntityHuman entityhuman, ItemStack itemstack, EnumHand enumhand) {
+    public boolean a(EntityHuman entityhuman, @Nullable ItemStack itemstack, EnumHand enumhand) {
         if (itemstack != null && itemstack.getItem() == Items.COAL && this.d + 3600 <= 32000) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 --itemstack.count;

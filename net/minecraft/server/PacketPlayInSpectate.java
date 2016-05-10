@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.io.IOException;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class PacketPlayInSpectate implements Packet<PacketListenerPlayIn> {
 
@@ -25,6 +26,7 @@ public class PacketPlayInSpectate implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
+    @Nullable
     public Entity a(WorldServer worldserver) {
         return worldserver.getEntity(this.a);
     }

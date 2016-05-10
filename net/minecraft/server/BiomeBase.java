@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,6 +38,7 @@ public abstract class BiomeBase {
     private final int E;
     private final boolean F;
     private final boolean G;
+    @Nullable
     private final String H;
     public IBlockData r;
     public IBlockData s;
@@ -50,10 +52,12 @@ public abstract class BiomeBase {
         return BiomeBase.REGISTRY_ID.a((Object) biomebase);
     }
 
+    @Nullable
     public static BiomeBase a(int i) {
         return (BiomeBase) BiomeBase.REGISTRY_ID.getId(i);
     }
 
+    @Nullable
     public static BiomeBase b(BiomeBase biomebase) {
         return (BiomeBase) BiomeBase.j.fromId(a(biomebase));
     }
@@ -231,6 +235,7 @@ public abstract class BiomeBase {
         return (double) this.getTemperature() < 0.2D ? BiomeBase.EnumTemperature.COLD : ((double) this.getTemperature() < 1.0D ? BiomeBase.EnumTemperature.MEDIUM : BiomeBase.EnumTemperature.WARM);
     }
 
+    @Nullable
     public static BiomeBase getBiome(int i) {
         return getBiome(i, (BiomeBase) null);
     }
@@ -385,6 +390,7 @@ public abstract class BiomeBase {
         private int f = 16777215;
         private boolean g;
         private boolean h = true;
+        @Nullable
         private String i;
 
         public a(String s) {

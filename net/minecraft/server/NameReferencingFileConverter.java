@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,7 +55,7 @@ public class NameReferencingFileConverter {
 
     private static void a(MinecraftServer minecraftserver, Collection<String> collection, ProfileLookupCallback profilelookupcallback) {
         String[] astring = (String[]) Iterators.toArray(Iterators.filter(collection.iterator(), new Predicate() {
-            public boolean a(String s) {
+            public boolean a(@Nullable String s) {
                 return !UtilColor.b(s);
             }
 

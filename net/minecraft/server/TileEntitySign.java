@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class TileEntitySign extends TileEntity {
 
     public final IChatBaseComponent[] lines = new IChatBaseComponent[] { new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
@@ -10,7 +12,7 @@ public class TileEntitySign extends TileEntity {
 
     public TileEntitySign() {}
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
 
         for (int i = 0; i < 4; ++i) {
@@ -20,6 +22,7 @@ public class TileEntitySign extends TileEntity {
         }
 
         this.i.b(nbttagcompound);
+        return nbttagcompound;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -81,18 +84,20 @@ public class TileEntitySign extends TileEntity {
         this.i.a(nbttagcompound);
     }
 
-    public Packet<?> getUpdatePacket() {
-        IChatBaseComponent[] aichatbasecomponent = new IChatBaseComponent[4];
+    @Nullable
+    public PacketPlayOutTileEntityData getUpdatePacket() {
+        return new PacketPlayOutTileEntityData(this.position, 9, this.E_());
+    }
 
-        System.arraycopy(this.lines, 0, aichatbasecomponent, 0, 4);
-        return new PacketPlayOutUpdateSign(this.world, this.position, aichatbasecomponent);
+    public NBTTagCompound E_() {
+        return this.save(new NBTTagCompound());
     }
 
     public boolean isFilteredNBT() {
         return true;
     }
 
-    public boolean b() {
+    public boolean c() {
         return this.isEditable;
     }
 
@@ -100,7 +105,7 @@ public class TileEntitySign extends TileEntity {
         this.h = entityhuman;
     }
 
-    public EntityHuman c() {
+    public EntityHuman d() {
         return this.h;
     }
 
@@ -167,7 +172,7 @@ public class TileEntitySign extends TileEntity {
         return true;
     }
 
-    public CommandObjectiveExecutor d() {
+    public CommandObjectiveExecutor e() {
         return this.i;
     }
 }

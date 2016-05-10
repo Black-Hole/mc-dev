@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public class CrashReportSystemDetails {
 
@@ -79,9 +78,9 @@ public class CrashReportSystemDetails {
         return stringbuilder.toString();
     }
 
-    public void a(String s, Callable<String> callable) {
+    public void a(String s, CrashReportCallable<String> crashreportcallable) {
         try {
-            this.a(s, callable.call());
+            this.a(s, crashreportcallable.call());
         } catch (Throwable throwable) {
             this.a(s, throwable);
         }
@@ -172,7 +171,7 @@ public class CrashReportSystemDetails {
     public static void a(CrashReportSystemDetails crashreportsystemdetails, final BlockPosition blockposition, final Block block, final int i) {
         final int j = Block.getId(block);
 
-        crashreportsystemdetails.a("Block type", new Callable() {
+        crashreportsystemdetails.a("Block type", new CrashReportCallable() {
             public String a() throws Exception {
                 try {
                     return String.format("ID #%d (%s // %s)", new Object[] { Integer.valueOf(i), block.a(), block.getClass().getCanonicalName()});
@@ -185,7 +184,7 @@ public class CrashReportSystemDetails {
                 return this.a();
             }
         });
-        crashreportsystemdetails.a("Block data value", new Callable() {
+        crashreportsystemdetails.a("Block data value", new CrashReportCallable() {
             public String a() throws Exception {
                 if (i < 0) {
                     return "Unknown? (Got " + i + ")";
@@ -200,7 +199,7 @@ public class CrashReportSystemDetails {
                 return this.a();
             }
         });
-        crashreportsystemdetails.a("Block location", new Callable() {
+        crashreportsystemdetails.a("Block location", new CrashReportCallable() {
             public String a() throws Exception {
                 return CrashReportSystemDetails.a(blockposition);
             }
@@ -212,7 +211,7 @@ public class CrashReportSystemDetails {
     }
 
     public static void a(CrashReportSystemDetails crashreportsystemdetails, final BlockPosition blockposition, final IBlockData iblockdata) {
-        crashreportsystemdetails.a("Block", new Callable() {
+        crashreportsystemdetails.a("Block", new CrashReportCallable() {
             public String a() throws Exception {
                 return iblockdata.toString();
             }
@@ -221,7 +220,7 @@ public class CrashReportSystemDetails {
                 return this.a();
             }
         });
-        crashreportsystemdetails.a("Block location", new Callable() {
+        crashreportsystemdetails.a("Block location", new CrashReportCallable() {
             public String a() throws Exception {
                 return CrashReportSystemDetails.a(blockposition);
             }

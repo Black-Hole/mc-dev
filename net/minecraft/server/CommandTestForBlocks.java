@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandTestForBlocks extends CommandAbstract {
 
@@ -62,15 +63,13 @@ public class CommandTestForBlocks extends CommandAbstract {
                                         TileEntity tileentity1 = world.getTileEntity(blockposition_mutableblockposition1);
 
                                         if (tileentity != null && tileentity1 != null) {
-                                            NBTTagCompound nbttagcompound = new NBTTagCompound();
+                                            NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
 
-                                            tileentity.save(nbttagcompound);
                                             nbttagcompound.remove("x");
                                             nbttagcompound.remove("y");
                                             nbttagcompound.remove("z");
-                                            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                                            NBTTagCompound nbttagcompound1 = tileentity1.save(new NBTTagCompound());
 
-                                            tileentity1.save(nbttagcompound1);
                                             nbttagcompound1.remove("x");
                                             nbttagcompound1.remove("y");
                                             nbttagcompound1.remove("z");
@@ -104,7 +103,7 @@ public class CommandTestForBlocks extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length > 3 && astring.length <= 6 ? a(astring, 3, blockposition) : (astring.length > 6 && astring.length <= 9 ? a(astring, 6, blockposition) : (astring.length == 10 ? a(astring, new String[] { "masked", "all"}) : Collections.emptyList())));
     }
 }

@@ -116,8 +116,6 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutUpdateTime packetplayoutupdatetime);
 
-    void a(PacketPlayOutUpdateSign packetplayoutupdatesign);
-
     void a(PacketPlayOutNamedSoundEffect packetplayoutnamedsoundeffect);
 
     void a(PacketPlayOutCustomSoundEffect packetplayoutcustomsoundeffect);

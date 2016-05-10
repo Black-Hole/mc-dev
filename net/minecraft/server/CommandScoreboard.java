@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public class CommandScoreboard extends CommandAbstract {
 
@@ -395,7 +396,7 @@ public class CommandScoreboard extends CommandAbstract {
                             throw new ExceptionUsage("commands.scoreboard.teams.option.noValue", new Object[] { s, a((Object[]) ScoreboardTeamBase.EnumNameTagVisibility.a())});
                         }
 
-                        scoreboardteam.b(scoreboardteambase_enumnametagvisibility);
+                        scoreboardteam.setDeathMessageVisibility(scoreboardteambase_enumnametagvisibility);
                     } else if (s.equalsIgnoreCase("collisionRule")) {
                         ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = ScoreboardTeamBase.EnumTeamPush.a(s1);
 
@@ -403,7 +404,7 @@ public class CommandScoreboard extends CommandAbstract {
                             throw new ExceptionUsage("commands.scoreboard.teams.option.noValue", new Object[] { s, a((Object[]) ScoreboardTeamBase.EnumTeamPush.a())});
                         }
 
-                        scoreboardteam.a(scoreboardteambase_enumteampush);
+                        scoreboardteam.setCollisionRule(scoreboardteambase_enumteampush);
                     }
                 }
 
@@ -490,7 +491,7 @@ public class CommandScoreboard extends CommandAbstract {
 
                     while (iterator.hasNext()) {
                         Entity entity = (Entity) iterator.next();
-                        String s2 = e(minecraftserver, icommandlistener, entity.getUniqueID().toString());
+                        String s2 = e(minecraftserver, icommandlistener, entity.bd());
 
                         if (scoreboard.addPlayerToTeam(s2, s)) {
                             hashset.add(s2);
@@ -542,7 +543,7 @@ public class CommandScoreboard extends CommandAbstract {
 
                     while (iterator.hasNext()) {
                         Entity entity = (Entity) iterator.next();
-                        String s1 = e(minecraftserver, icommandlistener, entity.getUniqueID().toString());
+                        String s1 = e(minecraftserver, icommandlistener, entity.bd());
 
                         if (scoreboard.removePlayerFromTeam(s1)) {
                             hashset.add(s1);
@@ -904,7 +905,7 @@ public class CommandScoreboard extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         if (astring.length == 1) {
             return a(astring, new String[] { "objectives", "players", "teams"});
         } else {

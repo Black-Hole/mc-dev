@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class TileEntityBanner extends TileEntity {
 
@@ -37,12 +38,13 @@ public class TileEntityBanner extends TileEntity {
         this.g = true;
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         a(nbttagcompound, this.color, this.patterns);
+        return nbttagcompound;
     }
 
-    public static void a(NBTTagCompound nbttagcompound, int i, NBTTagList nbttaglist) {
+    public static void a(NBTTagCompound nbttagcompound, int i, @Nullable NBTTagList nbttaglist) {
         nbttagcompound.setInt("Base", i);
         if (nbttaglist != null) {
             nbttagcompound.set("Patterns", nbttaglist);
@@ -60,14 +62,16 @@ public class TileEntityBanner extends TileEntity {
         this.g = true;
     }
 
-    public Packet<?> getUpdatePacket() {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
-
-        this.save(nbttagcompound);
-        return new PacketPlayOutTileEntityData(this.position, 6, nbttagcompound);
+    @Nullable
+    public PacketPlayOutTileEntityData getUpdatePacket() {
+        return new PacketPlayOutTileEntityData(this.position, 6, this.E_());
     }
 
-    public int b() {
+    public NBTTagCompound E_() {
+        return this.save(new NBTTagCompound());
+    }
+
+    public int c() {
         return this.color;
     }
 
@@ -83,7 +87,7 @@ public class TileEntityBanner extends TileEntity {
         return nbttagcompound != null && nbttagcompound.hasKey("Patterns") ? nbttagcompound.getList("Patterns", 10).size() : 0;
     }
 
-    public NBTTagList d() {
+    public NBTTagList e() {
         return this.patterns;
     }
 

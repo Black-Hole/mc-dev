@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ContainerBeacon extends Container {
 
     private IInventory beacon;
@@ -50,6 +52,7 @@ public class ContainerBeacon extends Container {
         return this.beacon.a(entityhuman);
     }
 
+    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
         ItemStack itemstack = null;
         Slot slot = (Slot) this.c.get(i);
@@ -102,7 +105,7 @@ public class ContainerBeacon extends Container {
             super(iinventory, i, j, k);
         }
 
-        public boolean isAllowed(ItemStack itemstack) {
+        public boolean isAllowed(@Nullable ItemStack itemstack) {
             return itemstack == null ? false : itemstack.getItem() == Items.EMERALD || itemstack.getItem() == Items.DIAMOND || itemstack.getItem() == Items.GOLD_INGOT || itemstack.getItem() == Items.IRON_INGOT;
         }
 

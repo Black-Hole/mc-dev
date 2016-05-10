@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class DragonControllerHover extends AbstractDragonController {
 
     private Vec3D b;
@@ -27,11 +29,12 @@ public class DragonControllerHover extends AbstractDragonController {
         return 1.0F;
     }
 
+    @Nullable
     public Vec3D g() {
         return this.b;
     }
 
-    public DragonControllerPhase<DragonControllerHover> i() {
+    public DragonControllerPhase<DragonControllerHover> getControllerPhase() {
         return DragonControllerPhase.k;
     }
 }

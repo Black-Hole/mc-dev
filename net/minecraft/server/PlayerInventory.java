@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
+import javax.annotation.Nullable;
 
 public class PlayerInventory implements IInventory {
 
@@ -19,6 +19,7 @@ public class PlayerInventory implements IInventory {
         this.player = entityhuman;
     }
 
+    @Nullable
     public ItemStack getItemInHand() {
         return e(this.itemInHandIndex) ? this.items[this.itemInHandIndex] : null;
     }
@@ -27,7 +28,7 @@ public class PlayerInventory implements IInventory {
         return 9;
     }
 
-    private boolean a(ItemStack itemstack, ItemStack itemstack1) {
+    private boolean a(@Nullable ItemStack itemstack, ItemStack itemstack1) {
         return itemstack != null && this.b(itemstack, itemstack1) && itemstack.isStackable() && itemstack.count < itemstack.getMaxStackSize() && itemstack.count < this.getMaxStackSize();
     }
 
@@ -78,7 +79,7 @@ public class PlayerInventory implements IInventory {
         return this.itemInHandIndex;
     }
 
-    public int a(Item item, int i, int j, NBTTagCompound nbttagcompound) {
+    public int a(@Nullable Item item, int i, int j, @Nullable NBTTagCompound nbttagcompound) {
         int k = 0;
 
         int l;
@@ -206,7 +207,7 @@ public class PlayerInventory implements IInventory {
 
     }
 
-    public boolean pickup(final ItemStack itemstack) {
+    public boolean pickup(@Nullable final ItemStack itemstack) {
         if (itemstack != null && itemstack.count != 0 && itemstack.getItem() != null) {
             try {
                 int i;
@@ -243,7 +244,7 @@ public class PlayerInventory implements IInventory {
 
                 crashreportsystemdetails.a("Item ID", (Object) Integer.valueOf(Item.getId(itemstack.getItem())));
                 crashreportsystemdetails.a("Item data", (Object) Integer.valueOf(itemstack.getData()));
-                crashreportsystemdetails.a("Item name", new Callable() {
+                crashreportsystemdetails.a("Item name", new CrashReportCallable() {
                     public String a() throws Exception {
                         return itemstack.getName();
                     }
@@ -259,6 +260,7 @@ public class PlayerInventory implements IInventory {
         }
     }
 
+    @Nullable
     public ItemStack splitStack(int i, int j) {
         ItemStack[] aitemstack = null;
         ItemStack[][] aitemstack1 = this.g;
@@ -304,6 +306,7 @@ public class PlayerInventory implements IInventory {
 
     }
 
+    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         ItemStack[] aitemstack = null;
         ItemStack[][] aitemstack1 = this.g;
@@ -330,7 +333,7 @@ public class PlayerInventory implements IInventory {
         }
     }
 
-    public void setItem(int i, ItemStack itemstack) {
+    public void setItem(int i, @Nullable ItemStack itemstack) {
         ItemStack[] aitemstack = null;
         ItemStack[][] aitemstack1 = this.g;
         int j = aitemstack1.length;
@@ -423,6 +426,7 @@ public class PlayerInventory implements IInventory {
         return this.items.length + this.armor.length + this.extraSlots.length;
     }
 
+    @Nullable
     public ItemStack getItem(int i) {
         ItemStack[] aitemstack = null;
         ItemStack[][] aitemstack1 = this.g;
@@ -506,10 +510,11 @@ public class PlayerInventory implements IInventory {
         this.f = true;
     }
 
-    public void setCarried(ItemStack itemstack) {
+    public void setCarried(@Nullable ItemStack itemstack) {
         this.carried = itemstack;
     }
 
+    @Nullable
     public ItemStack getCarried() {
         return this.carried;
     }

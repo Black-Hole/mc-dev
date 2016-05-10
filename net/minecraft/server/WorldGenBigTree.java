@@ -278,15 +278,15 @@ public class WorldGenBigTree extends WorldGenTreeAbstract {
 
     static class Position extends BlockPosition {
 
-        private final int c;
+        private final int b;
 
         public Position(BlockPosition blockposition, int i) {
             super(blockposition.getX(), blockposition.getY(), blockposition.getZ());
-            this.c = i;
+            this.b = i;
         }
 
         public int s() {
-            return this.c;
+            return this.b;
         }
     }
 }

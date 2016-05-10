@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockReed extends Block {
 
@@ -63,13 +64,13 @@ public class BlockReed extends Block {
                 EnumDirection enumdirection = (EnumDirection) iterator.next();
 
                 iblockdata = world.getType(blockposition1.shift(enumdirection));
-            } while (iblockdata.getMaterial() != Material.WATER && iblockdata.getBlock() != Blocks.de);
+            } while (iblockdata.getMaterial() != Material.WATER && iblockdata.getBlock() != Blocks.FROSTED_ICE);
 
             return true;
         }
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         this.e(world, blockposition, iblockdata);
     }
 
@@ -87,10 +88,12 @@ public class BlockReed extends Block {
         return this.canPlace(world, blockposition);
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockReed.k;
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.REEDS;
     }

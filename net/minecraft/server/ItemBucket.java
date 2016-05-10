@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ItemBucket extends Item {
 
     private Block a;
@@ -74,7 +76,7 @@ public class ItemBucket extends Item {
         }
     }
 
-    public boolean a(EntityHuman entityhuman, World world, BlockPosition blockposition) {
+    public boolean a(@Nullable EntityHuman entityhuman, World world, BlockPosition blockposition) {
         if (this.a == Blocks.AIR) {
             return false;
         } else {

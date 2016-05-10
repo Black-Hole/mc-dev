@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class WorldChunkManager {
 
@@ -71,11 +72,11 @@ public class WorldChunkManager {
         }
     }
 
-    public BiomeBase[] getBiomeBlock(BiomeBase[] abiomebase, int i, int j, int k, int l) {
+    public BiomeBase[] getBiomeBlock(@Nullable BiomeBase[] abiomebase, int i, int j, int k, int l) {
         return this.a(abiomebase, i, j, k, l, true);
     }
 
-    public BiomeBase[] a(BiomeBase[] abiomebase, int i, int j, int k, int l, boolean flag) {
+    public BiomeBase[] a(@Nullable BiomeBase[] abiomebase, int i, int j, int k, int l, boolean flag) {
         IntCache.a();
         if (abiomebase == null || abiomebase.length < k * l) {
             abiomebase = new BiomeBase[k * l];
@@ -130,6 +131,7 @@ public class WorldChunkManager {
         }
     }
 
+    @Nullable
     public BlockPosition a(int i, int j, int k, List<BiomeBase> list, Random random) {
         IntCache.a();
         int l = i - k >> 2;

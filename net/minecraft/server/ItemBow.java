@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ItemBow extends Item {
 
     public ItemBow() {
@@ -30,7 +32,7 @@ public class ItemBow extends Item {
         }
     }
 
-    protected boolean h_(ItemStack itemstack) {
+    protected boolean h_(@Nullable ItemStack itemstack) {
         return itemstack != null && itemstack.getItem() instanceof ItemArrow;
     }
 

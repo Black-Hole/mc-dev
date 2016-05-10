@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityDamageSource extends DamageSource {
 
     protected Entity s;
@@ -19,6 +21,7 @@ public class EntityDamageSource extends DamageSource {
         return this.t;
     }
 
+    @Nullable
     public Entity getEntity() {
         return this.s;
     }
@@ -35,6 +38,7 @@ public class EntityDamageSource extends DamageSource {
         return this.s != null && this.s instanceof EntityLiving && !(this.s instanceof EntityHuman);
     }
 
+    @Nullable
     public Vec3D v() {
         return new Vec3D(this.s.locX, this.s.locY, this.s.locZ);
     }

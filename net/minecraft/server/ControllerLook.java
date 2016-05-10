@@ -49,20 +49,20 @@ public class ControllerLook {
             float f1 = (float) (-(MathHelper.b(d1, d3) * 57.2957763671875D));
 
             this.a.pitch = this.a(this.a.pitch, f1, this.c);
-            this.a.aO = this.a(this.a.aO, f, this.b);
+            this.a.aP = this.a(this.a.aP, f, this.b);
         } else {
-            this.a.aO = this.a(this.a.aO, this.a.aM, 10.0F);
+            this.a.aP = this.a(this.a.aP, this.a.aN, 10.0F);
         }
 
-        float f2 = MathHelper.g(this.a.aO - this.a.aM);
+        float f2 = MathHelper.g(this.a.aP - this.a.aN);
 
         if (!this.a.getNavigation().n()) {
             if (f2 < -75.0F) {
-                this.a.aO = this.a.aM - 75.0F;
+                this.a.aP = this.a.aN - 75.0F;
             }
 
             if (f2 > 75.0F) {
-                this.a.aO = this.a.aM + 75.0F;
+                this.a.aP = this.a.aN + 75.0F;
             }
         }
 

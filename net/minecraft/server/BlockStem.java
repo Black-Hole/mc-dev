@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
 
@@ -101,14 +102,17 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
         }
     }
 
+    @Nullable
     protected Item e() {
         return this.blockFruit == Blocks.PUMPKIN ? Items.PUMPKIN_SEEDS : (this.blockFruit == Blocks.MELON_BLOCK ? Items.MELON_SEEDS : null);
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return null;
     }
 
+    @Nullable
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         Item item = this.e();
 

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public abstract class EntityProjectile extends Entity implements IProjectile {
 
@@ -13,10 +14,10 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
     public int shake;
     public EntityLiving shooter;
     public String shooterName;
-    private int at;
     private int au;
-    public Entity c;
     private int av;
+    public Entity c;
+    private int aw;
 
     public EntityProjectile(World world) {
         super(world);
@@ -71,7 +72,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
         this.lastYaw = this.yaw = (float) (MathHelper.b(d0, d2) * 57.2957763671875D);
         this.lastPitch = this.pitch = (float) (MathHelper.b(d1, (double) f3) * 57.2957763671875D);
-        this.at = 0;
+        this.au = 0;
     }
 
     public void m() {
@@ -85,8 +86,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
         if (this.inGround) {
             if (this.world.getType(new BlockPosition(this.blockX, this.blockY, this.blockZ)).getBlock() == this.inBlockId) {
-                ++this.at;
-                if (this.at == 1200) {
+                ++this.au;
+                if (this.au == 1200) {
                     this.die();
                 }
 
@@ -97,10 +98,10 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             this.motX *= (double) (this.random.nextFloat() * 0.2F);
             this.motY *= (double) (this.random.nextFloat() * 0.2F);
             this.motZ *= (double) (this.random.nextFloat() * 0.2F);
-            this.at = 0;
             this.au = 0;
+            this.av = 0;
         } else {
-            ++this.au;
+            ++this.av;
         }
 
         Vec3D vec3d = new Vec3D(this.locX, this.locY, this.locZ);
@@ -146,8 +147,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
         if (this.c != null) {
             if (flag) {
-                this.av = 2;
-            } else if (this.av-- <= 0) {
+                this.aw = 2;
+            } else if (this.aw-- <= 0) {
                 this.c = null;
             }
         }
@@ -252,6 +253,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.shooter = this.getShooter();
     }
 
+    @Nullable
     public EntityLiving getShooter() {
         if (this.shooter == null && this.shooterName != null && !this.shooterName.isEmpty()) {
             this.shooter = this.world.a(this.shooterName);

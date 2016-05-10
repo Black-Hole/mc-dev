@@ -12,6 +12,7 @@ import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 public class ChatDeserializer {
@@ -159,7 +160,7 @@ public class ChatDeserializer {
         }
     }
 
-    public static <T> T a(JsonElement jsonelement, String s, JsonDeserializationContext jsondeserializationcontext, Class<? extends T> oclass) {
+    public static <T> T a(@Nullable JsonElement jsonelement, String s, JsonDeserializationContext jsondeserializationcontext, Class<? extends T> oclass) {
         if (jsonelement != null) {
             return jsondeserializationcontext.deserialize(jsonelement, oclass);
         } else {

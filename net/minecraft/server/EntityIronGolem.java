@@ -1,14 +1,15 @@
 package net.minecraft.server;
 
 import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
 
 public class EntityIronGolem extends EntityGolem {
 
     protected static final DataWatcherObject<Byte> a = DataWatcher.a(EntityIronGolem.class, DataWatcherRegistry.a);
     private int c;
     Village b;
-    private int bv;
     private int bw;
+    private int bx;
 
     public EntityIronGolem(World world) {
         super(world);
@@ -27,7 +28,7 @@ public class EntityIronGolem extends EntityGolem {
         this.targetSelector.a(1, new PathfinderGoalDefendVillage(this));
         this.targetSelector.a(2, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityInsentient.class, 10, false, true, new Predicate() {
-            public boolean a(EntityInsentient entityinsentient) {
+            public boolean a(@Nullable EntityInsentient entityinsentient) {
                 return entityinsentient != null && IMonster.e.apply(entityinsentient) && !(entityinsentient instanceof EntityCreeper);
             }
 
@@ -47,7 +48,7 @@ public class EntityIronGolem extends EntityGolem {
             this.c = 70 + this.random.nextInt(50);
             this.b = this.world.ai().getClosestVillage(new BlockPosition(this), 32);
             if (this.b == null) {
-                this.cX();
+                this.cY();
             } else {
                 BlockPosition blockposition = this.b.a();
 
@@ -79,12 +80,12 @@ public class EntityIronGolem extends EntityGolem {
 
     public void n() {
         super.n();
-        if (this.bv > 0) {
-            --this.bv;
-        }
-
         if (this.bw > 0) {
             --this.bw;
+        }
+
+        if (this.bx > 0) {
+            --this.bx;
         }
 
         if (this.motX * this.motX + this.motZ * this.motZ > 2.500000277905201E-7D && this.random.nextInt(5) == 0) {
@@ -115,7 +116,7 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     public boolean B(Entity entity) {
-        this.bv = 10;
+        this.bw = 10;
         this.world.broadcastEntityEffect(this, (byte) 4);
         boolean flag = entity.damageEntity(DamageSource.mobAttack(this), (float) (7 + this.random.nextInt(15)));
 
@@ -133,15 +134,15 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     public void a(boolean flag) {
-        this.bw = flag ? 400 : 0;
+        this.bx = flag ? 400 : 0;
         this.world.broadcastEntityEffect(this, (byte) 11);
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.cJ;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.cI;
     }
 
@@ -149,12 +150,13 @@ public class EntityIronGolem extends EntityGolem {
         this.a(SoundEffects.cK, 1.0F, 1.0F);
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.z;
     }
 
-    public int da() {
-        return this.bw;
+    public int db() {
+        return this.bx;
     }
 
     public boolean isPlayerCreated() {

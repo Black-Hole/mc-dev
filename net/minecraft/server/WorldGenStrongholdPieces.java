@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class WorldGenStrongholdPieces {
 
@@ -69,7 +70,7 @@ public class WorldGenStrongholdPieces {
         return flag;
     }
 
-    private static WorldGenStrongholdPieces.WorldGenStrongholdPiece a(Class<? extends WorldGenStrongholdPieces.WorldGenStrongholdPiece> oclass, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
+    private static WorldGenStrongholdPieces.WorldGenStrongholdPiece a(Class<? extends WorldGenStrongholdPieces.WorldGenStrongholdPiece> oclass, List<StructurePiece> list, Random random, int i, int j, int k, @Nullable EnumDirection enumdirection, int l) {
         Object object = null;
 
         if (oclass == WorldGenStrongholdPieces.WorldGenStrongholdStairs.class) {
@@ -153,7 +154,7 @@ public class WorldGenStrongholdPieces {
         }
     }
 
-    private static StructurePiece c(WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
+    private static StructurePiece c(WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart, List<StructurePiece> list, Random random, int i, int j, int k, @Nullable EnumDirection enumdirection, int l) {
         if (l > 50) {
             return null;
         } else if (Math.abs(i - worldgenstrongholdpieces_worldgenstrongholdstart.c().a) <= 112 && Math.abs(k - worldgenstrongholdpieces_worldgenstrongholdstart.c().c) <= 112) {

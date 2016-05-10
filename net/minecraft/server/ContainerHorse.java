@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ContainerHorse extends Container {
 
     private IInventory a;
@@ -14,12 +16,12 @@ public class ContainerHorse extends Container {
         int i = (b0 - 4) * 18;
 
         this.a(new Slot(iinventory1, 0, 8, 18) {
-            public boolean isAllowed(ItemStack itemstack) {
+            public boolean isAllowed(@Nullable ItemStack itemstack) {
                 return super.isAllowed(itemstack) && itemstack.getItem() == Items.SADDLE && !this.hasItem();
             }
         });
         this.a(new Slot(iinventory1, 1, 8, 36) {
-            public boolean isAllowed(ItemStack itemstack) {
+            public boolean isAllowed(@Nullable ItemStack itemstack) {
                 return super.isAllowed(itemstack) && entityhorse.getType().j() && EnumHorseArmor.b(itemstack.getItem());
             }
         });
@@ -50,6 +52,7 @@ public class ContainerHorse extends Container {
         return this.a.a(entityhuman) && this.f.isAlive() && this.f.g((Entity) entityhuman) < 8.0F;
     }
 
+    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
         ItemStack itemstack = null;
         Slot slot = (Slot) this.c.get(i);

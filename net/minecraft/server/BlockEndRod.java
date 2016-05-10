@@ -62,7 +62,7 @@ public class BlockEndRod extends BlockDirectional {
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {}
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {}
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {}
 
     public IBlockData fromLegacyData(int i) {
         IBlockData iblockdata = this.getBlockData();

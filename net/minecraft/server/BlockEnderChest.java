@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockEnderChest extends BlockTileEntity {
 
@@ -29,6 +30,7 @@ public class BlockEnderChest extends BlockTileEntity {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.OBSIDIAN);
     }
@@ -49,7 +51,7 @@ public class BlockEnderChest extends BlockTileEntity {
         world.setTypeAndData(blockposition, iblockdata.set(BlockEnderChest.FACING, entityliving.getDirection().opposite()), 2);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         InventoryEnderChest inventoryenderchest = entityhuman.getEnderChest();
         TileEntity tileentity = world.getTileEntity(blockposition);
 

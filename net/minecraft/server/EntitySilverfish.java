@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class EntitySilverfish extends EntityMonster {
 
@@ -43,11 +44,11 @@ public class EntitySilverfish extends EntityMonster {
         return SoundEffects.fe;
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.fg;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.ff;
     }
 
@@ -67,12 +68,13 @@ public class EntitySilverfish extends EntityMonster {
         }
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.u;
     }
 
     public void m() {
-        this.aM = this.yaw;
+        this.aN = this.yaw;
         super.m();
     }
 
@@ -84,8 +86,8 @@ public class EntitySilverfish extends EntityMonster {
         return true;
     }
 
-    public boolean cF() {
-        if (super.cF()) {
+    public boolean cG() {
+        if (super.cG()) {
             EntityHuman entityhuman = this.world.b(this, 5.0D);
 
             return entityhuman == null;

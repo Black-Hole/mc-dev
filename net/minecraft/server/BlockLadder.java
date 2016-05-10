@@ -65,7 +65,7 @@ public class BlockLadder extends Block {
         }
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockLadder.FACING);
 
         if (!this.a(world, blockposition, enumdirection)) {
@@ -73,7 +73,7 @@ public class BlockLadder extends Block {
             world.setAir(blockposition);
         }
 
-        super.doPhysics(world, blockposition, iblockdata, block);
+        super.a(iblockdata, world, blockposition, block);
     }
 
     protected boolean a(World world, BlockPosition blockposition, EnumDirection enumdirection) {

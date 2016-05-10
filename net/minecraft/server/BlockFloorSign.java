@@ -8,13 +8,13 @@ public class BlockFloorSign extends BlockSign {
         this.w(this.blockStateList.getBlockData().set(BlockFloorSign.ROTATION, Integer.valueOf(0)));
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!world.getType(blockposition.down()).getMaterial().isBuildable()) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
         }
 
-        super.doPhysics(world, blockposition, iblockdata, block);
+        super.a(iblockdata, world, blockposition, block);
     }
 
     public IBlockData fromLegacyData(int i) {

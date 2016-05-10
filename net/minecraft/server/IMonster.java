@@ -1,11 +1,12 @@
 package net.minecraft.server;
 
 import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
 
 public interface IMonster extends IAnimal {
 
     Predicate<Entity> d = new Predicate() {
-        public boolean a(Entity entity) {
+        public boolean a(@Nullable Entity entity) {
             return entity instanceof IMonster;
         }
 
@@ -14,7 +15,7 @@ public interface IMonster extends IAnimal {
         }
     };
     Predicate<Entity> e = new Predicate() {
-        public boolean a(Entity entity) {
+        public boolean a(@Nullable Entity entity) {
             return entity instanceof IMonster && !entity.isInvisible();
         }
 

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockStairs extends Block {
 
@@ -44,7 +45,7 @@ public class BlockStairs extends Block {
         this.a(CreativeModeTab.b);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
         iblockdata = this.updateState(iblockdata, world, blockposition);
         Iterator iterator = x(iblockdata).iterator();
 
@@ -174,7 +175,7 @@ public class BlockStairs extends Block {
     }
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        this.doPhysics(world, blockposition, this.Q, Blocks.AIR);
+        this.Q.doPhysics(world, blockposition, Blocks.AIR);
         this.P.onPlace(world, blockposition, this.Q);
     }
 
@@ -190,7 +191,7 @@ public class BlockStairs extends Block {
         this.P.b(world, blockposition, iblockdata, random);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         return this.P.interact(world, blockposition, this.Q, entityhuman, enumhand, itemstack, EnumDirection.DOWN, 0.0F, 0.0F, 0.0F);
     }
 
@@ -213,6 +214,7 @@ public class BlockStairs extends Block {
         return enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) f1 <= 0.5D) ? iblockdata.set(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM) : iblockdata.set(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
     }
 
+    @Nullable
     public MovingObjectPosition a(IBlockData iblockdata, World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
         ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = x(this.updateState(iblockdata, world, blockposition)).iterator();

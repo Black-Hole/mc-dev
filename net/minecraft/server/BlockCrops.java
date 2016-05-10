@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement {
 
@@ -149,6 +150,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
         }
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return this.y(iblockdata) ? this.i() : this.h();
     }

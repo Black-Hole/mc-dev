@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.base.Predicate;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +22,7 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
         }
 
         this.c = new Predicate() {
-            public boolean a(Entity entity) {
+            public boolean a(@Nullable Entity entity) {
                 if (!(entity instanceof EntityHuman)) {
                     return false;
                 } else if (((EntityHuman) entity).abilities.isInvulnerable) {
@@ -34,7 +35,7 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
                     }
 
                     if (entity.isInvisible()) {
-                        float f = ((EntityHuman) entity).cG();
+                        float f = ((EntityHuman) entity).cH();
 
                         if (f < 0.1F) {
                             f = 0.1F;

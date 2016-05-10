@@ -197,9 +197,8 @@ public class JsonList<K, V extends JsonListEntry<K>> {
         public JsonListEntry<K> a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             if (jsonelement.isJsonObject()) {
                 JsonObject jsonobject = jsonelement.getAsJsonObject();
-                JsonListEntry jsonlistentry = JsonList.this.a(jsonobject);
 
-                return jsonlistentry;
+                return JsonList.this.a(jsonobject);
             } else {
                 return null;
             }

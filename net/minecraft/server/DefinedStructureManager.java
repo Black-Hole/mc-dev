@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
+import javax.annotation.Nullable;
 import org.apache.commons.io.IOUtils;
 
 public class DefinedStructureManager {
@@ -24,7 +25,7 @@ public class DefinedStructureManager {
         this.b = s;
     }
 
-    public DefinedStructure a(MinecraftServer minecraftserver, MinecraftKey minecraftkey) {
+    public DefinedStructure a(@Nullable MinecraftServer minecraftserver, MinecraftKey minecraftkey) {
         String s = minecraftkey.a();
 
         if (this.a.containsKey(s)) {
@@ -118,14 +119,14 @@ public class DefinedStructureManager {
             }
 
             File file1 = new File(file, s + ".nbt");
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
             DefinedStructure definedstructure = (DefinedStructure) this.a.get(s);
             FileOutputStream fileoutputstream = null;
 
             boolean flag;
 
             try {
-                definedstructure.a(nbttagcompound);
+                NBTTagCompound nbttagcompound = definedstructure.a(new NBTTagCompound());
+
                 fileoutputstream = new FileOutputStream(file1);
                 NBTCompressedStreamTools.a(nbttagcompound, (OutputStream) fileoutputstream);
                 return true;

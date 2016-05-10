@@ -19,12 +19,13 @@ public class TileEntityEnchantTable extends TileEntity implements ITickable, ITi
 
     public TileEntityEnchantTable() {}
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         if (this.hasCustomName()) {
             nbttagcompound.setString("CustomName", this.p);
         }
 
+        return nbttagcompound;
     }
 
     public void a(NBTTagCompound nbttagcompound) {

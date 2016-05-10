@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ItemBlock extends Item {
 
     protected final Block a;
@@ -44,7 +46,7 @@ public class ItemBlock extends Item {
         }
     }
 
-    public static boolean a(World world, EntityHuman entityhuman, BlockPosition blockposition, ItemStack itemstack) {
+    public static boolean a(World world, @Nullable EntityHuman entityhuman, BlockPosition blockposition, ItemStack itemstack) {
         MinecraftServer minecraftserver = world.getMinecraftServer();
 
         if (minecraftserver == null) {
@@ -58,10 +60,8 @@ public class ItemBlock extends Item {
                         return false;
                     }
 
-                    NBTTagCompound nbttagcompound = new NBTTagCompound();
+                    NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
                     NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttagcompound.clone();
-
-                    tileentity.save(nbttagcompound);
                     NBTTagCompound nbttagcompound2 = (NBTTagCompound) itemstack.getTag().get("BlockEntityTag");
 
                     nbttagcompound.a(nbttagcompound2);

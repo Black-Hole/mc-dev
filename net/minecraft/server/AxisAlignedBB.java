@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import com.google.common.annotations.VisibleForTesting;
+import javax.annotation.Nullable;
+
 public class AxisAlignedBB {
 
     public final double a;
@@ -212,6 +215,7 @@ public class AxisAlignedBB {
         return this.g(-d0);
     }
 
+    @Nullable
     public MovingObjectPosition a(Vec3D vec3d, Vec3D vec3d1) {
         Vec3D vec3d2 = this.a(this.a, vec3d, vec3d1);
         EnumDirection enumdirection = EnumDirection.WEST;
@@ -249,36 +253,46 @@ public class AxisAlignedBB {
         return vec3d2 == null ? null : new MovingObjectPosition(vec3d2, enumdirection);
     }
 
-    boolean a(Vec3D vec3d, Vec3D vec3d1, Vec3D vec3d2) {
+    @VisibleForTesting
+    boolean a(Vec3D vec3d, @Nullable Vec3D vec3d1, Vec3D vec3d2) {
         return vec3d1 == null || vec3d.distanceSquared(vec3d2) < vec3d.distanceSquared(vec3d1);
     }
 
+    @Nullable
+    @VisibleForTesting
     Vec3D a(double d0, Vec3D vec3d, Vec3D vec3d1) {
         Vec3D vec3d2 = vec3d.a(vec3d1, d0);
 
         return vec3d2 != null && this.b(vec3d2) ? vec3d2 : null;
     }
 
+    @Nullable
+    @VisibleForTesting
     Vec3D b(double d0, Vec3D vec3d, Vec3D vec3d1) {
         Vec3D vec3d2 = vec3d.b(vec3d1, d0);
 
         return vec3d2 != null && this.c(vec3d2) ? vec3d2 : null;
     }
 
+    @Nullable
+    @VisibleForTesting
     Vec3D c(double d0, Vec3D vec3d, Vec3D vec3d1) {
         Vec3D vec3d2 = vec3d.c(vec3d1, d0);
 
         return vec3d2 != null && this.d(vec3d2) ? vec3d2 : null;
     }
 
+    @VisibleForTesting
     public boolean b(Vec3D vec3d) {
         return vec3d.y >= this.b && vec3d.y <= this.e && vec3d.z >= this.c && vec3d.z <= this.f;
     }
 
+    @VisibleForTesting
     public boolean c(Vec3D vec3d) {
         return vec3d.x >= this.a && vec3d.x <= this.d && vec3d.z >= this.c && vec3d.z <= this.f;
     }
 
+    @VisibleForTesting
     public boolean d(Vec3D vec3d) {
         return vec3d.x >= this.a && vec3d.x <= this.d && vec3d.y >= this.b && vec3d.y <= this.e;
     }

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ChunkCache implements IBlockAccess {
 
     protected int a;
@@ -39,6 +41,7 @@ public class ChunkCache implements IBlockAccess {
 
     }
 
+    @Nullable
     public TileEntity getTileEntity(BlockPosition blockposition) {
         int i = (blockposition.getX() >> 4) - this.a;
         int j = (blockposition.getZ() >> 4) - this.b;

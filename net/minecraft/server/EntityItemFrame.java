@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.base.Optional;
+import javax.annotation.Nullable;
 
 public class EntityItemFrame extends EntityHanging {
 
@@ -50,7 +51,7 @@ public class EntityItemFrame extends EntityHanging {
         return 12;
     }
 
-    public void a(Entity entity) {
+    public void a(@Nullable Entity entity) {
         this.a(SoundEffects.cQ, 1.0F, 1.0F);
         this.b(entity, true);
     }
@@ -59,7 +60,7 @@ public class EntityItemFrame extends EntityHanging {
         this.a(SoundEffects.cR, 1.0F, 1.0F);
     }
 
-    public void b(Entity entity, boolean flag) {
+    public void b(@Nullable Entity entity, boolean flag) {
         if (this.world.getGameRules().getBoolean("doEntityDrops")) {
             ItemStack itemstack = this.getItem();
 
@@ -97,15 +98,16 @@ public class EntityItemFrame extends EntityHanging {
         }
     }
 
+    @Nullable
     public ItemStack getItem() {
         return (ItemStack) ((Optional) this.getDataWatcher().get(EntityItemFrame.c)).orNull();
     }
 
-    public void setItem(ItemStack itemstack) {
+    public void setItem(@Nullable ItemStack itemstack) {
         this.setItem(itemstack, true);
     }
 
-    private void setItem(ItemStack itemstack, boolean flag) {
+    private void setItem(@Nullable ItemStack itemstack, boolean flag) {
         if (itemstack != null) {
             itemstack = itemstack.cloneItemStack();
             itemstack.count = 1;
@@ -175,7 +177,7 @@ public class EntityItemFrame extends EntityHanging {
         super.a(nbttagcompound);
     }
 
-    public boolean a(EntityHuman entityhuman, ItemStack itemstack, EnumHand enumhand) {
+    public boolean a(EntityHuman entityhuman, @Nullable ItemStack itemstack, EnumHand enumhand) {
         if (this.getItem() == null) {
             if (itemstack != null && !this.world.isClientSide) {
                 this.setItem(itemstack);

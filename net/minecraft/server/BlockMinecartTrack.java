@@ -9,7 +9,7 @@ public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
         this.w(this.blockStateList.getBlockData().set(BlockMinecartTrack.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH));
     }
 
-    protected void b(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    protected void b(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (block.getBlockData().m() && (new BlockMinecartTrackAbstract.MinecartTrackLogic(world, blockposition, iblockdata)).b() == 3) {
             this.a(world, blockposition, iblockdata, false);
         }

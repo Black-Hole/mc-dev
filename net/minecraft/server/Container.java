@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public abstract class Container {
 
@@ -68,6 +69,7 @@ public abstract class Container {
         return false;
     }
 
+    @Nullable
     public Slot getSlot(IInventory iinventory, int i) {
         for (int j = 0; j < this.c.size(); ++j) {
             Slot slot = (Slot) this.c.get(j);
@@ -84,12 +86,14 @@ public abstract class Container {
         return (Slot) this.c.get(i);
     }
 
+    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
         Slot slot = (Slot) this.c.get(i);
 
         return slot != null ? slot.getItem() : null;
     }
 
+    @Nullable
     public ItemStack a(int i, int j, InventoryClickType inventoryclicktype, EntityHuman entityhuman) {
         ItemStack itemstack = null;
         PlayerInventory playerinventory = entityhuman.inventory;
@@ -532,11 +536,11 @@ public abstract class Container {
         return true;
     }
 
-    public static int a(TileEntity tileentity) {
+    public static int a(@Nullable TileEntity tileentity) {
         return tileentity instanceof IInventory ? b((IInventory) tileentity) : 0;
     }
 
-    public static int b(IInventory iinventory) {
+    public static int b(@Nullable IInventory iinventory) {
         if (iinventory == null) {
             return 0;
         } else {

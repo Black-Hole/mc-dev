@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import java.util.Collection;
+import javax.annotation.Nullable;
 
 public abstract class BlockFlowers extends BlockPlant {
 
@@ -26,7 +27,7 @@ public abstract class BlockFlowers extends BlockPlant {
     public IBlockState<BlockFlowers.EnumFlowerVarient> g() {
         if (this.TYPE == null) {
             this.TYPE = BlockStateEnum.a("type", BlockFlowers.EnumFlowerVarient.class, new Predicate() {
-                public boolean a(BlockFlowers.EnumFlowerVarient blockflowers_enumflowervarient) {
+                public boolean a(@Nullable BlockFlowers.EnumFlowerVarient blockflowers_enumflowervarient) {
                     return blockflowers_enumflowervarient.a() == BlockFlowers.this.e();
                 }
 
@@ -105,7 +106,7 @@ public abstract class BlockFlowers extends BlockPlant {
             for (int j = 0; j < i; ++j) {
                 final BlockFlowers.EnumFlowerType blockflowers_enumflowertype = ablockflowers_enumflowertype[j];
                 Collection collection = Collections2.filter(Lists.newArrayList(values()), new Predicate() {
-                    public boolean a(BlockFlowers.EnumFlowerVarient blockflowers_enumflowervarient) {
+                    public boolean a(@Nullable BlockFlowers.EnumFlowerVarient blockflowers_enumflowervarient) {
                         return blockflowers_enumflowervarient.a() == blockflowers_enumflowertype;
                     }
 

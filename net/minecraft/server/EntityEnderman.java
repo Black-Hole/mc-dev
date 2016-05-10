@@ -7,16 +7,17 @@ import com.google.common.collect.Sets;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class EntityEnderman extends EntityMonster {
 
     private static final UUID a = UUID.fromString("020E0DFB-87AE-4653-9556-831010E291A0");
     private static final AttributeModifier b = (new AttributeModifier(EntityEnderman.a, "Attacking speed boost", 0.15000000596046448D, 0)).a(false);
     private static final Set<Block> c = Sets.newIdentityHashSet();
-    private static final DataWatcherObject<Optional<IBlockData>> bv = DataWatcher.a(EntityEnderman.class, DataWatcherRegistry.g);
-    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityEnderman.class, DataWatcherRegistry.h);
-    private int bx = 0;
+    private static final DataWatcherObject<Optional<IBlockData>> bw = DataWatcher.a(EntityEnderman.class, DataWatcherRegistry.g);
+    private static final DataWatcherObject<Boolean> bx = DataWatcher.a(EntityEnderman.class, DataWatcherRegistry.h);
     private int by = 0;
+    private int bz = 0;
 
     public EntityEnderman(World world) {
         super(world);
@@ -36,7 +37,7 @@ public class EntityEnderman extends EntityMonster {
         this.targetSelector.a(1, new EntityEnderman.PathfinderGoalPlayerWhoLookedAtTarget(this));
         this.targetSelector.a(2, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityEndermite.class, 10, true, false, new Predicate() {
-            public boolean a(EntityEndermite entityendermite) {
+            public boolean a(@Nullable EntityEndermite entityendermite) {
                 return entityendermite.o();
             }
 
@@ -54,17 +55,17 @@ public class EntityEnderman extends EntityMonster {
         this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(64.0D);
     }
 
-    public void setGoalTarget(EntityLiving entityliving) {
+    public void setGoalTarget(@Nullable EntityLiving entityliving) {
         super.setGoalTarget(entityliving);
         AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
         if (entityliving == null) {
-            this.by = 0;
-            this.datawatcher.set(EntityEnderman.bw, Boolean.valueOf(false));
+            this.bz = 0;
+            this.datawatcher.set(EntityEnderman.bx, Boolean.valueOf(false));
             attributeinstance.c(EntityEnderman.b);
         } else {
-            this.by = this.ticksLived;
-            this.datawatcher.set(EntityEnderman.bw, Boolean.valueOf(true));
+            this.bz = this.ticksLived;
+            this.datawatcher.set(EntityEnderman.bx, Boolean.valueOf(true));
             if (!attributeinstance.a(EntityEnderman.b)) {
                 attributeinstance.b(EntityEnderman.b);
             }
@@ -74,22 +75,22 @@ public class EntityEnderman extends EntityMonster {
 
     protected void i() {
         super.i();
-        this.datawatcher.register(EntityEnderman.bv, Optional.absent());
-        this.datawatcher.register(EntityEnderman.bw, Boolean.valueOf(false));
+        this.datawatcher.register(EntityEnderman.bw, Optional.absent());
+        this.datawatcher.register(EntityEnderman.bx, Boolean.valueOf(false));
     }
 
     public void o() {
-        if (this.ticksLived >= this.bx + 400) {
-            this.bx = this.ticksLived;
+        if (this.ticksLived >= this.by + 400) {
+            this.by = this.ticksLived;
             if (!this.ad()) {
-                this.world.a(this.locX, this.locY + (double) this.getHeadHeight(), this.locZ, SoundEffects.aZ, this.bz(), 2.5F, 1.0F, false);
+                this.world.a(this.locX, this.locY + (double) this.getHeadHeight(), this.locZ, SoundEffects.aZ, this.bA(), 2.5F, 1.0F, false);
             }
         }
 
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityEnderman.bw.equals(datawatcherobject) && this.dc() && this.world.isClientSide) {
+        if (EntityEnderman.bx.equals(datawatcherobject) && this.dd() && this.world.isClientSide) {
             this.o();
         }
 
@@ -131,7 +132,7 @@ public class EntityEnderman extends EntityMonster {
             return false;
         } else {
             Vec3D vec3d = entityhuman.f(1.0F).a();
-            Vec3D vec3d1 = new Vec3D(this.locX - entityhuman.locX, this.getBoundingBox().b + (double) (this.length / 2.0F) - (entityhuman.locY + (double) entityhuman.getHeadHeight()), this.locZ - entityhuman.locZ);
+            Vec3D vec3d1 = new Vec3D(this.locX - entityhuman.locX, this.getBoundingBox().b + (double) this.getHeadHeight() - (entityhuman.locY + (double) entityhuman.getHeadHeight()), this.locZ - entityhuman.locZ);
             double d0 = vec3d1.b();
 
             vec3d1 = vec3d1.a();
@@ -152,7 +153,7 @@ public class EntityEnderman extends EntityMonster {
             }
         }
 
-        this.bc = false;
+        this.bd = false;
         super.n();
     }
 
@@ -161,19 +162,19 @@ public class EntityEnderman extends EntityMonster {
             this.damageEntity(DamageSource.DROWN, 1.0F);
         }
 
-        if (this.world.B() && this.ticksLived >= this.by + 600) {
+        if (this.world.B() && this.ticksLived >= this.bz + 600) {
             float f = this.e(1.0F);
 
             if (f > 0.5F && this.world.h(new BlockPosition(this)) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
                 this.setGoalTarget((EntityLiving) null);
-                this.da();
+                this.db();
             }
         }
 
         super.M();
     }
 
-    protected boolean da() {
+    protected boolean db() {
         double d0 = this.locX + (this.random.nextDouble() - 0.5D) * 64.0D;
         double d1 = this.locY + (double) (this.random.nextInt(64) - 32);
         double d2 = this.locZ + (this.random.nextDouble() - 0.5D) * 64.0D;
@@ -197,7 +198,7 @@ public class EntityEnderman extends EntityMonster {
         boolean flag = this.k(d0, d1, d2);
 
         if (flag) {
-            this.world.a((EntityHuman) null, this.lastX, this.lastY, this.lastZ, SoundEffects.ba, this.bz(), 1.0F, 1.0F);
+            this.world.a((EntityHuman) null, this.lastX, this.lastY, this.lastZ, SoundEffects.ba, this.bA(), 1.0F, 1.0F);
             this.a(SoundEffects.ba, 1.0F, 1.0F);
         }
 
@@ -205,14 +206,14 @@ public class EntityEnderman extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return this.dc() ? SoundEffects.aY : SoundEffects.aV;
-    }
-
-    protected SoundEffect bR() {
-        return SoundEffects.aX;
+        return this.dd() ? SoundEffects.aY : SoundEffects.aV;
     }
 
     protected SoundEffect bS() {
+        return SoundEffects.aX;
+    }
+
+    protected SoundEffect bT() {
         return SoundEffects.aW;
     }
 
@@ -226,16 +227,18 @@ public class EntityEnderman extends EntityMonster {
 
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.v;
     }
 
-    public void setCarried(IBlockData iblockdata) {
-        this.datawatcher.set(EntityEnderman.bv, Optional.fromNullable(iblockdata));
+    public void setCarried(@Nullable IBlockData iblockdata) {
+        this.datawatcher.set(EntityEnderman.bw, Optional.fromNullable(iblockdata));
     }
 
+    @Nullable
     public IBlockData getCarried() {
-        return (IBlockData) ((Optional) this.datawatcher.get(EntityEnderman.bv)).orNull();
+        return (IBlockData) ((Optional) this.datawatcher.get(EntityEnderman.bw)).orNull();
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
@@ -243,7 +246,7 @@ public class EntityEnderman extends EntityMonster {
             return false;
         } else if (damagesource instanceof EntityDamageSourceIndirect) {
             for (int i = 0; i < 64; ++i) {
-                if (this.da()) {
+                if (this.db()) {
                     return true;
                 }
             }
@@ -253,15 +256,15 @@ public class EntityEnderman extends EntityMonster {
             boolean flag = super.damageEntity(damagesource, f);
 
             if (damagesource.ignoresArmor() && this.random.nextInt(10) != 0) {
-                this.da();
+                this.db();
             }
 
             return flag;
         }
     }
 
-    public boolean dc() {
-        return ((Boolean) this.datawatcher.get(EntityEnderman.bw)).booleanValue();
+    public boolean dd() {
+        return ((Boolean) this.datawatcher.get(EntityEnderman.bx)).booleanValue();
     }
 
     static {
@@ -364,7 +367,7 @@ public class EntityEnderman extends EntityMonster {
             double d0 = this.f();
 
             this.j = this.i.world.a(this.i.locX, this.i.locY, this.i.locZ, d0, d0, (Function) null, new Predicate() {
-                public boolean a(EntityHuman entityhuman) {
+                public boolean a(@Nullable EntityHuman entityhuman) {
                     return entityhuman != null && PathfinderGoalPlayerWhoLookedAtTarget.this.i.c(entityhuman);
                 }
 
@@ -409,7 +412,7 @@ public class EntityEnderman extends EntityMonster {
                 if (this.d != null) {
                     if (this.i.c((EntityHuman) this.d)) {
                         if (((EntityHuman) this.d).h(this.i) < 16.0D) {
-                            this.i.da();
+                            this.i.db();
                         }
 
                         this.l = 0;

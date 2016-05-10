@@ -14,7 +14,7 @@ public enum EnumDragonRespawn {
             while (iterator.hasNext()) {
                 EntityEnderCrystal entityendercrystal = (EntityEnderCrystal) iterator.next();
 
-                entityendercrystal.a(blockposition1);
+                entityendercrystal.setBeamTarget(blockposition1);
             }
 
             enderdragonbattle.a(null.PREPARING_TO_SUMMON_PILLARS);
@@ -49,7 +49,7 @@ public enum EnumDragonRespawn {
                     while (iterator.hasNext()) {
                         EntityEnderCrystal entityendercrystal = (EntityEnderCrystal) iterator.next();
 
-                        entityendercrystal.a(new BlockPosition(worldgenender_spike.a(), worldgenender_spike.d() + 1, worldgenender_spike.b()));
+                        entityendercrystal.setBeamTarget(new BlockPosition(worldgenender_spike.a(), worldgenender_spike.d() + 1, worldgenender_spike.b()));
                     }
                 } else {
                     byte b1 = 10;
@@ -87,7 +87,7 @@ public enum EnumDragonRespawn {
 
             while (iterator.hasNext()) {
                 entityendercrystal = (EntityEnderCrystal) iterator.next();
-                entityendercrystal.a((BlockPosition) null);
+                entityendercrystal.setBeamTarget((BlockPosition) null);
                 worldserver.explode(entityendercrystal, entityendercrystal.locX, entityendercrystal.locY, entityendercrystal.locZ, 6.0F, false);
                 entityendercrystal.die();
             }
@@ -98,7 +98,7 @@ public enum EnumDragonRespawn {
 
             while (iterator.hasNext()) {
                 entityendercrystal = (EntityEnderCrystal) iterator.next();
-                entityendercrystal.a(new BlockPosition(0, 128, 0));
+                entityendercrystal.setBeamTarget(new BlockPosition(0, 128, 0));
             }
         } else if (i < 5) {
             worldserver.triggerEffect(3001, new BlockPosition(0, 128, 0), 0);

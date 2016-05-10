@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class BlockPiston extends BlockDirectional {
 
@@ -55,7 +56,7 @@ public class BlockPiston extends BlockDirectional {
         return !((Boolean) iblockdata.get(BlockPiston.EXTENDED)).booleanValue() || iblockdata.get(BlockPiston.FACING) == EnumDirection.DOWN;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
         a(blockposition, axisalignedbb, list, iblockdata.c(world, blockposition));
     }
 
@@ -71,7 +72,7 @@ public class BlockPiston extends BlockDirectional {
 
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!world.isClientSide) {
             this.e(world, blockposition, iblockdata);
         }
@@ -137,7 +138,7 @@ public class BlockPiston extends BlockDirectional {
         }
     }
 
-    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, int i, int j) {
+    public boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, int i, int j) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockPiston.FACING);
 
         if (!world.isClientSide) {
@@ -164,7 +165,7 @@ public class BlockPiston extends BlockDirectional {
             TileEntity tileentity = world.getTileEntity(blockposition.shift(enumdirection));
 
             if (tileentity instanceof TileEntityPiston) {
-                ((TileEntityPiston) tileentity).h();
+                ((TileEntityPiston) tileentity).i();
             }
 
             world.setTypeAndData(blockposition, Blocks.PISTON_EXTENSION.getBlockData().set(BlockPistonMoving.FACING, enumdirection).set(BlockPistonMoving.TYPE, this.sticky ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT), 3);
@@ -181,8 +182,8 @@ public class BlockPiston extends BlockDirectional {
                     if (tileentity1 instanceof TileEntityPiston) {
                         TileEntityPiston tileentitypiston = (TileEntityPiston) tileentity1;
 
-                        if (tileentitypiston.e() == enumdirection && tileentitypiston.d()) {
-                            tileentitypiston.h();
+                        if (tileentitypiston.g() == enumdirection && tileentitypiston.e()) {
+                            tileentitypiston.i();
                             flag1 = true;
                         }
                     }
@@ -205,6 +206,7 @@ public class BlockPiston extends BlockDirectional {
         return false;
     }
 
+    @Nullable
     public static EnumDirection e(int i) {
         int j = i & 7;
 

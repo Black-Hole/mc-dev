@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 
 public class EntityFallingBlock extends Entity {
 
@@ -102,9 +103,7 @@ public class EntityFallingBlock extends Entity {
                                     TileEntity tileentity = this.world.getTileEntity(blockposition);
 
                                     if (tileentity != null) {
-                                        NBTTagCompound nbttagcompound = new NBTTagCompound();
-
-                                        tileentity.save(nbttagcompound);
+                                        NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
                                         Iterator iterator = this.tileEntityData.c().iterator();
 
                                         while (iterator.hasNext()) {
@@ -238,11 +237,12 @@ public class EntityFallingBlock extends Entity {
 
     }
 
+    @Nullable
     public IBlockData getBlock() {
         return this.block;
     }
 
-    public boolean br() {
+    public boolean bs() {
         return true;
     }
 }

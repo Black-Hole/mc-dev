@@ -12,6 +12,7 @@ import com.google.gson.JsonSyntaxException;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class LootItemConditions {
 
@@ -32,7 +33,7 @@ public class LootItemConditions {
         }
     }
 
-    public static boolean a(LootItemCondition[] alootitemcondition, Random random, LootTableInfo loottableinfo) {
+    public static boolean a(@Nullable LootItemCondition[] alootitemcondition, Random random, LootTableInfo loottableinfo) {
         if (alootitemcondition == null) {
             return true;
         } else {

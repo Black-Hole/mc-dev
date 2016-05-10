@@ -40,7 +40,7 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
         entityhorse.prepare(difficultydamagescaler, (GroupDataEntity) null);
         entityhorse.setPosition(this.a.locX, this.a.locY, this.a.locZ);
         entityhorse.noDamageTicks = 60;
-        entityhorse.cL();
+        entityhorse.cM();
         entityhorse.setType(EnumHorseType.SKELETON);
         entityhorse.setTame(true);
         entityhorse.setAgeRaw(0);
@@ -54,7 +54,7 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
         entityskeleton.prepare(difficultydamagescaler, (GroupDataEntity) null);
         entityskeleton.setPosition(entityhorse.locX, entityhorse.locY, entityhorse.locZ);
         entityskeleton.noDamageTicks = 60;
-        entityskeleton.cL();
+        entityskeleton.cM();
         if (entityskeleton.getEquipment(EnumItemSlot.HEAD) == null) {
             entityskeleton.setSlot(EnumItemSlot.HEAD, new ItemStack(Items.IRON_HELMET));
         }

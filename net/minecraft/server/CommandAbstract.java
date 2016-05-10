@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 public abstract class CommandAbstract implements ICommand {
@@ -35,9 +36,8 @@ public abstract class CommandAbstract implements ICommand {
     }
 
     protected static NBTTagCompound a(Entity entity) {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
+        NBTTagCompound nbttagcompound = entity.e(new NBTTagCompound());
 
-        entity.e(nbttagcompound);
         if (entity instanceof EntityHuman) {
             ItemStack itemstack = ((EntityHuman) entity).inventory.getItemInHand();
 
@@ -61,7 +61,7 @@ public abstract class CommandAbstract implements ICommand {
         return icommandlistener.a(this.a(), this.getCommand());
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return Collections.emptyList();
     }
 
@@ -239,7 +239,7 @@ public abstract class CommandAbstract implements ICommand {
             return a(minecraftserver, icommandlistener, s).getName();
         } catch (ExceptionPlayerNotFound exceptionplayernotfound) {
             try {
-                return b(minecraftserver, icommandlistener, s).getUniqueID().toString();
+                return b(minecraftserver, icommandlistener, s).bd();
             } catch (ExceptionEntityNotFound exceptionentitynotfound) {
                 if (s != null && !s.startsWith("@")) {
                     return s;
@@ -323,17 +323,19 @@ public abstract class CommandAbstract implements ICommand {
                 }
             }
 
+            double d2 = d1 + (flag1 ? d0 : 0.0D);
+
             if (i != 0 || j != 0) {
-                if (d1 < (double) i) {
-                    throw new ExceptionInvalidNumber("commands.generic.double.tooSmall", new Object[] { Double.valueOf(d1), Integer.valueOf(i)});
+                if (d2 < (double) i) {
+                    throw new ExceptionInvalidNumber("commands.generic.double.tooSmall", new Object[] { Double.valueOf(d2), Integer.valueOf(i)});
                 }
 
-                if (d1 > (double) j) {
-                    throw new ExceptionInvalidNumber("commands.generic.double.tooBig", new Object[] { Double.valueOf(d1), Integer.valueOf(j)});
+                if (d2 > (double) j) {
+                    throw new ExceptionInvalidNumber("commands.generic.double.tooBig", new Object[] { Double.valueOf(d2), Integer.valueOf(j)});
                 }
             }
 
-            return new CommandAbstract.CommandNumber(d1 + (flag1 ? d0 : 0.0D), d1, flag1);
+            return new CommandAbstract.CommandNumber(d2, d1, flag1);
         }
     }
 
@@ -445,7 +447,7 @@ public abstract class CommandAbstract implements ICommand {
         return a(collection.toArray(new String[collection.size()]));
     }
 
-    public static List<String> a(String[] astring, int i, BlockPosition blockposition) {
+    public static List<String> a(String[] astring, int i, @Nullable BlockPosition blockposition) {
         if (blockposition == null) {
             return Lists.newArrayList(new String[] { "~"});
         } else {
@@ -468,7 +470,8 @@ public abstract class CommandAbstract implements ICommand {
         }
     }
 
-    public static List<String> b(String[] astring, int i, BlockPosition blockposition) {
+    @Nullable
+    public static List<String> b(String[] astring, int i, @Nullable BlockPosition blockposition) {
         if (blockposition == null) {
             return Lists.newArrayList(new String[] { "~"});
         } else {

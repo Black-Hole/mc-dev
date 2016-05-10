@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ContainerPlayer extends Container {
 
     private static final EnumItemSlot[] h = new EnumItemSlot[] { EnumItemSlot.HEAD, EnumItemSlot.CHEST, EnumItemSlot.LEGS, EnumItemSlot.FEET};
@@ -30,7 +32,7 @@ public class ContainerPlayer extends Container {
                     return 1;
                 }
 
-                public boolean isAllowed(ItemStack itemstack) {
+                public boolean isAllowed(@Nullable ItemStack itemstack) {
                     if (itemstack == null) {
                         return false;
                     } else {
@@ -53,7 +55,7 @@ public class ContainerPlayer extends Container {
         }
 
         this.a(new Slot(playerinventory, 40, 77, 62) {
-            public boolean isAllowed(ItemStack itemstack) {
+            public boolean isAllowed(@Nullable ItemStack itemstack) {
                 return super.isAllowed(itemstack);
             }
         });
@@ -82,6 +84,7 @@ public class ContainerPlayer extends Container {
         return true;
     }
 
+    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
         ItemStack itemstack = null;
         Slot slot = (Slot) this.c.get(i);

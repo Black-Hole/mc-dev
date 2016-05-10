@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockLightStone extends Block {
 
@@ -17,6 +18,7 @@ public class BlockLightStone extends Block {
         return 2 + random.nextInt(3);
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.GLOWSTONE_DUST;
     }

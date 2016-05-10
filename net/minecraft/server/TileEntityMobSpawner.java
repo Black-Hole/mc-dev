@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class TileEntityMobSpawner extends TileEntity implements ITickable {
 
     private final MobSpawnerAbstract a = new MobSpawnerAbstract() {
@@ -33,21 +35,26 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
         this.a.a(nbttagcompound);
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         this.a.b(nbttagcompound);
+        return nbttagcompound;
     }
 
     public void c() {
         this.a.c();
     }
 
-    public Packet<?> getUpdatePacket() {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
+    @Nullable
+    public PacketPlayOutTileEntityData getUpdatePacket() {
+        return new PacketPlayOutTileEntityData(this.position, 1, this.E_());
+    }
 
-        this.save(nbttagcompound);
+    public NBTTagCompound E_() {
+        NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
+
         nbttagcompound.remove("SpawnPotentials");
-        return new PacketPlayOutTileEntityData(this.position, 1, nbttagcompound);
+        return nbttagcompound;
     }
 
     public boolean c(int i, int j) {

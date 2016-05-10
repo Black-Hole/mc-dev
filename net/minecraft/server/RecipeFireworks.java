@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import javax.annotation.Nullable;
 
 public class RecipeFireworks implements IRecipe {
 
@@ -159,6 +160,7 @@ public class RecipeFireworks implements IRecipe {
         }
     }
 
+    @Nullable
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         return this.a.cloneItemStack();
     }
@@ -167,6 +169,7 @@ public class RecipeFireworks implements IRecipe {
         return 10;
     }
 
+    @Nullable
     public ItemStack b() {
         return this.a;
     }

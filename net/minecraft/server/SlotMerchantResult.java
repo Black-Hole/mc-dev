@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class SlotMerchantResult extends Slot {
 
     private final InventoryMerchant a;
@@ -14,7 +16,7 @@ public class SlotMerchantResult extends Slot {
         this.a = inventorymerchant;
     }
 
-    public boolean isAllowed(ItemStack itemstack) {
+    public boolean isAllowed(@Nullable ItemStack itemstack) {
         return false;
     }
 

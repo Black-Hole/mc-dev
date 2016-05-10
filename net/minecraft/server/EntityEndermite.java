@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityEndermite extends EntityMonster {
 
     private int a = 0;
@@ -40,11 +42,11 @@ public class EntityEndermite extends EntityMonster {
         return SoundEffects.bb;
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.bd;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.bc;
     }
 
@@ -52,6 +54,7 @@ public class EntityEndermite extends EntityMonster {
         this.a(SoundEffects.be, 0.15F, 1.0F);
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.ah;
     }
@@ -69,7 +72,7 @@ public class EntityEndermite extends EntityMonster {
     }
 
     public void m() {
-        this.aM = this.yaw;
+        this.aN = this.yaw;
         super.m();
     }
 
@@ -107,8 +110,8 @@ public class EntityEndermite extends EntityMonster {
         return true;
     }
 
-    public boolean cF() {
-        if (super.cF()) {
+    public boolean cG() {
+        if (super.cG()) {
             EntityHuman entityhuman = this.world.findNearbyPlayer(this, 5.0D);
 
             return entityhuman == null;

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ShapedRecipes implements IRecipe {
 
     private final int width;
@@ -15,6 +17,7 @@ public class ShapedRecipes implements IRecipe {
         this.result = itemstack;
     }
 
+    @Nullable
     public ItemStack b() {
         return this.result;
     }
@@ -85,6 +88,7 @@ public class ShapedRecipes implements IRecipe {
         return true;
     }
 
+    @Nullable
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         ItemStack itemstack = this.b().cloneItemStack();
 

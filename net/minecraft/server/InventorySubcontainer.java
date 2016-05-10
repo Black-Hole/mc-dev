@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class InventorySubcontainer implements IInventory {
 
@@ -30,10 +31,12 @@ public class InventorySubcontainer implements IInventory {
         this.d.remove(iinventorylistener);
     }
 
+    @Nullable
     public ItemStack getItem(int i) {
         return i >= 0 && i < this.items.length ? this.items[i] : null;
     }
 
+    @Nullable
     public ItemStack splitStack(int i, int j) {
         ItemStack itemstack = ContainerUtil.a(this.items, i, j);
 
@@ -44,6 +47,7 @@ public class InventorySubcontainer implements IInventory {
         return itemstack;
     }
 
+    @Nullable
     public ItemStack a(ItemStack itemstack) {
         ItemStack itemstack1 = itemstack.cloneItemStack();
 
@@ -78,6 +82,7 @@ public class InventorySubcontainer implements IInventory {
         return itemstack1;
     }
 
+    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         if (this.items[i] != null) {
             ItemStack itemstack = this.items[i];
@@ -89,7 +94,7 @@ public class InventorySubcontainer implements IInventory {
         }
     }
 
-    public void setItem(int i, ItemStack itemstack) {
+    public void setItem(int i, @Nullable ItemStack itemstack) {
         this.items[i] = itemstack;
         if (itemstack != null && itemstack.count > this.getMaxStackSize()) {
             itemstack.count = this.getMaxStackSize();

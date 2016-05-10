@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class WorldGenMineshaftPieces {
 
@@ -14,7 +15,7 @@ public class WorldGenMineshaftPieces {
         WorldGenFactory.a(WorldGenMineshaftPieces.WorldGenMineshaftStairs.class, "MSStairs");
     }
 
-    private static StructurePiece a(List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
+    private static StructurePiece a(List<StructurePiece> list, Random random, int i, int j, int k, @Nullable EnumDirection enumdirection, int l) {
         int i1 = random.nextInt(100);
         StructureBoundingBox structureboundingbox;
 
@@ -186,7 +187,7 @@ public class WorldGenMineshaftPieces {
             this.a = EnumDirection.fromType2(nbttagcompound.getInt("D"));
         }
 
-        public WorldGenMineshaftCross(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
+        public WorldGenMineshaftCross(int i, Random random, StructureBoundingBox structureboundingbox, @Nullable EnumDirection enumdirection) {
             super(i);
             this.a = enumdirection;
             this.l = structureboundingbox;

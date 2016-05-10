@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public class CommandHelp extends CommandAbstract {
 
@@ -93,7 +94,7 @@ public class CommandHelp extends CommandAbstract {
         return minecraftserver.getCommandHandler().getCommands();
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         if (astring.length == 1) {
             Set set = this.a(minecraftserver).keySet();
 

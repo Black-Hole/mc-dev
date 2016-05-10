@@ -20,7 +20,7 @@ public class EntityDragonFireball extends EntityFireball {
             List list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(4.0D, 2.0D, 4.0D));
             EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX, this.locY, this.locZ);
 
-            entityareaeffectcloud.a(this.shooter);
+            entityareaeffectcloud.setSource(this.shooter);
             entityareaeffectcloud.setParticle(EnumParticle.DRAGON_BREATH);
             entityareaeffectcloud.setRadius(3.0F);
             entityareaeffectcloud.setDuration(2400);

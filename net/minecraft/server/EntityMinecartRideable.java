@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityMinecartRideable extends EntityMinecartAbstract {
 
     public EntityMinecartRideable(World world) {
@@ -10,7 +12,7 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public boolean a(EntityHuman entityhuman, ItemStack itemstack, EnumHand enumhand) {
+    public boolean a(EntityHuman entityhuman, @Nullable ItemStack itemstack, EnumHand enumhand) {
         if (entityhuman.isSneaking()) {
             return false;
         } else if (this.isVehicle()) {

@@ -13,12 +13,13 @@ public abstract class TileEntityContainer extends TileEntity implements ITileEnt
         this.a = ChestLock.b(nbttagcompound);
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         if (this.a != null) {
             this.a.a(nbttagcompound);
         }
 
+        return nbttagcompound;
     }
 
     public boolean x_() {

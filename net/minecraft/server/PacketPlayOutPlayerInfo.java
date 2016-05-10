@@ -7,6 +7,7 @@ import com.mojang.authlib.properties.Property;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
@@ -217,7 +218,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
         private final GameProfile d;
         private final IChatBaseComponent e;
 
-        public PlayerInfoData(GameProfile gameprofile, int i, WorldSettings.EnumGamemode worldsettings_enumgamemode, IChatBaseComponent ichatbasecomponent) {
+        public PlayerInfoData(GameProfile gameprofile, int i, WorldSettings.EnumGamemode worldsettings_enumgamemode, @Nullable IChatBaseComponent ichatbasecomponent) {
             this.d = gameprofile;
             this.b = i;
             this.c = worldsettings_enumgamemode;
@@ -236,6 +237,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
             return this.c;
         }
 
+        @Nullable
         public IChatBaseComponent d() {
             return this.e;
         }

@@ -5,6 +5,7 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 
 public enum EnumProtocol {
@@ -85,7 +86,6 @@ public enum EnumProtocol {
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSpawnPosition.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutUpdateTime.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutTitle.class);
-        this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutUpdateSign.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutNamedSoundEffect.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutPlayerListHeaderFooter.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutCollect.class);
@@ -176,6 +176,7 @@ public enum EnumProtocol {
         return (Integer) ((BiMap) this.j.get(enumprotocoldirection)).inverse().get(packet.getClass());
     }
 
+    @Nullable
     public Packet<?> a(EnumProtocolDirection enumprotocoldirection, int i) throws IllegalAccessException, InstantiationException {
         Class oclass = (Class) ((BiMap) this.j.get(enumprotocoldirection)).get(Integer.valueOf(i));
 

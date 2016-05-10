@@ -3,19 +3,20 @@ package net.minecraft.server;
 import com.google.common.base.Predicate;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class EntityGuardian extends EntityMonster {
 
     private static final DataWatcherObject<Byte> a = DataWatcher.a(EntityGuardian.class, DataWatcherRegistry.a);
     private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityGuardian.class, DataWatcherRegistry.b);
     private float c;
-    private float bv;
     private float bw;
     private float bx;
     private float by;
-    private EntityLiving bz;
-    private int bA;
-    private boolean bB;
+    private float bz;
+    private EntityLiving bA;
+    private int bB;
+    private boolean bC;
     public PathfinderGoalRandomStroll goalRandomStroll;
 
     public EntityGuardian(World world) {
@@ -23,7 +24,7 @@ public class EntityGuardian extends EntityMonster {
         this.b_ = 10;
         this.setSize(0.85F, 0.85F);
         this.moveController = new EntityGuardian.ControllerMoveGuardian(this);
-        this.bv = this.c = this.random.nextFloat();
+        this.bw = this.c = this.random.nextFloat();
     }
 
     protected void r() {
@@ -91,7 +92,7 @@ public class EntityGuardian extends EntityMonster {
         this.a(2, flag);
     }
 
-    public int da() {
+    public int db() {
         return this.isElder() ? 60 : 80;
     }
 
@@ -106,7 +107,7 @@ public class EntityGuardian extends EntityMonster {
             this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.30000001192092896D);
             this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(8.0D);
             this.getAttributeInstance(GenericAttributes.maxHealth).setValue(80.0D);
-            this.cL();
+            this.cM();
             if (this.goalRandomStroll != null) {
                 this.goalRandomStroll.setTimeBetweenMovement(400);
             }
@@ -118,22 +119,22 @@ public class EntityGuardian extends EntityMonster {
         this.datawatcher.set(EntityGuardian.b, Integer.valueOf(i));
     }
 
-    public boolean dd() {
+    public boolean de() {
         return ((Integer) this.datawatcher.get(EntityGuardian.b)).intValue() != 0;
     }
 
-    public EntityLiving de() {
-        if (!this.dd()) {
+    public EntityLiving df() {
+        if (!this.de()) {
             return null;
         } else if (this.world.isClientSide) {
-            if (this.bz != null) {
-                return this.bz;
+            if (this.bA != null) {
+                return this.bA;
             } else {
                 Entity entity = this.world.getEntity(((Integer) this.datawatcher.get(EntityGuardian.b)).intValue());
 
                 if (entity instanceof EntityLiving) {
-                    this.bz = (EntityLiving) entity;
-                    return this.bz;
+                    this.bA = (EntityLiving) entity;
+                    return this.bA;
                 } else {
                     return null;
                 }
@@ -150,8 +151,8 @@ public class EntityGuardian extends EntityMonster {
                 this.setSize(1.9975F, 1.9975F);
             }
         } else if (EntityGuardian.b.equals(datawatcherobject)) {
-            this.bA = 0;
-            this.bz = null;
+            this.bB = 0;
+            this.bA = null;
         }
 
     }
@@ -164,11 +165,11 @@ public class EntityGuardian extends EntityMonster {
         return this.isElder() ? (this.isInWater() ? SoundEffects.aD : SoundEffects.aE) : (this.isInWater() ? SoundEffects.cf : SoundEffects.cg);
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return this.isElder() ? (this.isInWater() ? SoundEffects.aI : SoundEffects.aJ) : (this.isInWater() ? SoundEffects.cl : SoundEffects.cm);
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return this.isElder() ? (this.isInWater() ? SoundEffects.aG : SoundEffects.aH) : (this.isInWater() ? SoundEffects.ci : SoundEffects.cj);
     }
 
@@ -186,32 +187,32 @@ public class EntityGuardian extends EntityMonster {
 
     public void n() {
         if (this.world.isClientSide) {
-            this.bv = this.c;
+            this.bw = this.c;
             if (!this.isInWater()) {
-                this.bw = 2.0F;
-                if (this.motY > 0.0D && this.bB && !this.ad()) {
-                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.ck, this.bz(), 1.0F, 1.0F, false);
+                this.bx = 2.0F;
+                if (this.motY > 0.0D && this.bC && !this.ad()) {
+                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.ck, this.bA(), 1.0F, 1.0F, false);
                 }
 
-                this.bB = this.motY < 0.0D && this.world.d((new BlockPosition(this)).down(), false);
+                this.bC = this.motY < 0.0D && this.world.d((new BlockPosition(this)).down(), false);
             } else if (this.o()) {
-                if (this.bw < 0.5F) {
-                    this.bw = 4.0F;
+                if (this.bx < 0.5F) {
+                    this.bx = 4.0F;
                 } else {
-                    this.bw += (0.5F - this.bw) * 0.1F;
+                    this.bx += (0.5F - this.bx) * 0.1F;
                 }
             } else {
-                this.bw += (0.125F - this.bw) * 0.2F;
+                this.bx += (0.125F - this.bx) * 0.2F;
             }
 
-            this.c += this.bw;
-            this.by = this.bx;
+            this.c += this.bx;
+            this.bz = this.by;
             if (!this.isInWater()) {
-                this.bx = this.random.nextFloat();
+                this.by = this.random.nextFloat();
             } else if (this.o()) {
-                this.bx += (0.0F - this.bx) * 0.25F;
+                this.by += (0.0F - this.by) * 0.25F;
             } else {
-                this.bx += (1.0F - this.bx) * 0.06F;
+                this.by += (1.0F - this.by) * 0.06F;
             }
 
             if (this.o() && this.isInWater()) {
@@ -222,12 +223,12 @@ public class EntityGuardian extends EntityMonster {
                 }
             }
 
-            if (this.dd()) {
-                if (this.bA < this.da()) {
-                    ++this.bA;
+            if (this.de()) {
+                if (this.bB < this.db()) {
+                    ++this.bB;
                 }
 
-                EntityLiving entityliving = this.de();
+                EntityLiving entityliving = this.df();
 
                 if (entityliving != null) {
                     this.getControllerLook().a(entityliving, 90.0F, 90.0F);
@@ -262,15 +263,15 @@ public class EntityGuardian extends EntityMonster {
             this.impulse = true;
         }
 
-        if (this.dd()) {
-            this.yaw = this.aO;
+        if (this.de()) {
+            this.yaw = this.aP;
         }
 
         super.n();
     }
 
     public float s(float f) {
-        return ((float) this.bA + f) / (float) this.da();
+        return ((float) this.bB + f) / (float) this.db();
     }
 
     protected void M() {
@@ -284,7 +285,7 @@ public class EntityGuardian extends EntityMonster {
             if ((this.ticksLived + this.getId()) % 1200 == 0) {
                 MobEffectList mobeffectlist = MobEffects.SLOWER_DIG;
                 List list = this.world.b(EntityPlayer.class, new Predicate() {
-                    public boolean a(EntityPlayer entityplayer) {
+                    public boolean a(@Nullable EntityPlayer entityplayer) {
                         return EntityGuardian.this.h(entityplayer) < 2500.0D && entityplayer.playerInteractManager.c();
                     }
 
@@ -304,13 +305,14 @@ public class EntityGuardian extends EntityMonster {
                 }
             }
 
-            if (!this.cY()) {
+            if (!this.cZ()) {
                 this.a(new BlockPosition(this), 16);
             }
         }
 
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return this.isElder() ? LootTables.x : LootTables.w;
     }
@@ -323,8 +325,8 @@ public class EntityGuardian extends EntityMonster {
         return this.world.a(this.getBoundingBox(), (Entity) this) && this.world.getCubes(this, this.getBoundingBox()).isEmpty();
     }
 
-    public boolean cF() {
-        return (this.random.nextInt(20) == 0 || !this.world.i(new BlockPosition(this))) && super.cF();
+    public boolean cG() {
+        return (this.random.nextInt(20) == 0 || !this.world.i(new BlockPosition(this))) && super.cG();
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
@@ -348,7 +350,7 @@ public class EntityGuardian extends EntityMonster {
     }
 
     public void g(float f, float f1) {
-        if (this.co()) {
+        if (this.cp()) {
             if (this.isInWater()) {
                 this.a(f, f1, 0.1F);
                 this.move(this.motX, this.motY, this.motZ);
@@ -388,10 +390,10 @@ public class EntityGuardian extends EntityMonster {
                 float f = (float) (MathHelper.b(d2, d0) * 57.2957763671875D) - 90.0F;
 
                 this.i.yaw = this.a(this.i.yaw, f, 90.0F);
-                this.i.aM = this.i.yaw;
+                this.i.aN = this.i.yaw;
                 float f1 = (float) (this.e * this.i.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
 
-                this.i.l(this.i.ck() + (f1 - this.i.ck()) * 0.125F);
+                this.i.l(this.i.cl() + (f1 - this.i.cl()) * 0.125F);
                 double d4 = Math.sin((double) (this.i.ticksLived + this.i.getId()) * 0.5D) * 0.05D;
                 double d5 = Math.cos((double) (this.i.yaw * 0.017453292F));
                 double d6 = Math.sin((double) (this.i.yaw * 0.017453292F));
@@ -400,7 +402,7 @@ public class EntityGuardian extends EntityMonster {
                 this.i.motZ += d4 * d6;
                 d4 = Math.sin((double) (this.i.ticksLived + this.i.getId()) * 0.75D) * 0.05D;
                 this.i.motY += d4 * (d6 + d5) * 0.25D;
-                this.i.motY += (double) this.i.ck() * d1 * 0.1D;
+                this.i.motY += (double) this.i.cl() * d1 * 0.1D;
                 ControllerLook controllerlook = this.i.getControllerLook();
                 double d7 = this.i.locX + d0 / d3 * 2.0D;
                 double d8 = (double) this.i.getHeadHeight() + this.i.locY + d1 / d3;
@@ -469,7 +471,7 @@ public class EntityGuardian extends EntityMonster {
                 if (this.b == 0) {
                     this.a.b(this.a.getGoalTarget().getId());
                     this.a.world.broadcastEntityEffect(this.a, (byte) 21);
-                } else if (this.b >= this.a.da()) {
+                } else if (this.b >= this.a.db()) {
                     float f = 1.0F;
 
                     if (this.a.world.getDifficulty() == EnumDifficulty.HARD) {
@@ -498,7 +500,7 @@ public class EntityGuardian extends EntityMonster {
             this.a = entityguardian;
         }
 
-        public boolean a(EntityLiving entityliving) {
+        public boolean a(@Nullable EntityLiving entityliving) {
             return (entityliving instanceof EntityHuman || entityliving instanceof EntitySquid) && entityliving.h(this.a) > 9.0D;
         }
 

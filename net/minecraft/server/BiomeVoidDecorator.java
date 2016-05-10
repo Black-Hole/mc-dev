@@ -9,7 +9,7 @@ public class BiomeVoidDecorator extends BiomeDecorator {
     public void a(World world, Random random, BiomeBase biomebase, BlockPosition blockposition) {
         BlockPosition blockposition1 = world.getSpawn();
         boolean flag = true;
-        double d0 = blockposition1.k(blockposition.a(8, blockposition1.getY(), 8));
+        double d0 = blockposition1.n(blockposition.a(8, blockposition1.getY(), 8));
 
         if (d0 <= 1024.0D) {
             BlockPosition blockposition2 = new BlockPosition(blockposition1.getX() - 16, blockposition1.getY() - 1, blockposition1.getZ() - 16);

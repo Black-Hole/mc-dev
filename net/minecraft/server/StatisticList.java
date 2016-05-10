@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 public class StatisticList {
 
@@ -73,26 +74,32 @@ public class StatisticList {
     private static final Statistic[] ai = new Statistic[32000];
     private static final Statistic[] aj = new Statistic[32000];
 
+    @Nullable
     public static Statistic a(Block block) {
         return StatisticList.ae[Block.getId(block)];
     }
 
+    @Nullable
     public static Statistic a(Item item) {
         return StatisticList.af[Item.getId(item)];
     }
 
+    @Nullable
     public static Statistic b(Item item) {
         return StatisticList.ag[Item.getId(item)];
     }
 
+    @Nullable
     public static Statistic c(Item item) {
         return StatisticList.ah[Item.getId(item)];
     }
 
+    @Nullable
     public static Statistic d(Item item) {
         return StatisticList.ai[Item.getId(item)];
     }
 
+    @Nullable
     public static Statistic e(Item item) {
         return StatisticList.aj[Item.getId(item)];
     }

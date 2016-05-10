@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class EntityPigZombie extends EntityZombie {
 
@@ -15,7 +16,7 @@ public class EntityPigZombie extends EntityZombie {
         this.fireProof = true;
     }
 
-    public void a(EntityLiving entityliving) {
+    public void a(@Nullable EntityLiving entityliving) {
         super.a(entityliving);
         if (entityliving != null) {
             this.hurtBy = entityliving.getUniqueID();
@@ -42,7 +43,7 @@ public class EntityPigZombie extends EntityZombie {
     protected void M() {
         AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
-        if (this.da()) {
+        if (this.db()) {
             if (!this.isBaby() && !attributeinstance.a(EntityPigZombie.c)) {
                 attributeinstance.b(EntityPigZombie.c);
             }
@@ -53,7 +54,7 @@ public class EntityPigZombie extends EntityZombie {
         }
 
         if (this.soundDelay > 0 && --this.soundDelay == 0) {
-            this.a(SoundEffects.hs, this.cd() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
+            this.a(SoundEffects.hs, this.ce() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
         }
 
         if (this.angerLevel > 0 && this.hurtBy != null && this.getLastDamager() == null) {
@@ -61,13 +62,13 @@ public class EntityPigZombie extends EntityZombie {
 
             this.a((EntityLiving) entityhuman);
             this.killer = entityhuman;
-            this.lastDamageByPlayerTime = this.bH();
+            this.lastDamageByPlayerTime = this.bI();
         }
 
         super.M();
     }
 
-    public boolean cF() {
+    public boolean cG() {
         return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
@@ -98,7 +99,7 @@ public class EntityPigZombie extends EntityZombie {
             this.a((EntityLiving) entityhuman);
             if (entityhuman != null) {
                 this.killer = entityhuman;
-                this.lastDamageByPlayerTime = this.bH();
+                this.lastDamageByPlayerTime = this.bI();
             }
         }
 
@@ -127,7 +128,7 @@ public class EntityPigZombie extends EntityZombie {
 
     }
 
-    public boolean da() {
+    public boolean db() {
         return this.angerLevel > 0;
     }
 
@@ -135,19 +136,20 @@ public class EntityPigZombie extends EntityZombie {
         return SoundEffects.hr;
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.hu;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.ht;
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.aj;
     }
 
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
+    public boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {
         return false;
     }
 
@@ -155,7 +157,8 @@ public class EntityPigZombie extends EntityZombie {
         this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
     }
 
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
+    @Nullable
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
         super.prepare(difficultydamagescaler, groupdataentity);
         this.clearVillagerType();
         return groupdataentity;
@@ -168,7 +171,7 @@ public class EntityPigZombie extends EntityZombie {
         }
 
         public boolean a() {
-            return ((EntityPigZombie) this.e).da() && super.a();
+            return ((EntityPigZombie) this.e).db() && super.a();
         }
     }
 

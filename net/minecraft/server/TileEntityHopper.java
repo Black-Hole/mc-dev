@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class TileEntityHopper extends TileEntityLootable implements IHopper, ITickable {
 
@@ -19,7 +20,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         }
 
         this.g = nbttagcompound.getInt("TransferCooldown");
-        if (!this.c(nbttagcompound)) {
+        if (!this.d(nbttagcompound)) {
             NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -34,9 +35,9 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
 
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (!this.d(nbttagcompound)) {
+        if (!this.e(nbttagcompound)) {
             NBTTagList nbttaglist = new NBTTagList();
 
             for (int i = 0; i < this.items.length; ++i) {
@@ -57,28 +58,32 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
             nbttagcompound.setString("CustomName", this.f);
         }
 
+        return nbttagcompound;
     }
 
     public int getSize() {
         return this.items.length;
     }
 
+    @Nullable
     public ItemStack getItem(int i) {
         this.d((EntityHuman) null);
         return this.items[i];
     }
 
+    @Nullable
     public ItemStack splitStack(int i, int j) {
         this.d((EntityHuman) null);
         return ContainerUtil.a(this.items, i, j);
     }
 
+    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         this.d((EntityHuman) null);
         return ContainerUtil.a(this.items, i);
     }
 
-    public void setItem(int i, ItemStack itemstack) {
+    public void setItem(int i, @Nullable ItemStack itemstack) {
         this.d((EntityHuman) null);
         this.items[i] = itemstack;
         if (itemstack != null && itemstack.count > this.getMaxStackSize()) {
@@ -343,7 +348,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         }
     }
 
-    public static ItemStack addItem(IInventory iinventory, ItemStack itemstack, EnumDirection enumdirection) {
+    public static ItemStack addItem(IInventory iinventory, ItemStack itemstack, @Nullable EnumDirection enumdirection) {
         if (iinventory instanceof IWorldInventory && enumdirection != null) {
             IWorldInventory iworldinventory = (IWorldInventory) iinventory;
             int[] aint = iworldinventory.getSlotsForFace(enumdirection);
@@ -445,7 +450,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         }
 
         if (object == null) {
-            List list = world.a((Entity) null, new AxisAlignedBB(d0 - 0.5D, d1 - 0.5D, d2 - 0.5D, d0 + 0.5D, d1 + 0.5D, d2 + 0.5D), IEntitySelector.c);
+            List list = world.getEntities((Entity) null, new AxisAlignedBB(d0 - 0.5D, d1 - 0.5D, d2 - 0.5D, d0 + 0.5D, d1 + 0.5D, d2 + 0.5D), IEntitySelector.c);
 
             if (!list.isEmpty()) {
                 object = (IInventory) list.get(world.random.nextInt(list.size()));

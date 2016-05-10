@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal {
 
@@ -23,7 +24,7 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
 
     public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, Predicate<? super T> predicate, float f, double d0, double d1) {
         this.c = new Predicate() {
-            public boolean a(Entity entity) {
+            public boolean a(@Nullable Entity entity) {
                 return entity.isAlive() && PathfinderGoalAvoidTarget.this.a.getEntitySenses().a(entity);
             }
 

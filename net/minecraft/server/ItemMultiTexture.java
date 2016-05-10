@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.base.Function;
+import javax.annotation.Nullable;
 
 public class ItemMultiTexture extends ItemBlock {
 
@@ -17,7 +18,8 @@ public class ItemMultiTexture extends ItemBlock {
 
     public ItemMultiTexture(Block block, Block block1, final String[] astring) {
         this(block, block1, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 int i = itemstack.getData();
 
                 if (i < 0 || i >= astring.length) {

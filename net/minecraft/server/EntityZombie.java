@@ -3,21 +3,22 @@ package net.minecraft.server;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class EntityZombie extends EntityMonster {
 
     protected static final IAttribute a = (new AttributeRanged((IAttribute) null, "zombie.spawnReinforcements", 0.0D, 0.0D, 1.0D)).a("Spawn Reinforcements Chance");
     private static final UUID b = UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836");
     private static final AttributeModifier c = new AttributeModifier(EntityZombie.b, "Baby speed boost", 0.5D, 1);
-    private static final DataWatcherObject<Boolean> bv = DataWatcher.a(EntityZombie.class, DataWatcherRegistry.h);
-    private static final DataWatcherObject<Integer> bw = DataWatcher.a(EntityZombie.class, DataWatcherRegistry.b);
-    private static final DataWatcherObject<Boolean> bx = DataWatcher.a(EntityZombie.class, DataWatcherRegistry.h);
+    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityZombie.class, DataWatcherRegistry.h);
+    private static final DataWatcherObject<Integer> bx = DataWatcher.a(EntityZombie.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> by = DataWatcher.a(EntityZombie.class, DataWatcherRegistry.h);
-    private final PathfinderGoalBreakDoor bz = new PathfinderGoalBreakDoor(this);
-    private int bA;
-    private boolean bB = false;
-    private float bC = -1.0F;
-    private float bD;
+    private static final DataWatcherObject<Boolean> bz = DataWatcher.a(EntityZombie.class, DataWatcherRegistry.h);
+    private final PathfinderGoalBreakDoor bA = new PathfinderGoalBreakDoor(this);
+    private int bB;
+    private boolean bC = false;
+    private float bD = -1.0F;
+    private float bE;
 
     public EntityZombie(World world) {
         super(world);
@@ -53,35 +54,35 @@ public class EntityZombie extends EntityMonster {
 
     protected void i() {
         super.i();
-        this.getDataWatcher().register(EntityZombie.bv, Boolean.valueOf(false));
-        this.getDataWatcher().register(EntityZombie.bw, Integer.valueOf(0));
-        this.getDataWatcher().register(EntityZombie.bx, Boolean.valueOf(false));
+        this.getDataWatcher().register(EntityZombie.bw, Boolean.valueOf(false));
+        this.getDataWatcher().register(EntityZombie.bx, Integer.valueOf(0));
         this.getDataWatcher().register(EntityZombie.by, Boolean.valueOf(false));
+        this.getDataWatcher().register(EntityZombie.bz, Boolean.valueOf(false));
     }
 
     public void a(boolean flag) {
-        this.getDataWatcher().set(EntityZombie.by, Boolean.valueOf(flag));
+        this.getDataWatcher().set(EntityZombie.bz, Boolean.valueOf(flag));
     }
 
-    public boolean dc() {
-        return this.bB;
+    public boolean dd() {
+        return this.bC;
     }
 
     public void o(boolean flag) {
-        if (this.bB != flag) {
-            this.bB = flag;
+        if (this.bC != flag) {
+            this.bC = flag;
             ((Navigation) this.getNavigation()).a(flag);
             if (flag) {
-                this.goalSelector.a(1, this.bz);
+                this.goalSelector.a(1, this.bA);
             } else {
-                this.goalSelector.a((PathfinderGoal) this.bz);
+                this.goalSelector.a((PathfinderGoal) this.bA);
             }
         }
 
     }
 
     public boolean isBaby() {
-        return ((Boolean) this.getDataWatcher().get(EntityZombie.bv)).booleanValue();
+        return ((Boolean) this.getDataWatcher().get(EntityZombie.bw)).booleanValue();
     }
 
     protected int getExpValue(EntityHuman entityhuman) {
@@ -93,7 +94,7 @@ public class EntityZombie extends EntityMonster {
     }
 
     public void setBaby(boolean flag) {
-        this.getDataWatcher().set(EntityZombie.bv, Boolean.valueOf(flag));
+        this.getDataWatcher().set(EntityZombie.bw, Boolean.valueOf(flag));
         if (this.world != null && !this.world.isClientSide) {
             AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
@@ -107,23 +108,23 @@ public class EntityZombie extends EntityMonster {
     }
 
     public boolean isVillager() {
-        return ((Integer) this.getDataWatcher().get(EntityZombie.bw)).intValue() > 0;
+        return ((Integer) this.getDataWatcher().get(EntityZombie.bx)).intValue() > 0;
     }
 
     public int getVillagerType() {
-        return ((Integer) this.getDataWatcher().get(EntityZombie.bw)).intValue() - 1;
+        return ((Integer) this.getDataWatcher().get(EntityZombie.bx)).intValue() - 1;
     }
 
     public void setVillagerType(int i) {
-        this.getDataWatcher().set(EntityZombie.bw, Integer.valueOf(i + 1));
+        this.getDataWatcher().set(EntityZombie.bx, Integer.valueOf(i + 1));
     }
 
     public void clearVillagerType() {
-        this.getDataWatcher().set(EntityZombie.bw, Integer.valueOf(0));
+        this.getDataWatcher().set(EntityZombie.bx, Integer.valueOf(0));
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityZombie.bv.equals(datawatcherobject)) {
+        if (EntityZombie.bw.equals(datawatcherobject)) {
             this.q(this.isBaby());
         }
 
@@ -133,7 +134,7 @@ public class EntityZombie extends EntityMonster {
     public void n() {
         if (this.world.B() && !this.world.isClientSide && !this.isBaby()) {
             float f = this.e(1.0F);
-            BlockPosition blockposition = this.by() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
+            BlockPosition blockposition = this.bz() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
 
             if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.h(blockposition)) {
                 boolean flag = true;
@@ -203,9 +204,9 @@ public class EntityZombie extends EntityMonster {
         if (!this.world.isClientSide && this.isConverting()) {
             int i = this.getConversionTime();
 
-            this.bA -= i;
-            if (this.bA <= 0) {
-                this.dh();
+            this.bB -= i;
+            if (this.bB <= 0) {
+                this.di();
             }
         }
 
@@ -230,11 +231,11 @@ public class EntityZombie extends EntityMonster {
         return this.isVillager() ? SoundEffects.hw : SoundEffects.hh;
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return this.isVillager() ? SoundEffects.hA : SoundEffects.hp;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return this.isVillager() ? SoundEffects.hz : SoundEffects.hl;
     }
 
@@ -246,6 +247,7 @@ public class EntityZombie extends EntityMonster {
         return EnumMonsterType.UNDEAD;
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.ai;
     }
@@ -275,8 +277,8 @@ public class EntityZombie extends EntityMonster {
             nbttagcompound.setInt("VillagerProfession", this.getVillagerType());
         }
 
-        nbttagcompound.setInt("ConversionTime", this.isConverting() ? this.bA : -1);
-        nbttagcompound.setBoolean("CanBreakDoors", this.dc());
+        nbttagcompound.setInt("ConversionTime", this.isConverting() ? this.bB : -1);
+        nbttagcompound.setBoolean("CanBreakDoors", this.dd());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -315,7 +317,7 @@ public class EntityZombie extends EntityMonster {
             entityzombie.prepare(this.world.D(new BlockPosition(entityzombie)), new EntityZombie.GroupDataZombie(false, true, (EntityZombie.SyntheticClass_1) null));
             entityzombie.setVillagerType(entityvillager.getProfession());
             entityzombie.setBaby(entityliving.isBaby());
-            entityzombie.m(entityvillager.cR());
+            entityzombie.setAI(entityvillager.hasAI());
             if (entityvillager.hasCustomName()) {
                 entityzombie.setCustomName(entityvillager.getCustomName());
                 entityzombie.setCustomNameVisible(entityvillager.getCustomNameVisible());
@@ -341,7 +343,8 @@ public class EntityZombie extends EntityMonster {
         return itemstack.getItem() == Items.EGG && this.isBaby() && this.isPassenger() ? false : super.c(itemstack);
     }
 
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
+    @Nullable
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
         Object object = super.prepare(difficultydamagescaler, groupdataentity);
         float f = difficultydamagescaler.c();
 
@@ -408,7 +411,7 @@ public class EntityZombie extends EntityMonster {
         return (GroupDataEntity) object;
     }
 
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
+    public boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {
         if (itemstack != null && itemstack.getItem() == Items.GOLDEN_APPLE && itemstack.getData() == 0 && this.isVillager() && this.hasEffect(MobEffects.WEAKNESS)) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 --itemstack.count;
@@ -425,8 +428,8 @@ public class EntityZombie extends EntityMonster {
     }
 
     protected void b(int i) {
-        this.bA = i;
-        this.getDataWatcher().set(EntityZombie.bx, Boolean.valueOf(true));
+        this.bB = i;
+        this.getDataWatcher().set(EntityZombie.by, Boolean.valueOf(true));
         this.removeEffect(MobEffects.WEAKNESS);
         this.addEffect(new MobEffect(MobEffects.INCREASE_DAMAGE, i, Math.min(this.world.getDifficulty().a() - 1, 0)));
         this.world.broadcastEntityEffect(this, (byte) 16);
@@ -437,21 +440,21 @@ public class EntityZombie extends EntityMonster {
     }
 
     public boolean isConverting() {
-        return ((Boolean) this.getDataWatcher().get(EntityZombie.bx)).booleanValue();
+        return ((Boolean) this.getDataWatcher().get(EntityZombie.by)).booleanValue();
     }
 
-    protected void dh() {
+    protected void di() {
         EntityVillager entityvillager = new EntityVillager(this.world);
 
         entityvillager.u(this);
         entityvillager.prepare(this.world.D(new BlockPosition(entityvillager)), (GroupDataEntity) null);
-        entityvillager.dd();
+        entityvillager.de();
         if (this.isBaby()) {
             entityvillager.setAgeRaw(-24000);
         }
 
         this.world.kill(this);
-        entityvillager.m(this.cR());
+        entityvillager.setAI(this.hasAI());
         entityvillager.setProfession(this.getVillagerType());
         if (this.hasCustomName()) {
             entityvillager.setCustomName(this.getCustomName());
@@ -495,10 +498,10 @@ public class EntityZombie extends EntityMonster {
     }
 
     public final void setSize(float f, float f1) {
-        boolean flag = this.bC > 0.0F && this.bD > 0.0F;
+        boolean flag = this.bD > 0.0F && this.bE > 0.0F;
 
-        this.bC = f;
-        this.bD = f1;
+        this.bD = f;
+        this.bE = f1;
         if (!flag) {
             this.a(1.0F);
         }
@@ -506,7 +509,7 @@ public class EntityZombie extends EntityMonster {
     }
 
     protected final void a(float f) {
-        super.setSize(this.bC * f, this.bD * f);
+        super.setSize(this.bD * f, this.bE * f);
     }
 
     public double ax() {

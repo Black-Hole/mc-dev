@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class DragonControllerHold extends AbstractDragonController {
 
     private PathEntity b;
@@ -10,7 +12,7 @@ public class DragonControllerHold extends AbstractDragonController {
         super(entityenderdragon);
     }
 
-    public DragonControllerPhase<DragonControllerHold> i() {
+    public DragonControllerPhase<DragonControllerHold> getControllerPhase() {
         return DragonControllerPhase.a;
     }
 
@@ -28,6 +30,7 @@ public class DragonControllerHold extends AbstractDragonController {
         this.c = null;
     }
 
+    @Nullable
     public Vec3D g() {
         return this.c;
     }
@@ -38,9 +41,9 @@ public class DragonControllerHold extends AbstractDragonController {
         if (this.b != null && this.b.b()) {
             BlockPosition blockposition = this.a.world.q(new BlockPosition(WorldGenEndTrophy.a));
 
-            i = this.a.cU() == null ? 0 : this.a.cU().c();
+            i = this.a.cV() == null ? 0 : this.a.cV().c();
             if (this.a.getRandom().nextInt(i + 3) == 0) {
-                this.a.cT().a(DragonControllerPhase.c);
+                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.c);
                 return;
             }
 
@@ -72,7 +75,7 @@ public class DragonControllerHold extends AbstractDragonController {
                 --i;
             }
 
-            if (this.a.cU() != null && this.a.cU().c() >= 0) {
+            if (this.a.cV() != null && this.a.cV().c() >= 0) {
                 i %= 12;
                 if (i < 0) {
                     i += 12;
@@ -93,8 +96,8 @@ public class DragonControllerHold extends AbstractDragonController {
     }
 
     private void a(EntityHuman entityhuman) {
-        this.a.cT().a(DragonControllerPhase.b);
-        ((DragonControllerStrafe) this.a.cT().b(DragonControllerPhase.b)).a(entityhuman);
+        this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.b);
+        ((DragonControllerStrafe) this.a.getDragonControllerManager().b(DragonControllerPhase.b)).a(entityhuman);
     }
 
     private void k() {
@@ -116,7 +119,7 @@ public class DragonControllerHold extends AbstractDragonController {
 
     }
 
-    public void a(EntityEnderCrystal entityendercrystal, BlockPosition blockposition, DamageSource damagesource, EntityHuman entityhuman) {
+    public void a(EntityEnderCrystal entityendercrystal, BlockPosition blockposition, DamageSource damagesource, @Nullable EntityHuman entityhuman) {
         if (entityhuman != null) {
             this.a(entityhuman);
         }

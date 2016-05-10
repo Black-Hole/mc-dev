@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class PotionUtil {
 
@@ -21,7 +22,7 @@ public class PotionUtil {
         return arraylist;
     }
 
-    public static List<MobEffect> a(NBTTagCompound nbttagcompound) {
+    public static List<MobEffect> a(@Nullable NBTTagCompound nbttagcompound) {
         ArrayList arraylist = Lists.newArrayList();
 
         arraylist.addAll(c(nbttagcompound).a());
@@ -33,14 +34,14 @@ public class PotionUtil {
         return b(itemstack.getTag());
     }
 
-    public static List<MobEffect> b(NBTTagCompound nbttagcompound) {
+    public static List<MobEffect> b(@Nullable NBTTagCompound nbttagcompound) {
         ArrayList arraylist = Lists.newArrayList();
 
         a(nbttagcompound, (List) arraylist);
         return arraylist;
     }
 
-    public static void a(NBTTagCompound nbttagcompound, List<MobEffect> list) {
+    public static void a(@Nullable NBTTagCompound nbttagcompound, List<MobEffect> list) {
         if (nbttagcompound != null && nbttagcompound.hasKeyOfType("CustomPotionEffects", 9)) {
             NBTTagList nbttaglist = nbttagcompound.getList("CustomPotionEffects", 10);
 
@@ -97,7 +98,7 @@ public class PotionUtil {
         return c(itemstack.getTag());
     }
 
-    public static PotionRegistry c(NBTTagCompound nbttagcompound) {
+    public static PotionRegistry c(@Nullable NBTTagCompound nbttagcompound) {
         return nbttagcompound == null ? Potions.b : PotionRegistry.a(nbttagcompound.getString("Potion"));
     }
 

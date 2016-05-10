@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import java.util.Map;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,6 +32,7 @@ public class WorldGenFactory {
         return (String) WorldGenFactory.e.get(structurepiece.getClass());
     }
 
+    @Nullable
     public static StructureStart a(NBTTagCompound nbttagcompound, World world) {
         StructureStart structurestart = null;
 

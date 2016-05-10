@@ -5,20 +5,24 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class EntityShulkerBullet extends Entity {
 
     private EntityLiving shooter;
     private Entity target;
+    @Nullable
     private EnumDirection c;
     private int d;
     private double e;
     private double f;
     private double g;
+    @Nullable
     private UUID h;
-    private BlockPosition as;
-    private UUID at;
-    private BlockPosition au;
+    private BlockPosition at;
+    @Nullable
+    private UUID au;
+    private BlockPosition av;
 
     public EntityShulkerBullet(World world) {
         super(world);
@@ -26,7 +30,7 @@ public class EntityShulkerBullet extends Entity {
         this.noclip = true;
     }
 
-    public SoundCategory bz() {
+    public SoundCategory bA() {
         return SoundCategory.HOSTILE;
     }
 
@@ -90,24 +94,24 @@ public class EntityShulkerBullet extends Entity {
         if (nbttagcompound.hasKeyOfType("Owner", 10)) {
             nbttagcompound1 = nbttagcompound.getCompound("Owner");
             this.h = GameProfileSerializer.b(nbttagcompound1);
-            this.as = new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z"));
+            this.at = new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z"));
         }
 
         if (nbttagcompound.hasKeyOfType("Target", 10)) {
             nbttagcompound1 = nbttagcompound.getCompound("Target");
-            this.at = GameProfileSerializer.b(nbttagcompound1);
-            this.au = new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z"));
+            this.au = GameProfileSerializer.b(nbttagcompound1);
+            this.av = new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z"));
         }
 
     }
 
     protected void i() {}
 
-    private void a(EnumDirection enumdirection) {
+    private void a(@Nullable EnumDirection enumdirection) {
         this.c = enumdirection;
     }
 
-    private void a(EnumDirection.EnumAxis enumdirection_enumaxis) {
+    private void a(@Nullable EnumDirection.EnumAxis enumdirection_enumaxis) {
         double d0 = 0.5D;
         BlockPosition blockposition;
 
@@ -123,7 +127,7 @@ public class EntityShulkerBullet extends Entity {
         double d3 = (double) blockposition.getZ() + 0.5D;
         EnumDirection enumdirection = null;
 
-        if (blockposition.f(this.locX, this.locY, this.locZ) >= 4.0D) {
+        if (blockposition.g(this.locX, this.locY, this.locZ) >= 4.0D) {
             BlockPosition blockposition1 = new BlockPosition(this);
             ArrayList arraylist = Lists.newArrayList();
 
@@ -195,23 +199,23 @@ public class EntityShulkerBullet extends Entity {
                 Iterator iterator;
                 EntityLiving entityliving;
 
-                if (this.target == null && this.at != null) {
-                    list = this.world.a(EntityLiving.class, new AxisAlignedBB(this.au.a(-2, -2, -2), this.au.a(2, 2, 2)));
+                if (this.target == null && this.au != null) {
+                    list = this.world.a(EntityLiving.class, new AxisAlignedBB(this.av.a(-2, -2, -2), this.av.a(2, 2, 2)));
                     iterator = list.iterator();
 
                     while (iterator.hasNext()) {
                         entityliving = (EntityLiving) iterator.next();
-                        if (entityliving.getUniqueID().equals(this.at)) {
+                        if (entityliving.getUniqueID().equals(this.au)) {
                             this.target = entityliving;
                             break;
                         }
                     }
 
-                    this.at = null;
+                    this.au = null;
                 }
 
                 if (this.shooter == null && this.h != null) {
-                    list = this.world.a(EntityLiving.class, new AxisAlignedBB(this.as.a(-2, -2, -2), this.as.a(2, 2, 2)));
+                    list = this.world.a(EntityLiving.class, new AxisAlignedBB(this.at.a(-2, -2, -2), this.at.a(2, 2, 2)));
                     iterator = list.iterator();
 
                     while (iterator.hasNext()) {

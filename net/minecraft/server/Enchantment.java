@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import javax.annotation.Nullable;
 
 public abstract class Enchantment {
 
@@ -11,6 +12,7 @@ public abstract class Enchantment {
     public EnchantmentSlotType itemTarget;
     protected String d;
 
+    @Nullable
     public static Enchantment c(int i) {
         return (Enchantment) Enchantment.enchantments.getId(i);
     }
@@ -19,6 +21,7 @@ public abstract class Enchantment {
         return Enchantment.enchantments.a((Object) enchantment);
     }
 
+    @Nullable
     public static Enchantment b(String s) {
         return (Enchantment) Enchantment.enchantments.get(new MinecraftKey(s));
     }
@@ -29,6 +32,7 @@ public abstract class Enchantment {
         this.a = aenumitemslot;
     }
 
+    @Nullable
     public Iterable<ItemStack> a(EntityLiving entityliving) {
         ArrayList arraylist = Lists.newArrayList();
         EnumItemSlot[] aenumitemslot = this.a;

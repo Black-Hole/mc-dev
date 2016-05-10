@@ -1,14 +1,16 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityMushroomCow extends EntityCow {
 
     public EntityMushroomCow(World world) {
         super(world);
         this.setSize(0.9F, 1.4F);
-        this.by = Blocks.MYCELIUM;
+        this.bz = Blocks.MYCELIUM;
     }
 
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
+    public boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {
         if (itemstack != null && itemstack.getItem() == Items.BOWL && this.getAge() >= 0 && !entityhuman.abilities.canInstantlyBuild) {
             if (--itemstack.count == 0) {
                 entityhuman.a(enumhand, new ItemStack(Items.MUSHROOM_STEW));
@@ -25,7 +27,7 @@ public class EntityMushroomCow extends EntityCow {
 
                 entitycow.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
                 entitycow.setHealth(this.getHealth());
-                entitycow.aM = this.aM;
+                entitycow.aN = this.aN;
                 if (this.hasCustomName()) {
                     entitycow.setCustomName(this.getCustomName());
                 }
@@ -50,6 +52,7 @@ public class EntityMushroomCow extends EntityCow {
         return new EntityMushroomCow(this.world);
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.I;
     }

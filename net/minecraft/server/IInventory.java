@@ -1,16 +1,21 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public interface IInventory extends INamableTileEntity {
 
     int getSize();
 
+    @Nullable
     ItemStack getItem(int i);
 
+    @Nullable
     ItemStack splitStack(int i, int j);
 
+    @Nullable
     ItemStack splitWithoutUpdate(int i);
 
-    void setItem(int i, ItemStack itemstack);
+    void setItem(int i, @Nullable ItemStack itemstack);
 
     int getMaxStackSize();
 

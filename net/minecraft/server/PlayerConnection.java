@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -80,14 +79,14 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         }
 
         this.r = this.player.getVehicle();
-        if (this.r != this.player && this.r.bt() == this.player) {
+        if (this.r != this.player && this.r.bu() == this.player) {
             this.s = this.r.locX;
             this.t = this.r.locY;
             this.u = this.r.locZ;
             this.v = this.r.locX;
             this.w = this.r.locY;
             this.x = this.r.locZ;
-            if (this.D && this.player.getVehicle().bt() == this.player) {
+            if (this.D && this.player.getVehicle().bu() == this.player) {
                 if (++this.E > 80) {
                     PlayerConnection.LOGGER.warn(this.player.getName() + " was kicked for floating a vehicle too long!");
                     this.disconnect("Flying is not enabled on this server");
@@ -175,7 +174,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         } else {
             Entity entity = this.player.getVehicle();
 
-            if (entity != this.player && entity.bt() == this.player && entity == this.r) {
+            if (entity != this.player && entity.bu() == this.player && entity == this.r) {
                 WorldServer worldserver = this.player.x();
                 double d0 = entity.locX;
                 double d1 = entity.locY;
@@ -303,8 +302,8 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             i = 1;
                         }
 
-                        if (!this.player.K() && (!this.player.x().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.cB())) {
-                            float f2 = this.player.cB() ? 300.0F : 100.0F;
+                        if (!this.player.K() && (!this.player.x().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.cC())) {
+                            float f2 = this.player.cC() ? 300.0F : 100.0F;
 
                             if (d11 - d10 > (double) (f2 * (float) i) && (!this.minecraftServer.R() || !this.minecraftServer.Q().equals(this.player.getName()))) {
                                 PlayerConnection.LOGGER.warn(this.player.getName() + " moved too quickly! " + d7 + "," + d8 + "," + d9);
@@ -319,7 +318,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                         d8 = d5 - this.p;
                         d9 = d6 - this.q;
                         if (this.player.onGround && !packetplayinflying.a() && d8 > 0.0D) {
-                            this.player.ch();
+                            this.player.ci();
                         }
 
                         this.player.move(d7, d8, d9);
@@ -354,7 +353,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
                         this.B = d12 >= -0.03125D;
                         this.B &= !this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly;
-                        this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.cB() && !worldserver.d(this.player.getBoundingBox().g(0.0625D).a(0.0D, -0.55D, 0.0D));
+                        this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.cC() && !worldserver.d(this.player.getBoundingBox().g(0.0625D).a(0.0D, -0.55D, 0.0D));
                         this.player.onGround = packetplayinflying.a();
                         this.minecraftServer.getPlayerList().d(this.player);
                         this.player.a(this.player.locY - d3, packetplayinflying.a());
@@ -578,7 +577,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
     public void a(PacketPlayInBoatMove packetplayinboatmove) {
         PlayerConnectionUtils.ensureMainThread(packetplayinboatmove, this, this.player.x());
-        Entity entity = this.player.by();
+        Entity entity = this.player.bz();
 
         if (entity instanceof EntityBoat) {
             ((EntityBoat) entity).a(packetplayinboatmove.a(), packetplayinboatmove.b());
@@ -622,7 +621,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             CrashReport crashreport = CrashReport.a(throwable, "Sending packet");
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Packet being sent");
 
-            crashreportsystemdetails.a("Packet class", new Callable() {
+            crashreportsystemdetails.a("Packet class", new CrashReportCallable() {
                 public String a() throws Exception {
                     return packet.getClass().getCanonicalName();
                 }
@@ -719,8 +718,8 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             break;
 
         case 6:
-            if (this.player.by() instanceof IJumpable) {
-                ijumpable = (IJumpable) this.player.by();
+            if (this.player.bz() instanceof IJumpable) {
+                ijumpable = (IJumpable) this.player.bz();
                 int i = packetplayinentityaction.c();
 
                 if (ijumpable.b() && i > 0) {
@@ -730,20 +729,20 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             break;
 
         case 7:
-            if (this.player.by() instanceof IJumpable) {
-                ijumpable = (IJumpable) this.player.by();
+            if (this.player.bz() instanceof IJumpable) {
+                ijumpable = (IJumpable) this.player.bz();
                 ijumpable.r_();
             }
             break;
 
         case 8:
-            if (this.player.by() instanceof EntityHorse) {
-                ((EntityHorse) this.player.by()).f((EntityHuman) this.player);
+            if (this.player.bz() instanceof EntityHorse) {
+                ((EntityHorse) this.player.bz()).f((EntityHuman) this.player);
             }
             break;
 
         case 9:
-            if (!this.player.onGround && this.player.motY < 0.0D && !this.player.cB() && !this.player.isInWater()) {
+            if (!this.player.onGround && this.player.motY < 0.0D && !this.player.cC() && !this.player.isInWater()) {
                 ItemStack itemstack = this.player.getEquipment(EnumItemSlot.CHEST);
 
                 if (itemstack != null && itemstack.getItem() == Items.cR && ItemElytra.d(itemstack)) {
@@ -903,9 +902,8 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                     TileEntity tileentity = this.player.world.getTileEntity(blockposition);
 
                     if (tileentity != null) {
-                        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                        NBTTagCompound nbttagcompound1 = tileentity.save(new NBTTagCompound());
 
-                        tileentity.save(nbttagcompound1);
                         nbttagcompound1.remove("x");
                         nbttagcompound1.remove("y");
                         nbttagcompound1.remove("z");
@@ -964,7 +962,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
             TileEntitySign tileentitysign = (TileEntitySign) tileentity;
 
-            if (!tileentitysign.b() || tileentitysign.c() != this.player) {
+            if (!tileentitysign.c() || tileentitysign.d() != this.player) {
                 this.minecraftServer.warning("Player " + this.player.getName() + " just tried to change non-editable sign");
                 return;
             }
@@ -1295,18 +1293,18 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                                     tileentitystructure.b(packetdataserializer.e(128));
                                     tileentitystructure.a(packetdataserializer.readBoolean());
                                     if (b1 == 2) {
-                                        if (tileentitystructure.m()) {
+                                        if (tileentitystructure.n()) {
                                             this.player.b((IChatBaseComponent) (new ChatComponentText("Structure saved")));
                                         } else {
                                             this.player.b((IChatBaseComponent) (new ChatComponentText("Structure NOT saved")));
                                         }
                                     } else if (b1 == 3) {
-                                        if (tileentitystructure.n()) {
+                                        if (tileentitystructure.o()) {
                                             this.player.b((IChatBaseComponent) (new ChatComponentText("Structure loaded")));
                                         } else {
                                             this.player.b((IChatBaseComponent) (new ChatComponentText("Structure prepared")));
                                         }
-                                    } else if (b1 == 4 && tileentitystructure.l()) {
+                                    } else if (b1 == 4 && tileentitystructure.m()) {
                                         this.player.b((IChatBaseComponent) (new ChatComponentText("Size detected")));
                                     }
 

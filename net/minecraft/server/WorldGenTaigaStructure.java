@@ -47,7 +47,7 @@ public class WorldGenTaigaStructure extends WorldGenerator {
                 while (iterator.hasNext()) {
                     BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-                    if (blockposition1.k(blockposition) <= (double) (f * f)) {
+                    if (blockposition1.n(blockposition) <= (double) (f * f)) {
                         world.setTypeAndData(blockposition1, this.a.getBlockData(), 4);
                     }
                 }

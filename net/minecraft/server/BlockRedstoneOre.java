@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockRedstoneOre extends Block {
 
@@ -29,7 +30,7 @@ public class BlockRedstoneOre extends Block {
         super.stepOn(world, blockposition, entity);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         this.interact(world, blockposition);
         return super.interact(world, blockposition, iblockdata, entityhuman, enumhand, itemstack, enumdirection, f, f1, f2);
     }
@@ -49,6 +50,7 @@ public class BlockRedstoneOre extends Block {
 
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.REDSTONE;
     }
@@ -115,6 +117,7 @@ public class BlockRedstoneOre extends Block {
         return new ItemStack(Blocks.REDSTONE_ORE);
     }
 
+    @Nullable
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return new ItemStack(Item.getItemOf(Blocks.REDSTONE_ORE), 1, this.getDropData(iblockdata));
     }

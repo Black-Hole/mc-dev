@@ -11,7 +11,7 @@ public abstract class PersistentBase {
 
     public abstract void a(NBTTagCompound nbttagcompound);
 
-    public abstract void b(NBTTagCompound nbttagcompound);
+    public abstract NBTTagCompound b(NBTTagCompound nbttagcompound);
 
     public void c() {
         this.a(true);

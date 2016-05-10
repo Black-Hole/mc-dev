@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
+import javax.annotation.Nullable;
 
 public class MobEffectList {
 
@@ -17,6 +18,7 @@ public class MobEffectList {
     public double durationModifier;
     private boolean h;
 
+    @Nullable
     public static MobEffectList fromId(int i) {
         return (MobEffectList) MobEffectList.REGISTRY.getId(i);
     }
@@ -25,6 +27,7 @@ public class MobEffectList {
         return MobEffectList.REGISTRY.a((Object) mobeffectlist);
     }
 
+    @Nullable
     public static MobEffectList getByName(String s) {
         return (MobEffectList) MobEffectList.REGISTRY.get(new MinecraftKey(s));
     }
@@ -62,8 +65,8 @@ public class MobEffectList {
             if (!entityliving.world.isClientSide) {
                 ((EntityHuman) entityliving).getFoodData().eat(i + 1, 1.0F);
             }
-        } else if ((this != MobEffects.HEAL || entityliving.bP()) && (this != MobEffects.HARM || !entityliving.bP())) {
-            if (this == MobEffects.HARM && !entityliving.bP() || this == MobEffects.HEAL && entityliving.bP()) {
+        } else if ((this != MobEffects.HEAL || entityliving.bQ()) && (this != MobEffects.HARM || !entityliving.bQ())) {
+            if (this == MobEffects.HARM && !entityliving.bQ() || this == MobEffects.HEAL && entityliving.bQ()) {
                 entityliving.damageEntity(DamageSource.MAGIC, (float) (6 << i));
             }
         } else {
@@ -72,11 +75,11 @@ public class MobEffectList {
 
     }
 
-    public void applyInstantEffect(Entity entity, Entity entity1, EntityLiving entityliving, int i, double d0) {
+    public void applyInstantEffect(@Nullable Entity entity, @Nullable Entity entity1, EntityLiving entityliving, int i, double d0) {
         int j;
 
-        if ((this != MobEffects.HEAL || entityliving.bP()) && (this != MobEffects.HARM || !entityliving.bP())) {
-            if (this == MobEffects.HARM && !entityliving.bP() || this == MobEffects.HEAL && entityliving.bP()) {
+        if ((this != MobEffects.HEAL || entityliving.bQ()) && (this != MobEffects.HARM || !entityliving.bQ())) {
+            if (this == MobEffects.HARM && !entityliving.bQ() || this == MobEffects.HEAL && entityliving.bQ()) {
                 j = (int) (d0 * (double) (6 << i) + 0.5D);
                 if (entity == null) {
                     entityliving.damageEntity(DamageSource.MAGIC, (float) j);

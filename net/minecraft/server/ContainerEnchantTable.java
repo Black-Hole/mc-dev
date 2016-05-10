@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class ContainerEnchantTable extends Container {
 
@@ -26,9 +27,9 @@ public class ContainerEnchantTable extends Container {
     public ContainerEnchantTable(PlayerInventory playerinventory, World world, BlockPosition blockposition) {
         this.world = world;
         this.position = blockposition;
-        this.f = playerinventory.player.cQ();
+        this.f = playerinventory.player.cR();
         this.a(new Slot(this.enchantSlots, 0, 15, 47) {
-            public boolean isAllowed(ItemStack itemstack) {
+            public boolean isAllowed(@Nullable ItemStack itemstack) {
                 return true;
             }
 
@@ -37,7 +38,7 @@ public class ContainerEnchantTable extends Container {
             }
         });
         this.a(new Slot(this.enchantSlots, 1, 35, 47) {
-            public boolean isAllowed(ItemStack itemstack) {
+            public boolean isAllowed(@Nullable ItemStack itemstack) {
                 return itemstack.getItem() == Items.DYE && EnumColor.fromInvColorIndex(itemstack.getData()) == EnumColor.BLUE;
             }
         });
@@ -202,7 +203,7 @@ public class ContainerEnchantTable extends Container {
 
                     entityhuman.b(StatisticList.Y);
                     this.enchantSlots.update();
-                    this.f = entityhuman.cQ();
+                    this.f = entityhuman.cR();
                     this.a(this.enchantSlots);
                 }
             }
@@ -242,6 +243,7 @@ public class ContainerEnchantTable extends Container {
         return this.world.getType(this.position).getBlock() != Blocks.ENCHANTING_TABLE ? false : entityhuman.e((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
+    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
         ItemStack itemstack = null;
         Slot slot = (Slot) this.c.get(i);

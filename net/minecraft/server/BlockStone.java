@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockStone extends Block {
 
@@ -20,6 +21,7 @@ public class BlockStone extends Block {
         return ((BlockStone.EnumStoneVariant) iblockdata.get(BlockStone.VARIANT)).c();
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return iblockdata.get(BlockStone.VARIANT) == BlockStone.EnumStoneVariant.STONE ? Item.getItemOf(Blocks.COBBLESTONE) : Item.getItemOf(Blocks.STONE);
     }

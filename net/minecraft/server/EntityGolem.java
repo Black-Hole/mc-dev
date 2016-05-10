@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public abstract class EntityGolem extends EntityCreature implements IAnimal {
 
     public EntityGolem(World world) {
@@ -8,15 +10,18 @@ public abstract class EntityGolem extends EntityCreature implements IAnimal {
 
     public void e(float f, float f1) {}
 
+    @Nullable
     protected SoundEffect G() {
         return null;
     }
 
-    protected SoundEffect bR() {
+    @Nullable
+    protected SoundEffect bS() {
         return null;
     }
 
-    protected SoundEffect bS() {
+    @Nullable
+    protected SoundEffect bT() {
         return null;
     }
 

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class SlotFurnaceResult extends Slot {
 
     private EntityHuman a;
@@ -10,7 +12,7 @@ public class SlotFurnaceResult extends Slot {
         this.a = entityhuman;
     }
 
-    public boolean isAllowed(ItemStack itemstack) {
+    public boolean isAllowed(@Nullable ItemStack itemstack) {
         return false;
     }
 

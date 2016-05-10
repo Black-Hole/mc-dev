@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandTestFor extends CommandAbstract {
 
@@ -50,7 +51,7 @@ public class CommandTestFor extends CommandAbstract {
         return i == 0;
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : Collections.emptyList();
     }
 }

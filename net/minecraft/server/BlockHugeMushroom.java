@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockHugeMushroom extends Block {
 
@@ -33,6 +34,7 @@ public class BlockHugeMushroom extends Block {
         }
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(this.b);
     }

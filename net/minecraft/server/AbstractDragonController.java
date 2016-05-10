@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public abstract class AbstractDragonController implements IDragonController {
 
     protected final EntityEnderDragon a;
@@ -16,7 +18,7 @@ public abstract class AbstractDragonController implements IDragonController {
 
     public void c() {}
 
-    public void a(EntityEnderCrystal entityendercrystal, BlockPosition blockposition, DamageSource damagesource, EntityHuman entityhuman) {}
+    public void a(EntityEnderCrystal entityendercrystal, BlockPosition blockposition, DamageSource damagesource, @Nullable EntityHuman entityhuman) {}
 
     public void d() {}
 
@@ -26,6 +28,7 @@ public abstract class AbstractDragonController implements IDragonController {
         return 0.6F;
     }
 
+    @Nullable
     public Vec3D g() {
         return null;
     }

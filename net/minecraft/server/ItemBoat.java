@@ -59,7 +59,7 @@ public class ItemBoat extends Item {
                 boolean flag1 = block == Blocks.WATER || block == Blocks.FLOWING_WATER;
                 EntityBoat entityboat = new EntityBoat(world, movingobjectposition.pos.x, flag1 ? movingobjectposition.pos.y - 0.12D : movingobjectposition.pos.y, movingobjectposition.pos.z);
 
-                entityboat.a(this.a);
+                entityboat.setType(this.a);
                 entityboat.yaw = entityhuman.yaw;
                 if (!world.getCubes(entityboat, entityboat.getBoundingBox().g(-0.1D)).isEmpty()) {
                     return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);

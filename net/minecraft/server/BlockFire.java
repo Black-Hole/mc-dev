@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockFire extends Block {
 
@@ -70,6 +71,7 @@ public class BlockFire extends Block {
         this.B.put(block, Integer.valueOf(j));
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockFire.k;
     }
@@ -272,7 +274,7 @@ public class BlockFire extends Block {
         return world.getType(blockposition.down()).q() || this.c(world, blockposition);
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!world.getType(blockposition.down()).q() && !this.c(world, blockposition)) {
             world.setAir(blockposition);
         }

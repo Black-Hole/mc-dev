@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandGamemode extends CommandAbstract {
 
@@ -48,7 +49,7 @@ public class CommandGamemode extends CommandAbstract {
         return worldsettings_enumgamemode == WorldSettings.EnumGamemode.NOT_SET ? WorldSettings.a(a(s, 0, WorldSettings.EnumGamemode.values().length - 2)) : worldsettings_enumgamemode;
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, new String[] { "survival", "creative", "adventure", "spectator"}) : (astring.length == 2 ? a(astring, minecraftserver.getPlayers()) : Collections.emptyList());
     }
 

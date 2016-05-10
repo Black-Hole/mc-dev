@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class BlockWaterLily extends BlockPlant {
 
@@ -10,7 +11,7 @@ public class BlockWaterLily extends BlockPlant {
         this.a(CreativeModeTab.c);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
         if (!(entity instanceof EntityBoat)) {
             a(blockposition, axisalignedbb, list, BlockWaterLily.a);
         }

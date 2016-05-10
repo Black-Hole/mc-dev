@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class PotionRegistry {
 
@@ -15,6 +16,7 @@ public class PotionRegistry {
         return PotionRegistry.a.a((Object) potionregistry);
     }
 
+    @Nullable
     public static PotionRegistry a(String s) {
         return (PotionRegistry) PotionRegistry.a.get(new MinecraftKey(s));
     }
@@ -23,7 +25,7 @@ public class PotionRegistry {
         this((String) null, amobeffect);
     }
 
-    public PotionRegistry(String s, MobEffect... amobeffect) {
+    public PotionRegistry(@Nullable String s, MobEffect... amobeffect) {
         this.d = s;
         this.e = ImmutableList.copyOf(amobeffect);
     }

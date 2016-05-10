@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityBlaze extends EntityMonster {
 
     private float a = 0.5F;
@@ -42,11 +44,11 @@ public class EntityBlaze extends EntityMonster {
         return SoundEffects.B;
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.E;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.D;
     }
 
@@ -61,7 +63,7 @@ public class EntityBlaze extends EntityMonster {
 
         if (this.world.isClientSide) {
             if (this.random.nextInt(24) == 0 && !this.ad()) {
-                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, SoundEffects.C, this.bz(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
+                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, SoundEffects.C, this.bA(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
             }
 
             for (int i = 0; i < 2; ++i) {
@@ -99,6 +101,7 @@ public class EntityBlaze extends EntityMonster {
         return this.o();
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.p;
     }

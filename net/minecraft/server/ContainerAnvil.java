@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.Map;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,7 +31,7 @@ public class ContainerAnvil extends Container {
         this.a(new Slot(this.h, 0, 27, 47));
         this.a(new Slot(this.h, 1, 76, 47));
         this.a(new Slot(this.g, 2, 134, 47) {
-            public boolean isAllowed(ItemStack itemstack) {
+            public boolean isAllowed(@Nullable ItemStack itemstack) {
                 return false;
             }
 
@@ -297,6 +298,7 @@ public class ContainerAnvil extends Container {
         return this.i.getType(this.j).getBlock() != Blocks.ANVIL ? false : entityhuman.e((double) this.j.getX() + 0.5D, (double) this.j.getY() + 0.5D, (double) this.j.getZ() + 0.5D) <= 64.0D;
     }
 
+    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
         ItemStack itemstack = null;
         Slot slot = (Slot) this.c.get(i);

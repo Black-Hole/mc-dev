@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class EntitySpectralArrow extends EntityArrow {
 
-    private int f = 200;
+    public int duration = 200;
 
     public EntitySpectralArrow(World world) {
         super(world);
@@ -30,7 +30,7 @@ public class EntitySpectralArrow extends EntityArrow {
 
     protected void a(EntityLiving entityliving) {
         super.a(entityliving);
-        MobEffect mobeffect = new MobEffect(MobEffects.GLOWING, this.f, 0);
+        MobEffect mobeffect = new MobEffect(MobEffects.GLOWING, this.duration, 0);
 
         entityliving.addEffect(mobeffect);
     }
@@ -38,13 +38,13 @@ public class EntitySpectralArrow extends EntityArrow {
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.hasKey("Duration")) {
-            this.f = nbttagcompound.getInt("Duration");
+            this.duration = nbttagcompound.getInt("Duration");
         }
 
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("Duration", this.f);
+        nbttagcompound.setInt("Duration", this.duration);
     }
 }

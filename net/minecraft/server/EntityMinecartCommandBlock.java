@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
     private static final DataWatcherObject<String> a = DataWatcher.a(EntityMinecartCommandBlock.class, DataWatcherRegistry.d);
@@ -78,7 +80,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
     }
 
-    public boolean a(EntityHuman entityhuman, ItemStack itemstack, EnumHand enumhand) {
+    public boolean a(EntityHuman entityhuman, @Nullable ItemStack itemstack, EnumHand enumhand) {
         this.c.a(entityhuman);
         return false;
     }
@@ -97,7 +99,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
     }
 
-    public boolean br() {
+    public boolean bs() {
         return true;
     }
 }

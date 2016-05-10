@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class BlockCobbleWall extends Block {
 
     public static final BlockStateBoolean UP = BlockStateBoolean.of("up");
@@ -25,6 +27,7 @@ public class BlockCobbleWall extends Block {
         return BlockCobbleWall.g[i(iblockdata)];
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         iblockdata = this.updateState(iblockdata, world, blockposition);
         return BlockCobbleWall.B[i(iblockdata)];

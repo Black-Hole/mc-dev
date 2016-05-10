@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class RecipeMapExtend extends ShapedRecipes {
 
     public RecipeMapExtend() {
@@ -30,6 +32,7 @@ public class RecipeMapExtend extends ShapedRecipes {
         }
     }
 
+    @Nullable
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         ItemStack itemstack = null;
 

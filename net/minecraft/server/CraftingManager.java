@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CraftingManager {
 
@@ -276,6 +277,7 @@ public class CraftingManager {
         this.recipes.add(irecipe);
     }
 
+    @Nullable
     public ItemStack craft(InventoryCrafting inventorycrafting, World world) {
         Iterator iterator = this.recipes.iterator();
 

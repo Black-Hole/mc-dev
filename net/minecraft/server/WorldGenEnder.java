@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class WorldGenEnder extends WorldGenerator {
 
@@ -52,8 +53,8 @@ public class WorldGenEnder extends WorldGenerator {
 
             EntityEnderCrystal entityendercrystal = new EntityEnderCrystal(world);
 
-            entityendercrystal.a(this.c);
-            entityendercrystal.h(this.a);
+            entityendercrystal.setBeamTarget(this.c);
+            entityendercrystal.setInvulnerable(this.a);
             entityendercrystal.setPositionRotation((double) ((float) blockposition.getX() + 0.5F), (double) (this.b.d() + 1), (double) ((float) blockposition.getZ() + 0.5F), random.nextFloat() * 360.0F, 0.0F);
             world.addEntity(entityendercrystal);
             this.a(world, new BlockPosition(blockposition.getX(), this.b.d(), blockposition.getZ()), Blocks.BEDROCK.getBlockData());
@@ -61,7 +62,7 @@ public class WorldGenEnder extends WorldGenerator {
         }
     }
 
-    public void a(BlockPosition blockposition) {
+    public void a(@Nullable BlockPosition blockposition) {
         this.c = blockposition;
     }
 

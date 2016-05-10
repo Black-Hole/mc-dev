@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ContainerFurnace extends Container {
 
     private final IInventory furnace;
@@ -66,6 +68,7 @@ public class ContainerFurnace extends Container {
         return this.furnace.a(entityhuman);
     }
 
+    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
         ItemStack itemstack = null;
         Slot slot = (Slot) this.c.get(i);

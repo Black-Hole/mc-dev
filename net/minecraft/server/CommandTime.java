@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandTime extends CommandAbstract {
 
@@ -71,7 +72,7 @@ public class CommandTime extends CommandAbstract {
         throw new ExceptionUsage("commands.time.usage", new Object[0]);
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, new String[] { "set", "add", "query"}) : (astring.length == 2 && astring[0].equals("set") ? a(astring, new String[] { "day", "night"}) : (astring.length == 2 && astring[0].equals("query") ? a(astring, new String[] { "daytime", "gametime", "day"}) : Collections.emptyList()));
     }
 

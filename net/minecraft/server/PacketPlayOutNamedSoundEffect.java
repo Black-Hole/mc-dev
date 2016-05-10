@@ -23,7 +23,7 @@ public class PacketPlayOutNamedSoundEffect implements Packet<PacketListenerPlayO
         this.d = (int) (d1 * 8.0D);
         this.e = (int) (d2 * 8.0D);
         this.f = f;
-        this.g = (int) (f1 * 63.5F);
+        this.g = (int) (f1 * 63.0F);
         f1 = MathHelper.a(f1, 0.0F, 255.0F);
     }
 

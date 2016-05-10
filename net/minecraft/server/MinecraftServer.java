@@ -33,6 +33,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -350,7 +351,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                 long i = 0L;
 
                 this.q.setMOTD(new ChatComponentText(this.motd));
-                this.q.setServerInfo(new ServerPing.ServerData("1.9.2", 109));
+                this.q.setServerInfo(new ServerPing.ServerData("1.9.4", 110));
                 this.a(this.q);
 
                 while (this.isRunning) {
@@ -695,7 +696,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     public String getVersion() {
-        return "1.9.2";
+        return "1.9.4";
     }
 
     public int H() {
@@ -734,7 +735,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     public CrashReport b(CrashReport crashreport) {
-        crashreport.g().a("Profiler Position", new Callable() {
+        crashreport.g().a("Profiler Position", new CrashReportCallable() {
             public String a() throws Exception {
                 return MinecraftServer.this.methodProfiler.a ? MinecraftServer.this.methodProfiler.c() : "N/A (disabled)";
             }
@@ -744,7 +745,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
             }
         });
         if (this.v != null) {
-            crashreport.g().a("Player Count", new Callable() {
+            crashreport.g().a("Player Count", new CrashReportCallable() {
                 public String a() {
                     return MinecraftServer.this.v.getPlayerCount() + " / " + MinecraftServer.this.v.getMaxPlayers() + "; " + MinecraftServer.this.v.v();
                 }
@@ -758,7 +759,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         return crashreport;
     }
 
-    public List<String> tabCompleteCommand(ICommandListener icommandlistener, String s, BlockPosition blockposition, boolean flag) {
+    public List<String> tabCompleteCommand(ICommandListener icommandlistener, String s, @Nullable BlockPosition blockposition, boolean flag) {
         ArrayList arraylist = Lists.newArrayList();
         boolean flag1 = s.startsWith("/");
 
@@ -1135,6 +1136,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         this.Y = 0L;
     }
 
+    @Nullable
     public Entity a(UUID uuid) {
         WorldServer[] aworldserver = this.worldServer;
         int i = aworldserver.length;
@@ -1212,7 +1214,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         return this.dataConverterManager;
     }
 
-    public int a(WorldServer worldserver) {
+    public int a(@Nullable WorldServer worldserver) {
         return worldserver != null ? worldserver.getGameRules().c("spawnRadius") : 10;
     }
 }

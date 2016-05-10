@@ -19,7 +19,7 @@ public class BlockFalling extends Block {
         world.a(blockposition, (Block) this, this.a(world));
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         world.a(blockposition, (Block) this, this.a(world));
     }
 

@@ -2,11 +2,12 @@ package net.minecraft.server;
 
 import com.google.common.base.Predicate;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class BlockHopper extends BlockTileEntity {
 
     public static final BlockStateDirection FACING = BlockStateDirection.of("facing", new Predicate() {
-        public boolean a(EnumDirection enumdirection) {
+        public boolean a(@Nullable EnumDirection enumdirection) {
             return enumdirection != EnumDirection.UP;
         }
 
@@ -31,7 +32,7 @@ public class BlockHopper extends BlockTileEntity {
         return BlockHopper.j;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
         a(blockposition, axisalignedbb, list, BlockHopper.c);
         a(blockposition, axisalignedbb, list, BlockHopper.g);
         a(blockposition, axisalignedbb, list, BlockHopper.f);
@@ -73,7 +74,7 @@ public class BlockHopper extends BlockTileEntity {
         this.e(world, blockposition, iblockdata);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -88,7 +89,7 @@ public class BlockHopper extends BlockTileEntity {
         }
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         this.e(world, blockposition, iblockdata);
     }
 

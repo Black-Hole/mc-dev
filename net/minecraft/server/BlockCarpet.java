@@ -32,7 +32,7 @@ public class BlockCarpet extends Block {
         return super.canPlace(world, blockposition) && this.b(world, blockposition);
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         this.e(world, blockposition, iblockdata);
     }
 

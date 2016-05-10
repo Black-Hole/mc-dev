@@ -2,11 +2,12 @@ package net.minecraft.server;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import javax.annotation.Nullable;
 
 public final class IEntitySelector {
 
     public static final Predicate<Entity> a = new Predicate() {
-        public boolean a(Entity entity) {
+        public boolean a(@Nullable Entity entity) {
             return entity.isAlive();
         }
 
@@ -15,7 +16,7 @@ public final class IEntitySelector {
         }
     };
     public static final Predicate<Entity> b = new Predicate() {
-        public boolean a(Entity entity) {
+        public boolean a(@Nullable Entity entity) {
             return entity.isAlive() && !entity.isVehicle() && !entity.isPassenger();
         }
 
@@ -24,7 +25,7 @@ public final class IEntitySelector {
         }
     };
     public static final Predicate<Entity> c = new Predicate() {
-        public boolean a(Entity entity) {
+        public boolean a(@Nullable Entity entity) {
             return entity instanceof IInventory && entity.isAlive();
         }
 
@@ -33,7 +34,7 @@ public final class IEntitySelector {
         }
     };
     public static final Predicate<Entity> d = new Predicate() {
-        public boolean a(Entity entity) {
+        public boolean a(@Nullable Entity entity) {
             return !(entity instanceof EntityHuman) || !((EntityHuman) entity).isSpectator() && !((EntityHuman) entity).l_();
         }
 
@@ -42,7 +43,7 @@ public final class IEntitySelector {
         }
     };
     public static final Predicate<Entity> e = new Predicate() {
-        public boolean a(Entity entity) {
+        public boolean a(@Nullable Entity entity) {
             return !(entity instanceof EntityHuman) || !((EntityHuman) entity).isSpectator();
         }
 
@@ -51,7 +52,7 @@ public final class IEntitySelector {
         }
     };
     public static final Predicate<Entity> f = new Predicate() {
-        public boolean a(Entity entity) {
+        public boolean a(@Nullable Entity entity) {
             return entity instanceof EntityShulker && entity.isAlive();
         }
 
@@ -64,7 +65,7 @@ public final class IEntitySelector {
         final double d4 = d3 * d3;
 
         return new Predicate() {
-            public boolean a(T t0) {
+            public boolean a(@Nullable T t0) {
                 return t0 != null && t0.e(d0, d1, d2) <= d3;
             }
 
@@ -76,17 +77,17 @@ public final class IEntitySelector {
 
     public static <T extends Entity> Predicate<T> a(final Entity entity) {
         final ScoreboardTeamBase scoreboardteambase = entity.aO();
-        final ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.k();
+        final ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
 
         return scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : Predicates.and(IEntitySelector.e, new Predicate() {
-            public boolean a(Entity entity) {
+            public boolean a(@Nullable Entity entity) {
                 if (!entity.isCollidable()) {
                     return false;
-                } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).cJ())) {
+                } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).cK())) {
                     return false;
                 } else {
                     ScoreboardTeamBase scoreboardteambase = entity.aO();
-                    ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.k();
+                    ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
 
                     if (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER) {
                         return false;
@@ -112,7 +113,7 @@ public final class IEntitySelector {
             this.a = itemstack;
         }
 
-        public boolean a(Entity entity) {
+        public boolean a(@Nullable Entity entity) {
             if (!entity.isAlive()) {
                 return false;
             } else if (!(entity instanceof EntityLiving)) {
@@ -120,7 +121,7 @@ public final class IEntitySelector {
             } else {
                 EntityLiving entityliving = (EntityLiving) entity;
 
-                return entityliving.getEquipment(EntityInsentient.d(this.a)) != null ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).cM() : (entityliving instanceof EntityArmorStand ? true : entityliving instanceof EntityHuman));
+                return entityliving.getEquipment(EntityInsentient.d(this.a)) != null ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).cN() : (entityliving instanceof EntityArmorStand ? true : entityliving instanceof EntityHuman));
             }
         }
 

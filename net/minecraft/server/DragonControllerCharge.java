@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,9 +17,9 @@ public class DragonControllerCharge extends AbstractDragonController {
     public void c() {
         if (this.c == null) {
             DragonControllerCharge.b.warn("Aborting charge player as no target was set.");
-            this.a.cT().a(DragonControllerPhase.a);
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
         } else if (this.d > 0 && this.d++ >= 10) {
-            this.a.cT().a(DragonControllerPhase.a);
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
         } else {
             double d0 = this.c.c(this.a.locX, this.a.locY, this.a.locZ);
 
@@ -42,11 +43,12 @@ public class DragonControllerCharge extends AbstractDragonController {
         return 3.0F;
     }
 
+    @Nullable
     public Vec3D g() {
         return this.c;
     }
 
-    public DragonControllerPhase<DragonControllerCharge> i() {
+    public DragonControllerPhase<DragonControllerCharge> getControllerPhase() {
         return DragonControllerPhase.i;
     }
 }

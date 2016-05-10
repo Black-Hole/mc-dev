@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 public class PersistentCollection {
 
@@ -26,6 +27,7 @@ public class PersistentCollection {
         this.b();
     }
 
+    @Nullable
     public PersistentBase get(Class<? extends PersistentBase> oclass, String s) {
         PersistentBase persistentbase = (PersistentBase) this.a.get(s);
 
@@ -92,13 +94,10 @@ public class PersistentCollection {
                 if (file != null) {
                     NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-                    persistentbase.b(nbttagcompound);
-                    NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-
-                    nbttagcompound1.set("data", nbttagcompound);
+                    nbttagcompound.set("data", persistentbase.b(new NBTTagCompound()));
                     FileOutputStream fileoutputstream = new FileOutputStream(file);
 
-                    NBTCompressedStreamTools.a(nbttagcompound1, (OutputStream) fileoutputstream);
+                    NBTCompressedStreamTools.a(nbttagcompound, (OutputStream) fileoutputstream);
                     fileoutputstream.close();
                 }
             } catch (Exception exception) {

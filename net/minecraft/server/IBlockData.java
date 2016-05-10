@@ -3,7 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableMap;
 import java.util.Collection;
 
-public interface IBlockData extends IBlockProperties {
+public interface IBlockData extends IBlockPhysics, IBlockProperties {
 
     Collection<IBlockState<?>> r();
 

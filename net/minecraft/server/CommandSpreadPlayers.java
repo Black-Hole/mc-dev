@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class CommandSpreadPlayers extends CommandAbstract {
 
@@ -234,7 +235,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
         return acommandspreadplayers_location2d;
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length >= 1 && astring.length <= 2 ? b(astring, 0, blockposition) : Collections.emptyList();
     }
 

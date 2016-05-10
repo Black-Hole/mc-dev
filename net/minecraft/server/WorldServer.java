@@ -15,6 +15,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -138,6 +139,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.ao();
     }
 
+    @Nullable
     public BiomeBase.BiomeMeta a(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         List list = this.getChunkProviderServer().a(enumcreaturetype, blockposition);
 
@@ -215,7 +217,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     protected boolean isChunkLoaded(int i, int j, boolean flag) {
-        return this.getChunkProviderServer().e(i, j);
+        return this.getChunkProviderServer().isLoaded(i, j);
     }
 
     protected void i() {
@@ -343,7 +345,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         BlockPosition blockposition1 = this.p(blockposition);
         AxisAlignedBB axisalignedbb = (new AxisAlignedBB(blockposition1, new BlockPosition(blockposition1.getX(), this.getHeight(), blockposition1.getZ()))).g(3.0D);
         List list = this.a(EntityLiving.class, axisalignedbb, new Predicate() {
-            public boolean a(EntityLiving entityliving) {
+            public boolean a(@Nullable EntityLiving entityliving) {
                 return entityliving != null && entityliving.isAlive() && WorldServer.this.h(entityliving.getChunkCoordinates());
             }
 
@@ -460,7 +462,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
         for (int i = 0; i < this.players.size(); ++i) {
             Entity entity = (Entity) this.players.get(i);
-            Entity entity1 = entity.by();
+            Entity entity1 = entity.bz();
 
             if (entity1 != null) {
                 if (!entity1.dead && entity1.w(entity)) {
@@ -569,6 +571,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         }
     }
 
+    @Nullable
     public List<NextTickListEntry> a(Chunk chunk, boolean flag) {
         ChunkCoordIntPair chunkcoordintpair = chunk.k();
         int i = (chunkcoordintpair.x << 4) - 2;
@@ -579,6 +582,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         return this.a(new StructureBoundingBox(i, 0, k, j, 256, l), flag);
     }
 
+    @Nullable
     public List<NextTickListEntry> a(StructureBoundingBox structureboundingbox, boolean flag) {
         ArrayList arraylist = null;
 
@@ -640,21 +644,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         IChunkLoader ichunkloader = this.dataManager.createChunkLoader(this.worldProvider);
 
         return new ChunkProviderServer(this, ichunkloader, this.worldProvider.getChunkGenerator());
-    }
-
-    public List<TileEntity> getTileEntities(int i, int j, int k, int l, int i1, int j1) {
-        ArrayList arraylist = Lists.newArrayList();
-
-        for (int k1 = 0; k1 < this.tileEntityList.size(); ++k1) {
-            TileEntity tileentity = (TileEntity) this.tileEntityList.get(k1);
-            BlockPosition blockposition = tileentity.getPosition();
-
-            if (blockposition.getX() >= i && blockposition.getY() >= j && blockposition.getZ() >= k && blockposition.getX() < l && blockposition.getY() < i1 && blockposition.getZ() < j1) {
-                arraylist.add(tileentity);
-            }
-        }
-
-        return arraylist;
     }
 
     public boolean a(EntityHuman entityhuman, BlockPosition blockposition) {
@@ -762,7 +751,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         return this.worldProvider.h();
     }
 
-    public void save(boolean flag, IProgressUpdate iprogressupdate) throws ExceptionWorldConflict {
+    public void save(boolean flag, @Nullable IProgressUpdate iprogressupdate) throws ExceptionWorldConflict {
         ChunkProviderServer chunkproviderserver = this.getChunkProviderServer();
 
         if (chunkproviderserver.e()) {
@@ -783,7 +772,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                 Chunk chunk = (Chunk) iterator.next();
 
                 if (chunk != null && !this.manager.a(chunk.locX, chunk.locZ)) {
-                    chunkproviderserver.queueUnload(chunk.locX, chunk.locZ);
+                    chunkproviderserver.unload(chunk);
                 }
             }
 
@@ -916,7 +905,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         return (ChunkProviderServer) super.getChunkProvider();
     }
 
-    public Explosion createExplosion(Entity entity, double d0, double d1, double d2, float f, boolean flag, boolean flag1) {
+    public Explosion createExplosion(@Nullable Entity entity, double d0, double d1, double d2, float f, boolean flag, boolean flag1) {
         Explosion explosion = new Explosion(this, entity, d0, d1, d2, f, flag, flag1);
 
         explosion.a();
@@ -978,7 +967,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     private boolean a(BlockActionData blockactiondata) {
         IBlockData iblockdata = this.getType(blockactiondata.a());
 
-        return iblockdata.getBlock() == blockactiondata.d() ? iblockdata.getBlock().a(this, blockactiondata.a(), iblockdata, blockactiondata.b(), blockactiondata.c()) : false;
+        return iblockdata.getBlock() == blockactiondata.d() ? iblockdata.a(this, blockactiondata.a(), blockactiondata.b(), blockactiondata.c()) : false;
     }
 
     public void saveLevel() {
@@ -1010,6 +999,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     }
 
+    @Nullable
     public MinecraftServer getMinecraftServer() {
         return this.server;
     }
@@ -1061,6 +1051,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     }
 
+    @Nullable
     public Entity getEntity(UUID uuid) {
         return (Entity) this.entitiesByUUID.get(uuid);
     }

@@ -2,11 +2,12 @@ package net.minecraft.server;
 
 import com.google.common.base.Predicate;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 
 public class BlockTorch extends Block {
 
     public static final BlockStateDirection FACING = BlockStateDirection.of("facing", new Predicate() {
-        public boolean a(EnumDirection enumdirection) {
+        public boolean a(@Nullable EnumDirection enumdirection) {
             return enumdirection != EnumDirection.DOWN;
         }
 
@@ -46,6 +47,7 @@ public class BlockTorch extends Block {
         }
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockTorch.k;
     }
@@ -115,7 +117,7 @@ public class BlockTorch extends Block {
         this.f(world, blockposition, iblockdata);
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         this.e(world, blockposition, iblockdata);
     }
 

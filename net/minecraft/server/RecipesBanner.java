@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class RecipesBanner {
 
     public RecipesBanner() {}
@@ -50,6 +52,7 @@ public class RecipesBanner {
             }
         }
 
+        @Nullable
         public ItemStack craftItem(InventoryCrafting inventorycrafting) {
             ItemStack itemstack = null;
 
@@ -104,6 +107,7 @@ public class RecipesBanner {
             return 10;
         }
 
+        @Nullable
         public ItemStack b() {
             return null;
         }
@@ -122,6 +126,7 @@ public class RecipesBanner {
             return aitemstack;
         }
 
+        @Nullable
         private TileEntityBanner.EnumBannerPatternType c(InventoryCrafting inventorycrafting) {
             TileEntityBanner.EnumBannerPatternType[] atileentitybanner_enumbannerpatterntype = TileEntityBanner.EnumBannerPatternType.values();
             int i = atileentitybanner_enumbannerpatterntype.length;
@@ -264,6 +269,7 @@ public class RecipesBanner {
             return itemstack != null && itemstack1 != null;
         }
 
+        @Nullable
         public ItemStack craftItem(InventoryCrafting inventorycrafting) {
             for (int i = 0; i < inventorycrafting.getSize(); ++i) {
                 ItemStack itemstack = inventorycrafting.getItem(i);
@@ -283,6 +289,7 @@ public class RecipesBanner {
             return 2;
         }
 
+        @Nullable
         public ItemStack b() {
             return null;
         }

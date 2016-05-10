@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class CombatEntry {
 
     private final DamageSource a;
@@ -30,10 +32,12 @@ public class CombatEntry {
         return this.a.getEntity() instanceof EntityLiving;
     }
 
+    @Nullable
     public String g() {
         return this.e;
     }
 
+    @Nullable
     public IChatBaseComponent h() {
         return this.a().getEntity() == null ? null : this.a().getEntity().getScoreboardDisplayName();
     }

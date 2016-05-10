@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public abstract class BlockMinecartTrackAbstract extends Block {
 
@@ -26,6 +27,7 @@ public abstract class BlockMinecartTrackAbstract extends Block {
         this.a(CreativeModeTab.e);
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockMinecartTrackAbstract.k;
     }
@@ -52,13 +54,13 @@ public abstract class BlockMinecartTrackAbstract extends Block {
         if (!world.isClientSide) {
             iblockdata = this.a(world, blockposition, iblockdata, true);
             if (this.c) {
-                this.doPhysics(world, blockposition, iblockdata, this);
+                iblockdata.doPhysics(world, blockposition, this);
             }
         }
 
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!world.isClientSide) {
             BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition = (BlockMinecartTrackAbstract.EnumTrackPosition) iblockdata.get(this.g());
             boolean flag = false;
@@ -81,13 +83,13 @@ public abstract class BlockMinecartTrackAbstract extends Block {
                 this.b(world, blockposition, iblockdata, 0);
                 world.setAir(blockposition);
             } else {
-                this.b(world, blockposition, iblockdata, block);
+                this.b(iblockdata, world, blockposition, block);
             }
 
         }
     }
 
-    protected void b(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {}
+    protected void b(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {}
 
     protected IBlockData a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
         return world.isClientSide ? iblockdata : (new BlockMinecartTrackAbstract.MinecartTrackLogic(world, blockposition, iblockdata)).a(world.isBlockIndirectlyPowered(blockposition), flag).c();
@@ -326,6 +328,7 @@ public abstract class BlockMinecartTrackAbstract extends Block {
             return BlockMinecartTrackAbstract.b(this.b, blockposition) || BlockMinecartTrackAbstract.b(this.b, blockposition.up()) || BlockMinecartTrackAbstract.b(this.b, blockposition.down());
         }
 
+        @Nullable
         private BlockMinecartTrackAbstract.MinecartTrackLogic b(BlockPosition blockposition) {
             IBlockData iblockdata = this.b.getType(blockposition);
 

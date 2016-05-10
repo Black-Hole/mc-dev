@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,7 +52,7 @@ public abstract class CommandHandler implements ICommandHandler {
                 while (iterator.hasNext()) {
                     Entity entity = (Entity) iterator.next();
 
-                    astring[i] = entity.getUniqueID().toString();
+                    astring[i] = entity.bd();
                     if (this.a(icommandlistener, astring, icommand, s)) {
                         ++j;
                     }
@@ -124,7 +125,7 @@ public abstract class CommandHandler implements ICommandHandler {
         return astring1;
     }
 
-    public List<String> a(ICommandListener icommandlistener, String s, BlockPosition blockposition) {
+    public List<String> a(ICommandListener icommandlistener, String s, @Nullable BlockPosition blockposition) {
         String[] astring = s.split(" ", -1);
         String s1 = astring[0];
 

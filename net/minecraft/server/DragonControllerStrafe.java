@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +20,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
     public void c() {
         if (this.f == null) {
             DragonControllerStrafe.b.warn("Skipping player strafe phase because no player was found");
-            this.a.cT().a(DragonControllerPhase.a);
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
         } else {
             double d0;
             double d1;
@@ -55,11 +56,11 @@ public class DragonControllerStrafe extends AbstractDragonController {
                     if (this.c >= 5 && f1 >= 0.0F && f1 < 10.0F) {
                         d2 = 1.0D;
                         Vec3D vec3d2 = this.a.f(1.0F);
-                        double d6 = this.a.bu.locX - vec3d2.x * d2;
-                        double d7 = this.a.bu.locY + (double) (this.a.bu.length / 2.0F) + 0.5D;
-                        double d8 = this.a.bu.locZ - vec3d2.z * d2;
+                        double d6 = this.a.bv.locX - vec3d2.x * d2;
+                        double d7 = this.a.bv.locY + (double) (this.a.bv.length / 2.0F) + 0.5D;
+                        double d8 = this.a.bv.locZ - vec3d2.z * d2;
                         double d9 = this.f.locX - d6;
-                        double d10 = this.f.locY + (double) (this.f.length / 2.0F) - (d7 + (double) (this.a.bu.length / 2.0F));
+                        double d10 = this.f.locY + (double) (this.f.length / 2.0F) - (d7 + (double) (this.a.bv.length / 2.0F));
                         double d11 = this.f.locZ - d8;
 
                         this.a.world.a((EntityHuman) null, 1017, new BlockPosition(this.a), 0);
@@ -76,7 +77,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
                             }
                         }
 
-                        this.a.cT().a(DragonControllerPhase.a);
+                        this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
                     }
                 } else if (this.c > 0) {
                     --this.c;
@@ -104,7 +105,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
                 --j;
             }
 
-            if (this.a.cU() != null && this.a.cU().c() >= 0) {
+            if (this.a.cV() != null && this.a.cV().c() >= 0) {
                 j %= 12;
                 if (j < 0) {
                     j += 12;
@@ -171,11 +172,12 @@ public class DragonControllerStrafe extends AbstractDragonController {
 
     }
 
+    @Nullable
     public Vec3D g() {
         return this.e;
     }
 
-    public DragonControllerPhase<DragonControllerStrafe> i() {
+    public DragonControllerPhase<DragonControllerStrafe> getControllerPhase() {
         return DragonControllerPhase.b;
     }
 }

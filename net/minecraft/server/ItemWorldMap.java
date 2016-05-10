@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multisets;
+import javax.annotation.Nullable;
 
 public class ItemWorldMap extends ItemWorldMapBase {
 
@@ -173,6 +174,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
         }
     }
 
+    @Nullable
     public Packet<?> a(ItemStack itemstack, World world, EntityHuman entityhuman) {
         return this.getSavedMap(itemstack, world).a(itemstack, world, entityhuman);
     }

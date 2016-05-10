@@ -71,10 +71,16 @@ public class ControllerMove {
             float f8 = f3 * f7 - f4 * f6;
 
             f = f4 * f7 + f3 * f6;
-            if (PathfinderNormal.a((IBlockAccess) this.a.world, MathHelper.floor(this.a.locX + (double) f8), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ + (double) f)) != PathType.WALKABLE) {
-                this.f = 1.0F;
-                this.g = 0.0F;
-                f2 = f1;
+            NavigationAbstract navigationabstract = this.a.getNavigation();
+
+            if (navigationabstract != null) {
+                PathfinderAbstract pathfinderabstract = navigationabstract.q();
+
+                if (pathfinderabstract != null && pathfinderabstract.a(this.a.world, MathHelper.floor(this.a.locX + (double) f8), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ + (double) f)) != PathType.WALKABLE) {
+                    this.f = 1.0F;
+                    this.g = 0.0F;
+                    f2 = f1;
+                }
             }
 
             this.a.l(f2);

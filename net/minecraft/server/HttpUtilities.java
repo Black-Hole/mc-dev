@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,11 +57,11 @@ public class HttpUtilities {
         return stringbuilder.toString();
     }
 
-    public static String a(URL url, Map<String, Object> map, boolean flag, Proxy proxy) {
+    public static String a(URL url, Map<String, Object> map, boolean flag, @Nullable Proxy proxy) {
         return a(url, a(map), flag, proxy);
     }
 
-    private static String a(URL url, String s, boolean flag, Proxy proxy) {
+    private static String a(URL url, String s, boolean flag, @Nullable Proxy proxy) {
         try {
             if (proxy == null) {
                 proxy = Proxy.NO_PROXY;

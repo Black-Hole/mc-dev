@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public abstract class BlockPurpurSlab extends BlockStepAbstract {
 
@@ -18,6 +19,7 @@ public abstract class BlockPurpurSlab extends BlockStepAbstract {
         this.a(CreativeModeTab.b);
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.PURPUR_SLAB);
     }

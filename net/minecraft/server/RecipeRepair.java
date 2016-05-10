@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import javax.annotation.Nullable;
 
 public class RecipeRepair implements IRecipe {
 
@@ -28,6 +29,7 @@ public class RecipeRepair implements IRecipe {
         return arraylist.size() == 2;
     }
 
+    @Nullable
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         ArrayList arraylist = Lists.newArrayList();
 
@@ -73,6 +75,7 @@ public class RecipeRepair implements IRecipe {
         return 4;
     }
 
+    @Nullable
     public ItemStack b() {
         return null;
     }

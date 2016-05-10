@@ -63,8 +63,10 @@ public class WorldGenHellLava extends WorldGenerator {
             }
 
             if (!this.b && i == 4 && j == 1 || i == 5) {
-                world.setTypeAndData(blockposition, this.a.getBlockData(), 2);
-                world.a(this.a, blockposition, random);
+                IBlockData iblockdata = this.a.getBlockData();
+
+                world.setTypeAndData(blockposition, iblockdata, 2);
+                world.a(blockposition, iblockdata, random);
             }
 
             return true;

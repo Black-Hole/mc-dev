@@ -3,6 +3,7 @@ package net.minecraft.server;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class CommandWeather extends CommandAbstract {
 
@@ -63,7 +64,7 @@ public class CommandWeather extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, new String[] { "clear", "rain", "thunder"}) : Collections.emptyList();
     }
 }

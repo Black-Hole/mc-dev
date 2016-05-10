@@ -5,6 +5,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.properties.Property;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class TileEntitySkull extends TileEntity implements ITickable {
 
@@ -26,7 +27,7 @@ public class TileEntitySkull extends TileEntity implements ITickable {
         TileEntitySkull.k = minecraftsessionservice;
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         nbttagcompound.setByte("SkullType", (byte) (this.a & 255));
         nbttagcompound.setByte("Rot", (byte) (this.rotation & 255));
@@ -37,6 +38,7 @@ public class TileEntitySkull extends TileEntity implements ITickable {
             nbttagcompound.set("Owner", nbttagcompound1);
         }
 
+        return nbttagcompound;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -51,7 +53,7 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
                 if (!UtilColor.b(s)) {
                     this.g = new GameProfile((UUID) null, s);
-                    this.g();
+                    this.h();
                 }
             }
         }
@@ -70,15 +72,18 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     }
 
+    @Nullable
     public GameProfile getGameProfile() {
         return this.g;
     }
 
-    public Packet<?> getUpdatePacket() {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
+    @Nullable
+    public PacketPlayOutTileEntityData getUpdatePacket() {
+        return new PacketPlayOutTileEntityData(this.position, 4, this.E_());
+    }
 
-        this.save(nbttagcompound);
-        return new PacketPlayOutTileEntityData(this.position, 4, nbttagcompound);
+    public NBTTagCompound E_() {
+        return this.save(new NBTTagCompound());
     }
 
     public void setSkullType(int i) {
@@ -86,13 +91,13 @@ public class TileEntitySkull extends TileEntity implements ITickable {
         this.g = null;
     }
 
-    public void setGameProfile(GameProfile gameprofile) {
+    public void setGameProfile(@Nullable GameProfile gameprofile) {
         this.a = 3;
         this.g = gameprofile;
-        this.g();
+        this.h();
     }
 
-    private void g() {
+    private void h() {
         this.g = b(this.g);
         this.update();
     }

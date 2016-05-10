@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class PotionBrewer {
 
@@ -11,7 +12,7 @@ public class PotionBrewer {
     private static final List<PotionBrewer.PredicatedCombination<Item>> b = Lists.newArrayList();
     private static final List<PotionBrewer.PredicateItem> c = Lists.newArrayList();
     private static final Predicate<ItemStack> d = new Predicate() {
-        public boolean a(ItemStack itemstack) {
+        public boolean a(@Nullable ItemStack itemstack) {
             Iterator iterator = PotionBrewer.c.iterator();
 
             PotionBrewer.PredicateItem potionbrewer_predicateitem;
@@ -94,7 +95,8 @@ public class PotionBrewer {
         return false;
     }
 
-    public static ItemStack d(ItemStack itemstack, ItemStack itemstack1) {
+    @Nullable
+    public static ItemStack d(ItemStack itemstack, @Nullable ItemStack itemstack1) {
         if (itemstack1 != null) {
             PotionRegistry potionregistry = PotionUtil.c(itemstack1);
             Item item = itemstack1.getItem();
@@ -220,7 +222,7 @@ public class PotionBrewer {
             this.b = i;
         }
 
-        public boolean a(ItemStack itemstack) {
+        public boolean a(@Nullable ItemStack itemstack) {
             return itemstack != null && itemstack.getItem() == this.a && (this.b == -1 || this.b == itemstack.getData());
         }
 

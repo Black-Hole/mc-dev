@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityMagmaCube extends EntitySlime {
 
     public EntityMagmaCube(World world) {
@@ -12,7 +14,7 @@ public class EntityMagmaCube extends EntitySlime {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
     }
 
-    public boolean cF() {
+    public boolean cG() {
         return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
@@ -33,59 +35,60 @@ public class EntityMagmaCube extends EntitySlime {
         return EnumParticle.FLAME;
     }
 
-    protected EntitySlime cT() {
+    protected EntitySlime cU() {
         return new EntityMagmaCube(this.world);
     }
 
+    @Nullable
     protected MinecraftKey J() {
-        return !this.db() ? LootTables.ae : LootTables.a;
+        return !this.dc() ? LootTables.ae : LootTables.a;
     }
 
     public boolean isBurning() {
         return false;
     }
 
-    protected int cU() {
-        return super.cU() * 4;
+    protected int cV() {
+        return super.cV() * 4;
     }
 
-    protected void cV() {
+    protected void cW() {
         this.a *= 0.9F;
     }
 
-    protected void ch() {
+    protected void ci() {
         this.motY = (double) (0.42F + (float) this.getSize() * 0.1F);
         this.impulse = true;
     }
 
-    protected void cj() {
+    protected void ck() {
         this.motY = (double) (0.22F + (float) this.getSize() * 0.05F);
         this.impulse = true;
     }
 
     public void e(float f, float f1) {}
 
-    protected boolean cW() {
+    protected boolean cX() {
         return true;
     }
 
-    protected int cX() {
-        return super.cX() + 2;
-    }
-
-    protected SoundEffect bR() {
-        return this.db() ? SoundEffects.fB : SoundEffects.dl;
+    protected int cY() {
+        return super.cY() + 2;
     }
 
     protected SoundEffect bS() {
-        return this.db() ? SoundEffects.fA : SoundEffects.dk;
+        return this.dc() ? SoundEffects.fB : SoundEffects.dl;
     }
 
-    protected SoundEffect cY() {
-        return this.db() ? SoundEffects.fC : SoundEffects.dn;
+    protected SoundEffect bT() {
+        return this.dc() ? SoundEffects.fA : SoundEffects.dk;
     }
 
     protected SoundEffect cZ() {
+        return this.dc() ? SoundEffects.fC : SoundEffects.dn;
+    }
+
+    protected SoundEffect da() {
         return SoundEffects.dm;
     }
 }

@@ -29,11 +29,11 @@ public class VillageDoor {
     }
 
     public int a(BlockPosition blockposition) {
-        return (int) blockposition.k(this.d());
+        return (int) blockposition.n(this.d());
     }
 
     public int b(BlockPosition blockposition) {
-        return (int) this.b.k(blockposition);
+        return (int) this.b.n(blockposition);
     }
 
     public boolean c(BlockPosition blockposition) {

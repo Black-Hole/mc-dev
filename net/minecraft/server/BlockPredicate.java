@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
 
 public class BlockPredicate implements Predicate<IBlockData> {
 
@@ -14,7 +15,7 @@ public class BlockPredicate implements Predicate<IBlockData> {
         return new BlockPredicate(block);
     }
 
-    public boolean a(IBlockData iblockdata) {
+    public boolean a(@Nullable IBlockData iblockdata) {
         return iblockdata != null && iblockdata.getBlock() == this.a;
     }
 

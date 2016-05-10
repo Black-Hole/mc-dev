@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockVine extends Block {
 
@@ -24,6 +25,7 @@ public class BlockVine extends Block {
         this.a(CreativeModeTab.c);
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockVine.k;
     }
@@ -125,7 +127,7 @@ public class BlockVine extends Block {
         }
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!world.isClientSide && !this.e(world, blockposition, iblockdata)) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
@@ -264,6 +266,7 @@ public class BlockVine extends Block {
         return enumdirection.k().c() ? iblockdata.set(getDirection(enumdirection.opposite()), Boolean.valueOf(true)) : iblockdata;
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return null;
     }
@@ -272,7 +275,7 @@ public class BlockVine extends Block {
         return 0;
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
         if (!world.isClientSide && itemstack != null && itemstack.getItem() == Items.SHEARS) {
             entityhuman.b(StatisticList.a((Block) this));
             a(world, blockposition, new ItemStack(Blocks.VINE, 1, 0));

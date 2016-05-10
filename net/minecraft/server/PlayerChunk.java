@@ -3,9 +3,9 @@ package net.minecraft.server;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,6 +16,7 @@ public class PlayerChunk {
     private final List<EntityPlayer> c = Lists.newArrayList();
     private final ChunkCoordIntPair location;
     private final short[] dirtyBlocks = new short[64];
+    @Nullable
     private Chunk chunk;
     private int dirtyCount;
     private int h;
@@ -87,25 +88,13 @@ public class PlayerChunk {
             this.dirtyCount = 0;
             this.h = 0;
             this.done = true;
-            ArrayList arraylist = Lists.newArrayList(this.playerChunkMap.getWorld().getTileEntities(this.location.x * 16, 0, this.location.z * 16, this.location.x * 16 + 16, 256, this.location.z * 16 + 16));
-            PacketPlayOutMapChunk packetplayoutmapchunk = new PacketPlayOutMapChunk(this.chunk, true, '\uffff');
+            PacketPlayOutMapChunk packetplayoutmapchunk = new PacketPlayOutMapChunk(this.chunk, '\uffff');
             Iterator iterator = this.c.iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
                 entityplayer.playerConnection.sendPacket(packetplayoutmapchunk);
-                Iterator iterator1 = arraylist.iterator();
-
-                while (iterator1.hasNext()) {
-                    TileEntity tileentity = (TileEntity) iterator1.next();
-                    Packet packet = tileentity.getUpdatePacket();
-
-                    if (packet != null) {
-                        entityplayer.playerConnection.sendPacket(packet);
-                    }
-                }
-
                 this.playerChunkMap.getWorld().getTracker().a(entityplayer, this.chunk);
             }
 
@@ -115,18 +104,7 @@ public class PlayerChunk {
 
     public void sendChunk(EntityPlayer entityplayer) {
         if (this.done) {
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutMapChunk(this.chunk, true, '\uffff'));
-            Iterator iterator = this.playerChunkMap.getWorld().getTileEntities(this.location.x * 16, 0, this.location.z * 16, this.location.x * 16 + 16, 256, this.location.z * 16 + 16).iterator();
-
-            while (iterator.hasNext()) {
-                TileEntity tileentity = (TileEntity) iterator.next();
-                Packet packet = tileentity.getUpdatePacket();
-
-                if (packet != null) {
-                    entityplayer.playerConnection.sendPacket(packet);
-                }
-            }
-
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutMapChunk(this.chunk, '\uffff'));
             this.playerChunkMap.getWorld().getTracker().a(entityplayer, this.chunk);
         }
     }
@@ -187,36 +165,19 @@ public class PlayerChunk {
                     if (this.playerChunkMap.getWorld().getType(blockposition).getBlock().isTileEntity()) {
                         this.a(this.playerChunkMap.getWorld().getTileEntity(blockposition));
                     }
+                } else if (this.dirtyCount == 64) {
+                    this.a((Packet) (new PacketPlayOutMapChunk(this.chunk, this.h)));
                 } else {
-                    int l;
+                    this.a((Packet) (new PacketPlayOutMultiBlockChange(this.dirtyCount, this.dirtyBlocks, this.chunk)));
 
-                    if (this.dirtyCount == 64) {
-                        i = this.location.x * 16;
-                        j = this.location.z * 16;
-                        this.a((Packet) (new PacketPlayOutMapChunk(this.chunk, false, this.h)));
+                    for (i = 0; i < this.dirtyCount; ++i) {
+                        j = (this.dirtyBlocks[i] >> 12 & 15) + this.location.x * 16;
+                        k = this.dirtyBlocks[i] & 255;
+                        int l = (this.dirtyBlocks[i] >> 8 & 15) + this.location.z * 16;
+                        BlockPosition blockposition1 = new BlockPosition(j, k, l);
 
-                        for (k = 0; k < 16; ++k) {
-                            if ((this.h & 1 << k) != 0) {
-                                l = k << 4;
-                                List list = this.playerChunkMap.getWorld().getTileEntities(i, l, j, i + 16, l + 16, j + 16);
-
-                                for (int i1 = 0; i1 < list.size(); ++i1) {
-                                    this.a((TileEntity) list.get(i1));
-                                }
-                            }
-                        }
-                    } else {
-                        this.a((Packet) (new PacketPlayOutMultiBlockChange(this.dirtyCount, this.dirtyBlocks, this.chunk)));
-
-                        for (i = 0; i < this.dirtyCount; ++i) {
-                            j = (this.dirtyBlocks[i] >> 12 & 15) + this.location.x * 16;
-                            k = this.dirtyBlocks[i] & 255;
-                            l = (this.dirtyBlocks[i] >> 8 & 15) + this.location.z * 16;
-                            BlockPosition blockposition1 = new BlockPosition(j, k, l);
-
-                            if (this.playerChunkMap.getWorld().getType(blockposition1).getBlock().isTileEntity()) {
-                                this.a(this.playerChunkMap.getWorld().getTileEntity(blockposition1));
-                            }
+                        if (this.playerChunkMap.getWorld().getType(blockposition1).getBlock().isTileEntity()) {
+                            this.a(this.playerChunkMap.getWorld().getTileEntity(blockposition1));
                         }
                     }
                 }
@@ -227,12 +188,12 @@ public class PlayerChunk {
         }
     }
 
-    private void a(TileEntity tileentity) {
+    private void a(@Nullable TileEntity tileentity) {
         if (tileentity != null) {
-            Packet packet = tileentity.getUpdatePacket();
+            PacketPlayOutTileEntityData packetplayouttileentitydata = tileentity.getUpdatePacket();
 
-            if (packet != null) {
-                this.a(packet);
+            if (packetplayouttileentitydata != null) {
+                this.a((Packet) packetplayouttileentitydata);
             }
         }
 
@@ -264,6 +225,7 @@ public class PlayerChunk {
         return this.done;
     }
 
+    @Nullable
     public Chunk f() {
         return this.chunk;
     }

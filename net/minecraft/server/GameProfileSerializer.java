@@ -1,12 +1,15 @@
 package net.minecraft.server;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import java.util.Iterator;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public final class GameProfileSerializer {
 
+    @Nullable
     public static GameProfile deserialize(NBTTagCompound nbttagcompound) {
         String s = null;
         String s1 = null;
@@ -95,6 +98,7 @@ public final class GameProfileSerializer {
         return nbttagcompound;
     }
 
+    @VisibleForTesting
     public static boolean a(NBTBase nbtbase, NBTBase nbtbase1, boolean flag) {
         if (nbtbase == nbtbase1) {
             return true;

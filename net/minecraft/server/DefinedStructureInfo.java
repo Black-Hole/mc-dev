@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class DefinedStructureInfo {
 
     private EnumBlockMirror a;
@@ -14,7 +16,7 @@ public class DefinedStructureInfo {
         this(EnumBlockMirror.NONE, EnumBlockRotation.NONE, false, (Block) null, (StructureBoundingBox) null);
     }
 
-    public DefinedStructureInfo(EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation, boolean flag, Block block, StructureBoundingBox structureboundingbox) {
+    public DefinedStructureInfo(EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation, boolean flag, @Nullable Block block, @Nullable StructureBoundingBox structureboundingbox) {
         this.b = enumblockrotation;
         this.a = enumblockmirror;
         this.c = flag;
@@ -79,6 +81,7 @@ public class DefinedStructureInfo {
         return this.d;
     }
 
+    @Nullable
     public StructureBoundingBox g() {
         if (this.f == null && this.e != null) {
             this.i();
@@ -95,7 +98,8 @@ public class DefinedStructureInfo {
         this.f = this.b(this.e);
     }
 
-    private StructureBoundingBox b(ChunkCoordIntPair chunkcoordintpair) {
+    @Nullable
+    private StructureBoundingBox b(@Nullable ChunkCoordIntPair chunkcoordintpair) {
         if (chunkcoordintpair == null) {
             return null;
         } else {

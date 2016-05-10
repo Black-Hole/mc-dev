@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,6 +29,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         this.e = dataconvertermanager;
     }
 
+    @Nullable
     public Chunk a(World world, int i, int j) throws IOException {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
         NBTTagCompound nbttagcompound = (NBTTagCompound) this.b.get(chunkcoordintpair);
@@ -78,7 +80,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
             nbttagcompound.set("Level", nbttagcompound1);
-            nbttagcompound.setInt("DataVersion", 176);
+            nbttagcompound.setInt("DataVersion", 184);
             this.a(chunk, world, nbttagcompound1);
             this.a(chunk.k(), nbttagcompound);
         } catch (Exception exception) {
@@ -226,8 +228,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         while (iterator.hasNext()) {
             TileEntity tileentity = (TileEntity) iterator.next();
 
-            nbttagcompound1 = new NBTTagCompound();
-            tileentity.save(nbttagcompound1);
+            nbttagcompound1 = tileentity.save(new NBTTagCompound());
             nbttaglist2.add(nbttagcompound1);
         }
 
@@ -311,7 +312,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         if (nbttaglist2 != null) {
             for (int i1 = 0; i1 < nbttaglist2.size(); ++i1) {
                 NBTTagCompound nbttagcompound3 = nbttaglist2.get(i1);
-                TileEntity tileentity = TileEntity.a(world.getMinecraftServer(), nbttagcompound3);
+                TileEntity tileentity = TileEntity.c(nbttagcompound3);
 
                 if (tileentity != null) {
                     chunk.a(tileentity);
@@ -341,6 +342,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         return chunk;
     }
 
+    @Nullable
     public static Entity a(NBTTagCompound nbttagcompound, World world, Chunk chunk) {
         Entity entity = a(nbttagcompound, world);
 
@@ -364,6 +366,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         }
     }
 
+    @Nullable
     public static Entity a(NBTTagCompound nbttagcompound, World world, double d0, double d1, double d2, boolean flag) {
         Entity entity = a(nbttagcompound, world);
 
@@ -391,6 +394,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         }
     }
 
+    @Nullable
     protected static Entity a(NBTTagCompound nbttagcompound, World world) {
         try {
             return EntityTypes.a(nbttagcompound, world);
@@ -401,7 +405,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
     public static void a(Entity entity, World world) {
         if (world.addEntity(entity) && entity.isVehicle()) {
-            Iterator iterator = entity.bu().iterator();
+            Iterator iterator = entity.bv().iterator();
 
             while (iterator.hasNext()) {
                 Entity entity1 = (Entity) iterator.next();
@@ -412,6 +416,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
     }
 
+    @Nullable
     public static Entity a(NBTTagCompound nbttagcompound, World world, boolean flag) {
         Entity entity = a(nbttagcompound, world);
 

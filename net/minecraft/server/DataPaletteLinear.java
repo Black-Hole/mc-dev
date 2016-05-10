@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class DataPaletteLinear implements DataPalette {
 
     private final IBlockData[] a;
@@ -32,6 +34,7 @@ public class DataPaletteLinear implements DataPalette {
         }
     }
 
+    @Nullable
     public IBlockData a(int i) {
         return i >= 0 && i < this.d ? this.a[i] : null;
     }

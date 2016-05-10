@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 public interface ICommand extends Comparable<ICommand> {
 
@@ -14,7 +15,7 @@ public interface ICommand extends Comparable<ICommand> {
 
     boolean canUse(MinecraftServer minecraftserver, ICommandListener icommandlistener);
 
-    List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition);
+    List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition);
 
     boolean isListStart(String[] astring, int i);
 }

@@ -439,7 +439,7 @@ public class DispenserRegistry {
 
             EntityBoat entityboat = new EntityBoat(world, d0, d1 + d3, d2);
 
-            entityboat.a(this.c);
+            entityboat.setType(this.c);
             entityboat.yaw = enumdirection.opposite().l();
             world.addEntity(entityboat);
             itemstack.cloneAndSubtract(1);

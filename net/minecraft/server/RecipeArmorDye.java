@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import javax.annotation.Nullable;
 
 public class RecipeArmorDye implements IRecipe {
 
@@ -36,6 +37,7 @@ public class RecipeArmorDye implements IRecipe {
         return itemstack != null && !arraylist.isEmpty();
     }
 
+    @Nullable
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         ItemStack itemstack = null;
         int[] aint = new int[3];
@@ -115,6 +117,7 @@ public class RecipeArmorDye implements IRecipe {
         return 10;
     }
 
+    @Nullable
     public ItemStack b() {
         return null;
     }

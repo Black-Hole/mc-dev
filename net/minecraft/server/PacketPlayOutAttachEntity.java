@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.io.IOException;
+import javax.annotation.Nullable;
 
 public class PacketPlayOutAttachEntity implements Packet<PacketListenerPlayOut> {
 
@@ -9,7 +10,7 @@ public class PacketPlayOutAttachEntity implements Packet<PacketListenerPlayOut> 
 
     public PacketPlayOutAttachEntity() {}
 
-    public PacketPlayOutAttachEntity(Entity entity, Entity entity1) {
+    public PacketPlayOutAttachEntity(Entity entity, @Nullable Entity entity1) {
         this.a = entity.getId();
         this.b = entity1 != null ? entity1.getId() : -1;
     }

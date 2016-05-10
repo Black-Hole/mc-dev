@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Iterator;
+import javax.annotation.Nullable;
 
 public class BlockChest extends BlockTileEntity {
 
@@ -276,8 +277,8 @@ public class BlockChest extends BlockTileEntity {
         }
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        super.doPhysics(world, blockposition, iblockdata, block);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+        super.a(iblockdata, world, blockposition, block);
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityChest) {
@@ -297,7 +298,7 @@ public class BlockChest extends BlockTileEntity {
         super.remove(world, blockposition, iblockdata);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -316,10 +317,12 @@ public class BlockChest extends BlockTileEntity {
         }
     }
 
+    @Nullable
     public ITileInventory c(World world, BlockPosition blockposition) {
         return this.a(world, blockposition, false);
     }
 
+    @Nullable
     public ITileInventory a(World world, BlockPosition blockposition, boolean flag) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockEnderPortal extends BlockTileEntity {
 
@@ -20,7 +21,7 @@ public class BlockEnderPortal extends BlockTileEntity {
         return BlockEnderPortal.a;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {}
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {}
 
     public boolean b(IBlockData iblockdata) {
         return false;
@@ -41,6 +42,7 @@ public class BlockEnderPortal extends BlockTileEntity {
 
     }
 
+    @Nullable
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return null;
     }

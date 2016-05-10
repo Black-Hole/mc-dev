@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ContainerBrewingStand extends Container {
 
     private IInventory brewingStand;
@@ -57,6 +59,7 @@ public class ContainerBrewingStand extends Container {
         return this.brewingStand.a(entityhuman);
     }
 
+    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
         ItemStack itemstack = null;
         Slot slot = (Slot) this.c.get(i);
@@ -119,11 +122,11 @@ public class ContainerBrewingStand extends Container {
             super(iinventory, i, j, k);
         }
 
-        public boolean isAllowed(ItemStack itemstack) {
+        public boolean isAllowed(@Nullable ItemStack itemstack) {
             return b_(itemstack);
         }
 
-        public static boolean b_(ItemStack itemstack) {
+        public static boolean b_(@Nullable ItemStack itemstack) {
             return itemstack != null && itemstack.getItem() == Items.BLAZE_POWDER;
         }
 
@@ -138,7 +141,7 @@ public class ContainerBrewingStand extends Container {
             super(iinventory, i, j, k);
         }
 
-        public boolean isAllowed(ItemStack itemstack) {
+        public boolean isAllowed(@Nullable ItemStack itemstack) {
             return itemstack != null && PotionBrewer.a(itemstack);
         }
 
@@ -156,7 +159,7 @@ public class ContainerBrewingStand extends Container {
             this.a = entityhuman;
         }
 
-        public boolean isAllowed(ItemStack itemstack) {
+        public boolean isAllowed(@Nullable ItemStack itemstack) {
             return c_(itemstack);
         }
 
@@ -172,7 +175,7 @@ public class ContainerBrewingStand extends Container {
             super.a(entityhuman, itemstack);
         }
 
-        public static boolean c_(ItemStack itemstack) {
+        public static boolean c_(@Nullable ItemStack itemstack) {
             if (itemstack == null) {
                 return false;
             } else {

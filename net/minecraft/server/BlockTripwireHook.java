@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.base.Objects;
 import java.util.Iterator;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockTripwireHook extends Block {
 
@@ -38,6 +39,7 @@ public class BlockTripwireHook extends Block {
         }
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockTripwireHook.k;
     }
@@ -84,7 +86,7 @@ public class BlockTripwireHook extends Block {
         this.a(world, blockposition, iblockdata, false, false, -1, (IBlockData) null);
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (block != this) {
             if (this.e(world, blockposition, iblockdata)) {
                 EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockTripwireHook.FACING);
@@ -98,7 +100,7 @@ public class BlockTripwireHook extends Block {
         }
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag, boolean flag1, int i, IBlockData iblockdata1) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag, boolean flag1, int i, @Nullable IBlockData iblockdata1) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockTripwireHook.FACING);
         boolean flag2 = ((Boolean) iblockdata.get(BlockTripwireHook.ATTACHED)).booleanValue();
         boolean flag3 = ((Boolean) iblockdata.get(BlockTripwireHook.POWERED)).booleanValue();

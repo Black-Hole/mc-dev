@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockBed extends BlockFacingHorizontal {
 
@@ -14,7 +15,7 @@ public class BlockBed extends BlockFacingHorizontal {
         this.w(this.blockStateList.getBlockData().set(BlockBed.PART, BlockBed.EnumBedPart.FOOT).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -68,6 +69,7 @@ public class BlockBed extends BlockFacingHorizontal {
         }
     }
 
+    @Nullable
     private EntityHuman c(World world, BlockPosition blockposition) {
         Iterator iterator = world.players.iterator();
 
@@ -92,7 +94,7 @@ public class BlockBed extends BlockFacingHorizontal {
         return false;
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockBed.FACING);
 
         if (iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.HEAD) {
@@ -108,6 +110,7 @@ public class BlockBed extends BlockFacingHorizontal {
 
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.HEAD ? null : Items.BED;
     }
@@ -116,6 +119,7 @@ public class BlockBed extends BlockFacingHorizontal {
         return BlockBed.c;
     }
 
+    @Nullable
     public static BlockPosition a(World world, BlockPosition blockposition, int i) {
         EnumDirection enumdirection = (EnumDirection) world.getType(blockposition).get(BlockBed.FACING);
         int j = blockposition.getX();

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandStats extends CommandAbstract {
 
@@ -98,18 +99,18 @@ public class CommandStats extends CommandAbstract {
                     }
 
                     if (tileentity instanceof TileEntityCommand) {
-                        commandobjectiveexecutor = ((TileEntityCommand) tileentity).c();
+                        commandobjectiveexecutor = ((TileEntityCommand) tileentity).d();
                     } else {
                         if (!(tileentity instanceof TileEntitySign)) {
                             throw new CommandException("commands.stats.noCompatibleBlock", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
                         }
 
-                        commandobjectiveexecutor = ((TileEntitySign) tileentity).d();
+                        commandobjectiveexecutor = ((TileEntitySign) tileentity).e();
                     }
                 } else {
                     Entity entity = b(minecraftserver, icommandlistener, astring[1]);
 
-                    commandobjectiveexecutor = entity.bp();
+                    commandobjectiveexecutor = entity.bq();
                 }
 
                 if ("set".equals(s)) {
@@ -137,7 +138,7 @@ public class CommandStats extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, new String[] { "entity", "block"}) : (astring.length == 2 && astring[0].equals("entity") ? a(astring, minecraftserver.getPlayers()) : (astring.length >= 2 && astring.length <= 4 && astring[0].equals("block") ? a(astring, 1, blockposition) : ((astring.length != 3 || !astring[0].equals("entity")) && (astring.length != 5 || !astring[0].equals("block")) ? ((astring.length != 4 || !astring[0].equals("entity")) && (astring.length != 6 || !astring[0].equals("block")) ? ((astring.length != 6 || !astring[0].equals("entity")) && (astring.length != 8 || !astring[0].equals("block")) ? Collections.emptyList() : a(astring, (Collection) this.a(minecraftserver))) : a(astring, CommandObjectiveExecutor.EnumCommandResult.c())) : a(astring, new String[] { "set", "clear"}))));
     }
 

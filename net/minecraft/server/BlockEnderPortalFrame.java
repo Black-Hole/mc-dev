@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockEnderPortalFrame extends Block {
 
@@ -26,7 +27,7 @@ public class BlockEnderPortalFrame extends Block {
         return BlockEnderPortalFrame.c;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
         a(blockposition, axisalignedbb, list, BlockEnderPortalFrame.c);
         if (((Boolean) world.getType(blockposition).get(BlockEnderPortalFrame.EYE)).booleanValue()) {
             a(blockposition, axisalignedbb, list, BlockEnderPortalFrame.d);
@@ -34,6 +35,7 @@ public class BlockEnderPortalFrame extends Block {
 
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return null;
     }

@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public abstract class TileEntityLootable extends TileEntityContainer implements ILootable {
 
@@ -9,7 +10,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
 
     public TileEntityLootable() {}
 
-    protected boolean c(NBTTagCompound nbttagcompound) {
+    protected boolean d(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.hasKeyOfType("LootTable", 8)) {
             this.m = new MinecraftKey(nbttagcompound.getString("LootTable"));
             this.n = nbttagcompound.getLong("LootTableSeed");
@@ -19,7 +20,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
         }
     }
 
-    protected boolean d(NBTTagCompound nbttagcompound) {
+    protected boolean e(NBTTagCompound nbttagcompound) {
         if (this.m != null) {
             nbttagcompound.setString("LootTable", this.m.toString());
             if (this.n != 0L) {
@@ -32,7 +33,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
         }
     }
 
-    protected void d(EntityHuman entityhuman) {
+    protected void d(@Nullable EntityHuman entityhuman) {
         if (this.m != null) {
             LootTable loottable = this.world.ak().a(this.m);
 
@@ -48,7 +49,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
             LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
             if (entityhuman != null) {
-                loottableinfo_a.a(entityhuman.db());
+                loottableinfo_a.a(entityhuman.dc());
             }
 
             loottable.a(this, random, loottableinfo_a.a());

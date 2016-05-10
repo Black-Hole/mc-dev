@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class PathfinderGoalFleeSun extends PathfinderGoal {
 
@@ -49,6 +50,7 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
         this.a.getNavigation().a(this.b, this.c, this.d, this.e);
     }
 
+    @Nullable
     private Vec3D f() {
         Random random = this.a.getRandom();
         BlockPosition blockposition = new BlockPosition(this.a.locX, this.a.getBoundingBox().b, this.a.locZ);

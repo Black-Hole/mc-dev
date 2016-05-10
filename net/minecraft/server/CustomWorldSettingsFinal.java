@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -376,6 +377,7 @@ public class CustomWorldSettingsFinal {
 
     public static class CustomWorldSettings {
 
+        @VisibleForTesting
         static final Gson a = (new GsonBuilder()).registerTypeAdapter(CustomWorldSettingsFinal.CustomWorldSettings.class, new CustomWorldSettingsFinal.CustomWorldSettingsSerializer()).create();
         public float b = 684.412F;
         public float c = 684.412F;

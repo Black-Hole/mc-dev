@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class BlockNote extends BlockTileEntity {
 
@@ -12,7 +13,7 @@ public class BlockNote extends BlockTileEntity {
         this.a(CreativeModeTab.d);
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         boolean flag = world.isBlockIndirectlyPowered(blockposition);
         TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -30,7 +31,7 @@ public class BlockNote extends BlockTileEntity {
 
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -39,7 +40,7 @@ public class BlockNote extends BlockTileEntity {
             if (tileentity instanceof TileEntityNote) {
                 TileEntityNote tileentitynote = (TileEntityNote) tileentity;
 
-                tileentitynote.b();
+                tileentitynote.c();
                 tileentitynote.play(world, blockposition);
                 entityhuman.b(StatisticList.U);
             }
@@ -72,7 +73,7 @@ public class BlockNote extends BlockTileEntity {
         return (SoundEffect) BlockNote.a.get(i);
     }
 
-    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, int i, int j) {
+    public boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, int i, int j) {
         float f = (float) Math.pow(2.0D, (double) (j - 12) / 12.0D);
 
         world.a((EntityHuman) null, blockposition, this.e(i), SoundCategory.BLOCKS, 3.0F, f);

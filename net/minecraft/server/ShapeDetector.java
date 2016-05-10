@@ -6,6 +6,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 
 public class ShapeDetector {
 
@@ -43,6 +44,7 @@ public class ShapeDetector {
         return this.d;
     }
 
+    @Nullable
     private ShapeDetector.ShapeDetectorCollection a(BlockPosition blockposition, EnumDirection enumdirection, EnumDirection enumdirection1, LoadingCache<BlockPosition, ShapeDetectorBlock> loadingcache) {
         for (int i = 0; i < this.d; ++i) {
             for (int j = 0; j < this.c; ++j) {
@@ -57,6 +59,7 @@ public class ShapeDetector {
         return new ShapeDetector.ShapeDetectorCollection(blockposition, enumdirection, enumdirection1, loadingcache, this.d, this.c, this.b);
     }
 
+    @Nullable
     public ShapeDetector.ShapeDetectorCollection a(World world, BlockPosition blockposition) {
         LoadingCache loadingcache = a(world, false);
         int i = Math.max(Math.max(this.d, this.c), this.b);

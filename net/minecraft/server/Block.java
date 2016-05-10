@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class Block {
 
@@ -58,6 +59,7 @@ public class Block {
         return item instanceof ItemBlock ? ((ItemBlock) item).d() : null;
     }
 
+    @Nullable
     public static Block getByName(String s) {
         MinecraftKey minecraftkey = new MinecraftKey(s);
 
@@ -72,34 +74,42 @@ public class Block {
         }
     }
 
+    @Deprecated
     public boolean k(IBlockData iblockdata) {
         return iblockdata.getMaterial().k() && iblockdata.h();
     }
 
+    @Deprecated
     public boolean l(IBlockData iblockdata) {
         return this.l;
     }
 
+    @Deprecated
     public int m(IBlockData iblockdata) {
         return this.m;
     }
 
+    @Deprecated
     public int o(IBlockData iblockdata) {
         return this.o;
     }
 
+    @Deprecated
     public boolean p(IBlockData iblockdata) {
         return this.p;
     }
 
+    @Deprecated
     public Material q(IBlockData iblockdata) {
         return this.material;
     }
 
+    @Deprecated
     public MaterialMapColor r(IBlockData iblockdata) {
         return this.y;
     }
 
+    @Deprecated
     public IBlockData fromLegacyData(int i) {
         return this.getBlockData();
     }
@@ -112,14 +122,17 @@ public class Block {
         }
     }
 
+    @Deprecated
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata;
     }
 
+    @Deprecated
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         return iblockdata;
     }
 
+    @Deprecated
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         return iblockdata;
     }
@@ -162,10 +175,12 @@ public class Block {
         return this;
     }
 
+    @Deprecated
     public boolean s(IBlockData iblockdata) {
         return iblockdata.getMaterial().isSolid() && iblockdata.h();
     }
 
+    @Deprecated
     public boolean isOccluding(IBlockData iblockdata) {
         return iblockdata.getMaterial().k() && iblockdata.h() && !iblockdata.m();
     }
@@ -174,6 +189,7 @@ public class Block {
         return this.material.isSolid() && this.getBlockData().h();
     }
 
+    @Deprecated
     public boolean c(IBlockData iblockdata) {
         return true;
     }
@@ -182,6 +198,7 @@ public class Block {
         return !this.material.isSolid();
     }
 
+    @Deprecated
     public EnumRenderType a(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
@@ -204,6 +221,7 @@ public class Block {
         return this;
     }
 
+    @Deprecated
     public float b(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return this.strength;
     }
@@ -221,6 +239,7 @@ public class Block {
         return this.isTileEntity;
     }
 
+    @Deprecated
     public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return Block.j;
     }
@@ -229,11 +248,12 @@ public class Block {
         return iblockaccess.getType(blockposition).getMaterial().isBuildable();
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity) {
+    @Deprecated
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
         a(blockposition, axisalignedbb, list, iblockdata.d(world, blockposition));
     }
 
-    protected static void a(BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, AxisAlignedBB axisalignedbb1) {
+    protected static void a(BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable AxisAlignedBB axisalignedbb1) {
         if (axisalignedbb1 != Block.k) {
             AxisAlignedBB axisalignedbb2 = axisalignedbb1.a(blockposition);
 
@@ -244,10 +264,13 @@ public class Block {
 
     }
 
+    @Deprecated
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return iblockdata.c(world, blockposition);
     }
 
+    @Deprecated
     public boolean b(IBlockData iblockdata) {
         return true;
     }
@@ -268,7 +291,8 @@ public class Block {
 
     public void postBreak(World world, BlockPosition blockposition, IBlockData iblockdata) {}
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {}
+    @Deprecated
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {}
 
     public int a(World world) {
         return 10;
@@ -282,10 +306,12 @@ public class Block {
         return 1;
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(this);
     }
 
+    @Deprecated
     public float getDamage(IBlockData iblockdata, EntityHuman entityhuman, World world, BlockPosition blockposition) {
         float f = iblockdata.b(world, blockposition);
 
@@ -346,10 +372,13 @@ public class Block {
         return this.durability / 5.0F;
     }
 
+    @Deprecated
+    @Nullable
     public MovingObjectPosition a(IBlockData iblockdata, World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
         return this.a(blockposition, vec3d, vec3d1, iblockdata.c(world, blockposition));
     }
 
+    @Nullable
     protected MovingObjectPosition a(BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1, AxisAlignedBB axisalignedbb) {
         Vec3D vec3d2 = vec3d.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
         Vec3D vec3d3 = vec3d1.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
@@ -360,7 +389,7 @@ public class Block {
 
     public void wasExploded(World world, BlockPosition blockposition, Explosion explosion) {}
 
-    public boolean canPlace(World world, BlockPosition blockposition, EnumDirection enumdirection, ItemStack itemstack) {
+    public boolean canPlace(World world, BlockPosition blockposition, EnumDirection enumdirection, @Nullable ItemStack itemstack) {
         return this.canPlace(world, blockposition, enumdirection);
     }
 
@@ -372,7 +401,7 @@ public class Block {
         return world.getType(blockposition).getBlock().material.isReplaceable();
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         return false;
     }
 
@@ -388,21 +417,24 @@ public class Block {
         return vec3d;
     }
 
+    @Deprecated
     public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return 0;
     }
 
+    @Deprecated
     public boolean isPowerSource(IBlockData iblockdata) {
         return false;
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {}
 
+    @Deprecated
     public int c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return 0;
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
         entityhuman.b(StatisticList.a(this));
         entityhuman.applyExhaustion(0.025F);
         if (this.o() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
@@ -423,6 +455,7 @@ public class Block {
         return this.getBlockData().h() && !this.isTileEntity;
     }
 
+    @Nullable
     protected ItemStack u(IBlockData iblockdata) {
         Item item = Item.getItemOf(this);
 
@@ -462,7 +495,8 @@ public class Block {
         return "tile." + this.name;
     }
 
-    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, int i, int j) {
+    @Deprecated
+    public boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, int i, int j) {
         return false;
     }
 
@@ -475,6 +509,7 @@ public class Block {
         return this;
     }
 
+    @Deprecated
     public EnumPistonReaction h(IBlockData iblockdata) {
         return this.material.getPushReaction();
     }
@@ -487,6 +522,7 @@ public class Block {
         entity.motY = 0.0D;
     }
 
+    @Nullable
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return new ItemStack(Item.getItemOf(this), 1, this.getDropData(iblockdata));
     }
@@ -516,10 +552,12 @@ public class Block {
         return block != null && block1 != null ? (block == block1 ? true : block.b(block1)) : false;
     }
 
+    @Deprecated
     public boolean isComplexRedstone(IBlockData iblockdata) {
         return false;
     }
 
+    @Deprecated
     public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return 0;
     }

@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockPlant extends Block {
 
@@ -28,8 +29,8 @@ public class BlockPlant extends Block {
         return iblockdata.getBlock() == Blocks.GRASS || iblockdata.getBlock() == Blocks.DIRT || iblockdata.getBlock() == Blocks.FARMLAND;
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        super.doPhysics(world, blockposition, iblockdata, block);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+        super.a(iblockdata, world, blockposition, block);
         this.e(world, blockposition, iblockdata);
     }
 
@@ -53,6 +54,7 @@ public class BlockPlant extends Block {
         return BlockPlant.b;
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockPlant.k;
     }

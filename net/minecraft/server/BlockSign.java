@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockSign extends BlockTileEntity {
 
@@ -14,6 +15,7 @@ public class BlockSign extends BlockTileEntity {
         return BlockSign.a;
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockSign.k;
     }
@@ -38,6 +40,7 @@ public class BlockSign extends BlockTileEntity {
         return new TileEntitySign();
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.SIGN;
     }
@@ -46,7 +49,7 @@ public class BlockSign extends BlockTileEntity {
         return new ItemStack(Items.SIGN);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {

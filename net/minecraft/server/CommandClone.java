@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandClone extends CommandAbstract {
 
@@ -88,9 +89,8 @@ public class CommandClone extends CommandAbstract {
                                             TileEntity tileentity = world.getTileEntity(blockposition4);
 
                                             if (tileentity != null) {
-                                                NBTTagCompound nbttagcompound = new NBTTagCompound();
+                                                NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
 
-                                                tileentity.save(nbttagcompound);
                                                 arraylist1.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, nbttagcompound));
                                                 linkedlist.addLast(blockposition4);
                                             } else if (!iblockdata.b() && !iblockdata.h()) {
@@ -207,7 +207,7 @@ public class CommandClone extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length > 3 && astring.length <= 6 ? a(astring, 3, blockposition) : (astring.length > 6 && astring.length <= 9 ? a(astring, 6, blockposition) : (astring.length == 10 ? a(astring, new String[] { "replace", "masked", "filtered"}) : (astring.length == 11 ? a(astring, new String[] { "normal", "force", "move"}) : (astring.length == 12 && "filtered".equals(astring[9]) ? a(astring, (Collection) Block.REGISTRY.keySet()) : Collections.emptyList())))));
     }
 

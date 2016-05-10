@@ -3,6 +3,7 @@ package net.minecraft.server;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandPlaySound extends CommandAbstract {
 
@@ -99,7 +100,7 @@ public class CommandPlaySound extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, (Collection) SoundEffect.a.keySet()) : (astring.length == 2 ? a(astring, (Collection) SoundCategory.b()) : (astring.length == 3 ? a(astring, minecraftserver.getPlayers()) : (astring.length > 3 && astring.length <= 6 ? a(astring, 2, blockposition) : Collections.emptyList())));
     }
 

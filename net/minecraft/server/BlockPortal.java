@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.cache.LoadingCache;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockPortal extends BlockHalfTransparent {
 
@@ -52,6 +53,7 @@ public class BlockPortal extends BlockHalfTransparent {
 
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockPortal.k;
     }
@@ -82,7 +84,7 @@ public class BlockPortal extends BlockHalfTransparent {
         }
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         EnumDirection.EnumAxis enumdirection_enumaxis = (EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS);
         BlockPortal.Shape blockportal_shape;
 
@@ -111,6 +113,7 @@ public class BlockPortal extends BlockHalfTransparent {
 
     }
 
+    @Nullable
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return null;
     }

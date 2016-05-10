@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class DragonControllerLanding extends AbstractDragonController {
 
     private Vec3D b;
@@ -12,9 +14,9 @@ public class DragonControllerLanding extends AbstractDragonController {
         Vec3D vec3d = this.a.a(1.0F).a();
 
         vec3d.b(-0.7853982F);
-        double d0 = this.a.bu.locX;
-        double d1 = this.a.bu.locY + (double) (this.a.bu.length / 2.0F);
-        double d2 = this.a.bu.locZ;
+        double d0 = this.a.bv.locX;
+        double d1 = this.a.bv.locY + (double) (this.a.bv.length / 2.0F);
+        double d2 = this.a.bv.locZ;
 
         for (int i = 0; i < 8; ++i) {
             double d3 = d0 + this.a.getRandom().nextGaussian() / 2.0D;
@@ -33,8 +35,8 @@ public class DragonControllerLanding extends AbstractDragonController {
         }
 
         if (this.b.c(this.a.locX, this.a.locY, this.a.locZ) < 1.0D) {
-            ((DragonControllerLandedFlame) this.a.cT().b(DragonControllerPhase.f)).j();
-            this.a.cT().a(DragonControllerPhase.g);
+            ((DragonControllerLandedFlame) this.a.getDragonControllerManager().b(DragonControllerPhase.f)).j();
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.g);
         }
 
     }
@@ -54,11 +56,12 @@ public class DragonControllerLanding extends AbstractDragonController {
         this.b = null;
     }
 
+    @Nullable
     public Vec3D g() {
         return this.b;
     }
 
-    public DragonControllerPhase<DragonControllerLanding> i() {
+    public DragonControllerPhase<DragonControllerLanding> getControllerPhase() {
         return DragonControllerPhase.d;
     }
 }

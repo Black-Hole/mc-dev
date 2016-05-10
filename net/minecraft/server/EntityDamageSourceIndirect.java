@@ -1,18 +1,22 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityDamageSourceIndirect extends EntityDamageSource {
 
     private final Entity owner;
 
-    public EntityDamageSourceIndirect(String s, Entity entity, Entity entity1) {
+    public EntityDamageSourceIndirect(String s, Entity entity, @Nullable Entity entity1) {
         super(s, entity);
         this.owner = entity1;
     }
 
+    @Nullable
     public Entity i() {
         return this.s;
     }
 
+    @Nullable
     public Entity getEntity() {
         return this.owner;
     }

@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockSnow extends Block {
 
@@ -26,6 +27,7 @@ public class BlockSnow extends Block {
         return ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() == 7;
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         int i = ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() - 1;
         float f = 0.125F;
@@ -49,7 +51,7 @@ public class BlockSnow extends Block {
         return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (iblockdata.getMaterial() == Material.LEAVES ? true : (block == this && ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() >= 7 ? true : iblockdata.p() && iblockdata.getMaterial().isSolid())) : false;
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         this.e(world, blockposition, iblockdata);
     }
 
@@ -63,12 +65,13 @@ public class BlockSnow extends Block {
         }
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
         a(world, blockposition, new ItemStack(Items.SNOWBALL, ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() + 1, 0));
         world.setAir(blockposition);
         entityhuman.b(StatisticList.a((Block) this));
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.SNOWBALL;
     }

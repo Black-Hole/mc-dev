@@ -1,12 +1,14 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class BlockWoodButton extends BlockButtonAbstract {
 
     protected BlockWoodButton() {
         super(true);
     }
 
-    protected void a(EntityHuman entityhuman, World world, BlockPosition blockposition) {
+    protected void a(@Nullable EntityHuman entityhuman, World world, BlockPosition blockposition) {
         world.a(entityhuman, blockposition, SoundEffects.ha, SoundCategory.BLOCKS, 0.3F, 0.6F);
     }
 

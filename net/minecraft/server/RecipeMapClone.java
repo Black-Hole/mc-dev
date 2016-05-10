@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class RecipeMapClone implements IRecipe {
 
     public RecipeMapClone() {}
@@ -31,6 +33,7 @@ public class RecipeMapClone implements IRecipe {
         return itemstack != null && i > 0;
     }
 
+    @Nullable
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         int i = 0;
         ItemStack itemstack = null;
@@ -72,6 +75,7 @@ public class RecipeMapClone implements IRecipe {
         return 9;
     }
 
+    @Nullable
     public ItemStack b() {
         return null;
     }

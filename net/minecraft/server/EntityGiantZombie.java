@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityGiantZombie extends EntityMonster {
 
     public EntityGiantZombie(World world) {
@@ -22,6 +24,7 @@ public class EntityGiantZombie extends EntityMonster {
         return this.world.n(blockposition) - 0.5F;
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.t;
     }

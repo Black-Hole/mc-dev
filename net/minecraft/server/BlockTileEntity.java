@@ -28,8 +28,8 @@ public abstract class BlockTileEntity extends Block implements ITileEntity {
         world.s(blockposition);
     }
 
-    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, int i, int j) {
-        super.a(world, blockposition, iblockdata, i, j);
+    public boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, int i, int j) {
+        super.a(iblockdata, world, blockposition, i, j);
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         return tileentity == null ? false : tileentity.c(i, j);

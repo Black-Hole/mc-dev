@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class Enchantments {
 
     public static final Enchantment PROTECTION_ENVIRONMENTAL = a("protection");
@@ -30,6 +32,7 @@ public class Enchantments {
     public static final Enchantment LURE = a("lure");
     public static final Enchantment A = a("mending");
 
+    @Nullable
     private static Enchantment a(String s) {
         Enchantment enchantment = (Enchantment) Enchantment.enchantments.get(new MinecraftKey(s));
 

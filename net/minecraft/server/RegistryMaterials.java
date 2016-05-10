@@ -4,6 +4,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import java.util.Iterator;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 public class RegistryMaterials<K, V> extends RegistrySimple<K, V> implements Registry<V> {
 
@@ -23,10 +24,12 @@ public class RegistryMaterials<K, V> extends RegistrySimple<K, V> implements Reg
         return HashBiMap.create();
     }
 
-    public V get(K k0) {
+    @Nullable
+    public V get(@Nullable K k0) {
         return super.get(k0);
     }
 
+    @Nullable
     public K b(V v0) {
         return this.b.get(v0);
     }
@@ -39,6 +42,7 @@ public class RegistryMaterials<K, V> extends RegistrySimple<K, V> implements Reg
         return this.a.getId(v0);
     }
 
+    @Nullable
     public V getId(int i) {
         return this.a.fromId(i);
     }

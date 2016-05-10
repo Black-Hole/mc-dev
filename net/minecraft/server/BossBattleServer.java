@@ -10,12 +10,12 @@ public class BossBattleServer extends BossBattle {
 
     private final Set<EntityPlayer> h = Sets.newHashSet();
     private final Set<EntityPlayer> i;
-    private boolean j;
+    public boolean visible;
 
     public BossBattleServer(IChatBaseComponent ichatbasecomponent, BossBattle.BarColor bossbattle_barcolor, BossBattle.BarStyle bossbattle_barstyle) {
         super(MathHelper.a(), ichatbasecomponent, bossbattle_barcolor, bossbattle_barstyle);
         this.i = Collections.unmodifiableSet(this.h);
-        this.j = true;
+        this.visible = true;
     }
 
     public void setProgress(float f) {
@@ -54,7 +54,7 @@ public class BossBattleServer extends BossBattle {
     }
 
     public void sendUpdate(PacketPlayOutBoss.Action packetplayoutboss_action) {
-        if (this.j) {
+        if (this.visible) {
             PacketPlayOutBoss packetplayoutboss = new PacketPlayOutBoss(packetplayoutboss_action, this);
             Iterator iterator = this.h.iterator();
 
@@ -68,22 +68,22 @@ public class BossBattleServer extends BossBattle {
     }
 
     public void addPlayer(EntityPlayer entityplayer) {
-        if (this.h.add(entityplayer) && this.j) {
+        if (this.h.add(entityplayer) && this.visible) {
             entityplayer.playerConnection.sendPacket(new PacketPlayOutBoss(PacketPlayOutBoss.Action.ADD, this));
         }
 
     }
 
     public void removePlayer(EntityPlayer entityplayer) {
-        if (this.h.remove(entityplayer) && this.j) {
+        if (this.h.remove(entityplayer) && this.visible) {
             entityplayer.playerConnection.sendPacket(new PacketPlayOutBoss(PacketPlayOutBoss.Action.REMOVE, this));
         }
 
     }
 
     public void setVisible(boolean flag) {
-        if (flag != this.j) {
-            this.j = flag;
+        if (flag != this.visible) {
+            this.visible = flag;
             Iterator iterator = this.h.iterator();
 
             while (iterator.hasNext()) {

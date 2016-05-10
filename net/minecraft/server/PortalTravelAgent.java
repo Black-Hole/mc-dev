@@ -1,16 +1,15 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
-import java.util.Iterator;
-import java.util.List;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import java.util.Random;
 
 public class PortalTravelAgent {
 
     private final WorldServer world;
     private final Random b;
-    private final LongHashMap<PortalTravelAgent.ChunkCoordinatesPortal> c = new LongHashMap();
-    private final List<Long> d = Lists.newArrayList();
+    private final Long2ObjectMap<PortalTravelAgent.ChunkCoordinatesPortal> c = new Long2ObjectOpenHashMap(4096);
 
     public PortalTravelAgent(WorldServer worldserver) {
         this.world = worldserver;
@@ -57,12 +56,12 @@ public class PortalTravelAgent {
         Object object = BlockPosition.ZERO;
         long k = ChunkCoordIntPair.a(i, j);
 
-        if (this.c.contains(k)) {
-            PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.c.getEntry(k);
+        if (this.c.containsKey(k)) {
+            PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.c.get(k);
 
             d0 = 0.0D;
             object = portaltravelagent_chunkcoordinatesportal;
-            portaltravelagent_chunkcoordinatesportal.c = this.world.getTime();
+            portaltravelagent_chunkcoordinatesportal.b = this.world.getTime();
             flag1 = false;
         } else {
             BlockPosition blockposition = new BlockPosition(entity);
@@ -78,7 +77,7 @@ public class PortalTravelAgent {
                                 blockposition2 = blockposition1;
                             }
 
-                            double d1 = blockposition2.k(blockposition);
+                            double d1 = blockposition2.n(blockposition);
 
                             if (d0 < 0.0D || d1 < d0) {
                                 d0 = d1;
@@ -93,7 +92,6 @@ public class PortalTravelAgent {
         if (d0 >= 0.0D) {
             if (flag1) {
                 this.c.put(k, new PortalTravelAgent.ChunkCoordinatesPortal((BlockPosition) object, this.world.getTime()));
-                this.d.add(Long.valueOf(k));
             }
 
             double d2 = (double) ((BlockPosition) object).getX() + 0.5D;
@@ -338,16 +336,14 @@ public class PortalTravelAgent {
 
     public void a(long i) {
         if (i % 100L == 0L) {
-            Iterator iterator = this.d.iterator();
             long j = i - 300L;
+            ObjectIterator objectiterator = this.c.values().iterator();
 
-            while (iterator.hasNext()) {
-                Long olong = (Long) iterator.next();
-                PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.c.getEntry(olong.longValue());
+            while (objectiterator.hasNext()) {
+                PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) objectiterator.next();
 
-                if (portaltravelagent_chunkcoordinatesportal == null || portaltravelagent_chunkcoordinatesportal.c < j) {
-                    iterator.remove();
-                    this.c.remove(olong.longValue());
+                if (portaltravelagent_chunkcoordinatesportal == null || portaltravelagent_chunkcoordinatesportal.b < j) {
+                    objectiterator.remove();
                 }
             }
         }
@@ -356,11 +352,11 @@ public class PortalTravelAgent {
 
     public class ChunkCoordinatesPortal extends BlockPosition {
 
-        public long c;
+        public long b;
 
         public ChunkCoordinatesPortal(BlockPosition blockposition, long i) {
             super(blockposition.getX(), blockposition.getY(), blockposition.getZ());
-            this.c = i;
+            this.b = i;
         }
     }
 }

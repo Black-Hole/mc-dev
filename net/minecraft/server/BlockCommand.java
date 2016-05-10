@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockCommand extends BlockTileEntity {
 
@@ -19,20 +20,20 @@ public class BlockCommand extends BlockTileEntity {
         return tileentitycommand;
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!world.isClientSide) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityCommand) {
                 TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
                 boolean flag = world.isBlockIndirectlyPowered(blockposition);
-                boolean flag1 = tileentitycommand.d();
-                boolean flag2 = tileentitycommand.e();
+                boolean flag1 = tileentitycommand.e();
+                boolean flag2 = tileentitycommand.g();
 
                 if (flag && !flag1) {
                     tileentitycommand.a(true);
-                    if (tileentitycommand.i() != TileEntityCommand.Type.SEQUENCE && !flag2) {
-                        boolean flag3 = !tileentitycommand.j() || this.e(world, blockposition, iblockdata);
+                    if (tileentitycommand.j() != TileEntityCommand.Type.SEQUENCE && !flag2) {
+                        boolean flag3 = !tileentitycommand.k() || this.e(world, blockposition, iblockdata);
 
                         tileentitycommand.c(flag3);
                         world.a(blockposition, (Block) this, this.a(world));
@@ -56,9 +57,9 @@ public class BlockCommand extends BlockTileEntity {
                 TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
                 CommandBlockListenerAbstract commandblocklistenerabstract = tileentitycommand.getCommandBlock();
                 boolean flag = !UtilColor.b(commandblocklistenerabstract.getCommand());
-                TileEntityCommand.Type tileentitycommand_type = tileentitycommand.i();
-                boolean flag1 = !tileentitycommand.j() || this.e(world, blockposition, iblockdata);
-                boolean flag2 = tileentitycommand.g();
+                TileEntityCommand.Type tileentitycommand_type = tileentitycommand.j();
+                boolean flag1 = !tileentitycommand.k() || this.e(world, blockposition, iblockdata);
+                boolean flag2 = tileentitycommand.h();
                 boolean flag3 = false;
 
                 if (tileentitycommand_type != TileEntityCommand.Type.SEQUENCE && flag2 && flag) {
@@ -66,7 +67,7 @@ public class BlockCommand extends BlockTileEntity {
                     flag3 = true;
                 }
 
-                if (tileentitycommand.d() || tileentitycommand.e()) {
+                if (tileentitycommand.e() || tileentitycommand.g()) {
                     if (tileentitycommand_type == TileEntityCommand.Type.SEQUENCE && flag1 && flag) {
                         commandblocklistenerabstract.a(world);
                         flag3 = true;
@@ -102,7 +103,7 @@ public class BlockCommand extends BlockTileEntity {
         return 1;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityCommand) {
@@ -146,7 +147,7 @@ public class BlockCommand extends BlockTileEntity {
                     tileentitycommand.b(this == Blocks.dd);
                 }
 
-                if (tileentitycommand.i() == TileEntityCommand.Type.SEQUENCE) {
+                if (tileentitycommand.j() == TileEntityCommand.Type.SEQUENCE) {
                     boolean flag = world.isBlockIndirectlyPowered(blockposition);
 
                     tileentitycommand.a(flag);
@@ -199,7 +200,7 @@ public class BlockCommand extends BlockTileEntity {
             for (TileEntity tileentity = world.getTileEntity(blockposition_mutableblockposition); tileentity instanceof TileEntityCommand; tileentity = world.getTileEntity(blockposition_mutableblockposition)) {
                 TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
 
-                if (tileentitycommand.i() != TileEntityCommand.Type.SEQUENCE) {
+                if (tileentitycommand.j() != TileEntityCommand.Type.SEQUENCE) {
                     break;
                 }
 

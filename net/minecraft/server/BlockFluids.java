@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public abstract class BlockFluids extends Block {
 
@@ -17,6 +18,7 @@ public abstract class BlockFluids extends Block {
         return BlockFluids.j;
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockFluids.k;
     }
@@ -33,12 +35,12 @@ public abstract class BlockFluids extends Block {
         return (float) (i + 1) / 9.0F;
     }
 
-    protected int c(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockaccess.getType(blockposition).getMaterial() == this.material ? ((Integer) iblockaccess.getType(blockposition).get(BlockFluids.LEVEL)).intValue() : -1;
+    protected int i(IBlockData iblockdata) {
+        return iblockdata.getMaterial() == this.material ? ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() : -1;
     }
 
-    protected int d(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        int i = this.c(iblockaccess, blockposition);
+    protected int x(IBlockData iblockdata) {
+        int i = this.i(iblockdata);
 
         return i >= 8 ? 0 : i;
     }
@@ -65,6 +67,7 @@ public abstract class BlockFluids extends Block {
         return EnumRenderType.LIQUID;
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return null;
     }
@@ -73,24 +76,24 @@ public abstract class BlockFluids extends Block {
         return 0;
     }
 
-    protected Vec3D f(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    protected Vec3D a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
         double d0 = 0.0D;
         double d1 = 0.0D;
         double d2 = 0.0D;
-        int i = this.d(iblockaccess, blockposition);
+        int i = this.x(iblockdata);
         BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
         Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
         while (iterator.hasNext()) {
             EnumDirection enumdirection = (EnumDirection) iterator.next();
 
-            blockposition_pooledblockposition.h(blockposition).c(enumdirection);
-            int j = this.d(iblockaccess, blockposition_pooledblockposition);
+            blockposition_pooledblockposition.j(blockposition).d(enumdirection);
+            int j = this.x(iblockaccess.getType(blockposition_pooledblockposition));
             int k;
 
             if (j < 0) {
                 if (!iblockaccess.getType(blockposition_pooledblockposition).getMaterial().isSolid()) {
-                    j = this.d(iblockaccess, blockposition_pooledblockposition.down());
+                    j = this.x(iblockaccess.getType(blockposition_pooledblockposition.down()));
                     if (j >= 0) {
                         k = j - (i - 8);
                         d0 += (double) (enumdirection.getAdjacentX() * k);
@@ -108,13 +111,13 @@ public abstract class BlockFluids extends Block {
 
         Vec3D vec3d = new Vec3D(d0, d1, d2);
 
-        if (((Integer) iblockaccess.getType(blockposition).get(BlockFluids.LEVEL)).intValue() >= 8) {
+        if (((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() >= 8) {
             Iterator iterator1 = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
             while (iterator1.hasNext()) {
                 EnumDirection enumdirection1 = (EnumDirection) iterator1.next();
 
-                blockposition_pooledblockposition.h(blockposition).c(enumdirection1);
+                blockposition_pooledblockposition.j(blockposition).d(enumdirection1);
                 if (this.a(iblockaccess, (BlockPosition) blockposition_pooledblockposition, enumdirection1) || this.a(iblockaccess, blockposition_pooledblockposition.up(), enumdirection1)) {
                     vec3d = vec3d.a().add(0.0D, -6.0D, 0.0D);
                     break;
@@ -127,7 +130,7 @@ public abstract class BlockFluids extends Block {
     }
 
     public Vec3D a(World world, BlockPosition blockposition, Entity entity, Vec3D vec3d) {
-        return vec3d.e(this.f(world, blockposition));
+        return vec3d.e(this.a((IBlockAccess) world, blockposition, world.getType(blockposition)));
     }
 
     public int a(World world) {
@@ -138,7 +141,7 @@ public abstract class BlockFluids extends Block {
         this.e(world, blockposition, iblockdata);
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         this.e(world, blockposition, iblockdata);
     }
 

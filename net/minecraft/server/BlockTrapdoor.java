@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class BlockTrapdoor extends Block {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
@@ -63,7 +65,7 @@ public class BlockTrapdoor extends Block {
         return !((Boolean) iblockaccess.getType(blockposition).get(BlockTrapdoor.OPEN)).booleanValue();
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (this.material == Material.ORE) {
             return true;
         } else {
@@ -74,7 +76,7 @@ public class BlockTrapdoor extends Block {
         }
     }
 
-    protected void a(EntityHuman entityhuman, World world, BlockPosition blockposition, boolean flag) {
+    protected void a(@Nullable EntityHuman entityhuman, World world, BlockPosition blockposition, boolean flag) {
         int i;
 
         if (flag) {
@@ -87,7 +89,7 @@ public class BlockTrapdoor extends Block {
 
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!world.isClientSide) {
             boolean flag = world.isBlockIndirectlyPowered(blockposition);
 

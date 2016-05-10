@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class DragonControllerFly extends AbstractDragonController {
 
     private boolean b;
@@ -19,7 +21,7 @@ public class DragonControllerFly extends AbstractDragonController {
             double d0 = this.a.d(blockposition);
 
             if (d0 > 100.0D) {
-                this.a.cT().a(DragonControllerPhase.a);
+                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
             }
         }
 
@@ -36,7 +38,7 @@ public class DragonControllerFly extends AbstractDragonController {
         Vec3D vec3d = this.a.a(1.0F);
         int j = this.a.l(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
 
-        if (this.a.cU() != null && this.a.cU().c() >= 0) {
+        if (this.a.cV() != null && this.a.cV().c() >= 0) {
             j %= 12;
             if (j < 0) {
                 j += 12;
@@ -69,11 +71,12 @@ public class DragonControllerFly extends AbstractDragonController {
         this.d = new Vec3D(vec3d.x, d0, vec3d.z);
     }
 
+    @Nullable
     public Vec3D g() {
         return this.d;
     }
 
-    public DragonControllerPhase<DragonControllerFly> i() {
+    public DragonControllerPhase<DragonControllerFly> getControllerPhase() {
         return DragonControllerPhase.e;
     }
 }

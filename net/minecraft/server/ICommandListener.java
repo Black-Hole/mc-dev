@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public interface ICommandListener {
 
     String getName();
@@ -16,11 +18,13 @@ public interface ICommandListener {
 
     World getWorld();
 
+    @Nullable
     Entity f();
 
     boolean getSendCommandFeedback();
 
     void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i);
 
+    @Nullable
     MinecraftServer h();
 }

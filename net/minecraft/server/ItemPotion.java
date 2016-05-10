@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class ItemPotion extends Item {
 
@@ -10,6 +11,7 @@ public class ItemPotion extends Item {
         this.a(CreativeModeTab.k);
     }
 
+    @Nullable
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
         EntityHuman entityhuman = entityliving instanceof EntityHuman ? (EntityHuman) entityliving : null;
 

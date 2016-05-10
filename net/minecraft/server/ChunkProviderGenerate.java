@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class ChunkProviderGenerate implements ChunkGenerator {
 
@@ -418,6 +419,7 @@ public class ChunkProviderGenerate implements ChunkGenerator {
         return biomebase.getMobs(enumcreaturetype);
     }
 
+    @Nullable
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
         return "Stronghold".equals(s) && this.w != null ? this.w.getNearestGeneratedFeature(world, blockposition) : null;
     }

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Collection;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public interface AttributeInstance {
 
@@ -17,6 +18,7 @@ public interface AttributeInstance {
 
     boolean a(AttributeModifier attributemodifier);
 
+    @Nullable
     AttributeModifier a(UUID uuid);
 
     void b(AttributeModifier attributemodifier);

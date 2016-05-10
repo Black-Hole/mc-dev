@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public abstract class EntityMinecartContainer extends EntityMinecartAbstract implements ITileInventory, ILootable {
 
@@ -25,16 +26,19 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     }
 
+    @Nullable
     public ItemStack getItem(int i) {
         this.f((EntityHuman) null);
         return this.items[i];
     }
 
+    @Nullable
     public ItemStack splitStack(int i, int j) {
         this.f((EntityHuman) null);
         return ContainerUtil.a(this.items, i, j);
     }
 
+    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         this.f((EntityHuman) null);
         if (this.items[i] != null) {
@@ -47,7 +51,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         }
     }
 
-    public void setItem(int i, ItemStack itemstack) {
+    public void setItem(int i, @Nullable ItemStack itemstack) {
         this.f((EntityHuman) null);
         this.items[i] = itemstack;
         if (itemstack != null && itemstack.count > this.getMaxStackSize()) {
@@ -74,6 +78,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         return 64;
     }
 
+    @Nullable
     public Entity c(int i) {
         this.b = false;
         return super.c(i);
@@ -137,7 +142,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     }
 
-    public boolean a(EntityHuman entityhuman, ItemStack itemstack, EnumHand enumhand) {
+    public boolean a(EntityHuman entityhuman, @Nullable ItemStack itemstack, EnumHand enumhand) {
         if (!this.world.isClientSide) {
             entityhuman.openContainer(this);
         }
@@ -179,7 +184,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         return ChestLock.a;
     }
 
-    public void f(EntityHuman entityhuman) {
+    public void f(@Nullable EntityHuman entityhuman) {
         if (this.c != null) {
             LootTable loottable = this.world.ak().a(this.c);
 
@@ -195,7 +200,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
             LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
             if (entityhuman != null) {
-                loottableinfo_a.a(entityhuman.db());
+                loottableinfo_a.a(entityhuman.dc());
             }
 
             loottable.a(this, random, loottableinfo_a.a());

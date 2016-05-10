@@ -41,7 +41,7 @@ public class PathfinderGoalTame extends PathfinderGoal {
 
     public void e() {
         if (this.entity.getRandom().nextInt(50) == 0) {
-            Entity entity = (Entity) this.entity.bu().get(0);
+            Entity entity = (Entity) this.entity.bv().get(0);
 
             if (entity == null) {
                 return;
@@ -61,7 +61,7 @@ public class PathfinderGoalTame extends PathfinderGoal {
             }
 
             this.entity.az();
-            this.entity.dE();
+            this.entity.dF();
             this.entity.world.broadcastEntityEffect(this.entity, (byte) 6);
         }
 

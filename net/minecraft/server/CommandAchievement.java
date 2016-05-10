@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandAchievement extends CommandAbstract {
 
@@ -88,7 +89,7 @@ public class CommandAchievement extends CommandAbstract {
                                 }
 
                                 arraylist = Lists.newArrayList(Iterators.filter(AchievementList.e.iterator(), new Predicate() {
-                                    public boolean a(Achievement achievement) {
+                                    public boolean a(@Nullable Achievement achievement) {
                                         return entityplayer.getStatisticManager().hasAchievement(achievement) && achievement != statistic;
                                     }
 
@@ -145,7 +146,7 @@ public class CommandAchievement extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         if (astring.length == 1) {
             return a(astring, new String[] { "give", "take"});
         } else if (astring.length != 2) {

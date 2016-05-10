@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockGrassPath extends Block {
 
@@ -23,6 +24,7 @@ public class BlockGrassPath extends Block {
         return false;
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
     }
@@ -31,8 +33,8 @@ public class BlockGrassPath extends Block {
         return new ItemStack(this);
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        super.doPhysics(world, blockposition, iblockdata, block);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+        super.a(iblockdata, world, blockposition, block);
         if (world.getType(blockposition.up()).getMaterial().isBuildable()) {
             world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
         }

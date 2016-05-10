@@ -3,6 +3,7 @@ package net.minecraft.server;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandTestForBlock extends CommandAbstract {
 
@@ -77,9 +78,8 @@ public class CommandTestForBlock extends CommandAbstract {
                                 throw new CommandException("commands.testforblock.failed.tileEntity", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
                             }
 
-                            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                            NBTTagCompound nbttagcompound1 = tileentity.save(new NBTTagCompound());
 
-                            tileentity.save(nbttagcompound1);
                             if (!GameProfileSerializer.a(nbttagcompound, nbttagcompound1, true)) {
                                 throw new CommandException("commands.testforblock.failed.nbt", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
                             }
@@ -93,7 +93,7 @@ public class CommandTestForBlock extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length == 4 ? a(astring, (Collection) Block.REGISTRY.keySet()) : Collections.emptyList());
     }
 }

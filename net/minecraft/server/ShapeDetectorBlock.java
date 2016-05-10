@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
 
 public class ShapeDetectorBlock {
 
@@ -25,6 +26,7 @@ public class ShapeDetectorBlock {
         return this.d;
     }
 
+    @Nullable
     public TileEntity b() {
         if (this.e == null && !this.f) {
             this.e = this.a.getTileEntity(this.b);
@@ -40,7 +42,7 @@ public class ShapeDetectorBlock {
 
     public static Predicate<ShapeDetectorBlock> a(final Predicate<IBlockData> predicate) {
         return new Predicate() {
-            public boolean a(ShapeDetectorBlock shapedetectorblock) {
+            public boolean a(@Nullable ShapeDetectorBlock shapedetectorblock) {
                 return shapedetectorblock != null && predicate.apply(shapedetectorblock.a());
             }
 
@@ -52,7 +54,7 @@ public class ShapeDetectorBlock {
 
     public static Predicate<ShapeDetectorBlock> a(final IBlockData iblockdata) {
         return new Predicate() {
-            public boolean a(ShapeDetectorBlock shapedetectorblock) {
+            public boolean a(@Nullable ShapeDetectorBlock shapedetectorblock) {
                 return shapedetectorblock != null && shapedetectorblock.a().equals(iblockdata);
             }
 

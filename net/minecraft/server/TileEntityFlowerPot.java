@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class TileEntityFlowerPot extends TileEntity {
 
     private Item a;
@@ -12,12 +14,13 @@ public class TileEntityFlowerPot extends TileEntity {
         this.f = i;
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         MinecraftKey minecraftkey = (MinecraftKey) Item.REGISTRY.b(this.a);
 
         nbttagcompound.setString("Item", minecraftkey == null ? "" : minecraftkey.toString());
         nbttagcompound.setInt("Data", this.f);
+        return nbttagcompound;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -31,13 +34,13 @@ public class TileEntityFlowerPot extends TileEntity {
         this.f = nbttagcompound.getInt("Data");
     }
 
-    public Packet<?> getUpdatePacket() {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
+    @Nullable
+    public PacketPlayOutTileEntityData getUpdatePacket() {
+        return new PacketPlayOutTileEntityData(this.position, 5, this.E_());
+    }
 
-        this.save(nbttagcompound);
-        nbttagcompound.remove("Item");
-        nbttagcompound.setInt("Item", Item.getId(this.a));
-        return new PacketPlayOutTileEntityData(this.position, 5, nbttagcompound);
+    public NBTTagCompound E_() {
+        return this.save(new NBTTagCompound());
     }
 
     public void a(Item item, int i) {
@@ -45,15 +48,17 @@ public class TileEntityFlowerPot extends TileEntity {
         this.f = i;
     }
 
-    public ItemStack b() {
+    @Nullable
+    public ItemStack c() {
         return this.a == null ? null : new ItemStack(this.a, 1, this.f);
     }
 
-    public Item c() {
+    @Nullable
+    public Item d() {
         return this.a;
     }
 
-    public int d() {
+    public int e() {
         return this.f;
     }
 }

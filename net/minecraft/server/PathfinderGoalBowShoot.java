@@ -46,7 +46,7 @@ public class PathfinderGoalBowShoot extends PathfinderGoal {
         this.a.a(false);
         this.f = 0;
         this.e = -1;
-        this.a.cz();
+        this.a.cA();
     }
 
     public void e() {
@@ -100,14 +100,14 @@ public class PathfinderGoalBowShoot extends PathfinderGoal {
                 this.a.getControllerLook().a(entityliving, 30.0F, 30.0F);
             }
 
-            if (this.a.cs()) {
+            if (this.a.ct()) {
                 if (!flag && this.f < -60) {
-                    this.a.cz();
+                    this.a.cA();
                 } else if (flag) {
-                    int i = this.a.cx();
+                    int i = this.a.cy();
 
                     if (i >= 20) {
-                        this.a.cz();
+                        this.a.cA();
                         this.a.a(entityliving, ItemBow.b(i));
                         this.e = this.c;
                     }

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,6 +44,7 @@ public class EntityTypes {
         EntityTypes.eggInfo.put(s, new EntityTypes.MonsterEggInfo(s, j, k));
     }
 
+    @Nullable
     public static Entity createEntityByName(String s, World world) {
         Entity entity = null;
 
@@ -59,6 +61,7 @@ public class EntityTypes {
         return entity;
     }
 
+    @Nullable
     public static Entity a(NBTTagCompound nbttagcompound, World world) {
         Entity entity = null;
 
@@ -81,6 +84,7 @@ public class EntityTypes {
         return entity;
     }
 
+    @Nullable
     public static Entity a(int i, World world) {
         Entity entity = null;
 
@@ -101,6 +105,7 @@ public class EntityTypes {
         return entity;
     }
 
+    @Nullable
     public static Entity b(String s, World world) {
         return a(a(s), world);
     }
@@ -111,6 +116,7 @@ public class EntityTypes {
         return integer == null ? 0 : integer.intValue();
     }
 
+    @Nullable
     public static Class<? extends Entity> a(int i) {
         return (Class) EntityTypes.e.get(Integer.valueOf(i));
     }
@@ -241,14 +247,14 @@ public class EntityTypes {
         public final int b;
         public final int c;
         public final Statistic killEntityStatistic;
-        public final Statistic e;
+        public final Statistic killedByEntityStatistic;
 
         public MonsterEggInfo(String s, int i, int j) {
             this.a = s;
             this.b = i;
             this.c = j;
             this.killEntityStatistic = StatisticList.a(this);
-            this.e = StatisticList.b(this);
+            this.killedByEntityStatistic = StatisticList.b(this);
         }
     }
 }

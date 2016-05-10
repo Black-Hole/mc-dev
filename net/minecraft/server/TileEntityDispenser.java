@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class TileEntityDispenser extends TileEntityLootable implements IInventory {
 
@@ -14,11 +15,13 @@ public class TileEntityDispenser extends TileEntityLootable implements IInventor
         return 9;
     }
 
+    @Nullable
     public ItemStack getItem(int i) {
         this.d((EntityHuman) null);
         return this.items[i];
     }
 
+    @Nullable
     public ItemStack splitStack(int i, int j) {
         this.d((EntityHuman) null);
         ItemStack itemstack = ContainerUtil.a(this.items, i, j);
@@ -30,6 +33,7 @@ public class TileEntityDispenser extends TileEntityLootable implements IInventor
         return itemstack;
     }
 
+    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         this.d((EntityHuman) null);
         return ContainerUtil.a(this.items, i);
@@ -49,7 +53,7 @@ public class TileEntityDispenser extends TileEntityLootable implements IInventor
         return i;
     }
 
-    public void setItem(int i, ItemStack itemstack) {
+    public void setItem(int i, @Nullable ItemStack itemstack) {
         this.d((EntityHuman) null);
         this.items[i] = itemstack;
         if (itemstack != null && itemstack.count > this.getMaxStackSize()) {
@@ -84,7 +88,7 @@ public class TileEntityDispenser extends TileEntityLootable implements IInventor
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        if (!this.c(nbttagcompound)) {
+        if (!this.d(nbttagcompound)) {
             NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
 
             this.items = new ItemStack[this.getSize()];
@@ -105,9 +109,9 @@ public class TileEntityDispenser extends TileEntityLootable implements IInventor
 
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (!this.d(nbttagcompound)) {
+        if (!this.e(nbttagcompound)) {
             NBTTagList nbttaglist = new NBTTagList();
 
             for (int i = 0; i < this.items.length; ++i) {
@@ -127,6 +131,7 @@ public class TileEntityDispenser extends TileEntityLootable implements IInventor
             nbttagcompound.setString("CustomName", this.a);
         }
 
+        return nbttagcompound;
     }
 
     public int getMaxStackSize() {

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class IntHashMap<V> {
 
     private transient IntHashMap.IntHashMapEntry<V>[] a = new IntHashMap.IntHashMapEntry[16];
@@ -18,6 +20,7 @@ public class IntHashMap<V> {
         return i & j - 1;
     }
 
+    @Nullable
     public V get(int i) {
         int j = g(i);
 
@@ -34,6 +37,7 @@ public class IntHashMap<V> {
         return this.c(i) != null;
     }
 
+    @Nullable
     final IntHashMap.IntHashMapEntry<V> c(int i) {
         int j = g(i);
 
@@ -100,12 +104,14 @@ public class IntHashMap<V> {
 
     }
 
+    @Nullable
     public V d(int i) {
         IntHashMap.IntHashMapEntry inthashmap_inthashmapentry = this.e(i);
 
         return inthashmap_inthashmapentry == null ? null : inthashmap_inthashmapentry.b;
     }
 
+    @Nullable
     final IntHashMap.IntHashMapEntry<V> e(int i) {
         int j = g(i);
         int k = a(j, this.a.length);

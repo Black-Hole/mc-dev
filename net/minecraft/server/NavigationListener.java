@@ -1,26 +1,21 @@
 package net.minecraft.server;
 
-import java.util.WeakHashMap;
+import com.google.common.collect.Lists;
+import java.util.List;
+import javax.annotation.Nullable;
 
 public class NavigationListener implements IWorldAccess {
 
-    private static final Object a = new Object();
-    private final WeakHashMap<NavigationAbstract, Object> b = new WeakHashMap();
+    private final List<NavigationAbstract> a = Lists.newArrayList();
 
     public NavigationListener() {}
 
-    public void a(NavigationAbstract navigationabstract) {
-        this.b.put(navigationabstract, NavigationListener.a);
-    }
-
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, int i) {
         if (this.a(world, blockposition, iblockdata, iblockdata1)) {
-            NavigationAbstract[] anavigationabstract = (NavigationAbstract[]) this.b.keySet().toArray(new NavigationAbstract[0]);
-            NavigationAbstract[] anavigationabstract1 = anavigationabstract;
-            int j = anavigationabstract.length;
+            int j = 0;
 
-            for (int k = 0; k < j; ++k) {
-                NavigationAbstract navigationabstract = anavigationabstract1[k];
+            for (int k = this.a.size(); j < k; ++j) {
+                NavigationAbstract navigationabstract = (NavigationAbstract) this.a.get(j);
 
                 if (navigationabstract != null && !navigationabstract.i()) {
                     PathEntity pathentity = navigationabstract.k();
@@ -51,13 +46,23 @@ public class NavigationListener implements IWorldAccess {
 
     public void a(int i, int j, int k, int l, int i1, int j1) {}
 
-    public void a(EntityHuman entityhuman, SoundEffect soundeffect, SoundCategory soundcategory, double d0, double d1, double d2, float f, float f1) {}
+    public void a(@Nullable EntityHuman entityhuman, SoundEffect soundeffect, SoundCategory soundcategory, double d0, double d1, double d2, float f, float f1) {}
 
     public void a(int i, boolean flag, double d0, double d1, double d2, double d3, double d4, double d5, int... aint) {}
 
-    public void a(Entity entity) {}
+    public void a(Entity entity) {
+        if (entity instanceof EntityInsentient) {
+            this.a.add(((EntityInsentient) entity).getNavigation());
+        }
 
-    public void b(Entity entity) {}
+    }
+
+    public void b(Entity entity) {
+        if (entity instanceof EntityInsentient) {
+            this.a.remove(((EntityInsentient) entity).getNavigation());
+        }
+
+    }
 
     public void a(SoundEffect soundeffect, BlockPosition blockposition) {}
 

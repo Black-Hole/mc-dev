@@ -34,7 +34,7 @@ public class BlockCactus extends Block {
                     IBlockData iblockdata1 = iblockdata.set(BlockCactus.AGE, Integer.valueOf(0));
 
                     world.setTypeAndData(blockposition, iblockdata1, 4);
-                    this.doPhysics(world, blockposition1, iblockdata1, this);
+                    iblockdata1.doPhysics(world, blockposition1, this);
                 } else {
                     world.setTypeAndData(blockposition, iblockdata.set(BlockCactus.AGE, Integer.valueOf(j + 1)), 4);
                 }
@@ -59,7 +59,7 @@ public class BlockCactus extends Block {
         return super.canPlace(world, blockposition) ? this.b(world, blockposition) : false;
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!this.b(world, blockposition)) {
             world.setAir(blockposition, true);
         }

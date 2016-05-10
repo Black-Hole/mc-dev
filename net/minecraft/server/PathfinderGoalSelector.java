@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Sets;
 import java.util.Iterator;
 import java.util.Set;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -164,7 +165,7 @@ public class PathfinderGoalSelector {
             this.a = pathfindergoal;
         }
 
-        public boolean equals(Object object) {
+        public boolean equals(@Nullable Object object) {
             return this == object ? true : (object != null && this.getClass() == object.getClass() ? this.a.equals(((PathfinderGoalSelector.PathfinderGoalSelectorItem) object).a) : false);
         }
 

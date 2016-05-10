@@ -4,7 +4,7 @@ public interface IMerchant {
 
     void setTradingPlayer(EntityHuman entityhuman);
 
-    EntityHuman t_();
+    EntityHuman getTrader();
 
     MerchantRecipeList getOffers(EntityHuman entityhuman);
 

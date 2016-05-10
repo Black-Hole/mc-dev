@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class WorldProviderTheEnd extends WorldProvider {
 
     private EnderDragonBattle g = null;
@@ -63,6 +65,7 @@ public class WorldProviderTheEnd extends WorldProvider {
 
     }
 
+    @Nullable
     public EnderDragonBattle s() {
         return this.g;
     }

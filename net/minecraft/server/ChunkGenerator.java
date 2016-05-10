@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 public interface ChunkGenerator {
 
@@ -12,6 +13,7 @@ public interface ChunkGenerator {
 
     List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition);
 
+    @Nullable
     BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition);
 
     void recreateStructures(Chunk chunk, int i, int j);

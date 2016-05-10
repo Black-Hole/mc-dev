@@ -3,6 +3,7 @@ package net.minecraft.server;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class WorldChunkManagerHell extends WorldChunkManager {
 
@@ -25,7 +26,7 @@ public class WorldChunkManagerHell extends WorldChunkManager {
         return abiomebase;
     }
 
-    public BiomeBase[] getBiomeBlock(BiomeBase[] abiomebase, int i, int j, int k, int l) {
+    public BiomeBase[] getBiomeBlock(@Nullable BiomeBase[] abiomebase, int i, int j, int k, int l) {
         if (abiomebase == null || abiomebase.length < k * l) {
             abiomebase = new BiomeBase[k * l];
         }
@@ -34,10 +35,11 @@ public class WorldChunkManagerHell extends WorldChunkManager {
         return abiomebase;
     }
 
-    public BiomeBase[] a(BiomeBase[] abiomebase, int i, int j, int k, int l, boolean flag) {
+    public BiomeBase[] a(@Nullable BiomeBase[] abiomebase, int i, int j, int k, int l, boolean flag) {
         return this.getBiomeBlock(abiomebase, i, j, k, l);
     }
 
+    @Nullable
     public BlockPosition a(int i, int j, int k, List<BiomeBase> list, Random random) {
         return list.contains(this.a) ? new BlockPosition(i - k + random.nextInt(k * 2 + 1), 0, j - k + random.nextInt(k * 2 + 1)) : null;
     }

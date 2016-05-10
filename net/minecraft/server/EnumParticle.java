@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public enum EnumParticle {
 
@@ -46,10 +47,12 @@ public enum EnumParticle {
         return this.W;
     }
 
+    @Nullable
     public static EnumParticle a(int i) {
         return (EnumParticle) EnumParticle.Y.get(Integer.valueOf(i));
     }
 
+    @Nullable
     public static EnumParticle a(String s) {
         return (EnumParticle) EnumParticle.Z.get(s);
     }

@@ -4,11 +4,12 @@ import com.google.common.base.Predicate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
     public static final BlockStateEnum<BlockMinecartTrackAbstract.EnumTrackPosition> SHAPE = BlockStateEnum.a("shape", BlockMinecartTrackAbstract.EnumTrackPosition.class, new Predicate() {
-        public boolean a(BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition) {
+        public boolean a(@Nullable BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition) {
             return blockminecarttrackabstract_enumtrackposition != BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_EAST && blockminecarttrackabstract_enumtrackposition != BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_WEST && blockminecarttrackabstract_enumtrackposition != BlockMinecartTrackAbstract.EnumTrackPosition.SOUTH_EAST && blockminecarttrackabstract_enumtrackposition != BlockMinecartTrackAbstract.EnumTrackPosition.SOUTH_WEST;
         }
 
@@ -98,7 +99,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
             IBlockData iblockdata1 = world.getType(blockposition1);
 
             if (iblockdata1 != null) {
-                iblockdata1.getBlock().doPhysics(world, blockposition1, iblockdata1, iblockdata1.getBlock());
+                iblockdata1.doPhysics(world, blockposition1, iblockdata1.getBlock());
             }
         }
 

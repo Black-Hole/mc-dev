@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Sets;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public class PathfinderGoalTempt extends PathfinderGoal {
 
@@ -43,7 +44,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
         }
     }
 
-    protected boolean a(ItemStack itemstack) {
+    protected boolean a(@Nullable ItemStack itemstack) {
         return itemstack == null ? false : this.k.contains(itemstack.getItem());
     }
 
@@ -85,7 +86,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
     }
 
     public void e() {
-        this.a.getControllerLook().a(this.h, (float) (this.a.cE() + 20), (float) this.a.N());
+        this.a.getControllerLook().a(this.h, (float) (this.a.cF() + 20), (float) this.a.N());
         if (this.a.h(this.h) < 6.25D) {
             this.a.getNavigation().o();
         } else {

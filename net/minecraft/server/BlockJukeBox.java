@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class BlockJukeBox extends BlockTileEntity {
 
     public static final BlockStateBoolean HAS_RECORD = BlockStateBoolean.of("has_record");
@@ -10,7 +12,7 @@ public class BlockJukeBox extends BlockTileEntity {
         this.a(CreativeModeTab.c);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (((Boolean) iblockdata.get(BlockJukeBox.HAS_RECORD)).booleanValue()) {
             this.dropRecord(world, blockposition, iblockdata);
             iblockdata = iblockdata.set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false));
@@ -123,19 +125,21 @@ public class BlockJukeBox extends BlockTileEntity {
 
         }
 
-        public void save(NBTTagCompound nbttagcompound) {
+        public NBTTagCompound save(NBTTagCompound nbttagcompound) {
             super.save(nbttagcompound);
             if (this.getRecord() != null) {
                 nbttagcompound.set("RecordItem", this.getRecord().save(new NBTTagCompound()));
             }
 
+            return nbttagcompound;
         }
 
+        @Nullable
         public ItemStack getRecord() {
             return this.record;
         }
 
-        public void setRecord(ItemStack itemstack) {
+        public void setRecord(@Nullable ItemStack itemstack) {
             this.record = itemstack;
             this.update();
         }

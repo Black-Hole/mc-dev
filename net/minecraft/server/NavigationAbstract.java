@@ -1,10 +1,13 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public abstract class NavigationAbstract {
 
     private static int f = 20;
     protected EntityInsentient a;
     protected World b;
+    @Nullable
     protected PathEntity c;
     protected double d;
     private final AttributeInstance g;
@@ -32,7 +35,6 @@ public abstract class NavigationAbstract {
         this.b = world;
         this.g = entityinsentient.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
         this.s = this.a();
-        this.b.C().a(this);
     }
 
     protected abstract Pathfinder a();
@@ -63,10 +65,12 @@ public abstract class NavigationAbstract {
 
     }
 
+    @Nullable
     public final PathEntity a(double d0, double d1, double d2) {
         return this.a(new BlockPosition(MathHelper.floor(d0), (int) d1, MathHelper.floor(d2)));
     }
 
+    @Nullable
     public PathEntity a(BlockPosition blockposition) {
         if (!this.b()) {
             return null;
@@ -87,6 +91,7 @@ public abstract class NavigationAbstract {
         }
     }
 
+    @Nullable
     public PathEntity a(Entity entity) {
         if (!this.b()) {
             return null;
@@ -123,7 +128,7 @@ public abstract class NavigationAbstract {
         return pathentity != null ? this.a(pathentity, d0) : false;
     }
 
-    public boolean a(PathEntity pathentity, double d0) {
+    public boolean a(@Nullable PathEntity pathentity, double d0) {
         if (pathentity == null) {
             this.c = null;
             return false;
@@ -146,6 +151,7 @@ public abstract class NavigationAbstract {
         }
     }
 
+    @Nullable
     public PathEntity k() {
         return this.c;
     }
@@ -202,7 +208,7 @@ public abstract class NavigationAbstract {
         }
 
         int k = MathHelper.f(this.a.width);
-        int l = (int) this.a.length + 1;
+        int l = MathHelper.f(this.a.length);
         int i1 = k;
 
         for (int j1 = i - 1; j1 >= this.c.e(); --j1) {
@@ -232,7 +238,7 @@ public abstract class NavigationAbstract {
                 this.k = vec3d1;
                 double d0 = vec3d.f(this.k);
 
-                this.n = this.a.ck() > 0.0F ? d0 / (double) this.a.ck() * 1000.0D : 0.0D;
+                this.n = this.a.cl() > 0.0F ? d0 / (double) this.a.cl() * 1000.0D : 0.0D;
             } else {
                 this.l += System.currentTimeMillis() - this.m;
             }
@@ -271,5 +277,9 @@ public abstract class NavigationAbstract {
 
     public boolean b(BlockPosition blockposition) {
         return this.b.getType(blockposition.down()).b();
+    }
+
+    public PathfinderAbstract q() {
+        return this.e;
     }
 }

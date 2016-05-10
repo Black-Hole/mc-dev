@@ -7,6 +7,7 @@ import com.google.common.collect.Multimap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class Item {
 
@@ -40,6 +41,7 @@ public class Item {
         return (Item) Item.REGISTRY.getId(i);
     }
 
+    @Nullable
     public static Item getItemOf(Block block) {
         return (Item) Item.a.get(block);
     }
@@ -88,6 +90,7 @@ public class Item {
         return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
     }
 
+    @Nullable
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
         return itemstack;
     }
@@ -256,7 +259,8 @@ public class Item {
 
     public static void t() {
         a(Blocks.STONE, (Item) (new ItemMultiTexture(Blocks.STONE, Blocks.STONE, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockStone.EnumStoneVariant.a(itemstack.getData()).d();
             }
 
@@ -266,7 +270,8 @@ public class Item {
         })).b("stone"));
         a((Block) Blocks.GRASS, (Item) (new ItemWithAuxData(Blocks.GRASS, false)));
         a(Blocks.DIRT, (Item) (new ItemMultiTexture(Blocks.DIRT, Blocks.DIRT, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockDirt.EnumDirtVariant.a(itemstack.getData()).c();
             }
 
@@ -276,7 +281,8 @@ public class Item {
         })).b("dirt"));
         b(Blocks.COBBLESTONE);
         a(Blocks.PLANKS, (Item) (new ItemMultiTexture(Blocks.PLANKS, Blocks.PLANKS, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockWood.EnumLogVariant.a(itemstack.getData()).d();
             }
 
@@ -285,7 +291,8 @@ public class Item {
             }
         })).b("wood"));
         a(Blocks.SAPLING, (Item) (new ItemMultiTexture(Blocks.SAPLING, Blocks.SAPLING, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockWood.EnumLogVariant.a(itemstack.getData()).d();
             }
 
@@ -295,7 +302,8 @@ public class Item {
         })).b("sapling"));
         b(Blocks.BEDROCK);
         a((Block) Blocks.SAND, (Item) (new ItemMultiTexture(Blocks.SAND, Blocks.SAND, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockSand.EnumSandVariant.a(itemstack.getData()).d();
             }
 
@@ -308,7 +316,8 @@ public class Item {
         b(Blocks.IRON_ORE);
         b(Blocks.COAL_ORE);
         a(Blocks.LOG, (Item) (new ItemMultiTexture(Blocks.LOG, Blocks.LOG, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockWood.EnumLogVariant.a(itemstack.getData()).d();
             }
 
@@ -317,7 +326,8 @@ public class Item {
             }
         })).b("log"));
         a(Blocks.LOG2, (Item) (new ItemMultiTexture(Blocks.LOG2, Blocks.LOG2, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockWood.EnumLogVariant.a(itemstack.getData() + 4).d();
             }
 
@@ -328,7 +338,8 @@ public class Item {
         a((Block) Blocks.LEAVES, (Item) (new ItemLeaves(Blocks.LEAVES)).b("leaves"));
         a((Block) Blocks.LEAVES2, (Item) (new ItemLeaves(Blocks.LEAVES2)).b("leaves"));
         a(Blocks.SPONGE, (Item) (new ItemMultiTexture(Blocks.SPONGE, Blocks.SPONGE, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return (itemstack.getData() & 1) == 1 ? "wet" : "dry";
             }
 
@@ -341,7 +352,8 @@ public class Item {
         b(Blocks.LAPIS_BLOCK);
         b(Blocks.DISPENSER);
         a(Blocks.SANDSTONE, (Item) (new ItemMultiTexture(Blocks.SANDSTONE, Blocks.SANDSTONE, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockSandStone.EnumSandstoneVariant.a(itemstack.getData()).c();
             }
 
@@ -359,7 +371,8 @@ public class Item {
         a((Block) Blocks.PISTON, (Item) (new ItemPiston(Blocks.PISTON)));
         a(Blocks.WOOL, (Item) (new ItemCloth(Blocks.WOOL)).b("cloth"));
         a((Block) Blocks.YELLOW_FLOWER, (Item) (new ItemMultiTexture(Blocks.YELLOW_FLOWER, Blocks.YELLOW_FLOWER, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockFlowers.EnumFlowerVarient.a(BlockFlowers.EnumFlowerType.YELLOW, itemstack.getData()).d();
             }
 
@@ -368,7 +381,8 @@ public class Item {
             }
         })).b("flower"));
         a((Block) Blocks.RED_FLOWER, (Item) (new ItemMultiTexture(Blocks.RED_FLOWER, Blocks.RED_FLOWER, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockFlowers.EnumFlowerVarient.a(BlockFlowers.EnumFlowerType.RED, itemstack.getData()).d();
             }
 
@@ -430,7 +444,8 @@ public class Item {
         b(Blocks.LIT_PUMPKIN);
         b(Blocks.TRAPDOOR);
         a(Blocks.MONSTER_EGG, (Item) (new ItemMultiTexture(Blocks.MONSTER_EGG, Blocks.MONSTER_EGG, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockMonsterEggs.EnumMonsterEggVarient.a(itemstack.getData()).c();
             }
 
@@ -439,7 +454,8 @@ public class Item {
             }
         })).b("monsterStoneEgg"));
         a(Blocks.STONEBRICK, (Item) (new ItemMultiTexture(Blocks.STONEBRICK, Blocks.STONEBRICK, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockSmoothBrick.EnumStonebrickType.a(itemstack.getData()).c();
             }
 
@@ -484,7 +500,8 @@ public class Item {
         b(Blocks.COMMAND_BLOCK);
         b((Block) Blocks.BEACON);
         a(Blocks.COBBLESTONE_WALL, (Item) (new ItemMultiTexture(Blocks.COBBLESTONE_WALL, Blocks.COBBLESTONE_WALL, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockCobbleWall.EnumCobbleVariant.a(itemstack.getData()).c();
             }
 
@@ -518,7 +535,8 @@ public class Item {
         b(Blocks.SLIME);
         b(Blocks.GRASS_PATH);
         a((Block) Blocks.DOUBLE_PLANT, (Item) (new ItemMultiTexture(Blocks.DOUBLE_PLANT, Blocks.DOUBLE_PLANT, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockTallPlant.EnumTallFlowerVariants.a(itemstack.getData()).c();
             }
 
@@ -529,7 +547,8 @@ public class Item {
         a((Block) Blocks.STAINED_GLASS, (Item) (new ItemCloth(Blocks.STAINED_GLASS)).b("stainedGlass"));
         a((Block) Blocks.STAINED_GLASS_PANE, (Item) (new ItemCloth(Blocks.STAINED_GLASS_PANE)).b("stainedGlassPane"));
         a(Blocks.PRISMARINE, (Item) (new ItemMultiTexture(Blocks.PRISMARINE, Blocks.PRISMARINE, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockPrismarine.EnumPrismarineVariant.a(itemstack.getData()).c();
             }
 
@@ -539,7 +558,8 @@ public class Item {
         })).b("prismarine"));
         b(Blocks.SEA_LANTERN);
         a(Blocks.RED_SANDSTONE, (Item) (new ItemMultiTexture(Blocks.RED_SANDSTONE, Blocks.RED_SANDSTONE, new Function() {
-            public String a(ItemStack itemstack) {
+            @Nullable
+            public String a(@Nullable ItemStack itemstack) {
                 return BlockRedSandstone.EnumRedSandstoneVariant.a(itemstack.getData()).c();
             }
 

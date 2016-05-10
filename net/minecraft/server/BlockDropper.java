@@ -1,12 +1,14 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class BlockDropper extends BlockDispenser {
 
     private final IDispenseBehavior e = new DispenseBehaviorItem();
 
     public BlockDropper() {}
 
-    protected IDispenseBehavior a(ItemStack itemstack) {
+    protected IDispenseBehavior a(@Nullable ItemStack itemstack) {
         return this.e;
     }
 

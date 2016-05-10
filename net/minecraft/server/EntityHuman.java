@@ -8,33 +8,34 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public abstract class EntityHuman extends EntityLiving {
 
     private static final DataWatcherObject<Float> a = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.c);
     private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.b);
-    protected static final DataWatcherObject<Byte> bp = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.a);
     protected static final DataWatcherObject<Byte> bq = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.a);
+    protected static final DataWatcherObject<Byte> br = DataWatcher.a(EntityHuman.class, DataWatcherRegistry.a);
     public PlayerInventory inventory = new PlayerInventory(this);
     private InventoryEnderChest enderChest = new InventoryEnderChest();
     public Container defaultContainer;
     public Container activeContainer;
     protected FoodMetaData foodData = new FoodMetaData();
-    protected int bv;
-    public float bw;
+    protected int bw;
     public float bx;
-    public int by;
-    public double bz;
+    public float by;
+    public int bz;
     public double bA;
     public double bB;
     public double bC;
     public double bD;
     public double bE;
+    public double bF;
     public boolean sleeping;
     public BlockPosition bedPosition;
     public int sleepTicks;
-    public float bH;
     public float bI;
+    public float bJ;
     private BlockPosition e;
     private boolean f;
     private BlockPosition g;
@@ -43,13 +44,13 @@ public abstract class EntityHuman extends EntityLiving {
     public int expTotal;
     public float exp;
     private int h;
-    protected float bN = 0.1F;
-    protected float bO = 0.02F;
-    private int bQ;
-    private final GameProfile bR;
-    private boolean bS = false;
-    private ItemStack bT = null;
-    private final ItemCooldown bU = this.l();
+    protected float bO = 0.1F;
+    protected float bP = 0.02F;
+    private int bR;
+    private final GameProfile bS;
+    private boolean bT = false;
+    private ItemStack bU = null;
+    private final ItemCooldown bV = this.l();
     public EntityFishingHook hookedFish;
 
     protected ItemCooldown l() {
@@ -58,14 +59,14 @@ public abstract class EntityHuman extends EntityLiving {
 
     public EntityHuman(World world, GameProfile gameprofile) {
         super(world);
-        this.uniqueID = a(gameprofile);
-        this.bR = gameprofile;
+        this.a(a(gameprofile));
+        this.bS = gameprofile;
         this.defaultContainer = new ContainerPlayer(this.inventory, !world.isClientSide, this);
         this.activeContainer = this.defaultContainer;
         BlockPosition blockposition = world.getSpawn();
 
         this.setPositionRotation((double) blockposition.getX() + 0.5D, (double) (blockposition.getY() + 1), (double) blockposition.getZ() + 0.5D, 0.0F, 0.0F);
-        this.aZ = 180.0F;
+        this.ba = 180.0F;
         this.maxFireTicks = 20;
     }
 
@@ -81,8 +82,8 @@ public abstract class EntityHuman extends EntityLiving {
         super.i();
         this.datawatcher.register(EntityHuman.a, Float.valueOf(0.0F));
         this.datawatcher.register(EntityHuman.b, Integer.valueOf(0));
-        this.datawatcher.register(EntityHuman.bp, Byte.valueOf((byte) 0));
-        this.datawatcher.register(EntityHuman.bq, Byte.valueOf((byte) 1));
+        this.datawatcher.register(EntityHuman.bq, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityHuman.br, Byte.valueOf((byte) 1));
     }
 
     public void m() {
@@ -91,8 +92,8 @@ public abstract class EntityHuman extends EntityLiving {
             this.onGround = false;
         }
 
-        if (this.by > 0) {
-            --this.by;
+        if (this.bz > 0) {
+            --this.bz;
         }
 
         if (this.isSleeping()) {
@@ -150,64 +151,64 @@ public abstract class EntityHuman extends EntityLiving {
             this.setPosition(d0, this.locY, d1);
         }
 
-        ++this.aD;
+        ++this.aE;
         ItemStack itemstack = this.getItemInMainHand();
 
-        if (!ItemStack.matches(this.bT, itemstack)) {
-            if (!ItemStack.d(this.bT, itemstack)) {
-                this.cZ();
+        if (!ItemStack.matches(this.bU, itemstack)) {
+            if (!ItemStack.d(this.bU, itemstack)) {
+                this.da();
             }
 
-            this.bT = itemstack == null ? null : itemstack.cloneItemStack();
+            this.bU = itemstack == null ? null : itemstack.cloneItemStack();
         }
 
-        this.bU.a();
-        this.cE();
+        this.bV.a();
+        this.cF();
     }
 
     private void o() {
-        this.bz = this.bC;
         this.bA = this.bD;
         this.bB = this.bE;
-        double d0 = this.locX - this.bC;
-        double d1 = this.locY - this.bD;
-        double d2 = this.locZ - this.bE;
+        this.bC = this.bF;
+        double d0 = this.locX - this.bD;
+        double d1 = this.locY - this.bE;
+        double d2 = this.locZ - this.bF;
         double d3 = 10.0D;
 
         if (d0 > d3) {
-            this.bz = this.bC = this.locX;
+            this.bA = this.bD = this.locX;
         }
 
         if (d2 > d3) {
-            this.bB = this.bE = this.locZ;
+            this.bC = this.bF = this.locZ;
         }
 
         if (d1 > d3) {
-            this.bA = this.bD = this.locY;
+            this.bB = this.bE = this.locY;
         }
 
         if (d0 < -d3) {
-            this.bz = this.bC = this.locX;
+            this.bA = this.bD = this.locX;
         }
 
         if (d2 < -d3) {
-            this.bB = this.bE = this.locZ;
+            this.bC = this.bF = this.locZ;
         }
 
         if (d1 < -d3) {
-            this.bA = this.bD = this.locY;
+            this.bB = this.bE = this.locY;
         }
 
-        this.bC += d0 * 0.25D;
-        this.bE += d2 * 0.25D;
-        this.bD += d1 * 0.25D;
+        this.bD += d0 * 0.25D;
+        this.bF += d2 * 0.25D;
+        this.bE += d1 * 0.25D;
     }
 
-    protected void cE() {
+    protected void cF() {
         float f = this.width;
         float f1 = this.length;
 
-        if (this.cB()) {
+        if (this.cC()) {
             f = 0.6F;
             f1 = 0.6F;
         } else if (this.isSleeping()) {
@@ -249,14 +250,14 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public void a(SoundEffect soundeffect, float f, float f1) {
-        this.world.a(this, this.locX, this.locY, this.locZ, soundeffect, this.bz(), f, f1);
+        this.world.a(this, this.locX, this.locY, this.locZ, soundeffect, this.bA(), f, f1);
     }
 
-    public SoundCategory bz() {
+    public SoundCategory bA() {
         return SoundCategory.PLAYERS;
     }
 
-    protected boolean cf() {
+    protected boolean cg() {
         return this.getHealth() <= 0.0F || this.isSleeping();
     }
 
@@ -276,13 +277,13 @@ public abstract class EntityHuman extends EntityLiving {
             float f1 = this.pitch;
 
             super.aw();
-            this.bw = this.bx;
-            this.bx = 0.0F;
+            this.bx = this.by;
+            this.by = 0.0F;
             this.m(this.locX - d0, this.locY - d1, this.locZ - d2);
-            if (this.by() instanceof EntityPig) {
+            if (this.bz() instanceof EntityPig) {
                 this.pitch = f1;
                 this.yaw = f;
-                this.aM = ((EntityPig) this.by()).aM;
+                this.aN = ((EntityPig) this.bz()).aN;
             }
 
         }
@@ -290,13 +291,13 @@ public abstract class EntityHuman extends EntityLiving {
 
     protected void doTick() {
         super.doTick();
-        this.bY();
-        this.aO = this.yaw;
+        this.bZ();
+        this.aP = this.yaw;
     }
 
     public void n() {
-        if (this.bv > 0) {
-            --this.bv;
+        if (this.bw > 0) {
+            --this.bw;
         }
 
         if (this.world.getDifficulty() == EnumDifficulty.PEACEFUL && this.world.getGameRules().getBoolean("naturalRegeneration")) {
@@ -310,7 +311,7 @@ public abstract class EntityHuman extends EntityLiving {
         }
 
         this.inventory.m();
-        this.bw = this.bx;
+        this.bx = this.by;
         super.n();
         AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
@@ -318,9 +319,9 @@ public abstract class EntityHuman extends EntityLiving {
             attributeinstance.setValue((double) this.abilities.b());
         }
 
-        this.aQ = this.bO;
+        this.aR = this.bP;
         if (this.isSprinting()) {
-            this.aQ = (float) ((double) this.aQ + (double) this.bO * 0.3D);
+            this.aR = (float) ((double) this.aR + (double) this.bP * 0.3D);
         }
 
         this.l((float) attributeinstance.getValue());
@@ -339,13 +340,13 @@ public abstract class EntityHuman extends EntityLiving {
             f1 = 0.0F;
         }
 
-        this.bx += (f - this.bx) * 0.4F;
-        this.aJ += (f1 - this.aJ) * 0.8F;
+        this.by += (f - this.by) * 0.4F;
+        this.aK += (f1 - this.aK) * 0.8F;
         if (this.getHealth() > 0.0F && !this.isSpectator()) {
             AxisAlignedBB axisalignedbb = null;
 
-            if (this.isPassenger() && !this.by().dead) {
-                axisalignedbb = this.getBoundingBox().a(this.by().getBoundingBox()).grow(1.0D, 0.0D, 1.0D);
+            if (this.isPassenger() && !this.bz().dead) {
+                axisalignedbb = this.getBoundingBox().a(this.bz().getBoundingBox()).grow(1.0D, 0.0D, 1.0D);
             } else {
                 axisalignedbb = this.getBoundingBox().grow(1.0D, 0.5D, 1.0D);
             }
@@ -395,8 +396,8 @@ public abstract class EntityHuman extends EntityLiving {
         }
 
         if (damagesource != null) {
-            this.motX = (double) (-MathHelper.cos((this.az + this.yaw) * 0.017453292F) * 0.1F);
-            this.motZ = (double) (-MathHelper.sin((this.az + this.yaw) * 0.017453292F) * 0.1F);
+            this.motX = (double) (-MathHelper.cos((this.aA + this.yaw) * 0.017453292F) * 0.1F);
+            this.motZ = (double) (-MathHelper.sin((this.aA + this.yaw) * 0.017453292F) * 0.1F);
         } else {
             this.motX = this.motZ = 0.0D;
         }
@@ -405,11 +406,11 @@ public abstract class EntityHuman extends EntityLiving {
         this.a(StatisticList.h);
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.ENTITY_PLAYER_HURT;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.eg;
     }
 
@@ -439,7 +440,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     private Collection<ScoreboardObjective> d(Entity entity) {
-        String s = entity instanceof EntityHuman ? entity.getName() : entity.getUniqueID().toString();
+        String s = entity instanceof EntityHuman ? entity.getName() : entity.bd();
         ScoreboardTeam scoreboardteam = this.getScoreboard().getPlayerTeam(this.getName());
 
         if (scoreboardteam != null) {
@@ -470,15 +471,18 @@ public abstract class EntityHuman extends EntityLiving {
         return Lists.newArrayList();
     }
 
+    @Nullable
     public EntityItem a(boolean flag) {
         return this.a(this.inventory.splitStack(this.inventory.itemInHandIndex, flag && this.inventory.getItemInHand() != null ? this.inventory.getItemInHand().count : 1), false, true);
     }
 
-    public EntityItem drop(ItemStack itemstack, boolean flag) {
+    @Nullable
+    public EntityItem drop(@Nullable ItemStack itemstack, boolean flag) {
         return this.a(itemstack, false, false);
     }
 
-    public EntityItem a(ItemStack itemstack, boolean flag, boolean flag1) {
+    @Nullable
+    public EntityItem a(@Nullable ItemStack itemstack, boolean flag, boolean flag1) {
         if (itemstack == null) {
             return null;
         } else if (itemstack.count == 0) {
@@ -527,11 +531,10 @@ public abstract class EntityHuman extends EntityLiving {
         }
     }
 
+    @Nullable
     protected ItemStack a(EntityItem entityitem) {
         this.world.addEntity(entityitem);
-        ItemStack itemstack = entityitem.getItemStack();
-
-        return itemstack;
+        return entityitem.getItemStack();
     }
 
     public float a(IBlockData iblockdata) {
@@ -591,7 +594,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.uniqueID = a(this.bR);
+        this.a(a(this.bS));
         NBTTagList nbttaglist = nbttagcompound.getList("Inventory", 10);
 
         this.inventory.b(nbttaglist);
@@ -629,7 +632,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("DataVersion", 176);
+        nbttagcompound.setInt("DataVersion", 184);
         nbttagcompound.set("Inventory", this.inventory.a(new NBTTagList()));
         nbttagcompound.setInt("SelectedItemSlot", this.inventory.itemInHandIndex);
         nbttagcompound.setBoolean("Sleeping", this.sleeping);
@@ -706,12 +709,12 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     protected void k(float f) {
-        if (f >= 3.0F && this.bm != null && this.bm.getItem() == Items.SHIELD) {
+        if (f >= 3.0F && this.bn != null && this.bn.getItem() == Items.SHIELD) {
             int i = 1 + MathHelper.d(f);
 
-            this.bm.damage(i, this);
-            if (this.bm.count <= 0) {
-                EnumHand enumhand = this.ct();
+            this.bn.damage(i, this);
+            if (this.bn.count <= 0) {
+                EnumHand enumhand = this.cu();
 
                 if (enumhand == EnumHand.MAIN_HAND) {
                     this.setSlot(EnumItemSlot.MAINHAND, (ItemStack) null);
@@ -719,14 +722,14 @@ public abstract class EntityHuman extends EntityLiving {
                     this.setSlot(EnumItemSlot.OFFHAND, (ItemStack) null);
                 }
 
-                this.bm = null;
+                this.bn = null;
                 this.a(SoundEffects.eS, 0.8F, 0.8F + this.world.random.nextFloat() * 0.4F);
             }
         }
 
     }
 
-    public float cG() {
+    public float cH() {
         int i = 0;
         ItemStack[] aitemstack = this.inventory.armor;
         int j = aitemstack.length;
@@ -780,7 +783,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void a(ItemStack itemstack, EnumHand enumhand) {}
 
-    public EnumInteractionResult a(Entity entity, ItemStack itemstack, EnumHand enumhand) {
+    public EnumInteractionResult a(Entity entity, @Nullable ItemStack itemstack, EnumHand enumhand) {
         if (this.isSpectator()) {
             if (entity instanceof IInventory) {
                 this.openContainer((IInventory) entity);
@@ -845,7 +848,7 @@ public abstract class EntityHuman extends EntityLiving {
 
                 f *= 0.2F + f2 * f2 * 0.8F;
                 f1 *= f2;
-                this.cZ();
+                this.da();
                 if (f > 0.0F || f1 > 0.0F) {
                     boolean flag = f2 > 0.9F;
                     boolean flag1 = false;
@@ -855,7 +858,7 @@ public abstract class EntityHuman extends EntityLiving {
                     int i = b0 + EnchantmentManager.a((EntityLiving) this);
 
                     if (this.isSprinting() && flag) {
-                        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dY, this.bz(), 1.0F, 1.0F);
+                        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dY, this.bA(), 1.0F, 1.0F);
                         ++i;
                         flag1 = true;
                     }
@@ -869,7 +872,7 @@ public abstract class EntityHuman extends EntityLiving {
                     f += f1;
                     double d0 = (double) (this.J - this.I);
 
-                    if (flag && !flag2 && !flag1 && this.onGround && d0 < (double) this.ck()) {
+                    if (flag && !flag2 && !flag1 && this.onGround && d0 < (double) this.cl()) {
                         ItemStack itemstack = this.b(EnumHand.MAIN_HAND);
 
                         if (itemstack != null && itemstack.getItem() instanceof ItemSword) {
@@ -920,8 +923,8 @@ public abstract class EntityHuman extends EntityLiving {
                                 }
                             }
 
-                            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.eb, this.bz(), 1.0F, 1.0F);
-                            this.cH();
+                            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.eb, this.bA(), 1.0F, 1.0F);
+                            this.cI();
                         }
 
                         if (entity instanceof EntityPlayer && entity.velocityChanged) {
@@ -933,15 +936,15 @@ public abstract class EntityHuman extends EntityLiving {
                         }
 
                         if (flag2) {
-                            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_PLAYER_ATTACK_CRIT, this.bz(), 1.0F, 1.0F);
+                            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_PLAYER_ATTACK_CRIT, this.bA(), 1.0F, 1.0F);
                             this.a(entity);
                         }
 
                         if (!flag2 && !flag3) {
                             if (flag) {
-                                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ea, this.bz(), 1.0F, 1.0F);
+                                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ea, this.bA(), 1.0F, 1.0F);
                             } else {
-                                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ec, this.bz(), 1.0F, 1.0F);
+                                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ec, this.bA(), 1.0F, 1.0F);
                             }
                         }
 
@@ -952,7 +955,7 @@ public abstract class EntityHuman extends EntityLiving {
                         if (!this.world.isClientSide && entity instanceof EntityHuman) {
                             EntityHuman entityhuman = (EntityHuman) entity;
                             ItemStack itemstack1 = this.getItemInMainHand();
-                            ItemStack itemstack2 = entityhuman.cs() ? entityhuman.cv() : null;
+                            ItemStack itemstack2 = entityhuman.ct() ? entityhuman.cw() : null;
 
                             if (itemstack1 != null && itemstack2 != null && itemstack1.getItem() instanceof ItemAxe && itemstack2.getItem() == Items.SHIELD) {
                                 float f4 = 0.25F + (float) EnchantmentManager.getDigSpeedEnchantmentLevel(this) * 0.05F;
@@ -962,7 +965,7 @@ public abstract class EntityHuman extends EntityLiving {
                                 }
 
                                 if (this.random.nextFloat() < f4) {
-                                    entityhuman.da().a(Items.SHIELD, 100);
+                                    entityhuman.db().a(Items.SHIELD, 100);
                                     this.world.broadcastEntityEffect(entityhuman, (byte) 30);
                                 }
                             }
@@ -1013,7 +1016,7 @@ public abstract class EntityHuman extends EntityLiving {
 
                         this.applyExhaustion(0.3F);
                     } else {
-                        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dZ, this.bz(), 1.0F, 1.0F);
+                        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dZ, this.bA(), 1.0F, 1.0F);
                         if (flag4) {
                             entity.extinguish();
                         }
@@ -1028,7 +1031,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void b(Entity entity) {}
 
-    public void cH() {
+    public void cI() {
         double d0 = (double) (-MathHelper.sin(this.yaw * 0.017453292F));
         double d1 = (double) MathHelper.cos(this.yaw * 0.017453292F);
 
@@ -1051,12 +1054,12 @@ public abstract class EntityHuman extends EntityLiving {
         return !this.sleeping && super.inBlock();
     }
 
-    public boolean cJ() {
+    public boolean cK() {
         return false;
     }
 
     public GameProfile getProfile() {
-        return this.bR;
+        return this.bS;
     }
 
     public EntityHuman.EnumBedResult a(BlockPosition blockposition) {
@@ -1131,23 +1134,23 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     private void a(EnumDirection enumdirection) {
-        this.bH = 0.0F;
         this.bI = 0.0F;
+        this.bJ = 0.0F;
         switch (EntityHuman.SyntheticClass_1.a[enumdirection.ordinal()]) {
         case 1:
-            this.bI = -1.8F;
+            this.bJ = -1.8F;
             break;
 
         case 2:
-            this.bI = 1.8F;
+            this.bJ = 1.8F;
             break;
 
         case 3:
-            this.bH = 1.8F;
+            this.bI = 1.8F;
             break;
 
         case 4:
-            this.bH = -1.8F;
+            this.bI = -1.8F;
         }
 
     }
@@ -1183,6 +1186,7 @@ public abstract class EntityHuman extends EntityLiving {
         return this.world.getType(this.bedPosition).getBlock() == Blocks.BED;
     }
 
+    @Nullable
     public static BlockPosition getBed(World world, BlockPosition blockposition, boolean flag) {
         Block block = world.getType(blockposition).getBlock();
 
@@ -1241,8 +1245,8 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void a(Statistic statistic) {}
 
-    public void ch() {
-        super.ch();
+    public void ci() {
+        super.ci();
         this.b(StatisticList.w);
         if (this.isSprinting()) {
             this.applyExhaustion(0.8F);
@@ -1259,12 +1263,12 @@ public abstract class EntityHuman extends EntityLiving {
 
         if (this.abilities.isFlying && !this.isPassenger()) {
             double d3 = this.motY;
-            float f2 = this.aQ;
+            float f2 = this.aR;
 
-            this.aQ = this.abilities.a() * (float) (this.isSprinting() ? 2 : 1);
+            this.aR = this.abilities.a() * (float) (this.isSprinting() ? 2 : 1);
             super.g(f, f1);
             this.motY = d3 * 0.6D;
-            this.aQ = f2;
+            this.aR = f2;
             this.fallDistance = 0.0F;
             this.setFlag(7, false);
         } else {
@@ -1274,7 +1278,7 @@ public abstract class EntityHuman extends EntityLiving {
         this.checkMovement(this.locX - d0, this.locY - d1, this.locZ - d2);
     }
 
-    public float ck() {
+    public float cl() {
         return (float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue();
     }
 
@@ -1312,7 +1316,7 @@ public abstract class EntityHuman extends EntityLiving {
                         this.applyExhaustion(0.01F * (float) i * 0.01F);
                     }
                 }
-            } else if (this.cB()) {
+            } else if (this.cC()) {
                 i = Math.round(MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
                 this.a(StatisticList.v, i);
             } else {
@@ -1330,18 +1334,18 @@ public abstract class EntityHuman extends EntityLiving {
             int i = Math.round(MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
 
             if (i > 0) {
-                if (this.by() instanceof EntityMinecartAbstract) {
+                if (this.bz() instanceof EntityMinecartAbstract) {
                     this.a(StatisticList.r, i);
                     if (this.g == null) {
                         this.g = new BlockPosition(this);
                     } else if (this.g.distanceSquared((double) MathHelper.floor(this.locX), (double) MathHelper.floor(this.locY), (double) MathHelper.floor(this.locZ)) >= 1000000.0D) {
                         this.b((Statistic) AchievementList.q);
                     }
-                } else if (this.by() instanceof EntityBoat) {
+                } else if (this.bz() instanceof EntityBoat) {
                     this.a(StatisticList.s, i);
-                } else if (this.by() instanceof EntityPig) {
+                } else if (this.bz() instanceof EntityPig) {
                     this.a(StatisticList.t, i);
-                } else if (this.by() instanceof EntityHorse) {
+                } else if (this.bz() instanceof EntityHorse) {
                     this.a(StatisticList.u, i);
                 }
             }
@@ -1407,7 +1411,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     }
 
-    public int cQ() {
+    public int cR() {
         return this.h;
     }
 
@@ -1430,11 +1434,11 @@ public abstract class EntityHuman extends EntityLiving {
             this.expTotal = 0;
         }
 
-        if (i > 0 && this.expLevel % 5 == 0 && (float) this.bQ < (float) this.ticksLived - 100.0F) {
+        if (i > 0 && this.expLevel % 5 == 0 && (float) this.bR < (float) this.ticksLived - 100.0F) {
             float f = this.expLevel > 30 ? 1.0F : (float) this.expLevel / 30.0F;
 
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ei, this.bz(), f * 0.75F, 1.0F);
-            this.bQ = this.ticksLived;
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ei, this.bA(), f * 0.75F, 1.0F);
+            this.bR = this.ticksLived;
         }
 
     }
@@ -1460,15 +1464,15 @@ public abstract class EntityHuman extends EntityLiving {
         return (flag || this.foodData.c()) && !this.abilities.isInvulnerable;
     }
 
-    public boolean cT() {
+    public boolean cU() {
         return this.getHealth() > 0.0F && this.getHealth() < this.getMaxHealth();
     }
 
-    public boolean cU() {
+    public boolean cV() {
         return this.abilities.mayBuild;
     }
 
-    public boolean a(BlockPosition blockposition, EnumDirection enumdirection, ItemStack itemstack) {
+    public boolean a(BlockPosition blockposition, EnumDirection enumdirection, @Nullable ItemStack itemstack) {
         if (this.abilities.mayBuild) {
             return true;
         } else if (itemstack == null) {
@@ -1517,7 +1521,7 @@ public abstract class EntityHuman extends EntityLiving {
 
         this.h = entityhuman.h;
         this.enderChest = entityhuman.enderChest;
-        this.getDataWatcher().set(EntityHuman.bp, entityhuman.getDataWatcher().get(EntityHuman.bp));
+        this.getDataWatcher().set(EntityHuman.bq, entityhuman.getDataWatcher().get(EntityHuman.bq));
     }
 
     protected boolean playStepSound() {
@@ -1529,18 +1533,19 @@ public abstract class EntityHuman extends EntityLiving {
     public void a(WorldSettings.EnumGamemode worldsettings_enumgamemode) {}
 
     public String getName() {
-        return this.bR.getName();
+        return this.bS.getName();
     }
 
     public InventoryEnderChest getEnderChest() {
         return this.enderChest;
     }
 
+    @Nullable
     public ItemStack getEquipment(EnumItemSlot enumitemslot) {
         return enumitemslot == EnumItemSlot.MAINHAND ? this.inventory.getItemInHand() : (enumitemslot == EnumItemSlot.OFFHAND ? this.inventory.extraSlots[0] : (enumitemslot.a() == EnumItemSlot.Function.ARMOR ? this.inventory.armor[enumitemslot.b()] : null));
     }
 
-    public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
+    public void setSlot(EnumItemSlot enumitemslot, @Nullable ItemStack itemstack) {
         if (enumitemslot == EnumItemSlot.MAINHAND) {
             this.a_(itemstack);
             this.inventory.items[this.inventory.itemInHandIndex] = itemstack;
@@ -1566,7 +1571,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     public abstract boolean l_();
 
-    public boolean bd() {
+    public boolean be() {
         return !this.abilities.isFlying;
     }
 
@@ -1582,7 +1587,7 @@ public abstract class EntityHuman extends EntityLiving {
         ChatComponentText chatcomponenttext = new ChatComponentText(ScoreboardTeam.getPlayerDisplayName(this.aO(), this.getName()));
 
         chatcomponenttext.getChatModifier().setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/msg " + this.getName() + " "));
-        chatcomponenttext.getChatModifier().setChatHoverable(this.bk());
+        chatcomponenttext.getChatModifier().setChatHoverable(this.bl());
         chatcomponenttext.getChatModifier().setInsertion(this.getName());
         return chatcomponenttext;
     }
@@ -1593,7 +1598,7 @@ public abstract class EntityHuman extends EntityLiving {
         if (this.isSleeping()) {
             f = 0.2F;
         } else if (!this.isSneaking() && this.length != 1.65F) {
-            if (this.cB() || this.length == 0.6F) {
+            if (this.cC() || this.length == 0.6F) {
                 f = 0.4F;
             }
         } else {
@@ -1694,28 +1699,28 @@ public abstract class EntityHuman extends EntityLiving {
         }
     }
 
-    public EnumMainHand cr() {
-        return ((Byte) this.datawatcher.get(EntityHuman.bq)).byteValue() == 0 ? EnumMainHand.LEFT : EnumMainHand.RIGHT;
+    public EnumMainHand getMainHand() {
+        return ((Byte) this.datawatcher.get(EntityHuman.br)).byteValue() == 0 ? EnumMainHand.LEFT : EnumMainHand.RIGHT;
     }
 
     public void a(EnumMainHand enummainhand) {
-        this.datawatcher.set(EntityHuman.bq, Byte.valueOf((byte) (enummainhand == EnumMainHand.LEFT ? 0 : 1)));
+        this.datawatcher.set(EntityHuman.br, Byte.valueOf((byte) (enummainhand == EnumMainHand.LEFT ? 0 : 1)));
     }
 
-    public float cY() {
+    public float cZ() {
         return (float) (1.0D / this.getAttributeInstance(GenericAttributes.f).getValue() * 20.0D);
     }
 
     public float o(float f) {
-        return MathHelper.a(((float) this.aD + f) / this.cY(), 0.0F, 1.0F);
+        return MathHelper.a(((float) this.aE + f) / this.cZ(), 0.0F, 1.0F);
     }
 
-    public void cZ() {
-        this.aD = 0;
+    public void da() {
+        this.aE = 0;
     }
 
-    public ItemCooldown da() {
-        return this.bU;
+    public ItemCooldown db() {
+        return this.bV;
     }
 
     public void collide(Entity entity) {
@@ -1725,7 +1730,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     }
 
-    public float db() {
+    public float dc() {
         return (float) this.getAttributeInstance(GenericAttributes.i).getValue();
     }
 

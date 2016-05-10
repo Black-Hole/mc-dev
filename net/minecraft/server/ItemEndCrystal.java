@@ -38,7 +38,7 @@ public class ItemEndCrystal extends Item {
                         if (!world.isClientSide) {
                             EntityEnderCrystal entityendercrystal = new EntityEnderCrystal(world, (double) ((float) blockposition.getX() + 0.5F), (double) (blockposition.getY() + 1), (double) ((float) blockposition.getZ() + 0.5F));
 
-                            entityendercrystal.a(false);
+                            entityendercrystal.setShowingBottom(false);
                             world.addEntity(entityendercrystal);
                             if (world.worldProvider instanceof WorldProviderTheEnd) {
                                 EnderDragonBattle enderdragonbattle = ((WorldProviderTheEnd) world.worldProvider).s();

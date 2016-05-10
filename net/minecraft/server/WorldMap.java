@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 public class WorldMap extends PersistentBase {
 
@@ -72,7 +73,7 @@ public class WorldMap extends PersistentBase {
 
     }
 
-    public void b(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound b(NBTTagCompound nbttagcompound) {
         nbttagcompound.setByte("dimension", this.map);
         nbttagcompound.setInt("xCenter", this.centerX);
         nbttagcompound.setInt("zCenter", this.centerZ);
@@ -81,6 +82,7 @@ public class WorldMap extends PersistentBase {
         nbttagcompound.setShort("height", (short) 128);
         nbttagcompound.setByteArray("colors", this.colors);
         nbttagcompound.setBoolean("trackingPosition", this.track);
+        return nbttagcompound;
     }
 
     public void a(EntityHuman entityhuman, ItemStack itemstack) {
@@ -174,6 +176,7 @@ public class WorldMap extends PersistentBase {
         this.decorations.put(s, new MapIcon((byte) i, b0, b1, b3));
     }
 
+    @Nullable
     public Packet<?> a(ItemStack itemstack, World world, EntityHuman entityhuman) {
         WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker = (WorldMap.WorldMapHumanTracker) this.j.get(entityhuman);
 

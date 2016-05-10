@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
+import javax.annotation.Nullable;
 
 public class EnchantmentManager {
 
@@ -18,7 +19,7 @@ public class EnchantmentManager {
     private static final EnchantmentManager.EnchantmentModifierThorns d = new EnchantmentManager.EnchantmentModifierThorns((EnchantmentManager.SyntheticClass_1) null);
     private static final EnchantmentManager.EnchantmentModifierArthropods e = new EnchantmentManager.EnchantmentModifierArthropods((EnchantmentManager.SyntheticClass_1) null);
 
-    public static int getEnchantmentLevel(Enchantment enchantment, ItemStack itemstack) {
+    public static int getEnchantmentLevel(Enchantment enchantment, @Nullable ItemStack itemstack) {
         if (itemstack == null) {
             return 0;
         } else {
@@ -215,6 +216,7 @@ public class EnchantmentManager {
         return a(Enchantments.WATER_WORKER, entityliving) > 0;
     }
 
+    @Nullable
     public static ItemStack b(Enchantment enchantment, EntityLiving entityliving) {
         Iterable iterable = enchantment.a(entityliving);
 

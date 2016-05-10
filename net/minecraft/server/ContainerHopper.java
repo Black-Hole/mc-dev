@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ContainerHopper extends Container {
 
     private final IInventory hopper;
@@ -31,6 +33,7 @@ public class ContainerHopper extends Container {
         return this.hopper.a(entityhuman);
     }
 
+    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
         ItemStack itemstack = null;
         Slot slot = (Slot) this.c.get(i);

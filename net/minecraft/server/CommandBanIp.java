@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 
 public class CommandBanIp extends CommandAbstract {
 
@@ -51,11 +52,11 @@ public class CommandBanIp extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : Collections.emptyList();
     }
 
-    protected void a(MinecraftServer minecraftserver, ICommandListener icommandlistener, String s, String s1) {
+    protected void a(MinecraftServer minecraftserver, ICommandListener icommandlistener, String s, @Nullable String s1) {
         IpBanEntry ipbanentry = new IpBanEntry(s, (Date) null, icommandlistener.getName(), (Date) null, s1);
 
         minecraftserver.getPlayerList().getIPBans().add(ipbanentry);

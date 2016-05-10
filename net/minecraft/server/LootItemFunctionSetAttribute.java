@@ -10,6 +10,7 @@ import com.google.gson.JsonSyntaxException;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.UUID;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,10 +50,11 @@ public class LootItemFunctionSetAttribute extends LootItemFunction {
         private final String b;
         private final int c;
         private final LootValueBounds d;
+        @Nullable
         private final UUID e;
         private final EnumItemSlot[] f;
 
-        private a(String s, String s1, int i, LootValueBounds lootvaluebounds, EnumItemSlot[] aenumitemslot, UUID uuid) {
+        private a(String s, String s1, int i, LootValueBounds lootvaluebounds, EnumItemSlot[] aenumitemslot, @Nullable UUID uuid) {
             this.a = s;
             this.b = s1;
             this.c = i;

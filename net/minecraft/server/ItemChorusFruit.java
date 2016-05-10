@@ -1,11 +1,14 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ItemChorusFruit extends ItemFood {
 
     public ItemChorusFruit(int i, float f) {
         super(i, f, false);
     }
 
+    @Nullable
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
         ItemStack itemstack1 = super.a(itemstack, world, entityliving);
 
@@ -27,7 +30,7 @@ public class ItemChorusFruit extends ItemFood {
             }
 
             if (entityliving instanceof EntityHuman) {
-                ((EntityHuman) entityliving).da().a(this, 20);
+                ((EntityHuman) entityliving).db().a(this, 20);
             }
         }
 

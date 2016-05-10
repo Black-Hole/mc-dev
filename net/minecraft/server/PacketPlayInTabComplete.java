@@ -1,12 +1,14 @@
 package net.minecraft.server;
 
 import java.io.IOException;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 public class PacketPlayInTabComplete implements Packet<PacketListenerPlayIn> {
 
     private String a;
     private boolean b;
+    @Nullable
     private BlockPosition c;
 
     public PacketPlayInTabComplete() {}
@@ -42,6 +44,7 @@ public class PacketPlayInTabComplete implements Packet<PacketListenerPlayIn> {
         return this.a;
     }
 
+    @Nullable
     public BlockPosition b() {
         return this.c;
     }

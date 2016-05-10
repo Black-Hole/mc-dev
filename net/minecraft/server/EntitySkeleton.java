@@ -1,13 +1,14 @@
 package net.minecraft.server;
 
 import java.util.Calendar;
+import javax.annotation.Nullable;
 
 public class EntitySkeleton extends EntityMonster implements IRangedEntity {
 
     private static final DataWatcherObject<Integer> a = DataWatcher.a(EntitySkeleton.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> b = DataWatcher.a(EntitySkeleton.class, DataWatcherRegistry.h);
     private final PathfinderGoalBowShoot c = new PathfinderGoalBowShoot(this, 1.0D, 20, 15.0F);
-    private final PathfinderGoalMeleeAttack bv = new PathfinderGoalMeleeAttack(this, 1.2D, flag) {
+    private final PathfinderGoalMeleeAttack bw = new PathfinderGoalMeleeAttack(this, 1.2D, flag) {
         public void d() {
             super.d();
             EntitySkeleton.this.a(false);
@@ -52,11 +53,11 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
         return SoundEffects.fi;
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.fn;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.fj;
     }
 
@@ -83,7 +84,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
     public void n() {
         if (this.world.B() && !this.world.isClientSide) {
             float f = this.e(1.0F);
-            BlockPosition blockposition = this.by() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
+            BlockPosition blockposition = this.bz() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
 
             if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.h(blockposition)) {
                 boolean flag = true;
@@ -116,10 +117,10 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
 
     public void aw() {
         super.aw();
-        if (this.by() instanceof EntityCreature) {
-            EntityCreature entitycreature = (EntityCreature) this.by();
+        if (this.bz() instanceof EntityCreature) {
+            EntityCreature entitycreature = (EntityCreature) this.bz();
 
-            this.aM = entitycreature.aM;
+            this.aN = entitycreature.aN;
         }
 
     }
@@ -141,6 +142,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
 
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return this.getSkeletonType() == 1 ? LootTables.al : LootTables.ak;
     }
@@ -150,10 +152,11 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
         this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.BOW));
     }
 
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
+    @Nullable
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
         groupdataentity = super.prepare(difficultydamagescaler, groupdataentity);
         if (this.world.worldProvider instanceof WorldProviderHell && this.getRandom().nextInt(5) > 0) {
-            this.goalSelector.a(4, this.bv);
+            this.goalSelector.a(4, this.bw);
             this.setSkeletonType(1);
             this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
             this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(4.0D);
@@ -178,7 +181,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
 
     public void o() {
         if (this.world != null && !this.world.isClientSide) {
-            this.goalSelector.a((PathfinderGoal) this.bv);
+            this.goalSelector.a((PathfinderGoal) this.bw);
             this.goalSelector.a((PathfinderGoal) this.c);
             ItemStack itemstack = this.getItemInMainHand();
 
@@ -192,7 +195,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
                 this.c.b(b0);
                 this.goalSelector.a(4, this.c);
             } else {
-                this.goalSelector.a(4, this.bv);
+                this.goalSelector.a(4, this.bw);
             }
         }
 
@@ -261,7 +264,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
         nbttagcompound.setByte("SkeletonType", (byte) this.getSkeletonType());
     }
 
-    public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
+    public void setSlot(EnumItemSlot enumitemslot, @Nullable ItemStack itemstack) {
         super.setSlot(enumitemslot, itemstack);
         if (!this.world.isClientSide && enumitemslot == EnumItemSlot.MAINHAND) {
             this.o();

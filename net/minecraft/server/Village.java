@@ -139,7 +139,7 @@ public class Village {
     }
 
     public boolean a(BlockPosition blockposition) {
-        return this.d.k(blockposition) < (double) (this.e * this.e);
+        return this.d.n(blockposition) < (double) (this.e * this.e);
     }
 
     public List<VillageDoor> f() {
@@ -194,7 +194,7 @@ public class Village {
     }
 
     public VillageDoor e(BlockPosition blockposition) {
-        if (this.d.k(blockposition) > (double) (this.e * this.e)) {
+        if (this.d.n(blockposition) > (double) (this.e * this.e)) {
             return null;
         } else {
             Iterator iterator = this.b.iterator();

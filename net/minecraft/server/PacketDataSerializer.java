@@ -19,6 +19,7 @@ import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class PacketDataSerializer extends ByteBuf {
 
@@ -190,7 +191,7 @@ public class PacketDataSerializer extends ByteBuf {
         return this;
     }
 
-    public PacketDataSerializer a(NBTTagCompound nbttagcompound) {
+    public PacketDataSerializer a(@Nullable NBTTagCompound nbttagcompound) {
         if (nbttagcompound == null) {
             this.writeByte(0);
         } else {
@@ -204,6 +205,7 @@ public class PacketDataSerializer extends ByteBuf {
         return this;
     }
 
+    @Nullable
     public NBTTagCompound j() {
         int i = this.readerIndex();
         byte b0 = this.readByte();
@@ -221,7 +223,7 @@ public class PacketDataSerializer extends ByteBuf {
         }
     }
 
-    public PacketDataSerializer a(ItemStack itemstack) {
+    public PacketDataSerializer a(@Nullable ItemStack itemstack) {
         if (itemstack == null) {
             this.writeShort(-1);
         } else {
@@ -240,6 +242,7 @@ public class PacketDataSerializer extends ByteBuf {
         return this;
     }
 
+    @Nullable
     public ItemStack k() {
         ItemStack itemstack = null;
         short short0 = this.readShort();

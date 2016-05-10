@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityCaveSpider extends EntitySpider {
 
     public EntityCaveSpider(World world) {
@@ -34,7 +36,8 @@ public class EntityCaveSpider extends EntitySpider {
         }
     }
 
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
+    @Nullable
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
         return groupdataentity;
     }
 
@@ -42,6 +45,7 @@ public class EntityCaveSpider extends EntitySpider {
         return 0.45F;
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.s;
     }

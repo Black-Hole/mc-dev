@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.base.Predicate;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class ItemGlassBottle extends Item {
 
@@ -11,7 +12,7 @@ public class ItemGlassBottle extends Item {
 
     public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
         List list = world.a(EntityAreaEffectCloud.class, entityhuman.getBoundingBox().g(2.0D), new Predicate() {
-            public boolean a(EntityAreaEffectCloud entityareaeffectcloud) {
+            public boolean a(@Nullable EntityAreaEffectCloud entityareaeffectcloud) {
                 return entityareaeffectcloud != null && entityareaeffectcloud.isAlive() && entityareaeffectcloud.w() instanceof EntityEnderDragon;
             }
 

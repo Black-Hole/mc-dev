@@ -3,6 +3,7 @@ package net.minecraft.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,6 +43,7 @@ public class WorldLoader implements Convertable {
         }
     }
 
+    @Nullable
     public static WorldData a(File file, DataConverterManager dataconvertermanager) {
         try {
             NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));

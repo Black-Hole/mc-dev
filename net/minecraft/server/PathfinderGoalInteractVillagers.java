@@ -12,7 +12,7 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
 
     public void c() {
         super.c();
-        if (this.f.dg() && this.b instanceof EntityVillager && ((EntityVillager) this.b).dh()) {
+        if (this.f.dh() && this.b instanceof EntityVillager && ((EntityVillager) this.b).di()) {
             this.e = 10;
         } else {
             this.e = 0;
@@ -25,7 +25,7 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
         if (this.e > 0) {
             --this.e;
             if (this.e == 0) {
-                InventorySubcontainer inventorysubcontainer = this.f.de();
+                InventorySubcontainer inventorysubcontainer = this.f.df();
 
                 for (int i = 0; i < inventorysubcontainer.getSize(); ++i) {
                     ItemStack itemstack = inventorysubcontainer.getItem(i);
@@ -56,7 +56,7 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
                         double d0 = this.f.locY - 0.30000001192092896D + (double) this.f.getHeadHeight();
                         EntityItem entityitem = new EntityItem(this.f.world, this.f.locX, d0, this.f.locZ, itemstack1);
                         float f = 0.3F;
-                        float f1 = this.f.aO;
+                        float f1 = this.f.aP;
                         float f2 = this.f.pitch;
 
                         entityitem.motX = (double) (-MathHelper.sin(f1 * 0.017453292F) * MathHelper.cos(f2 * 0.017453292F) * f);

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class DragonControllerLandingFly extends AbstractDragonController {
 
     private PathEntity b;
@@ -9,7 +11,7 @@ public class DragonControllerLandingFly extends AbstractDragonController {
         super(entityenderdragon);
     }
 
-    public DragonControllerPhase<DragonControllerLandingFly> i() {
+    public DragonControllerPhase<DragonControllerLandingFly> getControllerPhase() {
         return DragonControllerPhase.c;
     }
 
@@ -27,6 +29,7 @@ public class DragonControllerLandingFly extends AbstractDragonController {
 
     }
 
+    @Nullable
     public Vec3D g() {
         return this.c;
     }
@@ -56,7 +59,7 @@ public class DragonControllerLandingFly extends AbstractDragonController {
 
         this.k();
         if (this.b != null && this.b.b()) {
-            this.a.cT().a(DragonControllerPhase.d);
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.d);
         }
 
     }

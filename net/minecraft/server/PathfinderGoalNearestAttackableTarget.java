@@ -5,6 +5,7 @@ import com.google.common.base.Predicate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> extends PathfinderGoalTarget {
 
@@ -22,14 +23,14 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
         this(entitycreature, oclass, 10, flag, flag1, (Predicate) null);
     }
 
-    public PathfinderGoalNearestAttackableTarget(EntityCreature entitycreature, Class<T> oclass, int i, boolean flag, boolean flag1, final Predicate<? super T> predicate) {
+    public PathfinderGoalNearestAttackableTarget(EntityCreature entitycreature, Class<T> oclass, int i, boolean flag, boolean flag1, @Nullable final Predicate<? super T> predicate) {
         super(entitycreature, flag, flag1);
         this.a = oclass;
         this.i = i;
         this.b = new PathfinderGoalNearestAttackableTarget.DistanceComparator(entitycreature);
         this.a(1);
         this.c = new Predicate() {
-            public boolean a(T t0) {
+            public boolean a(@Nullable T t0) {
                 return t0 == null ? false : (predicate != null && !predicate.apply(t0) ? false : (!IEntitySelector.e.apply(t0) ? false : PathfinderGoalNearestAttackableTarget.this.a(t0, false)));
             }
 
@@ -54,7 +55,8 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
             }
         } else {
             this.d = this.e.world.a(this.e.locX, this.e.locY + (double) this.e.getHeadHeight(), this.e.locZ, this.f(), this.f(), new Function() {
-                public Double a(EntityHuman entityhuman) {
+                @Nullable
+                public Double a(@Nullable EntityHuman entityhuman) {
                     ItemStack itemstack = entityhuman.getEquipment(EnumItemSlot.HEAD);
 
                     if (itemstack != null && itemstack.getItem() == Items.SKULL) {

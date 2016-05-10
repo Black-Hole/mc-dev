@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public class ScoreboardTeam extends ScoreboardTeamBase {
 
@@ -76,7 +77,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         return this.getPrefix() + s + this.getSuffix();
     }
 
-    public static String getPlayerDisplayName(ScoreboardTeamBase scoreboardteambase, String s) {
+    public static String getPlayerDisplayName(@Nullable ScoreboardTeamBase scoreboardteambase, String s) {
         return scoreboardteambase == null ? s : scoreboardteambase.getFormattedName(s);
     }
 
@@ -102,7 +103,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         return this.i;
     }
 
-    public ScoreboardTeamBase.EnumNameTagVisibility j() {
+    public ScoreboardTeamBase.EnumNameTagVisibility getDeathMessageVisibility() {
         return this.j;
     }
 
@@ -111,16 +112,16 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         this.a.handleTeamChanged(this);
     }
 
-    public void b(ScoreboardTeamBase.EnumNameTagVisibility scoreboardteambase_enumnametagvisibility) {
+    public void setDeathMessageVisibility(ScoreboardTeamBase.EnumNameTagVisibility scoreboardteambase_enumnametagvisibility) {
         this.j = scoreboardteambase_enumnametagvisibility;
         this.a.handleTeamChanged(this);
     }
 
-    public ScoreboardTeamBase.EnumTeamPush k() {
+    public ScoreboardTeamBase.EnumTeamPush getCollisionRule() {
         return this.l;
     }
 
-    public void a(ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush) {
+    public void setCollisionRule(ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush) {
         this.l = scoreboardteambase_enumteampush;
         this.a.handleTeamChanged(this);
     }

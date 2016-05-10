@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.base.Predicate;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITileEntity {
 
@@ -19,6 +20,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
         return LocaleI18n.get("item.comparator.name");
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.COMPARATOR;
     }
@@ -54,7 +56,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
     protected int a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
         TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
 
-        return tileentity instanceof TileEntityComparator ? ((TileEntityComparator) tileentity).b() : 0;
+        return tileentity instanceof TileEntityComparator ? ((TileEntityComparator) tileentity).c() : 0;
     }
 
     private int j(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -101,9 +103,10 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
         return i;
     }
 
+    @Nullable
     private EntityItemFrame a(World world, final EnumDirection enumdirection, BlockPosition blockposition) {
         List list = world.a(EntityItemFrame.class, new AxisAlignedBB((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), (double) (blockposition.getX() + 1), (double) (blockposition.getY() + 1), (double) (blockposition.getZ() + 1)), new Predicate() {
-            public boolean a(Entity entity) {
+            public boolean a(@Nullable Entity entity) {
                 return entity != null && entity.getDirection() == enumdirection;
             }
 
@@ -115,7 +118,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
         return list.size() == 1 ? (EntityItemFrame) list.get(0) : null;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (!entityhuman.abilities.mayBuild) {
             return false;
         } else {
@@ -133,7 +136,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
         if (!world.a(blockposition, (Block) this)) {
             int i = this.j(world, blockposition, iblockdata);
             TileEntity tileentity = world.getTileEntity(blockposition);
-            int j = tileentity instanceof TileEntityComparator ? ((TileEntityComparator) tileentity).b() : 0;
+            int j = tileentity instanceof TileEntityComparator ? ((TileEntityComparator) tileentity).c() : 0;
 
             if (i != j || this.z(iblockdata) != this.e(world, blockposition, iblockdata)) {
                 if (this.i(world, blockposition, iblockdata)) {
@@ -154,7 +157,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
         if (tileentity instanceof TileEntityComparator) {
             TileEntityComparator tileentitycomparator = (TileEntityComparator) tileentity;
 
-            j = tileentitycomparator.b();
+            j = tileentitycomparator.c();
             tileentitycomparator.a(i);
         }
 
@@ -192,8 +195,8 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
         this.h(world, blockposition, iblockdata);
     }
 
-    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, int i, int j) {
-        super.a(world, blockposition, iblockdata, i, j);
+    public boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, int i, int j) {
+        super.a(iblockdata, world, blockposition, i, j);
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         return tileentity == null ? false : tileentity.c(i, j);

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class PlayerInteractManager {
 
     public World world;
@@ -112,7 +114,7 @@ public class PlayerInteractManager {
                     return;
                 }
 
-                if (!this.player.cU()) {
+                if (!this.player.cV()) {
                     ItemStack itemstack = this.player.getItemInMainHand();
 
                     if (itemstack == null) {
@@ -205,7 +207,7 @@ public class PlayerInteractManager {
                         return false;
                     }
 
-                    if (!this.player.cU()) {
+                    if (!this.player.cV()) {
                         ItemStack itemstack = this.player.getItemInMainHand();
 
                         if (itemstack == null) {
@@ -248,7 +250,7 @@ public class PlayerInteractManager {
     public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand) {
         if (this.gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
             return EnumInteractionResult.PASS;
-        } else if (entityhuman.da().a(itemstack.getItem())) {
+        } else if (entityhuman.db().a(itemstack.getItem())) {
             return EnumInteractionResult.PASS;
         } else {
             int i = itemstack.count;
@@ -271,7 +273,7 @@ public class PlayerInteractManager {
                     entityhuman.a(enumhand, (ItemStack) null);
                 }
 
-                if (!entityhuman.cs()) {
+                if (!entityhuman.ct()) {
                     ((EntityPlayer) entityhuman).updateInventory(entityhuman.defaultContainer);
                 }
 
@@ -280,7 +282,7 @@ public class PlayerInteractManager {
         }
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, @Nullable ItemStack itemstack, EnumHand enumhand, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
         if (this.gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -313,7 +315,7 @@ public class PlayerInteractManager {
 
             if (itemstack == null) {
                 return EnumInteractionResult.PASS;
-            } else if (entityhuman.da().a(itemstack.getItem())) {
+            } else if (entityhuman.db().a(itemstack.getItem())) {
                 return EnumInteractionResult.PASS;
             } else if (itemstack.getItem() instanceof ItemBlock && ((ItemBlock) itemstack.getItem()).d() instanceof BlockCommand && !entityhuman.a(2, "")) {
                 return EnumInteractionResult.FAIL;

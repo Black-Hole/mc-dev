@@ -19,7 +19,7 @@ public class PathfinderGoalTradeWithPlayer extends PathfinderGoal {
         } else if (this.a.velocityChanged) {
             return false;
         } else {
-            EntityHuman entityhuman = this.a.t_();
+            EntityHuman entityhuman = this.a.getTrader();
 
             return entityhuman == null ? false : (this.a.h(entityhuman) > 16.0D ? false : entityhuman.activeContainer instanceof Container);
         }

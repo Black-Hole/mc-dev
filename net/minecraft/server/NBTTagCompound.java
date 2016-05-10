@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Map.Entry;
-import java.util.concurrent.Callable;
+import javax.annotation.Nullable;
 
 public class NBTTagCompound extends NBTBase {
 
@@ -90,6 +90,7 @@ public class NBTTagCompound extends NBTBase {
         this.setLong(s + "Least", uuid.getLeastSignificantBits());
     }
 
+    @Nullable
     public UUID a(String s) {
         return new UUID(this.getLong(s + "Most"), this.getLong(s + "Least"));
     }
@@ -311,7 +312,7 @@ public class NBTTagCompound extends NBTBase {
         CrashReport crashreport = CrashReport.a(classcastexception, "Reading NBT data");
         CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Corrupt NBT tag", 1);
 
-        crashreportsystemdetails.a("Tag type found", new Callable() {
+        crashreportsystemdetails.a("Tag type found", new CrashReportCallable() {
             public String a() throws Exception {
                 return NBTBase.a[((NBTBase) NBTTagCompound.this.map.get(s)).getTypeId()];
             }
@@ -320,7 +321,7 @@ public class NBTTagCompound extends NBTBase {
                 return this.a();
             }
         });
-        crashreportsystemdetails.a("Tag type expected", new Callable() {
+        crashreportsystemdetails.a("Tag type expected", new CrashReportCallable() {
             public String a() throws Exception {
                 return NBTBase.a[i];
             }

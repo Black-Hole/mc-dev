@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -231,6 +232,7 @@ public class EnderDragonBattle {
         return false;
     }
 
+    @Nullable
     private ShapeDetector.ShapeDetectorCollection h() {
         int i;
         int j;
@@ -372,7 +374,7 @@ public class EnderDragonBattle {
         this.d.getChunkAtWorldCoords(new BlockPosition(0, 128, 0));
         EntityEnderDragon entityenderdragon = new EntityEnderDragon(this.d);
 
-        entityenderdragon.cT().a(DragonControllerPhase.a);
+        entityenderdragon.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
         entityenderdragon.setPositionRotation(0.0D, 128.0D, 0.0D, this.d.random.nextFloat() * 360.0F, 0.0F);
         this.d.addEntity(entityenderdragon);
         this.m = entityenderdragon.getUniqueID();
@@ -487,8 +489,8 @@ public class EnderDragonBattle {
             while (iterator.hasNext()) {
                 EntityEnderCrystal entityendercrystal = (EntityEnderCrystal) iterator.next();
 
-                entityendercrystal.h(false);
-                entityendercrystal.a((BlockPosition) null);
+                entityendercrystal.setInvulnerable(false);
+                entityendercrystal.setBeamTarget((BlockPosition) null);
             }
         }
 

@@ -41,7 +41,7 @@ public final class SpawnerCreature {
                             if (!this.b.contains(chunkcoordintpair)) {
                                 ++i;
                                 if (!flag3 && worldserver.getWorldBorder().isInBounds(chunkcoordintpair)) {
-                                    PlayerChunk playerchunk = worldserver.getPlayerChunkMap().b(chunkcoordintpair.x, chunkcoordintpair.z);
+                                    PlayerChunk playerchunk = worldserver.getPlayerChunkMap().getChunk(chunkcoordintpair.x, chunkcoordintpair.z);
 
                                     if (playerchunk != null && playerchunk.e()) {
                                         this.b.add(chunkcoordintpair);
@@ -122,7 +122,7 @@ public final class SpawnerCreature {
                                                         }
 
                                                         entityinsentient.setPositionRotation((double) f, (double) k3, (double) f1, worldserver.random.nextFloat() * 360.0F, 0.0F);
-                                                        if (entityinsentient.cF() && entityinsentient.canSpawn()) {
+                                                        if (entityinsentient.cG() && entityinsentient.canSpawn()) {
                                                             groupdataentity = entityinsentient.prepare(worldserver.D(new BlockPosition(entityinsentient)), groupdataentity);
                                                             if (entityinsentient.canSpawn()) {
                                                                 ++l2;
@@ -131,7 +131,7 @@ public final class SpawnerCreature {
                                                                 entityinsentient.die();
                                                             }
 
-                                                            if (l2 >= entityinsentient.cJ()) {
+                                                            if (l2 >= entityinsentient.cK()) {
                                                                 continue label120;
                                                             }
                                                         }

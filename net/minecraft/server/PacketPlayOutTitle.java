@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.io.IOException;
+import javax.annotation.Nullable;
 
 public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
 
@@ -20,7 +21,7 @@ public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
         this(PacketPlayOutTitle.EnumTitleAction.TIMES, (IChatBaseComponent) null, i, j, k);
     }
 
-    public PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction packetplayouttitle_enumtitleaction, IChatBaseComponent ichatbasecomponent, int i, int j, int k) {
+    public PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction packetplayouttitle_enumtitleaction, @Nullable IChatBaseComponent ichatbasecomponent, int i, int j, int k) {
         this.a = packetplayouttitle_enumtitleaction;
         this.b = ichatbasecomponent;
         this.c = i;

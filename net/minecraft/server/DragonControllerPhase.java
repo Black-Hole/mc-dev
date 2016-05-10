@@ -49,7 +49,7 @@ public class DragonControllerPhase<T extends IDragonController> {
         return this.o + " (#" + this.n + ")";
     }
 
-    public static DragonControllerPhase<?> a(int i) {
+    public static DragonControllerPhase<?> getById(int i) {
         return i >= 0 && i < DragonControllerPhase.l.length ? DragonControllerPhase.l[i] : DragonControllerPhase.a;
     }
 

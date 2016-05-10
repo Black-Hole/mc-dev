@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class ShapelessRecipes implements IRecipe {
 
@@ -15,6 +16,7 @@ public class ShapelessRecipes implements IRecipe {
         this.ingredients = list;
     }
 
+    @Nullable
     public ItemStack b() {
         return this.result;
     }
@@ -64,6 +66,7 @@ public class ShapelessRecipes implements IRecipe {
         return arraylist.isEmpty();
     }
 
+    @Nullable
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         return this.result.cloneItemStack();
     }

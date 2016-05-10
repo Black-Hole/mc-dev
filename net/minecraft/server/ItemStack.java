@@ -4,6 +4,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.text.DecimalFormat;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public final class ItemStack {
 
@@ -101,6 +102,7 @@ public final class ItemStack {
         return this.getItem().a(this, world, entityhuman, enumhand);
     }
 
+    @Nullable
     public ItemStack a(World world, EntityLiving entityliving) {
         return this.getItem().a(this, world, entityliving);
     }
@@ -259,11 +261,11 @@ public final class ItemStack {
         return itemstack;
     }
 
-    public static boolean equals(ItemStack itemstack, ItemStack itemstack1) {
+    public static boolean equals(@Nullable ItemStack itemstack, @Nullable ItemStack itemstack1) {
         return itemstack == null && itemstack1 == null ? true : (itemstack != null && itemstack1 != null ? (itemstack.tag == null && itemstack1.tag != null ? false : itemstack.tag == null || itemstack.tag.equals(itemstack1.tag)) : false);
     }
 
-    public static boolean matches(ItemStack itemstack, ItemStack itemstack1) {
+    public static boolean matches(@Nullable ItemStack itemstack, @Nullable ItemStack itemstack1) {
         return itemstack == null && itemstack1 == null ? true : (itemstack != null && itemstack1 != null ? itemstack.e(itemstack1) : false);
     }
 
@@ -271,19 +273,19 @@ public final class ItemStack {
         return this.count != itemstack.count ? false : (this.item != itemstack.item ? false : (this.damage != itemstack.damage ? false : (this.tag == null && itemstack.tag != null ? false : this.tag == null || this.tag.equals(itemstack.tag))));
     }
 
-    public static boolean c(ItemStack itemstack, ItemStack itemstack1) {
+    public static boolean c(@Nullable ItemStack itemstack, @Nullable ItemStack itemstack1) {
         return itemstack == itemstack1 ? true : (itemstack != null && itemstack1 != null ? itemstack.doMaterialsMatch(itemstack1) : false);
     }
 
-    public static boolean d(ItemStack itemstack, ItemStack itemstack1) {
+    public static boolean d(@Nullable ItemStack itemstack, @Nullable ItemStack itemstack1) {
         return itemstack == itemstack1 ? true : (itemstack != null && itemstack1 != null ? itemstack.b(itemstack1) : false);
     }
 
-    public boolean doMaterialsMatch(ItemStack itemstack) {
+    public boolean doMaterialsMatch(@Nullable ItemStack itemstack) {
         return itemstack != null && this.item == itemstack.item && this.damage == itemstack.damage;
     }
 
-    public boolean b(ItemStack itemstack) {
+    public boolean b(@Nullable ItemStack itemstack) {
         return !this.e() ? this.doMaterialsMatch(itemstack) : itemstack != null && this.item == itemstack.item;
     }
 
@@ -331,6 +333,7 @@ public final class ItemStack {
         return this.tag != null;
     }
 
+    @Nullable
     public NBTTagCompound getTag() {
         return this.tag;
     }
@@ -453,6 +456,7 @@ public final class ItemStack {
         this.g = entityitemframe;
     }
 
+    @Nullable
     public EntityItemFrame z() {
         return this.g;
     }
@@ -511,6 +515,7 @@ public final class ItemStack {
         nbttaglist.add(nbttagcompound);
     }
 
+    @Deprecated
     public void setItem(Item item) {
         this.item = item;
     }
@@ -525,9 +530,8 @@ public final class ItemStack {
         IChatBaseComponent ichatbasecomponent = (new ChatComponentText("[")).addSibling(chatcomponenttext).a("]");
 
         if (this.item != null) {
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
 
-            this.save(nbttagcompound);
             ichatbasecomponent.getChatModifier().setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_ITEM, new ChatComponentText(nbttagcompound.toString())));
             ichatbasecomponent.getChatModifier().setColor(this.u().e);
         }

@@ -32,7 +32,7 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
         this.f = entityliving.locZ;
         this.j = (byte) ((int) (entityliving.yaw * 256.0F / 360.0F));
         this.k = (byte) ((int) (entityliving.pitch * 256.0F / 360.0F));
-        this.l = (byte) ((int) (entityliving.aO * 256.0F / 360.0F));
+        this.l = (byte) ((int) (entityliving.aP * 256.0F / 360.0F));
         double d0 = 3.9D;
         double d1 = entityliving.motX;
         double d2 = entityliving.motY;

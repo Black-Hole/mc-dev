@@ -13,7 +13,6 @@ import java.net.Proxy;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -71,7 +70,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
         thread.setDaemon(true);
         thread.start();
-        DedicatedServer.LOGGER.info("Starting minecraft server version 1.9.2");
+        DedicatedServer.LOGGER.info("Starting minecraft server version 1.9.4");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
             DedicatedServer.LOGGER.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
         }
@@ -271,7 +270,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     public CrashReport b(CrashReport crashreport) {
         crashreport = super.b(crashreport);
-        crashreport.g().a("Is Modded", new Callable() {
+        crashreport.g().a("Is Modded", new CrashReportCallable() {
             public String a() throws Exception {
                 String s = DedicatedServer.this.getServerModName();
 
@@ -282,7 +281,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
                 return this.a();
             }
         });
-        crashreport.g().a("Type", new Callable() {
+        crashreport.g().a("Type", new CrashReportCallable() {
             public String a() throws Exception {
                 return "Dedicated Server (map_server.txt)";
             }

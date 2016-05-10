@@ -1,12 +1,13 @@
 package net.minecraft.server;
 
 import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.Validate;
 
 public abstract class EntityHanging extends Entity {
 
     private static final Predicate<Entity> c = new Predicate() {
-        public boolean a(Entity entity) {
+        public boolean a(@Nullable Entity entity) {
             return entity instanceof EntityHanging;
         }
 
@@ -16,6 +17,7 @@ public abstract class EntityHanging extends Entity {
     };
     private int d;
     public BlockPosition blockPosition;
+    @Nullable
     public EnumDirection direction;
 
     public EntityHanging(World world) {
@@ -114,7 +116,7 @@ public abstract class EntityHanging extends Entity {
                 }
             }
 
-            return this.world.a((Entity) this, this.getBoundingBox(), EntityHanging.c).isEmpty();
+            return this.world.getEntities(this, this.getBoundingBox(), EntityHanging.c).isEmpty();
         }
     }
 
@@ -178,7 +180,7 @@ public abstract class EntityHanging extends Entity {
 
     public abstract int getHeight();
 
-    public abstract void a(Entity entity);
+    public abstract void a(@Nullable Entity entity);
 
     public abstract void o();
 

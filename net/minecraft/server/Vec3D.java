@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class Vec3D {
 
     public static final Vec3D a = new Vec3D(0.0D, 0.0D, 0.0D);
@@ -91,6 +93,7 @@ public class Vec3D {
         return (double) MathHelper.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
+    @Nullable
     public Vec3D a(Vec3D vec3d, double d0) {
         double d1 = vec3d.x - this.x;
         double d2 = vec3d.y - this.y;
@@ -105,6 +108,7 @@ public class Vec3D {
         }
     }
 
+    @Nullable
     public Vec3D b(Vec3D vec3d, double d0) {
         double d1 = vec3d.x - this.x;
         double d2 = vec3d.y - this.y;
@@ -119,6 +123,7 @@ public class Vec3D {
         }
     }
 
+    @Nullable
     public Vec3D c(Vec3D vec3d, double d0) {
         double d1 = vec3d.x - this.x;
         double d2 = vec3d.y - this.y;

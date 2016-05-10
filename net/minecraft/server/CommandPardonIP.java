@@ -3,6 +3,7 @@ package net.minecraft.server;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
+import javax.annotation.Nullable;
 
 public class CommandPardonIP extends CommandAbstract {
 
@@ -39,7 +40,7 @@ public class CommandPardonIP extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, minecraftserver.getPlayerList().getIPBans().getEntries()) : Collections.emptyList();
     }
 }

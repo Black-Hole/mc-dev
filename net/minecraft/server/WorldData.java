@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.Callable;
+import javax.annotation.Nullable;
 
 public class WorldData {
 
@@ -297,7 +297,7 @@ public class WorldData {
         this.L = worlddata.L;
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound a(@Nullable NBTTagCompound nbttagcompound) {
         if (nbttagcompound == null) {
             nbttagcompound = this.o;
         }
@@ -311,11 +311,11 @@ public class WorldData {
     private void a(NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
         NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
-        nbttagcompound2.setString("Name", "1.9.2");
-        nbttagcompound2.setInt("Id", 176);
+        nbttagcompound2.setString("Name", "1.9.4");
+        nbttagcompound2.setInt("Id", 184);
         nbttagcompound2.setBoolean("Snapshot", false);
         nbttagcompound.set("Version", nbttagcompound2);
-        nbttagcompound.setInt("DataVersion", 176);
+        nbttagcompound.setInt("DataVersion", 184);
         nbttagcompound.setLong("RandomSeed", this.e);
         nbttagcompound.setString("generatorName", this.f.name());
         nbttagcompound.setInt("generatorVersion", this.f.getVersion());
@@ -613,7 +613,7 @@ public class WorldData {
     }
 
     public void a(CrashReportSystemDetails crashreportsystemdetails) {
-        crashreportsystemdetails.a("Level seed", new Callable() {
+        crashreportsystemdetails.a("Level seed", new CrashReportCallable() {
             public String a() throws Exception {
                 return String.valueOf(WorldData.this.getSeed());
             }
@@ -622,7 +622,7 @@ public class WorldData {
                 return this.a();
             }
         });
-        crashreportsystemdetails.a("Level generator", new Callable() {
+        crashreportsystemdetails.a("Level generator", new CrashReportCallable() {
             public String a() throws Exception {
                 return String.format("ID %02d - %s, ver %d. Features enabled: %b", new Object[] { Integer.valueOf(WorldData.this.f.g()), WorldData.this.f.name(), Integer.valueOf(WorldData.this.f.getVersion()), Boolean.valueOf(WorldData.this.y)});
             }
@@ -631,7 +631,7 @@ public class WorldData {
                 return this.a();
             }
         });
-        crashreportsystemdetails.a("Level generator options", new Callable() {
+        crashreportsystemdetails.a("Level generator options", new CrashReportCallable() {
             public String a() throws Exception {
                 return WorldData.this.g;
             }
@@ -640,7 +640,7 @@ public class WorldData {
                 return this.a();
             }
         });
-        crashreportsystemdetails.a("Level spawn location", new Callable() {
+        crashreportsystemdetails.a("Level spawn location", new CrashReportCallable() {
             public String a() throws Exception {
                 return CrashReportSystemDetails.a(WorldData.this.h, WorldData.this.i, WorldData.this.j);
             }
@@ -649,7 +649,7 @@ public class WorldData {
                 return this.a();
             }
         });
-        crashreportsystemdetails.a("Level time", new Callable() {
+        crashreportsystemdetails.a("Level time", new CrashReportCallable() {
             public String a() throws Exception {
                 return String.format("%d game time, %d day time", new Object[] { Long.valueOf(WorldData.this.k), Long.valueOf(WorldData.this.l)});
             }
@@ -658,7 +658,7 @@ public class WorldData {
                 return this.a();
             }
         });
-        crashreportsystemdetails.a("Level dimension", new Callable() {
+        crashreportsystemdetails.a("Level dimension", new CrashReportCallable() {
             public String a() throws Exception {
                 return String.valueOf(WorldData.this.p);
             }
@@ -667,7 +667,7 @@ public class WorldData {
                 return this.a();
             }
         });
-        crashreportsystemdetails.a("Level storage version", new Callable() {
+        crashreportsystemdetails.a("Level storage version", new CrashReportCallable() {
             public String a() throws Exception {
                 String s = "Unknown?";
 
@@ -691,7 +691,7 @@ public class WorldData {
                 return this.a();
             }
         });
-        crashreportsystemdetails.a("Level weather", new Callable() {
+        crashreportsystemdetails.a("Level weather", new CrashReportCallable() {
             public String a() throws Exception {
                 return String.format("Rain time: %d (now: %b), thunder time: %d (now: %b)", new Object[] { Integer.valueOf(WorldData.this.u), Boolean.valueOf(WorldData.this.t), Integer.valueOf(WorldData.this.w), Boolean.valueOf(WorldData.this.v)});
             }
@@ -700,7 +700,7 @@ public class WorldData {
                 return this.a();
             }
         });
-        crashreportsystemdetails.a("Level game mode", new Callable() {
+        crashreportsystemdetails.a("Level game mode", new CrashReportCallable() {
             public String a() throws Exception {
                 return String.format("Game mode: %s (ID %d). Hardcore: %b. Cheats: %b", new Object[] { WorldData.this.x.b(), Integer.valueOf(WorldData.this.x.getId()), Boolean.valueOf(WorldData.this.z), Boolean.valueOf(WorldData.this.A)});
             }

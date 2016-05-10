@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Callable;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
@@ -35,16 +34,16 @@ public class CrashReport {
     }
 
     private void h() {
-        this.d.a("Minecraft Version", new Callable() {
+        this.d.a("Minecraft Version", new CrashReportCallable() {
             public String a() {
-                return "1.9.2";
+                return "1.9.4";
             }
 
             public Object call() throws Exception {
                 return this.a();
             }
         });
-        this.d.a("Operating System", new Callable() {
+        this.d.a("Operating System", new CrashReportCallable() {
             public String a() {
                 return System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version");
             }
@@ -53,7 +52,7 @@ public class CrashReport {
                 return this.a();
             }
         });
-        this.d.a("Java Version", new Callable() {
+        this.d.a("Java Version", new CrashReportCallable() {
             public String a() {
                 return System.getProperty("java.version") + ", " + System.getProperty("java.vendor");
             }
@@ -62,7 +61,7 @@ public class CrashReport {
                 return this.a();
             }
         });
-        this.d.a("Java VM Version", new Callable() {
+        this.d.a("Java VM Version", new CrashReportCallable() {
             public String a() {
                 return System.getProperty("java.vm.name") + " (" + System.getProperty("java.vm.info") + "), " + System.getProperty("java.vm.vendor");
             }
@@ -71,7 +70,7 @@ public class CrashReport {
                 return this.a();
             }
         });
-        this.d.a("Memory", new Callable() {
+        this.d.a("Memory", new CrashReportCallable() {
             public String a() {
                 Runtime runtime = Runtime.getRuntime();
                 long i = runtime.maxMemory();
@@ -88,7 +87,7 @@ public class CrashReport {
                 return this.a();
             }
         });
-        this.d.a("JVM Flags", new Callable() {
+        this.d.a("JVM Flags", new CrashReportCallable() {
             public String a() {
                 RuntimeMXBean runtimemxbean = ManagementFactory.getRuntimeMXBean();
                 List list = runtimemxbean.getInputArguments();
@@ -115,7 +114,7 @@ public class CrashReport {
                 return this.a();
             }
         });
-        this.d.a("IntCache", new Callable() {
+        this.d.a("IntCache", new CrashReportCallable() {
             public String a() throws Exception {
                 return IntCache.b();
             }
@@ -141,6 +140,7 @@ public class CrashReport {
 
         if (this.h != null && this.h.length > 0) {
             stringbuilder.append("-- Head --\n");
+            stringbuilder.append("Thread: ").append(Thread.currentThread().getName()).append("\n");
             stringbuilder.append("Stacktrace:\n");
             StackTraceElement[] astacktraceelement = this.h;
             int i = astacktraceelement.length;

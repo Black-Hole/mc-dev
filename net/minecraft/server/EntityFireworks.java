@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.base.Optional;
+import javax.annotation.Nullable;
 
 public class EntityFireworks extends Entity {
 
@@ -17,7 +18,7 @@ public class EntityFireworks extends Entity {
         this.datawatcher.register(EntityFireworks.FIREWORK_ITEM, Optional.absent());
     }
 
-    public EntityFireworks(World world, double d0, double d1, double d2, ItemStack itemstack) {
+    public EntityFireworks(World world, double d0, double d1, double d2, @Nullable ItemStack itemstack) {
         super(world);
         this.ticksFlown = 0;
         this.setSize(0.25F, 0.25F);
@@ -91,9 +92,8 @@ public class EntityFireworks extends Entity {
         ItemStack itemstack = (ItemStack) ((Optional) this.datawatcher.get(EntityFireworks.FIREWORK_ITEM)).orNull();
 
         if (itemstack != null) {
-            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+            NBTTagCompound nbttagcompound1 = itemstack.save(new NBTTagCompound());
 
-            itemstack.save(nbttagcompound1);
             nbttagcompound.set("FireworksItem", nbttagcompound1);
         }
 

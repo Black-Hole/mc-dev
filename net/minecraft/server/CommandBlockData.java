@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandBlockData extends CommandAbstract {
 
@@ -36,9 +37,7 @@ public class CommandBlockData extends CommandAbstract {
                 if (tileentity == null) {
                     throw new CommandException("commands.blockdata.notValid", new Object[0]);
                 } else {
-                    NBTTagCompound nbttagcompound = new NBTTagCompound();
-
-                    tileentity.save(nbttagcompound);
+                    NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
                     NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttagcompound.clone();
 
                     NBTTagCompound nbttagcompound2;
@@ -67,7 +66,7 @@ public class CommandBlockData extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : Collections.emptyList();
     }
 }

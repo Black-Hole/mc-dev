@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityCow extends EntityAnimal {
 
     public EntityCow(World world) {
@@ -28,11 +30,11 @@ public class EntityCow extends EntityAnimal {
         return SoundEffects.am;
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.ao;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.an;
     }
 
@@ -40,15 +42,16 @@ public class EntityCow extends EntityAnimal {
         this.a(SoundEffects.aq, 0.15F, 1.0F);
     }
 
-    protected float cd() {
+    protected float ce() {
         return 0.4F;
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.H;
     }
 
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
+    public boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {
         if (itemstack != null && itemstack.getItem() == Items.BUCKET && !entityhuman.abilities.canInstantlyBuild && !this.isBaby()) {
             entityhuman.a(SoundEffects.ap, 1.0F, 1.0F);
             if (--itemstack.count == 0) {

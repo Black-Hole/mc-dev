@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ContainerMerchant extends Container {
 
     private IMerchant merchant;
@@ -50,9 +52,10 @@ public class ContainerMerchant extends Container {
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.merchant.t_() == entityhuman;
+        return this.merchant.getTrader() == entityhuman;
     }
 
+    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
         ItemStack itemstack = null;
         Slot slot = (Slot) this.c.get(i);

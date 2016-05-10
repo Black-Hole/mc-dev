@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.List;
+import javax.annotation.Nullable;
 
 public interface IBlockProperties {
 
@@ -48,9 +49,10 @@ public interface IBlockProperties {
 
     boolean p();
 
+    @Nullable
     AxisAlignedBB d(World world, BlockPosition blockposition);
 
-    void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, Entity entity);
+    void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity);
 
     AxisAlignedBB c(IBlockAccess iblockaccess, BlockPosition blockposition);
 

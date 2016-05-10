@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public class TileEntityBeacon extends TileEntityContainer implements ITickable, IWorldInventory {
 
@@ -15,7 +16,9 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
     private final List<TileEntityBeacon.BeaconColorTracker> g = Lists.newArrayList();
     private boolean j;
     private int k = -1;
+    @Nullable
     private MobEffectList l;
+    @Nullable
     private MobEffectList m;
     private ItemStack inventorySlot;
     private String o;
@@ -168,13 +171,16 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
 
     }
 
-    public Packet<?> getUpdatePacket() {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
-
-        this.save(nbttagcompound);
-        return new PacketPlayOutTileEntityData(this.position, 3, nbttagcompound);
+    @Nullable
+    public PacketPlayOutTileEntityData getUpdatePacket() {
+        return new PacketPlayOutTileEntityData(this.position, 3, this.E_());
     }
 
+    public NBTTagCompound E_() {
+        return this.save(new NBTTagCompound());
+    }
+
+    @Nullable
     private static MobEffectList f(int i) {
         MobEffectList mobeffectlist = MobEffectList.fromId(i);
 
@@ -188,21 +194,24 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         this.k = nbttagcompound.getInt("Levels");
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         nbttagcompound.setInt("Primary", MobEffectList.getId(this.l));
         nbttagcompound.setInt("Secondary", MobEffectList.getId(this.m));
         nbttagcompound.setInt("Levels", this.k);
+        return nbttagcompound;
     }
 
     public int getSize() {
         return 1;
     }
 
+    @Nullable
     public ItemStack getItem(int i) {
         return i == 0 ? this.inventorySlot : null;
     }
 
+    @Nullable
     public ItemStack splitStack(int i, int j) {
         if (i == 0 && this.inventorySlot != null) {
             if (j >= this.inventorySlot.count) {
@@ -219,6 +228,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         }
     }
 
+    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         if (i == 0) {
             ItemStack itemstack = this.inventorySlot;
@@ -230,7 +240,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         }
     }
 
-    public void setItem(int i, ItemStack itemstack) {
+    public void setItem(int i, @Nullable ItemStack itemstack) {
         if (i == 0) {
             this.inventorySlot = itemstack;
         }

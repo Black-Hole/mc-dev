@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class EntitySpider extends EntityMonster {
 
@@ -54,11 +55,11 @@ public class EntitySpider extends EntityMonster {
         return SoundEffects.fR;
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.fT;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.fS;
     }
 
@@ -66,6 +67,7 @@ public class EntitySpider extends EntityMonster {
         this.a(SoundEffects.fU, 0.15F, 1.0F);
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.r;
     }
@@ -100,7 +102,8 @@ public class EntitySpider extends EntityMonster {
         this.datawatcher.set(EntitySpider.a, Byte.valueOf(b0));
     }
 
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
+    @Nullable
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
         Object object = super.prepare(difficultydamagescaler, groupdataentity);
 
         if (this.world.random.nextInt(100) == 0) {

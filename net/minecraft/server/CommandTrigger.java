@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandTrigger extends CommandAbstract {
 
@@ -77,7 +78,7 @@ public class CommandTrigger extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         if (astring.length == 1) {
             Scoreboard scoreboard = minecraftserver.getWorldServer(0).getScoreboard();
             ArrayList arraylist = Lists.newArrayList();

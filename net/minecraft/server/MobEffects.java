@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class MobEffects {
 
     public static final MobEffectList FASTER_MOVEMENT;
@@ -30,6 +32,7 @@ public class MobEffects {
     public static final MobEffectList z;
     public static final MobEffectList A;
 
+    @Nullable
     private static MobEffectList a(String s) {
         MobEffectList mobeffectlist = (MobEffectList) MobEffectList.REGISTRY.get(new MinecraftKey(s));
 

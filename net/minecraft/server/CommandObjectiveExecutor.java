@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class CommandObjectiveExecutor {
 
     private static final int a = CommandObjectiveExecutor.EnumCommandResult.values().length;
@@ -131,7 +133,7 @@ public class CommandObjectiveExecutor {
 
     }
 
-    public static void a(CommandObjectiveExecutor commandobjectiveexecutor, CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, String s, String s1) {
+    public static void a(CommandObjectiveExecutor commandobjectiveexecutor, CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, @Nullable String s, @Nullable String s1) {
         if (s != null && !s.isEmpty() && s1 != null && !s1.isEmpty()) {
             if (commandobjectiveexecutor.c == CommandObjectiveExecutor.b || commandobjectiveexecutor.d == CommandObjectiveExecutor.b) {
                 commandobjectiveexecutor.c = new String[CommandObjectiveExecutor.a];
@@ -217,6 +219,7 @@ public class CommandObjectiveExecutor {
             return astring;
         }
 
+        @Nullable
         public static CommandObjectiveExecutor.EnumCommandResult a(String s) {
             CommandObjectiveExecutor.EnumCommandResult[] acommandobjectiveexecutor_enumcommandresult = values();
             int i = acommandobjectiveexecutor_enumcommandresult.length;

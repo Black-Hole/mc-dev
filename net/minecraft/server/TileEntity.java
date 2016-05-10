@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import java.util.Map;
-import java.util.concurrent.Callable;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,7 +47,11 @@ public abstract class TileEntity {
         this.position = new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z"));
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
+        return this.d(nbttagcompound);
+    }
+
+    private NBTTagCompound d(NBTTagCompound nbttagcompound) {
         String s = (String) TileEntity.g.get(this.getClass());
 
         if (s == null) {
@@ -57,10 +61,11 @@ public abstract class TileEntity {
             nbttagcompound.setInt("x", this.position.getX());
             nbttagcompound.setInt("y", this.position.getY());
             nbttagcompound.setInt("z", this.position.getZ());
+            return nbttagcompound;
         }
     }
 
-    public static TileEntity a(MinecraftServer minecraftserver, NBTTagCompound nbttagcompound) {
+    public static TileEntity c(NBTTagCompound nbttagcompound) {
         TileEntity tileentity = null;
         String s = nbttagcompound.getString("id");
 
@@ -123,8 +128,13 @@ public abstract class TileEntity {
         return this.e;
     }
 
-    public Packet<?> getUpdatePacket() {
+    @Nullable
+    public PacketPlayOutTileEntityData getUpdatePacket() {
         return null;
+    }
+
+    public NBTTagCompound E_() {
+        return this.d(new NBTTagCompound());
     }
 
     public boolean x() {
@@ -149,7 +159,7 @@ public abstract class TileEntity {
     }
 
     public void a(CrashReportSystemDetails crashreportsystemdetails) {
-        crashreportsystemdetails.a("Name", new Callable() {
+        crashreportsystemdetails.a("Name", new CrashReportCallable() {
             public String a() throws Exception {
                 return (String) TileEntity.g.get(TileEntity.this.getClass()) + " // " + TileEntity.this.getClass().getCanonicalName();
             }
@@ -160,7 +170,7 @@ public abstract class TileEntity {
         });
         if (this.world != null) {
             CrashReportSystemDetails.a(crashreportsystemdetails, this.position, this.getBlock(), this.u());
-            crashreportsystemdetails.a("Actual block type", new Callable() {
+            crashreportsystemdetails.a("Actual block type", new CrashReportCallable() {
                 public String a() throws Exception {
                     int i = Block.getId(TileEntity.this.world.getType(TileEntity.this.position).getBlock());
 
@@ -175,7 +185,7 @@ public abstract class TileEntity {
                     return this.a();
                 }
             });
-            crashreportsystemdetails.a("Actual block data value", new Callable() {
+            crashreportsystemdetails.a("Actual block data value", new CrashReportCallable() {
                 public String a() throws Exception {
                     IBlockData iblockdata = TileEntity.this.world.getType(TileEntity.this.position);
                     int i = iblockdata.getBlock().toLegacyData(iblockdata);

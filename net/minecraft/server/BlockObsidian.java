@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockObsidian extends Block {
 
@@ -9,6 +10,7 @@ public class BlockObsidian extends Block {
         this.a(CreativeModeTab.b);
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.OBSIDIAN);
     }

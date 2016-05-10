@@ -1,13 +1,15 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public abstract class EntityAgeable extends EntityCreature {
 
-    private static final DataWatcherObject<Boolean> bv = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.h);
+    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.h);
     protected int a;
     protected int b;
     protected int c;
-    private float bw = -1.0F;
-    private float bx;
+    private float bx = -1.0F;
+    private float by;
 
     public EntityAgeable(World world) {
         super(world);
@@ -15,7 +17,7 @@ public abstract class EntityAgeable extends EntityCreature {
 
     public abstract EntityAgeable createChild(EntityAgeable entityageable);
 
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack) {
+    public boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {
         if (itemstack != null && itemstack.getItem() == Items.SPAWN_EGG) {
             if (!this.world.isClientSide) {
                 Class oclass = EntityTypes.a(EntityTypes.a(ItemMonsterEgg.h(itemstack)));
@@ -46,11 +48,11 @@ public abstract class EntityAgeable extends EntityCreature {
 
     protected void i() {
         super.i();
-        this.datawatcher.register(EntityAgeable.bv, Boolean.valueOf(false));
+        this.datawatcher.register(EntityAgeable.bw, Boolean.valueOf(false));
     }
 
     public int getAge() {
-        return this.world.isClientSide ? (((Boolean) this.datawatcher.get(EntityAgeable.bv)).booleanValue() ? -1 : 1) : this.a;
+        return this.world.isClientSide ? (((Boolean) this.datawatcher.get(EntityAgeable.bw)).booleanValue() ? -1 : 1) : this.a;
     }
 
     public void setAge(int i, boolean flag) {
@@ -86,7 +88,7 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     public void setAgeRaw(int i) {
-        this.datawatcher.set(EntityAgeable.bv, Boolean.valueOf(i < 0));
+        this.datawatcher.set(EntityAgeable.bw, Boolean.valueOf(i < 0));
         this.a = i;
         this.a(this.isBaby());
     }
@@ -104,7 +106,7 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityAgeable.bv.equals(datawatcherobject)) {
+        if (EntityAgeable.bw.equals(datawatcherobject)) {
             this.a(this.isBaby());
         }
 
@@ -149,10 +151,10 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     public final void setSize(float f, float f1) {
-        boolean flag = this.bw > 0.0F;
+        boolean flag = this.bx > 0.0F;
 
-        this.bw = f;
-        this.bx = f1;
+        this.bx = f;
+        this.by = f1;
         if (!flag) {
             this.a(1.0F);
         }
@@ -160,6 +162,6 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     protected final void a(float f) {
-        super.setSize(this.bw * f, this.bx * f);
+        super.setSize(this.bx * f, this.by * f);
     }
 }

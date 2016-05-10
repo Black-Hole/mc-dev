@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockBanner extends BlockTileEntity {
 
@@ -16,6 +17,7 @@ public class BlockBanner extends BlockTileEntity {
         return LocaleI18n.get("item.banner.white.name");
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockBanner.k;
     }
@@ -40,18 +42,19 @@ public class BlockBanner extends BlockTileEntity {
         return new TileEntityBanner();
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.BANNER;
     }
 
+    @Nullable
     private ItemStack e(World world, BlockPosition blockposition, IBlockData iblockdata) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityBanner) {
-            ItemStack itemstack = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).b());
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            ItemStack itemstack = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).c());
+            NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
 
-            tileentity.save(nbttagcompound);
             nbttagcompound.remove("x");
             nbttagcompound.remove("y");
             nbttagcompound.remove("z");
@@ -84,13 +87,13 @@ public class BlockBanner extends BlockTileEntity {
         return !this.b(world, blockposition) && super.canPlace(world, blockposition);
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
         if (tileentity instanceof TileEntityBanner) {
             TileEntityBanner tileentitybanner = (TileEntityBanner) tileentity;
-            ItemStack itemstack1 = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).b());
+            ItemStack itemstack1 = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).c());
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-            TileEntityBanner.a(nbttagcompound, tileentitybanner.b(), tileentitybanner.d());
+            TileEntityBanner.a(nbttagcompound, tileentitybanner.c(), tileentitybanner.e());
             itemstack1.a("BlockEntityTag", (NBTBase) nbttagcompound);
             a(world, blockposition, itemstack1);
         } else {
@@ -149,13 +152,13 @@ public class BlockBanner extends BlockTileEntity {
             return iblockdata.set(BlockBanner.BlockStandingBanner.ROTATION, Integer.valueOf(enumblockmirror.a(((Integer) iblockdata.get(BlockBanner.BlockStandingBanner.ROTATION)).intValue(), 16)));
         }
 
-        public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+        public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
             if (!world.getType(blockposition.down()).getMaterial().isBuildable()) {
                 this.b(world, blockposition, iblockdata, 0);
                 world.setAir(blockposition);
             }
 
-            super.doPhysics(world, blockposition, iblockdata, block);
+            super.a(iblockdata, world, blockposition, block);
         }
 
         public IBlockData fromLegacyData(int i) {
@@ -207,7 +210,7 @@ public class BlockBanner extends BlockTileEntity {
             }
         }
 
-        public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+        public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockBanner.BlockWallBanner.FACING);
 
             if (!world.getType(blockposition.shift(enumdirection.opposite())).getMaterial().isBuildable()) {
@@ -215,7 +218,7 @@ public class BlockBanner extends BlockTileEntity {
                 world.setAir(blockposition);
             }
 
-            super.doPhysics(world, blockposition, iblockdata, block);
+            super.a(iblockdata, world, blockposition, block);
         }
 
         public IBlockData fromLegacyData(int i) {

@@ -1,16 +1,10 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class PathfinderWater extends PathfinderAbstract {
 
     public PathfinderWater() {}
-
-    public void a(IBlockAccess iblockaccess, EntityInsentient entityinsentient) {
-        super.a(iblockaccess, entityinsentient);
-    }
-
-    public void a() {
-        super.a();
-    }
 
     public PathPoint b() {
         return this.a(MathHelper.floor(this.b.getBoundingBox().a), MathHelper.floor(this.b.getBoundingBox().b + 0.5D), MathHelper.floor(this.b.getBoundingBox().c));
@@ -41,6 +35,11 @@ public class PathfinderWater extends PathfinderAbstract {
         return PathType.WATER;
     }
 
+    public PathType a(IBlockAccess iblockaccess, int i, int j, int k) {
+        return PathType.WATER;
+    }
+
+    @Nullable
     private PathPoint b(int i, int j, int k) {
         PathType pathtype = this.c(i, j, k);
 

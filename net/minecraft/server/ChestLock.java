@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public class ChestLock {
 
     public static final ChestLock a = new ChestLock("");

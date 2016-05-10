@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.base.Optional;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class DataWatcherRegistry {
 
@@ -249,6 +250,7 @@ public class DataWatcherRegistry {
         DataWatcherRegistry.n.c(datawatcherserializer);
     }
 
+    @Nullable
     public static DataWatcherSerializer<?> a(int i) {
         return (DataWatcherSerializer) DataWatcherRegistry.n.fromId(i);
     }

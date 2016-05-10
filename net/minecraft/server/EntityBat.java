@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Calendar;
+import javax.annotation.Nullable;
 
 public class EntityBat extends EntityAmbient {
 
@@ -18,23 +19,24 @@ public class EntityBat extends EntityAmbient {
         this.datawatcher.register(EntityBat.a, Byte.valueOf((byte) 0));
     }
 
-    protected float cd() {
+    protected float ce() {
         return 0.1F;
     }
 
-    protected float ce() {
-        return super.ce() * 0.95F;
+    protected float cf() {
+        return super.cf() * 0.95F;
     }
 
+    @Nullable
     protected SoundEffect G() {
         return this.isAsleep() && this.random.nextInt(4) != 0 ? null : SoundEffects.w;
     }
 
-    protected SoundEffect bR() {
+    protected SoundEffect bS() {
         return SoundEffects.y;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bT() {
         return SoundEffects.x;
     }
 
@@ -44,7 +46,7 @@ public class EntityBat extends EntityAmbient {
 
     protected void C(Entity entity) {}
 
-    protected void cn() {}
+    protected void co() {}
 
     protected void initAttributes() {
         super.initAttributes();
@@ -88,7 +90,7 @@ public class EntityBat extends EntityAmbient {
                 this.world.a((EntityHuman) null, 1025, blockposition, 0);
             } else {
                 if (this.random.nextInt(200) == 0) {
-                    this.aO = (float) this.random.nextInt(360);
+                    this.aP = (float) this.random.nextInt(360);
                 }
 
                 if (this.world.b(this, 4.0D) != null) {
@@ -115,7 +117,7 @@ public class EntityBat extends EntityAmbient {
             float f = (float) (MathHelper.b(this.motZ, this.motX) * 57.2957763671875D) - 90.0F;
             float f1 = MathHelper.g(f - this.yaw);
 
-            this.be = 0.5F;
+            this.bf = 0.5F;
             this.yaw += f1;
             if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).l()) {
                 this.setAsleep(true);
@@ -158,7 +160,7 @@ public class EntityBat extends EntityAmbient {
         nbttagcompound.setByte("BatFlags", ((Byte) this.datawatcher.get(EntityBat.a)).byteValue());
     }
 
-    public boolean cF() {
+    public boolean cG() {
         BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
         if (blockposition.getY() >= this.world.K()) {
@@ -173,7 +175,7 @@ public class EntityBat extends EntityAmbient {
                 return false;
             }
 
-            return i > this.random.nextInt(b0) ? false : super.cF();
+            return i > this.random.nextInt(b0) ? false : super.cG();
         }
     }
 
@@ -185,6 +187,7 @@ public class EntityBat extends EntityAmbient {
         return this.length / 2.0F;
     }
 
+    @Nullable
     protected MinecraftKey J() {
         return LootTables.ac;
     }

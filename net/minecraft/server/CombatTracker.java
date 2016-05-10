@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CombatTracker {
 
@@ -97,6 +98,7 @@ public class CombatTracker {
         }
     }
 
+    @Nullable
     public EntityLiving c() {
         EntityLiving entityliving = null;
         EntityHuman entityhuman = null;
@@ -125,6 +127,7 @@ public class CombatTracker {
         }
     }
 
+    @Nullable
     private CombatEntry j() {
         CombatEntry combatentry = null;
         CombatEntry combatentry1 = null;

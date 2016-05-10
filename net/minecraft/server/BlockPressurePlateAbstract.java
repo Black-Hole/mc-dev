@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public abstract class BlockPressurePlateAbstract extends Block {
 
@@ -28,6 +29,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
         return 20;
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockPressurePlateAbstract.k;
     }
@@ -52,7 +54,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
         return this.i(world, blockposition.down());
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!this.i(world, blockposition.down())) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);

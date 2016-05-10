@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class TileEntityFurnace extends TileEntityContainer implements ITickable, IWorldInventory {
 
     private static final int[] a = new int[] { 0};
@@ -18,19 +20,22 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
         return this.items.length;
     }
 
+    @Nullable
     public ItemStack getItem(int i) {
         return this.items[i];
     }
 
+    @Nullable
     public ItemStack splitStack(int i, int j) {
         return ContainerUtil.a(this.items, i, j);
     }
 
+    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         return ContainerUtil.a(this.items, i);
     }
 
-    public void setItem(int i, ItemStack itemstack) {
+    public void setItem(int i, @Nullable ItemStack itemstack) {
         boolean flag = itemstack != null && itemstack.doMaterialsMatch(this.items[i]) && ItemStack.equals(itemstack, this.items[i]);
 
         this.items[i] = itemstack;
@@ -83,7 +88,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
 
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         nbttagcompound.setShort("BurnTime", (short) this.burnTime);
         nbttagcompound.setShort("CookTime", (short) this.cookTime);
@@ -105,6 +110,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
             nbttagcompound.setString("CustomName", this.m);
         }
 
+        return nbttagcompound;
     }
 
     public int getMaxStackSize() {
@@ -169,7 +175,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
 
     }
 
-    public int a(ItemStack itemstack) {
+    public int a(@Nullable ItemStack itemstack) {
         return 200;
     }
 

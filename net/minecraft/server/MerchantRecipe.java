@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class MerchantRecipe {
 
     public ItemStack buyingItem1;
@@ -13,11 +15,11 @@ public class MerchantRecipe {
         this.a(nbttagcompound);
     }
 
-    public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, ItemStack itemstack2) {
+    public MerchantRecipe(ItemStack itemstack, @Nullable ItemStack itemstack1, ItemStack itemstack2) {
         this(itemstack, itemstack1, itemstack2, 0, 7);
     }
 
-    public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, ItemStack itemstack2, int i, int j) {
+    public MerchantRecipe(ItemStack itemstack, @Nullable ItemStack itemstack1, ItemStack itemstack2, int i, int j) {
         this.buyingItem1 = itemstack;
         this.buyingItem2 = itemstack1;
         this.sellingItem = itemstack2;

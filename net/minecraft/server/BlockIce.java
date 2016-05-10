@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockIce extends BlockHalfTransparent {
 
@@ -11,7 +12,7 @@ public class BlockIce extends BlockHalfTransparent {
         this.a(CreativeModeTab.b);
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
         entityhuman.b(StatisticList.a((Block) this));
         entityhuman.applyExhaustion(0.025F);
         if (this.o() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {

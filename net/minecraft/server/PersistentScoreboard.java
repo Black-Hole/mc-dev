@@ -87,7 +87,7 @@ public class PersistentScoreboard extends PersistentBase {
             if (nbttagcompound.hasKeyOfType("DeathMessageVisibility", 8)) {
                 scoreboardteambase_enumnametagvisibility = ScoreboardTeamBase.EnumNameTagVisibility.a(nbttagcompound.getString("DeathMessageVisibility"));
                 if (scoreboardteambase_enumnametagvisibility != null) {
-                    scoreboardteam.b(scoreboardteambase_enumnametagvisibility);
+                    scoreboardteam.setDeathMessageVisibility(scoreboardteambase_enumnametagvisibility);
                 }
             }
 
@@ -95,7 +95,7 @@ public class PersistentScoreboard extends PersistentBase {
                 ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = ScoreboardTeamBase.EnumTeamPush.a(nbttagcompound.getString("CollisionRule"));
 
                 if (scoreboardteambase_enumteampush != null) {
-                    scoreboardteam.a(scoreboardteambase_enumteampush);
+                    scoreboardteam.setCollisionRule(scoreboardteambase_enumteampush);
                 }
             }
 
@@ -164,14 +164,16 @@ public class PersistentScoreboard extends PersistentBase {
 
     }
 
-    public void b(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound b(NBTTagCompound nbttagcompound) {
         if (this.c == null) {
             PersistentScoreboard.b.warn("Tried to save scoreboard without having a scoreboard...");
+            return nbttagcompound;
         } else {
             nbttagcompound.set("Objectives", this.b());
             nbttagcompound.set("PlayerScores", this.e());
             nbttagcompound.set("Teams", this.a());
             this.d(nbttagcompound);
+            return nbttagcompound;
         }
     }
 
@@ -195,8 +197,8 @@ public class PersistentScoreboard extends PersistentBase {
             nbttagcompound.setBoolean("AllowFriendlyFire", scoreboardteam.allowFriendlyFire());
             nbttagcompound.setBoolean("SeeFriendlyInvisibles", scoreboardteam.canSeeFriendlyInvisibles());
             nbttagcompound.setString("NameTagVisibility", scoreboardteam.getNameTagVisibility().e);
-            nbttagcompound.setString("DeathMessageVisibility", scoreboardteam.j().e);
-            nbttagcompound.setString("CollisionRule", scoreboardteam.k().e);
+            nbttagcompound.setString("DeathMessageVisibility", scoreboardteam.getDeathMessageVisibility().e);
+            nbttagcompound.setString("CollisionRule", scoreboardteam.getCollisionRule().e);
             NBTTagList nbttaglist1 = new NBTTagList();
             Iterator iterator1 = scoreboardteam.getPlayerNameSet().iterator();
 

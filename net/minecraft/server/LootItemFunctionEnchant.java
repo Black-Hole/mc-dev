@@ -12,15 +12,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class LootItemFunctionEnchant extends LootItemFunction {
 
     private static final Logger a = LogManager.getLogger();
+    @Nullable
     private final List<Enchantment> b;
 
-    public LootItemFunctionEnchant(LootItemCondition[] alootitemcondition, List<Enchantment> list) {
+    public LootItemFunctionEnchant(LootItemCondition[] alootitemcondition, @Nullable List<Enchantment> list) {
         super(alootitemcondition);
         this.b = list;
     }

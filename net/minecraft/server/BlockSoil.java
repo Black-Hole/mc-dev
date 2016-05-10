@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockSoil extends Block {
 
@@ -19,6 +20,7 @@ public class BlockSoil extends Block {
         return BlockSoil.b;
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockSoil.j;
     }
@@ -76,14 +78,15 @@ public class BlockSoil extends Block {
         return true;
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        super.doPhysics(world, blockposition, iblockdata, block);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+        super.a(iblockdata, world, blockposition, block);
         if (world.getType(blockposition.up()).getMaterial().isBuildable()) {
             world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
         }
 
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
     }

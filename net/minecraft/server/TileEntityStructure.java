@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class TileEntityStructure extends TileEntity {
 
@@ -26,7 +27,7 @@ public class TileEntityStructure extends TileEntity {
         this.l = TileEntityStructure.UsageMode.DATA;
     }
 
-    public void save(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         nbttagcompound.setString("name", this.a);
         nbttagcompound.setString("author", this.f);
@@ -41,6 +42,7 @@ public class TileEntityStructure extends TileEntity {
         nbttagcompound.setString("mirror", this.j.toString());
         nbttagcompound.setString("mode", this.l.toString());
         nbttagcompound.setBoolean("ignoreEntities", this.m);
+        return nbttagcompound;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -72,11 +74,13 @@ public class TileEntityStructure extends TileEntity {
         this.m = nbttagcompound.getBoolean("ignoreEntities");
     }
 
-    public Packet<?> getUpdatePacket() {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
+    @Nullable
+    public PacketPlayOutTileEntityData getUpdatePacket() {
+        return new PacketPlayOutTileEntityData(this.position, 7, this.E_());
+    }
 
-        this.save(nbttagcompound);
-        return new PacketPlayOutTileEntityData(this.position, 7, nbttagcompound);
+    public NBTTagCompound E_() {
+        return this.save(new NBTTagCompound());
     }
 
     public void a(String s) {
@@ -117,7 +121,7 @@ public class TileEntityStructure extends TileEntity {
         this.m = flag;
     }
 
-    public boolean l() {
+    public boolean m() {
         if (this.l != TileEntityStructure.UsageMode.SAVE) {
             return false;
         } else {
@@ -150,7 +154,7 @@ public class TileEntityStructure extends TileEntity {
 
     private List<TileEntityStructure> a(List<TileEntityStructure> list) {
         Iterable iterable = Iterables.filter(list, new Predicate() {
-            public boolean a(TileEntityStructure tileentitystructure) {
+            public boolean a(@Nullable TileEntityStructure tileentitystructure) {
                 return tileentitystructure.l == TileEntityStructure.UsageMode.CORNER && TileEntityStructure.this.a.equals(tileentitystructure.a);
             }
 
@@ -221,7 +225,7 @@ public class TileEntityStructure extends TileEntity {
         return structureboundingbox;
     }
 
-    public boolean m() {
+    public boolean n() {
         if (this.l == TileEntityStructure.UsageMode.SAVE && !this.world.isClientSide) {
             BlockPosition blockposition = this.getPosition().a(this.h);
             WorldServer worldserver = (WorldServer) this.world;
@@ -238,7 +242,7 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public boolean n() {
+    public boolean o() {
         if (this.l == TileEntityStructure.UsageMode.LOAD && !this.world.isClientSide) {
             BlockPosition blockposition = this.getPosition().a(this.h);
             WorldServer worldserver = (WorldServer) this.world;

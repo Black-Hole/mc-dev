@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public class BlockRedstoneWire extends Block {
 
@@ -87,6 +88,7 @@ public class BlockRedstoneWire extends Block {
         }
     }
 
+    @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return BlockRedstoneWire.k;
     }
@@ -284,7 +286,7 @@ public class BlockRedstoneWire extends Block {
         }
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!world.isClientSide) {
             if (this.canPlace(world, blockposition)) {
                 this.e(world, blockposition, iblockdata);
@@ -296,6 +298,7 @@ public class BlockRedstoneWire extends Block {
         }
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.REDSTONE;
     }
@@ -354,7 +357,7 @@ public class BlockRedstoneWire extends Block {
         return a(iblockdata, (EnumDirection) null);
     }
 
-    protected static boolean a(IBlockData iblockdata, EnumDirection enumdirection) {
+    protected static boolean a(IBlockData iblockdata, @Nullable EnumDirection enumdirection) {
         Block block = iblockdata.getBlock();
 
         if (block == Blocks.REDSTONE_WIRE) {

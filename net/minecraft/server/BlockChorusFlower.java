@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockChorusFlower extends Block {
 
@@ -14,6 +15,7 @@ public class BlockChorusFlower extends Block {
         this.a(true);
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return null;
     }
@@ -138,7 +140,7 @@ public class BlockChorusFlower extends Block {
         return super.canPlace(world, blockposition) && this.b(world, blockposition);
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!this.b(world, blockposition)) {
             world.a(blockposition, (Block) this, 1);
         }
@@ -173,7 +175,7 @@ public class BlockChorusFlower extends Block {
         }
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
         super.a(world, entityhuman, blockposition, iblockdata, tileentity, itemstack);
         a(world, blockposition, new ItemStack(Item.getItemOf(this)));
     }

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandWorldBorder extends CommandAbstract {
 
@@ -145,7 +146,7 @@ public class CommandWorldBorder extends CommandAbstract {
         return minecraftserver.worldServer[0].getWorldBorder();
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         return astring.length == 1 ? a(astring, new String[] { "set", "center", "damage", "warning", "add", "get"}) : (astring.length == 2 && astring[0].equals("damage") ? a(astring, new String[] { "buffer", "amount"}) : (astring.length >= 2 && astring.length <= 3 && astring[0].equals("center") ? b(astring, 1, blockposition) : (astring.length == 2 && astring[0].equals("warning") ? a(astring, new String[] { "time", "distance"}) : Collections.emptyList())));
     }
 }

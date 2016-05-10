@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 public abstract class EntityMinecartAbstract extends Entity implements INamableTileEntity {
 
@@ -14,12 +15,12 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
     private static final DataWatcherObject<Boolean> f = DataWatcher.a(EntityMinecartAbstract.class, DataWatcherRegistry.h);
     private boolean g;
     private static final int[][][] h = new int[][][] { { { 0, 0, -1}, { 0, 0, 1}}, { { -1, 0, 0}, { 1, 0, 0}}, { { -1, -1, 0}, { 1, 0, 0}}, { { -1, 0, 0}, { 1, -1, 0}}, { { 0, 0, -1}, { 0, -1, 1}}, { { 0, -1, -1}, { 0, 0, 1}}, { { 0, 0, 1}, { 1, 0, 0}}, { { 0, 0, 1}, { -1, 0, 0}}, { { 0, 0, -1}, { -1, 0, 0}}, { { 0, 0, -1}, { 1, 0, 0}}};
-    private int as;
-    private double at;
+    private int at;
     private double au;
     private double av;
     private double aw;
     private double ax;
+    private double ay;
 
     public EntityMinecartAbstract(World world) {
         super(world);
@@ -65,10 +66,12 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         this.datawatcher.register(EntityMinecartAbstract.f, Boolean.valueOf(false));
     }
 
+    @Nullable
     public AxisAlignedBB j(Entity entity) {
         return entity.isCollidable() ? entity.getBoundingBox() : null;
     }
 
+    @Nullable
     public AxisAlignedBB af() {
         return null;
     }
@@ -141,7 +144,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         super.die();
     }
 
-    public EnumDirection bj() {
+    public EnumDirection bk() {
         return this.g ? this.getDirection().opposite().e() : this.getDirection().e();
     }
 
@@ -201,15 +204,15 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         }
 
         if (this.world.isClientSide) {
-            if (this.as > 0) {
-                double d0 = this.locX + (this.at - this.locX) / (double) this.as;
-                double d1 = this.locY + (this.au - this.locY) / (double) this.as;
-                double d2 = this.locZ + (this.av - this.locZ) / (double) this.as;
-                double d3 = MathHelper.g(this.aw - (double) this.yaw);
+            if (this.at > 0) {
+                double d0 = this.locX + (this.au - this.locX) / (double) this.at;
+                double d1 = this.locY + (this.av - this.locY) / (double) this.at;
+                double d2 = this.locZ + (this.aw - this.locZ) / (double) this.at;
+                double d3 = MathHelper.g(this.ax - (double) this.yaw);
 
-                this.yaw = (float) ((double) this.yaw + d3 / (double) this.as);
-                this.pitch = (float) ((double) this.pitch + (this.ax - (double) this.pitch) / (double) this.as);
-                --this.as;
+                this.yaw = (float) ((double) this.yaw + d3 / (double) this.at);
+                this.pitch = (float) ((double) this.pitch + (this.ay - (double) this.pitch) / (double) this.at);
+                --this.at;
                 this.setPosition(d0, d1, d2);
                 this.setYawPitch(this.yaw, this.pitch);
             } else {
@@ -360,14 +363,14 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
 
         this.motX = d5 * d1 / d3;
         this.motZ = d5 * d2 / d3;
-        Entity entity = this.bu().isEmpty() ? null : (Entity) this.bu().get(0);
+        Entity entity = this.bv().isEmpty() ? null : (Entity) this.bv().get(0);
         double d6;
         double d7;
         double d8;
         double d9;
 
         if (entity instanceof EntityLiving) {
-            d6 = (double) ((EntityLiving) entity).be;
+            d6 = (double) ((EntityLiving) entity).bf;
             if (d6 > 0.0D) {
                 d7 = -Math.sin((double) (entity.yaw * 0.017453292F));
                 d8 = Math.cos((double) (entity.yaw * 0.017453292F));

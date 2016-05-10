@@ -58,7 +58,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         return !this.z(iblockdata) ? 0 : (iblockdata.get(BlockDiodeAbstract.FACING) == enumdirection ? this.a(iblockaccess, blockposition, iblockdata) : 0);
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (this.b(world, blockposition)) {
             this.g(world, blockposition, iblockdata);
         } else {

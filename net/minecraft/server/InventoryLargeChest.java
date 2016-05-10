@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class InventoryLargeChest implements ITileInventory {
 
     private String a;
@@ -46,19 +48,22 @@ public class InventoryLargeChest implements ITileInventory {
         return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
     }
 
+    @Nullable
     public ItemStack getItem(int i) {
         return i >= this.left.getSize() ? this.right.getItem(i - this.left.getSize()) : this.left.getItem(i);
     }
 
+    @Nullable
     public ItemStack splitStack(int i, int j) {
         return i >= this.left.getSize() ? this.right.splitStack(i - this.left.getSize(), j) : this.left.splitStack(i, j);
     }
 
+    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         return i >= this.left.getSize() ? this.right.splitWithoutUpdate(i - this.left.getSize()) : this.left.splitWithoutUpdate(i);
     }
 
-    public void setItem(int i, ItemStack itemstack) {
+    public void setItem(int i, @Nullable ItemStack itemstack) {
         if (i >= this.left.getSize()) {
             this.right.setItem(i - this.left.getSize(), itemstack);
         } else {

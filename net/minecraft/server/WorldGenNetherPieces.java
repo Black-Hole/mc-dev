@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class WorldGenNetherPieces {
 
@@ -635,11 +636,13 @@ public class WorldGenNetherPieces {
             this.a(world, structureboundingbox, 5, 5, 5, 7, 5, 7, Blocks.NETHER_BRICK.getBlockData(), Blocks.NETHER_BRICK.getBlockData(), false);
             this.a(world, structureboundingbox, 6, 1, 6, 6, 4, 6, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(world, Blocks.NETHER_BRICK.getBlockData(), 6, 0, 6, structureboundingbox);
-            this.a(world, Blocks.FLOWING_LAVA.getBlockData(), 6, 5, 6, structureboundingbox);
+            IBlockData iblockdata = Blocks.FLOWING_LAVA.getBlockData();
+
+            this.a(world, iblockdata, 6, 5, 6, structureboundingbox);
             BlockPosition blockposition = new BlockPosition(this.a(6, 6), this.d(5), this.b(6, 6));
 
             if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
-                world.a((Block) Blocks.FLOWING_LAVA, blockposition, random);
+                world.a(blockposition, iblockdata, random);
             }
 
             return true;
@@ -1120,7 +1123,7 @@ public class WorldGenNetherPieces {
             return WorldGenNetherPieces.WorldGenNetherPiece2.a(list1, random, i, j, k, enumdirection, l);
         }
 
-        private StructurePiece a(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l, boolean flag) {
+        private StructurePiece a(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, int k, @Nullable EnumDirection enumdirection, int l, boolean flag) {
             if (Math.abs(i - worldgennetherpieces_worldgennetherpiece15.c().a) <= 112 && Math.abs(k - worldgennetherpieces_worldgennetherpiece15.c().c) <= 112) {
                 List list1 = worldgennetherpieces_worldgennetherpiece15.b;
 

@@ -27,9 +27,9 @@ public class BlockSponge extends Block {
         this.e(world, blockposition, iblockdata);
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         this.e(world, blockposition, iblockdata);
-        super.doPhysics(world, blockposition, iblockdata, block);
+        super.a(iblockdata, world, blockposition, block);
     }
 
     protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {

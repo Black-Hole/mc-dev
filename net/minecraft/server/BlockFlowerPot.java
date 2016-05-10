@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockFlowerPot extends BlockTileEntity {
 
@@ -33,13 +34,13 @@ public class BlockFlowerPot extends BlockTileEntity {
         return false;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         if (itemstack != null && itemstack.getItem() instanceof ItemBlock) {
             TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
 
             if (tileentityflowerpot == null) {
                 return false;
-            } else if (tileentityflowerpot.c() != null) {
+            } else if (tileentityflowerpot.d() != null) {
                 return false;
             } else {
                 Block block = Block.asBlock(itemstack.getItem());
@@ -63,7 +64,7 @@ public class BlockFlowerPot extends BlockTileEntity {
         }
     }
 
-    private boolean a(Block block, int i) {
+    private boolean a(@Nullable Block block, int i) {
         return block != Blocks.YELLOW_FLOWER && block != Blocks.RED_FLOWER && block != Blocks.CACTUS && block != Blocks.BROWN_MUSHROOM && block != Blocks.RED_MUSHROOM && block != Blocks.SAPLING && block != Blocks.DEADBUSH ? block == Blocks.TALLGRASS && i == BlockLongGrass.EnumTallGrassType.FERN.a() : true;
     }
 
@@ -71,7 +72,7 @@ public class BlockFlowerPot extends BlockTileEntity {
         TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
 
         if (tileentityflowerpot != null) {
-            ItemStack itemstack = tileentityflowerpot.b();
+            ItemStack itemstack = tileentityflowerpot.c();
 
             if (itemstack != null) {
                 return itemstack;
@@ -85,7 +86,7 @@ public class BlockFlowerPot extends BlockTileEntity {
         return super.canPlace(world, blockposition) && world.getType(blockposition.down()).q();
     }
 
-    public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (!world.getType(blockposition.down()).q()) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
@@ -96,8 +97,8 @@ public class BlockFlowerPot extends BlockTileEntity {
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
         TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
 
-        if (tileentityflowerpot != null && tileentityflowerpot.c() != null) {
-            a(world, blockposition, new ItemStack(tileentityflowerpot.c(), 1, tileentityflowerpot.d()));
+        if (tileentityflowerpot != null && tileentityflowerpot.d() != null) {
+            a(world, blockposition, new ItemStack(tileentityflowerpot.d(), 1, tileentityflowerpot.e()));
         }
 
         super.remove(world, blockposition, iblockdata);
@@ -115,10 +116,12 @@ public class BlockFlowerPot extends BlockTileEntity {
 
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.FLOWER_POT;
     }
 
+    @Nullable
     private TileEntityFlowerPot c(World world, BlockPosition blockposition) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -207,10 +210,10 @@ public class BlockFlowerPot extends BlockTileEntity {
 
         if (tileentity instanceof TileEntityFlowerPot) {
             TileEntityFlowerPot tileentityflowerpot = (TileEntityFlowerPot) tileentity;
-            Item item = tileentityflowerpot.c();
+            Item item = tileentityflowerpot.d();
 
             if (item instanceof ItemBlock) {
-                int i = tileentityflowerpot.d();
+                int i = tileentityflowerpot.e();
                 Block block = Block.asBlock(item);
 
                 if (block == Blocks.SAPLING) {

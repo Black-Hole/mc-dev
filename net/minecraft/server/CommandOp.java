@@ -5,6 +5,7 @@ import com.mojang.authlib.GameProfile;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CommandOp extends CommandAbstract {
 
@@ -37,7 +38,7 @@ public class CommandOp extends CommandAbstract {
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, BlockPosition blockposition) {
+    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
         if (astring.length == 1) {
             String s = astring[astring.length - 1];
             ArrayList arraylist = Lists.newArrayList();

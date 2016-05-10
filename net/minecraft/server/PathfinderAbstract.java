@@ -23,7 +23,10 @@ public abstract class PathfinderAbstract {
         this.f = MathHelper.d(entityinsentient.width + 1.0F);
     }
 
-    public void a() {}
+    public void a() {
+        this.a = null;
+        this.b = null;
+    }
 
     protected PathPoint a(int i, int j, int k) {
         int l = PathPoint.b(i, j, k);
@@ -44,6 +47,8 @@ public abstract class PathfinderAbstract {
     public abstract int a(PathPoint[] apathpoint, PathPoint pathpoint, PathPoint pathpoint1, float f);
 
     public abstract PathType a(IBlockAccess iblockaccess, int i, int j, int k, EntityInsentient entityinsentient, int l, int i1, int j1, boolean flag, boolean flag1);
+
+    public abstract PathType a(IBlockAccess iblockaccess, int i, int j, int k);
 
     public void a(boolean flag) {
         this.g = flag;

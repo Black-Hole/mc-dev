@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElement {
 
@@ -24,6 +25,7 @@ public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElem
         return true;
     }
 
+    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return random.nextInt(8) == 0 ? Items.WHEAT_SEEDS : null;
     }
@@ -32,7 +34,7 @@ public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElem
         return 1 + random.nextInt(i * 2 + 1);
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
         if (!world.isClientSide && itemstack != null && itemstack.getItem() == Items.SHEARS) {
             entityhuman.b(StatisticList.a((Block) this));
             a(world, blockposition, new ItemStack(Blocks.TALLGRASS, 1, ((BlockLongGrass.EnumTallGrassType) iblockdata.get(BlockLongGrass.TYPE)).a()));

@@ -5,11 +5,12 @@ import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.annotation.Nullable;
 
 public class BlockStatePredicate implements Predicate<IBlockData> {
 
     public static final Predicate<IBlockData> a = new Predicate() {
-        public boolean a(IBlockData iblockdata) {
+        public boolean a(@Nullable IBlockData iblockdata) {
             return true;
         }
 
@@ -28,7 +29,7 @@ public class BlockStatePredicate implements Predicate<IBlockData> {
         return new BlockStatePredicate(block.t());
     }
 
-    public boolean a(IBlockData iblockdata) {
+    public boolean a(@Nullable IBlockData iblockdata) {
         if (iblockdata != null && iblockdata.getBlock().equals(this.b.getBlock())) {
             Iterator iterator = this.c.entrySet().iterator();
 
