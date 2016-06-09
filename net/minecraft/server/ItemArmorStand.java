@@ -56,13 +56,13 @@ public class ItemArmorStand extends Item {
     }
 
     private void a(EntityArmorStand entityarmorstand, Random random) {
-        Vector3f vector3f = entityarmorstand.w();
+        Vector3f vector3f = entityarmorstand.u();
         float f = random.nextFloat() * 5.0F;
         float f1 = random.nextFloat() * 20.0F - 10.0F;
         Vector3f vector3f1 = new Vector3f(vector3f.getX() + f, vector3f.getY() + f1, vector3f.getZ());
 
         entityarmorstand.setHeadPose(vector3f1);
-        vector3f = entityarmorstand.x();
+        vector3f = entityarmorstand.w();
         f = random.nextFloat() * 10.0F - 5.0F;
         vector3f1 = new Vector3f(vector3f.getX(), vector3f.getY() + f, vector3f.getZ());
         entityarmorstand.setBodyPose(vector3f1);

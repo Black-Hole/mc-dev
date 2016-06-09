@@ -24,6 +24,11 @@ public class WorldGenHugeMushroom extends WorldGenerator {
         }
 
         int i = random.nextInt(3) + 4;
+
+        if (random.nextInt(12) == 0) {
+            i *= 2;
+        }
+
         boolean flag = true;
 
         if (blockposition.getY() >= 1 && blockposition.getY() + i + 1 < 256) {

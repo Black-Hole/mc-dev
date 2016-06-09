@@ -16,9 +16,10 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract {
         int j = i - random.nextInt(2) - 3;
         int k = i - j;
         int l = 1 + random.nextInt(k + 1);
-        boolean flag = true;
 
         if (blockposition.getY() >= 1 && blockposition.getY() + i + 1 <= 256) {
+            boolean flag = true;
+
             int i1;
             int j1;
             int k1;

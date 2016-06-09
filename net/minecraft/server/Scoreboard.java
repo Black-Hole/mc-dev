@@ -18,7 +18,7 @@ public class Scoreboard {
     private final ScoreboardObjective[] displaySlots = new ScoreboardObjective[19];
     private final Map<String, ScoreboardTeam> teamsByName = Maps.newHashMap();
     private final Map<String, ScoreboardTeam> teamsByPlayer = Maps.newHashMap();
-    private static String[] g = null;
+    private static String[] g;
 
     public Scoreboard() {}
 
@@ -331,11 +331,11 @@ public class Scoreboard {
     }
 
     public static int getSlotForName(String s) {
-        if (s.equalsIgnoreCase("list")) {
+        if ("list".equalsIgnoreCase(s)) {
             return 0;
-        } else if (s.equalsIgnoreCase("sidebar")) {
+        } else if ("sidebar".equalsIgnoreCase(s)) {
             return 1;
-        } else if (s.equalsIgnoreCase("belowName")) {
+        } else if ("belowName".equalsIgnoreCase(s)) {
             return 2;
         } else {
             if (s.startsWith("sidebar.team.")) {
@@ -365,7 +365,7 @@ public class Scoreboard {
 
     public void a(Entity entity) {
         if (entity != null && !(entity instanceof EntityHuman) && !entity.isAlive()) {
-            String s = entity.bd();
+            String s = entity.bf();
 
             this.resetPlayerScores(s, (ScoreboardObjective) null);
             this.removePlayerFromTeam(s);

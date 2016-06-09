@@ -26,7 +26,7 @@ public abstract class World implements IBlockAccess {
     public final List<EntityHuman> players = Lists.newArrayList();
     public final List<Entity> j = Lists.newArrayList();
     protected final IntHashMap<Entity> entitiesById = new IntHashMap();
-    private long I = 16777215L;
+    private final long I = 16777215L;
     private int J;
     protected int l = (new Random()).nextInt();
     protected final int m = 1013904223;
@@ -457,23 +457,27 @@ public abstract class World implements IBlockAccess {
     }
 
     public BlockPosition getHighestBlockYAt(BlockPosition blockposition) {
-        int i;
+        return new BlockPosition(blockposition.getX(), this.b(blockposition.getX(), blockposition.getZ()), blockposition.getZ());
+    }
 
-        if (blockposition.getX() >= -30000000 && blockposition.getZ() >= -30000000 && blockposition.getX() < 30000000 && blockposition.getZ() < 30000000) {
-            if (this.isChunkLoaded(blockposition.getX() >> 4, blockposition.getZ() >> 4, true)) {
-                i = this.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4).b(blockposition.getX() & 15, blockposition.getZ() & 15);
+    public int b(int i, int j) {
+        int k;
+
+        if (i >= -30000000 && j >= -30000000 && i < 30000000 && j < 30000000) {
+            if (this.isChunkLoaded(i >> 4, j >> 4, true)) {
+                k = this.getChunkAt(i >> 4, j >> 4).b(i & 15, j & 15);
             } else {
-                i = 0;
+                k = 0;
             }
         } else {
-            i = this.K() + 1;
+            k = this.K() + 1;
         }
 
-        return new BlockPosition(blockposition.getX(), i, blockposition.getZ());
+        return k;
     }
 
     @Deprecated
-    public int b(int i, int j) {
+    public int c(int i, int j) {
         if (i >= -30000000 && j >= -30000000 && i < 30000000 && j < 30000000) {
             if (!this.isChunkLoaded(i >> 4, j >> 4, true)) {
                 return 0;
@@ -789,10 +793,10 @@ public abstract class World implements IBlockAccess {
             this.everyoneSleeping();
         }
 
-        int i = entity.ab;
-        int j = entity.ad;
+        int i = entity.ac;
+        int j = entity.ae;
 
-        if (entity.aa && this.isChunkLoaded(i, j, true)) {
+        if (entity.ab && this.isChunkLoaded(i, j, true)) {
             this.getChunkAt(i, j).b(entity);
         }
 
@@ -813,7 +817,7 @@ public abstract class World implements IBlockAccess {
         int i1 = MathHelper.floor(axisalignedbb.c) - 1;
         int j1 = MathHelper.f(axisalignedbb.f) + 1;
         WorldBorder worldborder = this.getWorldBorder();
-        boolean flag = entity != null && entity.bp();
+        boolean flag = entity != null && entity.br();
         boolean flag1 = entity != null && this.a(worldborder, entity);
         IBlockData iblockdata = Blocks.STONE.getBlockData();
         BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
@@ -830,9 +834,9 @@ public abstract class World implements IBlockAccess {
                             blockposition_pooledblockposition.f(l1, j2, k1);
                             if (entity != null) {
                                 if (flag && flag1) {
-                                    entity.j(false);
+                                    entity.k(false);
                                 } else if (!flag && !flag1) {
-                                    entity.j(true);
+                                    entity.k(true);
                                 }
                             }
 
@@ -857,7 +861,7 @@ public abstract class World implements IBlockAccess {
                 Entity entity1 = (Entity) list.get(k1);
 
                 if (!entity.x(entity1)) {
-                    AxisAlignedBB axisalignedbb1 = entity1.af();
+                    AxisAlignedBB axisalignedbb1 = entity1.ag();
 
                     if (axisalignedbb1 != null && axisalignedbb1.b(axisalignedbb)) {
                         arraylist.add(axisalignedbb1);
@@ -880,7 +884,7 @@ public abstract class World implements IBlockAccess {
         double d2 = worldborder.d();
         double d3 = worldborder.e();
 
-        if (entity.bp()) {
+        if (entity.br()) {
             ++d0;
             ++d1;
             --d2;
@@ -1073,10 +1077,10 @@ public abstract class World implements IBlockAccess {
 
         for (i = 0; i < this.f.size(); ++i) {
             entity = (Entity) this.f.get(i);
-            int k = entity.ab;
+            int k = entity.ac;
 
-            j = entity.ad;
-            if (entity.aa && this.isChunkLoaded(k, j, true)) {
+            j = entity.ae;
+            if (entity.ab && this.isChunkLoaded(k, j, true)) {
                 this.getChunkAt(k, j).b(entity);
             }
         }
@@ -1094,7 +1098,7 @@ public abstract class World implements IBlockAccess {
 
         for (i = 0; i < this.entityList.size(); ++i) {
             entity = (Entity) this.entityList.get(i);
-            Entity entity1 = entity.bz();
+            Entity entity1 = entity.bB();
 
             if (entity1 != null) {
                 if (!entity1.dead && entity1.w(entity)) {
@@ -1119,10 +1123,10 @@ public abstract class World implements IBlockAccess {
             this.methodProfiler.b();
             this.methodProfiler.a("remove");
             if (entity.dead) {
-                j = entity.ab;
-                int l = entity.ad;
+                j = entity.ac;
+                int l = entity.ae;
 
-                if (entity.aa && this.isChunkLoaded(j, l, true)) {
+                if (entity.ab && this.isChunkLoaded(j, l, true)) {
                     this.getChunkAt(j, l).b(entity);
                 }
 
@@ -1146,7 +1150,7 @@ public abstract class World implements IBlockAccess {
                 if (this.isLoaded(blockposition) && this.N.a(blockposition)) {
                     try {
                         this.methodProfiler.a(tileentity.getClass().getSimpleName());
-                        ((ITickable) tileentity).c();
+                        ((ITickable) tileentity).E_();
                         this.methodProfiler.b();
                     } catch (Throwable throwable2) {
                         crashreport1 = CrashReport.a(throwable2, "Ticking block entity");
@@ -1234,15 +1238,15 @@ public abstract class World implements IBlockAccess {
     public void entityJoinedWorld(Entity entity, boolean flag) {
         int i = MathHelper.floor(entity.locX);
         int j = MathHelper.floor(entity.locZ);
-        byte b0 = 32;
+        boolean flag1 = true;
 
-        if (!flag || this.isAreaLoaded(i - b0, 0, j - b0, i + b0, 0, j + b0, true)) {
+        if (!flag || this.isAreaLoaded(i - 32, 0, j - 32, i + 32, 0, j + 32, true)) {
             entity.M = entity.locX;
             entity.N = entity.locY;
             entity.O = entity.locZ;
             entity.lastYaw = entity.yaw;
             entity.lastPitch = entity.pitch;
-            if (flag && entity.aa) {
+            if (flag && entity.ab) {
                 ++entity.ticksLived;
                 if (entity.isPassenger()) {
                     entity.aw();
@@ -1276,26 +1280,26 @@ public abstract class World implements IBlockAccess {
             int l = MathHelper.floor(entity.locY / 16.0D);
             int i1 = MathHelper.floor(entity.locZ / 16.0D);
 
-            if (!entity.aa || entity.ab != k || entity.ac != l || entity.ad != i1) {
-                if (entity.aa && this.isChunkLoaded(entity.ab, entity.ad, true)) {
-                    this.getChunkAt(entity.ab, entity.ad).a(entity, entity.ac);
+            if (!entity.ab || entity.ac != k || entity.ad != l || entity.ae != i1) {
+                if (entity.ab && this.isChunkLoaded(entity.ac, entity.ae, true)) {
+                    this.getChunkAt(entity.ac, entity.ae).a(entity, entity.ad);
                 }
 
-                if (!entity.bt() && !this.isChunkLoaded(k, i1, true)) {
-                    entity.aa = false;
+                if (!entity.bv() && !this.isChunkLoaded(k, i1, true)) {
+                    entity.ab = false;
                 } else {
                     this.getChunkAt(k, i1).a(entity);
                 }
             }
 
             this.methodProfiler.b();
-            if (flag && entity.aa) {
-                Iterator iterator = entity.bv().iterator();
+            if (flag && entity.ab) {
+                Iterator iterator = entity.bx().iterator();
 
                 while (iterator.hasNext()) {
                     Entity entity1 = (Entity) iterator.next();
 
-                    if (!entity1.dead && entity1.bz() == entity) {
+                    if (!entity1.dead && entity1.bB() == entity) {
                         this.g(entity1);
                     } else {
                         entity1.stopRiding();
@@ -1447,13 +1451,13 @@ public abstract class World implements IBlockAccess {
             }
 
             blockposition_pooledblockposition.t();
-            if (vec3d.b() > 0.0D && entity.be()) {
+            if (vec3d.b() > 0.0D && entity.bg()) {
                 vec3d = vec3d.a();
                 double d1 = 0.014D;
 
-                entity.motX += vec3d.x * d1;
-                entity.motY += vec3d.y * d1;
-                entity.motZ += vec3d.z * d1;
+                entity.motX += vec3d.x * 0.014D;
+                entity.motY += vec3d.y * 0.014D;
+                entity.motZ += vec3d.z * 0.014D;
             }
 
             return flag;
@@ -1615,7 +1619,7 @@ public abstract class World implements IBlockAccess {
         if (!this.E(blockposition)) {
             if (tileentity != null && !tileentity.x()) {
                 if (this.M) {
-                    tileentity.a(blockposition);
+                    tileentity.setPosition(blockposition);
                     Iterator iterator = this.b.iterator();
 
                     while (iterator.hasNext()) {
@@ -2341,7 +2345,7 @@ public abstract class World implements IBlockAccess {
                 }
 
                 if (entityhuman1.isInvisible()) {
-                    float f = entityhuman1.cH();
+                    float f = entityhuman1.cL();
 
                     if (f < 0.1F) {
                         f = 0.1F;
@@ -2556,7 +2560,7 @@ public abstract class World implements IBlockAccess {
         crashreportsystemdetails.a("Level name", (Object) (this.worldData == null ? "????" : this.worldData.getName()));
         crashreportsystemdetails.a("All players", new CrashReportCallable() {
             public String a() {
-                return World.this.players.size() + " total; " + World.this.players.toString();
+                return World.this.players.size() + " total; " + World.this.players;
             }
 
             public Object call() throws Exception {
@@ -2663,13 +2667,13 @@ public abstract class World implements IBlockAccess {
         return this.N;
     }
 
-    public boolean c(int i, int j) {
+    public boolean d(int i, int j) {
         BlockPosition blockposition = this.getSpawn();
         int k = i * 16 + 8 - blockposition.getX();
         int l = j * 16 + 8 - blockposition.getZ();
-        short short0 = 128;
+        boolean flag = true;
 
-        return k >= -short0 && k <= short0 && l >= -short0 && l <= short0;
+        return k >= -128 && k <= 128 && l >= -128 && l <= 128;
     }
 
     public void a(Packet<?> packet) {

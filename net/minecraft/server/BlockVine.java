@@ -138,18 +138,18 @@ public class BlockVine extends Block {
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (!world.isClientSide) {
             if (world.random.nextInt(4) == 0) {
-                byte b0 = 4;
+                boolean flag = true;
                 int i = 5;
-                boolean flag = false;
+                boolean flag1 = false;
 
                 label188:
-                for (int j = -b0; j <= b0; ++j) {
-                    for (int k = -b0; k <= b0; ++k) {
+                for (int j = -4; j <= 4; ++j) {
+                    for (int k = -4; k <= 4; ++k) {
                         for (int l = -1; l <= 1; ++l) {
                             if (world.getType(blockposition.a(j, l, k)).getBlock() == this) {
                                 --i;
                                 if (i <= 0) {
-                                    flag = true;
+                                    flag1 = true;
                                     break label188;
                                 }
                             }
@@ -161,7 +161,7 @@ public class BlockVine extends Block {
                 BlockPosition blockposition1 = blockposition.up();
 
                 if (enumdirection == EnumDirection.UP && blockposition.getY() < 255 && world.isEmpty(blockposition1)) {
-                    if (!flag) {
+                    if (!flag1) {
                         IBlockData iblockdata1 = iblockdata;
                         Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
@@ -184,25 +184,25 @@ public class BlockVine extends Block {
                     BlockPosition blockposition2;
 
                     if (enumdirection.k().c() && !((Boolean) iblockdata.get(getDirection(enumdirection))).booleanValue()) {
-                        if (!flag) {
+                        if (!flag1) {
                             blockposition2 = blockposition.shift(enumdirection);
                             iblockdata2 = world.getType(blockposition2);
                             block = iblockdata2.getBlock();
                             if (block.material == Material.AIR) {
                                 EnumDirection enumdirection2 = enumdirection.e();
                                 EnumDirection enumdirection3 = enumdirection.f();
-                                boolean flag1 = ((Boolean) iblockdata.get(getDirection(enumdirection2))).booleanValue();
-                                boolean flag2 = ((Boolean) iblockdata.get(getDirection(enumdirection3))).booleanValue();
+                                boolean flag2 = ((Boolean) iblockdata.get(getDirection(enumdirection2))).booleanValue();
+                                boolean flag3 = ((Boolean) iblockdata.get(getDirection(enumdirection3))).booleanValue();
                                 BlockPosition blockposition3 = blockposition2.shift(enumdirection2);
                                 BlockPosition blockposition4 = blockposition2.shift(enumdirection3);
 
-                                if (flag1 && this.x(world.getType(blockposition3))) {
+                                if (flag2 && this.x(world.getType(blockposition3))) {
                                     world.setTypeAndData(blockposition2, this.getBlockData().set(getDirection(enumdirection2), Boolean.valueOf(true)), 2);
-                                } else if (flag2 && this.x(world.getType(blockposition4))) {
+                                } else if (flag3 && this.x(world.getType(blockposition4))) {
                                     world.setTypeAndData(blockposition2, this.getBlockData().set(getDirection(enumdirection3), Boolean.valueOf(true)), 2);
-                                } else if (flag1 && world.isEmpty(blockposition3) && this.x(world.getType(blockposition.shift(enumdirection2)))) {
+                                } else if (flag2 && world.isEmpty(blockposition3) && this.x(world.getType(blockposition.shift(enumdirection2)))) {
                                     world.setTypeAndData(blockposition3, this.getBlockData().set(getDirection(enumdirection.opposite()), Boolean.valueOf(true)), 2);
-                                } else if (flag2 && world.isEmpty(blockposition4) && this.x(world.getType(blockposition.shift(enumdirection3)))) {
+                                } else if (flag3 && world.isEmpty(blockposition4) && this.x(world.getType(blockposition.shift(enumdirection3)))) {
                                     world.setTypeAndData(blockposition4, this.getBlockData().set(getDirection(enumdirection.opposite()), Boolean.valueOf(true)), 2);
                                 } else if (this.x(world.getType(blockposition2.up()))) {
                                     world.setTypeAndData(blockposition2, this.getBlockData(), 2);

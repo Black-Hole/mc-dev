@@ -7,17 +7,17 @@ public class BiomeForest extends BiomeBase {
     protected static final WorldGenForest y = new WorldGenForest(false, true);
     protected static final WorldGenForest z = new WorldGenForest(false, false);
     protected static final WorldGenForestTree A = new WorldGenForestTree(false);
-    private BiomeForest.Type B;
+    private final BiomeForest.Type B;
 
     public BiomeForest(BiomeForest.Type biomeforest_type, BiomeBase.a biomebase_a) {
         super(biomebase_a);
         this.B = biomeforest_type;
         this.t.z = 10;
-        this.t.B = 2;
+        this.t.C = 2;
         if (this.B == BiomeForest.Type.FLOWER) {
             this.t.z = 6;
-            this.t.A = 100;
-            this.t.B = 1;
+            this.t.B = 100;
+            this.t.C = 1;
             this.v.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 4, 2, 3));
         }
 

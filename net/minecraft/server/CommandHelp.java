@@ -10,8 +10,8 @@ import javax.annotation.Nullable;
 
 public class CommandHelp extends CommandAbstract {
 
-    private static String[] a = new String[] { "Yolo", "/achievement take achievement.understandCommands @p", "Ask for help on twitter", "/deop @p", "Scoreboard deleted, commands blocked", "Contact helpdesk for help", "/testfornoob @p", "/trigger warning", "Oh my god, it\'s full of stats", "/kill @p[name=!Searge]", "Have you tried turning it off and on again?", "Sorry, no help today"};
-    private Random b = new Random();
+    private static final String[] a = new String[] { "Yolo", "/achievement take achievement.understandCommands @p", "Ask for help on twitter", "/deop @p", "Scoreboard deleted, commands blocked", "Contact helpdesk for help", "/testfornoob @p", "/trigger warning", "Oh my god, it\'s full of stats", "/kill @p[name=!Searge]", "Have you tried turning it off and on again?", "Sorry, no help today"};
+    private final Random b = new Random();
 
     public CommandHelp() {}
 

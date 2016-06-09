@@ -12,9 +12,14 @@ public class EntitySilverfish extends EntityMonster {
         this.setSize(0.4F, 0.3F);
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "Silverfish");
+    }
+
     protected void r() {
+        this.a = new EntitySilverfish.PathfinderGoalSilverfishWakeOthers(this);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
-        this.goalSelector.a(3, this.a = new EntitySilverfish.PathfinderGoalSilverfishWakeOthers(this));
+        this.goalSelector.a(3, this.a);
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.goalSelector.a(5, new EntitySilverfish.PathfinderGoalSilverfishHideInBlock(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
@@ -41,19 +46,19 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.fe;
+        return SoundEffects.fp;
     }
 
-    protected SoundEffect bS() {
-        return SoundEffects.fg;
+    protected SoundEffect bV() {
+        return SoundEffects.fr;
     }
 
-    protected SoundEffect bT() {
-        return SoundEffects.ff;
+    protected SoundEffect bW() {
+        return SoundEffects.fq;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.fh, 0.15F, 1.0F);
+        this.a(SoundEffects.fs, 0.15F, 1.0F);
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
@@ -74,7 +79,7 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     public void m() {
-        this.aN = this.yaw;
+        this.aO = this.yaw;
         super.m();
     }
 
@@ -86,8 +91,8 @@ public class EntitySilverfish extends EntityMonster {
         return true;
     }
 
-    public boolean cG() {
-        if (super.cG()) {
+    public boolean cK() {
+        if (super.cK()) {
             EntityHuman entityhuman = this.world.b(this, 5.0D);
 
             return entityhuman == null;
@@ -162,7 +167,7 @@ public class EntitySilverfish extends EntityMonster {
 
     static class PathfinderGoalSilverfishWakeOthers extends PathfinderGoal {
 
-        private EntitySilverfish silverfish;
+        private final EntitySilverfish silverfish;
         private int b;
 
         public PathfinderGoalSilverfishWakeOthers(EntitySilverfish entitysilverfish) {

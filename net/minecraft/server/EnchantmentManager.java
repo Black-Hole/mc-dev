@@ -136,7 +136,7 @@ public class EnchantmentManager {
         EnchantmentManager.d.b = entity;
         EnchantmentManager.d.a = entityliving;
         if (entityliving != null) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.aG());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.aI());
         }
 
         if (entity instanceof EntityHuman) {
@@ -149,7 +149,7 @@ public class EnchantmentManager {
         EnchantmentManager.e.a = entityliving;
         EnchantmentManager.e.b = entity;
         if (entityliving != null) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.e, entityliving.aG());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.e, entityliving.aI());
         }
 
         if (entityliving instanceof EntityHuman) {
@@ -214,6 +214,10 @@ public class EnchantmentManager {
 
     public static boolean i(EntityLiving entityliving) {
         return a(Enchantments.WATER_WORKER, entityliving) > 0;
+    }
+
+    public static boolean j(EntityLiving entityliving) {
+        return a(Enchantments.j, entityliving) > 0;
     }
 
     @Nullable

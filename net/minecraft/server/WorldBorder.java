@@ -7,8 +7,8 @@ import java.util.List;
 public class WorldBorder {
 
     private final List<IWorldBorderListener> a = Lists.newArrayList();
-    private double b = 0.0D;
-    private double c = 0.0D;
+    private double b;
+    private double c;
     private double d = 6.0E7D;
     private double e;
     private long f;
@@ -135,7 +135,7 @@ public class WorldBorder {
     }
 
     public long i() {
-        return this.getState() != EnumWorldBorderState.STATIONARY ? this.f - System.currentTimeMillis() : 0L;
+        return this.getState() == EnumWorldBorderState.STATIONARY ? 0L : this.f - System.currentTimeMillis();
     }
 
     public double j() {

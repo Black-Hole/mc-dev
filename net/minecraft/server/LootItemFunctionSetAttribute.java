@@ -154,11 +154,11 @@ public class LootItemFunctionSetAttribute extends LootItemFunction {
         }
 
         private static int a(String s) {
-            if (s.equals("addition")) {
+            if ("addition".equals(s)) {
                 return 0;
-            } else if (s.equals("multiply_base")) {
+            } else if ("multiply_base".equals(s)) {
                 return 1;
-            } else if (s.equals("multiply_total")) {
+            } else if ("multiply_total".equals(s)) {
                 return 2;
             } else {
                 throw new JsonSyntaxException("Unknown attribute modifier operation " + s);

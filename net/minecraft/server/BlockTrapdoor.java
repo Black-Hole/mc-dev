@@ -17,9 +17,6 @@ public class BlockTrapdoor extends Block {
     protected BlockTrapdoor(Material material) {
         super(material);
         this.w(this.blockStateList.getBlockData().set(BlockTrapdoor.FACING, EnumDirection.NORTH).set(BlockTrapdoor.OPEN, Boolean.valueOf(false)).set(BlockTrapdoor.HALF, BlockTrapdoor.EnumTrapdoorHalf.BOTTOM));
-        float f = 0.5F;
-        float f1 = 1.0F;
-
         this.a(CreativeModeTab.d);
     }
 

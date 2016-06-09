@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 public class BlockActionData {
 
-    private BlockPosition a;
-    private Block b;
-    private int c;
-    private int d;
+    private final BlockPosition a;
+    private final Block b;
+    private final int c;
+    private final int d;
 
     public BlockActionData(BlockPosition blockposition, Block block, int i, int j) {
         this.a = blockposition;

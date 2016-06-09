@@ -8,48 +8,48 @@ import org.apache.logging.log4j.Logger;
 
 public class EntityEnderDragon extends EntityInsentient implements IComplex, IMonster {
 
-    private static final Logger bI = LogManager.getLogger();
+    private static final Logger bJ = LogManager.getLogger();
     public static final DataWatcherObject<Integer> PHASE = DataWatcher.a(EntityEnderDragon.class, DataWatcherRegistry.b);
     public double[][] b = new double[64][3];
     public int c = -1;
     public EntityComplexPart[] children;
-    public EntityComplexPart bv;
-    public EntityComplexPart bw;
-    public EntityComplexPart bx;
-    public EntityComplexPart by;
-    public EntityComplexPart bz;
-    public EntityComplexPart bA;
-    public EntityComplexPart bB;
-    public EntityComplexPart bC;
-    public float bD;
+    public EntityComplexPart bw = new EntityComplexPart(this, "head", 6.0F, 6.0F);
+    public EntityComplexPart bx = new EntityComplexPart(this, "neck", 6.0F, 6.0F);
+    public EntityComplexPart by = new EntityComplexPart(this, "body", 8.0F, 8.0F);
+    public EntityComplexPart bz = new EntityComplexPart(this, "tail", 4.0F, 4.0F);
+    public EntityComplexPart bA = new EntityComplexPart(this, "tail", 4.0F, 4.0F);
+    public EntityComplexPart bB = new EntityComplexPart(this, "tail", 4.0F, 4.0F);
+    public EntityComplexPart bC = new EntityComplexPart(this, "wing", 4.0F, 4.0F);
+    public EntityComplexPart bD = new EntityComplexPart(this, "wing", 4.0F, 4.0F);
     public float bE;
-    public boolean bF;
-    public int bG;
+    public float bF;
+    public boolean bG;
+    public int bH;
     public EntityEnderCrystal currentEnderCrystal;
-    private final EnderDragonBattle bJ;
-    private final DragonControllerManager bK;
-    private int bL = 200;
-    private int bM;
-    private final PathPoint[] bN = new PathPoint[24];
-    private final int[] bO = new int[24];
-    private final Path bP = new Path();
+    private final EnderDragonBattle bK;
+    private final DragonControllerManager bL;
+    private int bM = 200;
+    private int bN;
+    private final PathPoint[] bO = new PathPoint[24];
+    private final int[] bP = new int[24];
+    private final Path bQ = new Path();
 
     public EntityEnderDragon(World world) {
         super(world);
-        this.children = new EntityComplexPart[] { this.bv = new EntityComplexPart(this, "head", 6.0F, 6.0F), this.bw = new EntityComplexPart(this, "neck", 6.0F, 6.0F), this.bx = new EntityComplexPart(this, "body", 8.0F, 8.0F), this.by = new EntityComplexPart(this, "tail", 4.0F, 4.0F), this.bz = new EntityComplexPart(this, "tail", 4.0F, 4.0F), this.bA = new EntityComplexPart(this, "tail", 4.0F, 4.0F), this.bB = new EntityComplexPart(this, "wing", 4.0F, 4.0F), this.bC = new EntityComplexPart(this, "wing", 4.0F, 4.0F)};
+        this.children = new EntityComplexPart[] { this.bw, this.bx, this.by, this.bz, this.bA, this.bB, this.bC, this.bD};
         this.setHealth(this.getMaxHealth());
         this.setSize(16.0F, 8.0F);
         this.noclip = true;
         this.fireProof = true;
-        this.bL = 100;
-        this.ah = true;
+        this.bM = 100;
+        this.ai = true;
         if (!world.isClientSide && world.worldProvider instanceof WorldProviderTheEnd) {
-            this.bJ = ((WorldProviderTheEnd) world.worldProvider).s();
+            this.bK = ((WorldProviderTheEnd) world.worldProvider).s();
         } else {
-            this.bJ = null;
+            this.bK = null;
         }
 
-        this.bK = new DragonControllerManager(this);
+        this.bL = new DragonControllerManager(this);
     }
 
     protected void initAttributes() {
@@ -88,21 +88,21 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
         if (this.world.isClientSide) {
             this.setHealth(this.getHealth());
-            if (!this.ad()) {
-                f = MathHelper.cos(this.bE * 6.2831855F);
-                f1 = MathHelper.cos(this.bD * 6.2831855F);
+            if (!this.isSilent()) {
+                f = MathHelper.cos(this.bF * 6.2831855F);
+                f1 = MathHelper.cos(this.bE * 6.2831855F);
                 if (f1 <= -0.3F && f >= -0.3F) {
-                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.aQ, this.bA(), 5.0F, 0.8F + this.random.nextFloat() * 0.3F, false);
+                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.aR, this.bC(), 5.0F, 0.8F + this.random.nextFloat() * 0.3F, false);
                 }
 
-                if (!this.bK.a().a() && --this.bL < 0) {
-                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.aR, this.bA(), 2.5F, 0.8F + this.random.nextFloat() * 0.3F, false);
-                    this.bL = 200 + this.random.nextInt(200);
+                if (!this.bL.a().a() && --this.bM < 0) {
+                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.aS, this.bC(), 2.5F, 0.8F + this.random.nextFloat() * 0.3F, false);
+                    this.bM = 200 + this.random.nextInt(200);
                 }
             }
         }
 
-        this.bD = this.bE;
+        this.bE = this.bF;
         float f2;
 
         if (this.getHealth() <= 0.0F) {
@@ -111,20 +111,20 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             f2 = (this.random.nextFloat() - 0.5F) * 8.0F;
             this.world.addParticle(EnumParticle.EXPLOSION_LARGE, this.locX + (double) f, this.locY + 2.0D + (double) f1, this.locZ + (double) f2, 0.0D, 0.0D, 0.0D, new int[0]);
         } else {
-            this.cW();
+            this.da();
             f = 0.2F / (MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ) * 10.0F + 1.0F);
             f *= (float) Math.pow(2.0D, this.motY);
-            if (this.bK.a().a()) {
-                this.bE += 0.1F;
-            } else if (this.bF) {
-                this.bE += f * 0.5F;
+            if (this.bL.a().a()) {
+                this.bF += 0.1F;
+            } else if (this.bG) {
+                this.bF += f * 0.5F;
             } else {
-                this.bE += f;
+                this.bF += f;
             }
 
             this.yaw = MathHelper.g(this.yaw);
             if (this.hasAI()) {
-                this.bE = 0.5F;
+                this.bF = 0.5F;
             } else {
                 if (this.c < 0) {
                     for (int i = 0; i < this.b.length; ++i) {
@@ -145,26 +145,26 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 float f3;
 
                 if (this.world.isClientSide) {
-                    if (this.bh > 0) {
-                        double d3 = this.locX + (this.bi - this.locX) / (double) this.bh;
+                    if (this.bi > 0) {
+                        double d3 = this.locX + (this.bj - this.locX) / (double) this.bi;
 
-                        d0 = this.locY + (this.bj - this.locY) / (double) this.bh;
-                        d1 = this.locZ + (this.bk - this.locZ) / (double) this.bh;
-                        d2 = MathHelper.g(this.bl - (double) this.yaw);
-                        this.yaw = (float) ((double) this.yaw + d2 / (double) this.bh);
-                        this.pitch = (float) ((double) this.pitch + (this.bm - (double) this.pitch) / (double) this.bh);
-                        --this.bh;
+                        d0 = this.locY + (this.bk - this.locY) / (double) this.bi;
+                        d1 = this.locZ + (this.bl - this.locZ) / (double) this.bi;
+                        d2 = MathHelper.g(this.bm - (double) this.yaw);
+                        this.yaw = (float) ((double) this.yaw + d2 / (double) this.bi);
+                        this.pitch = (float) ((double) this.pitch + (this.bn - (double) this.pitch) / (double) this.bi);
+                        --this.bi;
                         this.setPosition(d3, d0, d1);
                         this.setYawPitch(this.yaw, this.pitch);
                     }
 
-                    this.bK.a().b();
+                    this.bL.a().b();
                 } else {
-                    IDragonController idragoncontroller = this.bK.a();
+                    IDragonController idragoncontroller = this.bL.a();
 
                     idragoncontroller.c();
-                    if (this.bK.a() != idragoncontroller) {
-                        idragoncontroller = this.bK.a();
+                    if (this.bL.a() != idragoncontroller) {
+                        idragoncontroller = this.bL.a();
                         idragoncontroller.c();
                     }
 
@@ -185,14 +185,14 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                         Vec3D vec3d2 = (new Vec3D((double) MathHelper.sin(this.yaw * 0.017453292F), this.motY, (double) (-MathHelper.cos(this.yaw * 0.017453292F)))).a();
                         float f4 = Math.max(((float) vec3d2.b(vec3d1) + 0.5F) / 1.5F, 0.0F);
 
-                        this.bg *= 0.8F;
-                        this.bg = (float) ((double) this.bg + d5 * (double) idragoncontroller.h());
-                        this.yaw += this.bg * 0.1F;
+                        this.bh *= 0.8F;
+                        this.bh = (float) ((double) this.bh + d5 * (double) idragoncontroller.h());
+                        this.yaw += this.bh * 0.1F;
                         float f5 = (float) (2.0D / (d4 + 1.0D));
                         float f6 = 0.06F;
 
-                        this.a(0.0F, -1.0F, f6 * (f4 * f5 + (1.0F - f5)));
-                        if (this.bF) {
+                        this.a(0.0F, -1.0F, 0.06F * (f4 * f5 + (1.0F - f5)));
+                        if (this.bG) {
                             this.move(this.motX * 0.800000011920929D, this.motY * 0.800000011920929D, this.motZ * 0.800000011920929D);
                         } else {
                             this.move(this.motX, this.motY, this.motZ);
@@ -208,18 +208,23 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                     }
                 }
 
-                this.aN = this.yaw;
-                this.bv.width = this.bv.length = 1.0F;
-                this.bw.width = this.bw.length = 3.0F;
-                this.by.width = this.by.length = 2.0F;
-                this.bz.width = this.bz.length = 2.0F;
-                this.bA.width = this.bA.length = 2.0F;
+                this.aO = this.yaw;
+                this.bw.width = 1.0F;
+                this.bw.length = 1.0F;
+                this.bx.width = 3.0F;
                 this.bx.length = 3.0F;
-                this.bx.width = 5.0F;
+                this.bz.width = 2.0F;
+                this.bz.length = 2.0F;
+                this.bA.width = 2.0F;
+                this.bA.length = 2.0F;
+                this.bB.width = 2.0F;
                 this.bB.length = 2.0F;
-                this.bB.width = 4.0F;
-                this.bC.length = 3.0F;
+                this.by.length = 3.0F;
+                this.by.width = 5.0F;
+                this.bC.length = 2.0F;
                 this.bC.width = 4.0F;
+                this.bD.length = 3.0F;
+                this.bD.width = 4.0F;
                 f1 = (float) (this.a(5, 1.0F)[1] - this.a(10, 1.0F)[1]) * 10.0F * 0.017453292F;
                 f2 = MathHelper.cos(f1);
                 float f8 = MathHelper.sin(f1);
@@ -227,43 +232,43 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 float f10 = MathHelper.sin(f9);
                 float f11 = MathHelper.cos(f9);
 
-                this.bx.m();
-                this.bx.setPositionRotation(this.locX + (double) (f10 * 0.5F), this.locY, this.locZ - (double) (f11 * 0.5F), 0.0F, 0.0F);
-                this.bB.m();
-                this.bB.setPositionRotation(this.locX + (double) (f11 * 4.5F), this.locY + 2.0D, this.locZ + (double) (f10 * 4.5F), 0.0F, 0.0F);
+                this.by.m();
+                this.by.setPositionRotation(this.locX + (double) (f10 * 0.5F), this.locY, this.locZ - (double) (f11 * 0.5F), 0.0F, 0.0F);
                 this.bC.m();
-                this.bC.setPositionRotation(this.locX - (double) (f11 * 4.5F), this.locY + 2.0D, this.locZ - (double) (f10 * 4.5F), 0.0F, 0.0F);
+                this.bC.setPositionRotation(this.locX + (double) (f11 * 4.5F), this.locY + 2.0D, this.locZ + (double) (f10 * 4.5F), 0.0F, 0.0F);
+                this.bD.m();
+                this.bD.setPositionRotation(this.locX - (double) (f11 * 4.5F), this.locY + 2.0D, this.locZ - (double) (f10 * 4.5F), 0.0F, 0.0F);
                 if (!this.world.isClientSide && this.hurtTicks == 0) {
-                    this.a(this.world.getEntities(this, this.bB.getBoundingBox().grow(4.0D, 2.0D, 4.0D).c(0.0D, -2.0D, 0.0D)));
                     this.a(this.world.getEntities(this, this.bC.getBoundingBox().grow(4.0D, 2.0D, 4.0D).c(0.0D, -2.0D, 0.0D)));
-                    this.b(this.world.getEntities(this, this.bv.getBoundingBox().g(1.0D)));
+                    this.a(this.world.getEntities(this, this.bD.getBoundingBox().grow(4.0D, 2.0D, 4.0D).c(0.0D, -2.0D, 0.0D)));
                     this.b(this.world.getEntities(this, this.bw.getBoundingBox().g(1.0D)));
+                    this.b(this.world.getEntities(this, this.bx.getBoundingBox().g(1.0D)));
                 }
 
                 double[] adouble = this.a(5, 1.0F);
-                float f12 = MathHelper.sin(this.yaw * 0.017453292F - this.bg * 0.01F);
-                float f13 = MathHelper.cos(this.yaw * 0.017453292F - this.bg * 0.01F);
+                float f12 = MathHelper.sin(this.yaw * 0.017453292F - this.bh * 0.01F);
+                float f13 = MathHelper.cos(this.yaw * 0.017453292F - this.bh * 0.01F);
 
-                this.bv.m();
                 this.bw.m();
+                this.bx.m();
                 float f14 = this.q(1.0F);
 
-                this.bv.setPositionRotation(this.locX + (double) (f12 * 6.5F * f2), this.locY + (double) f14 + (double) (f8 * 6.5F), this.locZ - (double) (f13 * 6.5F * f2), 0.0F, 0.0F);
-                this.bw.setPositionRotation(this.locX + (double) (f12 * 5.5F * f2), this.locY + (double) f14 + (double) (f8 * 5.5F), this.locZ - (double) (f13 * 5.5F * f2), 0.0F, 0.0F);
+                this.bw.setPositionRotation(this.locX + (double) (f12 * 6.5F * f2), this.locY + (double) f14 + (double) (f8 * 6.5F), this.locZ - (double) (f13 * 6.5F * f2), 0.0F, 0.0F);
+                this.bx.setPositionRotation(this.locX + (double) (f12 * 5.5F * f2), this.locY + (double) f14 + (double) (f8 * 5.5F), this.locZ - (double) (f13 * 5.5F * f2), 0.0F, 0.0F);
 
                 for (int j = 0; j < 3; ++j) {
                     EntityComplexPart entitycomplexpart = null;
 
                     if (j == 0) {
-                        entitycomplexpart = this.by;
-                    }
-
-                    if (j == 1) {
                         entitycomplexpart = this.bz;
                     }
 
-                    if (j == 2) {
+                    if (j == 1) {
                         entitycomplexpart = this.bA;
+                    }
+
+                    if (j == 2) {
+                        entitycomplexpart = this.bB;
                     }
 
                     double[] adouble1 = this.a(12 + j * 2, 1.0F);
@@ -275,13 +280,13 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                     float f18 = (float) (j + 1) * 2.0F;
 
                     entitycomplexpart.m();
-                    entitycomplexpart.setPositionRotation(this.locX - (double) ((f10 * f17 + f15 * f18) * f2), this.locY + (adouble1[1] - adouble[1]) - (double) ((f18 + f17) * f8) + 1.5D, this.locZ + (double) ((f11 * f17 + f16 * f18) * f2), 0.0F, 0.0F);
+                    entitycomplexpart.setPositionRotation(this.locX - (double) ((f10 * 1.5F + f15 * f18) * f2), this.locY + (adouble1[1] - adouble[1]) - (double) ((f18 + 1.5F) * f8) + 1.5D, this.locZ + (double) ((f11 * 1.5F + f16 * f18) * f2), 0.0F, 0.0F);
                 }
 
                 if (!this.world.isClientSide) {
-                    this.bF = this.b(this.bv.getBoundingBox()) | this.b(this.bw.getBoundingBox()) | this.b(this.bx.getBoundingBox());
-                    if (this.bJ != null) {
-                        this.bJ.b(this);
+                    this.bG = this.b(this.bw.getBoundingBox()) | this.b(this.bx.getBoundingBox()) | this.b(this.by.getBoundingBox());
+                    if (this.bK != null) {
+                        this.bK.b(this);
                     }
                 }
 
@@ -290,9 +295,9 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     private float q(float f) {
-        double d0 = 0.0D;
+        double d0;
 
-        if (this.bK.a().a()) {
+        if (this.bL.a().a()) {
             d0 = -1.0D;
         } else {
             double[] adouble = this.a(5, 1.0F);
@@ -304,7 +309,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return (float) d0;
     }
 
-    private void cW() {
+    private void da() {
         if (this.currentEnderCrystal != null) {
             if (this.currentEnderCrystal.dead) {
                 this.currentEnderCrystal = null;
@@ -335,8 +340,8 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     private void a(List<Entity> list) {
-        double d0 = (this.bx.getBoundingBox().a + this.bx.getBoundingBox().d) / 2.0D;
-        double d1 = (this.bx.getBoundingBox().c + this.bx.getBoundingBox().f) / 2.0D;
+        double d0 = (this.by.getBoundingBox().a + this.by.getBoundingBox().d) / 2.0D;
+        double d1 = (this.by.getBoundingBox().c + this.by.getBoundingBox().f) / 2.0D;
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -348,7 +353,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 double d4 = d2 * d2 + d3 * d3;
 
                 entity.g(d2 / d4 * 4.0D, 0.20000000298023224D, d3 / d4 * 4.0D);
-                if (!this.bK.a().a() && ((EntityLiving) entity).bI() < entity.ticksLived - 2) {
+                if (!this.bL.a().a() && ((EntityLiving) entity).bK() < entity.ticksLived - 2) {
                     entity.damageEntity(DamageSource.mobAttack(this), 5.0F);
                     this.a((EntityLiving) this, entity);
                 }
@@ -419,8 +424,8 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     public boolean a(EntityComplexPart entitycomplexpart, DamageSource damagesource, float f) {
-        f = this.bK.a().a(entitycomplexpart, damagesource, f);
-        if (entitycomplexpart != this.bv) {
+        f = this.bL.a().a(entitycomplexpart, damagesource, f);
+        if (entitycomplexpart != this.bw) {
             f = f / 4.0F + Math.min(f, 1.0F);
         }
 
@@ -431,16 +436,16 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 float f1 = this.getHealth();
 
                 this.dealDamage(damagesource, f);
-                if (this.getHealth() <= 0.0F && !this.bK.a().a()) {
+                if (this.getHealth() <= 0.0F && !this.bL.a().a()) {
                     this.setHealth(1.0F);
-                    this.bK.setControllerPhase(DragonControllerPhase.j);
+                    this.bL.setControllerPhase(DragonControllerPhase.j);
                 }
 
-                if (this.bK.a().a()) {
-                    this.bM = (int) ((float) this.bM + (f1 - this.getHealth()));
-                    if ((float) this.bM > 0.25F * this.getMaxHealth()) {
-                        this.bM = 0;
-                        this.bK.setControllerPhase(DragonControllerPhase.e);
+                if (this.bL.a().a()) {
+                    this.bN = (int) ((float) this.bN + (f1 - this.getHealth()));
+                    if ((float) this.bN > 0.25F * this.getMaxHealth()) {
+                        this.bN = 0;
+                        this.bL.setControllerPhase(DragonControllerPhase.e);
                     }
                 }
             }
@@ -451,7 +456,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (damagesource instanceof EntityDamageSource && ((EntityDamageSource) damagesource).x()) {
-            this.a(this.bx, damagesource, f);
+            this.a(this.by, damagesource, f);
         }
 
         return false;
@@ -463,20 +468,20 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     public void Q() {
         this.die();
-        if (this.bJ != null) {
-            this.bJ.b(this);
-            this.bJ.a(this);
+        if (this.bK != null) {
+            this.bK.b(this);
+            this.bK.a(this);
         }
 
     }
 
-    protected void bD() {
-        if (this.bJ != null) {
-            this.bJ.b(this);
+    protected void bF() {
+        if (this.bK != null) {
+            this.bK.b(this);
         }
 
-        ++this.bG;
-        if (this.bG >= 180 && this.bG <= 200) {
+        ++this.bH;
+        if (this.bH >= 180 && this.bH <= 200) {
             float f = (this.random.nextFloat() - 0.5F) * 8.0F;
             float f1 = (this.random.nextFloat() - 0.5F) * 4.0F;
             float f2 = (this.random.nextFloat() - 0.5F) * 8.0F;
@@ -487,29 +492,30 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         boolean flag = this.world.getGameRules().getBoolean("doMobLoot");
         short short0 = 500;
 
-        if (this.bJ != null && !this.bJ.d()) {
+        if (this.bK != null && !this.bK.d()) {
             short0 = 12000;
         }
 
         if (!this.world.isClientSide) {
-            if (this.bG > 150 && this.bG % 5 == 0 && flag) {
+            if (this.bH > 150 && this.bH % 5 == 0 && flag) {
                 this.a(MathHelper.d((float) short0 * 0.08F));
             }
 
-            if (this.bG == 1) {
+            if (this.bH == 1) {
                 this.world.a(1028, new BlockPosition(this), 0);
             }
         }
 
         this.move(0.0D, 0.10000000149011612D, 0.0D);
-        this.aN = this.yaw += 20.0F;
-        if (this.bG == 200 && !this.world.isClientSide) {
+        this.yaw += 20.0F;
+        this.aO = this.yaw;
+        if (this.bH == 200 && !this.world.isClientSide) {
             if (flag) {
                 this.a(MathHelper.d((float) short0 * 0.2F));
             }
 
-            if (this.bJ != null) {
-                this.bJ.a(this);
+            if (this.bK != null) {
+                this.bK.a(this);
             }
 
             this.die();
@@ -528,12 +534,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     public int o() {
-        if (this.bN[0] == null) {
-            boolean flag = false;
-            boolean flag1 = false;
-            boolean flag2 = false;
-            boolean flag3 = false;
-
+        if (this.bO[0] == null) {
             for (int i = 0; i < 24; ++i) {
                 int j = 5;
                 int k;
@@ -559,33 +560,33 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
                 int j1 = Math.max(this.world.K() + 10, this.world.q(new BlockPosition(k, 0, l)).getY() + j);
 
-                this.bN[i] = new PathPoint(k, j1, l);
+                this.bO[i] = new PathPoint(k, j1, l);
             }
 
-            this.bO[0] = 6146;
-            this.bO[1] = 8197;
-            this.bO[2] = 8202;
-            this.bO[3] = 16404;
-            this.bO[4] = '\u8028';
-            this.bO[5] = '\u8050';
-            this.bO[6] = 65696;
-            this.bO[7] = 131392;
-            this.bO[8] = 131712;
-            this.bO[9] = 263424;
-            this.bO[10] = 526848;
-            this.bO[11] = 525313;
-            this.bO[12] = 1581057;
-            this.bO[13] = 3166214;
-            this.bO[14] = 2138120;
-            this.bO[15] = 6373424;
-            this.bO[16] = 4358208;
-            this.bO[17] = 12910976;
-            this.bO[18] = 9044480;
-            this.bO[19] = 9706496;
-            this.bO[20] = 15216640;
-            this.bO[21] = 13688832;
-            this.bO[22] = 11763712;
-            this.bO[23] = 8257536;
+            this.bP[0] = 6146;
+            this.bP[1] = 8197;
+            this.bP[2] = 8202;
+            this.bP[3] = 16404;
+            this.bP[4] = '\u8028';
+            this.bP[5] = '\u8050';
+            this.bP[6] = 65696;
+            this.bP[7] = 131392;
+            this.bP[8] = 131712;
+            this.bP[9] = 263424;
+            this.bP[10] = 526848;
+            this.bP[11] = 525313;
+            this.bP[12] = 1581057;
+            this.bP[13] = 3166214;
+            this.bP[14] = 2138120;
+            this.bP[15] = 6373424;
+            this.bP[16] = 4358208;
+            this.bP[17] = 12910976;
+            this.bP[18] = 9044480;
+            this.bP[19] = 9706496;
+            this.bP[20] = 15216640;
+            this.bP[21] = 13688832;
+            this.bP[22] = 11763712;
+            this.bP[23] = 8257536;
         }
 
         return this.l(this.locX, this.locY, this.locZ);
@@ -597,13 +598,13 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         PathPoint pathpoint = new PathPoint(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2));
         byte b0 = 0;
 
-        if (this.bJ == null || this.bJ.c() == 0) {
+        if (this.bK == null || this.bK.c() == 0) {
             b0 = 12;
         }
 
         for (int j = b0; j < 24; ++j) {
-            if (this.bN[j] != null) {
-                float f1 = this.bN[j].b(pathpoint);
+            if (this.bO[j] != null) {
+                float f1 = this.bO[j].b(pathpoint);
 
                 if (f1 < f) {
                     f = f1;
@@ -620,7 +621,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         PathPoint pathpoint1;
 
         for (int k = 0; k < 24; ++k) {
-            pathpoint1 = this.bN[k];
+            pathpoint1 = this.bO[k];
             pathpoint1.i = false;
             pathpoint1.g = 0.0F;
             pathpoint1.e = 0.0F;
@@ -629,24 +630,24 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             pathpoint1.d = -1;
         }
 
-        PathPoint pathpoint2 = this.bN[i];
+        PathPoint pathpoint2 = this.bO[i];
 
-        pathpoint1 = this.bN[j];
+        pathpoint1 = this.bO[j];
         pathpoint2.e = 0.0F;
         pathpoint2.f = pathpoint2.a(pathpoint1);
         pathpoint2.g = pathpoint2.f;
-        this.bP.a();
-        this.bP.a(pathpoint2);
+        this.bQ.a();
+        this.bQ.a(pathpoint2);
         PathPoint pathpoint3 = pathpoint2;
         byte b0 = 0;
 
-        if (this.bJ == null || this.bJ.c() == 0) {
+        if (this.bK == null || this.bK.c() == 0) {
             b0 = 12;
         }
 
         label70:
-        while (!this.bP.e()) {
-            PathPoint pathpoint4 = this.bP.c();
+        while (!this.bQ.e()) {
+            PathPoint pathpoint4 = this.bQ.c();
 
             if (pathpoint4.equals(pathpoint1)) {
                 if (pathpoint != null) {
@@ -667,7 +668,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
             while (true) {
                 if (i1 < 24) {
-                    if (this.bN[i1] != pathpoint4) {
+                    if (this.bO[i1] != pathpoint4) {
                         ++i1;
                         continue;
                     }
@@ -682,8 +683,8 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                         continue label70;
                     }
 
-                    if ((this.bO[l] & 1 << i1) > 0) {
-                        PathPoint pathpoint5 = this.bN[i1];
+                    if ((this.bP[l] & 1 << i1) > 0) {
+                        PathPoint pathpoint5 = this.bO[i1];
 
                         if (!pathpoint5.i) {
                             float f = pathpoint4.e + pathpoint4.a(pathpoint5);
@@ -693,10 +694,10 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                                 pathpoint5.e = f;
                                 pathpoint5.f = pathpoint5.a(pathpoint1);
                                 if (pathpoint5.a()) {
-                                    this.bP.a(pathpoint5, pathpoint5.e + pathpoint5.f);
+                                    this.bQ.a(pathpoint5, pathpoint5.e + pathpoint5.f);
                                 } else {
                                     pathpoint5.g = pathpoint5.e + pathpoint5.f;
-                                    this.bP.a(pathpoint5);
+                                    this.bQ.a(pathpoint5);
                                 }
                             }
                         }
@@ -710,7 +711,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         if (pathpoint3 == pathpoint2) {
             return null;
         } else {
-            EntityEnderDragon.bI.debug("Failed to find path from {} to {}", new Object[] { Integer.valueOf(i), Integer.valueOf(j)});
+            EntityEnderDragon.bJ.debug("Failed to find path from {} to {}", new Object[] { Integer.valueOf(i), Integer.valueOf(j)});
             if (pathpoint != null) {
                 pathpoint.h = pathpoint3;
                 pathpoint3 = pathpoint;
@@ -742,22 +743,26 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return new PathEntity(apathpoint);
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "EnderDragon");
+    }
+
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("DragonPhase", this.bK.a().getControllerPhase().b());
+        nbttagcompound.setInt("DragonPhase", this.bL.a().getControllerPhase().b());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.hasKey("DragonPhase")) {
-            this.bK.setControllerPhase(DragonControllerPhase.getById(nbttagcompound.getInt("DragonPhase")));
+            this.bL.setControllerPhase(DragonControllerPhase.getById(nbttagcompound.getInt("DragonPhase")));
         }
 
     }
 
     protected void L() {}
 
-    public Entity[] aR() {
+    public Entity[] aT() {
         return this.children;
     }
 
@@ -769,24 +774,24 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return this.world;
     }
 
-    public SoundCategory bA() {
+    public SoundCategory bC() {
         return SoundCategory.HOSTILE;
     }
 
     protected SoundEffect G() {
-        return SoundEffects.aN;
+        return SoundEffects.aO;
     }
 
-    protected SoundEffect bS() {
-        return SoundEffects.aS;
+    protected SoundEffect bV() {
+        return SoundEffects.aT;
     }
 
-    protected float ce() {
+    protected float ch() {
         return 5.0F;
     }
 
     public Vec3D a(float f) {
-        IDragonController idragoncontroller = this.bK.a();
+        IDragonController idragoncontroller = this.bL.a();
         DragonControllerPhase dragoncontrollerphase = idragoncontroller.getControllerPhase();
         Vec3D vec3d;
         float f1;
@@ -796,7 +801,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 float f2 = this.pitch;
 
                 f1 = 1.5F;
-                this.pitch = -6.0F * f1 * 5.0F;
+                this.pitch = -45.0F;
                 vec3d = this.f(f);
                 this.pitch = f2;
             } else {
@@ -810,7 +815,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             float f4 = this.pitch;
             float f5 = 1.5F;
 
-            this.pitch = -f3 * f5 * 5.0F;
+            this.pitch = -f3 * 1.5F * 5.0F;
             vec3d = this.f(f);
             this.pitch = f4;
         }
@@ -828,27 +833,27 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         }
 
         if (entityendercrystal == this.currentEnderCrystal) {
-            this.a(this.bv, DamageSource.b(entityhuman), 10.0F);
+            this.a(this.bw, DamageSource.b(entityhuman), 10.0F);
         }
 
-        this.bK.a().a(entityendercrystal, blockposition, damagesource, entityhuman);
+        this.bL.a().a(entityendercrystal, blockposition, damagesource, entityhuman);
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
         if (EntityEnderDragon.PHASE.equals(datawatcherobject) && this.world.isClientSide) {
-            this.bK.setControllerPhase(DragonControllerPhase.getById(((Integer) this.getDataWatcher().get(EntityEnderDragon.PHASE)).intValue()));
+            this.bL.setControllerPhase(DragonControllerPhase.getById(((Integer) this.getDataWatcher().get(EntityEnderDragon.PHASE)).intValue()));
         }
 
         super.a(datawatcherobject);
     }
 
     public DragonControllerManager getDragonControllerManager() {
-        return this.bK;
+        return this.bL;
     }
 
     @Nullable
-    public EnderDragonBattle cV() {
-        return this.bJ;
+    public EnderDragonBattle cZ() {
+        return this.bK;
     }
 
     public void addEffect(MobEffect mobeffect) {}
@@ -857,7 +862,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return false;
     }
 
-    public boolean aV() {
+    public boolean aX() {
         return false;
     }
 }

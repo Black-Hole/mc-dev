@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class WorldProviderTheEnd extends WorldProvider {
 
-    private EnderDragonBattle g = null;
+    private EnderDragonBattle g;
 
     public WorldProviderTheEnd() {}
 

@@ -4,8 +4,8 @@ import javax.annotation.Nullable;
 
 public class ContainerChest extends Container {
 
-    private IInventory container;
-    private int f;
+    private final IInventory container;
+    private final int f;
 
     public ContainerChest(IInventory iinventory, IInventory iinventory1, EntityHuman entityhuman) {
         this.container = iinventory1;

@@ -36,7 +36,8 @@ public abstract class EntityHanging extends Entity {
         Validate.notNull(enumdirection);
         Validate.isTrue(enumdirection.k().c());
         this.direction = enumdirection;
-        this.lastYaw = this.yaw = (float) (this.direction.get2DRotationValue() * 90);
+        this.yaw = (float) (this.direction.get2DRotationValue() * 90);
+        this.lastYaw = this.yaw;
         this.updateBoundingBox();
     }
 
@@ -102,13 +103,15 @@ public abstract class EntityHanging extends Entity {
             int j = Math.max(1, this.getHeight() / 16);
             BlockPosition blockposition = this.blockPosition.shift(this.direction.opposite());
             EnumDirection enumdirection = this.direction.f();
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
             for (int k = 0; k < i; ++k) {
                 for (int l = 0; l < j; ++l) {
-                    int i1 = i > 2 ? -1 : 0;
-                    int j1 = j > 2 ? -1 : 0;
-                    BlockPosition blockposition1 = blockposition.shift(enumdirection, k + i1).up(l + j1);
-                    IBlockData iblockdata = this.world.getType(blockposition1);
+                    int i1 = (i - 1) / -2;
+                    int j1 = (j - 1) / -2;
+
+                    blockposition_mutableblockposition.g(blockposition).c(enumdirection, k + i1).c(EnumDirection.UP, l + j1);
+                    IBlockData iblockdata = this.world.getType(blockposition_mutableblockposition);
 
                     if (!iblockdata.getMaterial().isBuildable() && !BlockDiodeAbstract.isDiode(iblockdata)) {
                         return false;
@@ -138,7 +141,7 @@ public abstract class EntityHanging extends Entity {
         } else {
             if (!this.dead && !this.world.isClientSide) {
                 this.die();
-                this.ao();
+                this.ap();
                 this.a(damagesource.getEntity());
             }
 
@@ -192,7 +195,7 @@ public abstract class EntityHanging extends Entity {
         return entityitem;
     }
 
-    protected boolean ar() {
+    protected boolean as() {
         return false;
     }
 
@@ -222,7 +225,21 @@ public abstract class EntityHanging extends Entity {
             }
         }
 
-        return super.a(enumblockrotation);
+        float f = MathHelper.g(this.yaw);
+
+        switch (EntityHanging.SyntheticClass_1.a[enumblockrotation.ordinal()]) {
+        case 1:
+            return f + 180.0F;
+
+        case 2:
+            return f + 90.0F;
+
+        case 3:
+            return f + 270.0F;
+
+        default:
+            return f;
+        }
     }
 
     public float a(EnumBlockMirror enumblockmirror) {

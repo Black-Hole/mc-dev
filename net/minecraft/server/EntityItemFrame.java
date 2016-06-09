@@ -33,7 +33,7 @@ public class EntityItemFrame extends EntityHanging {
         } else if (!damagesource.isExplosion() && this.getItem() != null) {
             if (!this.world.isClientSide) {
                 this.b(damagesource.getEntity(), false);
-                this.a(SoundEffects.cS, 1.0F, 1.0F);
+                this.a(SoundEffects.cX, 1.0F, 1.0F);
                 this.setItem((ItemStack) null);
             }
 
@@ -52,12 +52,12 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     public void a(@Nullable Entity entity) {
-        this.a(SoundEffects.cQ, 1.0F, 1.0F);
+        this.a(SoundEffects.cV, 1.0F, 1.0F);
         this.b(entity, true);
     }
 
     public void o() {
-        this.a(SoundEffects.cR, 1.0F, 1.0F);
+        this.a(SoundEffects.cW, 1.0F, 1.0F);
     }
 
     public void b(@Nullable Entity entity, boolean flag) {
@@ -117,7 +117,7 @@ public class EntityItemFrame extends EntityHanging {
         this.getDataWatcher().set(EntityItemFrame.c, Optional.fromNullable(itemstack));
         this.getDataWatcher().markDirty(EntityItemFrame.c);
         if (itemstack != null) {
-            this.a(SoundEffects.cP, 1.0F, 1.0F);
+            this.a(SoundEffects.cU, 1.0F, 1.0F);
         }
 
         if (flag && this.blockPosition != null) {
@@ -153,6 +153,10 @@ public class EntityItemFrame extends EntityHanging {
 
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItem("ItemFrame", new String[] { "Item"})));
+    }
+
     public void b(NBTTagCompound nbttagcompound) {
         if (this.getItem() != null) {
             nbttagcompound.set("Item", this.getItem().save(new NBTTagCompound()));
@@ -186,7 +190,7 @@ public class EntityItemFrame extends EntityHanging {
                 }
             }
         } else if (!this.world.isClientSide) {
-            this.a(SoundEffects.cT, 1.0F, 1.0F);
+            this.a(SoundEffects.cY, 1.0F, 1.0F);
             this.setRotation(this.getRotation() + 1);
         }
 

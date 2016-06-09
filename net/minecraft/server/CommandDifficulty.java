@@ -32,7 +32,7 @@ public class CommandDifficulty extends CommandAbstract {
     }
 
     protected EnumDifficulty e(String s) throws ExceptionInvalidNumber {
-        return !s.equalsIgnoreCase("peaceful") && !s.equalsIgnoreCase("p") ? (!s.equalsIgnoreCase("easy") && !s.equalsIgnoreCase("e") ? (!s.equalsIgnoreCase("normal") && !s.equalsIgnoreCase("n") ? (!s.equalsIgnoreCase("hard") && !s.equalsIgnoreCase("h") ? EnumDifficulty.getById(a(s, 0, 3)) : EnumDifficulty.HARD) : EnumDifficulty.NORMAL) : EnumDifficulty.EASY) : EnumDifficulty.PEACEFUL;
+        return !"peaceful".equalsIgnoreCase(s) && !"p".equalsIgnoreCase(s) ? (!"easy".equalsIgnoreCase(s) && !"e".equalsIgnoreCase(s) ? (!"normal".equalsIgnoreCase(s) && !"n".equalsIgnoreCase(s) ? (!"hard".equalsIgnoreCase(s) && !"h".equalsIgnoreCase(s) ? EnumDifficulty.getById(a(s, 0, 3)) : EnumDifficulty.HARD) : EnumDifficulty.NORMAL) : EnumDifficulty.EASY) : EnumDifficulty.PEACEFUL;
     }
 
     public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {

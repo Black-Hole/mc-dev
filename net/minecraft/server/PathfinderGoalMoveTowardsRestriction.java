@@ -2,11 +2,11 @@ package net.minecraft.server;
 
 public class PathfinderGoalMoveTowardsRestriction extends PathfinderGoal {
 
-    private EntityCreature a;
+    private final EntityCreature a;
     private double b;
     private double c;
     private double d;
-    private double e;
+    private final double e;
 
     public PathfinderGoalMoveTowardsRestriction(EntityCreature entitycreature, double d0) {
         this.a = entitycreature;
@@ -15,10 +15,10 @@ public class PathfinderGoalMoveTowardsRestriction extends PathfinderGoal {
     }
 
     public boolean a() {
-        if (this.a.cV()) {
+        if (this.a.cZ()) {
             return false;
         } else {
-            BlockPosition blockposition = this.a.cW();
+            BlockPosition blockposition = this.a.da();
             Vec3D vec3d = RandomPositionGenerator.a(this.a, 16, 7, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
 
             if (vec3d == null) {

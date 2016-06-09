@@ -77,7 +77,7 @@ public class GenericAttributes {
             if (attributeinstance != null) {
                 a(attributeinstance, nbttagcompound);
             } else {
-                GenericAttributes.j.warn("Ignoring unknown attribute \'" + nbttagcompound.getString("Name") + "\'");
+                GenericAttributes.j.warn("Ignoring unknown attribute \'{}\'", new Object[] { nbttagcompound.getString("Name")});
             }
         }
 
@@ -112,7 +112,7 @@ public class GenericAttributes {
         try {
             return new AttributeModifier(uuid, nbttagcompound.getString("Name"), nbttagcompound.getDouble("Amount"), nbttagcompound.getInt("Operation"));
         } catch (Exception exception) {
-            GenericAttributes.j.warn("Unable to create attribute: " + exception.getMessage());
+            GenericAttributes.j.warn("Unable to create attribute: {}", new Object[] { exception.getMessage()});
             return null;
         }
     }

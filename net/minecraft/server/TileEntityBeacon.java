@@ -25,7 +25,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
 
     public TileEntityBeacon() {}
 
-    public void c() {
+    public void E_() {
         if (this.world.getTime() % 80L == 0L) {
             this.m();
         }
@@ -173,10 +173,10 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 3, this.E_());
+        return new PacketPlayOutTileEntityData(this.position, 3, this.c());
     }
 
-    public NBTTagCompound E_() {
+    public NBTTagCompound c() {
         return this.save(new NBTTagCompound());
     }
 

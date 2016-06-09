@@ -4,7 +4,7 @@ public class SoundEffect {
 
     public static final RegistryMaterials<MinecraftKey, SoundEffect> a = new RegistryMaterials();
     private final MinecraftKey b;
-    private static int c = 0;
+    private static int c;
 
     public SoundEffect(MinecraftKey minecraftkey) {
         this.b = minecraftkey;
@@ -35,6 +35,7 @@ public class SoundEffect {
         a("block.dispenser.dispense");
         a("block.dispenser.fail");
         a("block.dispenser.launch");
+        a("block.enchantment_table.use");
         a("block.end_gateway.spawn");
         a("block.enderchest.close");
         a("block.enderchest.open");
@@ -259,6 +260,10 @@ public class SoundEffect {
         a("entity.hostile.small_fall");
         a("entity.hostile.splash");
         a("entity.hostile.swim");
+        a("entity.husk.ambient");
+        a("entity.husk.death");
+        a("entity.husk.hurt");
+        a("entity.husk.step");
         a("entity.irongolem.attack");
         a("entity.irongolem.death");
         a("entity.irongolem.hurt");
@@ -307,6 +312,12 @@ public class SoundEffect {
         a("entity.player.small_fall");
         a("entity.player.splash");
         a("entity.player.swim");
+        a("entity.polar_bear.ambient");
+        a("entity.polar_bear.baby_ambient");
+        a("entity.polar_bear.death");
+        a("entity.polar_bear.hurt");
+        a("entity.polar_bear.step");
+        a("entity.polar_bear.warning");
         a("entity.rabbit.ambient");
         a("entity.rabbit.attack");
         a("entity.rabbit.death");
@@ -365,6 +376,10 @@ public class SoundEffect {
         a("entity.squid.ambient");
         a("entity.squid.death");
         a("entity.squid.hurt");
+        a("entity.stray.ambient");
+        a("entity.stray.death");
+        a("entity.stray.hurt");
+        a("entity.stray.step");
         a("entity.tnt.primed");
         a("entity.villager.ambient");
         a("entity.villager.death");
@@ -383,6 +398,10 @@ public class SoundEffect {
         a("entity.wither.hurt");
         a("entity.wither.shoot");
         a("entity.wither.spawn");
+        a("entity.wither_skeleton.ambient");
+        a("entity.wither_skeleton.death");
+        a("entity.wither_skeleton.hurt");
+        a("entity.wither_skeleton.step");
         a("entity.wolf.ambient");
         a("entity.wolf.death");
         a("entity.wolf.growl");

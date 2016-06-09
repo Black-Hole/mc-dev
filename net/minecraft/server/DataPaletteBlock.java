@@ -8,7 +8,7 @@ public class DataPaletteBlock implements DataPaletteExpandable {
     protected static final IBlockData a = Blocks.AIR.getBlockData();
     protected DataBits b;
     protected DataPalette c;
-    private int e = 0;
+    private int e;
 
     public DataPaletteBlock() {
         this.b(4);

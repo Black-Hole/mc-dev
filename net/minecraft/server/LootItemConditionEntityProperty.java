@@ -25,10 +25,13 @@ public class LootItemConditionEntityProperty implements LootItemCondition {
         if (entity == null) {
             return false;
         } else {
-            int i = 0;
+            LootEntityProperty[] alootentityproperty = this.a;
+            int i = alootentityproperty.length;
 
-            for (int j = this.a.length; i < j; ++i) {
-                if (!this.a[i].a(random, entity)) {
+            for (int j = 0; j < i; ++j) {
+                LootEntityProperty lootentityproperty = alootentityproperty[j];
+
+                if (!lootentityproperty.a(random, entity)) {
                     return false;
                 }
             }

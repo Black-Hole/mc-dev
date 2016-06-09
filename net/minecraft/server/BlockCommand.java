@@ -27,13 +27,13 @@ public class BlockCommand extends BlockTileEntity {
             if (tileentity instanceof TileEntityCommand) {
                 TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
                 boolean flag = world.isBlockIndirectlyPowered(blockposition);
-                boolean flag1 = tileentitycommand.e();
-                boolean flag2 = tileentitycommand.g();
+                boolean flag1 = tileentitycommand.g();
+                boolean flag2 = tileentitycommand.h();
 
                 if (flag && !flag1) {
                     tileentitycommand.a(true);
-                    if (tileentitycommand.j() != TileEntityCommand.Type.SEQUENCE && !flag2) {
-                        boolean flag3 = !tileentitycommand.k() || this.e(world, blockposition, iblockdata);
+                    if (tileentitycommand.k() != TileEntityCommand.Type.SEQUENCE && !flag2) {
+                        boolean flag3 = !tileentitycommand.l() || this.e(world, blockposition, iblockdata);
 
                         tileentitycommand.c(flag3);
                         world.a(blockposition, (Block) this, this.a(world));
@@ -57,9 +57,9 @@ public class BlockCommand extends BlockTileEntity {
                 TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
                 CommandBlockListenerAbstract commandblocklistenerabstract = tileentitycommand.getCommandBlock();
                 boolean flag = !UtilColor.b(commandblocklistenerabstract.getCommand());
-                TileEntityCommand.Type tileentitycommand_type = tileentitycommand.j();
-                boolean flag1 = !tileentitycommand.k() || this.e(world, blockposition, iblockdata);
-                boolean flag2 = tileentitycommand.h();
+                TileEntityCommand.Type tileentitycommand_type = tileentitycommand.k();
+                boolean flag1 = !tileentitycommand.l() || this.e(world, blockposition, iblockdata);
+                boolean flag2 = tileentitycommand.i();
                 boolean flag3 = false;
 
                 if (tileentitycommand_type != TileEntityCommand.Type.SEQUENCE && flag2 && flag) {
@@ -67,7 +67,7 @@ public class BlockCommand extends BlockTileEntity {
                     flag3 = true;
                 }
 
-                if (tileentitycommand.e() || tileentitycommand.g()) {
+                if (tileentitycommand.g() || tileentitycommand.h()) {
                     if (tileentitycommand_type == TileEntityCommand.Type.SEQUENCE && flag1 && flag) {
                         commandblocklistenerabstract.a(world);
                         flag3 = true;
@@ -106,13 +106,9 @@ public class BlockCommand extends BlockTileEntity {
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
-        if (tileentity instanceof TileEntityCommand) {
-            if (!entityhuman.abilities.canInstantlyBuild) {
-                return false;
-            } else {
-                entityhuman.a((TileEntityCommand) tileentity);
-                return true;
-            }
+        if (tileentity instanceof TileEntityCommand && entityhuman.dh()) {
+            entityhuman.a((TileEntityCommand) tileentity);
+            return true;
         } else {
             return false;
         }
@@ -147,7 +143,7 @@ public class BlockCommand extends BlockTileEntity {
                     tileentitycommand.b(this == Blocks.dd);
                 }
 
-                if (tileentitycommand.j() == TileEntityCommand.Type.SEQUENCE) {
+                if (tileentitycommand.k() == TileEntityCommand.Type.SEQUENCE) {
                     boolean flag = world.isBlockIndirectlyPowered(blockposition);
 
                     tileentitycommand.a(flag);
@@ -200,7 +196,7 @@ public class BlockCommand extends BlockTileEntity {
             for (TileEntity tileentity = world.getTileEntity(blockposition_mutableblockposition); tileentity instanceof TileEntityCommand; tileentity = world.getTileEntity(blockposition_mutableblockposition)) {
                 TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
 
-                if (tileentitycommand.j() != TileEntityCommand.Type.SEQUENCE) {
+                if (tileentitycommand.k() != TileEntityCommand.Type.SEQUENCE) {
                     break;
                 }
 

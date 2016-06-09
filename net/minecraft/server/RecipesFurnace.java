@@ -9,8 +9,8 @@ import javax.annotation.Nullable;
 public class RecipesFurnace {
 
     private static final RecipesFurnace a = new RecipesFurnace();
-    public Map<ItemStack, ItemStack> recipes = Maps.newHashMap();
-    private Map<ItemStack, Float> c = Maps.newHashMap();
+    public final Map<ItemStack, ItemStack> recipes = Maps.newHashMap();
+    private final Map<ItemStack, Float> experience = Maps.newHashMap();
 
     public static RecipesFurnace getInstance() {
         return RecipesFurnace.a;
@@ -65,7 +65,7 @@ public class RecipesFurnace {
 
     public void a(ItemStack itemstack, ItemStack itemstack1, float f) {
         this.recipes.put(itemstack, itemstack1);
-        this.c.put(itemstack1, Float.valueOf(f));
+        this.experience.put(itemstack1, Float.valueOf(f));
     }
 
     @Nullable
@@ -94,7 +94,7 @@ public class RecipesFurnace {
     }
 
     public float b(ItemStack itemstack) {
-        Iterator iterator = this.c.entrySet().iterator();
+        Iterator iterator = this.experience.entrySet().iterator();
 
         Entry entry;
 

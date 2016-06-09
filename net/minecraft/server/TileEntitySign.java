@@ -25,6 +25,10 @@ public class TileEntitySign extends TileEntity {
         return nbttagcompound;
     }
 
+    protected void b(World world) {
+        this.a(world);
+    }
+
     public void a(NBTTagCompound nbttagcompound) {
         this.isEditable = false;
         super.a(nbttagcompound);
@@ -86,10 +90,10 @@ public class TileEntitySign extends TileEntity {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 9, this.E_());
+        return new PacketPlayOutTileEntityData(this.position, 9, this.c());
     }
 
-    public NBTTagCompound E_() {
+    public NBTTagCompound c() {
         return this.save(new NBTTagCompound());
     }
 
@@ -97,7 +101,7 @@ public class TileEntitySign extends TileEntity {
         return true;
     }
 
-    public boolean c() {
+    public boolean d() {
         return this.isEditable;
     }
 
@@ -105,7 +109,7 @@ public class TileEntitySign extends TileEntity {
         this.h = entityhuman;
     }
 
-    public EntityHuman d() {
+    public EntityHuman e() {
         return this.h;
     }
 
@@ -156,9 +160,12 @@ public class TileEntitySign extends TileEntity {
                 return entityhuman.h();
             }
         };
+        IChatBaseComponent[] aichatbasecomponent = this.lines;
+        int i = aichatbasecomponent.length;
 
-        for (int i = 0; i < this.lines.length; ++i) {
-            ChatModifier chatmodifier = this.lines[i] == null ? null : this.lines[i].getChatModifier();
+        for (int j = 0; j < i; ++j) {
+            IChatBaseComponent ichatbasecomponent = aichatbasecomponent[j];
+            ChatModifier chatmodifier = ichatbasecomponent == null ? null : ichatbasecomponent.getChatModifier();
 
             if (chatmodifier != null && chatmodifier.h() != null) {
                 ChatClickable chatclickable = chatmodifier.h();
@@ -172,7 +179,7 @@ public class TileEntitySign extends TileEntity {
         return true;
     }
 
-    public CommandObjectiveExecutor e() {
+    public CommandObjectiveExecutor g() {
         return this.i;
     }
 }

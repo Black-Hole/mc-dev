@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class NoiseGeneratorPerlin extends NoiseGenerator {
 
-    private int[] d;
+    private final int[] d;
     public double a;
     public double b;
     public double c;

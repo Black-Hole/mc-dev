@@ -44,7 +44,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
             }
 
             d1 = 64.0D;
-            if (this.f.h(this.a) < d1 * d1) {
+            if (this.f.h(this.a) < 4096.0D) {
                 if (this.a.hasLineOfSight(this.f)) {
                     ++this.c;
                     Vec3D vec3d = (new Vec3D(this.f.locX - this.a.locX, 0.0D, this.f.locZ - this.a.locZ)).a();
@@ -56,11 +56,11 @@ public class DragonControllerStrafe extends AbstractDragonController {
                     if (this.c >= 5 && f1 >= 0.0F && f1 < 10.0F) {
                         d2 = 1.0D;
                         Vec3D vec3d2 = this.a.f(1.0F);
-                        double d6 = this.a.bv.locX - vec3d2.x * d2;
-                        double d7 = this.a.bv.locY + (double) (this.a.bv.length / 2.0F) + 0.5D;
-                        double d8 = this.a.bv.locZ - vec3d2.z * d2;
+                        double d6 = this.a.bw.locX - vec3d2.x * 1.0D;
+                        double d7 = this.a.bw.locY + (double) (this.a.bw.length / 2.0F) + 0.5D;
+                        double d8 = this.a.bw.locZ - vec3d2.z * 1.0D;
                         double d9 = this.f.locX - d6;
-                        double d10 = this.f.locY + (double) (this.f.length / 2.0F) - (d7 + (double) (this.a.bv.length / 2.0F));
+                        double d10 = this.f.locY + (double) (this.f.length / 2.0F) - (d7 + (double) (this.a.bw.length / 2.0F));
                         double d11 = this.f.locZ - d8;
 
                         this.a.world.a((EntityHuman) null, 1017, new BlockPosition(this.a), 0);
@@ -105,7 +105,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
                 --j;
             }
 
-            if (this.a.cV() != null && this.a.cV().c() >= 0) {
+            if (this.a.cZ() != null && this.a.cZ().c() >= 0) {
                 j %= 12;
                 if (j < 0) {
                     j += 12;

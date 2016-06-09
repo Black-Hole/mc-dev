@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 public class GameRules {
 
-    private TreeMap<String, GameRules.GameRuleValue> a = new TreeMap();
+    private final TreeMap<String, GameRules.GameRuleValue> a = new TreeMap();
 
     public GameRules() {
         this.a("doFireTick", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
@@ -82,9 +82,8 @@ public class GameRules {
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
-            String s1 = nbttagcompound.getString(s);
 
-            this.set(s, s1);
+            this.set(s, nbttagcompound.getString(s));
         }
 
     }

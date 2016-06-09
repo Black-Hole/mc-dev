@@ -3,9 +3,9 @@ package net.minecraft.server;
 public class GenLayerBiome extends GenLayer {
 
     private BiomeBase[] c;
-    private BiomeBase[] d;
-    private BiomeBase[] e;
-    private BiomeBase[] f;
+    private final BiomeBase[] d;
+    private final BiomeBase[] e;
+    private final BiomeBase[] f;
     private final CustomWorldSettingsFinal g;
 
     public GenLayerBiome(long i, GenLayer genlayer, WorldType worldtype, String s) {

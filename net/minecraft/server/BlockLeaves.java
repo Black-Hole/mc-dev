@@ -20,17 +20,17 @@ public abstract class BlockLeaves extends Block {
     }
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        byte b0 = 1;
-        int i = b0 + 1;
-        int j = blockposition.getX();
-        int k = blockposition.getY();
-        int l = blockposition.getZ();
+        boolean flag = true;
+        boolean flag1 = true;
+        int i = blockposition.getX();
+        int j = blockposition.getY();
+        int k = blockposition.getZ();
 
-        if (world.areChunksLoadedBetween(new BlockPosition(j - i, k - i, l - i), new BlockPosition(j + i, k + i, l + i))) {
-            for (int i1 = -b0; i1 <= b0; ++i1) {
-                for (int j1 = -b0; j1 <= b0; ++j1) {
-                    for (int k1 = -b0; k1 <= b0; ++k1) {
-                        BlockPosition blockposition1 = blockposition.a(i1, j1, k1);
+        if (world.areChunksLoadedBetween(new BlockPosition(i - 2, j - 2, k - 2), new BlockPosition(i + 2, j + 2, k + 2))) {
+            for (int l = -1; l <= 1; ++l) {
+                for (int i1 = -1; i1 <= 1; ++i1) {
+                    for (int j1 = -1; j1 <= 1; ++j1) {
+                        BlockPosition blockposition1 = blockposition.a(l, i1, j1);
                         IBlockData iblockdata1 = world.getType(blockposition1);
 
                         if (iblockdata1.getMaterial() == Material.LEAVES && !((Boolean) iblockdata1.get(BlockLeaves.CHECK_DECAY)).booleanValue()) {
@@ -46,72 +46,72 @@ public abstract class BlockLeaves extends Block {
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (!world.isClientSide) {
             if (((Boolean) iblockdata.get(BlockLeaves.CHECK_DECAY)).booleanValue() && ((Boolean) iblockdata.get(BlockLeaves.DECAYABLE)).booleanValue()) {
-                byte b0 = 4;
-                int i = b0 + 1;
-                int j = blockposition.getX();
-                int k = blockposition.getY();
-                int l = blockposition.getZ();
-                byte b1 = 32;
-                int i1 = b1 * b1;
-                int j1 = b1 / 2;
+                boolean flag = true;
+                boolean flag1 = true;
+                int i = blockposition.getX();
+                int j = blockposition.getY();
+                int k = blockposition.getZ();
+                boolean flag2 = true;
+                boolean flag3 = true;
+                boolean flag4 = true;
 
                 if (this.d == null) {
-                    this.d = new int[b1 * b1 * b1];
+                    this.d = new int['\u8000'];
                 }
 
-                if (world.areChunksLoadedBetween(new BlockPosition(j - i, k - i, l - i), new BlockPosition(j + i, k + i, l + i))) {
+                if (world.areChunksLoadedBetween(new BlockPosition(i - 5, j - 5, k - 5), new BlockPosition(i + 5, j + 5, k + 5))) {
                     BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-                    int k1;
-                    int l1;
-                    int i2;
+                    int l;
+                    int i1;
+                    int j1;
 
-                    for (k1 = -b0; k1 <= b0; ++k1) {
-                        for (l1 = -b0; l1 <= b0; ++l1) {
-                            for (i2 = -b0; i2 <= b0; ++i2) {
-                                IBlockData iblockdata1 = world.getType(blockposition_mutableblockposition.c(j + k1, k + l1, l + i2));
+                    for (l = -4; l <= 4; ++l) {
+                        for (i1 = -4; i1 <= 4; ++i1) {
+                            for (j1 = -4; j1 <= 4; ++j1) {
+                                IBlockData iblockdata1 = world.getType(blockposition_mutableblockposition.c(i + l, j + i1, k + j1));
                                 Block block = iblockdata1.getBlock();
 
                                 if (block != Blocks.LOG && block != Blocks.LOG2) {
                                     if (iblockdata1.getMaterial() == Material.LEAVES) {
-                                        this.d[(k1 + j1) * i1 + (l1 + j1) * b1 + i2 + j1] = -2;
+                                        this.d[(l + 16) * 1024 + (i1 + 16) * 32 + j1 + 16] = -2;
                                     } else {
-                                        this.d[(k1 + j1) * i1 + (l1 + j1) * b1 + i2 + j1] = -1;
+                                        this.d[(l + 16) * 1024 + (i1 + 16) * 32 + j1 + 16] = -1;
                                     }
                                 } else {
-                                    this.d[(k1 + j1) * i1 + (l1 + j1) * b1 + i2 + j1] = 0;
+                                    this.d[(l + 16) * 1024 + (i1 + 16) * 32 + j1 + 16] = 0;
                                 }
                             }
                         }
                     }
 
-                    for (k1 = 1; k1 <= 4; ++k1) {
-                        for (l1 = -b0; l1 <= b0; ++l1) {
-                            for (i2 = -b0; i2 <= b0; ++i2) {
-                                for (int j2 = -b0; j2 <= b0; ++j2) {
-                                    if (this.d[(l1 + j1) * i1 + (i2 + j1) * b1 + j2 + j1] == k1 - 1) {
-                                        if (this.d[(l1 + j1 - 1) * i1 + (i2 + j1) * b1 + j2 + j1] == -2) {
-                                            this.d[(l1 + j1 - 1) * i1 + (i2 + j1) * b1 + j2 + j1] = k1;
+                    for (l = 1; l <= 4; ++l) {
+                        for (i1 = -4; i1 <= 4; ++i1) {
+                            for (j1 = -4; j1 <= 4; ++j1) {
+                                for (int k1 = -4; k1 <= 4; ++k1) {
+                                    if (this.d[(i1 + 16) * 1024 + (j1 + 16) * 32 + k1 + 16] == l - 1) {
+                                        if (this.d[(i1 + 16 - 1) * 1024 + (j1 + 16) * 32 + k1 + 16] == -2) {
+                                            this.d[(i1 + 16 - 1) * 1024 + (j1 + 16) * 32 + k1 + 16] = l;
                                         }
 
-                                        if (this.d[(l1 + j1 + 1) * i1 + (i2 + j1) * b1 + j2 + j1] == -2) {
-                                            this.d[(l1 + j1 + 1) * i1 + (i2 + j1) * b1 + j2 + j1] = k1;
+                                        if (this.d[(i1 + 16 + 1) * 1024 + (j1 + 16) * 32 + k1 + 16] == -2) {
+                                            this.d[(i1 + 16 + 1) * 1024 + (j1 + 16) * 32 + k1 + 16] = l;
                                         }
 
-                                        if (this.d[(l1 + j1) * i1 + (i2 + j1 - 1) * b1 + j2 + j1] == -2) {
-                                            this.d[(l1 + j1) * i1 + (i2 + j1 - 1) * b1 + j2 + j1] = k1;
+                                        if (this.d[(i1 + 16) * 1024 + (j1 + 16 - 1) * 32 + k1 + 16] == -2) {
+                                            this.d[(i1 + 16) * 1024 + (j1 + 16 - 1) * 32 + k1 + 16] = l;
                                         }
 
-                                        if (this.d[(l1 + j1) * i1 + (i2 + j1 + 1) * b1 + j2 + j1] == -2) {
-                                            this.d[(l1 + j1) * i1 + (i2 + j1 + 1) * b1 + j2 + j1] = k1;
+                                        if (this.d[(i1 + 16) * 1024 + (j1 + 16 + 1) * 32 + k1 + 16] == -2) {
+                                            this.d[(i1 + 16) * 1024 + (j1 + 16 + 1) * 32 + k1 + 16] = l;
                                         }
 
-                                        if (this.d[(l1 + j1) * i1 + (i2 + j1) * b1 + (j2 + j1 - 1)] == -2) {
-                                            this.d[(l1 + j1) * i1 + (i2 + j1) * b1 + (j2 + j1 - 1)] = k1;
+                                        if (this.d[(i1 + 16) * 1024 + (j1 + 16) * 32 + (k1 + 16 - 1)] == -2) {
+                                            this.d[(i1 + 16) * 1024 + (j1 + 16) * 32 + (k1 + 16 - 1)] = l;
                                         }
 
-                                        if (this.d[(l1 + j1) * i1 + (i2 + j1) * b1 + j2 + j1 + 1] == -2) {
-                                            this.d[(l1 + j1) * i1 + (i2 + j1) * b1 + j2 + j1 + 1] = k1;
+                                        if (this.d[(i1 + 16) * 1024 + (j1 + 16) * 32 + k1 + 16 + 1] == -2) {
+                                            this.d[(i1 + 16) * 1024 + (j1 + 16) * 32 + k1 + 16 + 1] = l;
                                         }
                                     }
                                 }
@@ -120,9 +120,9 @@ public abstract class BlockLeaves extends Block {
                     }
                 }
 
-                int k2 = this.d[j1 * i1 + j1 * b1 + j1];
+                int l1 = this.d[16912];
 
-                if (k2 >= 0) {
+                if (l1 >= 0) {
                     world.setTypeAndData(blockposition, iblockdata.set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)), 4);
                 } else {
                     this.b(world, blockposition);

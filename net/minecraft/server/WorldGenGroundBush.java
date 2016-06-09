@@ -14,9 +14,7 @@ public class WorldGenGroundBush extends WorldGenTrees {
     }
 
     public boolean generate(World world, Random random, BlockPosition blockposition) {
-        IBlockData iblockdata;
-
-        while (((iblockdata = world.getType(blockposition)).getMaterial() == Material.AIR || iblockdata.getMaterial() == Material.LEAVES) && blockposition.getY() > 0) {
+        for (IBlockData iblockdata = world.getType(blockposition); (iblockdata.getMaterial() == Material.AIR || iblockdata.getMaterial() == Material.LEAVES) && blockposition.getY() > 0; iblockdata = world.getType(blockposition)) {
             blockposition = blockposition.down();
         }
 

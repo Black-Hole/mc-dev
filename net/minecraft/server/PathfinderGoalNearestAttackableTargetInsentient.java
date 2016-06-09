@@ -10,11 +10,11 @@ import org.apache.logging.log4j.Logger;
 public class PathfinderGoalNearestAttackableTargetInsentient extends PathfinderGoal {
 
     private static final Logger a = LogManager.getLogger();
-    private EntityInsentient b;
+    private final EntityInsentient b;
     private final Predicate<EntityLiving> c;
     private final PathfinderGoalNearestAttackableTarget.DistanceComparator d;
     private EntityLiving e;
-    private Class<? extends EntityLiving> f;
+    private final Class<? extends EntityLiving> f;
 
     public PathfinderGoalNearestAttackableTargetInsentient(EntityInsentient entityinsentient, Class<? extends EntityLiving> oclass) {
         this.b = entityinsentient;

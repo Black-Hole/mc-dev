@@ -151,7 +151,7 @@ public class PlayerInventory implements IInventory {
             if (itemstack1 == null) {
                 itemstack1 = new ItemStack(item, 0, itemstack.getData());
                 if (itemstack.hasTag()) {
-                    itemstack1.setTag((NBTTagCompound) itemstack.getTag().clone());
+                    itemstack1.setTag(itemstack.getTag().g());
                 }
 
                 this.setItem(j, itemstack1);
@@ -195,12 +195,15 @@ public class PlayerInventory implements IInventory {
     }
 
     public void m() {
-        for (int i = 0; i < this.g.length; ++i) {
-            ItemStack[] aitemstack = this.g[i];
+        ItemStack[][] aitemstack = this.g;
+        int i = aitemstack.length;
 
-            for (int j = 0; j < aitemstack.length; ++j) {
-                if (aitemstack[j] != null) {
-                    aitemstack[j].a(this.player.world, this.player, j, this.itemInHandIndex == j);
+        for (int j = 0; j < i; ++j) {
+            ItemStack[] aitemstack1 = aitemstack[j];
+
+            for (int k = 0; k < aitemstack1.length; ++k) {
+                if (aitemstack1[k] != null) {
+                    aitemstack1[k].a(this.player.world, this.player, k, this.itemInHandIndex == k);
                 }
             }
         }
@@ -529,9 +532,13 @@ public class PlayerInventory implements IInventory {
 
         for (int j = 0; j < i; ++j) {
             ItemStack[] aitemstack1 = aitemstack[j];
+            ItemStack[] aitemstack2 = aitemstack1;
+            int k = aitemstack1.length;
 
-            for (int k = 0; k < aitemstack1.length; ++k) {
-                if (aitemstack1[k] != null && aitemstack1[k].doMaterialsMatch(itemstack)) {
+            for (int l = 0; l < k; ++l) {
+                ItemStack itemstack1 = aitemstack2[l];
+
+                if (itemstack1 != null && itemstack1.doMaterialsMatch(itemstack)) {
                     return true;
                 }
             }

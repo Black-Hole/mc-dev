@@ -53,7 +53,7 @@ public class ItemFish extends ItemFood {
         private final float i;
         private final int j;
         private final float k;
-        private boolean l = false;
+        private boolean l;
 
         private EnumFish(int i, String s, int j, float f, int k, float f1) {
             this.f = i;

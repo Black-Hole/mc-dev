@@ -33,7 +33,7 @@ public abstract class StructureStart {
         while (iterator.hasNext()) {
             StructurePiece structurepiece = (StructurePiece) iterator.next();
 
-            if (structurepiece.c().a(structureboundingbox) && !structurepiece.a(world, random, structureboundingbox)) {
+            if (structurepiece.d().a(structureboundingbox) && !structurepiece.a(world, random, structureboundingbox)) {
                 iterator.remove();
             }
         }
@@ -47,7 +47,7 @@ public abstract class StructureStart {
         while (iterator.hasNext()) {
             StructurePiece structurepiece = (StructurePiece) iterator.next();
 
-            this.b.b(structurepiece.c());
+            this.b.b(structurepiece.d());
         }
 
     }
@@ -65,7 +65,7 @@ public abstract class StructureStart {
         while (iterator.hasNext()) {
             StructurePiece structurepiece = (StructurePiece) iterator.next();
 
-            nbttaglist.add(structurepiece.b());
+            nbttaglist.add(structurepiece.c());
         }
 
         nbttagcompound.set("Children", nbttaglist);
@@ -116,7 +116,6 @@ public abstract class StructureStart {
 
     protected void a(World world, Random random, int i, int j) {
         int k = j - i + 1 - this.b.d();
-        boolean flag = true;
         int l;
 
         if (k > 1) {

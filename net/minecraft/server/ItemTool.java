@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class ItemTool extends Item {
 
-    private Set<Block> e;
+    private final Set<Block> e;
     protected float a;
     protected float b;
     protected float c;

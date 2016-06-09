@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class PathfinderGoalOfferFlower extends PathfinderGoal {
 
-    private EntityIronGolem a;
+    private final EntityIronGolem a;
     private EntityVillager b;
     private int c;
 

@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class ItemBucket extends Item {
 
-    private Block a;
+    private final Block a;
 
     public ItemBucket(Block block) {
         this.maxStackSize = 1;
@@ -93,7 +93,7 @@ public class ItemBucket extends Item {
                     int j = blockposition.getY();
                     int k = blockposition.getZ();
 
-                    world.a(entityhuman, blockposition, SoundEffects.bw, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+                    world.a(entityhuman, blockposition, SoundEffects.bx, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
 
                     for (int l = 0; l < 8; ++l) {
                         world.addParticle(EnumParticle.SMOKE_LARGE, (double) i + Math.random(), (double) j + Math.random(), (double) k + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);

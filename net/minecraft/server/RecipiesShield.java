@@ -73,7 +73,7 @@ public class RecipiesShield {
             NBTTagCompound nbttagcompound;
 
             if (itemstack.hasTag()) {
-                nbttagcompound = (NBTTagCompound) itemstack.getTag().clone();
+                nbttagcompound = itemstack.getTag().g();
                 enumcolor = EnumColor.fromInvColorIndex(TileEntityBanner.b(itemstack));
             } else {
                 nbttagcompound = new NBTTagCompound();

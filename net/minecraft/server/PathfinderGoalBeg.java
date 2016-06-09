@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 public class PathfinderGoalBeg extends PathfinderGoal {
 
-    private EntityWolf a;
+    private final EntityWolf a;
     private EntityHuman b;
-    private World c;
-    private float d;
+    private final World c;
+    private final float d;
     private int e;
 
     public PathfinderGoalBeg(EntityWolf entitywolf, float f) {
@@ -25,12 +25,12 @@ public class PathfinderGoalBeg extends PathfinderGoal {
     }
 
     public void c() {
-        this.a.s(true);
+        this.a.t(true);
         this.e = 40 + this.a.getRandom().nextInt(40);
     }
 
     public void d() {
-        this.a.s(false);
+        this.a.t(false);
         this.b = null;
     }
 

@@ -8,10 +8,12 @@ import java.util.Random;
 public class LootEnchantFunction extends LootItemFunction {
 
     private final LootValueBounds a;
+    private final int b;
 
-    public LootEnchantFunction(LootItemCondition[] alootitemcondition, LootValueBounds lootvaluebounds) {
+    public LootEnchantFunction(LootItemCondition[] alootitemcondition, LootValueBounds lootvaluebounds, int i) {
         super(alootitemcondition);
         this.a = lootvaluebounds;
+        this.b = i;
     }
 
     public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
@@ -27,6 +29,9 @@ public class LootEnchantFunction extends LootItemFunction {
             float f = (float) i * this.a.b(random);
 
             itemstack.count += Math.round(f);
+            if (this.b != 0 && itemstack.count > this.b) {
+                itemstack.count = this.b;
+            }
         }
 
         return itemstack;
@@ -40,10 +45,16 @@ public class LootEnchantFunction extends LootItemFunction {
 
         public void a(JsonObject jsonobject, LootEnchantFunction lootenchantfunction, JsonSerializationContext jsonserializationcontext) {
             jsonobject.add("count", jsonserializationcontext.serialize(lootenchantfunction.a));
+            if (lootenchantfunction.b > 0) {
+                jsonobject.add("limit", jsonserializationcontext.serialize(Integer.valueOf(lootenchantfunction.b)));
+            }
+
         }
 
         public LootEnchantFunction a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            return new LootEnchantFunction(alootitemcondition, (LootValueBounds) ChatDeserializer.a(jsonobject, "count", jsondeserializationcontext, LootValueBounds.class));
+            int i = ChatDeserializer.a(jsonobject, "limit", 0);
+
+            return new LootEnchantFunction(alootitemcondition, (LootValueBounds) ChatDeserializer.a(jsonobject, "count", jsondeserializationcontext, LootValueBounds.class), i);
         }
 
         public LootItemFunction b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {

@@ -32,7 +32,7 @@ public class ServerGUI extends JComponent {
 
     private static final Font a = new Font("Monospaced", 0, 12);
     private static final Logger b = LogManager.getLogger();
-    private DedicatedServer c;
+    private final DedicatedServer c;
 
     public static void a(final DedicatedServer dedicatedserver) {
         try {

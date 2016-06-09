@@ -37,10 +37,11 @@ public class LootItemConditions {
         if (alootitemcondition == null) {
             return true;
         } else {
-            int i = 0;
+            LootItemCondition[] alootitemcondition1 = alootitemcondition;
+            int i = alootitemcondition.length;
 
-            for (int j = alootitemcondition.length; i < j; ++i) {
-                LootItemCondition lootitemcondition = alootitemcondition[i];
+            for (int j = 0; j < i; ++j) {
+                LootItemCondition lootitemcondition = alootitemcondition1[j];
 
                 if (!lootitemcondition.a(random, loottableinfo)) {
                     return false;

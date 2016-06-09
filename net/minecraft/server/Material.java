@@ -41,17 +41,18 @@ public class Material {
     }).f().n();
     public static final Material PISTON = (new Material(MaterialMapColor.m)).o();
     public static final Material BANNER = (new Material(MaterialMapColor.b)).f().o();
+    public static final Material J = new MaterialGas(MaterialMapColor.b);
     private boolean canBurn;
-    private boolean K;
     private boolean L;
-    private final MaterialMapColor M;
-    private boolean N = true;
-    private EnumPistonReaction O;
-    private boolean P;
+    private boolean M;
+    private final MaterialMapColor N;
+    private boolean O = true;
+    private EnumPistonReaction P;
+    private boolean Q;
 
     public Material(MaterialMapColor materialmapcolor) {
-        this.O = EnumPistonReaction.NORMAL;
-        this.M = materialmapcolor;
+        this.P = EnumPistonReaction.NORMAL;
+        this.N = materialmapcolor;
     }
 
     public boolean isLiquid() {
@@ -71,12 +72,12 @@ public class Material {
     }
 
     private Material s() {
-        this.L = true;
+        this.M = true;
         return this;
     }
 
     protected Material f() {
-        this.N = false;
+        this.O = false;
         return this;
     }
 
@@ -90,42 +91,42 @@ public class Material {
     }
 
     public Material i() {
-        this.K = true;
+        this.L = true;
         return this;
     }
 
     public boolean isReplaceable() {
-        return this.K;
+        return this.L;
     }
 
     public boolean k() {
-        return this.L ? false : this.isSolid();
+        return this.M ? false : this.isSolid();
     }
 
     public boolean isAlwaysDestroyable() {
-        return this.N;
-    }
-
-    public EnumPistonReaction getPushReaction() {
         return this.O;
     }
 
+    public EnumPistonReaction getPushReaction() {
+        return this.P;
+    }
+
     protected Material n() {
-        this.O = EnumPistonReaction.DESTROY;
+        this.P = EnumPistonReaction.DESTROY;
         return this;
     }
 
     protected Material o() {
-        this.O = EnumPistonReaction.BLOCK;
+        this.P = EnumPistonReaction.BLOCK;
         return this;
     }
 
     protected Material p() {
-        this.P = true;
+        this.Q = true;
         return this;
     }
 
     public MaterialMapColor r() {
-        return this.M;
+        return this.N;
     }
 }

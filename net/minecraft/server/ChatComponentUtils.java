@@ -24,7 +24,7 @@ public class ChatComponentUtils {
                 if (entity1 instanceof EntityHuman) {
                     s = entity1.getName();
                 } else {
-                    s = entity1.bd();
+                    s = entity1.bf();
                 }
             }
 

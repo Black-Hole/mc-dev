@@ -49,11 +49,11 @@ public abstract class LotoSelectorEntry {
                 alootitemcondition = new LootItemCondition[0];
             }
 
-            if (s.equals("item")) {
+            if ("item".equals(s)) {
                 return LootItem.a(jsonobject, jsondeserializationcontext, i, j, alootitemcondition);
-            } else if (s.equals("loot_table")) {
+            } else if ("loot_table".equals(s)) {
                 return LootSelectorLootTable.a(jsonobject, jsondeserializationcontext, i, j, alootitemcondition);
-            } else if (s.equals("empty")) {
+            } else if ("empty".equals(s)) {
                 return LootSelectorEmpty.a(jsonobject, jsondeserializationcontext, i, j, alootitemcondition);
             } else {
                 throw new JsonSyntaxException("Unknown loot entry type \'" + s + "\'");

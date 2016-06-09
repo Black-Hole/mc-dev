@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class NoiseGeneratorOctaves extends NoiseGenerator {
 
-    private NoiseGeneratorPerlin[] a;
-    private int b;
+    private final NoiseGeneratorPerlin[] a;
+    private final int b;
 
     public NoiseGeneratorOctaves(Random random, int i) {
         this.b = i;

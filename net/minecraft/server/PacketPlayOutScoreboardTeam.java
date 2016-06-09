@@ -14,7 +14,7 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
     private String e;
     private String f;
     private int g;
-    private Collection<String> h;
+    private final Collection<String> h;
     private int i;
     private int j;
 

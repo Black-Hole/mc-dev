@@ -38,7 +38,7 @@ public class CommandBlockData extends CommandAbstract {
                     throw new CommandException("commands.blockdata.notValid", new Object[0]);
                 } else {
                     NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
-                    NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttagcompound.clone();
+                    NBTTagCompound nbttagcompound1 = nbttagcompound.g();
 
                     NBTTagCompound nbttagcompound2;
 

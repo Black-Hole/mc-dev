@@ -17,10 +17,10 @@ import javax.annotation.Nullable;
 
 public class PersistentCollection {
 
-    private IDataManager b;
+    private final IDataManager b;
     protected Map<String, PersistentBase> a = Maps.newHashMap();
-    private List<PersistentBase> c = Lists.newArrayList();
-    private Map<String, Short> d = Maps.newHashMap();
+    private final List<PersistentBase> c = Lists.newArrayList();
+    private final Map<String, Short> d = Maps.newHashMap();
 
     public PersistentCollection(IDataManager idatamanager) {
         this.b = idatamanager;
@@ -42,7 +42,7 @@ public class PersistentCollection {
                         try {
                             persistentbase = (PersistentBase) oclass.getConstructor(new Class[] { String.class}).newInstance(new Object[] { s});
                         } catch (Exception exception) {
-                            throw new RuntimeException("Failed to instantiate " + oclass.toString(), exception);
+                            throw new RuntimeException("Failed to instantiate " + oclass, exception);
                         }
 
                         FileInputStream fileinputstream = new FileInputStream(file);
@@ -129,7 +129,7 @@ public class PersistentCollection {
 
                     if (nbtbase instanceof NBTTagShort) {
                         NBTTagShort nbttagshort = (NBTTagShort) nbtbase;
-                        short short0 = nbttagshort.e();
+                        short short0 = nbttagshort.f();
 
                         this.d.put(s, Short.valueOf(short0));
                     }

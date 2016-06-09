@@ -40,7 +40,7 @@ public class CommandTestForBlocks extends CommandAbstract {
                 if (world.a(structureboundingbox) && world.a(structureboundingbox1)) {
                     boolean flag = false;
 
-                    if (astring.length > 9 && astring[9].equals("masked")) {
+                    if (astring.length > 9 && "masked".equals(astring[9])) {
                         flag = true;
                     }
 

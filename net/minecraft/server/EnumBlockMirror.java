@@ -5,7 +5,7 @@ public enum EnumBlockMirror {
     NONE("no_mirror"), LEFT_RIGHT("mirror_left_right"), FRONT_BACK("mirror_front_back");
 
     private final String d;
-    private static String[] e = new String[values().length];
+    private static final String[] e = new String[values().length];
 
     private EnumBlockMirror(String s) {
         this.d = s;
@@ -81,13 +81,13 @@ public enum EnumBlockMirror {
 
         static {
             try {
-                EnumBlockMirror.SyntheticClass_1.a[EnumBlockMirror.LEFT_RIGHT.ordinal()] = 1;
+                EnumBlockMirror.SyntheticClass_1.a[EnumBlockMirror.FRONT_BACK.ordinal()] = 1;
             } catch (NoSuchFieldError nosuchfielderror) {
                 ;
             }
 
             try {
-                EnumBlockMirror.SyntheticClass_1.a[EnumBlockMirror.FRONT_BACK.ordinal()] = 2;
+                EnumBlockMirror.SyntheticClass_1.a[EnumBlockMirror.LEFT_RIGHT.ordinal()] = 2;
             } catch (NoSuchFieldError nosuchfielderror1) {
                 ;
             }

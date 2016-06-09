@@ -70,8 +70,8 @@ public class EntityFireworks extends Entity {
 
         this.pitch = this.lastPitch + (this.pitch - this.lastPitch) * 0.2F;
         this.yaw = this.lastYaw + (this.yaw - this.lastYaw) * 0.2F;
-        if (this.ticksFlown == 0 && !this.ad()) {
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.br, SoundCategory.AMBIENT, 3.0F, 1.0F);
+        if (this.ticksFlown == 0 && !this.isSilent()) {
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.bs, SoundCategory.AMBIENT, 3.0F, 1.0F);
         }
 
         ++this.ticksFlown;
@@ -86,15 +86,17 @@ public class EntityFireworks extends Entity {
 
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItem("FireworksRocketEntity", new String[] { "FireworksItem"})));
+    }
+
     public void b(NBTTagCompound nbttagcompound) {
         nbttagcompound.setInt("Life", this.ticksFlown);
         nbttagcompound.setInt("LifeTime", this.expectedLifespan);
         ItemStack itemstack = (ItemStack) ((Optional) this.datawatcher.get(EntityFireworks.FIREWORK_ITEM)).orNull();
 
         if (itemstack != null) {
-            NBTTagCompound nbttagcompound1 = itemstack.save(new NBTTagCompound());
-
-            nbttagcompound.set("FireworksItem", nbttagcompound1);
+            nbttagcompound.set("FireworksItem", itemstack.save(new NBTTagCompound()));
         }
 
     }
@@ -118,7 +120,7 @@ public class EntityFireworks extends Entity {
         return super.e(f);
     }
 
-    public boolean aT() {
+    public boolean aV() {
         return false;
     }
 }

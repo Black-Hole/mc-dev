@@ -30,7 +30,7 @@ public class EULA {
             properties.load(fileinputstream);
             flag = Boolean.parseBoolean(properties.getProperty("eula", "false"));
         } catch (Exception exception) {
-            EULA.a.warn("Failed to load " + file);
+            EULA.a.warn("Failed to load {}", new Object[] { file});
             this.b();
         } finally {
             IOUtils.closeQuietly(fileinputstream);
@@ -53,7 +53,7 @@ public class EULA {
             properties.setProperty("eula", "false");
             properties.store(fileoutputstream, "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).");
         } catch (Exception exception) {
-            EULA.a.warn("Failed to save " + this.b, exception);
+            EULA.a.warn("Failed to save {}", new Object[] { this.b, exception});
         } finally {
             IOUtils.closeQuietly(fileoutputstream);
         }

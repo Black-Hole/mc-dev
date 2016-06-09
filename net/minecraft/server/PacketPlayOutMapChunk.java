@@ -37,7 +37,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
             int j = blockposition.getY() >> 4;
 
             if (this.e() || (i & 1 << j) != 0) {
-                NBTTagCompound nbttagcompound = tileentity.E_();
+                NBTTagCompound nbttagcompound = tileentity.c();
 
                 this.e.add(nbttagcompound);
             }

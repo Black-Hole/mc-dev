@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +35,7 @@ public class CommandDebug extends CommandAbstract {
         if (astring.length < 1) {
             throw new ExceptionUsage("commands.debug.usage", new Object[0]);
         } else {
-            if (astring[0].equals("start")) {
+            if ("start".equals(astring[0])) {
                 if (astring.length != 1) {
                     throw new ExceptionUsage("commands.debug.usage", new Object[0]);
                 }
@@ -44,7 +45,7 @@ public class CommandDebug extends CommandAbstract {
                 this.b = MinecraftServer.av();
                 this.c = minecraftserver.ap();
             } else {
-                if (!astring[0].equals("stop")) {
+                if (!"stop".equals(astring[0])) {
                     throw new ExceptionUsage("commands.debug.usage", new Object[0]);
                 }
 
@@ -73,14 +74,14 @@ public class CommandDebug extends CommandAbstract {
         File file = new File(minecraftserver.d("debug"), "profile-results-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + ".txt");
 
         file.getParentFile().mkdirs();
+        FileWriter filewriter = null;
 
         try {
-            FileWriter filewriter = new FileWriter(file);
-
+            filewriter = new FileWriter(file);
             filewriter.write(this.b(i, j, minecraftserver));
-            filewriter.close();
         } catch (Throwable throwable) {
-            CommandDebug.a.error("Could not save profiler results to " + file, throwable);
+            IOUtils.closeQuietly(filewriter);
+            CommandDebug.a.error("Could not save profiler results to {}", new Object[] { file, throwable});
         }
 
     }
@@ -115,7 +116,7 @@ public class CommandDebug extends CommandAbstract {
                 }
 
                 stringbuilder.append(methodprofiler_profilerinfo.c).append(" - ").append(String.format("%.2f", new Object[] { Double.valueOf(methodprofiler_profilerinfo.a)})).append("%/").append(String.format("%.2f", new Object[] { Double.valueOf(methodprofiler_profilerinfo.b)})).append("%\n");
-                if (!methodprofiler_profilerinfo.c.equals("unspecified")) {
+                if (!"unspecified".equals(methodprofiler_profilerinfo.c)) {
                     try {
                         this.a(i + 1, s + "." + methodprofiler_profilerinfo.c, stringbuilder, minecraftserver);
                     } catch (Exception exception) {

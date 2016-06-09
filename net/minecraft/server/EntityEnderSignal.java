@@ -99,10 +99,10 @@ public class EntityEnderSignal extends Entity {
 
         if (this.isInWater()) {
             for (int i = 0; i < 4; ++i) {
-                this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX - this.motX * (double) f3, this.locY - this.motY * (double) f3, this.locZ - this.motZ * (double) f3, this.motX, this.motY, this.motZ, new int[0]);
+                this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX - this.motX * 0.25D, this.locY - this.motY * 0.25D, this.locZ - this.motZ * 0.25D, this.motX, this.motY, this.motZ, new int[0]);
             }
         } else {
-            this.world.addParticle(EnumParticle.PORTAL, this.locX - this.motX * (double) f3 + this.random.nextDouble() * 0.6D - 0.3D, this.locY - this.motY * (double) f3 - 0.5D, this.locZ - this.motZ * (double) f3 + this.random.nextDouble() * 0.6D - 0.3D, this.motX, this.motY, this.motZ, new int[0]);
+            this.world.addParticle(EnumParticle.PORTAL, this.locX - this.motX * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, this.locY - this.motY * 0.25D - 0.5D, this.locZ - this.motZ * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, this.motX, this.motY, this.motZ, new int[0]);
         }
 
         if (!this.world.isClientSide) {
@@ -128,7 +128,7 @@ public class EntityEnderSignal extends Entity {
         return 1.0F;
     }
 
-    public boolean aT() {
+    public boolean aV() {
         return false;
     }
 }

@@ -4,18 +4,19 @@ import java.io.IOException;
 
 public class PacketPlayInResourcePackStatus implements Packet<PacketListenerPlayIn> {
 
-    private String a;
     public PacketPlayInResourcePackStatus.EnumResourcePackStatus status;
 
     public PacketPlayInResourcePackStatus() {}
 
+    public PacketPlayInResourcePackStatus(PacketPlayInResourcePackStatus.EnumResourcePackStatus packetplayinresourcepackstatus_enumresourcepackstatus) {
+        this.status = packetplayinresourcepackstatus_enumresourcepackstatus;
+    }
+
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e(40);
         this.status = (PacketPlayInResourcePackStatus.EnumResourcePackStatus) packetdataserializer.a(PacketPlayInResourcePackStatus.EnumResourcePackStatus.class);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
         packetdataserializer.a((Enum) this.status);
     }
 

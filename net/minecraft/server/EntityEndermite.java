@@ -4,8 +4,8 @@ import javax.annotation.Nullable;
 
 public class EntityEndermite extends EntityMonster {
 
-    private int a = 0;
-    private boolean b = false;
+    private int a;
+    private boolean b;
 
     public EntityEndermite(World world) {
         super(world);
@@ -39,24 +39,28 @@ public class EntityEndermite extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.bb;
-    }
-
-    protected SoundEffect bS() {
-        return SoundEffects.bd;
-    }
-
-    protected SoundEffect bT() {
         return SoundEffects.bc;
     }
 
+    protected SoundEffect bV() {
+        return SoundEffects.be;
+    }
+
+    protected SoundEffect bW() {
+        return SoundEffects.bd;
+    }
+
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.be, 0.15F, 1.0F);
+        this.a(SoundEffects.bf, 0.15F, 1.0F);
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.ah;
+        return LootTables.ai;
+    }
+
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "Endermite");
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -72,7 +76,7 @@ public class EntityEndermite extends EntityMonster {
     }
 
     public void m() {
-        this.aN = this.yaw;
+        this.aO = this.yaw;
         super.m();
     }
 
@@ -110,8 +114,8 @@ public class EntityEndermite extends EntityMonster {
         return true;
     }
 
-    public boolean cG() {
-        if (super.cG()) {
+    public boolean cK() {
+        if (super.cK()) {
             EntityHuman entityhuman = this.world.findNearbyPlayer(this, 5.0D);
 
             return entityhuman == null;

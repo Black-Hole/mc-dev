@@ -66,19 +66,19 @@ public class Chunk {
 
     public Chunk(World world, ChunkSnapshot chunksnapshot, int i, int j) {
         this(world, i, j);
-        short short0 = 256;
-        boolean flag = !world.worldProvider.m();
+        boolean flag = true;
+        boolean flag1 = !world.worldProvider.m();
 
         for (int k = 0; k < 16; ++k) {
             for (int l = 0; l < 16; ++l) {
-                for (int i1 = 0; i1 < short0; ++i1) {
+                for (int i1 = 0; i1 < 256; ++i1) {
                     IBlockData iblockdata = chunksnapshot.a(k, i1, l);
 
                     if (iblockdata.getMaterial() != Material.AIR) {
                         int j1 = i1 >> 4;
 
                         if (this.sections[j1] == Chunk.a) {
-                            this.sections[j1] = new ChunkSection(j1 << 4, flag);
+                            this.sections[j1] = new ChunkSection(j1 << 4, flag1);
                         }
 
                         this.sections[j1].setType(k, i1 & 15, l, iblockdata);
@@ -201,7 +201,7 @@ public class Chunk {
                         Iterator iterator;
                         EnumDirection enumdirection;
 
-                        for (iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator(); iterator.hasNext(); j1 = Math.min(j1, this.world.b(l + enumdirection.getAdjacentX(), i1 + enumdirection.getAdjacentZ()))) {
+                        for (iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator(); iterator.hasNext(); j1 = Math.min(j1, this.world.c(l + enumdirection.getAdjacentX(), i1 + enumdirection.getAdjacentZ()))) {
                             enumdirection = (EnumDirection) iterator.next();
                         }
 
@@ -422,7 +422,8 @@ public class Chunk {
                     return null;
                 }
 
-                chunksection = this.sections[j >> 4] = new ChunkSection(j >> 4 << 4, !this.world.worldProvider.m());
+                chunksection = new ChunkSection(j >> 4 << 4, !this.world.worldProvider.m());
+                this.sections[j >> 4] = chunksection;
                 flag = j >= i1;
             }
 
@@ -504,7 +505,8 @@ public class Chunk {
         ChunkSection chunksection = this.sections[k >> 4];
 
         if (chunksection == Chunk.a) {
-            chunksection = this.sections[k >> 4] = new ChunkSection(k >> 4 << 4, !this.world.worldProvider.m());
+            chunksection = new ChunkSection(k >> 4 << 4, !this.world.worldProvider.m());
+            this.sections[k >> 4] = chunksection;
             this.initLighting();
         }
 
@@ -547,7 +549,7 @@ public class Chunk {
         int j = MathHelper.floor(entity.locZ / 16.0D);
 
         if (i != this.locX || j != this.locZ) {
-            Chunk.e.warn("Wrong location! (" + i + ", " + j + ") should be (" + this.locX + ", " + this.locZ + "), " + entity, new Object[] { entity});
+            Chunk.e.warn("Wrong location! ({}, {}) should be ({}, {}), {}", new Object[] { Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(this.locX), Integer.valueOf(this.locZ), entity, entity});
             entity.die();
         }
 
@@ -561,15 +563,15 @@ public class Chunk {
             k = this.entitySlices.length - 1;
         }
 
-        entity.aa = true;
-        entity.ab = this.locX;
-        entity.ac = k;
-        entity.ad = this.locZ;
+        entity.ab = true;
+        entity.ac = this.locX;
+        entity.ad = k;
+        entity.ae = this.locZ;
         this.entitySlices[k].add(entity);
     }
 
     public void b(Entity entity) {
-        this.a(entity, entity.ac);
+        this.a(entity, entity.ad);
     }
 
     public void a(Entity entity, int i) {
@@ -629,7 +631,7 @@ public class Chunk {
 
     public void a(BlockPosition blockposition, TileEntity tileentity) {
         tileentity.a(this.world);
-        tileentity.a(blockposition);
+        tileentity.setPosition(blockposition);
         if (this.getBlockData(blockposition).getBlock() instanceof ITileEntity) {
             if (this.tileEntities.containsKey(blockposition)) {
                 ((TileEntity) this.tileEntities.get(blockposition)).y();
@@ -654,17 +656,13 @@ public class Chunk {
     public void addEntities() {
         this.j = true;
         this.world.b(this.tileEntities.values());
+        EntitySlice[] aentityslice = this.entitySlices;
+        int i = aentityslice.length;
 
-        for (int i = 0; i < this.entitySlices.length; ++i) {
-            Iterator iterator = this.entitySlices[i].iterator();
+        for (int j = 0; j < i; ++j) {
+            EntitySlice entityslice = aentityslice[j];
 
-            while (iterator.hasNext()) {
-                Entity entity = (Entity) iterator.next();
-
-                entity.at();
-            }
-
-            this.world.a((Collection) this.entitySlices[i]);
+            this.world.a((Collection) entityslice);
         }
 
     }
@@ -679,8 +677,13 @@ public class Chunk {
             this.world.b(tileentity);
         }
 
-        for (int i = 0; i < this.entitySlices.length; ++i) {
-            this.world.c((Collection) this.entitySlices[i]);
+        EntitySlice[] aentityslice = this.entitySlices;
+        int i = aentityslice.length;
+
+        for (int j = 0; j < i; ++j) {
+            EntitySlice entityslice = aentityslice[j];
+
+            this.world.c((Collection) entityslice);
         }
 
     }
@@ -708,13 +711,17 @@ public class Chunk {
                             list.add(entity1);
                         }
 
-                        Entity[] aentity = entity1.aR();
+                        Entity[] aentity = entity1.aT();
 
                         if (aentity != null) {
-                            for (int l = 0; l < aentity.length; ++l) {
-                                entity1 = aentity[l];
-                                if (entity1 != entity && entity1.getBoundingBox().b(axisalignedbb) && (predicate == null || predicate.apply(entity1))) {
-                                    list.add(entity1);
+                            Entity[] aentity1 = aentity;
+                            int l = aentity.length;
+
+                            for (int i1 = 0; i1 < l; ++i1) {
+                                Entity entity2 = aentity1[i1];
+
+                                if (entity2 != entity && entity2.getBoundingBox().b(axisalignedbb) && (predicate == null || predicate.apply(entity2))) {
+                                    list.add(entity2);
                                 }
                             }
                         }
@@ -893,7 +900,7 @@ public class Chunk {
 
     public void a(ChunkSection[] achunksection) {
         if (this.sections.length != achunksection.length) {
-            Chunk.e.warn("Could not set level chunk sections, array length is " + achunksection.length + " instead of " + this.sections.length);
+            Chunk.e.warn("Could not set level chunk sections, array length is {} instead of {}", new Object[] { Integer.valueOf(achunksection.length), Integer.valueOf(this.sections.length)});
         } else {
             System.arraycopy(achunksection, 0, this.sections, 0, this.sections.length);
         }
@@ -921,12 +928,9 @@ public class Chunk {
 
     public void a(byte[] abyte) {
         if (this.g.length != abyte.length) {
-            Chunk.e.warn("Could not set level chunk biomes, array length is " + abyte.length + " instead of " + this.g.length);
+            Chunk.e.warn("Could not set level chunk biomes, array length is {} instead of {}", new Object[] { Integer.valueOf(abyte.length), Integer.valueOf(this.g.length)});
         } else {
-            for (int i = 0; i < this.g.length; ++i) {
-                this.g[i] = abyte[i];
-            }
-
+            System.arraycopy(abyte, 0, this.g, 0, this.g.length);
         }
     }
 
@@ -1090,12 +1094,9 @@ public class Chunk {
 
     public void a(int[] aint) {
         if (this.heightMap.length != aint.length) {
-            Chunk.e.warn("Could not set level chunk heightmap, array length is " + aint.length + " instead of " + this.heightMap.length);
+            Chunk.e.warn("Could not set level chunk heightmap, array length is {} instead of {}", new Object[] { Integer.valueOf(aint.length), Integer.valueOf(this.heightMap.length)});
         } else {
-            for (int i = 0; i < this.heightMap.length; ++i) {
-                this.heightMap[i] = aint[i];
-            }
-
+            System.arraycopy(aint, 0, this.heightMap, 0, this.heightMap.length);
         }
     }
 

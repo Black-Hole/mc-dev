@@ -108,7 +108,7 @@ public class WorldGenNetherPieces {
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
             byte b0 = 1;
-            EnumDirection enumdirection = this.e();
+            EnumDirection enumdirection = this.f();
 
             if (enumdirection == EnumDirection.WEST || enumdirection == EnumDirection.NORTH) {
                 b0 = 5;
@@ -836,7 +836,7 @@ public class WorldGenNetherPieces {
         protected WorldGenNetherPiece1(Random random, int i, int j) {
             super(0);
             this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
-            if (this.e().k() == EnumDirection.EnumAxis.Z) {
+            if (this.f().k() == EnumDirection.EnumAxis.Z) {
                 this.l = new StructureBoundingBox(i, 64, j, i + 19 - 1, 73, j + 19 - 1);
             } else {
                 this.l = new StructureBoundingBox(i, 64, j, i + 19 - 1, 73, j + 19 - 1);
@@ -1124,7 +1124,7 @@ public class WorldGenNetherPieces {
         }
 
         private StructurePiece a(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, int k, @Nullable EnumDirection enumdirection, int l, boolean flag) {
-            if (Math.abs(i - worldgennetherpieces_worldgennetherpiece15.c().a) <= 112 && Math.abs(k - worldgennetherpieces_worldgennetherpiece15.c().c) <= 112) {
+            if (Math.abs(i - worldgennetherpieces_worldgennetherpiece15.d().a) <= 112 && Math.abs(k - worldgennetherpieces_worldgennetherpiece15.d().c) <= 112) {
                 List list1 = worldgennetherpieces_worldgennetherpiece15.b;
 
                 if (flag) {
@@ -1145,21 +1145,21 @@ public class WorldGenNetherPieces {
         }
 
         protected StructurePiece a(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, boolean flag) {
-            EnumDirection enumdirection = this.e();
+            EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
                 switch (WorldGenNetherPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
                 case 1:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + i, this.l.b + j, this.l.c - 1, enumdirection, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + i, this.l.b + j, this.l.c - 1, enumdirection, this.e(), flag);
 
                 case 2:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + i, this.l.b + j, this.l.f + 1, enumdirection, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + i, this.l.b + j, this.l.f + 1, enumdirection, this.e(), flag);
 
                 case 3:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + j, this.l.c + i, enumdirection, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + j, this.l.c + i, enumdirection, this.e(), flag);
 
                 case 4:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + j, this.l.c + i, enumdirection, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + j, this.l.c + i, enumdirection, this.e(), flag);
                 }
             }
 
@@ -1167,21 +1167,21 @@ public class WorldGenNetherPieces {
         }
 
         protected StructurePiece b(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, boolean flag) {
-            EnumDirection enumdirection = this.e();
+            EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
                 switch (WorldGenNetherPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
                 case 1:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.e(), flag);
 
                 case 2:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.e(), flag);
 
                 case 3:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.e(), flag);
 
                 case 4:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.e(), flag);
                 }
             }
 
@@ -1189,21 +1189,21 @@ public class WorldGenNetherPieces {
         }
 
         protected StructurePiece c(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, boolean flag) {
-            EnumDirection enumdirection = this.e();
+            EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
                 switch (WorldGenNetherPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
                 case 1:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.e(), flag);
 
                 case 2:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.e(), flag);
 
                 case 3:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.e(), flag);
 
                 case 4:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.d(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.e(), flag);
                 }
             }
 

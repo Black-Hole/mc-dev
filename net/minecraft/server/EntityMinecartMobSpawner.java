@@ -24,6 +24,21 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        a(dataconvertermanager, "MinecartSpawner");
+        dataconvertermanager.a(DataConverterTypes.ENTITY, new DataInspector() {
+            public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
+                if ("MinecartSpawner".equals(nbttagcompound.getString("id"))) {
+                    nbttagcompound.setString("id", "MobSpawner");
+                    dataconverter.a(DataConverterTypes.BLOCK_ENTITY, nbttagcompound, i);
+                    nbttagcompound.setString("id", "MinecartSpawner");
+                }
+
+                return nbttagcompound;
+            }
+        });
+    }
+
     public EntityMinecartAbstract.EnumMinecartType v() {
         return EntityMinecartAbstract.EnumMinecartType.SPAWNER;
     }

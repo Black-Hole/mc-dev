@@ -3,8 +3,8 @@ package net.minecraft.server;
 @Deprecated
 public class LocaleI18n {
 
-    private static LocaleLanguage a = LocaleLanguage.a();
-    private static LocaleLanguage b = new LocaleLanguage();
+    private static final LocaleLanguage a = LocaleLanguage.a();
+    private static final LocaleLanguage b = new LocaleLanguage();
 
     @Deprecated
     public static String get(String s) {

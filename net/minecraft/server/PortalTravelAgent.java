@@ -26,24 +26,26 @@ public class PortalTravelAgent {
             int i = MathHelper.floor(entity.locX);
             int j = MathHelper.floor(entity.locY) - 1;
             int k = MathHelper.floor(entity.locZ);
-            byte b0 = 1;
-            byte b1 = 0;
+            boolean flag = true;
+            boolean flag1 = false;
 
             for (int l = -2; l <= 2; ++l) {
                 for (int i1 = -2; i1 <= 2; ++i1) {
                     for (int j1 = -1; j1 < 3; ++j1) {
-                        int k1 = i + i1 * b0 + l * b1;
+                        int k1 = i + i1 * 1 + l * 0;
                         int l1 = j + j1;
-                        int i2 = k + i1 * b1 - l * b0;
-                        boolean flag = j1 < 0;
+                        int i2 = k + i1 * 0 - l * 1;
+                        boolean flag2 = j1 < 0;
 
-                        this.world.setTypeUpdate(new BlockPosition(k1, l1, i2), flag ? Blocks.OBSIDIAN.getBlockData() : Blocks.AIR.getBlockData());
+                        this.world.setTypeUpdate(new BlockPosition(k1, l1, i2), flag2 ? Blocks.OBSIDIAN.getBlockData() : Blocks.AIR.getBlockData());
                     }
                 }
             }
 
             entity.setPositionRotation((double) i, (double) j, (double) k, entity.yaw, 0.0F);
-            entity.motX = entity.motY = entity.motZ = 0.0D;
+            entity.motX = 0.0D;
+            entity.motY = 0.0D;
+            entity.motZ = 0.0D;
         }
     }
 
@@ -73,7 +75,7 @@ public class PortalTravelAgent {
                     for (BlockPosition blockposition2 = blockposition.a(l, this.world.Z() - 1 - blockposition.getY(), i1); blockposition2.getY() >= 0; blockposition2 = blockposition1) {
                         blockposition1 = blockposition2.down();
                         if (this.world.getType(blockposition2).getBlock() == Blocks.PORTAL) {
-                            while (this.world.getType(blockposition1 = blockposition2.down()).getBlock() == Blocks.PORTAL) {
+                            for (blockposition1 = blockposition2.down(); this.world.getType(blockposition1).getBlock() == Blocks.PORTAL; blockposition1 = blockposition1.down()) {
                                 blockposition2 = blockposition1;
                             }
 
@@ -95,21 +97,20 @@ public class PortalTravelAgent {
             }
 
             double d2 = (double) ((BlockPosition) object).getX() + 0.5D;
-            double d3 = (double) ((BlockPosition) object).getY() + 0.5D;
-            double d4 = (double) ((BlockPosition) object).getZ() + 0.5D;
+            double d3 = (double) ((BlockPosition) object).getZ() + 0.5D;
             ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = Blocks.PORTAL.c(this.world, (BlockPosition) object);
             boolean flag2 = shapedetector_shapedetectorcollection.getFacing().e().c() == EnumDirection.EnumAxisDirection.NEGATIVE;
-            double d5 = shapedetector_shapedetectorcollection.getFacing().k() == EnumDirection.EnumAxis.X ? (double) shapedetector_shapedetectorcollection.a().getZ() : (double) shapedetector_shapedetectorcollection.a().getX();
+            double d4 = shapedetector_shapedetectorcollection.getFacing().k() == EnumDirection.EnumAxis.X ? (double) shapedetector_shapedetectorcollection.a().getZ() : (double) shapedetector_shapedetectorcollection.a().getX();
+            double d5 = (double) (shapedetector_shapedetectorcollection.a().getY() + 1) - entity.getPortalOffset().y * (double) shapedetector_shapedetectorcollection.e();
 
-            d3 = (double) (shapedetector_shapedetectorcollection.a().getY() + 1) - entity.getPortalOffset().y * (double) shapedetector_shapedetectorcollection.e();
             if (flag2) {
-                ++d5;
+                ++d4;
             }
 
             if (shapedetector_shapedetectorcollection.getFacing().k() == EnumDirection.EnumAxis.X) {
-                d4 = d5 + (1.0D - entity.getPortalOffset().x) * (double) shapedetector_shapedetectorcollection.d() * (double) shapedetector_shapedetectorcollection.getFacing().e().c().a();
+                d3 = d4 + (1.0D - entity.getPortalOffset().x) * (double) shapedetector_shapedetectorcollection.d() * (double) shapedetector_shapedetectorcollection.getFacing().e().c().a();
             } else {
-                d2 = d5 + (1.0D - entity.getPortalOffset().x) * (double) shapedetector_shapedetectorcollection.d() * (double) shapedetector_shapedetectorcollection.getFacing().e().c().a();
+                d2 = d4 + (1.0D - entity.getPortalOffset().x) * (double) shapedetector_shapedetectorcollection.d() * (double) shapedetector_shapedetectorcollection.getFacing().e().c().a();
             }
 
             float f1 = 0.0F;
@@ -138,9 +139,9 @@ public class PortalTravelAgent {
             entity.motZ = d6 * (double) f3 + d7 * (double) f2;
             entity.yaw = f - (float) (entity.getPortalDirection().opposite().get2DRotationValue() * 90) + (float) (shapedetector_shapedetectorcollection.getFacing().get2DRotationValue() * 90);
             if (entity instanceof EntityPlayer) {
-                ((EntityPlayer) entity).playerConnection.a(d2, d3, d4, entity.yaw, entity.pitch);
+                ((EntityPlayer) entity).playerConnection.a(d2, d5, d3, entity.yaw, entity.pitch);
             } else {
-                entity.setPositionRotation(d2, d3, d4, entity.yaw, entity.pitch);
+                entity.setPositionRotation(d2, d5, d3, entity.yaw, entity.pitch);
             }
 
             return true;
@@ -150,7 +151,7 @@ public class PortalTravelAgent {
     }
 
     public boolean a(Entity entity) {
-        byte b0 = 16;
+        boolean flag = true;
         double d0 = -1.0D;
         int i = MathHelper.floor(entity.locX);
         int j = MathHelper.floor(entity.locY);
@@ -178,10 +179,10 @@ public class PortalTravelAgent {
         double d3;
         double d4;
 
-        for (i2 = i - b0; i2 <= i + b0; ++i2) {
+        for (i2 = i - 16; i2 <= i + 16; ++i2) {
             d1 = (double) i2 + 0.5D - entity.locX;
 
-            for (j2 = k - b0; j2 <= k + b0; ++j2) {
+            for (j2 = k - 16; j2 <= k + 16; ++j2) {
                 d2 = (double) j2 + 0.5D - entity.locZ;
 
                 label271:
@@ -230,10 +231,10 @@ public class PortalTravelAgent {
         }
 
         if (d0 < 0.0D) {
-            for (i2 = i - b0; i2 <= i + b0; ++i2) {
+            for (i2 = i - 16; i2 <= i + 16; ++i2) {
                 d1 = (double) i2 + 0.5D - entity.locX;
 
-                for (j2 = k - b0; j2 <= k + b0; ++j2) {
+                for (j2 = k - 16; j2 <= k + 16; ++j2) {
                     d2 = (double) j2 + 0.5D - entity.locZ;
 
                     label219:
@@ -297,15 +298,15 @@ public class PortalTravelAgent {
                         j3 = i5 + (l2 - 1) * k5 + k2 * l5;
                         k3 = j5 + i3;
                         l3 = j2 + (l2 - 1) * l5 - k2 * k5;
-                        boolean flag = i3 < 0;
+                        boolean flag1 = i3 < 0;
 
-                        this.world.setTypeUpdate(new BlockPosition(j3, k3, l3), flag ? Blocks.OBSIDIAN.getBlockData() : Blocks.AIR.getBlockData());
+                        this.world.setTypeUpdate(new BlockPosition(j3, k3, l3), flag1 ? Blocks.OBSIDIAN.getBlockData() : Blocks.AIR.getBlockData());
                     }
                 }
             }
         }
 
-        IBlockData iblockdata = Blocks.PORTAL.getBlockData().set(BlockPortal.AXIS, k5 != 0 ? EnumDirection.EnumAxis.X : EnumDirection.EnumAxis.Z);
+        IBlockData iblockdata = Blocks.PORTAL.getBlockData().set(BlockPortal.AXIS, k5 == 0 ? EnumDirection.EnumAxis.Z : EnumDirection.EnumAxis.X);
 
         for (l2 = 0; l2 < 4; ++l2) {
             for (i3 = 0; i3 < 4; ++i3) {
@@ -313,9 +314,9 @@ public class PortalTravelAgent {
                     k3 = i5 + (i3 - 1) * k5;
                     l3 = j5 + j3;
                     i4 = j2 + (i3 - 1) * l5;
-                    boolean flag1 = i3 == 0 || i3 == 3 || j3 == -1 || j3 == 3;
+                    boolean flag2 = i3 == 0 || i3 == 3 || j3 == -1 || j3 == 3;
 
-                    this.world.setTypeAndData(new BlockPosition(k3, l3, i4), flag1 ? Blocks.OBSIDIAN.getBlockData() : iblockdata, 2);
+                    this.world.setTypeAndData(new BlockPosition(k3, l3, i4), flag2 ? Blocks.OBSIDIAN.getBlockData() : iblockdata, 2);
                 }
             }
 

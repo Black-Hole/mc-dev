@@ -7,7 +7,7 @@ import java.util.List;
 public class FileIOThread implements Runnable {
 
     private static final FileIOThread a = new FileIOThread();
-    private List<IAsyncChunkSaver> b = Collections.synchronizedList(Lists.newArrayList());
+    private final List<IAsyncChunkSaver> b = Collections.synchronizedList(Lists.newArrayList());
     private volatile long c;
     private volatile long d;
     private volatile boolean e;

@@ -231,7 +231,7 @@ public class Item {
         float f6 = f3 * f4;
         float f7 = f2 * f4;
         double d3 = 5.0D;
-        Vec3D vec3d1 = vec3d.add((double) f6 * d3, (double) f5 * d3, (double) f7 * d3);
+        Vec3D vec3d1 = vec3d.add((double) f6 * 5.0D, (double) f5 * 5.0D, (double) f7 * 5.0D);
 
         return world.rayTrace(vec3d, vec3d1, flag, !flag, false);
     }
@@ -304,7 +304,7 @@ public class Item {
         a((Block) Blocks.SAND, (Item) (new ItemMultiTexture(Blocks.SAND, Blocks.SAND, new Function() {
             @Nullable
             public String a(@Nullable ItemStack itemstack) {
-                return BlockSand.EnumSandVariant.a(itemstack.getData()).d();
+                return BlockSand.EnumSandVariant.a(itemstack.getData()).e();
             }
 
             public Object apply(Object object) {
@@ -571,6 +571,12 @@ public class Item {
         a((Block) Blocks.STONE_SLAB2, (Item) (new ItemStep(Blocks.STONE_SLAB2, Blocks.STONE_SLAB2, Blocks.DOUBLE_STONE_SLAB2)).b("stoneSlab2"));
         b(Blocks.dc);
         b(Blocks.dd);
+        b(Blocks.df);
+        b(Blocks.dg);
+        b(Blocks.dh);
+        b(Blocks.di);
+        b(Blocks.dj);
+        b(Blocks.STRUCTURE_BLOCK);
         a(256, "iron_shovel", (new ItemSpade(Item.EnumToolMaterial.IRON)).c("shovelIron"));
         a(257, "iron_pickaxe", (new ItemPickaxe(Item.EnumToolMaterial.IRON)).c("pickaxeIron"));
         a(258, "iron_axe", (new ItemAxe(Item.EnumToolMaterial.IRON)).c("hatchetIron"));
@@ -768,18 +774,18 @@ public class Item {
         a(446, "jungle_boat", new ItemBoat(EntityBoat.EnumBoatType.JUNGLE));
         a(447, "acacia_boat", new ItemBoat(EntityBoat.EnumBoatType.ACACIA));
         a(448, "dark_oak_boat", new ItemBoat(EntityBoat.EnumBoatType.DARK_OAK));
-        a(2256, "record_13", (new ItemRecord("13", SoundEffects.ev)).c("record"));
-        a(2257, "record_cat", (new ItemRecord("cat", SoundEffects.ex)).c("record"));
-        a(2258, "record_blocks", (new ItemRecord("blocks", SoundEffects.ew)).c("record"));
-        a(2259, "record_chirp", (new ItemRecord("chirp", SoundEffects.ey)).c("record"));
-        a(2260, "record_far", (new ItemRecord("far", SoundEffects.ez)).c("record"));
-        a(2261, "record_mall", (new ItemRecord("mall", SoundEffects.eA)).c("record"));
-        a(2262, "record_mellohi", (new ItemRecord("mellohi", SoundEffects.eB)).c("record"));
-        a(2263, "record_stal", (new ItemRecord("stal", SoundEffects.eC)).c("record"));
-        a(2264, "record_strad", (new ItemRecord("strad", SoundEffects.eD)).c("record"));
-        a(2265, "record_ward", (new ItemRecord("ward", SoundEffects.eF)).c("record"));
-        a(2266, "record_11", (new ItemRecord("11", SoundEffects.eu)).c("record"));
-        a(2267, "record_wait", (new ItemRecord("wait", SoundEffects.eE)).c("record"));
+        a(2256, "record_13", (new ItemRecord("13", SoundEffects.eG)).c("record"));
+        a(2257, "record_cat", (new ItemRecord("cat", SoundEffects.eI)).c("record"));
+        a(2258, "record_blocks", (new ItemRecord("blocks", SoundEffects.eH)).c("record"));
+        a(2259, "record_chirp", (new ItemRecord("chirp", SoundEffects.eJ)).c("record"));
+        a(2260, "record_far", (new ItemRecord("far", SoundEffects.eK)).c("record"));
+        a(2261, "record_mall", (new ItemRecord("mall", SoundEffects.eL)).c("record"));
+        a(2262, "record_mellohi", (new ItemRecord("mellohi", SoundEffects.eM)).c("record"));
+        a(2263, "record_stal", (new ItemRecord("stal", SoundEffects.eN)).c("record"));
+        a(2264, "record_strad", (new ItemRecord("strad", SoundEffects.eO)).c("record"));
+        a(2265, "record_ward", (new ItemRecord("ward", SoundEffects.eQ)).c("record"));
+        a(2266, "record_11", (new ItemRecord("11", SoundEffects.eF)).c("record"));
+        a(2267, "record_wait", (new ItemRecord("wait", SoundEffects.eP)).c("record"));
     }
 
     private static void b(Block block) {

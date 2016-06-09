@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class ControllerLook {
 
-    private EntityInsentient a;
+    private final EntityInsentient a;
     private float b;
     private float c;
     private boolean d;
@@ -49,20 +49,20 @@ public class ControllerLook {
             float f1 = (float) (-(MathHelper.b(d1, d3) * 57.2957763671875D));
 
             this.a.pitch = this.a(this.a.pitch, f1, this.c);
-            this.a.aP = this.a(this.a.aP, f, this.b);
+            this.a.aQ = this.a(this.a.aQ, f, this.b);
         } else {
-            this.a.aP = this.a(this.a.aP, this.a.aN, 10.0F);
+            this.a.aQ = this.a(this.a.aQ, this.a.aO, 10.0F);
         }
 
-        float f2 = MathHelper.g(this.a.aP - this.a.aN);
+        float f2 = MathHelper.g(this.a.aQ - this.a.aO);
 
         if (!this.a.getNavigation().n()) {
             if (f2 < -75.0F) {
-                this.a.aP = this.a.aN - 75.0F;
+                this.a.aQ = this.a.aO - 75.0F;
             }
 
             if (f2 > 75.0F) {
-                this.a.aP = this.a.aN + 75.0F;
+                this.a.aQ = this.a.aO + 75.0F;
             }
         }
 

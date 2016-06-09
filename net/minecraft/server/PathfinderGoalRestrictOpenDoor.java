@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class PathfinderGoalRestrictOpenDoor extends PathfinderGoal {
 
-    private EntityCreature a;
+    private final EntityCreature a;
     private VillageDoor b;
 
     public PathfinderGoalRestrictOpenDoor(EntityCreature entitycreature) {

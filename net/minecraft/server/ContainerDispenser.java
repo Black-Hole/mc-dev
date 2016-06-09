@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class ContainerDispenser extends Container {
 
-    public IInventory items;
+    public final IInventory items;
 
     public ContainerDispenser(IInventory iinventory, IInventory iinventory1) {
         this.items = iinventory1;

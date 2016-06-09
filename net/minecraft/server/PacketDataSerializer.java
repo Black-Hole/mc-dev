@@ -64,9 +64,13 @@ public class PacketDataSerializer extends ByteBuf {
 
     public PacketDataSerializer a(int[] aint) {
         this.d(aint.length);
+        int[] aint1 = aint;
+        int i = aint.length;
 
-        for (int i = 0; i < aint.length; ++i) {
-            this.d(aint[i]);
+        for (int j = 0; j < i; ++j) {
+            int k = aint1[j];
+
+            this.d(k);
         }
 
         return this;
@@ -94,9 +98,13 @@ public class PacketDataSerializer extends ByteBuf {
 
     public PacketDataSerializer a(long[] along) {
         this.d(along.length);
+        long[] along1 = along;
+        int i = along.length;
 
-        for (int i = 0; i < along.length; ++i) {
-            this.writeLong(along[i]);
+        for (int j = 0; j < i; ++j) {
+            long k = along1[j];
+
+            this.writeLong(k);
         }
 
         return this;

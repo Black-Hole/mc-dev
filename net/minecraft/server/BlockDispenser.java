@@ -148,16 +148,12 @@ public class BlockDispenser extends BlockTileEntity {
     }
 
     public static IPosition a(ISourceBlock isourceblock) {
-        EnumDirection enumdirection = e(isourceblock.f());
+        EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
         double d0 = isourceblock.getX() + 0.7D * (double) enumdirection.getAdjacentX();
         double d1 = isourceblock.getY() + 0.7D * (double) enumdirection.getAdjacentY();
         double d2 = isourceblock.getZ() + 0.7D * (double) enumdirection.getAdjacentZ();
 
         return new Position(d0, d1, d2);
-    }
-
-    public static EnumDirection e(int i) {
-        return EnumDirection.fromType1(i & 7);
     }
 
     public boolean isComplexRedstone(IBlockData iblockdata) {
@@ -173,7 +169,7 @@ public class BlockDispenser extends BlockTileEntity {
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockDispenser.FACING, e(i)).set(BlockDispenser.TRIGGERED, Boolean.valueOf((i & 8) > 0));
+        return this.getBlockData().set(BlockDispenser.FACING, EnumDirection.fromType1(i & 7)).set(BlockDispenser.TRIGGERED, Boolean.valueOf((i & 8) > 0));
     }
 
     public int toLegacyData(IBlockData iblockdata) {

@@ -17,6 +17,10 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityMinecartAbstract.a(dataconvertermanager, "MinecartFurnace");
+    }
+
     public EntityMinecartAbstract.EnumMinecartType v() {
         return EntityMinecartAbstract.EnumMinecartType.FURNACE;
     }
@@ -33,10 +37,11 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         }
 
         if (this.d <= 0) {
-            this.a = this.b = 0.0D;
+            this.a = 0.0D;
+            this.b = 0.0D;
         }
 
-        this.k(this.d > 0);
+        this.l(this.d > 0);
         if (this.j() && this.random.nextInt(4) == 0) {
             this.world.addParticle(EnumParticle.SMOKE_LARGE, this.locX, this.locY + 0.8D, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
         }
@@ -88,8 +93,8 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
             this.motX *= 0.800000011920929D;
             this.motY *= 0.0D;
             this.motZ *= 0.800000011920929D;
-            this.motX += this.a * d1;
-            this.motZ += this.b * d1;
+            this.motX += this.a * 1.0D;
+            this.motZ += this.b * 1.0D;
         } else {
             this.motX *= 0.9800000190734863D;
             this.motY *= 0.0D;
@@ -131,7 +136,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         return ((Boolean) this.datawatcher.get(EntityMinecartFurnace.c)).booleanValue();
     }
 
-    protected void k(boolean flag) {
+    protected void l(boolean flag) {
         this.datawatcher.set(EntityMinecartFurnace.c, Boolean.valueOf(flag));
     }
 

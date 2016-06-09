@@ -157,7 +157,7 @@ public class WorldGenStrongholdPieces {
     private static StructurePiece c(WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart, List<StructurePiece> list, Random random, int i, int j, int k, @Nullable EnumDirection enumdirection, int l) {
         if (l > 50) {
             return null;
-        } else if (Math.abs(i - worldgenstrongholdpieces_worldgenstrongholdstart.c().a) <= 112 && Math.abs(k - worldgenstrongholdpieces_worldgenstrongholdstart.c().c) <= 112) {
+        } else if (Math.abs(i - worldgenstrongholdpieces_worldgenstrongholdstart.d().a) <= 112 && Math.abs(k - worldgenstrongholdpieces_worldgenstrongholdstart.d().c) <= 112) {
             WorldGenStrongholdPieces.WorldGenStrongholdPiece worldgenstrongholdpieces_worldgenstrongholdpiece = b(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, i, j, k, enumdirection, l + 1);
 
             if (worldgenstrongholdpieces_worldgenstrongholdpiece != null) {
@@ -428,7 +428,7 @@ public class WorldGenStrongholdPieces {
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
             int i = 3;
             int j = 5;
-            EnumDirection enumdirection = this.e();
+            EnumDirection enumdirection = this.f();
 
             if (enumdirection == EnumDirection.WEST || enumdirection == EnumDirection.NORTH) {
                 i = 8 - i;
@@ -551,7 +551,7 @@ public class WorldGenStrongholdPieces {
 
                 this.a(world, structureboundingbox, 0, 0, 0, 13, b0 - 1, 14, true, random, WorldGenStrongholdPieces.e);
                 this.a(world, random, structureboundingbox, this.d, 4, 1, 0);
-                this.a(world, structureboundingbox, random, 0.07F, 2, 1, 1, 11, 4, 13, Blocks.WEB.getBlockData(), Blocks.WEB.getBlockData(), false);
+                this.a(world, structureboundingbox, random, 0.07F, 2, 1, 1, 11, 4, 13, Blocks.WEB.getBlockData(), Blocks.WEB.getBlockData(), false, 0);
                 boolean flag = true;
                 boolean flag1 = true;
 
@@ -607,29 +607,29 @@ public class WorldGenStrongholdPieces {
                     this.a(world, iblockdata, 10, 5, 13, structureboundingbox);
                     this.a(world, iblockdata, 10, 6, 13, structureboundingbox);
                     this.a(world, iblockdata, 10, 7, 13, structureboundingbox);
-                    byte b1 = 7;
-                    byte b2 = 7;
+                    boolean flag2 = true;
+                    boolean flag3 = true;
 
-                    this.a(world, Blocks.FENCE.getBlockData(), b1 - 1, 9, b2, structureboundingbox);
-                    this.a(world, Blocks.FENCE.getBlockData(), b1, 9, b2, structureboundingbox);
-                    this.a(world, Blocks.FENCE.getBlockData(), b1 - 1, 8, b2, structureboundingbox);
-                    this.a(world, Blocks.FENCE.getBlockData(), b1, 8, b2, structureboundingbox);
-                    this.a(world, Blocks.FENCE.getBlockData(), b1 - 1, 7, b2, structureboundingbox);
-                    this.a(world, Blocks.FENCE.getBlockData(), b1, 7, b2, structureboundingbox);
-                    this.a(world, Blocks.FENCE.getBlockData(), b1 - 2, 7, b2, structureboundingbox);
-                    this.a(world, Blocks.FENCE.getBlockData(), b1 + 1, 7, b2, structureboundingbox);
-                    this.a(world, Blocks.FENCE.getBlockData(), b1 - 1, 7, b2 - 1, structureboundingbox);
-                    this.a(world, Blocks.FENCE.getBlockData(), b1 - 1, 7, b2 + 1, structureboundingbox);
-                    this.a(world, Blocks.FENCE.getBlockData(), b1, 7, b2 - 1, structureboundingbox);
-                    this.a(world, Blocks.FENCE.getBlockData(), b1, 7, b2 + 1, structureboundingbox);
+                    this.a(world, Blocks.FENCE.getBlockData(), 6, 9, 7, structureboundingbox);
+                    this.a(world, Blocks.FENCE.getBlockData(), 7, 9, 7, structureboundingbox);
+                    this.a(world, Blocks.FENCE.getBlockData(), 6, 8, 7, structureboundingbox);
+                    this.a(world, Blocks.FENCE.getBlockData(), 7, 8, 7, structureboundingbox);
+                    this.a(world, Blocks.FENCE.getBlockData(), 6, 7, 7, structureboundingbox);
+                    this.a(world, Blocks.FENCE.getBlockData(), 7, 7, 7, structureboundingbox);
+                    this.a(world, Blocks.FENCE.getBlockData(), 5, 7, 7, structureboundingbox);
+                    this.a(world, Blocks.FENCE.getBlockData(), 8, 7, 7, structureboundingbox);
+                    this.a(world, Blocks.FENCE.getBlockData(), 6, 7, 6, structureboundingbox);
+                    this.a(world, Blocks.FENCE.getBlockData(), 6, 7, 8, structureboundingbox);
+                    this.a(world, Blocks.FENCE.getBlockData(), 7, 7, 6, structureboundingbox);
+                    this.a(world, Blocks.FENCE.getBlockData(), 7, 7, 8, structureboundingbox);
                     IBlockData iblockdata1 = Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.UP);
 
-                    this.a(world, iblockdata1, b1 - 2, 8, b2, structureboundingbox);
-                    this.a(world, iblockdata1, b1 + 1, 8, b2, structureboundingbox);
-                    this.a(world, iblockdata1, b1 - 1, 8, b2 - 1, structureboundingbox);
-                    this.a(world, iblockdata1, b1 - 1, 8, b2 + 1, structureboundingbox);
-                    this.a(world, iblockdata1, b1, 8, b2 - 1, structureboundingbox);
-                    this.a(world, iblockdata1, b1, 8, b2 + 1, structureboundingbox);
+                    this.a(world, iblockdata1, 5, 8, 7, structureboundingbox);
+                    this.a(world, iblockdata1, 8, 8, 7, structureboundingbox);
+                    this.a(world, iblockdata1, 6, 8, 6, structureboundingbox);
+                    this.a(world, iblockdata1, 6, 8, 8, structureboundingbox);
+                    this.a(world, iblockdata1, 7, 8, 6, structureboundingbox);
+                    this.a(world, iblockdata1, 7, 8, 8, structureboundingbox);
                 }
 
                 this.a(world, structureboundingbox, random, 3, 3, 5, LootTables.h);
@@ -831,7 +831,7 @@ public class WorldGenStrongholdPieces {
         public WorldGenStrongholdRightTurn() {}
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
-            EnumDirection enumdirection = this.e();
+            EnumDirection enumdirection = this.f();
 
             if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.EAST) {
                 this.b((WorldGenStrongholdPieces.WorldGenStrongholdStart) structurepiece, list, random, 1, 1);
@@ -847,7 +847,7 @@ public class WorldGenStrongholdPieces {
             } else {
                 this.a(world, structureboundingbox, 0, 0, 0, 4, 4, 4, true, random, WorldGenStrongholdPieces.e);
                 this.a(world, random, structureboundingbox, this.d, 1, 1, 0);
-                EnumDirection enumdirection = this.e();
+                EnumDirection enumdirection = this.f();
 
                 if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.EAST) {
                     this.a(world, structureboundingbox, 0, 1, 1, 0, 3, 3, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
@@ -872,7 +872,7 @@ public class WorldGenStrongholdPieces {
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
-            EnumDirection enumdirection = this.e();
+            EnumDirection enumdirection = this.f();
 
             if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.EAST) {
                 this.c((WorldGenStrongholdPieces.WorldGenStrongholdStart) structurepiece, list, random, 1, 1);
@@ -894,7 +894,7 @@ public class WorldGenStrongholdPieces {
             } else {
                 this.a(world, structureboundingbox, 0, 0, 0, 4, 4, 4, true, random, WorldGenStrongholdPieces.e);
                 this.a(world, random, structureboundingbox, this.d, 1, 1, 0);
-                EnumDirection enumdirection = this.e();
+                EnumDirection enumdirection = this.f();
 
                 if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.EAST) {
                     this.a(world, structureboundingbox, 4, 1, 1, 4, 3, 3, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
@@ -1114,7 +1114,7 @@ public class WorldGenStrongholdPieces {
             this.a = true;
             this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
             this.d = WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING;
-            if (this.e().k() == EnumDirection.EnumAxis.Z) {
+            if (this.f().k() == EnumDirection.EnumAxis.Z) {
                 this.l = new StructureBoundingBox(j, 64, k, j + 5 - 1, 74, k + 5 - 1);
             } else {
                 this.l = new StructureBoundingBox(j, 64, k, j + 5 - 1, 74, k + 5 - 1);
@@ -1214,10 +1214,10 @@ public class WorldGenStrongholdPieces {
             if (structurepiece == null) {
                 return null;
             } else {
-                if (structurepiece.c().b == structureboundingbox.b) {
+                if (structurepiece.d().b == structureboundingbox.b) {
                     for (int l = 3; l >= 1; --l) {
                         structureboundingbox = StructureBoundingBox.a(i, j, k, -1, -1, 0, 5, 5, l - 1, enumdirection);
-                        if (!structurepiece.c().a(structureboundingbox)) {
+                        if (!structurepiece.d().a(structureboundingbox)) {
                             return StructureBoundingBox.a(i, j, k, -1, -1, 0, 5, 5, l, enumdirection);
                         }
                     }
@@ -1282,7 +1282,6 @@ public class WorldGenStrongholdPieces {
         protected void a(World world, Random random, StructureBoundingBox structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType worldgenstrongholdpieces_worldgenstrongholdpiece_worldgenstrongholdpiece$worldgenstrongholddoortype, int i, int j, int k) {
             switch (WorldGenStrongholdPieces.SyntheticClass_1.a[worldgenstrongholdpieces_worldgenstrongholdpiece_worldgenstrongholdpiece$worldgenstrongholddoortype.ordinal()]) {
             case 1:
-            default:
                 this.a(world, structureboundingbox, i, j, k, i + 3 - 1, j + 3 - 1, k, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
                 break;
 
@@ -1347,21 +1346,21 @@ public class WorldGenStrongholdPieces {
         }
 
         protected StructurePiece a(WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart, List<StructurePiece> list, Random random, int i, int j) {
-            EnumDirection enumdirection = this.e();
+            EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
                 switch (WorldGenStrongholdPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
                 case 1:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + i, this.l.b + j, this.l.c - 1, enumdirection, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + i, this.l.b + j, this.l.c - 1, enumdirection, this.e());
 
                 case 2:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + i, this.l.b + j, this.l.f + 1, enumdirection, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + i, this.l.b + j, this.l.f + 1, enumdirection, this.e());
 
                 case 3:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a - 1, this.l.b + j, this.l.c + i, enumdirection, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a - 1, this.l.b + j, this.l.c + i, enumdirection, this.e());
 
                 case 4:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.d + 1, this.l.b + j, this.l.c + i, enumdirection, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.d + 1, this.l.b + j, this.l.c + i, enumdirection, this.e());
                 }
             }
 
@@ -1369,21 +1368,21 @@ public class WorldGenStrongholdPieces {
         }
 
         protected StructurePiece b(WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart, List<StructurePiece> list, Random random, int i, int j) {
-            EnumDirection enumdirection = this.e();
+            EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
                 switch (WorldGenStrongholdPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
                 case 1:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.e());
 
                 case 2:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.e());
 
                 case 3:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.e());
 
                 case 4:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.e());
                 }
             }
 
@@ -1391,21 +1390,21 @@ public class WorldGenStrongholdPieces {
         }
 
         protected StructurePiece c(WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart, List<StructurePiece> list, Random random, int i, int j) {
-            EnumDirection enumdirection = this.e();
+            EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
                 switch (WorldGenStrongholdPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
                 case 1:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.e());
 
                 case 2:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.e());
 
                 case 3:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.e());
 
                 case 4:
-                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.d());
+                    return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.e());
                 }
             }
 

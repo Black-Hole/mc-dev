@@ -15,42 +15,43 @@ public class WorldGenMineshaftPieces {
         WorldGenFactory.a(WorldGenMineshaftPieces.WorldGenMineshaftStairs.class, "MSStairs");
     }
 
-    private static StructurePiece a(List<StructurePiece> list, Random random, int i, int j, int k, @Nullable EnumDirection enumdirection, int l) {
+    private static WorldGenMineshaftPieces.c a(List<StructurePiece> list, Random random, int i, int j, int k, @Nullable EnumDirection enumdirection, int l, WorldGenMineshaft.Type worldgenmineshaft_type) {
         int i1 = random.nextInt(100);
         StructureBoundingBox structureboundingbox;
 
         if (i1 >= 80) {
             structureboundingbox = WorldGenMineshaftPieces.WorldGenMineshaftCross.a(list, random, i, j, k, enumdirection);
             if (structureboundingbox != null) {
-                return new WorldGenMineshaftPieces.WorldGenMineshaftCross(l, random, structureboundingbox, enumdirection);
+                return new WorldGenMineshaftPieces.WorldGenMineshaftCross(l, random, structureboundingbox, enumdirection, worldgenmineshaft_type);
             }
         } else if (i1 >= 70) {
             structureboundingbox = WorldGenMineshaftPieces.WorldGenMineshaftStairs.a(list, random, i, j, k, enumdirection);
             if (structureboundingbox != null) {
-                return new WorldGenMineshaftPieces.WorldGenMineshaftStairs(l, random, structureboundingbox, enumdirection);
+                return new WorldGenMineshaftPieces.WorldGenMineshaftStairs(l, random, structureboundingbox, enumdirection, worldgenmineshaft_type);
             }
         } else {
             structureboundingbox = WorldGenMineshaftPieces.WorldGenMineshaftCorridor.a(list, random, i, j, k, enumdirection);
             if (structureboundingbox != null) {
-                return new WorldGenMineshaftPieces.WorldGenMineshaftCorridor(l, random, structureboundingbox, enumdirection);
+                return new WorldGenMineshaftPieces.WorldGenMineshaftCorridor(l, random, structureboundingbox, enumdirection, worldgenmineshaft_type);
             }
         }
 
         return null;
     }
 
-    private static StructurePiece b(StructurePiece structurepiece, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
+    private static WorldGenMineshaftPieces.c b(StructurePiece structurepiece, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
         if (l > 8) {
             return null;
-        } else if (Math.abs(i - structurepiece.c().a) <= 80 && Math.abs(k - structurepiece.c().c) <= 80) {
-            StructurePiece structurepiece1 = a(list, random, i, j, k, enumdirection, l + 1);
+        } else if (Math.abs(i - structurepiece.d().a) <= 80 && Math.abs(k - structurepiece.d().c) <= 80) {
+            WorldGenMineshaft.Type worldgenmineshaft_type = ((WorldGenMineshaftPieces.c) structurepiece).a;
+            WorldGenMineshaftPieces.c worldgenmineshaftpieces_c = a(list, random, i, j, k, enumdirection, l + 1, worldgenmineshaft_type);
 
-            if (structurepiece1 != null) {
-                list.add(structurepiece1);
-                structurepiece1.a(structurepiece, list, random);
+            if (worldgenmineshaftpieces_c != null) {
+                list.add(worldgenmineshaftpieces_c);
+                worldgenmineshaftpieces_c.a(structurepiece, list, random);
             }
 
-            return structurepiece1;
+            return worldgenmineshaftpieces_c;
         } else {
             return null;
         }
@@ -58,55 +59,75 @@ public class WorldGenMineshaftPieces {
 
     static class SyntheticClass_1 {
 
-        static final int[] a = new int[EnumDirection.values().length];
+        static final int[] a;
+        static final int[] b = new int[EnumDirection.values().length];
 
         static {
             try {
-                WorldGenMineshaftPieces.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
+                WorldGenMineshaftPieces.SyntheticClass_1.b[EnumDirection.NORTH.ordinal()] = 1;
             } catch (NoSuchFieldError nosuchfielderror) {
                 ;
             }
 
             try {
-                WorldGenMineshaftPieces.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
+                WorldGenMineshaftPieces.SyntheticClass_1.b[EnumDirection.SOUTH.ordinal()] = 2;
             } catch (NoSuchFieldError nosuchfielderror1) {
                 ;
             }
 
             try {
-                WorldGenMineshaftPieces.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
+                WorldGenMineshaftPieces.SyntheticClass_1.b[EnumDirection.WEST.ordinal()] = 3;
             } catch (NoSuchFieldError nosuchfielderror2) {
                 ;
             }
 
             try {
-                WorldGenMineshaftPieces.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
+                WorldGenMineshaftPieces.SyntheticClass_1.b[EnumDirection.EAST.ordinal()] = 4;
             } catch (NoSuchFieldError nosuchfielderror3) {
+                ;
+            }
+
+            a = new int[WorldGenMineshaft.Type.values().length];
+
+            try {
+                WorldGenMineshaftPieces.SyntheticClass_1.a[WorldGenMineshaft.Type.NORMAL.ordinal()] = 1;
+            } catch (NoSuchFieldError nosuchfielderror4) {
+                ;
+            }
+
+            try {
+                WorldGenMineshaftPieces.SyntheticClass_1.a[WorldGenMineshaft.Type.MESA.ordinal()] = 2;
+            } catch (NoSuchFieldError nosuchfielderror5) {
                 ;
             }
 
         }
     }
 
-    public static class WorldGenMineshaftStairs extends StructurePiece {
+    public static class WorldGenMineshaftStairs extends WorldGenMineshaftPieces.c {
 
         public WorldGenMineshaftStairs() {}
 
-        public WorldGenMineshaftStairs(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(i);
+        public WorldGenMineshaftStairs(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection, WorldGenMineshaft.Type worldgenmineshaft_type) {
+            super(i, worldgenmineshaft_type);
             this.a(enumdirection);
             this.l = structureboundingbox;
         }
 
-        protected void a(NBTTagCompound nbttagcompound) {}
+        protected void a(NBTTagCompound nbttagcompound) {
+            super.a(nbttagcompound);
+        }
 
-        protected void b(NBTTagCompound nbttagcompound) {}
+        protected void b(NBTTagCompound nbttagcompound) {
+            super.b(nbttagcompound);
+        }
 
         public static StructureBoundingBox a(List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection) {
             StructureBoundingBox structureboundingbox = new StructureBoundingBox(i, j - 5, k, i, j + 2, k);
 
-            switch (WorldGenMineshaftPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
+            switch (WorldGenMineshaftPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
             case 1:
+            default:
                 structureboundingbox.d = i + 2;
                 structureboundingbox.c = k - 8;
                 break;
@@ -130,12 +151,13 @@ public class WorldGenMineshaftPieces {
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
-            int i = this.d();
-            EnumDirection enumdirection = this.e();
+            int i = this.e();
+            EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
-                switch (WorldGenMineshaftPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
+                switch (WorldGenMineshaftPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
                 case 1:
+                default:
                     WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a, this.l.b, this.l.c - 1, EnumDirection.NORTH, i);
                     break;
 
@@ -170,28 +192,30 @@ public class WorldGenMineshaftPieces {
         }
     }
 
-    public static class WorldGenMineshaftCross extends StructurePiece {
+    public static class WorldGenMineshaftCross extends WorldGenMineshaftPieces.c {
 
-        private EnumDirection a;
-        private boolean b;
+        private EnumDirection b;
+        private boolean c;
 
         public WorldGenMineshaftCross() {}
 
         protected void a(NBTTagCompound nbttagcompound) {
-            nbttagcompound.setBoolean("tf", this.b);
-            nbttagcompound.setInt("D", this.a.get2DRotationValue());
+            super.a(nbttagcompound);
+            nbttagcompound.setBoolean("tf", this.c);
+            nbttagcompound.setInt("D", this.b.get2DRotationValue());
         }
 
         protected void b(NBTTagCompound nbttagcompound) {
-            this.b = nbttagcompound.getBoolean("tf");
-            this.a = EnumDirection.fromType2(nbttagcompound.getInt("D"));
+            super.b(nbttagcompound);
+            this.c = nbttagcompound.getBoolean("tf");
+            this.b = EnumDirection.fromType2(nbttagcompound.getInt("D"));
         }
 
-        public WorldGenMineshaftCross(int i, Random random, StructureBoundingBox structureboundingbox, @Nullable EnumDirection enumdirection) {
-            super(i);
-            this.a = enumdirection;
+        public WorldGenMineshaftCross(int i, Random random, StructureBoundingBox structureboundingbox, @Nullable EnumDirection enumdirection, WorldGenMineshaft.Type worldgenmineshaft_type) {
+            super(i, worldgenmineshaft_type);
+            this.b = enumdirection;
             this.l = structureboundingbox;
-            this.b = structureboundingbox.d() > 3;
+            this.c = structureboundingbox.d() > 3;
         }
 
         public static StructureBoundingBox a(List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection) {
@@ -201,8 +225,9 @@ public class WorldGenMineshaftPieces {
                 structureboundingbox.e += 4;
             }
 
-            switch (WorldGenMineshaftPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
+            switch (WorldGenMineshaftPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
             case 1:
+            default:
                 structureboundingbox.a = i - 1;
                 structureboundingbox.d = i + 3;
                 structureboundingbox.c = k - 4;
@@ -230,10 +255,11 @@ public class WorldGenMineshaftPieces {
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
-            int i = this.d();
+            int i = this.e();
 
-            switch (WorldGenMineshaftPieces.SyntheticClass_1.a[this.a.ordinal()]) {
+            switch (WorldGenMineshaftPieces.SyntheticClass_1.b[this.b.ordinal()]) {
             case 1:
+            default:
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a + 1, this.l.b, this.l.c - 1, EnumDirection.NORTH, i);
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a - 1, this.l.b, this.l.c + 1, EnumDirection.WEST, i);
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.d + 1, this.l.b, this.l.c + 1, EnumDirection.EAST, i);
@@ -257,7 +283,7 @@ public class WorldGenMineshaftPieces {
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.d + 1, this.l.b, this.l.c + 1, EnumDirection.EAST, i);
             }
 
-            if (this.b) {
+            if (this.c) {
                 if (random.nextBoolean()) {
                     WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a + 1, this.l.b + 3 + 1, this.l.c - 1, EnumDirection.NORTH, i);
                 }
@@ -281,7 +307,9 @@ public class WorldGenMineshaftPieces {
             if (this.a(world, structureboundingbox)) {
                 return false;
             } else {
-                if (this.b) {
+                IBlockData iblockdata = this.F_();
+
+                if (this.c) {
                     this.a(world, structureboundingbox, this.l.a + 1, this.l.b, this.l.c, this.l.d - 1, this.l.b + 3 - 1, this.l.f, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
                     this.a(world, structureboundingbox, this.l.a, this.l.b, this.l.c + 1, this.l.d, this.l.b + 3 - 1, this.l.f - 1, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
                     this.a(world, structureboundingbox, this.l.a + 1, this.l.e - 2, this.l.c, this.l.d - 1, this.l.e, this.l.f, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
@@ -292,15 +320,15 @@ public class WorldGenMineshaftPieces {
                     this.a(world, structureboundingbox, this.l.a, this.l.b, this.l.c + 1, this.l.d, this.l.e, this.l.f - 1, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
                 }
 
-                this.a(world, structureboundingbox, this.l.a + 1, this.l.b, this.l.c + 1, this.l.a + 1, this.l.e, this.l.c + 1, Blocks.PLANKS.getBlockData(), Blocks.AIR.getBlockData(), false);
-                this.a(world, structureboundingbox, this.l.a + 1, this.l.b, this.l.f - 1, this.l.a + 1, this.l.e, this.l.f - 1, Blocks.PLANKS.getBlockData(), Blocks.AIR.getBlockData(), false);
-                this.a(world, structureboundingbox, this.l.d - 1, this.l.b, this.l.c + 1, this.l.d - 1, this.l.e, this.l.c + 1, Blocks.PLANKS.getBlockData(), Blocks.AIR.getBlockData(), false);
-                this.a(world, structureboundingbox, this.l.d - 1, this.l.b, this.l.f - 1, this.l.d - 1, this.l.e, this.l.f - 1, Blocks.PLANKS.getBlockData(), Blocks.AIR.getBlockData(), false);
+                this.b(world, structureboundingbox, this.l.a + 1, this.l.b, this.l.c + 1, this.l.e);
+                this.b(world, structureboundingbox, this.l.a + 1, this.l.b, this.l.f - 1, this.l.e);
+                this.b(world, structureboundingbox, this.l.d - 1, this.l.b, this.l.c + 1, this.l.e);
+                this.b(world, structureboundingbox, this.l.d - 1, this.l.b, this.l.f - 1, this.l.e);
 
                 for (int i = this.l.a; i <= this.l.d; ++i) {
                     for (int j = this.l.c; j <= this.l.f; ++j) {
-                        if (this.a(world, i, this.l.b - 1, j, structureboundingbox).getMaterial() == Material.AIR) {
-                            this.a(world, Blocks.PLANKS.getBlockData(), i, this.l.b - 1, j, structureboundingbox);
+                        if (this.a(world, i, this.l.b - 1, j, structureboundingbox).getMaterial() == Material.AIR && this.b(world, i, this.l.b - 1, j, structureboundingbox) < 8) {
+                            this.a(world, iblockdata, i, this.l.b - 1, j, structureboundingbox);
                         }
                     }
                 }
@@ -308,41 +336,50 @@ public class WorldGenMineshaftPieces {
                 return true;
             }
         }
+
+        private void b(World world, StructureBoundingBox structureboundingbox, int i, int j, int k, int l) {
+            if (this.a(world, i, l + 1, k, structureboundingbox).getMaterial() != Material.AIR) {
+                this.a(world, structureboundingbox, i, j, k, i, l, k, this.F_(), Blocks.AIR.getBlockData(), false);
+            }
+
+        }
     }
 
-    public static class WorldGenMineshaftCorridor extends StructurePiece {
+    public static class WorldGenMineshaftCorridor extends WorldGenMineshaftPieces.c {
 
-        private boolean a;
         private boolean b;
         private boolean c;
-        private int d;
+        private boolean d;
+        private int e;
 
         public WorldGenMineshaftCorridor() {}
 
         protected void a(NBTTagCompound nbttagcompound) {
-            nbttagcompound.setBoolean("hr", this.a);
-            nbttagcompound.setBoolean("sc", this.b);
-            nbttagcompound.setBoolean("hps", this.c);
-            nbttagcompound.setInt("Num", this.d);
+            super.a(nbttagcompound);
+            nbttagcompound.setBoolean("hr", this.b);
+            nbttagcompound.setBoolean("sc", this.c);
+            nbttagcompound.setBoolean("hps", this.d);
+            nbttagcompound.setInt("Num", this.e);
         }
 
         protected void b(NBTTagCompound nbttagcompound) {
-            this.a = nbttagcompound.getBoolean("hr");
-            this.b = nbttagcompound.getBoolean("sc");
-            this.c = nbttagcompound.getBoolean("hps");
-            this.d = nbttagcompound.getInt("Num");
+            super.b(nbttagcompound);
+            this.b = nbttagcompound.getBoolean("hr");
+            this.c = nbttagcompound.getBoolean("sc");
+            this.d = nbttagcompound.getBoolean("hps");
+            this.e = nbttagcompound.getInt("Num");
         }
 
-        public WorldGenMineshaftCorridor(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
-            super(i);
+        public WorldGenMineshaftCorridor(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection, WorldGenMineshaft.Type worldgenmineshaft_type) {
+            super(i, worldgenmineshaft_type);
             this.a(enumdirection);
             this.l = structureboundingbox;
-            this.a = random.nextInt(3) == 0;
-            this.b = !this.a && random.nextInt(23) == 0;
-            if (this.e().k() == EnumDirection.EnumAxis.Z) {
-                this.d = structureboundingbox.e() / 5;
+            this.b = random.nextInt(3) == 0;
+            this.c = !this.b && random.nextInt(23) == 0;
+            if (this.f().k() == EnumDirection.EnumAxis.Z) {
+                this.e = structureboundingbox.e() / 5;
             } else {
-                this.d = structureboundingbox.c() / 5;
+                this.e = structureboundingbox.c() / 5;
             }
 
         }
@@ -355,8 +392,9 @@ public class WorldGenMineshaftPieces {
             for (l = random.nextInt(3) + 2; l > 0; --l) {
                 int i1 = l * 5;
 
-                switch (WorldGenMineshaftPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
+                switch (WorldGenMineshaftPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
                 case 1:
+                default:
                     structureboundingbox.d = i + 2;
                     structureboundingbox.c = k - (i1 - 1);
                     break;
@@ -385,13 +423,14 @@ public class WorldGenMineshaftPieces {
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
-            int i = this.d();
+            int i = this.e();
             int j = random.nextInt(4);
-            EnumDirection enumdirection = this.e();
+            EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
-                switch (WorldGenMineshaftPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
+                switch (WorldGenMineshaftPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
                 case 1:
+                default:
                     if (j <= 1) {
                         WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a, this.l.b - 1 + random.nextInt(3), this.l.c - 1, enumdirection, i);
                     } else if (j == 2) {
@@ -462,7 +501,7 @@ public class WorldGenMineshaftPieces {
         protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, MinecraftKey minecraftkey) {
             BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
 
-            if (structureboundingbox.b((BaseBlockPosition) blockposition) && world.getType(blockposition).getMaterial() == Material.AIR) {
+            if (structureboundingbox.b((BaseBlockPosition) blockposition) && world.getType(blockposition).getMaterial() == Material.AIR && world.getType(blockposition.down()).getMaterial() != Material.AIR) {
                 IBlockData iblockdata = Blocks.RAIL.getBlockData().set(BlockMinecartTrack.SHAPE, random.nextBoolean() ? BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH : BlockMinecartTrackAbstract.EnumTrackPosition.EAST_WEST);
 
                 this.a(world, iblockdata, i, j, k, structureboundingbox);
@@ -484,38 +523,29 @@ public class WorldGenMineshaftPieces {
                 boolean flag1 = true;
                 boolean flag2 = false;
                 boolean flag3 = true;
-                int i = this.d * 5 - 1;
+                int i = this.e * 5 - 1;
+                IBlockData iblockdata = this.F_();
 
                 this.a(world, structureboundingbox, 0, 0, 0, 2, 1, i, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
-                this.a(world, structureboundingbox, random, 0.8F, 0, 2, 0, 2, 2, i, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
-                if (this.b) {
-                    this.a(world, structureboundingbox, random, 0.6F, 0, 0, 0, 2, 1, i, Blocks.WEB.getBlockData(), Blocks.AIR.getBlockData(), false);
+                this.a(world, structureboundingbox, random, 0.8F, 0, 2, 0, 2, 2, i, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false, 0);
+                if (this.c) {
+                    this.a(world, structureboundingbox, random, 0.6F, 0, 0, 0, 2, 1, i, Blocks.WEB.getBlockData(), Blocks.AIR.getBlockData(), false, 8);
                 }
 
                 int j;
                 int k;
 
-                for (j = 0; j < this.d; ++j) {
+                for (j = 0; j < this.e; ++j) {
                     k = 2 + j * 5;
-                    this.a(world, structureboundingbox, 0, 0, k, 0, 1, k, Blocks.FENCE.getBlockData(), Blocks.AIR.getBlockData(), false);
-                    this.a(world, structureboundingbox, 2, 0, k, 2, 1, k, Blocks.FENCE.getBlockData(), Blocks.AIR.getBlockData(), false);
-                    if (random.nextInt(4) == 0) {
-                        this.a(world, structureboundingbox, 0, 2, k, 0, 2, k, Blocks.PLANKS.getBlockData(), Blocks.AIR.getBlockData(), false);
-                        this.a(world, structureboundingbox, 2, 2, k, 2, 2, k, Blocks.PLANKS.getBlockData(), Blocks.AIR.getBlockData(), false);
-                    } else {
-                        this.a(world, structureboundingbox, 0, 2, k, 2, 2, k, Blocks.PLANKS.getBlockData(), Blocks.AIR.getBlockData(), false);
-                    }
-
-                    this.a(world, structureboundingbox, random, 0.1F, 0, 2, k - 1, Blocks.WEB.getBlockData());
-                    this.a(world, structureboundingbox, random, 0.1F, 2, 2, k - 1, Blocks.WEB.getBlockData());
-                    this.a(world, structureboundingbox, random, 0.1F, 0, 2, k + 1, Blocks.WEB.getBlockData());
-                    this.a(world, structureboundingbox, random, 0.1F, 2, 2, k + 1, Blocks.WEB.getBlockData());
-                    this.a(world, structureboundingbox, random, 0.05F, 0, 2, k - 2, Blocks.WEB.getBlockData());
-                    this.a(world, structureboundingbox, random, 0.05F, 2, 2, k - 2, Blocks.WEB.getBlockData());
-                    this.a(world, structureboundingbox, random, 0.05F, 0, 2, k + 2, Blocks.WEB.getBlockData());
-                    this.a(world, structureboundingbox, random, 0.05F, 2, 2, k + 2, Blocks.WEB.getBlockData());
-                    this.a(world, structureboundingbox, random, 0.05F, 1, 2, k - 1, Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.SOUTH));
-                    this.a(world, structureboundingbox, random, 0.05F, 1, 2, k + 1, Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.NORTH));
+                    this.a(world, structureboundingbox, 0, 0, k, 2, 2, random);
+                    this.a(world, structureboundingbox, random, 0.1F, 0, 2, k - 1);
+                    this.a(world, structureboundingbox, random, 0.1F, 2, 2, k - 1);
+                    this.a(world, structureboundingbox, random, 0.1F, 0, 2, k + 1);
+                    this.a(world, structureboundingbox, random, 0.1F, 2, 2, k + 1);
+                    this.a(world, structureboundingbox, random, 0.05F, 0, 2, k - 2);
+                    this.a(world, structureboundingbox, random, 0.05F, 2, 2, k - 2);
+                    this.a(world, structureboundingbox, random, 0.05F, 0, 2, k + 2);
+                    this.a(world, structureboundingbox, random, 0.05F, 2, 2, k + 2);
                     if (random.nextInt(100) == 0) {
                         this.a(world, structureboundingbox, random, 2, 0, k - 1, LootTables.f);
                     }
@@ -524,16 +554,15 @@ public class WorldGenMineshaftPieces {
                         this.a(world, structureboundingbox, random, 0, 0, k + 1, LootTables.f);
                     }
 
-                    if (this.b && !this.c) {
+                    if (this.c && !this.d) {
                         int l = this.d(0);
                         int i1 = k - 1 + random.nextInt(3);
                         int j1 = this.a(1, i1);
+                        int k1 = this.b(1, i1);
+                        BlockPosition blockposition = new BlockPosition(j1, l, k1);
 
-                        i1 = this.b(1, i1);
-                        BlockPosition blockposition = new BlockPosition(j1, l, i1);
-
-                        if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
-                            this.c = true;
+                        if (structureboundingbox.b((BaseBlockPosition) blockposition) && this.b(world, 1, 0, i1, structureboundingbox) < 8) {
+                            this.d = true;
                             world.setTypeAndData(blockposition, Blocks.MOB_SPAWNER.getBlockData(), 2);
                             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -546,25 +575,27 @@ public class WorldGenMineshaftPieces {
 
                 for (j = 0; j <= 2; ++j) {
                     for (k = 0; k <= i; ++k) {
-                        byte b0 = -1;
-                        IBlockData iblockdata = this.a(world, j, b0, k, structureboundingbox);
+                        boolean flag4 = true;
+                        IBlockData iblockdata1 = this.a(world, j, -1, k, structureboundingbox);
 
-                        if (iblockdata.getMaterial() == Material.AIR) {
-                            byte b1 = -1;
+                        if (iblockdata1.getMaterial() == Material.AIR && this.b(world, j, -1, k, structureboundingbox) < 8) {
+                            boolean flag5 = true;
 
-                            this.a(world, Blocks.PLANKS.getBlockData(), j, b1, k, structureboundingbox);
+                            this.a(world, iblockdata, j, -1, k, structureboundingbox);
                         }
                     }
                 }
 
-                if (this.a) {
-                    IBlockData iblockdata1 = Blocks.RAIL.getBlockData().set(BlockMinecartTrack.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH);
+                if (this.b) {
+                    IBlockData iblockdata2 = Blocks.RAIL.getBlockData().set(BlockMinecartTrack.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH);
 
                     for (k = 0; k <= i; ++k) {
-                        IBlockData iblockdata2 = this.a(world, 1, -1, k, structureboundingbox);
+                        IBlockData iblockdata3 = this.a(world, 1, -1, k, structureboundingbox);
 
-                        if (iblockdata2.getMaterial() != Material.AIR && iblockdata2.b()) {
-                            this.a(world, structureboundingbox, random, 0.7F, 1, 0, k, iblockdata1);
+                        if (iblockdata3.getMaterial() != Material.AIR && iblockdata3.b()) {
+                            float f = this.b(world, 1, 0, k, structureboundingbox) > 8 ? 0.9F : 0.7F;
+
+                            this.a(world, structureboundingbox, random, f, 1, 0, k, iblockdata2);
                         }
                     }
                 }
@@ -572,21 +603,49 @@ public class WorldGenMineshaftPieces {
                 return true;
             }
         }
+
+        private void a(World world, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, Random random) {
+            if (this.a(world, structureboundingbox, i, i1, l, k)) {
+                IBlockData iblockdata = this.F_();
+                IBlockData iblockdata1 = this.b();
+                IBlockData iblockdata2 = Blocks.AIR.getBlockData();
+
+                this.a(world, structureboundingbox, i, j, k, i, l - 1, k, iblockdata1, iblockdata2, false);
+                this.a(world, structureboundingbox, i1, j, k, i1, l - 1, k, iblockdata1, iblockdata2, false);
+                if (random.nextInt(4) == 0) {
+                    this.a(world, structureboundingbox, i, l, k, i, l, k, iblockdata, iblockdata2, false);
+                    this.a(world, structureboundingbox, i1, l, k, i1, l, k, iblockdata, iblockdata2, false);
+                } else {
+                    this.a(world, structureboundingbox, i, l, k, i1, l, k, iblockdata, iblockdata2, false);
+                    this.a(world, structureboundingbox, random, 0.05F, i + 1, l, k - 1, Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.NORTH));
+                    this.a(world, structureboundingbox, random, 0.05F, i + 1, l, k + 1, Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.SOUTH));
+                }
+
+            }
+        }
+
+        private void a(World world, StructureBoundingBox structureboundingbox, Random random, float f, int i, int j, int k) {
+            if (this.b(world, i, j, k, structureboundingbox) < 8) {
+                this.a(world, structureboundingbox, random, f, i, j, k, Blocks.WEB.getBlockData());
+            }
+
+        }
     }
 
-    public static class WorldGenMineshaftRoom extends StructurePiece {
+    public static class WorldGenMineshaftRoom extends WorldGenMineshaftPieces.c {
 
-        private List<StructureBoundingBox> a = Lists.newLinkedList();
+        private final List<StructureBoundingBox> b = Lists.newLinkedList();
 
         public WorldGenMineshaftRoom() {}
 
-        public WorldGenMineshaftRoom(int i, Random random, int j, int k) {
-            super(i);
+        public WorldGenMineshaftRoom(int i, Random random, int j, int k, WorldGenMineshaft.Type worldgenmineshaft_type) {
+            super(i, worldgenmineshaft_type);
+            this.a = worldgenmineshaft_type;
             this.l = new StructureBoundingBox(j, 50, k, j + 7 + random.nextInt(6), 54 + random.nextInt(6), k + 7 + random.nextInt(6));
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
-            int i = this.d();
+            int i = this.e();
             int j = this.l.d() - 3 - 1;
 
             if (j <= 0) {
@@ -594,7 +653,7 @@ public class WorldGenMineshaftPieces {
             }
 
             int k;
-            StructurePiece structurepiece1;
+            WorldGenMineshaftPieces.c worldgenmineshaftpieces_c;
             StructureBoundingBox structureboundingbox;
 
             for (k = 0; k < this.l.c(); k += 4) {
@@ -603,10 +662,10 @@ public class WorldGenMineshaftPieces {
                     break;
                 }
 
-                structurepiece1 = WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a + k, this.l.b + random.nextInt(j) + 1, this.l.c - 1, EnumDirection.NORTH, i);
-                if (structurepiece1 != null) {
-                    structureboundingbox = structurepiece1.c();
-                    this.a.add(new StructureBoundingBox(structureboundingbox.a, structureboundingbox.b, this.l.c, structureboundingbox.d, structureboundingbox.e, this.l.c + 1));
+                worldgenmineshaftpieces_c = WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a + k, this.l.b + random.nextInt(j) + 1, this.l.c - 1, EnumDirection.NORTH, i);
+                if (worldgenmineshaftpieces_c != null) {
+                    structureboundingbox = worldgenmineshaftpieces_c.d();
+                    this.b.add(new StructureBoundingBox(structureboundingbox.a, structureboundingbox.b, this.l.c, structureboundingbox.d, structureboundingbox.e, this.l.c + 1));
                 }
             }
 
@@ -616,10 +675,10 @@ public class WorldGenMineshaftPieces {
                     break;
                 }
 
-                structurepiece1 = WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a + k, this.l.b + random.nextInt(j) + 1, this.l.f + 1, EnumDirection.SOUTH, i);
-                if (structurepiece1 != null) {
-                    structureboundingbox = structurepiece1.c();
-                    this.a.add(new StructureBoundingBox(structureboundingbox.a, structureboundingbox.b, this.l.f - 1, structureboundingbox.d, structureboundingbox.e, this.l.f));
+                worldgenmineshaftpieces_c = WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a + k, this.l.b + random.nextInt(j) + 1, this.l.f + 1, EnumDirection.SOUTH, i);
+                if (worldgenmineshaftpieces_c != null) {
+                    structureboundingbox = worldgenmineshaftpieces_c.d();
+                    this.b.add(new StructureBoundingBox(structureboundingbox.a, structureboundingbox.b, this.l.f - 1, structureboundingbox.d, structureboundingbox.e, this.l.f));
                 }
             }
 
@@ -629,10 +688,10 @@ public class WorldGenMineshaftPieces {
                     break;
                 }
 
-                structurepiece1 = WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a - 1, this.l.b + random.nextInt(j) + 1, this.l.c + k, EnumDirection.WEST, i);
-                if (structurepiece1 != null) {
-                    structureboundingbox = structurepiece1.c();
-                    this.a.add(new StructureBoundingBox(this.l.a, structureboundingbox.b, structureboundingbox.c, this.l.a + 1, structureboundingbox.e, structureboundingbox.f));
+                worldgenmineshaftpieces_c = WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a - 1, this.l.b + random.nextInt(j) + 1, this.l.c + k, EnumDirection.WEST, i);
+                if (worldgenmineshaftpieces_c != null) {
+                    structureboundingbox = worldgenmineshaftpieces_c.d();
+                    this.b.add(new StructureBoundingBox(this.l.a, structureboundingbox.b, structureboundingbox.c, this.l.a + 1, structureboundingbox.e, structureboundingbox.f));
                 }
             }
 
@@ -642,10 +701,10 @@ public class WorldGenMineshaftPieces {
                     break;
                 }
 
-                structurepiece1 = WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.d + 1, this.l.b + random.nextInt(j) + 1, this.l.c + k, EnumDirection.EAST, i);
-                if (structurepiece1 != null) {
-                    structureboundingbox = structurepiece1.c();
-                    this.a.add(new StructureBoundingBox(this.l.d - 1, structureboundingbox.b, structureboundingbox.c, this.l.d, structureboundingbox.e, structureboundingbox.f));
+                worldgenmineshaftpieces_c = WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.d + 1, this.l.b + random.nextInt(j) + 1, this.l.c + k, EnumDirection.EAST, i);
+                if (worldgenmineshaftpieces_c != null) {
+                    structureboundingbox = worldgenmineshaftpieces_c.d();
+                    this.b.add(new StructureBoundingBox(this.l.d - 1, structureboundingbox.b, structureboundingbox.c, this.l.d, structureboundingbox.e, structureboundingbox.f));
                 }
             }
 
@@ -657,7 +716,7 @@ public class WorldGenMineshaftPieces {
             } else {
                 this.a(world, structureboundingbox, this.l.a, this.l.b, this.l.c, this.l.d, this.l.b, this.l.f, Blocks.DIRT.getBlockData(), Blocks.AIR.getBlockData(), true);
                 this.a(world, structureboundingbox, this.l.a, this.l.b + 1, this.l.c, this.l.d, Math.min(this.l.b + 3, this.l.e), this.l.f, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
-                Iterator iterator = this.a.iterator();
+                Iterator iterator = this.b.iterator();
 
                 while (iterator.hasNext()) {
                     StructureBoundingBox structureboundingbox1 = (StructureBoundingBox) iterator.next();
@@ -672,7 +731,7 @@ public class WorldGenMineshaftPieces {
 
         public void a(int i, int j, int k) {
             super.a(i, j, k);
-            Iterator iterator = this.a.iterator();
+            Iterator iterator = this.b.iterator();
 
             while (iterator.hasNext()) {
                 StructureBoundingBox structureboundingbox = (StructureBoundingBox) iterator.next();
@@ -683,8 +742,9 @@ public class WorldGenMineshaftPieces {
         }
 
         protected void a(NBTTagCompound nbttagcompound) {
+            super.a(nbttagcompound);
             NBTTagList nbttaglist = new NBTTagList();
-            Iterator iterator = this.a.iterator();
+            Iterator iterator = this.b.iterator();
 
             while (iterator.hasNext()) {
                 StructureBoundingBox structureboundingbox = (StructureBoundingBox) iterator.next();
@@ -696,12 +756,65 @@ public class WorldGenMineshaftPieces {
         }
 
         protected void b(NBTTagCompound nbttagcompound) {
+            super.b(nbttagcompound);
             NBTTagList nbttaglist = nbttagcompound.getList("Entrances", 11);
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
-                this.a.add(new StructureBoundingBox(nbttaglist.d(i)));
+                this.b.add(new StructureBoundingBox(nbttaglist.d(i)));
             }
 
+        }
+    }
+
+    abstract static class c extends StructurePiece {
+
+        protected WorldGenMineshaft.Type a;
+
+        public c() {}
+
+        public c(int i, WorldGenMineshaft.Type worldgenmineshaft_type) {
+            super(i);
+            this.a = worldgenmineshaft_type;
+        }
+
+        protected void a(NBTTagCompound nbttagcompound) {
+            nbttagcompound.setInt("MST", this.a.ordinal());
+        }
+
+        protected void b(NBTTagCompound nbttagcompound) {
+            this.a = WorldGenMineshaft.Type.a(nbttagcompound.getInt("MST"));
+        }
+
+        protected IBlockData F_() {
+            switch (WorldGenMineshaftPieces.SyntheticClass_1.a[this.a.ordinal()]) {
+            case 1:
+            default:
+                return Blocks.PLANKS.getBlockData();
+
+            case 2:
+                return Blocks.PLANKS.getBlockData().set(BlockWood.VARIANT, BlockWood.EnumLogVariant.DARK_OAK);
+            }
+        }
+
+        protected IBlockData b() {
+            switch (WorldGenMineshaftPieces.SyntheticClass_1.a[this.a.ordinal()]) {
+            case 1:
+            default:
+                return Blocks.FENCE.getBlockData();
+
+            case 2:
+                return Blocks.DARK_OAK_FENCE.getBlockData();
+            }
+        }
+
+        protected boolean a(World world, StructureBoundingBox structureboundingbox, int i, int j, int k, int l) {
+            for (int i1 = i; i1 <= j; ++i1) {
+                if (this.a(world, i1, k + 1, l, structureboundingbox).getMaterial() == Material.AIR) {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

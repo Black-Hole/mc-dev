@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class GenLayerRiverMix extends GenLayer {
 
-    private GenLayer c;
-    private GenLayer d;
+    private final GenLayer c;
+    private final GenLayer d;
 
     public GenLayerRiverMix(long i, GenLayer genlayer, GenLayer genlayer1) {
         super(i);

@@ -177,6 +177,7 @@ public class CraftingManager {
         this.registerShapedRecipe(new ItemStack(Blocks.HOPPER), new Object[] { "I I", "ICI", " I ", Character.valueOf('I'), Items.IRON_INGOT, Character.valueOf('C'), Blocks.CHEST});
         this.registerShapedRecipe(new ItemStack(Items.ARMOR_STAND, 1), new Object[] { "///", " / ", "/_/", Character.valueOf('/'), Items.STICK, Character.valueOf('_'), new ItemStack(Blocks.STONE_SLAB, 1, BlockDoubleStepAbstract.EnumStoneSlabVariant.STONE.a())});
         this.registerShapedRecipe(new ItemStack(Blocks.END_ROD, 4), new Object[] { "/", "#", Character.valueOf('/'), Items.BLAZE_ROD, Character.valueOf('#'), Items.CHORUS_FRUIT_POPPED});
+        this.registerShapedRecipe(new ItemStack(Blocks.di, 1), new Object[] { "XXX", "XXX", "XXX", Character.valueOf('X'), new ItemStack(Items.DYE, 1, EnumColor.WHITE.getInvColorIndex())});
         Collections.sort(this.recipes, new Comparator() {
             public int a(IRecipe irecipe, IRecipe irecipe1) {
                 return irecipe instanceof ShapelessRecipes && irecipe1 instanceof ShapedRecipes ? 1 : (irecipe1 instanceof ShapelessRecipes && irecipe instanceof ShapedRecipes ? -1 : (irecipe1.a() < irecipe.a() ? -1 : (irecipe1.a() > irecipe.a() ? 1 : 0)));
@@ -193,12 +194,16 @@ public class CraftingManager {
         int i = 0;
         int j = 0;
         int k = 0;
+        int l;
 
         if (aobject[i] instanceof String[]) {
             String[] astring = (String[]) ((String[]) aobject[i++]);
+            String[] astring1 = astring;
 
-            for (int l = 0; l < astring.length; ++l) {
-                String s1 = astring[l];
+            l = astring.length;
+
+            for (int i1 = 0; i1 < l; ++i1) {
+                String s1 = astring1[i1];
 
                 ++k;
                 j = s1.length();
@@ -233,13 +238,13 @@ public class CraftingManager {
 
         ItemStack[] aitemstack = new ItemStack[j * k];
 
-        for (int i1 = 0; i1 < j * k; ++i1) {
-            char c0 = s.charAt(i1);
+        for (l = 0; l < j * k; ++l) {
+            char c0 = s.charAt(l);
 
             if (hashmap.containsKey(Character.valueOf(c0))) {
-                aitemstack[i1] = ((ItemStack) hashmap.get(Character.valueOf(c0))).cloneItemStack();
+                aitemstack[l] = ((ItemStack) hashmap.get(Character.valueOf(c0))).cloneItemStack();
             } else {
-                aitemstack[i1] = null;
+                aitemstack[l] = null;
             }
         }
 

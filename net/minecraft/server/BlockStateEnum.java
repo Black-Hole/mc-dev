@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
@@ -35,6 +36,10 @@ public class BlockStateEnum<T extends Enum<T> & INamable> extends BlockState<T> 
 
     public Collection<T> c() {
         return this.a;
+    }
+
+    public Optional<T> b(String s) {
+        return Optional.fromNullable(this.b.get(s));
     }
 
     public String a(T t0) {

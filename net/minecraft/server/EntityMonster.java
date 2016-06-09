@@ -7,12 +7,16 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         this.b_ = 5;
     }
 
-    public SoundCategory bA() {
+    public static void c(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "Monster");
+    }
+
+    public SoundCategory bC() {
         return SoundCategory.HOSTILE;
     }
 
     public void n() {
-        this.bZ();
+        this.cc();
         float f = this.e(1.0F);
 
         if (f > 0.5F) {
@@ -31,27 +35,27 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     }
 
     protected SoundEffect aa() {
-        return SoundEffects.cG;
+        return SoundEffects.cH;
     }
 
     protected SoundEffect ab() {
-        return SoundEffects.cF;
+        return SoundEffects.cG;
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
         return this.isInvulnerable(damagesource) ? false : super.damageEntity(damagesource, f);
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bV() {
+        return SoundEffects.cE;
+    }
+
+    protected SoundEffect bW() {
         return SoundEffects.cD;
     }
 
-    protected SoundEffect bT() {
-        return SoundEffects.cC;
-    }
-
     protected SoundEffect e(int i) {
-        return i > 4 ? SoundEffects.cB : SoundEffects.cE;
+        return i > 4 ? SoundEffects.cC : SoundEffects.cF;
     }
 
     public boolean B(Entity entity) {
@@ -81,13 +85,13 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
             if (entity instanceof EntityHuman) {
                 EntityHuman entityhuman = (EntityHuman) entity;
                 ItemStack itemstack = this.getItemInMainHand();
-                ItemStack itemstack1 = entityhuman.ct() ? entityhuman.cw() : null;
+                ItemStack itemstack1 = entityhuman.cx() ? entityhuman.cA() : null;
 
                 if (itemstack != null && itemstack1 != null && itemstack.getItem() instanceof ItemAxe && itemstack1.getItem() == Items.SHIELD) {
                     float f1 = 0.25F + (float) EnchantmentManager.getDigSpeedEnchantmentLevel(this) * 0.05F;
 
                     if (this.random.nextFloat() < f1) {
-                        entityhuman.db().a(Items.SHIELD, 100);
+                        entityhuman.df().a(Items.SHIELD, 100);
                         this.world.broadcastEntityEffect(entityhuman, (byte) 30);
                     }
                 }
@@ -123,8 +127,8 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         }
     }
 
-    public boolean cG() {
-        return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.s_() && super.cG();
+    public boolean cK() {
+        return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.s_() && super.cK();
     }
 
     protected void initAttributes() {

@@ -160,7 +160,7 @@ public class BlockPiston extends BlockDirectional {
             }
 
             world.setTypeAndData(blockposition, iblockdata.set(BlockPiston.EXTENDED, Boolean.valueOf(true)), 2);
-            world.a((EntityHuman) null, blockposition, SoundEffects.dW, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.25F + 0.6F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.eb, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.25F + 0.6F);
         } else if (i == 1) {
             TileEntity tileentity = world.getTileEntity(blockposition.shift(enumdirection));
 
@@ -196,7 +196,7 @@ public class BlockPiston extends BlockDirectional {
                 world.setAir(blockposition.shift(enumdirection));
             }
 
-            world.a((EntityHuman) null, blockposition, SoundEffects.dV, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.15F + 0.6F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.ea, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.15F + 0.6F);
         }
 
         return true;

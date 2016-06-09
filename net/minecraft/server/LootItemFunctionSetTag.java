@@ -19,7 +19,7 @@ public class LootItemFunctionSetTag extends LootItemFunction {
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
         if (nbttagcompound == null) {
-            nbttagcompound = (NBTTagCompound) this.a.clone();
+            nbttagcompound = this.a.g();
         } else {
             nbttagcompound.a(this.a);
         }

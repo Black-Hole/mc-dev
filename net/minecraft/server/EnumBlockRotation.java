@@ -5,7 +5,7 @@ public enum EnumBlockRotation {
     NONE("rotate_0"), CLOCKWISE_90("rotate_90"), CLOCKWISE_180("rotate_180"), COUNTERCLOCKWISE_90("rotate_270");
 
     private final String e;
-    private static String[] f = new String[values().length];
+    private static final String[] f = new String[values().length];
 
     private EnumBlockRotation(String s) {
         this.e = s;

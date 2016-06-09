@@ -29,7 +29,7 @@ public class CommandWorldBorder extends CommandAbstract {
             double d1;
             long i;
 
-            if (astring[0].equals("set")) {
+            if ("set".equals(astring[0])) {
                 if (astring.length != 2 && astring.length != 3) {
                     throw new ExceptionUsage("commands.worldborder.set.usage", new Object[0]);
                 }
@@ -48,7 +48,7 @@ public class CommandWorldBorder extends CommandAbstract {
                     worldborder.setSize(d1);
                     a(icommandlistener, (ICommand) this, "commands.worldborder.set.success", new Object[] { String.format("%.1f", new Object[] { Double.valueOf(d1)}), String.format("%.1f", new Object[] { Double.valueOf(d0)})});
                 }
-            } else if (astring[0].equals("add")) {
+            } else if ("add".equals(astring[0])) {
                 if (astring.length != 2 && astring.length != 3) {
                     throw new ExceptionUsage("commands.worldborder.add.usage", new Object[0]);
                 }
@@ -67,7 +67,7 @@ public class CommandWorldBorder extends CommandAbstract {
                     worldborder.setSize(d1);
                     a(icommandlistener, (ICommand) this, "commands.worldborder.set.success", new Object[] { String.format("%.1f", new Object[] { Double.valueOf(d1)}), String.format("%.1f", new Object[] { Double.valueOf(d0)})});
                 }
-            } else if (astring[0].equals("center")) {
+            } else if ("center".equals(astring[0])) {
                 if (astring.length != 3) {
                     throw new ExceptionUsage("commands.worldborder.center.usage", new Object[0]);
                 }
@@ -78,12 +78,12 @@ public class CommandWorldBorder extends CommandAbstract {
 
                 worldborder.setCenter(d2, d3);
                 a(icommandlistener, (ICommand) this, "commands.worldborder.center.success", new Object[] { Double.valueOf(d2), Double.valueOf(d3)});
-            } else if (astring[0].equals("damage")) {
+            } else if ("damage".equals(astring[0])) {
                 if (astring.length < 2) {
                     throw new ExceptionUsage("commands.worldborder.damage.usage", new Object[0]);
                 }
 
-                if (astring[1].equals("buffer")) {
+                if ("buffer".equals(astring[1])) {
                     if (astring.length != 3) {
                         throw new ExceptionUsage("commands.worldborder.damage.buffer.usage", new Object[0]);
                     }
@@ -92,7 +92,7 @@ public class CommandWorldBorder extends CommandAbstract {
                     d1 = worldborder.getDamageBuffer();
                     worldborder.setDamageBuffer(d0);
                     a(icommandlistener, (ICommand) this, "commands.worldborder.damage.buffer.success", new Object[] { String.format("%.1f", new Object[] { Double.valueOf(d0)}), String.format("%.1f", new Object[] { Double.valueOf(d1)})});
-                } else if (astring[1].equals("amount")) {
+                } else if ("amount".equals(astring[1])) {
                     if (astring.length != 3) {
                         throw new ExceptionUsage("commands.worldborder.damage.amount.usage", new Object[0]);
                     }
@@ -102,7 +102,7 @@ public class CommandWorldBorder extends CommandAbstract {
                     worldborder.setDamageAmount(d0);
                     a(icommandlistener, (ICommand) this, "commands.worldborder.damage.amount.success", new Object[] { String.format("%.2f", new Object[] { Double.valueOf(d0)}), String.format("%.2f", new Object[] { Double.valueOf(d1)})});
                 }
-            } else if (astring[0].equals("warning")) {
+            } else if ("warning".equals(astring[0])) {
                 if (astring.length < 2) {
                     throw new ExceptionUsage("commands.worldborder.warning.usage", new Object[0]);
                 }
@@ -110,7 +110,7 @@ public class CommandWorldBorder extends CommandAbstract {
                 int j;
                 int k;
 
-                if (astring[1].equals("time")) {
+                if ("time".equals(astring[1])) {
                     if (astring.length != 3) {
                         throw new ExceptionUsage("commands.worldborder.warning.time.usage", new Object[0]);
                     }
@@ -119,7 +119,7 @@ public class CommandWorldBorder extends CommandAbstract {
                     k = worldborder.getWarningTime();
                     worldborder.setWarningTime(j);
                     a(icommandlistener, (ICommand) this, "commands.worldborder.warning.time.success", new Object[] { Integer.valueOf(j), Integer.valueOf(k)});
-                } else if (astring[1].equals("distance")) {
+                } else if ("distance".equals(astring[1])) {
                     if (astring.length != 3) {
                         throw new ExceptionUsage("commands.worldborder.warning.distance.usage", new Object[0]);
                     }
@@ -130,7 +130,7 @@ public class CommandWorldBorder extends CommandAbstract {
                     a(icommandlistener, (ICommand) this, "commands.worldborder.warning.distance.success", new Object[] { Integer.valueOf(j), Integer.valueOf(k)});
                 }
             } else {
-                if (!astring[0].equals("get")) {
+                if (!"get".equals(astring[0])) {
                     throw new ExceptionUsage("commands.worldborder.usage", new Object[0]);
                 }
 
@@ -147,6 +147,6 @@ public class CommandWorldBorder extends CommandAbstract {
     }
 
     public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "set", "center", "damage", "warning", "add", "get"}) : (astring.length == 2 && astring[0].equals("damage") ? a(astring, new String[] { "buffer", "amount"}) : (astring.length >= 2 && astring.length <= 3 && astring[0].equals("center") ? b(astring, 1, blockposition) : (astring.length == 2 && astring[0].equals("warning") ? a(astring, new String[] { "time", "distance"}) : Collections.emptyList())));
+        return astring.length == 1 ? a(astring, new String[] { "set", "center", "damage", "warning", "add", "get"}) : (astring.length == 2 && "damage".equals(astring[0]) ? a(astring, new String[] { "buffer", "amount"}) : (astring.length >= 2 && astring.length <= 3 && "center".equals(astring[0]) ? b(astring, 1, blockposition) : (astring.length == 2 && "warning".equals(astring[0]) ? a(astring, new String[] { "time", "distance"}) : Collections.emptyList())));
     }
 }

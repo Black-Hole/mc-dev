@@ -32,9 +32,9 @@ public class BlockFalling extends Block {
 
     private void b(World world, BlockPosition blockposition) {
         if (i(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
-            byte b0 = 32;
+            boolean flag = true;
 
-            if (!BlockFalling.instaFall && world.areChunksLoadedBetween(blockposition.a(-b0, -b0, -b0), blockposition.a(b0, b0, b0))) {
+            if (!BlockFalling.instaFall && world.areChunksLoadedBetween(blockposition.a(-32, -32, -32), blockposition.a(32, 32, 32))) {
                 if (!world.isClientSide) {
                     EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, world.getType(blockposition));
 

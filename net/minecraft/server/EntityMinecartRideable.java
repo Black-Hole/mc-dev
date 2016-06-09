@@ -12,6 +12,10 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityMinecartAbstract.a(dataconvertermanager, "MinecartRideable");
+    }
+
     public boolean a(EntityHuman entityhuman, @Nullable ItemStack itemstack, EnumHand enumhand) {
         if (entityhuman.isSneaking()) {
             return false;
@@ -36,7 +40,7 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
                 this.e(-this.u());
                 this.d(10);
                 this.setDamage(50.0F);
-                this.ao();
+                this.ap();
             }
         }
 

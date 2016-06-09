@@ -137,7 +137,7 @@ public class BlockPosition extends BaseBlockPosition {
         return new Iterable() {
             public Iterator<BlockPosition> iterator() {
                 return new AbstractIterator() {
-                    private BlockPosition b = null;
+                    private BlockPosition b;
 
                     protected BlockPosition a() {
                         if (this.b == null) {
@@ -185,7 +185,7 @@ public class BlockPosition extends BaseBlockPosition {
         return new Iterable() {
             public Iterator<BlockPosition.MutableBlockPosition> iterator() {
                 return new AbstractIterator() {
-                    private BlockPosition.MutableBlockPosition b = null;
+                    private BlockPosition.MutableBlockPosition b;
 
                     protected BlockPosition.MutableBlockPosition a() {
                         if (this.b == null) {

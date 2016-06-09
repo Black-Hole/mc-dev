@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class PathfinderGoalTame extends PathfinderGoal {
 
-    private EntityHorse entity;
-    private double b;
+    private final EntityHorse entity;
+    private final double b;
     private double c;
     private double d;
     private double e;
@@ -41,7 +41,7 @@ public class PathfinderGoalTame extends PathfinderGoal {
 
     public void e() {
         if (this.entity.getRandom().nextInt(50) == 0) {
-            Entity entity = (Entity) this.entity.bv().get(0);
+            Entity entity = (Entity) this.entity.bx().get(0);
 
             if (entity == null) {
                 return;
@@ -61,7 +61,7 @@ public class PathfinderGoalTame extends PathfinderGoal {
             }
 
             this.entity.az();
-            this.entity.dF();
+            this.entity.dJ();
             this.entity.world.broadcastEntityEffect(this.entity, (byte) 6);
         }
 

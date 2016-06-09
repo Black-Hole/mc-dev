@@ -9,12 +9,16 @@ public class EntityMagmaCube extends EntitySlime {
         this.fireProof = true;
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "LavaSlime");
+    }
+
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
     }
 
-    public boolean cG() {
+    public boolean cK() {
         return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
@@ -35,60 +39,60 @@ public class EntityMagmaCube extends EntitySlime {
         return EnumParticle.FLAME;
     }
 
-    protected EntitySlime cU() {
+    protected EntitySlime cY() {
         return new EntityMagmaCube(this.world);
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return !this.dc() ? LootTables.ae : LootTables.a;
+        return this.dg() ? LootTables.a : LootTables.af;
     }
 
     public boolean isBurning() {
         return false;
     }
 
-    protected int cV() {
-        return super.cV() * 4;
+    protected int cZ() {
+        return super.cZ() * 4;
     }
 
-    protected void cW() {
+    protected void da() {
         this.a *= 0.9F;
     }
 
-    protected void ci() {
+    protected void cl() {
         this.motY = (double) (0.42F + (float) this.getSize() * 0.1F);
         this.impulse = true;
     }
 
-    protected void ck() {
+    protected void cn() {
         this.motY = (double) (0.22F + (float) this.getSize() * 0.05F);
         this.impulse = true;
     }
 
     public void e(float f, float f1) {}
 
-    protected boolean cX() {
+    protected boolean db() {
         return true;
     }
 
-    protected int cY() {
-        return super.cY() + 2;
+    protected int dc() {
+        return super.dc() + 2;
     }
 
-    protected SoundEffect bS() {
-        return this.dc() ? SoundEffects.fB : SoundEffects.dl;
+    protected SoundEffect bV() {
+        return this.dg() ? SoundEffects.fM : SoundEffects.dq;
     }
 
-    protected SoundEffect bT() {
-        return this.dc() ? SoundEffects.fA : SoundEffects.dk;
+    protected SoundEffect bW() {
+        return this.dg() ? SoundEffects.fL : SoundEffects.dp;
     }
 
-    protected SoundEffect cZ() {
-        return this.dc() ? SoundEffects.fC : SoundEffects.dn;
+    protected SoundEffect dd() {
+        return this.dg() ? SoundEffects.fN : SoundEffects.ds;
     }
 
-    protected SoundEffect da() {
-        return SoundEffects.dm;
+    protected SoundEffect de() {
+        return SoundEffects.dr;
     }
 }

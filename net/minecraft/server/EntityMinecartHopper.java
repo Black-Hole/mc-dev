@@ -7,7 +7,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 
     private boolean a = true;
     private int b = -1;
-    private BlockPosition c;
+    private final BlockPosition c;
 
     public EntityMinecartHopper(World world) {
         super(world);
@@ -27,7 +27,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
         return Blocks.HOPPER.getBlockData();
     }
 
-    public int A() {
+    public int z() {
         return 1;
     }
 
@@ -118,6 +118,10 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
             this.a(Item.getItemOf(Blocks.HOPPER), 1, 0.0F);
         }
 
+    }
+
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityMinecartContainer.b(dataconvertermanager, "MinecartHopper");
     }
 
     protected void b(NBTTagCompound nbttagcompound) {

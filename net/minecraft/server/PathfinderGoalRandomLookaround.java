@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class PathfinderGoalRandomLookaround extends PathfinderGoal {
 
-    private EntityInsentient a;
+    private final EntityInsentient a;
     private double b;
     private double c;
     private int d;
@@ -30,6 +30,6 @@ public class PathfinderGoalRandomLookaround extends PathfinderGoal {
 
     public void e() {
         --this.d;
-        this.a.getControllerLook().a(this.a.locX + this.b, this.a.locY + (double) this.a.getHeadHeight(), this.a.locZ + this.c, (float) this.a.cF(), (float) this.a.N());
+        this.a.getControllerLook().a(this.a.locX + this.b, this.a.locY + (double) this.a.getHeadHeight(), this.a.locZ + this.c, (float) this.a.cJ(), (float) this.a.N());
     }
 }

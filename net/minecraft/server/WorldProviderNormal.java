@@ -9,6 +9,6 @@ public class WorldProviderNormal extends WorldProvider {
     }
 
     public boolean c(int i, int j) {
-        return !this.b.c(i, j);
+        return !this.b.d(i, j);
     }
 }

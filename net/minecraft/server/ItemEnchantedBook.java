@@ -9,7 +9,7 @@ public class ItemEnchantedBook extends Item {
     }
 
     public EnumItemRarity g(ItemStack itemstack) {
-        return !this.h(itemstack).isEmpty() ? EnumItemRarity.UNCOMMON : super.g(itemstack);
+        return this.h(itemstack).isEmpty() ? super.g(itemstack) : EnumItemRarity.UNCOMMON;
     }
 
     public NBTTagList h(ItemStack itemstack) {

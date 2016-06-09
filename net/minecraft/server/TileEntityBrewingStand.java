@@ -33,7 +33,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         return this.items.length;
     }
 
-    public void c() {
+    public void E_() {
         if (this.m <= 0 && this.items[4] != null && this.items[4].getItem() == Items.BLAZE_POWDER) {
             this.m = 20;
             --this.items[4].count;
@@ -149,6 +149,10 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
 
         this.items[3] = itemstack;
         this.world.triggerEffect(1035, blockposition, 0);
+    }
+
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList("Cauldron", new String[] { "Items"})));
     }
 
     public void a(NBTTagCompound nbttagcompound) {

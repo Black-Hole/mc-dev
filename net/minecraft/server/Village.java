@@ -18,8 +18,8 @@ public class Village {
     private int g;
     private int h;
     private int i;
-    private TreeMap<String, Integer> j;
-    private List<Village.Aggressor> k;
+    private final TreeMap<String, Integer> j;
+    private final List<Village.Aggressor> k;
     private int l;
 
     public Village() {
@@ -390,7 +390,7 @@ public class Village {
         for (int j = 0; j < nbttaglist1.size(); ++j) {
             NBTTagCompound nbttagcompound2 = nbttaglist1.get(j);
 
-            if (nbttagcompound2.hasKey("UUID")) {
+            if (nbttagcompound2.hasKey("UUID") && this.a != null && this.a.getMinecraftServer() != null) {
                 UserCache usercache = this.a.getMinecraftServer().getUserCache();
                 GameProfile gameprofile = usercache.a(UUID.fromString(nbttagcompound2.getString("UUID")));
 

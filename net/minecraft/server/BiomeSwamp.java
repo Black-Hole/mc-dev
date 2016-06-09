@@ -9,15 +9,15 @@ public class BiomeSwamp extends BiomeBase {
     protected BiomeSwamp(BiomeBase.a biomebase_a) {
         super(biomebase_a);
         this.t.z = 2;
-        this.t.A = 1;
-        this.t.C = 1;
-        this.t.D = 8;
-        this.t.E = 10;
-        this.t.I = 1;
+        this.t.B = 1;
+        this.t.D = 1;
+        this.t.E = 8;
+        this.t.F = 10;
+        this.t.J = 1;
         this.t.y = 4;
+        this.t.I = 0;
         this.t.H = 0;
-        this.t.G = 0;
-        this.t.B = 5;
+        this.t.C = 5;
         this.u.add(new BiomeBase.BiomeMeta(EntitySlime.class, 1, 1, 1));
     }
 
@@ -50,5 +50,13 @@ public class BiomeSwamp extends BiomeBase {
         }
 
         this.b(world, random, chunksnapshot, i, j, d0);
+    }
+
+    public void a(World world, Random random, BlockPosition blockposition) {
+        super.a(world, random, blockposition);
+        if (random.nextInt(64) == 0) {
+            (new WorldGenFossils()).generate(world, random, blockposition);
+        }
+
     }
 }

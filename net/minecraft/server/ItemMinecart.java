@@ -6,7 +6,7 @@ public class ItemMinecart extends Item {
         private final DispenseBehaviorItem b = new DispenseBehaviorItem();
 
         public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-            EnumDirection enumdirection = BlockDispenser.e(isourceblock.f());
+            EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
             World world = isourceblock.getWorld();
             double d0 = isourceblock.getX() + (double) enumdirection.getAdjacentX() * 1.125D;
             double d1 = Math.floor(isourceblock.getY()) + (double) enumdirection.getAdjacentY();

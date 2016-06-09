@@ -38,7 +38,7 @@ public class EnchantmentFrostWalker extends Enchantment {
                     blockposition_mutableblockposition.c(blockposition_mutableblockposition1.getX(), blockposition_mutableblockposition1.getY() + 1, blockposition_mutableblockposition1.getZ());
                     IBlockData iblockdata = world.getType(blockposition_mutableblockposition);
 
-                    if (iblockdata.getBlock() == Blocks.AIR) {
+                    if (iblockdata.getMaterial() == Material.AIR) {
                         IBlockData iblockdata1 = world.getType(blockposition_mutableblockposition1);
 
                         if (iblockdata1.getMaterial() == Material.WATER && ((Integer) iblockdata1.get(BlockFluids.LEVEL)).intValue() == 0 && world.a(Blocks.FROSTED_ICE, blockposition_mutableblockposition1, false, EnumDirection.DOWN, (Entity) null, (ItemStack) null)) {

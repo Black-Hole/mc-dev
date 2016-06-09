@@ -57,7 +57,7 @@ public class RecipeFireworks implements IRecipe {
             NBTTagCompound nbttagcompound1;
 
             if (j >= 1 && i == 1 && i1 == 0) {
-                this.a = new ItemStack(Items.FIREWORKS);
+                this.a = new ItemStack(Items.FIREWORKS, 3);
                 if (l > 0) {
                     nbttagcompound = new NBTTagCompound();
                     nbttagcompound1 = new NBTTagCompound();

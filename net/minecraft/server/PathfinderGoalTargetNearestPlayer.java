@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
 
     private static final Logger a = LogManager.getLogger();
-    private EntityInsentient b;
+    private final EntityInsentient b;
     private final Predicate<Entity> c;
     private final PathfinderGoalNearestAttackableTarget.DistanceComparator d;
     private EntityLiving e;
@@ -35,7 +35,7 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
                     }
 
                     if (entity.isInvisible()) {
-                        float f = ((EntityHuman) entity).cH();
+                        float f = ((EntityHuman) entity).cL();
 
                         if (f < 0.1F) {
                             f = 0.1F;
@@ -78,8 +78,8 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
         } else if (entityliving instanceof EntityHuman && ((EntityHuman) entityliving).abilities.isInvulnerable) {
             return false;
         } else {
-            ScoreboardTeamBase scoreboardteambase = this.b.aO();
-            ScoreboardTeamBase scoreboardteambase1 = entityliving.aO();
+            ScoreboardTeamBase scoreboardteambase = this.b.aQ();
+            ScoreboardTeamBase scoreboardteambase1 = entityliving.aQ();
 
             if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
                 return false;

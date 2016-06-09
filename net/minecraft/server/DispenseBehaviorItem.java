@@ -8,12 +8,12 @@ public class DispenseBehaviorItem implements IDispenseBehavior {
         ItemStack itemstack1 = this.b(isourceblock, itemstack);
 
         this.a(isourceblock);
-        this.a(isourceblock, BlockDispenser.e(isourceblock.f()));
+        this.a(isourceblock, (EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
         return itemstack1;
     }
 
     protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-        EnumDirection enumdirection = BlockDispenser.e(isourceblock.f());
+        EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
         IPosition iposition = BlockDispenser.a(isourceblock);
         ItemStack itemstack1 = itemstack.cloneAndSubtract(1);
 

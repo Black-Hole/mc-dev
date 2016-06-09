@@ -10,7 +10,7 @@ public interface ISourceBlock extends ILocationSource {
 
     BlockPosition getBlockPosition();
 
-    int f();
+    IBlockData e();
 
     <T extends TileEntity> T getTileEntity();
 }

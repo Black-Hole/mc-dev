@@ -20,12 +20,12 @@ public abstract class StructurePiece {
         this.m = i;
     }
 
-    public final NBTTagCompound b() {
+    public final NBTTagCompound c() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.setString("id", WorldGenFactory.a(this));
         nbttagcompound.set("BB", this.l.g());
-        EnumDirection enumdirection = this.e();
+        EnumDirection enumdirection = this.f();
 
         nbttagcompound.setInt("O", enumdirection == null ? -1 : enumdirection.get2DRotationValue());
         nbttagcompound.setInt("GD", this.m);
@@ -53,11 +53,11 @@ public abstract class StructurePiece {
 
     public abstract boolean a(World world, Random random, StructureBoundingBox structureboundingbox);
 
-    public StructureBoundingBox c() {
+    public StructureBoundingBox d() {
         return this.l;
     }
 
-    public int d() {
+    public int e() {
         return this.m;
     }
 
@@ -72,7 +72,7 @@ public abstract class StructurePiece {
             }
 
             structurepiece = (StructurePiece) iterator.next();
-        } while (structurepiece.c() == null || !structurepiece.c().a(structureboundingbox));
+        } while (structurepiece.d() == null || !structurepiece.d().a(structureboundingbox));
 
         return structurepiece;
     }
@@ -133,7 +133,7 @@ public abstract class StructurePiece {
     }
 
     protected int a(int i, int j) {
-        EnumDirection enumdirection = this.e();
+        EnumDirection enumdirection = this.f();
 
         if (enumdirection == null) {
             return i;
@@ -156,11 +156,11 @@ public abstract class StructurePiece {
     }
 
     protected int d(int i) {
-        return this.e() == null ? i : i + this.l.b;
+        return this.f() == null ? i : i + this.l.b;
     }
 
     protected int b(int i, int j) {
-        EnumDirection enumdirection = this.e();
+        EnumDirection enumdirection = this.f();
 
         if (enumdirection == null) {
             return j;
@@ -207,6 +207,15 @@ public abstract class StructurePiece {
         return !structureboundingbox.b((BaseBlockPosition) blockposition) ? Blocks.AIR.getBlockData() : world.getType(blockposition);
     }
 
+    protected int b(World world, int i, int j, int k, StructureBoundingBox structureboundingbox) {
+        int l = this.a(i, k);
+        int i1 = this.d(j + 1);
+        int j1 = this.b(i, k);
+        BlockPosition blockposition = new BlockPosition(l, i1, j1);
+
+        return !structureboundingbox.b((BaseBlockPosition) blockposition) ? EnumSkyBlock.SKY.c : world.b(EnumSkyBlock.SKY, blockposition);
+    }
+
     protected void a(World world, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1) {
         for (int k1 = j; k1 <= i1; ++k1) {
             for (int l1 = i; l1 <= l; ++l1) {
@@ -249,15 +258,15 @@ public abstract class StructurePiece {
 
     }
 
-    protected void a(World world, StructureBoundingBox structureboundingbox, Random random, float f, int i, int j, int k, int l, int i1, int j1, IBlockData iblockdata, IBlockData iblockdata1, boolean flag) {
-        for (int k1 = j; k1 <= i1; ++k1) {
-            for (int l1 = i; l1 <= l; ++l1) {
-                for (int i2 = k; i2 <= j1; ++i2) {
-                    if (random.nextFloat() <= f && (!flag || this.a(world, l1, k1, i2, structureboundingbox).getMaterial() != Material.AIR)) {
-                        if (k1 != j && k1 != i1 && l1 != i && l1 != l && i2 != k && i2 != j1) {
-                            this.a(world, iblockdata1, l1, k1, i2, structureboundingbox);
+    protected void a(World world, StructureBoundingBox structureboundingbox, Random random, float f, int i, int j, int k, int l, int i1, int j1, IBlockData iblockdata, IBlockData iblockdata1, boolean flag, int k1) {
+        for (int l1 = j; l1 <= i1; ++l1) {
+            for (int i2 = i; i2 <= l; ++i2) {
+                for (int j2 = k; j2 <= j1; ++j2) {
+                    if (random.nextFloat() <= f && (!flag || this.a(world, i2, l1, j2, structureboundingbox).getMaterial() != Material.AIR) && (k1 <= 0 || this.b(world, i2, l1, j2, structureboundingbox) < k1)) {
+                        if (l1 != j && l1 != i1 && i2 != i && i2 != l && j2 != k && j2 != j1) {
+                            this.a(world, iblockdata1, i2, l1, j2, structureboundingbox);
                         } else {
-                            this.a(world, iblockdata, l1, k1, i2, structureboundingbox);
+                            this.a(world, iblockdata, i2, l1, j2, structureboundingbox);
                         }
                     }
                 }
@@ -302,7 +311,7 @@ public abstract class StructurePiece {
 
     }
 
-    protected void b(World world, int i, int j, int k, StructureBoundingBox structureboundingbox) {
+    protected void c(World world, int i, int j, int k, StructureBoundingBox structureboundingbox) {
         BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
 
         if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
@@ -364,9 +373,9 @@ public abstract class StructurePiece {
         }
     }
 
-    protected void a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, EnumDirection enumdirection) {
-        this.a(world, Blocks.WOODEN_DOOR.getBlockData().set(BlockDoor.FACING, enumdirection), i, j, k, structureboundingbox);
-        this.a(world, Blocks.WOODEN_DOOR.getBlockData().set(BlockDoor.FACING, enumdirection).set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), i, j + 1, k, structureboundingbox);
+    protected void a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, EnumDirection enumdirection, BlockDoor blockdoor) {
+        this.a(world, blockdoor.getBlockData().set(BlockDoor.FACING, enumdirection), i, j, k, structureboundingbox);
+        this.a(world, blockdoor.getBlockData().set(BlockDoor.FACING, enumdirection).set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), i, j + 1, k, structureboundingbox);
     }
 
     public void a(int i, int j, int k) {
@@ -374,7 +383,7 @@ public abstract class StructurePiece {
     }
 
     @Nullable
-    public EnumDirection e() {
+    public EnumDirection f() {
         return this.a;
     }
 

@@ -6,8 +6,8 @@ import javax.annotation.Nullable;
 
 public class WorldGenEnder extends WorldGenerator {
 
-    private boolean a = false;
-    private WorldGenEnder.Spike b = null;
+    private boolean a;
+    private WorldGenEnder.Spike b;
     private BlockPosition c;
 
     public WorldGenEnder() {}

@@ -9,6 +9,10 @@ public class EntityCaveSpider extends EntitySpider {
         this.setSize(0.7F, 0.5F);
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "CaveSpider");
+    }
+
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(12.0D);

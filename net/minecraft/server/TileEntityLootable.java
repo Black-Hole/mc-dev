@@ -10,7 +10,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
 
     public TileEntityLootable() {}
 
-    protected boolean d(NBTTagCompound nbttagcompound) {
+    protected boolean c(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.hasKeyOfType("LootTable", 8)) {
             this.m = new MinecraftKey(nbttagcompound.getString("LootTable"));
             this.n = nbttagcompound.getLong("LootTableSeed");
@@ -20,7 +20,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
         }
     }
 
-    protected boolean e(NBTTagCompound nbttagcompound) {
+    protected boolean d(NBTTagCompound nbttagcompound) {
         if (this.m != null) {
             nbttagcompound.setString("LootTable", this.m.toString());
             if (this.n != 0L) {
@@ -49,7 +49,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
             LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
             if (entityhuman != null) {
-                loottableinfo_a.a(entityhuman.dc());
+                loottableinfo_a.a(entityhuman.dg());
             }
 
             loottable.a(this, random, loottableinfo_a.a());

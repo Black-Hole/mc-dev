@@ -32,12 +32,12 @@ public class WorldGenRegistration {
             if (!this.a(world, structureboundingbox, -1)) {
                 return false;
             } else {
-                StructureBoundingBox structureboundingbox1 = this.c();
+                StructureBoundingBox structureboundingbox1 = this.d();
                 BlockPosition blockposition = new BlockPosition(structureboundingbox1.a, structureboundingbox1.b, structureboundingbox1.c);
                 EnumBlockRotation[] aenumblockrotation = EnumBlockRotation.values();
                 MinecraftServer minecraftserver = world.getMinecraftServer();
                 DefinedStructureManager definedstructuremanager = world.getDataManager().h();
-                DefinedStructureInfo definedstructureinfo = new DefinedStructureInfo(EnumBlockMirror.NONE, aenumblockrotation[random.nextInt(aenumblockrotation.length)], false, Blocks.BARRIER, structureboundingbox1);
+                DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(aenumblockrotation[random.nextInt(aenumblockrotation.length)]).a(Blocks.dj).a(structureboundingbox1);
                 DefinedStructure definedstructure = definedstructuremanager.a(minecraftserver, WorldGenRegistration.b.e);
 
                 definedstructure.a(world, blockposition, definedstructureinfo);
@@ -173,7 +173,7 @@ public class WorldGenRegistration {
         private boolean f;
         private boolean g;
         private boolean h;
-        private static WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece i = new WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece((WorldGenRegistration.SyntheticClass_1) null);
+        private static final WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece i = new WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece((WorldGenRegistration.SyntheticClass_1) null);
 
         public WorldGenJungleTemple() {}
 
@@ -403,7 +403,7 @@ public class WorldGenRegistration {
 
     public static class WorldGenPyramidPiece extends WorldGenRegistration.WorldGenScatteredPiece {
 
-        private boolean[] e = new boolean[4];
+        private final boolean[] e = new boolean[4];
 
         public WorldGenPyramidPiece() {}
 
@@ -439,9 +439,9 @@ public class WorldGenRegistration {
 
             for (i = 0; i < this.a; ++i) {
                 for (int j = 0; j < this.c; ++j) {
-                    byte b0 = -5;
+                    boolean flag = true;
 
-                    this.b(world, Blocks.SANDSTONE.getBlockData(), i, b0, j, structureboundingbox);
+                    this.b(world, Blocks.SANDSTONE.getBlockData(), i, -5, j, structureboundingbox);
                 }
             }
 
@@ -646,7 +646,7 @@ public class WorldGenRegistration {
             this.b = i1;
             this.c = j1;
             this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
-            if (this.e().k() == EnumDirection.EnumAxis.Z) {
+            if (this.f().k() == EnumDirection.EnumAxis.Z) {
                 this.l = new StructureBoundingBox(i, j, k, i + l - 1, j + i1 - 1, k + j1 - 1);
             } else {
                 this.l = new StructureBoundingBox(i, j, k, i + j1 - 1, j + i1 - 1, k + l - 1);

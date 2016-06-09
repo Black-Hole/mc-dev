@@ -19,12 +19,12 @@ public class EntityBat extends EntityAmbient {
         this.datawatcher.register(EntityBat.a, Byte.valueOf((byte) 0));
     }
 
-    protected float ce() {
+    protected float ch() {
         return 0.1F;
     }
 
-    protected float cf() {
-        return super.cf() * 0.95F;
+    protected float ci() {
+        return super.ci() * 0.95F;
     }
 
     @Nullable
@@ -32,11 +32,11 @@ public class EntityBat extends EntityAmbient {
         return this.isAsleep() && this.random.nextInt(4) != 0 ? null : SoundEffects.w;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bV() {
         return SoundEffects.y;
     }
 
-    protected SoundEffect bT() {
+    protected SoundEffect bW() {
         return SoundEffects.x;
     }
 
@@ -46,7 +46,7 @@ public class EntityBat extends EntityAmbient {
 
     protected void C(Entity entity) {}
 
-    protected void co() {}
+    protected void cs() {}
 
     protected void initAttributes() {
         super.initAttributes();
@@ -71,7 +71,9 @@ public class EntityBat extends EntityAmbient {
     public void m() {
         super.m();
         if (this.isAsleep()) {
-            this.motX = this.motY = this.motZ = 0.0D;
+            this.motX = 0.0D;
+            this.motY = 0.0D;
+            this.motZ = 0.0D;
             this.locY = (double) MathHelper.floor(this.locY) + 1.0D - (double) this.length;
         } else {
             this.motY *= 0.6000000238418579D;
@@ -85,18 +87,18 @@ public class EntityBat extends EntityAmbient {
         BlockPosition blockposition1 = blockposition.up();
 
         if (this.isAsleep()) {
-            if (!this.world.getType(blockposition1).l()) {
-                this.setAsleep(false);
-                this.world.a((EntityHuman) null, 1025, blockposition, 0);
-            } else {
+            if (this.world.getType(blockposition1).l()) {
                 if (this.random.nextInt(200) == 0) {
-                    this.aP = (float) this.random.nextInt(360);
+                    this.aQ = (float) this.random.nextInt(360);
                 }
 
                 if (this.world.b(this, 4.0D) != null) {
                     this.setAsleep(false);
                     this.world.a((EntityHuman) null, 1025, blockposition, 0);
                 }
+            } else {
+                this.setAsleep(false);
+                this.world.a((EntityHuman) null, 1025, blockposition, 0);
             }
         } else {
             if (this.b != null && (!this.world.isEmpty(this.b) || this.b.getY() < 1)) {
@@ -117,7 +119,7 @@ public class EntityBat extends EntityAmbient {
             float f = (float) (MathHelper.b(this.motZ, this.motX) * 57.2957763671875D) - 90.0F;
             float f1 = MathHelper.g(f - this.yaw);
 
-            this.bf = 0.5F;
+            this.bg = 0.5F;
             this.yaw += f1;
             if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).l()) {
                 this.setAsleep(true);
@@ -150,6 +152,10 @@ public class EntityBat extends EntityAmbient {
         }
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "Bat");
+    }
+
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.datawatcher.set(EntityBat.a, Byte.valueOf(nbttagcompound.getByte("BatFlags")));
@@ -160,7 +166,7 @@ public class EntityBat extends EntityAmbient {
         nbttagcompound.setByte("BatFlags", ((Byte) this.datawatcher.get(EntityBat.a)).byteValue());
     }
 
-    public boolean cG() {
+    public boolean cK() {
         BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
         if (blockposition.getY() >= this.world.K()) {
@@ -175,7 +181,7 @@ public class EntityBat extends EntityAmbient {
                 return false;
             }
 
-            return i > this.random.nextInt(b0) ? false : super.cG();
+            return i > this.random.nextInt(b0) ? false : super.cK();
         }
     }
 
@@ -189,6 +195,6 @@ public class EntityBat extends EntityAmbient {
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.ac;
+        return LootTables.ad;
     }
 }

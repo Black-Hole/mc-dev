@@ -22,7 +22,7 @@ public class CombatTracker {
 
     public void a() {
         this.k();
-        if (this.b.n_()) {
+        if (this.b.m_()) {
             Block block = this.b.world.getType(new BlockPosition(this.b.locX, this.b.getBoundingBox().b, this.b.locZ)).getBlock();
 
             if (block == Blocks.LADDER) {

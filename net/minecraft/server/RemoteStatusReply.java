@@ -6,8 +6,8 @@ import java.io.IOException;
 
 public class RemoteStatusReply {
 
-    private ByteArrayOutputStream a;
-    private DataOutputStream b;
+    private final ByteArrayOutputStream a;
+    private final DataOutputStream b;
 
     public RemoteStatusReply(int i) {
         this.a = new ByteArrayOutputStream(i);

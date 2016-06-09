@@ -85,6 +85,11 @@ public class Block {
     }
 
     @Deprecated
+    public boolean a(IBlockData iblockdata, Entity entity) {
+        return true;
+    }
+
+    @Deprecated
     public int m(IBlockData iblockdata) {
         return this.m;
     }
@@ -342,9 +347,9 @@ public class Block {
     public static void a(World world, BlockPosition blockposition, ItemStack itemstack) {
         if (!world.isClientSide && world.getGameRules().getBoolean("doTileDrops")) {
             float f = 0.5F;
-            double d0 = (double) (world.random.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-            double d1 = (double) (world.random.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-            double d2 = (double) (world.random.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+            double d0 = (double) (world.random.nextFloat() * 0.5F) + 0.25D;
+            double d1 = (double) (world.random.nextFloat() * 0.5F) + 0.25D;
+            double d2 = (double) (world.random.nextFloat() * 0.5F) + 0.25D;
             EntityItem entityitem = new EntityItem(world, (double) blockposition.getX() + d0, (double) blockposition.getY() + d1, (double) blockposition.getZ() + d2, itemstack);
 
             entityitem.q();
@@ -382,7 +387,7 @@ public class Block {
     protected MovingObjectPosition a(BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1, AxisAlignedBB axisalignedbb) {
         Vec3D vec3d2 = vec3d.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
         Vec3D vec3d3 = vec3d1.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
-        MovingObjectPosition movingobjectposition = axisalignedbb.a(vec3d2, vec3d3);
+        MovingObjectPosition movingobjectposition = axisalignedbb.b(vec3d2, vec3d3);
 
         return movingobjectposition == null ? null : new MovingObjectPosition(movingobjectposition.pos.add((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()), movingobjectposition.direction, blockposition);
     }
@@ -830,7 +835,12 @@ public class Block {
         a(210, "repeating_command_block", (new BlockCommand(MaterialMapColor.z)).k().b(6000000.0F).c("repeatingCommandBlock"));
         a(211, "chain_command_block", (new BlockCommand(MaterialMapColor.C)).k().b(6000000.0F).c("chainCommandBlock"));
         a(212, "frosted_ice", (new BlockIceFrost()).c(0.5F).d(3).a(SoundEffectType.f).c("frostedIce"));
-        a(255, "structure_block", (new BlockStructure()).k().b(6000000.0F).c("structureBlock").a(1.0F));
+        a(213, "magma", (new BlockMagma()).c(0.5F).a(SoundEffectType.d).c("magma"));
+        a(214, "nether_wart_block", (new Block(Material.GRASS, MaterialMapColor.D)).a(CreativeModeTab.b).c(1.0F).a(SoundEffectType.a).c("netherWartBlock"));
+        a(215, "red_nether_brick", (new BlockNetherbrick()).c(2.0F).b(10.0F).a(SoundEffectType.d).c("redNetherBrick").a(CreativeModeTab.b));
+        a(216, "bone_block", (new BlockBone()).c("boneBlock"));
+        a(217, "structure_void", (new BlockStructureVoid()).c("structureVoid"));
+        a(255, "structure_block", (new BlockStructure()).k().b(6000000.0F).c("structureBlock"));
         Block.REGISTRY.a();
         Iterator iterator = Block.REGISTRY.iterator();
 

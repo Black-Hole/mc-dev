@@ -56,7 +56,7 @@ public class ItemBanner extends ItemBlock {
 
     public static EnumColor b(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.a("BlockEntityTag", false);
-        EnumColor enumcolor = null;
+        EnumColor enumcolor;
 
         if (nbttagcompound != null && nbttagcompound.hasKey("Base")) {
             enumcolor = EnumColor.fromInvColorIndex(nbttagcompound.getInt("Base"));

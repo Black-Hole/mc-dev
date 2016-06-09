@@ -2,22 +2,22 @@ package net.minecraft.server;
 
 public enum EnumHorseType {
 
-    HORSE("horse", "horse_white", SoundEffects.co, SoundEffects.cv, SoundEffects.cs, LootTables.E), DONKEY("donkey", "donkey", SoundEffects.ax, SoundEffects.aB, SoundEffects.aA, LootTables.E), MULE("mule", "mule", SoundEffects.dy, SoundEffects.dA, SoundEffects.dz, LootTables.E), ZOMBIE("zombiehorse", "horse_zombie", SoundEffects.hm, SoundEffects.ho, SoundEffects.hn, LootTables.F), SKELETON("skeletonhorse", "horse_skeleton", SoundEffects.fk, SoundEffects.fm, SoundEffects.fl, LootTables.G);
+    HORSE("EntityHorse", "horse_white", SoundEffects.cp, SoundEffects.cw, SoundEffects.ct, LootTables.F), DONKEY("Donkey", "donkey", SoundEffects.ax, SoundEffects.aB, SoundEffects.aA, LootTables.F), MULE("Mule", "mule", SoundEffects.dD, SoundEffects.dF, SoundEffects.dE, LootTables.F), ZOMBIE("ZombieHorse", "horse_zombie", SoundEffects.hF, SoundEffects.hH, SoundEffects.hG, LootTables.G), SKELETON("SkeletonHorse", "horse_skeleton", SoundEffects.fv, SoundEffects.fx, SoundEffects.fw, LootTables.H);
 
     private final ChatMessage f;
     private final MinecraftKey g;
     private final SoundEffect h;
     private final SoundEffect i;
     private final SoundEffect j;
-    private MinecraftKey k;
+    private final MinecraftKey k;
 
     private EnumHorseType(String s, String s1, SoundEffect soundeffect, SoundEffect soundeffect1, SoundEffect soundeffect2, MinecraftKey minecraftkey) {
-        this.k = minecraftkey;
         this.f = new ChatMessage("entity." + s + ".name", new Object[0]);
         this.g = new MinecraftKey("textures/entity/horse/" + s1 + ".png");
         this.h = soundeffect1;
         this.i = soundeffect;
         this.j = soundeffect2;
+        this.k = minecraftkey;
     }
 
     public SoundEffect a() {

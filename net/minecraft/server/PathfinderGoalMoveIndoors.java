@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class PathfinderGoalMoveIndoors extends PathfinderGoal {
 
-    private EntityCreature a;
+    private final EntityCreature a;
     private VillageDoor b;
     private int c = -1;
     private int d = -1;

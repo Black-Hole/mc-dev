@@ -6,12 +6,12 @@ public class PathfinderGoalArrowAttack extends PathfinderGoal {
     private final IRangedEntity b;
     private EntityLiving c;
     private int d;
-    private double e;
+    private final double e;
     private int f;
-    private int g;
-    private int h;
-    private float i;
-    private float j;
+    private final int g;
+    private final int h;
+    private final float i;
+    private final float j;
 
     public PathfinderGoalArrowAttack(IRangedEntity irangedentity, double d0, int i, float f) {
         this(irangedentity, d0, i, i, f);

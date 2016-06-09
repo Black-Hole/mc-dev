@@ -30,10 +30,10 @@ public class CommandStats extends CommandAbstract {
         } else {
             boolean flag;
 
-            if (astring[0].equals("entity")) {
+            if ("entity".equals(astring[0])) {
                 flag = false;
             } else {
-                if (!astring[0].equals("block")) {
+                if (!"block".equals(astring[0])) {
                     throw new ExceptionUsage("commands.stats.usage", new Object[0]);
                 }
 
@@ -99,18 +99,18 @@ public class CommandStats extends CommandAbstract {
                     }
 
                     if (tileentity instanceof TileEntityCommand) {
-                        commandobjectiveexecutor = ((TileEntityCommand) tileentity).d();
+                        commandobjectiveexecutor = ((TileEntityCommand) tileentity).e();
                     } else {
                         if (!(tileentity instanceof TileEntitySign)) {
                             throw new CommandException("commands.stats.noCompatibleBlock", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
                         }
 
-                        commandobjectiveexecutor = ((TileEntitySign) tileentity).e();
+                        commandobjectiveexecutor = ((TileEntitySign) tileentity).g();
                     }
                 } else {
                     Entity entity = b(minecraftserver, icommandlistener, astring[1]);
 
-                    commandobjectiveexecutor = entity.bq();
+                    commandobjectiveexecutor = entity.bs();
                 }
 
                 if ("set".equals(s)) {
@@ -139,7 +139,7 @@ public class CommandStats extends CommandAbstract {
     }
 
     public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "entity", "block"}) : (astring.length == 2 && astring[0].equals("entity") ? a(astring, minecraftserver.getPlayers()) : (astring.length >= 2 && astring.length <= 4 && astring[0].equals("block") ? a(astring, 1, blockposition) : ((astring.length != 3 || !astring[0].equals("entity")) && (astring.length != 5 || !astring[0].equals("block")) ? ((astring.length != 4 || !astring[0].equals("entity")) && (astring.length != 6 || !astring[0].equals("block")) ? ((astring.length != 6 || !astring[0].equals("entity")) && (astring.length != 8 || !astring[0].equals("block")) ? Collections.emptyList() : a(astring, (Collection) this.a(minecraftserver))) : a(astring, CommandObjectiveExecutor.EnumCommandResult.c())) : a(astring, new String[] { "set", "clear"}))));
+        return astring.length == 1 ? a(astring, new String[] { "entity", "block"}) : (astring.length == 2 && "entity".equals(astring[0]) ? a(astring, minecraftserver.getPlayers()) : (astring.length >= 2 && astring.length <= 4 && "block".equals(astring[0]) ? a(astring, 1, blockposition) : ((astring.length != 3 || !"entity".equals(astring[0])) && (astring.length != 5 || !"block".equals(astring[0])) ? ((astring.length != 4 || !"entity".equals(astring[0])) && (astring.length != 6 || !"block".equals(astring[0])) ? ((astring.length != 6 || !"entity".equals(astring[0])) && (astring.length != 8 || !"block".equals(astring[0])) ? Collections.emptyList() : a(astring, (Collection) this.a(minecraftserver))) : a(astring, CommandObjectiveExecutor.EnumCommandResult.c())) : a(astring, new String[] { "set", "clear"}))));
     }
 
     protected List<String> a(MinecraftServer minecraftserver) {
@@ -159,6 +159,6 @@ public class CommandStats extends CommandAbstract {
     }
 
     public boolean isListStart(String[] astring, int i) {
-        return astring.length > 0 && astring[0].equals("entity") && i == 1;
+        return astring.length > 0 && "entity".equals(astring[0]) && i == 1;
     }
 }

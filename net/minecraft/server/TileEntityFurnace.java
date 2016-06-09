@@ -63,6 +63,10 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
         this.m = s;
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList("Furnace", new String[] { "Items"})));
+    }
+
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
@@ -121,7 +125,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
         return this.burnTime > 0;
     }
 
-    public void c() {
+    public void E_() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
 
@@ -136,7 +140,8 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
                 }
             } else {
                 if (!this.isBurning() && this.canBurn()) {
-                    this.ticksForCurrentFuel = this.burnTime = fuelTime(this.items[1]);
+                    this.burnTime = fuelTime(this.items[1]);
+                    this.ticksForCurrentFuel = this.burnTime;
                     if (this.isBurning()) {
                         flag1 = true;
                         if (this.items[1] != null) {
@@ -233,7 +238,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
                 }
             }
 
-            return item instanceof ItemTool && ((ItemTool) item).h().equals("WOOD") ? 200 : (item instanceof ItemSword && ((ItemSword) item).h().equals("WOOD") ? 200 : (item instanceof ItemHoe && ((ItemHoe) item).g().equals("WOOD") ? 200 : (item == Items.STICK ? 100 : (item == Items.COAL ? 1600 : (item == Items.LAVA_BUCKET ? 20000 : (item == Item.getItemOf(Blocks.SAPLING) ? 100 : (item == Items.BLAZE_ROD ? 2400 : 0)))))));
+            return item instanceof ItemTool && "WOOD".equals(((ItemTool) item).h()) ? 200 : (item instanceof ItemSword && "WOOD".equals(((ItemSword) item).h()) ? 200 : (item instanceof ItemHoe && "WOOD".equals(((ItemHoe) item).g()) ? 200 : (item == Items.STICK ? 100 : (item == Items.COAL ? 1600 : (item == Items.LAVA_BUCKET ? 20000 : (item == Item.getItemOf(Blocks.SAPLING) ? 100 : (item == Items.BLAZE_ROD ? 2400 : 0)))))));
         }
     }
 

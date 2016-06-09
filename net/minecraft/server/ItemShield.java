@@ -8,6 +8,7 @@ public class ItemShield extends Item {
         this.setMaxDurability(336);
         this.a(new MinecraftKey("blocking"), new IDynamicTexture() {
         });
+        BlockDispenser.REGISTRY.a(this, ItemArmor.b);
     }
 
     public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {

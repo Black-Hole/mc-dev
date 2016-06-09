@@ -32,10 +32,10 @@ public class CommandAchievement extends CommandAbstract {
         } else {
             final Statistic statistic = StatisticList.getStatistic(astring[1]);
 
-            if ((statistic != null || astring[1].equals("*")) && (statistic == null || statistic.d())) {
+            if ((statistic != null || "*".equals(astring[1])) && (statistic == null || statistic.d())) {
                 final EntityPlayer entityplayer = astring.length >= 3 ? a(minecraftserver, icommandlistener, astring[2]) : a(icommandlistener);
-                boolean flag = astring[0].equalsIgnoreCase("give");
-                boolean flag1 = astring[0].equalsIgnoreCase("take");
+                boolean flag = "give".equalsIgnoreCase(astring[0]);
+                boolean flag1 = "take".equalsIgnoreCase(astring[0]);
 
                 if (flag || flag1) {
                     if (statistic == null) {

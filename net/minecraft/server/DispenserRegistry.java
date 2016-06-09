@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 public class DispenserRegistry {
 
     public static final PrintStream a = System.out;
-    private static boolean b = false;
+    private static boolean b;
     private static final Logger c = LogManager.getLogger();
 
     public static boolean a() {
@@ -102,7 +102,7 @@ public class DispenserRegistry {
         });
         BlockDispenser.REGISTRY.a(Items.SPAWN_EGG, new DispenseBehaviorItem() {
             public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-                EnumDirection enumdirection = BlockDispenser.e(isourceblock.f());
+                EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
                 double d0 = isourceblock.getX() + (double) enumdirection.getAdjacentX();
                 double d1 = (double) ((float) isourceblock.getBlockPosition().getY() + 0.2F);
                 double d2 = isourceblock.getZ() + (double) enumdirection.getAdjacentZ();
@@ -119,7 +119,7 @@ public class DispenserRegistry {
         });
         BlockDispenser.REGISTRY.a(Items.FIREWORKS, new DispenseBehaviorItem() {
             public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-                EnumDirection enumdirection = BlockDispenser.e(isourceblock.f());
+                EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
                 double d0 = isourceblock.getX() + (double) enumdirection.getAdjacentX();
                 double d1 = (double) ((float) isourceblock.getBlockPosition().getY() + 0.2F);
                 double d2 = isourceblock.getZ() + (double) enumdirection.getAdjacentZ();
@@ -136,7 +136,7 @@ public class DispenserRegistry {
         });
         BlockDispenser.REGISTRY.a(Items.FIRE_CHARGE, new DispenseBehaviorItem() {
             public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-                EnumDirection enumdirection = BlockDispenser.e(isourceblock.f());
+                EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
                 IPosition iposition = BlockDispenser.a(isourceblock);
                 double d0 = iposition.getX() + (double) ((float) enumdirection.getAdjacentX() * 0.3F);
                 double d1 = iposition.getY() + (double) ((float) enumdirection.getAdjacentY() * 0.3F);
@@ -167,7 +167,7 @@ public class DispenserRegistry {
 
             public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
                 ItemBucket itembucket = (ItemBucket) itemstack.getItem();
-                BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.e(isourceblock.f()));
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
 
                 if (itembucket.a((EntityHuman) null, isourceblock.getWorld(), blockposition)) {
                     itemstack.setItem(Items.BUCKET);
@@ -186,7 +186,7 @@ public class DispenserRegistry {
 
             public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
                 World world = isourceblock.getWorld();
-                BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.e(isourceblock.f()));
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
                 IBlockData iblockdata = world.getType(blockposition);
                 Block block = iblockdata.getBlock();
                 Material material = iblockdata.getMaterial();
@@ -218,7 +218,7 @@ public class DispenserRegistry {
 
             protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
                 World world = isourceblock.getWorld();
-                BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.e(isourceblock.f()));
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
 
                 if (world.isEmpty(blockposition)) {
                     world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
@@ -250,7 +250,7 @@ public class DispenserRegistry {
             protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
                 if (EnumColor.WHITE == EnumColor.fromInvColorIndex(itemstack.getData())) {
                     World world = isourceblock.getWorld();
-                    BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.e(isourceblock.f()));
+                    BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
 
                     if (ItemDye.a(itemstack, world, blockposition)) {
                         if (!world.isClientSide) {
@@ -278,11 +278,11 @@ public class DispenserRegistry {
         BlockDispenser.REGISTRY.a(Item.getItemOf(Blocks.TNT), new DispenseBehaviorItem() {
             protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
                 World world = isourceblock.getWorld();
-                BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.e(isourceblock.f()));
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
                 EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, (EntityLiving) null);
 
                 world.addEntity(entitytntprimed);
-                world.a((EntityHuman) null, entitytntprimed.locX, entitytntprimed.locY, entitytntprimed.locZ, SoundEffects.gk, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.a((EntityHuman) null, entitytntprimed.locX, entitytntprimed.locY, entitytntprimed.locZ, SoundEffects.gz, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 --itemstack.count;
                 return itemstack;
             }
@@ -292,7 +292,7 @@ public class DispenserRegistry {
 
             protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
                 World world = isourceblock.getWorld();
-                EnumDirection enumdirection = BlockDispenser.e(isourceblock.f());
+                EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
                 BlockSkull blockskull = Blocks.SKULL;
 
@@ -351,7 +351,7 @@ public class DispenserRegistry {
 
             protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
                 World world = isourceblock.getWorld();
-                BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.e(isourceblock.f()));
+                BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
                 BlockPumpkin blockpumpkin = (BlockPumpkin) Blocks.PUMPKIN;
 
                 if (world.isEmpty(blockposition) && blockpumpkin.b(world, blockposition)) {
@@ -418,7 +418,7 @@ public class DispenserRegistry {
         }
 
         public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
-            EnumDirection enumdirection = BlockDispenser.e(isourceblock.f());
+            EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
             World world = isourceblock.getWorld();
             double d0 = isourceblock.getX() + (double) ((float) enumdirection.getAdjacentX() * 1.125F);
             double d1 = isourceblock.getY() + (double) ((float) enumdirection.getAdjacentY() * 1.125F);

@@ -31,7 +31,7 @@ public class WorldData {
     private int u;
     private boolean v;
     private int w;
-    private WorldSettings.EnumGamemode x;
+    private EnumGamemode x;
     private boolean y;
     private boolean z;
     private boolean A;
@@ -53,11 +53,7 @@ public class WorldData {
     protected WorldData() {
         this.f = WorldType.NORMAL;
         this.g = "";
-        this.E = 0.0D;
-        this.F = 0.0D;
         this.G = 6.0E7D;
-        this.H = 0L;
-        this.I = 0.0D;
         this.J = 5.0D;
         this.K = 0.2D;
         this.L = 5;
@@ -66,14 +62,22 @@ public class WorldData {
         this.O = new GameRules();
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.LEVEL, new DataInspector() {
+            public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
+                if (nbttagcompound.hasKeyOfType("Player", 10)) {
+                    nbttagcompound.set("Player", dataconverter.a(DataConverterTypes.PLAYER, nbttagcompound.getCompound("Player"), i));
+                }
+
+                return nbttagcompound;
+            }
+        });
+    }
+
     public WorldData(NBTTagCompound nbttagcompound) {
         this.f = WorldType.NORMAL;
         this.g = "";
-        this.E = 0.0D;
-        this.F = 0.0D;
         this.G = 6.0E7D;
-        this.H = 0L;
-        this.I = 0.0D;
         this.J = 5.0D;
         this.K = 0.2D;
         this.L = 5;
@@ -111,7 +115,7 @@ public class WorldData {
             }
         }
 
-        this.x = WorldSettings.EnumGamemode.getById(nbttagcompound.getInt("GameType"));
+        this.x = EnumGamemode.getById(nbttagcompound.getInt("GameType"));
         if (nbttagcompound.hasKeyOfType("MapFeatures", 99)) {
             this.y = nbttagcompound.getBoolean("MapFeatures");
         } else {
@@ -147,7 +151,7 @@ public class WorldData {
         if (nbttagcompound.hasKeyOfType("allowCommands", 99)) {
             this.A = nbttagcompound.getBoolean("allowCommands");
         } else {
-            this.A = this.x == WorldSettings.EnumGamemode.CREATIVE;
+            this.A = this.x == EnumGamemode.CREATIVE;
         }
 
         if (nbttagcompound.hasKeyOfType("Player", 10)) {
@@ -219,11 +223,7 @@ public class WorldData {
     public WorldData(WorldSettings worldsettings, String s) {
         this.f = WorldType.NORMAL;
         this.g = "";
-        this.E = 0.0D;
-        this.F = 0.0D;
         this.G = 6.0E7D;
-        this.H = 0L;
-        this.I = 0.0D;
         this.J = 5.0D;
         this.K = 0.2D;
         this.L = 5;
@@ -249,11 +249,7 @@ public class WorldData {
     public WorldData(WorldData worlddata) {
         this.f = WorldType.NORMAL;
         this.g = "";
-        this.E = 0.0D;
-        this.F = 0.0D;
         this.G = 6.0E7D;
-        this.H = 0L;
-        this.I = 0.0D;
         this.J = 5.0D;
         this.K = 0.2D;
         this.L = 5;
@@ -311,11 +307,11 @@ public class WorldData {
     private void a(NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
         NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
-        nbttagcompound2.setString("Name", "1.9.4");
-        nbttagcompound2.setInt("Id", 184);
+        nbttagcompound2.setString("Name", "1.10");
+        nbttagcompound2.setInt("Id", 510);
         nbttagcompound2.setBoolean("Snapshot", false);
         nbttagcompound.set("Version", nbttagcompound2);
-        nbttagcompound.setInt("DataVersion", 184);
+        nbttagcompound.setInt("DataVersion", 510);
         nbttagcompound.setLong("RandomSeed", this.e);
         nbttagcompound.setString("generatorName", this.f.name());
         nbttagcompound.setInt("generatorVersion", this.f.getVersion());
@@ -468,7 +464,7 @@ public class WorldData {
         this.u = i;
     }
 
-    public WorldSettings.EnumGamemode getGameType() {
+    public EnumGamemode getGameType() {
         return this.x;
     }
 
@@ -480,8 +476,8 @@ public class WorldData {
         this.y = flag;
     }
 
-    public void setGameType(WorldSettings.EnumGamemode worldsettings_enumgamemode) {
-        this.x = worldsettings_enumgamemode;
+    public void setGameType(EnumGamemode enumgamemode) {
+        this.x = enumgamemode;
     }
 
     public boolean isHardcore() {

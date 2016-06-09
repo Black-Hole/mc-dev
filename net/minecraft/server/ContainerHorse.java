@@ -4,16 +4,16 @@ import javax.annotation.Nullable;
 
 public class ContainerHorse extends Container {
 
-    private IInventory a;
-    private EntityHorse f;
+    private final IInventory a;
+    private final EntityHorse f;
 
     public ContainerHorse(IInventory iinventory, final IInventory iinventory1, final EntityHorse entityhorse, EntityHuman entityhuman) {
         this.a = iinventory1;
         this.f = entityhorse;
-        byte b0 = 3;
+        boolean flag = true;
 
         iinventory1.startOpen(entityhuman);
-        int i = (b0 - 4) * 18;
+        boolean flag1 = true;
 
         this.a(new Slot(iinventory1, 0, 8, 18) {
             public boolean isAllowed(@Nullable ItemStack itemstack) {
@@ -25,25 +25,25 @@ public class ContainerHorse extends Container {
                 return super.isAllowed(itemstack) && entityhorse.getType().j() && EnumHorseArmor.b(itemstack.getItem());
             }
         });
+        int i;
         int j;
-        int k;
 
         if (entityhorse.hasChest()) {
-            for (j = 0; j < b0; ++j) {
-                for (k = 0; k < 5; ++k) {
-                    this.a(new Slot(iinventory1, 2 + k + j * 5, 80 + k * 18, 18 + j * 18));
+            for (i = 0; i < 3; ++i) {
+                for (j = 0; j < 5; ++j) {
+                    this.a(new Slot(iinventory1, 2 + j + i * 5, 80 + j * 18, 18 + i * 18));
                 }
             }
         }
 
-        for (j = 0; j < 3; ++j) {
-            for (k = 0; k < 9; ++k) {
-                this.a(new Slot(iinventory, k + j * 9 + 9, 8 + k * 18, 102 + j * 18 + i));
+        for (i = 0; i < 3; ++i) {
+            for (j = 0; j < 9; ++j) {
+                this.a(new Slot(iinventory, j + i * 9 + 9, 8 + j * 18, 102 + i * 18 + -18));
             }
         }
 
-        for (j = 0; j < 9; ++j) {
-            this.a(new Slot(iinventory, j, 8 + j * 18, 160 + i));
+        for (i = 0; i < 9; ++i) {
+            this.a(new Slot(iinventory, i, 8 + i * 18, 142));
         }
 
     }

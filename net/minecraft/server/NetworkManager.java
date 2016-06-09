@@ -221,7 +221,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     public void a() {
         this.m();
         if (this.m instanceof ITickable) {
-            ((ITickable) this.m).c();
+            ((ITickable) this.m).E_();
         }
 
         this.channel.flush();

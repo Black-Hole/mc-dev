@@ -96,6 +96,11 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         this.b = flag;
     }
 
+    public static void b(DataConverterManager dataconvertermanager, String s) {
+        EntityMinecartAbstract.a(dataconvertermanager, s);
+        dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItemList(s, new String[] { "Items"})));
+    }
+
     protected void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         if (this.c != null) {
@@ -200,7 +205,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
             LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
             if (entityhuman != null) {
-                loottableinfo_a.a(entityhuman.dc());
+                loottableinfo_a.a(entityhuman.dg());
             }
 
             loottable.a(this, random, loottableinfo_a.a());

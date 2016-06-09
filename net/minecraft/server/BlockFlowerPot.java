@@ -40,7 +40,7 @@ public class BlockFlowerPot extends BlockTileEntity {
 
             if (tileentityflowerpot == null) {
                 return false;
-            } else if (tileentityflowerpot.d() != null) {
+            } else if (tileentityflowerpot.getItem() != null) {
                 return false;
             } else {
                 Block block = Block.asBlock(itemstack.getItem());
@@ -72,7 +72,7 @@ public class BlockFlowerPot extends BlockTileEntity {
         TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
 
         if (tileentityflowerpot != null) {
-            ItemStack itemstack = tileentityflowerpot.c();
+            ItemStack itemstack = tileentityflowerpot.d();
 
             if (itemstack != null) {
                 return itemstack;
@@ -97,8 +97,8 @@ public class BlockFlowerPot extends BlockTileEntity {
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
         TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
 
-        if (tileentityflowerpot != null && tileentityflowerpot.d() != null) {
-            a(world, blockposition, new ItemStack(tileentityflowerpot.d(), 1, tileentityflowerpot.e()));
+        if (tileentityflowerpot != null && tileentityflowerpot.getItem() != null) {
+            a(world, blockposition, new ItemStack(tileentityflowerpot.getItem(), 1, tileentityflowerpot.getData()));
         }
 
         super.remove(world, blockposition, iblockdata);
@@ -210,10 +210,10 @@ public class BlockFlowerPot extends BlockTileEntity {
 
         if (tileentity instanceof TileEntityFlowerPot) {
             TileEntityFlowerPot tileentityflowerpot = (TileEntityFlowerPot) tileentity;
-            Item item = tileentityflowerpot.d();
+            Item item = tileentityflowerpot.getItem();
 
             if (item instanceof ItemBlock) {
-                int i = tileentityflowerpot.e();
+                int i = tileentityflowerpot.getData();
                 Block block = Block.asBlock(item);
 
                 if (block == Blocks.SAPLING) {

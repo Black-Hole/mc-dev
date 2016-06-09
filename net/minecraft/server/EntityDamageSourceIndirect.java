@@ -13,7 +13,7 @@ public class EntityDamageSourceIndirect extends EntityDamageSource {
 
     @Nullable
     public Entity i() {
-        return this.s;
+        return this.t;
     }
 
     @Nullable
@@ -22,7 +22,7 @@ public class EntityDamageSourceIndirect extends EntityDamageSource {
     }
 
     public IChatBaseComponent getLocalizedDeathMessage(EntityLiving entityliving) {
-        IChatBaseComponent ichatbasecomponent = this.owner == null ? this.s.getScoreboardDisplayName() : this.owner.getScoreboardDisplayName();
+        IChatBaseComponent ichatbasecomponent = this.owner == null ? this.t.getScoreboardDisplayName() : this.owner.getScoreboardDisplayName();
         ItemStack itemstack = this.owner instanceof EntityLiving ? ((EntityLiving) this.owner).getItemInMainHand() : null;
         String s = "death.attack." + this.translationIndex;
         String s1 = s + ".item";

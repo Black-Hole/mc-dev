@@ -6,11 +6,11 @@ public abstract class EntityWaterAnimal extends EntityInsentient implements IAni
         super(world);
     }
 
-    public boolean bC() {
+    public boolean bE() {
         return true;
     }
 
-    public boolean cG() {
+    public boolean cK() {
         return true;
     }
 
@@ -47,7 +47,7 @@ public abstract class EntityWaterAnimal extends EntityInsentient implements IAni
 
     }
 
-    public boolean be() {
+    public boolean bg() {
         return false;
     }
 }

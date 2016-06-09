@@ -58,12 +58,14 @@ public class WorldGenFlatInfo {
                 stringbuilder.append(",");
             }
 
-            stringbuilder.append(((WorldGenFlatLayerInfo) this.layers.get(i)).toString());
+            stringbuilder.append(this.layers.get(i));
         }
 
         stringbuilder.append(";");
         stringbuilder.append(this.c);
-        if (!this.structures.isEmpty()) {
+        if (this.structures.isEmpty()) {
+            stringbuilder.append(";");
+        } else {
             stringbuilder.append(";");
             i = 0;
             Iterator iterator = this.structures.entrySet().iterator();
@@ -98,8 +100,6 @@ public class WorldGenFlatInfo {
                     stringbuilder.append(")");
                 }
             }
-        } else {
-            stringbuilder.append(";");
         }
 
         return stringbuilder.toString();
@@ -125,7 +125,7 @@ public class WorldGenFlatInfo {
             }
         }
 
-        Block block = null;
+        Block block;
 
         try {
             String s1 = astring[astring.length - 1];
@@ -233,12 +233,15 @@ public class WorldGenFlatInfo {
                                 worldgenflatinfo.b().put(astring3[0], hashmap);
                                 if (astring3.length > 1 && astring3[1].endsWith(")") && astring3[1].length() > 1) {
                                     String[] astring4 = astring3[1].substring(0, astring3[1].length() - 1).split(" ");
+                                    String[] astring5 = astring4;
+                                    int j1 = astring4.length;
 
-                                    for (int j1 = 0; j1 < astring4.length; ++j1) {
-                                        String[] astring5 = astring4[j1].split("=", 2);
+                                    for (int k1 = 0; k1 < j1; ++k1) {
+                                        String s2 = astring5[k1];
+                                        String[] astring6 = s2.split("=", 2);
 
-                                        if (astring5.length == 2) {
-                                            hashmap.put(astring5[0], astring5[1]);
+                                        if (astring6.length == 2) {
+                                            hashmap.put(astring6[0], astring6[1]);
                                         }
                                     }
                                 }

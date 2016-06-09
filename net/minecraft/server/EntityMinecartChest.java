@@ -10,6 +10,10 @@ public class EntityMinecartChest extends EntityMinecartContainer {
         super(world, d0, d1, d2);
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityMinecartContainer.b(dataconvertermanager, "MinecartChest");
+    }
+
     public void a(DamageSource damagesource) {
         super.a(damagesource);
         if (this.world.getGameRules().getBoolean("doEntityDrops")) {
@@ -30,7 +34,7 @@ public class EntityMinecartChest extends EntityMinecartContainer {
         return Blocks.CHEST.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH);
     }
 
-    public int A() {
+    public int z() {
         return 8;
     }
 

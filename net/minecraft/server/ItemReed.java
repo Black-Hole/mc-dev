@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class ItemReed extends Item {
 
-    private Block a;
+    private final Block a;
 
     public ItemReed(Block block) {
         this.a = block;

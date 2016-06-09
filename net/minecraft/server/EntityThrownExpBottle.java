@@ -14,6 +14,10 @@ public class EntityThrownExpBottle extends EntityProjectile {
         super(world, d0, d1, d2);
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityProjectile.a(dataconvertermanager, "ThrowableExpBottle");
+    }
+
     protected float j() {
         return 0.07F;
     }

@@ -14,8 +14,8 @@ public class RemoteControlSession extends RemoteConnectionThread {
     private static final Logger h = LogManager.getLogger();
     private boolean i;
     private Socket j;
-    private byte[] k = new byte[1460];
-    private String l;
+    private final byte[] k = new byte[1460];
+    private final String l;
 
     RemoteControlSession(IMinecraftServer iminecraftserver, Socket socket) {
         super(iminecraftserver, "RCON Client");

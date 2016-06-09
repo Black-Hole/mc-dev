@@ -9,6 +9,10 @@ public class EntityGiantZombie extends EntityMonster {
         this.setSize(this.width * 6.0F, this.length * 6.0F);
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "Giant");
+    }
+
     public float getHeadHeight() {
         return 10.440001F;
     }

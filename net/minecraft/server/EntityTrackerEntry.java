@@ -12,10 +12,10 @@ import org.apache.logging.log4j.Logger;
 public class EntityTrackerEntry {
 
     private static final Logger c = LogManager.getLogger();
-    private Entity tracker;
-    private int e;
+    private final Entity tracker;
+    private final int e;
     private int f;
-    private int g;
+    private final int g;
     private long xLoc;
     private long yLoc;
     private long zLoc;
@@ -30,13 +30,13 @@ public class EntityTrackerEntry {
     private double r;
     private double s;
     private boolean isMoving;
-    private boolean u;
+    private final boolean u;
     private int v;
     private List<Entity> w = Collections.emptyList();
     private boolean x;
     private boolean y;
     public boolean b;
-    public Set<EntityPlayer> trackedPlayers = Sets.newHashSet();
+    public final Set<EntityPlayer> trackedPlayers = Sets.newHashSet();
 
     public EntityTrackerEntry(Entity entity, int i, int j, int k, boolean flag) {
         this.tracker = entity;
@@ -72,7 +72,7 @@ public class EntityTrackerEntry {
             this.scanPlayers(list);
         }
 
-        List list1 = this.tracker.bv();
+        List list1 = this.tracker.bx();
 
         if (!list1.equals(this.w)) {
             this.w = list1;
@@ -106,30 +106,46 @@ public class EntityTrackerEntry {
         if (this.a % this.g == 0 || this.tracker.impulse || this.tracker.getDataWatcher().a()) {
             int i;
 
-            if (!this.tracker.isPassenger()) {
+            if (this.tracker.isPassenger()) {
+                i = MathHelper.d(this.tracker.yaw * 256.0F / 360.0F);
+                int j = MathHelper.d(this.tracker.pitch * 256.0F / 360.0F);
+                boolean flag = Math.abs(i - this.yRot) >= 1 || Math.abs(j - this.xRot) >= 1;
+
+                if (flag) {
+                    this.broadcast(new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) i, (byte) j, this.tracker.onGround));
+                    this.yRot = i;
+                    this.xRot = j;
+                }
+
+                this.xLoc = EntityTracker.a(this.tracker.locX);
+                this.yLoc = EntityTracker.a(this.tracker.locY);
+                this.zLoc = EntityTracker.a(this.tracker.locZ);
+                this.d();
+                this.x = true;
+            } else {
                 ++this.v;
-                long j = EntityTracker.a(this.tracker.locX);
-                long k = EntityTracker.a(this.tracker.locY);
-                long l = EntityTracker.a(this.tracker.locZ);
-                int i1 = MathHelper.d(this.tracker.yaw * 256.0F / 360.0F);
-                int j1 = MathHelper.d(this.tracker.pitch * 256.0F / 360.0F);
-                long k1 = j - this.xLoc;
-                long l1 = k - this.yLoc;
-                long i2 = l - this.zLoc;
+                long k = EntityTracker.a(this.tracker.locX);
+                long l = EntityTracker.a(this.tracker.locY);
+                long i1 = EntityTracker.a(this.tracker.locZ);
+                int j1 = MathHelper.d(this.tracker.yaw * 256.0F / 360.0F);
+                int k1 = MathHelper.d(this.tracker.pitch * 256.0F / 360.0F);
+                long l1 = k - this.xLoc;
+                long i2 = l - this.yLoc;
+                long j2 = i1 - this.zLoc;
                 Object object = null;
-                boolean flag = k1 * k1 + l1 * l1 + i2 * i2 >= 128L || this.a % 60 == 0;
-                boolean flag1 = Math.abs(i1 - this.yRot) >= 1 || Math.abs(j1 - this.xRot) >= 1;
+                boolean flag1 = l1 * l1 + i2 * i2 + j2 * j2 >= 128L || this.a % 60 == 0;
+                boolean flag2 = Math.abs(j1 - this.yRot) >= 1 || Math.abs(k1 - this.xRot) >= 1;
 
                 if (this.a > 0 || this.tracker instanceof EntityArrow) {
-                    if (k1 >= -32768L && k1 < 32768L && l1 >= -32768L && l1 < 32768L && i2 >= -32768L && i2 < 32768L && this.v <= 400 && !this.x && this.y == this.tracker.onGround) {
-                        if ((!flag || !flag1) && !(this.tracker instanceof EntityArrow)) {
-                            if (flag) {
-                                object = new PacketPlayOutEntity.PacketPlayOutRelEntityMove(this.tracker.getId(), k1, l1, i2, this.tracker.onGround);
-                            } else if (flag1) {
-                                object = new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) i1, (byte) j1, this.tracker.onGround);
+                    if (l1 >= -32768L && l1 < 32768L && i2 >= -32768L && i2 < 32768L && j2 >= -32768L && j2 < 32768L && this.v <= 400 && !this.x && this.y == this.tracker.onGround) {
+                        if ((!flag1 || !flag2) && !(this.tracker instanceof EntityArrow)) {
+                            if (flag1) {
+                                object = new PacketPlayOutEntity.PacketPlayOutRelEntityMove(this.tracker.getId(), l1, i2, j2, this.tracker.onGround);
+                            } else if (flag2) {
+                                object = new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) j1, (byte) k1, this.tracker.onGround);
                             }
                         } else {
-                            object = new PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook(this.tracker.getId(), k1, l1, i2, (byte) i1, (byte) j1, this.tracker.onGround);
+                            object = new PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook(this.tracker.getId(), l1, i2, j2, (byte) j1, (byte) k1, this.tracker.onGround);
                         }
                     } else {
                         this.y = this.tracker.onGround;
@@ -139,13 +155,13 @@ public class EntityTrackerEntry {
                     }
                 }
 
-                boolean flag2 = this.u;
+                boolean flag3 = this.u;
 
-                if (this.tracker instanceof EntityLiving && ((EntityLiving) this.tracker).cC()) {
-                    flag2 = true;
+                if (this.tracker instanceof EntityLiving && ((EntityLiving) this.tracker).cG()) {
+                    flag3 = true;
                 }
 
-                if (flag2) {
+                if (flag3) {
                     double d0 = this.tracker.motX - this.n;
                     double d1 = this.tracker.motY - this.o;
                     double d2 = this.tracker.motZ - this.p;
@@ -165,34 +181,18 @@ public class EntityTrackerEntry {
                 }
 
                 this.d();
-                if (flag) {
-                    this.xLoc = j;
-                    this.yLoc = k;
-                    this.zLoc = l;
+                if (flag1) {
+                    this.xLoc = k;
+                    this.yLoc = l;
+                    this.zLoc = i1;
                 }
 
-                if (flag1) {
-                    this.yRot = i1;
-                    this.xRot = j1;
+                if (flag2) {
+                    this.yRot = j1;
+                    this.xRot = k1;
                 }
 
                 this.x = false;
-            } else {
-                i = MathHelper.d(this.tracker.yaw * 256.0F / 360.0F);
-                int j2 = MathHelper.d(this.tracker.pitch * 256.0F / 360.0F);
-                boolean flag3 = Math.abs(i - this.yRot) >= 1 || Math.abs(j2 - this.xRot) >= 1;
-
-                if (flag3) {
-                    this.broadcast(new PacketPlayOutEntity.PacketPlayOutEntityLook(this.tracker.getId(), (byte) i, (byte) j2, this.tracker.onGround));
-                    this.yRot = i;
-                    this.xRot = j2;
-                }
-
-                this.xLoc = EntityTracker.a(this.tracker.locX);
-                this.yLoc = EntityTracker.a(this.tracker.locY);
-                this.zLoc = EntityTracker.a(this.tracker.locZ);
-                this.d();
-                this.x = true;
             }
 
             i = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
@@ -294,7 +294,7 @@ public class EntityTrackerEntry {
                             entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateAttributes(this.tracker.getId(), collection));
                         }
 
-                        if (((EntityLiving) this.tracker).cC()) {
+                        if (((EntityLiving) this.tracker).cG()) {
                             flag = true;
                         }
                     }
@@ -360,7 +360,7 @@ public class EntityTrackerEntry {
     }
 
     private boolean e(EntityPlayer entityplayer) {
-        return entityplayer.x().getPlayerChunkMap().a(entityplayer, this.tracker.ab, this.tracker.ad);
+        return entityplayer.x().getPlayerChunkMap().a(entityplayer, this.tracker.ac, this.tracker.ae);
     }
 
     public void scanPlayers(List<EntityHuman> list) {

@@ -45,7 +45,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
             }
 
             if (arraylist.isEmpty()) {
-                LootItemFunctionEnchant.a.warn("Couldn\'t find a compatible enchantment for " + itemstack);
+                LootItemFunctionEnchant.a.warn("Couldn\'t find a compatible enchantment for {}", new Object[] { itemstack});
                 return itemstack;
             }
 

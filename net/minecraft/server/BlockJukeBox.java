@@ -6,6 +6,10 @@ public class BlockJukeBox extends BlockTileEntity {
 
     public static final BlockStateBoolean HAS_RECORD = BlockStateBoolean.of("has_record");
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItem("RecordPlayer", new String[] { "RecordItem"})));
+    }
+
     protected BlockJukeBox() {
         super(Material.WOOD, MaterialMapColor.l);
         this.w(this.blockStateList.getBlockData().set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false)));
@@ -47,9 +51,9 @@ public class BlockJukeBox extends BlockTileEntity {
                     world.a(blockposition, (SoundEffect) null);
                     blockjukebox_tileentityrecordplayer.setRecord((ItemStack) null);
                     float f = 0.7F;
-                    double d0 = (double) (world.random.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-                    double d1 = (double) (world.random.nextFloat() * f) + (double) (1.0F - f) * 0.2D + 0.6D;
-                    double d2 = (double) (world.random.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                    double d0 = (double) (world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
+                    double d1 = (double) (world.random.nextFloat() * 0.7F) + 0.06000000238418579D + 0.6D;
+                    double d2 = (double) (world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
                     ItemStack itemstack1 = itemstack.cloneItemStack();
                     EntityItem entityitem = new EntityItem(world, (double) blockposition.getX() + d0, (double) blockposition.getY() + d1, (double) blockposition.getZ() + d2, itemstack1);
 

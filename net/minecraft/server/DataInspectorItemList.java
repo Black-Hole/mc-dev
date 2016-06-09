@@ -10,10 +10,13 @@ public class DataInspectorItemList extends DataInspectorTagged {
     }
 
     NBTTagCompound b(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
-        int j = 0;
+        String[] astring = this.a;
+        int j = astring.length;
 
-        for (int k = this.a.length; j < k; ++j) {
-            nbttagcompound = DataConverterRegistry.b(dataconverter, nbttagcompound, i, this.a[j]);
+        for (int k = 0; k < j; ++k) {
+            String s = astring[k];
+
+            nbttagcompound = DataConverterRegistry.b(dataconverter, nbttagcompound, i, s);
         }
 
         return nbttagcompound;

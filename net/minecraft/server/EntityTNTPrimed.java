@@ -44,7 +44,10 @@ public class EntityTNTPrimed extends Entity {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
-        this.motY -= 0.03999999910593033D;
+        if (!this.isNoGravity()) {
+            this.motY -= 0.03999999910593033D;
+        }
+
         this.move(this.motX, this.motY, this.motZ);
         this.motX *= 0.9800000190734863D;
         this.motY *= 0.9800000190734863D;
@@ -62,7 +65,7 @@ public class EntityTNTPrimed extends Entity {
                 this.explode();
             }
         } else {
-            this.aj();
+            this.ak();
             this.world.addParticle(EnumParticle.SMOKE_NORMAL, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
         }
 
@@ -71,7 +74,7 @@ public class EntityTNTPrimed extends Entity {
     private void explode() {
         float f = 4.0F;
 
-        this.world.explode(this, this.locX, this.locY + (double) (this.length / 16.0F), this.locZ, f, true);
+        this.world.explode(this, this.locX, this.locY + (double) (this.length / 16.0F), this.locZ, 4.0F, true);
     }
 
     protected void b(NBTTagCompound nbttagcompound) {

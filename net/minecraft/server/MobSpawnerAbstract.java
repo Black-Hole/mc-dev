@@ -90,7 +90,7 @@ public abstract class MobSpawnerAbstract {
                     EntityInsentient entityinsentient = entity instanceof EntityInsentient ? (EntityInsentient) entity : null;
 
                     entity.setPositionRotation(entity.locX, entity.locY, entity.locZ, world.random.nextFloat() * 360.0F, 0.0F);
-                    if (entityinsentient == null || entityinsentient.cG() && entityinsentient.canSpawn()) {
+                    if (entityinsentient == null || entityinsentient.cK() && entityinsentient.canSpawn()) {
                         if (this.spawnData.b().d() == 1 && this.spawnData.b().hasKeyOfType("id", 8) && entity instanceof EntityInsentient) {
                             ((EntityInsentient) entity).prepare(world.D(new BlockPosition(entity)), (GroupDataEntity) null);
                         }
@@ -181,10 +181,12 @@ public abstract class MobSpawnerAbstract {
             nbttagcompound.setShort("MaxNearbyEntities", (short) this.maxNearbyEntities);
             nbttagcompound.setShort("RequiredPlayerRange", (short) this.requiredPlayerRange);
             nbttagcompound.setShort("SpawnRange", (short) this.spawnRange);
-            nbttagcompound.set("SpawnData", this.spawnData.b().clone());
+            nbttagcompound.set("SpawnData", this.spawnData.b().g());
             NBTTagList nbttaglist = new NBTTagList();
 
-            if (!this.mobs.isEmpty()) {
+            if (this.mobs.isEmpty()) {
+                nbttaglist.add(this.spawnData.a());
+            } else {
                 Iterator iterator = this.mobs.iterator();
 
                 while (iterator.hasNext()) {
@@ -192,8 +194,6 @@ public abstract class MobSpawnerAbstract {
 
                     nbttaglist.add(mobspawnerdata.a());
                 }
-            } else {
-                nbttaglist.add(this.spawnData.a());
             }
 
             nbttagcompound.set("SpawnPotentials", nbttaglist);

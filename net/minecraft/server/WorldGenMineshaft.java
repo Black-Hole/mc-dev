@@ -32,6 +32,20 @@ public class WorldGenMineshaft extends StructureGenerator {
     }
 
     protected StructureStart b(int i, int j) {
-        return new WorldGenMineshaftStart(this.g, this.f, i, j);
+        BiomeBase biomebase = this.g.getBiome(new BlockPosition((i << 4) + 8, 64, (j << 4) + 8));
+        WorldGenMineshaft.Type worldgenmineshaft_type = biomebase instanceof BiomeMesa ? WorldGenMineshaft.Type.MESA : WorldGenMineshaft.Type.NORMAL;
+
+        return new WorldGenMineshaftStart(this.g, this.f, i, j, worldgenmineshaft_type);
+    }
+
+    public static enum Type {
+
+        NORMAL, MESA;
+
+        private Type() {}
+
+        public static WorldGenMineshaft.Type a(int i) {
+            return i >= 0 && i < values().length ? values()[i] : WorldGenMineshaft.Type.NORMAL;
+        }
     }
 }

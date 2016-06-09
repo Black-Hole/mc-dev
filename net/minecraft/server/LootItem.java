@@ -19,10 +19,11 @@ public class LootItem extends LotoSelectorEntry {
 
     public void a(Collection<ItemStack> collection, Random random, LootTableInfo loottableinfo) {
         ItemStack itemstack = new ItemStack(this.a);
-        int i = 0;
+        LootItemFunction[] alootitemfunction = this.b;
+        int i = alootitemfunction.length;
 
-        for (int j = this.b.length; i < j; ++i) {
-            LootItemFunction lootitemfunction = this.b[i];
+        for (int j = 0; j < i; ++j) {
+            LootItemFunction lootitemfunction = alootitemfunction[j];
 
             if (LootItemConditions.a(lootitemfunction.a(), random, loottableinfo)) {
                 itemstack = lootitemfunction.a(itemstack, random, loottableinfo);
@@ -33,13 +34,13 @@ public class LootItem extends LotoSelectorEntry {
             if (itemstack.count < this.a.getMaxStackSize()) {
                 collection.add(itemstack);
             } else {
-                i = itemstack.count;
+                int k = itemstack.count;
 
-                while (i > 0) {
+                while (k > 0) {
                     ItemStack itemstack1 = itemstack.cloneItemStack();
 
-                    itemstack1.count = Math.min(itemstack.getMaxStackSize(), i);
-                    i -= itemstack1.count;
+                    itemstack1.count = Math.min(itemstack.getMaxStackSize(), k);
+                    k -= itemstack1.count;
                     collection.add(itemstack1);
                 }
             }

@@ -14,10 +14,10 @@ import java.util.Map.Entry;
 public class RemoteControlListener extends RemoteConnectionThread {
 
     private int h;
-    private int i;
+    private final int i;
     private String j;
     private ServerSocket k;
-    private String l;
+    private final String l;
     private Map<SocketAddress, RemoteControlSession> m;
 
     public RemoteControlListener(IMinecraftServer iminecraftserver) {

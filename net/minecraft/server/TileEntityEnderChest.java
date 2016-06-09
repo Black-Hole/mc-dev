@@ -9,7 +9,7 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
 
     public TileEntityEnderChest() {}
 
-    public void c() {
+    public void E_() {
         if (++this.h % 20 * 4 == 0) {
             this.world.playBlockAction(this.position, Blocks.ENDER_CHEST, 1, this.g);
         }
@@ -25,16 +25,16 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
             double d1 = (double) i + 0.5D;
 
             d0 = (double) k + 0.5D;
-            this.world.a((EntityHuman) null, d1, (double) j + 0.5D, d0, SoundEffects.aM, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            this.world.a((EntityHuman) null, d1, (double) j + 0.5D, d0, SoundEffects.aN, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
         }
 
         if (this.g == 0 && this.a > 0.0F || this.g > 0 && this.a < 1.0F) {
             float f1 = this.a;
 
             if (this.g > 0) {
-                this.a += f;
+                this.a += 0.1F;
             } else {
-                this.a -= f;
+                this.a -= 0.1F;
             }
 
             if (this.a > 1.0F) {
@@ -43,11 +43,11 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
 
             float f2 = 0.5F;
 
-            if (this.a < f2 && f1 >= f2) {
+            if (this.a < 0.5F && f1 >= 0.5F) {
                 d0 = (double) i + 0.5D;
                 double d2 = (double) k + 0.5D;
 
-                this.world.a((EntityHuman) null, d0, (double) j + 0.5D, d2, SoundEffects.aL, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                this.world.a((EntityHuman) null, d0, (double) j + 0.5D, d2, SoundEffects.aM, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
             }
 
             if (this.a < 0.0F) {

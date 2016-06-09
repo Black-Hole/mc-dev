@@ -59,7 +59,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
             for (int i = 0; i < list.size(); ++i) {
                 Entity entity = (Entity) list.get(i);
 
-                if (entity.z() != EnumPistonReaction.IGNORE) {
+                if (entity.o_() != EnumPistonReaction.IGNORE) {
                     if (this.a.getBlock() == Blocks.SLIME) {
                         switch (TileEntityPiston.SyntheticClass_1.a[enumdirection.k().ordinal()]) {
                         case 1:
@@ -120,7 +120,8 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
     public void i() {
         if (this.j < 1.0F && this.world != null) {
-            this.j = this.i = 1.0F;
+            this.i = 1.0F;
+            this.j = this.i;
             this.world.s(this.position);
             this.y();
             if (this.world.getType(this.position).getBlock() == Blocks.PISTON_EXTENSION) {
@@ -131,7 +132,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
     }
 
-    public void c() {
+    public void E_() {
         this.j = this.i;
         if (this.j >= 1.0F) {
             this.j();
@@ -152,11 +153,14 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         }
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {}
+
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.a = Block.getById(nbttagcompound.getInt("blockId")).fromLegacyData(nbttagcompound.getInt("blockData"));
         this.f = EnumDirection.fromType1(nbttagcompound.getInt("facing"));
-        this.j = this.i = nbttagcompound.getFloat("progress");
+        this.i = nbttagcompound.getFloat("progress");
+        this.j = this.i;
         this.g = nbttagcompound.getBoolean("extending");
     }
 

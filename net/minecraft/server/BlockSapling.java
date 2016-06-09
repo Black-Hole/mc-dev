@@ -61,8 +61,8 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
             }
 
             if (!flag) {
-                j = 0;
                 i = 0;
+                j = 0;
                 object = new WorldGenTaiga2(true);
             }
             break;
@@ -87,8 +87,8 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
             }
 
             if (!flag) {
-                j = 0;
                 i = 0;
+                j = 0;
                 object = new WorldGenTrees(true, 4 + random.nextInt(7), iblockdata1, iblockdata2, false);
             }
             break;

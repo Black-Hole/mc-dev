@@ -10,8 +10,8 @@ public class BiomeSavanna extends BiomeBase {
         super(biomebase_a);
         this.v.add(new BiomeBase.BiomeMeta(EntityHorse.class, 1, 2, 6));
         this.t.z = 1;
-        this.t.A = 4;
-        this.t.B = 20;
+        this.t.B = 4;
+        this.t.C = 20;
     }
 
     public WorldGenTreeAbstract a(Random random) {

@@ -28,7 +28,7 @@ public class CommandEntityData extends CommandAbstract {
                 throw new CommandException("commands.entitydata.noPlayers", new Object[] { entity.getScoreboardDisplayName()});
             } else {
                 NBTTagCompound nbttagcompound = a(entity);
-                NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttagcompound.clone();
+                NBTTagCompound nbttagcompound1 = nbttagcompound.g();
 
                 NBTTagCompound nbttagcompound2;
 

@@ -7,8 +7,8 @@ public class BiomeSavannaMutated extends BiomeSavanna {
     public BiomeSavannaMutated(BiomeBase.a biomebase_a) {
         super(biomebase_a);
         this.t.z = 2;
-        this.t.A = 2;
-        this.t.B = 5;
+        this.t.B = 2;
+        this.t.C = 5;
     }
 
     public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {

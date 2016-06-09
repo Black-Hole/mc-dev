@@ -127,8 +127,13 @@ public class ScoreboardServer extends Scoreboard {
     }
 
     protected void b() {
-        for (int i = 0; i < this.c.length; ++i) {
-            this.c[i].run();
+        Runnable[] arunnable = this.c;
+        int i = arunnable.length;
+
+        for (int j = 0; j < i; ++j) {
+            Runnable runnable = arunnable[j];
+
+            runnable.run();
         }
 
     }

@@ -93,7 +93,7 @@ public class MojangsonParser {
                 s2 = b(s1, true);
                 if (s2.length() > 0) {
                     flag = false;
-                    mojangsonparser_mojangsoncompoundparser.b.add(a(s2, flag));
+                    mojangsonparser_mojangsoncompoundparser.b.add(a(s2, false));
                 }
 
                 if (s1.length() < s2.length() + 1) {
@@ -116,7 +116,7 @@ public class MojangsonParser {
                 s2 = b(s1, false);
                 if (s2.length() > 0) {
                     flag = true;
-                    mojangsonparser_mojangsonlistparser.b.add(a(s2, flag));
+                    mojangsonparser_mojangsonlistparser.b.add(a(s2, true));
                 }
 
                 if (s1.length() < s2.length() + 1) {
@@ -333,7 +333,7 @@ public class MojangsonParser {
                     return new NBTTagDouble(Double.parseDouble(this.b));
                 }
 
-                if (this.b.equalsIgnoreCase("true") || this.b.equalsIgnoreCase("false")) {
+                if ("true".equalsIgnoreCase(this.b) || "false".equalsIgnoreCase(this.b)) {
                     return new NBTTagByte((byte) (Boolean.parseBoolean(this.b) ? 1 : 0));
                 }
             } catch (NumberFormatException numberformatexception) {

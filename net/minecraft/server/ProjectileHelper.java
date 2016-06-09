@@ -30,7 +30,7 @@ public final class ProjectileHelper {
 
                 if (entity3.isInteractable() && (flag1 || !entity3.s(entity1)) && !entity3.noclip) {
                     AxisAlignedBB axisalignedbb = entity3.getBoundingBox().g(0.30000001192092896D);
-                    MovingObjectPosition movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
+                    MovingObjectPosition movingobjectposition1 = axisalignedbb.b(vec3d, vec3d1);
 
                     if (movingobjectposition1 != null) {
                         double d7 = vec3d.distanceSquared(movingobjectposition1.pos);

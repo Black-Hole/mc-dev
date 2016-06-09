@@ -5,6 +5,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import java.util.Iterator;
 import java.util.UUID;
+import java.util.Map.Entry;
 import javax.annotation.Nullable;
 
 public final class GameProfileSerializer {
@@ -189,5 +190,58 @@ public final class GameProfileSerializer {
         nbttagcompound.setInt("Y", blockposition.getY());
         nbttagcompound.setInt("Z", blockposition.getZ());
         return nbttagcompound;
+    }
+
+    public static IBlockData d(NBTTagCompound nbttagcompound) {
+        if (!nbttagcompound.hasKeyOfType("Name", 8)) {
+            return Blocks.AIR.getBlockData();
+        } else {
+            Block block = (Block) Block.REGISTRY.get(new MinecraftKey(nbttagcompound.getString("Name")));
+            IBlockData iblockdata = block.getBlockData();
+
+            if (nbttagcompound.hasKeyOfType("Properties", 10)) {
+                NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Properties");
+                BlockStateList blockstatelist = block.t();
+                Iterator iterator = nbttagcompound1.c().iterator();
+
+                while (iterator.hasNext()) {
+                    String s = (String) iterator.next();
+                    IBlockState iblockstate = blockstatelist.a(s);
+
+                    if (iblockstate != null) {
+                        iblockdata = a(iblockdata, iblockstate, nbttagcompound1.getString(s));
+                    }
+                }
+            }
+
+            return iblockdata;
+        }
+    }
+
+    private static <T extends Comparable<T>> IBlockData a(IBlockData iblockdata, IBlockState<T> iblockstate, String s) {
+        return iblockdata.set(iblockstate, (Comparable) iblockstate.b(s).get());
+    }
+
+    public static NBTTagCompound a(NBTTagCompound nbttagcompound, IBlockData iblockdata) {
+        nbttagcompound.setString("Name", ((MinecraftKey) Block.REGISTRY.b(iblockdata.getBlock())).toString());
+        if (!iblockdata.s().isEmpty()) {
+            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+            Iterator iterator = iblockdata.s().entrySet().iterator();
+
+            while (iterator.hasNext()) {
+                Entry entry = (Entry) iterator.next();
+                IBlockState iblockstate = (IBlockState) entry.getKey();
+
+                nbttagcompound1.setString(iblockstate.a(), a(iblockstate, (Comparable) entry.getValue()));
+            }
+
+            nbttagcompound.set("Properties", nbttagcompound1);
+        }
+
+        return nbttagcompound;
+    }
+
+    private static <T extends Comparable<T>> String a(IBlockState<T> iblockstate, Comparable<?> comparable) {
+        return iblockstate.a(comparable);
     }
 }

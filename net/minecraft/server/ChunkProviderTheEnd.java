@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class ChunkProviderTheEnd implements ChunkGenerator {
 
-    private Random h;
+    private final Random h;
     protected static final IBlockData a = Blocks.END_STONE.getBlockData();
     protected static final IBlockData b = Blocks.AIR.getBlockData();
     private final NoiseGeneratorOctaves i;
@@ -38,50 +38,50 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
     }
 
     public void a(int i, int j, ChunkSnapshot chunksnapshot) {
-        byte b0 = 2;
-        int k = b0 + 1;
-        byte b1 = 33;
-        int l = b0 + 1;
+        boolean flag = true;
+        boolean flag1 = true;
+        boolean flag2 = true;
+        boolean flag3 = true;
 
-        this.p = this.a(this.p, i * b0, 0, j * b0, k, b1, l);
+        this.p = this.a(this.p, i * 2, 0, j * 2, 3, 33, 3);
 
-        for (int i1 = 0; i1 < b0; ++i1) {
-            for (int j1 = 0; j1 < b0; ++j1) {
-                for (int k1 = 0; k1 < 32; ++k1) {
+        for (int k = 0; k < 2; ++k) {
+            for (int l = 0; l < 2; ++l) {
+                for (int i1 = 0; i1 < 32; ++i1) {
                     double d0 = 0.25D;
-                    double d1 = this.p[((i1 + 0) * l + j1 + 0) * b1 + k1 + 0];
-                    double d2 = this.p[((i1 + 0) * l + j1 + 1) * b1 + k1 + 0];
-                    double d3 = this.p[((i1 + 1) * l + j1 + 0) * b1 + k1 + 0];
-                    double d4 = this.p[((i1 + 1) * l + j1 + 1) * b1 + k1 + 0];
-                    double d5 = (this.p[((i1 + 0) * l + j1 + 0) * b1 + k1 + 1] - d1) * d0;
-                    double d6 = (this.p[((i1 + 0) * l + j1 + 1) * b1 + k1 + 1] - d2) * d0;
-                    double d7 = (this.p[((i1 + 1) * l + j1 + 0) * b1 + k1 + 1] - d3) * d0;
-                    double d8 = (this.p[((i1 + 1) * l + j1 + 1) * b1 + k1 + 1] - d4) * d0;
+                    double d1 = this.p[((k + 0) * 3 + l + 0) * 33 + i1 + 0];
+                    double d2 = this.p[((k + 0) * 3 + l + 1) * 33 + i1 + 0];
+                    double d3 = this.p[((k + 1) * 3 + l + 0) * 33 + i1 + 0];
+                    double d4 = this.p[((k + 1) * 3 + l + 1) * 33 + i1 + 0];
+                    double d5 = (this.p[((k + 0) * 3 + l + 0) * 33 + i1 + 1] - d1) * 0.25D;
+                    double d6 = (this.p[((k + 0) * 3 + l + 1) * 33 + i1 + 1] - d2) * 0.25D;
+                    double d7 = (this.p[((k + 1) * 3 + l + 0) * 33 + i1 + 1] - d3) * 0.25D;
+                    double d8 = (this.p[((k + 1) * 3 + l + 1) * 33 + i1 + 1] - d4) * 0.25D;
 
-                    for (int l1 = 0; l1 < 4; ++l1) {
+                    for (int j1 = 0; j1 < 4; ++j1) {
                         double d9 = 0.125D;
                         double d10 = d1;
                         double d11 = d2;
-                        double d12 = (d3 - d1) * d9;
-                        double d13 = (d4 - d2) * d9;
+                        double d12 = (d3 - d1) * 0.125D;
+                        double d13 = (d4 - d2) * 0.125D;
 
-                        for (int i2 = 0; i2 < 8; ++i2) {
+                        for (int k1 = 0; k1 < 8; ++k1) {
                             double d14 = 0.125D;
                             double d15 = d10;
-                            double d16 = (d11 - d10) * d14;
+                            double d16 = (d11 - d10) * 0.125D;
 
-                            for (int j2 = 0; j2 < 8; ++j2) {
+                            for (int l1 = 0; l1 < 8; ++l1) {
                                 IBlockData iblockdata = ChunkProviderTheEnd.b;
 
                                 if (d15 > 0.0D) {
                                     iblockdata = ChunkProviderTheEnd.a;
                                 }
 
-                                int k2 = i2 + i1 * 8;
-                                int l2 = l1 + k1 * 4;
-                                int i3 = j2 + j1 * 8;
+                                int i2 = k1 + k * 8;
+                                int j2 = j1 + i1 * 4;
+                                int k2 = l1 + l * 8;
 
-                                chunksnapshot.a(k2, l2, i3, iblockdata);
+                                chunksnapshot.a(i2, j2, k2, iblockdata);
                                 d15 += d16;
                             }
 
@@ -103,7 +103,7 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
     public void a(ChunkSnapshot chunksnapshot) {
         for (int i = 0; i < 16; ++i) {
             for (int j = 0; j < 16; ++j) {
-                byte b0 = 1;
+                boolean flag = true;
                 int k = -1;
                 IBlockData iblockdata = ChunkProviderTheEnd.a;
                 IBlockData iblockdata1 = ChunkProviderTheEnd.a;
@@ -115,12 +115,7 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
                         k = -1;
                     } else if (iblockdata2.getBlock() == Blocks.STONE) {
                         if (k == -1) {
-                            if (b0 <= 0) {
-                                iblockdata = ChunkProviderTheEnd.b;
-                                iblockdata1 = ChunkProviderTheEnd.a;
-                            }
-
-                            k = b0;
+                            k = 1;
                             if (l >= 0) {
                                 chunksnapshot.a(i, l, j, iblockdata);
                             } else {
@@ -215,9 +210,9 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
         double d1 = 684.412D;
 
         d0 *= 2.0D;
-        this.e = this.k.a(this.e, i, j, k, l, i1, j1, d0 / 80.0D, d1 / 160.0D, d0 / 80.0D);
-        this.f = this.i.a(this.f, i, j, k, l, i1, j1, d0, d1, d0);
-        this.g = this.j.a(this.g, i, j, k, l, i1, j1, d0, d1, d0);
+        this.e = this.k.a(this.e, i, j, k, l, i1, j1, d0 / 80.0D, 4.277575000000001D, d0 / 80.0D);
+        this.f = this.i.a(this.f, i, j, k, l, i1, j1, d0, 684.412D, d0);
+        this.g = this.j.a(this.g, i, j, k, l, i1, j1, d0, 684.412D, d0);
         int k1 = i / 2;
         int l1 = k / 2;
         int i2 = 0;
@@ -227,37 +222,37 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
                 float f = this.a(k1, l1, j2, k2);
 
                 for (int l2 = 0; l2 < i1; ++l2) {
-                    double d2 = 0.0D;
-                    double d3 = this.f[i2] / 512.0D;
-                    double d4 = this.g[i2] / 512.0D;
-                    double d5 = (this.e[i2] / 10.0D + 1.0D) / 2.0D;
+                    double d2 = this.f[i2] / 512.0D;
+                    double d3 = this.g[i2] / 512.0D;
+                    double d4 = (this.e[i2] / 10.0D + 1.0D) / 2.0D;
+                    double d5;
 
-                    if (d5 < 0.0D) {
-                        d2 = d3;
-                    } else if (d5 > 1.0D) {
-                        d2 = d4;
+                    if (d4 < 0.0D) {
+                        d5 = d2;
+                    } else if (d4 > 1.0D) {
+                        d5 = d3;
                     } else {
-                        d2 = d3 + (d4 - d3) * d5;
+                        d5 = d2 + (d3 - d2) * d4;
                     }
 
-                    d2 -= 8.0D;
-                    d2 += (double) f;
+                    d5 -= 8.0D;
+                    d5 += (double) f;
                     byte b0 = 2;
                     double d6;
 
                     if (l2 > i1 / 2 - b0) {
                         d6 = (double) ((float) (l2 - (i1 / 2 - b0)) / 64.0F);
                         d6 = MathHelper.a(d6, 0.0D, 1.0D);
-                        d2 = d2 * (1.0D - d6) + -3000.0D * d6;
+                        d5 = d5 * (1.0D - d6) + -3000.0D * d6;
                     }
 
                     b0 = 8;
                     if (l2 < b0) {
                         d6 = (double) ((float) (b0 - l2) / ((float) b0 - 1.0F));
-                        d2 = d2 * (1.0D - d6) + -30.0D * d6;
+                        d5 = d5 * (1.0D - d6) + -30.0D * d6;
                     }
 
-                    adouble[i2] = d2;
+                    adouble[i2] = d5;
                     ++i2;
                 }
             }

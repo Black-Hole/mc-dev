@@ -19,10 +19,10 @@ public class EntityShulkerBullet extends Entity {
     private double g;
     @Nullable
     private UUID h;
-    private BlockPosition at;
+    private BlockPosition au;
     @Nullable
-    private UUID au;
-    private BlockPosition av;
+    private UUID av;
+    private BlockPosition aw;
 
     public EntityShulkerBullet(World world) {
         super(world);
@@ -30,7 +30,7 @@ public class EntityShulkerBullet extends Entity {
         this.noclip = true;
     }
 
-    public SoundCategory bA() {
+    public SoundCategory bC() {
         return SoundCategory.HOSTILE;
     }
 
@@ -94,13 +94,13 @@ public class EntityShulkerBullet extends Entity {
         if (nbttagcompound.hasKeyOfType("Owner", 10)) {
             nbttagcompound1 = nbttagcompound.getCompound("Owner");
             this.h = GameProfileSerializer.b(nbttagcompound1);
-            this.at = new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z"));
+            this.au = new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z"));
         }
 
         if (nbttagcompound.hasKeyOfType("Target", 10)) {
             nbttagcompound1 = nbttagcompound.getCompound("Target");
-            this.au = GameProfileSerializer.b(nbttagcompound1);
-            this.av = new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z"));
+            this.av = GameProfileSerializer.b(nbttagcompound1);
+            this.aw = new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z"));
         }
 
     }
@@ -199,23 +199,23 @@ public class EntityShulkerBullet extends Entity {
                 Iterator iterator;
                 EntityLiving entityliving;
 
-                if (this.target == null && this.au != null) {
-                    list = this.world.a(EntityLiving.class, new AxisAlignedBB(this.av.a(-2, -2, -2), this.av.a(2, 2, 2)));
+                if (this.target == null && this.av != null) {
+                    list = this.world.a(EntityLiving.class, new AxisAlignedBB(this.aw.a(-2, -2, -2), this.aw.a(2, 2, 2)));
                     iterator = list.iterator();
 
                     while (iterator.hasNext()) {
                         entityliving = (EntityLiving) iterator.next();
-                        if (entityliving.getUniqueID().equals(this.au)) {
+                        if (entityliving.getUniqueID().equals(this.av)) {
                             this.target = entityliving;
                             break;
                         }
                     }
 
-                    this.au = null;
+                    this.av = null;
                 }
 
                 if (this.shooter == null && this.h != null) {
-                    list = this.world.a(EntityLiving.class, new AxisAlignedBB(this.at.a(-2, -2, -2), this.at.a(2, 2, 2)));
+                    list = this.world.a(EntityLiving.class, new AxisAlignedBB(this.au.a(-2, -2, -2), this.au.a(2, 2, 2)));
                     iterator = list.iterator();
 
                     while (iterator.hasNext()) {
@@ -236,7 +236,7 @@ public class EntityShulkerBullet extends Entity {
                     this.motX += (this.e - this.motX) * 0.2D;
                     this.motY += (this.f - this.motY) * 0.2D;
                     this.motZ += (this.g - this.motZ) * 0.2D;
-                } else {
+                } else if (!this.isNoGravity()) {
                     this.motY -= 0.04D;
                 }
 
@@ -289,7 +289,7 @@ public class EntityShulkerBullet extends Entity {
     protected void a(MovingObjectPosition movingobjectposition) {
         if (movingobjectposition.entity == null) {
             ((WorldServer) this.world).a(EnumParticle.EXPLOSION_LARGE, this.locX, this.locY, this.locZ, 2, 0.2D, 0.2D, 0.2D, 0.0D, new int[0]);
-            this.a(SoundEffects.eV, 1.0F, 1.0F);
+            this.a(SoundEffects.fg, 1.0F, 1.0F);
         } else {
             boolean flag = movingobjectposition.entity.damageEntity(DamageSource.a(this, this.shooter).b(), 4.0F);
 
@@ -310,7 +310,7 @@ public class EntityShulkerBullet extends Entity {
 
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (!this.world.isClientSide) {
-            this.a(SoundEffects.eW, 1.0F, 1.0F);
+            this.a(SoundEffects.fh, 1.0F, 1.0F);
             ((WorldServer) this.world).a(EnumParticle.CRIT, this.locX, this.locY, this.locZ, 15, 0.2D, 0.2D, 0.2D, 0.0D, new int[0]);
             this.die();
         }

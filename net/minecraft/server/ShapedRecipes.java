@@ -97,7 +97,7 @@ public class ShapedRecipes implements IRecipe {
                 ItemStack itemstack1 = inventorycrafting.getItem(i);
 
                 if (itemstack1 != null && itemstack1.hasTag()) {
-                    itemstack.setTag((NBTTagCompound) itemstack1.getTag().clone());
+                    itemstack.setTag(itemstack1.getTag().g());
                 }
             }
         }

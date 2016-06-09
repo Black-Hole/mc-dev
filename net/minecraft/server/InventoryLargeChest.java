@@ -4,9 +4,9 @@ import javax.annotation.Nullable;
 
 public class InventoryLargeChest implements ITileInventory {
 
-    private String a;
-    public ITileInventory left;
-    public ITileInventory right;
+    private final String a;
+    public final ITileInventory left;
+    public final ITileInventory right;
 
     public InventoryLargeChest(String s, ITileInventory itileinventory, ITileInventory itileinventory1) {
         this.a = s;

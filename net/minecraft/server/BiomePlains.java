@@ -10,9 +10,10 @@ public class BiomePlains extends BiomeBase {
         super(biomebase_a);
         this.y = flag;
         this.v.add(new BiomeBase.BiomeMeta(EntityHorse.class, 5, 2, 6));
-        this.t.z = -999;
-        this.t.A = 4;
-        this.t.B = 10;
+        this.t.z = 0;
+        this.t.A = 0.05F;
+        this.t.B = 4;
+        this.t.C = 10;
     }
 
     public BlockFlowers.EnumFlowerVarient a(Random random, BlockPosition blockposition) {
@@ -51,11 +52,11 @@ public class BiomePlains extends BiomeBase {
         int l;
 
         if (d0 < -0.8D) {
-            this.t.A = 15;
-            this.t.B = 5;
+            this.t.B = 15;
+            this.t.C = 5;
         } else {
-            this.t.A = 4;
-            this.t.B = 10;
+            this.t.B = 4;
+            this.t.C = 10;
             BiomePlains.m.a(BlockTallPlant.EnumTallFlowerVariants.GRASS);
 
             for (i = 0; i < 7; ++i) {
@@ -78,5 +79,9 @@ public class BiomePlains extends BiomeBase {
         }
 
         super.a(world, random, blockposition);
+    }
+
+    public WorldGenTreeAbstract a(Random random) {
+        return (WorldGenTreeAbstract) (random.nextInt(3) == 0 ? BiomePlains.o : BiomePlains.n);
     }
 }

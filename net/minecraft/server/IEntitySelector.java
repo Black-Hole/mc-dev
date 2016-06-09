@@ -35,7 +35,7 @@ public final class IEntitySelector {
     };
     public static final Predicate<Entity> d = new Predicate() {
         public boolean a(@Nullable Entity entity) {
-            return !(entity instanceof EntityHuman) || !((EntityHuman) entity).isSpectator() && !((EntityHuman) entity).l_();
+            return !(entity instanceof EntityHuman) || !((EntityHuman) entity).isSpectator() && !((EntityHuman) entity).z();
         }
 
         public boolean apply(Object object) {
@@ -76,17 +76,17 @@ public final class IEntitySelector {
     }
 
     public static <T extends Entity> Predicate<T> a(final Entity entity) {
-        final ScoreboardTeamBase scoreboardteambase = entity.aO();
+        final ScoreboardTeamBase scoreboardteambase = entity.aQ();
         final ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
 
         return scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : Predicates.and(IEntitySelector.e, new Predicate() {
             public boolean a(@Nullable Entity entity) {
                 if (!entity.isCollidable()) {
                     return false;
-                } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).cK())) {
+                } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).cO())) {
                     return false;
                 } else {
-                    ScoreboardTeamBase scoreboardteambase = entity.aO();
+                    ScoreboardTeamBase scoreboardteambase = entity.aQ();
                     ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
 
                     if (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER) {
@@ -121,7 +121,7 @@ public final class IEntitySelector {
             } else {
                 EntityLiving entityliving = (EntityLiving) entity;
 
-                return entityliving.getEquipment(EntityInsentient.d(this.a)) != null ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).cN() : (entityliving instanceof EntityArmorStand ? true : entityliving instanceof EntityHuman));
+                return entityliving.getEquipment(EntityInsentient.d(this.a)) != null ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).cR() : (entityliving instanceof EntityArmorStand ? true : entityliving instanceof EntityHuman));
             }
         }
 

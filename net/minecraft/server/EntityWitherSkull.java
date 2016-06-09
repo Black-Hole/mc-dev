@@ -14,6 +14,10 @@ public class EntityWitherSkull extends EntityFireball {
         this.setSize(0.3125F, 0.3125F);
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityFireball.a(dataconvertermanager, "WitherSkull");
+    }
+
     protected float l() {
         return this.isCharged() ? 0.73F : super.l();
     }
@@ -38,10 +42,10 @@ public class EntityWitherSkull extends EntityFireball {
             if (movingobjectposition.entity != null) {
                 if (this.shooter != null) {
                     if (movingobjectposition.entity.damageEntity(DamageSource.mobAttack(this.shooter), 8.0F)) {
-                        if (!movingobjectposition.entity.isAlive()) {
-                            this.shooter.heal(5.0F);
-                        } else {
+                        if (movingobjectposition.entity.isAlive()) {
                             this.a(this.shooter, movingobjectposition.entity);
+                        } else {
+                            this.shooter.heal(5.0F);
                         }
                     }
                 } else {

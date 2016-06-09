@@ -25,7 +25,7 @@ public abstract class DefinedStructurePiece extends StructurePiece {
         this.a(EnumDirection.NORTH);
         this.c = blockposition;
         this.b = definedstructureinfo;
-        this.h();
+        this.b();
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
@@ -56,7 +56,7 @@ public abstract class DefinedStructurePiece extends StructurePiece {
 
     protected abstract void a(String s, BlockPosition blockposition, World world, Random random, StructureBoundingBox structureboundingbox);
 
-    private void h() {
+    private void b() {
         EnumBlockRotation enumblockrotation = this.b.c();
         BlockPosition blockposition = this.a.a(enumblockrotation);
 

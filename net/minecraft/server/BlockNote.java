@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class BlockNote extends BlockTileEntity {
 
-    private static final List<SoundEffect> a = Lists.newArrayList(new SoundEffect[] { SoundEffects.dK, SoundEffects.dI, SoundEffects.dN, SoundEffects.dL, SoundEffects.dJ});
+    private static final List<SoundEffect> a = Lists.newArrayList(new SoundEffect[] { SoundEffects.dP, SoundEffects.dN, SoundEffects.dS, SoundEffects.dQ, SoundEffects.dO});
 
     public BlockNote() {
         super(Material.WOOD);
@@ -40,7 +40,7 @@ public class BlockNote extends BlockTileEntity {
             if (tileentity instanceof TileEntityNote) {
                 TileEntityNote tileentitynote = (TileEntityNote) tileentity;
 
-                tileentitynote.c();
+                tileentitynote.d();
                 tileentitynote.play(world, blockposition);
                 entityhuman.b(StatisticList.U);
             }
@@ -76,7 +76,7 @@ public class BlockNote extends BlockTileEntity {
     public boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, int i, int j) {
         float f = (float) Math.pow(2.0D, (double) (j - 12) / 12.0D);
 
-        world.a((EntityHuman) null, blockposition, this.e(i), SoundCategory.BLOCKS, 3.0F, f);
+        world.a((EntityHuman) null, blockposition, this.e(i), SoundCategory.RECORDS, 3.0F, f);
         world.addParticle(EnumParticle.NOTE, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 1.2D, (double) blockposition.getZ() + 0.5D, (double) j / 24.0D, 0.0D, 0.0D, new int[0]);
         return true;
     }

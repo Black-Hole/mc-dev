@@ -11,7 +11,7 @@ public class PacketPlayOutCustomSoundEffect implements Packet<PacketListenerPlay
     private int d = Integer.MAX_VALUE;
     private int e;
     private float f;
-    private int g;
+    private float g;
 
     public PacketPlayOutCustomSoundEffect() {}
 
@@ -23,8 +23,7 @@ public class PacketPlayOutCustomSoundEffect implements Packet<PacketListenerPlay
         this.d = (int) (d1 * 8.0D);
         this.e = (int) (d2 * 8.0D);
         this.f = f;
-        this.g = (int) (f1 * 63.0F);
-        f1 = MathHelper.a(f1, 0.0F, 255.0F);
+        this.g = f1;
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
@@ -34,7 +33,7 @@ public class PacketPlayOutCustomSoundEffect implements Packet<PacketListenerPlay
         this.d = packetdataserializer.readInt();
         this.e = packetdataserializer.readInt();
         this.f = packetdataserializer.readFloat();
-        this.g = packetdataserializer.readUnsignedByte();
+        this.g = packetdataserializer.readFloat();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
@@ -44,7 +43,7 @@ public class PacketPlayOutCustomSoundEffect implements Packet<PacketListenerPlay
         packetdataserializer.writeInt(this.d);
         packetdataserializer.writeInt(this.e);
         packetdataserializer.writeFloat(this.f);
-        packetdataserializer.writeByte(this.g);
+        packetdataserializer.writeFloat(this.g);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

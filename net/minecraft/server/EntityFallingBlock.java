@@ -73,7 +73,10 @@ public class EntityFallingBlock extends Entity {
                 }
             }
 
-            this.motY -= 0.03999999910593033D;
+            if (!this.isNoGravity()) {
+                this.motY -= 0.03999999910593033D;
+            }
+
             this.move(this.motX, this.motY, this.motZ);
             this.motX *= 0.9800000190734863D;
             this.motY *= 0.9800000190734863D;
@@ -110,7 +113,7 @@ public class EntityFallingBlock extends Entity {
                                             String s = (String) iterator.next();
                                             NBTBase nbtbase = this.tileEntityData.get(s);
 
-                                            if (!s.equals("x") && !s.equals("y") && !s.equals("z")) {
+                                            if (!"x".equals(s) && !"y".equals(s) && !"z".equals(s)) {
                                                 nbttagcompound.set(s, nbtbase.clone());
                                             }
                                         }
@@ -168,6 +171,8 @@ public class EntityFallingBlock extends Entity {
         }
 
     }
+
+    public static void a(DataConverterManager dataconvertermanager) {}
 
     protected void b(NBTTagCompound nbttagcompound) {
         Block block = this.block != null ? this.block.getBlock() : Blocks.AIR;
@@ -242,7 +247,7 @@ public class EntityFallingBlock extends Entity {
         return this.block;
     }
 
-    public boolean bs() {
+    public boolean bu() {
         return true;
     }
 }

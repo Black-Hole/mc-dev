@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class SlotFurnaceResult extends Slot {
 
-    private EntityHuman a;
+    private final EntityHuman a;
     private int b;
 
     public SlotFurnaceResult(EntityHuman entityhuman, IInventory iinventory, int i, int j, int k) {

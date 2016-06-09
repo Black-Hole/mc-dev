@@ -43,7 +43,7 @@ public class EntityPigZombie extends EntityZombie {
     protected void M() {
         AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
-        if (this.db()) {
+        if (this.df()) {
             if (!this.isBaby() && !attributeinstance.a(EntityPigZombie.c)) {
                 attributeinstance.b(EntityPigZombie.c);
             }
@@ -54,7 +54,7 @@ public class EntityPigZombie extends EntityZombie {
         }
 
         if (this.soundDelay > 0 && --this.soundDelay == 0) {
-            this.a(SoundEffects.hs, this.ce() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
+            this.a(SoundEffects.hL, this.ch() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
         }
 
         if (this.angerLevel > 0 && this.hurtBy != null && this.getLastDamager() == null) {
@@ -62,18 +62,22 @@ public class EntityPigZombie extends EntityZombie {
 
             this.a((EntityLiving) entityhuman);
             this.killer = entityhuman;
-            this.lastDamageByPlayerTime = this.bI();
+            this.lastDamageByPlayerTime = this.bK();
         }
 
         super.M();
     }
 
-    public boolean cG() {
+    public boolean cK() {
         return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
     public boolean canSpawn() {
         return this.world.a(this.getBoundingBox(), (Entity) this) && this.world.getCubes(this, this.getBoundingBox()).isEmpty() && !this.world.containsLiquid(this.getBoundingBox());
+    }
+
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "PigZombie");
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -99,7 +103,7 @@ public class EntityPigZombie extends EntityZombie {
             this.a((EntityLiving) entityhuman);
             if (entityhuman != null) {
                 this.killer = entityhuman;
-                this.lastDamageByPlayerTime = this.bI();
+                this.lastDamageByPlayerTime = this.bK();
             }
         }
 
@@ -128,25 +132,25 @@ public class EntityPigZombie extends EntityZombie {
 
     }
 
-    public boolean db() {
+    public boolean df() {
         return this.angerLevel > 0;
     }
 
     protected SoundEffect G() {
-        return SoundEffects.hr;
+        return SoundEffects.hK;
     }
 
-    protected SoundEffect bS() {
-        return SoundEffects.hu;
+    protected SoundEffect bV() {
+        return SoundEffects.hN;
     }
 
-    protected SoundEffect bT() {
-        return SoundEffects.ht;
+    protected SoundEffect bW() {
+        return SoundEffects.hM;
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.aj;
+        return LootTables.ak;
     }
 
     public boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {
@@ -160,7 +164,7 @@ public class EntityPigZombie extends EntityZombie {
     @Nullable
     public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
         super.prepare(difficultydamagescaler, groupdataentity);
-        this.clearVillagerType();
+        this.setVillagerType(EnumZombieType.NORMAL);
         return groupdataentity;
     }
 
@@ -171,7 +175,7 @@ public class EntityPigZombie extends EntityZombie {
         }
 
         public boolean a() {
-            return ((EntityPigZombie) this.e).db() && super.a();
+            return ((EntityPigZombie) this.e).df() && super.a();
         }
     }
 

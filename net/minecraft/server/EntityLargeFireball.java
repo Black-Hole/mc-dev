@@ -27,6 +27,10 @@ public class EntityLargeFireball extends EntityFireball {
 
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityFireball.a(dataconvertermanager, "Fireball");
+    }
+
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setInt("ExplosionPower", this.yield);

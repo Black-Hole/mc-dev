@@ -14,6 +14,8 @@ public class TileEntityFlowerPot extends TileEntity {
         this.f = i;
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {}
+
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         MinecraftKey minecraftkey = (MinecraftKey) Item.REGISTRY.b(this.a);
@@ -36,10 +38,10 @@ public class TileEntityFlowerPot extends TileEntity {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 5, this.E_());
+        return new PacketPlayOutTileEntityData(this.position, 5, this.c());
     }
 
-    public NBTTagCompound E_() {
+    public NBTTagCompound c() {
         return this.save(new NBTTagCompound());
     }
 
@@ -49,16 +51,16 @@ public class TileEntityFlowerPot extends TileEntity {
     }
 
     @Nullable
-    public ItemStack c() {
+    public ItemStack d() {
         return this.a == null ? null : new ItemStack(this.a, 1, this.f);
     }
 
     @Nullable
-    public Item d() {
+    public Item getItem() {
         return this.a;
     }
 
-    public int e() {
+    public int getData() {
         return this.f;
     }
 }

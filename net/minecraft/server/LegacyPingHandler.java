@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger a = LogManager.getLogger();
-    private ServerConnection b;
+    private final ServerConnection b;
 
     public LegacyPingHandler(ServerConnection serverconnection) {
         this.b = serverconnection;

@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 public class EntityPlayer extends EntityHuman implements ICrafting {
 
-    private static final Logger bR = LogManager.getLogger();
+    private static final Logger bS = LogManager.getLogger();
     private String locale = "en_US";
     public PlayerConnection playerConnection;
     public final MinecraftServer server;
@@ -22,23 +22,23 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public double d;
     public double e;
     public final List<Integer> removeQueue = Lists.newLinkedList();
-    private final ServerStatisticManager bU;
-    private float bV = Float.MIN_VALUE;
-    private int bW = Integer.MIN_VALUE;
+    private final ServerStatisticManager bV;
+    private float bW = Float.MIN_VALUE;
     private int bX = Integer.MIN_VALUE;
     private int bY = Integer.MIN_VALUE;
     private int bZ = Integer.MIN_VALUE;
     private int ca = Integer.MIN_VALUE;
+    private int cb = Integer.MIN_VALUE;
     private float lastHealthSent = -1.0E8F;
-    private int cc = -99999999;
-    private boolean cd = true;
+    private int cd = -99999999;
+    private boolean ce = true;
     public int lastSentExp = -99999999;
     public int invulnerableTicks = 60;
-    private EntityHuman.EnumChatVisibility cg;
-    private boolean ch = true;
-    private long ci = System.currentTimeMillis();
-    private Entity cj = null;
-    private boolean ck;
+    private EntityHuman.EnumChatVisibility ch;
+    private boolean ci = true;
+    private long cj = System.currentTimeMillis();
+    private Entity ck;
+    public boolean worldChangeInvuln;
     private int containerCounter;
     public boolean f;
     public int ping;
@@ -50,7 +50,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.playerInteractManager = playerinteractmanager;
         BlockPosition blockposition = worldserver.getSpawn();
 
-        if (!worldserver.worldProvider.m() && worldserver.getWorldData().getGameType() != WorldSettings.EnumGamemode.ADVENTURE) {
+        if (!worldserver.worldProvider.m() && worldserver.getWorldData().getGameType() != EnumGamemode.ADVENTURE) {
             int i = Math.max(0, minecraftserver.a(worldserver));
             int j = MathHelper.floor(worldserver.getWorldBorder().b((double) blockposition.getX(), (double) blockposition.getZ()));
 
@@ -66,7 +66,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         this.server = minecraftserver;
-        this.bU = minecraftserver.getPlayerList().a((EntityHuman) this);
+        this.bV = minecraftserver.getPlayerList().a((EntityHuman) this);
         this.P = 0.0F;
         this.setPositionRotation(blockposition, 0.0F, 0.0F);
 
@@ -82,7 +82,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             if (this.h().getForceGamemode()) {
                 this.playerInteractManager.setGameMode(this.h().getGamemode());
             } else {
-                this.playerInteractManager.setGameMode(WorldSettings.EnumGamemode.getById(nbttagcompound.getInt("playerGameType")));
+                this.playerInteractManager.setGameMode(EnumGamemode.getById(nbttagcompound.getInt("playerGameType")));
             }
         }
 
@@ -93,12 +93,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         nbttagcompound.setInt("playerGameType", this.playerInteractManager.getGameMode().getId());
         Entity entity = this.getVehicle();
 
-        if (this.bz() != null && entity != this & entity.b(EntityPlayer.class).size() == 1) {
+        if (this.bB() != null && entity != this & entity.b(EntityPlayer.class).size() == 1) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
             NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
             entity.d(nbttagcompound2);
-            nbttagcompound1.a("Attach", this.bz().getUniqueID());
+            nbttagcompound1.a("Attach", this.bB().getUniqueID());
             nbttagcompound1.set("Entity", nbttagcompound2);
             nbttagcompound.set("RootVehicle", nbttagcompound1);
         }
@@ -163,14 +163,14 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         Entity entity = this.getSpecatorTarget();
 
         if (entity != this) {
-            if (!entity.isAlive()) {
-                this.setSpectatorTarget(this);
-            } else {
+            if (entity.isAlive()) {
                 this.setLocation(entity.locX, entity.locY, entity.locZ, entity.yaw, entity.pitch);
                 this.server.getPlayerList().d(this);
                 if (this.isSneaking()) {
                     this.setSpectatorTarget(this);
                 }
+            } else {
+                this.setSpectatorTarget(this);
             }
         }
 
@@ -192,41 +192,41 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 }
             }
 
-            if (this.getHealth() != this.lastHealthSent || this.cc != this.foodData.getFoodLevel() || this.foodData.getSaturationLevel() == 0.0F != this.cd) {
+            if (this.getHealth() != this.lastHealthSent || this.cd != this.foodData.getFoodLevel() || this.foodData.getSaturationLevel() == 0.0F != this.ce) {
                 this.playerConnection.sendPacket(new PacketPlayOutUpdateHealth(this.getHealth(), this.foodData.getFoodLevel(), this.foodData.getSaturationLevel()));
                 this.lastHealthSent = this.getHealth();
-                this.cc = this.foodData.getFoodLevel();
-                this.cd = this.foodData.getSaturationLevel() == 0.0F;
+                this.cd = this.foodData.getFoodLevel();
+                this.ce = this.foodData.getSaturationLevel() == 0.0F;
             }
 
-            if (this.getHealth() + this.getAbsorptionHearts() != this.bV) {
-                this.bV = this.getHealth() + this.getAbsorptionHearts();
-                this.a(IScoreboardCriteria.g, MathHelper.f(this.bV));
+            if (this.getHealth() + this.getAbsorptionHearts() != this.bW) {
+                this.bW = this.getHealth() + this.getAbsorptionHearts();
+                this.a(IScoreboardCriteria.g, MathHelper.f(this.bW));
             }
 
-            if (this.foodData.getFoodLevel() != this.bW) {
-                this.bW = this.foodData.getFoodLevel();
-                this.a(IScoreboardCriteria.h, MathHelper.f((float) this.bW));
+            if (this.foodData.getFoodLevel() != this.bX) {
+                this.bX = this.foodData.getFoodLevel();
+                this.a(IScoreboardCriteria.h, MathHelper.f((float) this.bX));
             }
 
-            if (this.getAirTicks() != this.bX) {
-                this.bX = this.getAirTicks();
-                this.a(IScoreboardCriteria.i, MathHelper.f((float) this.bX));
+            if (this.getAirTicks() != this.bY) {
+                this.bY = this.getAirTicks();
+                this.a(IScoreboardCriteria.i, MathHelper.f((float) this.bY));
             }
 
-            if (this.getArmorStrength() != this.bY) {
-                this.bY = this.getArmorStrength();
-                this.a(IScoreboardCriteria.j, MathHelper.f((float) this.bY));
+            if (this.getArmorStrength() != this.bZ) {
+                this.bZ = this.getArmorStrength();
+                this.a(IScoreboardCriteria.j, MathHelper.f((float) this.bZ));
             }
 
-            if (this.expTotal != this.ca) {
-                this.ca = this.expTotal;
-                this.a(IScoreboardCriteria.k, MathHelper.f((float) this.ca));
+            if (this.expTotal != this.cb) {
+                this.cb = this.expTotal;
+                this.a(IScoreboardCriteria.k, MathHelper.f((float) this.cb));
             }
 
-            if (this.expLevel != this.bZ) {
-                this.bZ = this.expLevel;
-                this.a(IScoreboardCriteria.l, MathHelper.f((float) this.bZ));
+            if (this.expLevel != this.ca) {
+                this.ca = this.expLevel;
+                this.a(IScoreboardCriteria.l, MathHelper.f((float) this.ca));
             }
 
             if (this.expTotal != this.lastSentExp) {
@@ -303,7 +303,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         this.playerConnection.sendPacket(new PacketPlayOutCombatEvent(this.getCombatTracker(), PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED, flag));
         if (flag) {
-            ScoreboardTeamBase scoreboardteambase = this.aO();
+            ScoreboardTeamBase scoreboardteambase = this.aQ();
 
             if (scoreboardteambase != null && scoreboardteambase.getDeathMessageVisibility() != ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS) {
                 if (scoreboardteambase.getDeathMessageVisibility() == ScoreboardTeamBase.EnumNameTagVisibility.HIDE_FOR_OTHER_TEAMS) {
@@ -330,7 +330,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             scoreboardscore.incrementScore();
         }
 
-        EntityLiving entityliving = this.bW();
+        EntityLiving entityliving = this.bZ();
 
         if (entityliving != null) {
             EntityTypes.MonsterEggInfo entitytypes_monsteregginfo = (EntityTypes.MonsterEggInfo) EntityTypes.eggInfo.get(EntityTypes.b((Entity) entityliving));
@@ -339,7 +339,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 this.b(entitytypes_monsteregginfo.killedByEntityStatistic);
             }
 
-            entityliving.b(this, this.bb);
+            entityliving.b(this, this.bc);
         }
 
         this.b(StatisticList.A);
@@ -387,7 +387,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     @Nullable
     public Entity c(int i) {
-        this.ck = true;
+        this.worldChangeInvuln = true;
         if (this.dimension == 1 && i == 1) {
             this.world.kill(this);
             if (!this.viewingCredits) {
@@ -413,7 +413,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             this.playerConnection.sendPacket(new PacketPlayOutWorldEvent(1032, BlockPosition.ZERO, 0, false));
             this.lastSentExp = -1;
             this.lastHealthSent = -1.0F;
-            this.cc = -1;
+            this.cd = -1;
             return this;
         }
     }
@@ -466,12 +466,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public boolean a(Entity entity, boolean flag) {
-        Entity entity1 = this.bz();
+        Entity entity1 = this.bB();
 
         if (!super.a(entity, flag)) {
             return false;
         } else {
-            Entity entity2 = this.bz();
+            Entity entity2 = this.bB();
 
             if (entity2 != entity1 && this.playerConnection != null) {
                 this.playerConnection.a(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
@@ -482,10 +482,10 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void stopRiding() {
-        Entity entity = this.bz();
+        Entity entity = this.bB();
 
         super.stopRiding();
-        Entity entity1 = this.bz();
+        Entity entity1 = this.bB();
 
         if (entity1 != entity && this.playerConnection != null) {
             this.playerConnection.a(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
@@ -626,11 +626,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void a(TileEntityCommand tileentitycommand) {
-        if (this.a(2, "")) {
-            tileentitycommand.d(true);
-            this.a((TileEntity) tileentitycommand);
-        }
-
+        tileentitycommand.d(true);
+        this.a((TileEntity) tileentitycommand);
     }
 
     public void a(Container container, int i, ItemStack itemstack) {
@@ -680,26 +677,26 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public void a(float f, float f1, boolean flag, boolean flag1) {
         if (this.isPassenger()) {
             if (f >= -1.0F && f <= 1.0F) {
-                this.be = f;
+                this.bf = f;
             }
 
             if (f1 >= -1.0F && f1 <= 1.0F) {
-                this.bf = f1;
+                this.bg = f1;
             }
 
-            this.bd = flag;
+            this.be = flag;
             this.setSneaking(flag1);
         }
 
     }
 
     public boolean a(Achievement achievement) {
-        return this.bU.hasAchievement(achievement);
+        return this.bV.hasAchievement(achievement);
     }
 
     public void a(Statistic statistic, int i) {
         if (statistic != null) {
-            this.bU.b(this, statistic, i);
+            this.bV.b(this, statistic, i);
             Iterator iterator = this.getScoreboard().getObjectivesForCriteria(statistic.k()).iterator();
 
             while (iterator.hasNext()) {
@@ -708,8 +705,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 this.getScoreboard().getPlayerScoreForObjective(this.getName(), scoreboardobjective).addScore(i);
             }
 
-            if (this.bU.e()) {
-                this.bU.a(this);
+            if (this.bV.e()) {
+                this.bV.a(this);
             }
 
         }
@@ -717,7 +714,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void a(Statistic statistic) {
         if (statistic != null) {
-            this.bU.setStatistic(this, statistic, 0);
+            this.bV.setStatistic(this, statistic, 0);
             Iterator iterator = this.getScoreboard().getObjectivesForCriteria(statistic.k()).iterator();
 
             while (iterator.hasNext()) {
@@ -726,8 +723,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 this.getScoreboard().getPlayerScoreForObjective(this.getName(), scoreboardobjective).setScore(0);
             }
 
-            if (this.bU.e()) {
-                this.bU.a(this);
+            if (this.bV.e()) {
+                this.bV.a(this);
             }
 
         }
@@ -750,7 +747,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     protected void v() {
-        if (this.bn != null && this.ct()) {
+        if (this.bo != null && this.cx()) {
             this.playerConnection.sendPacket(new PacketPlayOutEntityStatus(this, (byte) 9));
             super.v();
         }
@@ -761,7 +758,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         super.copyTo(entityhuman, flag);
         this.lastSentExp = -1;
         this.lastHealthSent = -1.0F;
-        this.cc = -1;
+        this.cd = -1;
         this.removeQueue.addAll(((EntityPlayer) entityhuman).removeQueue);
     }
 
@@ -803,25 +800,25 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         return (WorldServer) this.world;
     }
 
-    public void a(WorldSettings.EnumGamemode worldsettings_enumgamemode) {
-        this.playerInteractManager.setGameMode(worldsettings_enumgamemode);
-        this.playerConnection.sendPacket(new PacketPlayOutGameStateChange(3, (float) worldsettings_enumgamemode.getId()));
-        if (worldsettings_enumgamemode == WorldSettings.EnumGamemode.SPECTATOR) {
+    public void a(EnumGamemode enumgamemode) {
+        this.playerInteractManager.setGameMode(enumgamemode);
+        this.playerConnection.sendPacket(new PacketPlayOutGameStateChange(3, (float) enumgamemode.getId()));
+        if (enumgamemode == EnumGamemode.SPECTATOR) {
             this.stopRiding();
         } else {
             this.setSpectatorTarget(this);
         }
 
         this.updateAbilities();
-        this.cr();
+        this.cv();
     }
 
     public boolean isSpectator() {
-        return this.playerInteractManager.getGameMode() == WorldSettings.EnumGamemode.SPECTATOR;
+        return this.playerInteractManager.getGameMode() == EnumGamemode.SPECTATOR;
     }
 
-    public boolean l_() {
-        return this.playerInteractManager.getGameMode() == WorldSettings.EnumGamemode.CREATIVE;
+    public boolean z() {
+        return this.playerInteractManager.getGameMode() == EnumGamemode.CREATIVE;
     }
 
     public void sendMessage(IChatBaseComponent ichatbasecomponent) {
@@ -854,14 +851,14 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void a(PacketPlayInSettings packetplayinsettings) {
         this.locale = packetplayinsettings.a();
-        this.cg = packetplayinsettings.c();
-        this.ch = packetplayinsettings.d();
-        this.getDataWatcher().set(EntityPlayer.bq, Byte.valueOf((byte) packetplayinsettings.e()));
-        this.getDataWatcher().set(EntityPlayer.br, Byte.valueOf((byte) (packetplayinsettings.f() == EnumMainHand.LEFT ? 0 : 1)));
+        this.ch = packetplayinsettings.c();
+        this.ci = packetplayinsettings.d();
+        this.getDataWatcher().set(EntityPlayer.br, Byte.valueOf((byte) packetplayinsettings.e()));
+        this.getDataWatcher().set(EntityPlayer.bs, Byte.valueOf((byte) (packetplayinsettings.getMainHand() == EnumMainHand.LEFT ? 0 : 1)));
     }
 
     public EntityHuman.EnumChatVisibility getChatFlags() {
-        return this.cg;
+        return this.ch;
     }
 
     public void setResourcePack(String s, String s1) {
@@ -873,11 +870,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void resetIdleTimer() {
-        this.ci = MinecraftServer.av();
+        this.cj = MinecraftServer.av();
     }
 
     public ServerStatisticManager getStatisticManager() {
-        return this.bU;
+        return this.bV;
     }
 
     public void c(Entity entity) {
@@ -895,7 +892,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     protected void F() {
         if (this.isSpectator()) {
-            this.bN();
+            this.bP();
             this.setInvisible(true);
         } else {
             super.F();
@@ -905,29 +902,29 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public Entity getSpecatorTarget() {
-        return (Entity) (this.cj == null ? this : this.cj);
+        return (Entity) (this.ck == null ? this : this.ck);
     }
 
     public void setSpectatorTarget(Entity entity) {
         Entity entity1 = this.getSpecatorTarget();
 
-        this.cj = (Entity) (entity == null ? this : entity);
-        if (entity1 != this.cj) {
-            this.playerConnection.sendPacket(new PacketPlayOutCamera(this.cj));
-            this.enderTeleportTo(this.cj.locX, this.cj.locY, this.cj.locZ);
+        this.ck = (Entity) (entity == null ? this : entity);
+        if (entity1 != this.ck) {
+            this.playerConnection.sendPacket(new PacketPlayOutCamera(this.ck));
+            this.enderTeleportTo(this.ck.locX, this.ck.locY, this.ck.locZ);
         }
 
     }
 
     protected void H() {
-        if (this.portalCooldown > 0 && !this.ck) {
+        if (this.portalCooldown > 0 && !this.worldChangeInvuln) {
             --this.portalCooldown;
         }
 
     }
 
     public void attack(Entity entity) {
-        if (this.playerInteractManager.getGameMode() == WorldSettings.EnumGamemode.SPECTATOR) {
+        if (this.playerInteractManager.getGameMode() == EnumGamemode.SPECTATOR) {
             this.setSpectatorTarget(entity);
         } else {
             super.attack(entity);
@@ -936,7 +933,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public long I() {
-        return this.ci;
+        return this.cj;
     }
 
     @Nullable
@@ -946,15 +943,15 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void a(EnumHand enumhand) {
         super.a(enumhand);
-        this.da();
+        this.de();
     }
 
     public boolean K() {
-        return this.ck;
+        return this.worldChangeInvuln;
     }
 
     public void L() {
-        this.ck = false;
+        this.worldChangeInvuln = false;
     }
 
     public void M() {

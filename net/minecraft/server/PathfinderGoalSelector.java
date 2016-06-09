@@ -15,7 +15,7 @@ public class PathfinderGoalSelector {
     private final MethodProfiler d;
     private int e;
     private int f = 3;
-    private int g = 0;
+    private int g;
 
     public PathfinderGoalSelector(MethodProfiler methodprofiler) {
         this.d = methodprofiler;

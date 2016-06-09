@@ -35,6 +35,10 @@ public class EntitySpectralArrow extends EntityArrow {
         entityliving.addEffect(mobeffect);
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityArrow.a(dataconvertermanager, "SpectralArrow");
+    }
+
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.hasKey("Duration")) {

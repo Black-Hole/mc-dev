@@ -4,8 +4,8 @@ import javax.annotation.Nullable;
 
 public class ContainerMerchant extends Container {
 
-    private IMerchant merchant;
-    private InventoryMerchant f;
+    private final IMerchant merchant;
+    private final InventoryMerchant f;
     private final World g;
 
     public ContainerMerchant(PlayerInventory playerinventory, IMerchant imerchant, World world) {

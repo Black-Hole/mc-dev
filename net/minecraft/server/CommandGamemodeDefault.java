@@ -18,22 +18,22 @@ public class CommandGamemodeDefault extends CommandGamemode {
         if (astring.length <= 0) {
             throw new ExceptionUsage("commands.defaultgamemode.usage", new Object[0]);
         } else {
-            WorldSettings.EnumGamemode worldsettings_enumgamemode = this.c(icommandlistener, astring[0]);
+            EnumGamemode enumgamemode = this.c(icommandlistener, astring[0]);
 
-            this.a(worldsettings_enumgamemode, minecraftserver);
-            a(icommandlistener, (ICommand) this, "commands.defaultgamemode.success", new Object[] { new ChatMessage("gameMode." + worldsettings_enumgamemode.b(), new Object[0])});
+            this.a(enumgamemode, minecraftserver);
+            a(icommandlistener, (ICommand) this, "commands.defaultgamemode.success", new Object[] { new ChatMessage("gameMode." + enumgamemode.b(), new Object[0])});
         }
     }
 
-    protected void a(WorldSettings.EnumGamemode worldsettings_enumgamemode, MinecraftServer minecraftserver) {
-        minecraftserver.setGamemode(worldsettings_enumgamemode);
+    protected void a(EnumGamemode enumgamemode, MinecraftServer minecraftserver) {
+        minecraftserver.setGamemode(enumgamemode);
         if (minecraftserver.getForceGamemode()) {
             Iterator iterator = minecraftserver.getPlayerList().v().iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                entityplayer.a(worldsettings_enumgamemode);
+                entityplayer.a(enumgamemode);
             }
         }
 

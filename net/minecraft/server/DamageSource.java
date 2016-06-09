@@ -8,6 +8,7 @@ public class DamageSource {
     public static DamageSource LIGHTNING = new DamageSource("lightningBolt");
     public static DamageSource BURN = (new DamageSource("onFire")).setIgnoreArmor().setExplosion();
     public static DamageSource LAVA = (new DamageSource("lava")).setExplosion();
+    public static DamageSource HOT_FLOOR = (new DamageSource("hotFloor")).setExplosion();
     public static DamageSource STUCK = (new DamageSource("inWall")).setIgnoreArmor();
     public static DamageSource DROWN = (new DamageSource("drown")).setIgnoreArmor();
     public static DamageSource STARVE = (new DamageSource("starve")).setIgnoreArmor().m();
@@ -21,15 +22,15 @@ public class DamageSource {
     public static DamageSource ANVIL = new DamageSource("anvil");
     public static DamageSource FALLING_BLOCK = new DamageSource("fallingBlock");
     public static DamageSource DRAGON_BREATH = (new DamageSource("dragonBreath")).setIgnoreArmor();
-    private boolean s;
     private boolean t;
     private boolean u;
-    private float v = 0.3F;
-    private boolean w;
+    private boolean v;
+    private float w = 0.3F;
     private boolean x;
     private boolean y;
     private boolean z;
     private boolean A;
+    private boolean B;
     public String translationIndex;
 
     public static DamageSource mobAttack(EntityLiving entityliving) {
@@ -73,37 +74,37 @@ public class DamageSource {
     }
 
     public boolean a() {
-        return this.x;
+        return this.y;
     }
 
     public DamageSource b() {
-        this.x = true;
+        this.y = true;
         return this;
     }
 
     public boolean isExplosion() {
-        return this.A;
+        return this.B;
     }
 
     public DamageSource d() {
-        this.A = true;
+        this.B = true;
         return this;
     }
 
     public boolean ignoresArmor() {
-        return this.s;
-    }
-
-    public float getExhaustionCost() {
-        return this.v;
-    }
-
-    public boolean ignoresInvulnerability() {
         return this.t;
     }
 
-    public boolean isStarvation() {
+    public float getExhaustionCost() {
+        return this.w;
+    }
+
+    public boolean ignoresInvulnerability() {
         return this.u;
+    }
+
+    public boolean isStarvation() {
+        return this.v;
     }
 
     protected DamageSource(String s) {
@@ -121,29 +122,29 @@ public class DamageSource {
     }
 
     protected DamageSource setIgnoreArmor() {
-        this.s = true;
-        this.v = 0.0F;
+        this.t = true;
+        this.w = 0.0F;
         return this;
     }
 
     protected DamageSource l() {
-        this.t = true;
+        this.u = true;
         return this;
     }
 
     protected DamageSource m() {
-        this.u = true;
-        this.v = 0.0F;
+        this.v = true;
+        this.w = 0.0F;
         return this;
     }
 
     protected DamageSource setExplosion() {
-        this.w = true;
+        this.x = true;
         return this;
     }
 
     public IChatBaseComponent getLocalizedDeathMessage(EntityLiving entityliving) {
-        EntityLiving entityliving1 = entityliving.bW();
+        EntityLiving entityliving1 = entityliving.bZ();
         String s = "death.attack." + this.translationIndex;
         String s1 = s + ".player";
 
@@ -151,7 +152,7 @@ public class DamageSource {
     }
 
     public boolean o() {
-        return this.w;
+        return this.x;
     }
 
     public String p() {
@@ -159,20 +160,20 @@ public class DamageSource {
     }
 
     public DamageSource q() {
-        this.y = true;
+        this.z = true;
         return this;
     }
 
     public boolean r() {
-        return this.y;
-    }
-
-    public boolean isMagic() {
         return this.z;
     }
 
+    public boolean isMagic() {
+        return this.A;
+    }
+
     public DamageSource setMagic() {
-        this.z = true;
+        this.A = true;
         return this;
     }
 

@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class PathfinderGoalBreed extends PathfinderGoal {
 
-    private EntityAnimal animal;
+    private final EntityAnimal animal;
     World a;
     private EntityAnimal partner;
     int b;

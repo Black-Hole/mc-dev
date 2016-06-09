@@ -9,7 +9,7 @@ public class DragonControllerLandedAttack extends AbstractDragonControllerLanded
     }
 
     public void b() {
-        this.a.world.a(this.a.locX, this.a.locY, this.a.locZ, SoundEffects.aR, this.a.bA(), 2.5F, 0.8F + this.a.getRandom().nextFloat() * 0.3F, false);
+        this.a.world.a(this.a.locX, this.a.locY, this.a.locZ, SoundEffects.aS, this.a.bC(), 2.5F, 0.8F + this.a.getRandom().nextFloat() * 0.3F, false);
     }
 
     public void c() {

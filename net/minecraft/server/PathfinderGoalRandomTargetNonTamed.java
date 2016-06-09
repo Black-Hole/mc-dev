@@ -4,7 +4,7 @@ import com.google.common.base.Predicate;
 
 public class PathfinderGoalRandomTargetNonTamed<T extends EntityLiving> extends PathfinderGoalNearestAttackableTarget<T> {
 
-    private EntityTameableAnimal i;
+    private final EntityTameableAnimal i;
 
     public PathfinderGoalRandomTargetNonTamed(EntityTameableAnimal entitytameableanimal, Class<T> oclass, boolean flag, Predicate<? super T> predicate) {
         super(entitytameableanimal, oclass, 10, flag, false, predicate);

@@ -12,6 +12,10 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityMinecartAbstract.a(dataconvertermanager, "MinecartTNT");
+    }
+
     public EntityMinecartAbstract.EnumMinecartType v() {
         return EntityMinecartAbstract.EnumMinecartType.TNT;
     }
@@ -102,8 +106,8 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         this.a = 80;
         if (!this.world.isClientSide) {
             this.world.broadcastEntityEffect(this, (byte) 10);
-            if (!this.ad()) {
-                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.gk, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            if (!this.isSilent()) {
+                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.gz, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
         }
 

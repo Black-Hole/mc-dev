@@ -9,6 +9,10 @@ public class EntityCow extends EntityAnimal {
         this.setSize(0.9F, 1.4F);
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "Cow");
+    }
+
     protected void r() {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 2.0D));
@@ -30,11 +34,11 @@ public class EntityCow extends EntityAnimal {
         return SoundEffects.am;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bV() {
         return SoundEffects.ao;
     }
 
-    protected SoundEffect bT() {
+    protected SoundEffect bW() {
         return SoundEffects.an;
     }
 
@@ -42,13 +46,13 @@ public class EntityCow extends EntityAnimal {
         this.a(SoundEffects.aq, 0.15F, 1.0F);
     }
 
-    protected float ce() {
+    protected float ch() {
         return 0.4F;
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.H;
+        return LootTables.I;
     }
 
     public boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {

@@ -15,6 +15,10 @@ public class EntityDragonFireball extends EntityFireball {
         this.setSize(0.3125F, 0.3125F);
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityFireball.a(dataconvertermanager, "DragonFireball");
+    }
+
     protected void a(MovingObjectPosition movingobjectposition) {
         if (!this.world.isClientSide) {
             List list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(4.0D, 2.0D, 4.0D));

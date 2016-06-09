@@ -21,13 +21,13 @@ public class NavigationGuardian extends NavigationAbstract {
     protected void m() {
         Vec3D vec3d = this.c();
         float f = this.a.width * this.a.width;
-        byte b0 = 6;
+        boolean flag = true;
 
         if (vec3d.distanceSquared(this.c.a(this.a, this.c.e())) < (double) f) {
             this.c.a();
         }
 
-        for (int i = Math.min(this.c.e() + b0, this.c.d() - 1); i > this.c.e(); --i) {
+        for (int i = Math.min(this.c.e() + 6, this.c.d() - 1); i > this.c.e(); --i) {
             Vec3D vec3d1 = this.c.a(this.a, i);
 
             if (vec3d1.distanceSquared(vec3d) <= 36.0D && this.a(vec3d, vec3d1, 0, 0, 0)) {

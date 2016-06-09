@@ -12,6 +12,10 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
 
     public TileEntityHopper() {}
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList("Hopper", new String[] { "Items"})));
+    }
+
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.items = new ItemStack[this.getSize()];
@@ -20,7 +24,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         }
 
         this.g = nbttagcompound.getInt("TransferCooldown");
-        if (!this.d(nbttagcompound)) {
+        if (!this.c(nbttagcompound)) {
             NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -37,7 +41,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (!this.e(nbttagcompound)) {
+        if (!this.d(nbttagcompound)) {
             NBTTagList nbttaglist = new NBTTagList();
 
             for (int i = 0; i < this.items.length; ++i) {
@@ -120,7 +124,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         return true;
     }
 
-    public void c() {
+    public void E_() {
         if (this.world != null && !this.world.isClientSide) {
             --this.g;
             if (!this.o()) {
@@ -221,19 +225,22 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         if (iinventory instanceof IWorldInventory) {
             IWorldInventory iworldinventory = (IWorldInventory) iinventory;
             int[] aint = iworldinventory.getSlotsForFace(enumdirection);
+            int[] aint1 = aint;
+            int i = aint.length;
 
-            for (int i = 0; i < aint.length; ++i) {
-                ItemStack itemstack = iworldinventory.getItem(aint[i]);
+            for (int j = 0; j < i; ++j) {
+                int k = aint1[j];
+                ItemStack itemstack = iworldinventory.getItem(k);
 
                 if (itemstack == null || itemstack.count != itemstack.getMaxStackSize()) {
                     return false;
                 }
             }
         } else {
-            int j = iinventory.getSize();
+            int l = iinventory.getSize();
 
-            for (int k = 0; k < j; ++k) {
-                ItemStack itemstack1 = iinventory.getItem(k);
+            for (int i1 = 0; i1 < l; ++i1) {
+                ItemStack itemstack1 = iinventory.getItem(i1);
 
                 if (itemstack1 == null || itemstack1.count != itemstack1.getMaxStackSize()) {
                     return false;
@@ -248,17 +255,21 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         if (iinventory instanceof IWorldInventory) {
             IWorldInventory iworldinventory = (IWorldInventory) iinventory;
             int[] aint = iworldinventory.getSlotsForFace(enumdirection);
+            int[] aint1 = aint;
+            int i = aint.length;
 
-            for (int i = 0; i < aint.length; ++i) {
-                if (iworldinventory.getItem(aint[i]) != null) {
+            for (int j = 0; j < i; ++j) {
+                int k = aint1[j];
+
+                if (iworldinventory.getItem(k) != null) {
                     return false;
                 }
             }
         } else {
-            int j = iinventory.getSize();
+            int l = iinventory.getSize();
 
-            for (int k = 0; k < j; ++k) {
-                if (iinventory.getItem(k) != null) {
+            for (int i1 = 0; i1 < l; ++i1) {
+                if (iinventory.getItem(i1) != null) {
                     return false;
                 }
             }
@@ -280,17 +291,21 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
             if (iinventory instanceof IWorldInventory) {
                 IWorldInventory iworldinventory = (IWorldInventory) iinventory;
                 int[] aint = iworldinventory.getSlotsForFace(enumdirection);
+                int[] aint1 = aint;
+                int i = aint.length;
 
-                for (int i = 0; i < aint.length; ++i) {
-                    if (a(ihopper, iinventory, aint[i], enumdirection)) {
+                for (int j = 0; j < i; ++j) {
+                    int k = aint1[j];
+
+                    if (a(ihopper, iinventory, k, enumdirection)) {
                         return true;
                     }
                 }
             } else {
-                int j = iinventory.getSize();
+                int l = iinventory.getSize();
 
-                for (int k = 0; k < j; ++k) {
-                    if (a(ihopper, iinventory, k, enumdirection)) {
+                for (int i1 = 0; i1 < l; ++i1) {
+                    if (a(ihopper, iinventory, i1, enumdirection)) {
                         return true;
                     }
                 }

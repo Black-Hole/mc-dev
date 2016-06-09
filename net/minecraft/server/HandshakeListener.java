@@ -16,12 +16,12 @@ public class HandshakeListener implements PacketHandshakingInListener {
             this.b.setProtocol(EnumProtocol.LOGIN);
             ChatComponentText chatcomponenttext;
 
-            if (packethandshakinginsetprotocol.b() > 110) {
-                chatcomponenttext = new ChatComponentText("Outdated server! I\'m still on 1.9.4");
+            if (packethandshakinginsetprotocol.b() > 210) {
+                chatcomponenttext = new ChatComponentText("Outdated server! I\'m still on 1.10");
                 this.b.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
                 this.b.close(chatcomponenttext);
-            } else if (packethandshakinginsetprotocol.b() < 110) {
-                chatcomponenttext = new ChatComponentText("Outdated client! Please use 1.9.4");
+            } else if (packethandshakinginsetprotocol.b() < 210) {
+                chatcomponenttext = new ChatComponentText("Outdated client! Please use 1.10");
                 this.b.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
                 this.b.close(chatcomponenttext);
             } else {

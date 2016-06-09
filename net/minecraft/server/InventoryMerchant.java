@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 public class InventoryMerchant implements IInventory {
 
     private final IMerchant merchant;
-    private ItemStack[] itemsInSlots = new ItemStack[3];
+    private final ItemStack[] itemsInSlots = new ItemStack[3];
     private final EntityHuman player;
     private MerchantRecipe recipe;
     public int selectedIndex;

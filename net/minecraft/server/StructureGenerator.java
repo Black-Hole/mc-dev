@@ -105,7 +105,7 @@ public abstract class StructureGenerator extends WorldGenBase {
                 while (iterator1.hasNext()) {
                     StructurePiece structurepiece = (StructurePiece) iterator1.next();
 
-                    if (structurepiece.c().b((BaseBlockPosition) blockposition)) {
+                    if (structurepiece.d().b((BaseBlockPosition) blockposition)) {
                         return structurestart;
                     }
                 }
@@ -168,7 +168,7 @@ public abstract class StructureGenerator extends WorldGenBase {
         if (blockposition1 != null) {
             return blockposition1;
         } else {
-            List list = this.F_();
+            List list = this.G_();
 
             if (list != null) {
                 BlockPosition blockposition3 = null;
@@ -190,7 +190,7 @@ public abstract class StructureGenerator extends WorldGenBase {
         }
     }
 
-    protected List<BlockPosition> F_() {
+    protected List<BlockPosition> G_() {
         return null;
     }
 

@@ -62,7 +62,10 @@ public class EntityItem extends Entity {
             this.lastX = this.locX;
             this.lastY = this.locY;
             this.lastZ = this.locZ;
-            this.motY -= 0.03999999910593033D;
+            if (!this.isNoGravity()) {
+                this.motY -= 0.03999999910593033D;
+            }
+
             this.noclip = this.j(this.locX, (this.getBoundingBox().b + this.getBoundingBox().e) / 2.0D, this.locZ);
             this.move(this.motX, this.motY, this.motZ);
             boolean flag = (int) this.lastX != (int) this.locX || (int) this.lastY != (int) this.locY || (int) this.lastZ != (int) this.locZ;
@@ -72,7 +75,7 @@ public class EntityItem extends Entity {
                     this.motY = 0.20000000298023224D;
                     this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
                     this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-                    this.a(SoundEffects.bA, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
+                    this.a(SoundEffects.bB, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
                 }
 
                 if (!this.world.isClientSide) {
@@ -97,7 +100,7 @@ public class EntityItem extends Entity {
                 ++this.age;
             }
 
-            this.aj();
+            this.ak();
             if (!this.world.isClientSide && this.age >= 6000) {
                 this.die();
             }
@@ -162,10 +165,10 @@ public class EntityItem extends Entity {
         this.age = 4800;
     }
 
-    public boolean aj() {
+    public boolean ak() {
         if (this.world.a(this.getBoundingBox(), Material.WATER, (Entity) this)) {
             if (!this.inWater && !this.justCreated) {
-                this.ak();
+                this.al();
             }
 
             this.inWater = true;
@@ -186,7 +189,7 @@ public class EntityItem extends Entity {
         } else if (this.getItemStack() != null && this.getItemStack().getItem() == Items.NETHER_STAR && damagesource.isExplosion()) {
             return false;
         } else {
-            this.ao();
+            this.ap();
             this.f = (int) ((float) this.f - f);
             if (this.f <= 0) {
                 this.die();
@@ -194,6 +197,10 @@ public class EntityItem extends Entity {
 
             return false;
         }
+    }
+
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItem("Item", new String[] { "Item"})));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -272,8 +279,8 @@ public class EntityItem extends Entity {
                     }
                 }
 
-                if (!this.ad()) {
-                    this.world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.cV, SoundCategory.PLAYERS, 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                if (!this.isSilent()) {
+                    this.world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.da, SoundCategory.PLAYERS, 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 }
 
                 entityhuman.receive(this, i);
@@ -291,7 +298,7 @@ public class EntityItem extends Entity {
         return this.hasCustomName() ? this.getCustomName() : LocaleI18n.get("item." + this.getItemStack().a());
     }
 
-    public boolean aT() {
+    public boolean aV() {
         return false;
     }
 
@@ -311,7 +318,7 @@ public class EntityItem extends Entity {
 
         if (itemstack == null) {
             if (this.world != null) {
-                EntityItem.b.error("Item entity " + this.getId() + " has no item?!");
+                EntityItem.b.error("Item entity {} has no item?!", new Object[] { Integer.valueOf(this.getId())});
             }
 
             return new ItemStack(Blocks.STONE);

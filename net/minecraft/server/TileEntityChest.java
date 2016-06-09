@@ -75,6 +75,10 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
         this.r = s;
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList("Chest", new String[] { "Items"})));
+    }
+
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.items = new ItemStack[this.getSize()];
@@ -82,7 +86,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
             this.r = nbttagcompound.getString("CustomName");
         }
 
-        if (!this.d(nbttagcompound)) {
+        if (!this.c(nbttagcompound)) {
             NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -99,7 +103,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (!this.e(nbttagcompound)) {
+        if (!this.d(nbttagcompound)) {
             NBTTagList nbttaglist = new NBTTagList();
 
             for (int i = 0; i < this.items.length; ++i) {
@@ -205,7 +209,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
         }
     }
 
-    public void c() {
+    public void E_() {
         this.m();
         int i = this.position.getX();
         int j = this.position.getY();
@@ -217,7 +221,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
         if (!this.world.isClientSide && this.l != 0 && (this.p + i + j + k) % 200 == 0) {
             this.l = 0;
             f = 5.0F;
-            List list = this.world.a(EntityHuman.class, new AxisAlignedBB((double) ((float) i - f), (double) ((float) j - f), (double) ((float) k - f), (double) ((float) (i + 1) + f), (double) ((float) (j + 1) + f), (double) ((float) (k + 1) + f)));
+            List list = this.world.a(EntityHuman.class, new AxisAlignedBB((double) ((float) i - 5.0F), (double) ((float) j - 5.0F), (double) ((float) k - 5.0F), (double) ((float) (i + 1) + 5.0F), (double) ((float) (j + 1) + 5.0F), (double) ((float) (k + 1) + 5.0F)));
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
@@ -256,9 +260,9 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
             float f1 = this.j;
 
             if (this.l > 0) {
-                this.j += f;
+                this.j += 0.1F;
             } else {
-                this.j -= f;
+                this.j -= 0.1F;
             }
 
             if (this.j > 1.0F) {
@@ -267,7 +271,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable, II
 
             float f2 = 0.5F;
 
-            if (this.j < f2 && f1 >= f2 && this.f == null && this.h == null) {
+            if (this.j < 0.5F && f1 >= 0.5F && this.f == null && this.h == null) {
                 d0 = (double) i + 0.5D;
                 double d2 = (double) k + 0.5D;
 

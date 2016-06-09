@@ -34,7 +34,7 @@ public class DataConverterSignText implements IDataConverter {
 
                 return ichatbasecomponent;
             } else {
-                throw new JsonParseException("Don\'t know how to turn " + jsonelement.toString() + " into a Component");
+                throw new JsonParseException("Don\'t know how to turn " + jsonelement + " into a Component");
             }
         }
 

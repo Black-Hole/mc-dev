@@ -111,7 +111,7 @@ public class BlockCobbleWall extends Block {
         private static final BlockCobbleWall.EnumCobbleVariant[] c = new BlockCobbleWall.EnumCobbleVariant[values().length];
         private final int d;
         private final String e;
-        private String f;
+        private final String f;
 
         private EnumCobbleVariant(int i, String s, String s1) {
             this.d = i;

@@ -70,7 +70,7 @@ public class EntityPainting extends EntityHanging {
 
     public void a(@Nullable Entity entity) {
         if (this.world.getGameRules().getBoolean("doEntityDrops")) {
-            this.a(SoundEffects.dO, 1.0F, 1.0F);
+            this.a(SoundEffects.dT, 1.0F, 1.0F);
             if (entity instanceof EntityHuman) {
                 EntityHuman entityhuman = (EntityHuman) entity;
 
@@ -84,7 +84,7 @@ public class EntityPainting extends EntityHanging {
     }
 
     public void o() {
-        this.a(SoundEffects.dP, 1.0F, 1.0F);
+        this.a(SoundEffects.dU, 1.0F, 1.0F);
     }
 
     public void setPositionRotation(double d0, double d1, double d2, float f, float f1) {

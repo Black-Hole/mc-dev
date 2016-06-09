@@ -10,9 +10,9 @@ public class BiomeDesert extends BiomeBase {
         this.r = Blocks.SAND.getBlockData();
         this.s = Blocks.SAND.getBlockData();
         this.t.z = -999;
-        this.t.C = 2;
-        this.t.E = 50;
-        this.t.F = 10;
+        this.t.D = 2;
+        this.t.F = 50;
+        this.t.G = 10;
         this.v.clear();
         this.v.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 4, 2, 3));
     }
@@ -25,6 +25,10 @@ public class BiomeDesert extends BiomeBase {
             BlockPosition blockposition1 = world.getHighestBlockYAt(blockposition.a(i, 0, j)).up();
 
             (new WorldGenDesertWell()).generate(world, random, blockposition1);
+        }
+
+        if (random.nextInt(64) == 0) {
+            (new WorldGenFossils()).generate(world, random, blockposition);
         }
 
     }

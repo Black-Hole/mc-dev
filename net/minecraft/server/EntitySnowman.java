@@ -11,6 +11,10 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         this.setSize(0.7F, 1.9F);
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "SnowMan");
+    }
+
     protected void r() {
         this.goalSelector.a(1, new PathfinderGoalArrowAttack(this, 1.25D, 20, 10.0F));
         this.goalSelector.a(2, new PathfinderGoalRandomStroll(this, 1.0D));
@@ -37,7 +41,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
             int j = MathHelper.floor(this.locY);
             int k = MathHelper.floor(this.locZ);
 
-            if (this.ah()) {
+            if (this.ai()) {
                 this.damageEntity(DamageSource.DROWN, 1.0F);
             }
 
@@ -77,7 +81,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         float f1 = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
 
         entitysnowball.shoot(d1, d2 + (double) f1, d3, 1.6F, 12.0F);
-        this.a(SoundEffects.fL, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.a(SoundEffects.fW, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(entitysnowball);
     }
 
@@ -86,19 +90,19 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     }
 
     protected boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {
-        if (itemstack != null && itemstack.getItem() == Items.SHEARS && !this.o() && !this.world.isClientSide) {
-            this.a(true);
+        if (itemstack != null && itemstack.getItem() == Items.SHEARS && !this.isDerp() && !this.world.isClientSide) {
+            this.setDerp(true);
             itemstack.damage(1, entityhuman);
         }
 
         return super.a(entityhuman, enumhand, itemstack);
     }
 
-    public boolean o() {
+    public boolean isDerp() {
         return (((Byte) this.datawatcher.get(EntitySnowman.a)).byteValue() & 16) != 0;
     }
 
-    public void a(boolean flag) {
+    public void setDerp(boolean flag) {
         byte b0 = ((Byte) this.datawatcher.get(EntitySnowman.a)).byteValue();
 
         if (flag) {
@@ -111,16 +115,16 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
 
     @Nullable
     protected SoundEffect G() {
-        return SoundEffects.fI;
+        return SoundEffects.fT;
     }
 
     @Nullable
-    protected SoundEffect bS() {
-        return SoundEffects.fK;
+    protected SoundEffect bV() {
+        return SoundEffects.fV;
     }
 
     @Nullable
-    protected SoundEffect bT() {
-        return SoundEffects.fJ;
+    protected SoundEffect bW() {
+        return SoundEffects.fU;
     }
 }

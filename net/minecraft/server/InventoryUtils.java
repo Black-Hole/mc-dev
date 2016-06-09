@@ -41,14 +41,14 @@ public class InventoryUtils {
             EntityItem entityitem = new EntityItem(world, d0 + (double) f, d1 + (double) f1, d2 + (double) f2, new ItemStack(itemstack.getItem(), i, itemstack.getData()));
 
             if (itemstack.hasTag()) {
-                entityitem.getItemStack().setTag((NBTTagCompound) itemstack.getTag().clone());
+                entityitem.getItemStack().setTag(itemstack.getTag().g());
             }
 
             float f3 = 0.05F;
 
-            entityitem.motX = InventoryUtils.a.nextGaussian() * (double) f3;
-            entityitem.motY = InventoryUtils.a.nextGaussian() * (double) f3 + 0.20000000298023224D;
-            entityitem.motZ = InventoryUtils.a.nextGaussian() * (double) f3;
+            entityitem.motX = InventoryUtils.a.nextGaussian() * 0.05000000074505806D;
+            entityitem.motY = InventoryUtils.a.nextGaussian() * 0.05000000074505806D + 0.20000000298023224D;
+            entityitem.motZ = InventoryUtils.a.nextGaussian() * 0.05000000074505806D;
             world.addEntity(entityitem);
         }
 

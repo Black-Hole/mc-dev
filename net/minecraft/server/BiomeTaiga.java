@@ -9,7 +9,7 @@ public class BiomeTaiga extends BiomeBase {
     private static final WorldGenMegaTree A = new WorldGenMegaTree(false, false);
     private static final WorldGenMegaTree B = new WorldGenMegaTree(false, true);
     private static final WorldGenTaigaStructure C = new WorldGenTaigaStructure(Blocks.MOSSY_COBBLESTONE, 0);
-    private BiomeTaiga.Type D;
+    private final BiomeTaiga.Type D;
 
     public BiomeTaiga(BiomeTaiga.Type biometaiga_type, BiomeBase.a biomebase_a) {
         super(biomebase_a);
@@ -18,12 +18,12 @@ public class BiomeTaiga extends BiomeBase {
         this.v.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 4, 2, 3));
         this.t.z = 10;
         if (biometaiga_type != BiomeTaiga.Type.MEGA && biometaiga_type != BiomeTaiga.Type.MEGA_SPRUCE) {
-            this.t.B = 1;
-            this.t.D = 1;
-        } else {
-            this.t.B = 7;
             this.t.C = 1;
-            this.t.D = 3;
+            this.t.E = 1;
+        } else {
+            this.t.C = 7;
+            this.t.D = 1;
+            this.t.E = 3;
         }
 
     }

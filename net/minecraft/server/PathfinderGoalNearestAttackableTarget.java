@@ -44,7 +44,7 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
         if (this.i > 0 && this.e.getRandom().nextInt(this.i) != 0) {
             return false;
         } else if (this.a != EntityHuman.class && this.a != EntityPlayer.class) {
-            List list = this.e.world.a(this.a, this.a(this.f()), this.c);
+            List list = this.e.world.a(this.a, this.a(this.i()), this.c);
 
             if (list.isEmpty()) {
                 return false;
@@ -54,14 +54,14 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
                 return true;
             }
         } else {
-            this.d = this.e.world.a(this.e.locX, this.e.locY + (double) this.e.getHeadHeight(), this.e.locZ, this.f(), this.f(), new Function() {
+            this.d = this.e.world.a(this.e.locX, this.e.locY + (double) this.e.getHeadHeight(), this.e.locZ, this.i(), this.i(), new Function() {
                 @Nullable
                 public Double a(@Nullable EntityHuman entityhuman) {
                     ItemStack itemstack = entityhuman.getEquipment(EnumItemSlot.HEAD);
 
                     if (itemstack != null && itemstack.getItem() == Items.SKULL) {
                         int i = itemstack.h();
-                        boolean flag = PathfinderGoalNearestAttackableTarget.this.e instanceof EntitySkeleton && ((EntitySkeleton) PathfinderGoalNearestAttackableTarget.this.e).getSkeletonType() == 0 && i == 0;
+                        boolean flag = PathfinderGoalNearestAttackableTarget.this.e instanceof EntitySkeleton && ((EntitySkeleton) PathfinderGoalNearestAttackableTarget.this.e).getSkeletonType() == EnumSkeletonType.NORMAL && i == 0;
                         boolean flag1 = PathfinderGoalNearestAttackableTarget.this.e instanceof EntityZombie && i == 2;
                         boolean flag2 = PathfinderGoalNearestAttackableTarget.this.e instanceof EntityCreeper && i == 4;
 

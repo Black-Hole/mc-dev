@@ -205,14 +205,14 @@ public class PlayerSelector {
                 s = s.substring(1);
             }
 
-            final WorldSettings.EnumGamemode worldsettings_enumgamemode;
+            final EnumGamemode enumgamemode;
 
             try {
                 int i = Integer.parseInt(s);
 
-                worldsettings_enumgamemode = WorldSettings.EnumGamemode.a(i, WorldSettings.EnumGamemode.NOT_SET);
+                enumgamemode = EnumGamemode.a(i, EnumGamemode.NOT_SET);
             } catch (Throwable throwable) {
-                worldsettings_enumgamemode = WorldSettings.EnumGamemode.a(s, WorldSettings.EnumGamemode.NOT_SET);
+                enumgamemode = EnumGamemode.a(s, EnumGamemode.NOT_SET);
             }
 
             arraylist.add(new Predicate() {
@@ -221,9 +221,9 @@ public class PlayerSelector {
                         return false;
                     } else {
                         EntityPlayer entityplayer = (EntityPlayer) entity;
-                        WorldSettings.EnumGamemode worldsettings_enumgamemode = entityplayer.playerInteractManager.getGameMode();
+                        EnumGamemode enumgamemode = entityplayer.playerInteractManager.getGameMode();
 
-                        return flag ? worldsettings_enumgamemode != worldsettings_enumgamemode1 : worldsettings_enumgamemode == worldsettings_enumgamemode1;
+                        return flag ? enumgamemode != enumgamemode1 : enumgamemode == enumgamemode1;
                     }
                 }
 
@@ -251,7 +251,7 @@ public class PlayerSelector {
                         return false;
                     } else {
                         EntityLiving entityliving = (EntityLiving) entity;
-                        ScoreboardTeamBase scoreboardteambase = entityliving.aO();
+                        ScoreboardTeamBase scoreboardteambase = entityliving.aQ();
                         String s = scoreboardteambase == null ? "" : scoreboardteambase.getName();
 
                         return s.equals(s1) != flag;
@@ -302,7 +302,7 @@ public class PlayerSelector {
                             return false;
                         }
 
-                        String s1 = entity instanceof EntityPlayer ? entity.getName() : entity.bd();
+                        String s1 = entity instanceof EntityPlayer ? entity.getName() : entity.bf();
 
                         if (!scoreboard.b(s1, scoreboardobjective)) {
                             return false;

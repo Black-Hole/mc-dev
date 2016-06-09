@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class VillageSiege {
 
-    private World a;
+    private final World a;
     private boolean b;
     private int c = -1;
     private int d;
@@ -134,7 +134,7 @@ public class VillageSiege {
             try {
                 entityzombie = new EntityZombie(this.a);
                 entityzombie.prepare(this.a.D(new BlockPosition(entityzombie)), (GroupDataEntity) null);
-                entityzombie.clearVillagerType();
+                entityzombie.setVillagerType(EnumZombieType.NORMAL);
             } catch (Exception exception) {
                 exception.printStackTrace();
                 return false;

@@ -36,7 +36,7 @@ public class CrashReport {
     private void h() {
         this.d.a("Minecraft Version", new CrashReportCallable() {
             public String a() {
-                return "1.9.4";
+                return "1.10";
             }
 
             public Object call() throws Exception {
@@ -148,7 +148,7 @@ public class CrashReport {
             for (int j = 0; j < i; ++j) {
                 StackTraceElement stacktraceelement = astacktraceelement[j];
 
-                stringbuilder.append("\t").append("at ").append(stacktraceelement.toString());
+                stringbuilder.append("\t").append("at ").append(stacktraceelement);
                 stringbuilder.append("\n");
             }
 
@@ -232,17 +232,25 @@ public class CrashReport {
                 file.getParentFile().mkdirs();
             }
 
-            try {
-                FileWriter filewriter = new FileWriter(file);
+            FileWriter filewriter = null;
 
+            boolean flag;
+
+            try {
+                filewriter = new FileWriter(file);
                 filewriter.write(this.e());
-                filewriter.close();
                 this.f = file;
-                return true;
+                boolean flag1 = true;
+
+                return flag1;
             } catch (Throwable throwable) {
-                CrashReport.a.error("Could not save crash report to " + file, throwable);
-                return false;
+                CrashReport.a.error("Could not save crash report to {}", new Object[] { file, throwable});
+                flag = false;
+            } finally {
+                IOUtils.closeQuietly(filewriter);
             }
+
+            return flag;
         }
     }
 

@@ -14,6 +14,10 @@ public class EntityEgg extends EntityProjectile {
         super(world, d0, d1, d2);
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityProjectile.a(dataconvertermanager, "ThrownEgg");
+    }
+
     protected void a(MovingObjectPosition movingobjectposition) {
         if (movingobjectposition.entity != null) {
             movingobjectposition.entity.damageEntity(DamageSource.projectile(this, this.getShooter()), 0.0F);

@@ -4,25 +4,26 @@ import javax.annotation.Nullable;
 
 public class ContainerBeacon extends Container {
 
-    private IInventory beacon;
+    private final IInventory beacon;
     private final ContainerBeacon.SlotBeacon f;
 
     public ContainerBeacon(IInventory iinventory, IInventory iinventory1) {
         this.beacon = iinventory1;
-        this.a((Slot) (this.f = new ContainerBeacon.SlotBeacon(iinventory1, 0, 136, 110)));
-        byte b0 = 36;
-        short short0 = 137;
+        this.f = new ContainerBeacon.SlotBeacon(iinventory1, 0, 136, 110);
+        this.a((Slot) this.f);
+        boolean flag = true;
+        boolean flag1 = true;
 
         int i;
 
         for (i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.a(new Slot(iinventory, j + i * 9 + 9, b0 + j * 18, short0 + i * 18));
+                this.a(new Slot(iinventory, j + i * 9 + 9, 36 + j * 18, 137 + i * 18));
             }
         }
 
         for (i = 0; i < 9; ++i) {
-            this.a(new Slot(iinventory, i, b0 + i * 18, 58 + short0));
+            this.a(new Slot(iinventory, i, 36 + i * 18, 195));
         }
 
     }

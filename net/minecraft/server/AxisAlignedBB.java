@@ -216,7 +216,7 @@ public class AxisAlignedBB {
     }
 
     @Nullable
-    public MovingObjectPosition a(Vec3D vec3d, Vec3D vec3d1) {
+    public MovingObjectPosition b(Vec3D vec3d, Vec3D vec3d1) {
         Vec3D vec3d2 = this.a(this.a, vec3d, vec3d1);
         EnumDirection enumdirection = EnumDirection.WEST;
         Vec3D vec3d3 = this.a(this.d, vec3d, vec3d1);

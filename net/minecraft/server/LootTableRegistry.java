@@ -53,7 +53,7 @@ public class LootTableRegistry {
 
         public LootTable a(MinecraftKey minecraftkey) throws Exception {
             if (minecraftkey.a().contains(".")) {
-                LootTableRegistry.a.debug("Invalid loot table name \'" + minecraftkey + "\' (can\'t contain periods)");
+                LootTableRegistry.a.debug("Invalid loot table name \'{}\' (can\'t contain periods)", new Object[] { minecraftkey});
                 return LootTable.a;
             } else {
                 LootTable loottable = this.b(minecraftkey);
@@ -82,18 +82,18 @@ public class LootTableRegistry {
                     try {
                         s = Files.toString(file, Charsets.UTF_8);
                     } catch (IOException ioexception) {
-                        LootTableRegistry.a.warn("Couldn\'t load loot table " + minecraftkey + " from " + file, ioexception);
+                        LootTableRegistry.a.warn("Couldn\'t load loot table {} from {}", new Object[] { minecraftkey, file, ioexception});
                         return LootTable.a;
                     }
 
                     try {
                         return (LootTable) LootTableRegistry.b.fromJson(s, LootTable.class);
                     } catch (JsonParseException jsonparseexception) {
-                        LootTableRegistry.a.error("Couldn\'t load loot table " + minecraftkey + " from " + file, jsonparseexception);
+                        LootTableRegistry.a.error("Couldn\'t load loot table {} from {}", new Object[] { minecraftkey, file, jsonparseexception});
                         return LootTable.a;
                     }
                 } else {
-                    LootTableRegistry.a.warn("Expected to find loot table " + minecraftkey + " at " + file + " but it was a folder.");
+                    LootTableRegistry.a.warn("Expected to find loot table {} at {} but it was a folder.", new Object[] { minecraftkey, file});
                     return LootTable.a;
                 }
             } else {
@@ -111,14 +111,14 @@ public class LootTableRegistry {
                 try {
                     s = Resources.toString(url, Charsets.UTF_8);
                 } catch (IOException ioexception) {
-                    LootTableRegistry.a.warn("Couldn\'t load loot table " + minecraftkey + " from " + url, ioexception);
+                    LootTableRegistry.a.warn("Couldn\'t load loot table {} from {}", new Object[] { minecraftkey, url, ioexception});
                     return LootTable.a;
                 }
 
                 try {
                     return (LootTable) LootTableRegistry.b.fromJson(s, LootTable.class);
                 } catch (JsonParseException jsonparseexception) {
-                    LootTableRegistry.a.error("Couldn\'t load loot table " + minecraftkey + " from " + url, jsonparseexception);
+                    LootTableRegistry.a.error("Couldn\'t load loot table {} from {}", new Object[] { minecraftkey, url, jsonparseexception});
                     return LootTable.a;
                 }
             } else {

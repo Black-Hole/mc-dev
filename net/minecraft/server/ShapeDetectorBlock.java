@@ -51,16 +51,4 @@ public class ShapeDetectorBlock {
             }
         };
     }
-
-    public static Predicate<ShapeDetectorBlock> a(final IBlockData iblockdata) {
-        return new Predicate() {
-            public boolean a(@Nullable ShapeDetectorBlock shapedetectorblock) {
-                return shapedetectorblock != null && shapedetectorblock.a().equals(iblockdata);
-            }
-
-            public boolean apply(Object object) {
-                return this.a((ShapeDetectorBlock) object);
-            }
-        };
-    }
 }

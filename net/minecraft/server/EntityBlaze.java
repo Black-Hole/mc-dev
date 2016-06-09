@@ -18,6 +18,10 @@ public class EntityBlaze extends EntityMonster {
         this.b_ = 10;
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "Blaze");
+    }
+
     protected void r() {
         this.goalSelector.a(4, new EntityBlaze.PathfinderGoalBlazeFireball(this));
         this.goalSelector.a(5, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
@@ -44,11 +48,11 @@ public class EntityBlaze extends EntityMonster {
         return SoundEffects.B;
     }
 
-    protected SoundEffect bS() {
+    protected SoundEffect bV() {
         return SoundEffects.E;
     }
 
-    protected SoundEffect bT() {
+    protected SoundEffect bW() {
         return SoundEffects.D;
     }
 
@@ -62,8 +66,8 @@ public class EntityBlaze extends EntityMonster {
         }
 
         if (this.world.isClientSide) {
-            if (this.random.nextInt(24) == 0 && !this.ad()) {
-                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, SoundEffects.C, this.bA(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
+            if (this.random.nextInt(24) == 0 && !this.isSilent()) {
+                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, SoundEffects.C, this.bC(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
             }
 
             for (int i = 0; i < 2; ++i) {
@@ -75,7 +79,7 @@ public class EntityBlaze extends EntityMonster {
     }
 
     protected void M() {
-        if (this.ah()) {
+        if (this.ai()) {
             this.damageEntity(DamageSource.DROWN, 1.0F);
         }
 
@@ -128,7 +132,7 @@ public class EntityBlaze extends EntityMonster {
 
     static class PathfinderGoalBlazeFireball extends PathfinderGoal {
 
-        private EntityBlaze a;
+        private final EntityBlaze a;
         private int b;
         private int c;
 

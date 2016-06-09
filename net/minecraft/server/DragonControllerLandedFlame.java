@@ -16,9 +16,9 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
             Vec3D vec3d = this.a.a(1.0F).a();
 
             vec3d.b(-0.7853982F);
-            double d0 = this.a.bv.locX;
-            double d1 = this.a.bv.locY + (double) (this.a.bv.length / 2.0F);
-            double d2 = this.a.bv.locZ;
+            double d0 = this.a.bw.locX;
+            double d1 = this.a.bw.locY + (double) (this.a.bw.length / 2.0F);
+            double d2 = this.a.bw.locZ;
 
             for (int i = 0; i < 8; ++i) {
                 double d3 = d0 + this.a.getRandom().nextGaussian() / 2.0D;
@@ -44,11 +44,11 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
                 this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.g);
             }
         } else if (this.b == 10) {
-            Vec3D vec3d = (new Vec3D(this.a.bv.locX - this.a.locX, 0.0D, this.a.bv.locZ - this.a.locZ)).a();
+            Vec3D vec3d = (new Vec3D(this.a.bw.locX - this.a.locX, 0.0D, this.a.bw.locZ - this.a.locZ)).a();
             float f = 5.0F;
-            double d0 = this.a.bv.locX + vec3d.x * (double) f / 2.0D;
-            double d1 = this.a.bv.locZ + vec3d.z * (double) f / 2.0D;
-            double d2 = this.a.bv.locY + (double) (this.a.bv.length / 2.0F);
+            double d0 = this.a.bw.locX + vec3d.x * 5.0D / 2.0D;
+            double d1 = this.a.bw.locZ + vec3d.z * 5.0D / 2.0D;
+            double d2 = this.a.bw.locY + (double) (this.a.bw.length / 2.0F);
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(MathHelper.floor(d0), MathHelper.floor(d2), MathHelper.floor(d1));
 
             while (this.a.world.isEmpty(blockposition_mutableblockposition)) {
@@ -59,7 +59,7 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
             d2 = (double) (MathHelper.floor(d2) + 1);
             this.d = new EntityAreaEffectCloud(this.a.world, d0, d2, d1);
             this.d.setSource(this.a);
-            this.d.setRadius(f);
+            this.d.setRadius(5.0F);
             this.d.setDuration(200);
             this.d.setParticle(EnumParticle.DRAGON_BREATH);
             this.d.a(new MobEffect(MobEffects.HARM));

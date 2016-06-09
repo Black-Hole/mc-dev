@@ -8,8 +8,8 @@ public class EntityIronGolem extends EntityGolem {
     protected static final DataWatcherObject<Byte> a = DataWatcher.a(EntityIronGolem.class, DataWatcherRegistry.a);
     private int c;
     Village b;
-    private int bw;
     private int bx;
+    private int by;
 
     public EntityIronGolem(World world) {
         super(world);
@@ -48,7 +48,7 @@ public class EntityIronGolem extends EntityGolem {
             this.c = 70 + this.random.nextInt(50);
             this.b = this.world.ai().getClosestVillage(new BlockPosition(this), 32);
             if (this.b == null) {
-                this.cY();
+                this.dc();
             } else {
                 BlockPosition blockposition = this.b.a();
 
@@ -80,12 +80,12 @@ public class EntityIronGolem extends EntityGolem {
 
     public void n() {
         super.n();
-        if (this.bw > 0) {
-            --this.bw;
-        }
-
         if (this.bx > 0) {
             --this.bx;
+        }
+
+        if (this.by > 0) {
+            --this.by;
         }
 
         if (this.motX * this.motX + this.motZ * this.motZ > 2.500000277905201E-7D && this.random.nextInt(5) == 0) {
@@ -105,6 +105,10 @@ public class EntityIronGolem extends EntityGolem {
         return this.isPlayerCreated() && EntityHuman.class.isAssignableFrom(oclass) ? false : (oclass == EntityCreeper.class ? false : super.d(oclass));
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "VillagerGolem");
+    }
+
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setBoolean("PlayerCreated", this.isPlayerCreated());
@@ -116,7 +120,7 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     public boolean B(Entity entity) {
-        this.bw = 10;
+        this.bx = 10;
         this.world.broadcastEntityEffect(this, (byte) 4);
         boolean flag = entity.damageEntity(DamageSource.mobAttack(this), (float) (7 + this.random.nextInt(15)));
 
@@ -125,7 +129,7 @@ public class EntityIronGolem extends EntityGolem {
             this.a((EntityLiving) this, entity);
         }
 
-        this.a(SoundEffects.cH, 1.0F, 1.0F);
+        this.a(SoundEffects.cM, 1.0F, 1.0F);
         return flag;
     }
 
@@ -134,20 +138,20 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     public void a(boolean flag) {
-        this.bx = flag ? 400 : 0;
+        this.by = flag ? 400 : 0;
         this.world.broadcastEntityEffect(this, (byte) 11);
     }
 
-    protected SoundEffect bS() {
-        return SoundEffects.cJ;
+    protected SoundEffect bV() {
+        return SoundEffects.cO;
     }
 
-    protected SoundEffect bT() {
-        return SoundEffects.cI;
+    protected SoundEffect bW() {
+        return SoundEffects.cN;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.cK, 1.0F, 1.0F);
+        this.a(SoundEffects.cP, 1.0F, 1.0F);
     }
 
     @Nullable
@@ -155,8 +159,8 @@ public class EntityIronGolem extends EntityGolem {
         return LootTables.z;
     }
 
-    public int db() {
-        return this.bx;
+    public int df() {
+        return this.by;
     }
 
     public boolean isPlayerCreated() {

@@ -41,10 +41,6 @@ public final class ItemStack {
     }
 
     public ItemStack(Item item, int i, int j) {
-        this.h = null;
-        this.i = false;
-        this.j = null;
-        this.k = false;
         this.item = item;
         this.count = i;
         this.damage = j;
@@ -61,11 +57,11 @@ public final class ItemStack {
         return itemstack.getItem() != null ? itemstack : null;
     }
 
-    private ItemStack() {
-        this.h = null;
-        this.i = false;
-        this.j = null;
-        this.k = false;
+    private ItemStack() {}
+
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.ITEM_INSTANCE, (DataInspector) (new DataInspectorBlockEntity()));
+        dataconvertermanager.a(DataConverterTypes.ITEM_INSTANCE, (DataInspector) (new DataInspectorEntity()));
     }
 
     public ItemStack cloneAndSubtract(int i) {
@@ -73,7 +69,7 @@ public final class ItemStack {
         ItemStack itemstack = new ItemStack(this.item, i, this.damage);
 
         if (this.tag != null) {
-            itemstack.tag = (NBTTagCompound) this.tag.clone();
+            itemstack.tag = this.tag.g();
         }
 
         this.count -= i;
@@ -255,7 +251,7 @@ public final class ItemStack {
         ItemStack itemstack = new ItemStack(this.item, this.count, this.damage);
 
         if (this.tag != null) {
-            itemstack.tag = (NBTTagCompound) this.tag.clone();
+            itemstack.tag = this.tag.g();
         }
 
         return itemstack;

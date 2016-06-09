@@ -35,9 +35,9 @@ public class RandomPositionGenerator {
         float f = -99999.0F;
         boolean flag1;
 
-        if (entitycreature.cZ()) {
-            double d0 = entitycreature.cW().distanceSquared((double) MathHelper.floor(entitycreature.locX), (double) MathHelper.floor(entitycreature.locY), (double) MathHelper.floor(entitycreature.locZ)) + 4.0D;
-            double d1 = (double) (entitycreature.cX() + (float) i);
+        if (entitycreature.dd()) {
+            double d0 = entitycreature.da().distanceSquared((double) MathHelper.floor(entitycreature.locX), (double) MathHelper.floor(entitycreature.locY), (double) MathHelper.floor(entitycreature.locZ)) + 4.0D;
+            double d1 = (double) (entitycreature.db() + (float) i);
 
             flag1 = d0 < d1 * d1;
         } else {
@@ -52,8 +52,8 @@ public class RandomPositionGenerator {
             if (vec3d == null || (double) k1 * vec3d.x + (double) i2 * vec3d.z >= 0.0D) {
                 BlockPosition blockposition;
 
-                if (entitycreature.cZ() && i > 1) {
-                    blockposition = entitycreature.cW();
+                if (entitycreature.dd() && i > 1) {
+                    blockposition = entitycreature.da();
                     if (entitycreature.locX > (double) blockposition.getX()) {
                         k1 -= random.nextInt(i / 2);
                     } else {
@@ -67,10 +67,7 @@ public class RandomPositionGenerator {
                     }
                 }
 
-                k1 += MathHelper.floor(entitycreature.locX);
-                l1 += MathHelper.floor(entitycreature.locY);
-                i2 += MathHelper.floor(entitycreature.locZ);
-                blockposition = new BlockPosition(k1, l1, i2);
+                blockposition = new BlockPosition((double) k1 + entitycreature.locX, (double) l1 + entitycreature.locY, (double) i2 + entitycreature.locZ);
                 if ((!flag1 || entitycreature.f(blockposition)) && navigationabstract.b(blockposition)) {
                     float f1 = entitycreature.a(blockposition);
 
@@ -86,7 +83,7 @@ public class RandomPositionGenerator {
         }
 
         if (flag) {
-            return new Vec3D((double) k, (double) l, (double) i1);
+            return new Vec3D((double) k + entitycreature.locX, (double) l + entitycreature.locY, (double) i1 + entitycreature.locZ);
         } else {
             return null;
         }

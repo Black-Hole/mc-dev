@@ -141,24 +141,22 @@ public enum EnumProtocol {
     }
 };
 
-    private static int e = -1;
-    private static int f = 2;
-    private static final EnumProtocol[] g = new EnumProtocol[EnumProtocol.f - EnumProtocol.e + 1];
-    private static final Map<Class<? extends Packet<?>>, EnumProtocol> h = Maps.newHashMap();
-    private final int i;
-    private final Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>> j;
+    private static final EnumProtocol[] e = new EnumProtocol[4];
+    private static final Map<Class<? extends Packet<?>>, EnumProtocol> f = Maps.newHashMap();
+    private final int g;
+    private final Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet<?>>>> h;
 
     private EnumProtocol(int i) {
-        this.j = Maps.newEnumMap(EnumProtocolDirection.class);
-        this.i = i;
+        this.h = Maps.newEnumMap(EnumProtocolDirection.class);
+        this.g = i;
     }
 
     protected EnumProtocol a(EnumProtocolDirection enumprotocoldirection, Class<? extends Packet<?>> oclass) {
-        Object object = (BiMap) this.j.get(enumprotocoldirection);
+        Object object = (BiMap) this.h.get(enumprotocoldirection);
 
         if (object == null) {
             object = HashBiMap.create();
-            this.j.put(enumprotocoldirection, object);
+            this.h.put(enumprotocoldirection, object);
         }
 
         if (((BiMap) object).containsValue(oclass)) {
@@ -173,26 +171,26 @@ public enum EnumProtocol {
     }
 
     public Integer a(EnumProtocolDirection enumprotocoldirection, Packet<?> packet) {
-        return (Integer) ((BiMap) this.j.get(enumprotocoldirection)).inverse().get(packet.getClass());
+        return (Integer) ((BiMap) this.h.get(enumprotocoldirection)).inverse().get(packet.getClass());
     }
 
     @Nullable
     public Packet<?> a(EnumProtocolDirection enumprotocoldirection, int i) throws IllegalAccessException, InstantiationException {
-        Class oclass = (Class) ((BiMap) this.j.get(enumprotocoldirection)).get(Integer.valueOf(i));
+        Class oclass = (Class) ((BiMap) this.h.get(enumprotocoldirection)).get(Integer.valueOf(i));
 
         return oclass == null ? null : (Packet) oclass.newInstance();
     }
 
     public int a() {
-        return this.i;
+        return this.g;
     }
 
     public static EnumProtocol a(int i) {
-        return i >= EnumProtocol.e && i <= EnumProtocol.f ? EnumProtocol.g[i - EnumProtocol.e] : null;
+        return i >= -1 && i <= 2 ? EnumProtocol.e[i - -1] : null;
     }
 
     public static EnumProtocol a(Packet<?> packet) {
-        return (EnumProtocol) EnumProtocol.h.get(packet.getClass());
+        return (EnumProtocol) EnumProtocol.f.get(packet.getClass());
     }
 
     EnumProtocol(int i, Object object) {
@@ -207,22 +205,22 @@ public enum EnumProtocol {
             EnumProtocol enumprotocol = aenumprotocol[j];
             int k = enumprotocol.a();
 
-            if (k < EnumProtocol.e || k > EnumProtocol.f) {
+            if (k < -1 || k > 2) {
                 throw new Error("Invalid protocol ID " + Integer.toString(k));
             }
 
-            EnumProtocol.g[k - EnumProtocol.e] = enumprotocol;
-            Iterator iterator = enumprotocol.j.keySet().iterator();
+            EnumProtocol.e[k - -1] = enumprotocol;
+            Iterator iterator = enumprotocol.h.keySet().iterator();
 
             while (iterator.hasNext()) {
                 EnumProtocolDirection enumprotocoldirection = (EnumProtocolDirection) iterator.next();
 
                 Class oclass;
 
-                for (Iterator iterator1 = ((BiMap) enumprotocol.j.get(enumprotocoldirection)).values().iterator(); iterator1.hasNext(); EnumProtocol.h.put(oclass, enumprotocol)) {
+                for (Iterator iterator1 = ((BiMap) enumprotocol.h.get(enumprotocoldirection)).values().iterator(); iterator1.hasNext(); EnumProtocol.f.put(oclass, enumprotocol)) {
                     oclass = (Class) iterator1.next();
-                    if (EnumProtocol.h.containsKey(oclass) && EnumProtocol.h.get(oclass) != enumprotocol) {
-                        throw new Error("Packet " + oclass + " is already assigned to protocol " + EnumProtocol.h.get(oclass) + " - can\'t reassign to " + enumprotocol);
+                    if (EnumProtocol.f.containsKey(oclass) && EnumProtocol.f.get(oclass) != enumprotocol) {
+                        throw new Error("Packet " + oclass + " is already assigned to protocol " + EnumProtocol.f.get(oclass) + " - can\'t reassign to " + enumprotocol);
                     }
 
                     try {

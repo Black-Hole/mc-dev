@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class ItemDoor extends Item {
 
-    private Block a;
+    private final Block a;
 
     public ItemDoor(Block block) {
         this.a = block;

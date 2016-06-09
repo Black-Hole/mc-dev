@@ -115,6 +115,10 @@ public class ContainerPlayer extends Container {
                 if (!this.a(itemstack1, j, j + 1, false)) {
                     return null;
                 }
+            } else if (enumitemslot == EnumItemSlot.OFFHAND && !((Slot) this.c.get(45)).hasItem()) {
+                if (!this.a(itemstack1, 45, 46, false)) {
+                    return null;
+                }
             } else if (i >= 9 && i < 36) {
                 if (!this.a(itemstack1, 36, 45, false)) {
                     return null;

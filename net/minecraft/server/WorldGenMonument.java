@@ -92,7 +92,7 @@ public class WorldGenMonument extends StructureGenerator {
 
     public static class WorldGenMonumentStart extends StructureStart {
 
-        private Set<ChunkCoordIntPair> c = Sets.newHashSet();
+        private final Set<ChunkCoordIntPair> c = Sets.newHashSet();
         private boolean d;
 
         public WorldGenMonumentStart() {}

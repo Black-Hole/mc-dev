@@ -31,16 +31,16 @@ public final class SpawnerCreature {
                     int l = MathHelper.floor(entityhuman.locX / 16.0D);
 
                     j = MathHelper.floor(entityhuman.locZ / 16.0D);
-                    byte b0 = 8;
+                    boolean flag3 = true;
 
-                    for (int i1 = -b0; i1 <= b0; ++i1) {
-                        for (k = -b0; k <= b0; ++k) {
-                            boolean flag3 = i1 == -b0 || i1 == b0 || k == -b0 || k == b0;
+                    for (int i1 = -8; i1 <= 8; ++i1) {
+                        for (k = -8; k <= 8; ++k) {
+                            boolean flag4 = i1 == -8 || i1 == 8 || k == -8 || k == 8;
                             ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i1 + l, k + j);
 
                             if (!this.b.contains(chunkcoordintpair)) {
                                 ++i;
-                                if (!flag3 && worldserver.getWorldBorder().isInBounds(chunkcoordintpair)) {
+                                if (!flag4 && worldserver.getWorldBorder().isInBounds(chunkcoordintpair)) {
                                     PlayerChunk playerchunk = worldserver.getPlayerChunkMap().getChunk(chunkcoordintpair.x, chunkcoordintpair.z);
 
                                     if (playerchunk != null && playerchunk.e()) {
@@ -87,7 +87,7 @@ public final class SpawnerCreature {
                                     int j3 = i2;
                                     int k3 = j2;
                                     int l3 = k2;
-                                    byte b1 = 6;
+                                    boolean flag5 = true;
                                     BiomeBase.BiomeMeta biomebase_biomemeta = null;
                                     GroupDataEntity groupdataentity = null;
                                     int i4 = MathHelper.f(Math.random() * 4.0D);
@@ -96,9 +96,9 @@ public final class SpawnerCreature {
                                     while (true) {
                                         if (j4 < i4) {
                                             label113: {
-                                                j3 += worldserver.random.nextInt(b1) - worldserver.random.nextInt(b1);
+                                                j3 += worldserver.random.nextInt(6) - worldserver.random.nextInt(6);
                                                 k3 += worldserver.random.nextInt(1) - worldserver.random.nextInt(1);
-                                                l3 += worldserver.random.nextInt(b1) - worldserver.random.nextInt(b1);
+                                                l3 += worldserver.random.nextInt(6) - worldserver.random.nextInt(6);
                                                 blockposition_mutableblockposition.c(j3, k3, l3);
                                                 float f = (float) j3 + 0.5F;
                                                 float f1 = (float) l3 + 0.5F;
@@ -122,7 +122,7 @@ public final class SpawnerCreature {
                                                         }
 
                                                         entityinsentient.setPositionRotation((double) f, (double) k3, (double) f1, worldserver.random.nextFloat() * 360.0F, 0.0F);
-                                                        if (entityinsentient.cG() && entityinsentient.canSpawn()) {
+                                                        if (entityinsentient.cK() && entityinsentient.canSpawn()) {
                                                             groupdataentity = entityinsentient.prepare(worldserver.D(new BlockPosition(entityinsentient)), groupdataentity);
                                                             if (entityinsentient.canSpawn()) {
                                                                 ++l2;
@@ -131,7 +131,7 @@ public final class SpawnerCreature {
                                                                 entityinsentient.die();
                                                             }
 
-                                                            if (l2 >= entityinsentient.cK()) {
+                                                            if (l2 >= entityinsentient.cO()) {
                                                                 continue label120;
                                                             }
                                                         }
@@ -159,7 +159,7 @@ public final class SpawnerCreature {
         }
     }
 
-    protected static BlockPosition getRandomPosition(World world, int i, int j) {
+    private static BlockPosition getRandomPosition(World world, int i, int j) {
         Chunk chunk = world.getChunkAt(i, j);
         int k = i * 16 + world.random.nextInt(16);
         int l = j * 16 + world.random.nextInt(16);

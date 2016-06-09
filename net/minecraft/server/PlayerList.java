@@ -39,7 +39,7 @@ public abstract class PlayerList {
     private boolean hasWhitelist;
     protected int maxPlayers;
     private int r;
-    private WorldSettings.EnumGamemode s;
+    private EnumGamemode s;
     private boolean t;
     private int u;
 
@@ -72,7 +72,7 @@ public abstract class PlayerList {
             s1 = networkmanager.getSocketAddress().toString();
         }
 
-        PlayerList.f.info(entityplayer.getName() + "[" + s1 + "] logged in with entity id " + entityplayer.getId() + " at (" + entityplayer.locX + ", " + entityplayer.locY + ", " + entityplayer.locZ + ")");
+        PlayerList.f.info("{}[{}] logged in with entity id {} at ({}, {}, {})", new Object[] { entityplayer.getName(), s1, Integer.valueOf(entityplayer.getId()), Double.valueOf(entityplayer.locX), Double.valueOf(entityplayer.locY), Double.valueOf(entityplayer.locZ)});
         WorldServer worldserver = this.server.getWorldServer(entityplayer.dimension);
         WorldData worlddata = worldserver.getWorldData();
         BlockPosition blockposition = worldserver.getSpawn();
@@ -93,10 +93,10 @@ public abstract class PlayerList {
         this.server.aC();
         ChatMessage chatmessage;
 
-        if (!entityplayer.getName().equalsIgnoreCase(s)) {
-            chatmessage = new ChatMessage("multiplayer.player.joined.renamed", new Object[] { entityplayer.getScoreboardDisplayName(), s});
-        } else {
+        if (entityplayer.getName().equalsIgnoreCase(s)) {
             chatmessage = new ChatMessage("multiplayer.player.joined", new Object[] { entityplayer.getScoreboardDisplayName()});
+        } else {
+            chatmessage = new ChatMessage("multiplayer.player.joined.renamed", new Object[] { entityplayer.getScoreboardDisplayName(), s});
         }
 
         chatmessage.getChatModifier().setColor(EnumChatFormat.YELLOW);
@@ -129,7 +129,7 @@ public abstract class PlayerList {
                     if (entity.getUniqueID().equals(uuid)) {
                         entityplayer.a(entity, true);
                     } else {
-                        iterator1 = entity.bw().iterator();
+                        iterator1 = entity.by().iterator();
 
                         while (iterator1.hasNext()) {
                             entity1 = (Entity) iterator1.next();
@@ -143,7 +143,7 @@ public abstract class PlayerList {
                     if (!entityplayer.isPassenger()) {
                         PlayerList.f.warn("Couldn\'t reattach entity to player");
                         worldserver.removeEntity(entity);
-                        iterator1 = entity.bw().iterator();
+                        iterator1 = entity.by().iterator();
 
                         while (iterator1.hasNext()) {
                             entity1 = (Entity) iterator1.next();
@@ -291,7 +291,7 @@ public abstract class PlayerList {
                 PlayerList.f.debug("Removing player mount");
                 entityplayer.stopRiding();
                 worldserver.removeEntity(entity);
-                Iterator iterator = entity.bw().iterator();
+                Iterator iterator = entity.by().iterator();
 
                 while (iterator.hasNext()) {
                     Entity entity1 = (Entity) iterator.next();
@@ -299,7 +299,7 @@ public abstract class PlayerList {
                     worldserver.removeEntity(entity1);
                 }
 
-                worldserver.getChunkAt(entityplayer.ab, entityplayer.ad).e();
+                worldserver.getChunkAt(entityplayer.ac, entityplayer.ae).e();
             }
         }
 
@@ -404,7 +404,7 @@ public abstract class PlayerList {
 
         entityplayer1.playerConnection = entityplayer.playerConnection;
         entityplayer1.copyTo(entityplayer, flag);
-        entityplayer1.f(entityplayer.getId());
+        entityplayer1.h(entityplayer.getId());
         entityplayer1.v(entityplayer);
         entityplayer1.a(entityplayer.getMainHand());
         Iterator iterator = entityplayer.P().iterator();
@@ -497,15 +497,15 @@ public abstract class PlayerList {
 
         worldserver.methodProfiler.a("moving");
         if (entity.dimension == -1) {
-            d0 = MathHelper.a(d0 / d2, worldserver1.getWorldBorder().b() + 16.0D, worldserver1.getWorldBorder().d() - 16.0D);
-            d1 = MathHelper.a(d1 / d2, worldserver1.getWorldBorder().c() + 16.0D, worldserver1.getWorldBorder().e() - 16.0D);
+            d0 = MathHelper.a(d0 / 8.0D, worldserver1.getWorldBorder().b() + 16.0D, worldserver1.getWorldBorder().d() - 16.0D);
+            d1 = MathHelper.a(d1 / 8.0D, worldserver1.getWorldBorder().c() + 16.0D, worldserver1.getWorldBorder().e() - 16.0D);
             entity.setPositionRotation(d0, entity.locY, d1, entity.yaw, entity.pitch);
             if (entity.isAlive()) {
                 worldserver.entityJoinedWorld(entity, false);
             }
         } else if (entity.dimension == 0) {
-            d0 = MathHelper.a(d0 * d2, worldserver1.getWorldBorder().b() + 16.0D, worldserver1.getWorldBorder().d() - 16.0D);
-            d1 = MathHelper.a(d1 * d2, worldserver1.getWorldBorder().c() + 16.0D, worldserver1.getWorldBorder().e() - 16.0D);
+            d0 = MathHelper.a(d0 * 8.0D, worldserver1.getWorldBorder().b() + 16.0D, worldserver1.getWorldBorder().d() - 16.0D);
+            d1 = MathHelper.a(d1 * 8.0D, worldserver1.getWorldBorder().c() + 16.0D, worldserver1.getWorldBorder().e() - 16.0D);
             entity.setPositionRotation(d0, entity.locY, d1, entity.yaw, entity.pitch);
             if (entity.isAlive()) {
                 worldserver.entityJoinedWorld(entity, false);
@@ -573,7 +573,7 @@ public abstract class PlayerList {
     }
 
     public void a(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent) {
-        ScoreboardTeamBase scoreboardteambase = entityhuman.aO();
+        ScoreboardTeamBase scoreboardteambase = entityhuman.aQ();
 
         if (scoreboardteambase != null) {
             Collection collection = scoreboardteambase.getPlayerNameSet();
@@ -592,7 +592,7 @@ public abstract class PlayerList {
     }
 
     public void b(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent) {
-        ScoreboardTeamBase scoreboardteambase = entityhuman.aO();
+        ScoreboardTeamBase scoreboardteambase = entityhuman.aQ();
 
         if (scoreboardteambase == null) {
             this.sendMessage(ichatbasecomponent);
@@ -600,7 +600,7 @@ public abstract class PlayerList {
             for (int i = 0; i < this.players.size(); ++i) {
                 EntityPlayer entityplayer = (EntityPlayer) this.players.get(i);
 
-                if (entityplayer.aO() != scoreboardteambase) {
+                if (entityplayer.aQ() != scoreboardteambase) {
                     entityplayer.sendMessage(ichatbasecomponent);
                 }
             }
@@ -619,7 +619,7 @@ public abstract class PlayerList {
 
             s = s + ((EntityPlayer) arraylist.get(i)).getName();
             if (flag) {
-                s = s + " (" + ((EntityPlayer) arraylist.get(i)).bd() + ")";
+                s = s + " (" + ((EntityPlayer) arraylist.get(i)).bf() + ")";
             }
         }
 
@@ -858,7 +858,7 @@ public abstract class PlayerList {
 
         if (serverstatisticmanager == null) {
             File file = new File(this.server.getWorldServer(0).getDataManager().getDirectory(), "stats");
-            File file1 = new File(file, uuid.toString() + ".json");
+            File file1 = new File(file, uuid + ".json");
 
             if (!file1.exists()) {
                 File file2 = new File(file, entityhuman.getName() + ".json");

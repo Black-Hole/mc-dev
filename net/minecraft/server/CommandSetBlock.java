@@ -54,13 +54,13 @@ public class CommandSetBlock extends CommandAbstract {
                 }
 
                 if (astring.length >= 6) {
-                    if (astring[5].equals("destroy")) {
+                    if ("destroy".equals(astring[5])) {
                         world.setAir(blockposition, true);
                         if (block == Blocks.AIR) {
                             a(icommandlistener, (ICommand) this, "commands.setblock.success", new Object[0]);
                             return;
                         }
-                    } else if (astring[5].equals("keep") && !world.isEmpty(blockposition)) {
+                    } else if ("keep".equals(astring[5]) && !world.isEmpty(blockposition)) {
                         throw new CommandException("commands.setblock.noChange", new Object[0]);
                     }
                 }

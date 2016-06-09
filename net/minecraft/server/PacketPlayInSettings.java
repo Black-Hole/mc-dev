@@ -51,7 +51,7 @@ public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
         return this.e;
     }
 
-    public EnumMainHand f() {
+    public EnumMainHand getMainHand() {
         return this.f;
     }
 }

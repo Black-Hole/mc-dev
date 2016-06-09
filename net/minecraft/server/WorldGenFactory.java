@@ -9,10 +9,10 @@ import org.apache.logging.log4j.Logger;
 public class WorldGenFactory {
 
     private static final Logger a = LogManager.getLogger();
-    private static Map<String, Class<? extends StructureStart>> b = Maps.newHashMap();
-    private static Map<Class<? extends StructureStart>, String> c = Maps.newHashMap();
-    private static Map<String, Class<? extends StructurePiece>> d = Maps.newHashMap();
-    private static Map<Class<? extends StructurePiece>, String> e = Maps.newHashMap();
+    private static final Map<String, Class<? extends StructureStart>> b = Maps.newHashMap();
+    private static final Map<Class<? extends StructureStart>, String> c = Maps.newHashMap();
+    private static final Map<String, Class<? extends StructurePiece>> d = Maps.newHashMap();
+    private static final Map<Class<? extends StructurePiece>, String> e = Maps.newHashMap();
 
     private static void b(Class<? extends StructureStart> oclass, String s) {
         WorldGenFactory.b.put(s, oclass);
@@ -43,14 +43,14 @@ public class WorldGenFactory {
                 structurestart = (StructureStart) oclass.newInstance();
             }
         } catch (Exception exception) {
-            WorldGenFactory.a.warn("Failed Start with id " + nbttagcompound.getString("id"));
+            WorldGenFactory.a.warn("Failed Start with id {}", new Object[] { nbttagcompound.getString("id")});
             exception.printStackTrace();
         }
 
         if (structurestart != null) {
             structurestart.a(world, nbttagcompound);
         } else {
-            WorldGenFactory.a.warn("Skipping Structure with id " + nbttagcompound.getString("id"));
+            WorldGenFactory.a.warn("Skipping Structure with id {}", new Object[] { nbttagcompound.getString("id")});
         }
 
         return structurestart;
@@ -66,14 +66,14 @@ public class WorldGenFactory {
                 structurepiece = (StructurePiece) oclass.newInstance();
             }
         } catch (Exception exception) {
-            WorldGenFactory.a.warn("Failed Piece with id " + nbttagcompound.getString("id"));
+            WorldGenFactory.a.warn("Failed Piece with id {}", new Object[] { nbttagcompound.getString("id")});
             exception.printStackTrace();
         }
 
         if (structurepiece != null) {
             structurepiece.a(world, nbttagcompound);
         } else {
-            WorldGenFactory.a.warn("Skipping Piece with id " + nbttagcompound.getString("id"));
+            WorldGenFactory.a.warn("Skipping Piece with id {}", new Object[] { nbttagcompound.getString("id")});
         }
 
         return structurepiece;

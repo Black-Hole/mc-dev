@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class SecondaryWorldServer extends WorldServer {
 
-    private WorldServer a;
+    private final WorldServer a;
 
     public SecondaryWorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, int i, WorldServer worldserver, MethodProfiler methodprofiler) {
         super(minecraftserver, idatamanager, new SecondaryWorldData(worldserver.getWorldData()), i, methodprofiler);

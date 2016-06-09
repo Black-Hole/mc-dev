@@ -18,10 +18,10 @@ public class NBTTagList extends NBTBase {
     public NBTTagList() {}
 
     void write(DataOutput dataoutput) throws IOException {
-        if (!this.list.isEmpty()) {
-            this.type = ((NBTBase) this.list.get(0)).getTypeId();
-        } else {
+        if (this.list.isEmpty()) {
             this.type = 0;
+        } else {
+            this.type = ((NBTBase) this.list.get(0)).getTypeId();
         }
 
         dataoutput.writeByte(this.type);
@@ -133,7 +133,7 @@ public class NBTTagList extends NBTBase {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
             if (nbtbase.getTypeId() == 3) {
-                return ((NBTTagInt) nbtbase).d();
+                return ((NBTTagInt) nbtbase).e();
             }
         }
 
@@ -145,7 +145,7 @@ public class NBTTagList extends NBTBase {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
             if (nbtbase.getTypeId() == 11) {
-                return ((NBTTagIntArray) nbtbase).c();
+                return ((NBTTagIntArray) nbtbase).d();
             }
         }
 
@@ -157,7 +157,7 @@ public class NBTTagList extends NBTBase {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
             if (nbtbase.getTypeId() == 6) {
-                return ((NBTTagDouble) nbtbase).g();
+                return ((NBTTagDouble) nbtbase).h();
             }
         }
 
@@ -169,7 +169,7 @@ public class NBTTagList extends NBTBase {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
             if (nbtbase.getTypeId() == 5) {
-                return ((NBTTagFloat) nbtbase).h();
+                return ((NBTTagFloat) nbtbase).i();
             }
         }
 
@@ -180,7 +180,7 @@ public class NBTTagList extends NBTBase {
         if (i >= 0 && i < this.list.size()) {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
-            return nbtbase.getTypeId() == 8 ? nbtbase.a_() : nbtbase.toString();
+            return nbtbase.getTypeId() == 8 ? nbtbase.c_() : nbtbase.toString();
         } else {
             return "";
         }
@@ -194,7 +194,7 @@ public class NBTTagList extends NBTBase {
         return this.list.size();
     }
 
-    public NBTBase clone() {
+    public NBTTagList d() {
         NBTTagList nbttaglist = new NBTTagList();
 
         nbttaglist.type = this.type;
@@ -226,7 +226,11 @@ public class NBTTagList extends NBTBase {
         return super.hashCode() ^ this.list.hashCode();
     }
 
-    public int d() {
+    public int g() {
         return this.type;
+    }
+
+    public NBTBase clone() {
+        return this.d();
     }
 }

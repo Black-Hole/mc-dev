@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.util.Collection;
@@ -48,6 +49,16 @@ public class BlockStateInteger extends BlockState<Integer> {
 
     public static BlockStateInteger of(String s, int i, int j) {
         return new BlockStateInteger(s, i, j);
+    }
+
+    public Optional<Integer> b(String s) {
+        try {
+            Integer integer = Integer.valueOf(s);
+
+            return this.a.contains(integer) ? Optional.of(integer) : Optional.absent();
+        } catch (NumberFormatException numberformatexception) {
+            return Optional.absent();
+        }
     }
 
     public String a(Integer integer) {

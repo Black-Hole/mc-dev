@@ -7,7 +7,7 @@ public class WorldGenMegaTree extends WorldGenMegaTreeAbstract {
     private static final IBlockData e = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.SPRUCE);
     private static final IBlockData f = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.SPRUCE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
     private static final IBlockData g = Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.PODZOL);
-    private boolean h;
+    private final boolean h;
 
     public WorldGenMegaTree(boolean flag, boolean flag1) {
         super(flag, 13, 15, WorldGenMegaTree.e, WorldGenMegaTree.f);

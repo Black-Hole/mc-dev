@@ -30,12 +30,12 @@ public abstract class GenLayer {
         GenLayerMushroomIsland genlayermushroomisland = new GenLayerMushroomIsland(5L, genlayerisland);
         GenLayerDeepOcean genlayerdeepocean = new GenLayerDeepOcean(4L, genlayermushroomisland);
         GenLayer genlayer = GenLayerZoom.b(1000L, genlayerdeepocean, 0);
-        CustomWorldSettingsFinal customworldsettingsfinal = null;
         int j = 4;
         int k = j;
 
         if (worldtype == WorldType.CUSTOMIZED && !s.isEmpty()) {
-            customworldsettingsfinal = CustomWorldSettingsFinal.CustomWorldSettings.a(s).b();
+            CustomWorldSettingsFinal customworldsettingsfinal = CustomWorldSettingsFinal.CustomWorldSettings.a(s).b();
+
             j = customworldsettingsfinal.G;
             k = customworldsettingsfinal.H;
         }

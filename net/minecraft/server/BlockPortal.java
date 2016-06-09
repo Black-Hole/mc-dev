@@ -46,7 +46,7 @@ public class BlockPortal extends BlockHalfTransparent {
                 Entity entity = ItemMonsterEgg.a(world, EntityTypes.getName(EntityPigZombie.class), (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 1.1D, (double) blockposition1.getZ() + 0.5D);
 
                 if (entity != null) {
-                    entity.portalCooldown = entity.aC();
+                    entity.portalCooldown = entity.aE();
                 }
             }
         }
@@ -107,7 +107,7 @@ public class BlockPortal extends BlockHalfTransparent {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (!entity.isPassenger() && !entity.isVehicle() && entity.aV()) {
+        if (!entity.isPassenger() && !entity.isVehicle() && entity.aX()) {
             entity.e(blockposition);
         }
 
@@ -250,7 +250,7 @@ public class BlockPortal extends BlockHalfTransparent {
         private final EnumDirection.EnumAxis b;
         private final EnumDirection c;
         private final EnumDirection d;
-        private int e = 0;
+        private int e;
         private BlockPosition position;
         private int height;
         private int width;

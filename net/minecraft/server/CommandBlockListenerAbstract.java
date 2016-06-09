@@ -9,7 +9,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     private static final SimpleDateFormat a = new SimpleDateFormat("HH:mm:ss");
     private int b;
     private boolean c = true;
-    private IChatBaseComponent d = null;
+    private IChatBaseComponent d;
     private String e = "";
     private String f = "@";
     private final CommandObjectiveExecutor g = new CommandObjectiveExecutor();
@@ -169,7 +169,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     }
 
     public boolean a(EntityHuman entityhuman) {
-        if (!entityhuman.abilities.canInstantlyBuild) {
+        if (!entityhuman.dh()) {
             return false;
         } else {
             if (entityhuman.getWorld().isClientSide) {

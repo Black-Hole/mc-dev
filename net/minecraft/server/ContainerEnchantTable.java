@@ -16,9 +16,9 @@ public class ContainerEnchantTable extends Container {
             ContainerEnchantTable.this.a((IInventory) this);
         }
     };
-    private World world;
-    private BlockPosition position;
-    private Random l = new Random();
+    public World world;
+    private final BlockPosition position;
+    private final Random l = new Random();
     public int f;
     public int[] costs = new int[3];
     public int[] h = new int[] { -1, -1, -1};
@@ -27,7 +27,7 @@ public class ContainerEnchantTable extends Container {
     public ContainerEnchantTable(PlayerInventory playerinventory, World world, BlockPosition blockposition) {
         this.world = world;
         this.position = blockposition;
-        this.f = playerinventory.player.cR();
+        this.f = playerinventory.player.cV();
         this.a(new Slot(this.enchantSlots, 0, 15, 47) {
             public boolean isAllowed(@Nullable ItemStack itemstack) {
                 return true;
@@ -203,8 +203,9 @@ public class ContainerEnchantTable extends Container {
 
                     entityhuman.b(StatisticList.Y);
                     this.enchantSlots.update();
-                    this.f = entityhuman.cR();
+                    this.f = entityhuman.cV();
                     this.a(this.enchantSlots);
+                    this.world.a((EntityHuman) null, this.position, SoundEffects.aL, SoundCategory.BLOCKS, 1.0F, this.world.random.nextFloat() * 0.1F + 0.9F);
                 }
             }
 

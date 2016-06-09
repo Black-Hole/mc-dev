@@ -23,9 +23,13 @@ public class PacketPlayOutEntityDestroy implements Packet<PacketListenerPlayOut>
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a.length);
+        int[] aint = this.a;
+        int i = aint.length;
 
-        for (int i = 0; i < this.a.length; ++i) {
-            packetdataserializer.d(this.a[i]);
+        for (int j = 0; j < i; ++j) {
+            int k = aint[j];
+
+            packetdataserializer.d(k);
         }
 
     }

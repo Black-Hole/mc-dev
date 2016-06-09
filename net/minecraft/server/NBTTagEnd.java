@@ -22,7 +22,11 @@ public class NBTTagEnd extends NBTBase {
         return "END";
     }
 
-    public NBTBase clone() {
+    public NBTTagEnd c() {
         return new NBTTagEnd();
+    }
+
+    public NBTBase clone() {
+        return this.c();
     }
 }

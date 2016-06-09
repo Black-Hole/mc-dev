@@ -32,18 +32,18 @@ public enum EnumDragonRespawn {
     }
 }, SUMMONING_PILLARS {;
     public void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition) {
-        byte b0 = 40;
-        boolean flag = i % b0 == 0;
-        boolean flag1 = i % b0 == b0 - 1;
+        boolean flag = true;
+        boolean flag1 = i % 40 == 0;
+        boolean flag2 = i % 40 == 39;
 
-        if (flag || flag1) {
+        if (flag1 || flag2) {
             WorldGenEnder.Spike[] aworldgenender_spike = BiomeTheEndDecorator.a(worldserver);
-            int j = i / b0;
+            int j = i / 40;
 
             if (j < aworldgenender_spike.length) {
                 WorldGenEnder.Spike worldgenender_spike = aworldgenender_spike[j];
 
-                if (flag) {
+                if (flag1) {
                     Iterator iterator = list.iterator();
 
                     while (iterator.hasNext()) {
@@ -52,8 +52,8 @@ public enum EnumDragonRespawn {
                         entityendercrystal.setBeamTarget(new BlockPosition(worldgenender_spike.a(), worldgenender_spike.d() + 1, worldgenender_spike.b()));
                     }
                 } else {
-                    byte b1 = 10;
-                    Iterator iterator1 = BlockPosition.b(new BlockPosition(worldgenender_spike.a() - b1, worldgenender_spike.d() - b1, worldgenender_spike.b() - b1), new BlockPosition(worldgenender_spike.a() + b1, worldgenender_spike.d() + b1, worldgenender_spike.b() + b1)).iterator();
+                    boolean flag3 = true;
+                    Iterator iterator1 = BlockPosition.b(new BlockPosition(worldgenender_spike.a() - 10, worldgenender_spike.d() - 10, worldgenender_spike.b() - 10), new BlockPosition(worldgenender_spike.a() + 10, worldgenender_spike.d() + 10, worldgenender_spike.b() + 10)).iterator();
 
                     while (iterator1.hasNext()) {
                         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = (BlockPosition.MutableBlockPosition) iterator1.next();
@@ -69,7 +69,7 @@ public enum EnumDragonRespawn {
                     worldgenender.a(new BlockPosition(0, 128, 0));
                     worldgenender.generate(worldserver, new Random(), new BlockPosition(worldgenender_spike.a(), 45, worldgenender_spike.b()));
                 }
-            } else if (flag) {
+            } else if (flag1) {
                 enderdragonbattle.a(null.SUMMONING_DRAGON);
             }
         }

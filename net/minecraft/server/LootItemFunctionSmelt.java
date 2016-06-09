@@ -19,7 +19,7 @@ public class LootItemFunctionSmelt extends LootItemFunction {
         ItemStack itemstack1 = RecipesFurnace.getInstance().getResult(itemstack);
 
         if (itemstack1 == null) {
-            LootItemFunctionSmelt.a.warn("Couldn\'t smelt " + itemstack + " because there is no smelting recipe");
+            LootItemFunctionSmelt.a.warn("Couldn\'t smelt {} because there is no smelting recipe", new Object[] { itemstack});
             return itemstack;
         } else {
             ItemStack itemstack2 = itemstack1.cloneItemStack();

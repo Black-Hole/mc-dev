@@ -2,11 +2,11 @@ package net.minecraft.server;
 
 public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
-    private EntityTameableAnimal d;
+    private final EntityTameableAnimal d;
     private EntityLiving e;
     World a;
-    private double f;
-    private NavigationAbstract g;
+    private final double f;
+    private final NavigationAbstract g;
     private int h;
     float b;
     float c;
@@ -60,9 +60,8 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
     private boolean a(BlockPosition blockposition) {
         IBlockData iblockdata = this.a.getType(blockposition);
-        Block block = iblockdata.getBlock();
 
-        return block == Blocks.AIR ? true : !iblockdata.h();
+        return iblockdata.getMaterial() == Material.AIR ? true : !iblockdata.h();
     }
 
     public void e() {

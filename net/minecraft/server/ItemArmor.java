@@ -24,12 +24,8 @@ public class ItemArmor extends Item {
     private final ItemArmor.EnumArmorMaterial p;
 
     public static ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-        BlockPosition blockposition = isourceblock.getBlockPosition().shift(BlockDispenser.e(isourceblock.f()));
-        int i = blockposition.getX();
-        int j = blockposition.getY();
-        int k = blockposition.getZ();
-        AxisAlignedBB axisalignedbb = new AxisAlignedBB((double) i, (double) j, (double) k, (double) (i + 1), (double) (j + 1), (double) (k + 1));
-        List list = isourceblock.getWorld().a(EntityLiving.class, axisalignedbb, Predicates.and(IEntitySelector.e, new IEntitySelector.EntitySelectorEquipable(itemstack)));
+        BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
+        List list = isourceblock.getWorld().a(EntityLiving.class, new AxisAlignedBB(blockposition), Predicates.and(IEntitySelector.e, new IEntitySelector.EntitySelectorEquipable(itemstack)));
 
         if (list.isEmpty()) {
             return null;

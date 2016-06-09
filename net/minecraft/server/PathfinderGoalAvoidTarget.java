@@ -9,14 +9,14 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
 
     private final Predicate<Entity> c;
     protected EntityCreature a;
-    private double d;
-    private double e;
+    private final double d;
+    private final double e;
     protected T b;
-    private float f;
+    private final float f;
     private PathEntity g;
-    private NavigationAbstract h;
-    private Class<T> i;
-    private Predicate<? super T> j;
+    private final NavigationAbstract h;
+    private final Class<T> i;
+    private final Predicate<? super T> j;
 
     public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, float f, double d0, double d1) {
         this(entitycreature, oclass, Predicates.alwaysTrue(), f, d0, d1);
@@ -57,7 +57,7 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
                 return false;
             } else {
                 this.g = this.h.a(vec3d.x, vec3d.y, vec3d.z);
-                return this.g == null ? false : this.g.b(vec3d);
+                return this.g != null;
             }
         }
     }

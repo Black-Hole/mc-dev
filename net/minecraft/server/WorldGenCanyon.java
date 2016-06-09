@@ -6,7 +6,7 @@ public class WorldGenCanyon extends WorldGenBase {
 
     protected static final IBlockData a = Blocks.FLOWING_LAVA.getBlockData();
     protected static final IBlockData b = Blocks.AIR.getBlockData();
-    private float[] c = new float[1024];
+    private final float[] c = new float[1024];
 
     public WorldGenCanyon() {}
 
@@ -176,9 +176,9 @@ public class WorldGenCanyon extends WorldGenBase {
             double d0 = (double) (i * 16 + this.f.nextInt(16));
             double d1 = (double) (this.f.nextInt(this.f.nextInt(40) + 8) + 20);
             double d2 = (double) (j * 16 + this.f.nextInt(16));
-            byte b0 = 1;
+            boolean flag = true;
 
-            for (int i1 = 0; i1 < b0; ++i1) {
+            for (int i1 = 0; i1 < 1; ++i1) {
                 float f = this.f.nextFloat() * 6.2831855F;
                 float f1 = (this.f.nextFloat() - 0.5F) * 2.0F / 8.0F;
                 float f2 = (this.f.nextFloat() * 2.0F + this.f.nextFloat()) * 2.0F;

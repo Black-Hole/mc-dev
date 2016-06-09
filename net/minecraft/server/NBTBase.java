@@ -81,24 +81,7 @@ public abstract class NBTBase {
         return this.getTypeId();
     }
 
-    protected String a_() {
+    protected String c_() {
         return this.toString();
-    }
-
-    public abstract static class NBTNumber extends NBTBase {
-
-        protected NBTNumber() {}
-
-        public abstract long c();
-
-        public abstract int d();
-
-        public abstract short e();
-
-        public abstract byte f();
-
-        public abstract double g();
-
-        public abstract float h();
     }
 }

@@ -126,13 +126,13 @@ public class PersistentVillage extends PersistentBase {
     }
 
     private void b(BlockPosition blockposition) {
-        byte b0 = 16;
-        byte b1 = 4;
-        byte b2 = 16;
+        boolean flag = true;
+        boolean flag1 = true;
+        boolean flag2 = true;
 
-        for (int i = -b0; i < b0; ++i) {
-            for (int j = -b1; j < b1; ++j) {
-                for (int k = -b2; k < b2; ++k) {
+        for (int i = -16; i < 16; ++i) {
+            for (int j = -4; j < 4; ++j) {
+                for (int k = -16; k < 16; ++k) {
                     BlockPosition blockposition1 = blockposition.a(i, j, k);
 
                     if (this.f(blockposition1)) {

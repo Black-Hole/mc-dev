@@ -10,15 +10,15 @@ import org.apache.logging.log4j.Logger;
 public class ContainerAnvil extends Container {
 
     private static final Logger f = LogManager.getLogger();
-    private IInventory g = new InventoryCraftResult();
-    private IInventory h = new InventorySubcontainer("Repair", true, 2) {
+    private final IInventory g = new InventoryCraftResult();
+    private final IInventory h = new InventorySubcontainer("Repair", true, 2) {
         public void update() {
             super.update();
             ContainerAnvil.this.a((IInventory) this);
         }
     };
-    private World i;
-    private BlockPosition j;
+    private final World i;
+    private final BlockPosition j;
     public int a;
     private int k;
     private String l;

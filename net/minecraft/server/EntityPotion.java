@@ -40,7 +40,7 @@ public class EntityPotion extends EntityProjectile {
             return itemstack;
         } else {
             if (this.world != null) {
-                EntityPotion.e.error("ThrownPotion entity " + this.getId() + " has no item?!");
+                EntityPotion.e.error("ThrownPotion entity {} has no item?!", new Object[] { Integer.valueOf(this.getId())});
             }
 
             return new ItemStack(Items.SPLASH_POTION);
@@ -107,7 +107,7 @@ public class EntityPotion extends EntityProjectile {
                             while (iterator1.hasNext()) {
                                 EntityLiving entityliving = (EntityLiving) iterator1.next();
 
-                                if (entityliving.cE()) {
+                                if (entityliving.cI()) {
                                     double d0 = this.h(entityliving);
 
                                     if (d0 < 16.0D) {
@@ -155,6 +155,11 @@ public class EntityPotion extends EntityProjectile {
             this.world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
         }
 
+    }
+
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityProjectile.a(dataconvertermanager, "ThrownPotion");
+        dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItem("ThrownPotion", new String[] { "Potion"})));
     }
 
     public void a(NBTTagCompound nbttagcompound) {

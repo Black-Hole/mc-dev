@@ -4,9 +4,9 @@ import java.util.Random;
 
 public class BiomeIcePlains extends BiomeBase {
 
-    private boolean y;
-    private WorldGenPackedIce2 z = new WorldGenPackedIce2();
-    private WorldGenPackedIce1 A = new WorldGenPackedIce1(4);
+    private final boolean y;
+    private final WorldGenPackedIce2 z = new WorldGenPackedIce2();
+    private final WorldGenPackedIce1 A = new WorldGenPackedIce1(4);
 
     public BiomeIcePlains(boolean flag, BiomeBase.a biomebase_a) {
         super(biomebase_a);
@@ -16,7 +16,12 @@ public class BiomeIcePlains extends BiomeBase {
         }
 
         this.v.clear();
-        this.v.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 4, 2, 3));
+        this.v.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 10, 2, 3));
+        this.v.add(new BiomeBase.BiomeMeta(EntityPolarBear.class, 1, 1, 2));
+    }
+
+    public float f() {
+        return 0.07F;
     }
 
     public void a(World world, Random random, BlockPosition blockposition) {

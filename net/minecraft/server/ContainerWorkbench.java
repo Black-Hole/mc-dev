@@ -6,8 +6,8 @@ public class ContainerWorkbench extends Container {
 
     public InventoryCrafting craftInventory = new InventoryCrafting(this, 3, 3);
     public IInventory resultInventory = new InventoryCraftResult();
-    private World g;
-    private BlockPosition h;
+    private final World g;
+    private final BlockPosition h;
 
     public ContainerWorkbench(PlayerInventory playerinventory, World world, BlockPosition blockposition) {
         this.g = world;

@@ -32,34 +32,34 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
         this.f = entityliving.locZ;
         this.j = (byte) ((int) (entityliving.yaw * 256.0F / 360.0F));
         this.k = (byte) ((int) (entityliving.pitch * 256.0F / 360.0F));
-        this.l = (byte) ((int) (entityliving.aP * 256.0F / 360.0F));
+        this.l = (byte) ((int) (entityliving.aQ * 256.0F / 360.0F));
         double d0 = 3.9D;
         double d1 = entityliving.motX;
         double d2 = entityliving.motY;
         double d3 = entityliving.motZ;
 
-        if (d1 < -d0) {
-            d1 = -d0;
+        if (d1 < -3.9D) {
+            d1 = -3.9D;
         }
 
-        if (d2 < -d0) {
-            d2 = -d0;
+        if (d2 < -3.9D) {
+            d2 = -3.9D;
         }
 
-        if (d3 < -d0) {
-            d3 = -d0;
+        if (d3 < -3.9D) {
+            d3 = -3.9D;
         }
 
-        if (d1 > d0) {
-            d1 = d0;
+        if (d1 > 3.9D) {
+            d1 = 3.9D;
         }
 
-        if (d2 > d0) {
-            d2 = d0;
+        if (d2 > 3.9D) {
+            d2 = 3.9D;
         }
 
-        if (d3 > d0) {
-            d3 = d0;
+        if (d3 > 3.9D) {
+            d3 = 3.9D;
         }
 
         this.g = (int) (d1 * 8000.0D);

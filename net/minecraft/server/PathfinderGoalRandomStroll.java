@@ -2,11 +2,11 @@ package net.minecraft.server;
 
 public class PathfinderGoalRandomStroll extends PathfinderGoal {
 
-    private EntityCreature a;
+    private final EntityCreature a;
     private double b;
     private double c;
     private double d;
-    private double e;
+    private final double e;
     private int f;
     private boolean g;
 
@@ -23,7 +23,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
 
     public boolean a() {
         if (!this.g) {
-            if (this.a.bL() >= 100) {
+            if (this.a.bN() >= 100) {
                 return false;
             }
 

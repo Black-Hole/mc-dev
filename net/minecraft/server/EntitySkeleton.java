@@ -8,7 +8,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
     private static final DataWatcherObject<Integer> a = DataWatcher.a(EntitySkeleton.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> b = DataWatcher.a(EntitySkeleton.class, DataWatcherRegistry.h);
     private final PathfinderGoalBowShoot c = new PathfinderGoalBowShoot(this, 1.0D, 20, 15.0F);
-    private final PathfinderGoalMeleeAttack bw = new PathfinderGoalMeleeAttack(this, 1.2D, flag) {
+    private final PathfinderGoalMeleeAttack bx = new PathfinderGoalMeleeAttack(this, 1.2D, flag) {
         public void d() {
             super.d();
             EntitySkeleton.this.a(false);
@@ -45,29 +45,31 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
 
     protected void i() {
         super.i();
-        this.datawatcher.register(EntitySkeleton.a, Integer.valueOf(0));
+        this.datawatcher.register(EntitySkeleton.a, Integer.valueOf(EnumSkeletonType.NORMAL.a()));
         this.datawatcher.register(EntitySkeleton.b, Boolean.valueOf(false));
     }
 
     protected SoundEffect G() {
-        return SoundEffects.fi;
+        return this.getSkeletonType().d();
     }
 
-    protected SoundEffect bS() {
-        return SoundEffects.fn;
+    protected SoundEffect bV() {
+        return this.getSkeletonType().e();
     }
 
-    protected SoundEffect bT() {
-        return SoundEffects.fj;
+    protected SoundEffect bW() {
+        return this.getSkeletonType().f();
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.fp, 0.15F, 1.0F);
+        SoundEffect soundeffect = this.getSkeletonType().g();
+
+        this.a(soundeffect, 0.15F, 1.0F);
     }
 
     public boolean B(Entity entity) {
         if (super.B(entity)) {
-            if (this.getSkeletonType() == 1 && entity instanceof EntityLiving) {
+            if (this.getSkeletonType() == EnumSkeletonType.WITHER && entity instanceof EntityLiving) {
                 ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.WITHER, 200));
             }
 
@@ -84,7 +86,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
     public void n() {
         if (this.world.B() && !this.world.isClientSide) {
             float f = this.e(1.0F);
-            BlockPosition blockposition = this.bz() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
+            BlockPosition blockposition = this.bB() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
 
             if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.h(blockposition)) {
                 boolean flag = true;
@@ -117,10 +119,10 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
 
     public void aw() {
         super.aw();
-        if (this.bz() instanceof EntityCreature) {
-            EntityCreature entitycreature = (EntityCreature) this.bz();
+        if (this.bB() instanceof EntityCreature) {
+            EntityCreature entitycreature = (EntityCreature) this.bB();
 
-            this.aN = entitycreature.aN;
+            this.aO = entitycreature.aO;
         }
 
     }
@@ -137,14 +139,14 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
             }
         } else if (damagesource.getEntity() instanceof EntityCreeper && ((EntityCreeper) damagesource.getEntity()).isPowered() && ((EntityCreeper) damagesource.getEntity()).canCauseHeadDrop()) {
             ((EntityCreeper) damagesource.getEntity()).setCausedHeadDrop();
-            this.a(new ItemStack(Items.SKULL, 1, this.getSkeletonType() == 1 ? 1 : 0), 0.0F);
+            this.a(new ItemStack(Items.SKULL, 1, this.getSkeletonType() == EnumSkeletonType.WITHER ? 1 : 0), 0.0F);
         }
 
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return this.getSkeletonType() == 1 ? LootTables.al : LootTables.ak;
+        return this.getSkeletonType().c();
     }
 
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
@@ -156,17 +158,23 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
     public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
         groupdataentity = super.prepare(difficultydamagescaler, groupdataentity);
         if (this.world.worldProvider instanceof WorldProviderHell && this.getRandom().nextInt(5) > 0) {
-            this.goalSelector.a(4, this.bw);
-            this.setSkeletonType(1);
+            this.goalSelector.a(4, this.bx);
+            this.setSkeletonType(EnumSkeletonType.WITHER);
             this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
             this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(4.0D);
         } else {
+            BiomeBase biomebase = this.world.getBiome(new BlockPosition(this));
+
+            if (biomebase instanceof BiomeIcePlains && this.world.h(new BlockPosition(this)) && this.random.nextInt(5) != 0) {
+                this.setSkeletonType(EnumSkeletonType.STRAY);
+            }
+
             this.goalSelector.a(4, this.c);
             this.a(difficultydamagescaler);
             this.b(difficultydamagescaler);
         }
 
-        this.l(this.random.nextFloat() < 0.55F * difficultydamagescaler.c());
+        this.m(this.random.nextFloat() < 0.55F * difficultydamagescaler.d());
         if (this.getEquipment(EnumItemSlot.HEAD) == null) {
             Calendar calendar = this.world.ac();
 
@@ -181,7 +189,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
 
     public void o() {
         if (this.world != null && !this.world.isClientSide) {
-            this.goalSelector.a((PathfinderGoal) this.bw);
+            this.goalSelector.a((PathfinderGoal) this.bx);
             this.goalSelector.a((PathfinderGoal) this.c);
             ItemStack itemstack = this.getItemInMainHand();
 
@@ -195,7 +203,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
                 this.c.b(b0);
                 this.goalSelector.a(4, this.c);
             } else {
-                this.goalSelector.a(4, this.bw);
+                this.goalSelector.a(4, this.bx);
             }
         }
 
@@ -211,6 +219,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
         entitytippedarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, (float) (14 - this.world.getDifficulty().a() * 4));
         int i = EnchantmentManager.a(Enchantments.ARROW_DAMAGE, (EntityLiving) this);
         int j = EnchantmentManager.a(Enchantments.ARROW_KNOCKBACK, (EntityLiving) this);
+        DifficultyDamageScaler difficultydamagescaler = this.world.D(new BlockPosition(this));
 
         entitytippedarrow.c((double) (f * 2.0F) + this.random.nextGaussian() * 0.25D + (double) ((float) this.world.getDifficulty().a() * 0.11F));
         if (i > 0) {
@@ -221,26 +230,37 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
             entitytippedarrow.setKnockbackStrength(j);
         }
 
-        if (EnchantmentManager.a(Enchantments.ARROW_FIRE, (EntityLiving) this) > 0 || this.getSkeletonType() == 1) {
+        boolean flag = this.isBurning() && difficultydamagescaler.c() && this.random.nextBoolean() || this.getSkeletonType() == EnumSkeletonType.WITHER;
+
+        flag = flag || EnchantmentManager.a(Enchantments.ARROW_FIRE, (EntityLiving) this) > 0;
+        if (flag) {
             entitytippedarrow.setOnFire(100);
         }
 
-        this.a(SoundEffects.fo, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        ItemStack itemstack = this.b(EnumHand.OFF_HAND);
+
+        if (itemstack != null && itemstack.getItem() == Items.TIPPED_ARROW) {
+            entitytippedarrow.a(itemstack);
+        } else if (this.getSkeletonType() == EnumSkeletonType.STRAY) {
+            entitytippedarrow.a(new MobEffect(MobEffects.SLOWER_MOVEMENT, 600));
+        }
+
+        this.a(SoundEffects.fz, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(entitytippedarrow);
     }
 
-    public int getSkeletonType() {
-        return ((Integer) this.datawatcher.get(EntitySkeleton.a)).intValue();
+    public EnumSkeletonType getSkeletonType() {
+        return EnumSkeletonType.a(((Integer) this.datawatcher.get(EntitySkeleton.a)).intValue());
     }
 
-    public void setSkeletonType(int i) {
-        this.datawatcher.set(EntitySkeleton.a, Integer.valueOf(i));
-        this.fireProof = i == 1;
-        this.b(i);
+    public void setSkeletonType(EnumSkeletonType enumskeletontype) {
+        this.datawatcher.set(EntitySkeleton.a, Integer.valueOf(enumskeletontype.a()));
+        this.fireProof = enumskeletontype == EnumSkeletonType.WITHER;
+        this.b(enumskeletontype);
     }
 
-    private void b(int i) {
-        if (i == 1) {
+    private void b(EnumSkeletonType enumskeletontype) {
+        if (enumskeletontype == EnumSkeletonType.WITHER) {
             this.setSize(0.7F, 2.4F);
         } else {
             this.setSize(0.6F, 1.99F);
@@ -248,12 +268,16 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
 
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "Skeleton");
+    }
+
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("SkeletonType", 99)) {
             byte b0 = nbttagcompound.getByte("SkeletonType");
 
-            this.setSkeletonType(b0);
+            this.setSkeletonType(EnumSkeletonType.a(b0));
         }
 
         this.o();
@@ -261,7 +285,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setByte("SkeletonType", (byte) this.getSkeletonType());
+        nbttagcompound.setByte("SkeletonType", (byte) this.getSkeletonType().a());
     }
 
     public void setSlot(EnumItemSlot enumitemslot, @Nullable ItemStack itemstack) {
@@ -273,7 +297,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
     }
 
     public float getHeadHeight() {
-        return this.getSkeletonType() == 1 ? 2.1F : 1.74F;
+        return this.getSkeletonType() == EnumSkeletonType.WITHER ? 2.1F : 1.74F;
     }
 
     public double ax() {

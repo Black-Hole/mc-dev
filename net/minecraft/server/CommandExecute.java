@@ -40,6 +40,11 @@ public class CommandExecute extends CommandAbstract {
                 Block block = b(icommandlistener, astring[8]);
                 int i = a(astring[9], -1, 15);
                 BlockPosition blockposition1 = new BlockPosition(d3, d4, d5);
+
+                if (!world.isLoaded(blockposition1)) {
+                    throw new CommandException("commands.execute.failed", new Object[] { "detect", entity.getName()});
+                }
+
                 IBlockData iblockdata = world.getType(blockposition1);
 
                 if (iblockdata.getBlock() != block || i >= 0 && iblockdata.getBlock().toLegacyData(iblockdata) != i) {

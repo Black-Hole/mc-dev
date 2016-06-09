@@ -27,7 +27,7 @@ public class CommandEffect extends CommandAbstract {
         } else {
             EntityLiving entityliving = (EntityLiving) a(minecraftserver, icommandlistener, astring[0], EntityLiving.class);
 
-            if (astring[1].equals("clear")) {
+            if ("clear".equals(astring[1])) {
                 if (entityliving.getEffects().isEmpty()) {
                     throw new CommandException("commands.effect.failure.notActive.all", new Object[] { entityliving.getName()});
                 } else {

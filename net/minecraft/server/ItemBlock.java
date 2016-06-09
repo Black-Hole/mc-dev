@@ -56,12 +56,12 @@ public class ItemBlock extends Item {
                 TileEntity tileentity = world.getTileEntity(blockposition);
 
                 if (tileentity != null) {
-                    if (!world.isClientSide && tileentity.isFilteredNBT() && (entityhuman == null || !minecraftserver.getPlayerList().isOp(entityhuman.getProfile()))) {
+                    if (!world.isClientSide && tileentity.isFilteredNBT() && (entityhuman == null || !entityhuman.dh())) {
                         return false;
                     }
 
                     NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
-                    NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttagcompound.clone();
+                    NBTTagCompound nbttagcompound1 = nbttagcompound.g();
                     NBTTagCompound nbttagcompound2 = (NBTTagCompound) itemstack.getTag().get("BlockEntityTag");
 
                     nbttagcompound.a(nbttagcompound2);

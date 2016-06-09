@@ -17,7 +17,7 @@ public abstract class Container {
     private int g;
     private final Set<Slot> h = Sets.newHashSet();
     protected List<ICrafting> listeners = Lists.newArrayList();
-    private Set<EntityHuman> i = Sets.newHashSet();
+    private final Set<EntityHuman> i = Sets.newHashSet();
 
     public Container() {}
 

@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public class PathfinderGoalMakeLove extends PathfinderGoal {
 
-    private EntityVillager b;
+    private final EntityVillager b;
     private EntityVillager c;
-    private World d;
+    private final World d;
     private int e;
     Village a;
 
@@ -23,14 +23,14 @@ public class PathfinderGoalMakeLove extends PathfinderGoal {
             this.a = this.d.ai().getClosestVillage(new BlockPosition(this.b), 0);
             if (this.a == null) {
                 return false;
-            } else if (this.f() && this.b.q(true)) {
+            } else if (this.f() && this.b.r(true)) {
                 Entity entity = this.d.a(EntityVillager.class, this.b.getBoundingBox().grow(8.0D, 3.0D, 8.0D), (Entity) this.b);
 
                 if (entity == null) {
                     return false;
                 } else {
                     this.c = (EntityVillager) entity;
-                    return this.c.getAge() == 0 && this.c.q(true);
+                    return this.c.getAge() == 0 && this.c.r(true);
                 }
             } else {
                 return false;
@@ -40,17 +40,17 @@ public class PathfinderGoalMakeLove extends PathfinderGoal {
 
     public void c() {
         this.e = 300;
-        this.b.o(true);
+        this.b.p(true);
     }
 
     public void d() {
         this.a = null;
         this.c = null;
-        this.b.o(false);
+        this.b.p(false);
     }
 
     public boolean b() {
-        return this.e >= 0 && this.f() && this.b.getAge() == 0 && this.b.q(false);
+        return this.e >= 0 && this.f() && this.b.getAge() == 0 && this.b.r(false);
     }
 
     public void e() {
@@ -58,7 +58,7 @@ public class PathfinderGoalMakeLove extends PathfinderGoal {
         this.b.getControllerLook().a(this.c, 10.0F, 30.0F);
         if (this.b.h(this.c) > 2.25D) {
             this.b.getNavigation().a((Entity) this.c, 0.25D);
-        } else if (this.e == 0 && this.c.db()) {
+        } else if (this.e == 0 && this.c.df()) {
             this.i();
         }
 
@@ -83,8 +83,8 @@ public class PathfinderGoalMakeLove extends PathfinderGoal {
 
         this.c.setAgeRaw(6000);
         this.b.setAgeRaw(6000);
-        this.c.r(false);
-        this.b.r(false);
+        this.c.s(false);
+        this.b.s(false);
         entityvillager.setAgeRaw(-24000);
         entityvillager.setPositionRotation(this.b.locX, this.b.locY, this.b.locZ, 0.0F, 0.0F);
         this.d.addEntity(entityvillager);

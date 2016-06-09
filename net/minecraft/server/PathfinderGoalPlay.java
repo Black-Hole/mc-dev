@@ -5,9 +5,9 @@ import java.util.List;
 
 public class PathfinderGoalPlay extends PathfinderGoal {
 
-    private EntityVillager a;
+    private final EntityVillager a;
     private EntityLiving b;
-    private double c;
+    private final double c;
     private int d;
 
     public PathfinderGoalPlay(EntityVillager entityvillager, double d0) {
@@ -29,7 +29,7 @@ public class PathfinderGoalPlay extends PathfinderGoal {
             while (iterator.hasNext()) {
                 EntityVillager entityvillager = (EntityVillager) iterator.next();
 
-                if (entityvillager != this.a && !entityvillager.dc() && entityvillager.getAge() < 0) {
+                if (entityvillager != this.a && !entityvillager.dg() && entityvillager.getAge() < 0) {
                     double d1 = entityvillager.h(this.a);
 
                     if (d1 <= d0) {
@@ -57,14 +57,14 @@ public class PathfinderGoalPlay extends PathfinderGoal {
 
     public void c() {
         if (this.b != null) {
-            this.a.p(true);
+            this.a.q(true);
         }
 
         this.d = 1000;
     }
 
     public void d() {
-        this.a.p(false);
+        this.a.q(false);
         this.b = null;
     }
 

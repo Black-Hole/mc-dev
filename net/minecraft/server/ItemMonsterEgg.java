@@ -76,7 +76,7 @@ public class ItemMonsterEgg extends Item {
             NBTTagCompound nbttagcompound = itemstack.getTag();
 
             if (nbttagcompound != null && nbttagcompound.hasKeyOfType("EntityTag", 10)) {
-                if (!world.isClientSide && entity.bs() && (entityhuman == null || !minecraftserver.getPlayerList().isOp(entityhuman.getProfile()))) {
+                if (!world.isClientSide && entity.bu() && (entityhuman == null || !minecraftserver.getPlayerList().isOp(entityhuman.getProfile()))) {
                     return;
                 }
 
@@ -140,8 +140,8 @@ public class ItemMonsterEgg extends Item {
                     EntityInsentient entityinsentient = (EntityInsentient) entity;
 
                     entity.setPositionRotation(d0, d1, d2, MathHelper.g(world.random.nextFloat() * 360.0F), 0.0F);
-                    entityinsentient.aP = entityinsentient.yaw;
-                    entityinsentient.aN = entityinsentient.yaw;
+                    entityinsentient.aQ = entityinsentient.yaw;
+                    entityinsentient.aO = entityinsentient.yaw;
                     entityinsentient.prepare(world.D(new BlockPosition(entityinsentient)), (GroupDataEntity) null);
                     world.addEntity(entity);
                     entityinsentient.D();

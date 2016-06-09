@@ -57,9 +57,9 @@ public class WorldLoaderServer extends WorldLoader {
 
         int i = arraylist.size() + arraylist1.size() + arraylist2.size();
 
-        WorldLoaderServer.c.info("Total conversion count is " + i);
+        WorldLoaderServer.c.info("Total conversion count is {}", new Object[] { Integer.valueOf(i)});
         WorldData worlddata = this.c(s);
-        Object object = null;
+        Object object;
 
         if (worlddata.getType() == WorldType.FLAT) {
             object = new WorldChunkManagerHell(Biomes.c);

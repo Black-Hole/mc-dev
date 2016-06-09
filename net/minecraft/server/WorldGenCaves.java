@@ -156,10 +156,6 @@ public class WorldGenCaves extends WorldGenBase {
                                                     chunksnapshot.a(j3, j4, i4, WorldGenCaves.a);
                                                 } else {
                                                     chunksnapshot.a(j3, j4, i4, WorldGenCaves.b);
-                                                    if (iblockdata2.getBlock() == Blocks.SAND) {
-                                                        chunksnapshot.a(j3, j4 + 1, i4, iblockdata2.get(BlockSand.VARIANT) == BlockSand.EnumSandVariant.RED_SAND ? WorldGenCaves.d : WorldGenCaves.c);
-                                                    }
-
                                                     if (flag3 && chunksnapshot.a(j3, j4 - 1, i4).getBlock() == Blocks.DIRT) {
                                                         blockposition_mutableblockposition.c(j3 + j * 16, 0, i4 + k * 16);
                                                         chunksnapshot.a(j3, j4 - 1, i4, this.g.getBiome(blockposition_mutableblockposition).r.getBlock().getBlockData());

@@ -31,7 +31,7 @@ public class ItemFood extends Item {
             EntityHuman entityhuman = (EntityHuman) entityliving;
 
             entityhuman.getFoodData().a(this, itemstack);
-            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ef, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ek, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
             this.a(itemstack, world, entityhuman);
             entityhuman.b(StatisticList.b((Item) this));
         }
@@ -55,7 +55,7 @@ public class ItemFood extends Item {
     }
 
     public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
-        if (entityhuman.l(this.e)) {
+        if (entityhuman.m(this.e)) {
             entityhuman.c(enumhand);
             return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
         } else {

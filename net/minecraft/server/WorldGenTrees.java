@@ -29,12 +29,12 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
         boolean flag = true;
 
         if (blockposition.getY() >= 1 && blockposition.getY() + i + 1 <= 256) {
-            byte b0;
             int j;
             int k;
 
             for (int l = blockposition.getY(); l <= blockposition.getY() + 1 + i; ++l) {
-                b0 = 1;
+                byte b0 = 1;
+
                 if (l == blockposition.getY()) {
                     b0 = 0;
                 }
@@ -65,17 +65,17 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
 
                 if ((block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.FARMLAND) && blockposition.getY() < 256 - i - 1) {
                     this.a(world, blockposition.down());
-                    b0 = 3;
-                    byte b1 = 0;
+                    boolean flag1 = true;
+                    boolean flag2 = false;
 
                     int i1;
                     int j1;
                     int k1;
                     BlockPosition blockposition1;
 
-                    for (j = blockposition.getY() - b0 + i; j <= blockposition.getY() + i; ++j) {
+                    for (j = blockposition.getY() - 3 + i; j <= blockposition.getY() + i; ++j) {
                         k = j - (blockposition.getY() + i);
-                        i1 = b1 + 1 - k / 2;
+                        i1 = 1 - k / 2;
 
                         for (int l1 = blockposition.getX() - i1; l1 <= blockposition.getX() + i1; ++l1) {
                             j1 = l1 - blockposition.getX();

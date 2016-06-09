@@ -4,19 +4,19 @@ import java.util.UUID;
 
 public abstract class EntityCreature extends EntityInsentient {
 
-    public static final UUID bu = UUID.fromString("E199AD21-BA8A-4C53-8D13-6182D5C69D3A");
-    public static final AttributeModifier bv = (new AttributeModifier(EntityCreature.bu, "Fleeing speed bonus", 2.0D, 2)).a(false);
+    public static final UUID bv = UUID.fromString("E199AD21-BA8A-4C53-8D13-6182D5C69D3A");
+    public static final AttributeModifier bw = (new AttributeModifier(EntityCreature.bv, "Fleeing speed bonus", 2.0D, 2)).a(false);
     private BlockPosition a;
     private float b;
-    private PathfinderGoal c;
-    private boolean bw;
-    private float bx;
+    private final PathfinderGoal c;
+    private boolean bx;
+    private float by;
 
     public EntityCreature(World world) {
         super(world);
         this.a = BlockPosition.ZERO;
         this.b = -1.0F;
-        this.bx = PathType.WATER.a();
+        this.by = PathType.WATER.a();
         this.c = new PathfinderGoalMoveTowardsRestriction(this, 1.0D);
     }
 
@@ -24,15 +24,15 @@ public abstract class EntityCreature extends EntityInsentient {
         return 0.0F;
     }
 
-    public boolean cG() {
-        return super.cG() && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ)) >= 0.0F;
+    public boolean cK() {
+        return super.cK() && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ)) >= 0.0F;
     }
 
-    public boolean cU() {
+    public boolean cY() {
         return !this.navigation.n();
     }
 
-    public boolean cV() {
+    public boolean cZ() {
         return this.f(new BlockPosition(this));
     }
 
@@ -45,24 +45,24 @@ public abstract class EntityCreature extends EntityInsentient {
         this.b = (float) i;
     }
 
-    public BlockPosition cW() {
+    public BlockPosition da() {
         return this.a;
     }
 
-    public float cX() {
+    public float db() {
         return this.b;
     }
 
-    public void cY() {
+    public void dc() {
         this.b = -1.0F;
     }
 
-    public boolean cZ() {
+    public boolean dd() {
         return this.b != -1.0F;
     }
 
-    protected void cP() {
-        super.cP();
+    protected void cT() {
+        super.cT();
         if (this.isLeashed() && this.getLeashHolder() != null && this.getLeashHolder().world == this.world) {
             Entity entity = this.getLeashHolder();
 
@@ -77,14 +77,14 @@ public abstract class EntityCreature extends EntityInsentient {
                 return;
             }
 
-            if (!this.bw) {
+            if (!this.bx) {
                 this.goalSelector.a(2, this.c);
                 if (this.getNavigation() instanceof Navigation) {
-                    this.bx = this.a(PathType.WATER);
+                    this.by = this.a(PathType.WATER);
                     this.a(PathType.WATER, 0.0F);
                 }
 
-                this.bw = true;
+                this.bx = true;
             }
 
             this.q(f);
@@ -105,14 +105,14 @@ public abstract class EntityCreature extends EntityInsentient {
             if (f > 10.0F) {
                 this.unleash(true, true);
             }
-        } else if (!this.isLeashed() && this.bw) {
-            this.bw = false;
+        } else if (!this.isLeashed() && this.bx) {
+            this.bx = false;
             this.goalSelector.a(this.c);
             if (this.getNavigation() instanceof Navigation) {
-                this.a(PathType.WATER, this.bx);
+                this.a(PathType.WATER, this.by);
             }
 
-            this.cY();
+            this.dc();
         }
 
     }

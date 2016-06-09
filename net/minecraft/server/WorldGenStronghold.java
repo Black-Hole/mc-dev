@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 
 public class WorldGenStronghold extends StructureGenerator {
 
-    private List<BiomeBase> a;
+    private final List<BiomeBase> a;
     private boolean b;
     private ChunkCoordIntPair[] d;
     private double h;
@@ -156,7 +156,7 @@ public class WorldGenStronghold extends StructureGenerator {
 
     }
 
-    protected List<BlockPosition> F_() {
+    protected List<BlockPosition> G_() {
         ArrayList arraylist = Lists.newArrayList();
         ChunkCoordIntPair[] achunkcoordintpair = this.d;
         int i = achunkcoordintpair.length;

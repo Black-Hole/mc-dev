@@ -9,10 +9,10 @@ import java.util.Map.Entry;
 
 public class WorldGenVillage extends StructureGenerator {
 
-    public static final List<BiomeBase> a = Arrays.asList(new BiomeBase[] { Biomes.c, Biomes.d, Biomes.K});
+    public static final List<BiomeBase> a = Arrays.asList(new BiomeBase[] { Biomes.c, Biomes.d, Biomes.K, Biomes.g});
     private int b;
     private int d;
-    private int h;
+    private final int h;
 
     public WorldGenVillage() {
         this.d = 32;
@@ -29,7 +29,7 @@ public class WorldGenVillage extends StructureGenerator {
             if (((String) entry.getKey()).equals("size")) {
                 this.b = MathHelper.a((String) entry.getValue(), this.b, 0);
             } else if (((String) entry.getKey()).equals("distance")) {
-                this.d = MathHelper.a((String) entry.getValue(), this.d, this.h + 1);
+                this.d = MathHelper.a((String) entry.getValue(), this.d, 9);
             }
         }
 
@@ -57,8 +57,8 @@ public class WorldGenVillage extends StructureGenerator {
 
         i1 *= this.d;
         j1 *= this.d;
-        i1 += random.nextInt(this.d - this.h);
-        j1 += random.nextInt(this.d - this.h);
+        i1 += random.nextInt(this.d - 8);
+        j1 += random.nextInt(this.d - 8);
         if (k == i1 && l == j1) {
             boolean flag = this.g.getWorldChunkManager().a(k * 16 + 8, l * 16 + 8, 0, WorldGenVillage.a);
 
@@ -87,8 +87,8 @@ public class WorldGenVillage extends StructureGenerator {
 
             this.a.add(worldgenvillagepieces_worldgenvillagestartpiece);
             worldgenvillagepieces_worldgenvillagestartpiece.a((StructurePiece) worldgenvillagepieces_worldgenvillagestartpiece, this.a, random);
-            List list1 = worldgenvillagepieces_worldgenvillagestartpiece.g;
-            List list2 = worldgenvillagepieces_worldgenvillagestartpiece.f;
+            List list1 = worldgenvillagepieces_worldgenvillagestartpiece.f;
+            List list2 = worldgenvillagepieces_worldgenvillagestartpiece.e;
 
             int l;
 

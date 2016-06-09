@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
 
     private int e;
-    private EntityVillager f;
+    private final EntityVillager f;
 
     public PathfinderGoalInteractVillagers(EntityVillager entityvillager) {
         super(entityvillager, EntityVillager.class, 3.0F, 0.02F);
@@ -12,7 +12,7 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
 
     public void c() {
         super.c();
-        if (this.f.dh() && this.b instanceof EntityVillager && ((EntityVillager) this.b).di()) {
+        if (this.f.dl() && this.b instanceof EntityVillager && ((EntityVillager) this.b).dm()) {
             this.e = 10;
         } else {
             this.e = 0;
@@ -25,7 +25,7 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
         if (this.e > 0) {
             --this.e;
             if (this.e == 0) {
-                InventorySubcontainer inventorysubcontainer = this.f.df();
+                InventorySubcontainer inventorysubcontainer = this.f.dj();
 
                 for (int i = 0; i < inventorysubcontainer.getSize(); ++i) {
                     ItemStack itemstack = inventorysubcontainer.getItem(i);
@@ -56,12 +56,12 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
                         double d0 = this.f.locY - 0.30000001192092896D + (double) this.f.getHeadHeight();
                         EntityItem entityitem = new EntityItem(this.f.world, this.f.locX, d0, this.f.locZ, itemstack1);
                         float f = 0.3F;
-                        float f1 = this.f.aP;
+                        float f1 = this.f.aQ;
                         float f2 = this.f.pitch;
 
-                        entityitem.motX = (double) (-MathHelper.sin(f1 * 0.017453292F) * MathHelper.cos(f2 * 0.017453292F) * f);
-                        entityitem.motZ = (double) (MathHelper.cos(f1 * 0.017453292F) * MathHelper.cos(f2 * 0.017453292F) * f);
-                        entityitem.motY = (double) (-MathHelper.sin(f2 * 0.017453292F) * f + 0.1F);
+                        entityitem.motX = (double) (-MathHelper.sin(f1 * 0.017453292F) * MathHelper.cos(f2 * 0.017453292F) * 0.3F);
+                        entityitem.motZ = (double) (MathHelper.cos(f1 * 0.017453292F) * MathHelper.cos(f2 * 0.017453292F) * 0.3F);
+                        entityitem.motY = (double) (-MathHelper.sin(f2 * 0.017453292F) * 0.3F + 0.1F);
                         entityitem.q();
                         this.f.world.addEntity(entityitem);
                         break;

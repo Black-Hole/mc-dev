@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Floats;
 import com.google.common.util.concurrent.Futures;
-import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import java.io.IOException;
@@ -61,7 +60,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         entityplayer.playerConnection = this;
     }
 
-    public void c() {
+    public void E_() {
         this.d();
         this.player.k_();
         this.player.setLocation(this.l, this.m, this.n, this.player.yaw, this.player.pitch);
@@ -69,7 +68,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         this.G = this.F;
         if (this.B) {
             if (++this.C > 80) {
-                PlayerConnection.LOGGER.warn(this.player.getName() + " was kicked for floating too long!");
+                PlayerConnection.LOGGER.warn("{} was kicked for floating too long!", new Object[] { this.player.getName()});
                 this.disconnect("Flying is not enabled on this server");
                 return;
             }
@@ -79,16 +78,16 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         }
 
         this.r = this.player.getVehicle();
-        if (this.r != this.player && this.r.bu() == this.player) {
+        if (this.r != this.player && this.r.bw() == this.player) {
             this.s = this.r.locX;
             this.t = this.r.locY;
             this.u = this.r.locZ;
             this.v = this.r.locX;
             this.w = this.r.locY;
             this.x = this.r.locZ;
-            if (this.D && this.player.getVehicle().bu() == this.player) {
+            if (this.D && this.player.getVehicle().bw() == this.player) {
                 if (++this.E > 80) {
-                    PlayerConnection.LOGGER.warn(this.player.getName() + " was kicked for floating a vehicle too long!");
+                    PlayerConnection.LOGGER.warn("{} was kicked for floating a vehicle too long!", new Object[] { this.player.getName()});
                     this.disconnect("Flying is not enabled on this server");
                     return;
                 }
@@ -174,7 +173,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         } else {
             Entity entity = this.player.getVehicle();
 
-            if (entity != this.player && entity.bu() == this.player && entity == this.r) {
+            if (entity != this.player && entity.bw() == this.player && entity == this.r) {
                 WorldServer worldserver = this.player.x();
                 double d0 = entity.locX;
                 double d1 = entity.locY;
@@ -191,7 +190,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                 double d10 = d6 * d6 + d7 * d7 + d8 * d8;
 
                 if (d10 - d9 > 100.0D && (!this.minecraftServer.R() || !this.minecraftServer.Q().equals(entity.getName()))) {
-                    PlayerConnection.LOGGER.warn(entity.getName() + " (vehicle of " + this.player.getName() + ") moved too quickly! " + d6 + "," + d7 + "," + d8);
+                    PlayerConnection.LOGGER.warn("{} (vehicle of {}) moved too quickly! {},{},{}", new Object[] { entity.getName(), this.player.getName(), Double.valueOf(d6), Double.valueOf(d7), Double.valueOf(d8)});
                     this.networkManager.sendPacket(new PacketPlayOutVehicleMove(entity));
                     return;
                 }
@@ -216,7 +215,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
                 if (d10 > 0.0625D) {
                     flag1 = true;
-                    PlayerConnection.LOGGER.warn(entity.getName() + " moved wrongly!");
+                    PlayerConnection.LOGGER.warn("{} moved wrongly!", new Object[] { entity.getName()});
                 }
 
                 entity.setLocation(d3, d4, d5, f, f1);
@@ -298,15 +297,15 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                         int i = this.F - this.G;
 
                         if (i > 5) {
-                            PlayerConnection.LOGGER.debug(this.player.getName() + " is sending move packets too frequently (" + i + " packets since last tick)");
+                            PlayerConnection.LOGGER.debug("{} is sending move packets too frequently ({} packets since last tick)", new Object[] { this.player.getName(), Integer.valueOf(i)});
                             i = 1;
                         }
 
-                        if (!this.player.K() && (!this.player.x().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.cC())) {
-                            float f2 = this.player.cC() ? 300.0F : 100.0F;
+                        if (!this.player.K() && (!this.player.x().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.cG())) {
+                            float f2 = this.player.cG() ? 300.0F : 100.0F;
 
                             if (d11 - d10 > (double) (f2 * (float) i) && (!this.minecraftServer.R() || !this.minecraftServer.Q().equals(this.player.getName()))) {
-                                PlayerConnection.LOGGER.warn(this.player.getName() + " moved too quickly! " + d7 + "," + d8 + "," + d9);
+                                PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", new Object[] { this.player.getName(), Double.valueOf(d7), Double.valueOf(d8), Double.valueOf(d9)});
                                 this.a(this.player.locX, this.player.locY, this.player.locZ, this.player.yaw, this.player.pitch);
                                 return;
                             }
@@ -318,7 +317,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                         d8 = d5 - this.p;
                         d9 = d6 - this.q;
                         if (this.player.onGround && !packetplayinflying.a() && d8 > 0.0D) {
-                            this.player.ci();
+                            this.player.cl();
                         }
 
                         this.player.move(d7, d8, d9);
@@ -335,9 +334,9 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                         d11 = d7 * d7 + d8 * d8 + d9 * d9;
                         boolean flag1 = false;
 
-                        if (!this.player.K() && d11 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative() && this.player.playerInteractManager.getGameMode() != WorldSettings.EnumGamemode.SPECTATOR) {
+                        if (!this.player.K() && d11 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative() && this.player.playerInteractManager.getGameMode() != EnumGamemode.SPECTATOR) {
                             flag1 = true;
-                            PlayerConnection.LOGGER.warn(this.player.getName() + " moved wrongly!");
+                            PlayerConnection.LOGGER.warn("{} moved wrongly!", new Object[] { this.player.getName()});
                         }
 
                         this.player.setLocation(d4, d5, d6, f, f1);
@@ -353,7 +352,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
                         this.B = d12 >= -0.03125D;
                         this.B &= !this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly;
-                        this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.cC() && !worldserver.d(this.player.getBoundingBox().g(0.0625D).a(0.0D, -0.55D, 0.0D));
+                        this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.cG() && !worldserver.d(this.player.getBoundingBox().g(0.0625D).a(0.0D, -0.55D, 0.0D));
                         this.player.onGround = packetplayinflying.a();
                         this.minecraftServer.getPlayerList().d(this.player);
                         this.player.a(this.player.locY - d3, packetplayinflying.a());
@@ -499,7 +498,6 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         itemstack = this.player.b(enumhand);
         if (itemstack != null && itemstack.count == 0) {
             this.player.a(enumhand, (ItemStack) null);
-            itemstack = null;
         }
 
     }
@@ -543,7 +541,9 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             if (entity != null) {
                 this.player.setSpectatorTarget(this.player);
                 this.player.stopRiding();
-                if (entity.world != this.player.world) {
+                if (entity.world == this.player.world) {
+                    this.player.enderTeleportTo(entity.locX, entity.locY, entity.locZ);
+                } else {
                     WorldServer worldserver1 = this.player.x();
                     WorldServer worldserver2 = (WorldServer) entity.world;
 
@@ -565,8 +565,6 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                     this.player.playerInteractManager.a(worldserver2);
                     this.minecraftServer.getPlayerList().b(this.player, worldserver2);
                     this.minecraftServer.getPlayerList().updateClient(this.player);
-                } else {
-                    this.player.enderTeleportTo(entity.locX, entity.locY, entity.locZ);
                 }
             }
         }
@@ -577,7 +575,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
     public void a(PacketPlayInBoatMove packetplayinboatmove) {
         PlayerConnectionUtils.ensureMainThread(packetplayinboatmove, this, this.player.x());
-        Entity entity = this.player.bz();
+        Entity entity = this.player.bB();
 
         if (entity instanceof EntityBoat) {
             ((EntityBoat) entity).a(packetplayinboatmove.a(), packetplayinboatmove.b());
@@ -586,7 +584,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     }
 
     public void a(IChatBaseComponent ichatbasecomponent) {
-        PlayerConnection.LOGGER.info(this.player.getName() + " lost connection: " + ichatbasecomponent);
+        PlayerConnection.LOGGER.info("{} lost connection: {}", new Object[] { this.player.getName(), ichatbasecomponent});
         this.minecraftServer.aC();
         ChatMessage chatmessage = new ChatMessage("multiplayer.player.left", new Object[] { this.player.getScoreboardDisplayName()});
 
@@ -640,7 +638,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             this.player.inventory.itemInHandIndex = packetplayinhelditemslot.a();
             this.player.resetIdleTimer();
         } else {
-            PlayerConnection.LOGGER.warn(this.player.getName() + " tried to set an invalid carried item");
+            PlayerConnection.LOGGER.warn("{} tried to set an invalid carried item", new Object[] { this.player.getName()});
         }
     }
 
@@ -718,8 +716,8 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             break;
 
         case 6:
-            if (this.player.bz() instanceof IJumpable) {
-                ijumpable = (IJumpable) this.player.bz();
+            if (this.player.bB() instanceof IJumpable) {
+                ijumpable = (IJumpable) this.player.bB();
                 int i = packetplayinentityaction.c();
 
                 if (ijumpable.b() && i > 0) {
@@ -729,20 +727,20 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             break;
 
         case 7:
-            if (this.player.bz() instanceof IJumpable) {
-                ijumpable = (IJumpable) this.player.bz();
+            if (this.player.bB() instanceof IJumpable) {
+                ijumpable = (IJumpable) this.player.bB();
                 ijumpable.r_();
             }
             break;
 
         case 8:
-            if (this.player.bz() instanceof EntityHorse) {
-                ((EntityHorse) this.player.bz()).f((EntityHuman) this.player);
+            if (this.player.bB() instanceof EntityHorse) {
+                ((EntityHorse) this.player.bB()).f((EntityHuman) this.player);
             }
             break;
 
         case 9:
-            if (!this.player.onGround && this.player.motY < 0.0D && !this.player.cC() && !this.player.isInWater()) {
+            if (!this.player.onGround && this.player.motY < 0.0D && !this.player.cG() && !this.player.isInWater()) {
                 ItemStack itemstack = this.player.getEquipment(EnumItemSlot.CHEST);
 
                 if (itemstack != null && itemstack.getItem() == Items.cR && ItemElytra.d(itemstack)) {
@@ -816,7 +814,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
                 this.player = this.minecraftServer.getPlayerList().moveToWorld(this.player, 0, false);
                 if (this.minecraftServer.isHardcore()) {
-                    this.player.a(WorldSettings.EnumGamemode.SPECTATOR);
+                    this.player.a(EnumGamemode.SPECTATOR);
                     this.player.x().getGameRules().set("spectatorsGenerateChunks", "false");
                 }
             }
@@ -962,7 +960,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
             TileEntitySign tileentitysign = (TileEntitySign) tileentity;
 
-            if (!tileentitysign.c() || tileentitysign.d() != this.player) {
+            if (!tileentitysign.d() || tileentitysign.e() != this.player) {
                 this.minecraftServer.warning("Player " + this.player.getName() + " just tried to change non-editable sign");
                 return;
             }
@@ -1024,7 +1022,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         ItemStack itemstack1;
 
         if ("MC|BEdit".equals(s)) {
-            packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(packetplayincustompayload.b()));
+            packetdataserializer = packetplayincustompayload.b();
 
             try {
                 itemstack = packetdataserializer.k();
@@ -1037,26 +1035,21 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                 }
 
                 itemstack1 = this.player.getItemInMainHand();
-                if (itemstack1 != null) {
-                    if (itemstack.getItem() == Items.WRITABLE_BOOK && itemstack.getItem() == itemstack1.getItem()) {
-                        itemstack1.a("pages", (NBTBase) itemstack.getTag().getList("pages", 8));
-                    }
-
+                if (itemstack1 == null) {
                     return;
+                }
+
+                if (itemstack.getItem() == Items.WRITABLE_BOOK && itemstack.getItem() == itemstack1.getItem()) {
+                    itemstack1.a("pages", (NBTBase) itemstack.getTag().getList("pages", 8));
                 }
             } catch (Exception exception) {
                 PlayerConnection.LOGGER.error("Couldn\'t handle book info", exception);
-                return;
-            } finally {
-                packetdataserializer.release();
             }
-
-            return;
         } else {
             String s1;
 
             if ("MC|BSign".equals(s)) {
-                packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(packetplayincustompayload.b()));
+                packetdataserializer = packetplayincustompayload.b();
 
                 try {
                     itemstack = packetdataserializer.k();
@@ -1069,34 +1062,29 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                     }
 
                     itemstack1 = this.player.getItemInMainHand();
-                    if (itemstack1 != null) {
-                        if (itemstack.getItem() == Items.WRITABLE_BOOK && itemstack1.getItem() == Items.WRITABLE_BOOK) {
-                            itemstack1.a("author", (NBTBase) (new NBTTagString(this.player.getName())));
-                            itemstack1.a("title", (NBTBase) (new NBTTagString(itemstack.getTag().getString("title"))));
-                            NBTTagList nbttaglist = itemstack.getTag().getList("pages", 8);
+                    if (itemstack1 == null) {
+                        return;
+                    }
 
-                            for (int i = 0; i < nbttaglist.size(); ++i) {
-                                s1 = nbttaglist.getString(i);
-                                ChatComponentText chatcomponenttext = new ChatComponentText(s1);
+                    if (itemstack.getItem() == Items.WRITABLE_BOOK && itemstack1.getItem() == Items.WRITABLE_BOOK) {
+                        itemstack1.a("author", (NBTBase) (new NBTTagString(this.player.getName())));
+                        itemstack1.a("title", (NBTBase) (new NBTTagString(itemstack.getTag().getString("title"))));
+                        NBTTagList nbttaglist = itemstack.getTag().getList("pages", 8);
 
-                                s1 = IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) chatcomponenttext);
-                                nbttaglist.a(i, new NBTTagString(s1));
-                            }
+                        for (int i = 0; i < nbttaglist.size(); ++i) {
+                            s1 = nbttaglist.getString(i);
+                            ChatComponentText chatcomponenttext = new ChatComponentText(s1);
 
-                            itemstack1.a("pages", (NBTBase) nbttaglist);
-                            itemstack1.setItem(Items.WRITTEN_BOOK);
+                            s1 = IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) chatcomponenttext);
+                            nbttaglist.a(i, new NBTTagString(s1));
                         }
 
-                        return;
+                        itemstack1.a("pages", (NBTBase) nbttaglist);
+                        itemstack1.setItem(Items.WRITTEN_BOOK);
                     }
                 } catch (Exception exception1) {
                     PlayerConnection.LOGGER.error("Couldn\'t sign book", exception1);
-                    return;
-                } finally {
-                    packetdataserializer.release();
                 }
-
-                return;
             } else if ("MC|TrSel".equals(s)) {
                 try {
                     int j = packetplayincustompayload.b().readInt();
@@ -1117,7 +1105,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                         return;
                     }
 
-                    if (!this.player.a(2, "") || !this.player.abilities.canInstantlyBuild) {
+                    if (!this.player.dh()) {
                         this.player.sendMessage(new ChatMessage("advMode.notAllowed", new Object[0]));
                         return;
                     }
@@ -1156,8 +1144,6 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                         }
                     } catch (Exception exception3) {
                         PlayerConnection.LOGGER.error("Couldn\'t set command block", exception3);
-                    } finally {
-                        packetdataserializer.release();
                     }
                 } else if ("MC|AutoCmd".equals(s)) {
                     if (!this.minecraftServer.getEnableCommandBlock()) {
@@ -1165,7 +1151,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                         return;
                     }
 
-                    if (!this.player.a(2, "") || !this.player.abilities.canInstantlyBuild) {
+                    if (!this.player.dh()) {
                         this.player.sendMessage(new ChatMessage("advMode.notAllowed", new Object[0]));
                         return;
                     }
@@ -1225,8 +1211,6 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                         }
                     } catch (Exception exception4) {
                         PlayerConnection.LOGGER.error("Couldn\'t set command block", exception4);
-                    } finally {
-                        packetdataserializer.release();
                     }
                 } else {
                     int k;
@@ -1267,55 +1251,75 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             }
                         }
                     } else if ("MC|Struct".equals(s)) {
+                        if (!this.player.dh()) {
+                            return;
+                        }
+
                         packetdataserializer = packetplayincustompayload.b();
 
                         try {
-                            if (this.player.a(4, "") && this.player.abilities.canInstantlyBuild) {
-                                BlockPosition blockposition1 = new BlockPosition(packetdataserializer.readInt(), packetdataserializer.readInt(), packetdataserializer.readInt());
-                                IBlockData iblockdata1 = this.player.world.getType(blockposition1);
+                            BlockPosition blockposition1 = new BlockPosition(packetdataserializer.readInt(), packetdataserializer.readInt(), packetdataserializer.readInt());
+                            IBlockData iblockdata1 = this.player.world.getType(blockposition1);
 
-                                tileentity = this.player.world.getTileEntity(blockposition1);
-                                if (tileentity instanceof TileEntityStructure) {
-                                    TileEntityStructure tileentitystructure = (TileEntityStructure) tileentity;
-                                    byte b1 = packetdataserializer.readByte();
-                                    String s4 = packetdataserializer.e(32);
+                            tileentity = this.player.world.getTileEntity(blockposition1);
+                            if (tileentity instanceof TileEntityStructure) {
+                                TileEntityStructure tileentitystructure = (TileEntityStructure) tileentity;
+                                byte b1 = packetdataserializer.readByte();
+                                String s4 = packetdataserializer.e(32);
 
-                                    tileentitystructure.a(TileEntityStructure.UsageMode.valueOf(s4));
-                                    tileentitystructure.a(packetdataserializer.e(64));
-                                    tileentitystructure.b(new BlockPosition(packetdataserializer.readInt(), packetdataserializer.readInt(), packetdataserializer.readInt()));
-                                    tileentitystructure.c(new BlockPosition(packetdataserializer.readInt(), packetdataserializer.readInt(), packetdataserializer.readInt()));
-                                    String s5 = packetdataserializer.e(32);
+                                tileentitystructure.a(TileEntityStructure.UsageMode.valueOf(s4));
+                                tileentitystructure.a(packetdataserializer.e(64));
+                                int i1 = MathHelper.clamp(packetdataserializer.readInt(), -32, 32);
+                                int j1 = MathHelper.clamp(packetdataserializer.readInt(), -32, 32);
+                                int k1 = MathHelper.clamp(packetdataserializer.readInt(), -32, 32);
 
-                                    tileentitystructure.a(EnumBlockMirror.valueOf(s5));
-                                    String s6 = packetdataserializer.e(32);
+                                tileentitystructure.b(new BlockPosition(i1, j1, k1));
+                                int l1 = MathHelper.clamp(packetdataserializer.readInt(), 0, 32);
+                                int i2 = MathHelper.clamp(packetdataserializer.readInt(), 0, 32);
+                                int j2 = MathHelper.clamp(packetdataserializer.readInt(), 0, 32);
 
-                                    tileentitystructure.a(EnumBlockRotation.valueOf(s6));
-                                    tileentitystructure.b(packetdataserializer.e(128));
-                                    tileentitystructure.a(packetdataserializer.readBoolean());
-                                    if (b1 == 2) {
-                                        if (tileentitystructure.n()) {
-                                            this.player.b((IChatBaseComponent) (new ChatComponentText("Structure saved")));
-                                        } else {
-                                            this.player.b((IChatBaseComponent) (new ChatComponentText("Structure NOT saved")));
-                                        }
-                                    } else if (b1 == 3) {
-                                        if (tileentitystructure.o()) {
-                                            this.player.b((IChatBaseComponent) (new ChatComponentText("Structure loaded")));
-                                        } else {
-                                            this.player.b((IChatBaseComponent) (new ChatComponentText("Structure prepared")));
-                                        }
-                                    } else if (b1 == 4 && tileentitystructure.m()) {
-                                        this.player.b((IChatBaseComponent) (new ChatComponentText("Size detected")));
+                                tileentitystructure.c(new BlockPosition(l1, i2, j2));
+                                String s5 = packetdataserializer.e(32);
+
+                                tileentitystructure.b(EnumBlockMirror.valueOf(s5));
+                                String s6 = packetdataserializer.e(32);
+
+                                tileentitystructure.b(EnumBlockRotation.valueOf(s6));
+                                tileentitystructure.b(packetdataserializer.e(128));
+                                tileentitystructure.a(packetdataserializer.readBoolean());
+                                tileentitystructure.e(packetdataserializer.readBoolean());
+                                tileentitystructure.f(packetdataserializer.readBoolean());
+                                tileentitystructure.a(MathHelper.a(packetdataserializer.readFloat(), 0.0F, 1.0F));
+                                tileentitystructure.a(packetdataserializer.h());
+                                String s7 = tileentitystructure.d();
+
+                                if (b1 == 2) {
+                                    if (tileentitystructure.q()) {
+                                        this.player.b((IChatBaseComponent) (new ChatMessage("structure_block.save_success", new Object[] { s7})));
+                                    } else {
+                                        this.player.b((IChatBaseComponent) (new ChatMessage("structure_block.save_failure", new Object[] { s7})));
                                     }
-
-                                    tileentitystructure.update();
-                                    this.player.world.notify(blockposition1, iblockdata1, iblockdata1, 3);
+                                } else if (b1 == 3) {
+                                    if (!tileentitystructure.F()) {
+                                        this.player.b((IChatBaseComponent) (new ChatMessage("structure_block.load_not_found", new Object[] { s7})));
+                                    } else if (tileentitystructure.r()) {
+                                        this.player.b((IChatBaseComponent) (new ChatMessage("structure_block.load_success", new Object[] { s7})));
+                                    } else {
+                                        this.player.b((IChatBaseComponent) (new ChatMessage("structure_block.load_prepare", new Object[] { s7})));
+                                    }
+                                } else if (b1 == 4) {
+                                    if (tileentitystructure.p()) {
+                                        this.player.b((IChatBaseComponent) (new ChatMessage("structure_block.size_success", new Object[] { s7})));
+                                    } else {
+                                        this.player.b((IChatBaseComponent) (new ChatMessage("structure_block.size_failure", new Object[0])));
+                                    }
                                 }
+
+                                tileentitystructure.update();
+                                this.player.world.notify(blockposition1, iblockdata1, iblockdata1, 3);
                             }
                         } catch (Exception exception6) {
                             PlayerConnection.LOGGER.error("Couldn\'t set structure block", exception6);
-                        } finally {
-                            packetdataserializer.release();
                         }
                     } else if ("MC|PickItem".equals(s)) {
                         packetdataserializer = packetplayincustompayload.b();
@@ -1328,8 +1332,6 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             this.player.playerConnection.sendPacket(new PacketPlayOutHeldItemSlot(this.player.inventory.itemInHandIndex));
                         } catch (Exception exception7) {
                             PlayerConnection.LOGGER.error("Couldn\'t pick item", exception7);
-                        } finally {
-                            packetdataserializer.release();
                         }
                     }
                 }

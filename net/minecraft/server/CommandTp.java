@@ -39,60 +39,15 @@ public class CommandTp extends CommandAbstract {
                 if (astring.length < b0 + 3) {
                     throw new ExceptionUsage("commands.tp.usage", new Object[0]);
                 } else if (((Entity) object).world != null) {
+                    boolean flag = true;
                     int i = b0 + 1;
                     CommandAbstract.CommandNumber commandabstract_commandnumber = a(((Entity) object).locX, astring[b0], true);
-                    CommandAbstract.CommandNumber commandabstract_commandnumber1 = a(((Entity) object).locY, astring[i++], -512, 512, false);
+                    CommandAbstract.CommandNumber commandabstract_commandnumber1 = a(((Entity) object).locY, astring[i++], -4096, 4096, false);
                     CommandAbstract.CommandNumber commandabstract_commandnumber2 = a(((Entity) object).locZ, astring[i++], true);
                     CommandAbstract.CommandNumber commandabstract_commandnumber3 = a((double) ((Entity) object).yaw, astring.length > i ? astring[i++] : "~", false);
                     CommandAbstract.CommandNumber commandabstract_commandnumber4 = a((double) ((Entity) object).pitch, astring.length > i ? astring[i] : "~", false);
-                    float f;
 
-                    if (object instanceof EntityPlayer) {
-                        EnumSet enumset = EnumSet.noneOf(PacketPlayOutPosition.EnumPlayerTeleportFlags.class);
-
-                        if (commandabstract_commandnumber.c()) {
-                            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X);
-                        }
-
-                        if (commandabstract_commandnumber1.c()) {
-                            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y);
-                        }
-
-                        if (commandabstract_commandnumber2.c()) {
-                            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Z);
-                        }
-
-                        if (commandabstract_commandnumber4.c()) {
-                            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X_ROT);
-                        }
-
-                        if (commandabstract_commandnumber3.c()) {
-                            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y_ROT);
-                        }
-
-                        f = (float) commandabstract_commandnumber3.b();
-                        if (!commandabstract_commandnumber3.c()) {
-                            f = MathHelper.g(f);
-                        }
-
-                        float f1 = (float) commandabstract_commandnumber4.b();
-
-                        if (!commandabstract_commandnumber4.c()) {
-                            f1 = MathHelper.g(f1);
-                        }
-
-                        ((Entity) object).stopRiding();
-                        ((EntityPlayer) object).playerConnection.a(commandabstract_commandnumber.b(), commandabstract_commandnumber1.b(), commandabstract_commandnumber2.b(), f, f1, enumset);
-                        ((Entity) object).h(f);
-                    } else {
-                        float f2 = (float) MathHelper.g(commandabstract_commandnumber3.a());
-
-                        f = (float) MathHelper.g(commandabstract_commandnumber4.a());
-                        f = MathHelper.a(f, -90.0F, 90.0F);
-                        ((Entity) object).setPositionRotation(commandabstract_commandnumber.a(), commandabstract_commandnumber1.a(), commandabstract_commandnumber2.a(), f2, f);
-                        ((Entity) object).h(f2);
-                    }
-
+                    a((Entity) object, commandabstract_commandnumber, commandabstract_commandnumber1, commandabstract_commandnumber2, commandabstract_commandnumber3, commandabstract_commandnumber4);
                     a(icommandlistener, (ICommand) this, "commands.tp.success.coordinates", new Object[] { ((Entity) object).getName(), Double.valueOf(commandabstract_commandnumber.a()), Double.valueOf(commandabstract_commandnumber1.a()), Double.valueOf(commandabstract_commandnumber2.a())});
                 }
             } else {
@@ -112,6 +67,62 @@ public class CommandTp extends CommandAbstract {
                 }
             }
         }
+    }
+
+    private static void a(Entity entity, CommandAbstract.CommandNumber commandabstract_commandnumber, CommandAbstract.CommandNumber commandabstract_commandnumber1, CommandAbstract.CommandNumber commandabstract_commandnumber2, CommandAbstract.CommandNumber commandabstract_commandnumber3, CommandAbstract.CommandNumber commandabstract_commandnumber4) {
+        float f;
+
+        if (entity instanceof EntityPlayer) {
+            EnumSet enumset = EnumSet.noneOf(PacketPlayOutPosition.EnumPlayerTeleportFlags.class);
+
+            if (commandabstract_commandnumber.c()) {
+                enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X);
+            }
+
+            if (commandabstract_commandnumber1.c()) {
+                enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y);
+            }
+
+            if (commandabstract_commandnumber2.c()) {
+                enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Z);
+            }
+
+            if (commandabstract_commandnumber4.c()) {
+                enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X_ROT);
+            }
+
+            if (commandabstract_commandnumber3.c()) {
+                enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y_ROT);
+            }
+
+            f = (float) commandabstract_commandnumber3.b();
+            if (!commandabstract_commandnumber3.c()) {
+                f = MathHelper.g(f);
+            }
+
+            float f1 = (float) commandabstract_commandnumber4.b();
+
+            if (!commandabstract_commandnumber4.c()) {
+                f1 = MathHelper.g(f1);
+            }
+
+            entity.stopRiding();
+            ((EntityPlayer) entity).playerConnection.a(commandabstract_commandnumber.b(), commandabstract_commandnumber1.b(), commandabstract_commandnumber2.b(), f, f1, enumset);
+            entity.h(f);
+        } else {
+            float f2 = (float) MathHelper.g(commandabstract_commandnumber3.a());
+
+            f = (float) MathHelper.g(commandabstract_commandnumber4.a());
+            f = MathHelper.a(f, -90.0F, 90.0F);
+            entity.setPositionRotation(commandabstract_commandnumber.a(), commandabstract_commandnumber1.a(), commandabstract_commandnumber2.a(), f2, f);
+            entity.h(f2);
+        }
+
+        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).cG()) {
+            entity.motY = 0.0D;
+            entity.onGround = true;
+        }
+
     }
 
     public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {

@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 
 public class BlockRedstoneTorch extends BlockTorch {
 
-    private static Map<World, List<BlockRedstoneTorch.RedstoneUpdateInfo>> g = Maps.newHashMap();
+    private static final Map<World, List<BlockRedstoneTorch.RedstoneUpdateInfo>> g = Maps.newHashMap();
     private final boolean isOn;
 
     private boolean a(World world, BlockPosition blockposition, boolean flag) {
@@ -101,7 +101,7 @@ public class BlockRedstoneTorch extends BlockTorch {
             if (flag) {
                 world.setTypeAndData(blockposition, Blocks.UNLIT_REDSTONE_TORCH.getBlockData().set(BlockRedstoneTorch.FACING, iblockdata.get(BlockRedstoneTorch.FACING)), 3);
                 if (this.a(world, blockposition, true)) {
-                    world.a((EntityHuman) null, blockposition, SoundEffects.eG, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+                    world.a((EntityHuman) null, blockposition, SoundEffects.eR, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
 
                     for (int i = 0; i < 5; ++i) {
                         double d0 = (double) blockposition.getX() + random.nextDouble() * 0.6D + 0.2D;

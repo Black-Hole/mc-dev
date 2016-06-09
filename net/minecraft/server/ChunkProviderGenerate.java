@@ -96,21 +96,21 @@ public class ChunkProviderGenerate implements ChunkGenerator {
                     double d2 = this.q[l1 + k2];
                     double d3 = this.q[i2 + k2];
                     double d4 = this.q[j2 + k2];
-                    double d5 = (this.q[k1 + k2 + 1] - d1) * d0;
-                    double d6 = (this.q[l1 + k2 + 1] - d2) * d0;
-                    double d7 = (this.q[i2 + k2 + 1] - d3) * d0;
-                    double d8 = (this.q[j2 + k2 + 1] - d4) * d0;
+                    double d5 = (this.q[k1 + k2 + 1] - d1) * 0.125D;
+                    double d6 = (this.q[l1 + k2 + 1] - d2) * 0.125D;
+                    double d7 = (this.q[i2 + k2 + 1] - d3) * 0.125D;
+                    double d8 = (this.q[j2 + k2 + 1] - d4) * 0.125D;
 
                     for (int l2 = 0; l2 < 8; ++l2) {
                         double d9 = 0.25D;
                         double d10 = d1;
                         double d11 = d2;
-                        double d12 = (d3 - d1) * d9;
-                        double d13 = (d4 - d2) * d9;
+                        double d12 = (d3 - d1) * 0.25D;
+                        double d13 = (d4 - d2) * 0.25D;
 
                         for (int i3 = 0; i3 < 4; ++i3) {
                             double d14 = 0.25D;
-                            double d15 = (d11 - d10) * d14;
+                            double d15 = (d11 - d10) * 0.25D;
                             double d16 = d10 - d15;
 
                             for (int j3 = 0; j3 < 4; ++j3) {
@@ -139,7 +139,7 @@ public class ChunkProviderGenerate implements ChunkGenerator {
     public void a(int i, int j, ChunkSnapshot chunksnapshot, BiomeBase[] abiomebase) {
         double d0 = 0.03125D;
 
-        this.u = this.m.a(this.u, (double) (i * 16), (double) (j * 16), 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
+        this.u = this.m.a(this.u, (double) (i * 16), (double) (j * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
 
         for (int k = 0; k < 16; ++k) {
             for (int l = 0; l < 16; ++l) {
@@ -207,8 +207,6 @@ public class ChunkProviderGenerate implements ChunkGenerator {
         this.e = this.l.a(this.e, i, j, k, 5, 33, 5, (double) (f / this.s.h), (double) (f1 / this.s.i), (double) (f / this.s.j));
         this.f = this.j.a(this.f, i, j, k, 5, 33, 5, (double) f, (double) f1, (double) f);
         this.g = this.k.a(this.g, i, j, k, 5, 33, 5, (double) f, (double) f1, (double) f);
-        boolean flag = false;
-        boolean flag1 = false;
         int l = 0;
         int i1 = 0;
 
@@ -217,11 +215,11 @@ public class ChunkProviderGenerate implements ChunkGenerator {
                 float f2 = 0.0F;
                 float f3 = 0.0F;
                 float f4 = 0.0F;
-                byte b0 = 2;
+                boolean flag = true;
                 BiomeBase biomebase = this.C[j1 + 2 + (k1 + 2) * 10];
 
-                for (int l1 = -b0; l1 <= b0; ++l1) {
-                    for (int i2 = -b0; i2 <= b0; ++i2) {
+                for (int l1 = -2; l1 <= 2; ++l1) {
+                    for (int i2 = -2; i2 <= 2; ++i2) {
                         BiomeBase biomebase1 = this.C[j1 + l1 + 2 + (k1 + i2 + 2) * 10];
                         float f5 = this.s.n + biomebase1.j() * this.s.m;
                         float f6 = this.s.p + biomebase1.m() * this.s.o;

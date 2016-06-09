@@ -16,7 +16,7 @@ public class LocaleLanguage {
 
     private static final Pattern a = Pattern.compile("%(\\d+\\$)?[\\d\\.]*[df]");
     private static final Splitter b = Splitter.on('=').limit(2);
-    private static LocaleLanguage c = new LocaleLanguage();
+    private static final LocaleLanguage c = new LocaleLanguage();
     private final Map<String, String> d = Maps.newHashMap();
     private long e;
 

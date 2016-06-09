@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 
 public class NBTTagCompound extends NBTBase {
 
-    private Map<String, NBTBase> map = Maps.newHashMap();
+    private final Map<String, NBTBase> map = Maps.newHashMap();
 
     public NBTTagCompound() {}
 
@@ -146,7 +146,7 @@ public class NBTTagCompound extends NBTBase {
     public byte getByte(String s) {
         try {
             if (this.hasKeyOfType(s, 99)) {
-                return ((NBTBase.NBTNumber) this.map.get(s)).f();
+                return ((NBTNumber) this.map.get(s)).g();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -158,7 +158,7 @@ public class NBTTagCompound extends NBTBase {
     public short getShort(String s) {
         try {
             if (this.hasKeyOfType(s, 99)) {
-                return ((NBTBase.NBTNumber) this.map.get(s)).e();
+                return ((NBTNumber) this.map.get(s)).f();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -170,7 +170,7 @@ public class NBTTagCompound extends NBTBase {
     public int getInt(String s) {
         try {
             if (this.hasKeyOfType(s, 99)) {
-                return ((NBTBase.NBTNumber) this.map.get(s)).d();
+                return ((NBTNumber) this.map.get(s)).e();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -182,7 +182,7 @@ public class NBTTagCompound extends NBTBase {
     public long getLong(String s) {
         try {
             if (this.hasKeyOfType(s, 99)) {
-                return ((NBTBase.NBTNumber) this.map.get(s)).c();
+                return ((NBTNumber) this.map.get(s)).d();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -194,7 +194,7 @@ public class NBTTagCompound extends NBTBase {
     public float getFloat(String s) {
         try {
             if (this.hasKeyOfType(s, 99)) {
-                return ((NBTBase.NBTNumber) this.map.get(s)).h();
+                return ((NBTNumber) this.map.get(s)).i();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -206,7 +206,7 @@ public class NBTTagCompound extends NBTBase {
     public double getDouble(String s) {
         try {
             if (this.hasKeyOfType(s, 99)) {
-                return ((NBTBase.NBTNumber) this.map.get(s)).g();
+                return ((NBTNumber) this.map.get(s)).h();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -218,7 +218,7 @@ public class NBTTagCompound extends NBTBase {
     public String getString(String s) {
         try {
             if (this.hasKeyOfType(s, 8)) {
-                return ((NBTBase) this.map.get(s)).a_();
+                return ((NBTBase) this.map.get(s)).c_();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -242,7 +242,7 @@ public class NBTTagCompound extends NBTBase {
     public int[] getIntArray(String s) {
         try {
             if (this.hasKeyOfType(s, 11)) {
-                return ((NBTTagIntArray) this.map.get(s)).c();
+                return ((NBTTagIntArray) this.map.get(s)).d();
             }
         } catch (ClassCastException classcastexception) {
             throw new ReportedException(this.a(s, 11, classcastexception));
@@ -268,7 +268,7 @@ public class NBTTagCompound extends NBTBase {
             if (this.d(s) == 9) {
                 NBTTagList nbttaglist = (NBTTagList) this.map.get(s);
 
-                if (!nbttaglist.isEmpty() && nbttaglist.d() != i) {
+                if (!nbttaglist.isEmpty() && nbttaglist.g() != i) {
                     return new NBTTagList();
                 }
 
@@ -334,7 +334,7 @@ public class NBTTagCompound extends NBTBase {
         return crashreport;
     }
 
-    public NBTBase clone() {
+    public NBTTagCompound g() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         Iterator iterator = this.map.keySet().iterator();
 
@@ -413,5 +413,9 @@ public class NBTTagCompound extends NBTBase {
             }
         }
 
+    }
+
+    public NBTBase clone() {
+        return this.g();
     }
 }

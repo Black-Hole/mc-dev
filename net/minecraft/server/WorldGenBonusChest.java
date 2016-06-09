@@ -7,9 +7,7 @@ public class WorldGenBonusChest extends WorldGenerator {
     public WorldGenBonusChest() {}
 
     public boolean generate(World world, Random random, BlockPosition blockposition) {
-        IBlockData iblockdata;
-
-        while (((iblockdata = world.getType(blockposition)).getMaterial() == Material.AIR || iblockdata.getMaterial() == Material.LEAVES) && blockposition.getY() > 1) {
+        for (IBlockData iblockdata = world.getType(blockposition); (iblockdata.getMaterial() == Material.AIR || iblockdata.getMaterial() == Material.LEAVES) && blockposition.getY() > 1; iblockdata = world.getType(blockposition)) {
             blockposition = blockposition.down();
         }
 

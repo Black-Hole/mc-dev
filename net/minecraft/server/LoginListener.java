@@ -29,7 +29,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
     private LoginListener.EnumProtocolState g;
     private int h;
     private GameProfile i;
-    private String j;
+    private final String j;
     private SecretKey loginKey;
     private EntityPlayer l;
 
@@ -41,7 +41,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
         LoginListener.random.nextBytes(this.e);
     }
 
-    public void c() {
+    public void E_() {
         if (this.g == LoginListener.EnumProtocolState.READY_TO_ACCEPT) {
             this.b();
         } else if (this.g == LoginListener.EnumProtocolState.DELAY_ACCEPT) {
@@ -62,7 +62,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
 
     public void disconnect(String s) {
         try {
-            LoginListener.c.info("Disconnecting " + this.d() + ": " + s);
+            LoginListener.c.info("Disconnecting {}: {}", new Object[] { this.d(), s});
             ChatComponentText chatcomponenttext = new ChatComponentText(s);
 
             this.networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
@@ -110,11 +110,11 @@ public class LoginListener implements PacketLoginInListener, ITickable {
     }
 
     public void a(IChatBaseComponent ichatbasecomponent) {
-        LoginListener.c.info(this.d() + " lost connection: " + ichatbasecomponent.toPlainText());
+        LoginListener.c.info("{} lost connection: {}", new Object[] { this.d(), ichatbasecomponent.toPlainText()});
     }
 
     public String d() {
-        return this.i != null ? this.i.toString() + " (" + this.networkManager.getSocketAddress().toString() + ")" : String.valueOf(this.networkManager.getSocketAddress());
+        return this.i != null ? this.i + " (" + this.networkManager.getSocketAddress() + ")" : String.valueOf(this.networkManager.getSocketAddress());
     }
 
     public void a(PacketLoginInStart packetlogininstart) {
@@ -122,7 +122,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
         this.i = packetlogininstart.a();
         if (this.server.getOnlineMode() && !this.networkManager.isLocal()) {
             this.g = LoginListener.EnumProtocolState.KEY;
-            this.networkManager.sendPacket(new PacketLoginOutEncryptionBegin(this.j, this.server.O().getPublic(), this.e));
+            this.networkManager.sendPacket(new PacketLoginOutEncryptionBegin("", this.server.O().getPublic(), this.e));
         } else {
             this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
         }
@@ -144,11 +144,11 @@ public class LoginListener implements PacketLoginInListener, ITickable {
                     GameProfile gameprofile = LoginListener.this.i;
 
                     try {
-                        String s = (new BigInteger(MinecraftEncryption.a(LoginListener.this.j, LoginListener.this.server.O().getPublic(), LoginListener.this.loginKey))).toString(16);
+                        String s = (new BigInteger(MinecraftEncryption.a("", LoginListener.this.server.O().getPublic(), LoginListener.this.loginKey))).toString(16);
 
                         LoginListener.this.i = LoginListener.this.server.ay().hasJoinedServer(new GameProfile((UUID) null, gameprofile.getName()), s);
                         if (LoginListener.this.i != null) {
-                            LoginListener.c.info("UUID of player " + LoginListener.this.i.getName() + " is " + LoginListener.this.i.getId());
+                            LoginListener.c.info("UUID of player {} is {}", new Object[] { LoginListener.this.i.getName(), LoginListener.this.i.getId()});
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else if (LoginListener.this.server.R()) {
                             LoginListener.c.warn("Failed to verify username but will let them in anyway!");
@@ -156,7 +156,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else {
                             LoginListener.this.disconnect("Failed to verify username!");
-                            LoginListener.c.error("Username \'" + gameprofile.getName() + "\' tried to join with an invalid session");
+                            LoginListener.c.error("Username \'{}\' tried to join with an invalid session", new Object[] { gameprofile.getName()});
                         }
                     } catch (AuthenticationUnavailableException authenticationunavailableexception) {
                         if (LoginListener.this.server.R()) {

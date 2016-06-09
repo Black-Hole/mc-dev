@@ -15,11 +15,11 @@ public class ItemBoat extends Item {
 
     public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
         float f = 1.0F;
-        float f1 = entityhuman.lastPitch + (entityhuman.pitch - entityhuman.lastPitch) * f;
-        float f2 = entityhuman.lastYaw + (entityhuman.yaw - entityhuman.lastYaw) * f;
-        double d0 = entityhuman.lastX + (entityhuman.locX - entityhuman.lastX) * (double) f;
-        double d1 = entityhuman.lastY + (entityhuman.locY - entityhuman.lastY) * (double) f + (double) entityhuman.getHeadHeight();
-        double d2 = entityhuman.lastZ + (entityhuman.locZ - entityhuman.lastZ) * (double) f;
+        float f1 = entityhuman.lastPitch + (entityhuman.pitch - entityhuman.lastPitch) * 1.0F;
+        float f2 = entityhuman.lastYaw + (entityhuman.yaw - entityhuman.lastYaw) * 1.0F;
+        double d0 = entityhuman.lastX + (entityhuman.locX - entityhuman.lastX) * 1.0D;
+        double d1 = entityhuman.lastY + (entityhuman.locY - entityhuman.lastY) * 1.0D + (double) entityhuman.getHeadHeight();
+        double d2 = entityhuman.lastZ + (entityhuman.locZ - entityhuman.lastZ) * 1.0D;
         Vec3D vec3d = new Vec3D(d0, d1, d2);
         float f3 = MathHelper.cos(-f2 * 0.017453292F - 3.1415927F);
         float f4 = MathHelper.sin(-f2 * 0.017453292F - 3.1415927F);
@@ -28,15 +28,15 @@ public class ItemBoat extends Item {
         float f7 = f4 * f5;
         float f8 = f3 * f5;
         double d3 = 5.0D;
-        Vec3D vec3d1 = vec3d.add((double) f7 * d3, (double) f6 * d3, (double) f8 * d3);
+        Vec3D vec3d1 = vec3d.add((double) f7 * 5.0D, (double) f6 * 5.0D, (double) f8 * 5.0D);
         MovingObjectPosition movingobjectposition = world.rayTrace(vec3d, vec3d1, true);
 
         if (movingobjectposition == null) {
             return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
         } else {
-            Vec3D vec3d2 = entityhuman.f(f);
+            Vec3D vec3d2 = entityhuman.f(1.0F);
             boolean flag = false;
-            List list = world.getEntities(entityhuman, entityhuman.getBoundingBox().a(vec3d2.x * d3, vec3d2.y * d3, vec3d2.z * d3).g(1.0D));
+            List list = world.getEntities(entityhuman, entityhuman.getBoundingBox().a(vec3d2.x * 5.0D, vec3d2.y * 5.0D, vec3d2.z * 5.0D).g(1.0D));
 
             for (int i = 0; i < list.size(); ++i) {
                 Entity entity = (Entity) list.get(i);

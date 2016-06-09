@@ -146,8 +146,8 @@ public abstract class CommandAbstract implements ICommand {
     }
 
     public static boolean d(String s) throws CommandException {
-        if (!s.equals("true") && !s.equals("1")) {
-            if (!s.equals("false") && !s.equals("0")) {
+        if (!"true".equals(s) && !"1".equals(s)) {
+            if (!"false".equals(s) && !"0".equals(s)) {
                 throw new CommandException("commands.generic.boolean.invalid", new Object[] { s});
             } else {
                 return false;
@@ -239,7 +239,7 @@ public abstract class CommandAbstract implements ICommand {
             return a(minecraftserver, icommandlistener, s).getName();
         } catch (ExceptionPlayerNotFound exceptionplayernotfound) {
             try {
-                return b(minecraftserver, icommandlistener, s).bd();
+                return b(minecraftserver, icommandlistener, s).bf();
             } catch (ExceptionEntityNotFound exceptionentitynotfound) {
                 if (s != null && !s.startsWith("@")) {
                     return s;

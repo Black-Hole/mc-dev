@@ -9,7 +9,7 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
     private int f;
     protected BlockPosition b;
     private boolean g;
-    private int h;
+    private final int h;
 
     public PathfinderGoalGotoTarget(EntityCreature entitycreature, double d0, int i) {
         this.b = BlockPosition.ZERO;

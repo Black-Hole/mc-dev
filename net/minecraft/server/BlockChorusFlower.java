@@ -32,7 +32,8 @@ public class BlockChorusFlower extends Block {
                 if (i < 5 && random.nextInt(1) == 0) {
                     boolean flag = false;
                     boolean flag1 = false;
-                    Block block = world.getType(blockposition.down()).getBlock();
+                    IBlockData iblockdata1 = world.getType(blockposition.down());
+                    Block block = iblockdata1.getBlock();
                     int j;
 
                     if (block == Blocks.END_STONE) {
@@ -63,7 +64,7 @@ public class BlockChorusFlower extends Block {
                         if (j < 2 || random.nextInt(k) >= j) {
                             flag = true;
                         }
-                    } else if (block == Blocks.AIR) {
+                    } else if (iblockdata1.getMaterial() == Material.AIR) {
                         flag = true;
                     }
 
@@ -148,20 +149,22 @@ public class BlockChorusFlower extends Block {
     }
 
     public boolean b(World world, BlockPosition blockposition) {
-        Block block = world.getType(blockposition.down()).getBlock();
+        IBlockData iblockdata = world.getType(blockposition.down());
+        Block block = iblockdata.getBlock();
 
         if (block != Blocks.CHORUS_PLANT && block != Blocks.END_STONE) {
-            if (block == Blocks.AIR) {
+            if (iblockdata.getMaterial() == Material.AIR) {
                 int i = 0;
                 Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                 while (iterator.hasNext()) {
                     EnumDirection enumdirection = (EnumDirection) iterator.next();
-                    Block block1 = world.getType(blockposition.shift(enumdirection)).getBlock();
+                    IBlockData iblockdata1 = world.getType(blockposition.shift(enumdirection));
+                    Block block1 = iblockdata1.getBlock();
 
                     if (block1 == Blocks.CHORUS_PLANT) {
                         ++i;
-                    } else if (block1 != Blocks.AIR) {
+                    } else if (iblockdata1.getMaterial() != Material.AIR) {
                         return false;
                     }
                 }

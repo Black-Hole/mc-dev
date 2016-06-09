@@ -12,6 +12,10 @@ public class EntitySpider extends EntityMonster {
         this.setSize(1.4F, 0.9F);
     }
 
+    public static void d(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "Spider");
+    }
+
     protected void r() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(3, new PathfinderGoalLeapAtTarget(this, 0.4F));
@@ -52,19 +56,19 @@ public class EntitySpider extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.fR;
+        return SoundEffects.gc;
     }
 
-    protected SoundEffect bS() {
-        return SoundEffects.fT;
+    protected SoundEffect bV() {
+        return SoundEffects.ge;
     }
 
-    protected SoundEffect bT() {
-        return SoundEffects.fS;
+    protected SoundEffect bW() {
+        return SoundEffects.gd;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.fU, 0.15F, 1.0F);
+        this.a(SoundEffects.gf, 0.15F, 1.0F);
     }
 
     @Nullable
@@ -72,11 +76,11 @@ public class EntitySpider extends EntityMonster {
         return LootTables.r;
     }
 
-    public boolean n_() {
+    public boolean m_() {
         return this.o();
     }
 
-    public void aQ() {}
+    public void aS() {}
 
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.ARTHROPOD;
@@ -117,7 +121,7 @@ public class EntitySpider extends EntityMonster {
 
         if (object == null) {
             object = new EntitySpider.GroupDataSpider();
-            if (this.world.getDifficulty() == EnumDifficulty.HARD && this.world.random.nextFloat() < 0.1F * difficultydamagescaler.c()) {
+            if (this.world.getDifficulty() == EnumDifficulty.HARD && this.world.random.nextFloat() < 0.1F * difficultydamagescaler.d()) {
                 ((EntitySpider.GroupDataSpider) object).a(this.world.random);
             }
         }

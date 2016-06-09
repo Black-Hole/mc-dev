@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class PathfinderGoalPanic extends PathfinderGoal {
 
-    private EntityCreature b;
+    private final EntityCreature b;
     protected double a;
     private double c;
     private double d;
@@ -17,7 +17,7 @@ public class PathfinderGoalPanic extends PathfinderGoal {
     public boolean a() {
         if (this.b.getLastDamager() == null && !this.b.isBurning()) {
             return false;
-        } else {
+        } else if (!this.b.isBurning()) {
             Vec3D vec3d = RandomPositionGenerator.a(this.b, 5, 4);
 
             if (vec3d == null) {
@@ -26,16 +26,17 @@ public class PathfinderGoalPanic extends PathfinderGoal {
                 this.c = vec3d.x;
                 this.d = vec3d.y;
                 this.e = vec3d.z;
-                if (this.b.isBurning()) {
-                    BlockPosition blockposition = this.a(this.b.world, this.b, 5, 4);
+                return true;
+            }
+        } else {
+            BlockPosition blockposition = this.a(this.b.world, this.b, 5, 4);
 
-                    if (blockposition != null) {
-                        this.c = (double) blockposition.getX();
-                        this.d = (double) blockposition.getY();
-                        this.e = (double) blockposition.getZ();
-                    }
-                }
-
+            if (blockposition == null) {
+                return false;
+            } else {
+                this.c = (double) blockposition.getX();
+                this.d = (double) blockposition.getY();
+                this.e = (double) blockposition.getZ();
                 return true;
             }
         }

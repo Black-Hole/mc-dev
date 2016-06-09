@@ -23,7 +23,7 @@ public class PropertyManager {
                 fileinputstream = new FileInputStream(file);
                 this.properties.load(fileinputstream);
             } catch (Exception exception) {
-                PropertyManager.a.warn("Failed to load " + file, exception);
+                PropertyManager.a.warn("Failed to load {}", new Object[] { file, exception});
                 this.a();
             } finally {
                 if (fileinputstream != null) {
@@ -36,7 +36,7 @@ public class PropertyManager {
 
             }
         } else {
-            PropertyManager.a.warn(file + " does not exist");
+            PropertyManager.a.warn("{} does not exist", new Object[] { file});
             this.a();
         }
 
@@ -54,7 +54,7 @@ public class PropertyManager {
             fileoutputstream = new FileOutputStream(this.file);
             this.properties.store(fileoutputstream, "Minecraft server properties");
         } catch (Exception exception) {
-            PropertyManager.a.warn("Failed to save " + this.file, exception);
+            PropertyManager.a.warn("Failed to save {}", new Object[] { this.file, exception});
             this.a();
         } finally {
             if (fileoutputstream != null) {

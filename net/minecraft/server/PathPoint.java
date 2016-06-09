@@ -12,9 +12,9 @@ public class PathPoint {
     public float g;
     public PathPoint h;
     public boolean i;
-    public float j = 0.0F;
-    public float k = 0.0F;
-    public float l = 0.0F;
+    public float j;
+    public float k;
+    public float l;
     public PathType m;
 
     public PathPoint(int i, int j, int k) {

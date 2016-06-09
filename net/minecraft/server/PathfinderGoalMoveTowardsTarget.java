@@ -2,13 +2,13 @@ package net.minecraft.server;
 
 public class PathfinderGoalMoveTowardsTarget extends PathfinderGoal {
 
-    private EntityCreature a;
+    private final EntityCreature a;
     private EntityLiving b;
     private double c;
     private double d;
     private double e;
-    private double f;
-    private float g;
+    private final double f;
+    private final float g;
 
     public PathfinderGoalMoveTowardsTarget(EntityCreature entitycreature, double d0, float f) {
         this.a = entitycreature;

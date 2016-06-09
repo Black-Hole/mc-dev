@@ -14,21 +14,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class DedicatedServer extends MinecraftServer implements IMinecraftServer {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final Pattern l = Pattern.compile("^[a-fA-F0-9]{40}$");
     private final List<ServerCommand> serverCommandQueue = Collections.synchronizedList(Lists.newArrayList());
-    private RemoteStatusListener m;
+    private RemoteStatusListener n;
     public final RemoteControlCommandListener remoteControlCommandListener = new RemoteControlCommandListener(this);
-    private RemoteControlListener o;
+    private RemoteControlListener p;
     public PropertyManager propertyManager;
-    private EULA q;
+    private EULA r;
     private boolean generateStructures;
-    private WorldSettings.EnumGamemode s;
-    private boolean t;
+    private EnumGamemode t;
+    private boolean u;
 
     public DedicatedServer(File file, DataConverterManager dataconvertermanager, YggdrasilAuthenticationService yggdrasilauthenticationservice, MinecraftSessionService minecraftsessionservice, GameProfileRepository gameprofilerepository, UserCache usercache) {
         super(file, Proxy.NO_PROXY, dataconvertermanager, yggdrasilauthenticationservice, minecraftsessionservice, gameprofilerepository, usercache);
@@ -70,17 +72,17 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
         thread.setDaemon(true);
         thread.start();
-        DedicatedServer.LOGGER.info("Starting minecraft server version 1.9.4");
+        DedicatedServer.LOGGER.info("Starting minecraft server version 1.10");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
             DedicatedServer.LOGGER.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
         }
 
         DedicatedServer.LOGGER.info("Loading properties");
         this.propertyManager = new PropertyManager(new File("server.properties"));
-        this.q = new EULA(new File("eula.txt"));
-        if (!this.q.a()) {
+        this.r = new EULA(new File("eula.txt"));
+        if (!this.r.a()) {
             DedicatedServer.LOGGER.info("You need to agree to the EULA in order to run the server. Go to eula.txt for more info.");
-            this.q.b();
+            this.r.b();
             return false;
         } else {
             if (this.R()) {
@@ -105,10 +107,10 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             }
 
             this.generateStructures = this.propertyManager.getBoolean("generate-structures", true);
-            int i = this.propertyManager.getInt("gamemode", WorldSettings.EnumGamemode.SURVIVAL.getId());
+            int i = this.propertyManager.getInt("gamemode", EnumGamemode.SURVIVAL.getId());
 
-            this.s = WorldSettings.a(i);
-            DedicatedServer.LOGGER.info("Default game type: " + this.s);
+            this.t = WorldSettings.a(i);
+            DedicatedServer.LOGGER.info("Default game type: {}", new Object[] { this.t});
             InetAddress inetaddress = null;
 
             if (!this.getServerIp().isEmpty()) {
@@ -121,7 +123,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
             DedicatedServer.LOGGER.info("Generating keypair");
             this.a(MinecraftEncryption.b());
-            DedicatedServer.LOGGER.info("Starting Minecraft server on " + (this.getServerIp().isEmpty() ? "*" : this.getServerIp()) + ":" + this.P());
+            DedicatedServer.LOGGER.info("Starting Minecraft server on {}:{}", new Object[] { this.getServerIp().isEmpty() ? "*" : this.getServerIp(), Integer.valueOf(this.P())});
 
             try {
                 this.am().a(inetaddress, this.P());
@@ -188,22 +190,22 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
                 TileEntitySkull.a(this.getUserCache());
                 TileEntitySkull.a(this.ay());
                 UserCache.a(this.getOnlineMode());
-                DedicatedServer.LOGGER.info("Preparing level \"" + this.S() + "\"");
+                DedicatedServer.LOGGER.info("Preparing level \"{}\"", new Object[] { this.S()});
                 this.a(this.S(), this.S(), k, worldtype, s2);
                 long i1 = System.nanoTime() - j;
                 String s3 = String.format("%.3fs", new Object[] { Double.valueOf((double) i1 / 1.0E9D)});
 
-                DedicatedServer.LOGGER.info("Done (" + s3 + ")! For help, type \"help\" or \"?\"");
+                DedicatedServer.LOGGER.info("Done ({})! For help, type \"help\" or \"?\"", new Object[] { s3});
                 if (this.propertyManager.getBoolean("enable-query", false)) {
                     DedicatedServer.LOGGER.info("Starting GS4 status listener");
-                    this.m = new RemoteStatusListener(this);
-                    this.m.a();
+                    this.n = new RemoteStatusListener(this);
+                    this.n.a();
                 }
 
                 if (this.propertyManager.getBoolean("enable-rcon", false)) {
                     DedicatedServer.LOGGER.info("Starting remote control listener");
-                    this.o = new RemoteControlListener(this);
-                    this.o.a();
+                    this.p = new RemoteControlListener(this);
+                    this.p.a();
                 }
 
                 if (this.aP() > 0L) {
@@ -220,42 +222,40 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     public String aK() {
-        String s = "";
-
-        if (this.propertyManager.a("resource-pack-hash") && !this.propertyManager.a("resource-pack-sha1")) {
-            DedicatedServer.LOGGER.warn("ressource-pack-hash is depricated. Please use ressource-pack-sha1 instead.");
-            s = this.propertyManager.getString("resource-pack-hash", "");
-            this.propertyManager.getString("resource-pack-sha1", s);
-            this.propertyManager.b("resource-pack-hash");
+        if (this.propertyManager.a("resource-pack-hash")) {
+            if (this.propertyManager.a("resource-pack-sha1")) {
+                DedicatedServer.LOGGER.warn("resource-pack-hash is deprecated and found along side resource-pack-sha1. resource-pack-hash will be ignored.");
+            } else {
+                DedicatedServer.LOGGER.warn("resource-pack-hash is deprecated. Please use resource-pack-sha1 instead.");
+                this.propertyManager.getString("resource-pack-sha1", this.propertyManager.getString("resource-pack-hash", ""));
+                this.propertyManager.b("resource-pack-hash");
+            }
         }
 
-        if (this.propertyManager.a("resource-pack-hash") && this.propertyManager.a("resource-pack-sha1")) {
-            DedicatedServer.LOGGER.warn("ressource-pack-hash is depricated and found along side resource-pack-sha1. resource-pack-hash will be ignored.");
-        }
+        String s = this.propertyManager.getString("resource-pack-sha1", "");
 
-        s = this.propertyManager.getString("resource-pack-sha1", "");
-        if (!s.equals("") && !s.matches("^[a-f0-9]{40}$")) {
+        if (!s.isEmpty() && !DedicatedServer.l.matcher(s).matches()) {
             DedicatedServer.LOGGER.warn("Invalid sha1 for ressource-pack-sha1");
         }
 
-        if (!this.propertyManager.getString("resource-pack", "").equals("") && s.equals("")) {
+        if (!this.propertyManager.getString("resource-pack", "").isEmpty() && s.isEmpty()) {
             DedicatedServer.LOGGER.warn("You specified a resource pack without providing a sha1 hash. Pack will be updated on the client only if you change the name of the pack.");
         }
 
         return s;
     }
 
-    public void setGamemode(WorldSettings.EnumGamemode worldsettings_enumgamemode) {
-        super.setGamemode(worldsettings_enumgamemode);
-        this.s = worldsettings_enumgamemode;
+    public void setGamemode(EnumGamemode enumgamemode) {
+        super.setGamemode(enumgamemode);
+        this.t = enumgamemode;
     }
 
     public boolean getGenerateStructures() {
         return this.generateStructures;
     }
 
-    public WorldSettings.EnumGamemode getGamemode() {
-        return this.s;
+    public EnumGamemode getGamemode() {
+        return this.t;
     }
 
     public EnumDifficulty getDifficulty() {
@@ -274,7 +274,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             public String a() throws Exception {
                 String s = DedicatedServer.this.getServerModName();
 
-                return !s.equals("vanilla") ? "Definitely; Server brand changed to \'" + s + "\'" : "Unknown (can\'t tell)";
+                return !"vanilla".equals(s) ? "Definitely; Server brand changed to \'" + s + "\'" : "Unknown (can\'t tell)";
             }
 
             public Object call() throws Exception {
@@ -385,14 +385,14 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     public void aN() {
         ServerGUI.a(this);
-        this.t = true;
+        this.u = true;
     }
 
     public boolean ao() {
-        return this.t;
+        return this.u;
     }
 
-    public String a(WorldSettings.EnumGamemode worldsettings_enumgamemode, boolean flag) {
+    public String a(EnumGamemode enumgamemode, boolean flag) {
         return "";
     }
 

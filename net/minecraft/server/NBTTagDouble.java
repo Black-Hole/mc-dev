@@ -4,7 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class NBTTagDouble extends NBTBase.NBTNumber {
+public class NBTTagDouble extends NBTNumber {
 
     private double data;
 
@@ -31,7 +31,7 @@ public class NBTTagDouble extends NBTBase.NBTNumber {
         return "" + this.data + "d";
     }
 
-    public NBTBase clone() {
+    public NBTTagDouble c() {
         return new NBTTagDouble(this.data);
     }
 
@@ -51,27 +51,31 @@ public class NBTTagDouble extends NBTBase.NBTNumber {
         return super.hashCode() ^ (int) (i ^ i >>> 32);
     }
 
-    public long c() {
+    public long d() {
         return (long) Math.floor(this.data);
     }
 
-    public int d() {
+    public int e() {
         return MathHelper.floor(this.data);
     }
 
-    public short e() {
+    public short f() {
         return (short) (MathHelper.floor(this.data) & '\uffff');
     }
 
-    public byte f() {
+    public byte g() {
         return (byte) (MathHelper.floor(this.data) & 255);
     }
 
-    public double g() {
+    public double h() {
         return this.data;
     }
 
-    public float h() {
+    public float i() {
         return (float) this.data;
+    }
+
+    public NBTBase clone() {
+        return this.c();
     }
 }

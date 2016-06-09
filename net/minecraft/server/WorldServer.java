@@ -34,9 +34,9 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     private final PortalTravelAgent portalTravelAgent;
     private final SpawnerCreature spawnerCreature = new SpawnerCreature();
     protected final VillageSiege siegeManager = new VillageSiege(this);
-    private WorldServer.BlockActionDataList[] S = new WorldServer.BlockActionDataList[] { new WorldServer.BlockActionDataList(null), new WorldServer.BlockActionDataList(null)};
+    private final WorldServer.BlockActionDataList[] S = new WorldServer.BlockActionDataList[] { new WorldServer.BlockActionDataList(null), new WorldServer.BlockActionDataList(null)};
     private int T;
-    private List<NextTickListEntry> U = Lists.newArrayList();
+    private final List<NextTickListEntry> U = Lists.newArrayList();
 
     public WorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, WorldData worlddata, int i, MethodProfiler methodprofiler) {
         super(idatamanager, worlddata, DimensionManager.a(i).d(), methodprofiler, false);
@@ -276,7 +276,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                             EntityHorse entityhorse = new EntityHorse(this);
 
                             entityhorse.setType(EnumHorseType.SKELETON);
-                            entityhorse.x(true);
+                            entityhorse.y(true);
                             entityhorse.setAgeRaw(0);
                             entityhorse.setPosition((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
                             this.addEntity(entityhorse);
@@ -462,7 +462,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
         for (int i = 0; i < this.players.size(); ++i) {
             Entity entity = (Entity) this.players.get(i);
-            Entity entity1 = entity.bz();
+            Entity entity1 = entity.bB();
 
             if (entity1 != null) {
                 if (!entity1.dead && entity1.w(entity)) {
@@ -488,10 +488,10 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.methodProfiler.b();
             this.methodProfiler.a("remove");
             if (entity.dead) {
-                int j = entity.ab;
-                int k = entity.ad;
+                int j = entity.ac;
+                int k = entity.ae;
 
-                if (entity.aa && this.isChunkLoaded(j, k, true)) {
+                if (entity.ab && this.isChunkLoaded(j, k, true)) {
                     this.getChunkAt(j, k).b(entity);
                 }
 
@@ -543,9 +543,9 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                 while (iterator.hasNext()) {
                     nextticklistentry = (NextTickListEntry) iterator.next();
                     iterator.remove();
-                    byte b0 = 0;
+                    boolean flag1 = false;
 
-                    if (this.areChunksLoadedBetween(nextticklistentry.a.a(-b0, -b0, -b0), nextticklistentry.a.a(b0, b0, b0))) {
+                    if (this.areChunksLoadedBetween(nextticklistentry.a.a(0, 0, 0), nextticklistentry.a.a(0, 0, 0))) {
                         IBlockData iblockdata = this.getType(nextticklistentry.a);
 
                         if (iblockdata.getMaterial() != Material.AIR && Block.a(iblockdata.getBlock(), nextticklistentry.a())) {
@@ -683,7 +683,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.worldData.setThundering(false);
         this.worldData.i(1000000000);
         this.worldData.setDayTime(6000L);
-        this.worldData.setGameType(WorldSettings.EnumGamemode.SPECTATOR);
+        this.worldData.setGameType(EnumGamemode.SPECTATOR);
         this.worldData.g(false);
         this.worldData.setDifficulty(EnumDifficulty.PEACEFUL);
         this.worldData.e(true);
@@ -834,7 +834,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     private boolean i(Entity entity) {
         if (entity.dead) {
-            WorldServer.a.warn("Tried to add entity " + EntityTypes.b(entity) + " but it was marked as removed already");
+            WorldServer.a.warn("Tried to add entity {} but it was marked as removed already", new Object[] { EntityTypes.b(entity)});
             return false;
         } else {
             UUID uuid = entity.getUniqueID();
@@ -846,11 +846,11 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                     this.f.remove(entity1);
                 } else {
                     if (!(entity instanceof EntityHuman)) {
-                        WorldServer.a.warn("Keeping entity " + EntityTypes.b(entity1) + " that already exists with UUID " + uuid.toString());
+                        WorldServer.a.warn("Keeping entity {} that already exists with UUID {}", new Object[] { EntityTypes.b(entity1), uuid.toString()});
                         return false;
                     }
 
-                    WorldServer.a.warn("Force-added player with duplicate UUID " + uuid.toString());
+                    WorldServer.a.warn("Force-added player with duplicate UUID {}", new Object[] { uuid.toString()});
                 }
 
                 this.removeEntity(entity1);
@@ -864,11 +864,16 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         super.b(entity);
         this.entitiesById.a(entity.getId(), entity);
         this.entitiesByUUID.put(entity.getUniqueID(), entity);
-        Entity[] aentity = entity.aR();
+        Entity[] aentity = entity.aT();
 
         if (aentity != null) {
-            for (int i = 0; i < aentity.length; ++i) {
-                this.entitiesById.a(aentity[i].getId(), aentity[i]);
+            Entity[] aentity1 = aentity;
+            int i = aentity.length;
+
+            for (int j = 0; j < i; ++j) {
+                Entity entity1 = aentity1[j];
+
+                this.entitiesById.a(entity1.getId(), entity1);
             }
         }
 
@@ -878,11 +883,16 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         super.c(entity);
         this.entitiesById.d(entity.getId());
         this.entitiesByUUID.remove(entity.getUniqueID());
-        Entity[] aentity = entity.aR();
+        Entity[] aentity = entity.aT();
 
         if (aentity != null) {
-            for (int i = 0; i < aentity.length; ++i) {
-                this.entitiesById.d(aentity[i].getId());
+            Entity[] aentity1 = aentity;
+            int i = aentity.length;
+
+            for (int j = 0; j < i; ++j) {
+                Entity entity1 = aentity1[j];
+
+                this.entitiesById.d(entity1.getId());
             }
         }
 

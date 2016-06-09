@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class ControllerJump {
 
-    private EntityInsentient b;
+    private final EntityInsentient b;
     protected boolean a;
 
     public ControllerJump(EntityInsentient entityinsentient) {
@@ -14,7 +14,7 @@ public class ControllerJump {
     }
 
     public void b() {
-        this.b.k(this.a);
+        this.b.l(this.a);
         this.a = false;
     }
 }

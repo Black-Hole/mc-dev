@@ -19,8 +19,8 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
             }
 
             this.f = -1;
-            this.d = this.c.dj();
-            this.e = this.c.di();
+            this.d = this.c.dn();
+            this.e = this.c.dm();
         }
 
         return super.a();
@@ -49,8 +49,8 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
 
             if (this.f == 0 && block instanceof BlockCrops && ((BlockCrops) block).y(iblockdata)) {
                 world.setAir(blockposition, true);
-            } else if (this.f == 1 && block == Blocks.AIR) {
-                InventorySubcontainer inventorysubcontainer = this.c.df();
+            } else if (this.f == 1 && iblockdata.getMaterial() == Material.AIR) {
+                InventorySubcontainer inventorysubcontainer = this.c.dj();
 
                 for (int i = 0; i < inventorysubcontainer.getSize(); ++i) {
                     ItemStack itemstack = inventorysubcontainer.getItem(i);
@@ -101,7 +101,7 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
                 return true;
             }
 
-            if (block == Blocks.AIR && this.d && (this.f == 1 || this.f < 0)) {
+            if (iblockdata.getMaterial() == Material.AIR && this.d && (this.f == 1 || this.f < 0)) {
                 this.f = 1;
                 return true;
             }

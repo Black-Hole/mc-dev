@@ -12,10 +12,10 @@ public class Statistic {
     private final Counter b;
     private final IScoreboardCriteria c;
     private Class<? extends IJsonStatistic> d;
-    private static NumberFormat k = NumberFormat.getIntegerInstance(Locale.US);
+    private static final NumberFormat k = NumberFormat.getIntegerInstance(Locale.US);
     public static Counter g = new Counter() {
     };
-    private static DecimalFormat l = new DecimalFormat("########0.00");
+    private static final DecimalFormat l = new DecimalFormat("########0.00");
     public static Counter h = new Counter() {
     };
     public static Counter i = new Counter() {

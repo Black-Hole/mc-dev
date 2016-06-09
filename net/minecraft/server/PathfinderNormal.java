@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Sets;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -33,21 +34,21 @@ public class PathfinderNormal extends PathfinderAbstract {
                 ++i;
                 blockposition_mutableblockposition.c(MathHelper.floor(this.b.locX), i, MathHelper.floor(this.b.locZ));
             }
-        } else if (!this.b.onGround) {
+        } else if (this.b.onGround) {
+            i = MathHelper.floor(this.b.getBoundingBox().b + 0.5D);
+        } else {
             for (blockposition = new BlockPosition(this.b); (this.a.getType(blockposition).getMaterial() == Material.AIR || this.a.getType(blockposition).getBlock().b(this.a, blockposition)) && blockposition.getY() > 0; blockposition = blockposition.down()) {
                 ;
             }
 
             i = blockposition.up().getY();
-        } else {
-            i = MathHelper.floor(this.b.getBoundingBox().b + 0.5D);
         }
 
         blockposition = new BlockPosition(this.b);
         PathType pathtype = this.a(this.b, blockposition.getX(), i, blockposition.getZ());
 
         if (this.b.a(pathtype) < 0.0F) {
-            HashSet hashset = new HashSet();
+            HashSet hashset = Sets.newHashSet();
 
             hashset.add(new BlockPosition(this.b.getBoundingBox().a, (double) i, this.b.getBoundingBox().c));
             hashset.add(new BlockPosition(this.b.getBoundingBox().a, (double) i, this.b.getBoundingBox().f));
@@ -148,7 +149,7 @@ public class PathfinderNormal extends PathfinderAbstract {
         BlockPosition blockposition1 = blockposition.down();
         double d1 = (double) j - (1.0D - this.a.getType(blockposition1).c(this.a, blockposition1).e);
 
-        if (d1 - d0 > 1.0D) {
+        if (d1 - d0 > 1.125D) {
             return null;
         } else {
             PathType pathtype = this.a(this.b, i, j, k);
@@ -166,7 +167,7 @@ public class PathfinderNormal extends PathfinderAbstract {
             } else {
                 if (pathpoint == null && l > 0 && pathtype != PathType.FENCE && pathtype != PathType.TRAPDOOR) {
                     pathpoint = this.a(i, j + 1, k, l - 1, d0, enumdirection);
-                    if (pathpoint != null && (pathpoint.m == PathType.OPEN || pathpoint.m == PathType.WALKABLE)) {
+                    if (pathpoint != null && (pathpoint.m == PathType.OPEN || pathpoint.m == PathType.WALKABLE) && this.b.width < 1.0F) {
                         double d3 = (double) (i - enumdirection.getAdjacentX()) + 0.5D;
                         double d4 = (double) (k - enumdirection.getAdjacentZ()) + 0.5D;
                         AxisAlignedBB axisalignedbb = new AxisAlignedBB(d3 - d2, (double) j + 0.001D, d4 - d2, d3 + d2, (double) ((float) j + this.b.length), d4 + d2);
@@ -201,7 +202,7 @@ public class PathfinderNormal extends PathfinderAbstract {
 
                     while (j > 0 && pathtype == PathType.OPEN) {
                         --j;
-                        if (i1++ >= this.b.aW()) {
+                        if (i1++ >= this.b.aY()) {
                             return null;
                         }
 
@@ -298,9 +299,17 @@ public class PathfinderNormal extends PathfinderAbstract {
         PathType pathtype = this.b(iblockaccess, i, j, k);
 
         if (pathtype == PathType.OPEN && j >= 1) {
+            Block block = iblockaccess.getType(new BlockPosition(i, j - 1, k)).getBlock();
             PathType pathtype1 = this.b(iblockaccess, i, j - 1, k);
 
             pathtype = pathtype1 != PathType.WALKABLE && pathtype1 != PathType.OPEN && pathtype1 != PathType.WATER && pathtype1 != PathType.LAVA ? PathType.WALKABLE : PathType.OPEN;
+            if (pathtype1 == PathType.DAMAGE_FIRE || block == Blocks.df) {
+                pathtype = PathType.DAMAGE_FIRE;
+            }
+
+            if (pathtype1 == PathType.DAMAGE_CACTUS) {
+                pathtype = PathType.DAMAGE_CACTUS;
+            }
         }
 
         BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
@@ -309,11 +318,11 @@ public class PathfinderNormal extends PathfinderAbstract {
             for (int l = -1; l <= 1; ++l) {
                 for (int i1 = -1; i1 <= 1; ++i1) {
                     if (l != 0 || i1 != 0) {
-                        Block block = iblockaccess.getType(blockposition_pooledblockposition.f(l + i, j, i1 + k)).getBlock();
+                        Block block1 = iblockaccess.getType(blockposition_pooledblockposition.f(l + i, j, i1 + k)).getBlock();
 
-                        if (block == Blocks.CACTUS) {
+                        if (block1 == Blocks.CACTUS) {
                             pathtype = PathType.DANGER_CACTUS;
-                        } else if (block == Blocks.FIRE) {
+                        } else if (block1 == Blocks.FIRE) {
                             pathtype = PathType.DANGER_FIRE;
                         }
                     }

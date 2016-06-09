@@ -30,12 +30,13 @@ public class ChunkProviderHell implements ChunkGenerator {
     private final WorldGenLightStone1 A = new WorldGenLightStone1();
     private final WorldGenLightStone2 B = new WorldGenLightStone2();
     private final WorldGenerator C;
-    private final WorldGenHellLava D;
+    private final WorldGenerator D;
     private final WorldGenHellLava E;
-    private final WorldGenMushrooms F;
+    private final WorldGenHellLava F;
     private final WorldGenMushrooms G;
-    private final WorldGenNether H;
-    private final WorldGenBase I;
+    private final WorldGenMushrooms H;
+    private final WorldGenNether I;
+    private final WorldGenBase J;
     double[] i;
     double[] j;
     double[] k;
@@ -44,12 +45,13 @@ public class ChunkProviderHell implements ChunkGenerator {
 
     public ChunkProviderHell(World world, boolean flag, long i) {
         this.C = new WorldGenMinable(Blocks.QUARTZ_ORE.getBlockData(), 14, BlockPredicate.a(Blocks.NETHERRACK));
-        this.D = new WorldGenHellLava(Blocks.FLOWING_LAVA, true);
-        this.E = new WorldGenHellLava(Blocks.FLOWING_LAVA, false);
-        this.F = new WorldGenMushrooms(Blocks.BROWN_MUSHROOM);
-        this.G = new WorldGenMushrooms(Blocks.RED_MUSHROOM);
-        this.H = new WorldGenNether();
-        this.I = new WorldGenCavesHell();
+        this.D = new WorldGenMinable(Blocks.df.getBlockData(), 33, BlockPredicate.a(Blocks.NETHERRACK));
+        this.E = new WorldGenHellLava(Blocks.FLOWING_LAVA, true);
+        this.F = new WorldGenHellLava(Blocks.FLOWING_LAVA, false);
+        this.G = new WorldGenMushrooms(Blocks.BROWN_MUSHROOM);
+        this.H = new WorldGenMushrooms(Blocks.RED_MUSHROOM);
+        this.I = new WorldGenNether();
+        this.J = new WorldGenCavesHell();
         this.n = world;
         this.o = flag;
         this.p = new Random(i);
@@ -64,43 +66,43 @@ public class ChunkProviderHell implements ChunkGenerator {
     }
 
     public void a(int i, int j, ChunkSnapshot chunksnapshot) {
-        byte b0 = 4;
+        boolean flag = true;
         int k = this.n.K() / 2 + 1;
-        int l = b0 + 1;
-        byte b1 = 17;
-        int i1 = b0 + 1;
+        boolean flag1 = true;
+        boolean flag2 = true;
+        boolean flag3 = true;
 
-        this.t = this.a(this.t, i * b0, 0, j * b0, l, b1, i1);
+        this.t = this.a(this.t, i * 4, 0, j * 4, 5, 17, 5);
 
-        for (int j1 = 0; j1 < b0; ++j1) {
-            for (int k1 = 0; k1 < b0; ++k1) {
-                for (int l1 = 0; l1 < 16; ++l1) {
+        for (int l = 0; l < 4; ++l) {
+            for (int i1 = 0; i1 < 4; ++i1) {
+                for (int j1 = 0; j1 < 16; ++j1) {
                     double d0 = 0.125D;
-                    double d1 = this.t[((j1 + 0) * i1 + k1 + 0) * b1 + l1 + 0];
-                    double d2 = this.t[((j1 + 0) * i1 + k1 + 1) * b1 + l1 + 0];
-                    double d3 = this.t[((j1 + 1) * i1 + k1 + 0) * b1 + l1 + 0];
-                    double d4 = this.t[((j1 + 1) * i1 + k1 + 1) * b1 + l1 + 0];
-                    double d5 = (this.t[((j1 + 0) * i1 + k1 + 0) * b1 + l1 + 1] - d1) * d0;
-                    double d6 = (this.t[((j1 + 0) * i1 + k1 + 1) * b1 + l1 + 1] - d2) * d0;
-                    double d7 = (this.t[((j1 + 1) * i1 + k1 + 0) * b1 + l1 + 1] - d3) * d0;
-                    double d8 = (this.t[((j1 + 1) * i1 + k1 + 1) * b1 + l1 + 1] - d4) * d0;
+                    double d1 = this.t[((l + 0) * 5 + i1 + 0) * 17 + j1 + 0];
+                    double d2 = this.t[((l + 0) * 5 + i1 + 1) * 17 + j1 + 0];
+                    double d3 = this.t[((l + 1) * 5 + i1 + 0) * 17 + j1 + 0];
+                    double d4 = this.t[((l + 1) * 5 + i1 + 1) * 17 + j1 + 0];
+                    double d5 = (this.t[((l + 0) * 5 + i1 + 0) * 17 + j1 + 1] - d1) * 0.125D;
+                    double d6 = (this.t[((l + 0) * 5 + i1 + 1) * 17 + j1 + 1] - d2) * 0.125D;
+                    double d7 = (this.t[((l + 1) * 5 + i1 + 0) * 17 + j1 + 1] - d3) * 0.125D;
+                    double d8 = (this.t[((l + 1) * 5 + i1 + 1) * 17 + j1 + 1] - d4) * 0.125D;
 
-                    for (int i2 = 0; i2 < 8; ++i2) {
+                    for (int k1 = 0; k1 < 8; ++k1) {
                         double d9 = 0.25D;
                         double d10 = d1;
                         double d11 = d2;
-                        double d12 = (d3 - d1) * d9;
-                        double d13 = (d4 - d2) * d9;
+                        double d12 = (d3 - d1) * 0.25D;
+                        double d13 = (d4 - d2) * 0.25D;
 
-                        for (int j2 = 0; j2 < 4; ++j2) {
+                        for (int l1 = 0; l1 < 4; ++l1) {
                             double d14 = 0.25D;
                             double d15 = d10;
-                            double d16 = (d11 - d10) * d14;
+                            double d16 = (d11 - d10) * 0.25D;
 
-                            for (int k2 = 0; k2 < 4; ++k2) {
+                            for (int i2 = 0; i2 < 4; ++i2) {
                                 IBlockData iblockdata = null;
 
-                                if (l1 * 8 + i2 < k) {
+                                if (j1 * 8 + k1 < k) {
                                     iblockdata = ChunkProviderHell.d;
                                 }
 
@@ -108,11 +110,11 @@ public class ChunkProviderHell implements ChunkGenerator {
                                     iblockdata = ChunkProviderHell.b;
                                 }
 
-                                int l2 = j2 + j1 * 4;
-                                int i3 = i2 + l1 * 8;
-                                int j3 = k2 + k1 * 4;
+                                int j2 = l1 + l * 4;
+                                int k2 = k1 + j1 * 8;
+                                int l2 = i2 + i1 * 4;
 
-                                chunksnapshot.a(l2, i3, j3, iblockdata);
+                                chunksnapshot.a(j2, k2, l2, iblockdata);
                                 d15 += d16;
                             }
 
@@ -135,9 +137,9 @@ public class ChunkProviderHell implements ChunkGenerator {
         int k = this.n.K() + 1;
         double d0 = 0.03125D;
 
-        this.q = this.x.a(this.q, i * 16, j * 16, 0, 16, 16, 1, d0, d0, 1.0D);
-        this.r = this.x.a(this.r, i * 16, 109, j * 16, 16, 1, 16, d0, 1.0D, d0);
-        this.s = this.y.a(this.s, i * 16, j * 16, 0, 16, 16, 1, d0 * 2.0D, d0 * 2.0D, d0 * 2.0D);
+        this.q = this.x.a(this.q, i * 16, j * 16, 0, 16, 16, 1, 0.03125D, 0.03125D, 1.0D);
+        this.r = this.x.a(this.r, i * 16, 109, j * 16, 16, 1, 16, 0.03125D, 1.0D, 0.03125D);
+        this.s = this.y.a(this.s, i * 16, j * 16, 0, 16, 16, 1, 0.0625D, 0.0625D, 0.0625D);
 
         for (int l = 0; l < 16; ++l) {
             for (int i1 = 0; i1 < 16; ++i1) {
@@ -205,9 +207,9 @@ public class ChunkProviderHell implements ChunkGenerator {
 
         this.a(i, j, chunksnapshot);
         this.b(i, j, chunksnapshot);
-        this.I.a(this.n, i, j, chunksnapshot);
+        this.J.a(this.n, i, j, chunksnapshot);
         if (this.o) {
-            this.H.a(this.n, i, j, chunksnapshot);
+            this.I.a(this.n, i, j, chunksnapshot);
         }
 
         Chunk chunk = new Chunk(this.n, chunksnapshot, i, j);
@@ -232,9 +234,9 @@ public class ChunkProviderHell implements ChunkGenerator {
 
         this.l = this.g.a(this.l, i, j, k, l, 1, j1, 1.0D, 0.0D, 1.0D);
         this.m = this.h.a(this.m, i, j, k, l, 1, j1, 100.0D, 0.0D, 100.0D);
-        this.i = this.w.a(this.i, i, j, k, l, i1, j1, d0 / 80.0D, d1 / 60.0D, d0 / 80.0D);
-        this.j = this.u.a(this.j, i, j, k, l, i1, j1, d0, d1, d0);
-        this.k = this.v.a(this.k, i, j, k, l, i1, j1, d0, d1, d0);
+        this.i = this.w.a(this.i, i, j, k, l, i1, j1, 8.555150000000001D, 34.2206D, 8.555150000000001D);
+        this.j = this.u.a(this.j, i, j, k, l, i1, j1, 684.412D, 2053.236D, 684.412D);
+        this.k = this.v.a(this.k, i, j, k, l, i1, j1, 684.412D, 2053.236D, 684.412D);
         int k1 = 0;
         double[] adouble1 = new double[i1];
 
@@ -259,35 +261,35 @@ public class ChunkProviderHell implements ChunkGenerator {
                 double d3 = 0.0D;
 
                 for (int j2 = 0; j2 < i1; ++j2) {
-                    double d4 = 0.0D;
-                    double d5 = adouble1[j2];
-                    double d6 = this.j[k1] / 512.0D;
-                    double d7 = this.k[k1] / 512.0D;
-                    double d8 = (this.i[k1] / 10.0D + 1.0D) / 2.0D;
+                    double d4 = adouble1[j2];
+                    double d5 = this.j[k1] / 512.0D;
+                    double d6 = this.k[k1] / 512.0D;
+                    double d7 = (this.i[k1] / 10.0D + 1.0D) / 2.0D;
+                    double d8;
 
-                    if (d8 < 0.0D) {
-                        d4 = d6;
-                    } else if (d8 > 1.0D) {
-                        d4 = d7;
+                    if (d7 < 0.0D) {
+                        d8 = d5;
+                    } else if (d7 > 1.0D) {
+                        d8 = d6;
                     } else {
-                        d4 = d6 + (d7 - d6) * d8;
+                        d8 = d5 + (d6 - d5) * d7;
                     }
 
-                    d4 -= d5;
+                    d8 -= d4;
                     double d9;
 
                     if (j2 > i1 - 4) {
                         d9 = (double) ((float) (j2 - (i1 - 4)) / 3.0F);
-                        d4 = d4 * (1.0D - d9) + -10.0D * d9;
+                        d8 = d8 * (1.0D - d9) + -10.0D * d9;
                     }
 
-                    if ((double) j2 < d3) {
-                        d9 = (d3 - (double) j2) / 4.0D;
+                    if ((double) j2 < 0.0D) {
+                        d9 = (0.0D - (double) j2) / 4.0D;
                         d9 = MathHelper.a(d9, 0.0D, 1.0D);
-                        d4 = d4 * (1.0D - d9) + -10.0D * d9;
+                        d8 = d8 * (1.0D - d9) + -10.0D * d9;
                     }
 
-                    adouble[k1] = d4;
+                    adouble[k1] = d8;
                     ++k1;
                 }
             }
@@ -298,45 +300,57 @@ public class ChunkProviderHell implements ChunkGenerator {
 
     public void recreateStructures(int i, int j) {
         BlockFalling.instaFall = true;
-        BlockPosition blockposition = new BlockPosition(i * 16, 0, j * 16);
+        int k = i * 16;
+        int l = j * 16;
+        BlockPosition blockposition = new BlockPosition(k, 0, l);
+        BiomeBase biomebase = this.n.getBiome(blockposition.a(16, 0, 16));
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
 
-        this.H.a(this.n, this.p, chunkcoordintpair);
+        this.I.a(this.n, this.p, chunkcoordintpair);
 
-        int k;
+        int i1;
 
-        for (k = 0; k < 8; ++k) {
-            this.E.generate(this.n, this.p, blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(120) + 4, this.p.nextInt(16) + 8));
+        for (i1 = 0; i1 < 8; ++i1) {
+            this.F.generate(this.n, this.p, blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(120) + 4, this.p.nextInt(16) + 8));
         }
 
-        for (k = 0; k < this.p.nextInt(this.p.nextInt(10) + 1) + 1; ++k) {
+        for (i1 = 0; i1 < this.p.nextInt(this.p.nextInt(10) + 1) + 1; ++i1) {
             this.z.generate(this.n, this.p, blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(120) + 4, this.p.nextInt(16) + 8));
         }
 
-        for (k = 0; k < this.p.nextInt(this.p.nextInt(10) + 1); ++k) {
+        for (i1 = 0; i1 < this.p.nextInt(this.p.nextInt(10) + 1); ++i1) {
             this.A.generate(this.n, this.p, blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(120) + 4, this.p.nextInt(16) + 8));
         }
 
-        for (k = 0; k < 10; ++k) {
+        for (i1 = 0; i1 < 10; ++i1) {
             this.B.generate(this.n, this.p, blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(128), this.p.nextInt(16) + 8));
-        }
-
-        if (this.p.nextBoolean()) {
-            this.F.generate(this.n, this.p, blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(128), this.p.nextInt(16) + 8));
         }
 
         if (this.p.nextBoolean()) {
             this.G.generate(this.n, this.p, blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(128), this.p.nextInt(16) + 8));
         }
 
-        for (k = 0; k < 16; ++k) {
+        if (this.p.nextBoolean()) {
+            this.H.generate(this.n, this.p, blockposition.a(this.p.nextInt(16) + 8, this.p.nextInt(128), this.p.nextInt(16) + 8));
+        }
+
+        for (i1 = 0; i1 < 16; ++i1) {
             this.C.generate(this.n, this.p, blockposition.a(this.p.nextInt(16), this.p.nextInt(108) + 10, this.p.nextInt(16)));
         }
 
-        for (k = 0; k < 16; ++k) {
-            this.D.generate(this.n, this.p, blockposition.a(this.p.nextInt(16), this.p.nextInt(108) + 10, this.p.nextInt(16)));
+        i1 = this.n.K() / 2 + 1;
+
+        int j1;
+
+        for (j1 = 0; j1 < 4; ++j1) {
+            this.D.generate(this.n, this.p, blockposition.a(this.p.nextInt(16), i1 - 5 + this.p.nextInt(10), this.p.nextInt(16)));
         }
 
+        for (j1 = 0; j1 < 16; ++j1) {
+            this.E.generate(this.n, this.p, blockposition.a(this.p.nextInt(16), this.p.nextInt(108) + 10, this.p.nextInt(16)));
+        }
+
+        biomebase.a(this.n, this.p, new BlockPosition(k, 0, l));
         BlockFalling.instaFall = false;
     }
 
@@ -346,12 +360,12 @@ public class ChunkProviderHell implements ChunkGenerator {
 
     public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         if (enumcreaturetype == EnumCreatureType.MONSTER) {
-            if (this.H.b(blockposition)) {
-                return this.H.b();
+            if (this.I.b(blockposition)) {
+                return this.I.b();
             }
 
-            if (this.H.b(this.n, blockposition) && this.n.getType(blockposition.down()).getBlock() == Blocks.NETHER_BRICK) {
-                return this.H.b();
+            if (this.I.b(this.n, blockposition) && this.n.getType(blockposition.down()).getBlock() == Blocks.NETHER_BRICK) {
+                return this.I.b();
             }
         }
 
@@ -366,6 +380,6 @@ public class ChunkProviderHell implements ChunkGenerator {
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {
-        this.H.a(this.n, i, j, (ChunkSnapshot) null);
+        this.I.a(this.n, i, j, (ChunkSnapshot) null);
     }
 }

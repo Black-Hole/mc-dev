@@ -44,10 +44,10 @@ public class CommandClone extends CommandAbstract {
                 Block block = null;
                 int j = -1;
 
-                if ((astring.length < 11 || !astring[10].equals("force") && !astring[10].equals("move")) && structureboundingbox.a(structureboundingbox1)) {
+                if ((astring.length < 11 || !"force".equals(astring[10]) && !"move".equals(astring[10])) && structureboundingbox.a(structureboundingbox1)) {
                     throw new CommandException("commands.clone.noOverlap", new Object[0]);
                 } else {
-                    if (astring.length >= 11 && astring[10].equals("move")) {
+                    if (astring.length >= 11 && "move".equals(astring[10])) {
                         flag = true;
                     }
 
@@ -58,9 +58,9 @@ public class CommandClone extends CommandAbstract {
                             boolean flag1 = false;
 
                             if (astring.length >= 10) {
-                                if (astring[9].equals("masked")) {
+                                if ("masked".equals(astring[9])) {
                                     flag1 = true;
-                                } else if (astring[9].equals("filtered")) {
+                                } else if ("filtered".equals(astring[9])) {
                                     if (astring.length < 12) {
                                         throw new ExceptionUsage("commands.clone.usage", new Object[0]);
                                     }

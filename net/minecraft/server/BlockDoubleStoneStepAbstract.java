@@ -88,7 +88,7 @@ public abstract class BlockDoubleStoneStepAbstract extends BlockStepAbstract {
 
     public static enum EnumStoneSlab2Variant implements INamable {
 
-        RED_SANDSTONE(0, "red_sandstone", BlockSand.EnumSandVariant.RED_SAND.c());
+        RED_SANDSTONE(0, "red_sandstone", BlockSand.EnumSandVariant.RED_SAND.d());
 
         private static final BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant[] b = new BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant[values().length];
         private final int c;

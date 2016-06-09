@@ -250,8 +250,8 @@ public class RegionFile {
 
     class ChunkBuffer extends ByteArrayOutputStream {
 
-        private int b;
-        private int c;
+        private final int b;
+        private final int c;
 
         public ChunkBuffer(int i, int j) {
             super(8096);

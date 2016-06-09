@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 public class SlotMerchantResult extends Slot {
 
     private final InventoryMerchant a;
-    private EntityHuman b;
+    private final EntityHuman b;
     private int c;
     private final IMerchant h;
 

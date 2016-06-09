@@ -9,6 +9,8 @@ public interface IBlockProperties {
 
     boolean b();
 
+    boolean a(Entity entity);
+
     int c();
 
     int d();

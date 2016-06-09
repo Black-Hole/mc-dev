@@ -30,10 +30,8 @@ public class SourceBlock implements ISourceBlock {
         return this.b;
     }
 
-    public int f() {
-        IBlockData iblockdata = this.a.getType(this.b);
-
-        return iblockdata.getBlock().toLegacyData(iblockdata);
+    public IBlockData e() {
+        return this.a.getType(this.b);
     }
 
     public <T extends TileEntity> T getTileEntity() {

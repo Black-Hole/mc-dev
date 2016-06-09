@@ -53,7 +53,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (entityhuman.cV()) {
+        if (entityhuman.cZ()) {
             if (world.isClientSide) {
                 return true;
             } else {

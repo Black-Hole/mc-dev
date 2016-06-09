@@ -107,7 +107,7 @@ public class MobEffect implements Comparable<MobEffect> {
     }
 
     public String toString() {
-        String s = "";
+        String s;
 
         if (this.amplification > 0) {
             s = this.f() + " x " + (this.amplification + 1) + ", Duration: " + this.duration;

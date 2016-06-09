@@ -30,6 +30,28 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
 
     public TileEntityMobSpawner() {}
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, new DataInspector() {
+            public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
+                if ("MobSpawner".equals(nbttagcompound.getString("id"))) {
+                    if (nbttagcompound.hasKeyOfType("SpawnPotentials", 9)) {
+                        NBTTagList nbttaglist = nbttagcompound.getList("SpawnPotentials", 10);
+
+                        for (int j = 0; j < nbttaglist.size(); ++j) {
+                            NBTTagCompound nbttagcompound1 = nbttaglist.get(j);
+
+                            nbttagcompound1.set("Entity", dataconverter.a(DataConverterTypes.ENTITY, nbttagcompound1.getCompound("Entity"), i));
+                        }
+                    }
+
+                    nbttagcompound.set("SpawnData", dataconverter.a(DataConverterTypes.ENTITY, nbttagcompound.getCompound("SpawnData"), i));
+                }
+
+                return nbttagcompound;
+            }
+        });
+    }
+
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.a.a(nbttagcompound);
@@ -41,16 +63,16 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
         return nbttagcompound;
     }
 
-    public void c() {
+    public void E_() {
         this.a.c();
     }
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 1, this.E_());
+        return new PacketPlayOutTileEntityData(this.position, 1, this.c());
     }
 
-    public NBTTagCompound E_() {
+    public NBTTagCompound c() {
         NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
 
         nbttagcompound.remove("SpawnPotentials");

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class WorldGenMushrooms extends WorldGenerator {
 
-    private BlockPlant a;
+    private final BlockPlant a;
 
     public WorldGenMushrooms(BlockPlant blockplant) {
         this.a = blockplant;

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class BiomeJungle extends BiomeBase {
 
-    private boolean y;
+    private final boolean y;
     private static final IBlockData z = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
     private static final IBlockData A = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
     private static final IBlockData B = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
@@ -18,8 +18,8 @@ public class BiomeJungle extends BiomeBase {
             this.t.z = 50;
         }
 
-        this.t.B = 25;
-        this.t.A = 4;
+        this.t.C = 25;
+        this.t.B = 4;
         if (!flag) {
             this.u.add(new BiomeBase.BiomeMeta(EntityOcelot.class, 2, 1, 1));
         }

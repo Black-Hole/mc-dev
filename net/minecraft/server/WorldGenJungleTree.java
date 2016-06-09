@@ -95,9 +95,9 @@ public class WorldGenJungleTree extends WorldGenMegaTreeAbstract {
     }
 
     private void c(World world, BlockPosition blockposition, int i) {
-        byte b0 = 2;
+        boolean flag = true;
 
-        for (int j = -b0; j <= 0; ++j) {
+        for (int j = -2; j <= 0; ++j) {
             this.a(world, blockposition.up(j), i + 1 - j);
         }
 

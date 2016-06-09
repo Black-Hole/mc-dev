@@ -137,6 +137,11 @@ public class BlockStateList {
         return Objects.toStringHelper(this).add("block", Block.REGISTRY.b(this.c)).add("properties", Iterables.transform(this.d.values(), BlockStateList.b)).toString();
     }
 
+    @Nullable
+    public IBlockState<?> a(String s) {
+        return (IBlockState) this.d.get(s);
+    }
+
     static class BlockData extends BlockDataAbstract {
 
         private final Block a;
@@ -234,6 +239,10 @@ public class BlockStateList {
 
         public boolean b() {
             return this.a.l(this);
+        }
+
+        public boolean a(Entity entity) {
+            return this.a.a((IBlockData) this, entity);
         }
 
         public int c() {

@@ -10,8 +10,8 @@ import javax.annotation.Nullable;
 public class TileEntitySkull extends TileEntity implements ITickable {
 
     private int a;
-    private int rotation;
-    private GameProfile g = null;
+    public int rotation;
+    private GameProfile g;
     private int h;
     private boolean i;
     private static UserCache j;
@@ -60,7 +60,7 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     }
 
-    public void c() {
+    public void E_() {
         if (this.a == 5) {
             if (this.world.isBlockIndirectlyPowered(this.position)) {
                 this.i = true;
@@ -79,10 +79,10 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 4, this.E_());
+        return new PacketPlayOutTileEntityData(this.position, 4, this.c());
     }
 
-    public NBTTagCompound E_() {
+    public NBTTagCompound c() {
         return this.save(new NBTTagCompound());
     }
 
@@ -134,5 +134,19 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     public void setRotation(int i) {
         this.rotation = i;
+    }
+
+    public void a(EnumBlockMirror enumblockmirror) {
+        if (this.world != null && this.world.getType(this.getPosition()).get(BlockSkull.FACING) == EnumDirection.UP) {
+            this.rotation = enumblockmirror.a(this.rotation, 16);
+        }
+
+    }
+
+    public void a(EnumBlockRotation enumblockrotation) {
+        if (this.world != null && this.world.getType(this.getPosition()).get(BlockSkull.FACING) == EnumDirection.UP) {
+            this.rotation = enumblockrotation.a(this.rotation, 16);
+        }
+
     }
 }

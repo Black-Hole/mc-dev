@@ -48,7 +48,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
         for (int j = 0; j < i; ++j) {
             GameProfile gameprofile = null;
             int k = 0;
-            WorldSettings.EnumGamemode worldsettings_enumgamemode = null;
+            EnumGamemode enumgamemode = null;
             IChatBaseComponent ichatbasecomponent = null;
 
             switch (PacketPlayOutPlayerInfo.SyntheticClass_1.a[this.a.ordinal()]) {
@@ -67,7 +67,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
                     }
                 }
 
-                worldsettings_enumgamemode = WorldSettings.EnumGamemode.getById(packetdataserializer.g());
+                enumgamemode = EnumGamemode.getById(packetdataserializer.g());
                 k = packetdataserializer.g();
                 if (packetdataserializer.readBoolean()) {
                     ichatbasecomponent = packetdataserializer.f();
@@ -76,7 +76,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
             case 2:
                 gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
-                worldsettings_enumgamemode = WorldSettings.EnumGamemode.getById(packetdataserializer.g());
+                enumgamemode = EnumGamemode.getById(packetdataserializer.g());
                 break;
 
             case 3:
@@ -95,7 +95,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
                 gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
             }
 
-            this.b.add(new PacketPlayOutPlayerInfo.PlayerInfoData(gameprofile, k, worldsettings_enumgamemode, ichatbasecomponent));
+            this.b.add(new PacketPlayOutPlayerInfo.PlayerInfoData(gameprofile, k, enumgamemode, ichatbasecomponent));
         }
 
     }
@@ -214,14 +214,14 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
     public class PlayerInfoData {
 
         private final int b;
-        private final WorldSettings.EnumGamemode c;
+        private final EnumGamemode c;
         private final GameProfile d;
         private final IChatBaseComponent e;
 
-        public PlayerInfoData(GameProfile gameprofile, int i, WorldSettings.EnumGamemode worldsettings_enumgamemode, @Nullable IChatBaseComponent ichatbasecomponent) {
+        public PlayerInfoData(GameProfile gameprofile, int i, EnumGamemode enumgamemode, @Nullable IChatBaseComponent ichatbasecomponent) {
             this.d = gameprofile;
             this.b = i;
-            this.c = worldsettings_enumgamemode;
+            this.c = enumgamemode;
             this.e = ichatbasecomponent;
         }
 
@@ -233,7 +233,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
             return this.b;
         }
 
-        public WorldSettings.EnumGamemode c() {
+        public EnumGamemode c() {
             return this.c;
         }
 

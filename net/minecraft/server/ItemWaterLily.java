@@ -29,7 +29,7 @@ public class ItemWaterLily extends ItemWithAuxData {
                     }
 
                     entityhuman.b(StatisticList.b((Item) this));
-                    world.a(entityhuman, blockposition, SoundEffects.gw, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.a(entityhuman, blockposition, SoundEffects.gL, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
                 }
             }

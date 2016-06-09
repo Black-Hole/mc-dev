@@ -216,7 +216,7 @@ public abstract class BiomeBase {
                     } else if (l > 0) {
                         --l;
                         chunksnapshot.a(k1, l1, j1, iblockdata1);
-                        if (l == 0 && iblockdata1.getBlock() == Blocks.SAND) {
+                        if (l == 0 && iblockdata1.getBlock() == Blocks.SAND && i1 > 1) {
                             l = random.nextInt(4) + Math.max(0, l1 - 63);
                             iblockdata1 = iblockdata1.get(BlockSand.VARIANT) == BlockSand.EnumSandVariant.RED_SAND ? BiomeBase.e : BiomeBase.f;
                         }

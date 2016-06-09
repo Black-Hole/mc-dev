@@ -31,7 +31,7 @@ public abstract class ScoreboardTeamBase {
 
         ALWAYS("always", 0), NEVER("never", 1), HIDE_FOR_OTHER_TEAMS("pushOtherTeams", 2), HIDE_FOR_OWN_TEAM("pushOwnTeam", 3);
 
-        private static Map<String, ScoreboardTeamBase.EnumTeamPush> g = Maps.newHashMap();
+        private static final Map<String, ScoreboardTeamBase.EnumTeamPush> g = Maps.newHashMap();
         public final String e;
         public final int f;
 
@@ -65,7 +65,7 @@ public abstract class ScoreboardTeamBase {
 
         ALWAYS("always", 0), NEVER("never", 1), HIDE_FOR_OTHER_TEAMS("hideForOtherTeams", 2), HIDE_FOR_OWN_TEAM("hideForOwnTeam", 3);
 
-        private static Map<String, ScoreboardTeamBase.EnumNameTagVisibility> g = Maps.newHashMap();
+        private static final Map<String, ScoreboardTeamBase.EnumNameTagVisibility> g = Maps.newHashMap();
         public final String e;
         public final int f;
 

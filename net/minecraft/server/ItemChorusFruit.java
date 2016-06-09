@@ -22,6 +22,10 @@ public class ItemChorusFruit extends ItemFood {
                 double d4 = MathHelper.a(entityliving.locY + (double) (entityliving.getRandom().nextInt(16) - 8), 0.0D, (double) (world.Z() - 1));
                 double d5 = entityliving.locZ + (entityliving.getRandom().nextDouble() - 0.5D) * 16.0D;
 
+                if (entityliving.isPassenger()) {
+                    entityliving.stopRiding();
+                }
+
                 if (entityliving.k(d3, d4, d5)) {
                     world.a((EntityHuman) null, d0, d1, d2, SoundEffects.af, SoundCategory.PLAYERS, 1.0F, 1.0F);
                     entityliving.a(SoundEffects.af, 1.0F, 1.0F);
@@ -30,7 +34,7 @@ public class ItemChorusFruit extends ItemFood {
             }
 
             if (entityliving instanceof EntityHuman) {
-                ((EntityHuman) entityliving).db().a(this, 20);
+                ((EntityHuman) entityliving).df().a(this, 20);
             }
         }
 

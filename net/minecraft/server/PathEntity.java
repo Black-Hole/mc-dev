@@ -82,10 +82,4 @@ public class PathEntity {
             return true;
         }
     }
-
-    public boolean b(Vec3D vec3d) {
-        PathPoint pathpoint = this.c();
-
-        return pathpoint == null ? false : pathpoint.a == (int) vec3d.x && pathpoint.c == (int) vec3d.z;
-    }
 }

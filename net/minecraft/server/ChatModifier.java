@@ -141,7 +141,7 @@ public class ChatModifier {
     }
 
     public boolean g() {
-        return this.c == null && this.d == null && this.f == null && this.e == null && this.g == null && this.b == null && this.h == null && this.i == null;
+        return this.c == null && this.d == null && this.f == null && this.e == null && this.g == null && this.b == null && this.h == null && this.i == null && this.j == null;
     }
 
     @Nullable

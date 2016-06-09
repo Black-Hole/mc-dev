@@ -32,11 +32,11 @@ public class PistonExtendsChecker {
         IBlockData iblockdata = this.a.getType(this.c);
 
         if (!BlockPiston.a(iblockdata, this.a, this.c, this.d, false)) {
-            if (iblockdata.o() != EnumPistonReaction.DESTROY) {
-                return false;
-            } else {
+            if (iblockdata.o() == EnumPistonReaction.DESTROY) {
                 this.f.add(this.c);
                 return true;
+            } else {
+                return false;
             }
         } else if (!this.a(this.c)) {
             return false;

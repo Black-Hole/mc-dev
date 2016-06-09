@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 public class GenLayerRegionHills extends GenLayer {
 
     private static final Logger c = LogManager.getLogger();
-    private GenLayer d;
+    private final GenLayer d;
 
     public GenLayerRegionHills(long i, GenLayer genlayer, GenLayer genlayer1) {
         super(i);
@@ -27,7 +27,7 @@ public class GenLayerRegionHills extends GenLayer {
                 boolean flag = (l1 - 2) % 29 == 0;
 
                 if (k1 > 255) {
-                    GenLayerRegionHills.c.debug("old! " + k1);
+                    GenLayerRegionHills.c.debug("old! {}", new Object[] { Integer.valueOf(k1)});
                 }
 
                 BiomeBase biomebase = BiomeBase.a(k1);

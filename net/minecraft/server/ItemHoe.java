@@ -51,7 +51,7 @@ public class ItemHoe extends Item {
     }
 
     protected void a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, IBlockData iblockdata) {
-        world.a(entityhuman, blockposition, SoundEffects.cn, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        world.a(entityhuman, blockposition, SoundEffects.co, SoundCategory.BLOCKS, 1.0F, 1.0F);
         if (!world.isClientSide) {
             world.setTypeAndData(blockposition, iblockdata, 11);
             itemstack.damage(1, entityhuman);

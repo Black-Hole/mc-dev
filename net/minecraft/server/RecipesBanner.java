@@ -71,10 +71,9 @@ public class RecipesBanner {
             if (tileentitybanner_enumbannerpatterntype != null) {
                 int j = 0;
 
-                ItemStack itemstack2;
-
                 for (int k = 0; k < inventorycrafting.getSize(); ++k) {
-                    itemstack2 = inventorycrafting.getItem(k);
+                    ItemStack itemstack2 = inventorycrafting.getItem(k);
+
                     if (itemstack2 != null && itemstack2.getItem() == Items.DYE) {
                         j = itemstack2.getData();
                         break;
@@ -82,8 +81,6 @@ public class RecipesBanner {
                 }
 
                 NBTTagCompound nbttagcompound = itemstack.a("BlockEntityTag", true);
-
-                itemstack2 = null;
                 NBTTagList nbttaglist;
 
                 if (nbttagcompound.hasKeyOfType("Patterns", 9)) {

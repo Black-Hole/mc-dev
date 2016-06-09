@@ -110,11 +110,13 @@ public class PlayerChunk {
     }
 
     public void c() {
+        long i = this.playerChunkMap.getWorld().getTime();
+
         if (this.chunk != null) {
-            this.chunk.c(this.chunk.x() + this.playerChunkMap.getWorld().getTime() - this.i);
+            this.chunk.c(this.chunk.x() + i - this.i);
         }
 
-        this.i = this.playerChunkMap.getWorld().getTime();
+        this.i = i;
     }
 
     public void a(int i, int j, int k) {

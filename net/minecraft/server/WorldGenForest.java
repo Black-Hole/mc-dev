@@ -6,7 +6,7 @@ public class WorldGenForest extends WorldGenTreeAbstract {
 
     private static final IBlockData a = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.BIRCH);
     private static final IBlockData b = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.BIRCH).set(BlockLeaves1.CHECK_DECAY, Boolean.valueOf(false));
-    private boolean c;
+    private final boolean c;
 
     public WorldGenForest(boolean flag, boolean flag1) {
         super(flag);

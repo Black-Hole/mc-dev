@@ -20,12 +20,11 @@ public class BlockQuartz extends Block {
                 return this.getBlockData().set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.LINES_X);
 
             case 3:
-            default:
                 return this.getBlockData().set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.LINES_Y);
             }
-        } else {
-            return i == BlockQuartz.EnumQuartzVariant.CHISELED.a() ? this.getBlockData().set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.CHISELED) : this.getBlockData().set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.DEFAULT);
         }
+
+        return i == BlockQuartz.EnumQuartzVariant.CHISELED.a() ? this.getBlockData().set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.CHISELED) : this.getBlockData().set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.DEFAULT);
     }
 
     public int getDropData(IBlockData iblockdata) {

@@ -25,7 +25,7 @@ public class CommandBanList extends CommandAbstract {
     }
 
     public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length >= 1 && astring[0].equalsIgnoreCase("ips")) {
+        if (astring.length >= 1 && "ips".equalsIgnoreCase(astring[0])) {
             icommandlistener.sendMessage(new ChatMessage("commands.banlist.ips", new Object[] { Integer.valueOf(minecraftserver.getPlayerList().getIPBans().getEntries().length)}));
             icommandlistener.sendMessage(new ChatComponentText(a((Object[]) minecraftserver.getPlayerList().getIPBans().getEntries())));
         } else {

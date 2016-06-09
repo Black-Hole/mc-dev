@@ -14,7 +14,7 @@ public class BlockAir extends Block {
 
     @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        return null;
+        return BlockAir.k;
     }
 
     public boolean b(IBlockData iblockdata) {

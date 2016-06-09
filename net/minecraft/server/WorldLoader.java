@@ -51,7 +51,7 @@ public class WorldLoader implements Convertable {
 
             return new WorldData(dataconvertermanager.a((DataConverterType) DataConverterTypes.LEVEL, nbttagcompound1));
         } catch (Exception exception) {
-            WorldLoader.c.error("Exception reading " + file, exception);
+            WorldLoader.c.error("Exception reading {}", new Object[] { file, exception});
             return null;
         }
     }

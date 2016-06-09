@@ -37,7 +37,7 @@ public class NBTTagString extends NBTBase {
         return "\"" + this.data.replace("\"", "\\\"") + "\"";
     }
 
-    public NBTBase clone() {
+    public NBTTagString c() {
         return new NBTTagString(this.data);
     }
 
@@ -59,7 +59,11 @@ public class NBTTagString extends NBTBase {
         return super.hashCode() ^ this.data.hashCode();
     }
 
-    public String a_() {
+    public String c_() {
         return this.data;
+    }
+
+    public NBTBase clone() {
+        return this.c();
     }
 }

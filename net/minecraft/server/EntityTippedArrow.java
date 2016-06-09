@@ -9,30 +9,30 @@ import java.util.Set;
 public class EntityTippedArrow extends EntityArrow {
 
     private static final DataWatcherObject<Integer> f = DataWatcher.a(EntityTippedArrow.class, DataWatcherRegistry.b);
-    private PotionRegistry g;
-    private final Set<MobEffect> h;
+    private PotionRegistry potionRegistry;
+    public final Set<MobEffect> effects;
 
     public EntityTippedArrow(World world) {
         super(world);
-        this.g = Potions.a;
-        this.h = Sets.newHashSet();
+        this.potionRegistry = Potions.a;
+        this.effects = Sets.newHashSet();
     }
 
     public EntityTippedArrow(World world, double d0, double d1, double d2) {
         super(world, d0, d1, d2);
-        this.g = Potions.a;
-        this.h = Sets.newHashSet();
+        this.potionRegistry = Potions.a;
+        this.effects = Sets.newHashSet();
     }
 
     public EntityTippedArrow(World world, EntityLiving entityliving) {
         super(world, entityliving);
-        this.g = Potions.a;
-        this.h = Sets.newHashSet();
+        this.potionRegistry = Potions.a;
+        this.effects = Sets.newHashSet();
     }
 
     public void a(ItemStack itemstack) {
         if (itemstack.getItem() == Items.TIPPED_ARROW) {
-            this.g = PotionUtil.c(itemstack.getTag());
+            this.potionRegistry = PotionUtil.c(itemstack.getTag());
             List list = PotionUtil.b(itemstack);
 
             if (!list.isEmpty()) {
@@ -41,22 +41,22 @@ public class EntityTippedArrow extends EntityArrow {
                 while (iterator.hasNext()) {
                     MobEffect mobeffect = (MobEffect) iterator.next();
 
-                    this.h.add(new MobEffect(mobeffect));
+                    this.effects.add(new MobEffect(mobeffect));
                 }
             }
 
-            this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.g, (Collection) list))));
+            this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) list))));
         } else if (itemstack.getItem() == Items.ARROW) {
-            this.g = Potions.a;
-            this.h.clear();
+            this.potionRegistry = Potions.a;
+            this.effects.clear();
             this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(0));
         }
 
     }
 
     public void a(MobEffect mobeffect) {
-        this.h.add(mobeffect);
-        this.getDataWatcher().set(EntityTippedArrow.f, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.g, (Collection) this.h))));
+        this.effects.add(mobeffect);
+        this.getDataWatcher().set(EntityTippedArrow.f, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
     }
 
     protected void i() {
@@ -74,10 +74,10 @@ public class EntityTippedArrow extends EntityArrow {
             } else {
                 this.b(2);
             }
-        } else if (this.inGround && this.b != 0 && !this.h.isEmpty() && this.b >= 600) {
+        } else if (this.inGround && this.b != 0 && !this.effects.isEmpty() && this.b >= 600) {
             this.world.broadcastEntityEffect(this, (byte) 0);
-            this.g = Potions.a;
-            this.h.clear();
+            this.potionRegistry = Potions.a;
+            this.effects.clear();
             this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(0));
         }
 
@@ -102,15 +102,19 @@ public class EntityTippedArrow extends EntityArrow {
         return ((Integer) this.datawatcher.get(EntityTippedArrow.f)).intValue();
     }
 
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityArrow.a(dataconvertermanager, "TippedArrow");
+    }
+
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        if (this.g != Potions.a && this.g != null) {
-            nbttagcompound.setString("Potion", ((MinecraftKey) PotionRegistry.a.b(this.g)).toString());
+        if (this.potionRegistry != Potions.a && this.potionRegistry != null) {
+            nbttagcompound.setString("Potion", ((MinecraftKey) PotionRegistry.a.b(this.potionRegistry)).toString());
         }
 
-        if (!this.h.isEmpty()) {
+        if (!this.effects.isEmpty()) {
             NBTTagList nbttaglist = new NBTTagList();
-            Iterator iterator = this.h.iterator();
+            Iterator iterator = this.effects.iterator();
 
             while (iterator.hasNext()) {
                 MobEffect mobeffect = (MobEffect) iterator.next();
@@ -126,7 +130,7 @@ public class EntityTippedArrow extends EntityArrow {
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Potion", 8)) {
-            this.g = PotionUtil.c(nbttagcompound);
+            this.potionRegistry = PotionUtil.c(nbttagcompound);
         }
 
         Iterator iterator = PotionUtil.b(nbttagcompound).iterator();
@@ -137,15 +141,15 @@ public class EntityTippedArrow extends EntityArrow {
             this.a(mobeffect);
         }
 
-        if (this.g != Potions.a || !this.h.isEmpty()) {
-            this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.g, (Collection) this.h))));
+        if (this.potionRegistry != Potions.a || !this.effects.isEmpty()) {
+            this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
         }
 
     }
 
     protected void a(EntityLiving entityliving) {
         super.a(entityliving);
-        Iterator iterator = this.g.a().iterator();
+        Iterator iterator = this.potionRegistry.a().iterator();
 
         MobEffect mobeffect;
 
@@ -154,8 +158,8 @@ public class EntityTippedArrow extends EntityArrow {
             entityliving.addEffect(new MobEffect(mobeffect.getMobEffect(), mobeffect.getDuration() / 8, mobeffect.getAmplifier(), mobeffect.isAmbient(), mobeffect.isShowParticles()));
         }
 
-        if (!this.h.isEmpty()) {
-            iterator = this.h.iterator();
+        if (!this.effects.isEmpty()) {
+            iterator = this.effects.iterator();
 
             while (iterator.hasNext()) {
                 mobeffect = (MobEffect) iterator.next();
@@ -166,13 +170,13 @@ public class EntityTippedArrow extends EntityArrow {
     }
 
     protected ItemStack j() {
-        if (this.h.isEmpty() && this.g == Potions.a) {
+        if (this.effects.isEmpty() && this.potionRegistry == Potions.a) {
             return new ItemStack(Items.ARROW);
         } else {
             ItemStack itemstack = new ItemStack(Items.TIPPED_ARROW);
 
-            PotionUtil.a(itemstack, this.g);
-            PotionUtil.a(itemstack, (Collection) this.h);
+            PotionUtil.a(itemstack, this.potionRegistry);
+            PotionUtil.a(itemstack, (Collection) this.effects);
             return itemstack;
         }
     }

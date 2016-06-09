@@ -86,9 +86,13 @@ public class TileEntityDispenser extends TileEntityLootable implements IInventor
         return this.a != null;
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList("Trap", new String[] { "Items"})));
+    }
+
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        if (!this.d(nbttagcompound)) {
+        if (!this.c(nbttagcompound)) {
             NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
 
             this.items = new ItemStack[this.getSize()];
@@ -111,7 +115,7 @@ public class TileEntityDispenser extends TileEntityLootable implements IInventor
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (!this.e(nbttagcompound)) {
+        if (!this.d(nbttagcompound)) {
             NBTTagList nbttaglist = new NBTTagList();
 
             for (int i = 0; i < this.items.length; ++i) {

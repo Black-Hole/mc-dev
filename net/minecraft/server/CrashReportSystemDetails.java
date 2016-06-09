@@ -158,7 +158,7 @@ public class CrashReportSystemDetails {
                 StackTraceElement stacktraceelement = astacktraceelement[j];
 
                 stringbuilder.append("\n\tat ");
-                stringbuilder.append(stacktraceelement.toString());
+                stringbuilder.append(stacktraceelement);
             }
         }
 

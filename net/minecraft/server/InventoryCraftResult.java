@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class InventoryCraftResult implements IInventory {
 
-    private ItemStack[] items = new ItemStack[1];
+    private final ItemStack[] items = new ItemStack[1];
 
     public InventoryCraftResult() {}
 

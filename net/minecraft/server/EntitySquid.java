@@ -7,23 +7,27 @@ public class EntitySquid extends EntityWaterAnimal {
     public float a;
     public float b;
     public float c;
-    public float bu;
     public float bv;
     public float bw;
     public float bx;
     public float by;
-    private float bz;
+    public float bz;
     private float bA;
     private float bB;
     private float bC;
     private float bD;
     private float bE;
+    private float bF;
 
     public EntitySquid(World world) {
         super(world);
         this.setSize(0.8F, 0.8F);
         this.random.setSeed((long) (1 + this.getId()));
-        this.bA = 1.0F / (this.random.nextFloat() + 1.0F) * 0.2F;
+        this.bB = 1.0F / (this.random.nextFloat() + 1.0F) * 0.2F;
+    }
+
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "Squid");
     }
 
     protected void r() {
@@ -40,18 +44,18 @@ public class EntitySquid extends EntityWaterAnimal {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.fX;
+        return SoundEffects.gi;
     }
 
-    protected SoundEffect bS() {
-        return SoundEffects.fZ;
+    protected SoundEffect bV() {
+        return SoundEffects.gk;
     }
 
-    protected SoundEffect bT() {
-        return SoundEffects.fY;
+    protected SoundEffect bW() {
+        return SoundEffects.gj;
     }
 
-    protected float ce() {
+    protected float ch() {
         return 0.4F;
     }
 
@@ -61,7 +65,7 @@ public class EntitySquid extends EntityWaterAnimal {
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.ag;
+        return LootTables.ah;
     }
 
     public boolean isInWater() {
@@ -71,17 +75,17 @@ public class EntitySquid extends EntityWaterAnimal {
     public void n() {
         super.n();
         this.b = this.a;
-        this.bu = this.c;
-        this.bw = this.bv;
-        this.by = this.bx;
-        this.bv += this.bA;
-        if ((double) this.bv > 6.283185307179586D) {
+        this.bv = this.c;
+        this.bx = this.bw;
+        this.bz = this.by;
+        this.bw += this.bB;
+        if ((double) this.bw > 6.283185307179586D) {
             if (this.world.isClientSide) {
-                this.bv = 6.2831855F;
+                this.bw = 6.2831855F;
             } else {
-                this.bv = (float) ((double) this.bv - 6.283185307179586D);
+                this.bw = (float) ((double) this.bw - 6.283185307179586D);
                 if (this.random.nextInt(10) == 0) {
-                    this.bA = 1.0F / (this.random.nextFloat() + 1.0F) * 0.2F;
+                    this.bB = 1.0F / (this.random.nextFloat() + 1.0F) * 0.2F;
                 }
 
                 this.world.broadcastEntityEffect(this, (byte) 19);
@@ -91,40 +95,40 @@ public class EntitySquid extends EntityWaterAnimal {
         if (this.inWater) {
             float f;
 
-            if (this.bv < 3.1415927F) {
-                f = this.bv / 3.1415927F;
-                this.bx = MathHelper.sin(f * f * 3.1415927F) * 3.1415927F * 0.25F;
+            if (this.bw < 3.1415927F) {
+                f = this.bw / 3.1415927F;
+                this.by = MathHelper.sin(f * f * 3.1415927F) * 3.1415927F * 0.25F;
                 if ((double) f > 0.75D) {
-                    this.bz = 1.0F;
-                    this.bB = 1.0F;
+                    this.bA = 1.0F;
+                    this.bC = 1.0F;
                 } else {
-                    this.bB *= 0.8F;
+                    this.bC *= 0.8F;
                 }
             } else {
-                this.bx = 0.0F;
-                this.bz *= 0.9F;
-                this.bB *= 0.99F;
+                this.by = 0.0F;
+                this.bA *= 0.9F;
+                this.bC *= 0.99F;
             }
 
             if (!this.world.isClientSide) {
-                this.motX = (double) (this.bC * this.bz);
-                this.motY = (double) (this.bD * this.bz);
-                this.motZ = (double) (this.bE * this.bz);
+                this.motX = (double) (this.bD * this.bA);
+                this.motY = (double) (this.bE * this.bA);
+                this.motZ = (double) (this.bF * this.bA);
             }
 
             f = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
-            this.aN += (-((float) MathHelper.b(this.motX, this.motZ)) * 57.295776F - this.aN) * 0.1F;
-            this.yaw = this.aN;
-            this.c = (float) ((double) this.c + 3.141592653589793D * (double) this.bB * 1.5D);
+            this.aO += (-((float) MathHelper.b(this.motX, this.motZ)) * 57.295776F - this.aO) * 0.1F;
+            this.yaw = this.aO;
+            this.c = (float) ((double) this.c + 3.141592653589793D * (double) this.bC * 1.5D);
             this.a += (-((float) MathHelper.b((double) f, this.motY)) * 57.295776F - this.a) * 0.1F;
         } else {
-            this.bx = MathHelper.e(MathHelper.sin(this.bv)) * 3.1415927F * 0.25F;
+            this.by = MathHelper.e(MathHelper.sin(this.bw)) * 3.1415927F * 0.25F;
             if (!this.world.isClientSide) {
                 this.motX = 0.0D;
                 this.motZ = 0.0D;
                 if (this.hasEffect(MobEffects.LEVITATION)) {
                     this.motY += 0.05D * (double) (this.getEffect(MobEffects.LEVITATION).getAmplifier() + 1) - this.motY;
-                } else {
+                } else if (!this.isNoGravity()) {
                     this.motY -= 0.08D;
                 }
 
@@ -140,23 +144,23 @@ public class EntitySquid extends EntityWaterAnimal {
         this.move(this.motX, this.motY, this.motZ);
     }
 
-    public boolean cG() {
-        return this.locY > 45.0D && this.locY < (double) this.world.K() && super.cG();
+    public boolean cK() {
+        return this.locY > 45.0D && this.locY < (double) this.world.K() && super.cK();
     }
 
     public void b(float f, float f1, float f2) {
-        this.bC = f;
-        this.bD = f1;
-        this.bE = f2;
+        this.bD = f;
+        this.bE = f1;
+        this.bF = f2;
     }
 
     public boolean o() {
-        return this.bC != 0.0F || this.bD != 0.0F || this.bE != 0.0F;
+        return this.bD != 0.0F || this.bE != 0.0F || this.bF != 0.0F;
     }
 
     static class PathfinderGoalSquid extends PathfinderGoal {
 
-        private EntitySquid a;
+        private final EntitySquid a;
 
         public PathfinderGoalSquid(EntitySquid entitysquid) {
             this.a = entitysquid;
@@ -167,7 +171,7 @@ public class EntitySquid extends EntityWaterAnimal {
         }
 
         public void e() {
-            int i = this.a.bL();
+            int i = this.a.bN();
 
             if (i > 100) {
                 this.a.b(0.0F, 0.0F, 0.0F);

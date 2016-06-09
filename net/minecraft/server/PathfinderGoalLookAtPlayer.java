@@ -6,7 +6,7 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
     protected Entity b;
     protected float c;
     private int e;
-    private float f;
+    private final float f;
     protected Class<? extends Entity> d;
 
     public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class<? extends Entity> oclass, float f) {
@@ -56,7 +56,7 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
     }
 
     public void e() {
-        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, (float) this.a.cF(), (float) this.a.N());
+        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, (float) this.a.cJ(), (float) this.a.N());
         --this.e;
     }
 }

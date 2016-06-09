@@ -8,7 +8,7 @@ public class DragonControllerCharge extends AbstractDragonController {
 
     private static final Logger b = LogManager.getLogger();
     private Vec3D c;
-    private int d = 0;
+    private int d;
 
     public DragonControllerCharge(EntityEnderDragon entityenderdragon) {
         super(entityenderdragon);

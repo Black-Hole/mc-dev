@@ -9,7 +9,7 @@ public class ContainerHopper extends Container {
     public ContainerHopper(PlayerInventory playerinventory, IInventory iinventory, EntityHuman entityhuman) {
         this.hopper = iinventory;
         iinventory.startOpen(entityhuman);
-        byte b0 = 51;
+        boolean flag = true;
 
         int i;
 
@@ -19,12 +19,12 @@ public class ContainerHopper extends Container {
 
         for (i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.a(new Slot(playerinventory, j + i * 9 + 9, 8 + j * 18, i * 18 + b0));
+                this.a(new Slot(playerinventory, j + i * 9 + 9, 8 + j * 18, i * 18 + 51));
             }
         }
 
         for (i = 0; i < 9; ++i) {
-            this.a(new Slot(playerinventory, i, 8 + i * 18, 58 + b0));
+            this.a(new Slot(playerinventory, i, 8 + i * 18, 109));
         }
 
     }

@@ -56,7 +56,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
     protected int a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
         TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
 
-        return tileentity instanceof TileEntityComparator ? ((TileEntityComparator) tileentity).c() : 0;
+        return tileentity instanceof TileEntityComparator ? ((TileEntityComparator) tileentity).d() : 0;
     }
 
     private int j(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -82,7 +82,6 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockRedstoneComparator.FACING);
         BlockPosition blockposition1 = blockposition.shift(enumdirection);
         IBlockData iblockdata1 = world.getType(blockposition1);
-        Block block = iblockdata1.getBlock();
 
         if (iblockdata1.n()) {
             i = iblockdata1.a(world, blockposition1);
@@ -136,7 +135,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
         if (!world.a(blockposition, (Block) this)) {
             int i = this.j(world, blockposition, iblockdata);
             TileEntity tileentity = world.getTileEntity(blockposition);
-            int j = tileentity instanceof TileEntityComparator ? ((TileEntityComparator) tileentity).c() : 0;
+            int j = tileentity instanceof TileEntityComparator ? ((TileEntityComparator) tileentity).d() : 0;
 
             if (i != j || this.z(iblockdata) != this.e(world, blockposition, iblockdata)) {
                 if (this.i(world, blockposition, iblockdata)) {
@@ -157,7 +156,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
         if (tileentity instanceof TileEntityComparator) {
             TileEntityComparator tileentitycomparator = (TileEntityComparator) tileentity;
 
-            j = tileentitycomparator.c();
+            j = tileentitycomparator.d();
             tileentitycomparator.a(i);
         }
 

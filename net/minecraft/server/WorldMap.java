@@ -16,7 +16,7 @@ public class WorldMap extends PersistentBase {
     public byte scale;
     public byte[] colors = new byte[16384];
     public List<WorldMap.WorldMapHumanTracker> h = Lists.newArrayList();
-    private Map<EntityHuman, WorldMap.WorldMapHumanTracker> j = Maps.newHashMap();
+    private final Map<EntityHuman, WorldMap.WorldMapHumanTracker> j = Maps.newHashMap();
     public Map<String, MapIcon> decorations = Maps.newLinkedHashMap();
 
     public WorldMap(String s) {
@@ -137,16 +137,16 @@ public class WorldMap extends PersistentBase {
         float f1 = (float) (d1 - (double) this.centerZ) / (float) j;
         byte b0 = (byte) ((int) ((double) (f * 2.0F) + 0.5D));
         byte b1 = (byte) ((int) ((double) (f1 * 2.0F) + 0.5D));
-        byte b2 = 63;
-        byte b3;
+        boolean flag = true;
+        byte b2;
 
-        if (f >= (float) (-b2) && f1 >= (float) (-b2) && f <= (float) b2 && f1 <= (float) b2) {
+        if (f >= -63.0F && f1 >= -63.0F && f <= 63.0F && f1 <= 63.0F) {
             d2 += d2 < 0.0D ? -8.0D : 8.0D;
-            b3 = (byte) ((int) (d2 * 16.0D / 360.0D));
+            b2 = (byte) ((int) (d2 * 16.0D / 360.0D));
             if (this.map < 0) {
                 int k = (int) (world.getWorldData().getDayTime() / 10L);
 
-                b3 = (byte) (k * k * 34187121 + k * 121 >> 15 & 15);
+                b2 = (byte) (k * k * 34187121 + k * 121 >> 15 & 15);
             }
         } else {
             if (Math.abs(f) >= 320.0F || Math.abs(f1) >= 320.0F) {
@@ -155,25 +155,25 @@ public class WorldMap extends PersistentBase {
             }
 
             i = 6;
-            b3 = 0;
-            if (f <= (float) (-b2)) {
-                b0 = (byte) ((int) ((double) (b2 * 2) + 2.5D));
+            b2 = 0;
+            if (f <= -63.0F) {
+                b0 = -128;
             }
 
-            if (f1 <= (float) (-b2)) {
-                b1 = (byte) ((int) ((double) (b2 * 2) + 2.5D));
+            if (f1 <= -63.0F) {
+                b1 = -128;
             }
 
-            if (f >= (float) b2) {
-                b0 = (byte) (b2 * 2 + 1);
+            if (f >= 63.0F) {
+                b0 = 127;
             }
 
-            if (f1 >= (float) b2) {
-                b1 = (byte) (b2 * 2 + 1);
+            if (f1 >= 63.0F) {
+                b1 = 127;
             }
         }
 
-        this.decorations.put(s, new MapIcon((byte) i, b0, b1, b3));
+        this.decorations.put(s, new MapIcon((byte) i, b0, b1, b2));
     }
 
     @Nullable
@@ -211,8 +211,8 @@ public class WorldMap extends PersistentBase {
 
         public final EntityHuman trackee;
         private boolean d = true;
-        private int e = 0;
-        private int f = 0;
+        private int e;
+        private int f;
         private int g = 127;
         private int h = 127;
         private int i;

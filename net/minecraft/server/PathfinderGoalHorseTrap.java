@@ -15,7 +15,7 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
     public void e() {
         DifficultyDamageScaler difficultydamagescaler = this.a.world.D(new BlockPosition(this.a));
 
-        this.a.x(false);
+        this.a.y(false);
         this.a.setType(EnumHorseType.SKELETON);
         this.a.setTame(true);
         this.a.setAgeRaw(0);
@@ -40,7 +40,7 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
         entityhorse.prepare(difficultydamagescaler, (GroupDataEntity) null);
         entityhorse.setPosition(this.a.locX, this.a.locY, this.a.locZ);
         entityhorse.noDamageTicks = 60;
-        entityhorse.cM();
+        entityhorse.cQ();
         entityhorse.setType(EnumHorseType.SKELETON);
         entityhorse.setTame(true);
         entityhorse.setAgeRaw(0);
@@ -54,13 +54,13 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
         entityskeleton.prepare(difficultydamagescaler, (GroupDataEntity) null);
         entityskeleton.setPosition(entityhorse.locX, entityhorse.locY, entityhorse.locZ);
         entityskeleton.noDamageTicks = 60;
-        entityskeleton.cM();
+        entityskeleton.cQ();
         if (entityskeleton.getEquipment(EnumItemSlot.HEAD) == null) {
             entityskeleton.setSlot(EnumItemSlot.HEAD, new ItemStack(Items.IRON_HELMET));
         }
 
-        EnchantmentManager.a(entityskeleton.getRandom(), entityskeleton.getItemInMainHand(), (int) (5.0F + difficultydamagescaler.c() * (float) entityskeleton.getRandom().nextInt(18)), false);
-        EnchantmentManager.a(entityskeleton.getRandom(), entityskeleton.getEquipment(EnumItemSlot.HEAD), (int) (5.0F + difficultydamagescaler.c() * (float) entityskeleton.getRandom().nextInt(18)), false);
+        EnchantmentManager.a(entityskeleton.getRandom(), entityskeleton.getItemInMainHand(), (int) (5.0F + difficultydamagescaler.d() * (float) entityskeleton.getRandom().nextInt(18)), false);
+        EnchantmentManager.a(entityskeleton.getRandom(), entityskeleton.getEquipment(EnumItemSlot.HEAD), (int) (5.0F + difficultydamagescaler.d() * (float) entityskeleton.getRandom().nextInt(18)), false);
         entityskeleton.world.addEntity(entityskeleton);
         return entityskeleton;
     }

@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 public class ChunkProviderServer implements IChunkProvider {
 
     private static final Logger a = LogManager.getLogger();
-    private final Set<Long> unloadQueue = Sets.newHashSet();
+    public final Set<Long> unloadQueue = Sets.newHashSet();
     public final ChunkGenerator chunkGenerator;
     private final IChunkLoader chunkLoader;
     public final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap(8192);

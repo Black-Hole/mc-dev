@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 public class InventorySubcontainer implements IInventory {
 
     private String a;
-    private int b;
-    public ItemStack[] items;
+    private final int b;
+    public final ItemStack[] items;
     private List<IInventoryListener> d;
     private boolean e;
 

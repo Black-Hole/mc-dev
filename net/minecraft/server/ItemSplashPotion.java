@@ -13,7 +13,7 @@ public class ItemSplashPotion extends ItemPotion {
             --itemstack.count;
         }
 
-        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.fW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemSplashPotion.j.nextFloat() * 0.4F + 0.8F));
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.gh, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemSplashPotion.j.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
             EntityPotion entitypotion = new EntityPotion(world, entityhuman, itemstack);
 

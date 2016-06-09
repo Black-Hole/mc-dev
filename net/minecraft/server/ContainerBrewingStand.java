@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class ContainerBrewingStand extends Container {
 
-    private IInventory brewingStand;
+    private final IInventory brewingStand;
     private final Slot f;
     private int g;
     private int h;
@@ -152,7 +152,7 @@ public class ContainerBrewingStand extends Container {
 
     static class SlotPotionBottle extends Slot {
 
-        private EntityHuman a;
+        private final EntityHuman a;
 
         public SlotPotionBottle(EntityHuman entityhuman, IInventory iinventory, int i, int j, int k) {
             super(iinventory, i, j, k);

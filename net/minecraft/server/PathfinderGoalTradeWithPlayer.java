@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class PathfinderGoalTradeWithPlayer extends PathfinderGoal {
 
-    private EntityVillager a;
+    private final EntityVillager a;
 
     public PathfinderGoalTradeWithPlayer(EntityVillager entityvillager) {
         this.a = entityvillager;

@@ -1,13 +1,13 @@
 package net.minecraft.server;
 
-import java.util.HashSet;
+import com.google.common.collect.Sets;
 import java.util.Set;
 import javax.annotation.Nullable;
 
 public class Pathfinder {
 
     private final Path a = new Path();
-    private final Set<PathPoint> b = new HashSet();
+    private final Set<PathPoint> b = Sets.newHashSet();
     private final PathPoint[] c = new PathPoint[32];
     private final PathfinderAbstract d;
 

@@ -8,8 +8,7 @@ import javax.annotation.Nullable;
 public abstract class BlockMinecartTrackAbstract extends Block {
 
     protected static final AxisAlignedBB a = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D);
-    protected static final AxisAlignedBB b = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.15625D, 1.0D);
-    protected final boolean c;
+    protected final boolean b;
 
     public static boolean b(World world, BlockPosition blockposition) {
         return i(world.getType(blockposition));
@@ -23,7 +22,7 @@ public abstract class BlockMinecartTrackAbstract extends Block {
 
     protected BlockMinecartTrackAbstract(boolean flag) {
         super(Material.ORIENTABLE);
-        this.c = flag;
+        this.b = flag;
         this.a(CreativeModeTab.e);
     }
 
@@ -39,7 +38,7 @@ public abstract class BlockMinecartTrackAbstract extends Block {
     public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition = iblockdata.getBlock() == this ? (BlockMinecartTrackAbstract.EnumTrackPosition) iblockdata.get(this.g()) : null;
 
-        return blockminecarttrackabstract_enumtrackposition != null && blockminecarttrackabstract_enumtrackposition.c() ? BlockMinecartTrackAbstract.b : BlockMinecartTrackAbstract.a;
+        return blockminecarttrackabstract_enumtrackposition != null && blockminecarttrackabstract_enumtrackposition.c() ? BlockMinecartTrackAbstract.j : BlockMinecartTrackAbstract.a;
     }
 
     public boolean c(IBlockData iblockdata) {
@@ -53,7 +52,7 @@ public abstract class BlockMinecartTrackAbstract extends Block {
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (!world.isClientSide) {
             iblockdata = this.a(world, blockposition, iblockdata, true);
-            if (this.c) {
+            if (this.b) {
                 iblockdata.doPhysics(world, blockposition, this);
             }
         }
@@ -105,7 +104,7 @@ public abstract class BlockMinecartTrackAbstract extends Block {
             world.applyPhysics(blockposition.up(), this);
         }
 
-        if (this.c) {
+        if (this.b) {
             world.applyPhysics(blockposition, this);
             world.applyPhysics(blockposition.down(), this);
         }
@@ -248,7 +247,7 @@ public abstract class BlockMinecartTrackAbstract extends Block {
             this.d = (BlockMinecartTrackAbstract) iblockdata.getBlock();
             BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition = (BlockMinecartTrackAbstract.EnumTrackPosition) iblockdata.get(this.d.g());
 
-            this.f = this.d.c;
+            this.f = this.d.b;
             this.a(blockminecarttrackabstract_enumtrackposition);
         }
 

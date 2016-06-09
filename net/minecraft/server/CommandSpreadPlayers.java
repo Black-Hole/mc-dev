@@ -100,7 +100,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
             Entity entity = (Entity) iterator.next();
 
             if (entity instanceof EntityHuman) {
-                hashset.add(((EntityHuman) entity).aO());
+                hashset.add(((EntityHuman) entity).aQ());
             } else {
                 hashset.add((Object) null);
             }
@@ -193,7 +193,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
             CommandSpreadPlayers.Location2D commandspreadplayers_location2d;
 
             if (flag) {
-                ScoreboardTeamBase scoreboardteambase = entity instanceof EntityHuman ? ((EntityHuman) entity).aO() : null;
+                ScoreboardTeamBase scoreboardteambase = entity instanceof EntityHuman ? ((EntityHuman) entity).aQ() : null;
 
                 if (!hashmap.containsKey(scoreboardteambase)) {
                     hashmap.put(scoreboardteambase, acommandspreadplayers_location2d[i++]);
@@ -206,10 +206,14 @@ public class CommandSpreadPlayers extends CommandAbstract {
 
             entity.enderTeleportTo((double) ((float) MathHelper.floor(commandspreadplayers_location2d.a) + 0.5F), (double) commandspreadplayers_location2d.a(world), (double) MathHelper.floor(commandspreadplayers_location2d.b) + 0.5D);
             double d1 = Double.MAX_VALUE;
+            CommandSpreadPlayers.Location2D[] acommandspreadplayers_location2d1 = acommandspreadplayers_location2d;
+            int k = acommandspreadplayers_location2d.length;
 
-            for (int k = 0; k < acommandspreadplayers_location2d.length; ++k) {
-                if (commandspreadplayers_location2d != acommandspreadplayers_location2d[k]) {
-                    double d2 = commandspreadplayers_location2d.a(acommandspreadplayers_location2d[k]);
+            for (int l = 0; l < k; ++l) {
+                CommandSpreadPlayers.Location2D commandspreadplayers_location2d1 = acommandspreadplayers_location2d1[l];
+
+                if (commandspreadplayers_location2d != commandspreadplayers_location2d1) {
+                    double d2 = commandspreadplayers_location2d.a(commandspreadplayers_location2d1);
 
                     d1 = Math.min(d2, d1);
                 }

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class WorldGenLakes extends WorldGenerator {
 
-    private Block a;
+    private final Block a;
 
     public WorldGenLakes(Block block) {
         this.a = block;
@@ -117,10 +117,10 @@ public class WorldGenLakes extends WorldGenerator {
             if (this.a.getBlockData().getMaterial() == Material.WATER) {
                 for (j = 0; j < 16; ++j) {
                     for (k1 = 0; k1 < 16; ++k1) {
-                        byte b0 = 4;
+                        boolean flag1 = true;
 
-                        if (world.u(blockposition.a(j, b0, k1))) {
-                            world.setTypeAndData(blockposition.a(j, b0, k1), Blocks.ICE.getBlockData(), 2);
+                        if (world.u(blockposition.a(j, 4, k1))) {
+                            world.setTypeAndData(blockposition.a(j, 4, k1), Blocks.ICE.getBlockData(), 2);
                         }
                     }
                 }

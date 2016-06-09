@@ -41,20 +41,23 @@ public class EntityExperienceOrb extends Entity {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
-        this.motY -= 0.029999999329447746D;
+        if (!this.isNoGravity()) {
+            this.motY -= 0.029999999329447746D;
+        }
+
         if (this.world.getType(new BlockPosition(this)).getMaterial() == Material.LAVA) {
             this.motY = 0.20000000298023224D;
             this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
             this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-            this.a(SoundEffects.bA, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
+            this.a(SoundEffects.bB, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
         }
 
         this.j(this.locX, (this.getBoundingBox().b + this.getBoundingBox().e) / 2.0D, this.locZ);
         double d0 = 8.0D;
 
         if (this.targetTime < this.a - 20 + this.getId() % 100) {
-            if (this.targetPlayer == null || this.targetPlayer.h(this) > d0 * d0) {
-                this.targetPlayer = this.world.findNearbyPlayer(this, d0);
+            if (this.targetPlayer == null || this.targetPlayer.h(this) > 64.0D) {
+                this.targetPlayer = this.world.findNearbyPlayer(this, 8.0D);
             }
 
             this.targetTime = this.a;
@@ -65,9 +68,9 @@ public class EntityExperienceOrb extends Entity {
         }
 
         if (this.targetPlayer != null) {
-            double d1 = (this.targetPlayer.locX - this.locX) / d0;
-            double d2 = (this.targetPlayer.locY + (double) this.targetPlayer.getHeadHeight() / 2.0D - this.locY) / d0;
-            double d3 = (this.targetPlayer.locZ - this.locZ) / d0;
+            double d1 = (this.targetPlayer.locX - this.locX) / 8.0D;
+            double d2 = (this.targetPlayer.locY + (double) this.targetPlayer.getHeadHeight() / 2.0D - this.locY) / 8.0D;
+            double d3 = (this.targetPlayer.locZ - this.locZ) / 8.0D;
             double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
             double d5 = 1.0D - d4;
 
@@ -101,7 +104,7 @@ public class EntityExperienceOrb extends Entity {
 
     }
 
-    public boolean aj() {
+    public boolean ak() {
         return this.world.a(this.getBoundingBox(), Material.WATER, (Entity) this);
     }
 
@@ -113,7 +116,7 @@ public class EntityExperienceOrb extends Entity {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            this.ao();
+            this.ap();
             this.d = (int) ((float) this.d - f);
             if (this.d <= 0) {
                 this.die();
@@ -137,9 +140,9 @@ public class EntityExperienceOrb extends Entity {
 
     public void d(EntityHuman entityhuman) {
         if (!this.world.isClientSide) {
-            if (this.c == 0 && entityhuman.bz == 0) {
-                entityhuman.bz = 2;
-                this.world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bj, SoundCategory.PLAYERS, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
+            if (this.c == 0 && entityhuman.bA == 0) {
+                entityhuman.bA = 2;
+                this.world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bk, SoundCategory.PLAYERS, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
                 entityhuman.receive(this, 1);
                 ItemStack itemstack = EnchantmentManager.b(Enchantments.A, (EntityLiving) entityhuman);
 
@@ -176,7 +179,7 @@ public class EntityExperienceOrb extends Entity {
         return i >= 2477 ? 2477 : (i >= 1237 ? 1237 : (i >= 617 ? 617 : (i >= 307 ? 307 : (i >= 149 ? 149 : (i >= 73 ? 73 : (i >= 37 ? 37 : (i >= 17 ? 17 : (i >= 7 ? 7 : (i >= 3 ? 3 : 1)))))))));
     }
 
-    public boolean aT() {
+    public boolean aV() {
         return false;
     }
 }

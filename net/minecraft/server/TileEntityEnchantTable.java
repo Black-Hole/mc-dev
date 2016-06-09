@@ -14,7 +14,7 @@ public class TileEntityEnchantTable extends TileEntity implements ITickable, ITi
     public float l;
     public float m;
     public float n;
-    private static Random o = new Random();
+    private static final Random o = new Random();
     private String p;
 
     public TileEntityEnchantTable() {}
@@ -36,7 +36,7 @@ public class TileEntityEnchantTable extends TileEntity implements ITickable, ITi
 
     }
 
-    public void c() {
+    public void E_() {
         this.k = this.j;
         this.m = this.l;
         EntityHuman entityhuman = this.world.a((double) ((float) this.position.getX() + 0.5F), (double) ((float) this.position.getY() + 0.5F), (double) ((float) this.position.getZ() + 0.5F), 3.0D, false);
@@ -92,7 +92,7 @@ public class TileEntityEnchantTable extends TileEntity implements ITickable, ITi
         float f2 = (this.h - this.f) * 0.4F;
         float f3 = 0.2F;
 
-        f2 = MathHelper.a(f2, -f3, f3);
+        f2 = MathHelper.a(f2, -0.2F, 0.2F);
         this.i += (f2 - this.i) * 0.9F;
         this.f += this.i;
     }

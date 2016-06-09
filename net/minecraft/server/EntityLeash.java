@@ -45,7 +45,7 @@ public class EntityLeash extends EntityHanging {
     }
 
     public void a(@Nullable Entity entity) {
-        this.a(SoundEffects.de, 1.0F, 1.0F);
+        this.a(SoundEffects.dj, 1.0F, 1.0F);
     }
 
     public boolean d(NBTTagCompound nbttagcompound) {
@@ -68,7 +68,7 @@ public class EntityLeash extends EntityHanging {
 
             if (itemstack != null && itemstack.getItem() == Items.LEAD) {
                 d0 = 7.0D;
-                list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX - d0, this.locY - d0, this.locZ - d0, this.locX + d0, this.locY + d0, this.locZ + d0));
+                list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX - 7.0D, this.locY - 7.0D, this.locZ - 7.0D, this.locX + 7.0D, this.locY + 7.0D, this.locZ + 7.0D));
                 iterator = list.iterator();
 
                 while (iterator.hasNext()) {
@@ -84,7 +84,7 @@ public class EntityLeash extends EntityHanging {
                 this.die();
                 if (entityhuman.abilities.canInstantlyBuild) {
                     d0 = 7.0D;
-                    list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX - d0, this.locY - d0, this.locZ - d0, this.locX + d0, this.locY + d0, this.locZ + d0));
+                    list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX - 7.0D, this.locY - 7.0D, this.locZ - 7.0D, this.locX + 7.0D, this.locY + 7.0D, this.locZ + 7.0D));
                     iterator = list.iterator();
 
                     while (iterator.hasNext()) {
@@ -134,6 +134,6 @@ public class EntityLeash extends EntityHanging {
     }
 
     public void o() {
-        this.a(SoundEffects.df, 1.0F, 1.0F);
+        this.a(SoundEffects.dk, 1.0F, 1.0F);
     }
 }

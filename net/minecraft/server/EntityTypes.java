@@ -78,7 +78,7 @@ public class EntityTypes {
         if (entity != null) {
             entity.f(nbttagcompound);
         } else {
-            EntityTypes.b.warn("Skipping Entity with id " + nbttagcompound.getString("id"));
+            EntityTypes.b.warn("Skipping Entity with id {}", new Object[] { nbttagcompound.getString("id")});
         }
 
         return entity;
@@ -99,7 +99,7 @@ public class EntityTypes {
         }
 
         if (entity == null) {
-            EntityTypes.b.warn("Skipping Entity with id " + i);
+            EntityTypes.b.warn("Skipping Entity with id {}", new Object[] { Integer.valueOf(i)});
         }
 
         return entity;
@@ -158,10 +158,16 @@ public class EntityTypes {
     public static boolean a(Entity entity, String s) {
         String s1 = b(entity);
 
-        if (s1 == null && entity instanceof EntityHuman) {
-            s1 = "Player";
-        } else if (s1 == null && entity instanceof EntityLightning) {
-            s1 = "LightningBolt";
+        if (s1 == null) {
+            if (entity instanceof EntityHuman) {
+                s1 = "Player";
+            } else {
+                if (!(entity instanceof EntityLightning)) {
+                    return false;
+                }
+
+                s1 = "LightningBolt";
+            }
         }
 
         return s.equals(s1);
@@ -237,6 +243,7 @@ public class EntityTypes {
         a(EntityIronGolem.class, "VillagerGolem", 99);
         a(EntityHorse.class, "EntityHorse", 100, 12623485, 15656192);
         a(EntityRabbit.class, "Rabbit", 101, 10051392, 7555121);
+        a(EntityPolarBear.class, "PolarBear", 102, 15921906, 9803152);
         a(EntityVillager.class, "Villager", 120, 5651507, 12422002);
         a(EntityEnderCrystal.class, "EnderCrystal", 200);
     }

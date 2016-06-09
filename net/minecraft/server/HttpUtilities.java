@@ -95,7 +95,7 @@ public class HttpUtilities {
             return stringbuffer.toString();
         } catch (Exception exception) {
             if (!flag) {
-                HttpUtilities.c.error("Could not post to " + url, exception);
+                HttpUtilities.c.error("Could not post to {}", new Object[] { url, exception});
             }
 
             return "";

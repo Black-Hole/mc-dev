@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 public class BiomeTheEndDecorator extends BiomeDecorator {
 
-    private static final LoadingCache<Long, WorldGenEnder.Spike[]> L = CacheBuilder.newBuilder().expireAfterWrite(5L, TimeUnit.MINUTES).build(new BiomeTheEndDecorator.SpikeCache((BiomeTheEndDecorator.SyntheticClass_1) null));
-    private final WorldGenEnder M = new WorldGenEnder();
+    private static final LoadingCache<Long, WorldGenEnder.Spike[]> M = CacheBuilder.newBuilder().expireAfterWrite(5L, TimeUnit.MINUTES).build(new BiomeTheEndDecorator.SpikeCache((BiomeTheEndDecorator.SyntheticClass_1) null));
+    private final WorldGenEnder N = new WorldGenEnder();
 
     public BiomeTheEndDecorator() {}
 
@@ -29,8 +29,8 @@ public class BiomeTheEndDecorator extends BiomeDecorator {
             WorldGenEnder.Spike worldgenender_spike = aworldgenender_spike1[j];
 
             if (worldgenender_spike.a(this.b)) {
-                this.M.a(worldgenender_spike);
-                this.M.generate(world, random, new BlockPosition(worldgenender_spike.a(), 45, worldgenender_spike.b()));
+                this.N.a(worldgenender_spike);
+                this.N.generate(world, random, new BlockPosition(worldgenender_spike.a(), 45, worldgenender_spike.b()));
             }
         }
 
@@ -40,7 +40,7 @@ public class BiomeTheEndDecorator extends BiomeDecorator {
         Random random = new Random(world.getSeed());
         long i = random.nextLong() & 65535L;
 
-        return (WorldGenEnder.Spike[]) BiomeTheEndDecorator.L.getUnchecked(Long.valueOf(i));
+        return (WorldGenEnder.Spike[]) BiomeTheEndDecorator.M.getUnchecked(Long.valueOf(i));
     }
 
     static class SyntheticClass_1 {    }

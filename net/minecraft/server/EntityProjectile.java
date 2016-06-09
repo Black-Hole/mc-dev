@@ -14,10 +14,10 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
     public int shake;
     public EntityLiving shooter;
     public String shooterName;
-    private int au;
     private int av;
-    public Entity c;
     private int aw;
+    public Entity c;
+    private int ax;
 
     public EntityProjectile(World world) {
         super(world);
@@ -70,9 +70,11 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.motZ = d2;
         float f3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 
-        this.lastYaw = this.yaw = (float) (MathHelper.b(d0, d2) * 57.2957763671875D);
-        this.lastPitch = this.pitch = (float) (MathHelper.b(d1, (double) f3) * 57.2957763671875D);
-        this.au = 0;
+        this.yaw = (float) (MathHelper.b(d0, d2) * 57.2957763671875D);
+        this.pitch = (float) (MathHelper.b(d1, (double) f3) * 57.2957763671875D);
+        this.lastYaw = this.yaw;
+        this.lastPitch = this.pitch;
+        this.av = 0;
     }
 
     public void m() {
@@ -86,8 +88,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
         if (this.inGround) {
             if (this.world.getType(new BlockPosition(this.blockX, this.blockY, this.blockZ)).getBlock() == this.inBlockId) {
-                ++this.au;
-                if (this.au == 1200) {
+                ++this.av;
+                if (this.av == 1200) {
                     this.die();
                 }
 
@@ -98,10 +100,10 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             this.motX *= (double) (this.random.nextFloat() * 0.2F);
             this.motY *= (double) (this.random.nextFloat() * 0.2F);
             this.motZ *= (double) (this.random.nextFloat() * 0.2F);
-            this.au = 0;
             this.av = 0;
+            this.aw = 0;
         } else {
-            ++this.av;
+            ++this.aw;
         }
 
         Vec3D vec3d = new Vec3D(this.locX, this.locY, this.locZ);
@@ -131,7 +133,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
                 } else {
                     flag = false;
                     AxisAlignedBB axisalignedbb = entity1.getBoundingBox().g(0.30000001192092896D);
-                    MovingObjectPosition movingobjectposition1 = axisalignedbb.a(vec3d, vec3d1);
+                    MovingObjectPosition movingobjectposition1 = axisalignedbb.b(vec3d, vec3d1);
 
                     if (movingobjectposition1 != null) {
                         double d1 = vec3d.distanceSquared(movingobjectposition1.pos);
@@ -147,8 +149,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
         if (this.c != null) {
             if (flag) {
-                this.aw = 2;
-            } else if (this.aw-- <= 0) {
+                this.ax = 2;
+            } else if (this.ax-- <= 0) {
                 this.c = null;
             }
         }
@@ -197,7 +199,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             for (int j = 0; j < 4; ++j) {
                 float f3 = 0.25F;
 
-                this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX - this.motX * (double) f3, this.locY - this.motY * (double) f3, this.locZ - this.motZ * (double) f3, this.motX, this.motY, this.motZ, new int[0]);
+                this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX - this.motX * 0.25D, this.locY - this.motY * 0.25D, this.locZ - this.motZ * 0.25D, this.motX, this.motY, this.motZ, new int[0]);
             }
 
             f1 = 0.8F;
@@ -206,7 +208,10 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.motX *= (double) f1;
         this.motY *= (double) f1;
         this.motZ *= (double) f1;
-        this.motY -= (double) f2;
+        if (!this.isNoGravity()) {
+            this.motY -= (double) f2;
+        }
+
         this.setPosition(this.locX, this.locY, this.locZ);
     }
 
@@ -215,6 +220,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
     }
 
     protected abstract void a(MovingObjectPosition movingobjectposition);
+
+    public static void a(DataConverterManager dataconvertermanager, String s) {}
 
     public void b(NBTTagCompound nbttagcompound) {
         nbttagcompound.setInt("xTile", this.blockX);

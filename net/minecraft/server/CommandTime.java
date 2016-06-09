@@ -24,10 +24,10 @@ public class CommandTime extends CommandAbstract {
         if (astring.length > 1) {
             int i;
 
-            if (astring[0].equals("set")) {
-                if (astring[1].equals("day")) {
+            if ("set".equals(astring[0])) {
+                if ("day".equals(astring[1])) {
                     i = 1000;
-                } else if (astring[1].equals("night")) {
+                } else if ("night".equals(astring[1])) {
                     i = 13000;
                 } else {
                     i = a(astring[1], 0);
@@ -38,29 +38,29 @@ public class CommandTime extends CommandAbstract {
                 return;
             }
 
-            if (astring[0].equals("add")) {
+            if ("add".equals(astring[0])) {
                 i = a(astring[1], 0);
                 this.b(minecraftserver, i);
                 a(icommandlistener, (ICommand) this, "commands.time.added", new Object[] { Integer.valueOf(i)});
                 return;
             }
 
-            if (astring[0].equals("query")) {
-                if (astring[1].equals("daytime")) {
+            if ("query".equals(astring[0])) {
+                if ("daytime".equals(astring[1])) {
                     i = (int) (icommandlistener.getWorld().getDayTime() % 24000L);
                     icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, i);
                     a(icommandlistener, (ICommand) this, "commands.time.query", new Object[] { Integer.valueOf(i)});
                     return;
                 }
 
-                if (astring[1].equals("day")) {
+                if ("day".equals(astring[1])) {
                     i = (int) (icommandlistener.getWorld().getDayTime() / 24000L % 2147483647L);
                     icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, i);
                     a(icommandlistener, (ICommand) this, "commands.time.query", new Object[] { Integer.valueOf(i)});
                     return;
                 }
 
-                if (astring[1].equals("gametime")) {
+                if ("gametime".equals(astring[1])) {
                     i = (int) (icommandlistener.getWorld().getTime() % 2147483647L);
                     icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, i);
                     a(icommandlistener, (ICommand) this, "commands.time.query", new Object[] { Integer.valueOf(i)});
@@ -73,7 +73,7 @@ public class CommandTime extends CommandAbstract {
     }
 
     public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "set", "add", "query"}) : (astring.length == 2 && astring[0].equals("set") ? a(astring, new String[] { "day", "night"}) : (astring.length == 2 && astring[0].equals("query") ? a(astring, new String[] { "daytime", "gametime", "day"}) : Collections.emptyList()));
+        return astring.length == 1 ? a(astring, new String[] { "set", "add", "query"}) : (astring.length == 2 && "set".equals(astring[0]) ? a(astring, new String[] { "day", "night"}) : (astring.length == 2 && "query".equals(astring[0]) ? a(astring, new String[] { "daytime", "gametime", "day"}) : Collections.emptyList()));
     }
 
     protected void a(MinecraftServer minecraftserver, int i) {

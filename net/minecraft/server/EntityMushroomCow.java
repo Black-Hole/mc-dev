@@ -7,7 +7,11 @@ public class EntityMushroomCow extends EntityCow {
     public EntityMushroomCow(World world) {
         super(world);
         this.setSize(0.9F, 1.4F);
-        this.bz = Blocks.MYCELIUM;
+        this.bA = Blocks.MYCELIUM;
+    }
+
+    public static void c(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, "MushroomCow");
     }
 
     public boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {
@@ -27,7 +31,7 @@ public class EntityMushroomCow extends EntityCow {
 
                 entitycow.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
                 entitycow.setHealth(this.getHealth());
-                entitycow.aN = this.aN;
+                entitycow.aO = this.aO;
                 if (this.hasCustomName()) {
                     entitycow.setCustomName(this.getCustomName());
                 }
@@ -39,7 +43,7 @@ public class EntityMushroomCow extends EntityCow {
                 }
 
                 itemstack.damage(1, entityhuman);
-                this.a(SoundEffects.dx, 1.0F, 1.0F);
+                this.a(SoundEffects.dC, 1.0F, 1.0F);
             }
 
             return true;
@@ -54,7 +58,7 @@ public class EntityMushroomCow extends EntityCow {
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.I;
+        return LootTables.J;
     }
 
     public EntityCow b(EntityAgeable entityageable) {

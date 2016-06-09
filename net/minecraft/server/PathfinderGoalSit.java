@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class PathfinderGoalSit extends PathfinderGoal {
 
-    private EntityTameableAnimal entity;
+    private final EntityTameableAnimal entity;
     private boolean willSit;
 
     public PathfinderGoalSit(EntityTameableAnimal entitytameableanimal) {

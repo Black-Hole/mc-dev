@@ -28,6 +28,10 @@ public class PacketPlayInCustomPayload implements Packet<PacketListenerPlayIn> {
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
         packetlistenerplayin.a(this);
+        if (this.b != null) {
+            this.b.release();
+        }
+
     }
 
     public String a() {

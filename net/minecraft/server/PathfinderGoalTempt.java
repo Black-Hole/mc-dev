@@ -6,8 +6,8 @@ import javax.annotation.Nullable;
 
 public class PathfinderGoalTempt extends PathfinderGoal {
 
-    private EntityCreature a;
-    private double b;
+    private final EntityCreature a;
+    private final double b;
     private double c;
     private double d;
     private double e;
@@ -16,8 +16,8 @@ public class PathfinderGoalTempt extends PathfinderGoal {
     private EntityHuman h;
     private int i;
     private boolean j;
-    private Set<Item> k;
-    private boolean l;
+    private final Set<Item> k;
+    private final boolean l;
 
     public PathfinderGoalTempt(EntityCreature entitycreature, double d0, Item item, boolean flag) {
         this(entitycreature, d0, flag, Sets.newHashSet(new Item[] { item}));
@@ -86,7 +86,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
     }
 
     public void e() {
-        this.a.getControllerLook().a(this.h, (float) (this.a.cF() + 20), (float) this.a.N());
+        this.a.getControllerLook().a(this.h, (float) (this.a.cJ() + 20), (float) this.a.N());
         if (this.a.h(this.h) < 6.25D) {
             this.a.getNavigation().o();
         } else {

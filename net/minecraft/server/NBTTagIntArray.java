@@ -17,9 +17,13 @@ public class NBTTagIntArray extends NBTBase {
 
     void write(DataOutput dataoutput) throws IOException {
         dataoutput.writeInt(this.data.length);
+        int[] aint = this.data;
+        int i = aint.length;
 
-        for (int i = 0; i < this.data.length; ++i) {
-            dataoutput.writeInt(this.data[i]);
+        for (int j = 0; j < i; ++j) {
+            int k = aint[j];
+
+            dataoutput.writeInt(k);
         }
 
     }
@@ -55,7 +59,7 @@ public class NBTTagIntArray extends NBTBase {
         return s + "]";
     }
 
-    public NBTBase clone() {
+    public NBTTagIntArray c() {
         int[] aint = new int[this.data.length];
 
         System.arraycopy(this.data, 0, aint, 0, this.data.length);
@@ -70,7 +74,11 @@ public class NBTTagIntArray extends NBTBase {
         return super.hashCode() ^ Arrays.hashCode(this.data);
     }
 
-    public int[] c() {
+    public int[] d() {
         return this.data;
+    }
+
+    public NBTBase clone() {
+        return this.c();
     }
 }

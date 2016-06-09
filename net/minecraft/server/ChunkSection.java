@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 public class ChunkSection {
 
-    private int yPos;
+    private final int yPos;
     private int nonEmptyBlockCount;
     private int tickingBlockCount;
-    private DataPaletteBlock blockIds;
+    private final DataPaletteBlock blockIds;
     private NibbleArray emittedLight;
     private NibbleArray skyLight;
 

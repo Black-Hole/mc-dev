@@ -6,7 +6,7 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
 
     private int a;
     private boolean b;
-    private WorldSettings.EnumGamemode c;
+    private EnumGamemode c;
     private int d;
     private EnumDifficulty e;
     private int f;
@@ -15,11 +15,11 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutLogin() {}
 
-    public PacketPlayOutLogin(int i, WorldSettings.EnumGamemode worldsettings_enumgamemode, boolean flag, int j, EnumDifficulty enumdifficulty, int k, WorldType worldtype, boolean flag1) {
+    public PacketPlayOutLogin(int i, EnumGamemode enumgamemode, boolean flag, int j, EnumDifficulty enumdifficulty, int k, WorldType worldtype, boolean flag1) {
         this.a = i;
         this.d = j;
         this.e = enumdifficulty;
-        this.c = worldsettings_enumgamemode;
+        this.c = enumgamemode;
         this.f = k;
         this.b = flag;
         this.g = worldtype;
@@ -33,7 +33,7 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
         this.b = (short0 & 8) == 8;
         int i = short0 & -9;
 
-        this.c = WorldSettings.EnumGamemode.getById(i);
+        this.c = EnumGamemode.getById(i);
         this.d = packetdataserializer.readInt();
         this.e = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
         this.f = packetdataserializer.readUnsignedByte();

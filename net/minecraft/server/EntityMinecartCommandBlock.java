@@ -32,7 +32,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
             return EntityMinecartCommandBlock.this.world.getMinecraftServer();
         }
     };
-    private int d = 0;
+    private int d;
 
     public EntityMinecartCommandBlock(World world) {
         super(world);
@@ -40,6 +40,21 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
     public EntityMinecartCommandBlock(World world, double d0, double d1, double d2) {
         super(world, d0, d1, d2);
+    }
+
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityMinecartAbstract.a(dataconvertermanager, "MinecartCommandBlock");
+        dataconvertermanager.a(DataConverterTypes.ENTITY, new DataInspector() {
+            public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
+                if ("MinecartCommandBlock".equals(nbttagcompound.getString("id"))) {
+                    nbttagcompound.setString("id", "Control");
+                    dataconverter.a(DataConverterTypes.BLOCK_ENTITY, nbttagcompound, i);
+                    nbttagcompound.setString("id", "MinecartCommandBlock");
+                }
+
+                return nbttagcompound;
+            }
+        });
     }
 
     protected void i() {
@@ -99,7 +114,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
     }
 
-    public boolean bs() {
+    public boolean bu() {
         return true;
     }
 }

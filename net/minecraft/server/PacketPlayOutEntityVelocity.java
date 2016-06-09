@@ -19,28 +19,28 @@ public class PacketPlayOutEntityVelocity implements Packet<PacketListenerPlayOut
         this.a = i;
         double d3 = 3.9D;
 
-        if (d0 < -d3) {
-            d0 = -d3;
+        if (d0 < -3.9D) {
+            d0 = -3.9D;
         }
 
-        if (d1 < -d3) {
-            d1 = -d3;
+        if (d1 < -3.9D) {
+            d1 = -3.9D;
         }
 
-        if (d2 < -d3) {
-            d2 = -d3;
+        if (d2 < -3.9D) {
+            d2 = -3.9D;
         }
 
-        if (d0 > d3) {
-            d0 = d3;
+        if (d0 > 3.9D) {
+            d0 = 3.9D;
         }
 
-        if (d1 > d3) {
-            d1 = d3;
+        if (d1 > 3.9D) {
+            d1 = 3.9D;
         }
 
-        if (d2 > d3) {
-            d2 = d3;
+        if (d2 > 3.9D) {
+            d2 = 3.9D;
         }
 
         this.b = (int) (d0 * 8000.0D);

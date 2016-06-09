@@ -52,7 +52,7 @@ public class BlockBanner extends BlockTileEntity {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityBanner) {
-            ItemStack itemstack = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).c());
+            ItemStack itemstack = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).d());
             NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
 
             nbttagcompound.remove("x");
@@ -90,10 +90,10 @@ public class BlockBanner extends BlockTileEntity {
     public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
         if (tileentity instanceof TileEntityBanner) {
             TileEntityBanner tileentitybanner = (TileEntityBanner) tileentity;
-            ItemStack itemstack1 = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).c());
+            ItemStack itemstack1 = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).d());
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-            TileEntityBanner.a(nbttagcompound, tileentitybanner.c(), tileentitybanner.e());
+            TileEntityBanner.a(nbttagcompound, tileentitybanner.d(), tileentitybanner.g());
             itemstack1.a("BlockEntityTag", (NBTBase) nbttagcompound);
             a(world, blockposition, itemstack1);
         } else {

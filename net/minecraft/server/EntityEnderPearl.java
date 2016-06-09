@@ -13,6 +13,10 @@ public class EntityEnderPearl extends EntityProjectile {
         this.d = entityliving;
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityProjectile.a(dataconvertermanager, "ThrownEnderpearl");
+    }
+
     protected void a(MovingObjectPosition movingobjectposition) {
         EntityLiving entityliving = this.getShooter();
 
@@ -60,7 +64,7 @@ public class EntityEnderPearl extends EntityProjectile {
                     }
 
                     if (entityliving.isPassenger()) {
-                        this.stopRiding();
+                        entityliving.stopRiding();
                     }
 
                     entityliving.enderTeleportTo(this.locX, this.locY, this.locZ);

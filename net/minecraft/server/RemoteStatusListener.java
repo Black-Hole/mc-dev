@@ -20,19 +20,19 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     private long h;
     private int i;
-    private int j;
-    private int k;
-    private String l;
-    private String m;
+    private final int j;
+    private final int k;
+    private final String l;
+    private final String m;
     private DatagramSocket n;
-    private byte[] o = new byte[1460];
+    private final byte[] o = new byte[1460];
     private DatagramPacket p;
-    private Map<SocketAddress, String> q;
+    private final Map<SocketAddress, String> q;
     private String r;
     private String s;
-    private Map<SocketAddress, RemoteStatusListener.RemoteStatusChallenge> t;
-    private long u;
-    private RemoteStatusReply v;
+    private final Map<SocketAddress, RemoteStatusListener.RemoteStatusChallenge> t;
+    private final long u;
+    private final RemoteStatusReply v;
     private long w;
 
     public RemoteStatusListener(IMinecraftServer iminecraftserver) {
@@ -265,7 +265,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     private void a(Exception exception) {
         if (this.a) {
-            this.c("Unexpected exception, buggy JRE? (" + exception.toString() + ")");
+            this.c("Unexpected exception, buggy JRE? (" + exception + ")");
             if (!this.g()) {
                 this.d("Failed to recover from buggy JRE, shutting down!");
                 this.a = false;
@@ -293,11 +293,11 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     class RemoteStatusChallenge {
 
-        private long time = (new Date()).getTime();
-        private int token;
-        private byte[] identity;
-        private byte[] response;
-        private String f;
+        private final long time = (new Date()).getTime();
+        private final int token;
+        private final byte[] identity;
+        private final byte[] response;
+        private final String f;
 
         public RemoteStatusChallenge(DatagramPacket datagrampacket) {
             byte[] abyte = datagrampacket.getData();

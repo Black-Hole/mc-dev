@@ -4,7 +4,7 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
 
     protected final EntityCreature e;
     protected boolean f;
-    private boolean a;
+    private final boolean a;
     private int b;
     private int c;
     private int d;
@@ -34,13 +34,13 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
         } else if (!entityliving.isAlive()) {
             return false;
         } else {
-            ScoreboardTeamBase scoreboardteambase = this.e.aO();
-            ScoreboardTeamBase scoreboardteambase1 = entityliving.aO();
+            ScoreboardTeamBase scoreboardteambase = this.e.aQ();
+            ScoreboardTeamBase scoreboardteambase1 = entityliving.aQ();
 
             if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
                 return false;
             } else {
-                double d0 = this.f();
+                double d0 = this.i();
 
                 if (this.e.h(entityliving) > d0 * d0) {
                     return false;
@@ -64,7 +64,7 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
         }
     }
 
-    protected double f() {
+    protected double i() {
         AttributeInstance attributeinstance = this.e.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
 
         return attributeinstance == null ? 16.0D : attributeinstance.getValue();

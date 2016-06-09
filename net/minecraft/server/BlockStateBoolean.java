@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
 
@@ -17,6 +18,10 @@ public class BlockStateBoolean extends BlockState<Boolean> {
 
     public static BlockStateBoolean of(String s) {
         return new BlockStateBoolean(s);
+    }
+
+    public Optional<Boolean> b(String s) {
+        return !"true".equals(s) && !"false".equals(s) ? Optional.absent() : Optional.of(Boolean.valueOf(s));
     }
 
     public String a(Boolean obool) {

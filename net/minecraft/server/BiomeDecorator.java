@@ -30,7 +30,7 @@ public class BiomeDecorator {
     protected WorldGenerator x;
     protected int y;
     protected int z;
-    protected int A;
+    protected float A;
     protected int B;
     protected int C;
     protected int D;
@@ -40,7 +40,8 @@ public class BiomeDecorator {
     protected int H;
     protected int I;
     protected int J;
-    public boolean K;
+    protected int K;
+    public boolean L;
 
     public BiomeDecorator() {
         this.e = new WorldGenSand(Blocks.SAND, 7);
@@ -52,12 +53,13 @@ public class BiomeDecorator {
         this.v = new WorldGenReed();
         this.w = new WorldGenCactus();
         this.x = new WorldGenWaterLily();
-        this.A = 2;
-        this.B = 1;
-        this.G = 1;
-        this.H = 3;
-        this.I = 1;
-        this.K = true;
+        this.A = 0.1F;
+        this.B = 2;
+        this.C = 1;
+        this.H = 1;
+        this.I = 3;
+        this.J = 1;
+        this.L = true;
     }
 
     public void a(World world, Random random, BiomeBase biomebase, BlockPosition blockposition) {
@@ -89,26 +91,26 @@ public class BiomeDecorator {
         int j;
         int k;
 
-        for (i = 0; i < this.H; ++i) {
+        for (i = 0; i < this.I; ++i) {
             j = random.nextInt(16) + 8;
             k = random.nextInt(16) + 8;
             this.e.generate(world, random, world.q(this.b.a(j, 0, k)));
         }
 
-        for (i = 0; i < this.I; ++i) {
+        for (i = 0; i < this.J; ++i) {
             j = random.nextInt(16) + 8;
             k = random.nextInt(16) + 8;
             this.d.generate(world, random, world.q(this.b.a(j, 0, k)));
         }
 
-        for (i = 0; i < this.G; ++i) {
+        for (i = 0; i < this.H; ++i) {
             j = random.nextInt(16) + 8;
             k = random.nextInt(16) + 8;
             this.f.generate(world, random, world.q(this.b.a(j, 0, k)));
         }
 
         i = this.z;
-        if (random.nextInt(10) == 0) {
+        if (random.nextFloat() < this.A) {
             ++i;
         }
 
@@ -127,7 +129,7 @@ public class BiomeDecorator {
             }
         }
 
-        for (j = 0; j < this.J; ++j) {
+        for (j = 0; j < this.K; ++j) {
             k = random.nextInt(16) + 8;
             l = random.nextInt(16) + 8;
             this.u.generate(world, random, world.getHighestBlockYAt(this.b.a(k, 0, l)));
@@ -137,7 +139,7 @@ public class BiomeDecorator {
         int i1;
         int j1;
 
-        for (j = 0; j < this.A; ++j) {
+        for (j = 0; j < this.B; ++j) {
             k = random.nextInt(16) + 8;
             l = random.nextInt(16) + 8;
             i1 = world.getHighestBlockYAt(this.b.a(k, 0, l)).getY() + 32;
@@ -154,7 +156,7 @@ public class BiomeDecorator {
             }
         }
 
-        for (j = 0; j < this.B; ++j) {
+        for (j = 0; j < this.C; ++j) {
             k = random.nextInt(16) + 8;
             l = random.nextInt(16) + 8;
             i1 = world.getHighestBlockYAt(this.b.a(k, 0, l)).getY() * 2;
@@ -164,7 +166,7 @@ public class BiomeDecorator {
             }
         }
 
-        for (j = 0; j < this.C; ++j) {
+        for (j = 0; j < this.D; ++j) {
             k = random.nextInt(16) + 8;
             l = random.nextInt(16) + 8;
             i1 = world.getHighestBlockYAt(this.b.a(k, 0, l)).getY() * 2;
@@ -194,7 +196,7 @@ public class BiomeDecorator {
             }
         }
 
-        for (j = 0; j < this.D; ++j) {
+        for (j = 0; j < this.E; ++j) {
             if (random.nextInt(4) == 0) {
                 k = random.nextInt(16) + 8;
                 l = random.nextInt(16) + 8;
@@ -235,7 +237,7 @@ public class BiomeDecorator {
             }
         }
 
-        for (j = 0; j < this.E; ++j) {
+        for (j = 0; j < this.F; ++j) {
             k = random.nextInt(16) + 8;
             l = random.nextInt(16) + 8;
             i1 = world.getHighestBlockYAt(this.b.a(k, 0, l)).getY() * 2;
@@ -265,7 +267,7 @@ public class BiomeDecorator {
             }
         }
 
-        for (j = 0; j < this.F; ++j) {
+        for (j = 0; j < this.G; ++j) {
             k = random.nextInt(16) + 8;
             l = random.nextInt(16) + 8;
             i1 = world.getHighestBlockYAt(this.b.a(k, 0, l)).getY() * 2;
@@ -275,7 +277,7 @@ public class BiomeDecorator {
             }
         }
 
-        if (this.K) {
+        if (this.L) {
             for (j = 0; j < 50; ++j) {
                 k = random.nextInt(16) + 8;
                 l = random.nextInt(16) + 8;

@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Random;
 import javax.annotation.Nullable;
 
 public class DefinedStructureInfo {
@@ -7,27 +8,41 @@ public class DefinedStructureInfo {
     private EnumBlockMirror a;
     private EnumBlockRotation b;
     private boolean c;
+    @Nullable
     private Block d;
+    @Nullable
     private ChunkCoordIntPair e;
+    @Nullable
     private StructureBoundingBox f;
     private boolean g;
+    private float h;
+    @Nullable
+    private Random i;
+    @Nullable
+    private Long j;
 
     public DefinedStructureInfo() {
-        this(EnumBlockMirror.NONE, EnumBlockRotation.NONE, false, (Block) null, (StructureBoundingBox) null);
-    }
-
-    public DefinedStructureInfo(EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation, boolean flag, @Nullable Block block, @Nullable StructureBoundingBox structureboundingbox) {
-        this.b = enumblockrotation;
-        this.a = enumblockmirror;
-        this.c = flag;
-        this.d = block;
-        this.e = null;
-        this.f = structureboundingbox;
+        this.a = EnumBlockMirror.NONE;
+        this.b = EnumBlockRotation.NONE;
+        this.c = false;
         this.g = true;
+        this.h = 1.0F;
     }
 
     public DefinedStructureInfo a() {
-        return (new DefinedStructureInfo(this.a, this.b, this.c, this.d, this.f)).a(this.e).b(this.g);
+        DefinedStructureInfo definedstructureinfo = new DefinedStructureInfo();
+
+        definedstructureinfo.a = this.a;
+        definedstructureinfo.b = this.b;
+        definedstructureinfo.c = this.c;
+        definedstructureinfo.d = this.d;
+        definedstructureinfo.e = this.e;
+        definedstructureinfo.f = this.f;
+        definedstructureinfo.g = this.g;
+        definedstructureinfo.h = this.h;
+        definedstructureinfo.i = this.i;
+        definedstructureinfo.j = this.j;
+        return definedstructureinfo;
     }
 
     public DefinedStructureInfo a(EnumBlockMirror enumblockmirror) {
@@ -60,6 +75,21 @@ public class DefinedStructureInfo {
         return this;
     }
 
+    public DefinedStructureInfo a(@Nullable Long olong) {
+        this.j = olong;
+        return this;
+    }
+
+    public DefinedStructureInfo a(@Nullable Random random) {
+        this.i = random;
+        return this;
+    }
+
+    public DefinedStructureInfo a(float f) {
+        this.h = f;
+        return this;
+    }
+
     public EnumBlockMirror b() {
         return this.a;
     }
@@ -73,28 +103,48 @@ public class DefinedStructureInfo {
         return this.b;
     }
 
-    public boolean e() {
+    public Random a(@Nullable BlockPosition blockposition) {
+        if (this.i != null) {
+            return this.i;
+        } else if (this.j != null) {
+            return this.j.longValue() == 0L ? new Random(System.currentTimeMillis()) : new Random(this.j.longValue());
+        } else if (blockposition == null) {
+            return new Random(System.currentTimeMillis());
+        } else {
+            int i = blockposition.getX();
+            int j = blockposition.getZ();
+
+            return new Random((long) (i * i * 4987142 + i * 5947611) + (long) (j * j) * 4392871L + (long) (j * 389711) ^ 987234911L);
+        }
+    }
+
+    public float f() {
+        return this.h;
+    }
+
+    public boolean g() {
         return this.c;
     }
 
-    public Block f() {
+    @Nullable
+    public Block h() {
         return this.d;
     }
 
     @Nullable
-    public StructureBoundingBox g() {
+    public StructureBoundingBox i() {
         if (this.f == null && this.e != null) {
-            this.i();
+            this.k();
         }
 
         return this.f;
     }
 
-    public boolean h() {
+    public boolean j() {
         return this.g;
     }
 
-    void i() {
+    void k() {
         this.f = this.b(this.e);
     }
 

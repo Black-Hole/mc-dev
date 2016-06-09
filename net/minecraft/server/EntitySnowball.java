@@ -14,6 +14,10 @@ public class EntitySnowball extends EntityProjectile {
         super(world, d0, d1, d2);
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        EntityProjectile.a(dataconvertermanager, "Snowball");
+    }
+
     protected void a(MovingObjectPosition movingobjectposition) {
         if (movingobjectposition.entity != null) {
             byte b0 = 0;

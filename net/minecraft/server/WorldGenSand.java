@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class WorldGenSand extends WorldGenerator {
 
-    private Block a;
-    private int b;
+    private final Block a;
+    private final int b;
 
     public WorldGenSand(Block block, int i) {
         this.a = block;
@@ -17,7 +17,7 @@ public class WorldGenSand extends WorldGenerator {
             return false;
         } else {
             int i = random.nextInt(this.b - 2) + 2;
-            byte b0 = 2;
+            boolean flag = true;
 
             for (int j = blockposition.getX() - i; j <= blockposition.getX() + i; ++j) {
                 for (int k = blockposition.getZ() - i; k <= blockposition.getZ() + i; ++k) {
@@ -25,7 +25,7 @@ public class WorldGenSand extends WorldGenerator {
                     int i1 = k - blockposition.getZ();
 
                     if (l * l + i1 * i1 <= i * i) {
-                        for (int j1 = blockposition.getY() - b0; j1 <= blockposition.getY() + b0; ++j1) {
+                        for (int j1 = blockposition.getY() - 2; j1 <= blockposition.getY() + 2; ++j1) {
                             BlockPosition blockposition1 = new BlockPosition(j, j1, k);
                             Block block = world.getType(blockposition1).getBlock();
 

@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class WorldGenEndCity extends StructureGenerator {
 
-    private int a = 20;
-    private int b = 11;
+    private final int a = 20;
+    private final int b = 11;
     private final ChunkProviderTheEnd d;
 
     public WorldGenEndCity(ChunkProviderTheEnd chunkprovidertheend) {
@@ -21,21 +21,21 @@ public class WorldGenEndCity extends StructureGenerator {
         int l = j;
 
         if (i < 0) {
-            i -= this.a - 1;
+            i -= 19;
         }
 
         if (j < 0) {
-            j -= this.a - 1;
+            j -= 19;
         }
 
-        int i1 = i / this.a;
-        int j1 = j / this.a;
+        int i1 = i / 20;
+        int j1 = j / 20;
         Random random = this.g.a(i1, j1, 10387313);
 
-        i1 *= this.a;
-        j1 *= this.a;
-        i1 += (random.nextInt(this.a - this.b) + random.nextInt(this.a - this.b)) / 2;
-        j1 += (random.nextInt(this.a - this.b) + random.nextInt(this.a - this.b)) / 2;
+        i1 *= 20;
+        j1 *= 20;
+        i1 += (random.nextInt(9) + random.nextInt(9)) / 2;
+        j1 += (random.nextInt(9) + random.nextInt(9)) / 2;
         return k == i1 && l == j1 && this.d.c(k, l);
     }
 

@@ -52,7 +52,7 @@ public abstract class CommandHandler implements ICommandHandler {
                 while (iterator.hasNext()) {
                     Entity entity = (Entity) iterator.next();
 
-                    astring[i] = entity.bd();
+                    astring[i] = entity.bf();
                     if (this.a(icommandlistener, astring, icommand, s)) {
                         ++j;
                     }
@@ -93,7 +93,7 @@ public abstract class CommandHandler implements ICommandHandler {
             chatmessage = new ChatMessage("commands.generic.exception", new Object[0]);
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             icommandlistener.sendMessage(chatmessage);
-            CommandHandler.a.warn("Couldn\'t process command: \'" + s + "\'");
+            CommandHandler.a.warn("Couldn\'t process command: \'{}\'", new Object[] { s});
         }
 
         return false;

@@ -13,7 +13,7 @@ public class CommandPublish extends CommandAbstract {
     }
 
     public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        String s = minecraftserver.a(WorldSettings.EnumGamemode.SURVIVAL, false);
+        String s = minecraftserver.a(EnumGamemode.SURVIVAL, false);
 
         if (s != null) {
             a(icommandlistener, (ICommand) this, "commands.publish.started", new Object[] { s});

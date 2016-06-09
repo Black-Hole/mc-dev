@@ -13,18 +13,27 @@ public class TileEntityStructure extends TileEntity {
     private String a = "";
     private String f = "";
     private String g = "";
-    private BlockPosition h = new BlockPosition(1, 1, 1);
+    private BlockPosition h = new BlockPosition(0, 1, 0);
     private BlockPosition i;
     private EnumBlockMirror j;
     private EnumBlockRotation k;
     private TileEntityStructure.UsageMode l;
     private boolean m;
+    private boolean n;
+    private boolean o;
+    private boolean p;
+    private float q;
+    private long r;
 
     public TileEntityStructure() {
         this.i = BlockPosition.ZERO;
         this.j = EnumBlockMirror.NONE;
         this.k = EnumBlockRotation.NONE;
         this.l = TileEntityStructure.UsageMode.DATA;
+        this.m = true;
+        this.p = true;
+        this.q = 1.0F;
+        this.r = 0L;
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
@@ -42,16 +51,29 @@ public class TileEntityStructure extends TileEntity {
         nbttagcompound.setString("mirror", this.j.toString());
         nbttagcompound.setString("mode", this.l.toString());
         nbttagcompound.setBoolean("ignoreEntities", this.m);
+        nbttagcompound.setBoolean("powered", this.n);
+        nbttagcompound.setBoolean("showair", this.o);
+        nbttagcompound.setBoolean("showboundingbox", this.p);
+        nbttagcompound.setFloat("integrity", this.q);
+        nbttagcompound.setLong("seed", this.r);
         return nbttagcompound;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.a = nbttagcompound.getString("name");
+        this.a(nbttagcompound.getString("name"));
         this.f = nbttagcompound.getString("author");
         this.g = nbttagcompound.getString("metadata");
-        this.h = new BlockPosition(nbttagcompound.getInt("posX"), nbttagcompound.getInt("posY"), nbttagcompound.getInt("posZ"));
-        this.i = new BlockPosition(nbttagcompound.getInt("sizeX"), nbttagcompound.getInt("sizeY"), nbttagcompound.getInt("sizeZ"));
+        int i = MathHelper.clamp(nbttagcompound.getInt("posX"), -32, 32);
+        int j = MathHelper.clamp(nbttagcompound.getInt("posY"), -32, 32);
+        int k = MathHelper.clamp(nbttagcompound.getInt("posZ"), -32, 32);
+
+        this.h = new BlockPosition(i, j, k);
+        int l = MathHelper.clamp(nbttagcompound.getInt("sizeX"), 0, 32);
+        int i1 = MathHelper.clamp(nbttagcompound.getInt("sizeY"), 0, 32);
+        int j1 = MathHelper.clamp(nbttagcompound.getInt("sizeZ"), 0, 32);
+
+        this.i = new BlockPosition(l, i1, j1);
 
         try {
             this.k = EnumBlockRotation.valueOf(nbttagcompound.getString("rotation"));
@@ -72,19 +94,75 @@ public class TileEntityStructure extends TileEntity {
         }
 
         this.m = nbttagcompound.getBoolean("ignoreEntities");
+        this.n = nbttagcompound.getBoolean("powered");
+        this.o = nbttagcompound.getBoolean("showair");
+        this.p = nbttagcompound.getBoolean("showboundingbox");
+        if (nbttagcompound.hasKey("integrity")) {
+            this.q = nbttagcompound.getFloat("integrity");
+        } else {
+            this.q = 1.0F;
+        }
+
+        this.r = nbttagcompound.getLong("seed");
+        this.J();
+    }
+
+    private void J() {
+        if (this.world != null) {
+            BlockPosition blockposition = this.getPosition();
+            IBlockData iblockdata = this.world.getType(blockposition);
+
+            if (iblockdata.getBlock() == Blocks.STRUCTURE_BLOCK) {
+                this.world.setTypeAndData(blockposition, iblockdata.set(BlockStructure.a, this.l), 2);
+            }
+
+        }
     }
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 7, this.E_());
+        return new PacketPlayOutTileEntityData(this.position, 7, this.c());
     }
 
-    public NBTTagCompound E_() {
+    public NBTTagCompound c() {
         return this.save(new NBTTagCompound());
     }
 
+    public boolean a(EntityHuman entityhuman) {
+        if (!entityhuman.dh()) {
+            return false;
+        } else {
+            if (entityhuman.getWorld().isClientSide) {
+                entityhuman.a(this);
+            }
+
+            return true;
+        }
+    }
+
+    public String d() {
+        return this.a;
+    }
+
     public void a(String s) {
-        this.a = s;
+        String s1 = s;
+        char[] achar = SharedConstants.b;
+        int i = achar.length;
+
+        for (int j = 0; j < i; ++j) {
+            char c0 = achar[j];
+
+            s1 = s1.replace(c0, '_');
+        }
+
+        this.a = s1;
+    }
+
+    public void a(EntityLiving entityliving) {
+        if (!UtilColor.b(entityliving.getName())) {
+            this.f = entityliving.getName();
+        }
+
     }
 
     public void b(BlockPosition blockposition) {
@@ -95,16 +173,20 @@ public class TileEntityStructure extends TileEntity {
         this.i = blockposition;
     }
 
-    public void a(EnumBlockMirror enumblockmirror) {
+    public void b(EnumBlockMirror enumblockmirror) {
         this.j = enumblockmirror;
     }
 
-    public void a(EnumBlockRotation enumblockrotation) {
+    public void b(EnumBlockRotation enumblockrotation) {
         this.k = enumblockrotation;
     }
 
     public void b(String s) {
         this.g = s;
+    }
+
+    public TileEntityStructure.UsageMode k() {
+        return this.l;
     }
 
     public void a(TileEntityStructure.UsageMode tileentitystructure_usagemode) {
@@ -121,14 +203,22 @@ public class TileEntityStructure extends TileEntity {
         this.m = flag;
     }
 
-    public boolean m() {
+    public void a(float f) {
+        this.q = f;
+    }
+
+    public void a(long i) {
+        this.r = i;
+    }
+
+    public boolean p() {
         if (this.l != TileEntityStructure.UsageMode.SAVE) {
             return false;
         } else {
             BlockPosition blockposition = this.getPosition();
             boolean flag = true;
-            BlockPosition blockposition1 = new BlockPosition(blockposition.getX() - 128, 0, blockposition.getZ() - 128);
-            BlockPosition blockposition2 = new BlockPosition(blockposition.getX() + 128, 255, blockposition.getZ() + 128);
+            BlockPosition blockposition1 = new BlockPosition(blockposition.getX() - 80, 0, blockposition.getZ() - 80);
+            BlockPosition blockposition2 = new BlockPosition(blockposition.getX() + 80, 255, blockposition.getZ() + 80);
             List list = this.a(blockposition1, blockposition2);
             List list1 = this.a(list);
 
@@ -225,56 +315,113 @@ public class TileEntityStructure extends TileEntity {
         return structureboundingbox;
     }
 
-    public boolean n() {
-        if (this.l == TileEntityStructure.UsageMode.SAVE && !this.world.isClientSide) {
+    public boolean q() {
+        return this.b(true);
+    }
+
+    public boolean b(boolean flag) {
+        if (this.l == TileEntityStructure.UsageMode.SAVE && !this.world.isClientSide && !UtilColor.b(this.a)) {
             BlockPosition blockposition = this.getPosition().a(this.h);
             WorldServer worldserver = (WorldServer) this.world;
             MinecraftServer minecraftserver = this.world.getMinecraftServer();
             DefinedStructureManager definedstructuremanager = worldserver.y();
             DefinedStructure definedstructure = definedstructuremanager.a(minecraftserver, new MinecraftKey(this.a));
 
-            definedstructure.a(this.world, blockposition, this.i, !this.m, Blocks.BARRIER);
+            definedstructure.a(this.world, blockposition, this.i, !this.m, Blocks.dj);
             definedstructure.a(this.f);
-            definedstructuremanager.c(minecraftserver, new MinecraftKey(this.a));
-            return true;
+            return !flag || definedstructuremanager.d(minecraftserver, new MinecraftKey(this.a));
         } else {
             return false;
         }
     }
 
-    public boolean o() {
-        if (this.l == TileEntityStructure.UsageMode.LOAD && !this.world.isClientSide) {
-            BlockPosition blockposition = this.getPosition().a(this.h);
+    public boolean r() {
+        return this.c(true);
+    }
+
+    public boolean c(boolean flag) {
+        if (this.l == TileEntityStructure.UsageMode.LOAD && !this.world.isClientSide && !UtilColor.b(this.a)) {
+            BlockPosition blockposition = this.getPosition();
+            BlockPosition blockposition1 = blockposition.a(this.h);
             WorldServer worldserver = (WorldServer) this.world;
             MinecraftServer minecraftserver = this.world.getMinecraftServer();
             DefinedStructureManager definedstructuremanager = worldserver.y();
-            DefinedStructure definedstructure = definedstructuremanager.a(minecraftserver, new MinecraftKey(this.a));
+            DefinedStructure definedstructure = definedstructuremanager.b(minecraftserver, new MinecraftKey(this.a));
 
-            if (!UtilColor.b(definedstructure.b())) {
-                this.f = definedstructure.b();
-            }
-
-            if (!this.i.equals(definedstructure.a())) {
-                this.i = definedstructure.a();
+            if (definedstructure == null) {
                 return false;
             } else {
-                BlockPosition blockposition1 = definedstructure.a(this.k);
-                Iterator iterator = this.world.getEntities((Entity) null, new AxisAlignedBB(blockposition, blockposition1.a(blockposition).a(-1, -1, -1))).iterator();
-
-                while (iterator.hasNext()) {
-                    Entity entity = (Entity) iterator.next();
-
-                    this.world.removeEntity(entity);
+                if (!UtilColor.b(definedstructure.b())) {
+                    this.f = definedstructure.b();
                 }
 
-                DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.j).a(this.k).a(this.m).a((ChunkCoordIntPair) null).a((Block) null).b(false);
+                BlockPosition blockposition2 = definedstructure.a();
+                boolean flag1 = this.i.equals(blockposition2);
 
-                definedstructure.a(this.world, blockposition, definedstructureinfo);
-                return true;
+                if (!flag1) {
+                    this.i = blockposition2;
+                    this.update();
+                    IBlockData iblockdata = this.world.getType(blockposition);
+
+                    this.world.notify(blockposition, iblockdata, iblockdata, 3);
+                }
+
+                if (flag && !flag1) {
+                    return false;
+                } else {
+                    DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.j).a(this.k).a(this.m).a((ChunkCoordIntPair) null).a((Block) null).b(false);
+
+                    if (this.q < 1.0F) {
+                        definedstructureinfo.a(MathHelper.a(this.q, 0.0F, 1.0F)).a(Long.valueOf(this.r));
+                    }
+
+                    definedstructure.a(this.world, blockposition1, definedstructureinfo);
+                    return true;
+                }
             }
         } else {
             return false;
         }
+    }
+
+    public void E() {
+        WorldServer worldserver = (WorldServer) this.world;
+        DefinedStructureManager definedstructuremanager = worldserver.y();
+
+        definedstructuremanager.a(new MinecraftKey(this.a));
+    }
+
+    public boolean F() {
+        if (this.l == TileEntityStructure.UsageMode.LOAD && !this.world.isClientSide) {
+            WorldServer worldserver = (WorldServer) this.world;
+            MinecraftServer minecraftserver = this.world.getMinecraftServer();
+            DefinedStructureManager definedstructuremanager = worldserver.y();
+
+            return definedstructuremanager.b(minecraftserver, new MinecraftKey(this.a)) != null;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean G() {
+        return this.n;
+    }
+
+    public void d(boolean flag) {
+        this.n = flag;
+    }
+
+    public void e(boolean flag) {
+        this.o = flag;
+    }
+
+    public void f(boolean flag) {
+        this.p = flag;
+    }
+
+    @Nullable
+    public IChatBaseComponent i_() {
+        return new ChatMessage("structure_block.hover." + this.l.f, new Object[] { this.l == TileEntityStructure.UsageMode.DATA ? this.g : this.a});
     }
 
     public static enum UsageMode implements INamable {
@@ -299,11 +446,7 @@ public class TileEntityStructure extends TileEntity {
         }
 
         public static TileEntityStructure.UsageMode a(int i) {
-            if (i < 0 || i >= TileEntityStructure.UsageMode.e.length) {
-                i = 0;
-            }
-
-            return TileEntityStructure.UsageMode.e[i];
+            return i >= 0 && i < TileEntityStructure.UsageMode.e.length ? TileEntityStructure.UsageMode.e[i] : TileEntityStructure.UsageMode.e[0];
         }
 
         static {

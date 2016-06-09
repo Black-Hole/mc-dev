@@ -12,9 +12,9 @@ import javax.swing.Timer;
 public class GuiStatsComponent extends JComponent {
 
     private static final DecimalFormat a = new DecimalFormat("########0.000");
-    private int[] b = new int[256];
+    private final int[] b = new int[256];
     private int c;
-    private String[] d = new String[11];
+    private final String[] d = new String[11];
     private final MinecraftServer e;
 
     public GuiStatsComponent(MinecraftServer minecraftserver) {
@@ -41,9 +41,13 @@ public class GuiStatsComponent extends JComponent {
 
     private double a(long[] along) {
         long i = 0L;
+        long[] along1 = along;
+        int j = along.length;
 
-        for (int j = 0; j < along.length; ++j) {
-            i += along[j];
+        for (int k = 0; k < j; ++k) {
+            long l = along1[k];
+
+            i += l;
         }
 
         return (double) i / (double) along.length;

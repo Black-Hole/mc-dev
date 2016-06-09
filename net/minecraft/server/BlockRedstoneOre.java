@@ -83,27 +83,27 @@ public class BlockRedstoneOre extends Block {
             double d3 = (double) ((float) blockposition.getZ() + random.nextFloat());
 
             if (i == 0 && !world.getType(blockposition.up()).p()) {
-                d2 = (double) blockposition.getY() + d0 + 1.0D;
+                d2 = (double) blockposition.getY() + 0.0625D + 1.0D;
             }
 
             if (i == 1 && !world.getType(blockposition.down()).p()) {
-                d2 = (double) blockposition.getY() - d0;
+                d2 = (double) blockposition.getY() - 0.0625D;
             }
 
             if (i == 2 && !world.getType(blockposition.south()).p()) {
-                d3 = (double) blockposition.getZ() + d0 + 1.0D;
+                d3 = (double) blockposition.getZ() + 0.0625D + 1.0D;
             }
 
             if (i == 3 && !world.getType(blockposition.north()).p()) {
-                d3 = (double) blockposition.getZ() - d0;
+                d3 = (double) blockposition.getZ() - 0.0625D;
             }
 
             if (i == 4 && !world.getType(blockposition.east()).p()) {
-                d1 = (double) blockposition.getX() + d0 + 1.0D;
+                d1 = (double) blockposition.getX() + 0.0625D + 1.0D;
             }
 
             if (i == 5 && !world.getType(blockposition.west()).p()) {
-                d1 = (double) blockposition.getX() - d0;
+                d1 = (double) blockposition.getX() - 0.0625D;
             }
 
             if (d1 < (double) blockposition.getX() || d1 > (double) (blockposition.getX() + 1) || d2 < 0.0D || d2 > (double) (blockposition.getY() + 1) || d3 < (double) blockposition.getZ() || d3 > (double) (blockposition.getZ() + 1)) {

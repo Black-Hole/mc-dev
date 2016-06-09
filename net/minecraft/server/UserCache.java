@@ -30,8 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Deque;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -45,7 +45,7 @@ public class UserCache {
     private static boolean c;
     private final Map<String, UserCache.UserCacheEntry> d = Maps.newHashMap();
     private final Map<UUID, UserCache.UserCacheEntry> e = Maps.newHashMap();
-    private final LinkedList<GameProfile> f = Lists.newLinkedList();
+    private final Deque<GameProfile> f = Lists.newLinkedList();
     private final GameProfileRepository g;
     protected final Gson b;
     private final File h;

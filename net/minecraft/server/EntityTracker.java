@@ -12,8 +12,8 @@ public class EntityTracker {
 
     private static final Logger a = LogManager.getLogger();
     private final WorldServer world;
-    private Set<EntityTrackerEntry> c = Sets.newHashSet();
-    public IntHashMap<EntityTrackerEntry> trackedEntities = new IntHashMap();
+    private final Set<EntityTrackerEntry> c = Sets.newHashSet();
+    public final IntHashMap<EntityTrackerEntry> trackedEntities = new IntHashMap();
     private int e;
 
     public EntityTracker(WorldServer worldserver) {
@@ -249,13 +249,13 @@ public class EntityTracker {
             EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
             Entity entity = entitytrackerentry.b();
 
-            if (entity != entityplayer && entity.ab == chunk.locX && entity.ad == chunk.locZ) {
+            if (entity != entityplayer && entity.ac == chunk.locX && entity.ae == chunk.locZ) {
                 entitytrackerentry.updatePlayer(entityplayer);
                 if (entity instanceof EntityInsentient && ((EntityInsentient) entity).getLeashHolder() != null) {
                     arraylist.add(entity);
                 }
 
-                if (!entity.bv().isEmpty()) {
+                if (!entity.bx().isEmpty()) {
                     arraylist1.add(entity);
                 }
             }

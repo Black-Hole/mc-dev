@@ -33,7 +33,7 @@ public class BlockSnow extends Block {
         float f = 0.125F;
         AxisAlignedBB axisalignedbb = iblockdata.c(world, blockposition);
 
-        return new AxisAlignedBB(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c, axisalignedbb.d, (double) ((float) i * f), axisalignedbb.f);
+        return new AxisAlignedBB(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c, axisalignedbb.d, (double) ((float) i * 0.125F), axisalignedbb.f);
     }
 
     public boolean b(IBlockData iblockdata) {

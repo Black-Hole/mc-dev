@@ -80,14 +80,14 @@ public class CommandFill extends CommandAbstract {
                             IBlockData iblockdata;
 
                             if (astring.length >= 9) {
-                                if (!astring[8].equals("outline") && !astring[8].equals("hollow")) {
-                                    if (astring[8].equals("destroy")) {
+                                if (!"outline".equals(astring[8]) && !"hollow".equals(astring[8])) {
+                                    if ("destroy".equals(astring[8])) {
                                         world.setAir(blockposition4, true);
-                                    } else if (astring[8].equals("keep")) {
+                                    } else if ("keep".equals(astring[8])) {
                                         if (!world.isEmpty(blockposition4)) {
                                             continue;
                                         }
-                                    } else if (astring[8].equals("replace") && !block.isTileEntity()) {
+                                    } else if ("replace".equals(astring[8]) && !block.isTileEntity()) {
                                         if (astring.length > 9) {
                                             Block block1 = CommandAbstract.b(icommandlistener, astring[9]);
 
@@ -106,7 +106,7 @@ public class CommandFill extends CommandAbstract {
                                         }
                                     }
                                 } else if (k1 != blockposition2.getX() && k1 != blockposition3.getX() && j1 != blockposition2.getY() && j1 != blockposition3.getY() && i1 != blockposition2.getZ() && i1 != blockposition3.getZ()) {
-                                    if (astring[8].equals("hollow")) {
+                                    if ("hollow".equals(astring[8])) {
                                         world.setTypeAndData(blockposition4, Blocks.AIR.getBlockData(), 2);
                                         arraylist.add(blockposition4);
                                     }

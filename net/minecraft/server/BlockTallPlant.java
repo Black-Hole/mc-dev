@@ -111,24 +111,22 @@ public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElem
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
         if (iblockdata.get(BlockTallPlant.HALF) == BlockTallPlant.EnumTallPlantHalf.UPPER) {
             if (world.getType(blockposition.down()).getBlock() == this) {
-                if (!entityhuman.abilities.canInstantlyBuild) {
+                if (entityhuman.abilities.canInstantlyBuild) {
+                    world.setAir(blockposition.down());
+                } else {
                     IBlockData iblockdata1 = world.getType(blockposition.down());
                     BlockTallPlant.EnumTallFlowerVariants blocktallplant_enumtallflowervariants = (BlockTallPlant.EnumTallFlowerVariants) iblockdata1.get(BlockTallPlant.VARIANT);
 
                     if (blocktallplant_enumtallflowervariants != BlockTallPlant.EnumTallFlowerVariants.FERN && blocktallplant_enumtallflowervariants != BlockTallPlant.EnumTallFlowerVariants.GRASS) {
                         world.setAir(blockposition.down(), true);
-                    } else if (!world.isClientSide) {
-                        if (entityhuman.getItemInMainHand() != null && entityhuman.getItemInMainHand().getItem() == Items.SHEARS) {
-                            this.b(world, blockposition, iblockdata1, entityhuman);
-                            world.setAir(blockposition.down());
-                        } else {
-                            world.setAir(blockposition.down(), true);
-                        }
-                    } else {
+                    } else if (world.isClientSide) {
                         world.setAir(blockposition.down());
+                    } else if (entityhuman.getItemInMainHand() != null && entityhuman.getItemInMainHand().getItem() == Items.SHEARS) {
+                        this.b(world, blockposition, iblockdata1, entityhuman);
+                        world.setAir(blockposition.down());
+                    } else {
+                        world.setAir(blockposition.down(), true);
                     }
-                } else {
-                    world.setAir(blockposition.down());
                 }
             }
         } else if (world.getType(blockposition.up()).getBlock() == this) {

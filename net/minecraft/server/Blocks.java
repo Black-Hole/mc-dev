@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class Blocks {
 
-    private static final Set<Block> dg;
+    private static final Set<Block> dl;
     public static final Block AIR;
     public static final Block STONE;
     public static final BlockGrass GRASS;
@@ -73,19 +73,19 @@ public class Blocks {
     public static final Block FURNACE;
     public static final Block LIT_FURNACE;
     public static final Block STANDING_SIGN;
-    public static final Block WOODEN_DOOR;
-    public static final Block SPRUCE_DOOR;
-    public static final Block BIRCH_DOOR;
-    public static final Block JUNGLE_DOOR;
-    public static final Block ACACIA_DOOR;
-    public static final Block DARK_OAK_DOOR;
+    public static final BlockDoor WOODEN_DOOR;
+    public static final BlockDoor SPRUCE_DOOR;
+    public static final BlockDoor BIRCH_DOOR;
+    public static final BlockDoor JUNGLE_DOOR;
+    public static final BlockDoor ACACIA_DOOR;
+    public static final BlockDoor DARK_OAK_DOOR;
     public static final Block LADDER;
     public static final Block RAIL;
     public static final Block STONE_STAIRS;
     public static final Block WALL_SIGN;
     public static final Block LEVER;
     public static final Block STONE_PRESSURE_PLATE;
-    public static final Block IRON_DOOR;
+    public static final BlockDoor IRON_DOOR;
     public static final Block WOODEN_PRESSURE_PLATE;
     public static final Block REDSTONE_ORE;
     public static final Block LIT_REDSTONE_ORE;
@@ -220,13 +220,18 @@ public class Blocks {
     public static final Block dc;
     public static final Block dd;
     public static final Block FROSTED_ICE;
+    public static final Block df;
+    public static final Block dg;
+    public static final Block dh;
+    public static final Block di;
+    public static final Block dj;
     public static final Block STRUCTURE_BLOCK;
 
     @Nullable
     private static Block get(String s) {
         Block block = (Block) Block.REGISTRY.get(new MinecraftKey(s));
 
-        if (!Blocks.dg.add(block)) {
+        if (!Blocks.dl.add(block)) {
             throw new IllegalStateException("Invalid Block requested: " + s);
         } else {
             return block;
@@ -237,7 +242,7 @@ public class Blocks {
         if (!DispenserRegistry.a()) {
             throw new RuntimeException("Accessed Blocks before Bootstrap!");
         } else {
-            dg = Sets.newHashSet();
+            dl = Sets.newHashSet();
             AIR = get("air");
             STONE = get("stone");
             GRASS = (BlockGrass) get("grass");
@@ -304,19 +309,19 @@ public class Blocks {
             FURNACE = get("furnace");
             LIT_FURNACE = get("lit_furnace");
             STANDING_SIGN = get("standing_sign");
-            WOODEN_DOOR = get("wooden_door");
-            SPRUCE_DOOR = get("spruce_door");
-            BIRCH_DOOR = get("birch_door");
-            JUNGLE_DOOR = get("jungle_door");
-            ACACIA_DOOR = get("acacia_door");
-            DARK_OAK_DOOR = get("dark_oak_door");
+            WOODEN_DOOR = (BlockDoor) get("wooden_door");
+            SPRUCE_DOOR = (BlockDoor) get("spruce_door");
+            BIRCH_DOOR = (BlockDoor) get("birch_door");
+            JUNGLE_DOOR = (BlockDoor) get("jungle_door");
+            ACACIA_DOOR = (BlockDoor) get("acacia_door");
+            DARK_OAK_DOOR = (BlockDoor) get("dark_oak_door");
             LADDER = get("ladder");
             RAIL = get("rail");
             STONE_STAIRS = get("stone_stairs");
             WALL_SIGN = get("wall_sign");
             LEVER = get("lever");
             STONE_PRESSURE_PLATE = get("stone_pressure_plate");
-            IRON_DOOR = get("iron_door");
+            IRON_DOOR = (BlockDoor) get("iron_door");
             WOODEN_PRESSURE_PLATE = get("wooden_pressure_plate");
             REDSTONE_ORE = get("redstone_ore");
             LIT_REDSTONE_ORE = get("lit_redstone_ore");
@@ -451,8 +456,13 @@ public class Blocks {
             dc = get("repeating_command_block");
             dd = get("chain_command_block");
             FROSTED_ICE = get("frosted_ice");
+            df = get("magma");
+            dg = get("nether_wart_block");
+            dh = get("red_nether_brick");
+            di = get("bone_block");
+            dj = get("structure_void");
             STRUCTURE_BLOCK = get("structure_block");
-            Blocks.dg.clear();
+            Blocks.dl.clear();
         }
     }
 }

@@ -6,8 +6,8 @@ import java.util.Set;
 
 public class LootTables {
 
-    private static final Set<MinecraftKey> aq = Sets.newHashSet();
-    private static final Set<MinecraftKey> ar = Collections.unmodifiableSet(LootTables.aq);
+    private static final Set<MinecraftKey> as = Sets.newHashSet();
+    private static final Set<MinecraftKey> at = Collections.unmodifiableSet(LootTables.as);
     public static final MinecraftKey a = a("empty");
     public static final MinecraftKey b = a("chests/spawn_bonus_chest");
     public static final MinecraftKey c = a("chests/end_city_treasure");
@@ -38,51 +38,53 @@ public class LootTables {
     public static final MinecraftKey B = a("entities/rabbit");
     public static final MinecraftKey C = a("entities/chicken");
     public static final MinecraftKey D = a("entities/pig");
-    public static final MinecraftKey E = a("entities/horse");
-    public static final MinecraftKey F = a("entities/zombie_horse");
-    public static final MinecraftKey G = a("entities/skeleton_horse");
-    public static final MinecraftKey H = a("entities/cow");
-    public static final MinecraftKey I = a("entities/mushroom_cow");
-    public static final MinecraftKey J = a("entities/wolf");
-    public static final MinecraftKey K = a("entities/ocelot");
-    public static final MinecraftKey L = a("entities/sheep");
-    public static final MinecraftKey M = a("entities/sheep/white");
-    public static final MinecraftKey N = a("entities/sheep/orange");
-    public static final MinecraftKey O = a("entities/sheep/magenta");
-    public static final MinecraftKey P = a("entities/sheep/light_blue");
-    public static final MinecraftKey Q = a("entities/sheep/yellow");
-    public static final MinecraftKey R = a("entities/sheep/lime");
-    public static final MinecraftKey S = a("entities/sheep/pink");
-    public static final MinecraftKey T = a("entities/sheep/gray");
-    public static final MinecraftKey U = a("entities/sheep/silver");
-    public static final MinecraftKey V = a("entities/sheep/cyan");
-    public static final MinecraftKey W = a("entities/sheep/purple");
-    public static final MinecraftKey X = a("entities/sheep/blue");
-    public static final MinecraftKey Y = a("entities/sheep/brown");
-    public static final MinecraftKey Z = a("entities/sheep/green");
-    public static final MinecraftKey aa = a("entities/sheep/red");
-    public static final MinecraftKey ab = a("entities/sheep/black");
-    public static final MinecraftKey ac = a("entities/bat");
-    public static final MinecraftKey ad = a("entities/slime");
-    public static final MinecraftKey ae = a("entities/magma_cube");
-    public static final MinecraftKey af = a("entities/ghast");
-    public static final MinecraftKey ag = a("entities/squid");
-    public static final MinecraftKey ah = a("entities/endermite");
-    public static final MinecraftKey ai = a("entities/zombie");
-    public static final MinecraftKey aj = a("entities/zombie_pigman");
-    public static final MinecraftKey ak = a("entities/skeleton");
-    public static final MinecraftKey al = a("entities/wither_skeleton");
-    public static final MinecraftKey am = a("gameplay/fishing");
-    public static final MinecraftKey an = a("gameplay/fishing/junk");
-    public static final MinecraftKey ao = a("gameplay/fishing/treasure");
-    public static final MinecraftKey ap = a("gameplay/fishing/fish");
+    public static final MinecraftKey E = a("entities/polar_bear");
+    public static final MinecraftKey F = a("entities/horse");
+    public static final MinecraftKey G = a("entities/zombie_horse");
+    public static final MinecraftKey H = a("entities/skeleton_horse");
+    public static final MinecraftKey I = a("entities/cow");
+    public static final MinecraftKey J = a("entities/mushroom_cow");
+    public static final MinecraftKey K = a("entities/wolf");
+    public static final MinecraftKey L = a("entities/ocelot");
+    public static final MinecraftKey M = a("entities/sheep");
+    public static final MinecraftKey N = a("entities/sheep/white");
+    public static final MinecraftKey O = a("entities/sheep/orange");
+    public static final MinecraftKey P = a("entities/sheep/magenta");
+    public static final MinecraftKey Q = a("entities/sheep/light_blue");
+    public static final MinecraftKey R = a("entities/sheep/yellow");
+    public static final MinecraftKey S = a("entities/sheep/lime");
+    public static final MinecraftKey T = a("entities/sheep/pink");
+    public static final MinecraftKey U = a("entities/sheep/gray");
+    public static final MinecraftKey V = a("entities/sheep/silver");
+    public static final MinecraftKey W = a("entities/sheep/cyan");
+    public static final MinecraftKey X = a("entities/sheep/purple");
+    public static final MinecraftKey Y = a("entities/sheep/blue");
+    public static final MinecraftKey Z = a("entities/sheep/brown");
+    public static final MinecraftKey aa = a("entities/sheep/green");
+    public static final MinecraftKey ab = a("entities/sheep/red");
+    public static final MinecraftKey ac = a("entities/sheep/black");
+    public static final MinecraftKey ad = a("entities/bat");
+    public static final MinecraftKey ae = a("entities/slime");
+    public static final MinecraftKey af = a("entities/magma_cube");
+    public static final MinecraftKey ag = a("entities/ghast");
+    public static final MinecraftKey ah = a("entities/squid");
+    public static final MinecraftKey ai = a("entities/endermite");
+    public static final MinecraftKey aj = a("entities/zombie");
+    public static final MinecraftKey ak = a("entities/zombie_pigman");
+    public static final MinecraftKey al = a("entities/skeleton");
+    public static final MinecraftKey am = a("entities/wither_skeleton");
+    public static final MinecraftKey an = a("entities/stray");
+    public static final MinecraftKey ao = a("gameplay/fishing");
+    public static final MinecraftKey ap = a("gameplay/fishing/junk");
+    public static final MinecraftKey aq = a("gameplay/fishing/treasure");
+    public static final MinecraftKey ar = a("gameplay/fishing/fish");
 
     private static MinecraftKey a(String s) {
         return a(new MinecraftKey("minecraft", s));
     }
 
     public static MinecraftKey a(MinecraftKey minecraftkey) {
-        if (LootTables.aq.add(minecraftkey)) {
+        if (LootTables.as.add(minecraftkey)) {
             return minecraftkey;
         } else {
             throw new IllegalArgumentException(minecraftkey + " is already a registered built-in loot table");
@@ -90,6 +92,6 @@ public class LootTables {
     }
 
     public static Set<MinecraftKey> a() {
-        return LootTables.ar;
+        return LootTables.at;
     }
 }

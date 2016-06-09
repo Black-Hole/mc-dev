@@ -14,11 +14,11 @@ public abstract class BlockLogAbstract extends BlockRotatable {
     }
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        byte b0 = 4;
-        int i = b0 + 1;
+        boolean flag = true;
+        boolean flag1 = true;
 
-        if (world.areChunksLoadedBetween(blockposition.a(-i, -i, -i), blockposition.a(i, i, i))) {
-            Iterator iterator = BlockPosition.a(blockposition.a(-b0, -b0, -b0), blockposition.a(b0, b0, b0)).iterator();
+        if (world.areChunksLoadedBetween(blockposition.a(-5, -5, -5), blockposition.a(5, 5, 5))) {
+            Iterator iterator = BlockPosition.a(blockposition.a(-4, -4, -4), blockposition.a(4, 4, 4)).iterator();
 
             while (iterator.hasNext()) {
                 BlockPosition blockposition1 = (BlockPosition) iterator.next();
