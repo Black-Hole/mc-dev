@@ -206,7 +206,7 @@ public class BlockFlowerPot extends BlockTileEntity {
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         BlockFlowerPot.EnumFlowerPotContents blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.EMPTY;
-        TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
+        TileEntity tileentity = iblockaccess instanceof ChunkCache ? ((ChunkCache) iblockaccess).a(blockposition, Chunk.EnumTileEntityState.CHECK) : iblockaccess.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityFlowerPot) {
             TileEntityFlowerPot tileentityflowerpot = (TileEntityFlowerPot) tileentity;

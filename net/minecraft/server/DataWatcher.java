@@ -13,33 +13,48 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DataWatcher {
 
-    private static final Map<Class<? extends Entity>, Integer> a = Maps.newHashMap();
-    private final Entity b;
-    private final Map<Integer, DataWatcher.Item<?>> c = Maps.newHashMap();
-    private final ReadWriteLock d = new ReentrantReadWriteLock();
-    private boolean e = true;
-    private boolean f;
+    private static final Logger a = LogManager.getLogger();
+    private static final Map<Class<? extends Entity>, Integer> b = Maps.newHashMap();
+    private final Entity c;
+    private final Map<Integer, DataWatcher.Item<?>> d = Maps.newHashMap();
+    private final ReadWriteLock e = new ReentrantReadWriteLock();
+    private boolean f = true;
+    private boolean g;
 
     public DataWatcher(Entity entity) {
-        this.b = entity;
+        this.c = entity;
     }
 
     public static <T> DataWatcherObject<T> a(Class<? extends Entity> oclass, DataWatcherSerializer<T> datawatcherserializer) {
+        if (DataWatcher.a.isDebugEnabled()) {
+            try {
+                Class oclass1 = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName());
+
+                if (!oclass1.equals(oclass)) {
+                    DataWatcher.a.debug("defineId called for: {} from {}", new Object[] { oclass, oclass1, new RuntimeException()});
+                }
+            } catch (ClassNotFoundException classnotfoundexception) {
+                ;
+            }
+        }
+
         int i;
 
-        if (DataWatcher.a.containsKey(oclass)) {
-            i = ((Integer) DataWatcher.a.get(oclass)).intValue() + 1;
+        if (DataWatcher.b.containsKey(oclass)) {
+            i = ((Integer) DataWatcher.b.get(oclass)).intValue() + 1;
         } else {
             int j = 0;
-            Class oclass1 = oclass;
+            Class oclass2 = oclass;
 
-            while (oclass1 != Entity.class) {
-                oclass1 = oclass1.getSuperclass();
-                if (DataWatcher.a.containsKey(oclass1)) {
-                    j = ((Integer) DataWatcher.a.get(oclass1)).intValue() + 1;
+            while (oclass2 != Entity.class) {
+                oclass2 = oclass2.getSuperclass();
+                if (DataWatcher.b.containsKey(oclass2)) {
+                    j = ((Integer) DataWatcher.b.get(oclass2)).intValue() + 1;
                     break;
                 }
             }
@@ -50,7 +65,7 @@ public class DataWatcher {
         if (i > 254) {
             throw new IllegalArgumentException("Data value id is too big with " + i + "! (Max is " + 254 + ")");
         } else {
-            DataWatcher.a.put(oclass, Integer.valueOf(i));
+            DataWatcher.b.put(oclass, Integer.valueOf(i));
             return datawatcherserializer.a(i);
         }
     }
@@ -60,7 +75,7 @@ public class DataWatcher {
 
         if (i > 254) {
             throw new IllegalArgumentException("Data value id is too big with " + i + "! (Max is " + 254 + ")");
-        } else if (this.c.containsKey(Integer.valueOf(i))) {
+        } else if (this.d.containsKey(Integer.valueOf(i))) {
             throw new IllegalArgumentException("Duplicate id value for " + i + "!");
         } else if (DataWatcherRegistry.b(datawatcherobject.b()) < 0) {
             throw new IllegalArgumentException("Unregistered serializer " + datawatcherobject.b() + " for " + i + "!");
@@ -72,19 +87,19 @@ public class DataWatcher {
     private <T> void registerObject(DataWatcherObject<T> datawatcherobject, T t0) {
         DataWatcher.Item datawatcher_item = new DataWatcher.Item(datawatcherobject, t0);
 
-        this.d.writeLock().lock();
-        this.c.put(Integer.valueOf(datawatcherobject.a()), datawatcher_item);
-        this.e = false;
-        this.d.writeLock().unlock();
+        this.e.writeLock().lock();
+        this.d.put(Integer.valueOf(datawatcherobject.a()), datawatcher_item);
+        this.f = false;
+        this.e.writeLock().unlock();
     }
 
     private <T> DataWatcher.Item<T> c(DataWatcherObject<T> datawatcherobject) {
-        this.d.readLock().lock();
+        this.e.readLock().lock();
 
         DataWatcher.Item datawatcher_item;
 
         try {
-            datawatcher_item = (DataWatcher.Item) this.c.get(Integer.valueOf(datawatcherobject.a()));
+            datawatcher_item = (DataWatcher.Item) this.d.get(Integer.valueOf(datawatcherobject.a()));
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.a(throwable, "Getting synched entity data");
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Synched entity data");
@@ -93,7 +108,7 @@ public class DataWatcher {
             throw new ReportedException(crashreport);
         }
 
-        this.d.readLock().unlock();
+        this.e.readLock().unlock();
         return datawatcher_item;
     }
 
@@ -106,20 +121,20 @@ public class DataWatcher {
 
         if (ObjectUtils.notEqual(t0, datawatcher_item.b())) {
             datawatcher_item.a(t0);
-            this.b.a(datawatcherobject);
+            this.c.a(datawatcherobject);
             datawatcher_item.a(true);
-            this.f = true;
+            this.g = true;
         }
 
     }
 
     public <T> void markDirty(DataWatcherObject<T> datawatcherobject) {
         this.c(datawatcherobject).c = true;
-        this.f = true;
+        this.g = true;
     }
 
     public boolean a() {
-        return this.f;
+        return this.g;
     }
 
     public static void a(List<DataWatcher.Item<?>> list, PacketDataSerializer packetdataserializer) throws IOException {
@@ -140,9 +155,9 @@ public class DataWatcher {
     public List<DataWatcher.Item<?>> b() {
         ArrayList arraylist = null;
 
-        if (this.f) {
-            this.d.readLock().lock();
-            Iterator iterator = this.c.values().iterator();
+        if (this.g) {
+            this.e.readLock().lock();
+            Iterator iterator = this.d.values().iterator();
 
             while (iterator.hasNext()) {
                 DataWatcher.Item datawatcher_item = (DataWatcher.Item) iterator.next();
@@ -157,16 +172,16 @@ public class DataWatcher {
                 }
             }
 
-            this.d.readLock().unlock();
+            this.e.readLock().unlock();
         }
 
-        this.f = false;
+        this.g = false;
         return arraylist;
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.d.readLock().lock();
-        Iterator iterator = this.c.values().iterator();
+        this.e.readLock().lock();
+        Iterator iterator = this.d.values().iterator();
 
         while (iterator.hasNext()) {
             DataWatcher.Item datawatcher_item = (DataWatcher.Item) iterator.next();
@@ -174,7 +189,7 @@ public class DataWatcher {
             a(packetdataserializer, datawatcher_item);
         }
 
-        this.d.readLock().unlock();
+        this.e.readLock().unlock();
         packetdataserializer.writeByte(255);
     }
 
@@ -182,18 +197,18 @@ public class DataWatcher {
     public List<DataWatcher.Item<?>> c() {
         ArrayList arraylist = null;
 
-        this.d.readLock().lock();
+        this.e.readLock().lock();
 
         DataWatcher.Item datawatcher_item;
 
-        for (Iterator iterator = this.c.values().iterator(); iterator.hasNext(); arraylist.add(datawatcher_item)) {
+        for (Iterator iterator = this.d.values().iterator(); iterator.hasNext(); arraylist.add(datawatcher_item)) {
             datawatcher_item = (DataWatcher.Item) iterator.next();
             if (arraylist == null) {
                 arraylist = Lists.newArrayList();
             }
         }
 
-        this.d.readLock().unlock();
+        this.e.readLock().unlock();
         return arraylist;
     }
 
@@ -235,11 +250,11 @@ public class DataWatcher {
     }
 
     public boolean d() {
-        return this.e;
+        return this.f;
     }
 
     public void e() {
-        this.f = false;
+        this.g = false;
     }
 
     public static class Item<T> {

@@ -20,11 +20,6 @@ public class BlockSoil extends Block {
         return BlockSoil.b;
     }
 
-    @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        return BlockSoil.j;
-    }
-
     public boolean b(IBlockData iblockdata) {
         return false;
     }

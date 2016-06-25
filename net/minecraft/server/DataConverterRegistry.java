@@ -24,7 +24,7 @@ public class DataConverterRegistry {
     }
 
     public static DataConverterManager a() {
-        DataConverterManager dataconvertermanager = new DataConverterManager(510);
+        DataConverterManager dataconvertermanager = new DataConverterManager(512);
 
         WorldData.a(dataconvertermanager);
         EntityHuman.a(dataconvertermanager);

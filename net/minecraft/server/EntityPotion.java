@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class EntityPotion extends EntityProjectile {
 
-    private static final DataWatcherObject<Optional<ItemStack>> d = DataWatcher.a(EntityItem.class, DataWatcherRegistry.f);
+    private static final DataWatcherObject<Optional<ItemStack>> d = DataWatcher.a(EntityPotion.class, DataWatcherRegistry.f);
     private static final Logger e = LogManager.getLogger();
 
     public EntityPotion(World world) {

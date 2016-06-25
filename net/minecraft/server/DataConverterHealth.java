@@ -25,7 +25,7 @@ public class DataConverterHealth implements IDataConverter {
                     return nbttagcompound;
                 }
 
-                f = nbttagcompound.getFloat("Heath");
+                f = nbttagcompound.getFloat("Health");
             }
 
             nbttagcompound.setFloat("Health", f);

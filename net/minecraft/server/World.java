@@ -1213,6 +1213,13 @@ public abstract class World implements IBlockAccess {
             this.tileEntityListTick.add(tileentity);
         }
 
+        if (this.isClientSide) {
+            BlockPosition blockposition = tileentity.getPosition();
+            IBlockData iblockdata = this.getType(blockposition);
+
+            this.notify(blockposition, iblockdata, iblockdata, 2);
+        }
+
         return flag;
     }
 
