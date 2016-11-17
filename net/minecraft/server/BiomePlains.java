@@ -10,6 +10,7 @@ public class BiomePlains extends BiomeBase {
         super(biomebase_a);
         this.y = flag;
         this.v.add(new BiomeBase.BiomeMeta(EntityHorse.class, 5, 2, 6));
+        this.v.add(new BiomeBase.BiomeMeta(EntityHorseDonkey.class, 1, 1, 3));
         this.t.z = 0;
         this.t.A = 0.05F;
         this.t.B = 4;

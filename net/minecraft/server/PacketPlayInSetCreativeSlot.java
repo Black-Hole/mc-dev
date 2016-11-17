@@ -7,7 +7,9 @@ public class PacketPlayInSetCreativeSlot implements Packet<PacketListenerPlayIn>
     private int slot;
     private ItemStack b;
 
-    public PacketPlayInSetCreativeSlot() {}
+    public PacketPlayInSetCreativeSlot() {
+        this.b = ItemStack.a;
+    }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
         packetlistenerplayin.a(this);

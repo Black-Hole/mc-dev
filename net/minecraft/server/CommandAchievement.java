@@ -93,7 +93,7 @@ public class CommandAchievement extends CommandAbstract {
                                         return entityplayer.getStatisticManager().hasAchievement(achievement) && achievement != statistic;
                                     }
 
-                                    public boolean apply(Object object) {
+                                    public boolean apply(@Nullable Object object) {
                                         return this.a((Achievement) object);
                                     }
                                 }));

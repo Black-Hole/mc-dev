@@ -13,7 +13,7 @@ public class EntityEnderPearl extends EntityProjectile {
         this.d = entityliving;
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
+    public static void b(DataConverterManager dataconvertermanager) {
         EntityProjectile.a(dataconvertermanager, "ThrownEnderpearl");
     }
 
@@ -81,13 +81,13 @@ public class EntityEnderPearl extends EntityProjectile {
 
     }
 
-    public void m() {
+    public void A_() {
         EntityLiving entityliving = this.getShooter();
 
         if (entityliving != null && entityliving instanceof EntityHuman && !entityliving.isAlive()) {
             this.die();
         } else {
-            super.m();
+            super.A_();
         }
 
     }

@@ -88,10 +88,6 @@ public class CommandReplaceItem extends CommandAbstract {
                 }
             }
 
-            if (itemstack.getItem() == null) {
-                itemstack = null;
-            }
-
             if (flag) {
                 icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, 0);
                 BlockPosition blockposition = a(icommandlistener, astring, 1, false);
@@ -116,7 +112,7 @@ public class CommandReplaceItem extends CommandAbstract {
                 }
 
                 if (!entity.c(j, itemstack)) {
-                    throw new CommandException("commands.replaceitem.failed", new Object[] { s, Integer.valueOf(k), itemstack == null ? "Air" : itemstack.B()});
+                    throw new CommandException("commands.replaceitem.failed", new Object[] { s, Integer.valueOf(k), itemstack.isEmpty() ? "Air" : itemstack.C()});
                 }
 
                 if (entity instanceof EntityHuman) {
@@ -125,7 +121,7 @@ public class CommandReplaceItem extends CommandAbstract {
             }
 
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, k);
-            a(icommandlistener, (ICommand) this, "commands.replaceitem.success", new Object[] { s, Integer.valueOf(k), itemstack == null ? "Air" : itemstack.B()});
+            a(icommandlistener, (ICommand) this, "commands.replaceitem.success", new Object[] { s, Integer.valueOf(k), itemstack.isEmpty() ? "Air" : itemstack.C()});
         }
     }
 

@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class DemoPlayerInteractManager extends PlayerInteractManager {
 
     private boolean c;
@@ -82,7 +80,7 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
         }
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, @Nullable ItemStack itemstack, EnumHand enumhand, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
         if (this.d) {
             this.f();
             return EnumInteractionResult.PASS;

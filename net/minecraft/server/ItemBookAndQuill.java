@@ -6,7 +6,9 @@ public class ItemBookAndQuill extends Item {
         this.d(1);
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         entityhuman.a(itemstack, enumhand);
         entityhuman.b(StatisticList.b((Item) this));
         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
@@ -22,10 +24,6 @@ public class ItemBookAndQuill extends Item {
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
                 String s = nbttaglist.getString(i);
-
-                if (s == null) {
-                    return false;
-                }
 
                 if (s.length() > 32767) {
                     return false;

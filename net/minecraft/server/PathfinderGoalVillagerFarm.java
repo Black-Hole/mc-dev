@@ -19,8 +19,8 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
             }
 
             this.f = -1;
-            this.d = this.c.dn();
-            this.e = this.c.dm();
+            this.d = this.c.dq();
+            this.e = this.c.dp();
         }
 
         return super.a();
@@ -28,14 +28,6 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
 
     public boolean b() {
         return this.f >= 0 && super.b();
-    }
-
-    public void c() {
-        super.c();
-    }
-
-    public void d() {
-        super.d();
     }
 
     public void e() {
@@ -47,16 +39,16 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
             IBlockData iblockdata = world.getType(blockposition);
             Block block = iblockdata.getBlock();
 
-            if (this.f == 0 && block instanceof BlockCrops && ((BlockCrops) block).y(iblockdata)) {
+            if (this.f == 0 && block instanceof BlockCrops && ((BlockCrops) block).A(iblockdata)) {
                 world.setAir(blockposition, true);
             } else if (this.f == 1 && iblockdata.getMaterial() == Material.AIR) {
-                InventorySubcontainer inventorysubcontainer = this.c.dj();
+                InventorySubcontainer inventorysubcontainer = this.c.dm();
 
                 for (int i = 0; i < inventorysubcontainer.getSize(); ++i) {
                     ItemStack itemstack = inventorysubcontainer.getItem(i);
                     boolean flag = false;
 
-                    if (itemstack != null) {
+                    if (!itemstack.isEmpty()) {
                         if (itemstack.getItem() == Items.WHEAT_SEEDS) {
                             world.setTypeAndData(blockposition, Blocks.WHEAT.getBlockData(), 3);
                             flag = true;
@@ -73,9 +65,9 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
                     }
 
                     if (flag) {
-                        --itemstack.count;
-                        if (itemstack.count <= 0) {
-                            inventorysubcontainer.setItem(i, (ItemStack) null);
+                        itemstack.subtract(1);
+                        if (itemstack.isEmpty()) {
+                            inventorysubcontainer.setItem(i, ItemStack.a);
                         }
                         break;
                     }
@@ -96,7 +88,7 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
             IBlockData iblockdata = world.getType(blockposition);
 
             block = iblockdata.getBlock();
-            if (block instanceof BlockCrops && ((BlockCrops) block).y(iblockdata) && this.e && (this.f == 0 || this.f < 0)) {
+            if (block instanceof BlockCrops && ((BlockCrops) block).A(iblockdata) && this.e && (this.f == 0 || this.f < 0)) {
                 this.f = 0;
                 return true;
             }

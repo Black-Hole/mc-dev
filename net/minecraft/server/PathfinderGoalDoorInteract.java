@@ -29,7 +29,7 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
                     PathPoint pathpoint = pathentity.a(i);
 
                     this.b = new BlockPosition(pathpoint.a, pathpoint.b + 1, pathpoint.c);
-                    if (this.a.e((double) this.b.getX(), this.a.locY, (double) this.b.getZ()) <= 2.25D) {
+                    if (this.a.d((double) this.b.getX(), this.a.locY, (double) this.b.getZ()) <= 2.25D) {
                         this.c = this.a(this.b);
                         if (this.c != null) {
                             return true;

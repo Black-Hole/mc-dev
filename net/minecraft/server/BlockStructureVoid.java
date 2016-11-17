@@ -15,11 +15,11 @@ public class BlockStructureVoid extends Block {
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockStructureVoid.k;
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockStructureVoid.a;
     }
 
@@ -32,4 +32,8 @@ public class BlockStructureVoid extends Block {
     }
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {}
+
+    public EnumPistonReaction h(IBlockData iblockdata) {
+        return EnumPistonReaction.DESTROY;
+    }
 }

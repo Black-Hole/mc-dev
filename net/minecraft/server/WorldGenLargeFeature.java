@@ -81,6 +81,11 @@ public class WorldGenLargeFeature extends StructureGenerator {
         return false;
     }
 
+    public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag) {
+        this.g = world;
+        return a(world, this, blockposition, this.d, 8, 14357617, false, 100, flag);
+    }
+
     protected StructureStart b(int i, int j) {
         return new WorldGenLargeFeature.WorldGenLargeFeatureStart(this.g, this.f, i, j);
     }

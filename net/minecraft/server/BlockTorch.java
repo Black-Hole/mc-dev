@@ -11,7 +11,7 @@ public class BlockTorch extends Block {
             return enumdirection != EnumDirection.DOWN;
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((EnumDirection) object);
         }
     });
@@ -23,23 +23,23 @@ public class BlockTorch extends Block {
 
     protected BlockTorch() {
         super(Material.ORIENTABLE);
-        this.w(this.blockStateList.getBlockData().set(BlockTorch.FACING, EnumDirection.UP));
+        this.y(this.blockStateList.getBlockData().set(BlockTorch.FACING, EnumDirection.UP));
         this.a(true);
         this.a(CreativeModeTab.c);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        switch (BlockTorch.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockTorch.FACING)).ordinal()]) {
-        case 1:
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        switch ((EnumDirection) iblockdata.get(BlockTorch.FACING)) {
+        case EAST:
             return BlockTorch.f;
 
-        case 2:
+        case WEST:
             return BlockTorch.e;
 
-        case 3:
+        case SOUTH:
             return BlockTorch.d;
 
-        case 4:
+        case NORTH:
             return BlockTorch.c;
 
         default:
@@ -48,7 +48,7 @@ public class BlockTorch extends Block {
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockTorch.k;
     }
 
@@ -61,7 +61,7 @@ public class BlockTorch extends Block {
     }
 
     private boolean b(World world, BlockPosition blockposition) {
-        if (world.getType(blockposition).q()) {
+        if (world.getType(blockposition).r()) {
             return true;
         } else {
             Block block = world.getType(blockposition).getBlock();
@@ -117,7 +117,7 @@ public class BlockTorch extends Block {
         this.f(world, blockposition, iblockdata);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         this.e(world, blockposition, iblockdata);
     }
 
@@ -191,25 +191,25 @@ public class BlockTorch extends Block {
         byte b0 = 0;
         int i;
 
-        switch (BlockTorch.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockTorch.FACING)).ordinal()]) {
-        case 1:
+        switch ((EnumDirection) iblockdata.get(BlockTorch.FACING)) {
+        case EAST:
             i = b0 | 1;
             break;
 
-        case 2:
+        case WEST:
             i = b0 | 2;
             break;
 
-        case 3:
+        case SOUTH:
             i = b0 | 3;
             break;
 
-        case 4:
+        case NORTH:
             i = b0 | 4;
             break;
 
-        case 5:
-        case 6:
+        case DOWN:
+        case UP:
         default:
             i = b0 | 5;
         }
@@ -227,49 +227,5 @@ public class BlockTorch extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockTorch.FACING});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                BlockTorch.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockTorch.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockTorch.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockTorch.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockTorch.SyntheticClass_1.a[EnumDirection.DOWN.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                BlockTorch.SyntheticClass_1.a[EnumDirection.UP.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-        }
     }
 }

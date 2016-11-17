@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,7 +13,7 @@ public class BlockAnvil extends BlockFalling {
 
     protected BlockAnvil() {
         super(Material.HEAVY);
-        this.w(this.blockStateList.getBlockData().set(BlockAnvil.FACING, EnumDirection.NORTH).set(BlockAnvil.DAMAGE, Integer.valueOf(0)));
+        this.y(this.blockStateList.getBlockData().set(BlockAnvil.FACING, EnumDirection.NORTH).set(BlockAnvil.DAMAGE, Integer.valueOf(0)));
         this.d(0);
         this.a(CreativeModeTab.c);
     }
@@ -36,7 +35,7 @@ public class BlockAnvil extends BlockFalling {
             if (!world.isClientSide) {
                 BlockAnvil.e.warn(String.format("Invalid damage property for anvil at %s. Found %d, must be in [0, 1, 2]", new Object[] { blockposition, Integer.valueOf(i >> 2)}));
                 if (entityliving instanceof EntityHuman) {
-                    ((EntityHuman) entityliving).sendMessage(new ChatMessage("Invalid damage property. Please pick in [0, 1, 2]", new Object[0]));
+                    entityliving.sendMessage(new ChatMessage("Invalid damage property. Please pick in [0, 1, 2]", new Object[0]));
                 }
             }
 
@@ -44,7 +43,7 @@ public class BlockAnvil extends BlockFalling {
         }
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (!world.isClientSide) {
             entityhuman.openTileEntity(new BlockAnvil.TileEntityContainerAnvil(world, blockposition));
         }
@@ -56,7 +55,7 @@ public class BlockAnvil extends BlockFalling {
         return ((Integer) iblockdata.get(BlockAnvil.DAMAGE)).intValue();
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockAnvil.FACING);
 
         return enumdirection.k() == EnumDirection.EnumAxis.X ? BlockAnvil.c : BlockAnvil.d;
@@ -68,6 +67,10 @@ public class BlockAnvil extends BlockFalling {
 
     public void a_(World world, BlockPosition blockposition) {
         world.triggerEffect(1031, blockposition, 0);
+    }
+
+    public void b(World world, BlockPosition blockposition) {
+        world.triggerEffect(1029, blockposition, 0);
     }
 
     public IBlockData fromLegacyData(int i) {

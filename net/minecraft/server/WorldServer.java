@@ -48,7 +48,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.portalTravelAgent = new PortalTravelAgent(this);
         this.H();
         this.I();
-        this.getWorldBorder().a(minecraftserver.aD());
+        this.getWorldBorder().a(minecraftserver.aE());
     }
 
     public World b() {
@@ -186,7 +186,10 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             }
         }
 
-        this.c();
+        if (this.getGameRules().getBoolean("doWeatherCycle")) {
+            this.c();
+        }
+
     }
 
     private void c() {
@@ -272,14 +275,13 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                     if (this.isRainingAt(blockposition)) {
                         DifficultyDamageScaler difficultydamagescaler = this.D(blockposition);
 
-                        if (this.random.nextDouble() < (double) difficultydamagescaler.b() * 0.05D) {
-                            EntityHorse entityhorse = new EntityHorse(this);
+                        if (this.getGameRules().getBoolean("doMobSpawning") && this.random.nextDouble() < (double) difficultydamagescaler.b() * 0.01D) {
+                            EntityHorseSkeleton entityhorseskeleton = new EntityHorseSkeleton(this);
 
-                            entityhorse.setType(EnumHorseType.SKELETON);
-                            entityhorse.y(true);
-                            entityhorse.setAgeRaw(0);
-                            entityhorse.setPosition((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
-                            this.addEntity(entityhorse);
+                            entityhorseskeleton.p(true);
+                            entityhorseskeleton.setAgeRaw(0);
+                            entityhorseskeleton.setPosition((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
+                            this.addEntity(entityhorseskeleton);
                             this.strikeLightning(new EntityLightning(this, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), true));
                         } else {
                             this.strikeLightning(new EntityLightning(this, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), false));
@@ -349,7 +351,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                 return entityliving != null && entityliving.isAlive() && WorldServer.this.h(entityliving.getChunkCoordinates());
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((EntityLiving) object);
             }
         });
@@ -390,7 +392,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         Material material = block.getBlockData().getMaterial();
 
         if (this.d && material != Material.AIR) {
-            if (block.s()) {
+            if (block.r()) {
                 if (this.areChunksLoadedBetween(blockposition.a(-8, -8, -8), blockposition.a(8, 8, 8))) {
                     IBlockData iblockdata = this.getType(blockposition);
 
@@ -452,7 +454,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.m();
         }
 
-        this.worldProvider.r();
+        this.worldProvider.s();
         super.tickEntities();
     }
 
@@ -488,10 +490,10 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.methodProfiler.b();
             this.methodProfiler.a("remove");
             if (entity.dead) {
-                int j = entity.ac;
-                int k = entity.ae;
+                int j = entity.ab;
+                int k = entity.ad;
 
-                if (entity.ab && this.isChunkLoaded(j, k, true)) {
+                if (entity.aa && this.isChunkLoaded(j, k, true)) {
                     this.getChunkAt(j, k).b(entity);
                 }
 
@@ -747,6 +749,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     }
 
+    @Nullable
     public BlockPosition getDimensionSpawn() {
         return this.worldProvider.h();
     }
@@ -834,7 +837,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     private boolean i(Entity entity) {
         if (entity.dead) {
-            WorldServer.a.warn("Tried to add entity {} but it was marked as removed already", new Object[] { EntityTypes.b(entity)});
+            WorldServer.a.warn("Tried to add entity {} but it was marked as removed already", new Object[] { EntityTypes.a(entity)});
             return false;
         } else {
             UUID uuid = entity.getUniqueID();
@@ -846,7 +849,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                     this.f.remove(entity1);
                 } else {
                     if (!(entity instanceof EntityHuman)) {
-                        WorldServer.a.warn("Keeping entity {} that already exists with UUID {}", new Object[] { EntityTypes.b(entity1), uuid.toString()});
+                        WorldServer.a.warn("Keeping entity {} that already exists with UUID {}", new Object[] { EntityTypes.a(entity1), uuid.toString()});
                         return false;
                     }
 
@@ -929,7 +932,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         while (iterator.hasNext()) {
             EntityHuman entityhuman = (EntityHuman) iterator.next();
 
-            if (entityhuman.e(d0, d1, d2) < 4096.0D) {
+            if (entityhuman.d(d0, d1, d2) < 4096.0D) {
                 ((EntityPlayer) entityhuman).playerConnection.sendPacket(new PacketPlayOutExplosion(d0, d1, d2, f, explosion.getBlocks(), (Vec3D) explosion.b().get(entityhuman)));
             }
         }
@@ -1072,6 +1075,11 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     public boolean isMainThread() {
         return this.server.isMainThread();
+    }
+
+    @Nullable
+    public BlockPosition a(String s, BlockPosition blockposition, boolean flag) {
+        return this.getChunkProviderServer().a(this, s, blockposition, flag);
     }
 
     public IChunkProvider getChunkProvider() {

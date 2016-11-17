@@ -65,7 +65,7 @@ public class NBTTagLong extends NBTNumber {
         return (byte) ((int) (this.data & 255L));
     }
 
-    public double h() {
+    public double asDouble() {
         return (double) this.data;
     }
 

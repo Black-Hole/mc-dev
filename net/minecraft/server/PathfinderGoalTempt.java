@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.Sets;
 import java.util.Set;
-import javax.annotation.Nullable;
 
 public class PathfinderGoalTempt extends PathfinderGoal {
 
@@ -44,14 +43,14 @@ public class PathfinderGoalTempt extends PathfinderGoal {
         }
     }
 
-    protected boolean a(@Nullable ItemStack itemstack) {
-        return itemstack == null ? false : this.k.contains(itemstack.getItem());
+    protected boolean a(ItemStack itemstack) {
+        return this.k.contains(itemstack.getItem());
     }
 
     public boolean b() {
         if (this.l) {
             if (this.a.h(this.h) < 36.0D) {
-                if (this.h.e(this.c, this.d, this.e) > 0.010000000000000002D) {
+                if (this.h.d(this.c, this.d, this.e) > 0.010000000000000002D) {
                     return false;
                 }
 
@@ -86,7 +85,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
     }
 
     public void e() {
-        this.a.getControllerLook().a(this.h, (float) (this.a.cJ() + 20), (float) this.a.N());
+        this.a.getControllerLook().a(this.h, (float) (this.a.cL() + 20), (float) this.a.N());
         if (this.a.h(this.h) < 6.25D) {
             this.a.getNavigation().o();
         } else {

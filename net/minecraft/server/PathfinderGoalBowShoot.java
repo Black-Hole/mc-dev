@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class PathfinderGoalBowShoot extends PathfinderGoal {
 
-    private final EntitySkeleton a;
+    private final EntitySkeletonAbstract a;
     private final double b;
     private int c;
     private final float d;
@@ -12,8 +12,8 @@ public class PathfinderGoalBowShoot extends PathfinderGoal {
     private boolean h;
     private int i = -1;
 
-    public PathfinderGoalBowShoot(EntitySkeleton entityskeleton, double d0, int i, float f) {
-        this.a = entityskeleton;
+    public PathfinderGoalBowShoot(EntitySkeletonAbstract entityskeletonabstract, double d0, int i, float f) {
+        this.a = entityskeletonabstract;
         this.b = d0;
         this.c = i;
         this.d = f * f;
@@ -29,7 +29,7 @@ public class PathfinderGoalBowShoot extends PathfinderGoal {
     }
 
     protected boolean f() {
-        return this.a.getItemInMainHand() != null && this.a.getItemInMainHand().getItem() == Items.BOW;
+        return !this.a.getItemInMainHand().isEmpty() && this.a.getItemInMainHand().getItem() == Items.BOW;
     }
 
     public boolean b() {
@@ -46,14 +46,14 @@ public class PathfinderGoalBowShoot extends PathfinderGoal {
         this.a.a(false);
         this.f = 0;
         this.e = -1;
-        this.a.cE();
+        this.a.cF();
     }
 
     public void e() {
         EntityLiving entityliving = this.a.getGoalTarget();
 
         if (entityliving != null) {
-            double d0 = this.a.e(entityliving.locX, entityliving.getBoundingBox().b, entityliving.locZ);
+            double d0 = this.a.d(entityliving.locX, entityliving.getBoundingBox().b, entityliving.locZ);
             boolean flag = this.a.getEntitySenses().a(entityliving);
             boolean flag1 = this.f > 0;
 
@@ -100,14 +100,14 @@ public class PathfinderGoalBowShoot extends PathfinderGoal {
                 this.a.getControllerLook().a(entityliving, 30.0F, 30.0F);
             }
 
-            if (this.a.cx()) {
+            if (this.a.isHandRaised()) {
                 if (!flag && this.f < -60) {
-                    this.a.cE();
+                    this.a.cF();
                 } else if (flag) {
-                    int i = this.a.cC();
+                    int i = this.a.cD();
 
                     if (i >= 20) {
-                        this.a.cE();
+                        this.a.cF();
                         this.a.a(entityliving, ItemBow.b(i));
                         this.e = this.c;
                     }

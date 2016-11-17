@@ -23,32 +23,6 @@ public class WorldGenMonumentPieces {
         WorldGenFactory.a(WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT.class, "OMSimpleT");
     }
 
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                WorldGenMonumentPieces.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                WorldGenMonumentPieces.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                WorldGenMonumentPieces.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-        }
-    }
-
     static class WorldGenMonumentPieceSelector4 implements WorldGenMonumentPieces.IWorldGenMonumentPieceSelector {
 
         private WorldGenMonumentPieceSelector4() {}
@@ -71,7 +45,7 @@ public class WorldGenMonumentPieces {
             return new WorldGenMonumentPieces.WorldGenMonumentPiece6(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
         }
 
-        WorldGenMonumentPieceSelector4(WorldGenMonumentPieces.SyntheticClass_1 worldgenmonumentpieces_syntheticclass_1) {
+        WorldGenMonumentPieceSelector4(Object object) {
             this();
         }
     }
@@ -98,7 +72,7 @@ public class WorldGenMonumentPieces {
             return new WorldGenMonumentPieces.WorldGenMonumentPiece4(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
         }
 
-        WorldGenMonumentPieceSelector6(WorldGenMonumentPieces.SyntheticClass_1 worldgenmonumentpieces_syntheticclass_1) {
+        WorldGenMonumentPieceSelector6(Object object) {
             this();
         }
     }
@@ -123,7 +97,7 @@ public class WorldGenMonumentPieces {
             return new WorldGenMonumentPieces.WorldGenMonumentPiece7(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker1, random);
         }
 
-        WorldGenMonumentPieceSelector3(WorldGenMonumentPieces.SyntheticClass_1 worldgenmonumentpieces_syntheticclass_1) {
+        WorldGenMonumentPieceSelector3(Object object) {
             this();
         }
     }
@@ -142,7 +116,7 @@ public class WorldGenMonumentPieces {
             return new WorldGenMonumentPieces.WorldGenMonumentPiece3(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
         }
 
-        WorldGenMonumentPieceSelector7(WorldGenMonumentPieces.SyntheticClass_1 worldgenmonumentpieces_syntheticclass_1) {
+        WorldGenMonumentPieceSelector7(Object object) {
             this();
         }
     }
@@ -161,7 +135,7 @@ public class WorldGenMonumentPieces {
             return new WorldGenMonumentPieces.WorldGenMonumentPiece5(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
         }
 
-        WorldGenMonumentPieceSelector5(WorldGenMonumentPieces.SyntheticClass_1 worldgenmonumentpieces_syntheticclass_1) {
+        WorldGenMonumentPieceSelector5(Object object) {
             this();
         }
     }
@@ -179,7 +153,7 @@ public class WorldGenMonumentPieces {
             return new WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
         }
 
-        WorldGenMonumentPieceSelector1(WorldGenMonumentPieces.SyntheticClass_1 worldgenmonumentpieces_syntheticclass_1) {
+        WorldGenMonumentPieceSelector1(Object object) {
             this();
         }
     }
@@ -197,7 +171,7 @@ public class WorldGenMonumentPieces {
             return new WorldGenMonumentPieces.WorldGenMonumentPieceSimple(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
         }
 
-        WorldGenMonumentPieceSelector2(WorldGenMonumentPieces.SyntheticClass_1 worldgenmonumentpieces_syntheticclass_1) {
+        WorldGenMonumentPieceSelector2(Object object) {
             this();
         }
     }
@@ -1258,13 +1232,13 @@ public class WorldGenMonumentPieces {
             this.p.add(new WorldGenMonumentPieces.WorldGenMonumentPiece2(enumdirection1, this.o, random));
             ArrayList arraylist = Lists.newArrayList();
 
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector6((WorldGenMonumentPieces.SyntheticClass_1) null));
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector4((WorldGenMonumentPieces.SyntheticClass_1) null));
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector3((WorldGenMonumentPieces.SyntheticClass_1) null));
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector7((WorldGenMonumentPieces.SyntheticClass_1) null));
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector5((WorldGenMonumentPieces.SyntheticClass_1) null));
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector1((WorldGenMonumentPieces.SyntheticClass_1) null));
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector2((WorldGenMonumentPieces.SyntheticClass_1) null));
+            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector6(null));
+            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector4(null));
+            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector3(null));
+            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector7(null));
+            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector5(null));
+            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector1(null));
+            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector2(null));
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
@@ -1891,16 +1865,16 @@ public class WorldGenMonumentPieces {
                 this.l = new StructureBoundingBox(0, 0, 0, j * 8 - 1, k * 4 - 1, l * 8 - 1);
             }
 
-            switch (WorldGenMonumentPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
-            case 1:
+            switch (enumdirection) {
+            case NORTH:
                 this.l.a(j1 * 8, l1 * 4, -(k1 + l) * 8 + 1);
                 break;
 
-            case 2:
+            case SOUTH:
                 this.l.a(j1 * 8, l1 * 4, k1 * 8);
                 break;
 
-            case 3:
+            case WEST:
                 this.l.a(-(k1 + l) * 8 + 1, l1 * 4, j1 * 8);
                 break;
 
@@ -1912,7 +1886,7 @@ public class WorldGenMonumentPieces {
 
         protected void a(NBTTagCompound nbttagcompound) {}
 
-        protected void b(NBTTagCompound nbttagcompound) {}
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {}
 
         protected void a(World world, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1, boolean flag) {
             for (int k1 = j; k1 <= i1; ++k1) {
@@ -1975,13 +1949,12 @@ public class WorldGenMonumentPieces {
             int j1 = this.b(i, k);
 
             if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(l, i1, j1)))) {
-                EntityGuardian entityguardian = new EntityGuardian(world);
+                EntityGuardianElder entityguardianelder = new EntityGuardianElder(world);
 
-                entityguardian.setElder(true);
-                entityguardian.heal(entityguardian.getMaxHealth());
-                entityguardian.setPositionRotation((double) l + 0.5D, (double) i1, (double) j1 + 0.5D, 0.0F, 0.0F);
-                entityguardian.prepare(world.D(new BlockPosition(entityguardian)), (GroupDataEntity) null);
-                world.addEntity(entityguardian);
+                entityguardianelder.heal(entityguardianelder.getMaxHealth());
+                entityguardianelder.setPositionRotation((double) l + 0.5D, (double) i1, (double) j1 + 0.5D, 0.0F, 0.0F);
+                entityguardianelder.prepare(world.D(new BlockPosition(entityguardianelder)), (GroupDataEntity) null);
+                world.addEntity(entityguardianelder);
                 return true;
             } else {
                 return false;

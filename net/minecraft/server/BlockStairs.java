@@ -35,7 +35,7 @@ public class BlockStairs extends Block {
 
     protected BlockStairs(IBlockData iblockdata) {
         super(iblockdata.getBlock().material);
-        this.w(this.blockStateList.getBlockData().set(BlockStairs.FACING, EnumDirection.NORTH).set(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.STRAIGHT));
+        this.y(this.blockStateList.getBlockData().set(BlockStairs.FACING, EnumDirection.NORTH).set(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.STRAIGHT));
         this.P = iblockdata.getBlock();
         this.Q = iblockdata;
         this.c(this.P.strength);
@@ -47,7 +47,7 @@ public class BlockStairs extends Block {
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
         iblockdata = this.updateState(iblockdata, world, blockposition);
-        Iterator iterator = x(iblockdata).iterator();
+        Iterator iterator = z(iblockdata).iterator();
 
         while (iterator.hasNext()) {
             AxisAlignedBB axisalignedbb1 = (AxisAlignedBB) iterator.next();
@@ -57,7 +57,7 @@ public class BlockStairs extends Block {
 
     }
 
-    private static List<AxisAlignedBB> x(IBlockData iblockdata) {
+    private static List<AxisAlignedBB> z(IBlockData iblockdata) {
         ArrayList arraylist = Lists.newArrayList();
         boolean flag = iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
 
@@ -65,71 +65,71 @@ public class BlockStairs extends Block {
         BlockStairs.EnumStairShape blockstairs_enumstairshape = (BlockStairs.EnumStairShape) iblockdata.get(BlockStairs.SHAPE);
 
         if (blockstairs_enumstairshape == BlockStairs.EnumStairShape.STRAIGHT || blockstairs_enumstairshape == BlockStairs.EnumStairShape.INNER_LEFT || blockstairs_enumstairshape == BlockStairs.EnumStairShape.INNER_RIGHT) {
-            arraylist.add(y(iblockdata));
+            arraylist.add(A(iblockdata));
         }
 
         if (blockstairs_enumstairshape != BlockStairs.EnumStairShape.STRAIGHT) {
-            arraylist.add(z(iblockdata));
+            arraylist.add(B(iblockdata));
         }
 
         return arraylist;
     }
 
-    private static AxisAlignedBB y(IBlockData iblockdata) {
+    private static AxisAlignedBB A(IBlockData iblockdata) {
         boolean flag = iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
 
-        switch (BlockStairs.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockStairs.FACING)).ordinal()]) {
-        case 1:
+        switch ((EnumDirection) iblockdata.get(BlockStairs.FACING)) {
+        case NORTH:
         default:
             return flag ? BlockStairs.J : BlockStairs.g;
 
-        case 2:
+        case SOUTH:
             return flag ? BlockStairs.K : BlockStairs.B;
 
-        case 3:
+        case WEST:
             return flag ? BlockStairs.H : BlockStairs.e;
 
-        case 4:
+        case EAST:
             return flag ? BlockStairs.I : BlockStairs.f;
         }
     }
 
-    private static AxisAlignedBB z(IBlockData iblockdata) {
+    private static AxisAlignedBB B(IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
         EnumDirection enumdirection1;
 
-        switch (BlockStairs.SyntheticClass_1.b[((BlockStairs.EnumStairShape) iblockdata.get(BlockStairs.SHAPE)).ordinal()]) {
-        case 1:
+        switch ((BlockStairs.EnumStairShape) iblockdata.get(BlockStairs.SHAPE)) {
+        case OUTER_LEFT:
         default:
             enumdirection1 = enumdirection;
             break;
 
-        case 2:
+        case OUTER_RIGHT:
             enumdirection1 = enumdirection.e();
             break;
 
-        case 3:
+        case INNER_RIGHT:
             enumdirection1 = enumdirection.opposite();
             break;
 
-        case 4:
+        case INNER_LEFT:
             enumdirection1 = enumdirection.f();
         }
 
         boolean flag = iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
 
-        switch (BlockStairs.SyntheticClass_1.a[enumdirection1.ordinal()]) {
-        case 1:
+        switch (enumdirection1) {
+        case NORTH:
         default:
             return flag ? BlockStairs.L : BlockStairs.C;
 
-        case 2:
+        case SOUTH:
             return flag ? BlockStairs.O : BlockStairs.F;
 
-        case 3:
+        case WEST:
             return flag ? BlockStairs.N : BlockStairs.E;
 
-        case 4:
+        case EAST:
             return flag ? BlockStairs.M : BlockStairs.D;
         }
     }
@@ -162,8 +162,8 @@ public class BlockStairs extends Block {
         return this.P.a(world, blockposition, entity, vec3d);
     }
 
-    public boolean n() {
-        return this.P.n();
+    public boolean m() {
+        return this.P.m();
     }
 
     public boolean a(IBlockData iblockdata, boolean flag) {
@@ -175,7 +175,7 @@ public class BlockStairs extends Block {
     }
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        this.Q.doPhysics(world, blockposition, Blocks.AIR);
+        this.Q.doPhysics(world, blockposition, Blocks.AIR, blockposition);
         this.P.onPlace(world, blockposition, this.Q);
     }
 
@@ -191,8 +191,8 @@ public class BlockStairs extends Block {
         this.P.b(world, blockposition, iblockdata, random);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
-        return this.P.interact(world, blockposition, this.Q, entityhuman, enumhand, itemstack, EnumDirection.DOWN, 0.0F, 0.0F, 0.0F);
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        return this.P.interact(world, blockposition, this.Q, entityhuman, enumhand, EnumDirection.DOWN, 0.0F, 0.0F, 0.0F);
     }
 
     public void wasExploded(World world, BlockPosition blockposition, Explosion explosion) {
@@ -217,7 +217,7 @@ public class BlockStairs extends Block {
     @Nullable
     public MovingObjectPosition a(IBlockData iblockdata, World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
         ArrayList arraylist = Lists.newArrayList();
-        Iterator iterator = x(this.updateState(iblockdata, world, blockposition)).iterator();
+        Iterator iterator = z(this.updateState(iblockdata, world, blockposition)).iterator();
 
         while (iterator.hasNext()) {
             AxisAlignedBB axisalignedbb = (AxisAlignedBB) iterator.next();
@@ -264,10 +264,10 @@ public class BlockStairs extends Block {
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.set(BlockStairs.SHAPE, d(iblockdata, iblockaccess, blockposition));
+        return iblockdata.set(BlockStairs.SHAPE, f(iblockdata, iblockaccess, blockposition));
     }
 
-    private static BlockStairs.EnumStairShape d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    private static BlockStairs.EnumStairShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
         IBlockData iblockdata1 = iblockaccess.getType(blockposition.shift(enumdirection));
 
@@ -318,20 +318,20 @@ public class BlockStairs extends Block {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
         BlockStairs.EnumStairShape blockstairs_enumstairshape = (BlockStairs.EnumStairShape) iblockdata.get(BlockStairs.SHAPE);
 
-        switch (BlockStairs.SyntheticClass_1.c[enumblockmirror.ordinal()]) {
-        case 1:
+        switch (enumblockmirror) {
+        case LEFT_RIGHT:
             if (enumdirection.k() == EnumDirection.EnumAxis.Z) {
-                switch (BlockStairs.SyntheticClass_1.b[blockstairs_enumstairshape.ordinal()]) {
-                case 1:
+                switch (blockstairs_enumstairshape) {
+                case OUTER_LEFT:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.OUTER_RIGHT);
 
-                case 2:
+                case OUTER_RIGHT:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.OUTER_LEFT);
 
-                case 3:
+                case INNER_RIGHT:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.INNER_LEFT);
 
-                case 4:
+                case INNER_LEFT:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.INNER_RIGHT);
 
                 default:
@@ -340,22 +340,22 @@ public class BlockStairs extends Block {
             }
             break;
 
-        case 2:
+        case FRONT_BACK:
             if (enumdirection.k() == EnumDirection.EnumAxis.X) {
-                switch (BlockStairs.SyntheticClass_1.b[blockstairs_enumstairshape.ordinal()]) {
-                case 1:
+                switch (blockstairs_enumstairshape) {
+                case OUTER_LEFT:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.OUTER_RIGHT);
 
-                case 2:
+                case OUTER_RIGHT:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.OUTER_LEFT);
 
-                case 3:
+                case INNER_RIGHT:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.INNER_RIGHT);
 
-                case 4:
+                case INNER_LEFT:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.INNER_LEFT);
 
-                case 5:
+                case STRAIGHT:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180);
                 }
             }
@@ -366,86 +366,6 @@ public class BlockStairs extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockStairs.FACING, BlockStairs.HALF, BlockStairs.SHAPE});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b;
-        static final int[] c = new int[EnumBlockMirror.values().length];
-
-        static {
-            try {
-                BlockStairs.SyntheticClass_1.c[EnumBlockMirror.LEFT_RIGHT.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockStairs.SyntheticClass_1.c[EnumBlockMirror.FRONT_BACK.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            b = new int[BlockStairs.EnumStairShape.values().length];
-
-            try {
-                BlockStairs.SyntheticClass_1.b[BlockStairs.EnumStairShape.OUTER_LEFT.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockStairs.SyntheticClass_1.b[BlockStairs.EnumStairShape.OUTER_RIGHT.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockStairs.SyntheticClass_1.b[BlockStairs.EnumStairShape.INNER_RIGHT.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                BlockStairs.SyntheticClass_1.b[BlockStairs.EnumStairShape.INNER_LEFT.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-            try {
-                BlockStairs.SyntheticClass_1.b[BlockStairs.EnumStairShape.STRAIGHT.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror6) {
-                ;
-            }
-
-            a = new int[EnumDirection.values().length];
-
-            try {
-                BlockStairs.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror7) {
-                ;
-            }
-
-            try {
-                BlockStairs.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror8) {
-                ;
-            }
-
-            try {
-                BlockStairs.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror9) {
-                ;
-            }
-
-            try {
-                BlockStairs.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror10) {
-                ;
-            }
-
-        }
     }
 
     public static enum EnumStairShape implements INamable {

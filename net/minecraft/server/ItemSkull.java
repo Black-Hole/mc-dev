@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.mojang.authlib.GameProfile;
 import java.util.UUID;
+import org.apache.commons.lang3.StringUtils;
 
 public class ItemSkull extends Item {
 
@@ -13,7 +14,7 @@ public class ItemSkull extends Item {
         this.a(true);
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (enumdirection == EnumDirection.DOWN) {
             return EnumInteractionResult.FAIL;
         } else {
@@ -28,6 +29,8 @@ public class ItemSkull extends Item {
 
                 blockposition = blockposition.shift(enumdirection);
             }
+
+            ItemStack itemstack = entityhuman.b(enumhand);
 
             if (entityhuman.a(blockposition, enumdirection, itemstack) && Blocks.SKULL.canPlace(world, blockposition)) {
                 if (world.isClientSide) {
@@ -53,7 +56,7 @@ public class ItemSkull extends Item {
 
                                 if (nbttagcompound.hasKeyOfType("SkullOwner", 10)) {
                                     gameprofile = GameProfileSerializer.deserialize(nbttagcompound.getCompound("SkullOwner"));
-                                } else if (nbttagcompound.hasKeyOfType("SkullOwner", 8) && !nbttagcompound.getString("SkullOwner").isEmpty()) {
+                                } else if (nbttagcompound.hasKeyOfType("SkullOwner", 8) && !StringUtils.isBlank(nbttagcompound.getString("SkullOwner"))) {
                                     gameprofile = new GameProfile((UUID) null, nbttagcompound.getString("SkullOwner"));
                                 }
                             }
@@ -67,7 +70,7 @@ public class ItemSkull extends Item {
                         Blocks.SKULL.a(world, blockposition, tileentityskull);
                     }
 
-                    --itemstack.count;
+                    itemstack.subtract(1);
                     return EnumInteractionResult.SUCCESS;
                 }
             } else {
@@ -80,7 +83,7 @@ public class ItemSkull extends Item {
         return i;
     }
 
-    public String f_(ItemStack itemstack) {
+    public String a(ItemStack itemstack) {
         int i = itemstack.getData();
 
         if (i < 0 || i >= ItemSkull.a.length) {
@@ -90,7 +93,7 @@ public class ItemSkull extends Item {
         return super.getName() + "." + ItemSkull.a[i];
     }
 
-    public String a(ItemStack itemstack) {
+    public String b(ItemStack itemstack) {
         if (itemstack.getData() == 3 && itemstack.hasTag()) {
             if (itemstack.getTag().hasKeyOfType("SkullOwner", 8)) {
                 return LocaleI18n.a("item.skull.player.name", new Object[] { itemstack.getTag().getString("SkullOwner")});
@@ -105,12 +108,12 @@ public class ItemSkull extends Item {
             }
         }
 
-        return super.a(itemstack);
+        return super.b(itemstack);
     }
 
     public boolean a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        if (nbttagcompound.hasKeyOfType("SkullOwner", 8) && !nbttagcompound.getString("SkullOwner").isEmpty()) {
+        if (nbttagcompound.hasKeyOfType("SkullOwner", 8) && !StringUtils.isBlank(nbttagcompound.getString("SkullOwner"))) {
             GameProfile gameprofile = new GameProfile((UUID) null, nbttagcompound.getString("SkullOwner"));
 
             gameprofile = TileEntitySkull.b(gameprofile);

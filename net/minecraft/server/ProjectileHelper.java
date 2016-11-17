@@ -22,7 +22,7 @@ public final class ProjectileHelper {
             }
 
             Entity entity2 = null;
-            List list = world.getEntities(entity, entity.getBoundingBox().a(d3, d4, d5).g(1.0D));
+            List list = world.getEntities(entity, entity.getBoundingBox().b(d3, d4, d5).g(1.0D));
             double d6 = 0.0D;
 
             for (int i = 0; i < list.size(); ++i) {
@@ -57,9 +57,9 @@ public final class ProjectileHelper {
         double d2 = entity.motZ;
         float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 
-        entity.yaw = (float) (MathHelper.b(d2, d0) * 57.2957763671875D) + 90.0F;
+        entity.yaw = (float) (MathHelper.c(d2, d0) * 57.2957763671875D) + 90.0F;
 
-        for (entity.pitch = (float) (MathHelper.b((double) f1, d1) * 57.2957763671875D) - 90.0F; entity.pitch - entity.lastPitch < -180.0F; entity.lastPitch -= 360.0F) {
+        for (entity.pitch = (float) (MathHelper.c((double) f1, d1) * 57.2957763671875D) - 90.0F; entity.pitch - entity.lastPitch < -180.0F; entity.lastPitch -= 360.0F) {
             ;
         }
 

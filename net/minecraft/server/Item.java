@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.Function;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
@@ -41,12 +40,14 @@ public class Item {
         return (Item) Item.REGISTRY.getId(i);
     }
 
-    @Nullable
     public static Item getItemOf(Block block) {
-        return (Item) Item.a.get(block);
+        Item item = (Item) Item.a.get(block);
+
+        return item == null ? Items.a : item;
     }
 
-    public static Item d(String s) {
+    @Nullable
+    public static Item b(String s) {
         Item item = (Item) Item.REGISTRY.get(new MinecraftKey(s));
 
         if (item == null) {
@@ -78,7 +79,7 @@ public class Item {
         return this;
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         return EnumInteractionResult.PASS;
     }
 
@@ -86,11 +87,10 @@ public class Item {
         return 1.0F;
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
-        return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        return new InteractionResultWrapper(EnumInteractionResult.PASS, entityhuman.b(enumhand));
     }
 
-    @Nullable
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
         return itemstack;
     }
@@ -103,7 +103,7 @@ public class Item {
         return 0;
     }
 
-    public boolean k() {
+    public boolean l() {
         return this.m;
     }
 
@@ -146,7 +146,7 @@ public class Item {
         return false;
     }
 
-    public Item n() {
+    public Item o() {
         this.l = true;
         return this;
     }
@@ -157,16 +157,14 @@ public class Item {
     }
 
     public String j(ItemStack itemstack) {
-        String s = this.f_(itemstack);
-
-        return s == null ? "" : LocaleI18n.get(s);
+        return LocaleI18n.get(this.a(itemstack));
     }
 
     public String getName() {
         return "item." + this.name;
     }
 
-    public String f_(ItemStack itemstack) {
+    public String a(ItemStack itemstack) {
         return "item." + this.name;
     }
 
@@ -175,15 +173,16 @@ public class Item {
         return this;
     }
 
-    public boolean p() {
+    public boolean q() {
         return true;
     }
 
-    public Item q() {
+    @Nullable
+    public Item r() {
         return this.craftingResult;
     }
 
-    public boolean r() {
+    public boolean s() {
         return this.craftingResult != null;
     }
 
@@ -205,8 +204,8 @@ public class Item {
 
     public void a(ItemStack itemstack, World world, EntityLiving entityliving, int i) {}
 
-    public String a(ItemStack itemstack) {
-        return ("" + LocaleI18n.get(this.j(itemstack) + ".name")).trim();
+    public String b(ItemStack itemstack) {
+        return LocaleI18n.get(this.j(itemstack) + ".name").trim();
     }
 
     public EnumItemRarity g(ItemStack itemstack) {
@@ -245,7 +244,7 @@ public class Item {
         return this;
     }
 
-    public boolean s() {
+    public boolean t() {
         return false;
     }
 
@@ -257,110 +256,66 @@ public class Item {
         return HashMultimap.create();
     }
 
-    public static void t() {
-        a(Blocks.STONE, (Item) (new ItemMultiTexture(Blocks.STONE, Blocks.STONE, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+    public static void u() {
+        a(Blocks.AIR, (Item) (new ItemAir(Blocks.AIR)));
+        a(Blocks.STONE, (new ItemMultiTexture(Blocks.STONE, Blocks.STONE, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockStone.EnumStoneVariant.a(itemstack.getData()).d();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("stone"));
+        })).c("stone"));
         a((Block) Blocks.GRASS, (Item) (new ItemWithAuxData(Blocks.GRASS, false)));
-        a(Blocks.DIRT, (Item) (new ItemMultiTexture(Blocks.DIRT, Blocks.DIRT, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        a(Blocks.DIRT, (new ItemMultiTexture(Blocks.DIRT, Blocks.DIRT, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockDirt.EnumDirtVariant.a(itemstack.getData()).c();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("dirt"));
+        })).c("dirt"));
         b(Blocks.COBBLESTONE);
-        a(Blocks.PLANKS, (Item) (new ItemMultiTexture(Blocks.PLANKS, Blocks.PLANKS, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        a(Blocks.PLANKS, (new ItemMultiTexture(Blocks.PLANKS, Blocks.PLANKS, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockWood.EnumLogVariant.a(itemstack.getData()).d();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("wood"));
-        a(Blocks.SAPLING, (Item) (new ItemMultiTexture(Blocks.SAPLING, Blocks.SAPLING, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        })).c("wood"));
+        a(Blocks.SAPLING, (new ItemMultiTexture(Blocks.SAPLING, Blocks.SAPLING, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockWood.EnumLogVariant.a(itemstack.getData()).d();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("sapling"));
+        })).c("sapling"));
         b(Blocks.BEDROCK);
-        a((Block) Blocks.SAND, (Item) (new ItemMultiTexture(Blocks.SAND, Blocks.SAND, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        a((Block) Blocks.SAND, (new ItemMultiTexture(Blocks.SAND, Blocks.SAND, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockSand.EnumSandVariant.a(itemstack.getData()).e();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("sand"));
+        })).c("sand"));
         b(Blocks.GRAVEL);
         b(Blocks.GOLD_ORE);
         b(Blocks.IRON_ORE);
         b(Blocks.COAL_ORE);
-        a(Blocks.LOG, (Item) (new ItemMultiTexture(Blocks.LOG, Blocks.LOG, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        a(Blocks.LOG, (new ItemMultiTexture(Blocks.LOG, Blocks.LOG, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockWood.EnumLogVariant.a(itemstack.getData()).d();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("log"));
-        a(Blocks.LOG2, (Item) (new ItemMultiTexture(Blocks.LOG2, Blocks.LOG2, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        })).c("log"));
+        a(Blocks.LOG2, (new ItemMultiTexture(Blocks.LOG2, Blocks.LOG2, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockWood.EnumLogVariant.a(itemstack.getData() + 4).d();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("log"));
-        a((Block) Blocks.LEAVES, (Item) (new ItemLeaves(Blocks.LEAVES)).b("leaves"));
-        a((Block) Blocks.LEAVES2, (Item) (new ItemLeaves(Blocks.LEAVES2)).b("leaves"));
-        a(Blocks.SPONGE, (Item) (new ItemMultiTexture(Blocks.SPONGE, Blocks.SPONGE, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        })).c("log"));
+        a((Block) Blocks.LEAVES, (new ItemLeaves(Blocks.LEAVES)).c("leaves"));
+        a((Block) Blocks.LEAVES2, (new ItemLeaves(Blocks.LEAVES2)).c("leaves"));
+        a(Blocks.SPONGE, (new ItemMultiTexture(Blocks.SPONGE, Blocks.SPONGE, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return (itemstack.getData() & 1) == 1 ? "wet" : "dry";
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("sponge"));
+        })).c("sponge"));
         b(Blocks.GLASS);
         b(Blocks.LAPIS_ORE);
         b(Blocks.LAPIS_BLOCK);
         b(Blocks.DISPENSER);
-        a(Blocks.SANDSTONE, (Item) (new ItemMultiTexture(Blocks.SANDSTONE, Blocks.SANDSTONE, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        a(Blocks.SANDSTONE, (new ItemMultiTexture(Blocks.SANDSTONE, Blocks.SANDSTONE, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockSandStone.EnumSandstoneVariant.a(itemstack.getData()).c();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("sandStone"));
+        })).c("sandStone"));
         b(Blocks.NOTEBLOCK);
         b(Blocks.GOLDEN_RAIL);
         b(Blocks.DETECTOR_RAIL);
@@ -369,32 +324,22 @@ public class Item {
         a((Block) Blocks.TALLGRASS, (Item) (new ItemWithAuxData(Blocks.TALLGRASS, true)).a(new String[] { "shrub", "grass", "fern"}));
         b((Block) Blocks.DEADBUSH);
         a((Block) Blocks.PISTON, (Item) (new ItemPiston(Blocks.PISTON)));
-        a(Blocks.WOOL, (Item) (new ItemCloth(Blocks.WOOL)).b("cloth"));
-        a((Block) Blocks.YELLOW_FLOWER, (Item) (new ItemMultiTexture(Blocks.YELLOW_FLOWER, Blocks.YELLOW_FLOWER, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        a(Blocks.WOOL, (new ItemCloth(Blocks.WOOL)).c("cloth"));
+        a((Block) Blocks.YELLOW_FLOWER, (new ItemMultiTexture(Blocks.YELLOW_FLOWER, Blocks.YELLOW_FLOWER, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockFlowers.EnumFlowerVarient.a(BlockFlowers.EnumFlowerType.YELLOW, itemstack.getData()).d();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("flower"));
-        a((Block) Blocks.RED_FLOWER, (Item) (new ItemMultiTexture(Blocks.RED_FLOWER, Blocks.RED_FLOWER, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        })).c("flower"));
+        a((Block) Blocks.RED_FLOWER, (new ItemMultiTexture(Blocks.RED_FLOWER, Blocks.RED_FLOWER, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockFlowers.EnumFlowerVarient.a(BlockFlowers.EnumFlowerType.RED, itemstack.getData()).d();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("rose"));
+        })).c("rose"));
         b((Block) Blocks.BROWN_MUSHROOM);
         b((Block) Blocks.RED_MUSHROOM);
         b(Blocks.GOLD_BLOCK);
         b(Blocks.IRON_BLOCK);
-        a((Block) Blocks.STONE_SLAB, (Item) (new ItemStep(Blocks.STONE_SLAB, Blocks.STONE_SLAB, Blocks.DOUBLE_STONE_SLAB)).b("stoneSlab"));
+        a((Block) Blocks.STONE_SLAB, (new ItemStep(Blocks.STONE_SLAB, Blocks.STONE_SLAB, Blocks.DOUBLE_STONE_SLAB)).c("stoneSlab"));
         b(Blocks.BRICK_BLOCK);
         b(Blocks.TNT);
         b(Blocks.BOOKSHELF);
@@ -407,7 +352,7 @@ public class Item {
         b(Blocks.PURPUR_BLOCK);
         b(Blocks.PURPUR_PILLAR);
         b(Blocks.PURPUR_STAIRS);
-        a((Block) Blocks.PURPUR_SLAB, (Item) (new ItemStep(Blocks.PURPUR_SLAB, Blocks.PURPUR_SLAB, Blocks.PURPUR_DOUBLE_SLAB)).b("purpurSlab"));
+        a((Block) Blocks.PURPUR_SLAB, (new ItemStep(Blocks.PURPUR_SLAB, Blocks.PURPUR_SLAB, Blocks.PURPUR_DOUBLE_SLAB)).c("purpurSlab"));
         b(Blocks.MOB_SPAWNER);
         b(Blocks.OAK_STAIRS);
         b((Block) Blocks.CHEST);
@@ -443,26 +388,16 @@ public class Item {
         b(Blocks.GLOWSTONE);
         b(Blocks.LIT_PUMPKIN);
         b(Blocks.TRAPDOOR);
-        a(Blocks.MONSTER_EGG, (Item) (new ItemMultiTexture(Blocks.MONSTER_EGG, Blocks.MONSTER_EGG, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        a(Blocks.MONSTER_EGG, (new ItemMultiTexture(Blocks.MONSTER_EGG, Blocks.MONSTER_EGG, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockMonsterEggs.EnumMonsterEggVarient.a(itemstack.getData()).c();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("monsterStoneEgg"));
-        a(Blocks.STONEBRICK, (Item) (new ItemMultiTexture(Blocks.STONEBRICK, Blocks.STONEBRICK, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        })).c("monsterStoneEgg"));
+        a(Blocks.STONEBRICK, (new ItemMultiTexture(Blocks.STONEBRICK, Blocks.STONEBRICK, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockSmoothBrick.EnumStonebrickType.a(itemstack.getData()).c();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("stonebricksmooth"));
+        })).c("stonebricksmooth"));
         b(Blocks.BROWN_MUSHROOM_BLOCK);
         b(Blocks.RED_MUSHROOM_BLOCK);
         b(Blocks.IRON_BARS);
@@ -488,7 +423,7 @@ public class Item {
         b(Blocks.END_BRICKS);
         b(Blocks.DRAGON_EGG);
         b(Blocks.REDSTONE_LAMP);
-        a((Block) Blocks.WOODEN_SLAB, (Item) (new ItemStep(Blocks.WOODEN_SLAB, Blocks.WOODEN_SLAB, Blocks.DOUBLE_WOODEN_SLAB)).b("woodSlab"));
+        a((Block) Blocks.WOODEN_SLAB, (new ItemStep(Blocks.WOODEN_SLAB, Blocks.WOODEN_SLAB, Blocks.DOUBLE_WOODEN_SLAB)).c("woodSlab"));
         b(Blocks.SANDSTONE_STAIRS);
         b(Blocks.EMERALD_ORE);
         b(Blocks.ENDER_CHEST);
@@ -499,18 +434,13 @@ public class Item {
         b(Blocks.JUNGLE_STAIRS);
         b(Blocks.COMMAND_BLOCK);
         b((Block) Blocks.BEACON);
-        a(Blocks.COBBLESTONE_WALL, (Item) (new ItemMultiTexture(Blocks.COBBLESTONE_WALL, Blocks.COBBLESTONE_WALL, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        a(Blocks.COBBLESTONE_WALL, (new ItemMultiTexture(Blocks.COBBLESTONE_WALL, Blocks.COBBLESTONE_WALL, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockCobbleWall.EnumCobbleVariant.a(itemstack.getData()).c();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("cobbleWall"));
+        })).c("cobbleWall"));
         b(Blocks.WOODEN_BUTTON);
-        a(Blocks.ANVIL, (Item) (new ItemAnvil(Blocks.ANVIL)).b("anvil"));
+        a(Blocks.ANVIL, (new ItemAnvil(Blocks.ANVIL)).c("anvil"));
         b(Blocks.TRAPPED_CHEST);
         b(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE);
         b(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE);
@@ -518,15 +448,15 @@ public class Item {
         b(Blocks.REDSTONE_BLOCK);
         b(Blocks.QUARTZ_ORE);
         b((Block) Blocks.HOPPER);
-        a(Blocks.QUARTZ_BLOCK, (Item) (new ItemMultiTexture(Blocks.QUARTZ_BLOCK, Blocks.QUARTZ_BLOCK, new String[] { "default", "chiseled", "lines"})).b("quartzBlock"));
+        a(Blocks.QUARTZ_BLOCK, (new ItemMultiTexture(Blocks.QUARTZ_BLOCK, Blocks.QUARTZ_BLOCK, new String[] { "default", "chiseled", "lines"})).c("quartzBlock"));
         b(Blocks.QUARTZ_STAIRS);
         b(Blocks.ACTIVATOR_RAIL);
         b(Blocks.DROPPER);
-        a(Blocks.STAINED_HARDENED_CLAY, (Item) (new ItemCloth(Blocks.STAINED_HARDENED_CLAY)).b("clayHardenedStained"));
+        a(Blocks.STAINED_HARDENED_CLAY, (new ItemCloth(Blocks.STAINED_HARDENED_CLAY)).c("clayHardenedStained"));
         b(Blocks.BARRIER);
         b(Blocks.IRON_TRAPDOOR);
         b(Blocks.HAY_BLOCK);
-        a(Blocks.CARPET, (Item) (new ItemCloth(Blocks.CARPET)).b("woolCarpet"));
+        a(Blocks.CARPET, (new ItemCloth(Blocks.CARPET)).c("woolCarpet"));
         b(Blocks.HARDENED_CLAY);
         b(Blocks.COAL_BLOCK);
         b(Blocks.PACKED_ICE);
@@ -534,41 +464,26 @@ public class Item {
         b(Blocks.DARK_OAK_STAIRS);
         b(Blocks.SLIME);
         b(Blocks.GRASS_PATH);
-        a((Block) Blocks.DOUBLE_PLANT, (Item) (new ItemMultiTexture(Blocks.DOUBLE_PLANT, Blocks.DOUBLE_PLANT, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        a((Block) Blocks.DOUBLE_PLANT, (new ItemMultiTexture(Blocks.DOUBLE_PLANT, Blocks.DOUBLE_PLANT, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockTallPlant.EnumTallFlowerVariants.a(itemstack.getData()).c();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("doublePlant"));
-        a((Block) Blocks.STAINED_GLASS, (Item) (new ItemCloth(Blocks.STAINED_GLASS)).b("stainedGlass"));
-        a((Block) Blocks.STAINED_GLASS_PANE, (Item) (new ItemCloth(Blocks.STAINED_GLASS_PANE)).b("stainedGlassPane"));
-        a(Blocks.PRISMARINE, (Item) (new ItemMultiTexture(Blocks.PRISMARINE, Blocks.PRISMARINE, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        })).c("doublePlant"));
+        a((Block) Blocks.STAINED_GLASS, (new ItemCloth(Blocks.STAINED_GLASS)).c("stainedGlass"));
+        a((Block) Blocks.STAINED_GLASS_PANE, (new ItemCloth(Blocks.STAINED_GLASS_PANE)).c("stainedGlassPane"));
+        a(Blocks.PRISMARINE, (new ItemMultiTexture(Blocks.PRISMARINE, Blocks.PRISMARINE, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockPrismarine.EnumPrismarineVariant.a(itemstack.getData()).c();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("prismarine"));
+        })).c("prismarine"));
         b(Blocks.SEA_LANTERN);
-        a(Blocks.RED_SANDSTONE, (Item) (new ItemMultiTexture(Blocks.RED_SANDSTONE, Blocks.RED_SANDSTONE, new Function() {
-            @Nullable
-            public String a(@Nullable ItemStack itemstack) {
+        a(Blocks.RED_SANDSTONE, (new ItemMultiTexture(Blocks.RED_SANDSTONE, Blocks.RED_SANDSTONE, new ItemMultiTexture.a() {
+            public String a(ItemStack itemstack) {
                 return BlockRedSandstone.EnumRedSandstoneVariant.a(itemstack.getData()).c();
             }
-
-            public Object apply(Object object) {
-                return this.a((ItemStack) object);
-            }
-        })).b("redSandStone"));
+        })).c("redSandStone"));
         b(Blocks.RED_SANDSTONE_STAIRS);
-        a((Block) Blocks.STONE_SLAB2, (Item) (new ItemStep(Blocks.STONE_SLAB2, Blocks.STONE_SLAB2, Blocks.DOUBLE_STONE_SLAB2)).b("stoneSlab2"));
+        a((Block) Blocks.STONE_SLAB2, (new ItemStep(Blocks.STONE_SLAB2, Blocks.STONE_SLAB2, Blocks.DOUBLE_STONE_SLAB2)).c("stoneSlab2"));
         b(Blocks.dc);
         b(Blocks.dd);
         b(Blocks.df);
@@ -576,6 +491,23 @@ public class Item {
         b(Blocks.dh);
         b(Blocks.di);
         b(Blocks.dj);
+        b(Blocks.dk);
+        a(Blocks.WHITE_SHULKER_BOX, (Item) (new ItemShulkerBox(Blocks.WHITE_SHULKER_BOX)));
+        a(Blocks.dm, (Item) (new ItemShulkerBox(Blocks.dm)));
+        a(Blocks.dn, (Item) (new ItemShulkerBox(Blocks.dn)));
+        a(Blocks.LIGHT_BLUE_SHULKER_BOX, (Item) (new ItemShulkerBox(Blocks.LIGHT_BLUE_SHULKER_BOX)));
+        a(Blocks.dp, (Item) (new ItemShulkerBox(Blocks.dp)));
+        a(Blocks.dq, (Item) (new ItemShulkerBox(Blocks.dq)));
+        a(Blocks.dr, (Item) (new ItemShulkerBox(Blocks.dr)));
+        a(Blocks.ds, (Item) (new ItemShulkerBox(Blocks.ds)));
+        a(Blocks.dt, (Item) (new ItemShulkerBox(Blocks.dt)));
+        a(Blocks.du, (Item) (new ItemShulkerBox(Blocks.du)));
+        a(Blocks.dv, (Item) (new ItemShulkerBox(Blocks.dv)));
+        a(Blocks.dw, (Item) (new ItemShulkerBox(Blocks.dw)));
+        a(Blocks.dx, (Item) (new ItemShulkerBox(Blocks.dx)));
+        a(Blocks.dy, (Item) (new ItemShulkerBox(Blocks.dy)));
+        a(Blocks.dz, (Item) (new ItemShulkerBox(Blocks.dz)));
+        a(Blocks.dA, (Item) (new ItemShulkerBox(Blocks.dA)));
         b(Blocks.STRUCTURE_BLOCK);
         a(256, "iron_shovel", (new ItemSpade(Item.EnumToolMaterial.IRON)).c("shovelIron"));
         a(257, "iron_pickaxe", (new ItemPickaxe(Item.EnumToolMaterial.IRON)).c("pickaxeIron"));
@@ -601,7 +533,7 @@ public class Item {
         a(277, "diamond_shovel", (new ItemSpade(Item.EnumToolMaterial.DIAMOND)).c("shovelDiamond"));
         a(278, "diamond_pickaxe", (new ItemPickaxe(Item.EnumToolMaterial.DIAMOND)).c("pickaxeDiamond"));
         a(279, "diamond_axe", (new ItemAxe(Item.EnumToolMaterial.DIAMOND)).c("hatchetDiamond"));
-        a(280, "stick", (new Item()).n().c("stick").a(CreativeModeTab.l));
+        a(280, "stick", (new Item()).o().c("stick").a(CreativeModeTab.l));
         a(281, "bowl", (new Item()).c("bowl").a(CreativeModeTab.l));
         a(282, "mushroom_stew", (new ItemSoup(6)).c("mushroomStew"));
         a(283, "golden_sword", (new ItemSword(Item.EnumToolMaterial.GOLD)).c("swordGold"));
@@ -675,7 +607,7 @@ public class Item {
         a(349, "fish", (new ItemFish(false)).c("fish").a(true));
         a(350, "cooked_fish", (new ItemFish(true)).c("fish").a(true));
         a(351, "dye", (new ItemDye()).c("dyePowder"));
-        a(352, "bone", (new Item()).c("bone").n().a(CreativeModeTab.f));
+        a(352, "bone", (new Item()).c("bone").o().a(CreativeModeTab.f));
         a(353, "sugar", (new Item()).c("sugar").a(CreativeModeTab.l));
         a(354, "cake", (new ItemReed(Blocks.CAKE)).d(1).c("cake").a(CreativeModeTab.h));
         a(355, "bed", (new ItemBed()).d(1).c("bed"));
@@ -692,7 +624,7 @@ public class Item {
         a(366, "cooked_chicken", (new ItemFood(6, 0.6F, true)).c("chickenCooked"));
         a(367, "rotten_flesh", (new ItemFood(4, 0.1F, true)).a(new MobEffect(MobEffects.HUNGER, 600, 0), 0.8F).c("rottenFlesh"));
         a(368, "ender_pearl", (new ItemEnderPearl()).c("enderPearl"));
-        a(369, "blaze_rod", (new Item()).c("blazeRod").a(CreativeModeTab.l).n());
+        a(369, "blaze_rod", (new Item()).c("blazeRod").a(CreativeModeTab.l).o());
         a(370, "ghast_tear", (new Item()).c("ghastTear").a(CreativeModeTab.k));
         a(371, "gold_nugget", (new Item()).c("goldNugget").a(CreativeModeTab.l));
         a(372, "nether_wart", (new ItemSeeds(Blocks.NETHER_WART, Blocks.SOUL_SAND)).c("netherStalkSeeds"));
@@ -750,7 +682,7 @@ public class Item {
         a(422, "command_block_minecart", (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.COMMAND_BLOCK)).c("minecartCommandBlock").a((CreativeModeTab) null));
         a(423, "mutton", (new ItemFood(2, 0.3F, true)).c("muttonRaw"));
         a(424, "cooked_mutton", (new ItemFood(6, 0.8F, true)).c("muttonCooked"));
-        a(425, "banner", (new ItemBanner()).b("banner"));
+        a(425, "banner", (new ItemBanner()).c("banner"));
         a(426, "end_crystal", new ItemEndCrystal());
         a(427, "spruce_door", (new ItemDoor(Blocks.SPRUCE_DOOR)).c("doorSpruce"));
         a(428, "birch_door", (new ItemDoor(Blocks.BIRCH_DOOR)).c("doorBirch"));
@@ -774,18 +706,20 @@ public class Item {
         a(446, "jungle_boat", new ItemBoat(EntityBoat.EnumBoatType.JUNGLE));
         a(447, "acacia_boat", new ItemBoat(EntityBoat.EnumBoatType.ACACIA));
         a(448, "dark_oak_boat", new ItemBoat(EntityBoat.EnumBoatType.DARK_OAK));
-        a(2256, "record_13", (new ItemRecord("13", SoundEffects.eG)).c("record"));
-        a(2257, "record_cat", (new ItemRecord("cat", SoundEffects.eI)).c("record"));
-        a(2258, "record_blocks", (new ItemRecord("blocks", SoundEffects.eH)).c("record"));
-        a(2259, "record_chirp", (new ItemRecord("chirp", SoundEffects.eJ)).c("record"));
-        a(2260, "record_far", (new ItemRecord("far", SoundEffects.eK)).c("record"));
-        a(2261, "record_mall", (new ItemRecord("mall", SoundEffects.eL)).c("record"));
-        a(2262, "record_mellohi", (new ItemRecord("mellohi", SoundEffects.eM)).c("record"));
-        a(2263, "record_stal", (new ItemRecord("stal", SoundEffects.eN)).c("record"));
-        a(2264, "record_strad", (new ItemRecord("strad", SoundEffects.eO)).c("record"));
-        a(2265, "record_ward", (new ItemRecord("ward", SoundEffects.eQ)).c("record"));
-        a(2266, "record_11", (new ItemRecord("11", SoundEffects.eF)).c("record"));
-        a(2267, "record_wait", (new ItemRecord("wait", SoundEffects.eP)).c("record"));
+        a(449, "totem", (new Item()).c("totem").d(1).a(CreativeModeTab.j));
+        a(450, "shulker_shell", (new Item()).c("shulkerShell").a(CreativeModeTab.l));
+        a(2256, "record_13", (new ItemRecord("13", SoundEffects.fa)).c("record"));
+        a(2257, "record_cat", (new ItemRecord("cat", SoundEffects.fc)).c("record"));
+        a(2258, "record_blocks", (new ItemRecord("blocks", SoundEffects.fb)).c("record"));
+        a(2259, "record_chirp", (new ItemRecord("chirp", SoundEffects.fd)).c("record"));
+        a(2260, "record_far", (new ItemRecord("far", SoundEffects.fe)).c("record"));
+        a(2261, "record_mall", (new ItemRecord("mall", SoundEffects.ff)).c("record"));
+        a(2262, "record_mellohi", (new ItemRecord("mellohi", SoundEffects.fg)).c("record"));
+        a(2263, "record_stal", (new ItemRecord("stal", SoundEffects.fh)).c("record"));
+        a(2264, "record_strad", (new ItemRecord("strad", SoundEffects.fi)).c("record"));
+        a(2265, "record_ward", (new ItemRecord("ward", SoundEffects.fk)).c("record"));
+        a(2266, "record_11", (new ItemRecord("11", SoundEffects.eZ)).c("record"));
+        a(2267, "record_wait", (new ItemRecord("wait", SoundEffects.fj)).c("record"));
     }
 
     private static void b(Block block) {

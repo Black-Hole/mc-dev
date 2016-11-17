@@ -2,18 +2,17 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.List;
-import javax.annotation.Nullable;
 
 public class BlockNote extends BlockTileEntity {
 
-    private static final List<SoundEffect> a = Lists.newArrayList(new SoundEffect[] { SoundEffects.dP, SoundEffects.dN, SoundEffects.dS, SoundEffects.dQ, SoundEffects.dO});
+    private static final List<SoundEffect> a = Lists.newArrayList(new SoundEffect[] { SoundEffects.ej, SoundEffects.eh, SoundEffects.em, SoundEffects.ek, SoundEffects.ei});
 
     public BlockNote() {
         super(Material.WOOD);
         this.a(CreativeModeTab.d);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         boolean flag = world.isBlockIndirectlyPowered(blockposition);
         TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -31,7 +30,7 @@ public class BlockNote extends BlockTileEntity {
 
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -40,7 +39,7 @@ public class BlockNote extends BlockTileEntity {
             if (tileentity instanceof TileEntityNote) {
                 TileEntityNote tileentitynote = (TileEntityNote) tileentity;
 
-                tileentitynote.d();
+                tileentitynote.a();
                 tileentitynote.play(world, blockposition);
                 entityhuman.b(StatisticList.U);
             }

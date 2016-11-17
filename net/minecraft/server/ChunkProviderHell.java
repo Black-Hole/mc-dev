@@ -364,7 +364,7 @@ public class ChunkProviderHell implements ChunkGenerator {
                 return this.I.b();
             }
 
-            if (this.I.b(this.n, blockposition) && this.n.getType(blockposition.down()).getBlock() == Blocks.NETHER_BRICK) {
+            if (this.I.a(this.n, blockposition) && this.n.getType(blockposition.down()).getBlock() == Blocks.NETHER_BRICK) {
                 return this.I.b();
             }
         }
@@ -375,8 +375,8 @@ public class ChunkProviderHell implements ChunkGenerator {
     }
 
     @Nullable
-    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
-        return null;
+    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, boolean flag) {
+        return "Fortress".equals(s) && this.I != null ? this.I.getNearestGeneratedFeature(world, blockposition, flag) : null;
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {

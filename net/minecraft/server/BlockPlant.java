@@ -29,8 +29,8 @@ public class BlockPlant extends Block {
         return iblockdata.getBlock() == Blocks.GRASS || iblockdata.getBlock() == Blocks.DIRT || iblockdata.getBlock() == Blocks.FARMLAND;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
-        super.a(iblockdata, world, blockposition, block);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+        super.a(iblockdata, world, blockposition, block, blockposition1);
         this.e(world, blockposition, iblockdata);
     }
 
@@ -50,12 +50,12 @@ public class BlockPlant extends Block {
         return this.i(world.getType(blockposition.down()));
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockPlant.b;
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockPlant.k;
     }
 

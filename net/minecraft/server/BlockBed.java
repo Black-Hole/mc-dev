@@ -12,10 +12,10 @@ public class BlockBed extends BlockFacingHorizontal {
 
     public BlockBed() {
         super(Material.CLOTH);
-        this.w(this.blockStateList.getBlockData().set(BlockBed.PART, BlockBed.EnumBedPart.FOOT).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockBed.PART, BlockBed.EnumBedPart.FOOT).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -32,7 +32,7 @@ public class BlockBed extends BlockFacingHorizontal {
                     EntityHuman entityhuman1 = this.c(world, blockposition);
 
                     if (entityhuman1 != null) {
-                        entityhuman.b((IChatBaseComponent) (new ChatMessage("tile.bed.occupied", new Object[0])));
+                        entityhuman.a((IChatBaseComponent) (new ChatMessage("tile.bed.occupied", new Object[0])), true);
                         return true;
                     }
 
@@ -48,9 +48,11 @@ public class BlockBed extends BlockFacingHorizontal {
                     return true;
                 } else {
                     if (entityhuman_enumbedresult == EntityHuman.EnumBedResult.NOT_POSSIBLE_NOW) {
-                        entityhuman.b((IChatBaseComponent) (new ChatMessage("tile.bed.noSleep", new Object[0])));
+                        entityhuman.a((IChatBaseComponent) (new ChatMessage("tile.bed.noSleep", new Object[0])), true);
                     } else if (entityhuman_enumbedresult == EntityHuman.EnumBedResult.NOT_SAFE) {
-                        entityhuman.b((IChatBaseComponent) (new ChatMessage("tile.bed.notSafe", new Object[0])));
+                        entityhuman.a((IChatBaseComponent) (new ChatMessage("tile.bed.notSafe", new Object[0])), true);
+                    } else if (entityhuman_enumbedresult == EntityHuman.EnumBedResult.TOO_FAR_AWAY) {
+                        entityhuman.a((IChatBaseComponent) (new ChatMessage("tile.bed.tooFarAway", new Object[0])), true);
                     }
 
                     return true;
@@ -94,7 +96,7 @@ public class BlockBed extends BlockFacingHorizontal {
         return false;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockBed.FACING);
 
         if (iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.HEAD) {
@@ -110,12 +112,11 @@ public class BlockBed extends BlockFacingHorizontal {
 
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.HEAD ? null : Items.BED;
+        return iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.HEAD ? Items.a : Items.BED;
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockBed.c;
     }
 
@@ -151,7 +152,7 @@ public class BlockBed extends BlockFacingHorizontal {
     }
 
     protected static boolean b(World world, BlockPosition blockposition) {
-        return world.getType(blockposition.down()).q() && !world.getType(blockposition).getMaterial().isBuildable() && !world.getType(blockposition.up()).getMaterial().isBuildable();
+        return world.getType(blockposition.down()).r() && !world.getType(blockposition).getMaterial().isBuildable() && !world.getType(blockposition.up()).getMaterial().isBuildable();
     }
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {

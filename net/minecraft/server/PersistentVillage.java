@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class PersistentVillage extends PersistentBase {
 
@@ -150,6 +151,7 @@ public class PersistentVillage extends PersistentBase {
 
     }
 
+    @Nullable
     private VillageDoor c(BlockPosition blockposition) {
         Iterator iterator = this.d.iterator();
 

@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class PlayerInteractManager {
 
     public World world;
@@ -114,10 +112,10 @@ public class PlayerInteractManager {
                     return;
                 }
 
-                if (!this.player.cZ()) {
+                if (!this.player.dc()) {
                     ItemStack itemstack = this.player.getItemInMainHand();
 
-                    if (itemstack == null) {
+                    if (itemstack.isEmpty()) {
                         return;
                     }
 
@@ -192,14 +190,14 @@ public class PlayerInteractManager {
     }
 
     public boolean breakBlock(BlockPosition blockposition) {
-        if (this.gamemode.isCreative() && this.player.getItemInMainHand() != null && this.player.getItemInMainHand().getItem() instanceof ItemSword) {
+        if (this.gamemode.isCreative() && !this.player.getItemInMainHand().isEmpty() && this.player.getItemInMainHand().getItem() instanceof ItemSword) {
             return false;
         } else {
             IBlockData iblockdata = this.world.getType(blockposition);
             TileEntity tileentity = this.world.getTileEntity(blockposition);
             Block block = iblockdata.getBlock();
 
-            if ((block instanceof BlockCommand || block instanceof BlockStructure) && !this.player.dh()) {
+            if ((block instanceof BlockCommand || block instanceof BlockStructure) && !this.player.dk()) {
                 this.world.notify(blockposition, iblockdata, iblockdata, 3);
                 return false;
             } else {
@@ -208,10 +206,10 @@ public class PlayerInteractManager {
                         return false;
                     }
 
-                    if (!this.player.cZ()) {
+                    if (!this.player.dc()) {
                         ItemStack itemstack = this.player.getItemInMainHand();
 
-                        if (itemstack == null) {
+                        if (itemstack.isEmpty()) {
                             return false;
                         }
 
@@ -228,14 +226,11 @@ public class PlayerInteractManager {
                     this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(this.world, blockposition));
                 } else {
                     ItemStack itemstack1 = this.player.getItemInMainHand();
-                    ItemStack itemstack2 = itemstack1 == null ? null : itemstack1.cloneItemStack();
+                    ItemStack itemstack2 = itemstack1.isEmpty() ? ItemStack.a : itemstack1.cloneItemStack();
                     boolean flag1 = this.player.hasBlock(iblockdata);
 
-                    if (itemstack1 != null) {
+                    if (!itemstack1.isEmpty()) {
                         itemstack1.a(this.world, iblockdata, blockposition, this.player);
-                        if (itemstack1.count == 0) {
-                            this.player.a(EnumHand.MAIN_HAND, (ItemStack) null);
-                        }
                     }
 
                     if (flag && flag1) {
@@ -251,30 +246,32 @@ public class PlayerInteractManager {
     public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand) {
         if (this.gamemode == EnumGamemode.SPECTATOR) {
             return EnumInteractionResult.PASS;
-        } else if (entityhuman.df().a(itemstack.getItem())) {
+        } else if (entityhuman.di().a(itemstack.getItem())) {
             return EnumInteractionResult.PASS;
         } else {
-            int i = itemstack.count;
+            int i = itemstack.getCount();
             int j = itemstack.getData();
             InteractionResultWrapper interactionresultwrapper = itemstack.a(world, entityhuman, enumhand);
             ItemStack itemstack1 = (ItemStack) interactionresultwrapper.b();
 
-            if (itemstack1 == itemstack && itemstack1.count == i && itemstack1.l() <= 0 && itemstack1.getData() == j) {
+            if (itemstack1 == itemstack && itemstack1.getCount() == i && itemstack1.m() <= 0 && itemstack1.getData() == j) {
+                return interactionresultwrapper.a();
+            } else if (interactionresultwrapper.a() == EnumInteractionResult.FAIL && itemstack1.m() > 0 && !entityhuman.isHandRaised()) {
                 return interactionresultwrapper.a();
             } else {
                 entityhuman.a(enumhand, itemstack1);
                 if (this.isCreative()) {
-                    itemstack1.count = i;
-                    if (itemstack1.e()) {
+                    itemstack1.setCount(i);
+                    if (itemstack1.f()) {
                         itemstack1.setData(j);
                     }
                 }
 
-                if (itemstack1.count == 0) {
-                    entityhuman.a(enumhand, (ItemStack) null);
+                if (itemstack1.isEmpty()) {
+                    entityhuman.a(enumhand, ItemStack.a);
                 }
 
-                if (!entityhuman.cx()) {
+                if (!entityhuman.isHandRaised()) {
                     ((EntityPlayer) entityhuman).updateInventory(entityhuman.defaultContainer);
                 }
 
@@ -283,7 +280,7 @@ public class PlayerInteractManager {
         }
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, @Nullable ItemStack itemstack, EnumHand enumhand, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
         if (this.gamemode == EnumGamemode.SPECTATOR) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -306,21 +303,21 @@ public class PlayerInteractManager {
 
             return EnumInteractionResult.PASS;
         } else {
-            if (!entityhuman.isSneaking() || entityhuman.getItemInMainHand() == null && entityhuman.getItemInOffHand() == null) {
+            if (!entityhuman.isSneaking() || entityhuman.getItemInMainHand().isEmpty() && entityhuman.getItemInOffHand().isEmpty()) {
                 IBlockData iblockdata = world.getType(blockposition);
 
-                if (iblockdata.getBlock().interact(world, blockposition, iblockdata, entityhuman, enumhand, itemstack, enumdirection, f, f1, f2)) {
+                if (iblockdata.getBlock().interact(world, blockposition, iblockdata, entityhuman, enumhand, enumdirection, f, f1, f2)) {
                     return EnumInteractionResult.SUCCESS;
                 }
             }
 
-            if (itemstack == null) {
+            if (itemstack.isEmpty()) {
                 return EnumInteractionResult.PASS;
-            } else if (entityhuman.df().a(itemstack.getItem())) {
+            } else if (entityhuman.di().a(itemstack.getItem())) {
                 return EnumInteractionResult.PASS;
             } else {
-                if (itemstack.getItem() instanceof ItemBlock && !entityhuman.dh()) {
-                    Block block1 = ((ItemBlock) itemstack.getItem()).d();
+                if (itemstack.getItem() instanceof ItemBlock && !entityhuman.dk()) {
+                    Block block1 = ((ItemBlock) itemstack.getItem()).getBlock();
 
                     if (block1 instanceof BlockCommand || block1 instanceof BlockStructure) {
                         return EnumInteractionResult.FAIL;
@@ -329,11 +326,11 @@ public class PlayerInteractManager {
 
                 if (this.isCreative()) {
                     int i = itemstack.getData();
-                    int j = itemstack.count;
+                    int j = itemstack.getCount();
                     EnumInteractionResult enuminteractionresult = itemstack.placeItem(entityhuman, world, blockposition, enumhand, enumdirection, f, f1, f2);
 
                     itemstack.setData(i);
-                    itemstack.count = j;
+                    itemstack.setCount(j);
                     return enuminteractionresult;
                 } else {
                     return itemstack.placeItem(entityhuman, world, blockposition, enumhand, enumdirection, f, f1, f2);

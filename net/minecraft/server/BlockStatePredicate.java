@@ -14,7 +14,7 @@ public class BlockStatePredicate implements Predicate<IBlockData> {
             return true;
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((IBlockData) object);
         }
     };
@@ -26,7 +26,7 @@ public class BlockStatePredicate implements Predicate<IBlockData> {
     }
 
     public static BlockStatePredicate a(Block block) {
-        return new BlockStatePredicate(block.t());
+        return new BlockStatePredicate(block.s());
     }
 
     public boolean a(@Nullable IBlockData iblockdata) {
@@ -62,7 +62,7 @@ public class BlockStatePredicate implements Predicate<IBlockData> {
         }
     }
 
-    public boolean apply(Object object) {
+    public boolean apply(@Nullable Object object) {
         return this.a((IBlockData) object);
     }
 }

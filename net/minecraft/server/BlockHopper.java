@@ -11,7 +11,7 @@ public class BlockHopper extends BlockTileEntity {
             return enumdirection != EnumDirection.UP;
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((EnumDirection) object);
         }
     });
@@ -24,11 +24,11 @@ public class BlockHopper extends BlockTileEntity {
 
     public BlockHopper() {
         super(Material.ORE, MaterialMapColor.m);
-        this.w(this.blockStateList.getBlockData().set(BlockHopper.FACING, EnumDirection.DOWN).set(BlockHopper.ENABLED, Boolean.valueOf(true)));
+        this.y(this.blockStateList.getBlockData().set(BlockHopper.FACING, EnumDirection.DOWN).set(BlockHopper.ENABLED, Boolean.valueOf(true)));
         this.a(CreativeModeTab.d);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockHopper.j;
     }
 
@@ -74,7 +74,7 @@ public class BlockHopper extends BlockTileEntity {
         this.e(world, blockposition, iblockdata);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -89,7 +89,7 @@ public class BlockHopper extends BlockTileEntity {
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         this.e(world, blockposition, iblockdata);
     }
 
@@ -137,7 +137,7 @@ public class BlockHopper extends BlockTileEntity {
         return true;
     }
 
-    public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public int c(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return Container.a(world.getTileEntity(blockposition));
     }
 

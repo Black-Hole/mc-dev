@@ -31,8 +31,8 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return this.b;
     }
 
-    public void m() {
-        super.m();
+    public void A_() {
+        super.A_();
         if (!this.world.isClientSide && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
             this.die();
         }
@@ -67,36 +67,36 @@ public class EntityGhast extends EntityFlying implements IMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.bL;
-    }
-
-    protected SoundEffect bV() {
-        return SoundEffects.bN;
+        return SoundEffects.bV;
     }
 
     protected SoundEffect bW() {
-        return SoundEffects.bM;
+        return SoundEffects.bX;
+    }
+
+    protected SoundEffect bX() {
+        return SoundEffects.bW;
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.ag;
+        return LootTables.aj;
     }
 
-    protected float ch() {
+    protected float ci() {
         return 10.0F;
     }
 
-    public boolean cK() {
-        return this.random.nextInt(20) == 0 && super.cK() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+    public boolean cM() {
+        return this.random.nextInt(20) == 0 && super.cM() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
-    public int cO() {
+    public int cQ() {
         return 1;
     }
 
     public static void b(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "Ghast");
+        EntityInsentient.a(dataconvertermanager, EntityGhast.class);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -189,8 +189,8 @@ public class EntityGhast extends EntityFlying implements IMonster {
 
         public void e() {
             if (this.a.getGoalTarget() == null) {
-                this.a.yaw = -((float) MathHelper.b(this.a.motX, this.a.motZ)) * 57.295776F;
-                this.a.aO = this.a.yaw;
+                this.a.yaw = -((float) MathHelper.c(this.a.motX, this.a.motZ)) * 57.295776F;
+                this.a.aN = this.a.yaw;
             } else {
                 EntityLiving entityliving = this.a.getGoalTarget();
                 double d0 = 64.0D;
@@ -199,8 +199,8 @@ public class EntityGhast extends EntityFlying implements IMonster {
                     double d1 = entityliving.locX - this.a.locX;
                     double d2 = entityliving.locZ - this.a.locZ;
 
-                    this.a.yaw = -((float) MathHelper.b(d1, d2)) * 57.295776F;
-                    this.a.aO = this.a.yaw;
+                    this.a.yaw = -((float) MathHelper.c(d1, d2)) * 57.295776F;
+                    this.a.aN = this.a.yaw;
                 }
             }
 
@@ -284,7 +284,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
             AxisAlignedBB axisalignedbb = this.i.getBoundingBox();
 
             for (int i = 1; (double) i < d3; ++i) {
-                axisalignedbb = axisalignedbb.c(d4, d5, d6);
+                axisalignedbb = axisalignedbb.d(d4, d5, d6);
                 if (!this.i.world.getCubes(this.i, axisalignedbb).isEmpty()) {
                     return false;
                 }

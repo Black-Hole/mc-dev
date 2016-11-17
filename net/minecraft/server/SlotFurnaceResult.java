@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class SlotFurnaceResult extends Slot {
 
     private final EntityHuman a;
@@ -12,21 +10,22 @@ public class SlotFurnaceResult extends Slot {
         this.a = entityhuman;
     }
 
-    public boolean isAllowed(@Nullable ItemStack itemstack) {
+    public boolean isAllowed(ItemStack itemstack) {
         return false;
     }
 
     public ItemStack a(int i) {
         if (this.hasItem()) {
-            this.b += Math.min(i, this.getItem().count);
+            this.b += Math.min(i, this.getItem().getCount());
         }
 
         return super.a(i);
     }
 
-    public void a(EntityHuman entityhuman, ItemStack itemstack) {
+    public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
         this.c(itemstack);
         super.a(entityhuman, itemstack);
+        return itemstack;
     }
 
     protected void a(ItemStack itemstack, int i) {

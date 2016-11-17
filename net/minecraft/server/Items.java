@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 public class Items {
 
+    public static final Item a;
     public static final Item IRON_SHOVEL;
     public static final Item IRON_PICKAXE;
     public static final Item IRON_AXE;
@@ -86,12 +87,12 @@ public class Items {
     public static final Item IRON_DOOR;
     public static final Item REDSTONE;
     public static final Item SNOWBALL;
-    public static final Item aG;
     public static final Item aH;
     public static final Item aI;
     public static final Item aJ;
     public static final Item aK;
     public static final Item aL;
+    public static final Item aM;
     public static final Item LEATHER;
     public static final Item MILK_BUCKET;
     public static final Item BRICK;
@@ -199,14 +200,16 @@ public class Items {
     public static final Item PRISMARINE_SHARD;
     public static final Item PRISMARINE_CRYSTALS;
     public static final Item BANNER;
-    public static final Item cP;
+    public static final Item cQ;
     public static final Item SHIELD;
-    public static final Item cR;
+    public static final Item cS;
     public static final Item CHORUS_FRUIT;
     public static final Item CHORUS_FRUIT_POPPED;
     public static final Item BEETROOT_SEEDS;
     public static final Item BEETROOT;
     public static final Item BEETROOT_SOUP;
+    public static final Item cY;
+    public static final Item cZ;
 
     private static Item get(String s) {
         Item item = (Item) Item.REGISTRY.get(new MinecraftKey(s));
@@ -222,6 +225,7 @@ public class Items {
         if (!DispenserRegistry.a()) {
             throw new RuntimeException("Accessed Items before Bootstrap!");
         } else {
+            a = get("air");
             IRON_SHOVEL = get("iron_shovel");
             IRON_PICKAXE = get("iron_pickaxe");
             IRON_AXE = get("iron_axe");
@@ -306,12 +310,12 @@ public class Items {
             IRON_DOOR = get("iron_door");
             REDSTONE = get("redstone");
             SNOWBALL = get("snowball");
-            aG = get("boat");
-            aH = get("spruce_boat");
-            aI = get("birch_boat");
-            aJ = get("jungle_boat");
-            aK = get("acacia_boat");
-            aL = get("dark_oak_boat");
+            aH = get("boat");
+            aI = get("spruce_boat");
+            aJ = get("birch_boat");
+            aK = get("jungle_boat");
+            aL = get("acacia_boat");
+            aM = get("dark_oak_boat");
             LEATHER = get("leather");
             MILK_BUCKET = get("milk_bucket");
             BRICK = get("brick");
@@ -419,14 +423,16 @@ public class Items {
             PRISMARINE_SHARD = get("prismarine_shard");
             PRISMARINE_CRYSTALS = get("prismarine_crystals");
             BANNER = get("banner");
-            cP = get("end_crystal");
+            cQ = get("end_crystal");
             SHIELD = get("shield");
-            cR = get("elytra");
+            cS = get("elytra");
             CHORUS_FRUIT = get("chorus_fruit");
             CHORUS_FRUIT_POPPED = get("chorus_fruit_popped");
             BEETROOT_SEEDS = get("beetroot_seeds");
             BEETROOT = get("beetroot");
             BEETROOT_SOUP = get("beetroot_soup");
+            cY = get("totem");
+            cZ = get("shulker_shell");
         }
     }
 }

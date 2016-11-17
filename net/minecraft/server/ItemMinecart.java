@@ -44,7 +44,7 @@ public class ItemMinecart extends Item {
             }
 
             world.addEntity(entityminecartabstract);
-            itemstack.cloneAndSubtract(1);
+            itemstack.subtract(1);
             return itemstack;
         }
 
@@ -61,12 +61,14 @@ public class ItemMinecart extends Item {
         BlockDispenser.REGISTRY.a(this, ItemMinecart.a);
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         IBlockData iblockdata = world.getType(blockposition);
 
         if (!BlockMinecartTrackAbstract.i(iblockdata)) {
             return EnumInteractionResult.FAIL;
         } else {
+            ItemStack itemstack = entityhuman.b(enumhand);
+
             if (!world.isClientSide) {
                 BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition = iblockdata.getBlock() instanceof BlockMinecartTrackAbstract ? (BlockMinecartTrackAbstract.EnumTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).g()) : BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH;
                 double d0 = 0.0D;
@@ -84,7 +86,7 @@ public class ItemMinecart extends Item {
                 world.addEntity(entityminecartabstract);
             }
 
-            --itemstack.count;
+            itemstack.subtract(1);
             return EnumInteractionResult.SUCCESS;
         }
     }

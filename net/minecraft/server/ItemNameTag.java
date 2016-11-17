@@ -7,17 +7,16 @@ public class ItemNameTag extends Item {
     }
 
     public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
-        if (!itemstack.hasName()) {
-            return false;
-        } else if (entityliving instanceof EntityInsentient) {
-            EntityInsentient entityinsentient = (EntityInsentient) entityliving;
+        if (itemstack.hasName() && !(entityliving instanceof EntityHuman)) {
+            entityliving.setCustomName(itemstack.getName());
+            if (entityliving instanceof EntityInsentient) {
+                ((EntityInsentient) entityliving).cS();
+            }
 
-            entityinsentient.setCustomName(itemstack.getName());
-            entityinsentient.cQ();
-            --itemstack.count;
+            itemstack.subtract(1);
             return true;
         } else {
-            return super.a(itemstack, entityhuman, entityliving, enumhand);
+            return false;
         }
     }
 }

@@ -68,17 +68,17 @@ public class BiomeDecorator {
         } else {
             this.c = CustomWorldSettingsFinal.CustomWorldSettings.a(world.getWorldData().getGeneratorOptions()).b();
             this.b = blockposition;
-            this.g = new WorldGenMinable(Blocks.DIRT.getBlockData(), this.c.I);
-            this.h = new WorldGenMinable(Blocks.GRAVEL.getBlockData(), this.c.M);
-            this.i = new WorldGenMinable(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.GRANITE), this.c.Q);
-            this.j = new WorldGenMinable(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.DIORITE), this.c.U);
-            this.k = new WorldGenMinable(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.ANDESITE), this.c.Y);
-            this.l = new WorldGenMinable(Blocks.COAL_ORE.getBlockData(), this.c.ac);
-            this.m = new WorldGenMinable(Blocks.IRON_ORE.getBlockData(), this.c.ag);
-            this.n = new WorldGenMinable(Blocks.GOLD_ORE.getBlockData(), this.c.ak);
-            this.o = new WorldGenMinable(Blocks.REDSTONE_ORE.getBlockData(), this.c.ao);
-            this.p = new WorldGenMinable(Blocks.DIAMOND_ORE.getBlockData(), this.c.as);
-            this.q = new WorldGenMinable(Blocks.LAPIS_ORE.getBlockData(), this.c.aw);
+            this.g = new WorldGenMinable(Blocks.DIRT.getBlockData(), this.c.J);
+            this.h = new WorldGenMinable(Blocks.GRAVEL.getBlockData(), this.c.N);
+            this.i = new WorldGenMinable(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.GRANITE), this.c.R);
+            this.j = new WorldGenMinable(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.DIORITE), this.c.V);
+            this.k = new WorldGenMinable(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.ANDESITE), this.c.Z);
+            this.l = new WorldGenMinable(Blocks.COAL_ORE.getBlockData(), this.c.ad);
+            this.m = new WorldGenMinable(Blocks.IRON_ORE.getBlockData(), this.c.ah);
+            this.n = new WorldGenMinable(Blocks.GOLD_ORE.getBlockData(), this.c.al);
+            this.o = new WorldGenMinable(Blocks.REDSTONE_ORE.getBlockData(), this.c.ap);
+            this.p = new WorldGenMinable(Blocks.DIAMOND_ORE.getBlockData(), this.c.at);
+            this.q = new WorldGenMinable(Blocks.LAPIS_ORE.getBlockData(), this.c.ax);
             this.a(biomebase, world, random);
             this.a = false;
         }
@@ -301,17 +301,17 @@ public class BiomeDecorator {
     }
 
     protected void a(World world, Random random) {
-        this.a(world, random, this.c.J, this.g, this.c.K, this.c.L);
-        this.a(world, random, this.c.N, this.h, this.c.O, this.c.P);
-        this.a(world, random, this.c.V, this.j, this.c.W, this.c.X);
-        this.a(world, random, this.c.R, this.i, this.c.S, this.c.T);
-        this.a(world, random, this.c.Z, this.k, this.c.aa, this.c.ab);
-        this.a(world, random, this.c.ad, this.l, this.c.ae, this.c.af);
-        this.a(world, random, this.c.ah, this.m, this.c.ai, this.c.aj);
-        this.a(world, random, this.c.al, this.n, this.c.am, this.c.an);
-        this.a(world, random, this.c.ap, this.o, this.c.aq, this.c.ar);
-        this.a(world, random, this.c.at, this.p, this.c.au, this.c.av);
-        this.b(world, random, this.c.ax, this.q, this.c.ay, this.c.az);
+        this.a(world, random, this.c.K, this.g, this.c.L, this.c.M);
+        this.a(world, random, this.c.O, this.h, this.c.P, this.c.Q);
+        this.a(world, random, this.c.W, this.j, this.c.X, this.c.Y);
+        this.a(world, random, this.c.S, this.i, this.c.T, this.c.U);
+        this.a(world, random, this.c.aa, this.k, this.c.ab, this.c.ac);
+        this.a(world, random, this.c.ae, this.l, this.c.af, this.c.ag);
+        this.a(world, random, this.c.ai, this.m, this.c.aj, this.c.ak);
+        this.a(world, random, this.c.am, this.n, this.c.an, this.c.ao);
+        this.a(world, random, this.c.aq, this.o, this.c.ar, this.c.as);
+        this.a(world, random, this.c.au, this.p, this.c.av, this.c.aw);
+        this.b(world, random, this.c.ay, this.q, this.c.az, this.c.aA);
     }
 
     protected void a(World world, Random random, int i, WorldGenerator worldgenerator, int j, int k) {

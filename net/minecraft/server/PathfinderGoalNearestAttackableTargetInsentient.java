@@ -34,7 +34,7 @@ public class PathfinderGoalNearestAttackableTargetInsentient extends PathfinderG
                 return entityliving.isInvisible() ? false : ((double) entityliving.g(PathfinderGoalNearestAttackableTargetInsentient.this.b) > d0 ? false : PathfinderGoalTarget.a(PathfinderGoalNearestAttackableTargetInsentient.this.b, entityliving, false, true));
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((EntityLiving) object);
             }
         };

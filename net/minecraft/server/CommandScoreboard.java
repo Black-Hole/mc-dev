@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -335,7 +336,7 @@ public class CommandScoreboard extends CommandAbstract {
         ScoreboardTeam scoreboardteam = this.a(astring[i++], minecraftserver);
 
         if (scoreboardteam != null) {
-            String s = astring[i++].toLowerCase();
+            String s = astring[i++].toLowerCase(Locale.ROOT);
 
             if (!"color".equalsIgnoreCase(s) && !"friendlyfire".equalsIgnoreCase(s) && !"seeFriendlyInvisibles".equalsIgnoreCase(s) && !"nametagVisibility".equalsIgnoreCase(s) && !"deathMessageVisibility".equalsIgnoreCase(s) && !"collisionRule".equalsIgnoreCase(s)) {
                 throw new ExceptionUsage("commands.scoreboard.teams.option.usage", new Object[0]);
@@ -485,7 +486,7 @@ public class CommandScoreboard extends CommandAbstract {
         } else {
             while (i < astring.length) {
                 s1 = astring[i++];
-                if (s1.startsWith("@")) {
+                if (PlayerSelector.isPattern(s1)) {
                     List list = c(minecraftserver, icommandlistener, s1);
                     Iterator iterator = list.iterator();
 
@@ -537,7 +538,7 @@ public class CommandScoreboard extends CommandAbstract {
         } else {
             while (i < astring.length) {
                 s = astring[i++];
-                if (s.startsWith("@")) {
+                if (PlayerSelector.isPattern(s)) {
                     List list = c(minecraftserver, icommandlistener, s);
                     Iterator iterator = list.iterator();
 

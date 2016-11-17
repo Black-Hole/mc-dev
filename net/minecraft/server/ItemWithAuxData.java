@@ -22,13 +22,13 @@ public class ItemWithAuxData extends ItemBlock {
         return this;
     }
 
-    public String f_(ItemStack itemstack) {
+    public String a(ItemStack itemstack) {
         if (this.b == null) {
-            return super.f_(itemstack);
+            return super.a(itemstack);
         } else {
             int i = itemstack.getData();
 
-            return i >= 0 && i < this.b.length ? super.f_(itemstack) + "." + this.b[i] : super.f_(itemstack);
+            return i >= 0 && i < this.b.length ? super.a(itemstack) + "." + this.b[i] : super.a(itemstack);
         }
     }
 }

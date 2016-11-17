@@ -47,14 +47,6 @@ public class ChunkCoordIntPair {
         return d2 * d2 + d3 * d3;
     }
 
-    public int a() {
-        return (this.x << 4) + 8;
-    }
-
-    public int b() {
-        return (this.z << 4) + 8;
-    }
-
     public int c() {
         return this.x << 4;
     }
@@ -73,10 +65,6 @@ public class ChunkCoordIntPair {
 
     public BlockPosition a(int i, int j, int k) {
         return new BlockPosition((this.x << 4) + i, j, (this.z << 4) + k);
-    }
-
-    public BlockPosition a(int i) {
-        return new BlockPosition(this.a(), i, this.b());
     }
 
     public String toString() {

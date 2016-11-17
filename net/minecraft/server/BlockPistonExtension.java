@@ -20,62 +20,70 @@ public class BlockPistonExtension extends BlockDirectional {
     protected static final AxisAlignedBB F = new AxisAlignedBB(0.375D, 0.375D, 0.25D, 0.625D, 0.625D, 1.25D);
     protected static final AxisAlignedBB G = new AxisAlignedBB(-0.25D, 0.375D, 0.375D, 0.75D, 0.625D, 0.625D);
     protected static final AxisAlignedBB I = new AxisAlignedBB(0.25D, 0.375D, 0.375D, 1.25D, 0.625D, 0.625D);
+    protected static final AxisAlignedBB J = new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.75D, 0.625D);
+    protected static final AxisAlignedBB K = new AxisAlignedBB(0.375D, 0.25D, 0.375D, 0.625D, 1.0D, 0.625D);
+    protected static final AxisAlignedBB L = new AxisAlignedBB(0.375D, 0.375D, 0.0D, 0.625D, 0.625D, 0.75D);
+    protected static final AxisAlignedBB M = new AxisAlignedBB(0.375D, 0.375D, 0.25D, 0.625D, 0.625D, 1.0D);
+    protected static final AxisAlignedBB N = new AxisAlignedBB(0.0D, 0.375D, 0.375D, 0.75D, 0.625D, 0.625D);
+    protected static final AxisAlignedBB O = new AxisAlignedBB(0.25D, 0.375D, 0.375D, 1.0D, 0.625D, 0.625D);
 
     public BlockPistonExtension() {
         super(Material.PISTON);
-        this.w(this.blockStateList.getBlockData().set(BlockPistonExtension.FACING, EnumDirection.NORTH).set(BlockPistonExtension.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT).set(BlockPistonExtension.SHORT, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockPistonExtension.FACING, EnumDirection.NORTH).set(BlockPistonExtension.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT).set(BlockPistonExtension.SHORT, Boolean.valueOf(false)));
         this.a(SoundEffectType.d);
         this.c(0.5F);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        switch (BlockPistonExtension.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).ordinal()]) {
-        case 1:
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        switch ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)) {
+        case DOWN:
         default:
             return BlockPistonExtension.B;
 
-        case 2:
+        case UP:
             return BlockPistonExtension.g;
 
-        case 3:
+        case NORTH:
             return BlockPistonExtension.f;
 
-        case 4:
+        case SOUTH:
             return BlockPistonExtension.e;
 
-        case 5:
+        case WEST:
             return BlockPistonExtension.d;
 
-        case 6:
+        case EAST:
             return BlockPistonExtension.c;
         }
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
-        a(blockposition, axisalignedbb, list, iblockdata.c(world, blockposition));
+        a(blockposition, axisalignedbb, list, iblockdata.d(world, blockposition));
         a(blockposition, axisalignedbb, list, this.i(iblockdata));
     }
 
     private AxisAlignedBB i(IBlockData iblockdata) {
-        switch (BlockPistonExtension.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)).ordinal()]) {
-        case 1:
+        boolean flag = ((Boolean) iblockdata.get(BlockPistonExtension.SHORT)).booleanValue();
+
+        switch ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)) {
+        case DOWN:
         default:
-            return BlockPistonExtension.D;
+            return flag ? BlockPistonExtension.K : BlockPistonExtension.D;
 
-        case 2:
-            return BlockPistonExtension.C;
+        case UP:
+            return flag ? BlockPistonExtension.J : BlockPistonExtension.C;
 
-        case 3:
-            return BlockPistonExtension.F;
+        case NORTH:
+            return flag ? BlockPistonExtension.M : BlockPistonExtension.F;
 
-        case 4:
-            return BlockPistonExtension.E;
+        case SOUTH:
+            return flag ? BlockPistonExtension.L : BlockPistonExtension.E;
 
-        case 5:
-            return BlockPistonExtension.I;
+        case WEST:
+            return flag ? BlockPistonExtension.O : BlockPistonExtension.I;
 
-        case 6:
-            return BlockPistonExtension.G;
+        case EAST:
+            return flag ? BlockPistonExtension.N : BlockPistonExtension.G;
         }
     }
 
@@ -130,15 +138,15 @@ public class BlockPistonExtension extends BlockDirectional {
         return 0;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockPistonExtension.FACING);
-        BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
-        IBlockData iblockdata1 = world.getType(blockposition1);
+        BlockPosition blockposition2 = blockposition.shift(enumdirection.opposite());
+        IBlockData iblockdata1 = world.getType(blockposition2);
 
         if (iblockdata1.getBlock() != Blocks.PISTON && iblockdata1.getBlock() != Blocks.STICKY_PISTON) {
             world.setAir(blockposition);
         } else {
-            iblockdata1.doPhysics(world, blockposition1, block);
+            iblockdata1.doPhysics(world, blockposition2, block, blockposition1);
         }
 
     }
@@ -179,50 +187,6 @@ public class BlockPistonExtension extends BlockDirectional {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockPistonExtension.FACING, BlockPistonExtension.TYPE, BlockPistonExtension.SHORT});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                BlockPistonExtension.SyntheticClass_1.a[EnumDirection.DOWN.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockPistonExtension.SyntheticClass_1.a[EnumDirection.UP.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockPistonExtension.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockPistonExtension.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockPistonExtension.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                BlockPistonExtension.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-        }
     }
 
     public static enum EnumPistonType implements INamable {

@@ -1,14 +1,13 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockIceFrost extends BlockIce {
 
     public static final BlockStateInteger a = BlockStateInteger.of("age", 0, 3);
 
     public BlockIceFrost() {
-        this.w(this.blockStateList.getBlockData().set(BlockIceFrost.a, Integer.valueOf(0)));
+        this.y(this.blockStateList.getBlockData().set(BlockIceFrost.a, Integer.valueOf(0)));
     }
 
     public int toLegacyData(IBlockData iblockdata) {
@@ -28,7 +27,7 @@ public class BlockIceFrost extends BlockIce {
 
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (block == this) {
             int i = this.c(world, blockposition);
 
@@ -88,8 +87,7 @@ public class BlockIceFrost extends BlockIce {
         return new BlockStateList(this, new IBlockState[] { BlockIceFrost.a});
     }
 
-    @Nullable
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return null;
+        return ItemStack.a;
     }
 }

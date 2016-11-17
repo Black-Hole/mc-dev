@@ -23,14 +23,14 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
 
     protected BlockButtonAbstract(boolean flag) {
         super(Material.ORIENTABLE);
-        this.w(this.blockStateList.getBlockData().set(BlockButtonAbstract.FACING, EnumDirection.NORTH).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockButtonAbstract.FACING, EnumDirection.NORTH).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false)));
         this.a(true);
         this.a(CreativeModeTab.d);
         this.I = flag;
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockButtonAbstract.k;
     }
 
@@ -68,14 +68,14 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
     protected static boolean a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
         BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
-        return enumdirection == EnumDirection.DOWN ? world.getType(blockposition1).q() : world.getType(blockposition1).l();
+        return enumdirection == EnumDirection.DOWN ? world.getType(blockposition1).r() : world.getType(blockposition1).m();
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
         return a(world, blockposition, enumdirection.opposite()) ? this.getBlockData().set(BlockButtonAbstract.FACING, enumdirection).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false)) : this.getBlockData().set(BlockButtonAbstract.FACING, EnumDirection.DOWN).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false));
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (this.e(world, blockposition, iblockdata) && !a(world, blockposition, ((EnumDirection) iblockdata.get(BlockButtonAbstract.FACING)).opposite())) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
@@ -93,33 +93,33 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
         }
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockButtonAbstract.FACING);
         boolean flag = ((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)).booleanValue();
 
-        switch (BlockButtonAbstract.SyntheticClass_1.a[enumdirection.ordinal()]) {
-        case 1:
+        switch (enumdirection) {
+        case EAST:
             return flag ? BlockButtonAbstract.G : BlockButtonAbstract.g;
 
-        case 2:
+        case WEST:
             return flag ? BlockButtonAbstract.F : BlockButtonAbstract.f;
 
-        case 3:
+        case SOUTH:
             return flag ? BlockButtonAbstract.E : BlockButtonAbstract.e;
 
-        case 4:
+        case NORTH:
         default:
             return flag ? BlockButtonAbstract.D : BlockButtonAbstract.d;
 
-        case 5:
+        case UP:
             return flag ? BlockButtonAbstract.C : BlockButtonAbstract.c;
 
-        case 6:
+        case DOWN:
             return flag ? BlockButtonAbstract.B : BlockButtonAbstract.b;
         }
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)).booleanValue()) {
             return true;
         } else {
@@ -162,7 +162,7 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
         if (!world.isClientSide) {
             if (((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)).booleanValue()) {
                 if (this.I) {
-                    this.e(iblockdata, world, blockposition);
+                    this.d(iblockdata, world, blockposition);
                 } else {
                     world.setTypeUpdate(blockposition, iblockdata.set(BlockButtonAbstract.POWERED, Boolean.valueOf(false)));
                     this.c(world, blockposition, (EnumDirection) iblockdata.get(BlockButtonAbstract.FACING));
@@ -178,14 +178,14 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
         if (!world.isClientSide) {
             if (this.I) {
                 if (!((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)).booleanValue()) {
-                    this.e(iblockdata, world, blockposition);
+                    this.d(iblockdata, world, blockposition);
                 }
             }
         }
     }
 
-    private void e(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        List list = world.a(EntityArrow.class, iblockdata.c(world, blockposition).a(blockposition));
+    private void d(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        List list = world.a(EntityArrow.class, iblockdata.d(world, blockposition).a(blockposition));
         boolean flag = !list.isEmpty();
         boolean flag1 = ((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)).booleanValue();
 
@@ -210,8 +210,8 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
     }
 
     private void c(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        world.applyPhysics(blockposition, this);
-        world.applyPhysics(blockposition.shift(enumdirection.opposite()), this);
+        world.applyPhysics(blockposition, this, false);
+        world.applyPhysics(blockposition.shift(enumdirection.opposite()), this, false);
     }
 
     public IBlockData fromLegacyData(int i) {
@@ -249,29 +249,29 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
     public int toLegacyData(IBlockData iblockdata) {
         int i;
 
-        switch (BlockButtonAbstract.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockButtonAbstract.FACING)).ordinal()]) {
-        case 1:
+        switch ((EnumDirection) iblockdata.get(BlockButtonAbstract.FACING)) {
+        case EAST:
             i = 1;
             break;
 
-        case 2:
+        case WEST:
             i = 2;
             break;
 
-        case 3:
+        case SOUTH:
             i = 3;
             break;
 
-        case 4:
+        case NORTH:
             i = 4;
             break;
 
-        case 5:
+        case UP:
         default:
             i = 5;
             break;
 
-        case 6:
+        case DOWN:
             i = 0;
         }
 
@@ -292,49 +292,5 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockButtonAbstract.FACING, BlockButtonAbstract.POWERED});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                BlockButtonAbstract.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockButtonAbstract.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockButtonAbstract.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockButtonAbstract.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockButtonAbstract.SyntheticClass_1.a[EnumDirection.UP.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                BlockButtonAbstract.SyntheticClass_1.a[EnumDirection.DOWN.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-        }
     }
 }

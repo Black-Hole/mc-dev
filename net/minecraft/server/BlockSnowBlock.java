@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockSnowBlock extends Block {
 
@@ -11,7 +10,6 @@ public class BlockSnowBlock extends Block {
         this.a(CreativeModeTab.b);
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.SNOWBALL;
     }
@@ -21,7 +19,7 @@ public class BlockSnowBlock extends Block {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (world.b(EnumSkyBlock.BLOCK, blockposition) > 11) {
+        if (world.getBrightness(EnumSkyBlock.BLOCK, blockposition) > 11) {
             this.b(world, blockposition, world.getType(blockposition), 0);
             world.setAir(blockposition);
         }

@@ -14,7 +14,7 @@ public class BlockSkull extends BlockTileEntity {
             return shapedetectorblock.a() != null && shapedetectorblock.a().getBlock() == Blocks.SKULL && shapedetectorblock.b() instanceof TileEntitySkull && ((TileEntitySkull) shapedetectorblock.b()).getSkullType() == 1;
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((ShapeDetectorBlock) object);
         }
     };
@@ -28,7 +28,7 @@ public class BlockSkull extends BlockTileEntity {
 
     protected BlockSkull() {
         super(Material.ORIENTABLE);
-        this.w(this.blockStateList.getBlockData().set(BlockSkull.FACING, EnumDirection.NORTH).set(BlockSkull.NODROP, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockSkull.FACING, EnumDirection.NORTH).set(BlockSkull.NODROP, Boolean.valueOf(false)));
     }
 
     public String getName() {
@@ -43,22 +43,22 @@ public class BlockSkull extends BlockTileEntity {
         return false;
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        switch (BlockSkull.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockSkull.FACING)).ordinal()]) {
-        case 1:
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        switch ((EnumDirection) iblockdata.get(BlockSkull.FACING)) {
+        case UP:
         default:
             return BlockSkull.c;
 
-        case 2:
+        case NORTH:
             return BlockSkull.d;
 
-        case 3:
+        case SOUTH:
             return BlockSkull.e;
 
-        case 4:
+        case WEST:
             return BlockSkull.f;
 
-        case 5:
+        case EAST:
             return BlockSkull.g;
         }
     }
@@ -118,7 +118,6 @@ public class BlockSkull extends BlockTileEntity {
         }
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.SKULL;
     }
@@ -154,7 +153,7 @@ public class BlockSkull extends BlockTileEntity {
                 BlockPosition blockposition2 = shapedetector_shapedetectorcollection.a(1, 2, 0).getPosition();
 
                 entitywither.setPositionRotation((double) blockposition2.getX() + 0.5D, (double) blockposition2.getY() + 0.55D, (double) blockposition2.getZ() + 0.5D, shapedetector_shapedetectorcollection.getFacing().k() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F, 0.0F);
-                entitywither.aO = shapedetector_shapedetectorcollection.getFacing().k() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
+                entitywither.aN = shapedetector_shapedetectorcollection.getFacing().k() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
                 entitywither.o();
                 Iterator iterator = world.a(EntityHuman.class, entitywither.getBoundingBox().g(50.0D)).iterator();
 
@@ -176,7 +175,7 @@ public class BlockSkull extends BlockTileEntity {
                     for (int l = 0; l < shapedetector.b(); ++l) {
                         ShapeDetectorBlock shapedetectorblock2 = shapedetector_shapedetectorcollection.a(k, l, 0);
 
-                        world.update(shapedetectorblock2.getPosition(), Blocks.AIR);
+                        world.update(shapedetectorblock2.getPosition(), Blocks.AIR, false);
                     }
                 }
 
@@ -225,43 +224,5 @@ public class BlockSkull extends BlockTileEntity {
         }
 
         return this.D;
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                BlockSkull.SyntheticClass_1.a[EnumDirection.UP.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockSkull.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockSkull.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockSkull.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockSkull.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-        }
     }
 }

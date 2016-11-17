@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.io.IOException;
+import javax.annotation.Nullable;
 
 public class PacketPlayInUseEntity implements Packet<PacketListenerPlayIn> {
 
@@ -48,6 +49,7 @@ public class PacketPlayInUseEntity implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
+    @Nullable
     public Entity a(World world) {
         return world.getEntity(this.a);
     }

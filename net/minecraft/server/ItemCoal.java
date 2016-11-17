@@ -8,7 +8,7 @@ public class ItemCoal extends Item {
         this.a(CreativeModeTab.l);
     }
 
-    public String f_(ItemStack itemstack) {
+    public String a(ItemStack itemstack) {
         return itemstack.getData() == 1 ? "item.charcoal" : "item.coal";
     }
 }

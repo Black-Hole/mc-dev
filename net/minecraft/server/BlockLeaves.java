@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public abstract class BlockLeaves extends Block {
 
@@ -141,7 +140,6 @@ public abstract class BlockLeaves extends Block {
         return random.nextInt(20) == 0 ? 1 : 0;
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.SAPLING);
     }
@@ -186,7 +184,7 @@ public abstract class BlockLeaves extends Block {
         return !this.c;
     }
 
-    public boolean j() {
+    public boolean u(IBlockData iblockdata) {
         return false;
     }
 

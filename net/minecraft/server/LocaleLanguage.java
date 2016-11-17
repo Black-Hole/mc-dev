@@ -22,7 +22,7 @@ public class LocaleLanguage {
 
     public LocaleLanguage() {
         try {
-            InputStream inputstream = LocaleLanguage.class.getResourceAsStream("/assets/minecraft/lang/en_US.lang");
+            InputStream inputstream = LocaleLanguage.class.getResourceAsStream("/assets/minecraft/lang/en_us.lang");
             Iterator iterator = IOUtils.readLines(inputstream, Charsets.UTF_8).iterator();
 
             while (iterator.hasNext()) {

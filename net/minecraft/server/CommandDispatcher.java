@@ -53,6 +53,7 @@ public class CommandDispatcher extends CommandHandler implements ICommandDispatc
         this.a((ICommand) (new CommandTitle()));
         this.a((ICommand) (new CommandEntityData()));
         this.a((ICommand) (new CommandStopSound()));
+        this.a((ICommand) (new CommandLocate()));
         if (minecraftserver.aa()) {
             this.a((ICommand) (new CommandOp()));
             this.a((ICommand) (new CommandDeop()));

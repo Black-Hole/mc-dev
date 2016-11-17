@@ -1,20 +1,37 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
+import java.util.Iterator;
 
 public class InventoryCraftResult implements IInventory {
 
-    private final ItemStack[] items = new ItemStack[1];
+    private final NonNullList<ItemStack> items;
 
-    public InventoryCraftResult() {}
+    public InventoryCraftResult() {
+        this.items = NonNullList.a(1, ItemStack.a);
+    }
 
     public int getSize() {
         return 1;
     }
 
-    @Nullable
+    public boolean w_() {
+        Iterator iterator = this.items.iterator();
+
+        ItemStack itemstack;
+
+        do {
+            if (!iterator.hasNext()) {
+                return true;
+            }
+
+            itemstack = (ItemStack) iterator.next();
+        } while (itemstack.isEmpty());
+
+        return false;
+    }
+
     public ItemStack getItem(int i) {
-        return this.items[0];
+        return (ItemStack) this.items.get(0);
     }
 
     public String getName() {
@@ -29,18 +46,16 @@ public class InventoryCraftResult implements IInventory {
         return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
     }
 
-    @Nullable
     public ItemStack splitStack(int i, int j) {
         return ContainerUtil.a(this.items, 0);
     }
 
-    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         return ContainerUtil.a(this.items, 0);
     }
 
-    public void setItem(int i, @Nullable ItemStack itemstack) {
-        this.items[0] = itemstack;
+    public void setItem(int i, ItemStack itemstack) {
+        this.items.set(0, itemstack);
     }
 
     public int getMaxStackSize() {
@@ -67,14 +82,11 @@ public class InventoryCraftResult implements IInventory {
 
     public void setProperty(int i, int j) {}
 
-    public int g() {
+    public int h() {
         return 0;
     }
 
-    public void l() {
-        for (int i = 0; i < this.items.length; ++i) {
-            this.items[i] = null;
-        }
-
+    public void clear() {
+        this.items.clear();
     }
 }

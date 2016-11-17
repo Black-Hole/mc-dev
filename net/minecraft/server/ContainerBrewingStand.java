@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class ContainerBrewingStand extends Container {
 
     private final IInventory brewingStand;
@@ -59,9 +57,8 @@ public class ContainerBrewingStand extends Container {
         return this.brewingStand.a(entityhuman);
     }
 
-    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.a;
         Slot slot = (Slot) this.c.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -69,45 +66,45 @@ public class ContainerBrewingStand extends Container {
 
             itemstack = itemstack1.cloneItemStack();
             if ((i < 0 || i > 2) && i != 3 && i != 4) {
-                if (!this.f.hasItem() && this.f.isAllowed(itemstack1)) {
+                if (this.f.isAllowed(itemstack1)) {
                     if (!this.a(itemstack1, 3, 4, false)) {
-                        return null;
+                        return ItemStack.a;
                     }
                 } else if (ContainerBrewingStand.SlotPotionBottle.c_(itemstack)) {
                     if (!this.a(itemstack1, 0, 3, false)) {
-                        return null;
+                        return ItemStack.a;
                     }
                 } else if (ContainerBrewingStand.a.b_(itemstack)) {
                     if (!this.a(itemstack1, 4, 5, false)) {
-                        return null;
+                        return ItemStack.a;
                     }
                 } else if (i >= 5 && i < 32) {
                     if (!this.a(itemstack1, 32, 41, false)) {
-                        return null;
+                        return ItemStack.a;
                     }
                 } else if (i >= 32 && i < 41) {
                     if (!this.a(itemstack1, 5, 32, false)) {
-                        return null;
+                        return ItemStack.a;
                     }
                 } else if (!this.a(itemstack1, 5, 41, false)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else {
                 if (!this.a(itemstack1, 5, 41, true)) {
-                    return null;
+                    return ItemStack.a;
                 }
 
                 slot.a(itemstack1, itemstack);
             }
 
-            if (itemstack1.count == 0) {
-                slot.set((ItemStack) null);
+            if (itemstack1.isEmpty()) {
+                slot.set(ItemStack.a);
             } else {
                 slot.f();
             }
 
-            if (itemstack1.count == itemstack.count) {
-                return null;
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.a;
             }
 
             slot.a(entityhuman, itemstack1);
@@ -122,12 +119,12 @@ public class ContainerBrewingStand extends Container {
             super(iinventory, i, j, k);
         }
 
-        public boolean isAllowed(@Nullable ItemStack itemstack) {
+        public boolean isAllowed(ItemStack itemstack) {
             return b_(itemstack);
         }
 
-        public static boolean b_(@Nullable ItemStack itemstack) {
-            return itemstack != null && itemstack.getItem() == Items.BLAZE_POWDER;
+        public static boolean b_(ItemStack itemstack) {
+            return itemstack.getItem() == Items.BLAZE_POWDER;
         }
 
         public int getMaxStackSize() {
@@ -141,8 +138,8 @@ public class ContainerBrewingStand extends Container {
             super(iinventory, i, j, k);
         }
 
-        public boolean isAllowed(@Nullable ItemStack itemstack) {
-            return itemstack != null && PotionBrewer.a(itemstack);
+        public boolean isAllowed(ItemStack itemstack) {
+            return PotionBrewer.a(itemstack);
         }
 
         public int getMaxStackSize() {
@@ -159,7 +156,7 @@ public class ContainerBrewingStand extends Container {
             this.a = entityhuman;
         }
 
-        public boolean isAllowed(@Nullable ItemStack itemstack) {
+        public boolean isAllowed(ItemStack itemstack) {
             return c_(itemstack);
         }
 
@@ -167,22 +164,21 @@ public class ContainerBrewingStand extends Container {
             return 1;
         }
 
-        public void a(EntityHuman entityhuman, ItemStack itemstack) {
-            if (PotionUtil.c(itemstack) != Potions.b) {
+        public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
+            PotionRegistry potionregistry = PotionUtil.d(itemstack);
+
+            if (potionregistry != Potions.b && potionregistry != Potions.EMPTY) {
                 this.a.b((Statistic) AchievementList.B);
             }
 
             super.a(entityhuman, itemstack);
+            return itemstack;
         }
 
-        public static boolean c_(@Nullable ItemStack itemstack) {
-            if (itemstack == null) {
-                return false;
-            } else {
-                Item item = itemstack.getItem();
+        public static boolean c_(ItemStack itemstack) {
+            Item item = itemstack.getItem();
 
-                return item == Items.POTION || item == Items.GLASS_BOTTLE || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION;
-            }
+            return item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.GLASS_BOTTLE;
         }
     }
 }

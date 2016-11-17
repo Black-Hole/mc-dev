@@ -7,22 +7,27 @@ import javax.annotation.Nullable;
 
 public class WorldChunkManager {
 
-    private GenLayer a;
+    private CustomWorldSettingsFinal a;
     private GenLayer b;
-    private final BiomeCache c;
-    private final List<BiomeBase> d;
+    private GenLayer c;
+    private final BiomeCache d;
+    private final List<BiomeBase> e;
 
     protected WorldChunkManager() {
-        this.c = new BiomeCache(this);
-        this.d = Lists.newArrayList(new BiomeBase[] { Biomes.f, Biomes.c, Biomes.g, Biomes.u, Biomes.t, Biomes.w, Biomes.x});
+        this.d = new BiomeCache(this);
+        this.e = Lists.newArrayList(new BiomeBase[] { Biomes.f, Biomes.c, Biomes.g, Biomes.u, Biomes.t, Biomes.w, Biomes.x});
     }
 
     private WorldChunkManager(long i, WorldType worldtype, String s) {
         this();
-        GenLayer[] agenlayer = GenLayer.a(i, worldtype, s);
+        if (worldtype == WorldType.CUSTOMIZED && !s.isEmpty()) {
+            this.a = CustomWorldSettingsFinal.CustomWorldSettings.a(s).b();
+        }
 
-        this.a = agenlayer[0];
-        this.b = agenlayer[1];
+        GenLayer[] agenlayer = GenLayer.a(i, worldtype, this.a);
+
+        this.b = agenlayer[0];
+        this.c = agenlayer[1];
     }
 
     public WorldChunkManager(WorldData worlddata) {
@@ -30,7 +35,7 @@ public class WorldChunkManager {
     }
 
     public List<BiomeBase> a() {
-        return this.d;
+        return this.e;
     }
 
     public BiomeBase getBiome(BlockPosition blockposition) {
@@ -38,7 +43,7 @@ public class WorldChunkManager {
     }
 
     public BiomeBase getBiome(BlockPosition blockposition, BiomeBase biomebase) {
-        return this.c.a(blockposition.getX(), blockposition.getZ(), biomebase);
+        return this.d.a(blockposition.getX(), blockposition.getZ(), biomebase);
     }
 
     public float a(float f, int i) {
@@ -51,7 +56,7 @@ public class WorldChunkManager {
             abiomebase = new BiomeBase[k * l];
         }
 
-        int[] aint = this.a.a(i, j, k, l);
+        int[] aint = this.b.a(i, j, k, l);
 
         try {
             for (int i1 = 0; i1 < k * l; ++i1) {
@@ -83,12 +88,12 @@ public class WorldChunkManager {
         }
 
         if (flag && k == 16 && l == 16 && (i & 15) == 0 && (j & 15) == 0) {
-            BiomeBase[] abiomebase1 = this.c.b(i, j);
+            BiomeBase[] abiomebase1 = this.d.b(i, j);
 
             System.arraycopy(abiomebase1, 0, abiomebase, 0, k * l);
             return abiomebase;
         } else {
-            int[] aint = this.b.a(i, j, k, l);
+            int[] aint = this.c.a(i, j, k, l);
 
             for (int i1 = 0; i1 < k * l; ++i1) {
                 abiomebase[i1] = BiomeBase.getBiome(aint[i1], Biomes.b);
@@ -106,7 +111,7 @@ public class WorldChunkManager {
         int k1 = j + k >> 2;
         int l1 = j1 - l + 1;
         int i2 = k1 - i1 + 1;
-        int[] aint = this.a.a(l, i1, l1, i2);
+        int[] aint = this.b.a(l, i1, l1, i2);
 
         try {
             for (int j2 = 0; j2 < l1 * i2; ++j2) {
@@ -122,7 +127,7 @@ public class WorldChunkManager {
             CrashReport crashreport = CrashReport.a(throwable, "Invalid Biome id");
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Layer");
 
-            crashreportsystemdetails.a("Layer", (Object) this.a.toString());
+            crashreportsystemdetails.a("Layer", (Object) this.b.toString());
             crashreportsystemdetails.a("x", (Object) Integer.valueOf(i));
             crashreportsystemdetails.a("z", (Object) Integer.valueOf(j));
             crashreportsystemdetails.a("radius", (Object) Integer.valueOf(k));
@@ -140,7 +145,7 @@ public class WorldChunkManager {
         int k1 = j + k >> 2;
         int l1 = j1 - l + 1;
         int i2 = k1 - i1 + 1;
-        int[] aint = this.a.a(l, i1, l1, i2);
+        int[] aint = this.b.a(l, i1, l1, i2);
         BlockPosition blockposition = null;
         int j2 = 0;
 
@@ -159,6 +164,14 @@ public class WorldChunkManager {
     }
 
     public void b() {
-        this.c.a();
+        this.d.a();
+    }
+
+    public boolean c() {
+        return this.a != null && this.a.G >= 0;
+    }
+
+    public BiomeBase d() {
+        return this.a != null && this.a.G >= 0 ? BiomeBase.a(this.a.G) : null;
     }
 }

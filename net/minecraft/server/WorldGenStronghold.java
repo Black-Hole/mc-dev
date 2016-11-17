@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +55,7 @@ public class WorldGenStronghold extends StructureGenerator {
         return "Stronghold";
     }
 
-    public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition) {
+    public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag) {
         if (!this.b) {
             this.c();
             this.b = true;
@@ -108,10 +108,10 @@ public class WorldGenStronghold extends StructureGenerator {
     private void c() {
         this.a(this.g);
         int i = 0;
-        Iterator iterator = this.c.values().iterator();
+        ObjectIterator objectiterator = this.c.values().iterator();
 
-        while (iterator.hasNext()) {
-            StructureStart structurestart = (StructureStart) iterator.next();
+        while (objectiterator.hasNext()) {
+            StructureStart structurestart = (StructureStart) objectiterator.next();
 
             if (i < this.d.length) {
                 this.d[i++] = new ChunkCoordIntPair(structurestart.e(), structurestart.f());
@@ -154,22 +154,6 @@ public class WorldGenStronghold extends StructureGenerator {
             }
         }
 
-    }
-
-    protected List<BlockPosition> G_() {
-        ArrayList arraylist = Lists.newArrayList();
-        ChunkCoordIntPair[] achunkcoordintpair = this.d;
-        int i = achunkcoordintpair.length;
-
-        for (int j = 0; j < i; ++j) {
-            ChunkCoordIntPair chunkcoordintpair = achunkcoordintpair[j];
-
-            if (chunkcoordintpair != null) {
-                arraylist.add(chunkcoordintpair.a(64));
-            }
-        }
-
-        return arraylist;
     }
 
     protected StructureStart b(int i, int j) {

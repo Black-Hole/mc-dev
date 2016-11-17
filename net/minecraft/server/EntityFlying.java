@@ -13,13 +13,13 @@ public abstract class EntityFlying extends EntityInsentient {
     public void g(float f, float f1) {
         if (this.isInWater()) {
             this.a(f, f1, 0.02F);
-            this.move(this.motX, this.motY, this.motZ);
+            this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
             this.motX *= 0.800000011920929D;
             this.motY *= 0.800000011920929D;
             this.motZ *= 0.800000011920929D;
         } else if (this.ao()) {
             this.a(f, f1, 0.02F);
-            this.move(this.motX, this.motY, this.motZ);
+            this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
             this.motX *= 0.5D;
             this.motY *= 0.5D;
             this.motZ *= 0.5D;
@@ -38,13 +38,13 @@ public abstract class EntityFlying extends EntityInsentient {
                 f2 = this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.getBoundingBox().b) - 1, MathHelper.floor(this.locZ))).getBlock().frictionFactor * 0.91F;
             }
 
-            this.move(this.motX, this.motY, this.motZ);
+            this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
             this.motX *= (double) f2;
             this.motY *= (double) f2;
             this.motZ *= (double) f2;
         }
 
-        this.aG = this.aH;
+        this.aF = this.aG;
         double d0 = this.locX - this.lastX;
         double d1 = this.locZ - this.lastZ;
         float f4 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;
@@ -53,8 +53,8 @@ public abstract class EntityFlying extends EntityInsentient {
             f4 = 1.0F;
         }
 
-        this.aH += (f4 - this.aH) * 0.4F;
-        this.aI += this.aH;
+        this.aG += (f4 - this.aG) * 0.4F;
+        this.aH += this.aG;
     }
 
     public boolean m_() {

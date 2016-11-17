@@ -18,7 +18,7 @@ public class InventoryUtils {
         for (int i = 0; i < iinventory.getSize(); ++i) {
             ItemStack itemstack = iinventory.getItem(i);
 
-            if (itemstack != null) {
+            if (!itemstack.isEmpty()) {
                 dropItem(world, d0, d1, d2, itemstack);
             }
         }
@@ -30,20 +30,8 @@ public class InventoryUtils {
         float f1 = InventoryUtils.a.nextFloat() * 0.8F + 0.1F;
         float f2 = InventoryUtils.a.nextFloat() * 0.8F + 0.1F;
 
-        while (itemstack.count > 0) {
-            int i = InventoryUtils.a.nextInt(21) + 10;
-
-            if (i > itemstack.count) {
-                i = itemstack.count;
-            }
-
-            itemstack.count -= i;
-            EntityItem entityitem = new EntityItem(world, d0 + (double) f, d1 + (double) f1, d2 + (double) f2, new ItemStack(itemstack.getItem(), i, itemstack.getData()));
-
-            if (itemstack.hasTag()) {
-                entityitem.getItemStack().setTag(itemstack.getTag().g());
-            }
-
+        while (!itemstack.isEmpty()) {
+            EntityItem entityitem = new EntityItem(world, d0 + (double) f, d1 + (double) f1, d2 + (double) f2, itemstack.cloneAndSubtract(InventoryUtils.a.nextInt(21) + 10));
             float f3 = 0.05F;
 
             entityitem.motX = InventoryUtils.a.nextGaussian() * 0.05000000074505806D;

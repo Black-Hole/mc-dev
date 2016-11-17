@@ -44,9 +44,9 @@ public class DragonControllerLandingFly extends AbstractDragonController {
             if (entityhuman != null) {
                 Vec3D vec3d = (new Vec3D(entityhuman.locX, 0.0D, entityhuman.locZ)).a();
 
-                j = this.a.l(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
+                j = this.a.k(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
             } else {
-                j = this.a.l(40.0D, (double) blockposition.getY(), 0.0D);
+                j = this.a.k(40.0D, (double) blockposition.getY(), 0.0D);
             }
 
             PathPoint pathpoint = new PathPoint(blockposition.getX(), blockposition.getY(), blockposition.getZ());

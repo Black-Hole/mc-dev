@@ -8,7 +8,7 @@ public class BlockEndRod extends BlockDirectional {
 
     protected BlockEndRod() {
         super(Material.ORIENTABLE);
-        this.w(this.blockStateList.getBlockData().set(BlockEndRod.FACING, EnumDirection.UP));
+        this.y(this.blockStateList.getBlockData().set(BlockEndRod.FACING, EnumDirection.UP));
         this.a(CreativeModeTab.c);
     }
 
@@ -20,16 +20,16 @@ public class BlockEndRod extends BlockDirectional {
         return iblockdata.set(BlockEndRod.FACING, enumblockmirror.b((EnumDirection) iblockdata.get(BlockEndRod.FACING)));
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        switch (BlockEndRod.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockEndRod.FACING)).k().ordinal()]) {
-        case 1:
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        switch (((EnumDirection) iblockdata.get(BlockEndRod.FACING)).k()) {
+        case X:
         default:
             return BlockEndRod.c;
 
-        case 2:
+        case Z:
             return BlockEndRod.b;
 
-        case 3:
+        case Y:
             return BlockEndRod.a;
         }
     }
@@ -60,10 +60,6 @@ public class BlockEndRod extends BlockDirectional {
         return this.getBlockData().set(BlockEndRod.FACING, enumdirection);
     }
 
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {}
-
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {}
-
     public IBlockData fromLegacyData(int i) {
         IBlockData iblockdata = this.getBlockData();
 
@@ -81,31 +77,5 @@ public class BlockEndRod extends BlockDirectional {
 
     public EnumPistonReaction h(IBlockData iblockdata) {
         return EnumPistonReaction.NORMAL;
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumDirection.EnumAxis.values().length];
-
-        static {
-            try {
-                BlockEndRod.SyntheticClass_1.a[EnumDirection.EnumAxis.X.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockEndRod.SyntheticClass_1.a[EnumDirection.EnumAxis.Z.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockEndRod.SyntheticClass_1.a[EnumDirection.EnumAxis.Y.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-        }
     }
 }

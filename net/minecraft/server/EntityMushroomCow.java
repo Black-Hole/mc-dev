@@ -7,23 +7,26 @@ public class EntityMushroomCow extends EntityCow {
     public EntityMushroomCow(World world) {
         super(world);
         this.setSize(0.9F, 1.4F);
-        this.bA = Blocks.MYCELIUM;
+        this.bz = Blocks.MYCELIUM;
     }
 
     public static void c(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "MushroomCow");
+        EntityInsentient.a(dataconvertermanager, EntityMushroomCow.class);
     }
 
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {
-        if (itemstack != null && itemstack.getItem() == Items.BOWL && this.getAge() >= 0 && !entityhuman.abilities.canInstantlyBuild) {
-            if (--itemstack.count == 0) {
+    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
+        if (itemstack.getItem() == Items.BOWL && this.getAge() >= 0 && !entityhuman.abilities.canInstantlyBuild) {
+            itemstack.subtract(1);
+            if (itemstack.isEmpty()) {
                 entityhuman.a(enumhand, new ItemStack(Items.MUSHROOM_STEW));
             } else if (!entityhuman.inventory.pickup(new ItemStack(Items.MUSHROOM_STEW))) {
                 entityhuman.drop(new ItemStack(Items.MUSHROOM_STEW), false);
             }
 
             return true;
-        } else if (itemstack != null && itemstack.getItem() == Items.SHEARS && this.getAge() >= 0) {
+        } else if (itemstack.getItem() == Items.SHEARS && this.getAge() >= 0) {
             this.die();
             this.world.addParticle(EnumParticle.EXPLOSION_LARGE, this.locX, this.locY + (double) (this.length / 2.0F), this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
             if (!this.world.isClientSide) {
@@ -31,7 +34,7 @@ public class EntityMushroomCow extends EntityCow {
 
                 entitycow.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
                 entitycow.setHealth(this.getHealth());
-                entitycow.aO = this.aO;
+                entitycow.aN = this.aN;
                 if (this.hasCustomName()) {
                     entitycow.setCustomName(this.getCustomName());
                 }
@@ -43,12 +46,12 @@ public class EntityMushroomCow extends EntityCow {
                 }
 
                 itemstack.damage(1, entityhuman);
-                this.a(SoundEffects.dC, 1.0F, 1.0F);
+                this.a(SoundEffects.dV, 1.0F, 1.0F);
             }
 
             return true;
         } else {
-            return super.a(entityhuman, enumhand, itemstack);
+            return super.a(entityhuman, enumhand);
         }
     }
 
@@ -58,7 +61,7 @@ public class EntityMushroomCow extends EntityCow {
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.J;
+        return LootTables.M;
     }
 
     public EntityCow b(EntityAgeable entityageable) {

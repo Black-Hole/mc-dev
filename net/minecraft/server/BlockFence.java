@@ -18,7 +18,7 @@ public class BlockFence extends Block {
 
     public BlockFence(Material material, MaterialMapColor materialmapcolor) {
         super(material, materialmapcolor);
-        this.w(this.blockStateList.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(false)).set(BlockFence.EAST, Boolean.valueOf(false)).set(BlockFence.SOUTH, Boolean.valueOf(false)).set(BlockFence.WEST, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(false)).set(BlockFence.EAST, Boolean.valueOf(false)).set(BlockFence.SOUTH, Boolean.valueOf(false)).set(BlockFence.WEST, Boolean.valueOf(false)));
         this.a(CreativeModeTab.c);
     }
 
@@ -43,7 +43,7 @@ public class BlockFence extends Block {
 
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
         return BlockFence.e[i(iblockdata)];
     }
@@ -89,8 +89,14 @@ public class BlockFence extends Block {
         return block == Blocks.BARRIER ? false : ((!(block instanceof BlockFence) || block.material != this.material) && !(block instanceof BlockFenceGate) ? (block.material.k() && iblockdata.h() ? block.material != Material.PUMPKIN : false) : true);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
-        return world.isClientSide ? true : ItemLeash.a(entityhuman, world, blockposition);
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        if (!world.isClientSide) {
+            return ItemLeash.a(entityhuman, world, blockposition);
+        } else {
+            ItemStack itemstack = entityhuman.b(enumhand);
+
+            return itemstack.getItem() == Items.LEAD || itemstack.isEmpty();
+        }
     }
 
     public int toLegacyData(IBlockData iblockdata) {
@@ -102,14 +108,14 @@ public class BlockFence extends Block {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        switch (BlockFence.SyntheticClass_1.a[enumblockrotation.ordinal()]) {
-        case 1:
+        switch (enumblockrotation) {
+        case CLOCKWISE_180:
             return iblockdata.set(BlockFence.NORTH, iblockdata.get(BlockFence.SOUTH)).set(BlockFence.EAST, iblockdata.get(BlockFence.WEST)).set(BlockFence.SOUTH, iblockdata.get(BlockFence.NORTH)).set(BlockFence.WEST, iblockdata.get(BlockFence.EAST));
 
-        case 2:
+        case COUNTERCLOCKWISE_90:
             return iblockdata.set(BlockFence.NORTH, iblockdata.get(BlockFence.EAST)).set(BlockFence.EAST, iblockdata.get(BlockFence.SOUTH)).set(BlockFence.SOUTH, iblockdata.get(BlockFence.WEST)).set(BlockFence.WEST, iblockdata.get(BlockFence.NORTH));
 
-        case 3:
+        case CLOCKWISE_90:
             return iblockdata.set(BlockFence.NORTH, iblockdata.get(BlockFence.WEST)).set(BlockFence.EAST, iblockdata.get(BlockFence.NORTH)).set(BlockFence.SOUTH, iblockdata.get(BlockFence.EAST)).set(BlockFence.WEST, iblockdata.get(BlockFence.SOUTH));
 
         default:
@@ -118,11 +124,11 @@ public class BlockFence extends Block {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        switch (BlockFence.SyntheticClass_1.b[enumblockmirror.ordinal()]) {
-        case 1:
+        switch (enumblockmirror) {
+        case LEFT_RIGHT:
             return iblockdata.set(BlockFence.NORTH, iblockdata.get(BlockFence.SOUTH)).set(BlockFence.SOUTH, iblockdata.get(BlockFence.NORTH));
 
-        case 2:
+        case FRONT_BACK:
             return iblockdata.set(BlockFence.EAST, iblockdata.get(BlockFence.WEST)).set(BlockFence.WEST, iblockdata.get(BlockFence.EAST));
 
         default:
@@ -132,46 +138,5 @@ public class BlockFence extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockFence.NORTH, BlockFence.EAST, BlockFence.WEST, BlockFence.SOUTH});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b = new int[EnumBlockMirror.values().length];
-
-        static {
-            try {
-                BlockFence.SyntheticClass_1.b[EnumBlockMirror.LEFT_RIGHT.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockFence.SyntheticClass_1.b[EnumBlockMirror.FRONT_BACK.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            a = new int[EnumBlockRotation.values().length];
-
-            try {
-                BlockFence.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_180.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockFence.SyntheticClass_1.a[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockFence.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-        }
     }
 }

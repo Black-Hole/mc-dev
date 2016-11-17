@@ -7,12 +7,14 @@ public class ItemSnowball extends Item {
         this.a(CreativeModeTab.f);
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         if (!entityhuman.abilities.canInstantlyBuild) {
-            --itemstack.count;
+            itemstack.subtract(1);
         }
 
-        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.fS, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemSnowball.j.nextFloat() * 0.4F + 0.8F));
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.go, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemSnowball.j.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
             EntitySnowball entitysnowball = new EntitySnowball(world, entityhuman);
 

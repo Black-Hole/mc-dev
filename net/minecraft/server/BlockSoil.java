@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockSoil extends Block {
 
@@ -11,12 +11,12 @@ public class BlockSoil extends Block {
 
     protected BlockSoil() {
         super(Material.EARTH);
-        this.w(this.blockStateList.getBlockData().set(BlockSoil.MOISTURE, Integer.valueOf(0)));
+        this.y(this.blockStateList.getBlockData().set(BlockSoil.MOISTURE, Integer.valueOf(0)));
         this.a(true);
         this.d(255);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockSoil.b;
     }
 
@@ -31,11 +31,11 @@ public class BlockSoil extends Block {
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         int i = ((Integer) iblockdata.get(BlockSoil.MOISTURE)).intValue();
 
-        if (!this.c(world, blockposition) && !world.isRainingAt(blockposition.up())) {
+        if (!this.d(world, blockposition) && !world.isRainingAt(blockposition.up())) {
             if (i > 0) {
                 world.setTypeAndData(blockposition, iblockdata.set(BlockSoil.MOISTURE, Integer.valueOf(i - 1)), 2);
-            } else if (!this.b(world, blockposition)) {
-                world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
+            } else if (!this.c(world, blockposition)) {
+                this.b(world, blockposition);
             }
         } else if (i < 7) {
             world.setTypeAndData(blockposition, iblockdata.set(BlockSoil.MOISTURE, Integer.valueOf(7)), 2);
@@ -45,19 +45,35 @@ public class BlockSoil extends Block {
 
     public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
         if (!world.isClientSide && world.random.nextFloat() < f - 0.5F && entity instanceof EntityLiving && (entity instanceof EntityHuman || world.getGameRules().getBoolean("mobGriefing")) && entity.width * entity.width * entity.length > 0.512F) {
-            world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
+            this.b(world, blockposition);
         }
 
         super.fallOn(world, blockposition, entity, f);
     }
 
-    private boolean b(World world, BlockPosition blockposition) {
+    private void b(World world, BlockPosition blockposition) {
+        IBlockData iblockdata = Blocks.DIRT.getBlockData();
+
+        world.setTypeUpdate(blockposition, iblockdata);
+        AxisAlignedBB axisalignedbb = iblockdata.c(world, blockposition).a(blockposition);
+        List list = world.getEntities((Entity) null, axisalignedbb);
+        Iterator iterator = list.iterator();
+
+        while (iterator.hasNext()) {
+            Entity entity = (Entity) iterator.next();
+
+            entity.setPosition(entity.locX, axisalignedbb.e, entity.locZ);
+        }
+
+    }
+
+    private boolean c(World world, BlockPosition blockposition) {
         Block block = world.getType(blockposition.up()).getBlock();
 
         return block instanceof BlockCrops || block instanceof BlockStem;
     }
 
-    private boolean c(World world, BlockPosition blockposition) {
+    private boolean d(World world, BlockPosition blockposition) {
         Iterator iterator = BlockPosition.b(blockposition.a(-4, 0, -4), blockposition.a(4, 1, 4)).iterator();
 
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition;
@@ -73,21 +89,16 @@ public class BlockSoil extends Block {
         return true;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
-        super.a(iblockdata, world, blockposition, block);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+        super.a(iblockdata, world, blockposition, block, blockposition1);
         if (world.getType(blockposition.up()).getMaterial().isBuildable()) {
-            world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
+            this.b(world, blockposition);
         }
 
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
-    }
-
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return new ItemStack(Blocks.DIRT);
     }
 
     public IBlockData fromLegacyData(int i) {

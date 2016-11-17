@@ -9,13 +9,14 @@ public class ItemEndCrystal extends Item {
         this.a(CreativeModeTab.c);
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         IBlockData iblockdata = world.getType(blockposition);
 
         if (iblockdata.getBlock() != Blocks.OBSIDIAN && iblockdata.getBlock() != Blocks.BEDROCK) {
             return EnumInteractionResult.FAIL;
         } else {
             BlockPosition blockposition1 = blockposition.up();
+            ItemStack itemstack = entityhuman.b(enumhand);
 
             if (!entityhuman.a(blockposition1, enumdirection, itemstack)) {
                 return EnumInteractionResult.FAIL;
@@ -41,13 +42,13 @@ public class ItemEndCrystal extends Item {
                             entityendercrystal.setShowingBottom(false);
                             world.addEntity(entityendercrystal);
                             if (world.worldProvider instanceof WorldProviderTheEnd) {
-                                EnderDragonBattle enderdragonbattle = ((WorldProviderTheEnd) world.worldProvider).s();
+                                EnderDragonBattle enderdragonbattle = ((WorldProviderTheEnd) world.worldProvider).t();
 
                                 enderdragonbattle.e();
                             }
                         }
 
-                        --itemstack.count;
+                        itemstack.subtract(1);
                         return EnumInteractionResult.SUCCESS;
                     }
                 }

@@ -5,7 +5,6 @@ import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockRedstoneTorch extends BlockTorch {
 
@@ -57,7 +56,7 @@ public class BlockRedstoneTorch extends BlockTorch {
             for (int j = 0; j < i; ++j) {
                 EnumDirection enumdirection = aenumdirection[j];
 
-                world.applyPhysics(blockposition.shift(enumdirection), this);
+                world.applyPhysics(blockposition.shift(enumdirection), this, false);
             }
         }
 
@@ -71,7 +70,7 @@ public class BlockRedstoneTorch extends BlockTorch {
             for (int j = 0; j < i; ++j) {
                 EnumDirection enumdirection = aenumdirection[j];
 
-                world.applyPhysics(blockposition.shift(enumdirection), this);
+                world.applyPhysics(blockposition.shift(enumdirection), this, false);
             }
         }
 
@@ -101,7 +100,7 @@ public class BlockRedstoneTorch extends BlockTorch {
             if (flag) {
                 world.setTypeAndData(blockposition, Blocks.UNLIT_REDSTONE_TORCH.getBlockData().set(BlockRedstoneTorch.FACING, iblockdata.get(BlockRedstoneTorch.FACING)), 3);
                 if (this.a(world, blockposition, true)) {
-                    world.a((EntityHuman) null, blockposition, SoundEffects.eR, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+                    world.a((EntityHuman) null, blockposition, SoundEffects.fl, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
 
                     for (int i = 0; i < 5; ++i) {
                         double d0 = (double) blockposition.getX() + random.nextDouble() * 0.6D + 0.2D;
@@ -120,7 +119,7 @@ public class BlockRedstoneTorch extends BlockTorch {
 
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!this.e(world, blockposition, iblockdata)) {
             if (this.isOn == this.g(world, blockposition, iblockdata)) {
                 world.a(blockposition, (Block) this, this.a(world));
@@ -133,7 +132,6 @@ public class BlockRedstoneTorch extends BlockTorch {
         return enumdirection == EnumDirection.DOWN ? iblockdata.a(iblockaccess, blockposition, enumdirection) : 0;
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.REDSTONE_TORCH);
     }

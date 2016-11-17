@@ -42,8 +42,8 @@ public class DataWatcherRegistry {
         }
     };
     public static final DataWatcherSerializer<Float> c = new DataWatcherSerializer() {
-        public void a(PacketDataSerializer packetdataserializer, Float float) {
-            packetdataserializer.writeFloat(float.floatValue());
+        public void a(PacketDataSerializer packetdataserializer, Float ofloat) {
+            packetdataserializer.writeFloat(ofloat.floatValue());
         }
 
         public Float b(PacketDataSerializer packetdataserializer) {
@@ -92,16 +92,16 @@ public class DataWatcherRegistry {
             return this.b(packetdataserializer);
         }
     };
-    public static final DataWatcherSerializer<Optional<ItemStack>> f = new DataWatcherSerializer() {
-        public void a(PacketDataSerializer packetdataserializer, Optional<ItemStack> optional) {
-            packetdataserializer.a((ItemStack) optional.orNull());
+    public static final DataWatcherSerializer<ItemStack> f = new DataWatcherSerializer() {
+        public void a(PacketDataSerializer packetdataserializer, ItemStack itemstack) {
+            packetdataserializer.a(itemstack);
         }
 
-        public Optional<ItemStack> b(PacketDataSerializer packetdataserializer) {
-            return Optional.fromNullable(packetdataserializer.k());
+        public ItemStack b(PacketDataSerializer packetdataserializer) {
+            return packetdataserializer.k();
         }
 
-        public DataWatcherObject<Optional<ItemStack>> a(int i) {
+        public DataWatcherObject<ItemStack> a(int i) {
             return new DataWatcherObject(i, this);
         }
 

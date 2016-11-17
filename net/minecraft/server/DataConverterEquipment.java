@@ -12,7 +12,7 @@ public class DataConverterEquipment implements IDataConverter {
         NBTTagList nbttaglist = nbttagcompound.getList("Equipment", 10);
         NBTTagList nbttaglist1;
 
-        if (nbttaglist.size() > 0 && !nbttagcompound.hasKeyOfType("HandItems", 10)) {
+        if (!nbttaglist.isEmpty() && !nbttagcompound.hasKeyOfType("HandItems", 10)) {
             nbttaglist1 = new NBTTagList();
             nbttaglist1.add(nbttaglist.h(0));
             nbttaglist1.add(new NBTTagCompound());

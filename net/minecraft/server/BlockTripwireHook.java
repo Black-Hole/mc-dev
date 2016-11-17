@@ -17,30 +17,30 @@ public class BlockTripwireHook extends Block {
 
     public BlockTripwireHook() {
         super(Material.ORIENTABLE);
-        this.w(this.blockStateList.getBlockData().set(BlockTripwireHook.FACING, EnumDirection.NORTH).set(BlockTripwireHook.POWERED, Boolean.valueOf(false)).set(BlockTripwireHook.ATTACHED, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockTripwireHook.FACING, EnumDirection.NORTH).set(BlockTripwireHook.POWERED, Boolean.valueOf(false)).set(BlockTripwireHook.ATTACHED, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
         this.a(true);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        switch (BlockTripwireHook.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockTripwireHook.FACING)).ordinal()]) {
-        case 1:
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        switch ((EnumDirection) iblockdata.get(BlockTripwireHook.FACING)) {
+        case EAST:
         default:
             return BlockTripwireHook.g;
 
-        case 2:
+        case WEST:
             return BlockTripwireHook.f;
 
-        case 3:
+        case SOUTH:
             return BlockTripwireHook.e;
 
-        case 4:
+        case NORTH:
             return BlockTripwireHook.d;
         }
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockTripwireHook.k;
     }
 
@@ -53,7 +53,7 @@ public class BlockTripwireHook extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        return enumdirection.k().c() && world.getType(blockposition.shift(enumdirection.opposite())).l();
+        return enumdirection.k().c() && world.getType(blockposition.shift(enumdirection.opposite())).m();
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
@@ -67,7 +67,7 @@ public class BlockTripwireHook extends Block {
             }
 
             enumdirection = (EnumDirection) iterator.next();
-        } while (!world.getType(blockposition.shift(enumdirection)).l());
+        } while (!world.getType(blockposition.shift(enumdirection)).m());
 
         return true;
     }
@@ -86,12 +86,12 @@ public class BlockTripwireHook extends Block {
         this.a(world, blockposition, iblockdata, false, false, -1, (IBlockData) null);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (block != this) {
             if (this.e(world, blockposition, iblockdata)) {
                 EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockTripwireHook.FACING);
 
-                if (!world.getType(blockposition.shift(enumdirection.opposite())).l()) {
+                if (!world.getType(blockposition.shift(enumdirection.opposite())).m()) {
                     this.b(world, blockposition, iblockdata, 0);
                     world.setAir(blockposition);
                 }
@@ -184,20 +184,20 @@ public class BlockTripwireHook extends Block {
 
     private void a(World world, BlockPosition blockposition, boolean flag, boolean flag1, boolean flag2, boolean flag3) {
         if (flag1 && !flag3) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.gC, SoundCategory.BLOCKS, 0.4F, 0.6F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.gZ, SoundCategory.BLOCKS, 0.4F, 0.6F);
         } else if (!flag1 && flag3) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.gB, SoundCategory.BLOCKS, 0.4F, 0.5F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.gY, SoundCategory.BLOCKS, 0.4F, 0.5F);
         } else if (flag && !flag2) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.gA, SoundCategory.BLOCKS, 0.4F, 0.7F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.gX, SoundCategory.BLOCKS, 0.4F, 0.7F);
         } else if (!flag && flag2) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.gD, SoundCategory.BLOCKS, 0.4F, 1.2F / (world.random.nextFloat() * 0.2F + 0.9F));
+            world.a((EntityHuman) null, blockposition, SoundEffects.ha, SoundCategory.BLOCKS, 0.4F, 1.2F / (world.random.nextFloat() * 0.2F + 0.9F));
         }
 
     }
 
     private void a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        world.applyPhysics(blockposition, this);
-        world.applyPhysics(blockposition.shift(enumdirection.opposite()), this);
+        world.applyPhysics(blockposition, this, false);
+        world.applyPhysics(blockposition.shift(enumdirection.opposite()), this, false);
     }
 
     private boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -219,8 +219,8 @@ public class BlockTripwireHook extends Block {
         }
 
         if (flag1) {
-            world.applyPhysics(blockposition, this);
-            world.applyPhysics(blockposition.shift(((EnumDirection) iblockdata.get(BlockTripwireHook.FACING)).opposite()), this);
+            world.applyPhysics(blockposition, this, false);
+            world.applyPhysics(blockposition.shift(((EnumDirection) iblockdata.get(BlockTripwireHook.FACING)).opposite()), this, false);
         }
 
         super.remove(world, blockposition, iblockdata);
@@ -267,37 +267,5 @@ public class BlockTripwireHook extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockTripwireHook.FACING, BlockTripwireHook.POWERED, BlockTripwireHook.ATTACHED});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                BlockTripwireHook.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockTripwireHook.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockTripwireHook.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockTripwireHook.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-        }
     }
 }

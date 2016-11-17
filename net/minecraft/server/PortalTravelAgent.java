@@ -327,7 +327,7 @@ public class PortalTravelAgent {
                     i4 = j2 + (i3 - 1) * l5;
                     BlockPosition blockposition = new BlockPosition(k3, l3, i4);
 
-                    this.world.applyPhysics(blockposition, this.world.getType(blockposition).getBlock());
+                    this.world.applyPhysics(blockposition, this.world.getType(blockposition).getBlock(), false);
                 }
             }
         }

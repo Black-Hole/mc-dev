@@ -9,15 +9,15 @@ public class PacketPlayInChat implements Packet<PacketListenerPlayIn> {
     public PacketPlayInChat() {}
 
     public PacketPlayInChat(String s) {
-        if (s.length() > 100) {
-            s = s.substring(0, 100);
+        if (s.length() > 256) {
+            s = s.substring(0, 256);
         }
 
         this.a = s;
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e(100);
+        this.a = packetdataserializer.e(256);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

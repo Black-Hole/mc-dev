@@ -13,18 +13,13 @@ public class ItemSaddle extends Item {
 
             if (!entitypig.hasSaddle() && !entitypig.isBaby()) {
                 entitypig.setSaddle(true);
-                entitypig.world.a(entityhuman, entitypig.locX, entitypig.locY, entitypig.locZ, SoundEffects.dY, SoundCategory.NEUTRAL, 0.5F, 1.0F);
-                --itemstack.count;
+                entitypig.world.a(entityhuman, entitypig.locX, entitypig.locY, entitypig.locZ, SoundEffects.es, SoundCategory.NEUTRAL, 0.5F, 1.0F);
+                itemstack.subtract(1);
             }
 
             return true;
         } else {
             return false;
         }
-    }
-
-    public boolean a(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1) {
-        this.a(itemstack, (EntityHuman) null, entityliving, EnumHand.MAIN_HAND);
-        return true;
     }
 }

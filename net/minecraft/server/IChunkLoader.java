@@ -15,4 +15,6 @@ public interface IChunkLoader {
     void a();
 
     void b();
+
+    boolean a(int i, int j);
 }

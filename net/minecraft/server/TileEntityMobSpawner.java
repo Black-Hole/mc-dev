@@ -33,7 +33,7 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
     public static void a(DataConverterManager dataconvertermanager) {
         dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, new DataInspector() {
             public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
-                if ("MobSpawner".equals(nbttagcompound.getString("id"))) {
+                if (TileEntity.a(TileEntityMobSpawner.class).equals(new MinecraftKey(nbttagcompound.getString("id")))) {
                     if (nbttagcompound.hasKeyOfType("SpawnPotentials", 9)) {
                         NBTTagList nbttaglist = nbttagcompound.getList("SpawnPotentials", 10);
 
@@ -63,16 +63,16 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
         return nbttagcompound;
     }
 
-    public void E_() {
+    public void F_() {
         this.a.c();
     }
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 1, this.c());
+        return new PacketPlayOutTileEntityData(this.position, 1, this.d());
     }
 
-    public NBTTagCompound c() {
+    public NBTTagCompound d() {
         NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
 
         nbttagcompound.remove("SpawnPotentials");

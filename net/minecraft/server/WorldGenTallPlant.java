@@ -18,7 +18,7 @@ public class WorldGenTallPlant extends WorldGenerator {
         for (int i = 0; i < 64; ++i) {
             BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 
-            if (world.isEmpty(blockposition1) && (!world.worldProvider.m() || blockposition1.getY() < 254) && Blocks.DOUBLE_PLANT.canPlace(world, blockposition1)) {
+            if (world.isEmpty(blockposition1) && (!world.worldProvider.n() || blockposition1.getY() < 254) && Blocks.DOUBLE_PLANT.canPlace(world, blockposition1)) {
                 Blocks.DOUBLE_PLANT.a(world, blockposition1, this.a, 2);
                 flag = true;
             }

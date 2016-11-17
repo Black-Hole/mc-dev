@@ -45,7 +45,7 @@ public class PacketPlayOutMap implements Packet<PacketListenerPlayOut> {
         for (int i = 0; i < this.d.length; ++i) {
             short short0 = (short) packetdataserializer.readByte();
 
-            this.d[i] = new MapIcon((byte) (short0 >> 4 & 15), packetdataserializer.readByte(), packetdataserializer.readByte(), (byte) (short0 & 15));
+            this.d[i] = new MapIcon(MapIcon.Type.a((byte) (short0 >> 4 & 15)), packetdataserializer.readByte(), packetdataserializer.readByte(), (byte) (short0 & 15));
         }
 
         this.g = packetdataserializer.readUnsignedByte();

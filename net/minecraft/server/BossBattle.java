@@ -29,6 +29,10 @@ public abstract class BossBattle {
         return this.title;
     }
 
+    public void a(IChatBaseComponent ichatbasecomponent) {
+        this.title = ichatbasecomponent;
+    }
+
     public float getProgress() {
         return this.b;
     }

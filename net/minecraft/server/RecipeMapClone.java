@@ -1,21 +1,19 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class RecipeMapClone implements IRecipe {
 
     public RecipeMapClone() {}
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
         int i = 0;
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.a;
 
         for (int j = 0; j < inventorycrafting.getSize(); ++j) {
             ItemStack itemstack1 = inventorycrafting.getItem(j);
 
-            if (itemstack1 != null) {
+            if (!itemstack1.isEmpty()) {
                 if (itemstack1.getItem() == Items.FILLED_MAP) {
-                    if (itemstack != null) {
+                    if (!itemstack.isEmpty()) {
                         return false;
                     }
 
@@ -30,27 +28,26 @@ public class RecipeMapClone implements IRecipe {
             }
         }
 
-        return itemstack != null && i > 0;
+        return !itemstack.isEmpty() && i > 0;
     }
 
-    @Nullable
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         int i = 0;
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.a;
 
         for (int j = 0; j < inventorycrafting.getSize(); ++j) {
             ItemStack itemstack1 = inventorycrafting.getItem(j);
 
-            if (itemstack1 != null) {
+            if (!itemstack1.isEmpty()) {
                 if (itemstack1.getItem() == Items.FILLED_MAP) {
-                    if (itemstack != null) {
-                        return null;
+                    if (!itemstack.isEmpty()) {
+                        return ItemStack.a;
                     }
 
                     itemstack = itemstack1;
                 } else {
                     if (itemstack1.getItem() != Items.MAP) {
-                        return null;
+                        return ItemStack.a;
                     }
 
                     ++i;
@@ -58,16 +55,20 @@ public class RecipeMapClone implements IRecipe {
             }
         }
 
-        if (itemstack != null && i >= 1) {
+        if (!itemstack.isEmpty() && i >= 1) {
             ItemStack itemstack2 = new ItemStack(Items.FILLED_MAP, i + 1, itemstack.getData());
 
             if (itemstack.hasName()) {
-                itemstack2.c(itemstack.getName());
+                itemstack2.g(itemstack.getName());
+            }
+
+            if (itemstack.hasTag()) {
+                itemstack2.setTag(itemstack.getTag());
             }
 
             return itemstack2;
         } else {
-            return null;
+            return ItemStack.a;
         }
     }
 
@@ -75,22 +76,21 @@ public class RecipeMapClone implements IRecipe {
         return 9;
     }
 
-    @Nullable
     public ItemStack b() {
-        return null;
+        return ItemStack.a;
     }
 
-    public ItemStack[] b(InventoryCrafting inventorycrafting) {
-        ItemStack[] aitemstack = new ItemStack[inventorycrafting.getSize()];
+    public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
+        NonNullList nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
 
-        for (int i = 0; i < aitemstack.length; ++i) {
+        for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
-            if (itemstack != null && itemstack.getItem().r()) {
-                aitemstack[i] = new ItemStack(itemstack.getItem().q());
+            if (itemstack.getItem().s()) {
+                nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
             }
         }
 
-        return aitemstack;
+        return nonnulllist;
     }
 }

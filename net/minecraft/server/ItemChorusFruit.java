@@ -1,14 +1,11 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class ItemChorusFruit extends ItemFood {
 
     public ItemChorusFruit(int i, float f) {
         super(i, f, false);
     }
 
-    @Nullable
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
         ItemStack itemstack1 = super.a(itemstack, world, entityliving);
 
@@ -26,15 +23,15 @@ public class ItemChorusFruit extends ItemFood {
                     entityliving.stopRiding();
                 }
 
-                if (entityliving.k(d3, d4, d5)) {
-                    world.a((EntityHuman) null, d0, d1, d2, SoundEffects.af, SoundCategory.PLAYERS, 1.0F, 1.0F);
-                    entityliving.a(SoundEffects.af, 1.0F, 1.0F);
+                if (entityliving.j(d3, d4, d5)) {
+                    world.a((EntityHuman) null, d0, d1, d2, SoundEffects.ah, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                    entityliving.a(SoundEffects.ah, 1.0F, 1.0F);
                     break;
                 }
             }
 
             if (entityliving instanceof EntityHuman) {
-                ((EntityHuman) entityliving).df().a(this, 20);
+                ((EntityHuman) entityliving).di().a(this, 20);
             }
         }
 

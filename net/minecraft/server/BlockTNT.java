@@ -1,14 +1,12 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class BlockTNT extends Block {
 
     public static final BlockStateBoolean EXPLODE = BlockStateBoolean.of("explode");
 
     public BlockTNT() {
         super(Material.TNT);
-        this.w(this.blockStateList.getBlockData().set(BlockTNT.EXPLODE, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockTNT.EXPLODE, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 
@@ -21,7 +19,7 @@ public class BlockTNT extends Block {
 
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (world.isBlockIndirectlyPowered(blockposition)) {
             this.postBreak(world, blockposition, iblockdata.set(BlockTNT.EXPLODE, Boolean.valueOf(true)));
             world.setAir(blockposition);
@@ -48,25 +46,27 @@ public class BlockTNT extends Block {
                 EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) blockposition.getX() + 0.5F), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + 0.5F), entityliving);
 
                 world.addEntity(entitytntprimed);
-                world.a((EntityHuman) null, entitytntprimed.locX, entitytntprimed.locY, entitytntprimed.locZ, SoundEffects.gz, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.a((EntityHuman) null, entitytntprimed.locX, entitytntprimed.locY, entitytntprimed.locZ, SoundEffects.gV, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
 
         }
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (itemstack != null && (itemstack.getItem() == Items.FLINT_AND_STEEL || itemstack.getItem() == Items.FIRE_CHARGE)) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
+        if (!itemstack.isEmpty() && (itemstack.getItem() == Items.FLINT_AND_STEEL || itemstack.getItem() == Items.FIRE_CHARGE)) {
             this.a(world, blockposition, iblockdata.set(BlockTNT.EXPLODE, Boolean.valueOf(true)), (EntityLiving) entityhuman);
             world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
             if (itemstack.getItem() == Items.FLINT_AND_STEEL) {
                 itemstack.damage(1, entityhuman);
             } else if (!entityhuman.abilities.canInstantlyBuild) {
-                --itemstack.count;
+                itemstack.subtract(1);
             }
 
             return true;
         } else {
-            return super.interact(world, blockposition, iblockdata, entityhuman, enumhand, itemstack, enumdirection, f, f1, f2);
+            return super.interact(world, blockposition, iblockdata, entityhuman, enumhand, enumdirection, f, f1, f2);
         }
     }
 

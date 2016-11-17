@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,7 +43,7 @@ public class CommandClone extends CommandAbstract {
             } else {
                 boolean flag = false;
                 Block block = null;
-                int j = -1;
+                Predicate predicate = null;
 
                 if ((astring.length < 11 || !"force".equals(astring[10]) && !"move".equals(astring[10])) && structureboundingbox.a(structureboundingbox1)) {
                     throw new CommandException("commands.clone.noOverlap", new Object[0]);
@@ -67,7 +68,7 @@ public class CommandClone extends CommandAbstract {
 
                                     block = b(icommandlistener, astring[11]);
                                     if (astring.length >= 13) {
-                                        j = a(astring[12], 0, 15);
+                                        predicate = b(block, astring[12]);
                                     }
                                 }
                             }
@@ -78,14 +79,14 @@ public class CommandClone extends CommandAbstract {
                             LinkedList linkedlist = Lists.newLinkedList();
                             BlockPosition blockposition3 = new BlockPosition(structureboundingbox1.a - structureboundingbox.a, structureboundingbox1.b - structureboundingbox.b, structureboundingbox1.c - structureboundingbox.c);
 
-                            for (int k = structureboundingbox.c; k <= structureboundingbox.f; ++k) {
-                                for (int l = structureboundingbox.b; l <= structureboundingbox.e; ++l) {
-                                    for (int i1 = structureboundingbox.a; i1 <= structureboundingbox.d; ++i1) {
-                                        BlockPosition blockposition4 = new BlockPosition(i1, l, k);
-                                        BlockPosition blockposition5 = blockposition4.a(blockposition3);
+                            for (int j = structureboundingbox.c; j <= structureboundingbox.f; ++j) {
+                                for (int k = structureboundingbox.b; k <= structureboundingbox.e; ++k) {
+                                    for (int l = structureboundingbox.a; l <= structureboundingbox.d; ++l) {
+                                        BlockPosition blockposition4 = new BlockPosition(l, k, j);
+                                        BlockPosition blockposition5 = blockposition4.a((BaseBlockPosition) blockposition3);
                                         IBlockData iblockdata = world.getType(blockposition4);
 
-                                        if ((!flag1 || iblockdata.getBlock() != Blocks.AIR) && (block == null || iblockdata.getBlock() == block && (j < 0 || iblockdata.getBlock().toLegacyData(iblockdata) == j))) {
+                                        if ((!flag1 || iblockdata.getBlock() != Blocks.AIR) && (block == null || iblockdata.getBlock() == block && (predicate == null || predicate.apply(iblockdata)))) {
                                             TileEntity tileentity = world.getTileEntity(blockposition4);
 
                                             if (tileentity != null) {
@@ -114,7 +115,7 @@ public class CommandClone extends CommandAbstract {
                                     TileEntity tileentity1 = world.getTileEntity(blockposition6);
 
                                     if (tileentity1 instanceof IInventory) {
-                                        ((IInventory) tileentity1).l();
+                                        ((IInventory) tileentity1).clear();
                                     }
                                 }
 
@@ -141,7 +142,7 @@ public class CommandClone extends CommandAbstract {
                                 commandclone_commandclonestoredtileentity = (CommandClone.CommandCloneStoredTileEntity) iterator1.next();
                                 tileentity2 = world.getTileEntity(commandclone_commandclonestoredtileentity.a);
                                 if (tileentity2 instanceof IInventory) {
-                                    ((IInventory) tileentity2).l();
+                                    ((IInventory) tileentity2).clear();
                                 }
                             }
 
@@ -171,7 +172,7 @@ public class CommandClone extends CommandAbstract {
 
                             while (iterator1.hasNext()) {
                                 commandclone_commandclonestoredtileentity = (CommandClone.CommandCloneStoredTileEntity) iterator1.next();
-                                world.update(commandclone_commandclonestoredtileentity.a, commandclone_commandclonestoredtileentity.b.getBlock());
+                                world.update(commandclone_commandclonestoredtileentity.a, commandclone_commandclonestoredtileentity.b.getBlock(), false);
                             }
 
                             List list1 = world.a(structureboundingbox, false);
@@ -183,7 +184,7 @@ public class CommandClone extends CommandAbstract {
                                     NextTickListEntry nextticklistentry = (NextTickListEntry) iterator2.next();
 
                                     if (structureboundingbox.b((BaseBlockPosition) nextticklistentry.a)) {
-                                        BlockPosition blockposition7 = nextticklistentry.a.a(blockposition3);
+                                        BlockPosition blockposition7 = nextticklistentry.a.a((BaseBlockPosition) blockposition3);
 
                                         world.b(blockposition7, nextticklistentry.a(), (int) (nextticklistentry.b - world.getWorldData().getTime()), nextticklistentry.c);
                                     }

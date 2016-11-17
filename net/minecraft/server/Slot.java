@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class Slot {
 
     public final int index;
@@ -18,40 +16,38 @@ public class Slot {
     }
 
     public void a(ItemStack itemstack, ItemStack itemstack1) {
-        if (itemstack != null && itemstack1 != null) {
-            if (itemstack.getItem() == itemstack1.getItem()) {
-                int i = itemstack1.count - itemstack.count;
+        int i = itemstack1.getCount() - itemstack.getCount();
 
-                if (i > 0) {
-                    this.a(itemstack, i);
-                }
-
-            }
+        if (i > 0) {
+            this.a(itemstack1, i);
         }
+
     }
 
     protected void a(ItemStack itemstack, int i) {}
 
+    protected void b(int i) {}
+
     protected void c(ItemStack itemstack) {}
 
-    public void a(EntityHuman entityhuman, ItemStack itemstack) {
+    public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
         this.f();
+        return itemstack;
     }
 
-    public boolean isAllowed(@Nullable ItemStack itemstack) {
+    public boolean isAllowed(ItemStack itemstack) {
         return true;
     }
 
-    @Nullable
     public ItemStack getItem() {
         return this.inventory.getItem(this.index);
     }
 
     public boolean hasItem() {
-        return this.getItem() != null;
+        return !this.getItem().isEmpty();
     }
 
-    public void set(@Nullable ItemStack itemstack) {
+    public void set(ItemStack itemstack) {
         this.inventory.setItem(this.index, itemstack);
         this.f();
     }

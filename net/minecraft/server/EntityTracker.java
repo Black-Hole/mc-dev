@@ -45,9 +45,11 @@ public class EntityTracker {
         } else if (entity instanceof EntitySmallFireball) {
             this.addEntity(entity, 64, 10, false);
         } else if (entity instanceof EntityFireball) {
-            this.addEntity(entity, 64, 10, false);
+            this.addEntity(entity, 64, 10, true);
         } else if (entity instanceof EntitySnowball) {
             this.addEntity(entity, 64, 10, true);
+        } else if (entity instanceof EntityLlamaSpit) {
+            this.addEntity(entity, 64, 10, false);
         } else if (entity instanceof EntityEnderPearl) {
             this.addEntity(entity, 64, 10, true);
         } else if (entity instanceof EntityEnderSignal) {
@@ -92,6 +94,8 @@ public class EntityTracker {
             this.addEntity(entity, 160, Integer.MAX_VALUE, true);
         } else if (entity instanceof EntityEnderCrystal) {
             this.addEntity(entity, 256, Integer.MAX_VALUE, false);
+        } else if (entity instanceof EntityEvokerFangs) {
+            this.addEntity(entity, 160, 2, false);
         }
 
     }
@@ -249,7 +253,7 @@ public class EntityTracker {
             EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
             Entity entity = entitytrackerentry.b();
 
-            if (entity != entityplayer && entity.ac == chunk.locX && entity.ae == chunk.locZ) {
+            if (entity != entityplayer && entity.ab == chunk.locX && entity.ad == chunk.locZ) {
                 entitytrackerentry.updatePlayer(entityplayer);
                 if (entity instanceof EntityInsentient && ((EntityInsentient) entity).getLeashHolder() != null) {
                     arraylist.add(entity);

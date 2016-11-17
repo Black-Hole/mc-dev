@@ -85,7 +85,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
             this.d = new ChatComponentText("#itzlipofutzli");
             this.b = 1;
         } else {
-            MinecraftServer minecraftserver = this.h();
+            MinecraftServer minecraftserver = this.B_();
 
             if (minecraftserver != null && minecraftserver.M() && minecraftserver.getEnableCommandBlock()) {
                 ICommandHandler icommandhandler = minecraftserver.getCommandHandler();
@@ -145,13 +145,13 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     }
 
     public boolean getSendCommandFeedback() {
-        MinecraftServer minecraftserver = this.h();
+        MinecraftServer minecraftserver = this.B_();
 
         return minecraftserver == null || !minecraftserver.M() || minecraftserver.worldServer[0].getGameRules().getBoolean("commandBlockOutput");
     }
 
     public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
-        this.g.a(this.h(), this, commandobjectiveexecutor_enumcommandresult, i);
+        this.g.a(this.B_(), this, commandobjectiveexecutor_enumcommandresult, i);
     }
 
     public abstract void i();
@@ -169,7 +169,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     }
 
     public boolean a(EntityHuman entityhuman) {
-        if (!entityhuman.dh()) {
+        if (!entityhuman.dk()) {
             return false;
         } else {
             if (entityhuman.getWorld().isClientSide) {

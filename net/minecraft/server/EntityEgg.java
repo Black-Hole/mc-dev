@@ -14,7 +14,7 @@ public class EntityEgg extends EntityProjectile {
         super(world, d0, d1, d2);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
+    public static void b(DataConverterManager dataconvertermanager) {
         EntityProjectile.a(dataconvertermanager, "ThrownEgg");
     }
 
@@ -23,29 +23,24 @@ public class EntityEgg extends EntityProjectile {
             movingobjectposition.entity.damageEntity(DamageSource.projectile(this, this.getShooter()), 0.0F);
         }
 
-        if (!this.world.isClientSide && this.random.nextInt(8) == 0) {
-            byte b0 = 1;
-
-            if (this.random.nextInt(32) == 0) {
-                b0 = 4;
-            }
-
-            for (int i = 0; i < b0; ++i) {
-                EntityChicken entitychicken = new EntityChicken(this.world);
-
-                entitychicken.setAgeRaw(-24000);
-                entitychicken.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, 0.0F);
-                this.world.addEntity(entitychicken);
-            }
-        }
-
-        double d0 = 0.08D;
-
-        for (int j = 0; j < 8; ++j) {
-            this.world.addParticle(EnumParticle.ITEM_CRACK, this.locX, this.locY, this.locZ, ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D, new int[] { Item.getId(Items.EGG)});
-        }
-
         if (!this.world.isClientSide) {
+            if (this.random.nextInt(8) == 0) {
+                byte b0 = 1;
+
+                if (this.random.nextInt(32) == 0) {
+                    b0 = 4;
+                }
+
+                for (int i = 0; i < b0; ++i) {
+                    EntityChicken entitychicken = new EntityChicken(this.world);
+
+                    entitychicken.setAgeRaw(-24000);
+                    entitychicken.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, 0.0F);
+                    this.world.addEntity(entitychicken);
+                }
+            }
+
+            this.world.broadcastEntityEffect(this, (byte) 3);
             this.die();
         }
 

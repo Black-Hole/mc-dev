@@ -51,8 +51,8 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
             EnumGamemode enumgamemode = null;
             IChatBaseComponent ichatbasecomponent = null;
 
-            switch (PacketPlayOutPlayerInfo.SyntheticClass_1.a[this.a.ordinal()]) {
-            case 1:
+            switch (this.a) {
+            case ADD_PLAYER:
                 gameprofile = new GameProfile(packetdataserializer.i(), packetdataserializer.e(16));
                 int l = packetdataserializer.g();
 
@@ -74,24 +74,24 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
                 }
                 break;
 
-            case 2:
+            case UPDATE_GAME_MODE:
                 gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
                 enumgamemode = EnumGamemode.getById(packetdataserializer.g());
                 break;
 
-            case 3:
+            case UPDATE_LATENCY:
                 gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
                 k = packetdataserializer.g();
                 break;
 
-            case 4:
+            case UPDATE_DISPLAY_NAME:
                 gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
                 if (packetdataserializer.readBoolean()) {
                     ichatbasecomponent = packetdataserializer.f();
                 }
                 break;
 
-            case 5:
+            case REMOVE_PLAYER:
                 gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
             }
 
@@ -108,8 +108,8 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
         while (iterator.hasNext()) {
             PacketPlayOutPlayerInfo.PlayerInfoData packetplayoutplayerinfo_playerinfodata = (PacketPlayOutPlayerInfo.PlayerInfoData) iterator.next();
 
-            switch (PacketPlayOutPlayerInfo.SyntheticClass_1.a[this.a.ordinal()]) {
-            case 1:
+            switch (this.a) {
+            case ADD_PLAYER:
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getName());
                 packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.a().getProperties().size());
@@ -138,17 +138,17 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
                 }
                 break;
 
-            case 2:
+            case UPDATE_GAME_MODE:
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
                 packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.c().getId());
                 break;
 
-            case 3:
+            case UPDATE_LATENCY:
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
                 packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.b());
                 break;
 
-            case 4:
+            case UPDATE_DISPLAY_NAME:
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
                 if (packetplayoutplayerinfo_playerinfodata.d() == null) {
                     packetdataserializer.writeBoolean(false);
@@ -158,7 +158,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
                 }
                 break;
 
-            case 5:
+            case REMOVE_PLAYER:
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
             }
         }
@@ -171,44 +171,6 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
     public String toString() {
         return Objects.toStringHelper(this).add("action", this.a).add("entries", this.b).toString();
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[PacketPlayOutPlayerInfo.EnumPlayerInfoAction.values().length];
-
-        static {
-            try {
-                PacketPlayOutPlayerInfo.SyntheticClass_1.a[PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                PacketPlayOutPlayerInfo.SyntheticClass_1.a[PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_GAME_MODE.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                PacketPlayOutPlayerInfo.SyntheticClass_1.a[PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_LATENCY.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                PacketPlayOutPlayerInfo.SyntheticClass_1.a[PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                PacketPlayOutPlayerInfo.SyntheticClass_1.a[PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-        }
     }
 
     public class PlayerInfoData {

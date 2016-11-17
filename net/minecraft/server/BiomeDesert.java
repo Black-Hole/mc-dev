@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
 import java.util.Random;
 
 public class BiomeDesert extends BiomeBase {
@@ -15,6 +16,19 @@ public class BiomeDesert extends BiomeBase {
         this.t.G = 10;
         this.v.clear();
         this.v.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 4, 2, 3));
+        Iterator iterator = this.u.iterator();
+
+        while (iterator.hasNext()) {
+            BiomeBase.BiomeMeta biomebase_biomemeta = (BiomeBase.BiomeMeta) iterator.next();
+
+            if (biomebase_biomemeta.b == EntityZombie.class || biomebase_biomemeta.b == EntityZombieVillager.class) {
+                iterator.remove();
+            }
+        }
+
+        this.u.add(new BiomeBase.BiomeMeta(EntityZombie.class, 19, 4, 4));
+        this.u.add(new BiomeBase.BiomeMeta(EntityZombieVillager.class, 1, 1, 1));
+        this.u.add(new BiomeBase.BiomeMeta(EntityZombieHusk.class, 80, 4, 4));
     }
 
     public void a(World world, Random random, BlockPosition blockposition) {

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
+import javax.annotation.Nullable;
 
 public class RegionFile {
 
@@ -85,6 +86,7 @@ public class RegionFile {
 
     }
 
+    @Nullable
     public synchronized DataInputStream a(int i, int j) {
         if (this.d(i, j)) {
             return null;
@@ -132,6 +134,7 @@ public class RegionFile {
         }
     }
 
+    @Nullable
     public DataOutputStream b(int i, int j) {
         return this.d(i, j) ? null : new DataOutputStream(new BufferedOutputStream(new DeflaterOutputStream(new RegionFile.ChunkBuffer(i, j))));
     }
@@ -203,7 +206,7 @@ public class RegionFile {
                 }
             }
 
-            this.b(i, j, (int) (MinecraftServer.av() / 1000L));
+            this.b(i, j, (int) (MinecraftServer.aw() / 1000L));
         } catch (IOException ioexception) {
             ioexception.printStackTrace();
         }

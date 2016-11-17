@@ -41,9 +41,9 @@ public class CommandDebug extends CommandAbstract {
                 }
 
                 a(icommandlistener, (ICommand) this, "commands.debug.start", new Object[0]);
-                minecraftserver.aq();
-                this.b = MinecraftServer.av();
-                this.c = minecraftserver.ap();
+                minecraftserver.ar();
+                this.b = MinecraftServer.aw();
+                this.c = minecraftserver.aq();
             } else {
                 if (!"stop".equals(astring[0])) {
                     throw new ExceptionUsage("commands.debug.usage", new Object[0]);
@@ -57,14 +57,14 @@ public class CommandDebug extends CommandAbstract {
                     throw new CommandException("commands.debug.notStarted", new Object[0]);
                 }
 
-                long i = MinecraftServer.av();
-                int j = minecraftserver.ap();
+                long i = MinecraftServer.aw();
+                int j = minecraftserver.aq();
                 long k = i - this.b;
                 int l = j - this.c;
 
                 this.a(k, l, minecraftserver);
                 minecraftserver.methodProfiler.a = false;
-                a(icommandlistener, (ICommand) this, "commands.debug.stop", new Object[] { Float.valueOf((float) k / 1000.0F), Integer.valueOf(l)});
+                a(icommandlistener, (ICommand) this, "commands.debug.stop", new Object[] { String.format("%.2f", new Object[] { Float.valueOf((float) k / 1000.0F)}), Integer.valueOf(l)});
             }
 
         }
@@ -80,8 +80,9 @@ public class CommandDebug extends CommandAbstract {
             filewriter = new FileWriter(file);
             filewriter.write(this.b(i, j, minecraftserver));
         } catch (Throwable throwable) {
-            IOUtils.closeQuietly(filewriter);
             CommandDebug.a.error("Could not save profiler results to {}", new Object[] { file, throwable});
+        } finally {
+            IOUtils.closeQuietly(filewriter);
         }
 
     }

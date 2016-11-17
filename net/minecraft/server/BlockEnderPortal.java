@@ -17,7 +17,7 @@ public class BlockEnderPortal extends BlockTileEntity {
         return new TileEntityEnderPortal();
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockEnderPortal.a;
     }
 
@@ -36,15 +36,14 @@ public class BlockEnderPortal extends BlockTileEntity {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (!entity.isPassenger() && !entity.isVehicle() && entity.aX() && !world.isClientSide && entity.getBoundingBox().b(iblockdata.c(world, blockposition).a(blockposition))) {
+        if (!entity.isPassenger() && !entity.isVehicle() && entity.aX() && !world.isClientSide && entity.getBoundingBox().c(iblockdata.d(world, blockposition).a(blockposition))) {
             entity.c(1);
         }
 
     }
 
-    @Nullable
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return null;
+        return ItemStack.a;
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {

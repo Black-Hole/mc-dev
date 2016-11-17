@@ -8,17 +8,19 @@ import javax.annotation.Nullable;
 
 public final class ItemStack {
 
-    public static final DecimalFormat a = new DecimalFormat("#.##");
-    public int count;
-    public int c;
+    public static final ItemStack a = new ItemStack((Item) null);
+    public static final DecimalFormat b = new DecimalFormat("#.##");
+    private int count;
+    private int d;
     private Item item;
     private NBTTagCompound tag;
+    private boolean g;
     private int damage;
-    private EntityItemFrame g;
-    private Block h;
-    private boolean i;
+    private EntityItemFrame i;
     private Block j;
     private boolean k;
+    private Block l;
+    private boolean m;
 
     public ItemStack(Block block) {
         this(block, 1);
@@ -42,22 +44,36 @@ public final class ItemStack {
 
     public ItemStack(Item item, int i, int j) {
         this.item = item;
-        this.count = i;
         this.damage = j;
+        this.count = i;
         if (this.damage < 0) {
             this.damage = 0;
         }
 
+        this.F();
     }
 
-    public static ItemStack createStack(NBTTagCompound nbttagcompound) {
-        ItemStack itemstack = new ItemStack();
-
-        itemstack.c(nbttagcompound);
-        return itemstack.getItem() != null ? itemstack : null;
+    private void F() {
+        this.g = this.isEmpty();
     }
 
-    private ItemStack() {}
+    public ItemStack(NBTTagCompound nbttagcompound) {
+        this.item = Item.b(nbttagcompound.getString("id"));
+        this.count = nbttagcompound.getByte("Count");
+        this.damage = Math.max(0, nbttagcompound.getShort("Damage"));
+        if (nbttagcompound.hasKeyOfType("tag", 10)) {
+            this.tag = nbttagcompound.getCompound("tag");
+            if (this.item != null) {
+                this.item.a(nbttagcompound);
+            }
+        }
+
+        this.F();
+    }
+
+    public boolean isEmpty() {
+        return this == ItemStack.a ? true : (this.item != null && this.item != Item.getItemOf(Blocks.AIR) ? (this.count <= 0 ? true : this.damage < -32768 || this.damage > '\uffff') : true);
+    }
 
     public static void a(DataConverterManager dataconvertermanager) {
         dataconvertermanager.a(DataConverterTypes.ITEM_INSTANCE, (DataInspector) (new DataInspectorBlockEntity()));
@@ -65,23 +81,20 @@ public final class ItemStack {
     }
 
     public ItemStack cloneAndSubtract(int i) {
-        i = Math.min(i, this.count);
-        ItemStack itemstack = new ItemStack(this.item, i, this.damage);
+        int j = Math.min(i, this.count);
+        ItemStack itemstack = this.cloneItemStack();
 
-        if (this.tag != null) {
-            itemstack.tag = this.tag.g();
-        }
-
-        this.count -= i;
+        itemstack.setCount(j);
+        this.subtract(j);
         return itemstack;
     }
 
     public Item getItem() {
-        return this.item;
+        return this.g ? Item.getItemOf(Blocks.AIR) : this.item;
     }
 
     public EnumInteractionResult placeItem(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        EnumInteractionResult enuminteractionresult = this.getItem().a(this, entityhuman, world, blockposition, enumhand, enumdirection, f, f1, f2);
+        EnumInteractionResult enuminteractionresult = this.getItem().a(entityhuman, world, blockposition, enumhand, enumdirection, f, f1, f2);
 
         if (enuminteractionresult == EnumInteractionResult.SUCCESS) {
             entityhuman.b(StatisticList.b(this.item));
@@ -95,10 +108,9 @@ public final class ItemStack {
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
-        return this.getItem().a(this, world, entityhuman, enumhand);
+        return this.getItem().a(world, entityhuman, enumhand);
     }
 
-    @Nullable
     public ItemStack a(World world, EntityLiving entityliving) {
         return this.getItem().a(this, world, entityliving);
     }
@@ -116,44 +128,27 @@ public final class ItemStack {
         return nbttagcompound;
     }
 
-    public void c(NBTTagCompound nbttagcompound) {
-        this.item = Item.d(nbttagcompound.getString("id"));
-        this.count = nbttagcompound.getByte("Count");
-        this.damage = nbttagcompound.getShort("Damage");
-        if (this.damage < 0) {
-            this.damage = 0;
-        }
-
-        if (nbttagcompound.hasKeyOfType("tag", 10)) {
-            this.tag = nbttagcompound.getCompound("tag");
-            if (this.item != null) {
-                this.item.a(this.tag);
-            }
-        }
-
-    }
-
     public int getMaxStackSize() {
         return this.getItem().getMaxStackSize();
     }
 
     public boolean isStackable() {
-        return this.getMaxStackSize() > 1 && (!this.e() || !this.g());
+        return this.getMaxStackSize() > 1 && (!this.f() || !this.h());
     }
 
-    public boolean e() {
-        return this.item == null ? false : (this.item.getMaxDurability() <= 0 ? false : !this.hasTag() || !this.getTag().getBoolean("Unbreakable"));
+    public boolean f() {
+        return this.g ? false : (this.item.getMaxDurability() <= 0 ? false : !this.hasTag() || !this.getTag().getBoolean("Unbreakable"));
     }
 
     public boolean usesData() {
-        return this.item.k();
+        return this.getItem().l();
     }
 
-    public boolean g() {
-        return this.e() && this.damage > 0;
+    public boolean h() {
+        return this.f() && this.damage > 0;
     }
 
-    public int h() {
+    public int i() {
         return this.damage;
     }
 
@@ -169,12 +164,12 @@ public final class ItemStack {
 
     }
 
-    public int j() {
-        return this.item == null ? 0 : this.item.getMaxDurability();
+    public int k() {
+        return this.getItem().getMaxDurability();
     }
 
     public boolean isDamaged(int i, Random random) {
-        if (!this.e()) {
+        if (!this.f()) {
             return false;
         } else {
             if (i > 0) {
@@ -194,24 +189,20 @@ public final class ItemStack {
             }
 
             this.damage += i;
-            return this.damage > this.j();
+            return this.damage > this.k();
         }
     }
 
     public void damage(int i, EntityLiving entityliving) {
         if (!(entityliving instanceof EntityHuman) || !((EntityHuman) entityliving).abilities.canInstantlyBuild) {
-            if (this.e()) {
+            if (this.f()) {
                 if (this.isDamaged(i, entityliving.getRandom())) {
                     entityliving.b(this);
-                    --this.count;
+                    this.subtract(1);
                     if (entityliving instanceof EntityHuman) {
                         EntityHuman entityhuman = (EntityHuman) entityliving;
 
                         entityhuman.b(StatisticList.c(this.item));
-                    }
-
-                    if (this.count < 0) {
-                        this.count = 0;
                     }
 
                     this.damage = 0;
@@ -222,7 +213,7 @@ public final class ItemStack {
     }
 
     public void a(EntityLiving entityliving, EntityHuman entityhuman) {
-        boolean flag = this.item.a(this, entityliving, entityhuman);
+        boolean flag = this.item.a(this, entityliving, (EntityLiving) entityhuman);
 
         if (flag) {
             entityhuman.b(StatisticList.b(this.item));
@@ -231,7 +222,7 @@ public final class ItemStack {
     }
 
     public void a(World world, IBlockData iblockdata, BlockPosition blockposition, EntityHuman entityhuman) {
-        boolean flag = this.item.a(this, world, iblockdata, blockposition, entityhuman);
+        boolean flag = this.getItem().a(this, world, iblockdata, blockposition, entityhuman);
 
         if (flag) {
             entityhuman.b(StatisticList.b(this.item));
@@ -240,11 +231,11 @@ public final class ItemStack {
     }
 
     public boolean b(IBlockData iblockdata) {
-        return this.item.canDestroySpecialBlock(iblockdata);
+        return this.getItem().canDestroySpecialBlock(iblockdata);
     }
 
     public boolean a(EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
-        return this.item.a(this, entityhuman, entityliving, enumhand);
+        return this.getItem().a(this, entityhuman, entityliving, enumhand);
     }
 
     public ItemStack cloneItemStack() {
@@ -257,49 +248,45 @@ public final class ItemStack {
         return itemstack;
     }
 
-    public static boolean equals(@Nullable ItemStack itemstack, @Nullable ItemStack itemstack1) {
-        return itemstack == null && itemstack1 == null ? true : (itemstack != null && itemstack1 != null ? (itemstack.tag == null && itemstack1.tag != null ? false : itemstack.tag == null || itemstack.tag.equals(itemstack1.tag)) : false);
+    public static boolean equals(ItemStack itemstack, ItemStack itemstack1) {
+        return itemstack.isEmpty() && itemstack1.isEmpty() ? true : (!itemstack.isEmpty() && !itemstack1.isEmpty() ? (itemstack.tag == null && itemstack1.tag != null ? false : itemstack.tag == null || itemstack.tag.equals(itemstack1.tag)) : false);
     }
 
-    public static boolean matches(@Nullable ItemStack itemstack, @Nullable ItemStack itemstack1) {
-        return itemstack == null && itemstack1 == null ? true : (itemstack != null && itemstack1 != null ? itemstack.e(itemstack1) : false);
+    public static boolean matches(ItemStack itemstack, ItemStack itemstack1) {
+        return itemstack.isEmpty() && itemstack1.isEmpty() ? true : (!itemstack.isEmpty() && !itemstack1.isEmpty() ? itemstack.d(itemstack1) : false);
     }
 
-    private boolean e(ItemStack itemstack) {
-        return this.count != itemstack.count ? false : (this.item != itemstack.item ? false : (this.damage != itemstack.damage ? false : (this.tag == null && itemstack.tag != null ? false : this.tag == null || this.tag.equals(itemstack.tag))));
+    private boolean d(ItemStack itemstack) {
+        return this.count != itemstack.count ? false : (this.getItem() != itemstack.getItem() ? false : (this.damage != itemstack.damage ? false : (this.tag == null && itemstack.tag != null ? false : this.tag == null || this.tag.equals(itemstack.tag))));
     }
 
-    public static boolean c(@Nullable ItemStack itemstack, @Nullable ItemStack itemstack1) {
-        return itemstack == itemstack1 ? true : (itemstack != null && itemstack1 != null ? itemstack.doMaterialsMatch(itemstack1) : false);
+    public static boolean c(ItemStack itemstack, ItemStack itemstack1) {
+        return itemstack == itemstack1 ? true : (!itemstack.isEmpty() && !itemstack1.isEmpty() ? itemstack.doMaterialsMatch(itemstack1) : false);
     }
 
-    public static boolean d(@Nullable ItemStack itemstack, @Nullable ItemStack itemstack1) {
-        return itemstack == itemstack1 ? true : (itemstack != null && itemstack1 != null ? itemstack.b(itemstack1) : false);
+    public static boolean d(ItemStack itemstack, ItemStack itemstack1) {
+        return itemstack == itemstack1 ? true : (!itemstack.isEmpty() && !itemstack1.isEmpty() ? itemstack.b(itemstack1) : false);
     }
 
-    public boolean doMaterialsMatch(@Nullable ItemStack itemstack) {
-        return itemstack != null && this.item == itemstack.item && this.damage == itemstack.damage;
+    public boolean doMaterialsMatch(ItemStack itemstack) {
+        return !itemstack.isEmpty() && this.item == itemstack.item && this.damage == itemstack.damage;
     }
 
-    public boolean b(@Nullable ItemStack itemstack) {
-        return !this.e() ? this.doMaterialsMatch(itemstack) : itemstack != null && this.item == itemstack.item;
+    public boolean b(ItemStack itemstack) {
+        return !this.f() ? this.doMaterialsMatch(itemstack) : !itemstack.isEmpty() && this.item == itemstack.item;
     }
 
     public String a() {
-        return this.item.f_(this);
-    }
-
-    public static ItemStack c(ItemStack itemstack) {
-        return itemstack == null ? null : itemstack.cloneItemStack();
+        return this.getItem().a(this);
     }
 
     public String toString() {
-        return this.count + "x" + this.item.getName() + "@" + this.damage;
+        return this.count + "x" + this.getItem().getName() + "@" + this.damage;
     }
 
     public void a(World world, Entity entity, int i, boolean flag) {
-        if (this.c > 0) {
-            --this.c;
+        if (this.d > 0) {
+            --this.d;
         }
 
         if (this.item != null) {
@@ -310,14 +297,14 @@ public final class ItemStack {
 
     public void a(World world, EntityHuman entityhuman, int i) {
         entityhuman.a(StatisticList.a(this.item), i);
-        this.item.b(this, world, entityhuman);
+        this.getItem().b(this, world, entityhuman);
     }
 
-    public int l() {
+    public int m() {
         return this.getItem().e(this);
     }
 
-    public EnumAnimation m() {
+    public EnumAnimation n() {
         return this.getItem().f(this);
     }
 
@@ -326,7 +313,7 @@ public final class ItemStack {
     }
 
     public boolean hasTag() {
-        return this.tag != null;
+        return !this.g && this.tag != null;
     }
 
     @Nullable
@@ -334,80 +321,91 @@ public final class ItemStack {
         return this.tag;
     }
 
-    public NBTTagCompound a(String s, boolean flag) {
+    public NBTTagCompound c(String s) {
         if (this.tag != null && this.tag.hasKeyOfType(s, 10)) {
             return this.tag.getCompound(s);
-        } else if (flag) {
+        } else {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
             this.a(s, (NBTBase) nbttagcompound);
             return nbttagcompound;
-        } else {
-            return null;
         }
     }
 
+    @Nullable
+    public NBTTagCompound d(String s) {
+        return this.tag != null && this.tag.hasKeyOfType(s, 10) ? this.tag.getCompound(s) : null;
+    }
+
+    public void e(String s) {
+        if (this.tag != null && this.tag.hasKeyOfType(s, 10)) {
+            this.tag.remove(s);
+        }
+
+    }
+
+    @Nullable
     public NBTTagList getEnchantments() {
         return this.tag == null ? null : this.tag.getList("ench", 10);
     }
 
-    public void setTag(NBTTagCompound nbttagcompound) {
+    public void setTag(@Nullable NBTTagCompound nbttagcompound) {
         this.tag = nbttagcompound;
     }
 
     public String getName() {
-        String s = this.getItem().a(this);
+        NBTTagCompound nbttagcompound = this.d("display");
 
-        if (this.tag != null && this.tag.hasKeyOfType("display", 10)) {
-            NBTTagCompound nbttagcompound = this.tag.getCompound("display");
-
+        if (nbttagcompound != null) {
             if (nbttagcompound.hasKeyOfType("Name", 8)) {
-                s = nbttagcompound.getString("Name");
+                return nbttagcompound.getString("Name");
+            }
+
+            if (nbttagcompound.hasKeyOfType("LocName", 8)) {
+                return LocaleI18n.get(nbttagcompound.getString("LocName"));
             }
         }
 
-        return s;
+        return this.getItem().b(this);
     }
 
-    public ItemStack c(String s) {
-        if (this.tag == null) {
-            this.tag = new NBTTagCompound();
-        }
-
-        if (!this.tag.hasKeyOfType("display", 10)) {
-            this.tag.set("display", new NBTTagCompound());
-        }
-
-        this.tag.getCompound("display").setString("Name", s);
+    public ItemStack f(String s) {
+        this.c("display").setString("LocName", s);
         return this;
     }
 
-    public void r() {
-        if (this.tag != null) {
-            if (this.tag.hasKeyOfType("display", 10)) {
-                NBTTagCompound nbttagcompound = this.tag.getCompound("display");
+    public ItemStack g(String s) {
+        this.c("display").setString("Name", s);
+        return this;
+    }
 
-                nbttagcompound.remove("Name");
-                if (nbttagcompound.isEmpty()) {
-                    this.tag.remove("display");
-                    if (this.tag.isEmpty()) {
-                        this.setTag((NBTTagCompound) null);
-                    }
-                }
+    public void s() {
+        NBTTagCompound nbttagcompound = this.d("display");
 
+        if (nbttagcompound != null) {
+            nbttagcompound.remove("Name");
+            if (nbttagcompound.isEmpty()) {
+                this.e("display");
             }
         }
+
+        if (this.tag != null && this.tag.isEmpty()) {
+            this.tag = null;
+        }
+
     }
 
     public boolean hasName() {
-        return this.tag == null ? false : (!this.tag.hasKeyOfType("display", 10) ? false : this.tag.getCompound("display").hasKeyOfType("Name", 8));
+        NBTTagCompound nbttagcompound = this.d("display");
+
+        return nbttagcompound != null && nbttagcompound.hasKeyOfType("Name", 8);
     }
 
-    public EnumItemRarity u() {
+    public EnumItemRarity v() {
         return this.getItem().g(this);
     }
 
-    public boolean v() {
+    public boolean canEnchant() {
         return !this.getItem().g_(this) ? false : !this.hasEnchantments();
     }
 
@@ -429,7 +427,7 @@ public final class ItemStack {
     }
 
     public boolean hasEnchantments() {
-        return this.tag != null && this.tag.hasKeyOfType("ench", 9);
+        return this.tag != null && this.tag.hasKeyOfType("ench", 9) ? !this.tag.getList("ench", 10).isEmpty() : false;
     }
 
     public void a(String s, NBTBase nbtbase) {
@@ -440,21 +438,21 @@ public final class ItemStack {
         this.tag.set(s, nbtbase);
     }
 
-    public boolean x() {
-        return this.getItem().s();
+    public boolean y() {
+        return this.getItem().t();
     }
 
-    public boolean y() {
-        return this.g != null;
+    public boolean z() {
+        return this.i != null;
     }
 
     public void a(EntityItemFrame entityitemframe) {
-        this.g = entityitemframe;
+        this.i = entityitemframe;
     }
 
     @Nullable
-    public EntityItemFrame z() {
-        return this.g;
+    public EntityItemFrame A() {
+        return this.g ? null : this.i;
     }
 
     public int getRepairCost() {
@@ -491,7 +489,7 @@ public final class ItemStack {
         return (Multimap) object;
     }
 
-    public void a(String s, AttributeModifier attributemodifier, EnumItemSlot enumitemslot) {
+    public void a(String s, AttributeModifier attributemodifier, @Nullable EnumItemSlot enumitemslot) {
         if (this.tag == null) {
             this.tag = new NBTTagCompound();
         }
@@ -511,12 +509,7 @@ public final class ItemStack {
         nbttaglist.add(nbttagcompound);
     }
 
-    @Deprecated
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
-    public IChatBaseComponent B() {
+    public IChatBaseComponent C() {
         ChatComponentText chatcomponenttext = new ChatComponentText(this.getName());
 
         if (this.hasName()) {
@@ -525,46 +518,23 @@ public final class ItemStack {
 
         IChatBaseComponent ichatbasecomponent = (new ChatComponentText("[")).addSibling(chatcomponenttext).a("]");
 
-        if (this.item != null) {
+        if (!this.g) {
             NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
 
             ichatbasecomponent.getChatModifier().setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_ITEM, new ChatComponentText(nbttagcompound.toString())));
-            ichatbasecomponent.getChatModifier().setColor(this.u().e);
+            ichatbasecomponent.getChatModifier().setColor(this.v().e);
         }
 
         return ichatbasecomponent;
     }
 
     public boolean a(Block block) {
-        if (block == this.h) {
-            return this.i;
-        } else {
-            this.h = block;
-            if (this.hasTag() && this.tag.hasKeyOfType("CanDestroy", 9)) {
-                NBTTagList nbttaglist = this.tag.getList("CanDestroy", 8);
-
-                for (int i = 0; i < nbttaglist.size(); ++i) {
-                    Block block1 = Block.getByName(nbttaglist.getString(i));
-
-                    if (block1 == block) {
-                        this.i = true;
-                        return true;
-                    }
-                }
-            }
-
-            this.i = false;
-            return false;
-        }
-    }
-
-    public boolean b(Block block) {
         if (block == this.j) {
             return this.k;
         } else {
             this.j = block;
-            if (this.hasTag() && this.tag.hasKeyOfType("CanPlaceOn", 9)) {
-                NBTTagList nbttaglist = this.tag.getList("CanPlaceOn", 8);
+            if (this.hasTag() && this.tag.hasKeyOfType("CanDestroy", 9)) {
+                NBTTagList nbttaglist = this.tag.getList("CanDestroy", 8);
 
                 for (int i = 0; i < nbttaglist.size(); ++i) {
                     Block block1 = Block.getByName(nbttaglist.getString(i));
@@ -579,5 +549,49 @@ public final class ItemStack {
             this.k = false;
             return false;
         }
+    }
+
+    public boolean b(Block block) {
+        if (block == this.l) {
+            return this.m;
+        } else {
+            this.l = block;
+            if (this.hasTag() && this.tag.hasKeyOfType("CanPlaceOn", 9)) {
+                NBTTagList nbttaglist = this.tag.getList("CanPlaceOn", 8);
+
+                for (int i = 0; i < nbttaglist.size(); ++i) {
+                    Block block1 = Block.getByName(nbttaglist.getString(i));
+
+                    if (block1 == block) {
+                        this.m = true;
+                        return true;
+                    }
+                }
+            }
+
+            this.m = false;
+            return false;
+        }
+    }
+
+    public void d(int i) {
+        this.d = i;
+    }
+
+    public int getCount() {
+        return this.g ? 0 : this.count;
+    }
+
+    public void setCount(int i) {
+        this.count = i;
+        this.F();
+    }
+
+    public void add(int i) {
+        this.setCount(this.count + i);
+    }
+
+    public void subtract(int i) {
+        this.add(-i);
     }
 }

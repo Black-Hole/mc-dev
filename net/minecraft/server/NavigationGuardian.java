@@ -39,10 +39,6 @@ public class NavigationGuardian extends NavigationAbstract {
         this.a(vec3d);
     }
 
-    protected void d() {
-        super.d();
-    }
-
     protected boolean a(Vec3D vec3d, Vec3D vec3d1, int i, int j, int k) {
         MovingObjectPosition movingobjectposition = this.b.rayTrace(vec3d, new Vec3D(vec3d1.x, vec3d1.y + (double) this.a.length * 0.5D, vec3d1.z), false, true, false);
 

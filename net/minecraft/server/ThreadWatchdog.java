@@ -19,13 +19,13 @@ public class ThreadWatchdog implements Runnable {
 
     public ThreadWatchdog(DedicatedServer dedicatedserver) {
         this.b = dedicatedserver;
-        this.c = dedicatedserver.aP();
+        this.c = dedicatedserver.aQ();
     }
 
     public void run() {
         while (this.b.isRunning()) {
-            long i = this.b.aG();
-            long j = MinecraftServer.av();
+            long i = this.b.aH();
+            long j = MinecraftServer.aw();
             long k = j - i;
 
             if (k > this.c) {
@@ -41,7 +41,7 @@ public class ThreadWatchdog implements Runnable {
                 for (int i1 = 0; i1 < l; ++i1) {
                     ThreadInfo threadinfo = athreadinfo1[i1];
 
-                    if (threadinfo.getThreadId() == this.b.aH().getId()) {
+                    if (threadinfo.getThreadId() == this.b.aI().getId()) {
                         error.setStackTrace(threadinfo.getStackTrace());
                     }
 

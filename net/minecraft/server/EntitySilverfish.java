@@ -13,7 +13,7 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     public static void b(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "Silverfish");
+        EntityInsentient.a(dataconvertermanager, EntitySilverfish.class);
     }
 
     protected void r() {
@@ -27,7 +27,7 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     public double ax() {
-        return 0.2D;
+        return 0.1D;
     }
 
     public float getHeadHeight() {
@@ -46,19 +46,19 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.fp;
-    }
-
-    protected SoundEffect bV() {
-        return SoundEffects.fr;
+        return SoundEffects.fL;
     }
 
     protected SoundEffect bW() {
-        return SoundEffects.fq;
+        return SoundEffects.fN;
+    }
+
+    protected SoundEffect bX() {
+        return SoundEffects.fM;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.fs, 0.15F, 1.0F);
+        this.a(SoundEffects.fO, 0.15F, 1.0F);
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
@@ -75,24 +75,29 @@ public class EntitySilverfish extends EntityMonster {
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.u;
+        return LootTables.v;
     }
 
-    public void m() {
-        this.aO = this.yaw;
-        super.m();
+    public void A_() {
+        this.aN = this.yaw;
+        super.A_();
+    }
+
+    public void i(float f) {
+        this.yaw = f;
+        super.i(f);
     }
 
     public float a(BlockPosition blockposition) {
         return this.world.getType(blockposition.down()).getBlock() == Blocks.STONE ? 10.0F : super.a(blockposition);
     }
 
-    protected boolean s_() {
+    protected boolean r_() {
         return true;
     }
 
-    public boolean cK() {
-        if (super.cK()) {
+    public boolean cM() {
+        if (super.cM()) {
             EntityHuman entityhuman = this.world.b(this, 5.0D);
 
             return entityhuman == null;
@@ -107,58 +112,54 @@ public class EntitySilverfish extends EntityMonster {
 
     static class PathfinderGoalSilverfishHideInBlock extends PathfinderGoalRandomStroll {
 
-        private final EntitySilverfish silverfish;
-        private EnumDirection b;
-        private boolean c;
+        private EnumDirection h;
+        private boolean i;
 
         public PathfinderGoalSilverfishHideInBlock(EntitySilverfish entitysilverfish) {
             super(entitysilverfish, 1.0D, 10);
-            this.silverfish = entitysilverfish;
             this.a(1);
         }
 
         public boolean a() {
-            if (!this.silverfish.world.getGameRules().getBoolean("mobGriefing")) {
+            if (this.a.getGoalTarget() != null) {
                 return false;
-            } else if (this.silverfish.getGoalTarget() != null) {
-                return false;
-            } else if (!this.silverfish.getNavigation().n()) {
+            } else if (!this.a.getNavigation().n()) {
                 return false;
             } else {
-                Random random = this.silverfish.getRandom();
+                Random random = this.a.getRandom();
 
-                if (random.nextInt(10) == 0) {
-                    this.b = EnumDirection.a(random);
-                    BlockPosition blockposition = (new BlockPosition(this.silverfish.locX, this.silverfish.locY + 0.5D, this.silverfish.locZ)).shift(this.b);
-                    IBlockData iblockdata = this.silverfish.world.getType(blockposition);
+                if (this.a.world.getGameRules().getBoolean("mobGriefing") && random.nextInt(10) == 0) {
+                    this.h = EnumDirection.a(random);
+                    BlockPosition blockposition = (new BlockPosition(this.a.locX, this.a.locY + 0.5D, this.a.locZ)).shift(this.h);
+                    IBlockData iblockdata = this.a.world.getType(blockposition);
 
                     if (BlockMonsterEggs.i(iblockdata)) {
-                        this.c = true;
+                        this.i = true;
                         return true;
                     }
                 }
 
-                this.c = false;
+                this.i = false;
                 return super.a();
             }
         }
 
         public boolean b() {
-            return this.c ? false : super.b();
+            return this.i ? false : super.b();
         }
 
         public void c() {
-            if (!this.c) {
+            if (!this.i) {
                 super.c();
             } else {
-                World world = this.silverfish.world;
-                BlockPosition blockposition = (new BlockPosition(this.silverfish.locX, this.silverfish.locY + 0.5D, this.silverfish.locZ)).shift(this.b);
+                World world = this.a.world;
+                BlockPosition blockposition = (new BlockPosition(this.a.locX, this.a.locY + 0.5D, this.a.locZ)).shift(this.h);
                 IBlockData iblockdata = world.getType(blockposition);
 
                 if (BlockMonsterEggs.i(iblockdata)) {
                     world.setTypeAndData(blockposition, Blocks.MONSTER_EGG.getBlockData().set(BlockMonsterEggs.VARIANT, BlockMonsterEggs.EnumMonsterEggVarient.a(iblockdata)), 3);
-                    this.silverfish.doSpawnEffect();
-                    this.silverfish.die();
+                    this.a.doSpawnEffect();
+                    this.a.die();
                 }
 
             }
@@ -192,9 +193,9 @@ public class EntitySilverfish extends EntityMonster {
                 Random random = this.silverfish.getRandom();
                 BlockPosition blockposition = new BlockPosition(this.silverfish);
 
-                for (int i = 0; i <= 5 && i >= -5; i = i <= 0 ? 1 - i : 0 - i) {
-                    for (int j = 0; j <= 10 && j >= -10; j = j <= 0 ? 1 - j : 0 - j) {
-                        for (int k = 0; k <= 10 && k >= -10; k = k <= 0 ? 1 - k : 0 - k) {
+                for (int i = 0; i <= 5 && i >= -5; i = (i <= 0 ? 1 : 0) - i) {
+                    for (int j = 0; j <= 10 && j >= -10; j = (j <= 0 ? 1 : 0) - j) {
+                        for (int k = 0; k <= 10 && k >= -10; k = (k <= 0 ? 1 : 0) - k) {
                             BlockPosition blockposition1 = blockposition.a(j, i, k);
                             IBlockData iblockdata = world.getType(blockposition1);
 

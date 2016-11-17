@@ -27,6 +27,8 @@ public class GameRules {
         this.a("spectatorsGenerateChunks", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
         this.a("spawnRadius", "10", GameRules.EnumGameRuleType.NUMERICAL_VALUE);
         this.a("disableElytraMovementCheck", "false", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("maxEntityCramming", "24", GameRules.EnumGameRuleType.NUMERICAL_VALUE);
+        this.a("doWeatherCycle", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
     }
 
     public void a(String s, String s1, GameRules.EnumGameRuleType gamerules_enumgameruletype) {

@@ -9,6 +9,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -19,20 +20,17 @@ import org.apache.logging.log4j.Logger;
 public class LootItemFunctionEnchant extends LootItemFunction {
 
     private static final Logger a = LogManager.getLogger();
-    @Nullable
     private final List<Enchantment> b;
 
     public LootItemFunctionEnchant(LootItemCondition[] alootitemcondition, @Nullable List<Enchantment> list) {
         super(alootitemcondition);
-        this.b = list;
+        this.b = list == null ? Collections.emptyList() : list;
     }
 
     public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
         Enchantment enchantment;
 
-        if (this.b != null && !this.b.isEmpty()) {
-            enchantment = (Enchantment) this.b.get(random.nextInt(this.b.size()));
-        } else {
+        if (this.b.isEmpty()) {
             ArrayList arraylist = Lists.newArrayList();
             Iterator iterator = Enchantment.enchantments.iterator();
 
@@ -50,12 +48,14 @@ public class LootItemFunctionEnchant extends LootItemFunction {
             }
 
             enchantment = (Enchantment) arraylist.get(random.nextInt(arraylist.size()));
+        } else {
+            enchantment = (Enchantment) this.b.get(random.nextInt(this.b.size()));
         }
 
         int i = MathHelper.nextInt(random, enchantment.getStartLevel(), enchantment.getMaxLevel());
 
         if (itemstack.getItem() == Items.BOOK) {
-            itemstack.setItem(Items.ENCHANTED_BOOK);
+            itemstack = new ItemStack(Items.ENCHANTED_BOOK);
             Items.ENCHANTED_BOOK.a(itemstack, new WeightedRandomEnchant(enchantment, i));
         } else {
             itemstack.addEnchantment(enchantment, i);
@@ -71,7 +71,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
         }
 
         public void a(JsonObject jsonobject, LootItemFunctionEnchant lootitemfunctionenchant, JsonSerializationContext jsonserializationcontext) {
-            if (lootitemfunctionenchant.b != null && !lootitemfunctionenchant.b.isEmpty()) {
+            if (!lootitemfunctionenchant.b.isEmpty()) {
                 JsonArray jsonarray = new JsonArray();
                 Iterator iterator = lootitemfunctionenchant.b.iterator();
 
@@ -92,10 +92,9 @@ public class LootItemFunctionEnchant extends LootItemFunction {
         }
 
         public LootItemFunctionEnchant a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            ArrayList arraylist = null;
+            ArrayList arraylist = Lists.newArrayList();
 
             if (jsonobject.has("enchantments")) {
-                arraylist = Lists.newArrayList();
                 JsonArray jsonarray = ChatDeserializer.u(jsonobject, "enchantments");
                 Iterator iterator = jsonarray.iterator();
 

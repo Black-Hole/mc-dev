@@ -29,7 +29,7 @@ public class BlockMagma extends Block {
 
         if (iblockdata1.getBlock() == Blocks.WATER || iblockdata1.getBlock() == Blocks.FLOWING_WATER) {
             world.setAir(blockposition1);
-            world.a((EntityHuman) null, blockposition, SoundEffects.bx, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.bH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
             if (world instanceof WorldServer) {
                 ((WorldServer) world).a(EnumParticle.SMOKE_LARGE, (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.25D, (double) blockposition1.getZ() + 0.5D, 8, 0.5D, 0.25D, 0.5D, 0.0D, new int[0]);
             }

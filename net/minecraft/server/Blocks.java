@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class Blocks {
 
-    private static final Set<Block> dl;
+    private static final Set<Block> dC;
     public static final Block AIR;
     public static final Block STONE;
     public static final BlockGrass GRASS;
@@ -225,13 +225,30 @@ public class Blocks {
     public static final Block dh;
     public static final Block di;
     public static final Block dj;
+    public static final Block dk;
+    public static final Block WHITE_SHULKER_BOX;
+    public static final Block dm;
+    public static final Block dn;
+    public static final Block LIGHT_BLUE_SHULKER_BOX;
+    public static final Block dp;
+    public static final Block dq;
+    public static final Block dr;
+    public static final Block ds;
+    public static final Block dt;
+    public static final Block du;
+    public static final Block dv;
+    public static final Block dw;
+    public static final Block dx;
+    public static final Block dy;
+    public static final Block dz;
+    public static final Block dA;
     public static final Block STRUCTURE_BLOCK;
 
     @Nullable
     private static Block get(String s) {
         Block block = (Block) Block.REGISTRY.get(new MinecraftKey(s));
 
-        if (!Blocks.dl.add(block)) {
+        if (!Blocks.dC.add(block)) {
             throw new IllegalStateException("Invalid Block requested: " + s);
         } else {
             return block;
@@ -242,7 +259,7 @@ public class Blocks {
         if (!DispenserRegistry.a()) {
             throw new RuntimeException("Accessed Blocks before Bootstrap!");
         } else {
-            dl = Sets.newHashSet();
+            dC = Sets.newHashSet();
             AIR = get("air");
             STONE = get("stone");
             GRASS = (BlockGrass) get("grass");
@@ -461,8 +478,25 @@ public class Blocks {
             dh = get("red_nether_brick");
             di = get("bone_block");
             dj = get("structure_void");
+            dk = get("observer");
+            WHITE_SHULKER_BOX = get("white_shulker_box");
+            dm = get("orange_shulker_box");
+            dn = get("magenta_shulker_box");
+            LIGHT_BLUE_SHULKER_BOX = get("light_blue_shulker_box");
+            dp = get("yellow_shulker_box");
+            dq = get("lime_shulker_box");
+            dr = get("pink_shulker_box");
+            ds = get("gray_shulker_box");
+            dt = get("silver_shulker_box");
+            du = get("cyan_shulker_box");
+            dv = get("purple_shulker_box");
+            dw = get("blue_shulker_box");
+            dx = get("brown_shulker_box");
+            dy = get("green_shulker_box");
+            dz = get("red_shulker_box");
+            dA = get("black_shulker_box");
             STRUCTURE_BLOCK = get("structure_block");
-            Blocks.dl.clear();
+            Blocks.dC.clear();
         }
     }
 }

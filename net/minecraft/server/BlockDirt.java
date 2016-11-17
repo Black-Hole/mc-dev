@@ -7,7 +7,7 @@ public class BlockDirt extends Block {
 
     protected BlockDirt() {
         super(Material.EARTH);
-        this.w(this.blockStateList.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT).set(BlockDirt.SNOWY, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT).set(BlockDirt.SNOWY, Boolean.valueOf(false)));
         this.a(CreativeModeTab.b);
     }
 

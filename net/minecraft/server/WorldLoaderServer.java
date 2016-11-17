@@ -61,7 +61,7 @@ public class WorldLoaderServer extends WorldLoader {
         WorldData worlddata = this.c(s);
         Object object;
 
-        if (worlddata.getType() == WorldType.FLAT) {
+        if (worlddata != null && worlddata.getType() == WorldType.FLAT) {
             object = new WorldChunkManagerHell(Biomes.c);
         } else {
             object = new WorldChunkManager(worlddata);

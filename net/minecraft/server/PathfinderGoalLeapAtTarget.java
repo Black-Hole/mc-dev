@@ -32,8 +32,11 @@ public class PathfinderGoalLeapAtTarget extends PathfinderGoal {
         double d1 = this.b.locZ - this.a.locZ;
         float f = MathHelper.sqrt(d0 * d0 + d1 * d1);
 
-        this.a.motX += d0 / (double) f * 0.5D * 0.800000011920929D + this.a.motX * 0.20000000298023224D;
-        this.a.motZ += d1 / (double) f * 0.5D * 0.800000011920929D + this.a.motZ * 0.20000000298023224D;
+        if ((double) f >= 1.0E-4D) {
+            this.a.motX += d0 / (double) f * 0.5D * 0.800000011920929D + this.a.motX * 0.20000000298023224D;
+            this.a.motZ += d1 / (double) f * 0.5D * 0.800000011920929D + this.a.motZ * 0.20000000298023224D;
+        }
+
         this.a.motY = (double) this.c;
     }
 }

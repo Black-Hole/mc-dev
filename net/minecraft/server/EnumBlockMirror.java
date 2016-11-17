@@ -15,11 +15,11 @@ public enum EnumBlockMirror {
         int k = j / 2;
         int l = i > k ? i - j : i;
 
-        switch (EnumBlockMirror.SyntheticClass_1.a[this.ordinal()]) {
-        case 1:
+        switch (this) {
+        case FRONT_BACK:
             return (j - l) % j;
 
-        case 2:
+        case LEFT_RIGHT:
             return (k - l + j) % j;
 
         default:
@@ -34,8 +34,8 @@ public enum EnumBlockMirror {
     }
 
     public EnumDirection b(EnumDirection enumdirection) {
-        switch (EnumBlockMirror.SyntheticClass_1.a[this.ordinal()]) {
-        case 1:
+        switch (this) {
+        case FRONT_BACK:
             if (enumdirection == EnumDirection.WEST) {
                 return EnumDirection.EAST;
             } else {
@@ -46,7 +46,7 @@ public enum EnumBlockMirror {
                 return enumdirection;
             }
 
-        case 2:
+        case LEFT_RIGHT:
             if (enumdirection == EnumDirection.NORTH) {
                 return EnumDirection.SOUTH;
             } else {
@@ -73,25 +73,5 @@ public enum EnumBlockMirror {
             EnumBlockMirror.e[i++] = enumblockmirror.d;
         }
 
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumBlockMirror.values().length];
-
-        static {
-            try {
-                EnumBlockMirror.SyntheticClass_1.a[EnumBlockMirror.FRONT_BACK.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                EnumBlockMirror.SyntheticClass_1.a[EnumBlockMirror.LEFT_RIGHT.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-        }
     }
 }

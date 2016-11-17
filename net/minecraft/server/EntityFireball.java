@@ -2,14 +2,9 @@ package net.minecraft.server;
 
 public abstract class EntityFireball extends Entity {
 
-    private int e = -1;
-    private int f = -1;
-    private int g = -1;
-    private Block h;
-    private boolean au;
     public EntityLiving shooter;
-    private int av;
-    private int aw;
+    private int e;
+    private int f;
     public double dirX;
     public double dirY;
     public double dirZ;
@@ -52,36 +47,17 @@ public abstract class EntityFireball extends Entity {
         this.dirZ = d2 / d3 * 0.1D;
     }
 
-    public void m() {
+    public void A_() {
         if (!this.world.isClientSide && (this.shooter != null && this.shooter.dead || !this.world.isLoaded(new BlockPosition(this)))) {
             this.die();
         } else {
-            super.m();
+            super.A_();
             if (this.k()) {
                 this.setOnFire(1);
             }
 
-            if (this.au) {
-                if (this.world.getType(new BlockPosition(this.e, this.f, this.g)).getBlock() == this.h) {
-                    ++this.av;
-                    if (this.av == 600) {
-                        this.die();
-                    }
-
-                    return;
-                }
-
-                this.au = false;
-                this.motX *= (double) (this.random.nextFloat() * 0.2F);
-                this.motY *= (double) (this.random.nextFloat() * 0.2F);
-                this.motZ *= (double) (this.random.nextFloat() * 0.2F);
-                this.av = 0;
-                this.aw = 0;
-            } else {
-                ++this.aw;
-            }
-
-            MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, true, this.aw >= 25, this.shooter);
+            ++this.f;
+            MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, true, this.f >= 25, this.shooter);
 
             if (movingobjectposition != null) {
                 this.a(movingobjectposition);
@@ -131,29 +107,12 @@ public abstract class EntityFireball extends Entity {
     public static void a(DataConverterManager dataconvertermanager, String s) {}
 
     public void b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setInt("xTile", this.e);
-        nbttagcompound.setInt("yTile", this.f);
-        nbttagcompound.setInt("zTile", this.g);
-        MinecraftKey minecraftkey = (MinecraftKey) Block.REGISTRY.b(this.h);
-
-        nbttagcompound.setString("inTile", minecraftkey == null ? "" : minecraftkey.toString());
-        nbttagcompound.setByte("inGround", (byte) (this.au ? 1 : 0));
         nbttagcompound.set("direction", this.a(new double[] { this.motX, this.motY, this.motZ}));
         nbttagcompound.set("power", this.a(new double[] { this.dirX, this.dirY, this.dirZ}));
-        nbttagcompound.setInt("life", this.av);
+        nbttagcompound.setInt("life", this.e);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        this.e = nbttagcompound.getInt("xTile");
-        this.f = nbttagcompound.getInt("yTile");
-        this.g = nbttagcompound.getInt("zTile");
-        if (nbttagcompound.hasKeyOfType("inTile", 8)) {
-            this.h = Block.getByName(nbttagcompound.getString("inTile"));
-        } else {
-            this.h = Block.getById(nbttagcompound.getByte("inTile") & 255);
-        }
-
-        this.au = nbttagcompound.getByte("inGround") == 1;
         NBTTagList nbttaglist;
 
         if (nbttagcompound.hasKeyOfType("power", 9)) {
@@ -165,7 +124,7 @@ public abstract class EntityFireball extends Entity {
             }
         }
 
-        this.av = nbttagcompound.getInt("life");
+        this.e = nbttagcompound.getInt("life");
         if (nbttagcompound.hasKeyOfType("direction", 9) && nbttagcompound.getList("direction", 6).size() == 3) {
             nbttaglist = nbttagcompound.getList("direction", 6);
             this.motX = nbttaglist.e(0);

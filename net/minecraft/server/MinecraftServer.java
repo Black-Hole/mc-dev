@@ -18,7 +18,9 @@ import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.Proxy;
+import java.net.URLEncoder;
 import java.security.KeyPair;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     public static final Logger LOGGER = LogManager.getLogger();
     public static final File a = new File("usercache.json");
     public Convertable convertable;
-    private final MojangStatisticsGenerator m = new MojangStatisticsGenerator("server", this, av());
+    private final MojangStatisticsGenerator m = new MojangStatisticsGenerator("server", this, aw());
     public File universe;
     private final List<ITickable> o = Lists.newArrayList();
     public final ICommandHandler b;
@@ -64,42 +66,43 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     public String f;
     public int g;
     private boolean onlineMode;
+    private boolean A;
     private boolean spawnAnimals;
     private boolean spawnNPCs;
     private boolean pvpMode;
     private boolean allowFlight;
     private String motd;
-    private int F;
     private int G;
+    private int H;
     public final long[] h = new long[100];
     public long[][] i;
-    private KeyPair H;
-    private String I;
+    private KeyPair I;
     private String J;
+    private String K;
     private boolean demoMode;
-    private boolean M;
-    private String N = "";
+    private boolean N;
     private String O = "";
-    private boolean P;
-    private long Q;
-    private String R;
-    private boolean S;
+    private String P = "";
+    private boolean Q;
+    private long R;
+    private String S;
     private boolean T;
-    private final YggdrasilAuthenticationService U;
-    private final MinecraftSessionService V;
-    private final GameProfileRepository W;
-    private final UserCache X;
-    private long Y;
+    private boolean U;
+    private final YggdrasilAuthenticationService V;
+    private final MinecraftSessionService W;
+    private final GameProfileRepository X;
+    private final UserCache Y;
+    private long Z;
     protected final Queue<FutureTask<?>> j = Queues.newArrayDeque();
     private Thread serverThread;
-    private long aa = av();
+    private long ab = aw();
 
     public MinecraftServer(File file, Proxy proxy, DataConverterManager dataconvertermanager, YggdrasilAuthenticationService yggdrasilauthenticationservice, MinecraftSessionService minecraftsessionservice, GameProfileRepository gameprofilerepository, UserCache usercache) {
         this.e = proxy;
-        this.U = yggdrasilauthenticationservice;
-        this.V = minecraftsessionservice;
-        this.W = gameprofilerepository;
-        this.X = usercache;
+        this.V = yggdrasilauthenticationservice;
+        this.W = minecraftsessionservice;
+        this.X = gameprofilerepository;
+        this.Y = usercache;
         this.universe = file;
         this.p = new ServerConnection(this);
         this.b = this.i();
@@ -137,7 +140,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     protected synchronized void b(String s) {
-        this.R = s;
+        this.S = s;
     }
 
     public void a(String s, String s1, long i, WorldType worldtype, String s2) {
@@ -157,7 +160,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
             } else {
                 worldsettings = new WorldSettings(i, this.getGamemode(), this.getGenerateStructures(), this.isHardcore(), worldtype);
                 worldsettings.setGeneratorSettings(s2);
-                if (this.M) {
+                if (this.N) {
                     worldsettings.a();
                 }
             }
@@ -215,11 +218,11 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         MinecraftServer.LOGGER.info("Preparing start region for level 0");
         WorldServer worldserver = this.worldServer[0];
         BlockPosition blockposition = worldserver.getSpawn();
-        long j = av();
+        long j = aw();
 
         for (int k = -192; k <= 192 && this.isRunning(); k += 16) {
             for (int l = -192; l <= 192 && this.isRunning(); l += 16) {
-                long i1 = av();
+                long i1 = aw();
 
                 if (i1 - j > 1000L) {
                     this.a_("Preparing spawn area", i * 100 / 625);
@@ -238,7 +241,11 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         File file = new File(idatamanager.getDirectory(), "resources.zip");
 
         if (file.isFile()) {
-            this.setResourcePack("level://" + s + "/" + "resources.zip", "");
+            try {
+                this.setResourcePack("level://" + URLEncoder.encode(s, Charsets.UTF_8.toString()) + "/" + "resources.zip", "");
+            } catch (UnsupportedEncodingException unsupportedencodingexception) {
+                MinecraftServer.LOGGER.warn("Something went wrong url encoding {}", new Object[] { s});
+            }
         }
 
     }
@@ -292,8 +299,8 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
     protected void stop() {
         MinecraftServer.LOGGER.info("Stopping server");
-        if (this.am() != null) {
-            this.am().b();
+        if (this.an() != null) {
+            this.an().b();
         }
 
         if (this.v != null) {
@@ -354,21 +361,21 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     public void run() {
         try {
             if (this.init()) {
-                this.aa = av();
+                this.ab = aw();
                 long i = 0L;
 
                 this.q.setMOTD(new ChatComponentText(this.motd));
-                this.q.setServerInfo(new ServerPing.ServerData("1.10.2", 210));
+                this.q.setServerInfo(new ServerPing.ServerData("1.11", 315));
                 this.a(this.q);
 
                 while (this.isRunning) {
-                    long j = av();
-                    long k = j - this.aa;
+                    long j = aw();
+                    long k = j - this.ab;
 
-                    if (k > 2000L && this.aa - this.Q >= 15000L) {
+                    if (k > 2000L && this.ab - this.R >= 15000L) {
                         MinecraftServer.LOGGER.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[] { Long.valueOf(k), Long.valueOf(k / 50L)});
                         k = 2000L;
-                        this.Q = this.aa;
+                        this.R = this.ab;
                     }
 
                     if (k < 0L) {
@@ -377,7 +384,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                     }
 
                     i += k;
-                    this.aa = j;
+                    this.ab = j;
                     if (this.worldServer[0].everyoneDeeplySleeping()) {
                         this.C();
                         i = 0L;
@@ -389,7 +396,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                     }
 
                     Thread.sleep(Math.max(1L, 50L - i));
-                    this.P = true;
+                    this.Q = true;
                 }
             } else {
                 this.a((CrashReport) null);
@@ -459,7 +466,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         return new File(".");
     }
 
-    public void a(CrashReport crashreport) {}
+    protected void a(CrashReport crashreport) {}
 
     public void B() {}
 
@@ -467,16 +474,16 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         long i = System.nanoTime();
 
         ++this.ticks;
-        if (this.S) {
-            this.S = false;
+        if (this.T) {
+            this.T = false;
             this.methodProfiler.a = true;
             this.methodProfiler.a();
         }
 
         this.methodProfiler.a("root");
         this.D();
-        if (i - this.Y >= 5000000000L) {
-            this.Y = i;
+        if (i - this.Z >= 5000000000L) {
+            this.Z = i;
             this.q.setPlayerSample(new ServerPing.ServerPingPlayerSample(this.I(), this.H()));
             GameProfile[] agameprofile = new GameProfile[Math.min(this.H(), 12)];
             int j = MathHelper.nextInt(this.r, 0, this.H() - agameprofile.length);
@@ -570,13 +577,13 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         }
 
         this.methodProfiler.c("connection");
-        this.am().c();
+        this.an().c();
         this.methodProfiler.c("players");
         this.v.tick();
         this.methodProfiler.c("tickables");
 
         for (i = 0; i < this.o.size(); ++i) {
-            ((ITickable) this.o.get(i)).E_();
+            ((ITickable) this.o.get(i)).F_();
         }
 
         this.methodProfiler.b();
@@ -666,7 +673,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
             }
 
             if (flag && !GraphicsEnvironment.isHeadless()) {
-                dedicatedserver.aN();
+                dedicatedserver.aO();
             }
 
             dedicatedserver.F();
@@ -703,7 +710,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     public String getVersion() {
-        return "1.10.2";
+        return "1.11";
     }
 
     public int H() {
@@ -832,7 +839,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     public KeyPair O() {
-        return this.H;
+        return this.I;
     }
 
     public int P() {
@@ -844,27 +851,27 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     public String Q() {
-        return this.I;
-    }
-
-    public void i(String s) {
-        this.I = s;
-    }
-
-    public boolean R() {
-        return this.I != null;
-    }
-
-    public String S() {
         return this.J;
     }
 
-    public void setWorld(String s) {
+    public void i(String s) {
         this.J = s;
     }
 
+    public boolean R() {
+        return this.J != null;
+    }
+
+    public String S() {
+        return this.K;
+    }
+
+    public void setWorld(String s) {
+        this.K = s;
+    }
+
     public void a(KeyPair keypair) {
-        this.H = keypair;
+        this.I = keypair;
     }
 
     public void a(EnumDifficulty enumdifficulty) {
@@ -903,7 +910,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     public void c(boolean flag) {
-        this.M = flag;
+        this.N = flag;
     }
 
     public Convertable getConvertable() {
@@ -911,16 +918,16 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     public String getResourcePack() {
-        return this.N;
-    }
-
-    public String getResourcePackHash() {
         return this.O;
     }
 
+    public String getResourcePackHash() {
+        return this.P;
+    }
+
     public void setResourcePack(String s, String s1) {
-        this.N = s;
-        this.O = s1;
+        this.O = s;
+        this.P = s1;
     }
 
     public void a(MojangStatisticsGenerator mojangstatisticsgenerator) {
@@ -933,8 +940,8 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         }
 
         mojangstatisticsgenerator.a("uses_auth", Boolean.valueOf(this.onlineMode));
-        mojangstatisticsgenerator.a("gui_state", this.ao() ? "enabled" : "disabled");
-        mojangstatisticsgenerator.a("run_time", Long.valueOf((av() - mojangstatisticsgenerator.g()) / 60L * 1000L));
+        mojangstatisticsgenerator.a("gui_state", this.ap() ? "enabled" : "disabled");
+        mojangstatisticsgenerator.a("run_time", Long.valueOf((aw() - mojangstatisticsgenerator.g()) / 60L * 1000L));
         mojangstatisticsgenerator.a("avg_tick_ms", Integer.valueOf((int) (MathHelper.a(this.h) * 1.0E-6D)));
         int i = 0;
 
@@ -954,7 +961,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                     mojangstatisticsgenerator.a("world[" + i + "][hardcore]", Boolean.valueOf(worlddata.isHardcore()));
                     mojangstatisticsgenerator.a("world[" + i + "][generator_name]", worlddata.getType().name());
                     mojangstatisticsgenerator.a("world[" + i + "][generator_version]", Integer.valueOf(worlddata.getType().getVersion()));
-                    mojangstatisticsgenerator.a("world[" + i + "][height]", Integer.valueOf(this.F));
+                    mojangstatisticsgenerator.a("world[" + i + "][height]", Integer.valueOf(this.G));
                     mojangstatisticsgenerator.a("world[" + i + "][chunks_loaded]", Integer.valueOf(worldserver.getChunkProviderServer().g()));
                     ++i;
                 }
@@ -985,6 +992,14 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         this.onlineMode = flag;
     }
 
+    public boolean ac() {
+        return this.A;
+    }
+
+    public void e(boolean flag) {
+        this.A = flag;
+    }
+
     public boolean getSpawnAnimals() {
         return this.spawnAnimals;
     }
@@ -997,7 +1012,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         return this.spawnNPCs;
     }
 
-    public abstract boolean ae();
+    public abstract boolean af();
 
     public void setSpawnNPCs(boolean flag) {
         this.spawnNPCs = flag;
@@ -1030,11 +1045,11 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     public int getMaxBuildHeight() {
-        return this.F;
+        return this.G;
     }
 
     public void c(int i) {
-        this.F = i;
+        this.G = i;
     }
 
     public boolean isStopped() {
@@ -1061,22 +1076,22 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
     }
 
-    public ServerConnection am() {
+    public ServerConnection an() {
         return this.p;
     }
 
-    public boolean ao() {
+    public boolean ap() {
         return false;
     }
 
     public abstract String a(EnumGamemode enumgamemode, boolean flag);
 
-    public int ap() {
+    public int aq() {
         return this.ticks;
     }
 
-    public void aq() {
-        this.S = true;
+    public void ar() {
+        this.T = true;
     }
 
     public BlockPosition getChunkCoordinates() {
@@ -1104,55 +1119,55 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     public void setForceGamemode(boolean flag) {
-        this.T = flag;
+        this.U = flag;
     }
 
     public boolean getForceGamemode() {
-        return this.T;
+        return this.U;
     }
 
-    public Proxy au() {
+    public Proxy av() {
         return this.e;
     }
 
-    public static long av() {
+    public static long aw() {
         return System.currentTimeMillis();
     }
 
     public int getIdleTimeout() {
-        return this.G;
+        return this.H;
     }
 
     public void setIdleTimeout(int i) {
-        this.G = i;
+        this.H = i;
     }
 
     public IChatBaseComponent getScoreboardDisplayName() {
         return new ChatComponentText(this.getName());
     }
 
-    public boolean ax() {
+    public boolean ay() {
         return true;
     }
 
-    public MinecraftSessionService ay() {
-        return this.V;
-    }
-
-    public GameProfileRepository getGameProfileRepository() {
+    public MinecraftSessionService az() {
         return this.W;
     }
 
-    public UserCache getUserCache() {
+    public GameProfileRepository getGameProfileRepository() {
         return this.X;
+    }
+
+    public UserCache getUserCache() {
+        return this.Y;
     }
 
     public ServerPing getServerPing() {
         return this.q;
     }
 
-    public void aC() {
-        this.Y = 0L;
+    public void aD() {
+        this.Z = 0L;
     }
 
     @Nullable
@@ -1181,11 +1196,11 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
     public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {}
 
-    public MinecraftServer h() {
+    public MinecraftServer B_() {
         return this;
     }
 
-    public int aD() {
+    public int aE() {
         return 29999984;
     }
 
@@ -1217,15 +1232,15 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         return Thread.currentThread() == this.serverThread;
     }
 
-    public int aF() {
+    public int aG() {
         return 256;
     }
 
-    public long aG() {
-        return this.aa;
+    public long aH() {
+        return this.ab;
     }
 
-    public Thread aH() {
+    public Thread aI() {
         return this.serverThread;
     }
 

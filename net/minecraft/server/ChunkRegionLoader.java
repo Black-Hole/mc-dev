@@ -35,7 +35,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         NBTTagCompound nbttagcompound = (NBTTagCompound) this.b.get(chunkcoordintpair);
 
         if (nbttagcompound == null) {
-            DataInputStream datainputstream = RegionFileCache.c(this.d, i, j);
+            DataInputStream datainputstream = RegionFileCache.d(this.d, i, j);
 
             if (datainputstream == null) {
                 return null;
@@ -47,6 +47,14 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         return this.a(world, i, j, nbttagcompound);
     }
 
+    public boolean a(int i, int j) {
+        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
+        NBTTagCompound nbttagcompound = (NBTTagCompound) this.b.get(chunkcoordintpair);
+
+        return nbttagcompound != null ? true : RegionFileCache.f(this.d, i, j);
+    }
+
+    @Nullable
     protected Chunk a(World world, int i, int j, NBTTagCompound nbttagcompound) {
         if (!nbttagcompound.hasKeyOfType("Level", 10)) {
             ChunkRegionLoader.a.error("Chunk file at {},{} is missing level data, skipping", new Object[] { Integer.valueOf(i), Integer.valueOf(j)});
@@ -80,7 +88,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
             nbttagcompound.set("Level", nbttagcompound1);
-            nbttagcompound.setInt("DataVersion", 512);
+            nbttagcompound.setInt("DataVersion", 819);
             this.a(chunk, world, nbttagcompound1);
             this.a(chunk.k(), nbttagcompound);
         } catch (Exception exception) {
@@ -131,7 +139,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
     }
 
     private void b(ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) throws IOException {
-        DataOutputStream dataoutputstream = RegionFileCache.d(this.d, chunkcoordintpair.x, chunkcoordintpair.z);
+        DataOutputStream dataoutputstream = RegionFileCache.e(this.d, chunkcoordintpair.x, chunkcoordintpair.z);
 
         NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) dataoutputstream);
         dataoutputstream.close();
@@ -196,7 +204,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         nbttagcompound.setLong("InhabitedTime", chunk.x());
         ChunkSection[] achunksection = chunk.getSections();
         NBTTagList nbttaglist = new NBTTagList();
-        boolean flag = !world.worldProvider.m();
+        boolean flag = world.worldProvider.m();
         ChunkSection[] achunksection1 = achunksection;
         int i = achunksection.length;
 
@@ -301,7 +309,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         NBTTagList nbttaglist = nbttagcompound.getList("Sections", 10);
         boolean flag = true;
         ChunkSection[] achunksection = new ChunkSection[16];
-        boolean flag1 = !world.worldProvider.m();
+        boolean flag1 = world.worldProvider.m();
 
         for (int k = 0; k < nbttaglist.size(); ++k) {
             NBTTagCompound nbttagcompound1 = nbttaglist.get(k);
@@ -328,44 +336,38 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
         NBTTagList nbttaglist1 = nbttagcompound.getList("Entities", 10);
 
-        if (nbttaglist1 != null) {
-            for (int l = 0; l < nbttaglist1.size(); ++l) {
-                NBTTagCompound nbttagcompound2 = nbttaglist1.get(l);
+        for (int l = 0; l < nbttaglist1.size(); ++l) {
+            NBTTagCompound nbttagcompound2 = nbttaglist1.get(l);
 
-                a(nbttagcompound2, world, chunk);
-                chunk.g(true);
-            }
+            a(nbttagcompound2, world, chunk);
+            chunk.g(true);
         }
 
         NBTTagList nbttaglist2 = nbttagcompound.getList("TileEntities", 10);
 
-        if (nbttaglist2 != null) {
-            for (int i1 = 0; i1 < nbttaglist2.size(); ++i1) {
-                NBTTagCompound nbttagcompound3 = nbttaglist2.get(i1);
-                TileEntity tileentity = TileEntity.a(world, nbttagcompound3);
+        for (int i1 = 0; i1 < nbttaglist2.size(); ++i1) {
+            NBTTagCompound nbttagcompound3 = nbttaglist2.get(i1);
+            TileEntity tileentity = TileEntity.a(world, nbttagcompound3);
 
-                if (tileentity != null) {
-                    chunk.a(tileentity);
-                }
+            if (tileentity != null) {
+                chunk.a(tileentity);
             }
         }
 
         if (nbttagcompound.hasKeyOfType("TileTicks", 9)) {
             NBTTagList nbttaglist3 = nbttagcompound.getList("TileTicks", 10);
 
-            if (nbttaglist3 != null) {
-                for (int j1 = 0; j1 < nbttaglist3.size(); ++j1) {
-                    NBTTagCompound nbttagcompound4 = nbttaglist3.get(j1);
-                    Block block;
+            for (int j1 = 0; j1 < nbttaglist3.size(); ++j1) {
+                NBTTagCompound nbttagcompound4 = nbttaglist3.get(j1);
+                Block block;
 
-                    if (nbttagcompound4.hasKeyOfType("i", 8)) {
-                        block = Block.getByName(nbttagcompound4.getString("i"));
-                    } else {
-                        block = Block.getById(nbttagcompound4.getInt("i"));
-                    }
-
-                    world.b(new BlockPosition(nbttagcompound4.getInt("x"), nbttagcompound4.getInt("y"), nbttagcompound4.getInt("z")), block, nbttagcompound4.getInt("t"), nbttagcompound4.getInt("p"));
+                if (nbttagcompound4.hasKeyOfType("i", 8)) {
+                    block = Block.getByName(nbttagcompound4.getString("i"));
+                } else {
+                    block = Block.getById(nbttagcompound4.getInt("i"));
                 }
+
+                world.b(new BlockPosition(nbttagcompound4.getInt("x"), nbttagcompound4.getInt("y"), nbttagcompound4.getInt("z")), block, nbttagcompound4.getInt("t"), nbttagcompound4.getInt("p"));
             }
         }
 

@@ -15,14 +15,14 @@ public class BlockEnderPortalFrame extends Block {
 
     public BlockEnderPortalFrame() {
         super(Material.STONE, MaterialMapColor.C);
-        this.w(this.blockStateList.getBlockData().set(BlockEnderPortalFrame.FACING, EnumDirection.NORTH).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockEnderPortalFrame.FACING, EnumDirection.NORTH).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(false)));
     }
 
     public boolean b(IBlockData iblockdata) {
         return false;
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockEnderPortalFrame.c;
     }
 
@@ -34,9 +34,8 @@ public class BlockEnderPortalFrame extends Block {
 
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return null;
+        return Items.a;
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
@@ -47,7 +46,7 @@ public class BlockEnderPortalFrame extends Block {
         return true;
     }
 
-    public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public int c(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return ((Boolean) iblockdata.get(BlockEnderPortalFrame.EYE)).booleanValue() ? 15 : 0;
     }
 

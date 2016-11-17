@@ -39,7 +39,7 @@ public class Chunk {
     private int v;
     private long w;
     private int x;
-    private ConcurrentLinkedQueue<BlockPosition> y;
+    private final ConcurrentLinkedQueue<BlockPosition> y;
     public boolean d;
 
     public Chunk(World world, int i, int j) {
@@ -67,7 +67,7 @@ public class Chunk {
     public Chunk(World world, ChunkSnapshot chunksnapshot, int i, int j) {
         this(world, i, j);
         boolean flag = true;
-        boolean flag1 = !world.worldProvider.m();
+        boolean flag1 = world.worldProvider.m();
 
         for (int k = 0; k < 16; ++k) {
             for (int l = 0; l < 16; ++l) {
@@ -147,7 +147,7 @@ public class Chunk {
                         }
                     }
 
-                    if (!this.world.worldProvider.m()) {
+                    if (this.world.worldProvider.m()) {
                         l = 15;
                         int i1 = i + 16 - 1;
 
@@ -201,7 +201,7 @@ public class Chunk {
                         Iterator iterator;
                         EnumDirection enumdirection;
 
-                        for (iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator(); iterator.hasNext(); j1 = Math.min(j1, this.world.c(l + enumdirection.getAdjacentX(), i1 + enumdirection.getAdjacentZ()))) {
+                        for (iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator(); iterator.hasNext(); j1 = Math.min(j1, this.world.d(l + enumdirection.getAdjacentX(), i1 + enumdirection.getAdjacentZ()))) {
                             enumdirection = (EnumDirection) iterator.next();
                         }
 
@@ -269,7 +269,7 @@ public class Chunk {
             int l1;
             int i2;
 
-            if (!this.world.worldProvider.m()) {
+            if (this.world.worldProvider.m()) {
                 ChunkSection chunksection;
 
                 if (i1 < l) {
@@ -325,7 +325,7 @@ public class Chunk {
                 this.v = l1;
             }
 
-            if (!this.world.worldProvider.m()) {
+            if (this.world.worldProvider.m()) {
                 Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                 while (iterator.hasNext()) {
@@ -422,7 +422,7 @@ public class Chunk {
                     return null;
                 }
 
-                chunksection = new ChunkSection(j >> 4 << 4, !this.world.worldProvider.m());
+                chunksection = new ChunkSection(j >> 4 << 4, this.world.worldProvider.m());
                 this.sections[j >> 4] = chunksection;
                 flag = j >= i1;
             }
@@ -495,7 +495,7 @@ public class Chunk {
         int k = blockposition.getZ() & 15;
         ChunkSection chunksection = this.sections[j >> 4];
 
-        return chunksection == Chunk.a ? (this.c(blockposition) ? enumskyblock.c : 0) : (enumskyblock == EnumSkyBlock.SKY ? (this.world.worldProvider.m() ? 0 : chunksection.b(i, j & 15, k)) : (enumskyblock == EnumSkyBlock.BLOCK ? chunksection.c(i, j & 15, k) : enumskyblock.c));
+        return chunksection == Chunk.a ? (this.c(blockposition) ? enumskyblock.c : 0) : (enumskyblock == EnumSkyBlock.SKY ? (!this.world.worldProvider.m() ? 0 : chunksection.b(i, j & 15, k)) : (enumskyblock == EnumSkyBlock.BLOCK ? chunksection.c(i, j & 15, k) : enumskyblock.c));
     }
 
     public void a(EnumSkyBlock enumskyblock, BlockPosition blockposition, int i) {
@@ -505,14 +505,14 @@ public class Chunk {
         ChunkSection chunksection = this.sections[k >> 4];
 
         if (chunksection == Chunk.a) {
-            chunksection = new ChunkSection(k >> 4 << 4, !this.world.worldProvider.m());
+            chunksection = new ChunkSection(k >> 4 << 4, this.world.worldProvider.m());
             this.sections[k >> 4] = chunksection;
             this.initLighting();
         }
 
         this.s = true;
         if (enumskyblock == EnumSkyBlock.SKY) {
-            if (!this.world.worldProvider.m()) {
+            if (this.world.worldProvider.m()) {
                 chunksection.a(j, k & 15, l, i);
             }
         } else if (enumskyblock == EnumSkyBlock.BLOCK) {
@@ -528,9 +528,9 @@ public class Chunk {
         ChunkSection chunksection = this.sections[k >> 4];
 
         if (chunksection == Chunk.a) {
-            return !this.world.worldProvider.m() && i < EnumSkyBlock.SKY.c ? EnumSkyBlock.SKY.c - i : 0;
+            return this.world.worldProvider.m() && i < EnumSkyBlock.SKY.c ? EnumSkyBlock.SKY.c - i : 0;
         } else {
-            int i1 = this.world.worldProvider.m() ? 0 : chunksection.b(j, k & 15, l);
+            int i1 = !this.world.worldProvider.m() ? 0 : chunksection.b(j, k & 15, l);
 
             i1 -= i;
             int j1 = chunksection.c(j, k & 15, l);
@@ -549,7 +549,7 @@ public class Chunk {
         int j = MathHelper.floor(entity.locZ / 16.0D);
 
         if (i != this.locX || j != this.locZ) {
-            Chunk.e.warn("Wrong location! ({}, {}) should be ({}, {}), {}", new Object[] { Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(this.locX), Integer.valueOf(this.locZ), entity, entity});
+            Chunk.e.warn("Wrong location! ({}, {}) should be ({}, {}), {}", new Object[] { Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(this.locX), Integer.valueOf(this.locZ), entity});
             entity.die();
         }
 
@@ -563,15 +563,15 @@ public class Chunk {
             k = this.entitySlices.length - 1;
         }
 
-        entity.ab = true;
-        entity.ac = this.locX;
-        entity.ad = k;
-        entity.ae = this.locZ;
+        entity.aa = true;
+        entity.ab = this.locX;
+        entity.ac = k;
+        entity.ad = this.locZ;
         this.entitySlices[k].add(entity);
     }
 
     public void b(Entity entity) {
-        this.a(entity, entity.ad);
+        this.a(entity, entity.ac);
     }
 
     public void a(Entity entity, int i) {
@@ -613,7 +613,7 @@ public class Chunk {
             } else if (chunk_enumtileentitystate == Chunk.EnumTileEntityState.QUEUED) {
                 this.y.add(blockposition);
             }
-        } else if (tileentity.x()) {
+        } else if (tileentity.y()) {
             this.tileEntities.remove(blockposition);
             return null;
         }
@@ -634,10 +634,10 @@ public class Chunk {
         tileentity.setPosition(blockposition);
         if (this.getBlockData(blockposition).getBlock() instanceof ITileEntity) {
             if (this.tileEntities.containsKey(blockposition)) {
-                ((TileEntity) this.tileEntities.get(blockposition)).y();
+                ((TileEntity) this.tileEntities.get(blockposition)).z();
             }
 
-            tileentity.z();
+            tileentity.A();
             this.tileEntities.put(blockposition, tileentity);
         }
     }
@@ -647,7 +647,7 @@ public class Chunk {
             TileEntity tileentity = (TileEntity) this.tileEntities.remove(blockposition);
 
             if (tileentity != null) {
-                tileentity.y();
+                tileentity.z();
             }
         }
 
@@ -706,7 +706,7 @@ public class Chunk {
                 while (iterator.hasNext()) {
                     Entity entity1 = (Entity) iterator.next();
 
-                    if (entity1.getBoundingBox().b(axisalignedbb) && entity1 != entity) {
+                    if (entity1.getBoundingBox().c(axisalignedbb) && entity1 != entity) {
                         if (predicate == null || predicate.apply(entity1)) {
                             list.add(entity1);
                         }
@@ -720,7 +720,7 @@ public class Chunk {
                             for (int i1 = 0; i1 < l; ++i1) {
                                 Entity entity2 = aentity1[i1];
 
-                                if (entity2 != entity && entity2.getBoundingBox().b(axisalignedbb) && (predicate == null || predicate.apply(entity2))) {
+                                if (entity2 != entity && entity2.getBoundingBox().c(axisalignedbb) && (predicate == null || predicate.apply(entity2))) {
                                     list.add(entity2);
                                 }
                             }
@@ -745,7 +745,7 @@ public class Chunk {
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                if (entity.getBoundingBox().b(axisalignedbb) && (predicate == null || predicate.apply(entity))) {
+                if (entity.getBoundingBox().c(axisalignedbb) && (predicate == null || predicate.apply(entity))) {
                     list.add(entity);
                 }
             }
@@ -844,7 +844,7 @@ public class Chunk {
     }
 
     public void b(boolean flag) {
-        if (this.m && !this.world.worldProvider.m() && !flag) {
+        if (this.m && this.world.worldProvider.m() && !flag) {
             this.h(this.world.isClientSide);
         }
 
@@ -983,7 +983,7 @@ public class Chunk {
         this.lit = true;
         BlockPosition blockposition = new BlockPosition(this.locX << 4, 0, this.locZ << 4);
 
-        if (!this.world.worldProvider.m()) {
+        if (this.world.worldProvider.m()) {
             if (this.world.areChunksLoadedBetween(blockposition.a(-1, 0, -1), blockposition.a(16, this.world.K(), 16))) {
                 label42:
                 for (int i = 0; i < 16; ++i) {

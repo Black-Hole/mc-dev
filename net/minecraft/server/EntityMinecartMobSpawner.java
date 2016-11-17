@@ -24,14 +24,16 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        a(dataconvertermanager, "MinecartSpawner");
+    public static void b(DataConverterManager dataconvertermanager) {
+        a(dataconvertermanager, EntityMinecartMobSpawner.class);
         dataconvertermanager.a(DataConverterTypes.ENTITY, new DataInspector() {
             public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
-                if ("MinecartSpawner".equals(nbttagcompound.getString("id"))) {
-                    nbttagcompound.setString("id", "MobSpawner");
+                String s = nbttagcompound.getString("id");
+
+                if (EntityTypes.getName(EntityMinecartMobSpawner.class).equals(new MinecraftKey(s))) {
+                    nbttagcompound.setString("id", TileEntity.a(TileEntityMobSpawner.class).toString());
                     dataconverter.a(DataConverterTypes.BLOCK_ENTITY, nbttagcompound, i);
-                    nbttagcompound.setString("id", "MinecartSpawner");
+                    nbttagcompound.setString("id", s);
                 }
 
                 return nbttagcompound;
@@ -57,8 +59,8 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
         this.a.b(nbttagcompound);
     }
 
-    public void m() {
-        super.m();
+    public void A_() {
+        super.A_();
         this.a.c();
     }
 }

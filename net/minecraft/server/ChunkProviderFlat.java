@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,7 @@ public class ChunkProviderFlat implements ChunkGenerator {
     private final Random b;
     private final IBlockData[] c = new IBlockData[256];
     private final WorldGenFlatInfo d;
-    private final List<StructureGenerator> e = Lists.newArrayList();
+    private final Map<String, StructureGenerator> e = new HashMap();
     private final boolean f;
     private final boolean g;
     private WorldGenLakes h;
@@ -33,23 +33,23 @@ public class ChunkProviderFlat implements ChunkGenerator {
                     map1.put("size", "1");
                 }
 
-                this.e.add(new WorldGenVillage(map1));
+                this.e.put("Village", new WorldGenVillage(map1));
             }
 
             if (map.containsKey("biome_1")) {
-                this.e.add(new WorldGenLargeFeature((Map) map.get("biome_1")));
+                this.e.put("Temple", new WorldGenLargeFeature((Map) map.get("biome_1")));
             }
 
             if (map.containsKey("mineshaft")) {
-                this.e.add(new WorldGenMineshaft((Map) map.get("mineshaft")));
+                this.e.put("Mineshaft", new WorldGenMineshaft((Map) map.get("mineshaft")));
             }
 
             if (map.containsKey("stronghold")) {
-                this.e.add(new WorldGenStronghold((Map) map.get("stronghold")));
+                this.e.put("Stronghold", new WorldGenStronghold((Map) map.get("stronghold")));
             }
 
             if (map.containsKey("oceanmonument")) {
-                this.e.add(new WorldGenMonument((Map) map.get("oceanmonument")));
+                this.e.put("Monument", new WorldGenMonument((Map) map.get("oceanmonument")));
             }
         }
 
@@ -108,7 +108,7 @@ public class ChunkProviderFlat implements ChunkGenerator {
             }
         }
 
-        Iterator iterator = this.e.iterator();
+        Iterator iterator = this.e.values().iterator();
 
         while (iterator.hasNext()) {
             WorldGenBase worldgenbase = (WorldGenBase) iterator.next();
@@ -141,7 +141,7 @@ public class ChunkProviderFlat implements ChunkGenerator {
 
         this.b.setSeed((long) i * i1 + (long) j * j1 ^ this.a.getSeed());
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
-        Iterator iterator = this.e.iterator();
+        Iterator iterator = this.e.values().iterator();
 
         while (iterator.hasNext()) {
             StructureGenerator structuregenerator = (StructureGenerator) iterator.next();
@@ -187,24 +187,14 @@ public class ChunkProviderFlat implements ChunkGenerator {
     }
 
     @Nullable
-    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
-        if ("Stronghold".equals(s)) {
-            Iterator iterator = this.e.iterator();
+    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, boolean flag) {
+        StructureGenerator structuregenerator = (StructureGenerator) this.e.get(s);
 
-            while (iterator.hasNext()) {
-                StructureGenerator structuregenerator = (StructureGenerator) iterator.next();
-
-                if (structuregenerator instanceof WorldGenStronghold) {
-                    return structuregenerator.getNearestGeneratedFeature(world, blockposition);
-                }
-            }
-        }
-
-        return null;
+        return structuregenerator != null ? structuregenerator.getNearestGeneratedFeature(world, blockposition, flag) : null;
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {
-        Iterator iterator = this.e.iterator();
+        Iterator iterator = this.e.values().iterator();
 
         while (iterator.hasNext()) {
             StructureGenerator structuregenerator = (StructureGenerator) iterator.next();

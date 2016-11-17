@@ -9,7 +9,7 @@ public class ItemDoor extends Item {
         this.a(CreativeModeTab.d);
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (enumdirection != EnumDirection.UP) {
             return EnumInteractionResult.FAIL;
         } else {
@@ -20,6 +20,8 @@ public class ItemDoor extends Item {
                 blockposition = blockposition.shift(enumdirection);
             }
 
+            ItemStack itemstack = entityhuman.b(enumhand);
+
             if (entityhuman.a(blockposition, enumdirection, itemstack) && this.a.canPlace(world, blockposition)) {
                 EnumDirection enumdirection1 = EnumDirection.fromAngle((double) entityhuman.yaw);
                 int i = enumdirection1.getAdjacentX();
@@ -27,10 +29,10 @@ public class ItemDoor extends Item {
                 boolean flag = i < 0 && f2 < 0.5F || i > 0 && f2 > 0.5F || j < 0 && f > 0.5F || j > 0 && f < 0.5F;
 
                 a(world, blockposition, enumdirection1, this.a, flag);
-                SoundEffectType soundeffecttype = this.a.w();
+                SoundEffectType soundeffecttype = this.a.getStepSound();
 
                 world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
-                --itemstack.count;
+                itemstack.subtract(1);
                 return EnumInteractionResult.SUCCESS;
             } else {
                 return EnumInteractionResult.FAIL;
@@ -41,8 +43,8 @@ public class ItemDoor extends Item {
     public static void a(World world, BlockPosition blockposition, EnumDirection enumdirection, Block block, boolean flag) {
         BlockPosition blockposition1 = blockposition.shift(enumdirection.e());
         BlockPosition blockposition2 = blockposition.shift(enumdirection.f());
-        int i = (world.getType(blockposition2).l() ? 1 : 0) + (world.getType(blockposition2.up()).l() ? 1 : 0);
-        int j = (world.getType(blockposition1).l() ? 1 : 0) + (world.getType(blockposition1.up()).l() ? 1 : 0);
+        int i = (world.getType(blockposition2).m() ? 1 : 0) + (world.getType(blockposition2.up()).m() ? 1 : 0);
+        int j = (world.getType(blockposition1).m() ? 1 : 0) + (world.getType(blockposition1.up()).m() ? 1 : 0);
         boolean flag1 = world.getType(blockposition2).getBlock() == block || world.getType(blockposition2.up()).getBlock() == block;
         boolean flag2 = world.getType(blockposition1).getBlock() == block || world.getType(blockposition1.up()).getBlock() == block;
 
@@ -60,7 +62,7 @@ public class ItemDoor extends Item {
 
         world.setTypeAndData(blockposition, iblockdata.set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.LOWER), 2);
         world.setTypeAndData(blockposition3, iblockdata.set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), 2);
-        world.applyPhysics(blockposition, block);
-        world.applyPhysics(blockposition3, block);
+        world.applyPhysics(blockposition, block, false);
+        world.applyPhysics(blockposition3, block, false);
     }
 }

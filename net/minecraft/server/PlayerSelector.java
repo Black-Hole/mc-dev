@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import com.google.common.base.Splitter;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -21,25 +22,60 @@ import javax.annotation.Nullable;
 
 public class PlayerSelector {
 
-    private static final Pattern a = Pattern.compile("^@([pare])(?:\\[([\\w=,!-]*)\\])?$");
-    private static final Pattern b = Pattern.compile("\\G([-!]?[\\w-]*)(?:$|,)");
-    private static final Pattern c = Pattern.compile("\\G(\\w+)=([-!]?[\\w-]*)(?:$|,)");
-    private static final Set<String> d = Sets.newHashSet(new String[] { "x", "y", "z", "dx", "dy", "dz", "rm", "r"});
+    private static final Pattern a = Pattern.compile("^@([pare])(?:\\[([^ ]*)\\])?$");
+    private static final Splitter b = Splitter.on(',').omitEmptyStrings();
+    private static final Splitter c = Splitter.on('=').limit(2);
+    private static final Set<String> d = Sets.newHashSet();
+    private static final String e = c("r");
+    private static final String f = c("rm");
+    private static final String g = c("l");
+    private static final String h = c("lm");
+    private static final String i = c("x");
+    private static final String j = c("y");
+    private static final String k = c("z");
+    private static final String l = c("dx");
+    private static final String m = c("dy");
+    private static final String n = c("dz");
+    private static final String o = c("rx");
+    private static final String p = c("rxm");
+    private static final String q = c("ry");
+    private static final String r = c("rym");
+    private static final String s = c("c");
+    private static final String t = c("m");
+    private static final String u = c("team");
+    private static final String v = c("name");
+    private static final String w = c("type");
+    private static final String x = c("tag");
+    private static final Predicate<String> y = new Predicate() {
+        public boolean a(@Nullable String s) {
+            return s != null && (PlayerSelector.d.contains(s) || s.length() > "score_".length() && s.startsWith("score_"));
+        }
+
+        public boolean apply(@Nullable Object object) {
+            return this.a((String) object);
+        }
+    };
+    private static final Set<String> z = Sets.newHashSet(new String[] { PlayerSelector.i, PlayerSelector.j, PlayerSelector.k, PlayerSelector.l, PlayerSelector.m, PlayerSelector.n, PlayerSelector.f, PlayerSelector.e});
+
+    private static String c(String s) {
+        PlayerSelector.d.add(s);
+        return s;
+    }
 
     @Nullable
-    public static EntityPlayer getPlayer(ICommandListener icommandlistener, String s) {
+    public static EntityPlayer getPlayer(ICommandListener icommandlistener, String s) throws CommandException {
         return (EntityPlayer) getEntity(icommandlistener, s, EntityPlayer.class);
     }
 
     @Nullable
-    public static <T extends Entity> T getEntity(ICommandListener icommandlistener, String s, Class<? extends T> oclass) {
+    public static <T extends Entity> T getEntity(ICommandListener icommandlistener, String s, Class<? extends T> oclass) throws CommandException {
         List list = getPlayers(icommandlistener, s, oclass);
 
         return list.size() == 1 ? (Entity) list.get(0) : null;
     }
 
     @Nullable
-    public static IChatBaseComponent getPlayerNames(ICommandListener icommandlistener, String s) {
+    public static IChatBaseComponent getPlayerNames(ICommandListener icommandlistener, String s) throws CommandException {
         List list = getPlayers(icommandlistener, s, Entity.class);
 
         if (list.isEmpty()) {
@@ -58,11 +94,11 @@ public class PlayerSelector {
         }
     }
 
-    public static <T extends Entity> List<T> getPlayers(ICommandListener icommandlistener, String s, Class<? extends T> oclass) {
+    public static <T extends Entity> List<T> getPlayers(ICommandListener icommandlistener, String s, Class<? extends T> oclass) throws CommandException {
         Matcher matcher = PlayerSelector.a.matcher(s);
 
         if (matcher.matches() && icommandlistener.a(1, "@")) {
-            Map map = c(matcher.group(2));
+            Map map = d(matcher.group(2));
 
             if (!b(icommandlistener, map)) {
                 return Collections.emptyList();
@@ -106,70 +142,65 @@ public class PlayerSelector {
         if (h(map)) {
             arraylist.add(icommandlistener.getWorld());
         } else {
-            Collections.addAll(arraylist, icommandlistener.h().worldServer);
+            Collections.addAll(arraylist, icommandlistener.B_().worldServer);
         }
 
         return arraylist;
     }
 
     private static <T extends Entity> boolean b(ICommandListener icommandlistener, Map<String, String> map) {
-        String s = b(map, "type");
+        String s = b(map, PlayerSelector.w);
 
-        s = s != null && s.startsWith("!") ? s.substring(1) : s;
-        if (s != null && !EntityTypes.b(s)) {
-            ChatMessage chatmessage = new ChatMessage("commands.generic.entity.invalidType", new Object[] { s});
-
-            chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
-            icommandlistener.sendMessage(chatmessage);
-            return false;
-        } else {
+        if (s == null) {
             return true;
+        } else {
+            MinecraftKey minecraftkey = new MinecraftKey(s.startsWith("!") ? s.substring(1) : s);
+
+            if (EntityTypes.b(minecraftkey)) {
+                return true;
+            } else {
+                ChatMessage chatmessage = new ChatMessage("commands.generic.entity.invalidType", new Object[] { minecraftkey});
+
+                chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
+                icommandlistener.sendMessage(chatmessage);
+                return false;
+            }
         }
     }
 
     private static List<Predicate<Entity>> a(Map<String, String> map, String s) {
-        ArrayList arraylist = Lists.newArrayList();
-        final String s1 = b(map, "type");
-        final boolean flag = s1 != null && s1.startsWith("!");
+        String s1 = b(map, PlayerSelector.w);
 
-        if (flag) {
-            s1 = s1.substring(1);
-        }
+        if (s1 != null && (s.equals("e") || s.equals("r"))) {
+            final boolean flag = s1.startsWith("!");
+            final MinecraftKey minecraftkey = new MinecraftKey(flag ? s1.substring(1) : s1);
 
-        boolean flag1 = !s.equals("e");
-        boolean flag2 = s.equals("r") && s1 != null;
-
-        if ((s1 == null || !s.equals("e")) && !flag2) {
-            if (flag1) {
-                arraylist.add(new Predicate() {
-                    public boolean a(@Nullable Entity entity) {
-                        return entity instanceof EntityHuman;
-                    }
-
-                    public boolean apply(Object object) {
-                        return this.a((Entity) object);
-                    }
-                });
-            }
-        } else {
-            arraylist.add(new Predicate() {
+            return Collections.singletonList(new Predicate() {
                 public boolean a(@Nullable Entity entity) {
-                    return EntityTypes.a(entity, s) != flag;
+                    return EntityTypes.a(entity, minecraftkey) != flag;
                 }
 
-                public boolean apply(Object object) {
+                public boolean apply(@Nullable Object object) {
                     return this.a((Entity) object);
                 }
             });
-        }
+        } else {
+            return !s.equals("e") ? Collections.singletonList(new Predicate() {
+                public boolean a(@Nullable Entity entity) {
+                    return entity instanceof EntityHuman;
+                }
 
-        return arraylist;
+                public boolean apply(@Nullable Object object) {
+                    return this.a((Entity) object);
+                }
+            }) : Collections.emptyList();
+        }
     }
 
     private static List<Predicate<Entity>> b(Map<String, String> map) {
         ArrayList arraylist = Lists.newArrayList();
-        final int i = a(map, "lm", -1);
-        final int j = a(map, "l", -1);
+        final int i = a(map, PlayerSelector.h, -1);
+        final int j = a(map, PlayerSelector.g, -1);
 
         if (i > -1 || j > -1) {
             arraylist.add(new Predicate() {
@@ -183,7 +214,7 @@ public class PlayerSelector {
                     }
                 }
 
-                public boolean apply(Object object) {
+                public boolean apply(@Nullable Object object) {
                     return this.a((Entity) object);
                 }
             });
@@ -194,7 +225,7 @@ public class PlayerSelector {
 
     private static List<Predicate<Entity>> c(Map<String, String> map) {
         ArrayList arraylist = Lists.newArrayList();
-        String s = b(map, "m");
+        String s = b(map, PlayerSelector.t);
 
         if (s == null) {
             return arraylist;
@@ -227,7 +258,7 @@ public class PlayerSelector {
                     }
                 }
 
-                public boolean apply(Object object) {
+                public boolean apply(@Nullable Object object) {
                     return this.a((Entity) object);
                 }
             });
@@ -237,7 +268,7 @@ public class PlayerSelector {
 
     private static List<Predicate<Entity>> d(Map<String, String> map) {
         ArrayList arraylist = Lists.newArrayList();
-        final String s = b(map, "team");
+        final String s = b(map, PlayerSelector.u);
         final boolean flag = s != null && s.startsWith("!");
 
         if (flag) {
@@ -258,7 +289,7 @@ public class PlayerSelector {
                     }
                 }
 
-                public boolean apply(Object object) {
+                public boolean apply(@Nullable Object object) {
                     return this.a((Entity) object);
                 }
             });
@@ -275,7 +306,7 @@ public class PlayerSelector {
                 if (entity == null) {
                     return false;
                 } else {
-                    Scoreboard scoreboard = icommandlistener.h().getWorldServer(0).getScoreboard();
+                    Scoreboard scoreboard = icommandlistener.B_().getWorldServer(0).getScoreboard();
                     Iterator iterator = map.entrySet().iterator();
 
                     Entry entry;
@@ -320,7 +351,7 @@ public class PlayerSelector {
                 }
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((Entity) object);
             }
         }}));
@@ -328,7 +359,7 @@ public class PlayerSelector {
 
     private static List<Predicate<Entity>> e(Map<String, String> map) {
         ArrayList arraylist = Lists.newArrayList();
-        final String s = b(map, "name");
+        final String s = b(map, PlayerSelector.v);
         final boolean flag = s != null && s.startsWith("!");
 
         if (flag) {
@@ -341,7 +372,7 @@ public class PlayerSelector {
                     return entity != null && entity.getName().equals(s) != flag;
                 }
 
-                public boolean apply(Object object) {
+                public boolean apply(@Nullable Object object) {
                     return this.a((Entity) object);
                 }
             });
@@ -352,7 +383,7 @@ public class PlayerSelector {
 
     private static List<Predicate<Entity>> f(Map<String, String> map) {
         ArrayList arraylist = Lists.newArrayList();
-        final String s = b(map, "tag");
+        final String s = b(map, PlayerSelector.x);
         final boolean flag = s != null && s.startsWith("!");
 
         if (flag) {
@@ -365,7 +396,7 @@ public class PlayerSelector {
                     return entity == null ? false : ("".equals(s) ? entity.P().isEmpty() != flag : entity.P().contains(s) != flag);
                 }
 
-                public boolean apply(Object object) {
+                public boolean apply(@Nullable Object object) {
                     return this.a((Entity) object);
                 }
             });
@@ -375,8 +406,8 @@ public class PlayerSelector {
     }
 
     private static List<Predicate<Entity>> a(Map<String, String> map, final Vec3D vec3d) {
-        double d0 = (double) a(map, "rm", -1);
-        double d1 = (double) a(map, "r", -1);
+        double d0 = (double) a(map, PlayerSelector.f, -1);
+        double d1 = (double) a(map, PlayerSelector.e, -1);
         final boolean flag = d0 < -0.5D;
         final boolean flag1 = d1 < -0.5D;
 
@@ -399,7 +430,7 @@ public class PlayerSelector {
                     }
                 }
 
-                public boolean apply(Object object) {
+                public boolean apply(@Nullable Object object) {
                     return this.a((Entity) object);
                 }
             }});
@@ -411,9 +442,9 @@ public class PlayerSelector {
         final int i;
         final int j;
 
-        if (map.containsKey("rym") || map.containsKey("ry")) {
-            i = MathHelper.b(a(map, "rym", 0));
-            j = MathHelper.b(a(map, "ry", 359));
+        if (map.containsKey(PlayerSelector.r) || map.containsKey(PlayerSelector.q)) {
+            i = MathHelper.b(a(map, PlayerSelector.r, 0));
+            j = MathHelper.b(a(map, PlayerSelector.q, 359));
             arraylist.add(new Predicate() {
                 public boolean a(@Nullable Entity entity) {
                     if (entity == null) {
@@ -425,15 +456,15 @@ public class PlayerSelector {
                     }
                 }
 
-                public boolean apply(Object object) {
+                public boolean apply(@Nullable Object object) {
                     return this.a((Entity) object);
                 }
             });
         }
 
-        if (map.containsKey("rxm") || map.containsKey("rx")) {
-            i = MathHelper.b(a(map, "rxm", 0));
-            j = MathHelper.b(a(map, "rx", 359));
+        if (map.containsKey(PlayerSelector.p) || map.containsKey(PlayerSelector.o)) {
+            i = MathHelper.b(a(map, PlayerSelector.p, 0));
+            j = MathHelper.b(a(map, PlayerSelector.o, 359));
             arraylist.add(new Predicate() {
                 public boolean a(@Nullable Entity entity) {
                     if (entity == null) {
@@ -445,7 +476,7 @@ public class PlayerSelector {
                     }
                 }
 
-                public boolean apply(Object object) {
+                public boolean apply(@Nullable Object object) {
                     return this.a((Entity) object);
                 }
             });
@@ -456,26 +487,23 @@ public class PlayerSelector {
 
     private static <T extends Entity> List<T> a(Map<String, String> map, Class<? extends T> oclass, List<Predicate<Entity>> list, String s, World world, BlockPosition blockposition) {
         ArrayList arraylist = Lists.newArrayList();
-        String s1 = b(map, "type");
+        String s1 = b(map, PlayerSelector.w);
 
         s1 = s1 != null && s1.startsWith("!") ? s1.substring(1) : s1;
         boolean flag = !s.equals("e");
         boolean flag1 = s.equals("r") && s1 != null;
-        int i = a(map, "dx", 0);
-        int j = a(map, "dy", 0);
-        int k = a(map, "dz", 0);
-        int l = a(map, "r", -1);
+        int i = a(map, PlayerSelector.l, 0);
+        int j = a(map, PlayerSelector.m, 0);
+        int k = a(map, PlayerSelector.n, 0);
+        int l = a(map, PlayerSelector.e, -1);
         Predicate predicate = Predicates.and(list);
         Predicate predicate1 = Predicates.and(IEntitySelector.a, predicate);
-        int i1 = world.players.size();
-        int j1 = world.entityList.size();
-        boolean flag2 = i1 < j1 / 16;
         final AxisAlignedBB axisalignedbb;
 
-        if (!map.containsKey("dx") && !map.containsKey("dy") && !map.containsKey("dz")) {
+        if (!map.containsKey(PlayerSelector.l) && !map.containsKey(PlayerSelector.m) && !map.containsKey(PlayerSelector.n)) {
             if (l >= 0) {
                 axisalignedbb = new AxisAlignedBB((double) (blockposition.getX() - l), (double) (blockposition.getY() - l), (double) (blockposition.getZ() - l), (double) (blockposition.getX() + l + 1), (double) (blockposition.getY() + l + 1), (double) (blockposition.getZ() + l + 1));
-                if (flag && flag2 && !flag1) {
+                if (flag && !flag1) {
                     arraylist.addAll(world.b(oclass, predicate1));
                 } else {
                     arraylist.addAll(world.a(oclass, axisalignedbb, predicate1));
@@ -489,13 +517,13 @@ public class PlayerSelector {
             }
         } else {
             axisalignedbb = a(blockposition, i, j, k);
-            if (flag && flag2 && !flag1) {
+            if (flag && !flag1) {
                 Predicate predicate2 = new Predicate() {
                     public boolean a(@Nullable Entity entity) {
-                        return entity != null && axisalignedbb.b(entity.getBoundingBox());
+                        return entity != null && axisalignedbb.c(entity.getBoundingBox());
                     }
 
-                    public boolean apply(Object object) {
+                    public boolean apply(@Nullable Object object) {
                         return this.a((Entity) object);
                     }
                 };
@@ -510,7 +538,7 @@ public class PlayerSelector {
     }
 
     private static <T extends Entity> List<T> a(List<T> list, Map<String, String> map, ICommandListener icommandlistener, Class<? extends T> oclass, String s, final Vec3D vec3d) {
-        int i = a(map, "c", !s.equals("a") && !s.equals("e") ? 1 : 0);
+        int i = a(map, PlayerSelector.s, !s.equals("a") && !s.equals("e") ? 1 : 0);
 
         if (!s.equals("p") && !s.equals("a") && !s.equals("e")) {
             if (s.equals("r")) {
@@ -519,7 +547,7 @@ public class PlayerSelector {
         } else {
             Collections.sort((List) list, new Comparator() {
                 public int a(Entity entity, Entity entity1) {
-                    return ComparisonChain.start().compare(entity.e(vec3d.x, vec3d.y, vec3d.z), entity1.e(vec3d.x, vec3d.y, vec3d.z)).result();
+                    return ComparisonChain.start().compare(entity.d(vec3d.x, vec3d.y, vec3d.z), entity1.d(vec3d.x, vec3d.y, vec3d.z)).result();
                 }
 
                 public int compare(Object object, Object object1) {
@@ -560,11 +588,11 @@ public class PlayerSelector {
     }
 
     private static BlockPosition a(Map<String, String> map, BlockPosition blockposition) {
-        return new BlockPosition(a(map, "x", blockposition.getX()), a(map, "y", blockposition.getY()), a(map, "z", blockposition.getZ()));
+        return new BlockPosition(a(map, PlayerSelector.i, blockposition.getX()), a(map, PlayerSelector.j, blockposition.getY()), a(map, PlayerSelector.k, blockposition.getZ()));
     }
 
     private static Vec3D b(Map<String, String> map, Vec3D vec3d) {
-        return new Vec3D(a(map, "x", vec3d.x, true), a(map, "y", vec3d.y, false), a(map, "z", vec3d.z, true));
+        return new Vec3D(a(map, PlayerSelector.i, vec3d.x, true), a(map, PlayerSelector.j, vec3d.y, false), a(map, PlayerSelector.k, vec3d.z, true));
     }
 
     private static double a(Map<String, String> map, String s, double d0, boolean flag) {
@@ -572,7 +600,7 @@ public class PlayerSelector {
     }
 
     private static boolean h(Map<String, String> map) {
-        Iterator iterator = PlayerSelector.d.iterator();
+        Iterator iterator = PlayerSelector.z.iterator();
 
         String s;
 
@@ -611,17 +639,17 @@ public class PlayerSelector {
         return hashmap;
     }
 
-    public static boolean isList(String s) {
+    public static boolean isList(String s) throws CommandException {
         Matcher matcher = PlayerSelector.a.matcher(s);
 
         if (!matcher.matches()) {
             return false;
         } else {
-            Map map = c(matcher.group(2));
+            Map map = d(matcher.group(2));
             String s1 = matcher.group(1);
             int i = !"a".equals(s1) && !"e".equals(s1) ? 1 : 0;
 
-            return a(map, "c", i) != 1;
+            return a(map, PlayerSelector.s, i) != 1;
         }
     }
 
@@ -629,46 +657,24 @@ public class PlayerSelector {
         return PlayerSelector.a.matcher(s).matches();
     }
 
-    private static Map<String, String> c(@Nullable String s) {
+    private static Map<String, String> d(@Nullable String s) throws CommandException {
         HashMap hashmap = Maps.newHashMap();
 
         if (s == null) {
             return hashmap;
         } else {
-            int i = 0;
-            int j = -1;
+            Iterator iterator = PlayerSelector.b.split(s).iterator();
 
-            for (Matcher matcher = PlayerSelector.b.matcher(s); matcher.find(); j = matcher.end()) {
-                String s1 = null;
+            while (iterator.hasNext()) {
+                String s1 = (String) iterator.next();
+                Iterator iterator1 = PlayerSelector.c.split(s1).iterator();
+                String s2 = (String) iterator1.next();
 
-                switch (i++) {
-                case 0:
-                    s1 = "x";
-                    break;
-
-                case 1:
-                    s1 = "y";
-                    break;
-
-                case 2:
-                    s1 = "z";
-                    break;
-
-                case 3:
-                    s1 = "r";
+                if (!PlayerSelector.y.apply(s2)) {
+                    throw new CommandException("commands.generic.selector_argument", new Object[] { s1});
                 }
 
-                if (s1 != null && !matcher.group(1).isEmpty()) {
-                    hashmap.put(s1, matcher.group(1));
-                }
-            }
-
-            if (j < s.length()) {
-                Matcher matcher1 = PlayerSelector.c.matcher(j == -1 ? s : s.substring(j));
-
-                while (matcher1.find()) {
-                    hashmap.put(matcher1.group(1), matcher1.group(2));
-                }
+                hashmap.put(s2, iterator1.hasNext() ? (String) iterator1.next() : "");
             }
 
             return hashmap;

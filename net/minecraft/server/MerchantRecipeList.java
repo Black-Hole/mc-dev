@@ -12,16 +12,16 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
     }
 
     @Nullable
-    public MerchantRecipe a(ItemStack itemstack, @Nullable ItemStack itemstack1, int i) {
+    public MerchantRecipe a(ItemStack itemstack, ItemStack itemstack1, int i) {
         if (i > 0 && i < this.size()) {
             MerchantRecipe merchantrecipe = (MerchantRecipe) this.get(i);
 
-            return this.a(itemstack, merchantrecipe.getBuyItem1()) && (itemstack1 == null && !merchantrecipe.hasSecondItem() || merchantrecipe.hasSecondItem() && this.a(itemstack1, merchantrecipe.getBuyItem2())) && itemstack.count >= merchantrecipe.getBuyItem1().count && (!merchantrecipe.hasSecondItem() || itemstack1.count >= merchantrecipe.getBuyItem2().count) ? merchantrecipe : null;
+            return this.a(itemstack, merchantrecipe.getBuyItem1()) && (itemstack1.isEmpty() && !merchantrecipe.hasSecondItem() || merchantrecipe.hasSecondItem() && this.a(itemstack1, merchantrecipe.getBuyItem2())) && itemstack.getCount() >= merchantrecipe.getBuyItem1().getCount() && (!merchantrecipe.hasSecondItem() || itemstack1.getCount() >= merchantrecipe.getBuyItem2().getCount()) ? merchantrecipe : null;
         } else {
             for (int j = 0; j < this.size(); ++j) {
                 MerchantRecipe merchantrecipe1 = (MerchantRecipe) this.get(j);
 
-                if (this.a(itemstack, merchantrecipe1.getBuyItem1()) && itemstack.count >= merchantrecipe1.getBuyItem1().count && (!merchantrecipe1.hasSecondItem() && itemstack1 == null || merchantrecipe1.hasSecondItem() && this.a(itemstack1, merchantrecipe1.getBuyItem2()) && itemstack1.count >= merchantrecipe1.getBuyItem2().count)) {
+                if (this.a(itemstack, merchantrecipe1.getBuyItem1()) && itemstack.getCount() >= merchantrecipe1.getBuyItem1().getCount() && (!merchantrecipe1.hasSecondItem() && itemstack1.isEmpty() || merchantrecipe1.hasSecondItem() && this.a(itemstack1, merchantrecipe1.getBuyItem2()) && itemstack1.getCount() >= merchantrecipe1.getBuyItem2().getCount())) {
                     return merchantrecipe1;
                 }
             }
@@ -44,8 +44,8 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
             packetdataserializer.a(merchantrecipe.getBuyItem3());
             ItemStack itemstack = merchantrecipe.getBuyItem2();
 
-            packetdataserializer.writeBoolean(itemstack != null);
-            if (itemstack != null) {
+            packetdataserializer.writeBoolean(!itemstack.isEmpty());
+            if (!itemstack.isEmpty()) {
                 packetdataserializer.a(itemstack);
             }
 

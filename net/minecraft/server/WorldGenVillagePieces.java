@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class WorldGenVillagePieces {
 
@@ -175,38 +176,6 @@ public class WorldGenVillagePieces {
         }
     }
 
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                WorldGenVillagePieces.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                WorldGenVillagePieces.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                WorldGenVillagePieces.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                WorldGenVillagePieces.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-        }
-    }
-
     public static class WorldGenVillageLight extends WorldGenVillagePieces.WorldGenVillagePiece {
 
         public WorldGenVillageLight() {}
@@ -275,8 +244,8 @@ public class WorldGenVillagePieces {
             nbttagcompound.setInt("CD", Block.REGISTRY.a((Object) this.d));
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = Block.getById(nbttagcompound.getInt("CA"));
             this.b = Block.getById(nbttagcompound.getInt("CB"));
             this.c = Block.getById(nbttagcompound.getInt("CC"));
@@ -406,8 +375,8 @@ public class WorldGenVillagePieces {
             nbttagcompound.setInt("CB", Block.REGISTRY.a((Object) this.b));
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = Block.getById(nbttagcompound.getInt("CA"));
             this.b = Block.getById(nbttagcompound.getInt("CB"));
         }
@@ -507,8 +476,8 @@ public class WorldGenVillagePieces {
             nbttagcompound.setBoolean("Chest", this.a);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getBoolean("Chest");
         }
 
@@ -888,8 +857,8 @@ public class WorldGenVillagePieces {
             nbttagcompound.setBoolean("C", this.a);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.b = nbttagcompound.getInt("T");
             this.a = nbttagcompound.getBoolean("C");
         }
@@ -1220,8 +1189,8 @@ public class WorldGenVillagePieces {
             nbttagcompound.setBoolean("Terrace", this.a);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getBoolean("Terrace");
         }
 
@@ -1343,8 +1312,8 @@ public class WorldGenVillagePieces {
             nbttagcompound.setInt("Length", this.a);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getInt("Length");
         }
 
@@ -1373,41 +1342,41 @@ public class WorldGenVillagePieces {
             EnumDirection enumdirection = this.f();
 
             if (flag && random.nextInt(3) > 0 && enumdirection != null) {
-                switch (WorldGenVillagePieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                 default:
                     WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.l.a - 1, this.l.b, this.l.c, EnumDirection.WEST, this.e());
                     break;
 
-                case 2:
+                case SOUTH:
                     WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.l.a - 1, this.l.b, this.l.f - 2, EnumDirection.WEST, this.e());
                     break;
 
-                case 3:
+                case WEST:
                     WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.l.a, this.l.b, this.l.c - 1, EnumDirection.NORTH, this.e());
                     break;
 
-                case 4:
+                case EAST:
                     WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.l.d - 2, this.l.b, this.l.c - 1, EnumDirection.NORTH, this.e());
                 }
             }
 
             if (flag && random.nextInt(3) > 0 && enumdirection != null) {
-                switch (WorldGenVillagePieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                 default:
                     WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.l.d + 1, this.l.b, this.l.c, EnumDirection.EAST, this.e());
                     break;
 
-                case 2:
+                case SOUTH:
                     WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.l.d + 1, this.l.b, this.l.f - 2, EnumDirection.EAST, this.e());
                     break;
 
-                case 3:
+                case WEST:
                     WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.l.a, this.l.b, this.l.f + 1, EnumDirection.SOUTH, this.e());
                     break;
 
-                case 4:
+                case EAST:
                     WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.l.d - 2, this.l.b, this.l.f + 1, EnumDirection.SOUTH, this.e());
                 }
             }
@@ -1564,7 +1533,7 @@ public class WorldGenVillagePieces {
             for (int i = 0; i <= 5; ++i) {
                 for (int j = 0; j <= 5; ++j) {
                     if (j == 0 || j == 5 || i == 0 || i == 5) {
-                        this.a(world, Blocks.COBBLESTONE.getBlockData(), j, 11, i, structureboundingbox);
+                        this.a(world, iblockdata, j, 11, i, structureboundingbox);
                         this.c(world, j, 12, i, structureboundingbox);
                     }
                 }
@@ -1599,7 +1568,7 @@ public class WorldGenVillagePieces {
             nbttagcompound.setBoolean("Zombie", this.i);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
             this.g = nbttagcompound.getInt("HPos");
             this.a = nbttagcompound.getInt("VCount");
             this.h = nbttagcompound.getByte("Type");
@@ -1610,22 +1579,23 @@ public class WorldGenVillagePieces {
             this.i = nbttagcompound.getBoolean("Zombie");
         }
 
+        @Nullable
         protected StructurePiece a(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, List<StructurePiece> list, Random random, int i, int j) {
             EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
-                switch (WorldGenVillagePieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                 default:
                     return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.e());
 
-                case 2:
+                case SOUTH:
                     return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.e());
 
-                case 3:
+                case WEST:
                     return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.e());
 
-                case 4:
+                case EAST:
                     return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.e());
                 }
             } else {
@@ -1633,22 +1603,23 @@ public class WorldGenVillagePieces {
             }
         }
 
+        @Nullable
         protected StructurePiece b(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, List<StructurePiece> list, Random random, int i, int j) {
             EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
-                switch (WorldGenVillagePieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                 default:
                     return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.e());
 
-                case 2:
+                case SOUTH:
                     return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.e());
 
-                case 3:
+                case WEST:
                     return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.e());
 
-                case 4:
+                case EAST:
                     return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.e());
                 }
             } else {
@@ -1695,19 +1666,19 @@ public class WorldGenVillagePieces {
 
                     ++this.a;
                     if (this.i) {
-                        EntityZombie entityzombie = new EntityZombie(world);
+                        EntityZombieVillager entityzombievillager = new EntityZombieVillager(world);
 
-                        entityzombie.setPositionRotation((double) j1 + 0.5D, (double) k1, (double) l1 + 0.5D, 0.0F, 0.0F);
-                        entityzombie.prepare(world.D(new BlockPosition(entityzombie)), (GroupDataEntity) null);
-                        entityzombie.setVillagerType(EnumZombieType.b(this.c(i1, 0)));
-                        entityzombie.cQ();
-                        world.addEntity(entityzombie);
+                        entityzombievillager.setPositionRotation((double) j1 + 0.5D, (double) k1, (double) l1 + 0.5D, 0.0F, 0.0F);
+                        entityzombievillager.prepare(world.D(new BlockPosition(entityzombievillager)), (GroupDataEntity) null);
+                        entityzombievillager.setProfession(this.c(i1, 0));
+                        entityzombievillager.cS();
+                        world.addEntity(entityzombievillager);
                     } else {
                         EntityVillager entityvillager = new EntityVillager(world);
 
                         entityvillager.setPositionRotation((double) j1 + 0.5D, (double) k1, (double) l1 + 0.5D, 0.0F, 0.0F);
-                        entityvillager.prepare(world.D(new BlockPosition(entityvillager)), (GroupDataEntity) null);
-                        entityvillager.setProfession(this.c(i1, entityvillager.getProfession()));
+                        entityvillager.setProfession(this.c(i1, world.random.nextInt(6)));
+                        entityvillager.a(world.D(new BlockPosition(entityvillager)), (GroupDataEntity) null, false);
                         world.addEntity(entityvillager);
                     }
                 }

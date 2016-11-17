@@ -10,7 +10,7 @@ public class EntityCow extends EntityAnimal {
     }
 
     public static void b(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "Cow");
+        EntityInsentient.a(dataconvertermanager, EntityCow.class);
     }
 
     protected void r() {
@@ -19,7 +19,7 @@ public class EntityCow extends EntityAnimal {
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
         this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.25D, Items.WHEAT, false));
         this.goalSelector.a(4, new PathfinderGoalFollowParent(this, 1.25D));
-        this.goalSelector.a(5, new PathfinderGoalRandomStroll(this, 1.0D));
+        this.goalSelector.a(5, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(7, new PathfinderGoalRandomLookaround(this));
     }
@@ -31,34 +31,37 @@ public class EntityCow extends EntityAnimal {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.am;
-    }
-
-    protected SoundEffect bV() {
         return SoundEffects.ao;
     }
 
     protected SoundEffect bW() {
-        return SoundEffects.an;
+        return SoundEffects.aq;
+    }
+
+    protected SoundEffect bX() {
+        return SoundEffects.ap;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.aq, 0.15F, 1.0F);
+        this.a(SoundEffects.as, 0.15F, 1.0F);
     }
 
-    protected float ch() {
+    protected float ci() {
         return 0.4F;
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.I;
+        return LootTables.L;
     }
 
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {
-        if (itemstack != null && itemstack.getItem() == Items.BUCKET && !entityhuman.abilities.canInstantlyBuild && !this.isBaby()) {
-            entityhuman.a(SoundEffects.ap, 1.0F, 1.0F);
-            if (--itemstack.count == 0) {
+    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
+        if (itemstack.getItem() == Items.BUCKET && !entityhuman.abilities.canInstantlyBuild && !this.isBaby()) {
+            entityhuman.a(SoundEffects.ar, 1.0F, 1.0F);
+            itemstack.subtract(1);
+            if (itemstack.isEmpty()) {
                 entityhuman.a(enumhand, new ItemStack(Items.MILK_BUCKET));
             } else if (!entityhuman.inventory.pickup(new ItemStack(Items.MILK_BUCKET))) {
                 entityhuman.drop(new ItemStack(Items.MILK_BUCKET), false);
@@ -66,7 +69,7 @@ public class EntityCow extends EntityAnimal {
 
             return true;
         } else {
-            return super.a(entityhuman, enumhand, itemstack);
+            return super.a(entityhuman, enumhand);
         }
     }
 

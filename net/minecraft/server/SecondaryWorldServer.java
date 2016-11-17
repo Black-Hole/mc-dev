@@ -59,6 +59,6 @@ public class SecondaryWorldServer extends WorldServer {
     }
 
     public void c() {
-        this.worldProvider.q();
+        this.worldProvider.r();
     }
 }

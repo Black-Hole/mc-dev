@@ -50,7 +50,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
                     List list = PlayerSelector.getPlayers(icommandlistener, s, Entity.class);
 
                     if (list.isEmpty()) {
-                        throw new ExceptionEntityNotFound();
+                        throw new ExceptionEntityNotFound("commands.generic.selector.notFound", new Object[] { s});
                     }
 
                     arraylist.addAll(list);
@@ -58,7 +58,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
                     EntityPlayer entityplayer = minecraftserver.getPlayerList().getPlayer(s);
 
                     if (entityplayer == null) {
-                        throw new ExceptionPlayerNotFound();
+                        throw new ExceptionPlayerNotFound("commands.generic.player.notFound", new Object[] { s});
                     }
 
                     arraylist.add(entityplayer);
@@ -67,7 +67,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
 
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ENTITIES, arraylist.size());
             if (arraylist.isEmpty()) {
-                throw new ExceptionEntityNotFound();
+                throw new ExceptionEntityNotFound("commands.spreadplayers.noop");
             } else {
                 icommandlistener.sendMessage(new ChatMessage("commands.spreadplayers.spreading." + (flag ? "teams" : "players"), new Object[] { Integer.valueOf(arraylist.size()), Double.valueOf(d4), Double.valueOf(d1), Double.valueOf(d2), Double.valueOf(d3)}));
                 this.a(icommandlistener, arraylist, new CommandSpreadPlayers.Location2D(d1, d2), d3, d4, ((Entity) arraylist.get(0)).world, flag);
@@ -100,7 +100,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
             Entity entity = (Entity) iterator.next();
 
             if (entity instanceof EntityHuman) {
-                hashset.add(((EntityHuman) entity).aQ());
+                hashset.add(entity.aQ());
             } else {
                 hashset.add((Object) null);
             }
@@ -193,7 +193,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
             CommandSpreadPlayers.Location2D commandspreadplayers_location2d;
 
             if (flag) {
-                ScoreboardTeamBase scoreboardteambase = entity instanceof EntityHuman ? ((EntityHuman) entity).aQ() : null;
+                ScoreboardTeamBase scoreboardteambase = entity instanceof EntityHuman ? entity.aQ() : null;
 
                 if (!hashmap.containsKey(scoreboardteambase)) {
                     hashmap.put(scoreboardteambase, acommandspreadplayers_location2d[i++]);

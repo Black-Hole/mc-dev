@@ -11,7 +11,9 @@ public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
     private ItemStack item;
     private InventoryClickType shift;
 
-    public PacketPlayInWindowClick() {}
+    public PacketPlayInWindowClick() {
+        this.item = ItemStack.a;
+    }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
         packetlistenerplayin.a(this);

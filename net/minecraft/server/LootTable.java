@@ -63,8 +63,8 @@ public class LootTable {
                 return;
             }
 
-            if (itemstack == null) {
-                iinventory.setItem(((Integer) list1.remove(list1.size() - 1)).intValue(), (ItemStack) null);
+            if (itemstack.isEmpty()) {
+                iinventory.setItem(((Integer) list1.remove(list1.size() - 1)).intValue(), ItemStack.a);
             } else {
                 iinventory.setItem(((Integer) list1.remove(list1.size() - 1)).intValue(), itemstack);
             }
@@ -79,9 +79,9 @@ public class LootTable {
         while (iterator.hasNext()) {
             ItemStack itemstack = (ItemStack) iterator.next();
 
-            if (itemstack.count <= 0) {
+            if (itemstack.isEmpty()) {
                 iterator.remove();
-            } else if (itemstack.count > 1) {
+            } else if (itemstack.getCount() > 1) {
                 arraylist.add(itemstack);
                 iterator.remove();
             }
@@ -91,19 +91,16 @@ public class LootTable {
 
         while (i > 0 && arraylist.size() > 0) {
             ItemStack itemstack1 = (ItemStack) arraylist.remove(MathHelper.nextInt(random, 0, arraylist.size() - 1));
-            int j = MathHelper.nextInt(random, 1, itemstack1.count / 2);
+            int j = MathHelper.nextInt(random, 1, itemstack1.getCount() / 2);
+            ItemStack itemstack2 = itemstack1.cloneAndSubtract(j);
 
-            itemstack1.count -= j;
-            ItemStack itemstack2 = itemstack1.cloneItemStack();
-
-            itemstack2.count = j;
-            if (itemstack1.count > 1 && random.nextBoolean()) {
+            if (itemstack1.getCount() > 1 && random.nextBoolean()) {
                 arraylist.add(itemstack1);
             } else {
                 list.add(itemstack1);
             }
 
-            if (itemstack2.count > 1 && random.nextBoolean()) {
+            if (itemstack2.getCount() > 1 && random.nextBoolean()) {
                 arraylist.add(itemstack2);
             } else {
                 list.add(itemstack2);
@@ -118,7 +115,7 @@ public class LootTable {
         ArrayList arraylist = Lists.newArrayList();
 
         for (int i = 0; i < iinventory.getSize(); ++i) {
-            if (iinventory.getItem(i) == null) {
+            if (iinventory.getItem(i).isEmpty()) {
                 arraylist.add(Integer.valueOf(i));
             }
         }

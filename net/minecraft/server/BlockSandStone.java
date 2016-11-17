@@ -6,7 +6,7 @@ public class BlockSandStone extends Block {
 
     public BlockSandStone() {
         super(Material.STONE);
-        this.w(this.blockStateList.getBlockData().set(BlockSandStone.TYPE, BlockSandStone.EnumSandstoneVariant.DEFAULT));
+        this.y(this.blockStateList.getBlockData().set(BlockSandStone.TYPE, BlockSandStone.EnumSandstoneVariant.DEFAULT));
         this.a(CreativeModeTab.b);
     }
 

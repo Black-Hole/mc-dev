@@ -6,8 +6,9 @@ public class ItemEnderEye extends Item {
         this.a(CreativeModeTab.f);
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         IBlockData iblockdata = world.getType(blockposition);
+        ItemStack itemstack = entityhuman.b(enumhand);
 
         if (entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack) && iblockdata.getBlock() == Blocks.END_PORTAL_FRAME && !((Boolean) iblockdata.get(BlockEnderPortalFrame.EYE)).booleanValue()) {
             if (world.isClientSide) {
@@ -15,7 +16,7 @@ public class ItemEnderEye extends Item {
             } else {
                 world.setTypeAndData(blockposition, iblockdata.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(true)), 2);
                 world.updateAdjacentComparators(blockposition, Blocks.END_PORTAL_FRAME);
-                --itemstack.count;
+                itemstack.subtract(1);
 
                 for (int i = 0; i < 16; ++i) {
                     double d0 = (double) ((float) blockposition.getX() + (5.0F + ItemEnderEye.j.nextFloat() * 6.0F) / 16.0F);
@@ -47,24 +48,26 @@ public class ItemEnderEye extends Item {
         }
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
         MovingObjectPosition movingobjectposition = this.a(world, entityhuman, false);
 
         if (movingobjectposition != null && movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && world.getType(movingobjectposition.a()).getBlock() == Blocks.END_PORTAL_FRAME) {
             return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
         } else {
+            entityhuman.c(enumhand);
             if (!world.isClientSide) {
-                BlockPosition blockposition = ((WorldServer) world).getChunkProviderServer().a(world, "Stronghold", new BlockPosition(entityhuman));
+                BlockPosition blockposition = ((WorldServer) world).getChunkProviderServer().a(world, "Stronghold", new BlockPosition(entityhuman), false);
 
                 if (blockposition != null) {
                     EntityEnderSignal entityendersignal = new EntityEnderSignal(world, entityhuman.locX, entityhuman.locY + (double) (entityhuman.length / 2.0F), entityhuman.locZ);
 
                     entityendersignal.a(blockposition);
                     world.addEntity(entityendersignal);
-                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.aV, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderEye.j.nextFloat() * 0.4F + 0.8F));
+                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.aY, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderEye.j.nextFloat() * 0.4F + 0.8F));
                     world.a((EntityHuman) null, 1003, new BlockPosition(entityhuman), 0);
                     if (!entityhuman.abilities.canInstantlyBuild) {
-                        --itemstack.count;
+                        itemstack.subtract(1);
                     }
 
                     entityhuman.b(StatisticList.b((Item) this));
@@ -72,7 +75,7 @@ public class ItemEnderEye extends Item {
                 }
             }
 
-            return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+            return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
         }
     }
 }

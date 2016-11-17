@@ -79,7 +79,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
                 return ichatbasecomponent.iterator();
             }
 
-            public Object apply(Object object) {
+            public Object apply(@Nullable Object object) {
                 return this.a((IChatBaseComponent) object);
             }
         }));
@@ -92,7 +92,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
                 return ichatbasecomponent1;
             }
 
-            public Object apply(Object object) {
+            public Object apply(@Nullable Object object) {
                 return this.a((IChatBaseComponent) object);
             }
         });

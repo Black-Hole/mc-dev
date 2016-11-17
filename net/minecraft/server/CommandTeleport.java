@@ -80,7 +80,7 @@ public class CommandTeleport extends CommandAbstract {
             entity.h(f2);
         }
 
-        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).cG()) {
+        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).cH()) {
             entity.motY = 0.0D;
             entity.onGround = true;
         }

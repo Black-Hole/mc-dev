@@ -57,53 +57,6 @@ public class WorldGenMineshaftPieces {
         }
     }
 
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                WorldGenMineshaftPieces.SyntheticClass_1.b[EnumDirection.NORTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                WorldGenMineshaftPieces.SyntheticClass_1.b[EnumDirection.SOUTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                WorldGenMineshaftPieces.SyntheticClass_1.b[EnumDirection.WEST.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                WorldGenMineshaftPieces.SyntheticClass_1.b[EnumDirection.EAST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            a = new int[WorldGenMineshaft.Type.values().length];
-
-            try {
-                WorldGenMineshaftPieces.SyntheticClass_1.a[WorldGenMineshaft.Type.NORMAL.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                WorldGenMineshaftPieces.SyntheticClass_1.a[WorldGenMineshaft.Type.MESA.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-        }
-    }
-
     public static class WorldGenMineshaftStairs extends WorldGenMineshaftPieces.c {
 
         public WorldGenMineshaftStairs() {}
@@ -114,35 +67,27 @@ public class WorldGenMineshaftPieces {
             this.l = structureboundingbox;
         }
 
-        protected void a(NBTTagCompound nbttagcompound) {
-            super.a(nbttagcompound);
-        }
-
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
-        }
-
         public static StructureBoundingBox a(List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection) {
             StructureBoundingBox structureboundingbox = new StructureBoundingBox(i, j - 5, k, i, j + 2, k);
 
-            switch (WorldGenMineshaftPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
-            case 1:
+            switch (enumdirection) {
+            case NORTH:
             default:
                 structureboundingbox.d = i + 2;
                 structureboundingbox.c = k - 8;
                 break;
 
-            case 2:
+            case SOUTH:
                 structureboundingbox.d = i + 2;
                 structureboundingbox.f = k + 8;
                 break;
 
-            case 3:
+            case WEST:
                 structureboundingbox.a = i - 8;
                 structureboundingbox.f = k + 2;
                 break;
 
-            case 4:
+            case EAST:
                 structureboundingbox.d = i + 8;
                 structureboundingbox.f = k + 2;
             }
@@ -155,21 +100,21 @@ public class WorldGenMineshaftPieces {
             EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
-                switch (WorldGenMineshaftPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                 default:
                     WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a, this.l.b, this.l.c - 1, EnumDirection.NORTH, i);
                     break;
 
-                case 2:
+                case SOUTH:
                     WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a, this.l.b, this.l.f + 1, EnumDirection.SOUTH, i);
                     break;
 
-                case 3:
+                case WEST:
                     WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a - 1, this.l.b, this.l.c, EnumDirection.WEST, i);
                     break;
 
-                case 4:
+                case EAST:
                     WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.d + 1, this.l.b, this.l.c, EnumDirection.EAST, i);
                 }
             }
@@ -205,8 +150,8 @@ public class WorldGenMineshaftPieces {
             nbttagcompound.setInt("D", this.b.get2DRotationValue());
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.c = nbttagcompound.getBoolean("tf");
             this.b = EnumDirection.fromType2(nbttagcompound.getInt("D"));
         }
@@ -225,27 +170,27 @@ public class WorldGenMineshaftPieces {
                 structureboundingbox.e += 4;
             }
 
-            switch (WorldGenMineshaftPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
-            case 1:
+            switch (enumdirection) {
+            case NORTH:
             default:
                 structureboundingbox.a = i - 1;
                 structureboundingbox.d = i + 3;
                 structureboundingbox.c = k - 4;
                 break;
 
-            case 2:
+            case SOUTH:
                 structureboundingbox.a = i - 1;
                 structureboundingbox.d = i + 3;
                 structureboundingbox.f = k + 3 + 1;
                 break;
 
-            case 3:
+            case WEST:
                 structureboundingbox.a = i - 4;
                 structureboundingbox.c = k - 1;
                 structureboundingbox.f = k + 3;
                 break;
 
-            case 4:
+            case EAST:
                 structureboundingbox.d = i + 3 + 1;
                 structureboundingbox.c = k - 1;
                 structureboundingbox.f = k + 3;
@@ -257,27 +202,27 @@ public class WorldGenMineshaftPieces {
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
             int i = this.e();
 
-            switch (WorldGenMineshaftPieces.SyntheticClass_1.b[this.b.ordinal()]) {
-            case 1:
+            switch (this.b) {
+            case NORTH:
             default:
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a + 1, this.l.b, this.l.c - 1, EnumDirection.NORTH, i);
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a - 1, this.l.b, this.l.c + 1, EnumDirection.WEST, i);
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.d + 1, this.l.b, this.l.c + 1, EnumDirection.EAST, i);
                 break;
 
-            case 2:
+            case SOUTH:
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a + 1, this.l.b, this.l.f + 1, EnumDirection.SOUTH, i);
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a - 1, this.l.b, this.l.c + 1, EnumDirection.WEST, i);
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.d + 1, this.l.b, this.l.c + 1, EnumDirection.EAST, i);
                 break;
 
-            case 3:
+            case WEST:
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a + 1, this.l.b, this.l.c - 1, EnumDirection.NORTH, i);
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a + 1, this.l.b, this.l.f + 1, EnumDirection.SOUTH, i);
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a - 1, this.l.b, this.l.c + 1, EnumDirection.WEST, i);
                 break;
 
-            case 4:
+            case EAST:
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a + 1, this.l.b, this.l.c - 1, EnumDirection.NORTH, i);
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a + 1, this.l.b, this.l.f + 1, EnumDirection.SOUTH, i);
                 WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.d + 1, this.l.b, this.l.c + 1, EnumDirection.EAST, i);
@@ -307,7 +252,7 @@ public class WorldGenMineshaftPieces {
             if (this.a(world, structureboundingbox)) {
                 return false;
             } else {
-                IBlockData iblockdata = this.F_();
+                IBlockData iblockdata = this.G_();
 
                 if (this.c) {
                     this.a(world, structureboundingbox, this.l.a + 1, this.l.b, this.l.c, this.l.d - 1, this.l.b + 3 - 1, this.l.f, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
@@ -339,7 +284,7 @@ public class WorldGenMineshaftPieces {
 
         private void b(World world, StructureBoundingBox structureboundingbox, int i, int j, int k, int l) {
             if (this.a(world, i, l + 1, k, structureboundingbox).getMaterial() != Material.AIR) {
-                this.a(world, structureboundingbox, i, j, k, i, l, k, this.F_(), Blocks.AIR.getBlockData(), false);
+                this.a(world, structureboundingbox, i, j, k, i, l, k, this.G_(), Blocks.AIR.getBlockData(), false);
             }
 
         }
@@ -362,8 +307,8 @@ public class WorldGenMineshaftPieces {
             nbttagcompound.setInt("Num", this.e);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.b = nbttagcompound.getBoolean("hr");
             this.c = nbttagcompound.getBoolean("sc");
             this.d = nbttagcompound.getBoolean("hps");
@@ -392,24 +337,24 @@ public class WorldGenMineshaftPieces {
             for (l = random.nextInt(3) + 2; l > 0; --l) {
                 int i1 = l * 5;
 
-                switch (WorldGenMineshaftPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                 default:
                     structureboundingbox.d = i + 2;
                     structureboundingbox.c = k - (i1 - 1);
                     break;
 
-                case 2:
+                case SOUTH:
                     structureboundingbox.d = i + 2;
                     structureboundingbox.f = k + (i1 - 1);
                     break;
 
-                case 3:
+                case WEST:
                     structureboundingbox.a = i - (i1 - 1);
                     structureboundingbox.f = k + 2;
                     break;
 
-                case 4:
+                case EAST:
                     structureboundingbox.d = i + (i1 - 1);
                     structureboundingbox.f = k + 2;
                 }
@@ -428,8 +373,8 @@ public class WorldGenMineshaftPieces {
             EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
-                switch (WorldGenMineshaftPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                 default:
                     if (j <= 1) {
                         WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a, this.l.b - 1 + random.nextInt(3), this.l.c - 1, enumdirection, i);
@@ -440,7 +385,7 @@ public class WorldGenMineshaftPieces {
                     }
                     break;
 
-                case 2:
+                case SOUTH:
                     if (j <= 1) {
                         WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a, this.l.b - 1 + random.nextInt(3), this.l.f + 1, enumdirection, i);
                     } else if (j == 2) {
@@ -450,7 +395,7 @@ public class WorldGenMineshaftPieces {
                     }
                     break;
 
-                case 3:
+                case WEST:
                     if (j <= 1) {
                         WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.a - 1, this.l.b - 1 + random.nextInt(3), this.l.c, enumdirection, i);
                     } else if (j == 2) {
@@ -460,7 +405,7 @@ public class WorldGenMineshaftPieces {
                     }
                     break;
 
-                case 4:
+                case EAST:
                     if (j <= 1) {
                         WorldGenMineshaftPieces.b(structurepiece, list, random, this.l.d + 1, this.l.b - 1 + random.nextInt(3), this.l.c, enumdirection, i);
                     } else if (j == 2) {
@@ -524,7 +469,7 @@ public class WorldGenMineshaftPieces {
                 boolean flag2 = false;
                 boolean flag3 = true;
                 int i = this.e * 5 - 1;
-                IBlockData iblockdata = this.F_();
+                IBlockData iblockdata = this.G_();
 
                 this.a(world, structureboundingbox, 0, 0, 0, 2, 1, i, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
                 this.a(world, structureboundingbox, random, 0.8F, 0, 2, 0, 2, 2, i, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false, 0);
@@ -567,7 +512,7 @@ public class WorldGenMineshaftPieces {
                             TileEntity tileentity = world.getTileEntity(blockposition);
 
                             if (tileentity instanceof TileEntityMobSpawner) {
-                                ((TileEntityMobSpawner) tileentity).getSpawner().setMobName("CaveSpider");
+                                ((TileEntityMobSpawner) tileentity).getSpawner().setMobName(EntityTypes.getName(EntityCaveSpider.class));
                             }
                         }
                     }
@@ -606,7 +551,7 @@ public class WorldGenMineshaftPieces {
 
         private void a(World world, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, Random random) {
             if (this.a(world, structureboundingbox, i, i1, l, k)) {
-                IBlockData iblockdata = this.F_();
+                IBlockData iblockdata = this.G_();
                 IBlockData iblockdata1 = this.b();
                 IBlockData iblockdata2 = Blocks.AIR.getBlockData();
 
@@ -755,8 +700,8 @@ public class WorldGenMineshaftPieces {
             nbttagcompound.set("Entrances", nbttaglist);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             NBTTagList nbttaglist = nbttagcompound.getList("Entrances", 11);
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -781,28 +726,28 @@ public class WorldGenMineshaftPieces {
             nbttagcompound.setInt("MST", this.a.ordinal());
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
             this.a = WorldGenMineshaft.Type.a(nbttagcompound.getInt("MST"));
         }
 
-        protected IBlockData F_() {
-            switch (WorldGenMineshaftPieces.SyntheticClass_1.a[this.a.ordinal()]) {
-            case 1:
+        protected IBlockData G_() {
+            switch (this.a) {
+            case NORMAL:
             default:
                 return Blocks.PLANKS.getBlockData();
 
-            case 2:
+            case MESA:
                 return Blocks.PLANKS.getBlockData().set(BlockWood.VARIANT, BlockWood.EnumLogVariant.DARK_OAK);
             }
         }
 
         protected IBlockData b() {
-            switch (WorldGenMineshaftPieces.SyntheticClass_1.a[this.a.ordinal()]) {
-            case 1:
+            switch (this.a) {
+            case NORMAL:
             default:
                 return Blocks.FENCE.getBlockData();
 
-            case 2:
+            case MESA:
                 return Blocks.DARK_OAK_FENCE.getBlockData();
             }
         }

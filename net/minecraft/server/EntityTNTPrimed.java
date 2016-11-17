@@ -1,8 +1,11 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityTNTPrimed extends Entity {
 
     private static final DataWatcherObject<Integer> FUSE_TICKS = DataWatcher.a(EntityTNTPrimed.class, DataWatcherRegistry.b);
+    @Nullable
     private EntityLiving source;
     private int c;
 
@@ -40,7 +43,7 @@ public class EntityTNTPrimed extends Entity {
         return !this.dead;
     }
 
-    public void m() {
+    public void A_() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
@@ -48,7 +51,7 @@ public class EntityTNTPrimed extends Entity {
             this.motY -= 0.03999999910593033D;
         }
 
-        this.move(this.motX, this.motY, this.motZ);
+        this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
         this.motX *= 0.9800000190734863D;
         this.motY *= 0.9800000190734863D;
         this.motZ *= 0.9800000190734863D;
@@ -85,6 +88,7 @@ public class EntityTNTPrimed extends Entity {
         this.setFuseTicks(nbttagcompound.getShort("Fuse"));
     }
 
+    @Nullable
     public EntityLiving getSource() {
         return this.source;
     }

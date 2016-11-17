@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+
 public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
 
     protected EntityInsentient a;
@@ -34,7 +37,9 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
             }
 
             if (this.d == EntityHuman.class) {
-                this.b = this.a.world.findNearbyPlayer(this.a, (double) this.c);
+                Predicate predicate = Predicates.and(IEntitySelector.e, IEntitySelector.b(this.a));
+
+                this.b = this.a.world.a(this.a.locX, this.a.locY, this.a.locZ, (double) this.c, predicate);
             } else {
                 this.b = this.a.world.a(this.d, this.a.getBoundingBox().grow((double) this.c, 3.0D, (double) this.c), (Entity) this.a);
             }
@@ -56,7 +61,7 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
     }
 
     public void e() {
-        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, (float) this.a.cJ(), (float) this.a.N());
+        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, (float) this.a.cL(), (float) this.a.N());
         --this.e;
     }
 }

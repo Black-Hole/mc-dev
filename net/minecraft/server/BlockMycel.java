@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockMycel extends Block {
 
@@ -9,7 +8,7 @@ public class BlockMycel extends Block {
 
     protected BlockMycel() {
         super(Material.GRASS, MaterialMapColor.z);
-        this.w(this.blockStateList.getBlockData().set(BlockMycel.SNOWY, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockMycel.SNOWY, Boolean.valueOf(false)));
         this.a(true);
         this.a(CreativeModeTab.b);
     }
@@ -41,7 +40,6 @@ public class BlockMycel extends Block {
         }
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
     }

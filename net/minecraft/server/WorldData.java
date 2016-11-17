@@ -307,11 +307,11 @@ public class WorldData {
     private void a(NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
         NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
-        nbttagcompound2.setString("Name", "1.10.2");
-        nbttagcompound2.setInt("Id", 512);
+        nbttagcompound2.setString("Name", "1.11");
+        nbttagcompound2.setInt("Id", 819);
         nbttagcompound2.setBoolean("Snapshot", false);
         nbttagcompound.set("Version", nbttagcompound2);
-        nbttagcompound.setInt("DataVersion", 512);
+        nbttagcompound.setInt("DataVersion", 819);
         nbttagcompound.setLong("RandomSeed", this.e);
         nbttagcompound.setString("generatorName", this.f.name());
         nbttagcompound.setInt("generatorVersion", this.f.getVersion());
@@ -324,7 +324,7 @@ public class WorldData {
         nbttagcompound.setLong("Time", this.k);
         nbttagcompound.setLong("DayTime", this.l);
         nbttagcompound.setLong("SizeOnDisk", this.n);
-        nbttagcompound.setLong("LastPlayed", MinecraftServer.av());
+        nbttagcompound.setLong("LastPlayed", MinecraftServer.aw());
         nbttagcompound.setString("LevelName", this.levelName);
         nbttagcompound.setInt("version", this.r);
         nbttagcompound.setInt("clearWeatherTime", this.s);

@@ -17,14 +17,16 @@ public class ItemRecord extends Item {
         ItemRecord.a.put(this.b, this);
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         IBlockData iblockdata = world.getType(blockposition);
 
         if (iblockdata.getBlock() == Blocks.JUKEBOX && !((Boolean) iblockdata.get(BlockJukeBox.HAS_RECORD)).booleanValue()) {
             if (!world.isClientSide) {
+                ItemStack itemstack = entityhuman.b(enumhand);
+
                 ((BlockJukeBox) Blocks.JUKEBOX).a(world, blockposition, iblockdata, itemstack);
                 world.a((EntityHuman) null, 1010, blockposition, Item.getId(this));
-                --itemstack.count;
+                itemstack.subtract(1);
                 entityhuman.b(StatisticList.Z);
             }
 

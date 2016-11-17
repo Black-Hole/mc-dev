@@ -34,20 +34,20 @@ public class FoodMetaData {
 
         boolean flag = entityhuman.world.getGameRules().getBoolean("naturalRegeneration");
 
-        if (flag && this.saturationLevel > 0.0F && entityhuman.cY() && this.foodLevel >= 20) {
+        if (flag && this.saturationLevel > 0.0F && entityhuman.db() && this.foodLevel >= 20) {
             ++this.foodTickTimer;
             if (this.foodTickTimer >= 10) {
-                float f = Math.min(this.saturationLevel, 4.0F);
+                float f = Math.min(this.saturationLevel, 6.0F);
 
-                entityhuman.heal(f / 4.0F);
+                entityhuman.heal(f / 6.0F);
                 this.a(f);
                 this.foodTickTimer = 0;
             }
-        } else if (flag && this.foodLevel >= 18 && entityhuman.cY()) {
+        } else if (flag && this.foodLevel >= 18 && entityhuman.db()) {
             ++this.foodTickTimer;
             if (this.foodTickTimer >= 80) {
                 entityhuman.heal(1.0F);
-                this.a(4.0F);
+                this.a(6.0F);
                 this.foodTickTimer = 0;
             }
         } else if (this.foodLevel <= 0) {

@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntityMinecartRideable extends EntityMinecartAbstract {
 
     public EntityMinecartRideable(World world) {
@@ -12,11 +10,11 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityMinecartAbstract.a(dataconvertermanager, "MinecartRideable");
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityMinecartAbstract.a(dataconvertermanager, EntityMinecartRideable.class);
     }
 
-    public boolean a(EntityHuman entityhuman, @Nullable ItemStack itemstack, EnumHand enumhand) {
+    public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
         if (entityhuman.isSneaking()) {
             return false;
         } else if (this.isVehicle()) {

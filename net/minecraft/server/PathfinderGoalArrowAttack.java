@@ -55,7 +55,7 @@ public class PathfinderGoalArrowAttack extends PathfinderGoal {
     }
 
     public void e() {
-        double d0 = this.a.e(this.c.locX, this.c.getBoundingBox().b, this.c.locZ);
+        double d0 = this.a.d(this.c.locX, this.c.getBoundingBox().b, this.c.locZ);
         boolean flag = this.a.getEntitySenses().a(this.c);
 
         if (flag) {

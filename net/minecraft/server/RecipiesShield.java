@@ -1,32 +1,28 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class RecipiesShield {
 
     public RecipiesShield() {}
 
     public void a(CraftingManager craftingmanager) {
         craftingmanager.registerShapedRecipe(new ItemStack(Items.SHIELD), new Object[] { "WoW", "WWW", " W ", Character.valueOf('W'), Blocks.PLANKS, Character.valueOf('o'), Items.IRON_INGOT});
-        craftingmanager.a(new RecipiesShield.Decoration((RecipiesShield.SyntheticClass_1) null));
+        craftingmanager.a(new RecipiesShield.Decoration(null));
     }
-
-    static class SyntheticClass_1 {    }
 
     static class Decoration implements IRecipe {
 
         private Decoration() {}
 
         public boolean a(InventoryCrafting inventorycrafting, World world) {
-            ItemStack itemstack = null;
-            ItemStack itemstack1 = null;
+            ItemStack itemstack = ItemStack.a;
+            ItemStack itemstack1 = ItemStack.a;
 
             for (int i = 0; i < inventorycrafting.getSize(); ++i) {
                 ItemStack itemstack2 = inventorycrafting.getItem(i);
 
-                if (itemstack2 != null) {
+                if (!itemstack2.isEmpty()) {
                     if (itemstack2.getItem() == Items.BANNER) {
-                        if (itemstack1 != null) {
+                        if (!itemstack1.isEmpty()) {
                             return false;
                         }
 
@@ -36,11 +32,11 @@ public class RecipiesShield {
                             return false;
                         }
 
-                        if (itemstack != null) {
+                        if (!itemstack.isEmpty()) {
                             return false;
                         }
 
-                        if (itemstack2.a("BlockEntityTag", false) != null) {
+                        if (itemstack2.d("BlockEntityTag") != null) {
                             return false;
                         }
 
@@ -49,66 +45,64 @@ public class RecipiesShield {
                 }
             }
 
-            if (itemstack != null && itemstack1 != null) {
+            if (!itemstack.isEmpty() && !itemstack1.isEmpty()) {
                 return true;
             } else {
                 return false;
             }
         }
 
-        @Nullable
         public ItemStack craftItem(InventoryCrafting inventorycrafting) {
-            ItemStack itemstack = null;
+            ItemStack itemstack = ItemStack.a;
+            ItemStack itemstack1 = ItemStack.a;
 
             for (int i = 0; i < inventorycrafting.getSize(); ++i) {
-                ItemStack itemstack1 = inventorycrafting.getItem(i);
+                ItemStack itemstack2 = inventorycrafting.getItem(i);
 
-                if (itemstack1 != null && itemstack1.getItem() == Items.BANNER) {
-                    itemstack = itemstack1;
+                if (!itemstack2.isEmpty()) {
+                    if (itemstack2.getItem() == Items.BANNER) {
+                        itemstack = itemstack2;
+                    } else if (itemstack2.getItem() == Items.SHIELD) {
+                        itemstack1 = itemstack2.cloneItemStack();
+                    }
                 }
             }
 
-            ItemStack itemstack2 = new ItemStack(Items.SHIELD, 1, 0);
-            EnumColor enumcolor;
-            NBTTagCompound nbttagcompound;
-
-            if (itemstack.hasTag()) {
-                nbttagcompound = itemstack.getTag().g();
-                enumcolor = EnumColor.fromInvColorIndex(TileEntityBanner.b(itemstack));
+            if (itemstack1.isEmpty()) {
+                return itemstack1;
             } else {
-                nbttagcompound = new NBTTagCompound();
-                enumcolor = EnumColor.fromInvColorIndex(itemstack.h());
-            }
+                NBTTagCompound nbttagcompound = itemstack.d("BlockEntityTag");
+                NBTTagCompound nbttagcompound1 = nbttagcompound == null ? new NBTTagCompound() : nbttagcompound.g();
 
-            itemstack2.setTag(nbttagcompound);
-            TileEntityBanner.a(itemstack2, enumcolor);
-            return itemstack2;
+                nbttagcompound1.setInt("Base", itemstack.getData() & 15);
+                itemstack1.a("BlockEntityTag", (NBTBase) nbttagcompound1);
+                return itemstack1;
+            }
         }
 
         public int a() {
             return 2;
         }
 
-        @Nullable
         public ItemStack b() {
-            return null;
+            return ItemStack.a;
         }
 
-        public ItemStack[] b(InventoryCrafting inventorycrafting) {
-            ItemStack[] aitemstack = new ItemStack[inventorycrafting.getSize()];
+        public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
+            NonNullList nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
 
-            for (int i = 0; i < aitemstack.length; ++i) {
+            for (int i = 0; i < nonnulllist.size(); ++i) {
                 ItemStack itemstack = inventorycrafting.getItem(i);
 
-                if (itemstack != null && itemstack.getItem().r()) {
-                    aitemstack[i] = new ItemStack(itemstack.getItem().q());
+                if (itemstack.getItem().s()) {
+                    nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
                 }
             }
 
-            return aitemstack;
+            return nonnulllist;
         }
 
-        Decoration(RecipiesShield.SyntheticClass_1 recipiesshield_syntheticclass_1) {
+        Decoration(Object object) {
             this();
         }
     }

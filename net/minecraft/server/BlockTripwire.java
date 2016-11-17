@@ -19,11 +19,11 @@ public class BlockTripwire extends Block {
 
     public BlockTripwire() {
         super(Material.ORIENTABLE);
-        this.w(this.blockStateList.getBlockData().set(BlockTripwire.POWERED, Boolean.valueOf(false)).set(BlockTripwire.ATTACHED, Boolean.valueOf(false)).set(BlockTripwire.DISARMED, Boolean.valueOf(false)).set(BlockTripwire.NORTH, Boolean.valueOf(false)).set(BlockTripwire.EAST, Boolean.valueOf(false)).set(BlockTripwire.SOUTH, Boolean.valueOf(false)).set(BlockTripwire.WEST, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockTripwire.POWERED, Boolean.valueOf(false)).set(BlockTripwire.ATTACHED, Boolean.valueOf(false)).set(BlockTripwire.DISARMED, Boolean.valueOf(false)).set(BlockTripwire.NORTH, Boolean.valueOf(false)).set(BlockTripwire.EAST, Boolean.valueOf(false)).set(BlockTripwire.SOUTH, Boolean.valueOf(false)).set(BlockTripwire.WEST, Boolean.valueOf(false)));
         this.a(true);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return !((Boolean) iblockdata.get(BlockTripwire.ATTACHED)).booleanValue() ? BlockTripwire.C : BlockTripwire.B;
     }
 
@@ -32,7 +32,7 @@ public class BlockTripwire extends Block {
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockTripwire.k;
     }
 
@@ -44,7 +44,6 @@ public class BlockTripwire extends Block {
         return false;
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.STRING;
     }
@@ -64,7 +63,7 @@ public class BlockTripwire extends Block {
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
         if (!world.isClientSide) {
-            if (entityhuman.getItemInMainHand() != null && entityhuman.getItemInMainHand().getItem() == Items.SHEARS) {
+            if (!entityhuman.getItemInMainHand().isEmpty() && entityhuman.getItemInMainHand().getItem() == Items.SHEARS) {
                 world.setTypeAndData(blockposition, iblockdata.set(BlockTripwire.DISARMED, Boolean.valueOf(true)), 4);
             }
 
@@ -124,7 +123,7 @@ public class BlockTripwire extends Block {
         IBlockData iblockdata = world.getType(blockposition);
         boolean flag = ((Boolean) iblockdata.get(BlockTripwire.POWERED)).booleanValue();
         boolean flag1 = false;
-        List list = world.getEntities((Entity) null, iblockdata.c(world, blockposition).a(blockposition));
+        List list = world.getEntities((Entity) null, iblockdata.d(world, blockposition).a(blockposition));
 
         if (!list.isEmpty()) {
             Iterator iterator = list.iterator();
@@ -188,14 +187,14 @@ public class BlockTripwire extends Block {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        switch (BlockTripwire.SyntheticClass_1.a[enumblockrotation.ordinal()]) {
-        case 1:
+        switch (enumblockrotation) {
+        case CLOCKWISE_180:
             return iblockdata.set(BlockTripwire.NORTH, iblockdata.get(BlockTripwire.SOUTH)).set(BlockTripwire.EAST, iblockdata.get(BlockTripwire.WEST)).set(BlockTripwire.SOUTH, iblockdata.get(BlockTripwire.NORTH)).set(BlockTripwire.WEST, iblockdata.get(BlockTripwire.EAST));
 
-        case 2:
+        case COUNTERCLOCKWISE_90:
             return iblockdata.set(BlockTripwire.NORTH, iblockdata.get(BlockTripwire.EAST)).set(BlockTripwire.EAST, iblockdata.get(BlockTripwire.SOUTH)).set(BlockTripwire.SOUTH, iblockdata.get(BlockTripwire.WEST)).set(BlockTripwire.WEST, iblockdata.get(BlockTripwire.NORTH));
 
-        case 3:
+        case CLOCKWISE_90:
             return iblockdata.set(BlockTripwire.NORTH, iblockdata.get(BlockTripwire.WEST)).set(BlockTripwire.EAST, iblockdata.get(BlockTripwire.NORTH)).set(BlockTripwire.SOUTH, iblockdata.get(BlockTripwire.EAST)).set(BlockTripwire.WEST, iblockdata.get(BlockTripwire.SOUTH));
 
         default:
@@ -204,11 +203,11 @@ public class BlockTripwire extends Block {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        switch (BlockTripwire.SyntheticClass_1.b[enumblockmirror.ordinal()]) {
-        case 1:
+        switch (enumblockmirror) {
+        case LEFT_RIGHT:
             return iblockdata.set(BlockTripwire.NORTH, iblockdata.get(BlockTripwire.SOUTH)).set(BlockTripwire.SOUTH, iblockdata.get(BlockTripwire.NORTH));
 
-        case 2:
+        case FRONT_BACK:
             return iblockdata.set(BlockTripwire.EAST, iblockdata.get(BlockTripwire.WEST)).set(BlockTripwire.WEST, iblockdata.get(BlockTripwire.EAST));
 
         default:
@@ -218,46 +217,5 @@ public class BlockTripwire extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockTripwire.POWERED, BlockTripwire.ATTACHED, BlockTripwire.DISARMED, BlockTripwire.NORTH, BlockTripwire.EAST, BlockTripwire.WEST, BlockTripwire.SOUTH});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b = new int[EnumBlockMirror.values().length];
-
-        static {
-            try {
-                BlockTripwire.SyntheticClass_1.b[EnumBlockMirror.LEFT_RIGHT.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockTripwire.SyntheticClass_1.b[EnumBlockMirror.FRONT_BACK.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            a = new int[EnumBlockRotation.values().length];
-
-            try {
-                BlockTripwire.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_180.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockTripwire.SyntheticClass_1.a[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockTripwire.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-        }
     }
 }

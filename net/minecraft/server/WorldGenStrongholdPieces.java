@@ -171,65 +171,6 @@ public class WorldGenStrongholdPieces {
         }
     }
 
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                WorldGenStrongholdPieces.SyntheticClass_1.b[EnumDirection.NORTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                WorldGenStrongholdPieces.SyntheticClass_1.b[EnumDirection.SOUTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                WorldGenStrongholdPieces.SyntheticClass_1.b[EnumDirection.WEST.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                WorldGenStrongholdPieces.SyntheticClass_1.b[EnumDirection.EAST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            a = new int[WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.values().length];
-
-            try {
-                WorldGenStrongholdPieces.SyntheticClass_1.a[WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                WorldGenStrongholdPieces.SyntheticClass_1.a[WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.WOOD_DOOR.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-            try {
-                WorldGenStrongholdPieces.SyntheticClass_1.a[WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.GRATES.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror6) {
-                ;
-            }
-
-            try {
-                WorldGenStrongholdPieces.SyntheticClass_1.a[WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.IRON_DOOR.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror7) {
-                ;
-            }
-
-        }
-    }
-
     static class WorldGenStrongholdStones extends StructurePiece.StructurePieceBlockSelector {
 
         private WorldGenStrongholdStones() {}
@@ -275,8 +216,8 @@ public class WorldGenStrongholdPieces {
             nbttagcompound.setBoolean("Mob", this.a);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getBoolean("Mob");
         }
 
@@ -380,7 +321,7 @@ public class WorldGenStrongholdPieces {
                     TileEntity tileentity = world.getTileEntity(blockposition);
 
                     if (tileentity instanceof TileEntityMobSpawner) {
-                        ((TileEntityMobSpawner) tileentity).getSpawner().setMobName("Silverfish");
+                        ((TileEntityMobSpawner) tileentity).getSpawner().setMobName(EntityTypes.getName(EntitySilverfish.class));
                     }
                 }
             }
@@ -417,8 +358,8 @@ public class WorldGenStrongholdPieces {
             nbttagcompound.setBoolean("rightHigh", this.e);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getBoolean("leftLow");
             this.b = nbttagcompound.getBoolean("leftHigh");
             this.c = nbttagcompound.getBoolean("rightLow");
@@ -521,8 +462,8 @@ public class WorldGenStrongholdPieces {
             nbttagcompound.setBoolean("Tall", this.a);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getBoolean("Tall");
         }
 
@@ -710,8 +651,8 @@ public class WorldGenStrongholdPieces {
             nbttagcompound.setInt("Type", this.a);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getInt("Type");
         }
 
@@ -971,8 +912,8 @@ public class WorldGenStrongholdPieces {
             nbttagcompound.setBoolean("Chest", this.a);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getBoolean("Chest");
         }
 
@@ -1035,8 +976,8 @@ public class WorldGenStrongholdPieces {
             nbttagcompound.setBoolean("Right", this.b);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getBoolean("Left");
             this.b = nbttagcompound.getBoolean("Right");
         }
@@ -1097,10 +1038,6 @@ public class WorldGenStrongholdPieces {
         public WorldGenStrongholdStart(int i, Random random, int j, int k) {
             super(0, random, j, k);
         }
-
-        public BlockPosition a() {
-            return this.b != null ? this.b.a() : super.a();
-        }
     }
 
     public static class WorldGenStrongholdStairs2 extends WorldGenStrongholdPieces.WorldGenStrongholdPiece {
@@ -1135,8 +1072,8 @@ public class WorldGenStrongholdPieces {
             nbttagcompound.setBoolean("Source", this.a);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getBoolean("Source");
         }
 
@@ -1201,8 +1138,8 @@ public class WorldGenStrongholdPieces {
             nbttagcompound.setInt("Steps", this.a);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getInt("Steps");
         }
 
@@ -1275,17 +1212,17 @@ public class WorldGenStrongholdPieces {
             nbttagcompound.setString("EntryDoor", this.d.name());
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
             this.d = WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.valueOf(nbttagcompound.getString("EntryDoor"));
         }
 
         protected void a(World world, Random random, StructureBoundingBox structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType worldgenstrongholdpieces_worldgenstrongholdpiece_worldgenstrongholdpiece$worldgenstrongholddoortype, int i, int j, int k) {
-            switch (WorldGenStrongholdPieces.SyntheticClass_1.a[worldgenstrongholdpieces_worldgenstrongholdpiece_worldgenstrongholdpiece$worldgenstrongholddoortype.ordinal()]) {
-            case 1:
+            switch (worldgenstrongholdpieces_worldgenstrongholdpiece_worldgenstrongholdpiece$worldgenstrongholddoortype) {
+            case OPENING:
                 this.a(world, structureboundingbox, i, j, k, i + 3 - 1, j + 3 - 1, k, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
                 break;
 
-            case 2:
+            case WOOD_DOOR:
                 this.a(world, Blocks.STONEBRICK.getBlockData(), i, j, k, structureboundingbox);
                 this.a(world, Blocks.STONEBRICK.getBlockData(), i, j + 1, k, structureboundingbox);
                 this.a(world, Blocks.STONEBRICK.getBlockData(), i, j + 2, k, structureboundingbox);
@@ -1297,7 +1234,7 @@ public class WorldGenStrongholdPieces {
                 this.a(world, Blocks.WOODEN_DOOR.getBlockData().set(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), i + 1, j + 1, k, structureboundingbox);
                 break;
 
-            case 3:
+            case GRATES:
                 this.a(world, Blocks.AIR.getBlockData(), i + 1, j, k, structureboundingbox);
                 this.a(world, Blocks.AIR.getBlockData(), i + 1, j + 1, k, structureboundingbox);
                 this.a(world, Blocks.IRON_BARS.getBlockData(), i, j, k, structureboundingbox);
@@ -1309,7 +1246,7 @@ public class WorldGenStrongholdPieces {
                 this.a(world, Blocks.IRON_BARS.getBlockData(), i + 2, j, k, structureboundingbox);
                 break;
 
-            case 4:
+            case IRON_DOOR:
                 this.a(world, Blocks.STONEBRICK.getBlockData(), i, j, k, structureboundingbox);
                 this.a(world, Blocks.STONEBRICK.getBlockData(), i, j + 1, k, structureboundingbox);
                 this.a(world, Blocks.STONEBRICK.getBlockData(), i, j + 2, k, structureboundingbox);
@@ -1345,21 +1282,22 @@ public class WorldGenStrongholdPieces {
             }
         }
 
+        @Nullable
         protected StructurePiece a(WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart, List<StructurePiece> list, Random random, int i, int j) {
             EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
-                switch (WorldGenStrongholdPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + i, this.l.b + j, this.l.c - 1, enumdirection, this.e());
 
-                case 2:
+                case SOUTH:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + i, this.l.b + j, this.l.f + 1, enumdirection, this.e());
 
-                case 3:
+                case WEST:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a - 1, this.l.b + j, this.l.c + i, enumdirection, this.e());
 
-                case 4:
+                case EAST:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.d + 1, this.l.b + j, this.l.c + i, enumdirection, this.e());
                 }
             }
@@ -1367,21 +1305,22 @@ public class WorldGenStrongholdPieces {
             return null;
         }
 
+        @Nullable
         protected StructurePiece b(WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart, List<StructurePiece> list, Random random, int i, int j) {
             EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
-                switch (WorldGenStrongholdPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.e());
 
-                case 2:
+                case SOUTH:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.e());
 
-                case 3:
+                case WEST:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.e());
 
-                case 4:
+                case EAST:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.e());
                 }
             }
@@ -1389,21 +1328,22 @@ public class WorldGenStrongholdPieces {
             return null;
         }
 
+        @Nullable
         protected StructurePiece c(WorldGenStrongholdPieces.WorldGenStrongholdStart worldgenstrongholdpieces_worldgenstrongholdstart, List<StructurePiece> list, Random random, int i, int j) {
             EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
-                switch (WorldGenStrongholdPieces.SyntheticClass_1.b[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.e());
 
-                case 2:
+                case SOUTH:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.e());
 
-                case 3:
+                case WEST:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.e());
 
-                case 4:
+                case EAST:
                     return WorldGenStrongholdPieces.c(worldgenstrongholdpieces_worldgenstrongholdstart, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.e());
                 }
             }

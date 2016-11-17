@@ -224,6 +224,13 @@ public class MathHelper {
         }
     }
 
+    public static long c(int i, int j, int k) {
+        long l = (long) (i * 3129871) ^ (long) k * 116129781L ^ (long) j;
+
+        l = l * l * 42317861L + l * 11L;
+        return l;
+    }
+
     public static UUID a(Random random) {
         long i = random.nextLong() & -61441L | 16384L;
         long j = random.nextLong() & 4611686018427387903L | Long.MIN_VALUE;
@@ -239,7 +246,7 @@ public class MathHelper {
         return (d0 - d1) / (d2 - d1);
     }
 
-    public static double b(double d0, double d1) {
+    public static double c(double d0, double d1) {
         double d2 = d1 * d1 + d0 * d0;
 
         if (Double.isNaN(d2)) {

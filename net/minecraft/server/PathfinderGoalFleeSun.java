@@ -26,7 +26,7 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
             return false;
         } else if (!this.f.h(new BlockPosition(this.a.locX, this.a.getBoundingBox().b, this.a.locZ))) {
             return false;
-        } else if (this.a.getEquipment(EnumItemSlot.HEAD) != null) {
+        } else if (!this.a.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
             return false;
         } else {
             Vec3D vec3d = this.f();

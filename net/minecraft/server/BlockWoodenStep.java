@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public abstract class BlockWoodenStep extends BlockStepAbstract {
 
@@ -15,7 +14,7 @@ public abstract class BlockWoodenStep extends BlockStepAbstract {
             iblockdata = iblockdata.set(BlockWoodenStep.HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
         }
 
-        this.w(iblockdata.set(BlockWoodenStep.VARIANT, BlockWood.EnumLogVariant.OAK));
+        this.y(iblockdata.set(BlockWoodenStep.VARIANT, BlockWood.EnumLogVariant.OAK));
         this.a(CreativeModeTab.b);
     }
 
@@ -23,7 +22,6 @@ public abstract class BlockWoodenStep extends BlockStepAbstract {
         return ((BlockWood.EnumLogVariant) iblockdata.get(BlockWoodenStep.VARIANT)).c();
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.WOODEN_SLAB);
     }

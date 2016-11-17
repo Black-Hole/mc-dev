@@ -12,15 +12,15 @@ public class EntitySpider extends EntityMonster {
         this.setSize(1.4F, 0.9F);
     }
 
-    public static void d(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "Spider");
+    public static void c(DataConverterManager dataconvertermanager) {
+        EntityInsentient.a(dataconvertermanager, EntitySpider.class);
     }
 
     protected void r() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(3, new PathfinderGoalLeapAtTarget(this, 0.4F));
         this.goalSelector.a(4, new EntitySpider.PathfinderGoalSpiderMeleeAttack(this));
-        this.goalSelector.a(5, new PathfinderGoalRandomStroll(this, 0.8D));
+        this.goalSelector.a(5, new PathfinderGoalRandomStrollLand(this, 0.8D));
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(6, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
@@ -41,8 +41,8 @@ public class EntitySpider extends EntityMonster {
         this.datawatcher.register(EntitySpider.a, Byte.valueOf((byte) 0));
     }
 
-    public void m() {
-        super.m();
+    public void A_() {
+        super.A_();
         if (!this.world.isClientSide) {
             this.a(this.positionChanged);
         }
@@ -56,24 +56,24 @@ public class EntitySpider extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.gc;
-    }
-
-    protected SoundEffect bV() {
-        return SoundEffects.ge;
+        return SoundEffects.gy;
     }
 
     protected SoundEffect bW() {
-        return SoundEffects.gd;
+        return SoundEffects.gA;
+    }
+
+    protected SoundEffect bX() {
+        return SoundEffects.gz;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.gf, 0.15F, 1.0F);
+        this.a(SoundEffects.gB, 0.15F, 1.0F);
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.r;
+        return LootTables.s;
     }
 
     public boolean m_() {

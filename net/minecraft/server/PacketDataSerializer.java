@@ -231,16 +231,16 @@ public class PacketDataSerializer extends ByteBuf {
         }
     }
 
-    public PacketDataSerializer a(@Nullable ItemStack itemstack) {
-        if (itemstack == null) {
+    public PacketDataSerializer a(ItemStack itemstack) {
+        if (itemstack.isEmpty()) {
             this.writeShort(-1);
         } else {
             this.writeShort(Item.getId(itemstack.getItem()));
-            this.writeByte(itemstack.count);
+            this.writeByte(itemstack.getCount());
             this.writeShort(itemstack.getData());
             NBTTagCompound nbttagcompound = null;
 
-            if (itemstack.getItem().usesDurability() || itemstack.getItem().p()) {
+            if (itemstack.getItem().usesDurability() || itemstack.getItem().q()) {
                 nbttagcompound = itemstack.getTag();
             }
 
@@ -250,20 +250,19 @@ public class PacketDataSerializer extends ByteBuf {
         return this;
     }
 
-    @Nullable
     public ItemStack k() {
-        ItemStack itemstack = null;
         short short0 = this.readShort();
 
-        if (short0 >= 0) {
+        if (short0 < 0) {
+            return ItemStack.a;
+        } else {
             byte b0 = this.readByte();
             short short1 = this.readShort();
+            ItemStack itemstack = new ItemStack(Item.getById(short0), b0, short1);
 
-            itemstack = new ItemStack(Item.getById(short0), b0, short1);
             itemstack.setTag(this.j());
+            return itemstack;
         }
-
-        return itemstack;
     }
 
     public String e(int i) {
@@ -288,7 +287,7 @@ public class PacketDataSerializer extends ByteBuf {
         byte[] abyte = s.getBytes(Charsets.UTF_8);
 
         if (abyte.length > 32767) {
-            throw new EncoderException("String too big (was " + s.length() + " bytes encoded, max " + 32767 + ")");
+            throw new EncoderException("String too big (was " + abyte.length + " bytes encoded, max " + 32767 + ")");
         } else {
             this.d(abyte.length);
             this.writeBytes(abyte);

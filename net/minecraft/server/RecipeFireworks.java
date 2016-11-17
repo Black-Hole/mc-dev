@@ -2,16 +2,17 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
-import javax.annotation.Nullable;
 
 public class RecipeFireworks implements IRecipe {
 
     private ItemStack a;
 
-    public RecipeFireworks() {}
+    public RecipeFireworks() {
+        this.a = ItemStack.a;
+    }
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
-        this.a = null;
+        this.a = ItemStack.a;
         int i = 0;
         int j = 0;
         int k = 0;
@@ -22,7 +23,7 @@ public class RecipeFireworks implements IRecipe {
         for (int k1 = 0; k1 < inventorycrafting.getSize(); ++k1) {
             ItemStack itemstack = inventorycrafting.getItem(k1);
 
-            if (itemstack != null) {
+            if (!itemstack.isEmpty()) {
                 if (itemstack.getItem() == Items.GUNPOWDER) {
                     ++j;
                 } else if (itemstack.getItem() == Items.FIREWORK_CHARGE) {
@@ -66,7 +67,7 @@ public class RecipeFireworks implements IRecipe {
                     for (int l1 = 0; l1 < inventorycrafting.getSize(); ++l1) {
                         ItemStack itemstack1 = inventorycrafting.getItem(l1);
 
-                        if (itemstack1 != null && itemstack1.getItem() == Items.FIREWORK_CHARGE && itemstack1.hasTag() && itemstack1.getTag().hasKeyOfType("Explosion", 10)) {
+                        if (itemstack1.getItem() == Items.FIREWORK_CHARGE && itemstack1.hasTag() && itemstack1.getTag().hasKeyOfType("Explosion", 10)) {
                             nbttaglist.add(itemstack1.getTag().getCompound("Explosion"));
                         }
                     }
@@ -88,7 +89,7 @@ public class RecipeFireworks implements IRecipe {
                 for (int i2 = 0; i2 < inventorycrafting.getSize(); ++i2) {
                     ItemStack itemstack2 = inventorycrafting.getItem(i2);
 
-                    if (itemstack2 != null) {
+                    if (!itemstack2.isEmpty()) {
                         if (itemstack2.getItem() == Items.DYE) {
                             arraylist.add(Integer.valueOf(ItemDye.a[itemstack2.getData() & 15]));
                         } else if (itemstack2.getItem() == Items.GLOWSTONE_DUST) {
@@ -124,12 +125,12 @@ public class RecipeFireworks implements IRecipe {
                 for (int k2 = 0; k2 < inventorycrafting.getSize(); ++k2) {
                     ItemStack itemstack3 = inventorycrafting.getItem(k2);
 
-                    if (itemstack3 != null) {
+                    if (!itemstack3.isEmpty()) {
                         if (itemstack3.getItem() == Items.DYE) {
                             arraylist1.add(Integer.valueOf(ItemDye.a[itemstack3.getData() & 15]));
                         } else if (itemstack3.getItem() == Items.FIREWORK_CHARGE) {
                             this.a = itemstack3.cloneItemStack();
-                            this.a.count = 1;
+                            this.a.setCount(1);
                         }
                     }
                 }
@@ -140,7 +141,7 @@ public class RecipeFireworks implements IRecipe {
                     aint1[l2] = ((Integer) arraylist1.get(l2)).intValue();
                 }
 
-                if (this.a != null && this.a.hasTag()) {
+                if (!this.a.isEmpty() && this.a.hasTag()) {
                     NBTTagCompound nbttagcompound2 = this.a.getTag().getCompound("Explosion");
 
                     if (nbttagcompound2 == null) {
@@ -160,7 +161,6 @@ public class RecipeFireworks implements IRecipe {
         }
     }
 
-    @Nullable
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         return this.a.cloneItemStack();
     }
@@ -169,22 +169,21 @@ public class RecipeFireworks implements IRecipe {
         return 10;
     }
 
-    @Nullable
     public ItemStack b() {
         return this.a;
     }
 
-    public ItemStack[] b(InventoryCrafting inventorycrafting) {
-        ItemStack[] aitemstack = new ItemStack[inventorycrafting.getSize()];
+    public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
+        NonNullList nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
 
-        for (int i = 0; i < aitemstack.length; ++i) {
+        for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
-            if (itemstack != null && itemstack.getItem().r()) {
-                aitemstack[i] = new ItemStack(itemstack.getItem().q());
+            if (itemstack.getItem().s()) {
+                nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
             }
         }
 
-        return aitemstack;
+        return nonnulllist;
     }
 }

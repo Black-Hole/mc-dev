@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Nullable;
 
 public abstract class Enchantment {
@@ -32,8 +33,7 @@ public abstract class Enchantment {
         this.a = aenumitemslot;
     }
 
-    @Nullable
-    public Iterable<ItemStack> a(EntityLiving entityliving) {
+    public List<ItemStack> a(EntityLiving entityliving) {
         ArrayList arraylist = Lists.newArrayList();
         EnumItemSlot[] aenumitemslot = this.a;
         int i = aenumitemslot.length;
@@ -42,15 +42,15 @@ public abstract class Enchantment {
             EnumItemSlot enumitemslot = aenumitemslot[j];
             ItemStack itemstack = entityliving.getEquipment(enumitemslot);
 
-            if (itemstack != null) {
+            if (!itemstack.isEmpty()) {
                 arraylist.add(itemstack);
             }
         }
 
-        return arraylist.size() > 0 ? arraylist : null;
+        return arraylist;
     }
 
-    public Enchantment.Rarity c() {
+    public Enchantment.Rarity e() {
         return this.e;
     }
 
@@ -94,6 +94,10 @@ public abstract class Enchantment {
     public String d(int i) {
         String s = LocaleI18n.get(this.a());
 
+        if (this.d()) {
+            s = EnumChatFormat.RED + s;
+        }
+
         return i == 1 && this.getMaxLevel() == 1 ? s : s + " " + LocaleI18n.get("enchantment.level." + i);
     }
 
@@ -105,11 +109,15 @@ public abstract class Enchantment {
 
     public void b(EntityLiving entityliving, Entity entity, int i) {}
 
-    public boolean e() {
+    public boolean isTreasure() {
         return false;
     }
 
-    public static void f() {
+    public boolean d() {
+        return false;
+    }
+
+    public static void g() {
         EnumItemSlot[] aenumitemslot = new EnumItemSlot[] { EnumItemSlot.HEAD, EnumItemSlot.CHEST, EnumItemSlot.LEGS, EnumItemSlot.FEET};
 
         Enchantment.enchantments.a(0, new MinecraftKey("protection"), new EnchantmentProtection(Enchantment.Rarity.COMMON, EnchantmentProtection.DamageType.ALL, aenumitemslot));
@@ -122,6 +130,7 @@ public abstract class Enchantment {
         Enchantment.enchantments.a(7, new MinecraftKey("thorns"), new EnchantmentThorns(Enchantment.Rarity.VERY_RARE, aenumitemslot));
         Enchantment.enchantments.a(8, new MinecraftKey("depth_strider"), new EnchantmentDepthStrider(Enchantment.Rarity.RARE, aenumitemslot));
         Enchantment.enchantments.a(9, new MinecraftKey("frost_walker"), new EnchantmentFrostWalker(Enchantment.Rarity.RARE, new EnumItemSlot[] { EnumItemSlot.FEET}));
+        Enchantment.enchantments.a(10, new MinecraftKey("binding_curse"), new EnchantmentBinding(Enchantment.Rarity.VERY_RARE, aenumitemslot));
         Enchantment.enchantments.a(16, new MinecraftKey("sharpness"), new EnchantmentWeaponDamage(Enchantment.Rarity.COMMON, 0, new EnumItemSlot[] { EnumItemSlot.MAINHAND}));
         Enchantment.enchantments.a(17, new MinecraftKey("smite"), new EnchantmentWeaponDamage(Enchantment.Rarity.UNCOMMON, 1, new EnumItemSlot[] { EnumItemSlot.MAINHAND}));
         Enchantment.enchantments.a(18, new MinecraftKey("bane_of_arthropods"), new EnchantmentWeaponDamage(Enchantment.Rarity.UNCOMMON, 2, new EnumItemSlot[] { EnumItemSlot.MAINHAND}));
@@ -139,6 +148,7 @@ public abstract class Enchantment {
         Enchantment.enchantments.a(61, new MinecraftKey("luck_of_the_sea"), new EnchantmentLootBonus(Enchantment.Rarity.RARE, EnchantmentSlotType.FISHING_ROD, new EnumItemSlot[] { EnumItemSlot.MAINHAND}));
         Enchantment.enchantments.a(62, new MinecraftKey("lure"), new EnchantmentLure(Enchantment.Rarity.RARE, EnchantmentSlotType.FISHING_ROD, new EnumItemSlot[] { EnumItemSlot.MAINHAND}));
         Enchantment.enchantments.a(70, new MinecraftKey("mending"), new EnchantmentMending(Enchantment.Rarity.RARE, EnumItemSlot.values()));
+        Enchantment.enchantments.a(71, new MinecraftKey("vanishing_curse"), new EnchantmentVanishing(Enchantment.Rarity.VERY_RARE, EnumItemSlot.values()));
     }
 
     public static enum Rarity {

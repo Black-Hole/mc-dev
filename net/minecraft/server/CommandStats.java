@@ -105,7 +105,7 @@ public class CommandStats extends CommandAbstract {
                             throw new CommandException("commands.stats.noCompatibleBlock", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
                         }
 
-                        commandobjectiveexecutor = ((TileEntitySign) tileentity).g();
+                        commandobjectiveexecutor = ((TileEntitySign) tileentity).f();
                     }
                 } else {
                     Entity entity = b(minecraftserver, icommandlistener, astring[1]);

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class PathEntity {
 
     private final PathPoint[] a;
@@ -21,6 +23,7 @@ public class PathEntity {
         return this.e >= this.f;
     }
 
+    @Nullable
     public PathPoint c() {
         return this.f > 0 ? this.a[this.f - 1] : null;
     }

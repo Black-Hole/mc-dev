@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import java.util.Random;
-
 public class BiomeHell extends BiomeBase {
 
     public BiomeHell(BiomeBase.a biomebase_a) {
@@ -15,9 +13,5 @@ public class BiomeHell extends BiomeBase {
         this.u.add(new BiomeBase.BiomeMeta(EntityMagmaCube.class, 2, 4, 4));
         this.u.add(new BiomeBase.BiomeMeta(EntityEnderman.class, 1, 4, 4));
         this.t = new BiomeDecoratorHell();
-    }
-
-    public void a(World world, Random random, BlockPosition blockposition) {
-        super.a(world, random, blockposition);
     }
 }

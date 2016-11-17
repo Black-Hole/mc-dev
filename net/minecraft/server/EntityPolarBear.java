@@ -7,10 +7,10 @@ import javax.annotation.Nullable;
 
 public class EntityPolarBear extends EntityAnimal {
 
-    private static final DataWatcherObject<Boolean> bx = DataWatcher.a(EntityPolarBear.class, DataWatcherRegistry.h);
+    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityPolarBear.class, DataWatcherRegistry.h);
+    private float bx;
     private float by;
-    private float bz;
-    private int bB;
+    private int bA;
 
     public EntityPolarBear(World world) {
         super(world);
@@ -48,60 +48,52 @@ public class EntityPolarBear extends EntityAnimal {
     }
 
     protected SoundEffect G() {
-        return this.isBaby() ? SoundEffects.es : SoundEffects.er;
-    }
-
-    protected SoundEffect bV() {
-        return SoundEffects.eu;
+        return this.isBaby() ? SoundEffects.eM : SoundEffects.eL;
     }
 
     protected SoundEffect bW() {
-        return SoundEffects.et;
+        return SoundEffects.eO;
+    }
+
+    protected SoundEffect bX() {
+        return SoundEffects.eN;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.ev, 0.15F, 1.0F);
+        this.a(SoundEffects.eP, 0.15F, 1.0F);
     }
 
-    protected void de() {
-        if (this.bB <= 0) {
-            this.a(SoundEffects.ew, 1.0F, 1.0F);
-            this.bB = 40;
+    protected void dh() {
+        if (this.bA <= 0) {
+            this.a(SoundEffects.eQ, 1.0F, 1.0F);
+            this.bA = 40;
         }
 
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.E;
+        return LootTables.F;
     }
 
     protected void i() {
         super.i();
-        this.datawatcher.register(EntityPolarBear.bx, Boolean.valueOf(false));
+        this.datawatcher.register(EntityPolarBear.bw, Boolean.valueOf(false));
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
-    }
-
-    public void b(NBTTagCompound nbttagcompound) {
-        super.b(nbttagcompound);
-    }
-
-    public void m() {
-        super.m();
+    public void A_() {
+        super.A_();
         if (this.world.isClientSide) {
-            this.by = this.bz;
-            if (this.df()) {
-                this.bz = MathHelper.a(this.bz + 1.0F, 0.0F, 6.0F);
+            this.bx = this.by;
+            if (this.di()) {
+                this.by = MathHelper.a(this.by + 1.0F, 0.0F, 6.0F);
             } else {
-                this.bz = MathHelper.a(this.bz - 1.0F, 0.0F, 6.0F);
+                this.by = MathHelper.a(this.by - 1.0F, 0.0F, 6.0F);
             }
         }
 
-        if (this.bB > 0) {
-            --this.bB;
+        if (this.bA > 0) {
+            --this.bA;
         }
 
     }
@@ -116,15 +108,15 @@ public class EntityPolarBear extends EntityAnimal {
         return flag;
     }
 
-    public boolean df() {
-        return ((Boolean) this.datawatcher.get(EntityPolarBear.bx)).booleanValue();
+    public boolean di() {
+        return ((Boolean) this.datawatcher.get(EntityPolarBear.bw)).booleanValue();
     }
 
     public void p(boolean flag) {
-        this.datawatcher.set(EntityPolarBear.bx, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityPolarBear.bw, Boolean.valueOf(flag));
     }
 
-    protected float co() {
+    protected float cp() {
         return 0.98F;
     }
 
@@ -134,7 +126,7 @@ public class EntityPolarBear extends EntityAnimal {
                 this.setAgeRaw(-24000);
             }
         } else {
-            EntityPolarBear.b entitypolarbear_b = new EntityPolarBear.b((EntityPolarBear.SyntheticClass_1) null);
+            EntityPolarBear.b entitypolarbear_b = new EntityPolarBear.b(null);
 
             entitypolarbear_b.a = true;
             groupdataentity = entitypolarbear_b;
@@ -142,8 +134,6 @@ public class EntityPolarBear extends EntityAnimal {
 
         return (GroupDataEntity) groupdataentity;
     }
-
-    static class SyntheticClass_1 {    }
 
     class e extends PathfinderGoalPanic {
 
@@ -177,7 +167,7 @@ public class EntityPolarBear extends EntityAnimal {
 
                 if (this.c <= 10) {
                     EntityPolarBear.this.p(true);
-                    EntityPolarBear.this.de();
+                    EntityPolarBear.this.dh();
                 }
             } else {
                 this.c = 20;
@@ -245,7 +235,7 @@ public class EntityPolarBear extends EntityAnimal {
         }
 
         protected void a(EntityCreature entitycreature, EntityLiving entityliving) {
-            if (entitycreature instanceof EntityPolarBear && !((EntityPolarBear) entitycreature).isBaby()) {
+            if (entitycreature instanceof EntityPolarBear && !entitycreature.isBaby()) {
                 super.a(entitycreature, entityliving);
             }
 
@@ -258,7 +248,7 @@ public class EntityPolarBear extends EntityAnimal {
 
         private b() {}
 
-        b(EntityPolarBear.SyntheticClass_1 entitypolarbear_syntheticclass_1) {
+        b(Object object) {
             this();
         }
     }

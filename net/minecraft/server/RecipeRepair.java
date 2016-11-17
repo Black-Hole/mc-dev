@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
-import javax.annotation.Nullable;
 
 public class RecipeRepair implements IRecipe {
 
@@ -14,12 +13,12 @@ public class RecipeRepair implements IRecipe {
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
-            if (itemstack != null) {
+            if (!itemstack.isEmpty()) {
                 arraylist.add(itemstack);
                 if (arraylist.size() > 1) {
                     ItemStack itemstack1 = (ItemStack) arraylist.get(0);
 
-                    if (itemstack.getItem() != itemstack1.getItem() || itemstack1.count != 1 || itemstack.count != 1 || !itemstack1.getItem().usesDurability()) {
+                    if (itemstack.getItem() != itemstack1.getItem() || itemstack1.getCount() != 1 || itemstack.getCount() != 1 || !itemstack1.getItem().usesDurability()) {
                         return false;
                     }
                 }
@@ -29,7 +28,6 @@ public class RecipeRepair implements IRecipe {
         return arraylist.size() == 2;
     }
 
-    @Nullable
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         ArrayList arraylist = Lists.newArrayList();
 
@@ -37,13 +35,13 @@ public class RecipeRepair implements IRecipe {
 
         for (int i = 0; i < inventorycrafting.getSize(); ++i) {
             itemstack = inventorycrafting.getItem(i);
-            if (itemstack != null) {
+            if (!itemstack.isEmpty()) {
                 arraylist.add(itemstack);
                 if (arraylist.size() > 1) {
                     ItemStack itemstack1 = (ItemStack) arraylist.get(0);
 
-                    if (itemstack.getItem() != itemstack1.getItem() || itemstack1.count != 1 || itemstack.count != 1 || !itemstack1.getItem().usesDurability()) {
-                        return null;
+                    if (itemstack.getItem() != itemstack1.getItem() || itemstack1.getCount() != 1 || itemstack.getCount() != 1 || !itemstack1.getItem().usesDurability()) {
+                        return ItemStack.a;
                     }
                 }
             }
@@ -53,10 +51,10 @@ public class RecipeRepair implements IRecipe {
             ItemStack itemstack2 = (ItemStack) arraylist.get(0);
 
             itemstack = (ItemStack) arraylist.get(1);
-            if (itemstack2.getItem() == itemstack.getItem() && itemstack2.count == 1 && itemstack.count == 1 && itemstack2.getItem().usesDurability()) {
+            if (itemstack2.getItem() == itemstack.getItem() && itemstack2.getCount() == 1 && itemstack.getCount() == 1 && itemstack2.getItem().usesDurability()) {
                 Item item = itemstack2.getItem();
-                int j = item.getMaxDurability() - itemstack2.h();
-                int k = item.getMaxDurability() - itemstack.h();
+                int j = item.getMaxDurability() - itemstack2.i();
+                int k = item.getMaxDurability() - itemstack.i();
                 int l = j + k + item.getMaxDurability() * 5 / 100;
                 int i1 = item.getMaxDurability() - l;
 
@@ -68,29 +66,28 @@ public class RecipeRepair implements IRecipe {
             }
         }
 
-        return null;
+        return ItemStack.a;
     }
 
     public int a() {
         return 4;
     }
 
-    @Nullable
     public ItemStack b() {
-        return null;
+        return ItemStack.a;
     }
 
-    public ItemStack[] b(InventoryCrafting inventorycrafting) {
-        ItemStack[] aitemstack = new ItemStack[inventorycrafting.getSize()];
+    public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
+        NonNullList nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
 
-        for (int i = 0; i < aitemstack.length; ++i) {
+        for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
-            if (itemstack != null && itemstack.getItem().r()) {
-                aitemstack[i] = new ItemStack(itemstack.getItem().q());
+            if (itemstack.getItem().s()) {
+                nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
             }
         }
 
-        return aitemstack;
+        return nonnulllist;
     }
 }

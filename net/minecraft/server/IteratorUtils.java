@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 public class IteratorUtils {
 
     public static <T> Iterable<T[]> a(Class<T> oclass, Iterable<? extends Iterable<? extends T>> iterable) {
-        return new IteratorUtils.ClassIterable(oclass, (Iterable[]) b(Iterable.class, iterable), (IteratorUtils.SyntheticClass_1) null);
+        return new IteratorUtils.ClassIterable(oclass, (Iterable[]) b(Iterable.class, iterable), null);
     }
 
     public static <T> Iterable<List<T>> a(Iterable<? extends Iterable<? extends T>> iterable) {
@@ -24,7 +24,7 @@ public class IteratorUtils {
     }
 
     private static <T> Iterable<List<T>> b(Iterable<Object[]> iterable) {
-        return Iterables.transform(iterable, new IteratorUtils.ArrayToList((IteratorUtils.SyntheticClass_1) null));
+        return Iterables.transform(iterable, new IteratorUtils.ArrayToList(null));
     }
 
     private static <T> T[] b(Class<? super T> oclass, Iterable<? extends T> iterable) {
@@ -44,8 +44,6 @@ public class IteratorUtils {
         return (Object[]) ((Object[]) Array.newInstance(oclass, i));
     }
 
-    static class SyntheticClass_1 {    }
-
     static class ClassIterable<T> implements Iterable<T[]> {
 
         private final Class<T> a;
@@ -57,10 +55,10 @@ public class IteratorUtils {
         }
 
         public Iterator<T[]> iterator() {
-            return (Iterator) (this.b.length <= 0 ? Collections.singletonList((Object[]) IteratorUtils.b(this.a, 0)).iterator() : new IteratorUtils.ClassIterable.ClassIterable$ClassIterator(this.a, this.b, (IteratorUtils.SyntheticClass_1) null));
+            return (Iterator) (this.b.length <= 0 ? Collections.singletonList((Object[]) IteratorUtils.b(this.a, 0)).iterator() : new IteratorUtils.ClassIterable.ClassIterable$ClassIterator(this.a, this.b, null));
         }
 
-        ClassIterable(Class oclass, Iterable[] aiterable, IteratorUtils.SyntheticClass_1 iteratorutils_syntheticclass_1) {
+        ClassIterable(Class oclass, Iterable[] aiterable, Object object) {
             this(oclass, aiterable);
         }
 
@@ -149,7 +147,7 @@ public class IteratorUtils {
                 return this.a();
             }
 
-            ClassIterable$ClassIterator(Class oclass, Iterable[] aiterable, IteratorUtils.SyntheticClass_1 iteratorutils_syntheticclass_1) {
+            ClassIterable$ClassIterator(Class oclass, Iterable[] aiterable, Object object) {
                 this(oclass, aiterable);
             }
         }
@@ -163,11 +161,11 @@ public class IteratorUtils {
             return Arrays.asList((Object[]) aobject);
         }
 
-        public Object apply(Object object) {
+        public Object apply(@Nullable Object object) {
             return this.a((Object[]) object);
         }
 
-        ArrayToList(IteratorUtils.SyntheticClass_1 iteratorutils_syntheticclass_1) {
+        ArrayToList(Object object) {
             this();
         }
     }

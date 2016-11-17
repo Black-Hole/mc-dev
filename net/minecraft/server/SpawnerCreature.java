@@ -79,7 +79,7 @@ public final class SpawnerCreature {
                             int k2 = blockposition1.getZ();
                             IBlockData iblockdata = worldserver.getType(blockposition1);
 
-                            if (!iblockdata.l()) {
+                            if (!iblockdata.m()) {
                                 int l2 = 0;
                                 int i3 = 0;
 
@@ -122,7 +122,7 @@ public final class SpawnerCreature {
                                                         }
 
                                                         entityinsentient.setPositionRotation((double) f, (double) k3, (double) f1, worldserver.random.nextFloat() * 360.0F, 0.0F);
-                                                        if (entityinsentient.cK() && entityinsentient.canSpawn()) {
+                                                        if (entityinsentient.cM() && entityinsentient.canSpawn()) {
                                                             groupdataentity = entityinsentient.prepare(worldserver.D(new BlockPosition(entityinsentient)), groupdataentity);
                                                             if (entityinsentient.canSpawn()) {
                                                                 ++l2;
@@ -131,7 +131,7 @@ public final class SpawnerCreature {
                                                                 entityinsentient.die();
                                                             }
 
-                                                            if (l2 >= entityinsentient.cO()) {
+                                                            if (l2 >= entityinsentient.cQ()) {
                                                                 continue label120;
                                                             }
                                                         }
@@ -170,7 +170,7 @@ public final class SpawnerCreature {
     }
 
     public static boolean a(IBlockData iblockdata) {
-        return iblockdata.k() ? false : (iblockdata.m() ? false : (iblockdata.getMaterial().isLiquid() ? false : !BlockMinecartTrackAbstract.i(iblockdata)));
+        return iblockdata.l() ? false : (iblockdata.n() ? false : (iblockdata.getMaterial().isLiquid() ? false : !BlockMinecartTrackAbstract.i(iblockdata)));
     }
 
     public static boolean a(EntityInsentient.EnumEntityPositionType entityinsentient_enumentitypositiontype, World world, BlockPosition blockposition) {
@@ -180,11 +180,11 @@ public final class SpawnerCreature {
             IBlockData iblockdata = world.getType(blockposition);
 
             if (entityinsentient_enumentitypositiontype == EntityInsentient.EnumEntityPositionType.IN_WATER) {
-                return iblockdata.getMaterial().isLiquid() && world.getType(blockposition.down()).getMaterial().isLiquid() && !world.getType(blockposition.up()).l();
+                return iblockdata.getMaterial() == Material.WATER && world.getType(blockposition.down()).getMaterial() == Material.WATER && !world.getType(blockposition.up()).m();
             } else {
                 BlockPosition blockposition1 = blockposition.down();
 
-                if (!world.getType(blockposition1).q()) {
+                if (!world.getType(blockposition1).r()) {
                     return false;
                 } else {
                     Block block = world.getType(blockposition1).getBlock();

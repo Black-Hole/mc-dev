@@ -3,107 +3,98 @@ package net.minecraft.server;
 import java.util.List;
 import javax.annotation.Nullable;
 
-public class TileEntityBanner extends TileEntity {
+public class TileEntityBanner extends TileEntity implements INamableTileEntity {
 
-    public int color;
+    private String a;
+    public EnumColor color;
     public NBTTagList patterns;
-    private boolean g;
-    private List<TileEntityBanner.EnumBannerPatternType> h;
-    private List<EnumColor> i;
-    private String j;
+    private boolean h;
+    private List<EnumBannerPatternType> i;
+    private List<EnumColor> j;
+    private String k;
 
-    public TileEntityBanner() {}
+    public TileEntityBanner() {
+        this.color = EnumColor.BLACK;
+    }
 
-    public void a(ItemStack itemstack) {
+    public void a(ItemStack itemstack, boolean flag) {
         this.patterns = null;
-        if (itemstack.hasTag() && itemstack.getTag().hasKeyOfType("BlockEntityTag", 10)) {
-            NBTTagCompound nbttagcompound = itemstack.getTag().getCompound("BlockEntityTag");
+        NBTTagCompound nbttagcompound = itemstack.d("BlockEntityTag");
 
-            if (nbttagcompound.hasKey("Patterns")) {
-                this.patterns = nbttagcompound.getList("Patterns", 10).d();
-            }
-
-            if (nbttagcompound.hasKeyOfType("Base", 99)) {
-                this.color = nbttagcompound.getInt("Base");
-            } else {
-                this.color = itemstack.getData() & 15;
-            }
-        } else {
-            this.color = itemstack.getData() & 15;
+        if (nbttagcompound != null && nbttagcompound.hasKeyOfType("Patterns", 9)) {
+            this.patterns = nbttagcompound.getList("Patterns", 10).d();
         }
 
-        this.h = null;
+        this.color = flag ? d(itemstack) : ItemBanner.c(itemstack);
         this.i = null;
-        this.j = "";
-        this.g = true;
+        this.j = null;
+        this.k = "";
+        this.h = true;
+        this.a = itemstack.hasName() ? itemstack.getName() : null;
+    }
+
+    public String getName() {
+        return this.hasCustomName() ? this.a : "banner";
+    }
+
+    public boolean hasCustomName() {
+        return this.a != null && !this.a.isEmpty();
+    }
+
+    public IChatBaseComponent getScoreboardDisplayName() {
+        return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        a(nbttagcompound, this.color, this.patterns);
-        return nbttagcompound;
-    }
-
-    public static void a(NBTTagCompound nbttagcompound, int i, @Nullable NBTTagList nbttaglist) {
-        nbttagcompound.setInt("Base", i);
-        if (nbttaglist != null) {
-            nbttagcompound.set("Patterns", nbttaglist);
+        nbttagcompound.setInt("Base", this.color.getInvColorIndex());
+        if (this.patterns != null) {
+            nbttagcompound.set("Patterns", this.patterns);
         }
 
+        if (this.hasCustomName()) {
+            nbttagcompound.setString("CustomName", this.a);
+        }
+
+        return nbttagcompound;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.color = nbttagcompound.getInt("Base");
+        if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
+            this.a = nbttagcompound.getString("CustomName");
+        }
+
+        this.color = EnumColor.fromInvColorIndex(nbttagcompound.getInt("Base"));
         this.patterns = nbttagcompound.getList("Patterns", 10);
-        this.h = null;
         this.i = null;
         this.j = null;
-        this.g = true;
+        this.k = null;
+        this.h = true;
     }
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 6, this.c());
+        return new PacketPlayOutTileEntityData(this.position, 6, this.d());
     }
 
-    public NBTTagCompound c() {
+    public NBTTagCompound d() {
         return this.save(new NBTTagCompound());
     }
 
-    public int d() {
-        return this.color;
-    }
-
     public static int b(ItemStack itemstack) {
-        NBTTagCompound nbttagcompound = itemstack.a("BlockEntityTag", false);
-
-        return nbttagcompound != null && nbttagcompound.hasKey("Base") ? nbttagcompound.getInt("Base") : itemstack.getData();
-    }
-
-    public static int c(ItemStack itemstack) {
-        NBTTagCompound nbttagcompound = itemstack.a("BlockEntityTag", false);
+        NBTTagCompound nbttagcompound = itemstack.d("BlockEntityTag");
 
         return nbttagcompound != null && nbttagcompound.hasKey("Patterns") ? nbttagcompound.getList("Patterns", 10).size() : 0;
     }
 
-    public NBTTagList g() {
-        return this.patterns;
-    }
-
-    public static void a(ItemStack itemstack, EnumColor enumcolor) {
-        NBTTagCompound nbttagcompound = itemstack.a("BlockEntityTag", true);
-
-        nbttagcompound.setInt("Base", enumcolor.getInvColorIndex());
-    }
-
-    public static void e(ItemStack itemstack) {
-        NBTTagCompound nbttagcompound = itemstack.a("BlockEntityTag", false);
+    public static void c(ItemStack itemstack) {
+        NBTTagCompound nbttagcompound = itemstack.d("BlockEntityTag");
 
         if (nbttagcompound != null && nbttagcompound.hasKeyOfType("Patterns", 9)) {
             NBTTagList nbttaglist = nbttagcompound.getList("Patterns", 10);
 
-            if (nbttaglist.size() > 0) {
+            if (!nbttaglist.isEmpty()) {
                 nbttaglist.remove(nbttaglist.size() - 1);
                 if (nbttaglist.isEmpty()) {
                     itemstack.getTag().remove("BlockEntityTag");
@@ -116,51 +107,19 @@ public class TileEntityBanner extends TileEntity {
         }
     }
 
-    public static enum EnumBannerPatternType {
+    public ItemStack l() {
+        ItemStack itemstack = ItemBanner.a(this.color, this.patterns);
 
-        BASE("base", "b"), SQUARE_BOTTOM_LEFT("square_bottom_left", "bl", "   ", "   ", "#  "), SQUARE_BOTTOM_RIGHT("square_bottom_right", "br", "   ", "   ", "  #"), SQUARE_TOP_LEFT("square_top_left", "tl", "#  ", "   ", "   "), SQUARE_TOP_RIGHT("square_top_right", "tr", "  #", "   ", "   "), STRIPE_BOTTOM("stripe_bottom", "bs", "   ", "   ", "###"), STRIPE_TOP("stripe_top", "ts", "###", "   ", "   "), STRIPE_LEFT("stripe_left", "ls", "#  ", "#  ", "#  "), STRIPE_RIGHT("stripe_right", "rs", "  #", "  #", "  #"), STRIPE_CENTER("stripe_center", "cs", " # ", " # ", " # "), STRIPE_MIDDLE("stripe_middle", "ms", "   ", "###", "   "), STRIPE_DOWNRIGHT("stripe_downright", "drs", "#  ", " # ", "  #"), STRIPE_DOWNLEFT("stripe_downleft", "dls", "  #", " # ", "#  "), STRIPE_SMALL("small_stripes", "ss", "# #", "# #", "   "), CROSS("cross", "cr", "# #", " # ", "# #"), STRAIGHT_CROSS("straight_cross", "sc", " # ", "###", " # "), TRIANGLE_BOTTOM("triangle_bottom", "bt", "   ", " # ", "# #"), TRIANGLE_TOP("triangle_top", "tt", "# #", " # ", "   "), TRIANGLES_BOTTOM("triangles_bottom", "bts", "   ", "# #", " # "), TRIANGLES_TOP("triangles_top", "tts", " # ", "# #", "   "), DIAGONAL_LEFT("diagonal_left", "ld", "## ", "#  ", "   "), DIAGONAL_RIGHT("diagonal_up_right", "rd", "   ", "  #", " ##"), DIAGONAL_LEFT_MIRROR("diagonal_up_left", "lud", "   ", "#  ", "## "), DIAGONAL_RIGHT_MIRROR("diagonal_right", "rud", " ##", "  #", "   "), CIRCLE_MIDDLE("circle", "mc", "   ", " # ", "   "), RHOMBUS_MIDDLE("rhombus", "mr", " # ", "# #", " # "), HALF_VERTICAL("half_vertical", "vh", "## ", "## ", "## "), HALF_HORIZONTAL("half_horizontal", "hh", "###", "###", "   "), HALF_VERTICAL_MIRROR("half_vertical_right", "vhr", " ##", " ##", " ##"), HALF_HORIZONTAL_MIRROR("half_horizontal_bottom", "hhb", "   ", "###", "###"), BORDER("border", "bo", "###", "# #", "###"), CURLY_BORDER("curly_border", "cbo", new ItemStack(Blocks.VINE)), CREEPER("creeper", "cre", new ItemStack(Items.SKULL, 1, 4)), GRADIENT("gradient", "gra", "# #", " # ", " # "), GRADIENT_UP("gradient_up", "gru", " # ", " # ", "# #"), BRICKS("bricks", "bri", new ItemStack(Blocks.BRICK_BLOCK)), SKULL("skull", "sku", new ItemStack(Items.SKULL, 1, 1)), FLOWER("flower", "flo", new ItemStack(Blocks.RED_FLOWER, 1, BlockFlowers.EnumFlowerVarient.OXEYE_DAISY.b())), MOJANG("mojang", "moj", new ItemStack(Items.GOLDEN_APPLE, 1, 1));
-
-        private final String N;
-        private final String O;
-        private final String[] P;
-        private ItemStack Q;
-
-        private EnumBannerPatternType(String s, String s1) {
-            this.P = new String[3];
-            this.N = s;
-            this.O = s1;
+        if (this.hasCustomName()) {
+            itemstack.g(this.getName());
         }
 
-        private EnumBannerPatternType(String s, String s1, ItemStack itemstack) {
-            this(s, s1);
-            this.Q = itemstack;
-        }
+        return itemstack;
+    }
 
-        private EnumBannerPatternType(String s, String s1, String s2, String s3, String s4) {
-            this(s, s1);
-            this.P[0] = s2;
-            this.P[1] = s3;
-            this.P[2] = s4;
-        }
+    public static EnumColor d(ItemStack itemstack) {
+        NBTTagCompound nbttagcompound = itemstack.d("BlockEntityTag");
 
-        public String b() {
-            return this.O;
-        }
-
-        public String[] c() {
-            return this.P;
-        }
-
-        public boolean d() {
-            return this.Q != null || this.P[0] != null;
-        }
-
-        public boolean e() {
-            return this.Q != null;
-        }
-
-        public ItemStack f() {
-            return this.Q;
-        }
+        return nbttagcompound != null && nbttagcompound.hasKey("Base") ? EnumColor.fromInvColorIndex(nbttagcompound.getInt("Base")) : EnumColor.BLACK;
     }
 }

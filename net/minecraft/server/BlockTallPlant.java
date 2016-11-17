@@ -11,13 +11,13 @@ public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElem
 
     public BlockTallPlant() {
         super(Material.REPLACEABLE_PLANT);
-        this.w(this.blockStateList.getBlockData().set(BlockTallPlant.VARIANT, BlockTallPlant.EnumTallFlowerVariants.SUNFLOWER).set(BlockTallPlant.HALF, BlockTallPlant.EnumTallPlantHalf.LOWER).set(BlockTallPlant.d, EnumDirection.NORTH));
+        this.y(this.blockStateList.getBlockData().set(BlockTallPlant.VARIANT, BlockTallPlant.EnumTallFlowerVariants.SUNFLOWER).set(BlockTallPlant.HALF, BlockTallPlant.EnumTallPlantHalf.LOWER).set(BlockTallPlant.d, EnumDirection.NORTH));
         this.c(0.0F);
         this.a(SoundEffectType.c);
         this.c("doublePlant");
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockTallPlant.j;
     }
 
@@ -78,14 +78,13 @@ public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElem
         }
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         if (iblockdata.get(BlockTallPlant.HALF) == BlockTallPlant.EnumTallPlantHalf.UPPER) {
-            return null;
+            return Items.a;
         } else {
             BlockTallPlant.EnumTallFlowerVariants blocktallplant_enumtallflowervariants = (BlockTallPlant.EnumTallFlowerVariants) iblockdata.get(BlockTallPlant.VARIANT);
 
-            return blocktallplant_enumtallflowervariants == BlockTallPlant.EnumTallFlowerVariants.FERN ? null : (blocktallplant_enumtallflowervariants == BlockTallPlant.EnumTallFlowerVariants.GRASS ? (random.nextInt(8) == 0 ? Items.WHEAT_SEEDS : null) : Item.getItemOf(this));
+            return blocktallplant_enumtallflowervariants == BlockTallPlant.EnumTallFlowerVariants.FERN ? Items.a : (blocktallplant_enumtallflowervariants == BlockTallPlant.EnumTallFlowerVariants.GRASS ? (random.nextInt(8) == 0 ? Items.WHEAT_SEEDS : Items.a) : super.getDropType(iblockdata, random, i));
         }
     }
 
@@ -102,8 +101,8 @@ public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElem
         world.setTypeAndData(blockposition.up(), this.getBlockData().set(BlockTallPlant.HALF, BlockTallPlant.EnumTallPlantHalf.UPPER), 2);
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
-        if (world.isClientSide || itemstack == null || itemstack.getItem() != Items.SHEARS || iblockdata.get(BlockTallPlant.HALF) != BlockTallPlant.EnumTallPlantHalf.LOWER || !this.b(world, blockposition, iblockdata, entityhuman)) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
+        if (world.isClientSide || itemstack.getItem() != Items.SHEARS || iblockdata.get(BlockTallPlant.HALF) != BlockTallPlant.EnumTallPlantHalf.LOWER || !this.b(world, blockposition, iblockdata, entityhuman)) {
             super.a(world, entityhuman, blockposition, iblockdata, tileentity, itemstack);
         }
     }
@@ -121,7 +120,7 @@ public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElem
                         world.setAir(blockposition.down(), true);
                     } else if (world.isClientSide) {
                         world.setAir(blockposition.down());
-                    } else if (entityhuman.getItemInMainHand() != null && entityhuman.getItemInMainHand().getItem() == Items.SHEARS) {
+                    } else if (!entityhuman.getItemInMainHand().isEmpty() && entityhuman.getItemInMainHand().getItem() == Items.SHEARS) {
                         this.b(world, blockposition, iblockdata1, entityhuman);
                         world.setAir(blockposition.down());
                     } else {
@@ -190,6 +189,10 @@ public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElem
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockTallPlant.HALF, BlockTallPlant.VARIANT, BlockTallPlant.d});
+    }
+
+    public Block.EnumRandomOffset u() {
+        return Block.EnumRandomOffset.XZ;
     }
 
     public static enum EnumTallPlantHalf implements INamable {

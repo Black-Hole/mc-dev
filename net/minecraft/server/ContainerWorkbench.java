@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class ContainerWorkbench extends Container {
 
     public InventoryCrafting craftInventory = new InventoryCrafting(this, 3, 3);
@@ -46,7 +44,7 @@ public class ContainerWorkbench extends Container {
             for (int i = 0; i < 9; ++i) {
                 ItemStack itemstack = this.craftInventory.splitWithoutUpdate(i);
 
-                if (itemstack != null) {
+                if (!itemstack.isEmpty()) {
                     entityhuman.drop(itemstack, false);
                 }
             }
@@ -55,12 +53,11 @@ public class ContainerWorkbench extends Container {
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.g.getType(this.h).getBlock() != Blocks.CRAFTING_TABLE ? false : entityhuman.e((double) this.h.getX() + 0.5D, (double) this.h.getY() + 0.5D, (double) this.h.getZ() + 0.5D) <= 64.0D;
+        return this.g.getType(this.h).getBlock() != Blocks.CRAFTING_TABLE ? false : entityhuman.d((double) this.h.getX() + 0.5D, (double) this.h.getY() + 0.5D, (double) this.h.getZ() + 0.5D) <= 64.0D;
     }
 
-    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.a;
         Slot slot = (Slot) this.c.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -68,34 +65,39 @@ public class ContainerWorkbench extends Container {
 
             itemstack = itemstack1.cloneItemStack();
             if (i == 0) {
+                itemstack1.getItem().b(itemstack1, this.g, entityhuman);
                 if (!this.a(itemstack1, 10, 46, true)) {
-                    return null;
+                    return ItemStack.a;
                 }
 
                 slot.a(itemstack1, itemstack);
             } else if (i >= 10 && i < 37) {
                 if (!this.a(itemstack1, 37, 46, false)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else if (i >= 37 && i < 46) {
                 if (!this.a(itemstack1, 10, 37, false)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else if (!this.a(itemstack1, 10, 46, false)) {
-                return null;
+                return ItemStack.a;
             }
 
-            if (itemstack1.count == 0) {
-                slot.set((ItemStack) null);
+            if (itemstack1.isEmpty()) {
+                slot.set(ItemStack.a);
             } else {
                 slot.f();
             }
 
-            if (itemstack1.count == itemstack.count) {
-                return null;
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.a;
             }
 
-            slot.a(entityhuman, itemstack1);
+            ItemStack itemstack2 = slot.a(entityhuman, itemstack1);
+
+            if (i == 0) {
+                entityhuman.drop(itemstack2, false);
+            }
         }
 
         return itemstack;

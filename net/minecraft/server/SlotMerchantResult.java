@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class SlotMerchantResult extends Slot {
 
     private final InventoryMerchant a;
@@ -16,13 +14,13 @@ public class SlotMerchantResult extends Slot {
         this.a = inventorymerchant;
     }
 
-    public boolean isAllowed(@Nullable ItemStack itemstack) {
+    public boolean isAllowed(ItemStack itemstack) {
         return false;
     }
 
     public ItemStack a(int i) {
         if (this.hasItem()) {
-            this.c += Math.min(i, this.getItem().count);
+            this.c += Math.min(i, this.getItem().getCount());
         }
 
         return super.a(i);
@@ -38,7 +36,7 @@ public class SlotMerchantResult extends Slot {
         this.c = 0;
     }
 
-    public void a(EntityHuman entityhuman, ItemStack itemstack) {
+    public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
         this.c(itemstack);
         MerchantRecipe merchantrecipe = this.a.getRecipe();
 
@@ -49,34 +47,27 @@ public class SlotMerchantResult extends Slot {
             if (this.a(merchantrecipe, itemstack1, itemstack2) || this.a(merchantrecipe, itemstack2, itemstack1)) {
                 this.h.a(merchantrecipe);
                 entityhuman.b(StatisticList.I);
-                if (itemstack1 != null && itemstack1.count <= 0) {
-                    itemstack1 = null;
-                }
-
-                if (itemstack2 != null && itemstack2.count <= 0) {
-                    itemstack2 = null;
-                }
-
                 this.a.setItem(0, itemstack1);
                 this.a.setItem(1, itemstack2);
             }
         }
 
+        return itemstack;
     }
 
     private boolean a(MerchantRecipe merchantrecipe, ItemStack itemstack, ItemStack itemstack1) {
         ItemStack itemstack2 = merchantrecipe.getBuyItem1();
         ItemStack itemstack3 = merchantrecipe.getBuyItem2();
 
-        if (itemstack != null && itemstack.getItem() == itemstack2.getItem() && itemstack.count >= itemstack2.count) {
-            if (itemstack3 != null && itemstack1 != null && itemstack3.getItem() == itemstack1.getItem() && itemstack1.count >= itemstack3.count) {
-                itemstack.count -= itemstack2.count;
-                itemstack1.count -= itemstack3.count;
+        if (itemstack.getItem() == itemstack2.getItem() && itemstack.getCount() >= itemstack2.getCount()) {
+            if (!itemstack3.isEmpty() && !itemstack1.isEmpty() && itemstack3.getItem() == itemstack1.getItem() && itemstack1.getCount() >= itemstack3.getCount()) {
+                itemstack.subtract(itemstack2.getCount());
+                itemstack1.subtract(itemstack3.getCount());
                 return true;
             }
 
-            if (itemstack3 == null && itemstack1 == null) {
-                itemstack.count -= itemstack2.count;
+            if (itemstack3.isEmpty() && itemstack1.isEmpty()) {
+                itemstack.subtract(itemstack2.getCount());
                 return true;
             }
         }

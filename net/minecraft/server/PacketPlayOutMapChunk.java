@@ -23,7 +23,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         this.a = chunk.locX;
         this.b = chunk.locZ;
         this.f = i == '\uffff';
-        boolean flag = !chunk.getWorld().worldProvider.m();
+        boolean flag = chunk.getWorld().worldProvider.m();
 
         this.d = new byte[this.a(chunk, flag, i)];
         this.c = this.a(new PacketDataSerializer(this.g()), chunk, flag, i);
@@ -37,7 +37,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
             int j = blockposition.getY() >> 4;
 
             if (this.e() || (i & 1 << j) != 0) {
-                NBTTagCompound nbttagcompound = tileentity.c();
+                NBTTagCompound nbttagcompound = tileentity.d();
 
                 this.e.add(nbttagcompound);
             }

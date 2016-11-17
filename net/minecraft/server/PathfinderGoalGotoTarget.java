@@ -39,8 +39,6 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
         this.f = this.c.getRandom().nextInt(this.c.getRandom().nextInt(1200) + 1200) + 1200;
     }
 
-    public void d() {}
-
     public void e() {
         if (this.c.d(this.b.up()) > 1.0D) {
             this.g = false;

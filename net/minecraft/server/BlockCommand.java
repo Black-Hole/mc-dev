@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockCommand extends BlockTileEntity {
 
@@ -10,7 +9,7 @@ public class BlockCommand extends BlockTileEntity {
 
     public BlockCommand(MaterialMapColor materialmapcolor) {
         super(Material.ORE, materialmapcolor);
-        this.w(this.blockStateList.getBlockData().set(BlockCommand.a, EnumDirection.NORTH).set(BlockCommand.b, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockCommand.a, EnumDirection.NORTH).set(BlockCommand.b, Boolean.valueOf(false)));
     }
 
     public TileEntity a(World world, int i) {
@@ -20,14 +19,14 @@ public class BlockCommand extends BlockTileEntity {
         return tileentitycommand;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!world.isClientSide) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityCommand) {
                 TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
                 boolean flag = world.isBlockIndirectlyPowered(blockposition);
-                boolean flag1 = tileentitycommand.g();
+                boolean flag1 = tileentitycommand.f();
                 boolean flag2 = tileentitycommand.h();
 
                 if (flag && !flag1) {
@@ -67,7 +66,7 @@ public class BlockCommand extends BlockTileEntity {
                     flag3 = true;
                 }
 
-                if (tileentitycommand.g() || tileentitycommand.h()) {
+                if (tileentitycommand.f() || tileentitycommand.h()) {
                     if (tileentitycommand_type == TileEntityCommand.Type.SEQUENCE && flag1 && flag) {
                         commandblocklistenerabstract.a(world);
                         flag3 = true;
@@ -103,10 +102,10 @@ public class BlockCommand extends BlockTileEntity {
         return 1;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
-        if (tileentity instanceof TileEntityCommand && entityhuman.dh()) {
+        if (tileentity instanceof TileEntityCommand && entityhuman.dk()) {
             entityhuman.a((TileEntityCommand) tileentity);
             return true;
         } else {
@@ -118,7 +117,7 @@ public class BlockCommand extends BlockTileEntity {
         return true;
     }
 
-    public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public int c(IBlockData iblockdata, World world, BlockPosition blockposition) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         return tileentity instanceof TileEntityCommand ? ((TileEntityCommand) tileentity).getCommandBlock().k() : 0;
@@ -182,7 +181,7 @@ public class BlockCommand extends BlockTileEntity {
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        return this.getBlockData().set(BlockCommand.a, BlockPiston.a(blockposition, entityliving)).set(BlockCommand.b, Boolean.valueOf(false));
+        return this.getBlockData().set(BlockCommand.a, EnumDirection.a(blockposition, entityliving)).set(BlockCommand.b, Boolean.valueOf(false));
     }
 
     public void c(World world, BlockPosition blockposition) {

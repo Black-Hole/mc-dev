@@ -9,7 +9,7 @@ public interface ICommand extends Comparable<ICommand> {
 
     String getUsage(ICommandListener icommandlistener);
 
-    List<String> b();
+    List<String> getAliases();
 
     void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException;
 

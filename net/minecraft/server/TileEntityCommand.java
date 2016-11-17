@@ -36,7 +36,7 @@ public class TileEntityCommand extends TileEntity {
             return null;
         }
 
-        public MinecraftServer h() {
+        public MinecraftServer B_() {
             return TileEntityCommand.this.world.getMinecraftServer();
         }
     };
@@ -46,7 +46,7 @@ public class TileEntityCommand extends TileEntity {
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         this.i.a(nbttagcompound);
-        nbttagcompound.setBoolean("powered", this.g());
+        nbttagcompound.setBoolean("powered", this.f());
         nbttagcompound.setBoolean("conditionMet", this.i());
         nbttagcompound.setBoolean("auto", this.h());
         return nbttagcompound;
@@ -88,7 +88,7 @@ public class TileEntityCommand extends TileEntity {
         this.a = flag;
     }
 
-    public boolean g() {
+    public boolean f() {
         return this.a;
     }
 
@@ -145,9 +145,9 @@ public class TileEntityCommand extends TileEntity {
         return iblockdata.getBlock() instanceof BlockCommand ? ((Boolean) iblockdata.get(BlockCommand.b)).booleanValue() : false;
     }
 
-    public void z() {
+    public void A() {
         this.e = null;
-        super.z();
+        super.A();
     }
 
     public static enum Type {

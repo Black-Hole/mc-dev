@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class ContainerDispenser extends Container {
 
     public final IInventory items;
@@ -34,9 +32,8 @@ public class ContainerDispenser extends Container {
         return this.items.a(entityhuman);
     }
 
-    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.a;
         Slot slot = (Slot) this.c.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -45,20 +42,20 @@ public class ContainerDispenser extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i < 9) {
                 if (!this.a(itemstack1, 9, 45, true)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else if (!this.a(itemstack1, 0, 9, false)) {
-                return null;
+                return ItemStack.a;
             }
 
-            if (itemstack1.count == 0) {
-                slot.set((ItemStack) null);
+            if (itemstack1.isEmpty()) {
+                slot.set(ItemStack.a);
             } else {
                 slot.f();
             }
 
-            if (itemstack1.count == itemstack.count) {
-                return null;
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.a;
             }
 
             slot.a(entityhuman, itemstack1);

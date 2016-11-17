@@ -9,7 +9,7 @@ public class ControllerMove {
     protected double e;
     protected float f;
     protected float g;
-    protected ControllerMove.Operation h;
+    public ControllerMove.Operation h;
 
     public ControllerMove(EntityInsentient entityinsentient) {
         this.h = ControllerMove.Operation.WAIT;
@@ -99,11 +99,17 @@ public class ControllerMove {
                 return;
             }
 
-            f = (float) (MathHelper.b(d1, d0) * 57.2957763671875D) - 90.0F;
+            f = (float) (MathHelper.c(d1, d0) * 57.2957763671875D) - 90.0F;
             this.a.yaw = this.a(this.a.yaw, f, 90.0F);
             this.a.l((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
             if (d2 > (double) this.a.P && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.a.width)) {
                 this.a.getControllerJump().a();
+                this.h = ControllerMove.Operation.JUMPING;
+            }
+        } else if (this.h == ControllerMove.Operation.JUMPING) {
+            this.a.l((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
+            if (this.a.onGround) {
+                this.h = ControllerMove.Operation.WAIT;
             }
         } else {
             this.a.o(0.0F);
@@ -147,7 +153,7 @@ public class ControllerMove {
 
     public static enum Operation {
 
-        WAIT, MOVE_TO, STRAFE;
+        WAIT, MOVE_TO, STRAFE, JUMPING;
 
         private Operation() {}
     }

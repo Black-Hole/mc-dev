@@ -21,7 +21,7 @@ public class PathfinderGoalTradeWithPlayer extends PathfinderGoal {
         } else {
             EntityHuman entityhuman = this.a.getTrader();
 
-            return entityhuman == null ? false : (this.a.h(entityhuman) > 16.0D ? false : entityhuman.activeContainer instanceof Container);
+            return entityhuman == null ? false : (this.a.h(entityhuman) > 16.0D ? false : entityhuman.activeContainer != null);
         }
     }
 

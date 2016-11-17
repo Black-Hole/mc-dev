@@ -7,7 +7,7 @@ public abstract class GenLayer {
     private long d;
     protected long b;
 
-    public static GenLayer[] a(long i, WorldType worldtype, String s) {
+    public static GenLayer[] a(long i, WorldType worldtype, CustomWorldSettingsFinal customworldsettingsfinal) {
         LayerIsland layerisland = new LayerIsland(1L);
         GenLayerZoomFuzzy genlayerzoomfuzzy = new GenLayerZoomFuzzy(2000L, layerisland);
         GenLayerIsland genlayerisland = new GenLayerIsland(1L, genlayerzoomfuzzy);
@@ -33,11 +33,9 @@ public abstract class GenLayer {
         int j = 4;
         int k = j;
 
-        if (worldtype == WorldType.CUSTOMIZED && !s.isEmpty()) {
-            CustomWorldSettingsFinal customworldsettingsfinal = CustomWorldSettingsFinal.CustomWorldSettings.a(s).b();
-
-            j = customworldsettingsfinal.G;
-            k = customworldsettingsfinal.H;
+        if (customworldsettingsfinal != null) {
+            j = customworldsettingsfinal.H;
+            k = customworldsettingsfinal.I;
         }
 
         if (worldtype == WorldType.LARGE_BIOMES) {
@@ -46,7 +44,7 @@ public abstract class GenLayer {
 
         GenLayer genlayer1 = GenLayerZoom.b(1000L, genlayer, 0);
         GenLayerCleaner genlayercleaner = new GenLayerCleaner(100L, genlayer1);
-        GenLayerBiome genlayerbiome = new GenLayerBiome(200L, genlayer, worldtype, s);
+        GenLayerBiome genlayerbiome = new GenLayerBiome(200L, genlayer, worldtype, customworldsettingsfinal);
         GenLayer genlayer2 = GenLayerZoom.b(1000L, genlayerbiome, 2);
         GenLayerDesert genlayerdesert = new GenLayerDesert(1000L, genlayer2);
         GenLayer genlayer3 = GenLayerZoom.b(1000L, genlayercleaner, 2);

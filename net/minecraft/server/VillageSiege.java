@@ -134,7 +134,6 @@ public class VillageSiege {
             try {
                 entityzombie = new EntityZombie(this.a);
                 entityzombie.prepare(this.a.D(new BlockPosition(entityzombie)), (GroupDataEntity) null);
-                entityzombie.setVillagerType(EnumZombieType.NORMAL);
             } catch (Exception exception) {
                 exception.printStackTrace();
                 return false;

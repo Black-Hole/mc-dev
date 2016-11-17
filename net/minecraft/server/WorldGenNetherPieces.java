@@ -64,38 +64,6 @@ public class WorldGenNetherPieces {
         return (WorldGenNetherPieces.WorldGenNetherPiece) object;
     }
 
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                WorldGenNetherPieces.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                WorldGenNetherPieces.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                WorldGenNetherPieces.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                WorldGenNetherPieces.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-        }
-    }
-
     public static class WorldGenNetherPiece5 extends WorldGenNetherPieces.WorldGenNetherPiece {
 
         public WorldGenNetherPiece5() {}
@@ -221,8 +189,8 @@ public class WorldGenNetherPieces {
             this.a = random.nextInt(3) == 0;
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getBoolean("Chest");
         }
 
@@ -281,8 +249,8 @@ public class WorldGenNetherPieces {
             this.a = random.nextInt(3) == 0;
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getBoolean("Chest");
         }
 
@@ -661,8 +629,8 @@ public class WorldGenNetherPieces {
             this.l = structureboundingbox;
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getBoolean("Mob");
         }
 
@@ -705,7 +673,7 @@ public class WorldGenNetherPieces {
                     TileEntity tileentity = world.getTileEntity(blockposition);
 
                     if (tileentity instanceof TileEntityMobSpawner) {
-                        ((TileEntityMobSpawner) tileentity).getSpawner().setMobName("Blaze");
+                        ((TileEntityMobSpawner) tileentity).getSpawner().setMobName(EntityTypes.getName(EntityBlaze.class));
                     }
                 }
             }
@@ -919,8 +887,8 @@ public class WorldGenNetherPieces {
             return a(structureboundingbox) && StructurePiece.a(list, structureboundingbox) == null ? new WorldGenNetherPieces.WorldGenNetherPiece2(l, random, structureboundingbox, enumdirection) : null;
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.a = nbttagcompound.getInt("Seed");
         }
 
@@ -1048,14 +1016,6 @@ public class WorldGenNetherPieces {
             }
 
         }
-
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
-        }
-
-        protected void a(NBTTagCompound nbttagcompound) {
-            super.a(nbttagcompound);
-        }
     }
 
     abstract static class WorldGenNetherPiece extends StructurePiece {
@@ -1066,7 +1026,7 @@ public class WorldGenNetherPieces {
             super(i);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {}
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {}
 
         protected void a(NBTTagCompound nbttagcompound) {}
 
@@ -1144,21 +1104,22 @@ public class WorldGenNetherPieces {
             }
         }
 
+        @Nullable
         protected StructurePiece a(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, boolean flag) {
             EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
-                switch (WorldGenNetherPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + i, this.l.b + j, this.l.c - 1, enumdirection, this.e(), flag);
 
-                case 2:
+                case SOUTH:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + i, this.l.b + j, this.l.f + 1, enumdirection, this.e(), flag);
 
-                case 3:
+                case WEST:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + j, this.l.c + i, enumdirection, this.e(), flag);
 
-                case 4:
+                case EAST:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + j, this.l.c + i, enumdirection, this.e(), flag);
                 }
             }
@@ -1166,21 +1127,22 @@ public class WorldGenNetherPieces {
             return null;
         }
 
+        @Nullable
         protected StructurePiece b(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, boolean flag) {
             EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
-                switch (WorldGenNetherPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.e(), flag);
 
-                case 2:
+                case SOUTH:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a - 1, this.l.b + i, this.l.c + j, EnumDirection.WEST, this.e(), flag);
 
-                case 3:
+                case WEST:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.e(), flag);
 
-                case 4:
+                case EAST:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.c - 1, EnumDirection.NORTH, this.e(), flag);
                 }
             }
@@ -1188,21 +1150,22 @@ public class WorldGenNetherPieces {
             return null;
         }
 
+        @Nullable
         protected StructurePiece c(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, boolean flag) {
             EnumDirection enumdirection = this.f();
 
             if (enumdirection != null) {
-                switch (WorldGenNetherPieces.SyntheticClass_1.a[enumdirection.ordinal()]) {
-                case 1:
+                switch (enumdirection) {
+                case NORTH:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.e(), flag);
 
-                case 2:
+                case SOUTH:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.d + 1, this.l.b + i, this.l.c + j, EnumDirection.EAST, this.e(), flag);
 
-                case 3:
+                case WEST:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.e(), flag);
 
-                case 4:
+                case EAST:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.l.a + j, this.l.b + i, this.l.f + 1, EnumDirection.SOUTH, this.e(), flag);
                 }
             }

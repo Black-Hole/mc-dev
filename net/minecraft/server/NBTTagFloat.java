@@ -65,7 +65,7 @@ public class NBTTagFloat extends NBTNumber {
         return (byte) (MathHelper.d(this.data) & 255);
     }
 
-    public double h() {
+    public double asDouble() {
         return (double) this.data;
     }
 

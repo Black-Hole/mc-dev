@@ -13,14 +13,14 @@ public class BlockRotatable extends Block {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        switch (BlockRotatable.SyntheticClass_1.b[enumblockrotation.ordinal()]) {
-        case 1:
-        case 2:
-            switch (BlockRotatable.SyntheticClass_1.a[((EnumDirection.EnumAxis) iblockdata.get(BlockRotatable.AXIS)).ordinal()]) {
-            case 1:
+        switch (enumblockrotation) {
+        case COUNTERCLOCKWISE_90:
+        case CLOCKWISE_90:
+            switch ((EnumDirection.EnumAxis) iblockdata.get(BlockRotatable.AXIS)) {
+            case X:
                 return iblockdata.set(BlockRotatable.AXIS, EnumDirection.EnumAxis.Z);
 
-            case 2:
+            case Z:
                 return iblockdata.set(BlockRotatable.AXIS, EnumDirection.EnumAxis.X);
 
             default:
@@ -62,46 +62,11 @@ public class BlockRotatable extends Block {
         return new BlockStateList(this, new IBlockState[] { BlockRotatable.AXIS});
     }
 
-    protected ItemStack u(IBlockData iblockdata) {
+    protected ItemStack w(IBlockData iblockdata) {
         return new ItemStack(Item.getItemOf(this));
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
         return super.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityliving).set(BlockRotatable.AXIS, enumdirection.k());
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b = new int[EnumBlockRotation.values().length];
-
-        static {
-            try {
-                BlockRotatable.SyntheticClass_1.b[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockRotatable.SyntheticClass_1.b[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            a = new int[EnumDirection.EnumAxis.values().length];
-
-            try {
-                BlockRotatable.SyntheticClass_1.a[EnumDirection.EnumAxis.X.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockRotatable.SyntheticClass_1.a[EnumDirection.EnumAxis.Z.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-        }
     }
 }

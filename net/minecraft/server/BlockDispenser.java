@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockDispenser extends BlockTileEntity {
 
@@ -12,7 +11,7 @@ public class BlockDispenser extends BlockTileEntity {
 
     protected BlockDispenser() {
         super(Material.STONE);
-        this.w(this.blockStateList.getBlockData().set(BlockDispenser.FACING, EnumDirection.NORTH).set(BlockDispenser.TRIGGERED, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockDispenser.FACING, EnumDirection.NORTH).set(BlockDispenser.TRIGGERED, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 
@@ -50,7 +49,7 @@ public class BlockDispenser extends BlockTileEntity {
         }
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -74,7 +73,7 @@ public class BlockDispenser extends BlockTileEntity {
         TileEntityDispenser tileentitydispenser = (TileEntityDispenser) sourceblock.getTileEntity();
 
         if (tileentitydispenser != null) {
-            int i = tileentitydispenser.m();
+            int i = tileentitydispenser.o();
 
             if (i < 0) {
                 world.triggerEffect(1001, blockposition, 0);
@@ -83,20 +82,18 @@ public class BlockDispenser extends BlockTileEntity {
                 IDispenseBehavior idispensebehavior = this.a(itemstack);
 
                 if (idispensebehavior != IDispenseBehavior.NONE) {
-                    ItemStack itemstack1 = idispensebehavior.a(sourceblock, itemstack);
-
-                    tileentitydispenser.setItem(i, itemstack1.count <= 0 ? null : itemstack1);
+                    tileentitydispenser.setItem(i, idispensebehavior.a(sourceblock, itemstack));
                 }
 
             }
         }
     }
 
-    protected IDispenseBehavior a(@Nullable ItemStack itemstack) {
-        return (IDispenseBehavior) BlockDispenser.REGISTRY.get(itemstack == null ? null : itemstack.getItem());
+    protected IDispenseBehavior a(ItemStack itemstack) {
+        return (IDispenseBehavior) BlockDispenser.REGISTRY.get(itemstack.getItem());
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         boolean flag = world.isBlockIndirectlyPowered(blockposition) || world.isBlockIndirectlyPowered(blockposition.up());
         boolean flag1 = ((Boolean) iblockdata.get(BlockDispenser.TRIGGERED)).booleanValue();
 
@@ -121,11 +118,11 @@ public class BlockDispenser extends BlockTileEntity {
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        return this.getBlockData().set(BlockDispenser.FACING, BlockPiston.a(blockposition, entityliving)).set(BlockDispenser.TRIGGERED, Boolean.valueOf(false));
+        return this.getBlockData().set(BlockDispenser.FACING, EnumDirection.a(blockposition, entityliving)).set(BlockDispenser.TRIGGERED, Boolean.valueOf(false));
     }
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
-        world.setTypeAndData(blockposition, iblockdata.set(BlockDispenser.FACING, BlockPiston.a(blockposition, entityliving)), 2);
+        world.setTypeAndData(blockposition, iblockdata.set(BlockDispenser.FACING, EnumDirection.a(blockposition, entityliving)), 2);
         if (itemstack.hasName()) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -160,7 +157,7 @@ public class BlockDispenser extends BlockTileEntity {
         return true;
     }
 
-    public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public int c(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return Container.a(world.getTileEntity(blockposition));
     }
 

@@ -30,7 +30,7 @@ public class CommandTitle extends CommandAbstract {
             throw new ExceptionUsage("commands.title.usage", new Object[0]);
         } else {
             if (astring.length < 3) {
-                if ("title".equals(astring[1]) || "subtitle".equals(astring[1])) {
+                if ("title".equals(astring[1]) || "subtitle".equals(astring[1]) || "actionbar".equals(astring[1])) {
                     throw new ExceptionUsage("commands.title.usage.title", new Object[0]);
                 }
 

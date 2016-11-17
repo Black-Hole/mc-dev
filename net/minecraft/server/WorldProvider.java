@@ -1,23 +1,26 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public abstract class WorldProvider {
 
     public static final float[] a = new float[] { 1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
     protected World b;
     private WorldType type;
-    private String h;
+    private String i;
     protected WorldChunkManager c;
     protected boolean d;
     protected boolean e;
-    protected final float[] f = new float[16];
-    private final float[] i = new float[4];
+    protected boolean f;
+    protected final float[] g = new float[16];
+    private final float[] j = new float[4];
 
     public WorldProvider() {}
 
     public final void a(World world) {
         this.b = world;
         this.type = world.getWorldData().getType();
-        this.h = world.getWorldData().getGeneratorOptions();
+        this.i = world.getWorldData().getGeneratorOptions();
         this.b();
         this.a();
     }
@@ -28,12 +31,13 @@ public abstract class WorldProvider {
         for (int i = 0; i <= 15; ++i) {
             float f1 = 1.0F - (float) i / 15.0F;
 
-            this.f[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * 1.0F + 0.0F;
+            this.g[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * 1.0F + 0.0F;
         }
 
     }
 
     protected void b() {
+        this.f = true;
         WorldType worldtype = this.b.getWorldData().getType();
 
         if (worldtype == WorldType.FLAT) {
@@ -49,7 +53,7 @@ public abstract class WorldProvider {
     }
 
     public ChunkGenerator getChunkGenerator() {
-        return (ChunkGenerator) (this.type == WorldType.FLAT ? new ChunkProviderFlat(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.h) : (this.type == WorldType.DEBUG_ALL_BLOCK_STATES ? new ChunkProviderDebug(this.b) : (this.type == WorldType.CUSTOMIZED ? new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.h) : new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.h))));
+        return (ChunkGenerator) (this.type == WorldType.FLAT ? new ChunkProviderFlat(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.i) : (this.type == WorldType.DEBUG_ALL_BLOCK_STATES ? new ChunkProviderDebug(this.b) : (this.type == WorldType.CUSTOMIZED ? new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.i) : new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.i))));
     }
 
     public boolean canSpawn(int i, int j) {
@@ -89,6 +93,7 @@ public abstract class WorldProvider {
         return true;
     }
 
+    @Nullable
     public BlockPosition h() {
         return null;
     }
@@ -106,11 +111,15 @@ public abstract class WorldProvider {
     }
 
     public boolean m() {
+        return this.f;
+    }
+
+    public boolean n() {
         return this.e;
     }
 
-    public float[] n() {
-        return this.f;
+    public float[] o() {
+        return this.g;
     }
 
     public WorldBorder getWorldBorder() {
@@ -123,9 +132,9 @@ public abstract class WorldProvider {
 
     public abstract DimensionManager getDimensionManager();
 
-    public void q() {}
-
     public void r() {}
+
+    public void s() {}
 
     public boolean c(int i, int j) {
         return true;

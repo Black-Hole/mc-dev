@@ -73,7 +73,7 @@ public class CommandPlaySound extends CommandAbstract {
                 }
 
                 double d6 = d3 > 1.0D ? d3 * 16.0D : 16.0D;
-                double d7 = entityplayer.f(d0, d1, d2);
+                double d7 = entityplayer.e(d0, d1, d2);
 
                 if (d7 > d6) {
                     if (d5 <= 0.0D) {

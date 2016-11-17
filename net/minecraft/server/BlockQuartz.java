@@ -6,20 +6,20 @@ public class BlockQuartz extends Block {
 
     public BlockQuartz() {
         super(Material.STONE);
-        this.w(this.blockStateList.getBlockData().set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.DEFAULT));
+        this.y(this.blockStateList.getBlockData().set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.DEFAULT));
         this.a(CreativeModeTab.b);
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
         if (i == BlockQuartz.EnumQuartzVariant.LINES_Y.a()) {
-            switch (BlockQuartz.SyntheticClass_1.a[enumdirection.k().ordinal()]) {
-            case 1:
+            switch (enumdirection.k()) {
+            case Z:
                 return this.getBlockData().set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.LINES_Z);
 
-            case 2:
+            case X:
                 return this.getBlockData().set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.LINES_X);
 
-            case 3:
+            case Y:
                 return this.getBlockData().set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.LINES_Y);
             }
         }
@@ -33,10 +33,10 @@ public class BlockQuartz extends Block {
         return blockquartz_enumquartzvariant != BlockQuartz.EnumQuartzVariant.LINES_X && blockquartz_enumquartzvariant != BlockQuartz.EnumQuartzVariant.LINES_Z ? blockquartz_enumquartzvariant.a() : BlockQuartz.EnumQuartzVariant.LINES_Y.a();
     }
 
-    protected ItemStack u(IBlockData iblockdata) {
+    protected ItemStack w(IBlockData iblockdata) {
         BlockQuartz.EnumQuartzVariant blockquartz_enumquartzvariant = (BlockQuartz.EnumQuartzVariant) iblockdata.get(BlockQuartz.VARIANT);
 
-        return blockquartz_enumquartzvariant != BlockQuartz.EnumQuartzVariant.LINES_X && blockquartz_enumquartzvariant != BlockQuartz.EnumQuartzVariant.LINES_Z ? super.u(iblockdata) : new ItemStack(Item.getItemOf(this), 1, BlockQuartz.EnumQuartzVariant.LINES_Y.a());
+        return blockquartz_enumquartzvariant != BlockQuartz.EnumQuartzVariant.LINES_X && blockquartz_enumquartzvariant != BlockQuartz.EnumQuartzVariant.LINES_Z ? super.w(iblockdata) : new ItemStack(Item.getItemOf(this), 1, BlockQuartz.EnumQuartzVariant.LINES_Y.a());
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
@@ -52,14 +52,14 @@ public class BlockQuartz extends Block {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        switch (BlockQuartz.SyntheticClass_1.c[enumblockrotation.ordinal()]) {
-        case 1:
-        case 2:
-            switch (BlockQuartz.SyntheticClass_1.b[((BlockQuartz.EnumQuartzVariant) iblockdata.get(BlockQuartz.VARIANT)).ordinal()]) {
-            case 1:
+        switch (enumblockrotation) {
+        case COUNTERCLOCKWISE_90:
+        case CLOCKWISE_90:
+            switch ((BlockQuartz.EnumQuartzVariant) iblockdata.get(BlockQuartz.VARIANT)) {
+            case LINES_X:
                 return iblockdata.set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.LINES_Z);
 
-            case 2:
+            case LINES_Z:
                 return iblockdata.set(BlockQuartz.VARIANT, BlockQuartz.EnumQuartzVariant.LINES_X);
 
             default:
@@ -73,62 +73,6 @@ public class BlockQuartz extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockQuartz.VARIANT});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b;
-        static final int[] c = new int[EnumBlockRotation.values().length];
-
-        static {
-            try {
-                BlockQuartz.SyntheticClass_1.c[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockQuartz.SyntheticClass_1.c[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            b = new int[BlockQuartz.EnumQuartzVariant.values().length];
-
-            try {
-                BlockQuartz.SyntheticClass_1.b[BlockQuartz.EnumQuartzVariant.LINES_X.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockQuartz.SyntheticClass_1.b[BlockQuartz.EnumQuartzVariant.LINES_Z.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            a = new int[EnumDirection.EnumAxis.values().length];
-
-            try {
-                BlockQuartz.SyntheticClass_1.a[EnumDirection.EnumAxis.Z.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                BlockQuartz.SyntheticClass_1.a[EnumDirection.EnumAxis.X.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-            try {
-                BlockQuartz.SyntheticClass_1.a[EnumDirection.EnumAxis.Y.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror6) {
-                ;
-            }
-
-        }
     }
 
     public static enum EnumQuartzVariant implements INamable {

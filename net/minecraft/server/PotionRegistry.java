@@ -1,20 +1,17 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.UnmodifiableIterator;
 import java.util.List;
 import javax.annotation.Nullable;
 
 public class PotionRegistry {
 
-    private static final MinecraftKey b = new MinecraftKey("water");
+    private static final MinecraftKey b = new MinecraftKey("empty");
     public static final RegistryBlocks<MinecraftKey, PotionRegistry> a = new RegistryBlocks(PotionRegistry.b);
     private static int c;
     private final String d;
     private final ImmutableList<MobEffect> e;
-
-    public static int a(PotionRegistry potionregistry) {
-        return PotionRegistry.a.a((Object) potionregistry);
-    }
 
     @Nullable
     public static PotionRegistry a(String s) {
@@ -81,5 +78,21 @@ public class PotionRegistry {
 
     protected static void a(String s, PotionRegistry potionregistry) {
         PotionRegistry.a.a(PotionRegistry.c++, new MinecraftKey(s), potionregistry);
+    }
+
+    public boolean c() {
+        if (!this.e.isEmpty()) {
+            UnmodifiableIterator unmodifiableiterator = this.e.iterator();
+
+            while (unmodifiableiterator.hasNext()) {
+                MobEffect mobeffect = (MobEffect) unmodifiableiterator.next();
+
+                if (mobeffect.getMobEffect().isInstant()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

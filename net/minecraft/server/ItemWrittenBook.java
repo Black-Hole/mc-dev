@@ -22,7 +22,7 @@ public class ItemWrittenBook extends Item {
         return itemstack.getTag().getInt("generation");
     }
 
-    public String a(ItemStack itemstack) {
+    public String b(ItemStack itemstack) {
         if (itemstack.hasTag()) {
             NBTTagCompound nbttagcompound = itemstack.getTag();
             String s = nbttagcompound.getString("title");
@@ -32,10 +32,12 @@ public class ItemWrittenBook extends Item {
             }
         }
 
-        return super.a(itemstack);
+        return super.b(itemstack);
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         if (!world.isClientSide) {
             this.a(itemstack, entityhuman);
         }
@@ -46,7 +48,7 @@ public class ItemWrittenBook extends Item {
     }
 
     private void a(ItemStack itemstack, EntityHuman entityhuman) {
-        if (itemstack != null && itemstack.getTag() != null) {
+        if (itemstack.getTag() != null) {
             NBTTagCompound nbttagcompound = itemstack.getTag();
 
             if (!nbttagcompound.getBoolean("resolved")) {

@@ -27,7 +27,7 @@ public class CommandKick extends CommandAbstract {
             boolean flag = false;
 
             if (entityplayer == null) {
-                throw new ExceptionPlayerNotFound();
+                throw new ExceptionPlayerNotFound("commands.generic.player.notFound", new Object[] { astring[0]});
             } else {
                 if (astring.length >= 2) {
                     s = a(icommandlistener, astring, 1).toPlainText();

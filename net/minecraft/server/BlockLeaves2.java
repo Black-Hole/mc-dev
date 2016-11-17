@@ -10,13 +10,13 @@ public class BlockLeaves2 extends BlockLeaves {
             return blockwood_enumlogvariant.a() >= 4;
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((BlockWood.EnumLogVariant) object);
         }
     });
 
     public BlockLeaves2() {
-        this.w(this.blockStateList.getBlockData().set(BlockLeaves2.VARIANT, BlockWood.EnumLogVariant.ACACIA).set(BlockLeaves2.CHECK_DECAY, Boolean.valueOf(true)).set(BlockLeaves2.DECAYABLE, Boolean.valueOf(true)));
+        this.y(this.blockStateList.getBlockData().set(BlockLeaves2.VARIANT, BlockWood.EnumLogVariant.ACACIA).set(BlockLeaves2.CHECK_DECAY, Boolean.valueOf(true)).set(BlockLeaves2.DECAYABLE, Boolean.valueOf(true)));
     }
 
     protected void a(World world, BlockPosition blockposition, IBlockData iblockdata, int i) {
@@ -34,7 +34,7 @@ public class BlockLeaves2 extends BlockLeaves {
         return new ItemStack(this, 1, iblockdata.getBlock().toLegacyData(iblockdata) & 3);
     }
 
-    protected ItemStack u(IBlockData iblockdata) {
+    protected ItemStack w(IBlockData iblockdata) {
         return new ItemStack(Item.getItemOf(this), 1, ((BlockWood.EnumLogVariant) iblockdata.get(BlockLeaves2.VARIANT)).a() - 4);
     }
 
@@ -65,8 +65,8 @@ public class BlockLeaves2 extends BlockLeaves {
         return new BlockStateList(this, new IBlockState[] { BlockLeaves2.VARIANT, BlockLeaves2.CHECK_DECAY, BlockLeaves2.DECAYABLE});
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
-        if (!world.isClientSide && itemstack != null && itemstack.getItem() == Items.SHEARS) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
+        if (!world.isClientSide && itemstack.getItem() == Items.SHEARS) {
             entityhuman.b(StatisticList.a((Block) this));
             a(world, blockposition, new ItemStack(Item.getItemOf(this), 1, ((BlockWood.EnumLogVariant) iblockdata.get(BlockLeaves2.VARIANT)).a() - 4));
         } else {

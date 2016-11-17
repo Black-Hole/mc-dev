@@ -32,32 +32,32 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.i();
         this.b = (PacketPlayOutBoss.Action) packetdataserializer.a(PacketPlayOutBoss.Action.class);
-        switch (PacketPlayOutBoss.SyntheticClass_1.a[this.b.ordinal()]) {
-        case 1:
+        switch (this.b) {
+        case ADD:
             this.c = packetdataserializer.f();
             this.d = packetdataserializer.readFloat();
             this.e = (BossBattle.BarColor) packetdataserializer.a(BossBattle.BarColor.class);
             this.f = (BossBattle.BarStyle) packetdataserializer.a(BossBattle.BarStyle.class);
             this.a(packetdataserializer.readUnsignedByte());
 
-        case 2:
+        case REMOVE:
         default:
             break;
 
-        case 3:
+        case UPDATE_PCT:
             this.d = packetdataserializer.readFloat();
             break;
 
-        case 4:
+        case UPDATE_NAME:
             this.c = packetdataserializer.f();
             break;
 
-        case 5:
+        case UPDATE_STYLE:
             this.e = (BossBattle.BarColor) packetdataserializer.a(BossBattle.BarColor.class);
             this.f = (BossBattle.BarStyle) packetdataserializer.a(BossBattle.BarStyle.class);
             break;
 
-        case 6:
+        case UPDATE_PROPERTIES:
             this.a(packetdataserializer.readUnsignedByte());
         }
 
@@ -72,32 +72,32 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.a((Enum) this.b);
-        switch (PacketPlayOutBoss.SyntheticClass_1.a[this.b.ordinal()]) {
-        case 1:
+        switch (this.b) {
+        case ADD:
             packetdataserializer.a(this.c);
             packetdataserializer.writeFloat(this.d);
             packetdataserializer.a((Enum) this.e);
             packetdataserializer.a((Enum) this.f);
             packetdataserializer.writeByte(this.j());
 
-        case 2:
+        case REMOVE:
         default:
             break;
 
-        case 3:
+        case UPDATE_PCT:
             packetdataserializer.writeFloat(this.d);
             break;
 
-        case 4:
+        case UPDATE_NAME:
             packetdataserializer.a(this.c);
             break;
 
-        case 5:
+        case UPDATE_STYLE:
             packetdataserializer.a((Enum) this.e);
             packetdataserializer.a((Enum) this.f);
             break;
 
-        case 6:
+        case UPDATE_PROPERTIES:
             packetdataserializer.writeByte(this.j());
         }
 
@@ -123,50 +123,6 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[PacketPlayOutBoss.Action.values().length];
-
-        static {
-            try {
-                PacketPlayOutBoss.SyntheticClass_1.a[PacketPlayOutBoss.Action.ADD.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                PacketPlayOutBoss.SyntheticClass_1.a[PacketPlayOutBoss.Action.REMOVE.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                PacketPlayOutBoss.SyntheticClass_1.a[PacketPlayOutBoss.Action.UPDATE_PCT.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                PacketPlayOutBoss.SyntheticClass_1.a[PacketPlayOutBoss.Action.UPDATE_NAME.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                PacketPlayOutBoss.SyntheticClass_1.a[PacketPlayOutBoss.Action.UPDATE_STYLE.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                PacketPlayOutBoss.SyntheticClass_1.a[PacketPlayOutBoss.Action.UPDATE_PROPERTIES.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-        }
     }
 
     public static enum Action {

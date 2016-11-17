@@ -7,14 +7,20 @@ import java.util.Random;
 public class PathfinderGoalBreed extends PathfinderGoal {
 
     private final EntityAnimal animal;
+    private final Class<? extends EntityAnimal> e;
     World a;
     private EntityAnimal partner;
     int b;
     double c;
 
     public PathfinderGoalBreed(EntityAnimal entityanimal, double d0) {
+        this(entityanimal, d0, entityanimal.getClass());
+    }
+
+    public PathfinderGoalBreed(EntityAnimal entityanimal, double d0, Class<? extends EntityAnimal> oclass) {
         this.animal = entityanimal;
         this.a = entityanimal.world;
+        this.e = oclass;
         this.c = d0;
         this.a(3);
     }
@@ -48,7 +54,7 @@ public class PathfinderGoalBreed extends PathfinderGoal {
     }
 
     private EntityAnimal f() {
-        List list = this.a.a(this.animal.getClass(), this.animal.getBoundingBox().g(8.0D));
+        List list = this.a.a(this.e, this.animal.getBoundingBox().g(8.0D));
         double d0 = Double.MAX_VALUE;
         EntityAnimal entityanimal = null;
         Iterator iterator = list.iterator();

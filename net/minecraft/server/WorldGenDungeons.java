@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 public class WorldGenDungeons extends WorldGenerator {
 
     private static final Logger a = LogManager.getLogger();
-    private static final String[] b = new String[] { "Skeleton", "Zombie", "Zombie", "Spider"};
+    private static final MinecraftKey[] b = new MinecraftKey[] { EntityTypes.getName(EntitySkeleton.class), EntityTypes.getName(EntityZombie.class), EntityTypes.getName(EntityZombie.class), EntityTypes.getName(EntitySpider.class)};
 
     public WorldGenDungeons() {}
 
@@ -134,7 +134,7 @@ public class WorldGenDungeons extends WorldGenerator {
         }
     }
 
-    private String a(Random random) {
+    private MinecraftKey a(Random random) {
         return WorldGenDungeons.b[random.nextInt(WorldGenDungeons.b.length)];
     }
 }

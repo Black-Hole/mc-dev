@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class ContainerBeacon extends Container {
 
     private final IInventory beacon;
@@ -42,7 +40,7 @@ public class ContainerBeacon extends Container {
         if (entityhuman != null && !entityhuman.world.isClientSide) {
             ItemStack itemstack = this.f.a(this.f.getMaxStackSize());
 
-            if (itemstack != null) {
+            if (!itemstack.isEmpty()) {
                 entityhuman.drop(itemstack, false);
             }
 
@@ -53,9 +51,8 @@ public class ContainerBeacon extends Container {
         return this.beacon.a(entityhuman);
     }
 
-    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.a;
         Slot slot = (Slot) this.c.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -64,34 +61,34 @@ public class ContainerBeacon extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i == 0) {
                 if (!this.a(itemstack1, 1, 37, true)) {
-                    return null;
+                    return ItemStack.a;
                 }
 
                 slot.a(itemstack1, itemstack);
-            } else if (!this.f.hasItem() && this.f.isAllowed(itemstack1) && itemstack1.count == 1) {
+            } else if (!this.f.hasItem() && this.f.isAllowed(itemstack1) && itemstack1.getCount() == 1) {
                 if (!this.a(itemstack1, 0, 1, false)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else if (i >= 1 && i < 28) {
                 if (!this.a(itemstack1, 28, 37, false)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else if (i >= 28 && i < 37) {
                 if (!this.a(itemstack1, 1, 28, false)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else if (!this.a(itemstack1, 1, 37, false)) {
-                return null;
+                return ItemStack.a;
             }
 
-            if (itemstack1.count == 0) {
-                slot.set((ItemStack) null);
+            if (itemstack1.isEmpty()) {
+                slot.set(ItemStack.a);
             } else {
                 slot.f();
             }
 
-            if (itemstack1.count == itemstack.count) {
-                return null;
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.a;
             }
 
             slot.a(entityhuman, itemstack1);
@@ -106,8 +103,10 @@ public class ContainerBeacon extends Container {
             super(iinventory, i, j, k);
         }
 
-        public boolean isAllowed(@Nullable ItemStack itemstack) {
-            return itemstack == null ? false : itemstack.getItem() == Items.EMERALD || itemstack.getItem() == Items.DIAMOND || itemstack.getItem() == Items.GOLD_INGOT || itemstack.getItem() == Items.IRON_INGOT;
+        public boolean isAllowed(ItemStack itemstack) {
+            Item item = itemstack.getItem();
+
+            return item == Items.EMERALD || item == Items.DIAMOND || item == Items.GOLD_INGOT || item == Items.IRON_INGOT;
         }
 
         public int getMaxStackSize() {

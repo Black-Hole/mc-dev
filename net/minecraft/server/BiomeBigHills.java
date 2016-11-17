@@ -16,6 +16,7 @@ public class BiomeBigHills extends BiomeBase {
             this.t.z = 3;
         }
 
+        this.v.add(new BiomeBase.BiomeMeta(EntityLlama.class, 5, 4, 6));
         this.A = biomebighills_type;
     }
 

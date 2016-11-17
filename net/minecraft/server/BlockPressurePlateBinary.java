@@ -10,7 +10,7 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     protected BlockPressurePlateBinary(Material material, BlockPressurePlateBinary.EnumMobType blockpressureplatebinary_enummobtype) {
         super(material);
-        this.w(this.blockStateList.getBlockData().set(BlockPressurePlateBinary.POWERED, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockPressurePlateBinary.POWERED, Boolean.valueOf(false)));
         this.e = blockpressureplatebinary_enummobtype;
     }
 
@@ -24,18 +24,18 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     protected void b(World world, BlockPosition blockposition) {
         if (this.material == Material.WOOD) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.hy, SoundCategory.BLOCKS, 0.3F, 0.8F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.ic, SoundCategory.BLOCKS, 0.3F, 0.8F);
         } else {
-            world.a((EntityHuman) null, blockposition, SoundEffects.gs, SoundCategory.BLOCKS, 0.3F, 0.6F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.gO, SoundCategory.BLOCKS, 0.3F, 0.6F);
         }
 
     }
 
     protected void c(World world, BlockPosition blockposition) {
         if (this.material == Material.WOOD) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.hx, SoundCategory.BLOCKS, 0.3F, 0.7F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.ib, SoundCategory.BLOCKS, 0.3F, 0.7F);
         } else {
-            world.a((EntityHuman) null, blockposition, SoundEffects.gr, SoundCategory.BLOCKS, 0.3F, 0.5F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.gN, SoundCategory.BLOCKS, 0.3F, 0.5F);
         }
 
     }
@@ -44,12 +44,12 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
         AxisAlignedBB axisalignedbb = BlockPressurePlateBinary.c.a(blockposition);
         List list;
 
-        switch (BlockPressurePlateBinary.SyntheticClass_1.a[this.e.ordinal()]) {
-        case 1:
+        switch (this.e) {
+        case EVERYTHING:
             list = world.getEntities((Entity) null, axisalignedbb);
             break;
 
-        case 2:
+        case MOBS:
             list = world.a(EntityLiving.class, axisalignedbb);
             break;
 
@@ -82,26 +82,6 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockPressurePlateBinary.POWERED});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[BlockPressurePlateBinary.EnumMobType.values().length];
-
-        static {
-            try {
-                BlockPressurePlateBinary.SyntheticClass_1.a[BlockPressurePlateBinary.EnumMobType.EVERYTHING.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockPressurePlateBinary.SyntheticClass_1.a[BlockPressurePlateBinary.EnumMobType.MOBS.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-        }
     }
 
     public static enum EnumMobType {

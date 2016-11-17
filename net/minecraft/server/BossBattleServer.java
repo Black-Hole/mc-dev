@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.Collections;
@@ -51,6 +52,14 @@ public class BossBattleServer extends BossBattle {
         }
 
         return this;
+    }
+
+    public void a(IChatBaseComponent ichatbasecomponent) {
+        if (!Objects.equal(ichatbasecomponent, this.title)) {
+            super.a(ichatbasecomponent);
+            this.sendUpdate(PacketPlayOutBoss.Action.UPDATE_NAME);
+        }
+
     }
 
     public void sendUpdate(PacketPlayOutBoss.Action packetplayoutboss_action) {

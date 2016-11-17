@@ -18,7 +18,7 @@ public class BlockBanner extends BlockTileEntity {
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockBanner.k;
     }
 
@@ -42,43 +42,29 @@ public class BlockBanner extends BlockTileEntity {
         return new TileEntityBanner();
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.BANNER;
     }
 
-    @Nullable
-    private ItemStack e(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    private ItemStack c(World world, BlockPosition blockposition) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
-        if (tileentity instanceof TileEntityBanner) {
-            ItemStack itemstack = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).d());
-            NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
-
-            nbttagcompound.remove("x");
-            nbttagcompound.remove("y");
-            nbttagcompound.remove("z");
-            nbttagcompound.remove("id");
-            itemstack.a("BlockEntityTag", (NBTBase) nbttagcompound);
-            return itemstack;
-        } else {
-            return null;
-        }
+        return tileentity instanceof TileEntityBanner ? ((TileEntityBanner) tileentity).l() : ItemStack.a;
     }
 
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        ItemStack itemstack = this.e(world, blockposition, iblockdata);
+        ItemStack itemstack = this.c(world, blockposition);
 
-        return itemstack != null ? itemstack : new ItemStack(Items.BANNER);
+        return itemstack.isEmpty() ? new ItemStack(Items.BANNER) : itemstack;
     }
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
-        ItemStack itemstack = this.e(world, blockposition, iblockdata);
+        ItemStack itemstack = this.c(world, blockposition);
 
-        if (itemstack != null) {
-            a(world, blockposition, itemstack);
-        } else {
+        if (itemstack.isEmpty()) {
             super.dropNaturally(world, blockposition, iblockdata, f, i);
+        } else {
+            a(world, blockposition, itemstack);
         }
 
     }
@@ -87,14 +73,11 @@ public class BlockBanner extends BlockTileEntity {
         return !this.b(world, blockposition) && super.canPlace(world, blockposition);
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
         if (tileentity instanceof TileEntityBanner) {
             TileEntityBanner tileentitybanner = (TileEntityBanner) tileentity;
-            ItemStack itemstack1 = new ItemStack(Items.BANNER, 1, ((TileEntityBanner) tileentity).d());
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            ItemStack itemstack1 = tileentitybanner.l();
 
-            TileEntityBanner.a(nbttagcompound, tileentitybanner.d(), tileentitybanner.g());
-            itemstack1.a("BlockEntityTag", (NBTBase) nbttagcompound);
             a(world, blockposition, itemstack1);
         } else {
             super.a(world, entityhuman, blockposition, iblockdata, (TileEntity) null, itemstack);
@@ -102,45 +85,13 @@ public class BlockBanner extends BlockTileEntity {
 
     }
 
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                BlockBanner.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockBanner.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockBanner.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockBanner.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-        }
-    }
-
     public static class BlockStandingBanner extends BlockBanner {
 
         public BlockStandingBanner() {
-            this.w(this.blockStateList.getBlockData().set(BlockBanner.BlockStandingBanner.ROTATION, Integer.valueOf(0)));
+            this.y(this.blockStateList.getBlockData().set(BlockBanner.BlockStandingBanner.ROTATION, Integer.valueOf(0)));
         }
 
-        public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
             return BlockBanner.BlockStandingBanner.c;
         }
 
@@ -152,13 +103,13 @@ public class BlockBanner extends BlockTileEntity {
             return iblockdata.set(BlockBanner.BlockStandingBanner.ROTATION, Integer.valueOf(enumblockmirror.a(((Integer) iblockdata.get(BlockBanner.BlockStandingBanner.ROTATION)).intValue(), 16)));
         }
 
-        public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+        public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
             if (!world.getType(blockposition.down()).getMaterial().isBuildable()) {
                 this.b(world, blockposition, iblockdata, 0);
                 world.setAir(blockposition);
             }
 
-            super.a(iblockdata, world, blockposition, block);
+            super.a(iblockdata, world, blockposition, block, blockposition1);
         }
 
         public IBlockData fromLegacyData(int i) {
@@ -182,7 +133,7 @@ public class BlockBanner extends BlockTileEntity {
         protected static final AxisAlignedBB g = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.125D, 0.78125D, 1.0D);
 
         public BlockWallBanner() {
-            this.w(this.blockStateList.getBlockData().set(BlockBanner.BlockWallBanner.FACING, EnumDirection.NORTH));
+            this.y(this.blockStateList.getBlockData().set(BlockBanner.BlockWallBanner.FACING, EnumDirection.NORTH));
         }
 
         public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
@@ -193,24 +144,24 @@ public class BlockBanner extends BlockTileEntity {
             return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockBanner.BlockWallBanner.FACING)));
         }
 
-        public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-            switch (BlockBanner.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockBanner.BlockWallBanner.FACING)).ordinal()]) {
-            case 1:
+        public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+            switch ((EnumDirection) iblockdata.get(BlockBanner.BlockWallBanner.FACING)) {
+            case NORTH:
             default:
                 return BlockBanner.BlockWallBanner.d;
 
-            case 2:
+            case SOUTH:
                 return BlockBanner.BlockWallBanner.e;
 
-            case 3:
+            case WEST:
                 return BlockBanner.BlockWallBanner.f;
 
-            case 4:
+            case EAST:
                 return BlockBanner.BlockWallBanner.g;
             }
         }
 
-        public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+        public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockBanner.BlockWallBanner.FACING);
 
             if (!world.getType(blockposition.shift(enumdirection.opposite())).getMaterial().isBuildable()) {
@@ -218,7 +169,7 @@ public class BlockBanner extends BlockTileEntity {
                 world.setAir(blockposition);
             }
 
-            super.a(iblockdata, world, blockposition, block);
+            super.a(iblockdata, world, blockposition, block, blockposition1);
         }
 
         public IBlockData fromLegacyData(int i) {

@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public abstract class TileEntityContainer extends TileEntity implements ITileEntityContainer, ITileInventory {
+public abstract class TileEntityContainer extends TileEntity implements ITileInventory {
 
     private ChestLock a;
 
@@ -22,11 +22,11 @@ public abstract class TileEntityContainer extends TileEntity implements ITileEnt
         return nbttagcompound;
     }
 
-    public boolean x_() {
+    public boolean isLocked() {
         return this.a != null && !this.a.a();
     }
 
-    public ChestLock y_() {
+    public ChestLock getLock() {
         return this.a;
     }
 

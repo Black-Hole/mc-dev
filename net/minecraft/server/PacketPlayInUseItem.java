@@ -17,18 +17,18 @@ public class PacketPlayInUseItem implements Packet<PacketListenerPlayIn> {
         this.a = packetdataserializer.e();
         this.b = (EnumDirection) packetdataserializer.a(EnumDirection.class);
         this.c = (EnumHand) packetdataserializer.a(EnumHand.class);
-        this.d = (float) packetdataserializer.readUnsignedByte() / 16.0F;
-        this.e = (float) packetdataserializer.readUnsignedByte() / 16.0F;
-        this.f = (float) packetdataserializer.readUnsignedByte() / 16.0F;
+        this.d = packetdataserializer.readFloat();
+        this.e = packetdataserializer.readFloat();
+        this.f = packetdataserializer.readFloat();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.a((Enum) this.b);
         packetdataserializer.a((Enum) this.c);
-        packetdataserializer.writeByte((int) (this.d * 16.0F));
-        packetdataserializer.writeByte((int) (this.e * 16.0F));
-        packetdataserializer.writeByte((int) (this.f * 16.0F));
+        packetdataserializer.writeFloat(this.d);
+        packetdataserializer.writeFloat(this.e);
+        packetdataserializer.writeFloat(this.f);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {

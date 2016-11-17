@@ -15,26 +15,30 @@ public class DataConverterZombie implements IDataConverter {
     public NBTTagCompound a(NBTTagCompound nbttagcompound) {
         if ("Zombie".equals(nbttagcompound.getString("id")) && nbttagcompound.getBoolean("IsVillager")) {
             if (!nbttagcompound.hasKeyOfType("ZombieType", 99)) {
-                EnumZombieType enumzombietype = null;
+                int i = -1;
 
                 if (nbttagcompound.hasKeyOfType("VillagerProfession", 99)) {
                     try {
-                        enumzombietype = EnumZombieType.a(nbttagcompound.getInt("VillagerProfession") + 1);
+                        i = this.a(nbttagcompound.getInt("VillagerProfession"));
                     } catch (RuntimeException runtimeexception) {
                         ;
                     }
                 }
 
-                if (enumzombietype == null) {
-                    enumzombietype = EnumZombieType.a(DataConverterZombie.a.nextInt(5) + 1);
+                if (i == -1) {
+                    i = this.a(DataConverterZombie.a.nextInt(6));
                 }
 
-                nbttagcompound.setInt("ZombieType", enumzombietype.a());
+                nbttagcompound.setInt("ZombieType", i);
             }
 
             nbttagcompound.remove("IsVillager");
         }
 
         return nbttagcompound;
+    }
+
+    private int a(int i) {
+        return i >= 0 && i < 6 ? i : -1;
     }
 }

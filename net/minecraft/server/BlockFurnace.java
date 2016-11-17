@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockFurnace extends BlockTileEntity {
 
@@ -11,11 +10,10 @@ public class BlockFurnace extends BlockTileEntity {
 
     protected BlockFurnace(boolean flag) {
         super(Material.STONE);
-        this.w(this.blockStateList.getBlockData().set(BlockFurnace.FACING, EnumDirection.NORTH));
+        this.y(this.blockStateList.getBlockData().set(BlockFurnace.FACING, EnumDirection.NORTH));
         this.b = flag;
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.FURNACE);
     }
@@ -46,7 +44,7 @@ public class BlockFurnace extends BlockTileEntity {
         }
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -76,7 +74,7 @@ public class BlockFurnace extends BlockTileEntity {
 
         BlockFurnace.c = false;
         if (tileentity != null) {
-            tileentity.z();
+            tileentity.A();
             world.setTileEntity(blockposition, tileentity);
         }
 
@@ -119,7 +117,7 @@ public class BlockFurnace extends BlockTileEntity {
         return true;
     }
 
-    public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public int c(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return Container.a(world.getTileEntity(blockposition));
     }
 

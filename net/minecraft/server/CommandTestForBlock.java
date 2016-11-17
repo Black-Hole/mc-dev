@@ -27,17 +27,11 @@ public class CommandTestForBlock extends CommandAbstract {
         } else {
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 0);
             BlockPosition blockposition = a(icommandlistener, astring, 0, false);
-            Block block = Block.getByName(astring[3]);
+            Block block = b(icommandlistener, astring[3]);
 
             if (block == null) {
                 throw new ExceptionInvalidNumber("commands.setblock.notFound", new Object[] { astring[3]});
             } else {
-                int i = -1;
-
-                if (astring.length >= 5) {
-                    i = a(astring[4], -1, 15);
-                }
-
                 World world = icommandlistener.getWorld();
 
                 if (!world.isLoaded(blockposition)) {
@@ -62,15 +56,15 @@ public class CommandTestForBlock extends CommandAbstract {
 
                     if (block1 != block) {
                         throw new CommandException("commands.testforblock.failed.tile", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ()), block1.getName(), block.getName()});
-                    } else {
-                        if (i > -1) {
-                            int j = iblockdata.getBlock().toLegacyData(iblockdata);
+                    } else if (astring.length >= 5 && !CommandAbstract.b(block, astring[4]).apply(iblockdata)) {
+                        try {
+                            int i = iblockdata.getBlock().toLegacyData(iblockdata);
 
-                            if (j != i) {
-                                throw new CommandException("commands.testforblock.failed.data", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ()), Integer.valueOf(j), Integer.valueOf(i)});
-                            }
+                            throw new CommandException("commands.testforblock.failed.data", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ()), Integer.valueOf(i), Integer.valueOf(Integer.parseInt(astring[4]))});
+                        } catch (NumberFormatException numberformatexception) {
+                            throw new CommandException("commands.testforblock.failed.data", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ()), iblockdata.toString(), astring[4]});
                         }
-
+                    } else {
                         if (flag) {
                             TileEntity tileentity = world.getTileEntity(blockposition);
 

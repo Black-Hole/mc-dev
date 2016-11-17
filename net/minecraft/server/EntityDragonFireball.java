@@ -7,48 +7,50 @@ public class EntityDragonFireball extends EntityFireball {
 
     public EntityDragonFireball(World world) {
         super(world);
-        this.setSize(0.3125F, 0.3125F);
+        this.setSize(1.0F, 1.0F);
     }
 
     public EntityDragonFireball(World world, EntityLiving entityliving, double d0, double d1, double d2) {
         super(world, entityliving, d0, d1, d2);
-        this.setSize(0.3125F, 0.3125F);
+        this.setSize(1.0F, 1.0F);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
+    public static void b(DataConverterManager dataconvertermanager) {
         EntityFireball.a(dataconvertermanager, "DragonFireball");
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (!this.world.isClientSide) {
-            List list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(4.0D, 2.0D, 4.0D));
-            EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX, this.locY, this.locZ);
+        if (movingobjectposition.entity == null || !movingobjectposition.entity.s(this.shooter)) {
+            if (!this.world.isClientSide) {
+                List list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(4.0D, 2.0D, 4.0D));
+                EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX, this.locY, this.locZ);
 
-            entityareaeffectcloud.setSource(this.shooter);
-            entityareaeffectcloud.setParticle(EnumParticle.DRAGON_BREATH);
-            entityareaeffectcloud.setRadius(3.0F);
-            entityareaeffectcloud.setDuration(2400);
-            entityareaeffectcloud.setRadiusPerTick((7.0F - entityareaeffectcloud.getRadius()) / (float) entityareaeffectcloud.getDuration());
-            entityareaeffectcloud.a(new MobEffect(MobEffects.HARM, 1, 1));
-            if (!list.isEmpty()) {
-                Iterator iterator = list.iterator();
+                entityareaeffectcloud.setSource(this.shooter);
+                entityareaeffectcloud.setParticle(EnumParticle.DRAGON_BREATH);
+                entityareaeffectcloud.setRadius(3.0F);
+                entityareaeffectcloud.setDuration(600);
+                entityareaeffectcloud.setRadiusPerTick((7.0F - entityareaeffectcloud.getRadius()) / (float) entityareaeffectcloud.getDuration());
+                entityareaeffectcloud.a(new MobEffect(MobEffects.HARM, 1, 1));
+                if (!list.isEmpty()) {
+                    Iterator iterator = list.iterator();
 
-                while (iterator.hasNext()) {
-                    EntityLiving entityliving = (EntityLiving) iterator.next();
-                    double d0 = this.h(entityliving);
+                    while (iterator.hasNext()) {
+                        EntityLiving entityliving = (EntityLiving) iterator.next();
+                        double d0 = this.h(entityliving);
 
-                    if (d0 < 16.0D) {
-                        entityareaeffectcloud.setPosition(entityliving.locX, entityliving.locY, entityliving.locZ);
-                        break;
+                        if (d0 < 16.0D) {
+                            entityareaeffectcloud.setPosition(entityliving.locX, entityliving.locY, entityliving.locZ);
+                            break;
+                        }
                     }
                 }
+
+                this.world.triggerEffect(2006, new BlockPosition(this.locX, this.locY, this.locZ), 0);
+                this.world.addEntity(entityareaeffectcloud);
+                this.die();
             }
 
-            this.world.triggerEffect(2006, new BlockPosition(this.locX, this.locY, this.locZ), 0);
-            this.world.addEntity(entityareaeffectcloud);
-            this.die();
         }
-
     }
 
     public boolean isInteractable() {

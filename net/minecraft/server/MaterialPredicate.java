@@ -19,7 +19,7 @@ public class MaterialPredicate implements Predicate<IBlockData> {
         return iblockdata != null && iblockdata.getMaterial() == this.a;
     }
 
-    public boolean apply(Object object) {
+    public boolean apply(@Nullable Object object) {
         return this.a((IBlockData) object);
     }
 }

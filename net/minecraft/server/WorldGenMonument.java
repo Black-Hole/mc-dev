@@ -78,6 +78,11 @@ public class WorldGenMonument extends StructureGenerator {
         return false;
     }
 
+    public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag) {
+        this.g = world;
+        return a(world, this, blockposition, this.d, this.h, 10387313, true, 100, flag);
+    }
+
     protected StructureStart b(int i, int j) {
         return new WorldGenMonument.WorldGenMonumentStart(this.g, this.f, i, j);
     }

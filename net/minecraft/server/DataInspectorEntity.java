@@ -18,7 +18,7 @@ public class DataInspectorEntity implements DataInspector {
             String s1;
 
             if ("minecraft:armor_stand".equals(s)) {
-                s1 = "ArmorStand";
+                s1 = i < 515 ? "ArmorStand" : "minecraft:armor_stand";
             } else {
                 if (!"minecraft:spawn_egg".equals(s)) {
                     return nbttagcompound;

@@ -6,7 +6,7 @@ public class BlockWood extends Block {
 
     public BlockWood() {
         super(Material.WOOD);
-        this.w(this.blockStateList.getBlockData().set(BlockWood.VARIANT, BlockWood.EnumLogVariant.OAK));
+        this.y(this.blockStateList.getBlockData().set(BlockWood.VARIANT, BlockWood.EnumLogVariant.OAK));
         this.a(CreativeModeTab.b);
     }
 

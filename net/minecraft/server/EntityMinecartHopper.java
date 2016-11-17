@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.List;
-import javax.annotation.Nullable;
 
 public class EntityMinecartHopper extends EntityMinecartContainer implements IHopper {
 
@@ -35,7 +34,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
         return 5;
     }
 
-    public boolean a(EntityHuman entityhuman, @Nullable ItemStack itemstack, EnumHand enumhand) {
+    public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
         if (!this.world.isClientSide) {
             entityhuman.openContainer(this);
         }
@@ -76,8 +75,8 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
         return this.locZ;
     }
 
-    public void m() {
-        super.m();
+    public void A_() {
+        super.A_();
         if (!this.world.isClientSide && this.isAlive() && this.isEnabled()) {
             BlockPosition blockposition = new BlockPosition(this);
 
@@ -105,7 +104,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
             List list = this.world.a(EntityItem.class, this.getBoundingBox().grow(0.25D, 0.0D, 0.25D), IEntitySelector.a);
 
             if (!list.isEmpty()) {
-                TileEntityHopper.a((IInventory) this, (EntityItem) list.get(0));
+                TileEntityHopper.a((IInventory) null, this, (EntityItem) list.get(0));
             }
 
             return false;
@@ -120,8 +119,8 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityMinecartContainer.b(dataconvertermanager, "MinecartHopper");
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityMinecartContainer.b(dataconvertermanager, EntityMinecartHopper.class);
     }
 
     protected void b(NBTTagCompound nbttagcompound) {

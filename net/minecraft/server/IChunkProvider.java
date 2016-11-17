@@ -12,4 +12,6 @@ public interface IChunkProvider {
     boolean unloadChunks();
 
     String getName();
+
+    boolean e(int i, int j);
 }

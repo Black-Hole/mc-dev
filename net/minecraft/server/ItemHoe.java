@@ -15,7 +15,9 @@ public class ItemHoe extends Item {
         this.b = item_enumtoolmaterial.c() + 1.0F;
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         if (!entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
             return EnumInteractionResult.FAIL;
         } else {
@@ -29,12 +31,12 @@ public class ItemHoe extends Item {
                 }
 
                 if (block == Blocks.DIRT) {
-                    switch (ItemHoe.SyntheticClass_1.a[((BlockDirt.EnumDirtVariant) iblockdata.get(BlockDirt.VARIANT)).ordinal()]) {
-                    case 1:
+                    switch ((BlockDirt.EnumDirtVariant) iblockdata.get(BlockDirt.VARIANT)) {
+                    case DIRT:
                         this.a(itemstack, entityhuman, world, blockposition, Blocks.FARMLAND.getBlockData());
                         return EnumInteractionResult.SUCCESS;
 
-                    case 2:
+                    case COARSE_DIRT:
                         this.a(itemstack, entityhuman, world, blockposition, Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT));
                         return EnumInteractionResult.SUCCESS;
                     }
@@ -51,7 +53,7 @@ public class ItemHoe extends Item {
     }
 
     protected void a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, IBlockData iblockdata) {
-        world.a(entityhuman, blockposition, SoundEffects.co, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        world.a(entityhuman, blockposition, SoundEffects.cy, SoundCategory.BLOCKS, 1.0F, 1.0F);
         if (!world.isClientSide) {
             world.setTypeAndData(blockposition, iblockdata, 11);
             itemstack.damage(1, entityhuman);
@@ -72,25 +74,5 @@ public class ItemHoe extends Item {
         }
 
         return multimap;
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[BlockDirt.EnumDirtVariant.values().length];
-
-        static {
-            try {
-                ItemHoe.SyntheticClass_1.a[BlockDirt.EnumDirtVariant.DIRT.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                ItemHoe.SyntheticClass_1.a[BlockDirt.EnumDirtVariant.COARSE_DIRT.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-        }
     }
 }

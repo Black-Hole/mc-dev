@@ -377,6 +377,9 @@ public class EnderDragonBattle {
         if (entityenderdragon.getUniqueID().equals(this.m)) {
             this.c.setProgress(entityenderdragon.getHealth() / entityenderdragon.getMaxHealth());
             this.g = 0;
+            if (entityenderdragon.hasCustomName()) {
+                this.c.a(entityenderdragon.getScoreboardDisplayName());
+            }
         }
 
     }

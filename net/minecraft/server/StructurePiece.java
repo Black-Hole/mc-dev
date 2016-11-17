@@ -44,10 +44,10 @@ public abstract class StructurePiece {
 
         this.a(i == -1 ? null : EnumDirection.fromType2(i));
         this.m = nbttagcompound.getInt("GD");
-        this.b(nbttagcompound);
+        this.a(nbttagcompound, world.getDataManager().h());
     }
 
-    protected abstract void b(NBTTagCompound nbttagcompound);
+    protected abstract void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager);
 
     public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {}
 
@@ -75,10 +75,6 @@ public abstract class StructurePiece {
         } while (structurepiece.d() == null || !structurepiece.d().a(structureboundingbox));
 
         return structurepiece;
-    }
-
-    public BlockPosition a() {
-        return new BlockPosition(this.l.f());
     }
 
     protected boolean a(World world, StructureBoundingBox structureboundingbox) {
@@ -138,15 +134,15 @@ public abstract class StructurePiece {
         if (enumdirection == null) {
             return i;
         } else {
-            switch (StructurePiece.SyntheticClass_1.a[enumdirection.ordinal()]) {
-            case 1:
-            case 2:
+            switch (enumdirection) {
+            case NORTH:
+            case SOUTH:
                 return this.l.a + i;
 
-            case 3:
+            case WEST:
                 return this.l.d - j;
 
-            case 4:
+            case EAST:
                 return this.l.a + j;
 
             default:
@@ -165,15 +161,15 @@ public abstract class StructurePiece {
         if (enumdirection == null) {
             return j;
         } else {
-            switch (StructurePiece.SyntheticClass_1.a[enumdirection.ordinal()]) {
-            case 1:
+            switch (enumdirection) {
+            case NORTH:
                 return this.l.f - j;
 
-            case 2:
+            case SOUTH:
                 return this.l.c + j;
 
-            case 3:
-            case 4:
+            case WEST:
+            case EAST:
                 return this.l.c + i;
 
             default:
@@ -213,7 +209,7 @@ public abstract class StructurePiece {
         int j1 = this.b(i, k);
         BlockPosition blockposition = new BlockPosition(l, i1, j1);
 
-        return !structureboundingbox.b((BaseBlockPosition) blockposition) ? EnumSkyBlock.SKY.c : world.b(EnumSkyBlock.SKY, blockposition);
+        return !structureboundingbox.b((BaseBlockPosition) blockposition) ? EnumSkyBlock.SKY.c : world.getBrightness(EnumSkyBlock.SKY, blockposition);
     }
 
     protected void a(World world, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1) {
@@ -340,10 +336,16 @@ public abstract class StructurePiece {
     protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, int i, int j, int k, MinecraftKey minecraftkey) {
         BlockPosition blockposition = new BlockPosition(this.a(i, k), this.d(j), this.b(i, k));
 
-        if (structureboundingbox.b((BaseBlockPosition) blockposition) && world.getType(blockposition).getBlock() != Blocks.CHEST) {
-            IBlockData iblockdata = Blocks.CHEST.getBlockData();
+        return this.a(world, structureboundingbox, random, blockposition, minecraftkey, (IBlockData) null);
+    }
 
-            world.setTypeAndData(blockposition, Blocks.CHEST.f(world, blockposition, iblockdata), 2);
+    protected boolean a(World world, StructureBoundingBox structureboundingbox, Random random, BlockPosition blockposition, MinecraftKey minecraftkey, @Nullable IBlockData iblockdata) {
+        if (structureboundingbox.b((BaseBlockPosition) blockposition) && world.getType(blockposition).getBlock() != Blocks.CHEST) {
+            if (iblockdata == null) {
+                iblockdata = Blocks.CHEST.f(world, blockposition, Blocks.CHEST.getBlockData());
+            }
+
+            world.setTypeAndData(blockposition, iblockdata, 2);
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityChest) {
@@ -393,18 +395,18 @@ public abstract class StructurePiece {
             this.c = EnumBlockRotation.NONE;
             this.b = EnumBlockMirror.NONE;
         } else {
-            switch (StructurePiece.SyntheticClass_1.a[enumdirection.ordinal()]) {
-            case 2:
+            switch (enumdirection) {
+            case SOUTH:
                 this.b = EnumBlockMirror.LEFT_RIGHT;
                 this.c = EnumBlockRotation.NONE;
                 break;
 
-            case 3:
+            case WEST:
                 this.b = EnumBlockMirror.LEFT_RIGHT;
                 this.c = EnumBlockRotation.CLOCKWISE_90;
                 break;
 
-            case 4:
+            case EAST:
                 this.b = EnumBlockMirror.NONE;
                 this.c = EnumBlockRotation.CLOCKWISE_90;
                 break;
@@ -415,38 +417,6 @@ public abstract class StructurePiece {
             }
         }
 
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                StructurePiece.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                StructurePiece.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                StructurePiece.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                StructurePiece.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-        }
     }
 
     public abstract static class StructurePieceBlockSelector {

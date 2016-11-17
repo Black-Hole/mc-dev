@@ -18,10 +18,10 @@ public class LootItemFunctionSetDamage extends LootItemFunction {
     }
 
     public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
-        if (itemstack.e()) {
+        if (itemstack.f()) {
             float f = 1.0F - this.b.b(random);
 
-            itemstack.setData(MathHelper.d(f * (float) itemstack.j()));
+            itemstack.setData(MathHelper.d(f * (float) itemstack.k()));
         } else {
             LootItemFunctionSetDamage.a.warn("Couldn\'t set damage of loot item {}", new Object[] { itemstack});
         }

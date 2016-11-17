@@ -11,11 +11,11 @@ public class BlockReed extends Block {
 
     protected BlockReed() {
         super(Material.PLANT);
-        this.w(this.blockStateList.getBlockData().set(BlockReed.AGE, Integer.valueOf(0)));
+        this.y(this.blockStateList.getBlockData().set(BlockReed.AGE, Integer.valueOf(0)));
         this.a(true);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockReed.b;
     }
 
@@ -70,7 +70,7 @@ public class BlockReed extends Block {
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         this.e(world, blockposition, iblockdata);
     }
 
@@ -89,11 +89,10 @@ public class BlockReed extends Block {
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockReed.k;
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.REEDS;
     }

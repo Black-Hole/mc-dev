@@ -34,10 +34,10 @@ public class EnchantmentThorns extends Enchantment {
                 entity.damageEntity(DamageSource.a(entityliving), (float) b(i, random));
             }
 
-            if (itemstack != null) {
+            if (!itemstack.isEmpty()) {
                 itemstack.damage(3, entityliving);
             }
-        } else if (itemstack != null) {
+        } else if (!itemstack.isEmpty()) {
             itemstack.damage(1, entityliving);
         }
 

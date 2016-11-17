@@ -11,7 +11,7 @@ public abstract class EntityHanging extends Entity {
             return entity instanceof EntityHanging;
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((Entity) object);
         }
     };
@@ -81,7 +81,7 @@ public abstract class EntityHanging extends Entity {
         return i % 32 == 0 ? 0.5D : 0.0D;
     }
 
-    public void m() {
+    public void A_() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
@@ -149,7 +149,7 @@ public abstract class EntityHanging extends Entity {
         }
     }
 
-    public void move(double d0, double d1, double d2) {
+    public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
         if (!this.world.isClientSide && !this.dead && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
             this.die();
             this.a((Entity) null);
@@ -157,7 +157,7 @@ public abstract class EntityHanging extends Entity {
 
     }
 
-    public void g(double d0, double d1, double d2) {
+    public void f(double d0, double d1, double d2) {
         if (!this.world.isClientSide && !this.dead && d0 * d0 + d1 * d1 + d2 * d2 > 0.0D) {
             this.die();
             this.a((Entity) null);
@@ -211,30 +211,30 @@ public abstract class EntityHanging extends Entity {
 
     public float a(EnumBlockRotation enumblockrotation) {
         if (this.direction != null && this.direction.k() != EnumDirection.EnumAxis.Y) {
-            switch (EntityHanging.SyntheticClass_1.a[enumblockrotation.ordinal()]) {
-            case 1:
+            switch (enumblockrotation) {
+            case CLOCKWISE_180:
                 this.direction = this.direction.opposite();
                 break;
 
-            case 2:
+            case COUNTERCLOCKWISE_90:
                 this.direction = this.direction.f();
                 break;
 
-            case 3:
+            case CLOCKWISE_90:
                 this.direction = this.direction.e();
             }
         }
 
         float f = MathHelper.g(this.yaw);
 
-        switch (EntityHanging.SyntheticClass_1.a[enumblockrotation.ordinal()]) {
-        case 1:
+        switch (enumblockrotation) {
+        case CLOCKWISE_180:
             return f + 180.0F;
 
-        case 2:
+        case COUNTERCLOCKWISE_90:
             return f + 90.0F;
 
-        case 3:
+        case CLOCKWISE_90:
             return f + 270.0F;
 
         default:
@@ -247,30 +247,4 @@ public abstract class EntityHanging extends Entity {
     }
 
     public void onLightningStrike(EntityLightning entitylightning) {}
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumBlockRotation.values().length];
-
-        static {
-            try {
-                EntityHanging.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_180.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                EntityHanging.SyntheticClass_1.a[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                EntityHanging.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-        }
-    }
 }

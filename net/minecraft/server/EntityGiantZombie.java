@@ -10,7 +10,7 @@ public class EntityGiantZombie extends EntityMonster {
     }
 
     public static void b(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "Giant");
+        EntityInsentient.a(dataconvertermanager, EntityGiantZombie.class);
     }
 
     public float getHeadHeight() {
@@ -30,6 +30,6 @@ public class EntityGiantZombie extends EntityMonster {
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.t;
+        return LootTables.u;
     }
 }

@@ -39,15 +39,11 @@ public class BiomeMesa extends BiomeBase {
     }
 
     protected BiomeDecorator a() {
-        return new BiomeMesa.a((BiomeMesa.SyntheticClass_1) null);
+        return new BiomeMesa.a(null);
     }
 
     public WorldGenTreeAbstract a(Random random) {
         return BiomeMesa.n;
-    }
-
-    public void a(World world, Random random, BlockPosition blockposition) {
-        super.a(world, random, blockposition);
     }
 
     public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
@@ -105,7 +101,7 @@ public class BiomeMesa extends BiomeBase {
 
             if (i2 <= random.nextInt(5)) {
                 chunksnapshot.a(l, i2, k, BiomeMesa.c);
-            } else if (l1 < 15) {
+            } else if (l1 < 15 || this.J) {
                 IBlockData iblockdata2 = chunksnapshot.a(l, i2, k);
 
                 if (iblockdata2.getMaterial() == Material.AIR) {
@@ -257,8 +253,6 @@ public class BiomeMesa extends BiomeBase {
         return this.E[(j + l + 64) % 64];
     }
 
-    static class SyntheticClass_1 {    }
-
     class a extends BiomeDecorator {
 
         private a() {}
@@ -268,7 +262,7 @@ public class BiomeMesa extends BiomeBase {
             this.a(world, random, 20, this.n, 32, 80);
         }
 
-        a(BiomeMesa.SyntheticClass_1 biomemesa_syntheticclass_1) {
+        a(Object object) {
             this();
         }
     }

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ItemBanner extends ItemBlock {
 
     public ItemBanner() {
@@ -10,12 +12,14 @@ public class ItemBanner extends ItemBlock {
         this.setMaxDurability(0);
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         IBlockData iblockdata = world.getType(blockposition);
         boolean flag = iblockdata.getBlock().a((IBlockAccess) world, blockposition);
 
         if (enumdirection != EnumDirection.DOWN && (iblockdata.getMaterial().isBuildable() || flag) && (!flag || enumdirection == EnumDirection.UP)) {
             blockposition = blockposition.shift(enumdirection);
+            ItemStack itemstack = entityhuman.b(enumhand);
+
             if (entityhuman.a(blockposition, enumdirection, itemstack) && Blocks.STANDING_BANNER.canPlace(world, blockposition)) {
                 if (world.isClientSide) {
                     return EnumInteractionResult.SUCCESS;
@@ -29,13 +33,13 @@ public class ItemBanner extends ItemBlock {
                         world.setTypeAndData(blockposition, Blocks.WALL_BANNER.getBlockData().set(BlockWallSign.FACING, enumdirection), 3);
                     }
 
-                    --itemstack.count;
                     TileEntity tileentity = world.getTileEntity(blockposition);
 
                     if (tileentity instanceof TileEntityBanner) {
-                        ((TileEntityBanner) tileentity).a(itemstack);
+                        ((TileEntityBanner) tileentity).a(itemstack, false);
                     }
 
+                    itemstack.subtract(1);
                     return EnumInteractionResult.SUCCESS;
                 }
             } else {
@@ -46,24 +50,25 @@ public class ItemBanner extends ItemBlock {
         }
     }
 
-    public String a(ItemStack itemstack) {
+    public String b(ItemStack itemstack) {
         String s = "item.banner.";
-        EnumColor enumcolor = b(itemstack);
+        EnumColor enumcolor = c(itemstack);
 
         s = s + enumcolor.d() + ".name";
         return LocaleI18n.get(s);
     }
 
-    public static EnumColor b(ItemStack itemstack) {
-        NBTTagCompound nbttagcompound = itemstack.a("BlockEntityTag", false);
-        EnumColor enumcolor;
+    public static ItemStack a(EnumColor enumcolor, @Nullable NBTTagList nbttaglist) {
+        ItemStack itemstack = new ItemStack(Items.BANNER, 1, enumcolor.getInvColorIndex());
 
-        if (nbttagcompound != null && nbttagcompound.hasKey("Base")) {
-            enumcolor = EnumColor.fromInvColorIndex(nbttagcompound.getInt("Base"));
-        } else {
-            enumcolor = EnumColor.fromInvColorIndex(itemstack.getData());
+        if (nbttaglist != null && !nbttaglist.isEmpty()) {
+            itemstack.c("BlockEntityTag").set("Patterns", nbttaglist.d());
         }
 
-        return enumcolor;
+        return itemstack;
+    }
+
+    public static EnumColor c(ItemStack itemstack) {
+        return EnumColor.fromInvColorIndex(itemstack.getData() & 15);
     }
 }

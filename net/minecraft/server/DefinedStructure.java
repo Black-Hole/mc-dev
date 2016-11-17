@@ -37,7 +37,7 @@ public class DefinedStructure {
 
     public void a(World world, BlockPosition blockposition, BlockPosition blockposition1, boolean flag, @Nullable Block block) {
         if (blockposition1.getX() >= 1 && blockposition1.getY() >= 1 && blockposition1.getZ() >= 1) {
-            BlockPosition blockposition2 = blockposition.a(blockposition1).a(-1, -1, -1);
+            BlockPosition blockposition2 = blockposition.a((BaseBlockPosition) blockposition1).a(-1, -1, -1);
             ArrayList arraylist = Lists.newArrayList();
             ArrayList arraylist1 = Lists.newArrayList();
             ArrayList arraylist2 = Lists.newArrayList();
@@ -89,7 +89,7 @@ public class DefinedStructure {
                 return !(entity instanceof EntityHuman);
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((Entity) object);
             }
         });
@@ -122,7 +122,7 @@ public class DefinedStructure {
 
         while (iterator.hasNext()) {
             DefinedStructure.BlockInfo definedstructure_blockinfo = (DefinedStructure.BlockInfo) iterator.next();
-            BlockPosition blockposition1 = a(definedstructureinfo, definedstructure_blockinfo.a).a(blockposition);
+            BlockPosition blockposition1 = a(definedstructureinfo, definedstructure_blockinfo.a).a((BaseBlockPosition) blockposition);
 
             if (structureboundingbox == null || structureboundingbox.b((BaseBlockPosition) blockposition1)) {
                 IBlockData iblockdata = definedstructure_blockinfo.b;
@@ -165,7 +165,7 @@ public class DefinedStructure {
     }
 
     public void a(World world, BlockPosition blockposition, @Nullable DefinedStructureProcessor definedstructureprocessor, DefinedStructureInfo definedstructureinfo, int i) {
-        if (!this.a.isEmpty() && this.c.getX() >= 1 && this.c.getY() >= 1 && this.c.getZ() >= 1) {
+        if ((!this.a.isEmpty() || !definedstructureinfo.g() && !this.b.isEmpty()) && this.c.getX() >= 1 && this.c.getY() >= 1 && this.c.getZ() >= 1) {
             Block block = definedstructureinfo.h();
             StructureBoundingBox structureboundingbox = definedstructureinfo.i();
             Iterator iterator = this.a.iterator();
@@ -175,7 +175,7 @@ public class DefinedStructure {
 
             while (iterator.hasNext()) {
                 definedstructure_blockinfo = (DefinedStructure.BlockInfo) iterator.next();
-                blockposition1 = a(definedstructureinfo, definedstructure_blockinfo.a).a(blockposition);
+                blockposition1 = a(definedstructureinfo, definedstructure_blockinfo.a).a((BaseBlockPosition) blockposition);
                 DefinedStructure.BlockInfo definedstructure_blockinfo1 = definedstructureprocessor != null ? definedstructureprocessor.a(world, blockposition1, definedstructure_blockinfo) : definedstructure_blockinfo;
 
                 if (definedstructure_blockinfo1 != null) {
@@ -190,7 +190,7 @@ public class DefinedStructure {
                             tileentity = world.getTileEntity(blockposition1);
                             if (tileentity != null) {
                                 if (tileentity instanceof IInventory) {
-                                    ((IInventory) tileentity).l();
+                                    ((IInventory) tileentity).clear();
                                 }
 
                                 world.setTypeAndData(blockposition1, Blocks.BARRIER.getBlockData(), 4);
@@ -217,9 +217,9 @@ public class DefinedStructure {
             while (iterator.hasNext()) {
                 definedstructure_blockinfo = (DefinedStructure.BlockInfo) iterator.next();
                 if (block == null || block != definedstructure_blockinfo.b.getBlock()) {
-                    blockposition1 = a(definedstructureinfo, definedstructure_blockinfo.a).a(blockposition);
+                    blockposition1 = a(definedstructureinfo, definedstructure_blockinfo.a).a((BaseBlockPosition) blockposition);
                     if (structureboundingbox == null || structureboundingbox.b((BaseBlockPosition) blockposition1)) {
-                        world.update(blockposition1, definedstructure_blockinfo.b.getBlock());
+                        world.update(blockposition1, definedstructure_blockinfo.b.getBlock(), false);
                         if (definedstructure_blockinfo.c != null) {
                             TileEntity tileentity1 = world.getTileEntity(blockposition1);
 
@@ -243,7 +243,7 @@ public class DefinedStructure {
 
         while (iterator.hasNext()) {
             DefinedStructure.EntityInfo definedstructure_entityinfo = (DefinedStructure.EntityInfo) iterator.next();
-            BlockPosition blockposition1 = b(definedstructure_entityinfo.b, enumblockmirror, enumblockrotation).a(blockposition);
+            BlockPosition blockposition1 = b(definedstructure_entityinfo.b, enumblockmirror, enumblockrotation).a((BaseBlockPosition) blockposition);
 
             if (structureboundingbox == null || structureboundingbox.b((BaseBlockPosition) blockposition1)) {
                 NBTTagCompound nbttagcompound = definedstructure_entityinfo.c;
@@ -278,9 +278,9 @@ public class DefinedStructure {
     }
 
     public BlockPosition a(EnumBlockRotation enumblockrotation) {
-        switch (DefinedStructure.SyntheticClass_1.a[enumblockrotation.ordinal()]) {
-        case 1:
-        case 2:
+        switch (enumblockrotation) {
+        case COUNTERCLOCKWISE_90:
+        case CLOCKWISE_90:
             return new BlockPosition(this.c.getZ(), this.c.getY(), this.c.getX());
 
         default:
@@ -294,12 +294,12 @@ public class DefinedStructure {
         int k = blockposition.getZ();
         boolean flag = true;
 
-        switch (DefinedStructure.SyntheticClass_1.b[enumblockmirror.ordinal()]) {
-        case 1:
+        switch (enumblockmirror) {
+        case LEFT_RIGHT:
             k = -k;
             break;
 
-        case 2:
+        case FRONT_BACK:
             i = -i;
             break;
 
@@ -307,14 +307,14 @@ public class DefinedStructure {
             flag = false;
         }
 
-        switch (DefinedStructure.SyntheticClass_1.a[enumblockrotation.ordinal()]) {
-        case 1:
+        switch (enumblockrotation) {
+        case COUNTERCLOCKWISE_90:
             return new BlockPosition(k, j, -i);
 
-        case 2:
+        case CLOCKWISE_90:
             return new BlockPosition(-k, j, i);
 
-        case 3:
+        case CLOCKWISE_180:
             return new BlockPosition(-i, j, -k);
 
         default:
@@ -328,12 +328,12 @@ public class DefinedStructure {
         double d2 = vec3d.z;
         boolean flag = true;
 
-        switch (DefinedStructure.SyntheticClass_1.b[enumblockmirror.ordinal()]) {
-        case 1:
+        switch (enumblockmirror) {
+        case LEFT_RIGHT:
             d2 = 1.0D - d2;
             break;
 
-        case 2:
+        case FRONT_BACK:
             d0 = 1.0D - d0;
             break;
 
@@ -341,14 +341,14 @@ public class DefinedStructure {
             flag = false;
         }
 
-        switch (DefinedStructure.SyntheticClass_1.a[enumblockrotation.ordinal()]) {
-        case 1:
+        switch (enumblockrotation) {
+        case COUNTERCLOCKWISE_90:
             return new Vec3D(d2, d1, 1.0D - d0);
 
-        case 2:
+        case CLOCKWISE_90:
             return new Vec3D(1.0D - d2, d1, d0);
 
-        case 3:
+        case CLOCKWISE_180:
             return new Vec3D(1.0D - d0, d1, 1.0D - d2);
 
         default:
@@ -357,30 +357,68 @@ public class DefinedStructure {
     }
 
     public BlockPosition a(BlockPosition blockposition, EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation) {
-        int i = this.a().getX() - 1;
-        int j = this.a().getZ() - 1;
+        return a(blockposition, enumblockmirror, enumblockrotation, this.a().getX(), this.a().getZ());
+    }
+
+    public static BlockPosition a(BlockPosition blockposition, EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation, int i, int j) {
+        --i;
+        --j;
         int k = enumblockmirror == EnumBlockMirror.FRONT_BACK ? i : 0;
         int l = enumblockmirror == EnumBlockMirror.LEFT_RIGHT ? j : 0;
         BlockPosition blockposition1 = blockposition;
 
-        switch (DefinedStructure.SyntheticClass_1.a[enumblockrotation.ordinal()]) {
-        case 1:
+        switch (enumblockrotation) {
+        case COUNTERCLOCKWISE_90:
             blockposition1 = blockposition.a(l, 0, i - k);
             break;
 
-        case 2:
+        case CLOCKWISE_90:
             blockposition1 = blockposition.a(j - l, 0, k);
             break;
 
-        case 3:
+        case CLOCKWISE_180:
             blockposition1 = blockposition.a(i - k, 0, j - l);
             break;
 
-        case 4:
+        case NONE:
             blockposition1 = blockposition.a(k, 0, l);
         }
 
         return blockposition1;
+    }
+
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.STRUCTURE, new DataInspector() {
+            public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
+                NBTTagList nbttaglist;
+                int j;
+                NBTTagCompound nbttagcompound1;
+
+                if (nbttagcompound.hasKeyOfType("entities", 9)) {
+                    nbttaglist = nbttagcompound.getList("entities", 10);
+
+                    for (j = 0; j < nbttaglist.size(); ++j) {
+                        nbttagcompound1 = (NBTTagCompound) nbttaglist.h(j);
+                        if (nbttagcompound1.hasKeyOfType("nbt", 10)) {
+                            nbttagcompound1.set("nbt", dataconverter.a(DataConverterTypes.ENTITY, nbttagcompound1.getCompound("nbt"), i));
+                        }
+                    }
+                }
+
+                if (nbttagcompound.hasKeyOfType("blocks", 9)) {
+                    nbttaglist = nbttagcompound.getList("blocks", 10);
+
+                    for (j = 0; j < nbttaglist.size(); ++j) {
+                        nbttagcompound1 = (NBTTagCompound) nbttaglist.h(j);
+                        if (nbttagcompound1.hasKeyOfType("nbt", 10)) {
+                            nbttagcompound1.set("nbt", dataconverter.a(DataConverterTypes.BLOCK_ENTITY, nbttagcompound1.getCompound("nbt"), i));
+                        }
+                    }
+                }
+
+                return nbttagcompound;
+            }
+        });
     }
 
     public NBTTagCompound a(NBTTagCompound nbttagcompound) {
@@ -428,8 +466,8 @@ public class DefinedStructure {
         nbttagcompound.set("blocks", nbttaglist);
         nbttagcompound.set("entities", nbttaglist1);
         nbttagcompound.set("size", this.a(new int[] { this.c.getX(), this.c.getY(), this.c.getZ()}));
-        nbttagcompound.setInt("version", 1);
         nbttagcompound.setString("author", this.d);
+        nbttagcompound.setInt("DataVersion", 819);
         return nbttagcompound;
     }
 
@@ -509,53 +547,6 @@ public class DefinedStructure {
         }
 
         return nbttaglist;
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b = new int[EnumBlockMirror.values().length];
-
-        static {
-            try {
-                DefinedStructure.SyntheticClass_1.b[EnumBlockMirror.LEFT_RIGHT.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                DefinedStructure.SyntheticClass_1.b[EnumBlockMirror.FRONT_BACK.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            a = new int[EnumBlockRotation.values().length];
-
-            try {
-                DefinedStructure.SyntheticClass_1.a[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                DefinedStructure.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                DefinedStructure.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_180.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                DefinedStructure.SyntheticClass_1.a[EnumBlockRotation.NONE.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-        }
     }
 
     public static class EntityInfo {

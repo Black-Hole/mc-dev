@@ -26,7 +26,7 @@ public class BlockWaterLily extends BlockPlant {
 
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockWaterLily.a;
     }
 

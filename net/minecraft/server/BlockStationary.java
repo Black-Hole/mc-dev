@@ -13,7 +13,7 @@ public class BlockStationary extends BlockFluids {
 
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!this.e(world, blockposition, iblockdata)) {
             this.f(world, blockposition, iblockdata);
         }

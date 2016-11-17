@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockMelon extends Block {
 
@@ -10,7 +9,6 @@ public class BlockMelon extends Block {
         this.a(CreativeModeTab.b);
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.MELON;
     }

@@ -10,7 +10,7 @@ public class EntityCaveSpider extends EntitySpider {
     }
 
     public static void b(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "CaveSpider");
+        EntityInsentient.a(dataconvertermanager, EntityCaveSpider.class);
     }
 
     protected void initAttributes() {
@@ -51,6 +51,6 @@ public class EntityCaveSpider extends EntitySpider {
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.s;
+        return LootTables.t;
     }
 }

@@ -16,7 +16,7 @@ public class EntityEndermite extends EntityMonster {
     protected void r() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, 1.0D, false));
-        this.goalSelector.a(3, new PathfinderGoalRandomStroll(this, 1.0D));
+        this.goalSelector.a(3, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
@@ -39,28 +39,28 @@ public class EntityEndermite extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.bc;
-    }
-
-    protected SoundEffect bV() {
-        return SoundEffects.be;
+        return SoundEffects.bf;
     }
 
     protected SoundEffect bW() {
-        return SoundEffects.bd;
+        return SoundEffects.bh;
+    }
+
+    protected SoundEffect bX() {
+        return SoundEffects.bg;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.bf, 0.15F, 1.0F);
+        this.a(SoundEffects.bi, 0.15F, 1.0F);
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.ai;
+        return LootTables.al;
     }
 
     public static void b(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "Endermite");
+        EntityInsentient.a(dataconvertermanager, EntityEndermite.class);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -75,13 +75,18 @@ public class EntityEndermite extends EntityMonster {
         nbttagcompound.setBoolean("PlayerSpawned", this.b);
     }
 
-    public void m() {
-        this.aO = this.yaw;
-        super.m();
+    public void A_() {
+        this.aN = this.yaw;
+        super.A_();
+    }
+
+    public void i(float f) {
+        this.yaw = f;
+        super.i(f);
     }
 
     public double ax() {
-        return 0.3D;
+        return 0.1D;
     }
 
     public boolean o() {
@@ -110,12 +115,12 @@ public class EntityEndermite extends EntityMonster {
 
     }
 
-    protected boolean s_() {
+    protected boolean r_() {
         return true;
     }
 
-    public boolean cK() {
-        if (super.cK()) {
+    public boolean cM() {
+        if (super.cM()) {
             EntityHuman entityhuman = this.world.findNearbyPlayer(this, 5.0D);
 
             return entityhuman == null;

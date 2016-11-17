@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockRepeater extends BlockDiodeAbstract {
 
@@ -10,7 +9,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
 
     protected BlockRepeater(boolean flag) {
         super(flag);
-        this.w(this.blockStateList.getBlockData().set(BlockRepeater.FACING, EnumDirection.NORTH).set(BlockRepeater.DELAY, Integer.valueOf(1)).set(BlockRepeater.LOCKED, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockRepeater.FACING, EnumDirection.NORTH).set(BlockRepeater.DELAY, Integer.valueOf(1)).set(BlockRepeater.LOCKED, Boolean.valueOf(false)));
     }
 
     public String getName() {
@@ -29,7 +28,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
         return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockRepeater.FACING)));
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (!entityhuman.abilities.mayBuild) {
             return false;
         } else {
@@ -42,7 +41,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
         return ((Integer) iblockdata.get(BlockRepeater.DELAY)).intValue() * 2;
     }
 
-    protected IBlockData x(IBlockData iblockdata) {
+    protected IBlockData z(IBlockData iblockdata) {
         Integer integer = (Integer) iblockdata.get(BlockRepeater.DELAY);
         Boolean obool = (Boolean) iblockdata.get(BlockRepeater.LOCKED);
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockRepeater.FACING);
@@ -50,7 +49,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
         return Blocks.POWERED_REPEATER.getBlockData().set(BlockRepeater.FACING, enumdirection).set(BlockRepeater.DELAY, integer).set(BlockRepeater.LOCKED, obool);
     }
 
-    protected IBlockData y(IBlockData iblockdata) {
+    protected IBlockData A(IBlockData iblockdata) {
         Integer integer = (Integer) iblockdata.get(BlockRepeater.DELAY);
         Boolean obool = (Boolean) iblockdata.get(BlockRepeater.LOCKED);
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockRepeater.FACING);
@@ -58,7 +57,6 @@ public class BlockRepeater extends BlockDiodeAbstract {
         return Blocks.UNPOWERED_REPEATER.getBlockData().set(BlockRepeater.FACING, enumdirection).set(BlockRepeater.DELAY, integer).set(BlockRepeater.LOCKED, obool);
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.REPEATER;
     }
@@ -71,7 +69,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
         return this.c(iblockaccess, blockposition, iblockdata) > 0;
     }
 
-    protected boolean A(IBlockData iblockdata) {
+    protected boolean C(IBlockData iblockdata) {
         return isDiode(iblockdata);
     }
 

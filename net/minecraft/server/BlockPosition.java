@@ -51,11 +51,11 @@ public class BlockPosition extends BaseBlockPosition {
     }
 
     public BlockPosition a(BaseBlockPosition baseblockposition) {
-        return baseblockposition.getX() == 0 && baseblockposition.getY() == 0 && baseblockposition.getZ() == 0 ? this : new BlockPosition(this.getX() + baseblockposition.getX(), this.getY() + baseblockposition.getY(), this.getZ() + baseblockposition.getZ());
+        return this.a(baseblockposition.getX(), baseblockposition.getY(), baseblockposition.getZ());
     }
 
     public BlockPosition b(BaseBlockPosition baseblockposition) {
-        return baseblockposition.getX() == 0 && baseblockposition.getY() == 0 && baseblockposition.getZ() == 0 ? this : new BlockPosition(this.getX() - baseblockposition.getX(), this.getY() - baseblockposition.getY(), this.getZ() - baseblockposition.getZ());
+        return this.a(-baseblockposition.getX(), -baseblockposition.getY(), -baseblockposition.getZ());
     }
 
     public BlockPosition up() {
@@ -112,6 +112,23 @@ public class BlockPosition extends BaseBlockPosition {
 
     public BlockPosition shift(EnumDirection enumdirection, int i) {
         return i == 0 ? this : new BlockPosition(this.getX() + enumdirection.getAdjacentX() * i, this.getY() + enumdirection.getAdjacentY() * i, this.getZ() + enumdirection.getAdjacentZ() * i);
+    }
+
+    public BlockPosition a(EnumBlockRotation enumblockrotation) {
+        switch (enumblockrotation) {
+        case NONE:
+        default:
+            return this;
+
+        case CLOCKWISE_90:
+            return new BlockPosition(-this.getZ(), this.getY(), this.getX());
+
+        case CLOCKWISE_180:
+            return new BlockPosition(-this.getX(), this.getY(), -this.getZ());
+
+        case COUNTERCLOCKWISE_90:
+            return new BlockPosition(this.getZ(), this.getY(), -this.getX());
+        }
     }
 
     public BlockPosition c(BaseBlockPosition baseblockposition) {
@@ -340,6 +357,22 @@ public class BlockPosition extends BaseBlockPosition {
             this.b = i;
             this.c = j;
             this.d = k;
+        }
+
+        public BlockPosition a(double d0, double d1, double d2) {
+            return super.a(d0, d1, d2).h();
+        }
+
+        public BlockPosition a(int i, int j, int k) {
+            return super.a(i, j, k).h();
+        }
+
+        public BlockPosition shift(EnumDirection enumdirection, int i) {
+            return super.shift(enumdirection, i).h();
+        }
+
+        public BlockPosition a(EnumBlockRotation enumblockrotation) {
+            return super.a(enumblockrotation).h();
         }
 
         public int getX() {

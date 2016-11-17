@@ -37,14 +37,14 @@ public abstract class BlockLogAbstract extends BlockRotatable {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        switch (BlockLogAbstract.SyntheticClass_1.b[enumblockrotation.ordinal()]) {
-        case 1:
-        case 2:
-            switch (BlockLogAbstract.SyntheticClass_1.a[((BlockLogAbstract.EnumLogRotation) iblockdata.get(BlockLogAbstract.AXIS)).ordinal()]) {
-            case 1:
+        switch (enumblockrotation) {
+        case COUNTERCLOCKWISE_90:
+        case CLOCKWISE_90:
+            switch ((BlockLogAbstract.EnumLogRotation) iblockdata.get(BlockLogAbstract.AXIS)) {
+            case X:
                 return iblockdata.set(BlockLogAbstract.AXIS, BlockLogAbstract.EnumLogRotation.Z);
 
-            case 2:
+            case Z:
                 return iblockdata.set(BlockLogAbstract.AXIS, BlockLogAbstract.EnumLogRotation.X);
 
             default:
@@ -53,62 +53,6 @@ public abstract class BlockLogAbstract extends BlockRotatable {
 
         default:
             return iblockdata;
-        }
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b;
-        static final int[] c = new int[EnumDirection.EnumAxis.values().length];
-
-        static {
-            try {
-                BlockLogAbstract.SyntheticClass_1.c[EnumDirection.EnumAxis.X.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockLogAbstract.SyntheticClass_1.c[EnumDirection.EnumAxis.Y.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockLogAbstract.SyntheticClass_1.c[EnumDirection.EnumAxis.Z.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            b = new int[EnumBlockRotation.values().length];
-
-            try {
-                BlockLogAbstract.SyntheticClass_1.b[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockLogAbstract.SyntheticClass_1.b[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            a = new int[BlockLogAbstract.EnumLogRotation.values().length];
-
-            try {
-                BlockLogAbstract.SyntheticClass_1.a[BlockLogAbstract.EnumLogRotation.X.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-            try {
-                BlockLogAbstract.SyntheticClass_1.a[BlockLogAbstract.EnumLogRotation.Z.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror6) {
-                ;
-            }
-
         }
     }
 
@@ -127,14 +71,14 @@ public abstract class BlockLogAbstract extends BlockRotatable {
         }
 
         public static BlockLogAbstract.EnumLogRotation a(EnumDirection.EnumAxis enumdirection_enumaxis) {
-            switch (BlockLogAbstract.SyntheticClass_1.c[enumdirection_enumaxis.ordinal()]) {
-            case 1:
+            switch (enumdirection_enumaxis) {
+            case X:
                 return BlockLogAbstract.EnumLogRotation.X;
 
-            case 2:
+            case Y:
                 return BlockLogAbstract.EnumLogRotation.Y;
 
-            case 3:
+            case Z:
                 return BlockLogAbstract.EnumLogRotation.Z;
 
             default:

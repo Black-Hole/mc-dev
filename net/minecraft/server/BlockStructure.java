@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockStructure extends BlockTileEntity {
 
@@ -9,14 +8,14 @@ public class BlockStructure extends BlockTileEntity {
 
     public BlockStructure() {
         super(Material.ORE, MaterialMapColor.x);
-        this.w(this.blockStateList.getBlockData());
+        this.y(this.blockStateList.getBlockData());
     }
 
     public TileEntity a(World world, int i) {
         return new TileEntityStructure();
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         return tileentity instanceof TileEntityStructure ? ((TileEntityStructure) tileentity).a(entityhuman) : false;
@@ -32,11 +31,6 @@ public class BlockStructure extends BlockTileEntity {
                 tileentitystructure.a(entityliving);
             }
         }
-    }
-
-    @Nullable
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return super.a(world, blockposition, iblockdata);
     }
 
     public int a(Random random) {
@@ -63,14 +57,14 @@ public class BlockStructure extends BlockTileEntity {
         return new BlockStateList(this, new IBlockState[] { BlockStructure.a});
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!world.isClientSide) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityStructure) {
                 TileEntityStructure tileentitystructure = (TileEntityStructure) tileentity;
                 boolean flag = world.isBlockIndirectlyPowered(blockposition);
-                boolean flag1 = tileentitystructure.G();
+                boolean flag1 = tileentitystructure.F();
 
                 if (flag && !flag1) {
                     tileentitystructure.d(true);
@@ -84,52 +78,20 @@ public class BlockStructure extends BlockTileEntity {
     }
 
     private void a(TileEntityStructure tileentitystructure) {
-        switch (BlockStructure.SyntheticClass_1.a[tileentitystructure.k().ordinal()]) {
-        case 1:
+        switch (tileentitystructure.k()) {
+        case SAVE:
             tileentitystructure.b(false);
             break;
 
-        case 2:
+        case LOAD:
             tileentitystructure.c(false);
             break;
 
-        case 3:
-            tileentitystructure.E();
+        case CORNER:
+            tileentitystructure.s();
 
-        case 4:
+        case DATA:
         }
 
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[TileEntityStructure.UsageMode.values().length];
-
-        static {
-            try {
-                BlockStructure.SyntheticClass_1.a[TileEntityStructure.UsageMode.SAVE.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockStructure.SyntheticClass_1.a[TileEntityStructure.UsageMode.LOAD.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockStructure.SyntheticClass_1.a[TileEntityStructure.UsageMode.CORNER.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockStructure.SyntheticClass_1.a[TileEntityStructure.UsageMode.DATA.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-        }
     }
 }

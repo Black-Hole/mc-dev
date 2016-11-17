@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class ItemMilkBucket extends Item {
 
     public ItemMilkBucket() {
@@ -9,10 +7,9 @@ public class ItemMilkBucket extends Item {
         this.a(CreativeModeTab.f);
     }
 
-    @Nullable
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
         if (entityliving instanceof EntityHuman && !((EntityHuman) entityliving).abilities.canInstantlyBuild) {
-            --itemstack.count;
+            itemstack.subtract(1);
         }
 
         if (!world.isClientSide) {
@@ -23,7 +20,7 @@ public class ItemMilkBucket extends Item {
             ((EntityHuman) entityliving).b(StatisticList.b((Item) this));
         }
 
-        return itemstack.count <= 0 ? new ItemStack(Items.BUCKET) : itemstack;
+        return itemstack.isEmpty() ? new ItemStack(Items.BUCKET) : itemstack;
     }
 
     public int e(ItemStack itemstack) {
@@ -34,8 +31,8 @@ public class ItemMilkBucket extends Item {
         return EnumAnimation.DRINK;
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         entityhuman.c(enumhand);
-        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, entityhuman.b(enumhand));
     }
 }

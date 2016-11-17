@@ -12,20 +12,21 @@ public class ItemElytra extends Item {
     }
 
     public static boolean d(ItemStack itemstack) {
-        return itemstack.h() < itemstack.j() - 1;
+        return itemstack.i() < itemstack.k() - 1;
     }
 
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
         return itemstack1.getItem() == Items.LEATHER;
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
         EnumItemSlot enumitemslot = EntityInsentient.d(itemstack);
         ItemStack itemstack1 = entityhuman.getEquipment(enumitemslot);
 
-        if (itemstack1 == null) {
+        if (itemstack1.isEmpty()) {
             entityhuman.setSlot(enumitemslot, itemstack.cloneItemStack());
-            itemstack.count = 0;
+            itemstack.setCount(0);
             return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
         } else {
             return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);

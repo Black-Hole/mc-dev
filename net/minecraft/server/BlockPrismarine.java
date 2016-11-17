@@ -9,7 +9,7 @@ public class BlockPrismarine extends Block {
 
     public BlockPrismarine() {
         super(Material.STONE);
-        this.w(this.blockStateList.getBlockData().set(BlockPrismarine.VARIANT, BlockPrismarine.EnumPrismarineVariant.ROUGH));
+        this.y(this.blockStateList.getBlockData().set(BlockPrismarine.VARIANT, BlockPrismarine.EnumPrismarineVariant.ROUGH));
         this.a(CreativeModeTab.b);
     }
 

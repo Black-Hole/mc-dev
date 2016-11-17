@@ -12,7 +12,7 @@ abstract class NBTNumber extends NBTBase {
 
     public abstract byte g();
 
-    public abstract double h();
+    public abstract double asDouble();
 
     public abstract float i();
 }

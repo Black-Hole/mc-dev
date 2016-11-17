@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public abstract class BlockDoubleStepAbstract extends BlockStepAbstract {
 
@@ -18,11 +17,10 @@ public abstract class BlockDoubleStepAbstract extends BlockStepAbstract {
             iblockdata = iblockdata.set(BlockDoubleStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
         }
 
-        this.w(iblockdata.set(BlockDoubleStepAbstract.VARIANT, BlockDoubleStepAbstract.EnumStoneSlabVariant.STONE));
+        this.y(iblockdata.set(BlockDoubleStepAbstract.VARIANT, BlockDoubleStepAbstract.EnumStoneSlabVariant.STONE));
         this.a(CreativeModeTab.b);
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.STONE_SLAB);
     }

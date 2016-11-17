@@ -15,10 +15,10 @@ public class PathfinderGoalMoveTowardsRestriction extends PathfinderGoal {
     }
 
     public boolean a() {
-        if (this.a.cZ()) {
+        if (this.a.db()) {
             return false;
         } else {
-            BlockPosition blockposition = this.a.da();
+            BlockPosition blockposition = this.a.dc();
             Vec3D vec3d = RandomPositionGenerator.a(this.a, 16, 7, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
 
             if (vec3d == null) {

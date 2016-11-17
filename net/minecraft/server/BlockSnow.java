@@ -10,12 +10,12 @@ public class BlockSnow extends Block {
 
     protected BlockSnow() {
         super(Material.PACKED_ICE);
-        this.w(this.blockStateList.getBlockData().set(BlockSnow.LAYERS, Integer.valueOf(1)));
+        this.y(this.blockStateList.getBlockData().set(BlockSnow.LAYERS, Integer.valueOf(1)));
         this.a(true);
         this.a(CreativeModeTab.c);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockSnow.b[((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue()];
     }
 
@@ -24,14 +24,14 @@ public class BlockSnow extends Block {
     }
 
     public boolean k(IBlockData iblockdata) {
-        return ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() == 7;
+        return ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() == 8;
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         int i = ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() - 1;
         float f = 0.125F;
-        AxisAlignedBB axisalignedbb = iblockdata.c(world, blockposition);
+        AxisAlignedBB axisalignedbb = iblockdata.d(iblockaccess, blockposition);
 
         return new AxisAlignedBB(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c, axisalignedbb.d, (double) ((float) i * 0.125F), axisalignedbb.f);
     }
@@ -48,10 +48,10 @@ public class BlockSnow extends Block {
         IBlockData iblockdata = world.getType(blockposition.down());
         Block block = iblockdata.getBlock();
 
-        return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (iblockdata.getMaterial() == Material.LEAVES ? true : (block == this && ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() >= 7 ? true : iblockdata.p() && iblockdata.getMaterial().isSolid())) : false;
+        return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (iblockdata.getMaterial() == Material.LEAVES ? true : (block == this && ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() == 8 ? true : iblockdata.q() && iblockdata.getMaterial().isSolid())) : false;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         this.e(world, blockposition, iblockdata);
     }
 
@@ -65,13 +65,12 @@ public class BlockSnow extends Block {
         }
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
         a(world, blockposition, new ItemStack(Items.SNOWBALL, ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() + 1, 0));
         world.setAir(blockposition);
         entityhuman.b(StatisticList.a((Block) this));
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.SNOWBALL;
     }
@@ -81,7 +80,7 @@ public class BlockSnow extends Block {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (world.b(EnumSkyBlock.BLOCK, blockposition) > 11) {
+        if (world.getBrightness(EnumSkyBlock.BLOCK, blockposition) > 11) {
             this.b(world, blockposition, world.getType(blockposition), 0);
             world.setAir(blockposition);
         }

@@ -21,23 +21,23 @@ public class EntityAreaEffectCloud extends Entity {
     private static final DataWatcherObject<Integer> f = DataWatcher.a(EntityAreaEffectCloud.class, DataWatcherRegistry.b);
     private PotionRegistry potionRegistry;
     public List<MobEffect> effects;
-    private final Map<Entity, Integer> au;
-    private int av;
+    private final Map<Entity, Integer> at;
+    private int au;
     public int waitTime;
     public int reapplicationDelay;
     private boolean hasColor;
     public int durationOnUse;
     public float radiusOnUse;
     public float radiusPerTick;
-    private EntityLiving aC;
-    private UUID aD;
+    private EntityLiving aB;
+    private UUID aC;
 
     public EntityAreaEffectCloud(World world) {
         super(world);
-        this.potionRegistry = Potions.a;
+        this.potionRegistry = Potions.EMPTY;
         this.effects = Lists.newArrayList();
-        this.au = Maps.newHashMap();
-        this.av = 600;
+        this.at = Maps.newHashMap();
+        this.au = 600;
         this.waitTime = 20;
         this.reapplicationDelay = 20;
         this.noclip = true;
@@ -79,11 +79,16 @@ public class EntityAreaEffectCloud extends Entity {
     public void a(PotionRegistry potionregistry) {
         this.potionRegistry = potionregistry;
         if (!this.hasColor) {
-            if (potionregistry == Potions.a && this.effects.isEmpty()) {
-                this.getDataWatcher().set(EntityAreaEffectCloud.b, Integer.valueOf(0));
-            } else {
-                this.getDataWatcher().set(EntityAreaEffectCloud.b, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(potionregistry, (Collection) this.effects))));
-            }
+            this.C();
+        }
+
+    }
+
+    private void C() {
+        if (this.potionRegistry == Potions.EMPTY && this.effects.isEmpty()) {
+            this.getDataWatcher().set(EntityAreaEffectCloud.b, Integer.valueOf(0));
+        } else {
+            this.getDataWatcher().set(EntityAreaEffectCloud.b, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
         }
 
     }
@@ -91,7 +96,7 @@ public class EntityAreaEffectCloud extends Entity {
     public void a(MobEffect mobeffect) {
         this.effects.add(mobeffect);
         if (!this.hasColor) {
-            this.getDataWatcher().set(EntityAreaEffectCloud.b, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
+            this.C();
         }
 
     }
@@ -138,15 +143,15 @@ public class EntityAreaEffectCloud extends Entity {
     }
 
     public int getDuration() {
-        return this.av;
+        return this.au;
     }
 
     public void setDuration(int i) {
-        this.av = i;
+        this.au = i;
     }
 
-    public void m() {
-        super.m();
+    public void A_() {
+        super.A_();
         boolean flag = this.q();
         float f = this.getRadius();
 
@@ -183,9 +188,9 @@ public class EntityAreaEffectCloud extends Entity {
                             i = i1 >> 16 & 255;
                             j = i1 >> 8 & 255;
                             k = i1 & 255;
-                            this.world.addParticle(EnumParticle.SPELL_MOB, this.locX + (double) f2, this.locY, this.locZ + (double) f3, (double) ((float) i / 255.0F), (double) ((float) j / 255.0F), (double) ((float) k / 255.0F), new int[0]);
+                            this.world.a(EnumParticle.SPELL_MOB.c(), this.locX + (double) f2, this.locY, this.locZ + (double) f3, (double) ((float) i / 255.0F), (double) ((float) j / 255.0F), (double) ((float) k / 255.0F), new int[0]);
                         } else {
-                            this.world.addParticle(enumparticle, this.locX + (double) f2, this.locY, this.locZ + (double) f3, 0.0D, 0.0D, 0.0D, aint);
+                            this.world.a(enumparticle.c(), this.locX + (double) f2, this.locY, this.locZ + (double) f3, 0.0D, 0.0D, 0.0D, aint);
                         }
                     }
                 }
@@ -204,14 +209,14 @@ public class EntityAreaEffectCloud extends Entity {
                         k = i >> 8 & 255;
                         int k1 = i & 255;
 
-                        this.world.addParticle(EnumParticle.SPELL_MOB, this.locX + (double) f3, this.locY, this.locZ + (double) f6, (double) ((float) j / 255.0F), (double) ((float) k / 255.0F), (double) ((float) k1 / 255.0F), new int[0]);
+                        this.world.a(EnumParticle.SPELL_MOB.c(), this.locX + (double) f3, this.locY, this.locZ + (double) f6, (double) ((float) j / 255.0F), (double) ((float) k / 255.0F), (double) ((float) k1 / 255.0F), new int[0]);
                     } else {
-                        this.world.addParticle(enumparticle, this.locX + (double) f3, this.locY, this.locZ + (double) f6, (0.5D - this.random.nextDouble()) * 0.15D, 0.009999999776482582D, (0.5D - this.random.nextDouble()) * 0.15D, aint);
+                        this.world.a(enumparticle.c(), this.locX + (double) f3, this.locY, this.locZ + (double) f6, (0.5D - this.random.nextDouble()) * 0.15D, 0.009999999776482582D, (0.5D - this.random.nextDouble()) * 0.15D, aint);
                     }
                 }
             }
         } else {
-            if (this.ticksLived >= this.waitTime + this.av) {
+            if (this.ticksLived >= this.waitTime + this.au) {
                 this.die();
                 return;
             }
@@ -237,7 +242,7 @@ public class EntityAreaEffectCloud extends Entity {
             }
 
             if (this.ticksLived % 5 == 0) {
-                Iterator iterator = this.au.entrySet().iterator();
+                Iterator iterator = this.at.entrySet().iterator();
 
                 while (iterator.hasNext()) {
                     Entry entry = (Entry) iterator.next();
@@ -258,7 +263,7 @@ public class EntityAreaEffectCloud extends Entity {
 
                 arraylist.addAll(this.effects);
                 if (arraylist.isEmpty()) {
-                    this.au.clear();
+                    this.at.clear();
                 } else {
                     List list = this.world.a(EntityLiving.class, this.getBoundingBox());
 
@@ -268,13 +273,13 @@ public class EntityAreaEffectCloud extends Entity {
                         while (iterator2.hasNext()) {
                             EntityLiving entityliving = (EntityLiving) iterator2.next();
 
-                            if (!this.au.containsKey(entityliving) && entityliving.cI()) {
+                            if (!this.at.containsKey(entityliving) && entityliving.cJ()) {
                                 double d0 = entityliving.locX - this.locX;
                                 double d1 = entityliving.locZ - this.locZ;
                                 double d2 = d0 * d0 + d1 * d1;
 
                                 if (d2 <= (double) (f * f)) {
-                                    this.au.put(entityliving, Integer.valueOf(this.ticksLived + this.reapplicationDelay));
+                                    this.at.put(entityliving, Integer.valueOf(this.ticksLived + this.reapplicationDelay));
                                     Iterator iterator3 = arraylist.iterator();
 
                                     while (iterator3.hasNext()) {
@@ -298,8 +303,8 @@ public class EntityAreaEffectCloud extends Entity {
                                     }
 
                                     if (this.durationOnUse != 0) {
-                                        this.av += this.durationOnUse;
-                                        if (this.av <= 0) {
+                                        this.au += this.durationOnUse;
+                                        if (this.au <= 0) {
                                             this.die();
                                             return;
                                         }
@@ -327,33 +332,33 @@ public class EntityAreaEffectCloud extends Entity {
     }
 
     public void setSource(@Nullable EntityLiving entityliving) {
-        this.aC = entityliving;
-        this.aD = entityliving == null ? null : entityliving.getUniqueID();
+        this.aB = entityliving;
+        this.aC = entityliving == null ? null : entityliving.getUniqueID();
     }
 
     @Nullable
     public EntityLiving y() {
-        if (this.aC == null && this.aD != null && this.world instanceof WorldServer) {
-            Entity entity = ((WorldServer) this.world).getEntity(this.aD);
+        if (this.aB == null && this.aC != null && this.world instanceof WorldServer) {
+            Entity entity = ((WorldServer) this.world).getEntity(this.aC);
 
             if (entity instanceof EntityLiving) {
-                this.aC = (EntityLiving) entity;
+                this.aB = (EntityLiving) entity;
             }
         }
 
-        return this.aC;
+        return this.aB;
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
         this.ticksLived = nbttagcompound.getInt("Age");
-        this.av = nbttagcompound.getInt("Duration");
+        this.au = nbttagcompound.getInt("Duration");
         this.waitTime = nbttagcompound.getInt("WaitTime");
         this.reapplicationDelay = nbttagcompound.getInt("ReapplicationDelay");
         this.durationOnUse = nbttagcompound.getInt("DurationOnUse");
         this.radiusOnUse = nbttagcompound.getFloat("RadiusOnUse");
         this.radiusPerTick = nbttagcompound.getFloat("RadiusPerTick");
         this.setRadius(nbttagcompound.getFloat("Radius"));
-        this.aD = nbttagcompound.a("OwnerUUID");
+        this.aC = nbttagcompound.a("OwnerUUID");
         if (nbttagcompound.hasKeyOfType("Particle", 8)) {
             EnumParticle enumparticle = EnumParticle.a(nbttagcompound.getString("Particle"));
 
@@ -390,7 +395,7 @@ public class EntityAreaEffectCloud extends Entity {
 
     protected void b(NBTTagCompound nbttagcompound) {
         nbttagcompound.setInt("Age", this.ticksLived);
-        nbttagcompound.setInt("Duration", this.av);
+        nbttagcompound.setInt("Duration", this.au);
         nbttagcompound.setInt("WaitTime", this.waitTime);
         nbttagcompound.setInt("ReapplicationDelay", this.reapplicationDelay);
         nbttagcompound.setInt("DurationOnUse", this.durationOnUse);
@@ -400,15 +405,15 @@ public class EntityAreaEffectCloud extends Entity {
         nbttagcompound.setString("Particle", this.getParticle().b());
         nbttagcompound.setInt("ParticleParam1", this.n());
         nbttagcompound.setInt("ParticleParam2", this.o());
-        if (this.aD != null) {
-            nbttagcompound.a("OwnerUUID", this.aD);
+        if (this.aC != null) {
+            nbttagcompound.a("OwnerUUID", this.aC);
         }
 
         if (this.hasColor) {
             nbttagcompound.setInt("Color", this.getColor());
         }
 
-        if (this.potionRegistry != Potions.a && this.potionRegistry != null) {
+        if (this.potionRegistry != Potions.EMPTY && this.potionRegistry != null) {
             nbttagcompound.setString("Potion", ((MinecraftKey) PotionRegistry.a.b(this.potionRegistry)).toString());
         }
 

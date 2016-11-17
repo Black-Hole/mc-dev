@@ -41,7 +41,7 @@ public class CommandBanIp extends CommandAbstract {
                 EntityPlayer entityplayer = minecraftserver.getPlayerList().getPlayer(astring[0]);
 
                 if (entityplayer == null) {
-                    throw new ExceptionPlayerNotFound("commands.banip.invalid", new Object[0]);
+                    throw new ExceptionPlayerNotFound("commands.banip.invalid");
                 }
 
                 this.a(minecraftserver, icommandlistener, entityplayer.A(), ichatbasecomponent == null ? null : ichatbasecomponent.toPlainText());

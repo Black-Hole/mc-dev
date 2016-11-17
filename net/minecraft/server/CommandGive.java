@@ -44,21 +44,21 @@ public class CommandGive extends CommandAbstract {
             boolean flag = entityplayer.inventory.pickup(itemstack);
 
             if (flag) {
-                entityplayer.world.a((EntityHuman) null, entityplayer.locX, entityplayer.locY, entityplayer.locZ, SoundEffects.da, SoundCategory.PLAYERS, 0.2F, ((entityplayer.getRandom().nextFloat() - entityplayer.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                entityplayer.world.a((EntityHuman) null, entityplayer.locX, entityplayer.locY, entityplayer.locZ, SoundEffects.dk, SoundCategory.PLAYERS, 0.2F, ((entityplayer.getRandom().nextFloat() - entityplayer.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 entityplayer.defaultContainer.b();
             }
 
             EntityItem entityitem;
 
-            if (flag && itemstack.count <= 0) {
-                itemstack.count = 1;
+            if (flag && itemstack.isEmpty()) {
+                itemstack.setCount(1);
                 icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, i);
                 entityitem = entityplayer.drop(itemstack, false);
                 if (entityitem != null) {
                     entityitem.w();
                 }
             } else {
-                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, i - itemstack.count);
+                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, i - itemstack.getCount());
                 entityitem = entityplayer.drop(itemstack, false);
                 if (entityitem != null) {
                     entityitem.r();
@@ -66,7 +66,7 @@ public class CommandGive extends CommandAbstract {
                 }
             }
 
-            a(icommandlistener, (ICommand) this, "commands.give.success", new Object[] { itemstack.B(), Integer.valueOf(i), entityplayer.getName()});
+            a(icommandlistener, (ICommand) this, "commands.give.success", new Object[] { itemstack.C(), Integer.valueOf(i), entityplayer.getName()});
         }
     }
 

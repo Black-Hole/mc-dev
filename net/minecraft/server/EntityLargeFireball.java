@@ -27,7 +27,7 @@ public class EntityLargeFireball extends EntityFireball {
 
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
+    public static void b(DataConverterManager dataconvertermanager) {
         EntityFireball.a(dataconvertermanager, "Fireball");
     }
 

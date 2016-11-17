@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class ItemFood extends Item {
 
     public final int a;
@@ -24,14 +22,13 @@ public class ItemFood extends Item {
         this(i, 0.6F, flag);
     }
 
-    @Nullable
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
-        --itemstack.count;
+        itemstack.subtract(1);
         if (entityliving instanceof EntityHuman) {
             EntityHuman entityhuman = (EntityHuman) entityliving;
 
             entityhuman.getFoodData().a(this, itemstack);
-            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ek, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.eE, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
             this.a(itemstack, world, entityhuman);
             entityhuman.b(StatisticList.b((Item) this));
         }
@@ -54,8 +51,10 @@ public class ItemFood extends Item {
         return EnumAnimation.EAT;
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
-        if (entityhuman.m(this.e)) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
+        if (entityhuman.n(this.e)) {
             entityhuman.c(enumhand);
             return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
         } else {

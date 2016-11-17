@@ -32,8 +32,8 @@ public class EntityExperienceOrb extends Entity {
 
     protected void i() {}
 
-    public void m() {
-        super.m();
+    public void A_() {
+        super.A_();
         if (this.c > 0) {
             --this.c;
         }
@@ -49,10 +49,10 @@ public class EntityExperienceOrb extends Entity {
             this.motY = 0.20000000298023224D;
             this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
             this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-            this.a(SoundEffects.bB, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
+            this.a(SoundEffects.bL, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
         }
 
-        this.j(this.locX, (this.getBoundingBox().b + this.getBoundingBox().e) / 2.0D, this.locZ);
+        this.i(this.locX, (this.getBoundingBox().b + this.getBoundingBox().e) / 2.0D, this.locZ);
         double d0 = 8.0D;
 
         if (this.targetTime < this.a - 20 + this.getId() % 100) {
@@ -82,7 +82,7 @@ public class EntityExperienceOrb extends Entity {
             }
         }
 
-        this.move(this.motX, this.motY, this.motZ);
+        this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
         float f = 0.98F;
 
         if (this.onGround) {
@@ -140,17 +140,16 @@ public class EntityExperienceOrb extends Entity {
 
     public void d(EntityHuman entityhuman) {
         if (!this.world.isClientSide) {
-            if (this.c == 0 && entityhuman.bA == 0) {
-                entityhuman.bA = 2;
-                this.world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bk, SoundCategory.PLAYERS, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
+            if (this.c == 0 && entityhuman.bz == 0) {
+                entityhuman.bz = 2;
                 entityhuman.receive(this, 1);
-                ItemStack itemstack = EnchantmentManager.b(Enchantments.A, (EntityLiving) entityhuman);
+                ItemStack itemstack = EnchantmentManager.b(Enchantments.B, (EntityLiving) entityhuman);
 
-                if (itemstack != null && itemstack.g()) {
-                    int i = Math.min(this.d(this.value), itemstack.h());
+                if (!itemstack.isEmpty() && itemstack.h()) {
+                    int i = Math.min(this.d(this.value), itemstack.i());
 
                     this.value -= this.b(i);
-                    itemstack.setData(itemstack.h() - i);
+                    itemstack.setData(itemstack.i() - i);
                 }
 
                 if (this.value > 0) {

@@ -7,12 +7,14 @@ public class ItemEgg extends Item {
         this.a(CreativeModeTab.l);
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         if (!entityhuman.abilities.canInstantlyBuild) {
-            --itemstack.count;
+            itemstack.subtract(1);
         }
 
-        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.aC, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEgg.j.nextFloat() * 0.4F + 0.8F));
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.aE, SoundCategory.PLAYERS, 0.5F, 0.4F / (ItemEgg.j.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
             EntityEgg entityegg = new EntityEgg(world, entityhuman);
 

@@ -7,12 +7,14 @@ public class ItemSign extends Item {
         this.a(CreativeModeTab.c);
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         IBlockData iblockdata = world.getType(blockposition);
         boolean flag = iblockdata.getBlock().a((IBlockAccess) world, blockposition);
 
         if (enumdirection != EnumDirection.DOWN && (iblockdata.getMaterial().isBuildable() || flag) && (!flag || enumdirection == EnumDirection.UP)) {
             blockposition = blockposition.shift(enumdirection);
+            ItemStack itemstack = entityhuman.b(enumhand);
+
             if (entityhuman.a(blockposition, enumdirection, itemstack) && Blocks.STANDING_SIGN.canPlace(world, blockposition)) {
                 if (world.isClientSide) {
                     return EnumInteractionResult.SUCCESS;
@@ -26,13 +28,13 @@ public class ItemSign extends Item {
                         world.setTypeAndData(blockposition, Blocks.WALL_SIGN.getBlockData().set(BlockWallSign.FACING, enumdirection), 11);
                     }
 
-                    --itemstack.count;
                     TileEntity tileentity = world.getTileEntity(blockposition);
 
                     if (tileentity instanceof TileEntitySign && !ItemBlock.a(world, entityhuman, blockposition, itemstack)) {
                         entityhuman.openSign((TileEntitySign) tileentity);
                     }
 
+                    itemstack.subtract(1);
                     return EnumInteractionResult.SUCCESS;
                 }
             } else {

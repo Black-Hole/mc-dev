@@ -35,7 +35,7 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
                     }
 
                     if (entity.isInvisible()) {
-                        float f = ((EntityHuman) entity).cL();
+                        float f = ((EntityHuman) entity).cO();
 
                         if (f < 0.1F) {
                             f = 0.1F;
@@ -48,7 +48,7 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
                 }
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((Entity) object);
             }
         };

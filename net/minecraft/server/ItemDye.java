@@ -10,13 +10,15 @@ public class ItemDye extends Item {
         this.a(CreativeModeTab.l);
     }
 
-    public String f_(ItemStack itemstack) {
+    public String a(ItemStack itemstack) {
         int i = itemstack.getData();
 
         return super.getName() + "." + EnumColor.fromInvColorIndex(i).d();
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         if (!entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
             return EnumInteractionResult.FAIL;
         } else {
@@ -35,21 +37,21 @@ public class ItemDye extends Item {
                 Block block = iblockdata.getBlock();
 
                 if (block == Blocks.LOG && iblockdata.get(BlockLog1.VARIANT) == BlockWood.EnumLogVariant.JUNGLE) {
-                    if (enumdirection != EnumDirection.DOWN && enumdirection != EnumDirection.UP) {
-                        blockposition = blockposition.shift(enumdirection);
-                        if (world.isEmpty(blockposition)) {
-                            IBlockData iblockdata1 = Blocks.COCOA.getPlacedState(world, blockposition, enumdirection, f, f1, f2, 0, entityhuman);
+                    if (enumdirection == EnumDirection.DOWN || enumdirection == EnumDirection.UP) {
+                        return EnumInteractionResult.FAIL;
+                    }
 
-                            world.setTypeAndData(blockposition, iblockdata1, 10);
-                            if (!entityhuman.abilities.canInstantlyBuild) {
-                                --itemstack.count;
-                            }
+                    blockposition = blockposition.shift(enumdirection);
+                    if (world.isEmpty(blockposition)) {
+                        IBlockData iblockdata1 = Blocks.COCOA.getPlacedState(world, blockposition, enumdirection, f, f1, f2, 0, entityhuman);
+
+                        world.setTypeAndData(blockposition, iblockdata1, 10);
+                        if (!entityhuman.abilities.canInstantlyBuild) {
+                            itemstack.subtract(1);
                         }
 
                         return EnumInteractionResult.SUCCESS;
                     }
-
-                    return EnumInteractionResult.FAIL;
                 }
 
                 return EnumInteractionResult.FAIL;
@@ -71,7 +73,7 @@ public class ItemDye extends Item {
                         iblockfragileplantelement.b(world, world.random, blockposition, iblockdata);
                     }
 
-                    --itemstack.count;
+                    itemstack.subtract(1);
                 }
 
                 return true;
@@ -88,7 +90,7 @@ public class ItemDye extends Item {
 
             if (!entitysheep.isSheared() && entitysheep.getColor() != enumcolor) {
                 entitysheep.setColor(enumcolor);
-                --itemstack.count;
+                itemstack.subtract(1);
             }
 
             return true;

@@ -9,10 +9,10 @@ public class BlockStoneButton extends BlockButtonAbstract {
     }
 
     protected void a(@Nullable EntityHuman entityhuman, World world, BlockPosition blockposition) {
-        world.a(entityhuman, blockposition, SoundEffects.gn, SoundCategory.BLOCKS, 0.3F, 0.6F);
+        world.a(entityhuman, blockposition, SoundEffects.gJ, SoundCategory.BLOCKS, 0.3F, 0.6F);
     }
 
     protected void b(World world, BlockPosition blockposition) {
-        world.a((EntityHuman) null, blockposition, SoundEffects.gm, SoundCategory.BLOCKS, 0.3F, 0.5F);
+        world.a((EntityHuman) null, blockposition, SoundEffects.gI, SoundCategory.BLOCKS, 0.3F, 0.5F);
     }
 }

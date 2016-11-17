@@ -11,7 +11,7 @@ public final class IEntitySelector {
             return entity.isAlive();
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((Entity) object);
         }
     };
@@ -20,7 +20,7 @@ public final class IEntitySelector {
             return entity.isAlive() && !entity.isVehicle() && !entity.isPassenger();
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((Entity) object);
         }
     };
@@ -29,7 +29,7 @@ public final class IEntitySelector {
             return entity instanceof IInventory && entity.isAlive();
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((Entity) object);
         }
     };
@@ -38,7 +38,7 @@ public final class IEntitySelector {
             return !(entity instanceof EntityHuman) || !((EntityHuman) entity).isSpectator() && !((EntityHuman) entity).z();
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((Entity) object);
         }
     };
@@ -47,16 +47,7 @@ public final class IEntitySelector {
             return !(entity instanceof EntityHuman) || !((EntityHuman) entity).isSpectator();
         }
 
-        public boolean apply(Object object) {
-            return this.a((Entity) object);
-        }
-    };
-    public static final Predicate<Entity> f = new Predicate() {
-        public boolean a(@Nullable Entity entity) {
-            return entity instanceof EntityShulker && entity.isAlive();
-        }
-
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((Entity) object);
         }
     };
@@ -66,10 +57,10 @@ public final class IEntitySelector {
 
         return new Predicate() {
             public boolean a(@Nullable T t0) {
-                return t0 != null && t0.e(d0, d1, d2) <= d3;
+                return t0 != null && t0.d(d0, d1, d2) <= d3;
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((Entity) object);
             }
         };
@@ -83,7 +74,7 @@ public final class IEntitySelector {
             public boolean a(@Nullable Entity entity) {
                 if (!entity.isCollidable()) {
                     return false;
-                } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).cO())) {
+                } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).cR())) {
                     return false;
                 } else {
                     ScoreboardTeamBase scoreboardteambase = entity.aQ();
@@ -99,10 +90,33 @@ public final class IEntitySelector {
                 }
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((Entity) object);
             }
         });
+    }
+
+    public static Predicate<Entity> b(final Entity entity) {
+        return new Predicate() {
+            public boolean a(@Nullable Entity entity) {
+                while (true) {
+                    if (entity.isPassenger()) {
+                        entity = entity.bB();
+                        if (entity != entity1) {
+                            continue;
+                        }
+
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+
+            public boolean apply(@Nullable Object object) {
+                return this.a((Entity) object);
+            }
+        };
     }
 
     public static class EntitySelectorEquipable implements Predicate<Entity> {
@@ -121,11 +135,11 @@ public final class IEntitySelector {
             } else {
                 EntityLiving entityliving = (EntityLiving) entity;
 
-                return entityliving.getEquipment(EntityInsentient.d(this.a)) != null ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).cR() : (entityliving instanceof EntityArmorStand ? true : entityliving instanceof EntityHuman));
+                return !entityliving.getEquipment(EntityInsentient.d(this.a)).isEmpty() ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).cT() : (entityliving instanceof EntityArmorStand ? true : entityliving instanceof EntityHuman));
             }
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((Entity) object);
         }
     }

@@ -14,19 +14,19 @@ public class EntityTippedArrow extends EntityArrow {
 
     public EntityTippedArrow(World world) {
         super(world);
-        this.potionRegistry = Potions.a;
+        this.potionRegistry = Potions.EMPTY;
         this.effects = Sets.newHashSet();
     }
 
     public EntityTippedArrow(World world, double d0, double d1, double d2) {
         super(world, d0, d1, d2);
-        this.potionRegistry = Potions.a;
+        this.potionRegistry = Potions.EMPTY;
         this.effects = Sets.newHashSet();
     }
 
     public EntityTippedArrow(World world, EntityLiving entityliving) {
         super(world, entityliving);
-        this.potionRegistry = Potions.a;
+        this.potionRegistry = Potions.EMPTY;
         this.effects = Sets.newHashSet();
     }
 
@@ -45,13 +45,17 @@ public class EntityTippedArrow extends EntityArrow {
                 }
             }
 
-            this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) list))));
+            this.o();
         } else if (itemstack.getItem() == Items.ARROW) {
-            this.potionRegistry = Potions.a;
+            this.potionRegistry = Potions.EMPTY;
             this.effects.clear();
             this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(0));
         }
 
+    }
+
+    void o() {
+        this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
     }
 
     public void a(MobEffect mobeffect) {
@@ -64,8 +68,8 @@ public class EntityTippedArrow extends EntityArrow {
         this.datawatcher.register(EntityTippedArrow.f, Integer.valueOf(0));
     }
 
-    public void m() {
-        super.m();
+    public void A_() {
+        super.A_();
         if (this.world.isClientSide) {
             if (this.inGround) {
                 if (this.b % 5 == 0) {
@@ -76,7 +80,7 @@ public class EntityTippedArrow extends EntityArrow {
             }
         } else if (this.inGround && this.b != 0 && !this.effects.isEmpty() && this.b >= 600) {
             this.world.broadcastEntityEffect(this, (byte) 0);
-            this.potionRegistry = Potions.a;
+            this.potionRegistry = Potions.EMPTY;
             this.effects.clear();
             this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(0));
         }
@@ -84,7 +88,7 @@ public class EntityTippedArrow extends EntityArrow {
     }
 
     private void b(int i) {
-        int j = this.n();
+        int j = this.q();
 
         if (j != 0 && i > 0) {
             double d0 = (double) (j >> 16 & 255) / 255.0D;
@@ -98,17 +102,17 @@ public class EntityTippedArrow extends EntityArrow {
         }
     }
 
-    public int n() {
+    public int q() {
         return ((Integer) this.datawatcher.get(EntityTippedArrow.f)).intValue();
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void c(DataConverterManager dataconvertermanager) {
         EntityArrow.a(dataconvertermanager, "TippedArrow");
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        if (this.potionRegistry != Potions.a && this.potionRegistry != null) {
+        if (this.potionRegistry != Potions.EMPTY && this.potionRegistry != null) {
             nbttagcompound.setString("Potion", ((MinecraftKey) PotionRegistry.a.b(this.potionRegistry)).toString());
         }
 
@@ -141,8 +145,10 @@ public class EntityTippedArrow extends EntityArrow {
             this.a(mobeffect);
         }
 
-        if (this.potionRegistry != Potions.a || !this.effects.isEmpty()) {
-            this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
+        if (this.potionRegistry == Potions.EMPTY) {
+            this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(0));
+        } else {
+            this.o();
         }
 
     }
@@ -155,7 +161,7 @@ public class EntityTippedArrow extends EntityArrow {
 
         while (iterator.hasNext()) {
             mobeffect = (MobEffect) iterator.next();
-            entityliving.addEffect(new MobEffect(mobeffect.getMobEffect(), mobeffect.getDuration() / 8, mobeffect.getAmplifier(), mobeffect.isAmbient(), mobeffect.isShowParticles()));
+            entityliving.addEffect(new MobEffect(mobeffect.getMobEffect(), Math.max(mobeffect.getDuration() / 8, 1), mobeffect.getAmplifier(), mobeffect.isAmbient(), mobeffect.isShowParticles()));
         }
 
         if (!this.effects.isEmpty()) {
@@ -170,7 +176,7 @@ public class EntityTippedArrow extends EntityArrow {
     }
 
     protected ItemStack j() {
-        if (this.effects.isEmpty() && this.potionRegistry == Potions.a) {
+        if (this.effects.isEmpty() && this.potionRegistry == Potions.EMPTY) {
             return new ItemStack(Items.ARROW);
         } else {
             ItemStack itemstack = new ItemStack(Items.TIPPED_ARROW);

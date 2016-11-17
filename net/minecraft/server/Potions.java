@@ -6,7 +6,7 @@ import java.util.Set;
 public class Potions {
 
     private static final Set<PotionRegistry> K;
-    public static final PotionRegistry a;
+    public static final PotionRegistry EMPTY;
     public static final PotionRegistry b;
     public static final PotionRegistry c;
     public static final PotionRegistry d;
@@ -58,7 +58,7 @@ public class Potions {
             throw new RuntimeException("Accessed Potions before Bootstrap!");
         } else {
             K = Sets.newHashSet();
-            a = a("empty");
+            EMPTY = a("empty");
             b = a("water");
             c = a("mundane");
             d = a("thick");

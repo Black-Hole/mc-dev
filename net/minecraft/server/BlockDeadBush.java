@@ -11,7 +11,7 @@ public class BlockDeadBush extends BlockPlant {
         super(Material.REPLACEABLE_PLANT);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockDeadBush.a;
     }
 
@@ -31,13 +31,12 @@ public class BlockDeadBush extends BlockPlant {
         return random.nextInt(3);
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.STICK;
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
-        if (!world.isClientSide && itemstack != null && itemstack.getItem() == Items.SHEARS) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
+        if (!world.isClientSide && itemstack.getItem() == Items.SHEARS) {
             entityhuman.b(StatisticList.a((Block) this));
             a(world, blockposition, new ItemStack(Blocks.DEADBUSH, 1, 0));
         } else {

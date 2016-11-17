@@ -11,17 +11,11 @@ public class ItemShield extends Item {
         BlockDispenser.REGISTRY.a(this, ItemArmor.b);
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        return super.a(itemstack, entityhuman, world, blockposition, enumhand, enumdirection, f, f1, f2);
-    }
+    public String b(ItemStack itemstack) {
+        if (itemstack.d("BlockEntityTag") != null) {
+            EnumColor enumcolor = TileEntityBanner.d(itemstack);
 
-    public String a(ItemStack itemstack) {
-        if (itemstack.a("BlockEntityTag", false) != null) {
-            String s = "item.shield.";
-            EnumColor enumcolor = ItemBanner.b(itemstack);
-
-            s = s + enumcolor.d() + ".name";
-            return LocaleI18n.get(s);
+            return LocaleI18n.get("item.shield." + enumcolor.d() + ".name");
         } else {
             return LocaleI18n.get("item.shield.name");
         }
@@ -35,7 +29,9 @@ public class ItemShield extends Item {
         return 72000;
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         entityhuman.c(enumhand);
         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
     }

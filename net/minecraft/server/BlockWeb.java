@@ -19,7 +19,7 @@ public class BlockWeb extends Block {
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockWeb.k;
     }
 
@@ -27,17 +27,16 @@ public class BlockWeb extends Block {
         return false;
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.STRING;
     }
 
-    protected boolean o() {
+    protected boolean n() {
         return true;
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
-        if (!world.isClientSide && itemstack != null && itemstack.getItem() == Items.SHEARS) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
+        if (!world.isClientSide && itemstack.getItem() == Items.SHEARS) {
             entityhuman.b(StatisticList.a((Block) this));
             a(world, blockposition, new ItemStack(Item.getItemOf(this), 1));
         } else {

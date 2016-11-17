@@ -16,29 +16,29 @@ public class BlockTrapdoor extends Block {
 
     protected BlockTrapdoor(Material material) {
         super(material);
-        this.w(this.blockStateList.getBlockData().set(BlockTrapdoor.FACING, EnumDirection.NORTH).set(BlockTrapdoor.OPEN, Boolean.valueOf(false)).set(BlockTrapdoor.HALF, BlockTrapdoor.EnumTrapdoorHalf.BOTTOM));
+        this.y(this.blockStateList.getBlockData().set(BlockTrapdoor.FACING, EnumDirection.NORTH).set(BlockTrapdoor.OPEN, Boolean.valueOf(false)).set(BlockTrapdoor.HALF, BlockTrapdoor.EnumTrapdoorHalf.BOTTOM));
         this.a(CreativeModeTab.d);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         AxisAlignedBB axisalignedbb;
 
         if (((Boolean) iblockdata.get(BlockTrapdoor.OPEN)).booleanValue()) {
-            switch (BlockTrapdoor.SyntheticClass_1.a[((EnumDirection) iblockdata.get(BlockTrapdoor.FACING)).ordinal()]) {
-            case 1:
+            switch ((EnumDirection) iblockdata.get(BlockTrapdoor.FACING)) {
+            case NORTH:
             default:
                 axisalignedbb = BlockTrapdoor.g;
                 break;
 
-            case 2:
+            case SOUTH:
                 axisalignedbb = BlockTrapdoor.f;
                 break;
 
-            case 3:
+            case WEST:
                 axisalignedbb = BlockTrapdoor.e;
                 break;
 
-            case 4:
+            case EAST:
                 axisalignedbb = BlockTrapdoor.d;
             }
         } else if (iblockdata.get(BlockTrapdoor.HALF) == BlockTrapdoor.EnumTrapdoorHalf.TOP) {
@@ -62,9 +62,9 @@ public class BlockTrapdoor extends Block {
         return !((Boolean) iblockaccess.getType(blockposition).get(BlockTrapdoor.OPEN)).booleanValue();
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (this.material == Material.ORE) {
-            return true;
+            return false;
         } else {
             iblockdata = iblockdata.a((IBlockState) BlockTrapdoor.OPEN);
             world.setTypeAndData(blockposition, iblockdata, 2);
@@ -86,11 +86,11 @@ public class BlockTrapdoor extends Block {
 
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!world.isClientSide) {
             boolean flag = world.isBlockIndirectlyPowered(blockposition);
 
-            if (flag || block.getBlockData().m()) {
+            if (flag || block.getBlockData().n()) {
                 boolean flag1 = ((Boolean) iblockdata.get(BlockTrapdoor.OPEN)).booleanValue();
 
                 if (flag1 != flag) {
@@ -111,6 +111,10 @@ public class BlockTrapdoor extends Block {
         } else {
             iblockdata = iblockdata.set(BlockTrapdoor.FACING, entityliving.getDirection().opposite()).set(BlockTrapdoor.OPEN, Boolean.valueOf(false));
             iblockdata = iblockdata.set(BlockTrapdoor.HALF, enumdirection == EnumDirection.UP ? BlockTrapdoor.EnumTrapdoorHalf.BOTTOM : BlockTrapdoor.EnumTrapdoorHalf.TOP);
+        }
+
+        if (world.isBlockIndirectlyPowered(blockposition)) {
+            iblockdata = iblockdata.set(BlockTrapdoor.OPEN, Boolean.valueOf(true));
         }
 
         return iblockdata;
@@ -138,17 +142,17 @@ public class BlockTrapdoor extends Block {
     }
 
     protected static int a(EnumDirection enumdirection) {
-        switch (BlockTrapdoor.SyntheticClass_1.a[enumdirection.ordinal()]) {
-        case 1:
+        switch (enumdirection) {
+        case NORTH:
             return 0;
 
-        case 2:
+        case SOUTH:
             return 1;
 
-        case 3:
+        case WEST:
             return 2;
 
-        case 4:
+        case EAST:
         default:
             return 3;
         }
@@ -183,38 +187,6 @@ public class BlockTrapdoor extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockTrapdoor.FACING, BlockTrapdoor.OPEN, BlockTrapdoor.HALF});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumDirection.values().length];
-
-        static {
-            try {
-                BlockTrapdoor.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockTrapdoor.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockTrapdoor.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockTrapdoor.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-        }
     }
 
     public static enum EnumTrapdoorHalf implements INamable {

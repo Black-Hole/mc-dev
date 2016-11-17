@@ -69,7 +69,7 @@ public class TileEntitySign extends TileEntity {
 
             public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {}
 
-            public MinecraftServer h() {
+            public MinecraftServer B_() {
                 return TileEntitySign.this.world.getMinecraftServer();
             }
         };
@@ -90,10 +90,10 @@ public class TileEntitySign extends TileEntity {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 9, this.c());
+        return new PacketPlayOutTileEntityData(this.position, 9, this.d());
     }
 
-    public NBTTagCompound c() {
+    public NBTTagCompound d() {
         return this.save(new NBTTagCompound());
     }
 
@@ -101,7 +101,7 @@ public class TileEntitySign extends TileEntity {
         return true;
     }
 
-    public boolean d() {
+    public boolean a() {
         return this.isEditable;
     }
 
@@ -156,8 +156,8 @@ public class TileEntitySign extends TileEntity {
 
             }
 
-            public MinecraftServer h() {
-                return entityhuman.h();
+            public MinecraftServer B_() {
+                return entityhuman.B_();
             }
         };
         IChatBaseComponent[] aichatbasecomponent = this.lines;
@@ -171,7 +171,7 @@ public class TileEntitySign extends TileEntity {
                 ChatClickable chatclickable = chatmodifier.h();
 
                 if (chatclickable.a() == ChatClickable.EnumClickAction.RUN_COMMAND) {
-                    entityhuman.h().getCommandHandler().a(icommandlistener, chatclickable.b());
+                    entityhuman.B_().getCommandHandler().a(icommandlistener, chatclickable.b());
                 }
             }
         }
@@ -179,7 +179,7 @@ public class TileEntitySign extends TileEntity {
         return true;
     }
 
-    public CommandObjectiveExecutor g() {
+    public CommandObjectiveExecutor f() {
         return this.i;
     }
 }

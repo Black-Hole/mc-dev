@@ -33,7 +33,6 @@ public class TileEntityStructure extends TileEntity {
         this.m = true;
         this.p = true;
         this.q = 1.0F;
-        this.r = 0L;
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
@@ -121,15 +120,15 @@ public class TileEntityStructure extends TileEntity {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 7, this.c());
+        return new PacketPlayOutTileEntityData(this.position, 7, this.d());
     }
 
-    public NBTTagCompound c() {
+    public NBTTagCompound d() {
         return this.save(new NBTTagCompound());
     }
 
     public boolean a(EntityHuman entityhuman) {
-        if (!entityhuman.dh()) {
+        if (!entityhuman.dk()) {
             return false;
         } else {
             if (entityhuman.getWorld().isClientSide) {
@@ -140,7 +139,7 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public String d() {
+    public String a() {
         return this.a;
     }
 
@@ -248,7 +247,7 @@ public class TileEntityStructure extends TileEntity {
                 return tileentitystructure.l == TileEntityStructure.UsageMode.CORNER && TileEntityStructure.this.a.equals(tileentitystructure.a);
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((TileEntityStructure) object);
             }
         });
@@ -321,7 +320,7 @@ public class TileEntityStructure extends TileEntity {
 
     public boolean b(boolean flag) {
         if (this.l == TileEntityStructure.UsageMode.SAVE && !this.world.isClientSide && !UtilColor.b(this.a)) {
-            BlockPosition blockposition = this.getPosition().a(this.h);
+            BlockPosition blockposition = this.getPosition().a((BaseBlockPosition) this.h);
             WorldServer worldserver = (WorldServer) this.world;
             MinecraftServer minecraftserver = this.world.getMinecraftServer();
             DefinedStructureManager definedstructuremanager = worldserver.y();
@@ -329,7 +328,7 @@ public class TileEntityStructure extends TileEntity {
 
             definedstructure.a(this.world, blockposition, this.i, !this.m, Blocks.dj);
             definedstructure.a(this.f);
-            return !flag || definedstructuremanager.d(minecraftserver, new MinecraftKey(this.a));
+            return !flag || definedstructuremanager.c(minecraftserver, new MinecraftKey(this.a));
         } else {
             return false;
         }
@@ -342,7 +341,7 @@ public class TileEntityStructure extends TileEntity {
     public boolean c(boolean flag) {
         if (this.l == TileEntityStructure.UsageMode.LOAD && !this.world.isClientSide && !UtilColor.b(this.a)) {
             BlockPosition blockposition = this.getPosition();
-            BlockPosition blockposition1 = blockposition.a(this.h);
+            BlockPosition blockposition1 = blockposition.a((BaseBlockPosition) this.h);
             WorldServer worldserver = (WorldServer) this.world;
             MinecraftServer minecraftserver = this.world.getMinecraftServer();
             DefinedStructureManager definedstructuremanager = worldserver.y();
@@ -384,14 +383,14 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public void E() {
+    public void s() {
         WorldServer worldserver = (WorldServer) this.world;
         DefinedStructureManager definedstructuremanager = worldserver.y();
 
-        definedstructuremanager.a(new MinecraftKey(this.a));
+        definedstructuremanager.b(new MinecraftKey(this.a));
     }
 
-    public boolean F() {
+    public boolean E() {
         if (this.l == TileEntityStructure.UsageMode.LOAD && !this.world.isClientSide) {
             WorldServer worldserver = (WorldServer) this.world;
             MinecraftServer minecraftserver = this.world.getMinecraftServer();
@@ -403,7 +402,7 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public boolean G() {
+    public boolean F() {
         return this.n;
     }
 

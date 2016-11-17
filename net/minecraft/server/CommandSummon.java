@@ -43,7 +43,7 @@ public class CommandSummon extends CommandAbstract {
 
             if (!world.isLoaded(blockposition)) {
                 throw new CommandException("commands.summon.outOfWorld", new Object[0]);
-            } else if ("LightningBolt".equals(s)) {
+            } else if (EntityTypes.a.equals(new MinecraftKey(s))) {
                 world.strikeLightning(new EntityLightning(world, d0, d1, d2, false));
                 a(icommandlistener, (ICommand) this, "commands.summon.success", new Object[0]);
             } else {
@@ -79,6 +79,6 @@ public class CommandSummon extends CommandAbstract {
     }
 
     public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, (Collection) EntityTypes.b()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : Collections.emptyList());
+        return astring.length == 1 ? a(astring, (Collection) EntityTypes.a()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : Collections.emptyList());
     }
 }

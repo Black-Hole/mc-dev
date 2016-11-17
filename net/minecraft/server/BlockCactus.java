@@ -11,7 +11,7 @@ public class BlockCactus extends Block {
 
     protected BlockCactus() {
         super(Material.CACTUS);
-        this.w(this.blockStateList.getBlockData().set(BlockCactus.AGE, Integer.valueOf(0)));
+        this.y(this.blockStateList.getBlockData().set(BlockCactus.AGE, Integer.valueOf(0)));
         this.a(true);
         this.a(CreativeModeTab.c);
     }
@@ -34,7 +34,7 @@ public class BlockCactus extends Block {
                     IBlockData iblockdata1 = iblockdata.set(BlockCactus.AGE, Integer.valueOf(0));
 
                     world.setTypeAndData(blockposition, iblockdata1, 4);
-                    iblockdata1.doPhysics(world, blockposition1, this);
+                    iblockdata1.doPhysics(world, blockposition1, this, blockposition);
                 } else {
                     world.setTypeAndData(blockposition, iblockdata.set(BlockCactus.AGE, Integer.valueOf(j + 1)), 4);
                 }
@@ -43,7 +43,7 @@ public class BlockCactus extends Block {
         }
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockCactus.b;
     }
 
@@ -59,7 +59,7 @@ public class BlockCactus extends Block {
         return super.canPlace(world, blockposition) ? this.b(world, blockposition) : false;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!this.b(world, blockposition)) {
             world.setAir(blockposition, true);
         }

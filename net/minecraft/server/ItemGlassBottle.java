@@ -10,22 +10,23 @@ public class ItemGlassBottle extends Item {
         this.a(CreativeModeTab.k);
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         List list = world.a(EntityAreaEffectCloud.class, entityhuman.getBoundingBox().g(2.0D), new Predicate() {
             public boolean a(@Nullable EntityAreaEffectCloud entityareaeffectcloud) {
                 return entityareaeffectcloud != null && entityareaeffectcloud.isAlive() && entityareaeffectcloud.y() instanceof EntityEnderDragon;
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((EntityAreaEffectCloud) object);
             }
         });
+        ItemStack itemstack = entityhuman.b(enumhand);
 
         if (!list.isEmpty()) {
             EntityAreaEffectCloud entityareaeffectcloud = (EntityAreaEffectCloud) list.get(0);
 
             entityareaeffectcloud.setRadius(entityareaeffectcloud.getRadius() - 0.5F);
-            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.J, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.L, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, new ItemStack(Items.DRAGON_BREATH)));
         } else {
             MovingObjectPosition movingobjectposition = this.a(world, entityhuman, true);
@@ -41,8 +42,8 @@ public class ItemGlassBottle extends Item {
                     }
 
                     if (world.getType(blockposition).getMaterial() == Material.WATER) {
-                        world.a(entityhuman, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.I, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, new ItemStack(Items.POTION)));
+                        world.a(entityhuman, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.K, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, PotionUtil.a(new ItemStack(Items.POTION), Potions.b)));
                     }
                 }
 
@@ -52,9 +53,9 @@ public class ItemGlassBottle extends Item {
     }
 
     protected ItemStack a(ItemStack itemstack, EntityHuman entityhuman, ItemStack itemstack1) {
-        --itemstack.count;
+        itemstack.subtract(1);
         entityhuman.b(StatisticList.b((Item) this));
-        if (itemstack.count <= 0) {
+        if (itemstack.isEmpty()) {
             return itemstack1;
         } else {
             if (!entityhuman.inventory.pickup(itemstack1)) {

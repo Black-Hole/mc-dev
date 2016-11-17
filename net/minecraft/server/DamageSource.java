@@ -4,33 +4,34 @@ import javax.annotation.Nullable;
 
 public class DamageSource {
 
-    public static DamageSource FIRE = (new DamageSource("inFire")).setExplosion();
-    public static DamageSource LIGHTNING = new DamageSource("lightningBolt");
-    public static DamageSource BURN = (new DamageSource("onFire")).setIgnoreArmor().setExplosion();
-    public static DamageSource LAVA = (new DamageSource("lava")).setExplosion();
-    public static DamageSource HOT_FLOOR = (new DamageSource("hotFloor")).setExplosion();
-    public static DamageSource STUCK = (new DamageSource("inWall")).setIgnoreArmor();
-    public static DamageSource DROWN = (new DamageSource("drown")).setIgnoreArmor();
-    public static DamageSource STARVE = (new DamageSource("starve")).setIgnoreArmor().m();
-    public static DamageSource CACTUS = new DamageSource("cactus");
-    public static DamageSource FALL = (new DamageSource("fall")).setIgnoreArmor();
-    public static DamageSource FLY_INTO_WALL = (new DamageSource("flyIntoWall")).setIgnoreArmor();
-    public static DamageSource OUT_OF_WORLD = (new DamageSource("outOfWorld")).setIgnoreArmor().l();
-    public static DamageSource GENERIC = (new DamageSource("generic")).setIgnoreArmor();
-    public static DamageSource MAGIC = (new DamageSource("magic")).setIgnoreArmor().setMagic();
-    public static DamageSource WITHER = (new DamageSource("wither")).setIgnoreArmor();
-    public static DamageSource ANVIL = new DamageSource("anvil");
-    public static DamageSource FALLING_BLOCK = new DamageSource("fallingBlock");
-    public static DamageSource DRAGON_BREATH = (new DamageSource("dragonBreath")).setIgnoreArmor();
-    private boolean t;
+    public static final DamageSource FIRE = (new DamageSource("inFire")).setExplosion();
+    public static final DamageSource LIGHTNING = new DamageSource("lightningBolt");
+    public static final DamageSource BURN = (new DamageSource("onFire")).setIgnoreArmor().setExplosion();
+    public static final DamageSource LAVA = (new DamageSource("lava")).setExplosion();
+    public static final DamageSource HOT_FLOOR = (new DamageSource("hotFloor")).setExplosion();
+    public static final DamageSource STUCK = (new DamageSource("inWall")).setIgnoreArmor();
+    public static final DamageSource CRAMMING = (new DamageSource("cramming")).setIgnoreArmor();
+    public static final DamageSource DROWN = (new DamageSource("drown")).setIgnoreArmor();
+    public static final DamageSource STARVE = (new DamageSource("starve")).setIgnoreArmor().m();
+    public static final DamageSource CACTUS = new DamageSource("cactus");
+    public static final DamageSource FALL = (new DamageSource("fall")).setIgnoreArmor();
+    public static final DamageSource FLY_INTO_WALL = (new DamageSource("flyIntoWall")).setIgnoreArmor();
+    public static final DamageSource OUT_OF_WORLD = (new DamageSource("outOfWorld")).setIgnoreArmor().l();
+    public static final DamageSource GENERIC = (new DamageSource("generic")).setIgnoreArmor();
+    public static final DamageSource MAGIC = (new DamageSource("magic")).setIgnoreArmor().setMagic();
+    public static final DamageSource WITHER = (new DamageSource("wither")).setIgnoreArmor();
+    public static final DamageSource ANVIL = new DamageSource("anvil");
+    public static final DamageSource FALLING_BLOCK = new DamageSource("fallingBlock");
+    public static final DamageSource DRAGON_BREATH = (new DamageSource("dragonBreath")).setIgnoreArmor();
     private boolean u;
     private boolean v;
-    private float w = 0.3F;
-    private boolean x;
+    private boolean w;
+    private float x = 0.1F;
     private boolean y;
     private boolean z;
     private boolean A;
     private boolean B;
+    private boolean C;
     public String translationIndex;
 
     public static DamageSource mobAttack(EntityLiving entityliving) {
@@ -74,37 +75,37 @@ public class DamageSource {
     }
 
     public boolean a() {
-        return this.y;
+        return this.z;
     }
 
     public DamageSource b() {
-        this.y = true;
+        this.z = true;
         return this;
     }
 
     public boolean isExplosion() {
-        return this.B;
+        return this.C;
     }
 
     public DamageSource d() {
-        this.B = true;
+        this.C = true;
         return this;
     }
 
     public boolean ignoresArmor() {
-        return this.t;
-    }
-
-    public float getExhaustionCost() {
-        return this.w;
-    }
-
-    public boolean ignoresInvulnerability() {
         return this.u;
     }
 
-    public boolean isStarvation() {
+    public float getExhaustionCost() {
+        return this.x;
+    }
+
+    public boolean ignoresInvulnerability() {
         return this.v;
+    }
+
+    public boolean isStarvation() {
+        return this.w;
     }
 
     protected DamageSource(String s) {
@@ -122,29 +123,29 @@ public class DamageSource {
     }
 
     protected DamageSource setIgnoreArmor() {
-        this.t = true;
-        this.w = 0.0F;
+        this.u = true;
+        this.x = 0.0F;
         return this;
     }
 
     protected DamageSource l() {
-        this.u = true;
+        this.v = true;
         return this;
     }
 
     protected DamageSource m() {
-        this.v = true;
-        this.w = 0.0F;
+        this.w = true;
+        this.x = 0.0F;
         return this;
     }
 
     protected DamageSource setExplosion() {
-        this.x = true;
+        this.y = true;
         return this;
     }
 
     public IChatBaseComponent getLocalizedDeathMessage(EntityLiving entityliving) {
-        EntityLiving entityliving1 = entityliving.bZ();
+        EntityLiving entityliving1 = entityliving.ca();
         String s = "death.attack." + this.translationIndex;
         String s1 = s + ".player";
 
@@ -152,7 +153,7 @@ public class DamageSource {
     }
 
     public boolean o() {
-        return this.x;
+        return this.y;
     }
 
     public String p() {
@@ -160,20 +161,20 @@ public class DamageSource {
     }
 
     public DamageSource q() {
-        this.z = true;
+        this.A = true;
         return this;
     }
 
     public boolean r() {
-        return this.z;
-    }
-
-    public boolean isMagic() {
         return this.A;
     }
 
+    public boolean isMagic() {
+        return this.B;
+    }
+
     public DamageSource setMagic() {
-        this.A = true;
+        this.B = true;
         return this;
     }
 

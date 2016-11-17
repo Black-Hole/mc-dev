@@ -20,7 +20,7 @@ public class WorldGenFlowers extends WorldGenerator {
         for (int i = 0; i < 64; ++i) {
             BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 
-            if (world.isEmpty(blockposition1) && (!world.worldProvider.m() || blockposition1.getY() < 255) && this.a.f(world, blockposition1, this.b)) {
+            if (world.isEmpty(blockposition1) && (!world.worldProvider.n() || blockposition1.getY() < 255) && this.a.f(world, blockposition1, this.b)) {
                 world.setTypeAndData(blockposition1, this.b, 2);
             }
         }

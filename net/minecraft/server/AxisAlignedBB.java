@@ -71,6 +71,35 @@ public class AxisAlignedBB {
         double d8 = this.f;
 
         if (d0 < 0.0D) {
+            d3 -= d0;
+        } else if (d0 > 0.0D) {
+            d6 -= d0;
+        }
+
+        if (d1 < 0.0D) {
+            d4 -= d1;
+        } else if (d1 > 0.0D) {
+            d7 -= d1;
+        }
+
+        if (d2 < 0.0D) {
+            d5 -= d2;
+        } else if (d2 > 0.0D) {
+            d8 -= d2;
+        }
+
+        return new AxisAlignedBB(d3, d4, d5, d6, d7, d8);
+    }
+
+    public AxisAlignedBB b(double d0, double d1, double d2) {
+        double d3 = this.a;
+        double d4 = this.b;
+        double d5 = this.c;
+        double d6 = this.d;
+        double d7 = this.e;
+        double d8 = this.f;
+
+        if (d0 < 0.0D) {
             d3 += d0;
         } else if (d0 > 0.0D) {
             d6 += d0;
@@ -107,6 +136,17 @@ public class AxisAlignedBB {
     }
 
     public AxisAlignedBB a(AxisAlignedBB axisalignedbb) {
+        double d0 = Math.max(this.a, axisalignedbb.a);
+        double d1 = Math.max(this.b, axisalignedbb.b);
+        double d2 = Math.max(this.c, axisalignedbb.c);
+        double d3 = Math.min(this.d, axisalignedbb.d);
+        double d4 = Math.min(this.e, axisalignedbb.e);
+        double d5 = Math.min(this.f, axisalignedbb.f);
+
+        return new AxisAlignedBB(d0, d1, d2, d3, d4, d5);
+    }
+
+    public AxisAlignedBB b(AxisAlignedBB axisalignedbb) {
         double d0 = Math.min(this.a, axisalignedbb.a);
         double d1 = Math.min(this.b, axisalignedbb.b);
         double d2 = Math.min(this.c, axisalignedbb.c);
@@ -117,12 +157,16 @@ public class AxisAlignedBB {
         return new AxisAlignedBB(d0, d1, d2, d3, d4, d5);
     }
 
-    public AxisAlignedBB c(double d0, double d1, double d2) {
+    public AxisAlignedBB d(double d0, double d1, double d2) {
         return new AxisAlignedBB(this.a + d0, this.b + d1, this.c + d2, this.d + d0, this.e + d1, this.f + d2);
     }
 
     public AxisAlignedBB a(BlockPosition blockposition) {
         return new AxisAlignedBB(this.a + (double) blockposition.getX(), this.b + (double) blockposition.getY(), this.c + (double) blockposition.getZ(), this.d + (double) blockposition.getX(), this.e + (double) blockposition.getY(), this.f + (double) blockposition.getZ());
+    }
+
+    public AxisAlignedBB a(Vec3D vec3d) {
+        return this.d(vec3d.x, vec3d.y, vec3d.z);
     }
 
     public double a(AxisAlignedBB axisalignedbb, double d0) {
@@ -191,7 +235,7 @@ public class AxisAlignedBB {
         }
     }
 
-    public boolean b(AxisAlignedBB axisalignedbb) {
+    public boolean c(AxisAlignedBB axisalignedbb) {
         return this.a(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c, axisalignedbb.d, axisalignedbb.e, axisalignedbb.f);
     }
 
@@ -199,7 +243,7 @@ public class AxisAlignedBB {
         return this.a < d3 && this.d > d0 && this.b < d4 && this.e > d1 && this.c < d5 && this.f > d2;
     }
 
-    public boolean a(Vec3D vec3d) {
+    public boolean b(Vec3D vec3d) {
         return vec3d.x > this.a && vec3d.x < this.d ? (vec3d.y > this.b && vec3d.y < this.e ? vec3d.z > this.c && vec3d.z < this.f : false) : false;
     }
 
@@ -263,7 +307,7 @@ public class AxisAlignedBB {
     Vec3D a(double d0, Vec3D vec3d, Vec3D vec3d1) {
         Vec3D vec3d2 = vec3d.a(vec3d1, d0);
 
-        return vec3d2 != null && this.b(vec3d2) ? vec3d2 : null;
+        return vec3d2 != null && this.c(vec3d2) ? vec3d2 : null;
     }
 
     @Nullable
@@ -271,7 +315,7 @@ public class AxisAlignedBB {
     Vec3D b(double d0, Vec3D vec3d, Vec3D vec3d1) {
         Vec3D vec3d2 = vec3d.b(vec3d1, d0);
 
-        return vec3d2 != null && this.c(vec3d2) ? vec3d2 : null;
+        return vec3d2 != null && this.d(vec3d2) ? vec3d2 : null;
     }
 
     @Nullable
@@ -279,21 +323,21 @@ public class AxisAlignedBB {
     Vec3D c(double d0, Vec3D vec3d, Vec3D vec3d1) {
         Vec3D vec3d2 = vec3d.c(vec3d1, d0);
 
-        return vec3d2 != null && this.d(vec3d2) ? vec3d2 : null;
-    }
-
-    @VisibleForTesting
-    public boolean b(Vec3D vec3d) {
-        return vec3d.y >= this.b && vec3d.y <= this.e && vec3d.z >= this.c && vec3d.z <= this.f;
+        return vec3d2 != null && this.e(vec3d2) ? vec3d2 : null;
     }
 
     @VisibleForTesting
     public boolean c(Vec3D vec3d) {
-        return vec3d.x >= this.a && vec3d.x <= this.d && vec3d.z >= this.c && vec3d.z <= this.f;
+        return vec3d.y >= this.b && vec3d.y <= this.e && vec3d.z >= this.c && vec3d.z <= this.f;
     }
 
     @VisibleForTesting
     public boolean d(Vec3D vec3d) {
+        return vec3d.x >= this.a && vec3d.x <= this.d && vec3d.z >= this.c && vec3d.z <= this.f;
+    }
+
+    @VisibleForTesting
+    public boolean e(Vec3D vec3d) {
         return vec3d.x >= this.a && vec3d.x <= this.d && vec3d.y >= this.b && vec3d.y <= this.e;
     }
 

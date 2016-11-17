@@ -10,16 +10,20 @@ public class ItemFishingRod extends Item {
         });
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         if (entityhuman.hookedFish != null) {
             int i = entityhuman.hookedFish.j();
 
             itemstack.damage(i, entityhuman);
             entityhuman.a(enumhand);
         } else {
-            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.H, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemFishingRod.j.nextFloat() * 0.4F + 0.8F));
+            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.I, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemFishingRod.j.nextFloat() * 0.4F + 0.8F));
             if (!world.isClientSide) {
-                world.addEntity(new EntityFishingHook(world, entityhuman));
+                EntityFishingHook entityfishinghook = new EntityFishingHook(world, entityhuman);
+
+                world.addEntity(entityfishinghook);
             }
 
             entityhuman.a(enumhand);
@@ -27,10 +31,6 @@ public class ItemFishingRod extends Item {
         }
 
         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
-    }
-
-    public boolean g_(ItemStack itemstack) {
-        return super.g_(itemstack);
     }
 
     public int c() {

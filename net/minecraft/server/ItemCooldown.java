@@ -47,15 +47,13 @@ public class ItemCooldown {
     }
 
     public void a(Item item, int i) {
-        this.a.put(item, new ItemCooldown.Info(this.b, this.b + i, (ItemCooldown.SyntheticClass_1) null));
+        this.a.put(item, new ItemCooldown.Info(this.b, this.b + i, null));
         this.b(item, i);
     }
 
     protected void b(Item item, int i) {}
 
     protected void c(Item item) {}
-
-    static class SyntheticClass_1 {    }
 
     class Info {
 
@@ -67,7 +65,7 @@ public class ItemCooldown {
             this.b = j;
         }
 
-        Info(int i, int j, ItemCooldown.SyntheticClass_1 itemcooldown_syntheticclass_1) {
+        Info(int i, int j, Object object) {
             this(i, j);
         }
     }

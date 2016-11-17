@@ -8,7 +8,7 @@ public class GenLayerBiome extends GenLayer {
     private final BiomeBase[] f;
     private final CustomWorldSettingsFinal g;
 
-    public GenLayerBiome(long i, GenLayer genlayer, WorldType worldtype, String s) {
+    public GenLayerBiome(long i, GenLayer genlayer, WorldType worldtype, CustomWorldSettingsFinal customworldsettingsfinal) {
         super(i);
         this.c = new BiomeBase[] { Biomes.d, Biomes.d, Biomes.d, Biomes.K, Biomes.K, Biomes.c};
         this.d = new BiomeBase[] { Biomes.f, Biomes.E, Biomes.e, Biomes.c, Biomes.C, Biomes.h};
@@ -18,10 +18,8 @@ public class GenLayerBiome extends GenLayer {
         if (worldtype == WorldType.NORMAL_1_1) {
             this.c = new BiomeBase[] { Biomes.d, Biomes.f, Biomes.e, Biomes.h, Biomes.c, Biomes.g};
             this.g = null;
-        } else if (worldtype == WorldType.CUSTOMIZED) {
-            this.g = CustomWorldSettingsFinal.CustomWorldSettings.a(s).b();
         } else {
-            this.g = null;
+            this.g = customworldsettingsfinal;
         }
 
     }
@@ -37,8 +35,8 @@ public class GenLayerBiome extends GenLayer {
                 int l1 = (k1 & 3840) >> 8;
 
                 k1 &= -3841;
-                if (this.g != null && this.g.F >= 0) {
-                    aint1[j1 + i1 * k] = this.g.F;
+                if (this.g != null && this.g.G >= 0) {
+                    aint1[j1 + i1 * k] = this.g.G;
                 } else if (b(k1)) {
                     aint1[j1 + i1 * k] = k1;
                 } else if (k1 == BiomeBase.a(Biomes.p)) {

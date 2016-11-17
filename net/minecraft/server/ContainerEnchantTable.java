@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import java.util.List;
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class ContainerEnchantTable extends Container {
 
@@ -27,9 +26,9 @@ public class ContainerEnchantTable extends Container {
     public ContainerEnchantTable(PlayerInventory playerinventory, World world, BlockPosition blockposition) {
         this.world = world;
         this.position = blockposition;
-        this.f = playerinventory.player.cV();
+        this.f = playerinventory.player.cY();
         this.a(new Slot(this.enchantSlots, 0, 15, 47) {
-            public boolean isAllowed(@Nullable ItemStack itemstack) {
+            public boolean isAllowed(ItemStack itemstack) {
                 return true;
             }
 
@@ -38,7 +37,7 @@ public class ContainerEnchantTable extends Container {
             }
         });
         this.a(new Slot(this.enchantSlots, 1, 35, 47) {
-            public boolean isAllowed(@Nullable ItemStack itemstack) {
+            public boolean isAllowed(ItemStack itemstack) {
                 return itemstack.getItem() == Items.DYE && EnumColor.fromInvColorIndex(itemstack.getData()) == EnumColor.BLUE;
             }
         });
@@ -91,7 +90,7 @@ public class ContainerEnchantTable extends Container {
             ItemStack itemstack = iinventory.getItem(0);
             int i;
 
-            if (itemstack != null && itemstack.v()) {
+            if (!itemstack.isEmpty() && itemstack.canEnchant()) {
                 if (!this.world.isClientSide) {
                     i = 0;
 
@@ -171,17 +170,19 @@ public class ContainerEnchantTable extends Container {
         ItemStack itemstack1 = this.enchantSlots.getItem(1);
         int j = i + 1;
 
-        if ((itemstack1 == null || itemstack1.count < j) && !entityhuman.abilities.canInstantlyBuild) {
+        if ((itemstack1.isEmpty() || itemstack1.getCount() < j) && !entityhuman.abilities.canInstantlyBuild) {
             return false;
-        } else if (this.costs[i] > 0 && itemstack != null && (entityhuman.expLevel >= j && entityhuman.expLevel >= this.costs[i] || entityhuman.abilities.canInstantlyBuild)) {
+        } else if (this.costs[i] > 0 && !itemstack.isEmpty() && (entityhuman.expLevel >= j && entityhuman.expLevel >= this.costs[i] || entityhuman.abilities.canInstantlyBuild)) {
             if (!this.world.isClientSide) {
                 List list = this.a(itemstack, i, this.costs[i]);
-                boolean flag = itemstack.getItem() == Items.BOOK;
 
-                if (list != null) {
+                if (!list.isEmpty()) {
                     entityhuman.enchantDone(j);
+                    boolean flag = itemstack.getItem() == Items.BOOK;
+
                     if (flag) {
-                        itemstack.setItem(Items.ENCHANTED_BOOK);
+                        itemstack = new ItemStack(Items.ENCHANTED_BOOK);
+                        this.enchantSlots.setItem(0, itemstack);
                     }
 
                     for (int k = 0; k < list.size(); ++k) {
@@ -195,17 +196,17 @@ public class ContainerEnchantTable extends Container {
                     }
 
                     if (!entityhuman.abilities.canInstantlyBuild) {
-                        itemstack1.count -= j;
-                        if (itemstack1.count <= 0) {
-                            this.enchantSlots.setItem(1, (ItemStack) null);
+                        itemstack1.subtract(j);
+                        if (itemstack1.isEmpty()) {
+                            this.enchantSlots.setItem(1, ItemStack.a);
                         }
                     }
 
                     entityhuman.b(StatisticList.Y);
                     this.enchantSlots.update();
-                    this.f = entityhuman.cV();
+                    this.f = entityhuman.cY();
                     this.a(this.enchantSlots);
-                    this.world.a((EntityHuman) null, this.position, SoundEffects.aL, SoundCategory.BLOCKS, 1.0F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                    this.world.a((EntityHuman) null, this.position, SoundEffects.aO, SoundCategory.BLOCKS, 1.0F, this.world.random.nextFloat() * 0.1F + 0.9F);
                 }
             }
 
@@ -232,7 +233,7 @@ public class ContainerEnchantTable extends Container {
             for (int i = 0; i < this.enchantSlots.getSize(); ++i) {
                 ItemStack itemstack = this.enchantSlots.splitWithoutUpdate(i);
 
-                if (itemstack != null) {
+                if (!itemstack.isEmpty()) {
                     entityhuman.drop(itemstack, false);
                 }
             }
@@ -241,12 +242,11 @@ public class ContainerEnchantTable extends Container {
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getType(this.position).getBlock() != Blocks.ENCHANTING_TABLE ? false : entityhuman.e((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
+        return this.world.getType(this.position).getBlock() != Blocks.ENCHANTING_TABLE ? false : entityhuman.d((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
-    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.a;
         Slot slot = (Slot) this.c.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -255,38 +255,38 @@ public class ContainerEnchantTable extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i == 0) {
                 if (!this.a(itemstack1, 2, 38, true)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else if (i == 1) {
                 if (!this.a(itemstack1, 2, 38, true)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else if (itemstack1.getItem() == Items.DYE && EnumColor.fromInvColorIndex(itemstack1.getData()) == EnumColor.BLUE) {
                 if (!this.a(itemstack1, 1, 2, true)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else {
                 if (((Slot) this.c.get(0)).hasItem() || !((Slot) this.c.get(0)).isAllowed(itemstack1)) {
-                    return null;
+                    return ItemStack.a;
                 }
 
-                if (itemstack1.hasTag() && itemstack1.count == 1) {
+                if (itemstack1.hasTag() && itemstack1.getCount() == 1) {
                     ((Slot) this.c.get(0)).set(itemstack1.cloneItemStack());
-                    itemstack1.count = 0;
-                } else if (itemstack1.count >= 1) {
+                    itemstack1.setCount(0);
+                } else if (!itemstack1.isEmpty()) {
                     ((Slot) this.c.get(0)).set(new ItemStack(itemstack1.getItem(), 1, itemstack1.getData()));
-                    --itemstack1.count;
+                    itemstack1.subtract(1);
                 }
             }
 
-            if (itemstack1.count == 0) {
-                slot.set((ItemStack) null);
+            if (itemstack1.isEmpty()) {
+                slot.set(ItemStack.a);
             } else {
                 slot.f();
             }
 
-            if (itemstack1.count == itemstack.count) {
-                return null;
+            if (itemstack1.getCount() == itemstack.getCount()) {
+                return ItemStack.a;
             }
 
             slot.a(entityhuman, itemstack1);

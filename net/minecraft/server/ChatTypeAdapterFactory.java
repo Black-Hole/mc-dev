@@ -11,11 +11,13 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
+import javax.annotation.Nullable;
 
 public class ChatTypeAdapterFactory implements TypeAdapterFactory {
 
     public ChatTypeAdapterFactory() {}
 
+    @Nullable
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typetoken) {
         Class oclass = typetoken.getRawType();
 
@@ -42,6 +44,7 @@ public class ChatTypeAdapterFactory implements TypeAdapterFactory {
 
                 }
 
+                @Nullable
                 public T read(JsonReader jsonreader) throws IOException {
                     if (jsonreader.peek() == JsonToken.NULL) {
                         jsonreader.nextNull();

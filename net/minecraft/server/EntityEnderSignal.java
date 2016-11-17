@@ -44,19 +44,19 @@ public class EntityEnderSignal extends Entity {
         this.e = this.random.nextInt(5) > 0;
     }
 
-    public void m() {
+    public void A_() {
         this.M = this.locX;
         this.N = this.locY;
         this.O = this.locZ;
-        super.m();
+        super.A_();
         this.locX += this.motX;
         this.locY += this.motY;
         this.locZ += this.motZ;
         float f = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
 
-        this.yaw = (float) (MathHelper.b(this.motX, this.motZ) * 57.2957763671875D);
+        this.yaw = (float) (MathHelper.c(this.motX, this.motZ) * 57.2957763671875D);
 
-        for (this.pitch = (float) (MathHelper.b(this.motY, (double) f) * 57.2957763671875D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
+        for (this.pitch = (float) (MathHelper.c(this.motY, (double) f) * 57.2957763671875D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
             ;
         }
 
@@ -78,7 +78,7 @@ public class EntityEnderSignal extends Entity {
             double d0 = this.a - this.locX;
             double d1 = this.c - this.locZ;
             float f1 = (float) Math.sqrt(d0 * d0 + d1 * d1);
-            float f2 = (float) MathHelper.b(d1, d0);
+            float f2 = (float) MathHelper.c(d1, d0);
             double d2 = (double) f + (double) (f1 - f) * 0.0025D;
 
             if (f1 < 1.0F) {

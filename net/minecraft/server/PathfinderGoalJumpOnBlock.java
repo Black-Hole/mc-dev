@@ -13,10 +13,6 @@ public class PathfinderGoalJumpOnBlock extends PathfinderGoalGotoTarget {
         return this.c.isTamed() && !this.c.isSitting() && super.a();
     }
 
-    public boolean b() {
-        return super.b();
-    }
-
     public void c() {
         super.c();
         this.c.getGoalSit().setSitting(false);

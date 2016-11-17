@@ -7,18 +7,18 @@ import javax.annotation.Nullable;
 
 public class EntitySheep extends EntityAnimal {
 
-    private static final DataWatcherObject<Byte> bx = DataWatcher.a(EntitySheep.class, DataWatcherRegistry.a);
+    private static final DataWatcherObject<Byte> bw = DataWatcher.a(EntitySheep.class, DataWatcherRegistry.a);
     private final InventoryCrafting container = new InventoryCrafting(new Container() {
         public boolean a(EntityHuman entityhuman) {
             return false;
         }
     }, 2, 1);
-    private static final Map<EnumColor, float[]> bz = Maps.newEnumMap(EnumColor.class);
-    private int bB;
-    private PathfinderGoalEatTile bC;
+    private static final Map<EnumColor, float[]> by = Maps.newEnumMap(EnumColor.class);
+    private int bA;
+    private PathfinderGoalEatTile bB;
 
     public static float[] a(EnumColor enumcolor) {
-        return (float[]) EntitySheep.bz.get(enumcolor);
+        return (float[]) EntitySheep.by.get(enumcolor);
     }
 
     public EntitySheep(World world) {
@@ -29,26 +29,26 @@ public class EntitySheep extends EntityAnimal {
     }
 
     protected void r() {
-        this.bC = new PathfinderGoalEatTile(this);
+        this.bB = new PathfinderGoalEatTile(this);
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.25D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
         this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.1D, Items.WHEAT, false));
         this.goalSelector.a(4, new PathfinderGoalFollowParent(this, 1.1D));
-        this.goalSelector.a(5, this.bC);
-        this.goalSelector.a(6, new PathfinderGoalRandomStroll(this, 1.0D));
+        this.goalSelector.a(5, this.bB);
+        this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
     }
 
     protected void M() {
-        this.bB = this.bC.f();
+        this.bA = this.bB.f();
         super.M();
     }
 
     public void n() {
         if (this.world.isClientSide) {
-            this.bB = Math.max(0, this.bB - 1);
+            this.bA = Math.max(0, this.bA - 1);
         }
 
         super.n();
@@ -62,69 +62,71 @@ public class EntitySheep extends EntityAnimal {
 
     protected void i() {
         super.i();
-        this.datawatcher.register(EntitySheep.bx, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntitySheep.bw, Byte.valueOf((byte) 0));
     }
 
     @Nullable
     protected MinecraftKey J() {
         if (this.isSheared()) {
-            return LootTables.M;
+            return LootTables.P;
         } else {
-            switch (EntitySheep.SyntheticClass_1.a[this.getColor().ordinal()]) {
-            case 1:
+            switch (this.getColor()) {
+            case WHITE:
             default:
-                return LootTables.N;
-
-            case 2:
-                return LootTables.O;
-
-            case 3:
-                return LootTables.P;
-
-            case 4:
                 return LootTables.Q;
 
-            case 5:
+            case ORANGE:
                 return LootTables.R;
 
-            case 6:
+            case MAGENTA:
                 return LootTables.S;
 
-            case 7:
+            case LIGHT_BLUE:
                 return LootTables.T;
 
-            case 8:
+            case YELLOW:
                 return LootTables.U;
 
-            case 9:
+            case LIME:
                 return LootTables.V;
 
-            case 10:
+            case PINK:
                 return LootTables.W;
 
-            case 11:
+            case GRAY:
                 return LootTables.X;
 
-            case 12:
+            case SILVER:
                 return LootTables.Y;
 
-            case 13:
+            case CYAN:
                 return LootTables.Z;
 
-            case 14:
+            case PURPLE:
                 return LootTables.aa;
 
-            case 15:
+            case BLUE:
                 return LootTables.ab;
 
-            case 16:
+            case BROWN:
                 return LootTables.ac;
+
+            case GREEN:
+                return LootTables.ad;
+
+            case RED:
+                return LootTables.ae;
+
+            case BLACK:
+                return LootTables.af;
             }
         }
     }
 
-    public boolean a(EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack) {
-        if (itemstack != null && itemstack.getItem() == Items.SHEARS && !this.isSheared() && !this.isBaby()) {
+    public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
+        if (itemstack.getItem() == Items.SHEARS && !this.isSheared() && !this.isBaby()) {
             if (!this.world.isClientSide) {
                 this.setSheared(true);
                 int i = 1 + this.random.nextInt(3);
@@ -139,14 +141,14 @@ public class EntitySheep extends EntityAnimal {
             }
 
             itemstack.damage(1, entityhuman);
-            this.a(SoundEffects.fa, 1.0F, 1.0F);
+            this.a(SoundEffects.fu, 1.0F, 1.0F);
         }
 
-        return super.a(entityhuman, enumhand, itemstack);
+        return super.a(entityhuman, enumhand);
     }
 
     public static void b(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "Sheep");
+        EntityInsentient.a(dataconvertermanager, EntitySheep.class);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -162,42 +164,42 @@ public class EntitySheep extends EntityAnimal {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.eX;
-    }
-
-    protected SoundEffect bV() {
-        return SoundEffects.eZ;
+        return SoundEffects.fr;
     }
 
     protected SoundEffect bW() {
-        return SoundEffects.eY;
+        return SoundEffects.ft;
+    }
+
+    protected SoundEffect bX() {
+        return SoundEffects.fs;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.fb, 0.15F, 1.0F);
+        this.a(SoundEffects.fv, 0.15F, 1.0F);
     }
 
     public EnumColor getColor() {
-        return EnumColor.fromColorIndex(((Byte) this.datawatcher.get(EntitySheep.bx)).byteValue() & 15);
+        return EnumColor.fromColorIndex(((Byte) this.datawatcher.get(EntitySheep.bw)).byteValue() & 15);
     }
 
     public void setColor(EnumColor enumcolor) {
-        byte b0 = ((Byte) this.datawatcher.get(EntitySheep.bx)).byteValue();
+        byte b0 = ((Byte) this.datawatcher.get(EntitySheep.bw)).byteValue();
 
-        this.datawatcher.set(EntitySheep.bx, Byte.valueOf((byte) (b0 & 240 | enumcolor.getColorIndex() & 15)));
+        this.datawatcher.set(EntitySheep.bw, Byte.valueOf((byte) (b0 & 240 | enumcolor.getColorIndex() & 15)));
     }
 
     public boolean isSheared() {
-        return (((Byte) this.datawatcher.get(EntitySheep.bx)).byteValue() & 16) != 0;
+        return (((Byte) this.datawatcher.get(EntitySheep.bw)).byteValue() & 16) != 0;
     }
 
     public void setSheared(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntitySheep.bx)).byteValue();
+        byte b0 = ((Byte) this.datawatcher.get(EntitySheep.bw)).byteValue();
 
         if (flag) {
-            this.datawatcher.set(EntitySheep.bx, Byte.valueOf((byte) (b0 | 16)));
+            this.datawatcher.set(EntitySheep.bw, Byte.valueOf((byte) (b0 | 16)));
         } else {
-            this.datawatcher.set(EntitySheep.bx, Byte.valueOf((byte) (b0 & -17)));
+            this.datawatcher.set(EntitySheep.bw, Byte.valueOf((byte) (b0 & -17)));
         }
 
     }
@@ -240,7 +242,7 @@ public class EntitySheep extends EntityAnimal {
         ItemStack itemstack = CraftingManager.getInstance().craft(this.container, ((EntitySheep) entityanimal).world);
         int k;
 
-        if (itemstack != null && itemstack.getItem() == Items.DYE) {
+        if (itemstack.getItem() == Items.DYE) {
             k = itemstack.getData();
         } else {
             k = this.world.random.nextBoolean() ? i : j;
@@ -258,125 +260,21 @@ public class EntitySheep extends EntityAnimal {
     }
 
     static {
-        EntitySheep.bz.put(EnumColor.WHITE, new float[] { 1.0F, 1.0F, 1.0F});
-        EntitySheep.bz.put(EnumColor.ORANGE, new float[] { 0.85F, 0.5F, 0.2F});
-        EntitySheep.bz.put(EnumColor.MAGENTA, new float[] { 0.7F, 0.3F, 0.85F});
-        EntitySheep.bz.put(EnumColor.LIGHT_BLUE, new float[] { 0.4F, 0.6F, 0.85F});
-        EntitySheep.bz.put(EnumColor.YELLOW, new float[] { 0.9F, 0.9F, 0.2F});
-        EntitySheep.bz.put(EnumColor.LIME, new float[] { 0.5F, 0.8F, 0.1F});
-        EntitySheep.bz.put(EnumColor.PINK, new float[] { 0.95F, 0.5F, 0.65F});
-        EntitySheep.bz.put(EnumColor.GRAY, new float[] { 0.3F, 0.3F, 0.3F});
-        EntitySheep.bz.put(EnumColor.SILVER, new float[] { 0.6F, 0.6F, 0.6F});
-        EntitySheep.bz.put(EnumColor.CYAN, new float[] { 0.3F, 0.5F, 0.6F});
-        EntitySheep.bz.put(EnumColor.PURPLE, new float[] { 0.5F, 0.25F, 0.7F});
-        EntitySheep.bz.put(EnumColor.BLUE, new float[] { 0.2F, 0.3F, 0.7F});
-        EntitySheep.bz.put(EnumColor.BROWN, new float[] { 0.4F, 0.3F, 0.2F});
-        EntitySheep.bz.put(EnumColor.GREEN, new float[] { 0.4F, 0.5F, 0.2F});
-        EntitySheep.bz.put(EnumColor.RED, new float[] { 0.6F, 0.2F, 0.2F});
-        EntitySheep.bz.put(EnumColor.BLACK, new float[] { 0.1F, 0.1F, 0.1F});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumColor.values().length];
-
-        static {
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.WHITE.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.ORANGE.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.MAGENTA.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.LIGHT_BLUE.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.YELLOW.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.LIME.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.PINK.ordinal()] = 7;
-            } catch (NoSuchFieldError nosuchfielderror6) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.GRAY.ordinal()] = 8;
-            } catch (NoSuchFieldError nosuchfielderror7) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.SILVER.ordinal()] = 9;
-            } catch (NoSuchFieldError nosuchfielderror8) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.CYAN.ordinal()] = 10;
-            } catch (NoSuchFieldError nosuchfielderror9) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.PURPLE.ordinal()] = 11;
-            } catch (NoSuchFieldError nosuchfielderror10) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.BLUE.ordinal()] = 12;
-            } catch (NoSuchFieldError nosuchfielderror11) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.BROWN.ordinal()] = 13;
-            } catch (NoSuchFieldError nosuchfielderror12) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.GREEN.ordinal()] = 14;
-            } catch (NoSuchFieldError nosuchfielderror13) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.RED.ordinal()] = 15;
-            } catch (NoSuchFieldError nosuchfielderror14) {
-                ;
-            }
-
-            try {
-                EntitySheep.SyntheticClass_1.a[EnumColor.BLACK.ordinal()] = 16;
-            } catch (NoSuchFieldError nosuchfielderror15) {
-                ;
-            }
-
-        }
+        EntitySheep.by.put(EnumColor.WHITE, new float[] { 1.0F, 1.0F, 1.0F});
+        EntitySheep.by.put(EnumColor.ORANGE, new float[] { 0.85F, 0.5F, 0.2F});
+        EntitySheep.by.put(EnumColor.MAGENTA, new float[] { 0.7F, 0.3F, 0.85F});
+        EntitySheep.by.put(EnumColor.LIGHT_BLUE, new float[] { 0.4F, 0.6F, 0.85F});
+        EntitySheep.by.put(EnumColor.YELLOW, new float[] { 0.9F, 0.9F, 0.2F});
+        EntitySheep.by.put(EnumColor.LIME, new float[] { 0.5F, 0.8F, 0.1F});
+        EntitySheep.by.put(EnumColor.PINK, new float[] { 0.95F, 0.5F, 0.65F});
+        EntitySheep.by.put(EnumColor.GRAY, new float[] { 0.3F, 0.3F, 0.3F});
+        EntitySheep.by.put(EnumColor.SILVER, new float[] { 0.6F, 0.6F, 0.6F});
+        EntitySheep.by.put(EnumColor.CYAN, new float[] { 0.3F, 0.5F, 0.6F});
+        EntitySheep.by.put(EnumColor.PURPLE, new float[] { 0.5F, 0.25F, 0.7F});
+        EntitySheep.by.put(EnumColor.BLUE, new float[] { 0.2F, 0.3F, 0.7F});
+        EntitySheep.by.put(EnumColor.BROWN, new float[] { 0.4F, 0.3F, 0.2F});
+        EntitySheep.by.put(EnumColor.GREEN, new float[] { 0.4F, 0.5F, 0.2F});
+        EntitySheep.by.put(EnumColor.RED, new float[] { 0.6F, 0.2F, 0.2F});
+        EntitySheep.by.put(EnumColor.BLACK, new float[] { 0.1F, 0.1F, 0.1F});
     }
 }

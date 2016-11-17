@@ -36,8 +36,8 @@ public class NavigationListener implements IWorldAccess {
     }
 
     protected boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {
-        AxisAlignedBB axisalignedbb = iblockdata.d(world, blockposition);
-        AxisAlignedBB axisalignedbb1 = iblockdata1.d(world, blockposition);
+        AxisAlignedBB axisalignedbb = iblockdata.c(world, blockposition);
+        AxisAlignedBB axisalignedbb1 = iblockdata1.c(world, blockposition);
 
         return axisalignedbb != axisalignedbb1 && (axisalignedbb == null || !axisalignedbb.equals(axisalignedbb1));
     }
@@ -49,6 +49,8 @@ public class NavigationListener implements IWorldAccess {
     public void a(@Nullable EntityHuman entityhuman, SoundEffect soundeffect, SoundCategory soundcategory, double d0, double d1, double d2, float f, float f1) {}
 
     public void a(int i, boolean flag, double d0, double d1, double d2, double d3, double d4, double d5, int... aint) {}
+
+    public void a(int i, boolean flag, boolean flag1, double d0, double d1, double d2, double d3, double d4, double d5, int... aint) {}
 
     public void a(Entity entity) {
         if (entity instanceof EntityInsentient) {

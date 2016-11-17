@@ -46,7 +46,7 @@ public class ShapeDetectorBlock {
                 return shapedetectorblock != null && predicate.apply(shapedetectorblock.a());
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((ShapeDetectorBlock) object);
             }
         };

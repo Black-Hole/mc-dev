@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.annotation.Nullable;
 
 public abstract class AttributeMapBase {
 
@@ -20,6 +21,7 @@ public abstract class AttributeMapBase {
         return (AttributeInstance) this.a.get(iattribute);
     }
 
+    @Nullable
     public AttributeInstance a(String s) {
         return (AttributeInstance) this.b.get(s);
     }

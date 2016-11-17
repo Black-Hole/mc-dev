@@ -25,17 +25,17 @@ public interface IBlockProperties {
 
     boolean h();
 
-    EnumRenderType i();
-
-    boolean k();
+    EnumRenderType j();
 
     boolean l();
 
     boolean m();
 
+    boolean n();
+
     int a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection);
 
-    boolean n();
+    boolean o();
 
     int a(World world, BlockPosition blockposition);
 
@@ -45,20 +45,24 @@ public interface IBlockProperties {
 
     int b(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection);
 
-    EnumPistonReaction o();
+    EnumPistonReaction p();
 
     IBlockData b(IBlockAccess iblockaccess, BlockPosition blockposition);
 
-    boolean p();
+    boolean q();
 
     @Nullable
-    AxisAlignedBB d(World world, BlockPosition blockposition);
+    AxisAlignedBB c(IBlockAccess iblockaccess, BlockPosition blockposition);
 
     void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity);
 
-    AxisAlignedBB c(IBlockAccess iblockaccess, BlockPosition blockposition);
+    AxisAlignedBB d(IBlockAccess iblockaccess, BlockPosition blockposition);
 
     MovingObjectPosition a(World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1);
 
-    boolean q();
+    boolean r();
+
+    Vec3D e(IBlockAccess iblockaccess, BlockPosition blockposition);
+
+    boolean s();
 }

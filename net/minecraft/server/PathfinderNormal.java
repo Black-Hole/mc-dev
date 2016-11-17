@@ -70,7 +70,7 @@ public class PathfinderNormal extends PathfinderAbstract {
     }
 
     public PathPoint a(double d0, double d1, double d2) {
-        return this.a(MathHelper.floor(d0 - (double) (this.b.width / 2.0F)), MathHelper.floor(d1), MathHelper.floor(d2 - (double) (this.b.width / 2.0F)));
+        return this.a(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2));
     }
 
     public int a(PathPoint[] apathpoint, PathPoint pathpoint, PathPoint pathpoint1, float f) {
@@ -83,7 +83,7 @@ public class PathfinderNormal extends PathfinderAbstract {
         }
 
         BlockPosition blockposition = (new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c)).down();
-        double d0 = (double) pathpoint.b - (1.0D - this.a.getType(blockposition).c(this.a, blockposition).e);
+        double d0 = (double) pathpoint.b - (1.0D - this.a.getType(blockposition).d(this.a, blockposition).e);
         PathPoint pathpoint2 = this.a(pathpoint.a, pathpoint.b, pathpoint.c + 1, j, d0, EnumDirection.SOUTH);
         PathPoint pathpoint3 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c, j, d0, EnumDirection.WEST);
         PathPoint pathpoint4 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c, j, d0, EnumDirection.EAST);
@@ -147,7 +147,7 @@ public class PathfinderNormal extends PathfinderAbstract {
         PathPoint pathpoint = null;
         BlockPosition blockposition = new BlockPosition(i, j, k);
         BlockPosition blockposition1 = blockposition.down();
-        double d1 = (double) j - (1.0D - this.a.getType(blockposition1).c(this.a, blockposition1).e);
+        double d1 = (double) j - (1.0D - this.a.getType(blockposition1).d(this.a, blockposition1).e);
 
         if (d1 - d0 > 1.125D) {
             return null;
@@ -171,8 +171,8 @@ public class PathfinderNormal extends PathfinderAbstract {
                         double d3 = (double) (i - enumdirection.getAdjacentX()) + 0.5D;
                         double d4 = (double) (k - enumdirection.getAdjacentZ()) + 0.5D;
                         AxisAlignedBB axisalignedbb = new AxisAlignedBB(d3 - d2, (double) j + 0.001D, d4 - d2, d3 + d2, (double) ((float) j + this.b.length), d4 + d2);
-                        AxisAlignedBB axisalignedbb1 = this.a.getType(blockposition).c(this.a, blockposition);
-                        AxisAlignedBB axisalignedbb2 = axisalignedbb.a(0.0D, axisalignedbb1.e - 0.002D, 0.0D);
+                        AxisAlignedBB axisalignedbb1 = this.a.getType(blockposition).d(this.a, blockposition);
+                        AxisAlignedBB axisalignedbb2 = axisalignedbb.b(0.0D, axisalignedbb1.e - 0.002D, 0.0D);
 
                         if (this.b.world.b(axisalignedbb2)) {
                             pathpoint = null;

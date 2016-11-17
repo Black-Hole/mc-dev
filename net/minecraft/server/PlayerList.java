@@ -75,7 +75,6 @@ public abstract class PlayerList {
         PlayerList.f.info("{}[{}] logged in with entity id {} at ({}, {}, {})", new Object[] { entityplayer.getName(), s1, Integer.valueOf(entityplayer.getId()), Double.valueOf(entityplayer.locX), Double.valueOf(entityplayer.locY), Double.valueOf(entityplayer.locZ)});
         WorldServer worldserver = this.server.getWorldServer(entityplayer.dimension);
         WorldData worlddata = worldserver.getWorldData();
-        BlockPosition blockposition = worldserver.getSpawn();
 
         this.a(entityplayer, (EntityPlayer) null, worldserver);
         PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
@@ -83,14 +82,13 @@ public abstract class PlayerList {
         playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), worlddata.isHardcore(), worldserver.worldProvider.getDimensionManager().getDimensionID(), worldserver.getDifficulty(), this.getMaxPlayers(), worlddata.getType(), worldserver.getGameRules().getBoolean("reducedDebugInfo")));
         playerconnection.sendPacket(new PacketPlayOutCustomPayload("MC|Brand", (new PacketDataSerializer(Unpooled.buffer())).a(this.getServer().getServerModName())));
         playerconnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
-        playerconnection.sendPacket(new PacketPlayOutSpawnPosition(blockposition));
         playerconnection.sendPacket(new PacketPlayOutAbilities(entityplayer.abilities));
         playerconnection.sendPacket(new PacketPlayOutHeldItemSlot(entityplayer.inventory.itemInHandIndex));
         this.f(entityplayer);
         entityplayer.getStatisticManager().d();
         entityplayer.getStatisticManager().updateStatistics(entityplayer);
         this.sendScoreboard((ScoreboardServer) worldserver.getScoreboard(), entityplayer);
-        this.server.aC();
+        this.server.aD();
         ChatMessage chatmessage;
 
         if (entityplayer.getName().equalsIgnoreCase(s)) {
@@ -299,7 +297,7 @@ public abstract class PlayerList {
                     worldserver.removeEntity(entity1);
                 }
 
-                worldserver.getChunkAt(entityplayer.ac, entityplayer.ae).e();
+                worldserver.getChunkAt(entityplayer.ab, entityplayer.ad).e();
             }
         }
 
@@ -763,6 +761,9 @@ public abstract class PlayerList {
 
         entityplayer.playerConnection.sendPacket(new PacketPlayOutWorldBorder(worldborder, PacketPlayOutWorldBorder.EnumWorldBorderAction.INITIALIZE));
         entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateTime(worldserver.getTime(), worldserver.getDayTime(), worldserver.getGameRules().getBoolean("doDaylightCycle")));
+        BlockPosition blockposition = worldserver.getSpawn();
+
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutSpawnPosition(blockposition));
         if (worldserver.W()) {
             entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(1, 0.0F));
             entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(7, worldserver.j(1.0F)));

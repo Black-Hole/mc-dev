@@ -38,12 +38,12 @@ public class CommandEnchant extends CommandAbstract {
             }
 
             if (enchantment == null) {
-                throw new ExceptionInvalidNumber("commands.enchant.notFound", new Object[] { Integer.valueOf(Enchantment.getId(enchantment))});
+                throw new ExceptionInvalidNumber("commands.enchant.notFound", new Object[] { astring[1]});
             } else {
                 int i = 1;
                 ItemStack itemstack = entityliving.getItemInMainHand();
 
-                if (itemstack == null) {
+                if (itemstack.isEmpty()) {
                     throw new CommandException("commands.enchant.noItem", new Object[0]);
                 } else if (!enchantment.canEnchant(itemstack)) {
                     throw new CommandException("commands.enchant.cantEnchant", new Object[0]);

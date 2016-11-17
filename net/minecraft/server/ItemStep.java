@@ -17,12 +17,14 @@ public class ItemStep extends ItemBlock {
         return i;
     }
 
-    public String f_(ItemStack itemstack) {
+    public String a(ItemStack itemstack) {
         return this.b.e(itemstack.getData());
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (itemstack.count != 0 && entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
+        if (!itemstack.isEmpty() && entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
             Comparable comparable = this.b.a(itemstack);
             IBlockData iblockdata = world.getType(blockposition);
 
@@ -33,20 +35,20 @@ public class ItemStep extends ItemBlock {
 
                 if ((enumdirection == EnumDirection.UP && blockstepabstract_enumslabhalf == BlockStepAbstract.EnumSlabHalf.BOTTOM || enumdirection == EnumDirection.DOWN && blockstepabstract_enumslabhalf == BlockStepAbstract.EnumSlabHalf.TOP) && comparable1 == comparable) {
                     IBlockData iblockdata1 = this.a(iblockstate, comparable1);
-                    AxisAlignedBB axisalignedbb = iblockdata1.d(world, blockposition);
+                    AxisAlignedBB axisalignedbb = iblockdata1.c(world, blockposition);
 
                     if (axisalignedbb != Block.k && world.c(axisalignedbb.a(blockposition)) && world.setTypeAndData(blockposition, iblockdata1, 11)) {
-                        SoundEffectType soundeffecttype = this.c.w();
+                        SoundEffectType soundeffecttype = this.c.getStepSound();
 
                         world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
-                        --itemstack.count;
+                        itemstack.subtract(1);
                     }
 
                     return EnumInteractionResult.SUCCESS;
                 }
             }
 
-            return this.a(entityhuman, itemstack, world, blockposition.shift(enumdirection), (Object) comparable) ? EnumInteractionResult.SUCCESS : super.a(itemstack, entityhuman, world, blockposition, enumhand, enumdirection, f, f1, f2);
+            return this.a(entityhuman, itemstack, world, blockposition.shift(enumdirection), (Object) comparable) ? EnumInteractionResult.SUCCESS : super.a(entityhuman, world, blockposition, enumhand, enumdirection, f, f1, f2);
         } else {
             return EnumInteractionResult.FAIL;
         }
@@ -60,13 +62,13 @@ public class ItemStep extends ItemBlock {
 
             if (comparable == object) {
                 IBlockData iblockdata1 = this.a(this.b.g(), comparable);
-                AxisAlignedBB axisalignedbb = iblockdata1.d(world, blockposition);
+                AxisAlignedBB axisalignedbb = iblockdata1.c(world, blockposition);
 
                 if (axisalignedbb != Block.k && world.c(axisalignedbb.a(blockposition)) && world.setTypeAndData(blockposition, iblockdata1, 11)) {
-                    SoundEffectType soundeffecttype = this.c.w();
+                    SoundEffectType soundeffecttype = this.c.getStepSound();
 
                     world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
-                    --itemstack.count;
+                    itemstack.subtract(1);
                 }
 
                 return true;

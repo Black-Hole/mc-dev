@@ -2,9 +2,10 @@ package net.minecraft.server;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public abstract class StructureGenerator extends WorldGenBase {
 
@@ -72,10 +73,10 @@ public abstract class StructureGenerator extends WorldGenBase {
         int i = (chunkcoordintpair.x << 4) + 8;
         int j = (chunkcoordintpair.z << 4) + 8;
         boolean flag = false;
-        Iterator iterator = this.c.values().iterator();
+        ObjectIterator objectiterator = this.c.values().iterator();
 
-        while (iterator.hasNext()) {
-            StructureStart structurestart = (StructureStart) iterator.next();
+        while (objectiterator.hasNext()) {
+            StructureStart structurestart = (StructureStart) objectiterator.next();
 
             if (structurestart.a() && structurestart.a(chunkcoordintpair) && structurestart.b().a(i, j, i + 15, j + 15)) {
                 structurestart.a(world, random, new StructureBoundingBox(i, j, i + 15, j + 15));
@@ -93,17 +94,18 @@ public abstract class StructureGenerator extends WorldGenBase {
         return this.c(blockposition) != null;
     }
 
+    @Nullable
     protected StructureStart c(BlockPosition blockposition) {
-        Iterator iterator = this.c.values().iterator();
+        ObjectIterator objectiterator = this.c.values().iterator();
 
-        while (iterator.hasNext()) {
-            StructureStart structurestart = (StructureStart) iterator.next();
+        while (objectiterator.hasNext()) {
+            StructureStart structurestart = (StructureStart) objectiterator.next();
 
             if (structurestart.a() && structurestart.b().b((BaseBlockPosition) blockposition)) {
-                Iterator iterator1 = structurestart.c().iterator();
+                Iterator iterator = structurestart.c().iterator();
 
-                while (iterator1.hasNext()) {
-                    StructurePiece structurepiece = (StructurePiece) iterator1.next();
+                while (iterator.hasNext()) {
+                    StructurePiece structurepiece = (StructurePiece) iterator.next();
 
                     if (structurepiece.d().b((BaseBlockPosition) blockposition)) {
                         return structurestart;
@@ -115,84 +117,25 @@ public abstract class StructureGenerator extends WorldGenBase {
         return null;
     }
 
-    public boolean b(World world, BlockPosition blockposition) {
+    public boolean a(World world, BlockPosition blockposition) {
         this.a(world);
-        Iterator iterator = this.c.values().iterator();
+        ObjectIterator objectiterator = this.c.values().iterator();
 
         StructureStart structurestart;
 
         do {
-            if (!iterator.hasNext()) {
+            if (!objectiterator.hasNext()) {
                 return false;
             }
 
-            structurestart = (StructureStart) iterator.next();
+            structurestart = (StructureStart) objectiterator.next();
         } while (!structurestart.a() || !structurestart.b().b((BaseBlockPosition) blockposition));
 
         return true;
     }
 
-    public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition) {
-        this.g = world;
-        this.a(world);
-        this.f.setSeed(world.getSeed());
-        long i = this.f.nextLong();
-        long j = this.f.nextLong();
-        long k = (long) (blockposition.getX() >> 4) * i;
-        long l = (long) (blockposition.getZ() >> 4) * j;
-
-        this.f.setSeed(k ^ l ^ world.getSeed());
-        this.a(world, blockposition.getX() >> 4, blockposition.getZ() >> 4, 0, 0, (ChunkSnapshot) null);
-        double d0 = Double.MAX_VALUE;
-        BlockPosition blockposition1 = null;
-        Iterator iterator = this.c.values().iterator();
-
-        BlockPosition blockposition2;
-        double d1;
-
-        while (iterator.hasNext()) {
-            StructureStart structurestart = (StructureStart) iterator.next();
-
-            if (structurestart.a()) {
-                StructurePiece structurepiece = (StructurePiece) structurestart.c().get(0);
-
-                blockposition2 = structurepiece.a();
-                d1 = blockposition2.n(blockposition);
-                if (d1 < d0) {
-                    d0 = d1;
-                    blockposition1 = blockposition2;
-                }
-            }
-        }
-
-        if (blockposition1 != null) {
-            return blockposition1;
-        } else {
-            List list = this.G_();
-
-            if (list != null) {
-                BlockPosition blockposition3 = null;
-                Iterator iterator1 = list.iterator();
-
-                while (iterator1.hasNext()) {
-                    blockposition2 = (BlockPosition) iterator1.next();
-                    d1 = blockposition2.n(blockposition);
-                    if (d1 < d0) {
-                        d0 = d1;
-                        blockposition3 = blockposition2;
-                    }
-                }
-
-                return blockposition3;
-            } else {
-                return null;
-            }
-        }
-    }
-
-    protected List<BlockPosition> G_() {
-        return null;
-    }
+    @Nullable
+    public abstract BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag);
 
     protected void a(World world) {
         if (this.a == null) {
@@ -235,4 +178,63 @@ public abstract class StructureGenerator extends WorldGenBase {
     protected abstract boolean a(int i, int j);
 
     protected abstract StructureStart b(int i, int j);
+
+    protected static BlockPosition a(World world, StructureGenerator structuregenerator, BlockPosition blockposition, int i, int j, int k, boolean flag, int l, boolean flag1) {
+        int i1 = blockposition.getX() >> 4;
+        int j1 = blockposition.getZ() >> 4;
+        int k1 = 0;
+
+        for (Random random = new Random(); k1 <= l; ++k1) {
+            for (int l1 = -k1; l1 <= k1; ++l1) {
+                boolean flag2 = l1 == -k1 || l1 == k1;
+
+                for (int i2 = -k1; i2 <= k1; ++i2) {
+                    boolean flag3 = i2 == -k1 || i2 == k1;
+
+                    if (flag2 || flag3) {
+                        int j2 = i1 + i * l1;
+                        int k2 = j1 + i * i2;
+
+                        if (j2 < 0) {
+                            j2 -= i - 1;
+                        }
+
+                        if (k2 < 0) {
+                            k2 -= i - 1;
+                        }
+
+                        int l2 = j2 / i;
+                        int i3 = k2 / i;
+                        Random random1 = world.a(l2, i3, k);
+
+                        l2 *= i;
+                        i3 *= i;
+                        if (flag) {
+                            l2 += (random1.nextInt(i - j) + random1.nextInt(i - j)) / 2;
+                            i3 += (random1.nextInt(i - j) + random1.nextInt(i - j)) / 2;
+                        } else {
+                            l2 += random1.nextInt(i - j);
+                            i3 += random1.nextInt(i - j);
+                        }
+
+                        WorldGenBase.a(world.getSeed(), random, l2, i3);
+                        random.nextInt();
+                        if (structuregenerator.a(l2, i3)) {
+                            if (!flag1 || !world.b(l2, i3)) {
+                                return new BlockPosition((l2 << 4) + 8, 64, (i3 << 4) + 8);
+                            }
+                        } else if (k1 == 0) {
+                            break;
+                        }
+                    }
+                }
+
+                if (k1 == 0) {
+                    break;
+                }
+            }
+        }
+
+        return null;
+    }
 }

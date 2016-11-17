@@ -8,13 +8,15 @@ public class ItemCarrotStick extends Item {
         this.setMaxDurability(25);
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         if (entityhuman.isPassenger() && entityhuman.bB() instanceof EntityPig) {
             EntityPig entitypig = (EntityPig) entityhuman.bB();
 
-            if (itemstack.j() - itemstack.getData() >= 7 && entitypig.df()) {
+            if (itemstack.k() - itemstack.getData() >= 7 && entitypig.di()) {
                 itemstack.damage(7, entityhuman);
-                if (itemstack.count == 0) {
+                if (itemstack.isEmpty()) {
                     ItemStack itemstack1 = new ItemStack(Items.FISHING_ROD);
 
                     itemstack1.setTag(itemstack.getTag());

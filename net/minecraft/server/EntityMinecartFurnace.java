@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntityMinecartFurnace extends EntityMinecartAbstract {
 
     private static final DataWatcherObject<Boolean> c = DataWatcher.a(EntityMinecartFurnace.class, DataWatcherRegistry.h);
@@ -17,8 +15,8 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityMinecartAbstract.a(dataconvertermanager, "MinecartFurnace");
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityMinecartAbstract.a(dataconvertermanager, EntityMinecartFurnace.class);
     }
 
     public EntityMinecartAbstract.EnumMinecartType v() {
@@ -30,8 +28,8 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         this.datawatcher.register(EntityMinecartFurnace.c, Boolean.valueOf(false));
     }
 
-    public void m() {
-        super.m();
+    public void A_() {
+        super.A_();
         if (this.d > 0) {
             --this.d;
         }
@@ -104,10 +102,12 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         super.r();
     }
 
-    public boolean a(EntityHuman entityhuman, @Nullable ItemStack itemstack, EnumHand enumhand) {
-        if (itemstack != null && itemstack.getItem() == Items.COAL && this.d + 3600 <= 32000) {
+    public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
+        if (itemstack.getItem() == Items.COAL && this.d + 3600 <= 32000) {
             if (!entityhuman.abilities.canInstantlyBuild) {
-                --itemstack.count;
+                itemstack.subtract(1);
             }
 
             this.d += 3600;

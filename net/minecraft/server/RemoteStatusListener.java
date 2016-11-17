@@ -124,7 +124,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     }
 
     private byte[] b(DatagramPacket datagrampacket) throws IOException {
-        long i = MinecraftServer.av();
+        long i = MinecraftServer.aw();
 
         if (i < this.w + 5000L) {
             byte[] abyte = this.v.a();
@@ -207,7 +207,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     private void f() {
         if (this.a) {
-            long i = MinecraftServer.av();
+            long i = MinecraftServer.aw();
 
             if (i >= this.h + 30000L) {
                 this.h = i;
@@ -227,7 +227,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     public void run() {
         this.b("Query running on " + this.s + ":" + this.i);
-        this.h = MinecraftServer.av();
+        this.h = MinecraftServer.aw();
         this.p = new DatagramPacket(this.o, this.o.length);
 
         try {

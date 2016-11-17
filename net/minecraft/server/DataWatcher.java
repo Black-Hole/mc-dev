@@ -255,6 +255,16 @@ public class DataWatcher {
 
     public void e() {
         this.g = false;
+        this.e.readLock().lock();
+        Iterator iterator = this.d.values().iterator();
+
+        while (iterator.hasNext()) {
+            DataWatcher.Item datawatcher_item = (DataWatcher.Item) iterator.next();
+
+            datawatcher_item.a(false);
+        }
+
+        this.e.readLock().unlock();
     }
 
     public static class Item<T> {

@@ -10,7 +10,7 @@ public class WorldGenMinable extends WorldGenerator {
     private final Predicate<IBlockData> c;
 
     public WorldGenMinable(IBlockData iblockdata, int i) {
-        this(iblockdata, i, BlockPredicate.a(Blocks.STONE));
+        this(iblockdata, i, new WorldGenMinable.a(null));
     }
 
     public WorldGenMinable(IBlockData iblockdata, int i, Predicate<IBlockData> predicate) {
@@ -69,5 +69,28 @@ public class WorldGenMinable extends WorldGenerator {
         }
 
         return true;
+    }
+
+    static class a implements Predicate<IBlockData> {
+
+        private a() {}
+
+        public boolean a(IBlockData iblockdata) {
+            if (iblockdata != null && iblockdata.getBlock() == Blocks.STONE) {
+                BlockStone.EnumStoneVariant blockstone_enumstonevariant = (BlockStone.EnumStoneVariant) iblockdata.get(BlockStone.VARIANT);
+
+                return blockstone_enumstonevariant.e();
+            } else {
+                return false;
+            }
+        }
+
+        public boolean apply(Object object) {
+            return this.a((IBlockData) object);
+        }
+
+        a(Object object) {
+            this();
+        }
     }
 }

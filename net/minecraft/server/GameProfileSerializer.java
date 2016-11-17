@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.UnmodifiableIterator;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import java.util.Iterator;
@@ -23,9 +24,7 @@ public final class GameProfileSerializer {
             s1 = nbttagcompound.getString("Id");
         }
 
-        if (UtilColor.b(s) && UtilColor.b(s1)) {
-            return null;
-        } else {
+        try {
             UUID uuid;
 
             try {
@@ -58,6 +57,8 @@ public final class GameProfileSerializer {
             }
 
             return gameprofile;
+        } catch (Throwable throwable1) {
+            return null;
         }
     }
 
@@ -131,8 +132,8 @@ public final class GameProfileSerializer {
             NBTTagList nbttaglist = (NBTTagList) nbtbase;
             NBTTagList nbttaglist1 = (NBTTagList) nbtbase1;
 
-            if (nbttaglist.size() == 0) {
-                return nbttaglist1.size() == 0;
+            if (nbttaglist.isEmpty()) {
+                return nbttaglist1.isEmpty();
             } else {
                 int i = 0;
 
@@ -201,7 +202,7 @@ public final class GameProfileSerializer {
 
             if (nbttagcompound.hasKeyOfType("Properties", 10)) {
                 NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Properties");
-                BlockStateList blockstatelist = block.t();
+                BlockStateList blockstatelist = block.s();
                 Iterator iterator = nbttagcompound1.c().iterator();
 
                 while (iterator.hasNext()) {
@@ -224,12 +225,12 @@ public final class GameProfileSerializer {
 
     public static NBTTagCompound a(NBTTagCompound nbttagcompound, IBlockData iblockdata) {
         nbttagcompound.setString("Name", ((MinecraftKey) Block.REGISTRY.b(iblockdata.getBlock())).toString());
-        if (!iblockdata.s().isEmpty()) {
+        if (!iblockdata.u().isEmpty()) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-            Iterator iterator = iblockdata.s().entrySet().iterator();
+            UnmodifiableIterator unmodifiableiterator = iblockdata.u().entrySet().iterator();
 
-            while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+            while (unmodifiableiterator.hasNext()) {
+                Entry entry = (Entry) unmodifiableiterator.next();
                 IBlockState iblockstate = (IBlockState) entry.getKey();
 
                 nbttagcompound1.setString(iblockstate.a(), a(iblockstate, (Comparable) entry.getValue()));

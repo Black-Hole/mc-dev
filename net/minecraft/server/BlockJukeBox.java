@@ -1,22 +1,20 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class BlockJukeBox extends BlockTileEntity {
 
     public static final BlockStateBoolean HAS_RECORD = BlockStateBoolean.of("has_record");
 
     public static void a(DataConverterManager dataconvertermanager) {
-        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItem("RecordPlayer", new String[] { "RecordItem"})));
+        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItem(BlockJukeBox.TileEntityRecordPlayer.class, new String[] { "RecordItem"})));
     }
 
     protected BlockJukeBox() {
         super(Material.WOOD, MaterialMapColor.l);
-        this.w(this.blockStateList.getBlockData().set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false)));
         this.a(CreativeModeTab.c);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (((Boolean) iblockdata.get(BlockJukeBox.HAS_RECORD)).booleanValue()) {
             this.dropRecord(world, blockposition, iblockdata);
             iblockdata = iblockdata.set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false));
@@ -46,10 +44,10 @@ public class BlockJukeBox extends BlockTileEntity {
                 BlockJukeBox.TileEntityRecordPlayer blockjukebox_tileentityrecordplayer = (BlockJukeBox.TileEntityRecordPlayer) tileentity;
                 ItemStack itemstack = blockjukebox_tileentityrecordplayer.getRecord();
 
-                if (itemstack != null) {
+                if (!itemstack.isEmpty()) {
                     world.triggerEffect(1010, blockposition, 0);
                     world.a(blockposition, (SoundEffect) null);
-                    blockjukebox_tileentityrecordplayer.setRecord((ItemStack) null);
+                    blockjukebox_tileentityrecordplayer.setRecord(ItemStack.a);
                     float f = 0.7F;
                     double d0 = (double) (world.random.nextFloat() * 0.7F) + 0.15000000596046448D;
                     double d1 = (double) (world.random.nextFloat() * 0.7F) + 0.06000000238418579D + 0.6D;
@@ -83,13 +81,13 @@ public class BlockJukeBox extends BlockTileEntity {
         return true;
     }
 
-    public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public int c(IBlockData iblockdata, World world, BlockPosition blockposition) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof BlockJukeBox.TileEntityRecordPlayer) {
             ItemStack itemstack = ((BlockJukeBox.TileEntityRecordPlayer) tileentity).getRecord();
 
-            if (itemstack != null) {
+            if (!itemstack.isEmpty()) {
                 return Item.getId(itemstack.getItem()) + 1 - Item.getId(Items.RECORD_13);
             }
         }
@@ -117,12 +115,14 @@ public class BlockJukeBox extends BlockTileEntity {
 
         private ItemStack record;
 
-        public TileEntityRecordPlayer() {}
+        public TileEntityRecordPlayer() {
+            this.record = ItemStack.a;
+        }
 
         public void a(NBTTagCompound nbttagcompound) {
             super.a(nbttagcompound);
             if (nbttagcompound.hasKeyOfType("RecordItem", 10)) {
-                this.setRecord(ItemStack.createStack(nbttagcompound.getCompound("RecordItem")));
+                this.setRecord(new ItemStack(nbttagcompound.getCompound("RecordItem")));
             } else if (nbttagcompound.getInt("Record") > 0) {
                 this.setRecord(new ItemStack(Item.getById(nbttagcompound.getInt("Record"))));
             }
@@ -131,19 +131,18 @@ public class BlockJukeBox extends BlockTileEntity {
 
         public NBTTagCompound save(NBTTagCompound nbttagcompound) {
             super.save(nbttagcompound);
-            if (this.getRecord() != null) {
+            if (!this.getRecord().isEmpty()) {
                 nbttagcompound.set("RecordItem", this.getRecord().save(new NBTTagCompound()));
             }
 
             return nbttagcompound;
         }
 
-        @Nullable
         public ItemStack getRecord() {
             return this.record;
         }
 
-        public void setRecord(@Nullable ItemStack itemstack) {
+        public void setRecord(ItemStack itemstack) {
             this.record = itemstack;
             this.update();
         }

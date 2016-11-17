@@ -27,7 +27,7 @@ public class CommandHelp extends CommandAbstract {
         return "commands.help.usage";
     }
 
-    public List<String> b() {
+    public List<String> getAliases() {
         return Arrays.asList(new String[] { "?"});
     }
 
@@ -52,11 +52,11 @@ public class CommandHelp extends CommandAbstract {
                     throw new ExceptionUsage(icommand.getUsage(icommandlistener), new Object[0]);
                 }
 
-                if (MathHelper.a(astring[0], -1) != -1) {
-                    throw exceptioninvalidnumber;
+                if (MathHelper.a(astring[0], -1) == -1 && MathHelper.a(astring[0], -2) == -2) {
+                    throw new ExceptionUnknownCommand();
                 }
 
-                throw new ExceptionUnknownCommand();
+                throw exceptioninvalidnumber;
             }
 
             int k = Math.min((j + 1) * 7, list.size());
@@ -73,7 +73,7 @@ public class CommandHelp extends CommandAbstract {
                 icommandlistener.sendMessage(chatmessage1);
             }
 
-            if (j == 0 && icommandlistener instanceof EntityHuman) {
+            if (j == 0) {
                 ChatMessage chatmessage2 = new ChatMessage("commands.help.footer", new Object[0]);
 
                 chatmessage2.getChatModifier().setColor(EnumChatFormat.GREEN);

@@ -9,7 +9,10 @@ public class ItemShears extends Item {
     }
 
     public boolean a(ItemStack itemstack, World world, IBlockData iblockdata, BlockPosition blockposition, EntityLiving entityliving) {
-        itemstack.damage(1, entityliving);
+        if (!world.isClientSide) {
+            itemstack.damage(1, entityliving);
+        }
+
         Block block = iblockdata.getBlock();
 
         return iblockdata.getMaterial() != Material.LEAVES && block != Blocks.WEB && block != Blocks.TALLGRASS && block != Blocks.VINE && block != Blocks.TRIPWIRE && block != Blocks.WOOL ? super.a(itemstack, world, iblockdata, blockposition, entityliving) : true;

@@ -10,7 +10,7 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     public static void b(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "LavaSlime");
+        EntityInsentient.a(dataconvertermanager, EntityMagmaCube.class);
     }
 
     protected void initAttributes() {
@@ -18,7 +18,7 @@ public class EntityMagmaCube extends EntitySlime {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
     }
 
-    public boolean cK() {
+    public boolean cM() {
         return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
@@ -26,8 +26,8 @@ public class EntityMagmaCube extends EntitySlime {
         return this.world.a(this.getBoundingBox(), (Entity) this) && this.world.getCubes(this, this.getBoundingBox()).isEmpty() && !this.world.containsLiquid(this.getBoundingBox());
     }
 
-    protected void setSize(int i) {
-        super.setSize(i);
+    protected void setSize(int i, boolean flag) {
+        super.setSize(i, flag);
         this.getAttributeInstance(GenericAttributes.g).setValue((double) (i * 3));
     }
 
@@ -39,60 +39,60 @@ public class EntityMagmaCube extends EntitySlime {
         return EnumParticle.FLAME;
     }
 
-    protected EntitySlime cY() {
+    protected EntitySlime da() {
         return new EntityMagmaCube(this.world);
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return this.dg() ? LootTables.a : LootTables.af;
+        return this.di() ? LootTables.a : LootTables.ai;
     }
 
     public boolean isBurning() {
         return false;
     }
 
-    protected int cZ() {
-        return super.cZ() * 4;
+    protected int db() {
+        return super.db() * 4;
     }
 
-    protected void da() {
+    protected void dc() {
         this.a *= 0.9F;
     }
 
-    protected void cl() {
+    protected void cm() {
         this.motY = (double) (0.42F + (float) this.getSize() * 0.1F);
         this.impulse = true;
     }
 
-    protected void cn() {
+    protected void co() {
         this.motY = (double) (0.22F + (float) this.getSize() * 0.05F);
         this.impulse = true;
     }
 
     public void e(float f, float f1) {}
 
-    protected boolean db() {
+    protected boolean dd() {
         return true;
     }
 
-    protected int dc() {
-        return super.dc() + 2;
-    }
-
-    protected SoundEffect bV() {
-        return this.dg() ? SoundEffects.fM : SoundEffects.dq;
+    protected int de() {
+        return super.de() + 2;
     }
 
     protected SoundEffect bW() {
-        return this.dg() ? SoundEffects.fL : SoundEffects.dp;
+        return this.di() ? SoundEffects.gi : SoundEffects.dJ;
     }
 
-    protected SoundEffect dd() {
-        return this.dg() ? SoundEffects.fN : SoundEffects.ds;
+    protected SoundEffect bX() {
+        return this.di() ? SoundEffects.gh : SoundEffects.dI;
     }
 
-    protected SoundEffect de() {
-        return SoundEffects.dr;
+    protected SoundEffect df() {
+        return this.di() ? SoundEffects.gj : SoundEffects.dL;
+    }
+
+    protected SoundEffect dg() {
+        return SoundEffects.dK;
     }
 }

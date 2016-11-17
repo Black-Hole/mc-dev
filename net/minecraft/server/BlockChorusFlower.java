@@ -9,15 +9,14 @@ public class BlockChorusFlower extends Block {
     public static final BlockStateInteger AGE = BlockStateInteger.of("age", 0, 5);
 
     protected BlockChorusFlower() {
-        super(Material.PLANT);
-        this.w(this.blockStateList.getBlockData().set(BlockChorusFlower.AGE, Integer.valueOf(0)));
+        super(Material.PLANT, MaterialMapColor.z);
+        this.y(this.blockStateList.getBlockData().set(BlockChorusFlower.AGE, Integer.valueOf(0)));
         this.a(CreativeModeTab.c);
         this.a(true);
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return null;
+        return Items.a;
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
@@ -141,7 +140,7 @@ public class BlockChorusFlower extends Block {
         return super.canPlace(world, blockposition) && this.b(world, blockposition);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!this.b(world, blockposition)) {
             world.a(blockposition, (Block) this, 1);
         }
@@ -178,13 +177,13 @@ public class BlockChorusFlower extends Block {
         }
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
         super.a(world, entityhuman, blockposition, iblockdata, tileentity, itemstack);
         a(world, blockposition, new ItemStack(Item.getItemOf(this)));
     }
 
-    protected ItemStack u(IBlockData iblockdata) {
-        return null;
+    protected ItemStack w(IBlockData iblockdata) {
+        return ItemStack.a;
     }
 
     public IBlockData fromLegacyData(int i) {
@@ -197,10 +196,6 @@ public class BlockChorusFlower extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockChorusFlower.AGE});
-    }
-
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        super.onPlace(world, blockposition, iblockdata);
     }
 
     public static void a(World world, BlockPosition blockposition, Random random, int i) {

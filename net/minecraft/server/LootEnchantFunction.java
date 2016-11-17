@@ -28,9 +28,9 @@ public class LootEnchantFunction extends LootItemFunction {
 
             float f = (float) i * this.a.b(random);
 
-            itemstack.count += Math.round(f);
-            if (this.b != 0 && itemstack.count > this.b) {
-                itemstack.count = this.b;
+            itemstack.add(Math.round(f));
+            if (this.b != 0 && itemstack.getCount() > this.b) {
+                itemstack.setCount(this.b);
             }
         }
 

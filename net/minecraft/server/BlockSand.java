@@ -5,7 +5,7 @@ public class BlockSand extends BlockFalling {
     public static final BlockStateEnum<BlockSand.EnumSandVariant> VARIANT = BlockStateEnum.of("variant", BlockSand.EnumSandVariant.class);
 
     public BlockSand() {
-        this.w(this.blockStateList.getBlockData().set(BlockSand.VARIANT, BlockSand.EnumSandVariant.SAND));
+        this.y(this.blockStateList.getBlockData().set(BlockSand.VARIANT, BlockSand.EnumSandVariant.SAND));
     }
 
     public int getDropData(IBlockData iblockdata) {

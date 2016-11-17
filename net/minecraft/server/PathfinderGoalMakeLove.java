@@ -58,7 +58,7 @@ public class PathfinderGoalMakeLove extends PathfinderGoal {
         this.b.getControllerLook().a(this.c, 10.0F, 30.0F);
         if (this.b.h(this.c) > 2.25D) {
             this.b.getNavigation().a((Entity) this.c, 0.25D);
-        } else if (this.e == 0 && this.c.df()) {
+        } else if (this.e == 0 && this.c.di()) {
             this.i();
         }
 

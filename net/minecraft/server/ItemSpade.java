@@ -17,7 +17,9 @@ public class ItemSpade extends ItemTool {
         return block == Blocks.SNOW_LAYER ? true : block == Blocks.SNOW;
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         if (!entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
             return EnumInteractionResult.FAIL;
         } else {
@@ -27,7 +29,7 @@ public class ItemSpade extends ItemTool {
             if (enumdirection != EnumDirection.DOWN && world.getType(blockposition.up()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
                 IBlockData iblockdata1 = Blocks.GRASS_PATH.getBlockData();
 
-                world.a(entityhuman, blockposition, SoundEffects.fe, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.a(entityhuman, blockposition, SoundEffects.fy, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 if (!world.isClientSide) {
                     world.setTypeAndData(blockposition, iblockdata1, 11);
                     itemstack.damage(1, entityhuman);

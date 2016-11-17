@@ -17,8 +17,7 @@ public class LootEnchantLevel extends LootItemFunction {
     }
 
     public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
-        EnchantmentManager.a(random, itemstack, this.a.a(random), this.b);
-        return itemstack;
+        return EnchantmentManager.a(random, itemstack, this.a.a(random), this.b);
     }
 
     public static class a extends LootItemFunction.a<LootEnchantLevel> {

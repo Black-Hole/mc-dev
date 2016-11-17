@@ -12,49 +12,49 @@ public enum EnumBlockRotation {
     }
 
     public EnumBlockRotation a(EnumBlockRotation enumblockrotation) {
-        switch (EnumBlockRotation.SyntheticClass_1.a[enumblockrotation.ordinal()]) {
-        case 3:
-            switch (EnumBlockRotation.SyntheticClass_1.a[this.ordinal()]) {
-            case 1:
+        switch (enumblockrotation) {
+        case CLOCKWISE_180:
+            switch (this) {
+            case NONE:
                 return EnumBlockRotation.CLOCKWISE_180;
 
-            case 2:
+            case CLOCKWISE_90:
                 return EnumBlockRotation.COUNTERCLOCKWISE_90;
 
-            case 3:
+            case CLOCKWISE_180:
                 return EnumBlockRotation.NONE;
 
-            case 4:
+            case COUNTERCLOCKWISE_90:
                 return EnumBlockRotation.CLOCKWISE_90;
             }
 
-        case 4:
-            switch (EnumBlockRotation.SyntheticClass_1.a[this.ordinal()]) {
-            case 1:
+        case COUNTERCLOCKWISE_90:
+            switch (this) {
+            case NONE:
                 return EnumBlockRotation.COUNTERCLOCKWISE_90;
 
-            case 2:
+            case CLOCKWISE_90:
                 return EnumBlockRotation.NONE;
 
-            case 3:
+            case CLOCKWISE_180:
                 return EnumBlockRotation.CLOCKWISE_90;
 
-            case 4:
+            case COUNTERCLOCKWISE_90:
                 return EnumBlockRotation.CLOCKWISE_180;
             }
 
-        case 2:
-            switch (EnumBlockRotation.SyntheticClass_1.a[this.ordinal()]) {
-            case 1:
+        case CLOCKWISE_90:
+            switch (this) {
+            case NONE:
                 return EnumBlockRotation.CLOCKWISE_90;
 
-            case 2:
+            case CLOCKWISE_90:
                 return EnumBlockRotation.CLOCKWISE_180;
 
-            case 3:
+            case CLOCKWISE_180:
                 return EnumBlockRotation.COUNTERCLOCKWISE_90;
 
-            case 4:
+            case COUNTERCLOCKWISE_90:
                 return EnumBlockRotation.NONE;
             }
 
@@ -67,14 +67,14 @@ public enum EnumBlockRotation {
         if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
             return enumdirection;
         } else {
-            switch (EnumBlockRotation.SyntheticClass_1.a[this.ordinal()]) {
-            case 2:
+            switch (this) {
+            case CLOCKWISE_90:
                 return enumdirection.e();
 
-            case 3:
+            case CLOCKWISE_180:
                 return enumdirection.opposite();
 
-            case 4:
+            case COUNTERCLOCKWISE_90:
                 return enumdirection.f();
 
             default:
@@ -84,14 +84,14 @@ public enum EnumBlockRotation {
     }
 
     public int a(int i, int j) {
-        switch (EnumBlockRotation.SyntheticClass_1.a[this.ordinal()]) {
-        case 2:
+        switch (this) {
+        case CLOCKWISE_90:
             return (i + j / 4) % j;
 
-        case 3:
+        case CLOCKWISE_180:
             return (i + j / 2) % j;
 
-        case 4:
+        case COUNTERCLOCKWISE_90:
             return (i + j * 3 / 4) % j;
 
         default:
@@ -110,37 +110,5 @@ public enum EnumBlockRotation {
             EnumBlockRotation.f[i++] = enumblockrotation.e;
         }
 
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumBlockRotation.values().length];
-
-        static {
-            try {
-                EnumBlockRotation.SyntheticClass_1.a[EnumBlockRotation.NONE.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                EnumBlockRotation.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                EnumBlockRotation.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_180.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                EnumBlockRotation.SyntheticClass_1.a[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-        }
     }
 }

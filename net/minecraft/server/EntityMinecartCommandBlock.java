@@ -1,14 +1,12 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
-    private static final DataWatcherObject<String> a = DataWatcher.a(EntityMinecartCommandBlock.class, DataWatcherRegistry.d);
+    public static final DataWatcherObject<String> COMMAND = DataWatcher.a(EntityMinecartCommandBlock.class, DataWatcherRegistry.d);
     private static final DataWatcherObject<IChatBaseComponent> b = DataWatcher.a(EntityMinecartCommandBlock.class, DataWatcherRegistry.e);
     private final CommandBlockListenerAbstract c = new CommandBlockListenerAbstract() {
         public void i() {
-            EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.a, this.getCommand());
+            EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.COMMAND, this.getCommand());
             EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.b, this.l());
         }
 
@@ -28,7 +26,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
             return EntityMinecartCommandBlock.this;
         }
 
-        public MinecraftServer h() {
+        public MinecraftServer B_() {
             return EntityMinecartCommandBlock.this.world.getMinecraftServer();
         }
     };
@@ -42,11 +40,11 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityMinecartAbstract.a(dataconvertermanager, "MinecartCommandBlock");
+    public static void b(DataConverterManager dataconvertermanager) {
+        EntityMinecartAbstract.a(dataconvertermanager, EntityMinecartCommandBlock.class);
         dataconvertermanager.a(DataConverterTypes.ENTITY, new DataInspector() {
             public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
-                if ("MinecartCommandBlock".equals(nbttagcompound.getString("id"))) {
+                if (TileEntity.a(TileEntityCommand.class).equals(new MinecraftKey(nbttagcompound.getString("id")))) {
                     nbttagcompound.setString("id", "Control");
                     dataconverter.a(DataConverterTypes.BLOCK_ENTITY, nbttagcompound, i);
                     nbttagcompound.setString("id", "MinecartCommandBlock");
@@ -59,14 +57,14 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
     protected void i() {
         super.i();
-        this.getDataWatcher().register(EntityMinecartCommandBlock.a, "");
+        this.getDataWatcher().register(EntityMinecartCommandBlock.COMMAND, "");
         this.getDataWatcher().register(EntityMinecartCommandBlock.b, new ChatComponentText(""));
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.c.b(nbttagcompound);
-        this.getDataWatcher().set(EntityMinecartCommandBlock.a, this.getCommandBlock().getCommand());
+        this.getDataWatcher().set(EntityMinecartCommandBlock.COMMAND, this.getCommandBlock().getCommand());
         this.getDataWatcher().set(EntityMinecartCommandBlock.b, this.getCommandBlock().l());
     }
 
@@ -95,7 +93,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
     }
 
-    public boolean a(EntityHuman entityhuman, @Nullable ItemStack itemstack, EnumHand enumhand) {
+    public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
         this.c.a(entityhuman);
         return false;
     }
@@ -108,8 +106,8 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
             } catch (Throwable throwable) {
                 ;
             }
-        } else if (EntityMinecartCommandBlock.a.equals(datawatcherobject)) {
-            this.c.setCommand((String) this.getDataWatcher().get(EntityMinecartCommandBlock.a));
+        } else if (EntityMinecartCommandBlock.COMMAND.equals(datawatcherobject)) {
+            this.c.setCommand((String) this.getDataWatcher().get(EntityMinecartCommandBlock.COMMAND));
         }
 
     }

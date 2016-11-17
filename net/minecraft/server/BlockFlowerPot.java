@@ -11,14 +11,14 @@ public class BlockFlowerPot extends BlockTileEntity {
 
     public BlockFlowerPot() {
         super(Material.ORIENTABLE);
-        this.w(this.blockStateList.getBlockData().set(BlockFlowerPot.CONTENTS, BlockFlowerPot.EnumFlowerPotContents.EMPTY).set(BlockFlowerPot.LEGACY_DATA, Integer.valueOf(0)));
+        this.y(this.blockStateList.getBlockData().set(BlockFlowerPot.CONTENTS, BlockFlowerPot.EnumFlowerPotContents.EMPTY).set(BlockFlowerPot.LEGACY_DATA, Integer.valueOf(0)));
     }
 
     public String getName() {
         return LocaleI18n.get("item.flowerPot.name");
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockFlowerPot.c;
     }
 
@@ -34,47 +34,60 @@ public class BlockFlowerPot extends BlockTileEntity {
         return false;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (itemstack != null && itemstack.getItem() instanceof ItemBlock) {
-            TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+        TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
 
-            if (tileentityflowerpot == null) {
-                return false;
-            } else if (tileentityflowerpot.getItem() != null) {
-                return false;
-            } else {
-                Block block = Block.asBlock(itemstack.getItem());
-
-                if (!this.a(block, itemstack.getData())) {
-                    return false;
-                } else {
-                    tileentityflowerpot.a(itemstack.getItem(), itemstack.getData());
-                    tileentityflowerpot.update();
-                    world.notify(blockposition, iblockdata, iblockdata, 3);
-                    entityhuman.b(StatisticList.V);
-                    if (!entityhuman.abilities.canInstantlyBuild) {
-                        --itemstack.count;
-                    }
-
-                    return true;
-                }
-            }
-        } else {
+        if (tileentityflowerpot == null) {
             return false;
+        } else {
+            ItemStack itemstack1 = tileentityflowerpot.getContents();
+
+            if (itemstack1.isEmpty()) {
+                if (!this.a(itemstack)) {
+                    return false;
+                }
+
+                tileentityflowerpot.setContents(itemstack);
+                entityhuman.b(StatisticList.V);
+                if (!entityhuman.abilities.canInstantlyBuild) {
+                    itemstack.subtract(1);
+                }
+            } else {
+                if (itemstack.isEmpty()) {
+                    entityhuman.a(enumhand, itemstack1);
+                } else if (!entityhuman.inventory.pickup(itemstack1)) {
+                    entityhuman.drop(itemstack1, false);
+                }
+
+                tileentityflowerpot.setContents(ItemStack.a);
+            }
+
+            tileentityflowerpot.update();
+            world.notify(blockposition, iblockdata, iblockdata, 3);
+            return true;
         }
     }
 
-    private boolean a(@Nullable Block block, int i) {
-        return block != Blocks.YELLOW_FLOWER && block != Blocks.RED_FLOWER && block != Blocks.CACTUS && block != Blocks.BROWN_MUSHROOM && block != Blocks.RED_MUSHROOM && block != Blocks.SAPLING && block != Blocks.DEADBUSH ? block == Blocks.TALLGRASS && i == BlockLongGrass.EnumTallGrassType.FERN.a() : true;
+    private boolean a(ItemStack itemstack) {
+        Block block = Block.asBlock(itemstack.getItem());
+
+        if (block != Blocks.YELLOW_FLOWER && block != Blocks.RED_FLOWER && block != Blocks.CACTUS && block != Blocks.BROWN_MUSHROOM && block != Blocks.RED_MUSHROOM && block != Blocks.SAPLING && block != Blocks.DEADBUSH) {
+            int i = itemstack.getData();
+
+            return block == Blocks.TALLGRASS && i == BlockLongGrass.EnumTallGrassType.FERN.a();
+        } else {
+            return true;
+        }
     }
 
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
 
         if (tileentityflowerpot != null) {
-            ItemStack itemstack = tileentityflowerpot.d();
+            ItemStack itemstack = tileentityflowerpot.getContents();
 
-            if (itemstack != null) {
+            if (!itemstack.isEmpty()) {
                 return itemstack;
             }
         }
@@ -83,11 +96,11 @@ public class BlockFlowerPot extends BlockTileEntity {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return super.canPlace(world, blockposition) && world.getType(blockposition.down()).q();
+        return super.canPlace(world, blockposition) && world.getType(blockposition.down()).r();
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
-        if (!world.getType(blockposition.down()).q()) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+        if (!world.getType(blockposition.down()).r()) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
         }
@@ -110,13 +123,12 @@ public class BlockFlowerPot extends BlockTileEntity {
             TileEntityFlowerPot tileentityflowerpot = this.c(world, blockposition);
 
             if (tileentityflowerpot != null) {
-                tileentityflowerpot.a((Item) null, 0);
+                tileentityflowerpot.setContents(ItemStack.a);
             }
         }
 
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.FLOWER_POT;
     }
@@ -217,28 +229,28 @@ public class BlockFlowerPot extends BlockTileEntity {
                 Block block = Block.asBlock(item);
 
                 if (block == Blocks.SAPLING) {
-                    switch (BlockFlowerPot.SyntheticClass_1.a[BlockWood.EnumLogVariant.a(i).ordinal()]) {
-                    case 1:
+                    switch (BlockWood.EnumLogVariant.a(i)) {
+                    case OAK:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.OAK_SAPLING;
                         break;
 
-                    case 2:
+                    case SPRUCE:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.SPRUCE_SAPLING;
                         break;
 
-                    case 3:
+                    case BIRCH:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.BIRCH_SAPLING;
                         break;
 
-                    case 4:
+                    case JUNGLE:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.JUNGLE_SAPLING;
                         break;
 
-                    case 5:
+                    case ACACIA:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.ACACIA_SAPLING;
                         break;
 
-                    case 6:
+                    case DARK_OAK:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.DARK_OAK_SAPLING;
                         break;
 
@@ -261,40 +273,40 @@ public class BlockFlowerPot extends BlockTileEntity {
                 } else if (block == Blocks.YELLOW_FLOWER) {
                     blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.DANDELION;
                 } else if (block == Blocks.RED_FLOWER) {
-                    switch (BlockFlowerPot.SyntheticClass_1.b[BlockFlowers.EnumFlowerVarient.a(BlockFlowers.EnumFlowerType.RED, i).ordinal()]) {
-                    case 1:
+                    switch (BlockFlowers.EnumFlowerVarient.a(BlockFlowers.EnumFlowerType.RED, i)) {
+                    case POPPY:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.POPPY;
                         break;
 
-                    case 2:
+                    case BLUE_ORCHID:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.BLUE_ORCHID;
                         break;
 
-                    case 3:
+                    case ALLIUM:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.ALLIUM;
                         break;
 
-                    case 4:
+                    case HOUSTONIA:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.HOUSTONIA;
                         break;
 
-                    case 5:
+                    case RED_TULIP:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.RED_TULIP;
                         break;
 
-                    case 6:
+                    case ORANGE_TULIP:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.ORANGE_TULIP;
                         break;
 
-                    case 7:
+                    case WHITE_TULIP:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.WHITE_TULIP;
                         break;
 
-                    case 8:
+                    case PINK_TULIP:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.PINK_TULIP;
                         break;
 
-                    case 9:
+                    case OXEYE_DAISY:
                         blockflowerpot_enumflowerpotcontents = BlockFlowerPot.EnumFlowerPotContents.OXEYE_DAISY;
                         break;
 
@@ -314,107 +326,6 @@ public class BlockFlowerPot extends BlockTileEntity {
         }
 
         return iblockdata.set(BlockFlowerPot.CONTENTS, blockflowerpot_enumflowerpotcontents);
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b = new int[BlockFlowers.EnumFlowerVarient.values().length];
-
-        static {
-            try {
-                BlockFlowerPot.SyntheticClass_1.b[BlockFlowers.EnumFlowerVarient.POPPY.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.b[BlockFlowers.EnumFlowerVarient.BLUE_ORCHID.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.b[BlockFlowers.EnumFlowerVarient.ALLIUM.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.b[BlockFlowers.EnumFlowerVarient.HOUSTONIA.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.b[BlockFlowers.EnumFlowerVarient.RED_TULIP.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.b[BlockFlowers.EnumFlowerVarient.ORANGE_TULIP.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.b[BlockFlowers.EnumFlowerVarient.WHITE_TULIP.ordinal()] = 7;
-            } catch (NoSuchFieldError nosuchfielderror6) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.b[BlockFlowers.EnumFlowerVarient.PINK_TULIP.ordinal()] = 8;
-            } catch (NoSuchFieldError nosuchfielderror7) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.b[BlockFlowers.EnumFlowerVarient.OXEYE_DAISY.ordinal()] = 9;
-            } catch (NoSuchFieldError nosuchfielderror8) {
-                ;
-            }
-
-            a = new int[BlockWood.EnumLogVariant.values().length];
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.a[BlockWood.EnumLogVariant.OAK.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror9) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.a[BlockWood.EnumLogVariant.SPRUCE.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror10) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.a[BlockWood.EnumLogVariant.BIRCH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror11) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.a[BlockWood.EnumLogVariant.JUNGLE.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror12) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.a[BlockWood.EnumLogVariant.ACACIA.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror13) {
-                ;
-            }
-
-            try {
-                BlockFlowerPot.SyntheticClass_1.a[BlockWood.EnumLogVariant.DARK_OAK.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror14) {
-                ;
-            }
-
-        }
     }
 
     public static enum EnumFlowerPotContents implements INamable {

@@ -1,7 +1,10 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
+import org.apache.commons.lang3.StringUtils;
 
 public class ItemMonsterEgg extends Item {
 
@@ -9,9 +12,9 @@ public class ItemMonsterEgg extends Item {
         this.a(CreativeModeTab.f);
     }
 
-    public String a(ItemStack itemstack) {
+    public String b(ItemStack itemstack) {
         String s = ("" + LocaleI18n.get(this.getName() + ".name")).trim();
-        String s1 = h(itemstack);
+        String s1 = EntityTypes.a(h(itemstack));
 
         if (s1 != null) {
             s = s + " " + LocaleI18n.get("entity." + s1 + ".name");
@@ -20,15 +23,18 @@ public class ItemMonsterEgg extends Item {
         return s;
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         if (world.isClientSide) {
             return EnumInteractionResult.SUCCESS;
         } else if (!entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
             return EnumInteractionResult.FAIL;
         } else {
             IBlockData iblockdata = world.getType(blockposition);
+            Block block = iblockdata.getBlock();
 
-            if (iblockdata.getBlock() == Blocks.MOB_SPAWNER) {
+            if (block == Blocks.MOB_SPAWNER) {
                 TileEntity tileentity = world.getTileEntity(blockposition);
 
                 if (tileentity instanceof TileEntityMobSpawner) {
@@ -38,21 +44,16 @@ public class ItemMonsterEgg extends Item {
                     tileentity.update();
                     world.notify(blockposition, iblockdata, iblockdata, 3);
                     if (!entityhuman.abilities.canInstantlyBuild) {
-                        --itemstack.count;
+                        itemstack.subtract(1);
                     }
 
                     return EnumInteractionResult.SUCCESS;
                 }
             }
 
-            blockposition = blockposition.shift(enumdirection);
-            double d0 = 0.0D;
-
-            if (enumdirection == EnumDirection.UP && iblockdata instanceof BlockFence) {
-                d0 = 0.5D;
-            }
-
-            Entity entity = a(world, h(itemstack), (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + d0, (double) blockposition.getZ() + 0.5D);
+            BlockPosition blockposition1 = blockposition.shift(enumdirection);
+            double d0 = this.a(world, blockposition1);
+            Entity entity = a(world, h(itemstack), (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + d0, (double) blockposition1.getZ() + 0.5D);
 
             if (entity != null) {
                 if (entity instanceof EntityLiving && itemstack.hasName()) {
@@ -61,11 +62,30 @@ public class ItemMonsterEgg extends Item {
 
                 a(world, entityhuman, itemstack, entity);
                 if (!entityhuman.abilities.canInstantlyBuild) {
-                    --itemstack.count;
+                    itemstack.subtract(1);
                 }
             }
 
             return EnumInteractionResult.SUCCESS;
+        }
+    }
+
+    protected double a(World world, BlockPosition blockposition) {
+        AxisAlignedBB axisalignedbb = (new AxisAlignedBB(blockposition)).b(0.0D, -1.0D, 0.0D);
+        List list = world.getCubes((Entity) null, axisalignedbb);
+
+        if (list.isEmpty()) {
+            return 0.0D;
+        } else {
+            double d0 = axisalignedbb.b;
+
+            AxisAlignedBB axisalignedbb1;
+
+            for (Iterator iterator = list.iterator(); iterator.hasNext(); d0 = Math.max(axisalignedbb1.e, d0)) {
+                axisalignedbb1 = (AxisAlignedBB) iterator.next();
+            }
+
+            return d0 - (double) blockposition.getY();
         }
     }
 
@@ -91,7 +111,9 @@ public class ItemMonsterEgg extends Item {
         }
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         if (world.isClientSide) {
             return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
         } else {
@@ -114,7 +136,7 @@ public class ItemMonsterEgg extends Item {
 
                         a(world, entityhuman, itemstack, entity);
                         if (!entityhuman.abilities.canInstantlyBuild) {
-                            --itemstack.count;
+                            itemstack.subtract(1);
                         }
 
                         entityhuman.b(StatisticList.b((Item) this));
@@ -130,18 +152,18 @@ public class ItemMonsterEgg extends Item {
     }
 
     @Nullable
-    public static Entity a(World world, @Nullable String s, double d0, double d1, double d2) {
-        if (s != null && EntityTypes.eggInfo.containsKey(s)) {
+    public static Entity a(World world, @Nullable MinecraftKey minecraftkey, double d0, double d1, double d2) {
+        if (minecraftkey != null && EntityTypes.eggInfo.containsKey(minecraftkey)) {
             Entity entity = null;
 
             for (int i = 0; i < 1; ++i) {
-                entity = EntityTypes.b(s, world);
-                if (entity instanceof EntityLiving) {
+                entity = EntityTypes.a(minecraftkey, world);
+                if (entity instanceof EntityInsentient) {
                     EntityInsentient entityinsentient = (EntityInsentient) entity;
 
                     entity.setPositionRotation(d0, d1, d2, MathHelper.g(world.random.nextFloat() * 360.0F), 0.0F);
-                    entityinsentient.aQ = entityinsentient.yaw;
-                    entityinsentient.aO = entityinsentient.yaw;
+                    entityinsentient.aP = entityinsentient.yaw;
+                    entityinsentient.aN = entityinsentient.yaw;
                     entityinsentient.prepare(world.D(new BlockPosition(entityinsentient)), (GroupDataEntity) null);
                     world.addEntity(entity);
                     entityinsentient.D();
@@ -155,7 +177,7 @@ public class ItemMonsterEgg extends Item {
     }
 
     @Nullable
-    public static String h(ItemStack itemstack) {
+    public static MinecraftKey h(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
         if (nbttagcompound == null) {
@@ -165,7 +187,14 @@ public class ItemMonsterEgg extends Item {
         } else {
             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("EntityTag");
 
-            return !nbttagcompound1.hasKeyOfType("id", 8) ? null : nbttagcompound1.getString("id");
+            if (!nbttagcompound1.hasKeyOfType("id", 8)) {
+                return null;
+            } else {
+                String s = nbttagcompound1.getString("id");
+                MinecraftKey minecraftkey = new MinecraftKey(s);
+
+                return !StringUtils.equals(s, minecraftkey.toString()) ? null : minecraftkey;
+            }
         }
     }
 }

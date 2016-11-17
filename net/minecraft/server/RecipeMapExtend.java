@@ -1,51 +1,66 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
+import java.util.Iterator;
 
 public class RecipeMapExtend extends ShapedRecipes {
 
     public RecipeMapExtend() {
-        super(3, 3, new ItemStack[] { new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.FILLED_MAP, 0, 32767), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER)}, new ItemStack(Items.MAP, 0, 0));
+        super(3, 3, new ItemStack[] { new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.FILLED_MAP, 1, 32767), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER)}, new ItemStack(Items.MAP));
     }
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
         if (!super.a(inventorycrafting, world)) {
             return false;
         } else {
-            ItemStack itemstack = null;
+            ItemStack itemstack = ItemStack.a;
 
-            for (int i = 0; i < inventorycrafting.getSize() && itemstack == null; ++i) {
+            for (int i = 0; i < inventorycrafting.getSize() && itemstack.isEmpty(); ++i) {
                 ItemStack itemstack1 = inventorycrafting.getItem(i);
 
-                if (itemstack1 != null && itemstack1.getItem() == Items.FILLED_MAP) {
+                if (itemstack1.getItem() == Items.FILLED_MAP) {
                     itemstack = itemstack1;
                 }
             }
 
-            if (itemstack == null) {
+            if (itemstack.isEmpty()) {
                 return false;
             } else {
                 WorldMap worldmap = Items.FILLED_MAP.getSavedMap(itemstack, world);
 
-                return worldmap == null ? false : worldmap.scale < 4;
+                return worldmap == null ? false : (this.a(worldmap) ? false : worldmap.scale < 4);
             }
         }
     }
 
-    @Nullable
-    public ItemStack craftItem(InventoryCrafting inventorycrafting) {
-        ItemStack itemstack = null;
+    private boolean a(WorldMap worldmap) {
+        if (worldmap.decorations != null) {
+            Iterator iterator = worldmap.decorations.values().iterator();
 
-        for (int i = 0; i < inventorycrafting.getSize() && itemstack == null; ++i) {
+            while (iterator.hasNext()) {
+                MapIcon mapicon = (MapIcon) iterator.next();
+
+                if (mapicon.b() == MapIcon.Type.MANSION || mapicon.b() == MapIcon.Type.MONUMENT) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public ItemStack craftItem(InventoryCrafting inventorycrafting) {
+        ItemStack itemstack = ItemStack.a;
+
+        for (int i = 0; i < inventorycrafting.getSize() && itemstack.isEmpty(); ++i) {
             ItemStack itemstack1 = inventorycrafting.getItem(i);
 
-            if (itemstack1 != null && itemstack1.getItem() == Items.FILLED_MAP) {
+            if (itemstack1.getItem() == Items.FILLED_MAP) {
                 itemstack = itemstack1;
             }
         }
 
         itemstack = itemstack.cloneItemStack();
-        itemstack.count = 1;
+        itemstack.setCount(1);
         if (itemstack.getTag() == null) {
             itemstack.setTag(new NBTTagCompound());
         }

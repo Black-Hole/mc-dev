@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class TileEntityEndGateway extends TileEntity implements ITickable {
+public class TileEntityEndGateway extends TileEntityEnderPortal implements ITickable {
 
     private static final Logger a = LogManager.getLogger();
     private long f;
@@ -41,8 +41,8 @@ public class TileEntityEndGateway extends TileEntity implements ITickable {
         this.exactTeleport = nbttagcompound.getBoolean("ExactTeleport");
     }
 
-    public void E_() {
-        boolean flag = this.d();
+    public void F_() {
+        boolean flag = this.a();
         boolean flag1 = this.e();
 
         ++this.f;
@@ -54,15 +54,19 @@ public class TileEntityEndGateway extends TileEntity implements ITickable {
             if (!list.isEmpty()) {
                 this.a((Entity) list.get(0));
             }
+
+            if (this.f % 2400L == 0L) {
+                this.f();
+            }
         }
 
-        if (flag != this.d() || flag1 != this.e()) {
+        if (flag != this.a() || flag1 != this.e()) {
             this.update();
         }
 
     }
 
-    public boolean d() {
+    public boolean a() {
         return this.f < 200L;
     }
 
@@ -72,16 +76,16 @@ public class TileEntityEndGateway extends TileEntity implements ITickable {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 8, this.c());
+        return new PacketPlayOutTileEntityData(this.position, 8, this.d());
     }
 
-    public NBTTagCompound c() {
+    public NBTTagCompound d() {
         return this.save(new NBTTagCompound());
     }
 
-    public void i() {
+    public void f() {
         if (!this.world.isClientSide) {
-            this.g = 20;
+            this.g = 40;
             this.world.playBlockAction(this.getPosition(), this.getBlock(), 1, 0);
             this.update();
         }
@@ -90,7 +94,7 @@ public class TileEntityEndGateway extends TileEntity implements ITickable {
 
     public boolean c(int i, int j) {
         if (i == 1) {
-            this.g = 20;
+            this.g = 40;
             return true;
         } else {
             return super.c(i, j);
@@ -101,27 +105,27 @@ public class TileEntityEndGateway extends TileEntity implements ITickable {
         if (!this.world.isClientSide && !this.e()) {
             this.g = 100;
             if (this.exitPortal == null && this.world.worldProvider instanceof WorldProviderTheEnd) {
-                this.l();
+                this.j();
             }
 
             if (this.exitPortal != null) {
-                BlockPosition blockposition = this.exactTeleport ? this.exitPortal : this.k();
+                BlockPosition blockposition = this.exactTeleport ? this.exitPortal : this.i();
 
                 entity.enderTeleportTo((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
             }
 
-            this.i();
+            this.f();
         }
     }
 
-    private BlockPosition k() {
+    private BlockPosition i() {
         BlockPosition blockposition = a(this.world, this.exitPortal, 5, false);
 
         TileEntityEndGateway.a.debug("Best exit position for portal at {} is {}", new Object[] { this.exitPortal, blockposition});
         return blockposition.up();
     }
 
-    private void l() {
+    private void j() {
         Vec3D vec3d = (new Vec3D((double) this.getPosition().getX(), 0.0D, (double) this.getPosition().getZ())).a();
         Vec3D vec3d1 = vec3d.a(1024.0D);
 
@@ -150,7 +154,7 @@ public class TileEntityEndGateway extends TileEntity implements ITickable {
         this.exitPortal = a(this.world, this.exitPortal, 16, true);
         TileEntityEndGateway.a.debug("Creating portal at {}", new Object[] { this.exitPortal});
         this.exitPortal = this.exitPortal.up(10);
-        this.b(this.exitPortal);
+        this.c(this.exitPortal);
         this.update();
     }
 
@@ -164,7 +168,7 @@ public class TileEntityEndGateway extends TileEntity implements ITickable {
                         BlockPosition blockposition2 = new BlockPosition(blockposition.getX() + j, l, blockposition.getZ() + k);
                         IBlockData iblockdata = world.getType(blockposition2);
 
-                        if (iblockdata.k() && (flag || iblockdata.getBlock() != Blocks.BEDROCK)) {
+                        if (iblockdata.l() && (flag || iblockdata.getBlock() != Blocks.BEDROCK)) {
                             blockposition1 = blockposition2;
                             break;
                         }
@@ -193,7 +197,7 @@ public class TileEntityEndGateway extends TileEntity implements ITickable {
             BlockPosition blockposition3 = (BlockPosition) iterator.next();
             IBlockData iblockdata = chunk.getBlockData(blockposition3);
 
-            if (iblockdata.getBlock() == Blocks.END_STONE && !chunk.getBlockData(blockposition3.up(1)).k() && !chunk.getBlockData(blockposition3.up(2)).k()) {
+            if (iblockdata.getBlock() == Blocks.END_STONE && !chunk.getBlockData(blockposition3.up(1)).l() && !chunk.getBlockData(blockposition3.up(2)).l()) {
                 double d1 = blockposition3.g(0.0D, 0.0D, 0.0D);
 
                 if (blockposition2 == null || d1 < d0) {
@@ -206,7 +210,7 @@ public class TileEntityEndGateway extends TileEntity implements ITickable {
         return blockposition2;
     }
 
-    private void b(BlockPosition blockposition) {
+    private void c(BlockPosition blockposition) {
         (new WorldGenEndGateway()).generate(this.world, new Random(), blockposition);
         TileEntity tileentity = this.world.getTileEntity(blockposition);
 
@@ -219,5 +223,10 @@ public class TileEntityEndGateway extends TileEntity implements ITickable {
             TileEntityEndGateway.a.warn("Couldn\'t save exit portal at {}", new Object[] { blockposition});
         }
 
+    }
+
+    public void b(BlockPosition blockposition) {
+        this.exactTeleport = true;
+        this.exitPortal = blockposition;
     }
 }

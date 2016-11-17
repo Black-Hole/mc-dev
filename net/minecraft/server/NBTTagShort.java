@@ -65,7 +65,7 @@ public class NBTTagShort extends NBTNumber {
         return (byte) (this.data & 255);
     }
 
-    public double h() {
+    public double asDouble() {
         return (double) this.data;
     }
 

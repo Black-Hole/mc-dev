@@ -14,6 +14,7 @@ public class Enchantments {
     public static final Enchantment THORNS = a("thorns");
     public static final Enchantment DEPTH_STRIDER = a("depth_strider");
     public static final Enchantment j = a("frost_walker");
+    public static final Enchantment k = a("binding_curse");
     public static final Enchantment DAMAGE_ALL = a("sharpness");
     public static final Enchantment DAMAGE_UNDEAD = a("smite");
     public static final Enchantment DAMAGE_ARTHROPODS = a("bane_of_arthropods");
@@ -30,7 +31,8 @@ public class Enchantments {
     public static final Enchantment ARROW_INFINITE = a("infinity");
     public static final Enchantment LUCK = a("luck_of_the_sea");
     public static final Enchantment LURE = a("lure");
-    public static final Enchantment A = a("mending");
+    public static final Enchantment B = a("mending");
+    public static final Enchantment C = a("vanishing_curse");
 
     @Nullable
     private static Enchantment a(String s) {
@@ -45,7 +47,7 @@ public class Enchantments {
 
     static {
         if (!DispenserRegistry.a()) {
-            throw new RuntimeException("Accessed MobEffects before Bootstrap!");
+            throw new RuntimeException("Accessed Enchantments before Bootstrap!");
         }
     }
 }

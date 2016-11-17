@@ -15,7 +15,7 @@ public class LootItemFunctionSetCount extends LootItemFunction {
     }
 
     public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
-        itemstack.count = this.a.a(random);
+        itemstack.setCount(this.a.a(random));
         return itemstack;
     }
 

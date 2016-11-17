@@ -6,7 +6,7 @@ public class WeightedRandomEnchant extends WeightedRandom.WeightedRandomChoice {
     public final int level;
 
     public WeightedRandomEnchant(Enchantment enchantment, int i) {
-        super(enchantment.c().a());
+        super(enchantment.e().a());
         this.enchantment = enchantment;
         this.level = i;
     }

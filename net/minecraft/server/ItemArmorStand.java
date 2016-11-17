@@ -9,12 +9,13 @@ public class ItemArmorStand extends Item {
         this.a(CreativeModeTab.c);
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (enumdirection == EnumDirection.DOWN) {
             return EnumInteractionResult.FAIL;
         } else {
             boolean flag = world.getType(blockposition).getBlock().a((IBlockAccess) world, blockposition);
             BlockPosition blockposition1 = flag ? blockposition : blockposition.shift(enumdirection);
+            ItemStack itemstack = entityhuman.b(enumhand);
 
             if (!entityhuman.a(blockposition1, enumdirection, itemstack)) {
                 return EnumInteractionResult.FAIL;
@@ -47,7 +48,7 @@ public class ItemArmorStand extends Item {
                             world.a((EntityHuman) null, entityarmorstand.locX, entityarmorstand.locY, entityarmorstand.locZ, SoundEffects.m, SoundCategory.BLOCKS, 0.75F, 0.8F);
                         }
 
-                        --itemstack.count;
+                        itemstack.subtract(1);
                         return EnumInteractionResult.SUCCESS;
                     }
                 }

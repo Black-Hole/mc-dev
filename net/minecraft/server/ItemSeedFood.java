@@ -11,10 +11,12 @@ public class ItemSeedFood extends ItemFood {
         this.c = block1;
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         if (enumdirection == EnumDirection.UP && entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack) && world.getType(blockposition).getBlock() == this.c && world.isEmpty(blockposition.up())) {
             world.setTypeAndData(blockposition.up(), this.b.getBlockData(), 11);
-            --itemstack.count;
+            itemstack.subtract(1);
             return EnumInteractionResult.SUCCESS;
         } else {
             return EnumInteractionResult.FAIL;

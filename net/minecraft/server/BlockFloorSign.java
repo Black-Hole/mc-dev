@@ -5,16 +5,16 @@ public class BlockFloorSign extends BlockSign {
     public static final BlockStateInteger ROTATION = BlockStateInteger.of("rotation", 0, 15);
 
     public BlockFloorSign() {
-        this.w(this.blockStateList.getBlockData().set(BlockFloorSign.ROTATION, Integer.valueOf(0)));
+        this.y(this.blockStateList.getBlockData().set(BlockFloorSign.ROTATION, Integer.valueOf(0)));
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!world.getType(blockposition.down()).getMaterial().isBuildable()) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
         }
 
-        super.a(iblockdata, world, blockposition, block);
+        super.a(iblockdata, world, blockposition, block, blockposition1);
     }
 
     public IBlockData fromLegacyData(int i) {

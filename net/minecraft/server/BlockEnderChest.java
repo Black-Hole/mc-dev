@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockEnderChest extends BlockTileEntity {
 
@@ -10,11 +9,11 @@ public class BlockEnderChest extends BlockTileEntity {
 
     protected BlockEnderChest() {
         super(Material.STONE);
-        this.w(this.blockStateList.getBlockData().set(BlockEnderChest.FACING, EnumDirection.NORTH));
+        this.y(this.blockStateList.getBlockData().set(BlockEnderChest.FACING, EnumDirection.NORTH));
         this.a(CreativeModeTab.c);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockEnderChest.b;
     }
 
@@ -30,7 +29,6 @@ public class BlockEnderChest extends BlockTileEntity {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.OBSIDIAN);
     }
@@ -39,7 +37,7 @@ public class BlockEnderChest extends BlockTileEntity {
         return 8;
     }
 
-    protected boolean o() {
+    protected boolean n() {
         return true;
     }
 
@@ -51,12 +49,12 @@ public class BlockEnderChest extends BlockTileEntity {
         world.setTypeAndData(blockposition, iblockdata.set(BlockEnderChest.FACING, entityliving.getDirection().opposite()), 2);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         InventoryEnderChest inventoryenderchest = entityhuman.getEnderChest();
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (inventoryenderchest != null && tileentity instanceof TileEntityEnderChest) {
-            if (world.getType(blockposition.up()).l()) {
+            if (world.getType(blockposition.up()).m()) {
                 return true;
             } else if (world.isClientSide) {
                 return true;

@@ -59,7 +59,7 @@ public class NameReferencingFileConverter {
                 return !UtilColor.b(s);
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((String) object);
             }
         }), String.class);

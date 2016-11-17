@@ -440,10 +440,12 @@ public class ChatModifier {
             }
         }
 
+        @Nullable
         public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
             return this.a((ChatModifier) object, type, jsonserializationcontext);
         }
 
+        @Nullable
         public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             return this.a(jsonelement, type, jsondeserializationcontext);
         }

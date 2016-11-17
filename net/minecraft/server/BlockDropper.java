@@ -1,14 +1,12 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class BlockDropper extends BlockDispenser {
 
     private final IDispenseBehavior e = new DispenseBehaviorItem();
 
     public BlockDropper() {}
 
-    protected IDispenseBehavior a(@Nullable ItemStack itemstack) {
+    protected IDispenseBehavior a(ItemStack itemstack) {
         return this.e;
     }
 
@@ -21,14 +19,14 @@ public class BlockDropper extends BlockDispenser {
         TileEntityDispenser tileentitydispenser = (TileEntityDispenser) sourceblock.getTileEntity();
 
         if (tileentitydispenser != null) {
-            int i = tileentitydispenser.m();
+            int i = tileentitydispenser.o();
 
             if (i < 0) {
                 world.triggerEffect(1001, blockposition, 0);
             } else {
                 ItemStack itemstack = tileentitydispenser.getItem(i);
 
-                if (itemstack != null) {
+                if (!itemstack.isEmpty()) {
                     EnumDirection enumdirection = (EnumDirection) world.getType(blockposition).get(BlockDropper.FACING);
                     BlockPosition blockposition1 = blockposition.shift(enumdirection);
                     IInventory iinventory = TileEntityHopper.b(world, (double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
@@ -36,16 +34,11 @@ public class BlockDropper extends BlockDispenser {
 
                     if (iinventory == null) {
                         itemstack1 = this.e.a(sourceblock, itemstack);
-                        if (itemstack1 != null && itemstack1.count <= 0) {
-                            itemstack1 = null;
-                        }
                     } else {
-                        itemstack1 = TileEntityHopper.addItem(iinventory, itemstack.cloneItemStack().cloneAndSubtract(1), enumdirection.opposite());
-                        if (itemstack1 == null) {
+                        itemstack1 = TileEntityHopper.addItem(tileentitydispenser, iinventory, itemstack.cloneItemStack().cloneAndSubtract(1), enumdirection.opposite());
+                        if (itemstack1.isEmpty()) {
                             itemstack1 = itemstack.cloneItemStack();
-                            if (--itemstack1.count <= 0) {
-                                itemstack1 = null;
-                            }
+                            itemstack1.subtract(1);
                         } else {
                             itemstack1 = itemstack.cloneItemStack();
                         }

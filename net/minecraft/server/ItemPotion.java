@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nullable;
 
 public class ItemPotion extends Item {
 
@@ -11,12 +10,11 @@ public class ItemPotion extends Item {
         this.a(CreativeModeTab.k);
     }
 
-    @Nullable
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
         EntityHuman entityhuman = entityliving instanceof EntityHuman ? (EntityHuman) entityliving : null;
 
         if (entityhuman == null || !entityhuman.abilities.canInstantlyBuild) {
-            --itemstack.count;
+            itemstack.subtract(1);
         }
 
         if (!world.isClientSide) {
@@ -26,7 +24,11 @@ public class ItemPotion extends Item {
             while (iterator.hasNext()) {
                 MobEffect mobeffect = (MobEffect) iterator.next();
 
-                entityliving.addEffect(new MobEffect(mobeffect));
+                if (mobeffect.getMobEffect().isInstant()) {
+                    mobeffect.getMobEffect().applyInstantEffect(entityhuman, entityhuman, entityliving, mobeffect.getAmplifier(), 1.0D);
+                } else {
+                    entityliving.addEffect(new MobEffect(mobeffect));
+                }
             }
         }
 
@@ -35,7 +37,7 @@ public class ItemPotion extends Item {
         }
 
         if (entityhuman == null || !entityhuman.abilities.canInstantlyBuild) {
-            if (itemstack.count <= 0) {
+            if (itemstack.isEmpty()) {
                 return new ItemStack(Items.GLASS_BOTTLE);
             }
 
@@ -55,12 +57,12 @@ public class ItemPotion extends Item {
         return EnumAnimation.DRINK;
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         entityhuman.c(enumhand);
-        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, entityhuman.b(enumhand));
     }
 
-    public String a(ItemStack itemstack) {
-        return LocaleI18n.get(PotionUtil.c(itemstack).b("potion.effect."));
+    public String b(ItemStack itemstack) {
+        return LocaleI18n.get(PotionUtil.d(itemstack).b("potion.effect."));
     }
 }

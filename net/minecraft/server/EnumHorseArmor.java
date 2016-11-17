@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public enum EnumHorseArmor {
 
     NONE(0), IRON(5, "iron", "meo"), GOLD(7, "gold", "goo"), DIAMOND(11, "diamond", "dio");
@@ -34,15 +32,15 @@ public enum EnumHorseArmor {
         return values()[i];
     }
 
-    public static EnumHorseArmor a(@Nullable ItemStack itemstack) {
-        return itemstack == null ? EnumHorseArmor.NONE : a(itemstack.getItem());
+    public static EnumHorseArmor a(ItemStack itemstack) {
+        return itemstack.isEmpty() ? EnumHorseArmor.NONE : a(itemstack.getItem());
     }
 
-    public static EnumHorseArmor a(@Nullable Item item) {
+    public static EnumHorseArmor a(Item item) {
         return item == Items.IRON_HORSE_ARMOR ? EnumHorseArmor.IRON : (item == Items.GOLDEN_HORSE_ARMOR ? EnumHorseArmor.GOLD : (item == Items.DIAMOND_HORSE_ARMOR ? EnumHorseArmor.DIAMOND : EnumHorseArmor.NONE));
     }
 
-    public static boolean b(@Nullable Item item) {
+    public static boolean b(Item item) {
         return a(item) != EnumHorseArmor.NONE;
     }
 }

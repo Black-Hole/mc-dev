@@ -14,14 +14,14 @@ public class BlockPumpkin extends BlockFacingHorizontal {
             return iblockdata != null && (iblockdata.getBlock() == Blocks.PUMPKIN || iblockdata.getBlock() == Blocks.LIT_PUMPKIN);
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((IBlockData) object);
         }
     };
 
     protected BlockPumpkin() {
         super(Material.PUMPKIN, MaterialMapColor.q);
-        this.w(this.blockStateList.getBlockData().set(BlockPumpkin.FACING, EnumDirection.NORTH));
+        this.y(this.blockStateList.getBlockData().set(BlockPumpkin.FACING, EnumDirection.NORTH));
         this.a(true);
         this.a(CreativeModeTab.b);
     }
@@ -60,7 +60,7 @@ public class BlockPumpkin extends BlockFacingHorizontal {
             for (j = 0; j < this.getDetectorSnowGolem().b(); ++j) {
                 ShapeDetectorBlock shapedetectorblock1 = shapedetector_shapedetectorcollection.a(0, j, 0);
 
-                world.update(shapedetectorblock1.getPosition(), Blocks.AIR);
+                world.update(shapedetectorblock1.getPosition(), Blocks.AIR, false);
             }
         } else {
             shapedetector_shapedetectorcollection = this.getDetectorIronGolem().a(world, blockposition);
@@ -86,7 +86,7 @@ public class BlockPumpkin extends BlockFacingHorizontal {
                     for (int l = 0; l < this.getDetectorIronGolem().b(); ++l) {
                         ShapeDetectorBlock shapedetectorblock2 = shapedetector_shapedetectorcollection.a(j, l, 0);
 
-                        world.update(shapedetectorblock2.getPosition(), Blocks.AIR);
+                        world.update(shapedetectorblock2.getPosition(), Blocks.AIR, false);
                     }
                 }
             }
@@ -95,7 +95,7 @@ public class BlockPumpkin extends BlockFacingHorizontal {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return world.getType(blockposition).getBlock().material.isReplaceable() && world.getType(blockposition.down()).q();
+        return world.getType(blockposition).getBlock().material.isReplaceable() && world.getType(blockposition.down()).r();
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {

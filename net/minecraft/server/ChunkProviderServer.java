@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,10 +43,10 @@ public class ChunkProviderServer implements IChunkProvider {
     }
 
     public void b() {
-        Iterator iterator = this.chunks.values().iterator();
+        ObjectIterator objectiterator = this.chunks.values().iterator();
 
-        while (iterator.hasNext()) {
-            Chunk chunk = (Chunk) iterator.next();
+        while (objectiterator.hasNext()) {
+            Chunk chunk = (Chunk) objectiterator.next();
 
             this.unload(chunk);
         }
@@ -210,8 +211,8 @@ public class ChunkProviderServer implements IChunkProvider {
     }
 
     @Nullable
-    public BlockPosition a(World world, String s, BlockPosition blockposition) {
-        return this.chunkGenerator.findNearestMapFeature(world, s, blockposition);
+    public BlockPosition a(World world, String s, BlockPosition blockposition, boolean flag) {
+        return this.chunkGenerator.findNearestMapFeature(world, s, blockposition, flag);
     }
 
     public int g() {
@@ -220,5 +221,9 @@ public class ChunkProviderServer implements IChunkProvider {
 
     public boolean isLoaded(int i, int j) {
         return this.chunks.containsKey(ChunkCoordIntPair.a(i, j));
+    }
+
+    public boolean e(int i, int j) {
+        return this.chunks.containsKey(ChunkCoordIntPair.a(i, j)) || this.chunkLoader.a(i, j);
     }
 }

@@ -19,25 +19,25 @@ public class EntityBat extends EntityAmbient {
         this.datawatcher.register(EntityBat.a, Byte.valueOf((byte) 0));
     }
 
-    protected float ch() {
+    protected float ci() {
         return 0.1F;
     }
 
-    protected float ci() {
-        return super.ci() * 0.95F;
+    protected float cj() {
+        return super.cj() * 0.95F;
     }
 
     @Nullable
     protected SoundEffect G() {
-        return this.isAsleep() && this.random.nextInt(4) != 0 ? null : SoundEffects.w;
-    }
-
-    protected SoundEffect bV() {
-        return SoundEffects.y;
+        return this.isAsleep() && this.random.nextInt(4) != 0 ? null : SoundEffects.x;
     }
 
     protected SoundEffect bW() {
-        return SoundEffects.x;
+        return SoundEffects.z;
+    }
+
+    protected SoundEffect bX() {
+        return SoundEffects.y;
     }
 
     public boolean isCollidable() {
@@ -46,7 +46,7 @@ public class EntityBat extends EntityAmbient {
 
     protected void C(Entity entity) {}
 
-    protected void cs() {}
+    protected void ct() {}
 
     protected void initAttributes() {
         super.initAttributes();
@@ -68,8 +68,8 @@ public class EntityBat extends EntityAmbient {
 
     }
 
-    public void m() {
-        super.m();
+    public void A_() {
+        super.A_();
         if (this.isAsleep()) {
             this.motX = 0.0D;
             this.motY = 0.0D;
@@ -87,9 +87,9 @@ public class EntityBat extends EntityAmbient {
         BlockPosition blockposition1 = blockposition.up();
 
         if (this.isAsleep()) {
-            if (this.world.getType(blockposition1).l()) {
+            if (this.world.getType(blockposition1).m()) {
                 if (this.random.nextInt(200) == 0) {
-                    this.aQ = (float) this.random.nextInt(360);
+                    this.aP = (float) this.random.nextInt(360);
                 }
 
                 if (this.world.b(this, 4.0D) != null) {
@@ -116,12 +116,12 @@ public class EntityBat extends EntityAmbient {
             this.motX += (Math.signum(d0) * 0.5D - this.motX) * 0.10000000149011612D;
             this.motY += (Math.signum(d1) * 0.699999988079071D - this.motY) * 0.10000000149011612D;
             this.motZ += (Math.signum(d2) * 0.5D - this.motZ) * 0.10000000149011612D;
-            float f = (float) (MathHelper.b(this.motZ, this.motX) * 57.2957763671875D) - 90.0F;
+            float f = (float) (MathHelper.c(this.motZ, this.motX) * 57.2957763671875D) - 90.0F;
             float f1 = MathHelper.g(f - this.yaw);
 
-            this.bg = 0.5F;
+            this.bf = 0.5F;
             this.yaw += f1;
-            if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).l()) {
+            if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).m()) {
                 this.setAsleep(true);
             }
         }
@@ -153,7 +153,7 @@ public class EntityBat extends EntityAmbient {
     }
 
     public static void b(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "Bat");
+        EntityInsentient.a(dataconvertermanager, EntityBat.class);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -166,7 +166,7 @@ public class EntityBat extends EntityAmbient {
         nbttagcompound.setByte("BatFlags", ((Byte) this.datawatcher.get(EntityBat.a)).byteValue());
     }
 
-    public boolean cK() {
+    public boolean cM() {
         BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
         if (blockposition.getY() >= this.world.K()) {
@@ -181,7 +181,7 @@ public class EntityBat extends EntityAmbient {
                 return false;
             }
 
-            return i > this.random.nextInt(b0) ? false : super.cK();
+            return i > this.random.nextInt(b0) ? false : super.cM();
         }
     }
 
@@ -195,6 +195,6 @@ public class EntityBat extends EntityAmbient {
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.ad;
+        return LootTables.ag;
     }
 }

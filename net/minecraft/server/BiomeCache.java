@@ -28,7 +28,7 @@ public class BiomeCache {
             this.d.add(biomecache_a);
         }
 
-        biomecache_a.d = MinecraftServer.av();
+        biomecache_a.d = MinecraftServer.aw();
         return biomecache_a;
     }
 
@@ -39,7 +39,7 @@ public class BiomeCache {
     }
 
     public void a() {
-        long i = MinecraftServer.av();
+        long i = MinecraftServer.aw();
         long j = i - this.b;
 
         if (j > 7500L || j < 0L) {

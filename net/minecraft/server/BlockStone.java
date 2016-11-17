@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockStone extends Block {
 
@@ -9,7 +8,7 @@ public class BlockStone extends Block {
 
     public BlockStone() {
         super(Material.STONE);
-        this.w(this.blockStateList.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE));
+        this.y(this.blockStateList.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE));
         this.a(CreativeModeTab.b);
     }
 
@@ -21,7 +20,6 @@ public class BlockStone extends Block {
         return ((BlockStone.EnumStoneVariant) iblockdata.get(BlockStone.VARIANT)).c();
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return iblockdata.get(BlockStone.VARIANT) == BlockStone.EnumStoneVariant.STONE ? Item.getItemOf(Blocks.COBBLESTONE) : Item.getItemOf(Blocks.STONE);
     }
@@ -44,23 +42,25 @@ public class BlockStone extends Block {
 
     public static enum EnumStoneVariant implements INamable {
 
-        STONE(0, MaterialMapColor.m, "stone"), GRANITE(1, MaterialMapColor.l, "granite"), GRANITE_SMOOTH(2, MaterialMapColor.l, "smooth_granite", "graniteSmooth"), DIORITE(3, MaterialMapColor.p, "diorite"), DIORITE_SMOOTH(4, MaterialMapColor.p, "smooth_diorite", "dioriteSmooth"), ANDESITE(5, MaterialMapColor.m, "andesite"), ANDESITE_SMOOTH(6, MaterialMapColor.m, "smooth_andesite", "andesiteSmooth");
+        STONE(0, MaterialMapColor.m, "stone", true), GRANITE(1, MaterialMapColor.l, "granite", true), GRANITE_SMOOTH(2, MaterialMapColor.l, "smooth_granite", "graniteSmooth", false), DIORITE(3, MaterialMapColor.p, "diorite", true), DIORITE_SMOOTH(4, MaterialMapColor.p, "smooth_diorite", "dioriteSmooth", false), ANDESITE(5, MaterialMapColor.m, "andesite", true), ANDESITE_SMOOTH(6, MaterialMapColor.m, "smooth_andesite", "andesiteSmooth", false);
 
         private static final BlockStone.EnumStoneVariant[] h = new BlockStone.EnumStoneVariant[values().length];
         private final int i;
         private final String j;
         private final String k;
         private final MaterialMapColor l;
+        private final boolean m;
 
-        private EnumStoneVariant(int i, MaterialMapColor materialmapcolor, String s) {
-            this(i, materialmapcolor, s, s);
+        private EnumStoneVariant(int i, MaterialMapColor materialmapcolor, String s, boolean flag) {
+            this(i, materialmapcolor, s, s, flag);
         }
 
-        private EnumStoneVariant(int i, MaterialMapColor materialmapcolor, String s, String s1) {
+        private EnumStoneVariant(int i, MaterialMapColor materialmapcolor, String s, String s1, boolean flag) {
             this.i = i;
             this.j = s;
             this.k = s1;
             this.l = materialmapcolor;
+            this.m = flag;
         }
 
         public int a() {
@@ -89,6 +89,10 @@ public class BlockStone extends Block {
 
         public String d() {
             return this.k;
+        }
+
+        public boolean e() {
+            return this.m;
         }
 
         static {

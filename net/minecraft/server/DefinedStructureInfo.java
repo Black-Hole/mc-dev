@@ -24,7 +24,6 @@ public class DefinedStructureInfo {
     public DefinedStructureInfo() {
         this.a = EnumBlockMirror.NONE;
         this.b = EnumBlockRotation.NONE;
-        this.c = false;
         this.g = true;
         this.h = 1.0F;
     }

@@ -1,14 +1,16 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class PathfinderGoalRandomStroll extends PathfinderGoal {
 
-    private final EntityCreature a;
-    private double b;
-    private double c;
-    private double d;
-    private final double e;
-    private int f;
-    private boolean g;
+    protected final EntityCreature a;
+    protected double b;
+    protected double c;
+    protected double d;
+    protected final double e;
+    protected int f;
+    protected boolean g;
 
     public PathfinderGoalRandomStroll(EntityCreature entitycreature, double d0) {
         this(entitycreature, d0, 120);
@@ -23,7 +25,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
 
     public boolean a() {
         if (!this.g) {
-            if (this.a.bN() >= 100) {
+            if (this.a.bO() >= 100) {
                 return false;
             }
 
@@ -32,7 +34,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
             }
         }
 
-        Vec3D vec3d = RandomPositionGenerator.a(this.a, 10, 7);
+        Vec3D vec3d = this.f();
 
         if (vec3d == null) {
             return false;
@@ -45,6 +47,11 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
         }
     }
 
+    @Nullable
+    protected Vec3D f() {
+        return RandomPositionGenerator.a(this.a, 10, 7);
+    }
+
     public boolean b() {
         return !this.a.getNavigation().n();
     }
@@ -53,7 +60,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
         this.a.getNavigation().a(this.b, this.c, this.d, this.e);
     }
 
-    public void f() {
+    public void i() {
         this.g = true;
     }
 

@@ -15,9 +15,11 @@ public class DefinedStructureManager {
 
     private final Map<String, DefinedStructure> a = Maps.newHashMap();
     private final String b;
+    private final DataConverterManager c;
 
-    public DefinedStructureManager(String s) {
+    public DefinedStructureManager(String s, DataConverterManager dataconvertermanager) {
         this.b = s;
+        this.c = dataconvertermanager;
     }
 
     public DefinedStructure a(@Nullable MinecraftServer minecraftserver, MinecraftKey minecraftkey) {
@@ -38,22 +40,22 @@ public class DefinedStructureManager {
         if (this.a.containsKey(s)) {
             return (DefinedStructure) this.a.get(s);
         } else {
-            if (minecraftserver != null) {
-                this.c(minecraftserver, minecraftkey);
+            if (minecraftserver == null) {
+                this.c(minecraftkey);
             } else {
-                this.b(minecraftkey);
+                this.a(minecraftkey);
             }
 
             return this.a.containsKey(s) ? (DefinedStructure) this.a.get(s) : null;
         }
     }
 
-    public boolean c(MinecraftServer minecraftserver, MinecraftKey minecraftkey) {
+    public boolean a(MinecraftKey minecraftkey) {
         String s = minecraftkey.a();
         File file = new File(this.b, s + ".nbt");
 
         if (!file.exists()) {
-            return this.b(minecraftkey);
+            return this.c(minecraftkey);
         } else {
             FileInputStream fileinputstream = null;
 
@@ -73,7 +75,7 @@ public class DefinedStructureManager {
         }
     }
 
-    private boolean b(MinecraftKey minecraftkey) {
+    private boolean c(MinecraftKey minecraftkey) {
         String s = minecraftkey.b();
         String s1 = minecraftkey.a();
         InputStream inputstream = null;
@@ -95,13 +97,18 @@ public class DefinedStructureManager {
 
     private void a(String s, InputStream inputstream) throws IOException {
         NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a(inputstream);
+
+        if (!nbttagcompound.hasKeyOfType("DataVersion", 99)) {
+            nbttagcompound.setInt("DataVersion", 500);
+        }
+
         DefinedStructure definedstructure = new DefinedStructure();
 
-        definedstructure.b(nbttagcompound);
+        definedstructure.b(this.c.a((DataConverterType) DataConverterTypes.STRUCTURE, nbttagcompound));
         this.a.put(s, definedstructure);
     }
 
-    public boolean d(@Nullable MinecraftServer minecraftserver, MinecraftKey minecraftkey) {
+    public boolean c(@Nullable MinecraftServer minecraftserver, MinecraftKey minecraftkey) {
         String s = minecraftkey.a();
 
         if (minecraftserver != null && this.a.containsKey(s)) {
@@ -139,7 +146,7 @@ public class DefinedStructureManager {
         }
     }
 
-    public void a(MinecraftKey minecraftkey) {
+    public void b(MinecraftKey minecraftkey) {
         this.a.remove(minecraftkey.a());
     }
 }

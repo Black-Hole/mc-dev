@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Locale;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -9,8 +10,8 @@ public class MinecraftKey {
     protected final String b;
 
     protected MinecraftKey(int i, String... astring) {
-        this.a = StringUtils.isEmpty(astring[0]) ? "minecraft" : astring[0].toLowerCase();
-        this.b = astring[1];
+        this.a = StringUtils.isEmpty(astring[0]) ? "minecraft" : astring[0].toLowerCase(Locale.ROOT);
+        this.b = astring[1].toLowerCase(Locale.ROOT);
         Validate.notNull(this.b);
     }
 

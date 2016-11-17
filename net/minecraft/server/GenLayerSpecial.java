@@ -11,15 +11,15 @@ public class GenLayerSpecial extends GenLayer {
     }
 
     public int[] a(int i, int j, int k, int l) {
-        switch (GenLayerSpecial.SyntheticClass_1.a[this.c.ordinal()]) {
-        case 1:
+        switch (this.c) {
+        case COOL_WARM:
         default:
             return this.c(i, j, k, l);
 
-        case 2:
+        case HEAT_ICE:
             return this.d(i, j, k, l);
 
-        case 3:
+        case SPECIAL:
             return this.e(i, j, k, l);
         }
     }
@@ -107,32 +107,6 @@ public class GenLayerSpecial extends GenLayer {
         }
 
         return aint1;
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[GenLayerSpecial.EnumGenLayerSpecial.values().length];
-
-        static {
-            try {
-                GenLayerSpecial.SyntheticClass_1.a[GenLayerSpecial.EnumGenLayerSpecial.COOL_WARM.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                GenLayerSpecial.SyntheticClass_1.a[GenLayerSpecial.EnumGenLayerSpecial.HEAT_ICE.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                GenLayerSpecial.SyntheticClass_1.a[GenLayerSpecial.EnumGenLayerSpecial.SPECIAL.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-        }
     }
 
     public static enum EnumGenLayerSpecial {

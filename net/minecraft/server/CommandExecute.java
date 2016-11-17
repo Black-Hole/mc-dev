@@ -38,7 +38,6 @@ public class CommandExecute extends CommandAbstract {
                 double d4 = b(d1, astring[6], false);
                 double d5 = b(d2, astring[7], false);
                 Block block = b(icommandlistener, astring[8]);
-                int i = a(astring[9], -1, 15);
                 BlockPosition blockposition1 = new BlockPosition(d3, d4, d5);
 
                 if (!world.isLoaded(blockposition1)) {
@@ -47,7 +46,11 @@ public class CommandExecute extends CommandAbstract {
 
                 IBlockData iblockdata = world.getType(blockposition1);
 
-                if (iblockdata.getBlock() != block || i >= 0 && iblockdata.getBlock().toLegacyData(iblockdata) != i) {
+                if (iblockdata.getBlock() != block) {
+                    throw new CommandException("commands.execute.failed", new Object[] { "detect", entity.getName()});
+                }
+
+                if (!CommandAbstract.b(block, astring[9]).apply(iblockdata)) {
                     throw new CommandException("commands.execute.failed", new Object[] { "detect", entity.getName()});
                 }
 
@@ -96,16 +99,16 @@ public class CommandExecute extends CommandAbstract {
                     entity.a(commandobjectiveexecutor_enumcommandresult, i);
                 }
 
-                public MinecraftServer h() {
-                    return entity.h();
+                public MinecraftServer B_() {
+                    return entity.B_();
                 }
             };
             ICommandHandler icommandhandler = minecraftserver.getCommandHandler();
 
             try {
-                int j = icommandhandler.a(icommandlistener1, s);
+                int i = icommandhandler.a(icommandlistener1, s);
 
-                if (j < 1) {
+                if (i < 1) {
                     throw new CommandException("commands.execute.allInvocationsFailed", new Object[] { s});
                 }
             } catch (Throwable throwable) {

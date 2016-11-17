@@ -9,16 +9,20 @@ public abstract class BlockStepAbstract extends Block {
     protected static final AxisAlignedBB c = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 1.0D, 1.0D, 1.0D);
 
     public BlockStepAbstract(Material material) {
-        super(material);
+        this(material, material.r());
+    }
+
+    public BlockStepAbstract(Material material, MaterialMapColor materialmapcolor) {
+        super(material, materialmapcolor);
         this.l = this.e();
         this.d(255);
     }
 
-    protected boolean o() {
+    protected boolean n() {
         return false;
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return this.e() ? BlockStepAbstract.j : (iblockdata.get(BlockStepAbstract.HALF) == BlockStepAbstract.EnumSlabHalf.TOP ? BlockStepAbstract.c : BlockStepAbstract.b);
     }
 

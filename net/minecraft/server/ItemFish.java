@@ -36,7 +36,7 @@ public class ItemFish extends ItemFood {
         super.a(itemstack, world, entityhuman);
     }
 
-    public String f_(ItemStack itemstack) {
+    public String a(ItemStack itemstack) {
         ItemFish.EnumFish itemfish_enumfish = ItemFish.EnumFish.a(itemstack);
 
         return this.getName() + "." + itemfish_enumfish.b() + "." + (this.b && itemfish_enumfish.g() ? "cooked" : "raw");
@@ -53,7 +53,7 @@ public class ItemFish extends ItemFood {
         private final float i;
         private final int j;
         private final float k;
-        private boolean l;
+        private final boolean l;
 
         private EnumFish(int i, String s, int j, float f, int k, float f1) {
             this.f = i;

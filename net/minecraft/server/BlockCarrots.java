@@ -14,7 +14,7 @@ public class BlockCarrots extends BlockCrops {
         return Items.CARROT;
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockCarrots.a[((Integer) iblockdata.get(this.e())).intValue()];
     }
 }

@@ -7,13 +7,15 @@ public class ItemEnderPearl extends Item {
         this.a(CreativeModeTab.f);
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
         if (!entityhuman.abilities.canInstantlyBuild) {
-            --itemstack.count;
+            itemstack.subtract(1);
         }
 
-        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bg, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderPearl.j.nextFloat() * 0.4F + 0.8F));
-        entityhuman.df().a(this, 20);
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bj, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderPearl.j.nextFloat() * 0.4F + 0.8F));
+        entityhuman.di().a(this, 20);
         if (!world.isClientSide) {
             EntityEnderPearl entityenderpearl = new EntityEnderPearl(world, entityhuman);
 

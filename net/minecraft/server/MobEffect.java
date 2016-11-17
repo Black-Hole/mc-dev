@@ -173,7 +173,7 @@ public class MobEffect implements Comparable<MobEffect> {
                 flag1 = nbttagcompound.getBoolean("ShowParticles");
             }
 
-            return new MobEffect(mobeffectlist, i, b1, flag, flag1);
+            return new MobEffect(mobeffectlist, i, b1 < 0 ? 0 : b1, flag, flag1);
         }
     }
 

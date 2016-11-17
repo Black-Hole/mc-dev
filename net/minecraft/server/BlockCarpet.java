@@ -7,12 +7,12 @@ public class BlockCarpet extends Block {
 
     protected BlockCarpet() {
         super(Material.WOOL);
-        this.w(this.blockStateList.getBlockData().set(BlockCarpet.COLOR, EnumColor.WHITE));
+        this.y(this.blockStateList.getBlockData().set(BlockCarpet.COLOR, EnumColor.WHITE));
         this.a(true);
         this.a(CreativeModeTab.c);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockCarpet.b;
     }
 
@@ -32,7 +32,7 @@ public class BlockCarpet extends Block {
         return super.canPlace(world, blockposition) && this.b(world, blockposition);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         this.e(world, blockposition, iblockdata);
     }
 

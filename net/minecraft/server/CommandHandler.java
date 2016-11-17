@@ -33,46 +33,58 @@ public abstract class CommandHandler implements ICommandHandler {
 
         astring = a(astring);
         ICommand icommand = (ICommand) this.b.get(s1);
-        int i = this.a(icommand, astring);
-        int j = 0;
+        int i = 0;
+
         ChatMessage chatmessage;
 
-        if (icommand == null) {
-            chatmessage = new ChatMessage("commands.generic.notFound", new Object[0]);
-            chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
-            icommandlistener.sendMessage(chatmessage);
-        } else if (icommand.canUse(this.a(), icommandlistener)) {
-            if (i > -1) {
-                List list = PlayerSelector.getPlayers(icommandlistener, astring[i], Entity.class);
-                String s2 = astring[i];
+        try {
+            int j = this.a(icommand, astring);
 
-                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ENTITIES, list.size());
-                Iterator iterator = list.iterator();
+            if (icommand == null) {
+                chatmessage = new ChatMessage("commands.generic.notFound", new Object[0]);
+                chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
+                icommandlistener.sendMessage(chatmessage);
+            } else if (icommand.canUse(this.a(), icommandlistener)) {
+                if (j > -1) {
+                    List list = PlayerSelector.getPlayers(icommandlistener, astring[j], Entity.class);
+                    String s2 = astring[j];
 
-                while (iterator.hasNext()) {
-                    Entity entity = (Entity) iterator.next();
+                    icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ENTITIES, list.size());
+                    if (list.isEmpty()) {
+                        throw new ExceptionPlayerNotFound("commands.generic.selector.notFound", new Object[] { astring[j]});
+                    }
 
-                    astring[i] = entity.bf();
+                    Iterator iterator = list.iterator();
+
+                    while (iterator.hasNext()) {
+                        Entity entity = (Entity) iterator.next();
+
+                        astring[j] = entity.bf();
+                        if (this.a(icommandlistener, astring, icommand, s)) {
+                            ++i;
+                        }
+                    }
+
+                    astring[j] = s2;
+                } else {
+                    icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ENTITIES, 1);
                     if (this.a(icommandlistener, astring, icommand, s)) {
-                        ++j;
+                        ++i;
                     }
                 }
-
-                astring[i] = s2;
             } else {
-                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ENTITIES, 1);
-                if (this.a(icommandlistener, astring, icommand, s)) {
-                    ++j;
-                }
+                chatmessage = new ChatMessage("commands.generic.permission", new Object[0]);
+                chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
+                icommandlistener.sendMessage(chatmessage);
             }
-        } else {
-            chatmessage = new ChatMessage("commands.generic.permission", new Object[0]);
+        } catch (CommandException commandexception) {
+            chatmessage = new ChatMessage(commandexception.getMessage(), commandexception.getArgs());
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             icommandlistener.sendMessage(chatmessage);
         }
 
-        icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.SUCCESS_COUNT, j);
-        return j;
+        icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.SUCCESS_COUNT, i);
+        return i;
     }
 
     protected boolean a(ICommandListener icommandlistener, String[] astring, ICommand icommand, String s) {
@@ -104,7 +116,7 @@ public abstract class CommandHandler implements ICommandHandler {
     public ICommand a(ICommand icommand) {
         this.b.put(icommand.getCommand(), icommand);
         this.c.add(icommand);
-        Iterator iterator = icommand.b().iterator();
+        Iterator iterator = icommand.getAliases().iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
@@ -174,7 +186,7 @@ public abstract class CommandHandler implements ICommandHandler {
         return this.b;
     }
 
-    private int a(ICommand icommand, String[] astring) {
+    private int a(ICommand icommand, String[] astring) throws CommandException {
         if (icommand == null) {
             return -1;
         } else {

@@ -13,20 +13,20 @@ public class BlockPortal extends BlockHalfTransparent {
 
     public BlockPortal() {
         super(Material.PORTAL, false);
-        this.w(this.blockStateList.getBlockData().set(BlockPortal.AXIS, EnumDirection.EnumAxis.X));
+        this.y(this.blockStateList.getBlockData().set(BlockPortal.AXIS, EnumDirection.EnumAxis.X));
         this.a(true);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        switch (BlockPortal.SyntheticClass_1.a[((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS)).ordinal()]) {
-        case 1:
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        switch ((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS)) {
+        case X:
             return BlockPortal.b;
 
-        case 2:
+        case Y:
         default:
             return BlockPortal.d;
 
-        case 3:
+        case Z:
             return BlockPortal.c;
         }
     }
@@ -38,11 +38,11 @@ public class BlockPortal extends BlockHalfTransparent {
 
             BlockPosition blockposition1;
 
-            for (blockposition1 = blockposition; !world.getType(blockposition1).q() && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
+            for (blockposition1 = blockposition; !world.getType(blockposition1).r() && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
                 ;
             }
 
-            if (i > 0 && !world.getType(blockposition1.up()).l()) {
+            if (i > 0 && !world.getType(blockposition1.up()).m()) {
                 Entity entity = ItemMonsterEgg.a(world, EntityTypes.getName(EntityPigZombie.class), (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 1.1D, (double) blockposition1.getZ() + 0.5D);
 
                 if (entity != null) {
@@ -54,7 +54,7 @@ public class BlockPortal extends BlockHalfTransparent {
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockPortal.k;
     }
 
@@ -84,7 +84,7 @@ public class BlockPortal extends BlockHalfTransparent {
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         EnumDirection.EnumAxis enumdirection_enumaxis = (EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS);
         BlockPortal.Shape blockportal_shape;
 
@@ -113,9 +113,8 @@ public class BlockPortal extends BlockHalfTransparent {
 
     }
 
-    @Nullable
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return null;
+        return ItemStack.a;
     }
 
     public IBlockData fromLegacyData(int i) {
@@ -127,14 +126,14 @@ public class BlockPortal extends BlockHalfTransparent {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        switch (BlockPortal.SyntheticClass_1.b[enumblockrotation.ordinal()]) {
-        case 1:
-        case 2:
-            switch (BlockPortal.SyntheticClass_1.a[((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS)).ordinal()]) {
-            case 1:
+        switch (enumblockrotation) {
+        case COUNTERCLOCKWISE_90:
+        case CLOCKWISE_90:
+            switch ((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS)) {
+            case X:
                 return iblockdata.set(BlockPortal.AXIS, EnumDirection.EnumAxis.Z);
 
-            case 3:
+            case Z:
                 return iblockdata.set(BlockPortal.AXIS, EnumDirection.EnumAxis.X);
 
             default:
@@ -200,47 +199,6 @@ public class BlockPortal extends BlockHalfTransparent {
             }
 
             return new ShapeDetector.ShapeDetectorCollection(enumdirection.c() == enumdirection_enumaxisdirection1 ? blockposition1 : blockposition1.shift(blockportal_shape.c, blockportal_shape.b() - 1), EnumDirection.a(enumdirection_enumaxisdirection1, enumdirection_enumaxis), EnumDirection.UP, loadingcache, blockportal_shape.b(), blockportal_shape.a(), 1);
-        }
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b = new int[EnumBlockRotation.values().length];
-
-        static {
-            try {
-                BlockPortal.SyntheticClass_1.b[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockPortal.SyntheticClass_1.b[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            a = new int[EnumDirection.EnumAxis.values().length];
-
-            try {
-                BlockPortal.SyntheticClass_1.a[EnumDirection.EnumAxis.X.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockPortal.SyntheticClass_1.a[EnumDirection.EnumAxis.Y.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockPortal.SyntheticClass_1.a[EnumDirection.EnumAxis.Z.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
         }
     }
 

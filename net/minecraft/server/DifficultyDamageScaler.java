@@ -17,10 +17,6 @@ public class DifficultyDamageScaler {
         return this.b;
     }
 
-    public boolean c() {
-        return this.b >= (float) EnumDifficulty.HARD.ordinal();
-    }
-
     public float d() {
         return this.b < 2.0F ? 0.0F : (this.b > 4.0F ? 1.0F : (this.b - 2.0F) / 2.0F);
     }

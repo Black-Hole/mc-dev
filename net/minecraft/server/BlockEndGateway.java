@@ -15,7 +15,7 @@ public class BlockEndGateway extends BlockTileEntity {
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockEndGateway.k;
     }
 
@@ -31,9 +31,8 @@ public class BlockEndGateway extends BlockTileEntity {
         return 0;
     }
 
-    @Nullable
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return null;
+        return ItemStack.a;
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {

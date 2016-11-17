@@ -24,7 +24,7 @@ public class AttributeModifiable implements AttributeInstance {
     public AttributeModifiable(AttributeMapBase attributemapbase, IAttribute iattribute) {
         this.a = attributemapbase;
         this.b = iattribute;
-        this.f = iattribute.b();
+        this.f = iattribute.getDefault();
 
         for (int i = 0; i < 3; ++i) {
             this.c.put(Integer.valueOf(i), Sets.newHashSet());

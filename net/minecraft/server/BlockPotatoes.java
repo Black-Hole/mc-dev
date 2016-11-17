@@ -17,14 +17,14 @@ public class BlockPotatoes extends BlockCrops {
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         super.dropNaturally(world, blockposition, iblockdata, f, i);
         if (!world.isClientSide) {
-            if (this.y(iblockdata) && world.random.nextInt(50) == 0) {
+            if (this.A(iblockdata) && world.random.nextInt(50) == 0) {
                 a(world, blockposition, new ItemStack(Items.POISONOUS_POTATO));
             }
 
         }
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockPotatoes.a[((Integer) iblockdata.get(this.e())).intValue()];
     }
 }

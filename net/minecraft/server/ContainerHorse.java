@@ -1,37 +1,39 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class ContainerHorse extends Container {
 
     private final IInventory a;
-    private final EntityHorse f;
+    private final EntityHorseAbstract f;
 
-    public ContainerHorse(IInventory iinventory, final IInventory iinventory1, final EntityHorse entityhorse, EntityHuman entityhuman) {
+    public ContainerHorse(IInventory iinventory, final IInventory iinventory1, final EntityHorseAbstract entityhorseabstract, EntityHuman entityhuman) {
         this.a = iinventory1;
-        this.f = entityhorse;
+        this.f = entityhorseabstract;
         boolean flag = true;
 
         iinventory1.startOpen(entityhuman);
         boolean flag1 = true;
 
         this.a(new Slot(iinventory1, 0, 8, 18) {
-            public boolean isAllowed(@Nullable ItemStack itemstack) {
-                return super.isAllowed(itemstack) && itemstack.getItem() == Items.SADDLE && !this.hasItem();
+            public boolean isAllowed(ItemStack itemstack) {
+                return itemstack.getItem() == Items.SADDLE && !this.hasItem() && entityhorseabstract.dA();
             }
         });
         this.a(new Slot(iinventory1, 1, 8, 36) {
-            public boolean isAllowed(@Nullable ItemStack itemstack) {
-                return super.isAllowed(itemstack) && entityhorse.getType().j() && EnumHorseArmor.b(itemstack.getItem());
+            public boolean isAllowed(ItemStack itemstack) {
+                return entityhorseabstract.f(itemstack);
+            }
+
+            public int getMaxStackSize() {
+                return 1;
             }
         });
         int i;
         int j;
 
-        if (entityhorse.hasChest()) {
+        if (entityhorseabstract instanceof EntityHorseChestedAbstract && ((EntityHorseChestedAbstract) entityhorseabstract).isCarryingChest()) {
             for (i = 0; i < 3; ++i) {
-                for (j = 0; j < 5; ++j) {
-                    this.a(new Slot(iinventory1, 2 + j + i * 5, 80 + j * 18, 18 + i * 18));
+                for (j = 0; j < ((EntityHorseChestedAbstract) entityhorseabstract).dl(); ++j) {
+                    this.a(new Slot(iinventory1, 2 + j + i * ((EntityHorseChestedAbstract) entityhorseabstract).dl(), 80 + j * 18, 18 + i * 18));
                 }
             }
         }
@@ -52,9 +54,8 @@ public class ContainerHorse extends Container {
         return this.a.a(entityhuman) && this.f.isAlive() && this.f.g((Entity) entityhuman) < 8.0F;
     }
 
-    @Nullable
     public ItemStack b(EntityHuman entityhuman, int i) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.a;
         Slot slot = (Slot) this.c.get(i);
 
         if (slot != null && slot.hasItem()) {
@@ -63,22 +64,22 @@ public class ContainerHorse extends Container {
             itemstack = itemstack1.cloneItemStack();
             if (i < this.a.getSize()) {
                 if (!this.a(itemstack1, this.a.getSize(), this.c.size(), true)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else if (this.getSlot(1).isAllowed(itemstack1) && !this.getSlot(1).hasItem()) {
                 if (!this.a(itemstack1, 1, 2, false)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else if (this.getSlot(0).isAllowed(itemstack1)) {
                 if (!this.a(itemstack1, 0, 1, false)) {
-                    return null;
+                    return ItemStack.a;
                 }
             } else if (this.a.getSize() <= 2 || !this.a(itemstack1, 2, this.a.getSize(), false)) {
-                return null;
+                return ItemStack.a;
             }
 
-            if (itemstack1.count == 0) {
-                slot.set((ItemStack) null);
+            if (itemstack1.isEmpty()) {
+                slot.set(ItemStack.a);
             } else {
                 slot.f();
             }

@@ -8,7 +8,7 @@ public class BlockStainedGlass extends BlockHalfTransparent {
 
     public BlockStainedGlass(Material material) {
         super(material, false);
-        this.w(this.blockStateList.getBlockData().set(BlockStainedGlass.COLOR, EnumColor.WHITE));
+        this.y(this.blockStateList.getBlockData().set(BlockStainedGlass.COLOR, EnumColor.WHITE));
         this.a(CreativeModeTab.b);
     }
 
@@ -24,7 +24,7 @@ public class BlockStainedGlass extends BlockHalfTransparent {
         return 0;
     }
 
-    protected boolean o() {
+    protected boolean n() {
         return true;
     }
 

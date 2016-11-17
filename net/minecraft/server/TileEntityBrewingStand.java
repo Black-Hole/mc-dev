@@ -1,21 +1,23 @@
 package net.minecraft.server;
 
 import java.util.Arrays;
-import javax.annotation.Nullable;
+import java.util.Iterator;
 
 public class TileEntityBrewingStand extends TileEntityContainer implements ITickable, IWorldInventory {
 
     private static final int[] a = new int[] { 3};
     private static final int[] f = new int[] { 0, 1, 2, 3};
     private static final int[] g = new int[] { 0, 1, 2, 4};
-    private ItemStack[] items = new ItemStack[5];
+    private NonNullList<ItemStack> items;
     private int brewTime;
     private boolean[] j;
     private Item k;
     private String l;
     private int m;
 
-    public TileEntityBrewingStand() {}
+    public TileEntityBrewingStand() {
+        this.items = NonNullList.a(5, ItemStack.a);
+    }
 
     public String getName() {
         return this.hasCustomName() ? this.l : "container.brewing";
@@ -30,46 +32,61 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
     }
 
     public int getSize() {
-        return this.items.length;
+        return this.items.size();
     }
 
-    public void E_() {
-        if (this.m <= 0 && this.items[4] != null && this.items[4].getItem() == Items.BLAZE_POWDER) {
-            this.m = 20;
-            --this.items[4].count;
-            if (this.items[4].count <= 0) {
-                this.items[4] = null;
+    public boolean w_() {
+        Iterator iterator = this.items.iterator();
+
+        ItemStack itemstack;
+
+        do {
+            if (!iterator.hasNext()) {
+                return true;
             }
 
+            itemstack = (ItemStack) iterator.next();
+        } while (itemstack.isEmpty());
+
+        return false;
+    }
+
+    public void F_() {
+        ItemStack itemstack = (ItemStack) this.items.get(4);
+
+        if (this.m <= 0 && itemstack.getItem() == Items.BLAZE_POWDER) {
+            this.m = 20;
+            itemstack.subtract(1);
             this.update();
         }
 
-        boolean flag = this.n();
+        boolean flag = this.o();
         boolean flag1 = this.brewTime > 0;
+        ItemStack itemstack1 = (ItemStack) this.items.get(3);
 
         if (flag1) {
             --this.brewTime;
             boolean flag2 = this.brewTime == 0;
 
             if (flag2 && flag) {
-                this.o();
+                this.p();
                 this.update();
             } else if (!flag) {
                 this.brewTime = 0;
                 this.update();
-            } else if (this.k != this.items[3].getItem()) {
+            } else if (this.k != itemstack1.getItem()) {
                 this.brewTime = 0;
                 this.update();
             }
         } else if (flag && this.m > 0) {
             --this.m;
             this.brewTime = 400;
-            this.k = this.items[3].getItem();
+            this.k = itemstack1.getItem();
             this.update();
         }
 
         if (!this.world.isClientSide) {
-            boolean[] aboolean = this.m();
+            boolean[] aboolean = this.n();
 
             if (!Arrays.equals(aboolean, this.j)) {
                 this.j = aboolean;
@@ -89,11 +106,11 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
 
     }
 
-    public boolean[] m() {
+    public boolean[] n() {
         boolean[] aboolean = new boolean[3];
 
         for (int i = 0; i < 3; ++i) {
-            if (this.items[i] != null) {
+            if (!((ItemStack) this.items.get(i)).isEmpty()) {
                 aboolean[i] = true;
             }
         }
@@ -101,75 +118,58 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         return aboolean;
     }
 
-    private boolean n() {
-        if (this.items[3] != null && this.items[3].count > 0) {
-            ItemStack itemstack = this.items[3];
+    private boolean o() {
+        ItemStack itemstack = (ItemStack) this.items.get(3);
 
-            if (!PotionBrewer.a(itemstack)) {
-                return false;
-            } else {
-                for (int i = 0; i < 3; ++i) {
-                    ItemStack itemstack1 = this.items[i];
-
-                    if (itemstack1 != null && PotionBrewer.a(itemstack1, itemstack)) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
+        if (itemstack.isEmpty()) {
+            return false;
+        } else if (!PotionBrewer.a(itemstack)) {
+            return false;
         } else {
+            for (int i = 0; i < 3; ++i) {
+                ItemStack itemstack1 = (ItemStack) this.items.get(i);
+
+                if (!itemstack1.isEmpty() && PotionBrewer.a(itemstack1, itemstack)) {
+                    return true;
+                }
+            }
+
             return false;
         }
     }
 
-    private void o() {
-        ItemStack itemstack = this.items[3];
+    private void p() {
+        ItemStack itemstack = (ItemStack) this.items.get(3);
 
         for (int i = 0; i < 3; ++i) {
-            this.items[i] = PotionBrewer.d(itemstack, this.items[i]);
+            this.items.set(i, PotionBrewer.d(itemstack, (ItemStack) this.items.get(i)));
         }
 
-        --itemstack.count;
+        itemstack.subtract(1);
         BlockPosition blockposition = this.getPosition();
 
-        if (itemstack.getItem().r()) {
-            ItemStack itemstack1 = new ItemStack(itemstack.getItem().q());
+        if (itemstack.getItem().s()) {
+            ItemStack itemstack1 = new ItemStack(itemstack.getItem().r());
 
-            if (itemstack.count <= 0) {
+            if (itemstack.isEmpty()) {
                 itemstack = itemstack1;
             } else {
                 InventoryUtils.dropItem(this.world, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), itemstack1);
             }
         }
 
-        if (itemstack.count <= 0) {
-            itemstack = null;
-        }
-
-        this.items[3] = itemstack;
+        this.items.set(3, itemstack);
         this.world.triggerEffect(1035, blockposition, 0);
     }
 
     public static void a(DataConverterManager dataconvertermanager) {
-        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList("Cauldron", new String[] { "Items"})));
+        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList(TileEntityBrewingStand.class, new String[] { "Items"})));
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
-
-        this.items = new ItemStack[this.getSize()];
-
-        for (int i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagCompound nbttagcompound1 = nbttaglist.get(i);
-            byte b0 = nbttagcompound1.getByte("Slot");
-
-            if (b0 >= 0 && b0 < this.items.length) {
-                this.items[b0] = ItemStack.createStack(nbttagcompound1);
-            }
-        }
-
+        this.items = NonNullList.a(this.getSize(), ItemStack.a);
+        ContainerUtil.b(nbttagcompound, this.items);
         this.brewTime = nbttagcompound.getShort("BrewTime");
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
             this.l = nbttagcompound.getString("CustomName");
@@ -181,19 +181,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         nbttagcompound.setShort("BrewTime", (short) this.brewTime);
-        NBTTagList nbttaglist = new NBTTagList();
-
-        for (int i = 0; i < this.items.length; ++i) {
-            if (this.items[i] != null) {
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-
-                nbttagcompound1.setByte("Slot", (byte) i);
-                this.items[i].save(nbttagcompound1);
-                nbttaglist.add(nbttagcompound1);
-            }
-        }
-
-        nbttagcompound.set("Items", nbttaglist);
+        ContainerUtil.a(nbttagcompound, this.items);
         if (this.hasCustomName()) {
             nbttagcompound.setString("CustomName", this.l);
         }
@@ -202,24 +190,21 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         return nbttagcompound;
     }
 
-    @Nullable
     public ItemStack getItem(int i) {
-        return i >= 0 && i < this.items.length ? this.items[i] : null;
+        return i >= 0 && i < this.items.size() ? (ItemStack) this.items.get(i) : ItemStack.a;
     }
 
-    @Nullable
     public ItemStack splitStack(int i, int j) {
         return ContainerUtil.a(this.items, i, j);
     }
 
-    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         return ContainerUtil.a(this.items, i);
     }
 
-    public void setItem(int i, @Nullable ItemStack itemstack) {
-        if (i >= 0 && i < this.items.length) {
-            this.items[i] = itemstack;
+    public void setItem(int i, ItemStack itemstack) {
+        if (i >= 0 && i < this.items.size()) {
+            this.items.set(i, itemstack);
         }
 
     }
@@ -229,7 +214,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getTileEntity(this.position) != this ? false : entityhuman.e((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
+        return this.world.getTileEntity(this.position) != this ? false : entityhuman.d((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
     public void startOpen(EntityHuman entityhuman) {}
@@ -291,11 +276,11 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
 
     }
 
-    public int g() {
+    public int h() {
         return 2;
     }
 
-    public void l() {
-        Arrays.fill(this.items, (Object) null);
+    public void clear() {
+        this.items.clear();
     }
 }

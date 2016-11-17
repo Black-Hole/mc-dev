@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockRedstoneLamp extends Block {
 
@@ -27,7 +26,7 @@ public class BlockRedstoneLamp extends Block {
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!world.isClientSide) {
             if (this.a && !world.isBlockIndirectlyPowered(blockposition)) {
                 world.a(blockposition, (Block) this, 4);
@@ -47,7 +46,6 @@ public class BlockRedstoneLamp extends Block {
         }
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.REDSTONE_LAMP);
     }
@@ -56,7 +54,7 @@ public class BlockRedstoneLamp extends Block {
         return new ItemStack(Blocks.REDSTONE_LAMP);
     }
 
-    protected ItemStack u(IBlockData iblockdata) {
+    protected ItemStack w(IBlockData iblockdata) {
         return new ItemStack(Blocks.REDSTONE_LAMP);
     }
 }

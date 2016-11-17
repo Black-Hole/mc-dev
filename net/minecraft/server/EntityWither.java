@@ -11,29 +11,29 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
     private static final DataWatcherObject<Integer> a = DataWatcher.a(EntityWither.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityWither.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Integer> c = DataWatcher.a(EntityWither.class, DataWatcherRegistry.b);
-    private static final DataWatcherObject<Integer>[] bx = new DataWatcherObject[] { EntityWither.a, EntityWither.b, EntityWither.c};
-    private static final DataWatcherObject<Integer> by = DataWatcher.a(EntityWither.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Integer>[] bw = new DataWatcherObject[] { EntityWither.a, EntityWither.b, EntityWither.c};
+    private static final DataWatcherObject<Integer> bx = DataWatcher.a(EntityWither.class, DataWatcherRegistry.b);
+    private final float[] by = new float[2];
     private final float[] bz = new float[2];
     private final float[] bA = new float[2];
     private final float[] bB = new float[2];
-    private final float[] bC = new float[2];
+    private final int[] bC = new int[2];
     private final int[] bD = new int[2];
-    private final int[] bE = new int[2];
-    private int bF;
-    private final BossBattleServer bG;
-    private static final Predicate<Entity> bH = new Predicate() {
+    private int bE;
+    private final BossBattleServer bF;
+    private static final Predicate<Entity> bG = new Predicate() {
         public boolean a(@Nullable Entity entity) {
-            return entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() != EnumMonsterType.UNDEAD;
+            return entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() != EnumMonsterType.UNDEAD && ((EntityLiving) entity).cK();
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((Entity) object);
         }
     };
 
     public EntityWither(World world) {
         super(world);
-        this.bG = (BossBattleServer) (new BossBattleServer(this.getScoreboardDisplayName(), BossBattle.BarColor.PURPLE, BossBattle.BarStyle.PROGRESS)).setDarkenSky(true);
+        this.bF = (BossBattleServer) (new BossBattleServer(this.getScoreboardDisplayName(), BossBattle.BarColor.PURPLE, BossBattle.BarStyle.PROGRESS)).setDarkenSky(true);
         this.setHealth(this.getMaxHealth());
         this.setSize(0.9F, 3.5F);
         this.fireProof = true;
@@ -45,11 +45,11 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         this.goalSelector.a(0, new EntityWither.a());
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, new PathfinderGoalArrowAttack(this, 1.0D, 40, 20.0F));
-        this.goalSelector.a(5, new PathfinderGoalRandomStroll(this, 1.0D));
+        this.goalSelector.a(5, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(7, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityInsentient.class, 0, false, false, EntityWither.bH));
+        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityInsentient.class, 0, false, false, EntityWither.bG));
     }
 
     protected void i() {
@@ -57,33 +57,37 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         this.datawatcher.register(EntityWither.a, Integer.valueOf(0));
         this.datawatcher.register(EntityWither.b, Integer.valueOf(0));
         this.datawatcher.register(EntityWither.c, Integer.valueOf(0));
-        this.datawatcher.register(EntityWither.by, Integer.valueOf(0));
+        this.datawatcher.register(EntityWither.bx, Integer.valueOf(0));
     }
 
     public static void b(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "WitherBoss");
+        EntityInsentient.a(dataconvertermanager, EntityWither.class);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("Invul", this.de());
+        nbttagcompound.setInt("Invul", this.dh());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.g(nbttagcompound.getInt("Invul"));
+        if (this.hasCustomName()) {
+            this.bF.a(this.getScoreboardDisplayName());
+        }
+
     }
 
     protected SoundEffect G() {
-        return SoundEffects.gU;
-    }
-
-    protected SoundEffect bV() {
-        return SoundEffects.gX;
+        return SoundEffects.hy;
     }
 
     protected SoundEffect bW() {
-        return SoundEffects.gW;
+        return SoundEffects.hB;
+    }
+
+    protected SoundEffect bX() {
+        return SoundEffects.hA;
     }
 
     public void n() {
@@ -96,7 +100,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
             Entity entity = this.world.getEntity(this.m(0));
 
             if (entity != null) {
-                if (this.locY < entity.locY || !this.df() && this.locY < entity.locY + 5.0D) {
+                if (this.locY < entity.locY || !this.di() && this.locY < entity.locY + 5.0D) {
                     if (this.motY < 0.0D) {
                         this.motY = 0.0D;
                     }
@@ -117,7 +121,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         }
 
         if (this.motX * this.motX + this.motZ * this.motZ > 0.05000000074505806D) {
-            this.yaw = (float) MathHelper.b(this.motZ, this.motX) * 57.295776F - 90.0F;
+            this.yaw = (float) MathHelper.c(this.motZ, this.motX) * 57.295776F - 90.0F;
         }
 
         super.n();
@@ -125,8 +129,8 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         int i;
 
         for (i = 0; i < 2; ++i) {
-            this.bC[i] = this.bA[i];
             this.bB[i] = this.bz[i];
+            this.bA[i] = this.by[i];
         }
 
         int j;
@@ -147,17 +151,17 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
                 double d5 = entity1.locY + (double) entity1.getHeadHeight() - d1;
                 double d6 = entity1.locZ - d2;
                 double d7 = (double) MathHelper.sqrt(d4 * d4 + d6 * d6);
-                float f = (float) (MathHelper.b(d6, d4) * 57.2957763671875D) - 90.0F;
-                float f1 = (float) (-(MathHelper.b(d5, d7) * 57.2957763671875D));
+                float f = (float) (MathHelper.c(d6, d4) * 57.2957763671875D) - 90.0F;
+                float f1 = (float) (-(MathHelper.c(d5, d7) * 57.2957763671875D));
 
-                this.bz[i] = this.b(this.bz[i], f1, 40.0F);
-                this.bA[i] = this.b(this.bA[i], f, 10.0F);
+                this.by[i] = this.b(this.by[i], f1, 40.0F);
+                this.bz[i] = this.b(this.bz[i], f, 10.0F);
             } else {
-                this.bA[i] = this.b(this.bA[i], this.aO, 10.0F);
+                this.bz[i] = this.b(this.bz[i], this.aN, 10.0F);
             }
         }
 
-        boolean flag = this.df();
+        boolean flag = this.di();
 
         for (j = 0; j < 3; ++j) {
             double d8 = this.n(j);
@@ -170,7 +174,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
             }
         }
 
-        if (this.de() > 0) {
+        if (this.dh() > 0) {
             for (j = 0; j < 3; ++j) {
                 this.world.addParticle(EnumParticle.SPELL_MOB, this.locX + this.random.nextGaussian(), this.locY + (double) (this.random.nextFloat() * 3.3F), this.locZ + this.random.nextGaussian(), 0.699999988079071D, 0.699999988079071D, 0.8999999761581421D, new int[0]);
             }
@@ -181,8 +185,8 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
     protected void M() {
         int i;
 
-        if (this.de() > 0) {
-            i = this.de() - 1;
+        if (this.dh() > 0) {
+            i = this.dh() - 1;
             if (i <= 0) {
                 this.world.createExplosion(this, this.locX, this.locY + (double) this.getHeadHeight(), this.locZ, 7.0F, false, this.world.getGameRules().getBoolean("mobGriefing"));
                 this.world.a(1023, new BlockPosition(this), 0);
@@ -199,13 +203,13 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
             int j;
 
             for (i = 1; i < 3; ++i) {
-                if (this.ticksLived >= this.bD[i - 1]) {
-                    this.bD[i - 1] = this.ticksLived + 10 + this.random.nextInt(10);
+                if (this.ticksLived >= this.bC[i - 1]) {
+                    this.bC[i - 1] = this.ticksLived + 10 + this.random.nextInt(10);
                     if (this.world.getDifficulty() == EnumDifficulty.NORMAL || this.world.getDifficulty() == EnumDifficulty.HARD) {
                         int k = i - 1;
-                        int l = this.bE[i - 1];
+                        int l = this.bD[i - 1];
 
-                        this.bE[k] = this.bE[i - 1] + 1;
+                        this.bD[k] = this.bD[i - 1] + 1;
                         if (l > 15) {
                             float f = 10.0F;
                             float f1 = 5.0F;
@@ -214,7 +218,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
                             double d2 = MathHelper.a(this.random, this.locZ - 10.0D, this.locZ + 10.0D);
 
                             this.a(i + 1, d0, d1, d2, true);
-                            this.bE[i - 1] = 0;
+                            this.bD[i - 1] = 0;
                         }
                     }
 
@@ -227,14 +231,14 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
                                 this.a(i, 0);
                             } else {
                                 this.a(i + 1, (EntityLiving) entity);
-                                this.bD[i - 1] = this.ticksLived + 40 + this.random.nextInt(20);
-                                this.bE[i - 1] = 0;
+                                this.bC[i - 1] = this.ticksLived + 40 + this.random.nextInt(20);
+                                this.bD[i - 1] = 0;
                             }
                         } else {
                             this.a(i, 0);
                         }
                     } else {
-                        List list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(20.0D, 8.0D, 20.0D), Predicates.and(EntityWither.bH, IEntitySelector.e));
+                        List list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(20.0D, 8.0D, 20.0D), Predicates.and(EntityWither.bG, IEntitySelector.e));
 
                         for (int i1 = 0; i1 < 10 && !list.isEmpty(); ++i1) {
                             EntityLiving entityliving = (EntityLiving) list.get(this.random.nextInt(list.size()));
@@ -262,9 +266,9 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
                 this.a(0, 0);
             }
 
-            if (this.bF > 0) {
-                --this.bF;
-                if (this.bF == 0 && this.world.getGameRules().getBoolean("mobGriefing")) {
+            if (this.bE > 0) {
+                --this.bE;
+                if (this.bE == 0 && this.world.getGameRules().getBoolean("mobGriefing")) {
                     i = MathHelper.floor(this.locY);
                     j = MathHelper.floor(this.locX);
                     int j1 = MathHelper.floor(this.locZ);
@@ -297,12 +301,12 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
                 this.heal(1.0F);
             }
 
-            this.bG.setProgress(this.getHealth() / this.getMaxHealth());
+            this.bF.setProgress(this.getHealth() / this.getMaxHealth());
         }
     }
 
     public static boolean a(Block block) {
-        return block != Blocks.BEDROCK && block != Blocks.END_PORTAL && block != Blocks.END_PORTAL_FRAME && block != Blocks.COMMAND_BLOCK && block != Blocks.dc && block != Blocks.dd && block != Blocks.BARRIER;
+        return block != Blocks.BEDROCK && block != Blocks.END_PORTAL && block != Blocks.END_PORTAL_FRAME && block != Blocks.COMMAND_BLOCK && block != Blocks.dc && block != Blocks.dd && block != Blocks.BARRIER && block != Blocks.STRUCTURE_BLOCK && block != Blocks.dj;
     }
 
     public void o() {
@@ -314,19 +318,19 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
 
     public void b(EntityPlayer entityplayer) {
         super.b(entityplayer);
-        this.bG.addPlayer(entityplayer);
+        this.bF.addPlayer(entityplayer);
     }
 
     public void c(EntityPlayer entityplayer) {
         super.c(entityplayer);
-        this.bG.removePlayer(entityplayer);
+        this.bF.removePlayer(entityplayer);
     }
 
     private double n(int i) {
         if (i <= 0) {
             return this.locX;
         } else {
-            float f = (this.aO + (float) (180 * (i - 1))) * 0.017453292F;
+            float f = (this.aN + (float) (180 * (i - 1))) * 0.017453292F;
             float f1 = MathHelper.cos(f);
 
             return this.locX + (double) f1 * 1.3D;
@@ -341,7 +345,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         if (i <= 0) {
             return this.locZ;
         } else {
-            float f = (this.aO + (float) (180 * (i - 1))) * 0.017453292F;
+            float f = (this.aN + (float) (180 * (i - 1))) * 0.017453292F;
             float f1 = MathHelper.sin(f);
 
             return this.locZ + (double) f1 * 1.3D;
@@ -394,12 +398,12 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else if (damagesource != DamageSource.DROWN && !(damagesource.getEntity() instanceof EntityWither)) {
-            if (this.de() > 0 && damagesource != DamageSource.OUT_OF_WORLD) {
+            if (this.dh() > 0 && damagesource != DamageSource.OUT_OF_WORLD) {
                 return false;
             } else {
                 Entity entity;
 
-                if (this.df()) {
+                if (this.di()) {
                     entity = damagesource.i();
                     if (entity instanceof EntityArrow) {
                         return false;
@@ -410,12 +414,12 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
                 if (entity != null && !(entity instanceof EntityHuman) && entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == this.getMonsterType()) {
                     return false;
                 } else {
-                    if (this.bF <= 0) {
-                        this.bF = 20;
+                    if (this.bE <= 0) {
+                        this.bE = 20;
                     }
 
-                    for (int i = 0; i < this.bE.length; ++i) {
-                        this.bE[i] += 3;
+                    for (int i = 0; i < this.bD.length; ++i) {
+                        this.bD[i] += 3;
                     }
 
                     return super.damageEntity(damagesource, f);
@@ -461,23 +465,23 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         this.getAttributeInstance(GenericAttributes.g).setValue(4.0D);
     }
 
-    public int de() {
-        return ((Integer) this.datawatcher.get(EntityWither.by)).intValue();
+    public int dh() {
+        return ((Integer) this.datawatcher.get(EntityWither.bx)).intValue();
     }
 
     public void g(int i) {
-        this.datawatcher.set(EntityWither.by, Integer.valueOf(i));
+        this.datawatcher.set(EntityWither.bx, Integer.valueOf(i));
     }
 
     public int m(int i) {
-        return ((Integer) this.datawatcher.get(EntityWither.bx[i])).intValue();
+        return ((Integer) this.datawatcher.get(EntityWither.bw[i])).intValue();
     }
 
     public void a(int i, int j) {
-        this.datawatcher.set(EntityWither.bx[i], Integer.valueOf(j));
+        this.datawatcher.set(EntityWither.bw[i], Integer.valueOf(j));
     }
 
-    public boolean df() {
+    public boolean di() {
         return this.getHealth() <= this.getMaxHealth() / 2.0F;
     }
 
@@ -500,7 +504,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         }
 
         public boolean a() {
-            return EntityWither.this.de() > 0;
+            return EntityWither.this.dh() > 0;
         }
     }
 }

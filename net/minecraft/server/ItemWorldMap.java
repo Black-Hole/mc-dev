@@ -11,6 +11,22 @@ public class ItemWorldMap extends ItemWorldMapBase {
         this.a(true);
     }
 
+    public static ItemStack a(World world, double d0, double d1, byte b0, boolean flag, boolean flag1) {
+        ItemStack itemstack = new ItemStack(Items.FILLED_MAP, 1, world.b("map"));
+        String s = "map_" + itemstack.getData();
+        WorldMap worldmap = new WorldMap(s);
+
+        world.a(s, (PersistentBase) worldmap);
+        worldmap.scale = b0;
+        worldmap.a(d0, d1, worldmap.scale);
+        worldmap.map = (byte) world.worldProvider.getDimensionManager().getDimensionID();
+        worldmap.track = flag;
+        worldmap.unlimitedTracking = flag1;
+        worldmap.c();
+        return itemstack;
+    }
+
+    @Nullable
     public WorldMap getSavedMap(ItemStack itemstack, World world) {
         String s = "map_" + itemstack.getData();
         WorldMap worldmap = (WorldMap) world.a(WorldMap.class, s);
@@ -38,7 +54,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
             int i1 = MathHelper.floor(entity.locZ - (double) k) / i + 64;
             int j1 = 128 / i;
 
-            if (world.worldProvider.m()) {
+            if (world.worldProvider.n()) {
                 j1 /= 2;
             }
 
@@ -68,7 +84,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                 int k3 = 0;
                                 double d1 = 0.0D;
 
-                                if (world.worldProvider.m()) {
+                                if (world.worldProvider.n()) {
                                     int l3 = k2 + l2 * 231871;
 
                                     l3 = l3 * l3 * 31287121 + l3 * 11;
@@ -103,6 +119,8 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                                         ++k3;
                                                     } while (l4 > 0 && iblockdata1.getMaterial().isLiquid());
                                                 }
+                                            } else {
+                                                iblockdata = Blocks.BEDROCK.getBlockData();
                                             }
 
                                             d1 += (double) k4 / (double) (i * i);
@@ -157,6 +175,99 @@ public class ItemWorldMap extends ItemWorldMapBase {
         }
     }
 
+    public static void a(World world, ItemStack itemstack) {
+        if (itemstack.getItem() == Items.FILLED_MAP) {
+            WorldMap worldmap = Items.FILLED_MAP.getSavedMap(itemstack, world);
+
+            if (worldmap != null) {
+                if (world.worldProvider.getDimensionManager().getDimensionID() == worldmap.map) {
+                    int i = 1 << worldmap.scale;
+                    int j = worldmap.centerX;
+                    int k = worldmap.centerZ;
+                    BiomeBase[] abiomebase = world.getWorldChunkManager().a((BiomeBase[]) null, (j / i - 64) * i, (k / i - 64) * i, 128 * i, 128 * i, false);
+
+                    for (int l = 0; l < 128; ++l) {
+                        for (int i1 = 0; i1 < 128; ++i1) {
+                            int j1 = l * i;
+                            int k1 = i1 * i;
+                            BiomeBase biomebase = abiomebase[j1 + k1 * 128 * i];
+                            MaterialMapColor materialmapcolor = MaterialMapColor.b;
+                            int l1 = 3;
+                            int i2 = 8;
+
+                            if (l > 0 && i1 > 0 && l < 127 && i1 < 127) {
+                                if (abiomebase[(l - 1) * i + (i1 - 1) * i * 128 * i].j() >= 0.0F) {
+                                    --i2;
+                                }
+
+                                if (abiomebase[(l - 1) * i + (i1 + 1) * i * 128 * i].j() >= 0.0F) {
+                                    --i2;
+                                }
+
+                                if (abiomebase[(l - 1) * i + i1 * i * 128 * i].j() >= 0.0F) {
+                                    --i2;
+                                }
+
+                                if (abiomebase[(l + 1) * i + (i1 - 1) * i * 128 * i].j() >= 0.0F) {
+                                    --i2;
+                                }
+
+                                if (abiomebase[(l + 1) * i + (i1 + 1) * i * 128 * i].j() >= 0.0F) {
+                                    --i2;
+                                }
+
+                                if (abiomebase[(l + 1) * i + i1 * i * 128 * i].j() >= 0.0F) {
+                                    --i2;
+                                }
+
+                                if (abiomebase[l * i + (i1 - 1) * i * 128 * i].j() >= 0.0F) {
+                                    --i2;
+                                }
+
+                                if (abiomebase[l * i + (i1 + 1) * i * 128 * i].j() >= 0.0F) {
+                                    --i2;
+                                }
+
+                                if (biomebase.j() < 0.0F) {
+                                    materialmapcolor = MaterialMapColor.q;
+                                    if (i2 > 7 && i1 % 2 == 0) {
+                                        l1 = (l + (int) (MathHelper.sin((float) i1 + 0.0F) * 7.0F)) / 8 % 5;
+                                        if (l1 == 3) {
+                                            l1 = 1;
+                                        } else if (l1 == 4) {
+                                            l1 = 0;
+                                        }
+                                    } else if (i2 > 7) {
+                                        materialmapcolor = MaterialMapColor.b;
+                                    } else if (i2 > 5) {
+                                        l1 = 1;
+                                    } else if (i2 > 3) {
+                                        l1 = 0;
+                                    } else if (i2 > 1) {
+                                        l1 = 0;
+                                    }
+                                } else if (i2 > 0) {
+                                    materialmapcolor = MaterialMapColor.B;
+                                    if (i2 > 3) {
+                                        l1 = 1;
+                                    } else {
+                                        l1 = 3;
+                                    }
+                                }
+                            }
+
+                            if (materialmapcolor != MaterialMapColor.b) {
+                                worldmap.colors[l + i1 * 128] = (byte) (materialmapcolor.M * 4 + l1);
+                                worldmap.flagDirty(l, i1);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
     public void a(ItemStack itemstack, World world, Entity entity, int i, boolean flag) {
         if (!world.isClientSide) {
             WorldMap worldmap = this.getSavedMap(itemstack, world);
@@ -200,12 +311,15 @@ public class ItemWorldMap extends ItemWorldMapBase {
         itemstack.setData(world.b("map"));
         WorldMap worldmap1 = new WorldMap("map_" + itemstack.getData());
 
-        worldmap1.scale = (byte) MathHelper.clamp(worldmap.scale + i, 0, 4);
-        worldmap1.track = worldmap.track;
-        worldmap1.a((double) worldmap.centerX, (double) worldmap.centerZ, worldmap1.scale);
-        worldmap1.map = worldmap.map;
-        worldmap1.c();
-        world.a("map_" + itemstack.getData(), (PersistentBase) worldmap1);
+        if (worldmap != null) {
+            worldmap1.scale = (byte) MathHelper.clamp(worldmap.scale + i, 0, 4);
+            worldmap1.track = worldmap.track;
+            worldmap1.a((double) worldmap.centerX, (double) worldmap.centerZ, worldmap1.scale);
+            worldmap1.map = worldmap.map;
+            worldmap1.c();
+            world.a("map_" + itemstack.getData(), (PersistentBase) worldmap1);
+        }
+
     }
 
     protected static void b(ItemStack itemstack, World world) {
@@ -215,11 +329,14 @@ public class ItemWorldMap extends ItemWorldMapBase {
         WorldMap worldmap1 = new WorldMap("map_" + itemstack.getData());
 
         worldmap1.track = true;
-        worldmap1.centerX = worldmap.centerX;
-        worldmap1.centerZ = worldmap.centerZ;
-        worldmap1.scale = worldmap.scale;
-        worldmap1.map = worldmap.map;
-        worldmap1.c();
-        world.a("map_" + itemstack.getData(), (PersistentBase) worldmap1);
+        if (worldmap != null) {
+            worldmap1.centerX = worldmap.centerX;
+            worldmap1.centerZ = worldmap.centerZ;
+            worldmap1.scale = worldmap.scale;
+            worldmap1.map = worldmap.map;
+            worldmap1.c();
+            world.a("map_" + itemstack.getData(), (PersistentBase) worldmap1);
+        }
+
     }
 }

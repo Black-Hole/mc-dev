@@ -15,7 +15,7 @@ public class EnchantmentMending extends Enchantment {
         return this.a(i) + 50;
     }
 
-    public boolean e() {
+    public boolean isTreasure() {
         return true;
     }
 

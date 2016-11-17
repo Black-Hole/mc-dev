@@ -56,7 +56,7 @@ public class ChatDeserializer {
     public static Item b(JsonElement jsonelement, String s) {
         if (jsonelement.isJsonPrimitive()) {
             String s1 = jsonelement.getAsString();
-            Item item = Item.d(s1);
+            Item item = Item.b(s1);
 
             if (item == null) {
                 throw new JsonSyntaxException("Expected " + s + " to be an item, was unknown string \'" + s1 + "\'");

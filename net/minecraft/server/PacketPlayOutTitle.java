@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.io.IOException;
+import java.util.Locale;
 import javax.annotation.Nullable;
 
 public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
@@ -31,7 +32,7 @@ public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = (PacketPlayOutTitle.EnumTitleAction) packetdataserializer.a(PacketPlayOutTitle.EnumTitleAction.class);
-        if (this.a == PacketPlayOutTitle.EnumTitleAction.TITLE || this.a == PacketPlayOutTitle.EnumTitleAction.SUBTITLE) {
+        if (this.a == PacketPlayOutTitle.EnumTitleAction.TITLE || this.a == PacketPlayOutTitle.EnumTitleAction.SUBTITLE || this.a == PacketPlayOutTitle.EnumTitleAction.ACTIONBAR) {
             this.b = packetdataserializer.f();
         }
 
@@ -45,7 +46,7 @@ public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.a);
-        if (this.a == PacketPlayOutTitle.EnumTitleAction.TITLE || this.a == PacketPlayOutTitle.EnumTitleAction.SUBTITLE) {
+        if (this.a == PacketPlayOutTitle.EnumTitleAction.TITLE || this.a == PacketPlayOutTitle.EnumTitleAction.SUBTITLE || this.a == PacketPlayOutTitle.EnumTitleAction.ACTIONBAR) {
             packetdataserializer.a(this.b);
         }
 
@@ -63,7 +64,7 @@ public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
 
     public static enum EnumTitleAction {
 
-        TITLE, SUBTITLE, TIMES, CLEAR, RESET;
+        TITLE, SUBTITLE, ACTIONBAR, TIMES, CLEAR, RESET;
 
         private EnumTitleAction() {}
 
@@ -91,7 +92,7 @@ public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
             for (int k = 0; k < j; ++k) {
                 PacketPlayOutTitle.EnumTitleAction packetplayouttitle_enumtitleaction = apacketplayouttitle_enumtitleaction[k];
 
-                astring[i++] = packetplayouttitle_enumtitleaction.name().toLowerCase();
+                astring[i++] = packetplayouttitle_enumtitleaction.name().toLowerCase(Locale.ROOT);
             }
 
             return astring;

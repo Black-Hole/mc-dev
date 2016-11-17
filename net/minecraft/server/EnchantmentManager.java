@@ -9,18 +9,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
-import javax.annotation.Nullable;
 
 public class EnchantmentManager {
 
     private static final Random a = new Random();
-    private static final EnchantmentManager.EnchantmentModifierProtection b = new EnchantmentManager.EnchantmentModifierProtection((EnchantmentManager.SyntheticClass_1) null);
-    private static final EnchantmentManager.EnchantmentModifierDamage c = new EnchantmentManager.EnchantmentModifierDamage((EnchantmentManager.SyntheticClass_1) null);
-    private static final EnchantmentManager.EnchantmentModifierThorns d = new EnchantmentManager.EnchantmentModifierThorns((EnchantmentManager.SyntheticClass_1) null);
-    private static final EnchantmentManager.EnchantmentModifierArthropods e = new EnchantmentManager.EnchantmentModifierArthropods((EnchantmentManager.SyntheticClass_1) null);
+    private static final EnchantmentManager.EnchantmentModifierProtection b = new EnchantmentManager.EnchantmentModifierProtection(null);
+    private static final EnchantmentManager.EnchantmentModifierDamage c = new EnchantmentManager.EnchantmentModifierDamage(null);
+    private static final EnchantmentManager.EnchantmentModifierThorns d = new EnchantmentManager.EnchantmentModifierThorns(null);
+    private static final EnchantmentManager.EnchantmentModifierArthropods e = new EnchantmentManager.EnchantmentModifierArthropods(null);
 
-    public static int getEnchantmentLevel(Enchantment enchantment, @Nullable ItemStack itemstack) {
-        if (itemstack == null) {
+    public static int getEnchantmentLevel(Enchantment enchantment, ItemStack itemstack) {
+        if (itemstack.isEmpty()) {
             return 0;
         } else {
             NBTTagList nbttaglist = itemstack.getEnchantments();
@@ -90,7 +89,7 @@ public class EnchantmentManager {
     }
 
     private static void a(EnchantmentManager.EnchantmentModifier enchantmentmanager_enchantmentmodifier, ItemStack itemstack) {
-        if (itemstack != null) {
+        if (!itemstack.isEmpty()) {
             NBTTagList nbttaglist = itemstack.getEnchantments();
 
             if (nbttaglist != null) {
@@ -159,13 +158,13 @@ public class EnchantmentManager {
     }
 
     public static int a(Enchantment enchantment, EntityLiving entityliving) {
-        Iterable iterable = enchantment.a(entityliving);
+        List list = enchantment.a(entityliving);
 
-        if (iterable == null) {
+        if (list == null) {
             return 0;
         } else {
             int i = 0;
-            Iterator iterator = iterable.iterator();
+            Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 ItemStack itemstack = (ItemStack) iterator.next();
@@ -220,25 +219,32 @@ public class EnchantmentManager {
         return a(Enchantments.j, entityliving) > 0;
     }
 
-    @Nullable
-    public static ItemStack b(Enchantment enchantment, EntityLiving entityliving) {
-        Iterable iterable = enchantment.a(entityliving);
+    public static boolean b(ItemStack itemstack) {
+        return getEnchantmentLevel(Enchantments.k, itemstack) > 0;
+    }
 
-        if (iterable == null) {
-            return null;
+    public static boolean c(ItemStack itemstack) {
+        return getEnchantmentLevel(Enchantments.C, itemstack) > 0;
+    }
+
+    public static ItemStack b(Enchantment enchantment, EntityLiving entityliving) {
+        List list = enchantment.a(entityliving);
+
+        if (list.isEmpty()) {
+            return ItemStack.a;
         } else {
             ArrayList arraylist = Lists.newArrayList();
-            Iterator iterator = iterable.iterator();
+            Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 ItemStack itemstack = (ItemStack) iterator.next();
 
-                if (itemstack != null && getEnchantmentLevel(enchantment, itemstack) > 0) {
+                if (!itemstack.isEmpty() && getEnchantmentLevel(enchantment, itemstack) > 0) {
                     arraylist.add(itemstack);
                 }
             }
 
-            return arraylist.isEmpty() ? null : (ItemStack) arraylist.get(entityliving.getRandom().nextInt(arraylist.size()));
+            return arraylist.isEmpty() ? ItemStack.a : (ItemStack) arraylist.get(entityliving.getRandom().nextInt(arraylist.size()));
         }
     }
 
@@ -260,11 +266,11 @@ public class EnchantmentManager {
     }
 
     public static ItemStack a(Random random, ItemStack itemstack, int i, boolean flag) {
-        boolean flag1 = itemstack.getItem() == Items.BOOK;
         List list = b(random, itemstack, i, flag);
+        boolean flag1 = itemstack.getItem() == Items.BOOK;
 
         if (flag1) {
-            itemstack.setItem(Items.ENCHANTED_BOOK);
+            itemstack = new ItemStack(Items.ENCHANTED_BOOK);
         }
 
         Iterator iterator = list.iterator();
@@ -334,7 +340,7 @@ public class EnchantmentManager {
         while (iterator.hasNext()) {
             Enchantment enchantment = (Enchantment) iterator.next();
 
-            if ((!enchantment.e() || flag) && (enchantment.itemTarget.canEnchant(item) || flag1)) {
+            if ((!enchantment.isTreasure() || flag) && (enchantment.itemTarget.canEnchant(item) || flag1)) {
                 for (int j = enchantment.getMaxLevel(); j > enchantment.getStartLevel() - 1; --j) {
                     if (i >= enchantment.a(j) && i <= enchantment.b(j)) {
                         arraylist.add(new WeightedRandomEnchant(enchantment, j));
@@ -347,8 +353,6 @@ public class EnchantmentManager {
         return arraylist;
     }
 
-    static class SyntheticClass_1 {    }
-
     static final class EnchantmentModifierArthropods implements EnchantmentManager.EnchantmentModifier {
 
         public EntityLiving a;
@@ -360,7 +364,7 @@ public class EnchantmentManager {
             enchantment.a(this.a, this.b, i);
         }
 
-        EnchantmentModifierArthropods(EnchantmentManager.SyntheticClass_1 enchantmentmanager_syntheticclass_1) {
+        EnchantmentModifierArthropods(Object object) {
             this();
         }
     }
@@ -376,7 +380,7 @@ public class EnchantmentManager {
             enchantment.b(this.a, this.b, i);
         }
 
-        EnchantmentModifierThorns(EnchantmentManager.SyntheticClass_1 enchantmentmanager_syntheticclass_1) {
+        EnchantmentModifierThorns(Object object) {
             this();
         }
     }
@@ -392,7 +396,7 @@ public class EnchantmentManager {
             this.a += enchantment.a(i, this.b);
         }
 
-        EnchantmentModifierDamage(EnchantmentManager.SyntheticClass_1 enchantmentmanager_syntheticclass_1) {
+        EnchantmentModifierDamage(Object object) {
             this();
         }
     }
@@ -408,7 +412,7 @@ public class EnchantmentManager {
             this.a += enchantment.a(i, this.b);
         }
 
-        EnchantmentModifierProtection(EnchantmentManager.SyntheticClass_1 enchantmentmanager_syntheticclass_1) {
+        EnchantmentModifierProtection(Object object) {
             this();
         }
     }

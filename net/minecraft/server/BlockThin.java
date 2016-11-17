@@ -15,7 +15,7 @@ public class BlockThin extends Block {
 
     protected BlockThin(Material material, boolean flag) {
         super(material);
-        this.w(this.blockStateList.getBlockData().set(BlockThin.NORTH, Boolean.valueOf(false)).set(BlockThin.EAST, Boolean.valueOf(false)).set(BlockThin.SOUTH, Boolean.valueOf(false)).set(BlockThin.WEST, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockThin.NORTH, Boolean.valueOf(false)).set(BlockThin.EAST, Boolean.valueOf(false)).set(BlockThin.SOUTH, Boolean.valueOf(false)).set(BlockThin.WEST, Boolean.valueOf(false)));
         this.a = flag;
         this.a(CreativeModeTab.c);
     }
@@ -45,7 +45,7 @@ public class BlockThin extends Block {
         return 1 << enumdirection.get2DRotationValue();
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
         return BlockThin.f[i(iblockdata)];
     }
@@ -76,9 +76,8 @@ public class BlockThin extends Block {
         return iblockdata.set(BlockThin.NORTH, Boolean.valueOf(this.c(iblockaccess.getType(blockposition.north()).getBlock()))).set(BlockThin.SOUTH, Boolean.valueOf(this.c(iblockaccess.getType(blockposition.south()).getBlock()))).set(BlockThin.WEST, Boolean.valueOf(this.c(iblockaccess.getType(blockposition.west()).getBlock()))).set(BlockThin.EAST, Boolean.valueOf(this.c(iblockaccess.getType(blockposition.east()).getBlock())));
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return !this.a ? null : super.getDropType(iblockdata, random, i);
+        return !this.a ? Items.a : super.getDropType(iblockdata, random, i);
     }
 
     public boolean b(IBlockData iblockdata) {
@@ -93,7 +92,7 @@ public class BlockThin extends Block {
         return block.getBlockData().h() || block == this || block == Blocks.GLASS || block == Blocks.STAINED_GLASS || block == Blocks.STAINED_GLASS_PANE || block instanceof BlockThin;
     }
 
-    protected boolean o() {
+    protected boolean n() {
         return true;
     }
 
@@ -102,14 +101,14 @@ public class BlockThin extends Block {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        switch (BlockThin.SyntheticClass_1.a[enumblockrotation.ordinal()]) {
-        case 1:
+        switch (enumblockrotation) {
+        case CLOCKWISE_180:
             return iblockdata.set(BlockThin.NORTH, iblockdata.get(BlockThin.SOUTH)).set(BlockThin.EAST, iblockdata.get(BlockThin.WEST)).set(BlockThin.SOUTH, iblockdata.get(BlockThin.NORTH)).set(BlockThin.WEST, iblockdata.get(BlockThin.EAST));
 
-        case 2:
+        case COUNTERCLOCKWISE_90:
             return iblockdata.set(BlockThin.NORTH, iblockdata.get(BlockThin.EAST)).set(BlockThin.EAST, iblockdata.get(BlockThin.SOUTH)).set(BlockThin.SOUTH, iblockdata.get(BlockThin.WEST)).set(BlockThin.WEST, iblockdata.get(BlockThin.NORTH));
 
-        case 3:
+        case CLOCKWISE_90:
             return iblockdata.set(BlockThin.NORTH, iblockdata.get(BlockThin.WEST)).set(BlockThin.EAST, iblockdata.get(BlockThin.NORTH)).set(BlockThin.SOUTH, iblockdata.get(BlockThin.EAST)).set(BlockThin.WEST, iblockdata.get(BlockThin.SOUTH));
 
         default:
@@ -118,11 +117,11 @@ public class BlockThin extends Block {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        switch (BlockThin.SyntheticClass_1.b[enumblockmirror.ordinal()]) {
-        case 1:
+        switch (enumblockmirror) {
+        case LEFT_RIGHT:
             return iblockdata.set(BlockThin.NORTH, iblockdata.get(BlockThin.SOUTH)).set(BlockThin.SOUTH, iblockdata.get(BlockThin.NORTH));
 
-        case 2:
+        case FRONT_BACK:
             return iblockdata.set(BlockThin.EAST, iblockdata.get(BlockThin.WEST)).set(BlockThin.WEST, iblockdata.get(BlockThin.EAST));
 
         default:
@@ -132,46 +131,5 @@ public class BlockThin extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockThin.NORTH, BlockThin.EAST, BlockThin.WEST, BlockThin.SOUTH});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b = new int[EnumBlockMirror.values().length];
-
-        static {
-            try {
-                BlockThin.SyntheticClass_1.b[EnumBlockMirror.LEFT_RIGHT.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockThin.SyntheticClass_1.b[EnumBlockMirror.FRONT_BACK.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            a = new int[EnumBlockRotation.values().length];
-
-            try {
-                BlockThin.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_180.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockThin.SyntheticClass_1.a[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockThin.SyntheticClass_1.a[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-        }
     }
 }

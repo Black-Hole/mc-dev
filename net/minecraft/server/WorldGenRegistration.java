@@ -14,8 +14,6 @@ public class WorldGenRegistration {
         WorldGenFactory.a(WorldGenRegistration.b.class, "Iglu");
     }
 
-    static class SyntheticClass_1 {    }
-
     public static class b extends WorldGenRegistration.WorldGenScatteredPiece {
 
         private static final MinecraftKey e = new MinecraftKey("igloo/igloo_top");
@@ -49,10 +47,10 @@ public class WorldGenRegistration {
                     for (int j = 0; j < i; ++j) {
                         BlockPosition blockposition1 = definedstructure.a(definedstructureinfo, new BlockPosition(3, -1 - j * 3, 5), definedstructureinfo, new BlockPosition(1, 2, 1));
 
-                        definedstructure1.a(world, blockposition.a(blockposition1), definedstructureinfo);
+                        definedstructure1.a(world, blockposition.a((BaseBlockPosition) blockposition1), definedstructureinfo);
                     }
 
-                    BlockPosition blockposition2 = blockposition.a(definedstructure.a(definedstructureinfo, new BlockPosition(3, -1 - i * 3, 5), definedstructureinfo, new BlockPosition(3, 5, 7)));
+                    BlockPosition blockposition2 = blockposition.a((BaseBlockPosition) definedstructure.a(definedstructureinfo, new BlockPosition(3, -1 - i * 3, 5), definedstructureinfo, new BlockPosition(3, 5, 7)));
 
                     definedstructure2.a(world, blockposition2, definedstructureinfo);
                     Map map = definedstructure2.a(blockposition2, definedstructureinfo);
@@ -75,7 +73,7 @@ public class WorldGenRegistration {
                 } else {
                     BlockPosition blockposition4 = DefinedStructure.a(definedstructureinfo, new BlockPosition(3, 0, 5));
 
-                    world.setTypeAndData(blockposition.a(blockposition4), Blocks.SNOW.getBlockData(), 3);
+                    world.setTypeAndData(blockposition.a((BaseBlockPosition) blockposition4), Blocks.SNOW.getBlockData(), 3);
                 }
 
                 return true;
@@ -98,8 +96,8 @@ public class WorldGenRegistration {
             nbttagcompound.setBoolean("Witch", this.e);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.e = nbttagcompound.getBoolean("Witch");
         }
 
@@ -156,6 +154,7 @@ public class WorldGenRegistration {
                         this.e = true;
                         EntityWitch entitywitch = new EntityWitch(world);
 
+                        entitywitch.cS();
                         entitywitch.setPositionRotation((double) i + 0.5D, (double) j, (double) k + 0.5D, 0.0F, 0.0F);
                         entitywitch.prepare(world.D(new BlockPosition(i, j, k)), (GroupDataEntity) null);
                         world.addEntity(entitywitch);
@@ -173,7 +172,7 @@ public class WorldGenRegistration {
         private boolean f;
         private boolean g;
         private boolean h;
-        private static final WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece i = new WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece((WorldGenRegistration.SyntheticClass_1) null);
+        private static final WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece i = new WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece(null);
 
         public WorldGenJungleTemple() {}
 
@@ -189,8 +188,8 @@ public class WorldGenRegistration {
             nbttagcompound.setBoolean("placedTrap2", this.h);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.e = nbttagcompound.getBoolean("placedMainChest");
             this.f = nbttagcompound.getBoolean("placedHiddenChest");
             this.g = nbttagcompound.getBoolean("placedTrap1");
@@ -395,7 +394,7 @@ public class WorldGenRegistration {
 
             }
 
-            WorldGenJungleTemple$WorldGenJungleTemplePiece(WorldGenRegistration.SyntheticClass_1 worldgenregistration_syntheticclass_1) {
+            WorldGenJungleTemple$WorldGenJungleTemplePiece(Object object) {
                 this();
             }
         }
@@ -419,8 +418,8 @@ public class WorldGenRegistration {
             nbttagcompound.setBoolean("hasPlacedChest3", this.e[3]);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
-            super.b(nbttagcompound);
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
+            super.a(nbttagcompound, definedstructuremanager);
             this.e[0] = nbttagcompound.getBoolean("hasPlacedChest0");
             this.e[1] = nbttagcompound.getBoolean("hasPlacedChest1");
             this.e[2] = nbttagcompound.getBoolean("hasPlacedChest2");
@@ -661,7 +660,7 @@ public class WorldGenRegistration {
             nbttagcompound.setInt("HPos", this.d);
         }
 
-        protected void b(NBTTagCompound nbttagcompound) {
+        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
             this.a = nbttagcompound.getInt("Width");
             this.b = nbttagcompound.getInt("Height");
             this.c = nbttagcompound.getInt("Depth");

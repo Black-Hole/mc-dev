@@ -34,7 +34,7 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
                 return t0 == null ? false : (predicate != null && !predicate.apply(t0) ? false : (!IEntitySelector.e.apply(t0) ? false : PathfinderGoalNearestAttackableTarget.this.a(t0, false)));
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((EntityLiving) object);
             }
         };
@@ -59,9 +59,9 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
                 public Double a(@Nullable EntityHuman entityhuman) {
                     ItemStack itemstack = entityhuman.getEquipment(EnumItemSlot.HEAD);
 
-                    if (itemstack != null && itemstack.getItem() == Items.SKULL) {
-                        int i = itemstack.h();
-                        boolean flag = PathfinderGoalNearestAttackableTarget.this.e instanceof EntitySkeleton && ((EntitySkeleton) PathfinderGoalNearestAttackableTarget.this.e).getSkeletonType() == EnumSkeletonType.NORMAL && i == 0;
+                    if (itemstack.getItem() == Items.SKULL) {
+                        int i = itemstack.i();
+                        boolean flag = PathfinderGoalNearestAttackableTarget.this.e instanceof EntitySkeleton && i == 0;
                         boolean flag1 = PathfinderGoalNearestAttackableTarget.this.e instanceof EntityZombie && i == 2;
                         boolean flag2 = PathfinderGoalNearestAttackableTarget.this.e instanceof EntityCreeper && i == 4;
 
@@ -73,7 +73,8 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
                     return Double.valueOf(1.0D);
                 }
 
-                public Object apply(Object object) {
+                @Nullable
+                public Object apply(@Nullable Object object) {
                     return this.a((EntityHuman) object);
                 }
             }, this.c);

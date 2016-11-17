@@ -15,7 +15,7 @@ public class BlockChest extends BlockTileEntity {
 
     protected BlockChest(BlockChest.Type blockchest_type) {
         super(Material.WOOD);
-        this.w(this.blockStateList.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH));
+        this.y(this.blockStateList.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH));
         this.g = blockchest_type;
         this.a(blockchest_type == BlockChest.Type.TRAP ? CreativeModeTab.d : CreativeModeTab.c);
     }
@@ -32,7 +32,7 @@ public class BlockChest extends BlockTileEntity {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockaccess.getType(blockposition.north()).getBlock() == this ? BlockChest.b : (iblockaccess.getType(blockposition.south()).getBlock() == this ? BlockChest.c : (iblockaccess.getType(blockposition.west()).getBlock() == this ? BlockChest.d : (iblockaccess.getType(blockposition.east()).getBlock() == this ? BlockChest.e : BlockChest.f)));
     }
 
@@ -277,8 +277,8 @@ public class BlockChest extends BlockTileEntity {
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
-        super.a(iblockdata, world, blockposition, block);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+        super.a(iblockdata, world, blockposition, block, blockposition1);
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityChest) {
@@ -298,7 +298,7 @@ public class BlockChest extends BlockTileEntity {
         super.remove(world, blockposition, iblockdata);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -372,7 +372,7 @@ public class BlockChest extends BlockTileEntity {
     }
 
     public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        if (!iblockdata.m()) {
+        if (!iblockdata.n()) {
             return 0;
         } else {
             int i = 0;
@@ -395,7 +395,7 @@ public class BlockChest extends BlockTileEntity {
     }
 
     private boolean i(World world, BlockPosition blockposition) {
-        return world.getType(blockposition.up()).l();
+        return world.getType(blockposition.up()).m();
     }
 
     private boolean j(World world, BlockPosition blockposition) {
@@ -420,7 +420,7 @@ public class BlockChest extends BlockTileEntity {
         return true;
     }
 
-    public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public int c(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return Container.b((IInventory) this.c(world, blockposition));
     }
 

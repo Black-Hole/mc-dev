@@ -9,11 +9,11 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
     protected static final AxisAlignedBB d = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
 
     protected BlockSapling() {
-        this.w(this.blockStateList.getBlockData().set(BlockSapling.TYPE, BlockWood.EnumLogVariant.OAK).set(BlockSapling.STAGE, Integer.valueOf(0)));
+        this.y(this.blockStateList.getBlockData().set(BlockSapling.TYPE, BlockWood.EnumLogVariant.OAK).set(BlockSapling.STAGE, Integer.valueOf(0)));
         this.a(CreativeModeTab.c);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockSapling.d;
     }
 
@@ -47,8 +47,8 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
         boolean flag = false;
         IBlockData iblockdata1;
 
-        switch (BlockSapling.SyntheticClass_1.a[((BlockWood.EnumLogVariant) iblockdata.get(BlockSapling.TYPE)).ordinal()]) {
-        case 1:
+        switch ((BlockWood.EnumLogVariant) iblockdata.get(BlockSapling.TYPE)) {
+        case SPRUCE:
             label66:
             for (i = 0; i >= -1; --i) {
                 for (j = 0; j >= -1; --j) {
@@ -67,11 +67,11 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
             }
             break;
 
-        case 2:
+        case BIRCH:
             object = new WorldGenForest(true, false);
             break;
 
-        case 3:
+        case JUNGLE:
             iblockdata1 = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
             IBlockData iblockdata2 = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
 
@@ -93,11 +93,11 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
             }
             break;
 
-        case 4:
+        case ACACIA:
             object = new WorldGenAcaciaTree(true);
             break;
 
-        case 5:
+        case DARK_OAK:
             label90:
             for (i = 0; i >= -1; --i) {
                 for (j = 0; j >= -1; --j) {
@@ -113,7 +113,7 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
                 return;
             }
 
-        case 6:
+        case OAK:
         }
 
         iblockdata1 = Blocks.AIR.getBlockData();
@@ -179,49 +179,5 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockSapling.TYPE, BlockSapling.STAGE});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[BlockWood.EnumLogVariant.values().length];
-
-        static {
-            try {
-                BlockSapling.SyntheticClass_1.a[BlockWood.EnumLogVariant.SPRUCE.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockSapling.SyntheticClass_1.a[BlockWood.EnumLogVariant.BIRCH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockSapling.SyntheticClass_1.a[BlockWood.EnumLogVariant.JUNGLE.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockSapling.SyntheticClass_1.a[BlockWood.EnumLogVariant.ACACIA.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockSapling.SyntheticClass_1.a[BlockWood.EnumLogVariant.DARK_OAK.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                BlockSapling.SyntheticClass_1.a[BlockWood.EnumLogVariant.OAK.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-        }
     }
 }

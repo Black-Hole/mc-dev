@@ -14,7 +14,7 @@ public class ItemArmor extends Item {
         protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
             ItemStack itemstack1 = ItemArmor.a(isourceblock, itemstack);
 
-            return itemstack1 != null ? itemstack1 : super.b(isourceblock, itemstack);
+            return itemstack1.isEmpty() ? super.b(isourceblock, itemstack) : itemstack1;
         }
     };
     public final EnumItemSlot c;
@@ -28,19 +28,17 @@ public class ItemArmor extends Item {
         List list = isourceblock.getWorld().a(EntityLiving.class, new AxisAlignedBB(blockposition), Predicates.and(IEntitySelector.e, new IEntitySelector.EntitySelectorEquipable(itemstack)));
 
         if (list.isEmpty()) {
-            return null;
+            return ItemStack.a;
         } else {
             EntityLiving entityliving = (EntityLiving) list.get(0);
             EnumItemSlot enumitemslot = EntityInsentient.d(itemstack);
-            ItemStack itemstack1 = itemstack.cloneItemStack();
+            ItemStack itemstack1 = itemstack.cloneAndSubtract(1);
 
-            itemstack1.count = 1;
             entityliving.setSlot(enumitemslot, itemstack1);
             if (entityliving instanceof EntityInsentient) {
                 ((EntityInsentient) entityliving).a(enumitemslot, 2.0F);
             }
 
-            --itemstack.count;
             return itemstack;
         }
     }
@@ -75,7 +73,7 @@ public class ItemArmor extends Item {
         }
     }
 
-    public int b(ItemStack itemstack) {
+    public int c(ItemStack itemstack) {
         if (this.p != ItemArmor.EnumArmorMaterial.LEATHER) {
             return 16777215;
         } else {
@@ -93,7 +91,7 @@ public class ItemArmor extends Item {
         }
     }
 
-    public void c(ItemStack itemstack) {
+    public void d(ItemStack itemstack) {
         if (this.p == ItemArmor.EnumArmorMaterial.LEATHER) {
             NBTTagCompound nbttagcompound = itemstack.getTag();
 
@@ -133,13 +131,14 @@ public class ItemArmor extends Item {
         return this.p.c() == itemstack1.getItem() ? true : super.a(itemstack, itemstack1);
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
         EnumItemSlot enumitemslot = EntityInsentient.d(itemstack);
         ItemStack itemstack1 = entityhuman.getEquipment(enumitemslot);
 
-        if (itemstack1 == null) {
+        if (itemstack1.isEmpty()) {
             entityhuman.setSlot(enumitemslot, itemstack.cloneItemStack());
-            itemstack.count = 0;
+            itemstack.setCount(0);
             return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
         } else {
             return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
@@ -159,7 +158,7 @@ public class ItemArmor extends Item {
 
     public static enum EnumArmorMaterial {
 
-        LEATHER("leather", 5, new int[] { 1, 2, 3, 1}, 15, SoundEffects.s, 0.0F), CHAIN("chainmail", 15, new int[] { 1, 4, 5, 2}, 12, SoundEffects.n, 0.0F), IRON("iron", 15, new int[] { 2, 5, 6, 2}, 9, SoundEffects.r, 0.0F), GOLD("gold", 7, new int[] { 1, 3, 5, 2}, 25, SoundEffects.q, 0.0F), DIAMOND("diamond", 33, new int[] { 3, 6, 8, 3}, 10, SoundEffects.o, 2.0F);
+        LEATHER("leather", 5, new int[] { 1, 2, 3, 1}, 15, SoundEffects.t, 0.0F), CHAIN("chainmail", 15, new int[] { 1, 4, 5, 2}, 12, SoundEffects.n, 0.0F), IRON("iron", 15, new int[] { 2, 5, 6, 2}, 9, SoundEffects.s, 0.0F), GOLD("gold", 7, new int[] { 1, 3, 5, 2}, 25, SoundEffects.r, 0.0F), DIAMOND("diamond", 33, new int[] { 3, 6, 8, 3}, 10, SoundEffects.o, 2.0F);
 
         private final String f;
         private final int g;

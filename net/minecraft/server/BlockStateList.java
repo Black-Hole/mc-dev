@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.UnmodifiableIterator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,7 +33,8 @@ public class BlockStateList {
             return iblockstate == null ? "<NULL>" : iblockstate.a();
         }
 
-        public Object apply(Object object) {
+        @Nullable
+        public Object apply(@Nullable Object object) {
             return this.a((IBlockState) object);
         }
     };
@@ -110,10 +112,10 @@ public class BlockStateList {
     private List<Iterable<Comparable<?>>> e() {
         ArrayList arraylist = Lists.newArrayList();
         ImmutableCollection immutablecollection = this.d.values();
-        Iterator iterator = immutablecollection.iterator();
+        UnmodifiableIterator unmodifiableiterator = immutablecollection.iterator();
 
-        while (iterator.hasNext()) {
-            IBlockState iblockstate = (IBlockState) iterator.next();
+        while (unmodifiableiterator.hasNext()) {
+            IBlockState iblockstate = (IBlockState) unmodifiableiterator.next();
 
             arraylist.add(iblockstate.c());
         }
@@ -153,7 +155,7 @@ public class BlockStateList {
             this.b = immutablemap;
         }
 
-        public Collection<IBlockState<?>> r() {
+        public Collection<IBlockState<?>> t() {
             return Collections.unmodifiableCollection(this.b.keySet());
         }
 
@@ -161,7 +163,7 @@ public class BlockStateList {
             Comparable comparable = (Comparable) this.b.get(iblockstate);
 
             if (comparable == null) {
-                throw new IllegalArgumentException("Cannot get property " + iblockstate + " as it does not exist in " + this.a.t());
+                throw new IllegalArgumentException("Cannot get property " + iblockstate + " as it does not exist in " + this.a.s());
             } else {
                 return (Comparable) iblockstate.b().cast(comparable);
             }
@@ -171,7 +173,7 @@ public class BlockStateList {
             Comparable comparable = (Comparable) this.b.get(iblockstate);
 
             if (comparable == null) {
-                throw new IllegalArgumentException("Cannot set property " + iblockstate + " as it does not exist in " + this.a.t());
+                throw new IllegalArgumentException("Cannot set property " + iblockstate + " as it does not exist in " + this.a.s());
             } else if (comparable == v0) {
                 return this;
             } else {
@@ -185,7 +187,7 @@ public class BlockStateList {
             }
         }
 
-        public ImmutableMap<IBlockState<?>, Comparable<?>> s() {
+        public ImmutableMap<IBlockState<?>, Comparable<?>> u() {
             return this.b;
         }
 
@@ -206,15 +208,15 @@ public class BlockStateList {
                 throw new IllegalStateException();
             } else {
                 HashBasedTable hashbasedtable = HashBasedTable.create();
-                Iterator iterator = this.b.entrySet().iterator();
+                UnmodifiableIterator unmodifiableiterator = this.b.entrySet().iterator();
 
-                while (iterator.hasNext()) {
-                    Entry entry = (Entry) iterator.next();
+                while (unmodifiableiterator.hasNext()) {
+                    Entry entry = (Entry) unmodifiableiterator.next();
                     IBlockState iblockstate = (IBlockState) entry.getKey();
-                    Iterator iterator1 = iblockstate.c().iterator();
+                    Iterator iterator = iblockstate.c().iterator();
 
-                    while (iterator1.hasNext()) {
-                        Comparable comparable = (Comparable) iterator1.next();
+                    while (iterator.hasNext()) {
+                        Comparable comparable = (Comparable) iterator.next();
 
                         if (comparable != entry.getValue()) {
                             hashbasedtable.put(iblockstate, comparable, map.get(this.b(iblockstate, comparable)));
@@ -273,19 +275,19 @@ public class BlockStateList {
             return this.a.c((IBlockData) this);
         }
 
-        public EnumRenderType i() {
+        public EnumRenderType j() {
             return this.a.a((IBlockData) this);
         }
 
-        public boolean k() {
+        public boolean l() {
             return this.a.s(this);
         }
 
-        public boolean l() {
+        public boolean m() {
             return this.a.isOccluding(this);
         }
 
-        public boolean m() {
+        public boolean n() {
             return this.a.isPowerSource(this);
         }
 
@@ -293,16 +295,16 @@ public class BlockStateList {
             return this.a.b((IBlockData) this, iblockaccess, blockposition, enumdirection);
         }
 
-        public boolean n() {
+        public boolean o() {
             return this.a.isComplexRedstone(this);
         }
 
         public int a(World world, BlockPosition blockposition) {
-            return this.a.d(this, world, blockposition);
+            return this.a.c(this, world, blockposition);
         }
 
         public float b(World world, BlockPosition blockposition) {
-            return this.a.b(this, world, blockposition);
+            return this.a.a((IBlockData) this, world, blockposition);
         }
 
         public float a(EntityHuman entityhuman, World world, BlockPosition blockposition) {
@@ -313,7 +315,7 @@ public class BlockStateList {
             return this.a.c(this, iblockaccess, blockposition, enumdirection);
         }
 
-        public EnumPistonReaction o() {
+        public EnumPistonReaction p() {
             return this.a.h(this);
         }
 
@@ -321,37 +323,45 @@ public class BlockStateList {
             return this.a.updateState(this, iblockaccess, blockposition);
         }
 
-        public boolean p() {
+        public boolean q() {
             return this.a.b((IBlockData) this);
         }
 
         @Nullable
-        public AxisAlignedBB d(World world, BlockPosition blockposition) {
-            return this.a.a((IBlockData) this, world, blockposition);
+        public AxisAlignedBB c(IBlockAccess iblockaccess, BlockPosition blockposition) {
+            return this.a.a((IBlockData) this, iblockaccess, blockposition);
         }
 
         public void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
             this.a.a((IBlockData) this, world, blockposition, axisalignedbb, list, entity);
         }
 
-        public AxisAlignedBB c(IBlockAccess iblockaccess, BlockPosition blockposition) {
-            return this.a.a((IBlockData) this, iblockaccess, blockposition);
+        public AxisAlignedBB d(IBlockAccess iblockaccess, BlockPosition blockposition) {
+            return this.a.b(this, iblockaccess, blockposition);
         }
 
         public MovingObjectPosition a(World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
             return this.a.a(this, world, blockposition, vec3d, vec3d1);
         }
 
-        public boolean q() {
+        public boolean r() {
             return this.a.k(this);
+        }
+
+        public Vec3D e(IBlockAccess iblockaccess, BlockPosition blockposition) {
+            return this.a.e(this, iblockaccess, blockposition);
         }
 
         public boolean a(World world, BlockPosition blockposition, int i, int j) {
             return this.a.a(this, world, blockposition, i, j);
         }
 
-        public void doPhysics(World world, BlockPosition blockposition, Block block) {
-            this.a.a((IBlockData) this, world, blockposition, block);
+        public void doPhysics(World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+            this.a.a(this, world, blockposition, block, blockposition1);
+        }
+
+        public boolean s() {
+            return this.a.u(this);
         }
 
         BlockData(Block block, ImmutableMap immutablemap, Object object) {

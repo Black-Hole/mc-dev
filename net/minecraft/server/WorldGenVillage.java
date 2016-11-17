@@ -70,6 +70,11 @@ public class WorldGenVillage extends StructureGenerator {
         return false;
     }
 
+    public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag) {
+        this.g = world;
+        return a(world, this, blockposition, this.d, 8, 10387312, false, 100, flag);
+    }
+
     protected StructureStart b(int i, int j) {
         return new WorldGenVillage.WorldGenVillageStart(this.g, this.f, i, j, this.b);
     }

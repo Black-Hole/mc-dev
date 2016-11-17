@@ -55,7 +55,7 @@ public class RemoteControlCommandListener implements ICommandListener {
 
     public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {}
 
-    public MinecraftServer h() {
+    public MinecraftServer B_() {
         return this.b;
     }
 }

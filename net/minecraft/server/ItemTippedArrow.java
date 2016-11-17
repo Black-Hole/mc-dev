@@ -11,7 +11,7 @@ public class ItemTippedArrow extends ItemArrow {
         return entitytippedarrow;
     }
 
-    public String a(ItemStack itemstack) {
-        return LocaleI18n.get(PotionUtil.c(itemstack).b("tipped_arrow.effect."));
+    public String b(ItemStack itemstack) {
+        return LocaleI18n.get(PotionUtil.d(itemstack).b("tipped_arrow.effect."));
     }
 }

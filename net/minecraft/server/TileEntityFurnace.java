@@ -1,46 +1,62 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
+import java.util.Iterator;
 
 public class TileEntityFurnace extends TileEntityContainer implements ITickable, IWorldInventory {
 
     private static final int[] a = new int[] { 0};
     private static final int[] f = new int[] { 2, 1};
     private static final int[] g = new int[] { 1};
-    private ItemStack[] items = new ItemStack[3];
+    private NonNullList<ItemStack> items;
     private int burnTime;
     private int ticksForCurrentFuel;
     private int cookTime;
     private int cookTimeTotal;
     private String m;
 
-    public TileEntityFurnace() {}
+    public TileEntityFurnace() {
+        this.items = NonNullList.a(3, ItemStack.a);
+    }
 
     public int getSize() {
-        return this.items.length;
+        return this.items.size();
     }
 
-    @Nullable
+    public boolean w_() {
+        Iterator iterator = this.items.iterator();
+
+        ItemStack itemstack;
+
+        do {
+            if (!iterator.hasNext()) {
+                return true;
+            }
+
+            itemstack = (ItemStack) iterator.next();
+        } while (itemstack.isEmpty());
+
+        return false;
+    }
+
     public ItemStack getItem(int i) {
-        return this.items[i];
+        return (ItemStack) this.items.get(i);
     }
 
-    @Nullable
     public ItemStack splitStack(int i, int j) {
         return ContainerUtil.a(this.items, i, j);
     }
 
-    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         return ContainerUtil.a(this.items, i);
     }
 
-    public void setItem(int i, @Nullable ItemStack itemstack) {
-        boolean flag = itemstack != null && itemstack.doMaterialsMatch(this.items[i]) && ItemStack.equals(itemstack, this.items[i]);
+    public void setItem(int i, ItemStack itemstack) {
+        ItemStack itemstack1 = (ItemStack) this.items.get(i);
+        boolean flag = !itemstack.isEmpty() && itemstack.doMaterialsMatch(itemstack1) && ItemStack.equals(itemstack, itemstack1);
 
-        this.items[i] = itemstack;
-        if (itemstack != null && itemstack.count > this.getMaxStackSize()) {
-            itemstack.count = this.getMaxStackSize();
+        this.items.set(i, itemstack);
+        if (itemstack.getCount() > this.getMaxStackSize()) {
+            itemstack.setCount(this.getMaxStackSize());
         }
 
         if (i == 0 && !flag) {
@@ -64,28 +80,17 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
     }
 
     public static void a(DataConverterManager dataconvertermanager) {
-        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList("Furnace", new String[] { "Items"})));
+        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList(TileEntityFurnace.class, new String[] { "Items"})));
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
-
-        this.items = new ItemStack[this.getSize()];
-
-        for (int i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagCompound nbttagcompound1 = nbttaglist.get(i);
-            byte b0 = nbttagcompound1.getByte("Slot");
-
-            if (b0 >= 0 && b0 < this.items.length) {
-                this.items[b0] = ItemStack.createStack(nbttagcompound1);
-            }
-        }
-
+        this.items = NonNullList.a(this.getSize(), ItemStack.a);
+        ContainerUtil.b(nbttagcompound, this.items);
         this.burnTime = nbttagcompound.getShort("BurnTime");
         this.cookTime = nbttagcompound.getShort("CookTime");
         this.cookTimeTotal = nbttagcompound.getShort("CookTimeTotal");
-        this.ticksForCurrentFuel = fuelTime(this.items[1]);
+        this.ticksForCurrentFuel = fuelTime((ItemStack) this.items.get(1));
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
             this.m = nbttagcompound.getString("CustomName");
         }
@@ -97,19 +102,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
         nbttagcompound.setShort("BurnTime", (short) this.burnTime);
         nbttagcompound.setShort("CookTime", (short) this.cookTime);
         nbttagcompound.setShort("CookTimeTotal", (short) this.cookTimeTotal);
-        NBTTagList nbttaglist = new NBTTagList();
-
-        for (int i = 0; i < this.items.length; ++i) {
-            if (this.items[i] != null) {
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-
-                nbttagcompound1.setByte("Slot", (byte) i);
-                this.items[i].save(nbttagcompound1);
-                nbttaglist.add(nbttagcompound1);
-            }
-        }
-
-        nbttagcompound.set("Items", nbttaglist);
+        ContainerUtil.a(nbttagcompound, this.items);
         if (this.hasCustomName()) {
             nbttagcompound.setString("CustomName", this.m);
         }
@@ -125,7 +118,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
         return this.burnTime > 0;
     }
 
-    public void E_() {
+    public void F_() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
 
@@ -134,22 +127,26 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
         }
 
         if (!this.world.isClientSide) {
-            if (!this.isBurning() && (this.items[1] == null || this.items[0] == null)) {
+            ItemStack itemstack = (ItemStack) this.items.get(1);
+
+            if (!this.isBurning() && (itemstack.isEmpty() || ((ItemStack) this.items.get(0)).isEmpty())) {
                 if (!this.isBurning() && this.cookTime > 0) {
                     this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.cookTimeTotal);
                 }
             } else {
                 if (!this.isBurning() && this.canBurn()) {
-                    this.burnTime = fuelTime(this.items[1]);
+                    this.burnTime = fuelTime(itemstack);
                     this.ticksForCurrentFuel = this.burnTime;
                     if (this.isBurning()) {
                         flag1 = true;
-                        if (this.items[1] != null) {
-                            --this.items[1].count;
-                            if (this.items[1].count == 0) {
-                                Item item = this.items[1].getItem().q();
+                        if (!itemstack.isEmpty()) {
+                            Item item = itemstack.getItem();
 
-                                this.items[1] = item != null ? new ItemStack(item) : null;
+                            itemstack.subtract(1);
+                            if (itemstack.isEmpty()) {
+                                Item item1 = item.r();
+
+                                this.items.set(1, item1 == null ? ItemStack.a : new ItemStack(item1));
                             }
                         }
                     }
@@ -159,7 +156,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
                     ++this.cookTime;
                     if (this.cookTime == this.cookTimeTotal) {
                         this.cookTime = 0;
-                        this.cookTimeTotal = this.a(this.items[0]);
+                        this.cookTimeTotal = this.a((ItemStack) this.items.get(0));
                         this.burn();
                         flag1 = true;
                     }
@@ -180,65 +177,53 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
 
     }
 
-    public int a(@Nullable ItemStack itemstack) {
+    public int a(ItemStack itemstack) {
         return 200;
     }
 
     private boolean canBurn() {
-        if (this.items[0] == null) {
+        if (((ItemStack) this.items.get(0)).isEmpty()) {
             return false;
         } else {
-            ItemStack itemstack = RecipesFurnace.getInstance().getResult(this.items[0]);
+            ItemStack itemstack = RecipesFurnace.getInstance().getResult((ItemStack) this.items.get(0));
 
-            return itemstack == null ? false : (this.items[2] == null ? true : (!this.items[2].doMaterialsMatch(itemstack) ? false : (this.items[2].count < this.getMaxStackSize() && this.items[2].count < this.items[2].getMaxStackSize() ? true : this.items[2].count < itemstack.getMaxStackSize())));
+            if (itemstack.isEmpty()) {
+                return false;
+            } else {
+                ItemStack itemstack1 = (ItemStack) this.items.get(2);
+
+                return itemstack1.isEmpty() ? true : (!itemstack1.doMaterialsMatch(itemstack) ? false : (itemstack1.getCount() < this.getMaxStackSize() && itemstack1.getCount() < itemstack1.getMaxStackSize() ? true : itemstack1.getCount() < itemstack.getMaxStackSize()));
+            }
         }
     }
 
     public void burn() {
         if (this.canBurn()) {
-            ItemStack itemstack = RecipesFurnace.getInstance().getResult(this.items[0]);
+            ItemStack itemstack = (ItemStack) this.items.get(0);
+            ItemStack itemstack1 = RecipesFurnace.getInstance().getResult(itemstack);
+            ItemStack itemstack2 = (ItemStack) this.items.get(2);
 
-            if (this.items[2] == null) {
-                this.items[2] = itemstack.cloneItemStack();
-            } else if (this.items[2].getItem() == itemstack.getItem()) {
-                ++this.items[2].count;
+            if (itemstack2.isEmpty()) {
+                this.items.set(2, itemstack1.cloneItemStack());
+            } else if (itemstack2.getItem() == itemstack1.getItem()) {
+                itemstack2.add(1);
             }
 
-            if (this.items[0].getItem() == Item.getItemOf(Blocks.SPONGE) && this.items[0].getData() == 1 && this.items[1] != null && this.items[1].getItem() == Items.BUCKET) {
-                this.items[1] = new ItemStack(Items.WATER_BUCKET);
+            if (itemstack.getItem() == Item.getItemOf(Blocks.SPONGE) && itemstack.getData() == 1 && !((ItemStack) this.items.get(1)).isEmpty() && ((ItemStack) this.items.get(1)).getItem() == Items.BUCKET) {
+                this.items.set(1, new ItemStack(Items.WATER_BUCKET));
             }
 
-            --this.items[0].count;
-            if (this.items[0].count <= 0) {
-                this.items[0] = null;
-            }
-
+            itemstack.subtract(1);
         }
     }
 
     public static int fuelTime(ItemStack itemstack) {
-        if (itemstack == null) {
+        if (itemstack.isEmpty()) {
             return 0;
         } else {
             Item item = itemstack.getItem();
 
-            if (item instanceof ItemBlock && Block.asBlock(item) != Blocks.AIR) {
-                Block block = Block.asBlock(item);
-
-                if (block == Blocks.WOODEN_SLAB) {
-                    return 150;
-                }
-
-                if (block.getBlockData().getMaterial() == Material.WOOD) {
-                    return 300;
-                }
-
-                if (block == Blocks.COAL_BLOCK) {
-                    return 16000;
-                }
-            }
-
-            return item instanceof ItemTool && "WOOD".equals(((ItemTool) item).h()) ? 200 : (item instanceof ItemSword && "WOOD".equals(((ItemSword) item).h()) ? 200 : (item instanceof ItemHoe && "WOOD".equals(((ItemHoe) item).g()) ? 200 : (item == Items.STICK ? 100 : (item == Items.COAL ? 1600 : (item == Items.LAVA_BUCKET ? 20000 : (item == Item.getItemOf(Blocks.SAPLING) ? 100 : (item == Items.BLAZE_ROD ? 2400 : 0)))))));
+            return item == Item.getItemOf(Blocks.WOODEN_SLAB) ? 150 : (item == Item.getItemOf(Blocks.WOOL) ? 100 : (item == Item.getItemOf(Blocks.CARPET) ? 67 : (item == Item.getItemOf(Blocks.LADDER) ? 300 : (item == Item.getItemOf(Blocks.WOODEN_BUTTON) ? 100 : (Block.asBlock(item).getBlockData().getMaterial() == Material.WOOD ? 300 : (item == Item.getItemOf(Blocks.COAL_BLOCK) ? 16000 : (item instanceof ItemTool && "WOOD".equals(((ItemTool) item).h()) ? 200 : (item instanceof ItemSword && "WOOD".equals(((ItemSword) item).h()) ? 200 : (item instanceof ItemHoe && "WOOD".equals(((ItemHoe) item).g()) ? 200 : (item == Items.STICK ? 100 : (item != Items.BOW && item != Items.FISHING_ROD ? (item == Items.SIGN ? 200 : (item == Items.COAL ? 1600 : (item == Items.LAVA_BUCKET ? 20000 : (item != Item.getItemOf(Blocks.SAPLING) && item != Items.BOWL ? (item == Items.BLAZE_ROD ? 2400 : (item instanceof ItemDoor && item != Items.IRON_DOOR ? 200 : (item instanceof ItemBoat ? 400 : 0))) : 100)))) : 300)))))))))));
         }
     }
 
@@ -247,7 +232,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getTileEntity(this.position) != this ? false : entityhuman.e((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
+        return this.world.getTileEntity(this.position) != this ? false : entityhuman.d((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
     public void startOpen(EntityHuman entityhuman) {}
@@ -260,9 +245,9 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
         } else if (i != 1) {
             return true;
         } else {
-            ItemStack itemstack1 = this.items[1];
+            ItemStack itemstack1 = (ItemStack) this.items.get(1);
 
-            return isFuel(itemstack) || SlotFurnaceFuel.d_(itemstack) && (itemstack1 == null || itemstack1.getItem() != Items.BUCKET);
+            return isFuel(itemstack) || SlotFurnaceFuel.d_(itemstack) && itemstack1.getItem() != Items.BUCKET;
         }
     }
 
@@ -333,14 +318,11 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
 
     }
 
-    public int g() {
+    public int h() {
         return 4;
     }
 
-    public void l() {
-        for (int i = 0; i < this.items.length; ++i) {
-            this.items[i] = null;
-        }
-
+    public void clear() {
+        this.items.clear();
     }
 }

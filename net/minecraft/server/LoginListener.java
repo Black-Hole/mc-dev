@@ -8,11 +8,15 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.security.PrivateKey;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.annotation.Nullable;
 import javax.crypto.SecretKey;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
@@ -41,7 +45,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
         LoginListener.random.nextBytes(this.e);
     }
 
-    public void E_() {
+    public void F_() {
         if (this.g == LoginListener.EnumProtocolState.READY_TO_ACCEPT) {
             this.b();
         } else if (this.g == LoginListener.EnumProtocolState.DELAY_ACCEPT) {
@@ -84,10 +88,10 @@ public class LoginListener implements PacketLoginInListener, ITickable {
             this.disconnect(s);
         } else {
             this.g = LoginListener.EnumProtocolState.ACCEPTED;
-            if (this.server.aF() >= 0 && !this.networkManager.isLocal()) {
-                this.networkManager.sendPacket(new PacketLoginOutSetCompression(this.server.aF()), new ChannelFutureListener() {
+            if (this.server.aG() >= 0 && !this.networkManager.isLocal()) {
+                this.networkManager.sendPacket(new PacketLoginOutSetCompression(this.server.aG()), new ChannelFutureListener() {
                     public void a(ChannelFuture channelfuture) throws Exception {
-                        LoginListener.this.networkManager.setCompressionLevel(LoginListener.this.server.aF());
+                        LoginListener.this.networkManager.setCompressionLevel(LoginListener.this.server.aG());
                     }
 
                     public void operationComplete(Future future) throws Exception {
@@ -146,7 +150,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
                     try {
                         String s = (new BigInteger(MinecraftEncryption.a("", LoginListener.this.server.O().getPublic(), LoginListener.this.loginKey))).toString(16);
 
-                        LoginListener.this.i = LoginListener.this.server.ay().hasJoinedServer(new GameProfile((UUID) null, gameprofile.getName()), s);
+                        LoginListener.this.i = LoginListener.this.server.az().hasJoinedServer(new GameProfile((UUID) null, gameprofile.getName()), s, this.a());
                         if (LoginListener.this.i != null) {
                             LoginListener.c.info("UUID of player {} is {}", new Object[] { LoginListener.this.i.getName(), LoginListener.this.i.getId()});
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
@@ -169,6 +173,13 @@ public class LoginListener implements PacketLoginInListener, ITickable {
                         }
                     }
 
+                }
+
+                @Nullable
+                private InetAddress a() {
+                    SocketAddress socketaddress = LoginListener.this.networkManager.getSocketAddress();
+
+                    return LoginListener.this.server.ac() && socketaddress instanceof InetSocketAddress ? ((InetSocketAddress) socketaddress).getAddress() : null;
                 }
             }).start();
         }

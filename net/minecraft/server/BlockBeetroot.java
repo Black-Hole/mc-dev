@@ -42,7 +42,7 @@ public class BlockBeetroot extends BlockCrops {
         return new BlockStateList(this, new IBlockState[] { BlockBeetroot.a});
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockBeetroot.d[((Integer) iblockdata.get(this.e())).intValue()];
     }
 }

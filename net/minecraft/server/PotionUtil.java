@@ -57,6 +57,16 @@ public class PotionUtil {
 
     }
 
+    public static int c(ItemStack itemstack) {
+        NBTTagCompound nbttagcompound = itemstack.getTag();
+
+        return nbttagcompound != null && nbttagcompound.hasKeyOfType("CustomPotionColor", 99) ? nbttagcompound.getInt("CustomPotionColor") : (d(itemstack) == Potions.EMPTY ? 16253176 : a((Collection) getEffects(itemstack)));
+    }
+
+    public static int a(PotionRegistry potionregistry) {
+        return potionregistry == Potions.EMPTY ? 16253176 : a((Collection) potionregistry.a());
+    }
+
     public static int a(Collection<MobEffect> collection) {
         int i = 3694022;
 
@@ -94,20 +104,28 @@ public class PotionUtil {
         }
     }
 
-    public static PotionRegistry c(ItemStack itemstack) {
+    public static PotionRegistry d(ItemStack itemstack) {
         return c(itemstack.getTag());
     }
 
     public static PotionRegistry c(@Nullable NBTTagCompound nbttagcompound) {
-        return nbttagcompound == null ? Potions.b : PotionRegistry.a(nbttagcompound.getString("Potion"));
+        return nbttagcompound == null ? Potions.EMPTY : PotionRegistry.a(nbttagcompound.getString("Potion"));
     }
 
     public static ItemStack a(ItemStack itemstack, PotionRegistry potionregistry) {
         MinecraftKey minecraftkey = (MinecraftKey) PotionRegistry.a.b(potionregistry);
+        NBTTagCompound nbttagcompound;
 
-        if (minecraftkey != null) {
-            NBTTagCompound nbttagcompound = itemstack.hasTag() ? itemstack.getTag() : new NBTTagCompound();
-
+        if (potionregistry == Potions.EMPTY) {
+            if (itemstack.hasTag()) {
+                nbttagcompound = itemstack.getTag();
+                nbttagcompound.remove("Potion");
+                if (nbttagcompound.isEmpty()) {
+                    itemstack.setTag((NBTTagCompound) null);
+                }
+            }
+        } else {
+            nbttagcompound = itemstack.hasTag() ? itemstack.getTag() : new NBTTagCompound();
             nbttagcompound.setString("Potion", minecraftkey.toString());
             itemstack.setTag(nbttagcompound);
         }

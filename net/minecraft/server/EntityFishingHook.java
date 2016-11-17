@@ -5,399 +5,383 @@ import java.util.List;
 
 public class EntityFishingHook extends Entity {
 
-    private static final DataWatcherObject<Integer> c = DataWatcher.a(EntityFishingHook.class, DataWatcherRegistry.b);
-    private BlockPosition d = new BlockPosition(-1, -1, -1);
-    private Block e;
+    private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityFishingHook.class, DataWatcherRegistry.b);
     private boolean isInGround;
+    private int d = 0;
     public EntityHuman owner;
+    private int f;
     private int g;
     private int h;
-    private int au;
-    private int av;
-    private int aw;
-    private float ax;
-    private int ay;
-    private double az;
-    private double aA;
-    private double aB;
-    private double aC;
-    private double aD;
+    private int at;
+    private float au;
     public Entity hooked;
-
-    public EntityFishingHook(World world) {
-        super(world);
-        this.setSize(0.25F, 0.25F);
-        this.ai = true;
-    }
+    private EntityFishingHook.HookState av;
 
     public EntityFishingHook(World world, EntityHuman entityhuman) {
         super(world);
-        this.ai = true;
+        this.av = EntityFishingHook.HookState.FLYING;
+        this.a(entityhuman);
+        this.n();
+    }
+
+    private void a(EntityHuman entityhuman) {
+        this.setSize(0.25F, 0.25F);
+        this.ah = true;
         this.owner = entityhuman;
         this.owner.hookedFish = this;
-        this.setSize(0.25F, 0.25F);
-        this.setPositionRotation(entityhuman.locX, entityhuman.locY + (double) entityhuman.getHeadHeight(), entityhuman.locZ, entityhuman.yaw, entityhuman.pitch);
-        this.locX -= (double) (MathHelper.cos(this.yaw * 0.017453292F) * 0.16F);
-        this.locY -= 0.10000000149011612D;
-        this.locZ -= (double) (MathHelper.sin(this.yaw * 0.017453292F) * 0.16F);
-        this.setPosition(this.locX, this.locY, this.locZ);
-        float f = 0.4F;
+    }
 
-        this.motX = (double) (-MathHelper.sin(this.yaw * 0.017453292F) * MathHelper.cos(this.pitch * 0.017453292F) * 0.4F);
-        this.motZ = (double) (MathHelper.cos(this.yaw * 0.017453292F) * MathHelper.cos(this.pitch * 0.017453292F) * 0.4F);
-        this.motY = (double) (-MathHelper.sin(this.pitch * 0.017453292F) * 0.4F);
-        this.c(this.motX, this.motY, this.motZ, 1.5F, 1.0F);
+    private void n() {
+        float f = this.owner.lastPitch + (this.owner.pitch - this.owner.lastPitch);
+        float f1 = this.owner.lastYaw + (this.owner.yaw - this.owner.lastYaw);
+        float f2 = MathHelper.cos(-f1 * 0.017453292F - 3.1415927F);
+        float f3 = MathHelper.sin(-f1 * 0.017453292F - 3.1415927F);
+        float f4 = -MathHelper.cos(-f * 0.017453292F);
+        float f5 = MathHelper.sin(-f * 0.017453292F);
+        double d0 = this.owner.lastX + (this.owner.locX - this.owner.lastX) - (double) f3 * 0.3D;
+        double d1 = this.owner.lastY + (this.owner.locY - this.owner.lastY) + (double) this.owner.getHeadHeight();
+        double d2 = this.owner.lastZ + (this.owner.locZ - this.owner.lastZ) - (double) f2 * 0.3D;
+
+        this.setPositionRotation(d0, d1, d2, f1, f);
+        this.motX = (double) (-f3);
+        this.motY = (double) MathHelper.a(-(f5 / f4), -5.0F, 5.0F);
+        this.motZ = (double) (-f2);
+        float f6 = MathHelper.sqrt(this.motX * this.motX + this.motY * this.motY + this.motZ * this.motZ);
+
+        this.motX *= 0.6D / (double) f6 + 0.5D + this.random.nextGaussian() * 0.0045D;
+        this.motY *= 0.6D / (double) f6 + 0.5D + this.random.nextGaussian() * 0.0045D;
+        this.motZ *= 0.6D / (double) f6 + 0.5D + this.random.nextGaussian() * 0.0045D;
+        float f7 = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
+
+        this.yaw = (float) (MathHelper.c(this.motX, this.motZ) * 57.2957763671875D);
+        this.pitch = (float) (MathHelper.c(this.motY, (double) f7) * 57.2957763671875D);
+        this.lastYaw = this.yaw;
+        this.lastPitch = this.pitch;
     }
 
     protected void i() {
-        this.getDataWatcher().register(EntityFishingHook.c, Integer.valueOf(0));
+        this.getDataWatcher().register(EntityFishingHook.b, Integer.valueOf(0));
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityFishingHook.c.equals(datawatcherobject)) {
-            int i = ((Integer) this.getDataWatcher().get(EntityFishingHook.c)).intValue();
+        if (EntityFishingHook.b.equals(datawatcherobject)) {
+            int i = ((Integer) this.getDataWatcher().get(EntityFishingHook.b)).intValue();
 
-            if (i > 0 && this.hooked != null) {
-                this.hooked = null;
-            }
+            this.hooked = i > 0 ? this.world.getEntity(i - 1) : null;
         }
 
         super.a(datawatcherobject);
     }
 
-    public void c(double d0, double d1, double d2, float f, float f1) {
-        float f2 = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-
-        d0 /= (double) f2;
-        d1 /= (double) f2;
-        d2 /= (double) f2;
-        d0 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
-        d1 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
-        d2 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
-        d0 *= (double) f;
-        d1 *= (double) f;
-        d2 *= (double) f;
-        this.motX = d0;
-        this.motY = d1;
-        this.motZ = d2;
-        float f3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
-
-        this.yaw = (float) (MathHelper.b(d0, d2) * 57.2957763671875D);
-        this.pitch = (float) (MathHelper.b(d1, (double) f3) * 57.2957763671875D);
-        this.lastYaw = this.yaw;
-        this.lastPitch = this.pitch;
-        this.g = 0;
-    }
-
-    public void m() {
-        super.m();
-        if (this.world.isClientSide) {
-            int i = ((Integer) this.getDataWatcher().get(EntityFishingHook.c)).intValue();
-
-            if (i > 0 && this.hooked == null) {
-                this.hooked = this.world.getEntity(i - 1);
-            }
-        } else {
-            ItemStack itemstack = this.owner.getItemInMainHand();
-
-            if (this.owner.dead || !this.owner.isAlive() || itemstack == null || itemstack.getItem() != Items.FISHING_ROD || this.h(this.owner) > 1024.0D) {
-                this.die();
-                this.owner.hookedFish = null;
-                return;
-            }
-        }
-
-        if (this.hooked != null) {
-            if (!this.hooked.dead) {
-                this.locX = this.hooked.locX;
-                double d0 = (double) this.hooked.length;
-
-                this.locY = this.hooked.getBoundingBox().b + d0 * 0.8D;
-                this.locZ = this.hooked.locZ;
-                return;
-            }
-
-            this.hooked = null;
-        }
-
-        if (this.ay > 0) {
-            double d1 = this.locX + (this.az - this.locX) / (double) this.ay;
-            double d2 = this.locY + (this.aA - this.locY) / (double) this.ay;
-            double d3 = this.locZ + (this.aB - this.locZ) / (double) this.ay;
-            double d4 = MathHelper.g(this.aC - (double) this.yaw);
-
-            this.yaw = (float) ((double) this.yaw + d4 / (double) this.ay);
-            this.pitch = (float) ((double) this.pitch + (this.aD - (double) this.pitch) / (double) this.ay);
-            --this.ay;
-            this.setPosition(d1, d2, d3);
-            this.setYawPitch(this.yaw, this.pitch);
-        } else {
+    public void A_() {
+        super.A_();
+        if (this.owner == null) {
+            this.die();
+        } else if (this.world.isClientSide || !this.o()) {
             if (this.isInGround) {
-                if (this.world.getType(this.d).getBlock() == this.e) {
-                    ++this.g;
-                    if (this.g == 1200) {
-                        this.die();
+                ++this.d;
+                if (this.d >= 1200) {
+                    this.die();
+                    return;
+                }
+            }
+
+            float f = 0.0F;
+            BlockPosition blockposition = new BlockPosition(this);
+            IBlockData iblockdata = this.world.getType(blockposition);
+
+            if (iblockdata.getMaterial() == Material.WATER) {
+                f = BlockFluids.f(iblockdata, this.world, blockposition);
+            }
+
+            double d0;
+
+            if (this.av == EntityFishingHook.HookState.FLYING) {
+                if (this.hooked != null) {
+                    this.motX = 0.0D;
+                    this.motY = 0.0D;
+                    this.motZ = 0.0D;
+                    this.av = EntityFishingHook.HookState.HOOKED_IN_ENTITY;
+                    return;
+                }
+
+                if (f > 0.0F) {
+                    this.motX *= 0.3D;
+                    this.motY *= 0.2D;
+                    this.motZ *= 0.3D;
+                    this.av = EntityFishingHook.HookState.BOBBING;
+                    return;
+                }
+
+                if (!this.world.isClientSide) {
+                    this.r();
+                }
+
+                if (!this.isInGround && !this.onGround && !this.positionChanged) {
+                    ++this.f;
+                } else {
+                    this.f = 0;
+                    this.motX = 0.0D;
+                    this.motY = 0.0D;
+                    this.motZ = 0.0D;
+                }
+            } else {
+                if (this.av == EntityFishingHook.HookState.HOOKED_IN_ENTITY) {
+                    if (this.hooked != null) {
+                        if (this.hooked.dead) {
+                            this.hooked = null;
+                            this.av = EntityFishingHook.HookState.FLYING;
+                        } else {
+                            this.locX = this.hooked.locX;
+                            double d1 = (double) this.hooked.length;
+
+                            this.locY = this.hooked.getBoundingBox().b + d1 * 0.8D;
+                            this.locZ = this.hooked.locZ;
+                            this.setPosition(this.locX, this.locY, this.locZ);
+                        }
                     }
 
                     return;
                 }
 
-                this.isInGround = false;
-                this.motX *= (double) (this.random.nextFloat() * 0.2F);
-                this.motY *= (double) (this.random.nextFloat() * 0.2F);
-                this.motZ *= (double) (this.random.nextFloat() * 0.2F);
-                this.g = 0;
-                this.h = 0;
-            } else {
-                ++this.h;
-            }
-
-            double d5;
-            double d6;
-
-            if (!this.world.isClientSide) {
-                Vec3D vec3d = new Vec3D(this.locX, this.locY, this.locZ);
-                Vec3D vec3d1 = new Vec3D(this.locX + this.motX, this.locY + this.motY, this.locZ + this.motZ);
-                MovingObjectPosition movingobjectposition = this.world.rayTrace(vec3d, vec3d1);
-
-                vec3d = new Vec3D(this.locX, this.locY, this.locZ);
-                vec3d1 = new Vec3D(this.locX + this.motX, this.locY + this.motY, this.locZ + this.motZ);
-                if (movingobjectposition != null) {
-                    vec3d1 = new Vec3D(movingobjectposition.pos.x, movingobjectposition.pos.y, movingobjectposition.pos.z);
-                }
-
-                Entity entity = null;
-                List list = this.world.getEntities(this, this.getBoundingBox().a(this.motX, this.motY, this.motZ).g(1.0D));
-
-                d5 = 0.0D;
-
-                for (int j = 0; j < list.size(); ++j) {
-                    Entity entity1 = (Entity) list.get(j);
-
-                    if (this.a(entity1) && (entity1 != this.owner || this.h >= 5)) {
-                        AxisAlignedBB axisalignedbb = entity1.getBoundingBox().g(0.30000001192092896D);
-                        MovingObjectPosition movingobjectposition1 = axisalignedbb.b(vec3d, vec3d1);
-
-                        if (movingobjectposition1 != null) {
-                            d6 = vec3d.distanceSquared(movingobjectposition1.pos);
-                            if (d6 < d5 || d5 == 0.0D) {
-                                entity = entity1;
-                                d5 = d6;
-                            }
-                        }
+                if (this.av == EntityFishingHook.HookState.BOBBING) {
+                    this.motX *= 0.9D;
+                    this.motZ *= 0.9D;
+                    d0 = this.locY + this.motY - (double) blockposition.getY() - (double) f;
+                    if (Math.abs(d0) < 0.01D) {
+                        d0 += Math.signum(d0) * 0.1D;
                     }
-                }
 
-                if (entity != null) {
-                    movingobjectposition = new MovingObjectPosition(entity);
-                }
-
-                if (movingobjectposition != null) {
-                    if (movingobjectposition.entity != null) {
-                        this.hooked = movingobjectposition.entity;
-                        this.getDataWatcher().set(EntityFishingHook.c, Integer.valueOf(this.hooked.getId() + 1));
-                    } else {
-                        this.isInGround = true;
+                    this.motY -= d0 * (double) this.random.nextFloat() * 0.2D;
+                    if (!this.world.isClientSide && f > 0.0F) {
+                        this.a(blockposition);
                     }
                 }
             }
 
-            if (!this.isInGround) {
-                this.move(this.motX, this.motY, this.motZ);
-                float f = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
+            if (iblockdata.getMaterial() != Material.WATER) {
+                this.motY -= 0.03D;
+            }
 
-                this.yaw = (float) (MathHelper.b(this.motX, this.motZ) * 57.2957763671875D);
+            this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
+            this.q();
+            d0 = 0.92D;
+            this.motX *= 0.92D;
+            this.motY *= 0.92D;
+            this.motZ *= 0.92D;
+            this.setPosition(this.locX, this.locY, this.locZ);
+        }
+    }
 
-                for (this.pitch = (float) (MathHelper.b(this.motY, (double) f) * 57.2957763671875D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
-                    ;
-                }
+    private boolean o() {
+        ItemStack itemstack = this.owner.getItemInMainHand();
+        ItemStack itemstack1 = this.owner.getItemInOffHand();
+        boolean flag = itemstack.getItem() == Items.FISHING_ROD;
+        boolean flag1 = itemstack1.getItem() == Items.FISHING_ROD;
 
-                while (this.pitch - this.lastPitch >= 180.0F) {
-                    this.lastPitch += 360.0F;
-                }
+        if (!this.owner.dead && this.owner.isAlive() && (flag || flag1) && this.h(this.owner) <= 1024.0D) {
+            return false;
+        } else {
+            this.die();
+            return true;
+        }
+    }
 
-                while (this.yaw - this.lastYaw < -180.0F) {
-                    this.lastYaw -= 360.0F;
-                }
+    private void q() {
+        float f = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
 
-                while (this.yaw - this.lastYaw >= 180.0F) {
-                    this.lastYaw += 360.0F;
-                }
+        this.yaw = (float) (MathHelper.c(this.motX, this.motZ) * 57.2957763671875D);
 
-                this.pitch = this.lastPitch + (this.pitch - this.lastPitch) * 0.2F;
-                this.yaw = this.lastYaw + (this.yaw - this.lastYaw) * 0.2F;
-                float f1 = 0.92F;
+        for (this.pitch = (float) (MathHelper.c(this.motY, (double) f) * 57.2957763671875D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
+            ;
+        }
 
-                if (this.onGround || this.positionChanged) {
-                    f1 = 0.5F;
-                }
+        while (this.pitch - this.lastPitch >= 180.0F) {
+            this.lastPitch += 360.0F;
+        }
 
-                boolean flag = true;
-                double d7 = 0.0D;
+        while (this.yaw - this.lastYaw < -180.0F) {
+            this.lastYaw -= 360.0F;
+        }
 
-                for (int k = 0; k < 5; ++k) {
-                    AxisAlignedBB axisalignedbb1 = this.getBoundingBox();
-                    double d8 = axisalignedbb1.e - axisalignedbb1.b;
-                    double d9 = axisalignedbb1.b + d8 * (double) k / 5.0D;
+        while (this.yaw - this.lastYaw >= 180.0F) {
+            this.lastYaw += 360.0F;
+        }
 
-                    d6 = axisalignedbb1.b + d8 * (double) (k + 1) / 5.0D;
-                    AxisAlignedBB axisalignedbb2 = new AxisAlignedBB(axisalignedbb1.a, d9, axisalignedbb1.c, axisalignedbb1.d, d6, axisalignedbb1.f);
+        this.pitch = this.lastPitch + (this.pitch - this.lastPitch) * 0.2F;
+        this.yaw = this.lastYaw + (this.yaw - this.lastYaw) * 0.2F;
+    }
 
-                    if (this.world.b(axisalignedbb2, Material.WATER)) {
-                        d7 += 0.2D;
+    private void r() {
+        Vec3D vec3d = new Vec3D(this.locX, this.locY, this.locZ);
+        Vec3D vec3d1 = new Vec3D(this.locX + this.motX, this.locY + this.motY, this.locZ + this.motZ);
+        MovingObjectPosition movingobjectposition = this.world.rayTrace(vec3d, vec3d1, false, true, false);
+
+        vec3d = new Vec3D(this.locX, this.locY, this.locZ);
+        vec3d1 = new Vec3D(this.locX + this.motX, this.locY + this.motY, this.locZ + this.motZ);
+        if (movingobjectposition != null) {
+            vec3d1 = new Vec3D(movingobjectposition.pos.x, movingobjectposition.pos.y, movingobjectposition.pos.z);
+        }
+
+        Entity entity = null;
+        List list = this.world.getEntities(this, this.getBoundingBox().b(this.motX, this.motY, this.motZ).g(1.0D));
+        double d0 = 0.0D;
+        Iterator iterator = list.iterator();
+
+        while (iterator.hasNext()) {
+            Entity entity1 = (Entity) iterator.next();
+
+            if (this.a(entity1) && (entity1 != this.owner || this.f >= 5)) {
+                AxisAlignedBB axisalignedbb = entity1.getBoundingBox().g(0.30000001192092896D);
+                MovingObjectPosition movingobjectposition1 = axisalignedbb.b(vec3d, vec3d1);
+
+                if (movingobjectposition1 != null) {
+                    double d1 = vec3d.distanceSquared(movingobjectposition1.pos);
+
+                    if (d1 < d0 || d0 == 0.0D) {
+                        entity = entity1;
+                        d0 = d1;
                     }
                 }
-
-                if (!this.world.isClientSide && d7 > 0.0D) {
-                    WorldServer worldserver = (WorldServer) this.world;
-                    int l = 1;
-                    BlockPosition blockposition = (new BlockPosition(this)).up();
-
-                    if (this.random.nextFloat() < 0.25F && this.world.isRainingAt(blockposition)) {
-                        l = 2;
-                    }
-
-                    if (this.random.nextFloat() < 0.5F && !this.world.h(blockposition)) {
-                        --l;
-                    }
-
-                    if (this.au > 0) {
-                        --this.au;
-                        if (this.au <= 0) {
-                            this.av = 0;
-                            this.aw = 0;
-                        }
-                    } else {
-                        double d10;
-                        Block block;
-                        float f2;
-                        float f3;
-                        float f4;
-                        double d11;
-
-                        if (this.aw > 0) {
-                            this.aw -= l;
-                            if (this.aw <= 0) {
-                                this.motY -= 0.20000000298023224D;
-                                this.a(SoundEffects.G, 0.25F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
-                                f2 = (float) MathHelper.floor(this.getBoundingBox().b);
-                                worldserver.a(EnumParticle.WATER_BUBBLE, this.locX, (double) (f2 + 1.0F), this.locZ, (int) (1.0F + this.width * 20.0F), (double) this.width, 0.0D, (double) this.width, 0.20000000298023224D, new int[0]);
-                                worldserver.a(EnumParticle.WATER_WAKE, this.locX, (double) (f2 + 1.0F), this.locZ, (int) (1.0F + this.width * 20.0F), (double) this.width, 0.0D, (double) this.width, 0.20000000298023224D, new int[0]);
-                                this.au = MathHelper.nextInt(this.random, 10, 30);
-                            } else {
-                                this.ax = (float) ((double) this.ax + this.random.nextGaussian() * 4.0D);
-                                f2 = this.ax * 0.017453292F;
-                                f3 = MathHelper.sin(f2);
-                                f4 = MathHelper.cos(f2);
-                                d6 = this.locX + (double) (f3 * (float) this.aw * 0.1F);
-                                d11 = (double) ((float) MathHelper.floor(this.getBoundingBox().b) + 1.0F);
-                                d10 = this.locZ + (double) (f4 * (float) this.aw * 0.1F);
-                                block = worldserver.getType(new BlockPosition((int) d6, (int) d11 - 1, (int) d10)).getBlock();
-                                if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
-                                    if (this.random.nextFloat() < 0.15F) {
-                                        worldserver.a(EnumParticle.WATER_BUBBLE, d6, d11 - 0.10000000149011612D, d10, 1, (double) f3, 0.1D, (double) f4, 0.0D, new int[0]);
-                                    }
-
-                                    float f5 = f3 * 0.04F;
-                                    float f6 = f4 * 0.04F;
-
-                                    worldserver.a(EnumParticle.WATER_WAKE, d6, d11, d10, 0, (double) f6, 0.01D, (double) (-f5), 1.0D, new int[0]);
-                                    worldserver.a(EnumParticle.WATER_WAKE, d6, d11, d10, 0, (double) (-f6), 0.01D, (double) f5, 1.0D, new int[0]);
-                                }
-                            }
-                        } else if (this.av > 0) {
-                            this.av -= l;
-                            f2 = 0.15F;
-                            if (this.av < 20) {
-                                f2 = (float) ((double) f2 + (double) (20 - this.av) * 0.05D);
-                            } else if (this.av < 40) {
-                                f2 = (float) ((double) f2 + (double) (40 - this.av) * 0.02D);
-                            } else if (this.av < 60) {
-                                f2 = (float) ((double) f2 + (double) (60 - this.av) * 0.01D);
-                            }
-
-                            if (this.random.nextFloat() < f2) {
-                                f3 = MathHelper.a(this.random, 0.0F, 360.0F) * 0.017453292F;
-                                f4 = MathHelper.a(this.random, 25.0F, 60.0F);
-                                d6 = this.locX + (double) (MathHelper.sin(f3) * f4 * 0.1F);
-                                d11 = (double) ((float) MathHelper.floor(this.getBoundingBox().b) + 1.0F);
-                                d10 = this.locZ + (double) (MathHelper.cos(f3) * f4 * 0.1F);
-                                block = worldserver.getType(new BlockPosition((int) d6, (int) d11 - 1, (int) d10)).getBlock();
-                                if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
-                                    worldserver.a(EnumParticle.WATER_SPLASH, d6, d11, d10, 2 + this.random.nextInt(2), 0.10000000149011612D, 0.0D, 0.10000000149011612D, 0.0D, new int[0]);
-                                }
-                            }
-
-                            if (this.av <= 0) {
-                                this.ax = MathHelper.a(this.random, 0.0F, 360.0F);
-                                this.aw = MathHelper.nextInt(this.random, 20, 80);
-                            }
-                        } else {
-                            this.av = MathHelper.nextInt(this.random, 100, 900);
-                            this.av -= EnchantmentManager.g(this.owner) * 20 * 5;
-                        }
-                    }
-
-                    if (this.au > 0) {
-                        this.motY -= (double) (this.random.nextFloat() * this.random.nextFloat() * this.random.nextFloat()) * 0.2D;
-                    }
-                }
-
-                d5 = d7 * 2.0D - 1.0D;
-                this.motY += 0.03999999910593033D * d5;
-                if (d7 > 0.0D) {
-                    f1 = (float) ((double) f1 * 0.9D);
-                    this.motY *= 0.8D;
-                }
-
-                this.motX *= (double) f1;
-                this.motY *= (double) f1;
-                this.motZ *= (double) f1;
-                this.setPosition(this.locX, this.locY, this.locZ);
             }
         }
+
+        if (entity != null) {
+            movingobjectposition = new MovingObjectPosition(entity);
+        }
+
+        if (movingobjectposition != null && movingobjectposition.type != MovingObjectPosition.EnumMovingObjectType.MISS) {
+            if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
+                this.hooked = movingobjectposition.entity;
+                this.s();
+            } else {
+                this.isInGround = true;
+            }
+        }
+
+    }
+
+    private void s() {
+        this.getDataWatcher().set(EntityFishingHook.b, Integer.valueOf(this.hooked.getId() + 1));
+    }
+
+    private void a(BlockPosition blockposition) {
+        WorldServer worldserver = (WorldServer) this.world;
+        int i = 1;
+        BlockPosition blockposition1 = blockposition.up();
+
+        if (this.random.nextFloat() < 0.25F && this.world.isRainingAt(blockposition1)) {
+            ++i;
+        }
+
+        if (this.random.nextFloat() < 0.5F && !this.world.h(blockposition1)) {
+            --i;
+        }
+
+        if (this.g > 0) {
+            --this.g;
+            if (this.g <= 0) {
+                this.h = 0;
+                this.at = 0;
+            } else {
+                this.motY -= 0.2D * (double) this.random.nextFloat() * (double) this.random.nextFloat();
+            }
+        } else {
+            float f;
+            float f1;
+            float f2;
+            double d0;
+            double d1;
+            double d2;
+            Block block;
+
+            if (this.at > 0) {
+                this.at -= i;
+                if (this.at > 0) {
+                    this.au = (float) ((double) this.au + this.random.nextGaussian() * 4.0D);
+                    f = this.au * 0.017453292F;
+                    f1 = MathHelper.sin(f);
+                    f2 = MathHelper.cos(f);
+                    d0 = this.locX + (double) (f1 * (float) this.at * 0.1F);
+                    d1 = (double) ((float) MathHelper.floor(this.getBoundingBox().b) + 1.0F);
+                    d2 = this.locZ + (double) (f2 * (float) this.at * 0.1F);
+                    block = worldserver.getType(new BlockPosition(d0, d1 - 1.0D, d2)).getBlock();
+                    if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
+                        if (this.random.nextFloat() < 0.15F) {
+                            worldserver.a(EnumParticle.WATER_BUBBLE, d0, d1 - 0.10000000149011612D, d2, 1, (double) f1, 0.1D, (double) f2, 0.0D, new int[0]);
+                        }
+
+                        float f3 = f1 * 0.04F;
+                        float f4 = f2 * 0.04F;
+
+                        worldserver.a(EnumParticle.WATER_WAKE, d0, d1, d2, 0, (double) f4, 0.01D, (double) (-f3), 1.0D, new int[0]);
+                        worldserver.a(EnumParticle.WATER_WAKE, d0, d1, d2, 0, (double) (-f4), 0.01D, (double) f3, 1.0D, new int[0]);
+                    }
+                } else {
+                    this.motY = (double) (-0.4F * MathHelper.a(this.random, 0.6F, 1.0F));
+                    this.a(SoundEffects.H, 0.25F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+                    double d3 = this.getBoundingBox().b + 0.5D;
+
+                    worldserver.a(EnumParticle.WATER_BUBBLE, this.locX, d3, this.locZ, (int) (1.0F + this.width * 20.0F), (double) this.width, 0.0D, (double) this.width, 0.20000000298023224D, new int[0]);
+                    worldserver.a(EnumParticle.WATER_WAKE, this.locX, d3, this.locZ, (int) (1.0F + this.width * 20.0F), (double) this.width, 0.0D, (double) this.width, 0.20000000298023224D, new int[0]);
+                    this.g = MathHelper.nextInt(this.random, 20, 40);
+                }
+            } else if (this.h > 0) {
+                this.h -= i;
+                f = 0.15F;
+                if (this.h < 20) {
+                    f = (float) ((double) f + (double) (20 - this.h) * 0.05D);
+                } else if (this.h < 40) {
+                    f = (float) ((double) f + (double) (40 - this.h) * 0.02D);
+                } else if (this.h < 60) {
+                    f = (float) ((double) f + (double) (60 - this.h) * 0.01D);
+                }
+
+                if (this.random.nextFloat() < f) {
+                    f1 = MathHelper.a(this.random, 0.0F, 360.0F) * 0.017453292F;
+                    f2 = MathHelper.a(this.random, 25.0F, 60.0F);
+                    d0 = this.locX + (double) (MathHelper.sin(f1) * f2 * 0.1F);
+                    d1 = (double) ((float) MathHelper.floor(this.getBoundingBox().b) + 1.0F);
+                    d2 = this.locZ + (double) (MathHelper.cos(f1) * f2 * 0.1F);
+                    block = worldserver.getType(new BlockPosition((int) d0, (int) d1 - 1, (int) d2)).getBlock();
+                    if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
+                        worldserver.a(EnumParticle.WATER_SPLASH, d0, d1, d2, 2 + this.random.nextInt(2), 0.10000000149011612D, 0.0D, 0.10000000149011612D, 0.0D, new int[0]);
+                    }
+                }
+
+                if (this.h <= 0) {
+                    this.au = MathHelper.a(this.random, 0.0F, 360.0F);
+                    this.at = MathHelper.nextInt(this.random, 20, 80);
+                }
+            } else {
+                this.h = MathHelper.nextInt(this.random, 100, 600);
+                this.h -= EnchantmentManager.g(this.owner) * 20 * 5;
+            }
+        }
+
     }
 
     protected boolean a(Entity entity) {
         return entity.isInteractable() || entity instanceof EntityItem;
     }
 
-    public void b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setInt("xTile", this.d.getX());
-        nbttagcompound.setInt("yTile", this.d.getY());
-        nbttagcompound.setInt("zTile", this.d.getZ());
-        MinecraftKey minecraftkey = (MinecraftKey) Block.REGISTRY.b(this.e);
+    public void b(NBTTagCompound nbttagcompound) {}
 
-        nbttagcompound.setString("inTile", minecraftkey == null ? "" : minecraftkey.toString());
-        nbttagcompound.setByte("inGround", (byte) (this.isInGround ? 1 : 0));
-    }
-
-    public void a(NBTTagCompound nbttagcompound) {
-        this.d = new BlockPosition(nbttagcompound.getInt("xTile"), nbttagcompound.getInt("yTile"), nbttagcompound.getInt("zTile"));
-        if (nbttagcompound.hasKeyOfType("inTile", 8)) {
-            this.e = Block.getByName(nbttagcompound.getString("inTile"));
-        } else {
-            this.e = Block.getById(nbttagcompound.getByte("inTile") & 255);
-        }
-
-        this.isInGround = nbttagcompound.getByte("inGround") == 1;
-    }
+    public void a(NBTTagCompound nbttagcompound) {}
 
     public int j() {
-        if (this.world.isClientSide) {
-            return 0;
-        } else {
+        if (!this.world.isClientSide && this.owner != null) {
             int i = 0;
 
             if (this.hooked != null) {
                 this.k();
                 this.world.broadcastEntityEffect(this, (byte) 31);
                 i = this.hooked instanceof EntityItem ? 3 : 5;
-            } else if (this.au > 0) {
+            } else if (this.g > 0) {
                 LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
-                loottableinfo_a.a((float) EnchantmentManager.f(this.owner) + this.owner.dg());
-                Iterator iterator = this.world.ak().a(LootTables.ao).a(this.random, loottableinfo_a.a()).iterator();
+                loottableinfo_a.a((float) EnchantmentManager.f(this.owner) + this.owner.dj());
+                Iterator iterator = this.world.ak().a(LootTables.az).a(this.random, loottableinfo_a.a()).iterator();
 
                 while (iterator.hasNext()) {
                     ItemStack itemstack = (ItemStack) iterator.next();
@@ -423,21 +407,27 @@ public class EntityFishingHook extends Entity {
             }
 
             this.die();
-            this.owner.hookedFish = null;
             return i;
+        } else {
+            return 0;
         }
     }
 
     protected void k() {
-        double d0 = this.owner.locX - this.locX;
-        double d1 = this.owner.locY - this.locY;
-        double d2 = this.owner.locZ - this.locZ;
-        double d3 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-        double d4 = 0.1D;
+        if (this.owner != null) {
+            double d0 = this.owner.locX - this.locX;
+            double d1 = this.owner.locY - this.locY;
+            double d2 = this.owner.locZ - this.locZ;
+            double d3 = 0.1D;
 
-        this.hooked.motX += d0 * 0.1D;
-        this.hooked.motY += d1 * 0.1D + (double) MathHelper.sqrt(d3) * 0.08D;
-        this.hooked.motZ += d2 * 0.1D;
+            this.hooked.motX += d0 * 0.1D;
+            this.hooked.motY += d1 * 0.1D;
+            this.hooked.motZ += d2 * 0.1D;
+        }
+    }
+
+    protected boolean playStepSound() {
+        return false;
     }
 
     public void die() {
@@ -446,5 +436,16 @@ public class EntityFishingHook extends Entity {
             this.owner.hookedFish = null;
         }
 
+    }
+
+    public EntityHuman l() {
+        return this.owner;
+    }
+
+    static enum HookState {
+
+        FLYING, HOOKED_IN_ENTITY, BOBBING;
+
+        private HookState() {}
     }
 }

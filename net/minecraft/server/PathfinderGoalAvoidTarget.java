@@ -25,10 +25,10 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
     public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, Predicate<? super T> predicate, float f, double d0, double d1) {
         this.c = new Predicate() {
             public boolean a(@Nullable Entity entity) {
-                return entity.isAlive() && PathfinderGoalAvoidTarget.this.a.getEntitySenses().a(entity);
+                return entity.isAlive() && PathfinderGoalAvoidTarget.this.a.getEntitySenses().a(entity) && !PathfinderGoalAvoidTarget.this.a.r(entity);
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((Entity) object);
             }
         };
@@ -53,7 +53,7 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
 
             if (vec3d == null) {
                 return false;
-            } else if (this.b.e(vec3d.x, vec3d.y, vec3d.z) < this.b.h(this.a)) {
+            } else if (this.b.d(vec3d.x, vec3d.y, vec3d.z) < this.b.h(this.a)) {
                 return false;
             } else {
                 this.g = this.h.a(vec3d.x, vec3d.y, vec3d.z);

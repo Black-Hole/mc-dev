@@ -11,7 +11,11 @@ public abstract class BlockFlowers extends BlockPlant {
     protected BlockStateEnum<BlockFlowers.EnumFlowerVarient> TYPE;
 
     protected BlockFlowers() {
-        this.w(this.blockStateList.getBlockData().set(this.g(), this.e() == BlockFlowers.EnumFlowerType.RED ? BlockFlowers.EnumFlowerVarient.POPPY : BlockFlowers.EnumFlowerVarient.DANDELION));
+        this.y(this.blockStateList.getBlockData().set(this.g(), this.e() == BlockFlowers.EnumFlowerType.RED ? BlockFlowers.EnumFlowerVarient.POPPY : BlockFlowers.EnumFlowerVarient.DANDELION));
+    }
+
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return super.b(iblockdata, iblockaccess, blockposition).a(iblockdata.e(iblockaccess, blockposition));
     }
 
     public int getDropData(IBlockData iblockdata) {
@@ -31,7 +35,7 @@ public abstract class BlockFlowers extends BlockPlant {
                     return blockflowers_enumflowervarient.a() == BlockFlowers.this.e();
                 }
 
-                public boolean apply(Object object) {
+                public boolean apply(@Nullable Object object) {
                     return this.a((BlockFlowers.EnumFlowerVarient) object);
                 }
             });
@@ -46,6 +50,10 @@ public abstract class BlockFlowers extends BlockPlant {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { this.g()});
+    }
+
+    public Block.EnumRandomOffset u() {
+        return Block.EnumRandomOffset.XZ;
     }
 
     public static enum EnumFlowerVarient implements INamable {
@@ -110,7 +118,7 @@ public abstract class BlockFlowers extends BlockPlant {
                         return blockflowers_enumflowervarient.a() == blockflowers_enumflowertype;
                     }
 
-                    public boolean apply(Object object) {
+                    public boolean apply(@Nullable Object object) {
                         return this.a((BlockFlowers.EnumFlowerVarient) object);
                     }
                 });

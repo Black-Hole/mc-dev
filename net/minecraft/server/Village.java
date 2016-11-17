@@ -1,11 +1,13 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TreeMap;
+import java.util.Map;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class Village {
 
@@ -18,21 +20,21 @@ public class Village {
     private int g;
     private int h;
     private int i;
-    private final TreeMap<String, Integer> j;
+    private final Map<String, Integer> j;
     private final List<Village.Aggressor> k;
     private int l;
 
     public Village() {
         this.c = BlockPosition.ZERO;
         this.d = BlockPosition.ZERO;
-        this.j = new TreeMap();
+        this.j = Maps.newHashMap();
         this.k = Lists.newArrayList();
     }
 
     public Village(World world) {
         this.c = BlockPosition.ZERO;
         this.d = BlockPosition.ZERO;
-        this.j = new TreeMap();
+        this.j = Maps.newHashMap();
         this.k = Lists.newArrayList();
         this.a = world;
     }
@@ -82,7 +84,7 @@ public class Village {
     }
 
     private boolean a(BlockPosition blockposition, BlockPosition blockposition1) {
-        if (!this.a.getType(blockposition1.down()).q()) {
+        if (!this.a.getType(blockposition1.down()).r()) {
             return false;
         } else {
             int i = blockposition1.getX() - blockposition.getX() / 2;
@@ -91,7 +93,7 @@ public class Village {
             for (int k = i; k < i + blockposition.getX(); ++k) {
                 for (int l = blockposition1.getY(); l < blockposition1.getY() + blockposition.getY(); ++l) {
                     for (int i1 = j; i1 < j + blockposition.getZ(); ++i1) {
-                        if (this.a.getType(new BlockPosition(k, l, i1)).l()) {
+                        if (this.a.getType(new BlockPosition(k, l, i1)).m()) {
                             return false;
                         }
                     }
@@ -193,6 +195,7 @@ public class Village {
         return villagedoor;
     }
 
+    @Nullable
     public VillageDoor e(BlockPosition blockposition) {
         if (this.d.n(blockposition) > (double) (this.e * this.e)) {
             return null;
@@ -215,7 +218,7 @@ public class Village {
 
     public void a(VillageDoor villagedoor) {
         this.b.add(villagedoor);
-        this.c = this.c.a(villagedoor.d());
+        this.c = this.c.a((BaseBlockPosition) villagedoor.d());
         this.n();
         this.f = villagedoor.h();
     }
@@ -241,6 +244,7 @@ public class Village {
         village_aggressor.b = this.g;
     }
 
+    @Nullable
     public EntityLiving b(EntityLiving entityliving) {
         double d0 = Double.MAX_VALUE;
         Village.Aggressor village_aggressor = null;
@@ -255,7 +259,7 @@ public class Village {
             }
         }
 
-        return village_aggressor != null ? village_aggressor.a : null;
+        return village_aggressor == null ? null : village_aggressor.a;
     }
 
     public EntityHuman c(EntityLiving entityliving) {
@@ -352,7 +356,7 @@ public class Village {
     public int a(String s) {
         Integer integer = (Integer) this.j.get(s);
 
-        return integer != null ? integer.intValue() : 0;
+        return integer == null ? 0 : integer.intValue();
     }
 
     public int a(String s, int i) {
@@ -441,12 +445,17 @@ public class Village {
             String s = (String) iterator1.next();
             NBTTagCompound nbttagcompound2 = new NBTTagCompound();
             UserCache usercache = this.a.getMinecraftServer().getUserCache();
-            GameProfile gameprofile = usercache.getProfile(s);
 
-            if (gameprofile != null) {
-                nbttagcompound2.setString("UUID", gameprofile.getId().toString());
-                nbttagcompound2.setInt("S", ((Integer) this.j.get(s)).intValue());
-                nbttaglist1.add(nbttagcompound2);
+            try {
+                GameProfile gameprofile = usercache.getProfile(s);
+
+                if (gameprofile != null) {
+                    nbttagcompound2.setString("UUID", gameprofile.getId().toString());
+                    nbttagcompound2.setInt("S", ((Integer) this.j.get(s)).intValue());
+                    nbttaglist1.add(nbttagcompound2);
+                }
+            } catch (RuntimeException runtimeexception) {
+                ;
             }
         }
 

@@ -60,13 +60,13 @@ public class MobEffectList {
         } else if (this == MobEffects.WITHER) {
             entityliving.damageEntity(DamageSource.WITHER, 1.0F);
         } else if (this == MobEffects.HUNGER && entityliving instanceof EntityHuman) {
-            ((EntityHuman) entityliving).applyExhaustion(0.025F * (float) (i + 1));
+            ((EntityHuman) entityliving).applyExhaustion(0.005F * (float) (i + 1));
         } else if (this == MobEffects.SATURATION && entityliving instanceof EntityHuman) {
             if (!entityliving.world.isClientSide) {
                 ((EntityHuman) entityliving).getFoodData().eat(i + 1, 1.0F);
             }
-        } else if ((this != MobEffects.HEAL || entityliving.bS()) && (this != MobEffects.HARM || !entityliving.bS())) {
-            if (this == MobEffects.HARM && !entityliving.bS() || this == MobEffects.HEAL && entityliving.bS()) {
+        } else if ((this != MobEffects.HEAL || entityliving.bT()) && (this != MobEffects.HARM || !entityliving.bT())) {
+            if (this == MobEffects.HARM && !entityliving.bT() || this == MobEffects.HEAL && entityliving.bT()) {
                 entityliving.damageEntity(DamageSource.MAGIC, (float) (6 << i));
             }
         } else {
@@ -78,8 +78,8 @@ public class MobEffectList {
     public void applyInstantEffect(@Nullable Entity entity, @Nullable Entity entity1, EntityLiving entityliving, int i, double d0) {
         int j;
 
-        if ((this != MobEffects.HEAL || entityliving.bS()) && (this != MobEffects.HARM || !entityliving.bS())) {
-            if (this == MobEffects.HARM && !entityliving.bS() || this == MobEffects.HEAL && entityliving.bS()) {
+        if ((this != MobEffects.HEAL || entityliving.bT()) && (this != MobEffects.HARM || !entityliving.bT())) {
+            if (this == MobEffects.HARM && !entityliving.bT() || this == MobEffects.HEAL && entityliving.bT()) {
                 j = (int) (d0 * (double) (6 << i) + 0.5D);
                 if (entity == null) {
                     entityliving.damageEntity(DamageSource.MAGIC, (float) j);

@@ -14,6 +14,7 @@ public class PacketPlayOutEntityMetadata implements Packet<PacketListenerPlayOut
         this.a = i;
         if (flag) {
             this.b = datawatcher.c();
+            datawatcher.e();
         } else {
             this.b = datawatcher.b();
         }

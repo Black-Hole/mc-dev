@@ -19,7 +19,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
         this.a(true);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         boolean flag = this.getPower(iblockdata) > 0;
 
         return flag ? BlockPressurePlateAbstract.a : BlockPressurePlateAbstract.b;
@@ -30,7 +30,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockPressurePlateAbstract.k;
     }
 
@@ -54,7 +54,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
         return this.i(world, blockposition.down());
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!this.i(world, blockposition.down())) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
@@ -63,7 +63,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
     }
 
     private boolean i(World world, BlockPosition blockposition) {
-        return world.getType(blockposition).q() || world.getType(blockposition).getBlock() instanceof BlockFence;
+        return world.getType(blockposition).r() || world.getType(blockposition).getBlock() instanceof BlockFence;
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {}
@@ -127,8 +127,8 @@ public abstract class BlockPressurePlateAbstract extends Block {
     }
 
     protected void d(World world, BlockPosition blockposition) {
-        world.applyPhysics(blockposition, this);
-        world.applyPhysics(blockposition.down(), this);
+        world.applyPhysics(blockposition, this, false);
+        world.applyPhysics(blockposition.down(), this, false);
     }
 
     public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {

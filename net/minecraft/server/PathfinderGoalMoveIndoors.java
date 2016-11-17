@@ -15,10 +15,10 @@ public class PathfinderGoalMoveIndoors extends PathfinderGoal {
     public boolean a() {
         BlockPosition blockposition = new BlockPosition(this.a);
 
-        if ((!this.a.world.B() || this.a.world.W() && !this.a.world.getBiome(blockposition).d()) && !this.a.world.worldProvider.m()) {
+        if ((!this.a.world.B() || this.a.world.W() && !this.a.world.getBiome(blockposition).d()) && this.a.world.worldProvider.m()) {
             if (this.a.getRandom().nextInt(50) != 0) {
                 return false;
-            } else if (this.c != -1 && this.a.e((double) this.c, this.a.locY, (double) this.d) < 4.0D) {
+            } else if (this.c != -1 && this.a.d((double) this.c, this.a.locY, (double) this.d) < 4.0D) {
                 return false;
             } else {
                 Village village = this.a.world.ai().getClosestVillage(blockposition, 14);

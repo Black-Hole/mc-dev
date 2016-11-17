@@ -20,17 +20,17 @@ public class BlockVine extends Block {
 
     public BlockVine() {
         super(Material.REPLACEABLE_PLANT);
-        this.w(this.blockStateList.getBlockData().set(BlockVine.UP, Boolean.valueOf(false)).set(BlockVine.NORTH, Boolean.valueOf(false)).set(BlockVine.EAST, Boolean.valueOf(false)).set(BlockVine.SOUTH, Boolean.valueOf(false)).set(BlockVine.WEST, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockVine.UP, Boolean.valueOf(false)).set(BlockVine.NORTH, Boolean.valueOf(false)).set(BlockVine.EAST, Boolean.valueOf(false)).set(BlockVine.SOUTH, Boolean.valueOf(false)).set(BlockVine.WEST, Boolean.valueOf(false)));
         this.a(true);
         this.a(CreativeModeTab.c);
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockVine.k;
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         iblockdata = iblockdata.b(iblockaccess, blockposition);
         int i = 0;
         AxisAlignedBB axisalignedbb = BlockVine.j;
@@ -64,7 +64,7 @@ public class BlockVine extends Block {
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.set(BlockVine.UP, Boolean.valueOf(iblockaccess.getType(blockposition.up()).k()));
+        return iblockdata.set(BlockVine.UP, Boolean.valueOf(iblockaccess.getType(blockposition.up()).l()));
     }
 
     public boolean b(IBlockData iblockdata) {
@@ -80,22 +80,22 @@ public class BlockVine extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        switch (BlockVine.SyntheticClass_1.a[enumdirection.ordinal()]) {
-        case 1:
-            return this.x(world.getType(blockposition.up()));
+        switch (enumdirection) {
+        case UP:
+            return this.z(world.getType(blockposition.up()));
 
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-            return this.x(world.getType(blockposition.shift(enumdirection.opposite())));
+        case NORTH:
+        case SOUTH:
+        case EAST:
+        case WEST:
+            return this.z(world.getType(blockposition.shift(enumdirection.opposite())));
 
         default:
             return false;
         }
     }
 
-    private boolean x(IBlockData iblockdata) {
+    private boolean z(IBlockData iblockdata) {
         return iblockdata.h() && iblockdata.getMaterial().isSolid();
     }
 
@@ -107,7 +107,7 @@ public class BlockVine extends Block {
             EnumDirection enumdirection = (EnumDirection) iterator.next();
             BlockStateBoolean blockstateboolean = getDirection(enumdirection);
 
-            if (((Boolean) iblockdata.get(blockstateboolean)).booleanValue() && !this.x(world.getType(blockposition.shift(enumdirection)))) {
+            if (((Boolean) iblockdata.get(blockstateboolean)).booleanValue() && !this.z(world.getType(blockposition.shift(enumdirection)))) {
                 IBlockData iblockdata2 = world.getType(blockposition.up());
 
                 if (iblockdata2.getBlock() != this || !((Boolean) iblockdata2.get(blockstateboolean)).booleanValue()) {
@@ -127,7 +127,7 @@ public class BlockVine extends Block {
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!world.isClientSide && !this.e(world, blockposition, iblockdata)) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
@@ -168,7 +168,7 @@ public class BlockVine extends Block {
                         while (iterator.hasNext()) {
                             EnumDirection enumdirection1 = (EnumDirection) iterator.next();
 
-                            if (random.nextBoolean() || !this.x(world.getType(blockposition1.shift(enumdirection1)))) {
+                            if (random.nextBoolean() || !this.z(world.getType(blockposition1.shift(enumdirection1)))) {
                                 iblockdata1 = iblockdata1.set(getDirection(enumdirection1), Boolean.valueOf(false));
                             }
                         }
@@ -196,15 +196,15 @@ public class BlockVine extends Block {
                                 BlockPosition blockposition3 = blockposition2.shift(enumdirection2);
                                 BlockPosition blockposition4 = blockposition2.shift(enumdirection3);
 
-                                if (flag2 && this.x(world.getType(blockposition3))) {
+                                if (flag2 && this.z(world.getType(blockposition3))) {
                                     world.setTypeAndData(blockposition2, this.getBlockData().set(getDirection(enumdirection2), Boolean.valueOf(true)), 2);
-                                } else if (flag3 && this.x(world.getType(blockposition4))) {
+                                } else if (flag3 && this.z(world.getType(blockposition4))) {
                                     world.setTypeAndData(blockposition2, this.getBlockData().set(getDirection(enumdirection3), Boolean.valueOf(true)), 2);
-                                } else if (flag2 && world.isEmpty(blockposition3) && this.x(world.getType(blockposition.shift(enumdirection2)))) {
+                                } else if (flag2 && world.isEmpty(blockposition3) && this.z(world.getType(blockposition.shift(enumdirection2)))) {
                                     world.setTypeAndData(blockposition3, this.getBlockData().set(getDirection(enumdirection.opposite()), Boolean.valueOf(true)), 2);
-                                } else if (flag3 && world.isEmpty(blockposition4) && this.x(world.getType(blockposition.shift(enumdirection3)))) {
+                                } else if (flag3 && world.isEmpty(blockposition4) && this.z(world.getType(blockposition.shift(enumdirection3)))) {
                                     world.setTypeAndData(blockposition4, this.getBlockData().set(getDirection(enumdirection.opposite()), Boolean.valueOf(true)), 2);
-                                } else if (this.x(world.getType(blockposition2.up()))) {
+                                } else if (this.z(world.getType(blockposition2.up()))) {
                                     world.setTypeAndData(blockposition2, this.getBlockData(), 2);
                                 }
                             } else if (block.material.k() && iblockdata2.h()) {
@@ -266,17 +266,16 @@ public class BlockVine extends Block {
         return enumdirection.k().c() ? iblockdata.set(getDirection(enumdirection.opposite()), Boolean.valueOf(true)) : iblockdata;
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return null;
+        return Items.a;
     }
 
     public int a(Random random) {
         return 0;
     }
 
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, @Nullable ItemStack itemstack) {
-        if (!world.isClientSide && itemstack != null && itemstack.getItem() == Items.SHEARS) {
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
+        if (!world.isClientSide && itemstack.getItem() == Items.SHEARS) {
             entityhuman.b(StatisticList.a((Block) this));
             a(world, blockposition, new ItemStack(Blocks.VINE, 1, 0));
         } else {
@@ -316,14 +315,14 @@ public class BlockVine extends Block {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        switch (BlockVine.SyntheticClass_1.b[enumblockrotation.ordinal()]) {
-        case 1:
+        switch (enumblockrotation) {
+        case CLOCKWISE_180:
             return iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.SOUTH)).set(BlockVine.EAST, iblockdata.get(BlockVine.WEST)).set(BlockVine.SOUTH, iblockdata.get(BlockVine.NORTH)).set(BlockVine.WEST, iblockdata.get(BlockVine.EAST));
 
-        case 2:
+        case COUNTERCLOCKWISE_90:
             return iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.EAST)).set(BlockVine.EAST, iblockdata.get(BlockVine.SOUTH)).set(BlockVine.SOUTH, iblockdata.get(BlockVine.WEST)).set(BlockVine.WEST, iblockdata.get(BlockVine.NORTH));
 
-        case 3:
+        case CLOCKWISE_90:
             return iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.WEST)).set(BlockVine.EAST, iblockdata.get(BlockVine.NORTH)).set(BlockVine.SOUTH, iblockdata.get(BlockVine.EAST)).set(BlockVine.WEST, iblockdata.get(BlockVine.SOUTH));
 
         default:
@@ -332,11 +331,11 @@ public class BlockVine extends Block {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        switch (BlockVine.SyntheticClass_1.c[enumblockmirror.ordinal()]) {
-        case 1:
+        switch (enumblockmirror) {
+        case LEFT_RIGHT:
             return iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.SOUTH)).set(BlockVine.SOUTH, iblockdata.get(BlockVine.NORTH));
 
-        case 2:
+        case FRONT_BACK:
             return iblockdata.set(BlockVine.EAST, iblockdata.get(BlockVine.WEST)).set(BlockVine.WEST, iblockdata.get(BlockVine.EAST));
 
         default:
@@ -345,20 +344,20 @@ public class BlockVine extends Block {
     }
 
     public static BlockStateBoolean getDirection(EnumDirection enumdirection) {
-        switch (BlockVine.SyntheticClass_1.a[enumdirection.ordinal()]) {
-        case 1:
+        switch (enumdirection) {
+        case UP:
             return BlockVine.UP;
 
-        case 2:
+        case NORTH:
             return BlockVine.NORTH;
 
-        case 3:
+        case SOUTH:
             return BlockVine.SOUTH;
 
-        case 4:
+        case EAST:
             return BlockVine.EAST;
 
-        case 5:
+        case WEST:
             return BlockVine.WEST;
 
         default:
@@ -380,79 +379,5 @@ public class BlockVine extends Block {
         }
 
         return i;
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b;
-        static final int[] c = new int[EnumBlockMirror.values().length];
-
-        static {
-            try {
-                BlockVine.SyntheticClass_1.c[EnumBlockMirror.LEFT_RIGHT.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockVine.SyntheticClass_1.c[EnumBlockMirror.FRONT_BACK.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            b = new int[EnumBlockRotation.values().length];
-
-            try {
-                BlockVine.SyntheticClass_1.b[EnumBlockRotation.CLOCKWISE_180.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockVine.SyntheticClass_1.b[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockVine.SyntheticClass_1.b[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            a = new int[EnumDirection.values().length];
-
-            try {
-                BlockVine.SyntheticClass_1.a[EnumDirection.UP.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-            try {
-                BlockVine.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror6) {
-                ;
-            }
-
-            try {
-                BlockVine.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror7) {
-                ;
-            }
-
-            try {
-                BlockVine.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror8) {
-                ;
-            }
-
-            try {
-                BlockVine.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror9) {
-                ;
-            }
-
-        }
     }
 }

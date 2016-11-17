@@ -28,10 +28,12 @@ public class CommandSetBlock extends CommandAbstract {
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 0);
             BlockPosition blockposition = a(icommandlistener, astring, 0, false);
             Block block = CommandAbstract.b(icommandlistener, astring[3]);
-            int i = 0;
+            IBlockData iblockdata;
 
             if (astring.length >= 5) {
-                i = a(astring[4], 0, 15);
+                iblockdata = a(block, astring[4]);
+            } else {
+                iblockdata = block.getBlockData();
             }
 
             World world = icommandlistener.getWorld();
@@ -69,13 +71,11 @@ public class CommandSetBlock extends CommandAbstract {
 
                 if (tileentity != null) {
                     if (tileentity instanceof IInventory) {
-                        ((IInventory) tileentity).l();
+                        ((IInventory) tileentity).clear();
                     }
 
                     world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), block == Blocks.AIR ? 2 : 4);
                 }
-
-                IBlockData iblockdata = block.fromLegacyData(i);
 
                 if (!world.setTypeAndData(blockposition, iblockdata, 2)) {
                     throw new CommandException("commands.setblock.noChange", new Object[0]);
@@ -91,7 +91,7 @@ public class CommandSetBlock extends CommandAbstract {
                         }
                     }
 
-                    world.update(blockposition, iblockdata.getBlock());
+                    world.update(blockposition, iblockdata.getBlock(), false);
                     icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 1);
                     a(icommandlistener, (ICommand) this, "commands.setblock.success", new Object[0]);
                 }

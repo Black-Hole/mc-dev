@@ -157,7 +157,7 @@ public class NBTTagList extends NBTBase {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
             if (nbtbase.getTypeId() == 6) {
-                return ((NBTTagDouble) nbtbase).h();
+                return ((NBTTagDouble) nbtbase).asDouble();
             }
         }
 

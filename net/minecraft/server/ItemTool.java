@@ -37,7 +37,7 @@ public class ItemTool extends Item {
     }
 
     public boolean a(ItemStack itemstack, World world, IBlockData iblockdata, BlockPosition blockposition, EntityLiving entityliving) {
-        if ((double) iblockdata.b(world, blockposition) != 0.0D) {
+        if (!world.isClientSide && (double) iblockdata.b(world, blockposition) != 0.0D) {
             itemstack.damage(1, entityliving);
         }
 

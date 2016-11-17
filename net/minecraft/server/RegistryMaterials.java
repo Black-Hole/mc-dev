@@ -38,7 +38,7 @@ public class RegistryMaterials<K, V> extends RegistrySimple<K, V> implements Reg
         return super.d(k0);
     }
 
-    public int a(V v0) {
+    public int a(@Nullable V v0) {
         return this.a.getId(v0);
     }
 

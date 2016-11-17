@@ -14,7 +14,7 @@ public interface ChunkGenerator {
     List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition);
 
     @Nullable
-    BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition);
+    BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, boolean flag);
 
     void recreateStructures(Chunk chunk, int i, int j);
 }

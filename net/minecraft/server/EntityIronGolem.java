@@ -7,9 +7,10 @@ public class EntityIronGolem extends EntityGolem {
 
     protected static final DataWatcherObject<Byte> a = DataWatcher.a(EntityIronGolem.class, DataWatcherRegistry.a);
     private int c;
+    @Nullable
     Village b;
+    private int bw;
     private int bx;
-    private int by;
 
     public EntityIronGolem(World world) {
         super(world);
@@ -22,7 +23,7 @@ public class EntityIronGolem extends EntityGolem {
         this.goalSelector.a(3, new PathfinderGoalMoveThroughVillage(this, 0.6D, true));
         this.goalSelector.a(4, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
         this.goalSelector.a(5, new PathfinderGoalOfferFlower(this));
-        this.goalSelector.a(6, new PathfinderGoalRandomStroll(this, 0.6D));
+        this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 0.6D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalDefendVillage(this));
@@ -32,7 +33,7 @@ public class EntityIronGolem extends EntityGolem {
                 return entityinsentient != null && IMonster.e.apply(entityinsentient) && !(entityinsentient instanceof EntityCreeper);
             }
 
-            public boolean apply(Object object) {
+            public boolean apply(@Nullable Object object) {
                 return this.a((EntityInsentient) object);
             }
         }));
@@ -48,7 +49,7 @@ public class EntityIronGolem extends EntityGolem {
             this.c = 70 + this.random.nextInt(50);
             this.b = this.world.ai().getClosestVillage(new BlockPosition(this), 32);
             if (this.b == null) {
-                this.dc();
+                this.de();
             } else {
                 BlockPosition blockposition = this.b.a();
 
@@ -80,12 +81,12 @@ public class EntityIronGolem extends EntityGolem {
 
     public void n() {
         super.n();
-        if (this.bx > 0) {
-            --this.bx;
+        if (this.bw > 0) {
+            --this.bw;
         }
 
-        if (this.by > 0) {
-            --this.by;
+        if (this.bx > 0) {
+            --this.bx;
         }
 
         if (this.motX * this.motX + this.motZ * this.motZ > 2.500000277905201E-7D && this.random.nextInt(5) == 0) {
@@ -106,7 +107,7 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     public static void b(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "VillagerGolem");
+        EntityInsentient.a(dataconvertermanager, EntityIronGolem.class);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -120,7 +121,7 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     public boolean B(Entity entity) {
-        this.bx = 10;
+        this.bw = 10;
         this.world.broadcastEntityEffect(this, (byte) 4);
         boolean flag = entity.damageEntity(DamageSource.mobAttack(this), (float) (7 + this.random.nextInt(15)));
 
@@ -129,7 +130,7 @@ public class EntityIronGolem extends EntityGolem {
             this.a((EntityLiving) this, entity);
         }
 
-        this.a(SoundEffects.cM, 1.0F, 1.0F);
+        this.a(SoundEffects.cW, 1.0F, 1.0F);
         return flag;
     }
 
@@ -138,29 +139,35 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     public void a(boolean flag) {
-        this.by = flag ? 400 : 0;
-        this.world.broadcastEntityEffect(this, (byte) 11);
-    }
+        if (flag) {
+            this.bx = 400;
+            this.world.broadcastEntityEffect(this, (byte) 11);
+        } else {
+            this.bx = 0;
+            this.world.broadcastEntityEffect(this, (byte) 34);
+        }
 
-    protected SoundEffect bV() {
-        return SoundEffects.cO;
     }
 
     protected SoundEffect bW() {
-        return SoundEffects.cN;
+        return SoundEffects.cY;
+    }
+
+    protected SoundEffect bX() {
+        return SoundEffects.cX;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.cP, 1.0F, 1.0F);
+        this.a(SoundEffects.cZ, 1.0F, 1.0F);
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.z;
+        return LootTables.A;
     }
 
-    public int df() {
-        return this.by;
+    public int di() {
+        return this.bx;
     }
 
     public boolean isPlayerCreated() {

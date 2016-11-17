@@ -14,7 +14,7 @@ public class EntityThrownExpBottle extends EntityProjectile {
         super(world, d0, d1, d2);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
+    public static void b(DataConverterManager dataconvertermanager) {
         EntityProjectile.a(dataconvertermanager, "ThrowableExpBottle");
     }
 
@@ -24,7 +24,7 @@ public class EntityThrownExpBottle extends EntityProjectile {
 
     protected void a(MovingObjectPosition movingobjectposition) {
         if (!this.world.isClientSide) {
-            this.world.triggerEffect(2002, new BlockPosition(this), 0);
+            this.world.triggerEffect(2002, new BlockPosition(this), PotionUtil.a(Potions.b));
             int i = 3 + this.world.random.nextInt(5) + this.world.random.nextInt(5);
 
             while (i > 0) {

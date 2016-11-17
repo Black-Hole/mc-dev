@@ -30,7 +30,8 @@ public class ChunkProviderGenerate implements ChunkGenerator {
     private final WorldGenLargeFeature z;
     private final WorldGenBase A;
     private final WorldGenMonument B;
-    private BiomeBase[] C;
+    private final WorldGenWoodlandMansion C;
+    private BiomeBase[] D;
     double[] e;
     double[] f;
     double[] g;
@@ -46,6 +47,7 @@ public class ChunkProviderGenerate implements ChunkGenerator {
         this.z = new WorldGenLargeFeature();
         this.A = new WorldGenCanyon();
         this.B = new WorldGenMonument();
+        this.C = new WorldGenWoodlandMansion(this);
         this.n = world;
         this.o = flag;
         this.p = world.getWorldData().getType();
@@ -70,14 +72,14 @@ public class ChunkProviderGenerate implements ChunkGenerator {
 
         if (s != null) {
             this.s = CustomWorldSettingsFinal.CustomWorldSettings.a(s).b();
-            this.t = this.s.E ? Blocks.LAVA.getBlockData() : Blocks.WATER.getBlockData();
+            this.t = this.s.F ? Blocks.LAVA.getBlockData() : Blocks.WATER.getBlockData();
             world.b(this.s.q);
         }
 
     }
 
     public void a(int i, int j, ChunkSnapshot chunksnapshot) {
-        this.C = this.n.getWorldChunkManager().getBiomes(this.C, i * 4 - 2, j * 4 - 2, 10, 10);
+        this.D = this.n.getWorldChunkManager().getBiomes(this.D, i * 4 - 2, j * 4 - 2, 10, 10);
         this.a(i * 4, 0, j * 4);
 
         for (int k = 0; k < 4; ++k) {
@@ -156,13 +158,13 @@ public class ChunkProviderGenerate implements ChunkGenerator {
         ChunkSnapshot chunksnapshot = new ChunkSnapshot();
 
         this.a(i, j, chunksnapshot);
-        this.C = this.n.getWorldChunkManager().getBiomeBlock(this.C, i * 16, j * 16, 16, 16);
-        this.a(i, j, chunksnapshot, this.C);
+        this.D = this.n.getWorldChunkManager().getBiomeBlock(this.D, i * 16, j * 16, 16, 16);
+        this.a(i, j, chunksnapshot, this.D);
         if (this.s.r) {
             this.v.a(this.n, i, j, chunksnapshot);
         }
 
-        if (this.s.z) {
+        if (this.s.A) {
             this.A.a(this.n, i, j, chunksnapshot);
         }
 
@@ -186,13 +188,17 @@ public class ChunkProviderGenerate implements ChunkGenerator {
             if (this.s.y) {
                 this.B.a(this.n, i, j, chunksnapshot);
             }
+
+            if (this.s.z) {
+                this.C.a(this.n, i, j, chunksnapshot);
+            }
         }
 
         Chunk chunk = new Chunk(this.n, chunksnapshot, i, j);
         byte[] abyte = chunk.getBiomeIndex();
 
         for (int k = 0; k < abyte.length; ++k) {
-            abyte[k] = (byte) BiomeBase.a(this.C[k]);
+            abyte[k] = (byte) BiomeBase.a(this.D[k]);
         }
 
         chunk.initLighting();
@@ -216,11 +222,11 @@ public class ChunkProviderGenerate implements ChunkGenerator {
                 float f3 = 0.0F;
                 float f4 = 0.0F;
                 boolean flag = true;
-                BiomeBase biomebase = this.C[j1 + 2 + (k1 + 2) * 10];
+                BiomeBase biomebase = this.D[j1 + 2 + (k1 + 2) * 10];
 
                 for (int l1 = -2; l1 <= 2; ++l1) {
                     for (int i2 = -2; i2 <= 2; ++i2) {
-                        BiomeBase biomebase1 = this.C[j1 + l1 + 2 + (k1 + i2 + 2) * 10];
+                        BiomeBase biomebase1 = this.D[j1 + l1 + 2 + (k1 + i2 + 2) * 10];
                         float f5 = this.s.n + biomebase1.j() * this.s.m;
                         float f6 = this.s.p + biomebase1.m() * this.s.o;
 
@@ -337,24 +343,28 @@ public class ChunkProviderGenerate implements ChunkGenerator {
             if (this.s.y) {
                 this.B.a(this.n, this.i, chunkcoordintpair);
             }
+
+            if (this.s.z) {
+                this.C.a(this.n, this.i, chunkcoordintpair);
+            }
         }
 
         int k1;
         int l1;
         int i2;
 
-        if (biomebase != Biomes.d && biomebase != Biomes.s && this.s.A && !flag && this.i.nextInt(this.s.B) == 0) {
+        if (biomebase != Biomes.d && biomebase != Biomes.s && this.s.B && !flag && this.i.nextInt(this.s.C) == 0) {
             k1 = this.i.nextInt(16) + 8;
             l1 = this.i.nextInt(256);
             i2 = this.i.nextInt(16) + 8;
             (new WorldGenLakes(Blocks.WATER)).generate(this.n, this.i, blockposition.a(k1, l1, i2));
         }
 
-        if (!flag && this.i.nextInt(this.s.D / 10) == 0 && this.s.C) {
+        if (!flag && this.i.nextInt(this.s.E / 10) == 0 && this.s.D) {
             k1 = this.i.nextInt(16) + 8;
             l1 = this.i.nextInt(this.i.nextInt(248) + 8);
             i2 = this.i.nextInt(16) + 8;
-            if (l1 < this.n.K() || this.i.nextInt(this.s.D / 8) == 0) {
+            if (l1 < this.n.K() || this.i.nextInt(this.s.E / 8) == 0) {
                 (new WorldGenLakes(Blocks.LAVA)).generate(this.n, this.i, blockposition.a(k1, l1, i2));
             }
         }
@@ -409,7 +419,7 @@ public class ChunkProviderGenerate implements ChunkGenerator {
                 return this.z.b();
             }
 
-            if (enumcreaturetype == EnumCreatureType.MONSTER && this.s.y && this.B.b(this.n, blockposition)) {
+            if (enumcreaturetype == EnumCreatureType.MONSTER && this.s.y && this.B.a(this.n, blockposition)) {
                 return this.B.b();
             }
         }
@@ -418,8 +428,8 @@ public class ChunkProviderGenerate implements ChunkGenerator {
     }
 
     @Nullable
-    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
-        return "Stronghold".equals(s) && this.w != null ? this.w.getNearestGeneratedFeature(world, blockposition) : null;
+    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, boolean flag) {
+        return "Stronghold".equals(s) && this.w != null ? this.w.getNearestGeneratedFeature(world, blockposition, flag) : ("Mansion".equals(s) && this.C != null ? this.C.getNearestGeneratedFeature(world, blockposition, flag) : ("Monument".equals(s) && this.B != null ? this.B.getNearestGeneratedFeature(world, blockposition, flag) : ("Village".equals(s) && this.x != null ? this.x.getNearestGeneratedFeature(world, blockposition, flag) : ("Mineshaft".equals(s) && this.y != null ? this.y.getNearestGeneratedFeature(world, blockposition, flag) : ("Temple".equals(s) && this.z != null ? this.z.getNearestGeneratedFeature(world, blockposition, flag) : null)))));
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {
@@ -442,6 +452,10 @@ public class ChunkProviderGenerate implements ChunkGenerator {
 
             if (this.s.y) {
                 this.B.a(this.n, i, j, (ChunkSnapshot) null);
+            }
+
+            if (this.s.z) {
+                this.C.a(this.n, i, j, (ChunkSnapshot) null);
             }
         }
 

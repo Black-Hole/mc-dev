@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockNetherWart extends BlockPlant {
 
@@ -10,12 +9,12 @@ public class BlockNetherWart extends BlockPlant {
 
     protected BlockNetherWart() {
         super(Material.PLANT, MaterialMapColor.D);
-        this.w(this.blockStateList.getBlockData().set(BlockNetherWart.AGE, Integer.valueOf(0)));
+        this.y(this.blockStateList.getBlockData().set(BlockNetherWart.AGE, Integer.valueOf(0)));
         this.a(true);
         this.a((CreativeModeTab) null);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockNetherWart.c[((Integer) iblockdata.get(BlockNetherWart.AGE)).intValue()];
     }
 
@@ -56,9 +55,8 @@ public class BlockNetherWart extends BlockPlant {
         }
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return null;
+        return Items.a;
     }
 
     public int a(Random random) {

@@ -18,7 +18,7 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
     private final File baseDir;
     private final File playerDir;
     private final File dataDir;
-    private final long sessionId = MinecraftServer.av();
+    private final long sessionId = MinecraftServer.aw();
     private final String g;
     private final DefinedStructureManager h;
     protected final DataConverterManager a;
@@ -33,7 +33,7 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
         this.g = s;
         if (flag) {
             this.playerDir.mkdirs();
-            this.h = new DefinedStructureManager((new File(this.baseDir, "structures")).toString());
+            this.h = new DefinedStructureManager((new File(this.baseDir, "structures")).toString(), dataconvertermanager);
         } else {
             this.h = null;
         }
@@ -84,6 +84,7 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
         throw new RuntimeException("Old Chunk Storage is no longer supported.");
     }
 
+    @Nullable
     public WorldData getWorldData() {
         File file = new File(this.baseDir, "level.dat");
 

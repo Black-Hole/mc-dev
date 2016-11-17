@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class ShapedRecipes implements IRecipe {
 
     private final int width;
@@ -14,26 +12,32 @@ public class ShapedRecipes implements IRecipe {
         this.width = i;
         this.height = j;
         this.items = aitemstack;
+
+        for (int k = 0; k < this.items.length; ++k) {
+            if (this.items[k] == null) {
+                this.items[k] = ItemStack.a;
+            }
+        }
+
         this.result = itemstack;
     }
 
-    @Nullable
     public ItemStack b() {
         return this.result;
     }
 
-    public ItemStack[] b(InventoryCrafting inventorycrafting) {
-        ItemStack[] aitemstack = new ItemStack[inventorycrafting.getSize()];
+    public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
+        NonNullList nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
 
-        for (int i = 0; i < aitemstack.length; ++i) {
+        for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
-            if (itemstack != null && itemstack.getItem().r()) {
-                aitemstack[i] = new ItemStack(itemstack.getItem().q());
+            if (itemstack.getItem().s()) {
+                nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
             }
         }
 
-        return aitemstack;
+        return nonnulllist;
     }
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
@@ -57,7 +61,7 @@ public class ShapedRecipes implements IRecipe {
             for (int l = 0; l < 3; ++l) {
                 int i1 = k - i;
                 int j1 = l - j;
-                ItemStack itemstack = null;
+                ItemStack itemstack = ItemStack.a;
 
                 if (i1 >= 0 && j1 >= 0 && i1 < this.width && j1 < this.height) {
                     if (flag) {
@@ -69,8 +73,8 @@ public class ShapedRecipes implements IRecipe {
 
                 ItemStack itemstack1 = inventorycrafting.c(k, l);
 
-                if (itemstack1 != null || itemstack != null) {
-                    if (itemstack1 == null && itemstack != null || itemstack1 != null && itemstack == null) {
+                if (!itemstack1.isEmpty() || !itemstack.isEmpty()) {
+                    if (itemstack1.isEmpty() != itemstack.isEmpty()) {
                         return false;
                     }
 
@@ -88,7 +92,6 @@ public class ShapedRecipes implements IRecipe {
         return true;
     }
 
-    @Nullable
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         ItemStack itemstack = this.b().cloneItemStack();
 
@@ -96,7 +99,7 @@ public class ShapedRecipes implements IRecipe {
             for (int i = 0; i < inventorycrafting.getSize(); ++i) {
                 ItemStack itemstack1 = inventorycrafting.getItem(i);
 
-                if (itemstack1 != null && itemstack1.hasTag()) {
+                if (!itemstack1.isEmpty() && itemstack1.hasTag()) {
                     itemstack.setTag(itemstack1.getTag().g());
                 }
             }

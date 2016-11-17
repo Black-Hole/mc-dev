@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -9,8 +9,17 @@ import org.apache.logging.log4j.Logger;
 
 public class EntityPotion extends EntityProjectile {
 
-    private static final DataWatcherObject<Optional<ItemStack>> d = DataWatcher.a(EntityPotion.class, DataWatcherRegistry.f);
-    private static final Logger e = LogManager.getLogger();
+    private static final DataWatcherObject<ItemStack> e = DataWatcher.a(EntityPotion.class, DataWatcherRegistry.f);
+    private static final Logger f = LogManager.getLogger();
+    public static final Predicate<EntityLiving> d = new Predicate() {
+        public boolean a(@Nullable EntityLiving entityliving) {
+            return EntityPotion.c(entityliving);
+        }
+
+        public boolean apply(@Nullable Object object) {
+            return this.a((EntityLiving) object);
+        }
+    };
 
     public EntityPotion(World world) {
         super(world);
@@ -21,35 +30,35 @@ public class EntityPotion extends EntityProjectile {
         this.setItem(itemstack);
     }
 
-    public EntityPotion(World world, double d0, double d1, double d2, @Nullable ItemStack itemstack) {
+    public EntityPotion(World world, double d0, double d1, double d2, ItemStack itemstack) {
         super(world, d0, d1, d2);
-        if (itemstack != null) {
+        if (!itemstack.isEmpty()) {
             this.setItem(itemstack);
         }
 
     }
 
     protected void i() {
-        this.getDataWatcher().register(EntityPotion.d, Optional.absent());
+        this.getDataWatcher().register(EntityPotion.e, ItemStack.a);
     }
 
     public ItemStack getItem() {
-        ItemStack itemstack = (ItemStack) ((Optional) this.getDataWatcher().get(EntityPotion.d)).orNull();
+        ItemStack itemstack = (ItemStack) this.getDataWatcher().get(EntityPotion.e);
 
-        if (itemstack != null && (itemstack.getItem() == Items.SPLASH_POTION || itemstack.getItem() == Items.LINGERING_POTION)) {
-            return itemstack;
-        } else {
+        if (itemstack.getItem() != Items.SPLASH_POTION && itemstack.getItem() != Items.LINGERING_POTION) {
             if (this.world != null) {
-                EntityPotion.e.error("ThrownPotion entity {} has no item?!", new Object[] { Integer.valueOf(this.getId())});
+                EntityPotion.f.error("ThrownPotion entity {} has no item?!", new Object[] { Integer.valueOf(this.getId())});
             }
 
             return new ItemStack(Items.SPLASH_POTION);
+        } else {
+            return itemstack;
         }
     }
 
-    public void setItem(@Nullable ItemStack itemstack) {
-        this.getDataWatcher().set(EntityPotion.d, Optional.fromNullable(itemstack));
-        this.getDataWatcher().markDirty(EntityPotion.d);
+    public void setItem(ItemStack itemstack) {
+        this.getDataWatcher().set(EntityPotion.e, itemstack);
+        this.getDataWatcher().markDirty(EntityPotion.e);
     }
 
     protected float j() {
@@ -59,91 +68,120 @@ public class EntityPotion extends EntityProjectile {
     protected void a(MovingObjectPosition movingobjectposition) {
         if (!this.world.isClientSide) {
             ItemStack itemstack = this.getItem();
-            PotionRegistry potionregistry = PotionUtil.c(itemstack);
+            PotionRegistry potionregistry = PotionUtil.d(itemstack);
             List list = PotionUtil.getEffects(itemstack);
-            Iterator iterator;
+            boolean flag = potionregistry == Potions.b && list.isEmpty();
 
-            if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && potionregistry == Potions.b && list.isEmpty()) {
+            if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && flag) {
                 BlockPosition blockposition = movingobjectposition.a().shift(movingobjectposition.direction);
 
                 this.a(blockposition);
-                iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
+                Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                 while (iterator.hasNext()) {
                     EnumDirection enumdirection = (EnumDirection) iterator.next();
 
                     this.a(blockposition.shift(enumdirection));
                 }
+            }
 
-                this.world.triggerEffect(2002, new BlockPosition(this), PotionRegistry.a(potionregistry));
-                this.die();
-            } else {
-                if (!list.isEmpty()) {
-                    if (this.isLingering()) {
-                        EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX, this.locY, this.locZ);
+            if (flag) {
+                this.n();
+            } else if (!list.isEmpty()) {
+                if (this.isLingering()) {
+                    this.a(itemstack, potionregistry);
+                } else {
+                    this.a(movingobjectposition, list);
+                }
+            }
 
-                        entityareaeffectcloud.setSource(this.getShooter());
-                        entityareaeffectcloud.setRadius(3.0F);
-                        entityareaeffectcloud.setRadiusOnUse(-0.5F);
-                        entityareaeffectcloud.setWaitTime(10);
-                        entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / (float) entityareaeffectcloud.getDuration());
-                        entityareaeffectcloud.a(potionregistry);
-                        iterator = PotionUtil.b(itemstack).iterator();
+            int i = potionregistry.c() ? 2007 : 2002;
 
-                        while (iterator.hasNext()) {
-                            MobEffect mobeffect = (MobEffect) iterator.next();
+            this.world.triggerEffect(i, new BlockPosition(this), PotionUtil.c(itemstack));
+            this.die();
+        }
+    }
 
-                            entityareaeffectcloud.a(new MobEffect(mobeffect.getMobEffect(), mobeffect.getDuration(), mobeffect.getAmplifier()));
+    private void n() {
+        AxisAlignedBB axisalignedbb = this.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
+        List list = this.world.a(EntityLiving.class, axisalignedbb, EntityPotion.d);
+
+        if (!list.isEmpty()) {
+            Iterator iterator = list.iterator();
+
+            while (iterator.hasNext()) {
+                EntityLiving entityliving = (EntityLiving) iterator.next();
+                double d0 = this.h(entityliving);
+
+                if (d0 < 16.0D && c(entityliving)) {
+                    entityliving.damageEntity(DamageSource.DROWN, 1.0F);
+                }
+            }
+        }
+
+    }
+
+    private void a(MovingObjectPosition movingobjectposition, List<MobEffect> list) {
+        AxisAlignedBB axisalignedbb = this.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
+        List list1 = this.world.a(EntityLiving.class, axisalignedbb);
+
+        if (!list1.isEmpty()) {
+            Iterator iterator = list1.iterator();
+
+            while (iterator.hasNext()) {
+                EntityLiving entityliving = (EntityLiving) iterator.next();
+
+                if (entityliving.cJ()) {
+                    double d0 = this.h(entityliving);
+
+                    if (d0 < 16.0D) {
+                        double d1 = 1.0D - Math.sqrt(d0) / 4.0D;
+
+                        if (entityliving == movingobjectposition.entity) {
+                            d1 = 1.0D;
                         }
 
-                        this.world.addEntity(entityareaeffectcloud);
-                    } else {
-                        AxisAlignedBB axisalignedbb = this.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
-                        List list1 = this.world.a(EntityLiving.class, axisalignedbb);
+                        Iterator iterator1 = list.iterator();
 
-                        if (!list1.isEmpty()) {
-                            Iterator iterator1 = list1.iterator();
+                        while (iterator1.hasNext()) {
+                            MobEffect mobeffect = (MobEffect) iterator1.next();
+                            MobEffectList mobeffectlist = mobeffect.getMobEffect();
 
-                            while (iterator1.hasNext()) {
-                                EntityLiving entityliving = (EntityLiving) iterator1.next();
+                            if (mobeffectlist.isInstant()) {
+                                mobeffectlist.applyInstantEffect(this, this.getShooter(), entityliving, mobeffect.getAmplifier(), d1);
+                            } else {
+                                int i = (int) (d1 * (double) mobeffect.getDuration() + 0.5D);
 
-                                if (entityliving.cI()) {
-                                    double d0 = this.h(entityliving);
-
-                                    if (d0 < 16.0D) {
-                                        double d1 = 1.0D - Math.sqrt(d0) / 4.0D;
-
-                                        if (entityliving == movingobjectposition.entity) {
-                                            d1 = 1.0D;
-                                        }
-
-                                        Iterator iterator2 = list.iterator();
-
-                                        while (iterator2.hasNext()) {
-                                            MobEffect mobeffect1 = (MobEffect) iterator2.next();
-                                            MobEffectList mobeffectlist = mobeffect1.getMobEffect();
-
-                                            if (mobeffectlist.isInstant()) {
-                                                mobeffectlist.applyInstantEffect(this, this.getShooter(), entityliving, mobeffect1.getAmplifier(), d1);
-                                            } else {
-                                                int i = (int) (d1 * (double) mobeffect1.getDuration() + 0.5D);
-
-                                                if (i > 20) {
-                                                    entityliving.addEffect(new MobEffect(mobeffectlist, i, mobeffect1.getAmplifier()));
-                                                }
-                                            }
-                                        }
-                                    }
+                                if (i > 20) {
+                                    entityliving.addEffect(new MobEffect(mobeffectlist, i, mobeffect.getAmplifier(), mobeffect.isAmbient(), mobeffect.isShowParticles()));
                                 }
                             }
                         }
                     }
                 }
-
-                this.world.triggerEffect(2002, new BlockPosition(this), PotionRegistry.a(potionregistry));
-                this.die();
             }
         }
+
+    }
+
+    private void a(ItemStack itemstack, PotionRegistry potionregistry) {
+        EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX, this.locY, this.locZ);
+
+        entityareaeffectcloud.setSource(this.getShooter());
+        entityareaeffectcloud.setRadius(3.0F);
+        entityareaeffectcloud.setRadiusOnUse(-0.5F);
+        entityareaeffectcloud.setWaitTime(10);
+        entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / (float) entityareaeffectcloud.getDuration());
+        entityareaeffectcloud.a(potionregistry);
+        Iterator iterator = PotionUtil.b(itemstack).iterator();
+
+        while (iterator.hasNext()) {
+            MobEffect mobeffect = (MobEffect) iterator.next();
+
+            entityareaeffectcloud.a(new MobEffect(mobeffect));
+        }
+
+        this.world.addEntity(entityareaeffectcloud);
     }
 
     public boolean isLingering() {
@@ -157,16 +195,16 @@ public class EntityPotion extends EntityProjectile {
 
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
+    public static void b(DataConverterManager dataconvertermanager) {
         EntityProjectile.a(dataconvertermanager, "ThrownPotion");
-        dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItem("ThrownPotion", new String[] { "Potion"})));
+        dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItem(EntityPotion.class, new String[] { "Potion"})));
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        ItemStack itemstack = ItemStack.createStack(nbttagcompound.getCompound("Potion"));
+        ItemStack itemstack = new ItemStack(nbttagcompound.getCompound("Potion"));
 
-        if (itemstack == null) {
+        if (itemstack.isEmpty()) {
             this.die();
         } else {
             this.setItem(itemstack);
@@ -178,9 +216,13 @@ public class EntityPotion extends EntityProjectile {
         super.b(nbttagcompound);
         ItemStack itemstack = this.getItem();
 
-        if (itemstack != null) {
+        if (!itemstack.isEmpty()) {
             nbttagcompound.set("Potion", itemstack.save(new NBTTagCompound()));
         }
 
+    }
+
+    private static boolean c(EntityLiving entityliving) {
+        return entityliving instanceof EntityEnderman || entityliving instanceof EntityBlaze;
     }
 }

@@ -39,6 +39,7 @@ public abstract class ScoreboardTeamBase {
             return (String[]) ScoreboardTeamBase.EnumTeamPush.g.keySet().toArray(new String[ScoreboardTeamBase.EnumTeamPush.g.size()]);
         }
 
+        @Nullable
         public static ScoreboardTeamBase.EnumTeamPush a(String s) {
             return (ScoreboardTeamBase.EnumTeamPush) ScoreboardTeamBase.EnumTeamPush.g.get(s);
         }
@@ -73,6 +74,7 @@ public abstract class ScoreboardTeamBase {
             return (String[]) ScoreboardTeamBase.EnumNameTagVisibility.g.keySet().toArray(new String[ScoreboardTeamBase.EnumNameTagVisibility.g.size()]);
         }
 
+        @Nullable
         public static ScoreboardTeamBase.EnumNameTagVisibility a(String s) {
             return (ScoreboardTeamBase.EnumNameTagVisibility) ScoreboardTeamBase.EnumNameTagVisibility.g.get(s);
         }

@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class BiomeTheEndDecorator extends BiomeDecorator {
 
-    private static final LoadingCache<Long, WorldGenEnder.Spike[]> M = CacheBuilder.newBuilder().expireAfterWrite(5L, TimeUnit.MINUTES).build(new BiomeTheEndDecorator.SpikeCache((BiomeTheEndDecorator.SyntheticClass_1) null));
+    private static final LoadingCache<Long, WorldGenEnder.Spike[]> M = CacheBuilder.newBuilder().expireAfterWrite(5L, TimeUnit.MINUTES).build(new BiomeTheEndDecorator.SpikeCache(null));
     private final WorldGenEnder N = new WorldGenEnder();
 
     public BiomeTheEndDecorator() {}
@@ -42,8 +42,6 @@ public class BiomeTheEndDecorator extends BiomeDecorator {
 
         return (WorldGenEnder.Spike[]) BiomeTheEndDecorator.M.getUnchecked(Long.valueOf(i));
     }
-
-    static class SyntheticClass_1 {    }
 
     static class SpikeCache extends CacheLoader<Long, WorldGenEnder.Spike[]> {
 
@@ -73,7 +71,7 @@ public class BiomeTheEndDecorator extends BiomeDecorator {
             return this.a((Long) object);
         }
 
-        SpikeCache(BiomeTheEndDecorator.SyntheticClass_1 biometheenddecorator_syntheticclass_1) {
+        SpikeCache(Object object) {
             this();
         }
     }

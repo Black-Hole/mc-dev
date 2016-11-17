@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockGrass extends Block implements IBlockFragilePlantElement {
 
@@ -9,7 +8,7 @@ public class BlockGrass extends Block implements IBlockFragilePlantElement {
 
     protected BlockGrass() {
         super(Material.GRASS);
-        this.w(this.blockStateList.getBlockData().set(BlockGrass.SNOWY, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockGrass.SNOWY, Boolean.valueOf(false)));
         this.a(true);
         this.a(CreativeModeTab.b);
     }
@@ -46,7 +45,6 @@ public class BlockGrass extends Block implements IBlockFragilePlantElement {
         }
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
     }
@@ -70,7 +68,7 @@ public class BlockGrass extends Block implements IBlockFragilePlantElement {
             while (true) {
                 if (j < i / 16) {
                     blockposition2 = blockposition2.a(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
-                    if (world.getType(blockposition2.down()).getBlock() == Blocks.GRASS && !world.getType(blockposition2).l()) {
+                    if (world.getType(blockposition2.down()).getBlock() == Blocks.GRASS && !world.getType(blockposition2).m()) {
                         ++j;
                         continue;
                     }

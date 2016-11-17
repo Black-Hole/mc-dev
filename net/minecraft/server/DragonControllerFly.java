@@ -13,16 +13,16 @@ public class DragonControllerFly extends AbstractDragonController {
     }
 
     public void c() {
-        if (this.b) {
-            this.b = false;
-            this.j();
-        } else {
+        if (!this.b && this.c != null) {
             BlockPosition blockposition = this.a.world.q(WorldGenEndTrophy.a);
             double d0 = this.a.d(blockposition);
 
             if (d0 > 100.0D) {
                 this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
             }
+        } else {
+            this.b = false;
+            this.j();
         }
 
     }
@@ -36,9 +36,9 @@ public class DragonControllerFly extends AbstractDragonController {
     private void j() {
         int i = this.a.o();
         Vec3D vec3d = this.a.a(1.0F);
-        int j = this.a.l(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
+        int j = this.a.k(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
 
-        if (this.a.cZ() != null && this.a.cZ().c() >= 0) {
+        if (this.a.db() != null && this.a.db().c() > 0) {
             j %= 12;
             if (j < 0) {
                 j += 12;

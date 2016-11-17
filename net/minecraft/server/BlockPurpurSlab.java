@@ -1,25 +1,23 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public abstract class BlockPurpurSlab extends BlockStepAbstract {
 
     public static final BlockStateEnum<BlockPurpurSlab.Type> d = BlockStateEnum.of("variant", BlockPurpurSlab.Type.class);
 
     public BlockPurpurSlab() {
-        super(Material.STONE);
+        super(Material.STONE, MaterialMapColor.r);
         IBlockData iblockdata = this.blockStateList.getBlockData();
 
         if (!this.e()) {
             iblockdata = iblockdata.set(BlockPurpurSlab.HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
         }
 
-        this.w(iblockdata.set(BlockPurpurSlab.d, BlockPurpurSlab.Type.DEFAULT));
+        this.y(iblockdata.set(BlockPurpurSlab.d, BlockPurpurSlab.Type.DEFAULT));
         this.a(CreativeModeTab.b);
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Item.getItemOf(Blocks.PURPUR_SLAB);
     }

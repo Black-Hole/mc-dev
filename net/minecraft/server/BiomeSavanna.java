@@ -9,6 +9,11 @@ public class BiomeSavanna extends BiomeBase {
     protected BiomeSavanna(BiomeBase.a biomebase_a) {
         super(biomebase_a);
         this.v.add(new BiomeBase.BiomeMeta(EntityHorse.class, 1, 2, 6));
+        this.v.add(new BiomeBase.BiomeMeta(EntityHorseDonkey.class, 1, 1, 1));
+        if (this.j() > 1.1F) {
+            this.v.add(new BiomeBase.BiomeMeta(EntityLlama.class, 8, 4, 4));
+        }
+
         this.t.z = 1;
         this.t.B = 4;
         this.t.C = 20;

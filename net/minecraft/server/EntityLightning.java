@@ -38,11 +38,11 @@ public class EntityLightning extends EntityWeather {
         return SoundCategory.WEATHER;
     }
 
-    public void m() {
-        super.m();
+    public void A_() {
+        super.A_();
         if (this.lifeTicks == 2) {
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dn, SoundCategory.WEATHER, 10000.0F, 0.8F + this.random.nextFloat() * 0.2F);
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dm, SoundCategory.WEATHER, 2.0F, 0.5F + this.random.nextFloat() * 0.2F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dx, SoundCategory.WEATHER, 10000.0F, 0.8F + this.random.nextFloat() * 0.2F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dw, SoundCategory.WEATHER, 2.0F, 0.5F + this.random.nextFloat() * 0.2F);
         }
 
         --this.lifeTicks;

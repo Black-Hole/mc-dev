@@ -6,7 +6,7 @@ import java.util.List;
 public class ChatComponentUtils {
 
     public static IChatBaseComponent filterForDisplay(ICommandListener icommandlistener, IChatBaseComponent ichatbasecomponent, Entity entity) throws CommandException {
-        Object object = null;
+        Object object;
 
         if (ichatbasecomponent instanceof ChatComponentScore) {
             ChatComponentScore chatcomponentscore = (ChatComponentScore) ichatbasecomponent;
@@ -16,7 +16,7 @@ public class ChatComponentUtils {
                 List list = PlayerSelector.getPlayers(icommandlistener, s, Entity.class);
 
                 if (list.size() != 1) {
-                    throw new ExceptionEntityNotFound();
+                    throw new ExceptionEntityNotFound("commands.generic.selector.notFound", new Object[] { s});
                 }
 
                 Entity entity1 = (Entity) list.get(0);
@@ -28,12 +28,15 @@ public class ChatComponentUtils {
                 }
             }
 
-            object = entity != null && s.equals("*") ? new ChatComponentScore(entity.getName(), chatcomponentscore.h()) : new ChatComponentScore(s, chatcomponentscore.h());
+            String s1 = entity != null && s.equals("*") ? entity.getName() : s;
+
+            object = new ChatComponentScore(s1, chatcomponentscore.h());
+            ((ChatComponentScore) object).b(chatcomponentscore.getText());
             ((ChatComponentScore) object).a(icommandlistener);
         } else if (ichatbasecomponent instanceof ChatComponentSelector) {
-            String s1 = ((ChatComponentSelector) ichatbasecomponent).g();
+            String s2 = ((ChatComponentSelector) ichatbasecomponent).g();
 
-            object = PlayerSelector.getPlayerNames(icommandlistener, s1);
+            object = PlayerSelector.getPlayerNames(icommandlistener, s2);
             if (object == null) {
                 object = new ChatComponentText("");
             }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -77,7 +78,7 @@ public class WorldGenFlatInfo {
                     stringbuilder.append(",");
                 }
 
-                stringbuilder.append(((String) entry.getKey()).toLowerCase());
+                stringbuilder.append(((String) entry.getKey()).toLowerCase(Locale.ROOT));
                 Map map = (Map) entry.getValue();
 
                 if (!map.isEmpty()) {
@@ -220,7 +221,7 @@ public class WorldGenFlatInfo {
 
                     worldgenflatinfo.a(k);
                     if (i > 0 && astring.length > j) {
-                        String[] astring1 = astring[j++].toLowerCase().split(",");
+                        String[] astring1 = astring[j++].toLowerCase(Locale.ROOT).split(",");
                         String[] astring2 = astring1;
                         int l = astring1.length;
 

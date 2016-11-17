@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class SlotResult extends Slot {
 
     private final InventoryCrafting a;
@@ -14,13 +12,13 @@ public class SlotResult extends Slot {
         this.a = inventorycrafting;
     }
 
-    public boolean isAllowed(@Nullable ItemStack itemstack) {
+    public boolean isAllowed(ItemStack itemstack) {
         return false;
     }
 
     public ItemStack a(int i) {
         if (this.hasItem()) {
-            this.c += Math.min(i, this.getItem().count);
+            this.c += Math.min(i, this.getItem().getCount());
         }
 
         return super.a(i);
@@ -29,6 +27,10 @@ public class SlotResult extends Slot {
     protected void a(ItemStack itemstack, int i) {
         this.c += i;
         this.c(itemstack);
+    }
+
+    protected void b(int i) {
+        this.c += i;
     }
 
     protected void c(ItemStack itemstack) {
@@ -79,24 +81,24 @@ public class SlotResult extends Slot {
 
     }
 
-    public void a(EntityHuman entityhuman, ItemStack itemstack) {
+    public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
         this.c(itemstack);
-        ItemStack[] aitemstack = CraftingManager.getInstance().b(this.a, entityhuman.world);
+        NonNullList nonnulllist = CraftingManager.getInstance().b(this.a, entityhuman.world);
 
-        for (int i = 0; i < aitemstack.length; ++i) {
+        for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack1 = this.a.getItem(i);
-            ItemStack itemstack2 = aitemstack[i];
+            ItemStack itemstack2 = (ItemStack) nonnulllist.get(i);
 
-            if (itemstack1 != null) {
+            if (!itemstack1.isEmpty()) {
                 this.a.splitStack(i, 1);
                 itemstack1 = this.a.getItem(i);
             }
 
-            if (itemstack2 != null) {
-                if (itemstack1 == null) {
+            if (!itemstack2.isEmpty()) {
+                if (itemstack1.isEmpty()) {
                     this.a.setItem(i, itemstack2);
                 } else if (ItemStack.c(itemstack1, itemstack2) && ItemStack.equals(itemstack1, itemstack2)) {
-                    itemstack2.count += itemstack1.count;
+                    itemstack2.add(itemstack1.getCount());
                     this.a.setItem(i, itemstack2);
                 } else if (!this.b.inventory.pickup(itemstack2)) {
                     this.b.drop(itemstack2, false);
@@ -104,5 +106,6 @@ public class SlotResult extends Slot {
             }
         }
 
+        return itemstack;
     }
 }

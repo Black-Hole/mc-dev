@@ -67,41 +67,42 @@ public class StatisticList {
     public static final Statistic ab = (new CounterStatistic("stat.craftingTableInteraction", new ChatMessage("stat.workbenchInteraction", new Object[0]))).h();
     public static final Statistic ac = (new CounterStatistic("stat.chestOpened", new ChatMessage("stat.chestOpened", new Object[0]))).h();
     public static final Statistic ad = (new CounterStatistic("stat.sleepInBed", new ChatMessage("stat.sleepInBed", new Object[0]))).h();
-    private static final Statistic[] ae = new Statistic[4096];
-    private static final Statistic[] af = new Statistic[32000];
+    public static final Statistic ae = (new CounterStatistic("stat.shulkerBoxOpened", new ChatMessage("stat.shulkerBoxOpened", new Object[0]))).h();
+    private static final Statistic[] af = new Statistic[4096];
     private static final Statistic[] ag = new Statistic[32000];
     private static final Statistic[] ah = new Statistic[32000];
     private static final Statistic[] ai = new Statistic[32000];
     private static final Statistic[] aj = new Statistic[32000];
+    private static final Statistic[] ak = new Statistic[32000];
 
     @Nullable
     public static Statistic a(Block block) {
-        return StatisticList.ae[Block.getId(block)];
+        return StatisticList.af[Block.getId(block)];
     }
 
     @Nullable
     public static Statistic a(Item item) {
-        return StatisticList.af[Item.getId(item)];
-    }
-
-    @Nullable
-    public static Statistic b(Item item) {
         return StatisticList.ag[Item.getId(item)];
     }
 
     @Nullable
-    public static Statistic c(Item item) {
+    public static Statistic b(Item item) {
         return StatisticList.ah[Item.getId(item)];
     }
 
     @Nullable
-    public static Statistic d(Item item) {
+    public static Statistic c(Item item) {
         return StatisticList.ai[Item.getId(item)];
     }
 
     @Nullable
-    public static Statistic e(Item item) {
+    public static Statistic d(Item item) {
         return StatisticList.aj[Item.getId(item)];
+    }
+
+    @Nullable
+    public static Statistic e(Item item) {
+        return StatisticList.ak[Item.getId(item)];
     }
 
     public static void a() {
@@ -111,7 +112,6 @@ public class StatisticList {
         b();
         f();
         AchievementList.a();
-        EntityTypes.a();
     }
 
     private static void b() {
@@ -120,8 +120,9 @@ public class StatisticList {
 
         while (iterator.hasNext()) {
             IRecipe irecipe = (IRecipe) iterator.next();
+            ItemStack itemstack = irecipe.b();
 
-            if (irecipe.b() != null) {
+            if (!itemstack.isEmpty()) {
                 hashset.add(irecipe.b().getItem());
             }
         }
@@ -129,9 +130,9 @@ public class StatisticList {
         iterator = RecipesFurnace.getInstance().getRecipes().values().iterator();
 
         while (iterator.hasNext()) {
-            ItemStack itemstack = (ItemStack) iterator.next();
+            ItemStack itemstack1 = (ItemStack) iterator.next();
 
-            hashset.add(itemstack.getItem());
+            hashset.add(itemstack1.getItem());
         }
 
         iterator = hashset.iterator();
@@ -144,12 +145,12 @@ public class StatisticList {
                 String s = f(item);
 
                 if (s != null) {
-                    StatisticList.af[i] = (new CraftingStatistic("stat.craftItem.", s, new ChatMessage("stat.craftItem", new Object[] { (new ItemStack(item)).B()}), item)).h();
+                    StatisticList.ag[i] = (new CraftingStatistic("stat.craftItem.", s, new ChatMessage("stat.craftItem", new Object[] { (new ItemStack(item)).C()}), item)).h();
                 }
             }
         }
 
-        a(StatisticList.af);
+        a(StatisticList.ag);
     }
 
     private static void c() {
@@ -159,18 +160,18 @@ public class StatisticList {
             Block block = (Block) iterator.next();
             Item item = Item.getItemOf(block);
 
-            if (item != null) {
+            if (item != Items.a) {
                 int i = Block.getId(block);
                 String s = f(item);
 
-                if (s != null && block.p()) {
-                    StatisticList.ae[i] = (new CraftingStatistic("stat.mineBlock.", s, new ChatMessage("stat.mineBlock", new Object[] { (new ItemStack(block)).B()}), item)).h();
-                    StatisticList.e.add((CraftingStatistic) StatisticList.ae[i]);
+                if (s != null && block.o()) {
+                    StatisticList.af[i] = (new CraftingStatistic("stat.mineBlock.", s, new ChatMessage("stat.mineBlock", new Object[] { (new ItemStack(block)).C()}), item)).h();
+                    StatisticList.e.add((CraftingStatistic) StatisticList.af[i]);
                 }
             }
         }
 
-        a(StatisticList.ae);
+        a(StatisticList.af);
     }
 
     private static void d() {
@@ -184,15 +185,15 @@ public class StatisticList {
                 String s = f(item);
 
                 if (s != null) {
-                    StatisticList.ag[i] = (new CraftingStatistic("stat.useItem.", s, new ChatMessage("stat.useItem", new Object[] { (new ItemStack(item)).B()}), item)).h();
+                    StatisticList.ah[i] = (new CraftingStatistic("stat.useItem.", s, new ChatMessage("stat.useItem", new Object[] { (new ItemStack(item)).C()}), item)).h();
                     if (!(item instanceof ItemBlock)) {
-                        StatisticList.d.add((CraftingStatistic) StatisticList.ag[i]);
+                        StatisticList.d.add((CraftingStatistic) StatisticList.ah[i]);
                     }
                 }
             }
         }
 
-        a(StatisticList.ag);
+        a(StatisticList.ah);
     }
 
     private static void e() {
@@ -206,12 +207,12 @@ public class StatisticList {
                 String s = f(item);
 
                 if (s != null && item.usesDurability()) {
-                    StatisticList.ah[i] = (new CraftingStatistic("stat.breakItem.", s, new ChatMessage("stat.breakItem", new Object[] { (new ItemStack(item)).B()}), item)).h();
+                    StatisticList.ai[i] = (new CraftingStatistic("stat.breakItem.", s, new ChatMessage("stat.breakItem", new Object[] { (new ItemStack(item)).C()}), item)).h();
                 }
             }
         }
 
-        a(StatisticList.ah);
+        a(StatisticList.ai);
     }
 
     private static void f() {
@@ -225,13 +226,13 @@ public class StatisticList {
                 String s = f(item);
 
                 if (s != null) {
-                    StatisticList.ai[i] = (new CraftingStatistic("stat.pickup.", s, new ChatMessage("stat.pickup", new Object[] { (new ItemStack(item)).B()}), item)).h();
-                    StatisticList.aj[i] = (new CraftingStatistic("stat.drop.", s, new ChatMessage("stat.drop", new Object[] { (new ItemStack(item)).B()}), item)).h();
+                    StatisticList.aj[i] = (new CraftingStatistic("stat.pickup.", s, new ChatMessage("stat.pickup", new Object[] { (new ItemStack(item)).C()}), item)).h();
+                    StatisticList.ak[i] = (new CraftingStatistic("stat.drop.", s, new ChatMessage("stat.drop", new Object[] { (new ItemStack(item)).C()}), item)).h();
                 }
             }
         }
 
-        a(StatisticList.ah);
+        a(StatisticList.ai);
     }
 
     private static String f(Item item) {
@@ -272,13 +273,18 @@ public class StatisticList {
     }
 
     public static Statistic a(EntityTypes.MonsterEggInfo entitytypes_monsteregginfo) {
-        return entitytypes_monsteregginfo.a == null ? null : (new Statistic("stat.killEntity." + entitytypes_monsteregginfo.a, new ChatMessage("stat.entityKill", new Object[] { new ChatMessage("entity." + entitytypes_monsteregginfo.a + ".name", new Object[0])}))).h();
+        String s = EntityTypes.a(entitytypes_monsteregginfo.a);
+
+        return s == null ? null : (new Statistic("stat.killEntity." + s, new ChatMessage("stat.entityKill", new Object[] { new ChatMessage("entity." + s + ".name", new Object[0])}))).h();
     }
 
     public static Statistic b(EntityTypes.MonsterEggInfo entitytypes_monsteregginfo) {
-        return entitytypes_monsteregginfo.a == null ? null : (new Statistic("stat.entityKilledBy." + entitytypes_monsteregginfo.a, new ChatMessage("stat.entityKilledBy", new Object[] { new ChatMessage("entity." + entitytypes_monsteregginfo.a + ".name", new Object[0])}))).h();
+        String s = EntityTypes.a(entitytypes_monsteregginfo.a);
+
+        return s == null ? null : (new Statistic("stat.entityKilledBy." + s, new ChatMessage("stat.entityKilledBy", new Object[] { new ChatMessage("entity." + s + ".name", new Object[0])}))).h();
     }
 
+    @Nullable
     public static Statistic getStatistic(String s) {
         return (Statistic) StatisticList.a.get(s);
     }

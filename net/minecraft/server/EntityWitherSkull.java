@@ -14,7 +14,7 @@ public class EntityWitherSkull extends EntityFireball {
         this.setSize(0.3125F, 0.3125F);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
+    public static void b(DataConverterManager dataconvertermanager) {
         EntityFireball.a(dataconvertermanager, "WitherSkull");
     }
 

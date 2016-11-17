@@ -21,7 +21,7 @@ public class DataConverterManager implements DataConverter {
     public NBTTagCompound a(DataConverterType dataconvertertype, NBTTagCompound nbttagcompound) {
         int i = nbttagcompound.hasKeyOfType("DataVersion", 99) ? nbttagcompound.getInt("DataVersion") : -1;
 
-        return i >= 512 ? nbttagcompound : this.a(dataconvertertype, nbttagcompound, i);
+        return i >= 819 ? nbttagcompound : this.a(dataconvertertype, nbttagcompound, i);
     }
 
     public NBTTagCompound a(DataConverterType dataconvertertype, NBTTagCompound nbttagcompound, int i) {

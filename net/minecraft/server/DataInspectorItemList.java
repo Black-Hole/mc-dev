@@ -4,8 +4,8 @@ public class DataInspectorItemList extends DataInspectorTagged {
 
     private final String[] a;
 
-    public DataInspectorItemList(String s, String... astring) {
-        super("id", s);
+    public DataInspectorItemList(Class<?> oclass, String... astring) {
+        super(oclass);
         this.a = astring;
     }
 

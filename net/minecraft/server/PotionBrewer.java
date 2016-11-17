@@ -4,7 +4,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nullable;
 
 public class PotionBrewer {
 
@@ -12,7 +11,7 @@ public class PotionBrewer {
     private static final List<PotionBrewer.PredicatedCombination<Item>> b = Lists.newArrayList();
     private static final List<PotionBrewer.PredicateItem> c = Lists.newArrayList();
     private static final Predicate<ItemStack> d = new Predicate() {
-        public boolean a(@Nullable ItemStack itemstack) {
+        public boolean a(ItemStack itemstack) {
             Iterator iterator = PotionBrewer.c.iterator();
 
             PotionBrewer.PredicateItem potionbrewer_predicateitem;
@@ -81,7 +80,7 @@ public class PotionBrewer {
     }
 
     protected static boolean c(ItemStack itemstack, ItemStack itemstack1) {
-        PotionRegistry potionregistry = PotionUtil.c(itemstack);
+        PotionRegistry potionregistry = PotionUtil.d(itemstack);
         int i = 0;
 
         for (int j = PotionBrewer.a.size(); i < j; ++i) {
@@ -95,10 +94,9 @@ public class PotionBrewer {
         return false;
     }
 
-    @Nullable
-    public static ItemStack d(ItemStack itemstack, @Nullable ItemStack itemstack1) {
-        if (itemstack1 != null) {
-            PotionRegistry potionregistry = PotionUtil.c(itemstack1);
+    public static ItemStack d(ItemStack itemstack, ItemStack itemstack1) {
+        if (!itemstack1.isEmpty()) {
+            PotionRegistry potionregistry = PotionUtil.d(itemstack1);
             Item item = itemstack1.getItem();
             int i = 0;
 
@@ -222,8 +220,8 @@ public class PotionBrewer {
             this.b = i;
         }
 
-        public boolean a(@Nullable ItemStack itemstack) {
-            return itemstack != null && itemstack.getItem() == this.a && (this.b == -1 || this.b == itemstack.getData());
+        public boolean a(ItemStack itemstack) {
+            return itemstack.getItem() == this.a && (this.b == -1 || this.b == itemstack.getData());
         }
 
         public boolean apply(Object object) {

@@ -10,33 +10,33 @@ public class BlockLog2 extends BlockLogAbstract {
             return blockwood_enumlogvariant.a() >= 4;
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((BlockWood.EnumLogVariant) object);
         }
     });
 
     public BlockLog2() {
-        this.w(this.blockStateList.getBlockData().set(BlockLog2.VARIANT, BlockWood.EnumLogVariant.ACACIA).set(BlockLog2.AXIS, BlockLogAbstract.EnumLogRotation.Y));
+        this.y(this.blockStateList.getBlockData().set(BlockLog2.VARIANT, BlockWood.EnumLogVariant.ACACIA).set(BlockLog2.AXIS, BlockLogAbstract.EnumLogRotation.Y));
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
         BlockWood.EnumLogVariant blockwood_enumlogvariant = (BlockWood.EnumLogVariant) iblockdata.get(BlockLog2.VARIANT);
 
-        switch (BlockLog2.SyntheticClass_1.b[((BlockLogAbstract.EnumLogRotation) iblockdata.get(BlockLog2.AXIS)).ordinal()]) {
-        case 1:
-        case 2:
-        case 3:
+        switch ((BlockLogAbstract.EnumLogRotation) iblockdata.get(BlockLog2.AXIS)) {
+        case X:
+        case Z:
+        case NONE:
         default:
-            switch (BlockLog2.SyntheticClass_1.a[blockwood_enumlogvariant.ordinal()]) {
-            case 1:
+            switch (blockwood_enumlogvariant) {
+            case ACACIA:
             default:
                 return MaterialMapColor.m;
 
-            case 2:
+            case DARK_OAK:
                 return BlockWood.EnumLogVariant.DARK_OAK.c();
             }
 
-        case 4:
+        case Y:
             return blockwood_enumlogvariant.c();
         }
     }
@@ -68,16 +68,16 @@ public class BlockLog2 extends BlockLogAbstract {
         byte b0 = 0;
         int i = b0 | ((BlockWood.EnumLogVariant) iblockdata.get(BlockLog2.VARIANT)).a() - 4;
 
-        switch (BlockLog2.SyntheticClass_1.b[((BlockLogAbstract.EnumLogRotation) iblockdata.get(BlockLog2.AXIS)).ordinal()]) {
-        case 1:
+        switch ((BlockLogAbstract.EnumLogRotation) iblockdata.get(BlockLog2.AXIS)) {
+        case X:
             i |= 4;
             break;
 
-        case 2:
+        case Z:
             i |= 8;
             break;
 
-        case 3:
+        case NONE:
             i |= 12;
         }
 
@@ -88,58 +88,11 @@ public class BlockLog2 extends BlockLogAbstract {
         return new BlockStateList(this, new IBlockState[] { BlockLog2.VARIANT, BlockLog2.AXIS});
     }
 
-    protected ItemStack u(IBlockData iblockdata) {
+    protected ItemStack w(IBlockData iblockdata) {
         return new ItemStack(Item.getItemOf(this), 1, ((BlockWood.EnumLogVariant) iblockdata.get(BlockLog2.VARIANT)).a() - 4);
     }
 
     public int getDropData(IBlockData iblockdata) {
         return ((BlockWood.EnumLogVariant) iblockdata.get(BlockLog2.VARIANT)).a() - 4;
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b = new int[BlockLogAbstract.EnumLogRotation.values().length];
-
-        static {
-            try {
-                BlockLog2.SyntheticClass_1.b[BlockLogAbstract.EnumLogRotation.X.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockLog2.SyntheticClass_1.b[BlockLogAbstract.EnumLogRotation.Z.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BlockLog2.SyntheticClass_1.b[BlockLogAbstract.EnumLogRotation.NONE.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockLog2.SyntheticClass_1.b[BlockLogAbstract.EnumLogRotation.Y.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            a = new int[BlockWood.EnumLogVariant.values().length];
-
-            try {
-                BlockLog2.SyntheticClass_1.a[BlockWood.EnumLogVariant.ACACIA.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                BlockLog2.SyntheticClass_1.a[BlockWood.EnumLogVariant.DARK_OAK.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-        }
     }
 }

@@ -30,7 +30,7 @@ public class ChatComponentScore extends ChatBaseComponent {
     }
 
     public void a(ICommandListener icommandlistener) {
-        MinecraftServer minecraftserver = icommandlistener.h();
+        MinecraftServer minecraftserver = icommandlistener.B_();
 
         if (minecraftserver != null && minecraftserver.M() && UtilColor.b(this.d)) {
             Scoreboard scoreboard = minecraftserver.getWorldServer(0).getScoreboard();
@@ -40,11 +40,11 @@ public class ChatComponentScore extends ChatBaseComponent {
                 ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(this.b, scoreboardobjective);
 
                 this.b(String.format("%d", new Object[] { Integer.valueOf(scoreboardscore.getScore())}));
-                return;
+            } else {
+                this.d = "";
             }
         }
 
-        this.d = "";
     }
 
     public ChatComponentScore i() {

@@ -8,7 +8,7 @@ public class ItemReed extends Item {
         this.a = block;
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         IBlockData iblockdata = world.getType(blockposition);
         Block block = iblockdata.getBlock();
 
@@ -18,7 +18,9 @@ public class ItemReed extends Item {
             blockposition = blockposition.shift(enumdirection);
         }
 
-        if (entityhuman.a(blockposition, enumdirection, itemstack) && itemstack.count != 0 && world.a(this.a, blockposition, false, enumdirection, (Entity) null, itemstack)) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
+        if (!itemstack.isEmpty() && entityhuman.a(blockposition, enumdirection, itemstack) && world.a(this.a, blockposition, false, enumdirection, (Entity) null)) {
             IBlockData iblockdata1 = this.a.getPlacedState(world, blockposition, enumdirection, f, f1, f2, 0, entityhuman);
 
             if (!world.setTypeAndData(blockposition, iblockdata1, 11)) {
@@ -30,10 +32,10 @@ public class ItemReed extends Item {
                     iblockdata1.getBlock().postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
                 }
 
-                SoundEffectType soundeffecttype = this.a.w();
+                SoundEffectType soundeffecttype = this.a.getStepSound();
 
                 world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
-                --itemstack.count;
+                itemstack.subtract(1);
                 return EnumInteractionResult.SUCCESS;
             }
         } else {

@@ -55,9 +55,7 @@ public class Navigation extends NavigationAbstract {
     }
 
     public PathEntity a(Entity entity) {
-        BlockPosition blockposition = new BlockPosition(entity);
-
-        return this.a(blockposition);
+        return this.a(new BlockPosition(entity));
     }
 
     private int r() {

@@ -27,7 +27,8 @@ public abstract class BlockDataAbstract implements IBlockData {
             return iblockstate.a(comparable);
         }
 
-        public Object apply(Object object) {
+        @Nullable
+        public Object apply(@Nullable Object object) {
             return this.a((Entry) object);
         }
     };
@@ -58,9 +59,9 @@ public abstract class BlockDataAbstract implements IBlockData {
         StringBuilder stringbuilder = new StringBuilder();
 
         stringbuilder.append(Block.REGISTRY.b(this.getBlock()));
-        if (!this.s().isEmpty()) {
+        if (!this.u().isEmpty()) {
             stringbuilder.append("[");
-            BlockDataAbstract.a.appendTo(stringbuilder, Iterables.transform(this.s().entrySet(), BlockDataAbstract.b));
+            BlockDataAbstract.a.appendTo(stringbuilder, Iterables.transform(this.u().entrySet(), BlockDataAbstract.b));
             stringbuilder.append("]");
         }
 

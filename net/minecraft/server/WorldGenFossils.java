@@ -26,7 +26,7 @@ public class WorldGenFossils extends WorldGenerator {
     public WorldGenFossils() {}
 
     public boolean generate(World world, Random random, BlockPosition blockposition) {
-        Random random1 = world.getChunkAt(blockposition.getX(), blockposition.getZ()).a(987234911L);
+        Random random1 = world.getChunkAtWorldCoords(blockposition).a(987234911L);
         MinecraftServer minecraftserver = world.getMinecraftServer();
         EnumBlockRotation[] aenumblockrotation = EnumBlockRotation.values();
         EnumBlockRotation enumblockrotation = aenumblockrotation[random1.nextInt(aenumblockrotation.length)];
@@ -46,7 +46,7 @@ public class WorldGenFossils extends WorldGenerator {
 
         for (i1 = 0; i1 < blockposition1.getX(); ++i1) {
             for (int j1 = 0; j1 < blockposition1.getX(); ++j1) {
-                l = Math.min(l, world.b(blockposition.getX() + i1 + j, blockposition.getZ() + j1 + k));
+                l = Math.min(l, world.c(blockposition.getX() + i1 + j, blockposition.getZ() + j1 + k));
             }
         }
 
@@ -54,9 +54,9 @@ public class WorldGenFossils extends WorldGenerator {
         BlockPosition blockposition2 = definedstructure.a(blockposition.a(j, i1, k), EnumBlockMirror.NONE, enumblockrotation);
 
         definedstructureinfo.a(0.9F);
-        definedstructure.a(world, blockposition2, definedstructureinfo, 4);
+        definedstructure.a(world, blockposition2, definedstructureinfo, 20);
         definedstructureinfo.a(0.1F);
-        definedstructure1.a(world, blockposition2, definedstructureinfo, 4);
+        definedstructure1.a(world, blockposition2, definedstructureinfo, 20);
         return true;
     }
 }

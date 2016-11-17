@@ -30,7 +30,7 @@ public class EntityEnderCrystal extends Entity {
         this.getDataWatcher().register(EntityEnderCrystal.c, Boolean.valueOf(true));
     }
 
-    public void m() {
+    public void A_() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
@@ -94,7 +94,7 @@ public class EntityEnderCrystal extends Entity {
     private void a(DamageSource damagesource) {
         if (this.world.worldProvider instanceof WorldProviderTheEnd) {
             WorldProviderTheEnd worldprovidertheend = (WorldProviderTheEnd) this.world.worldProvider;
-            EnderDragonBattle enderdragonbattle = worldprovidertheend.s();
+            EnderDragonBattle enderdragonbattle = worldprovidertheend.t();
 
             if (enderdragonbattle != null) {
                 enderdragonbattle.a(this, damagesource);

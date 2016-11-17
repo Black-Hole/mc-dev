@@ -74,10 +74,10 @@ public class GenericAttributes {
             NBTTagCompound nbttagcompound = nbttaglist.get(i);
             AttributeInstance attributeinstance = attributemapbase.a(nbttagcompound.getString("Name"));
 
-            if (attributeinstance != null) {
-                a(attributeinstance, nbttagcompound);
-            } else {
+            if (attributeinstance == null) {
                 GenericAttributes.j.warn("Ignoring unknown attribute \'{}\'", new Object[] { nbttagcompound.getString("Name")});
+            } else {
+                a(attributeinstance, nbttagcompound);
             }
         }
 

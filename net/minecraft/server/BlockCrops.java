@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement {
 
@@ -9,15 +8,15 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     private static final AxisAlignedBB[] a = new AxisAlignedBB[] { new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
 
     protected BlockCrops() {
-        this.w(this.blockStateList.getBlockData().set(this.e(), Integer.valueOf(0)));
+        this.y(this.blockStateList.getBlockData().set(this.e(), Integer.valueOf(0)));
         this.a(true);
         this.a((CreativeModeTab) null);
         this.c(0.0F);
         this.a(SoundEffectType.c);
-        this.q();
+        this.p();
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockCrops.a[((Integer) iblockdata.get(this.e())).intValue()];
     }
 
@@ -33,7 +32,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
         return 7;
     }
 
-    protected int x(IBlockData iblockdata) {
+    protected int z(IBlockData iblockdata) {
         return ((Integer) iblockdata.get(this.e())).intValue();
     }
 
@@ -41,14 +40,14 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
         return this.getBlockData().set(this.e(), Integer.valueOf(i));
     }
 
-    public boolean y(IBlockData iblockdata) {
+    public boolean A(IBlockData iblockdata) {
         return ((Integer) iblockdata.get(this.e())).intValue() >= this.g();
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         super.b(world, blockposition, iblockdata, random);
         if (world.getLightLevel(blockposition.up()) >= 9) {
-            int i = this.x(iblockdata);
+            int i = this.z(iblockdata);
 
             if (i < this.g()) {
                 float f = a((Block) this, world, blockposition);
@@ -62,7 +61,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     public void g(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        int i = this.x(iblockdata) + this.b(world);
+        int i = this.z(iblockdata) + this.b(world);
         int j = this.g();
 
         if (i > j) {
@@ -135,7 +134,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         super.dropNaturally(world, blockposition, iblockdata, f, 0);
         if (!world.isClientSide) {
-            int j = this.x(iblockdata);
+            int j = this.z(iblockdata);
 
             if (j >= this.g()) {
                 int k = 3 + i;
@@ -150,9 +149,8 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
         }
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return this.y(iblockdata) ? this.i() : this.h();
+        return this.A(iblockdata) ? this.i() : this.h();
     }
 
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -160,7 +158,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
-        return !this.y(iblockdata);
+        return !this.A(iblockdata);
     }
 
     public boolean a(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
@@ -176,7 +174,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     public int toLegacyData(IBlockData iblockdata) {
-        return this.x(iblockdata);
+        return this.z(iblockdata);
     }
 
     protected BlockStateList getStateList() {

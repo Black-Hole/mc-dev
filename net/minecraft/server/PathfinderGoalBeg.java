@@ -47,14 +47,12 @@ public class PathfinderGoalBeg extends PathfinderGoal {
             EnumHand enumhand = aenumhand[j];
             ItemStack itemstack = entityhuman.b(enumhand);
 
-            if (itemstack != null) {
-                if (this.a.isTamed() && itemstack.getItem() == Items.BONE) {
-                    return true;
-                }
+            if (this.a.isTamed() && itemstack.getItem() == Items.BONE) {
+                return true;
+            }
 
-                if (this.a.e(itemstack)) {
-                    return true;
-                }
+            if (this.a.e(itemstack)) {
+                return true;
             }
         }
 

@@ -20,13 +20,13 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
         this.a = packetplayoutcombatevent_enumcombateventtype;
         EntityLiving entityliving = combattracker.c();
 
-        switch (PacketPlayOutCombatEvent.SyntheticClass_1.a[packetplayoutcombatevent_enumcombateventtype.ordinal()]) {
-        case 1:
+        switch (packetplayoutcombatevent_enumcombateventtype) {
+        case END_COMBAT:
             this.d = combattracker.f();
             this.c = entityliving == null ? -1 : entityliving.getId();
             break;
 
-        case 2:
+        case ENTITY_DIED:
             this.b = combattracker.h().getId();
             this.c = entityliving == null ? -1 : entityliving.getId();
             if (flag) {
@@ -66,26 +66,6 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[PacketPlayOutCombatEvent.EnumCombatEventType.values().length];
-
-        static {
-            try {
-                PacketPlayOutCombatEvent.SyntheticClass_1.a[PacketPlayOutCombatEvent.EnumCombatEventType.END_COMBAT.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                PacketPlayOutCombatEvent.SyntheticClass_1.a[PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-        }
     }
 
     public static enum EnumCombatEventType {

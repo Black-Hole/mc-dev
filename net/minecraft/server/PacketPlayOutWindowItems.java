@@ -1,23 +1,26 @@
 package net.minecraft.server;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 public class PacketPlayOutWindowItems implements Packet<PacketListenerPlayOut> {
 
     private int a;
-    private ItemStack[] b;
+    private List<ItemStack> b;
 
     public PacketPlayOutWindowItems() {}
 
-    public PacketPlayOutWindowItems(int i, List<ItemStack> list) {
+    public PacketPlayOutWindowItems(int i, NonNullList<ItemStack> nonnulllist) {
         this.a = i;
-        this.b = new ItemStack[list.size()];
+        this.b = NonNullList.a(nonnulllist.size(), ItemStack.a);
 
-        for (int j = 0; j < this.b.length; ++j) {
-            ItemStack itemstack = (ItemStack) list.get(j);
+        for (int j = 0; j < this.b.size(); ++j) {
+            ItemStack itemstack = (ItemStack) nonnulllist.get(j);
 
-            this.b[j] = itemstack == null ? null : itemstack.cloneItemStack();
+            if (!itemstack.isEmpty()) {
+                this.b.set(j, itemstack.cloneItemStack());
+            }
         }
 
     }
@@ -26,22 +29,21 @@ public class PacketPlayOutWindowItems implements Packet<PacketListenerPlayOut> {
         this.a = packetdataserializer.readUnsignedByte();
         short short0 = packetdataserializer.readShort();
 
-        this.b = new ItemStack[short0];
+        this.b = NonNullList.a(short0, ItemStack.a);
 
         for (int i = 0; i < short0; ++i) {
-            this.b[i] = packetdataserializer.k();
+            this.b.set(i, packetdataserializer.k());
         }
 
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
-        packetdataserializer.writeShort(this.b.length);
-        ItemStack[] aitemstack = this.b;
-        int i = aitemstack.length;
+        packetdataserializer.writeShort(this.b.size());
+        Iterator iterator = this.b.iterator();
 
-        for (int j = 0; j < i; ++j) {
-            ItemStack itemstack = aitemstack[j];
+        while (iterator.hasNext()) {
+            ItemStack itemstack = (ItemStack) iterator.next();
 
             packetdataserializer.a(itemstack);
         }

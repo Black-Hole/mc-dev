@@ -26,5 +26,5 @@ public interface ICommandListener {
     void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i);
 
     @Nullable
-    MinecraftServer h();
+    MinecraftServer B_();
 }

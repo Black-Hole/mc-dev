@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import javax.annotation.Nullable;
@@ -50,17 +51,17 @@ public enum EnumDirection implements INamable {
     }
 
     public EnumDirection e() {
-        switch (EnumDirection.SyntheticClass_1.b[this.ordinal()]) {
-        case 1:
+        switch (this) {
+        case NORTH:
             return EnumDirection.EAST;
 
-        case 2:
+        case EAST:
             return EnumDirection.SOUTH;
 
-        case 3:
+        case SOUTH:
             return EnumDirection.WEST;
 
-        case 4:
+        case WEST:
             return EnumDirection.NORTH;
 
         default:
@@ -69,17 +70,17 @@ public enum EnumDirection implements INamable {
     }
 
     public EnumDirection f() {
-        switch (EnumDirection.SyntheticClass_1.b[this.ordinal()]) {
-        case 1:
+        switch (this) {
+        case NORTH:
             return EnumDirection.WEST;
 
-        case 2:
+        case EAST:
             return EnumDirection.NORTH;
 
-        case 3:
+        case SOUTH:
             return EnumDirection.EAST;
 
-        case 4:
+        case WEST:
             return EnumDirection.SOUTH;
 
         default:
@@ -150,6 +151,22 @@ public enum EnumDirection implements INamable {
         throw new IllegalArgumentException("No such direction: " + enumdirection_enumaxisdirection + " " + enumdirection_enumaxis);
     }
 
+    public static EnumDirection a(BlockPosition blockposition, EntityLiving entityliving) {
+        if (Math.abs(entityliving.locX - (double) ((float) blockposition.getX() + 0.5F)) < 2.0D && Math.abs(entityliving.locZ - (double) ((float) blockposition.getZ() + 0.5F)) < 2.0D) {
+            double d0 = entityliving.locY + (double) entityliving.getHeadHeight();
+
+            if (d0 - (double) blockposition.getY() > 2.0D) {
+                return EnumDirection.UP;
+            }
+
+            if ((double) blockposition.getY() - d0 > 0.0D) {
+                return EnumDirection.DOWN;
+            }
+        }
+
+        return entityliving.getDirection().opposite();
+    }
+
     static {
         EnumDirection[] aenumdirection = values();
         int i = aenumdirection.length;
@@ -162,89 +179,9 @@ public enum EnumDirection implements INamable {
                 EnumDirection.o[enumdirection.i] = enumdirection;
             }
 
-            EnumDirection.p.put(enumdirection.j().toLowerCase(), enumdirection);
+            EnumDirection.p.put(enumdirection.j().toLowerCase(Locale.ROOT), enumdirection);
         }
 
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b;
-        static final int[] c = new int[EnumDirection.EnumDirectionLimit.values().length];
-
-        static {
-            try {
-                EnumDirection.SyntheticClass_1.c[EnumDirection.EnumDirectionLimit.HORIZONTAL.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                EnumDirection.SyntheticClass_1.c[EnumDirection.EnumDirectionLimit.VERTICAL.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            b = new int[EnumDirection.values().length];
-
-            try {
-                EnumDirection.SyntheticClass_1.b[EnumDirection.NORTH.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                EnumDirection.SyntheticClass_1.b[EnumDirection.EAST.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                EnumDirection.SyntheticClass_1.b[EnumDirection.SOUTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            try {
-                EnumDirection.SyntheticClass_1.b[EnumDirection.WEST.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-            try {
-                EnumDirection.SyntheticClass_1.b[EnumDirection.UP.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror6) {
-                ;
-            }
-
-            try {
-                EnumDirection.SyntheticClass_1.b[EnumDirection.DOWN.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror7) {
-                ;
-            }
-
-            a = new int[EnumDirection.EnumAxis.values().length];
-
-            try {
-                EnumDirection.SyntheticClass_1.a[EnumDirection.EnumAxis.X.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror8) {
-                ;
-            }
-
-            try {
-                EnumDirection.SyntheticClass_1.a[EnumDirection.EnumAxis.Y.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror9) {
-                ;
-            }
-
-            try {
-                EnumDirection.SyntheticClass_1.a[EnumDirection.EnumAxis.Z.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror10) {
-                ;
-            }
-
-        }
     }
 
     public static enum EnumDirectionLimit implements Predicate<EnumDirection>, Iterable<EnumDirection> {
@@ -254,11 +191,11 @@ public enum EnumDirection implements INamable {
         private EnumDirectionLimit() {}
 
         public EnumDirection[] a() {
-            switch (EnumDirection.SyntheticClass_1.c[this.ordinal()]) {
-            case 1:
+            switch (this) {
+            case HORIZONTAL:
                 return new EnumDirection[] { EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST};
 
-            case 2:
+            case VERTICAL:
                 return new EnumDirection[] { EnumDirection.UP, EnumDirection.DOWN};
 
             default:
@@ -280,7 +217,7 @@ public enum EnumDirection implements INamable {
             return Iterators.forArray(this.a());
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((EnumDirection) object);
         }
     }
@@ -347,7 +284,7 @@ public enum EnumDirection implements INamable {
             return this.e;
         }
 
-        public boolean apply(Object object) {
+        public boolean apply(@Nullable Object object) {
             return this.a((EnumDirection) object);
         }
 
@@ -358,7 +295,7 @@ public enum EnumDirection implements INamable {
             for (int j = 0; j < i; ++j) {
                 EnumDirection.EnumAxis enumdirection_enumaxis = aenumdirection_enumaxis[j];
 
-                EnumDirection.EnumAxis.d.put(enumdirection_enumaxis.a().toLowerCase(), enumdirection_enumaxis);
+                EnumDirection.EnumAxis.d.put(enumdirection_enumaxis.a().toLowerCase(Locale.ROOT), enumdirection_enumaxis);
             }
 
         }

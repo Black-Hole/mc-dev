@@ -206,7 +206,7 @@ public class NBTTagCompound extends NBTBase {
     public double getDouble(String s) {
         try {
             if (this.hasKeyOfType(s, 99)) {
-                return ((NBTNumber) this.map.get(s)).h();
+                return ((NBTNumber) this.map.get(s)).asDouble();
             }
         } catch (ClassCastException classcastexception) {
             ;

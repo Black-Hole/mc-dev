@@ -16,8 +16,8 @@ public class EntitySpectralArrow extends EntityArrow {
         super(world, d0, d1, d2);
     }
 
-    public void m() {
-        super.m();
+    public void A_() {
+        super.A_();
         if (this.world.isClientSide && !this.inGround) {
             this.world.addParticle(EnumParticle.SPELL_INSTANT, this.locX, this.locY, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
         }
@@ -35,7 +35,7 @@ public class EntitySpectralArrow extends EntityArrow {
         entityliving.addEffect(mobeffect);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void c(DataConverterManager dataconvertermanager) {
         EntityArrow.a(dataconvertermanager, "SpectralArrow");
     }
 

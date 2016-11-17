@@ -3,6 +3,8 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
+import org.apache.commons.lang3.StringUtils;
 
 public abstract class MobSpawnerAbstract {
 
@@ -21,12 +23,19 @@ public abstract class MobSpawnerAbstract {
 
     public MobSpawnerAbstract() {}
 
-    public String getMobName() {
-        return this.spawnData.b().getString("id");
+    @Nullable
+    public MinecraftKey getMobName() {
+        String s = this.spawnData.b().getString("id");
+        MinecraftKey minecraftkey = new MinecraftKey(s);
+
+        return !UtilColor.b(s) && StringUtils.equals(s, minecraftkey.toString()) ? minecraftkey : null;
     }
 
-    public void setMobName(String s) {
-        this.spawnData.b().setString("id", s);
+    public void setMobName(@Nullable MinecraftKey minecraftkey) {
+        if (minecraftkey != null) {
+            this.spawnData.b().setString("id", minecraftkey.toString());
+        }
+
     }
 
     private boolean h() {
@@ -90,7 +99,7 @@ public abstract class MobSpawnerAbstract {
                     EntityInsentient entityinsentient = entity instanceof EntityInsentient ? (EntityInsentient) entity : null;
 
                     entity.setPositionRotation(entity.locX, entity.locY, entity.locZ, world.random.nextFloat() * 360.0F, 0.0F);
-                    if (entityinsentient == null || entityinsentient.cK() && entityinsentient.canSpawn()) {
+                    if (entityinsentient == null || entityinsentient.cM() && entityinsentient.canSpawn()) {
                         if (this.spawnData.b().d() == 1 && this.spawnData.b().hasKeyOfType("id", 8) && entity instanceof EntityInsentient) {
                             ((EntityInsentient) entity).prepare(world.D(new BlockPosition(entity)), (GroupDataEntity) null);
                         }
@@ -169,9 +178,9 @@ public abstract class MobSpawnerAbstract {
     }
 
     public NBTTagCompound b(NBTTagCompound nbttagcompound) {
-        String s = this.getMobName();
+        MinecraftKey minecraftkey = this.getMobName();
 
-        if (UtilColor.b(s)) {
+        if (minecraftkey == null) {
             return nbttagcompound;
         } else {
             nbttagcompound.setShort("Delay", (short) this.spawnDelay);

@@ -11,7 +11,8 @@ public class ItemHanging extends Item {
         this.a(CreativeModeTab.c);
     }
 
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        ItemStack itemstack = entityhuman.b(enumhand);
         BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
         if (enumdirection != EnumDirection.DOWN && enumdirection != EnumDirection.UP && entityhuman.a(blockposition1, enumdirection, itemstack)) {
@@ -23,7 +24,7 @@ public class ItemHanging extends Item {
                     world.addEntity(entityhanging);
                 }
 
-                --itemstack.count;
+                itemstack.subtract(1);
             }
 
             return EnumInteractionResult.SUCCESS;

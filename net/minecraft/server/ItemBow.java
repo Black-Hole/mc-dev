@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class ItemBow extends Item {
 
     public ItemBow() {
@@ -15,25 +13,25 @@ public class ItemBow extends Item {
     }
 
     private ItemStack a(EntityHuman entityhuman) {
-        if (this.h_(entityhuman.b(EnumHand.OFF_HAND))) {
+        if (this.d(entityhuman.b(EnumHand.OFF_HAND))) {
             return entityhuman.b(EnumHand.OFF_HAND);
-        } else if (this.h_(entityhuman.b(EnumHand.MAIN_HAND))) {
+        } else if (this.d(entityhuman.b(EnumHand.MAIN_HAND))) {
             return entityhuman.b(EnumHand.MAIN_HAND);
         } else {
             for (int i = 0; i < entityhuman.inventory.getSize(); ++i) {
                 ItemStack itemstack = entityhuman.inventory.getItem(i);
 
-                if (this.h_(itemstack)) {
+                if (this.d(itemstack)) {
                     return itemstack;
                 }
             }
 
-            return null;
+            return ItemStack.a;
         }
     }
 
-    protected boolean h_(@Nullable ItemStack itemstack) {
-        return itemstack != null && itemstack.getItem() instanceof ItemArrow;
+    protected boolean d(ItemStack itemstack) {
+        return itemstack.getItem() instanceof ItemArrow;
     }
 
     public void a(ItemStack itemstack, World world, EntityLiving entityliving, int i) {
@@ -42,8 +40,8 @@ public class ItemBow extends Item {
             boolean flag = entityhuman.abilities.canInstantlyBuild || EnchantmentManager.getEnchantmentLevel(Enchantments.ARROW_INFINITE, itemstack) > 0;
             ItemStack itemstack1 = this.a(entityhuman);
 
-            if (itemstack1 != null || flag) {
-                if (itemstack1 == null) {
+            if (!itemstack1.isEmpty() || flag) {
+                if (itemstack1.isEmpty()) {
                     itemstack1 = new ItemStack(Items.ARROW);
                 }
 
@@ -55,7 +53,7 @@ public class ItemBow extends Item {
 
                     if (!world.isClientSide) {
                         ItemArrow itemarrow = (ItemArrow) ((ItemArrow) (itemstack1.getItem() instanceof ItemArrow ? itemstack1.getItem() : Items.ARROW));
-                        EntityArrow entityarrow = itemarrow.a(world, itemstack1, entityhuman);
+                        EntityArrow entityarrow = itemarrow.a(world, itemstack1, (EntityLiving) entityhuman);
 
                         entityarrow.a(entityhuman, entityhuman.pitch, entityhuman.yaw, 0.0F, f * 3.0F, 1.0F);
                         if (f == 1.0F) {
@@ -79,17 +77,17 @@ public class ItemBow extends Item {
                         }
 
                         itemstack.damage(1, entityhuman);
-                        if (flag1) {
+                        if (flag1 || entityhuman.abilities.canInstantlyBuild && (itemstack1.getItem() == Items.SPECTRAL_ARROW || itemstack1.getItem() == Items.TIPPED_ARROW)) {
                             entityarrow.fromPlayer = EntityArrow.PickupStatus.CREATIVE_ONLY;
                         }
 
                         world.addEntity(entityarrow);
                     }
 
-                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.v, SoundCategory.NEUTRAL, 1.0F, 1.0F / (ItemBow.j.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-                    if (!flag1) {
-                        --itemstack1.count;
-                        if (itemstack1.count == 0) {
+                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.w, SoundCategory.PLAYERS, 1.0F, 1.0F / (ItemBow.j.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    if (!flag1 && !entityhuman.abilities.canInstantlyBuild) {
+                        itemstack1.subtract(1);
+                        if (itemstack1.isEmpty()) {
                             entityhuman.inventory.d(itemstack1);
                         }
                     }
@@ -119,11 +117,12 @@ public class ItemBow extends Item {
         return EnumAnimation.BOW;
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
-        boolean flag = this.a(entityhuman) != null;
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+        boolean flag = !this.a(entityhuman).isEmpty();
 
         if (!entityhuman.abilities.canInstantlyBuild && !flag) {
-            return !flag ? new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack) : new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+            return flag ? new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack) : new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
         } else {
             entityhuman.c(enumhand);
             return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);

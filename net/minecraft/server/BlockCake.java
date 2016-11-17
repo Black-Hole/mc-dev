@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockCake extends Block {
 
@@ -10,11 +9,11 @@ public class BlockCake extends Block {
 
     protected BlockCake() {
         super(Material.CAKE);
-        this.w(this.blockStateList.getBlockData().set(BlockCake.BITES, Integer.valueOf(0)));
+        this.y(this.blockStateList.getBlockData().set(BlockCake.BITES, Integer.valueOf(0)));
         this.a(true);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockCake.b[((Integer) iblockdata.get(BlockCake.BITES)).intValue()];
     }
 
@@ -26,13 +25,20 @@ public class BlockCake extends Block {
         return false;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
-        this.b(world, blockposition, iblockdata, entityhuman);
-        return true;
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        if (!world.isClientSide) {
+            return this.b(world, blockposition, iblockdata, entityhuman);
+        } else {
+            ItemStack itemstack = entityhuman.b(enumhand);
+
+            return this.b(world, blockposition, iblockdata, entityhuman) || itemstack.isEmpty();
+        }
     }
 
-    private void b(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        if (entityhuman.m(false)) {
+    private boolean b(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
+        if (!entityhuman.n(false)) {
+            return false;
+        } else {
             entityhuman.b(StatisticList.J);
             entityhuman.getFoodData().eat(2, 0.1F);
             int i = ((Integer) iblockdata.get(BlockCake.BITES)).intValue();
@@ -43,6 +49,7 @@ public class BlockCake extends Block {
                 world.setAir(blockposition);
             }
 
+            return true;
         }
     }
 
@@ -50,7 +57,7 @@ public class BlockCake extends Block {
         return super.canPlace(world, blockposition) ? this.b(world, blockposition) : false;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!this.b(world, blockposition)) {
             world.setAir(blockposition);
         }
@@ -65,9 +72,8 @@ public class BlockCake extends Block {
         return 0;
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return null;
+        return Items.a;
     }
 
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -86,7 +92,7 @@ public class BlockCake extends Block {
         return new BlockStateList(this, new IBlockState[] { BlockCake.BITES});
     }
 
-    public int d(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public int c(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return (7 - ((Integer) iblockdata.get(BlockCake.BITES)).intValue()) * 2;
     }
 

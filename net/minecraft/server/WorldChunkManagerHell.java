@@ -47,4 +47,12 @@ public class WorldChunkManagerHell extends WorldChunkManager {
     public boolean a(int i, int j, int k, List<BiomeBase> list) {
         return list.contains(this.a);
     }
+
+    public boolean c() {
+        return true;
+    }
+
+    public BiomeBase d() {
+        return this.a;
+    }
 }

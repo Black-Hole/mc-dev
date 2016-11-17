@@ -11,7 +11,8 @@ public class WorldGenNether extends StructureGenerator {
     public WorldGenNether() {
         this.a.add(new BiomeBase.BiomeMeta(EntityBlaze.class, 10, 2, 3));
         this.a.add(new BiomeBase.BiomeMeta(EntityPigZombie.class, 5, 4, 4));
-        this.a.add(new BiomeBase.BiomeMeta(EntitySkeleton.class, 10, 4, 4));
+        this.a.add(new BiomeBase.BiomeMeta(EntitySkeletonWither.class, 8, 5, 5));
+        this.a.add(new BiomeBase.BiomeMeta(EntitySkeleton.class, 2, 5, 5));
         this.a.add(new BiomeBase.BiomeMeta(EntityMagmaCube.class, 3, 4, 4));
     }
 
@@ -34,6 +35,33 @@ public class WorldGenNether extends StructureGenerator {
 
     protected StructureStart b(int i, int j) {
         return new WorldGenNether.WorldGenNetherStart(this.g, this.f, i, j);
+    }
+
+    public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag) {
+        boolean flag1 = true;
+        int i = blockposition.getX() >> 4;
+        int j = blockposition.getZ() >> 4;
+
+        for (int k = 0; k <= 1000; ++k) {
+            for (int l = -k; l <= k; ++l) {
+                boolean flag2 = l == -k || l == k;
+
+                for (int i1 = -k; i1 <= k; ++i1) {
+                    boolean flag3 = i1 == -k || i1 == k;
+
+                    if (flag2 || flag3) {
+                        int j1 = i + l;
+                        int k1 = j + i1;
+
+                        if (this.a(j1, k1) && (!flag || !world.b(j1, k1))) {
+                            return new BlockPosition((j1 << 4) + 8, 64, (k1 << 4) + 8);
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     public static class WorldGenNetherStart extends StructureStart {

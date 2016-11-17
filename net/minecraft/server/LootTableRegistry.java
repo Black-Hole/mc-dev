@@ -21,7 +21,7 @@ public class LootTableRegistry {
 
     private static final Logger a = LogManager.getLogger();
     private static final Gson b = (new GsonBuilder()).registerTypeAdapter(LootValueBounds.class, new LootValueBounds.a()).registerTypeAdapter(LootSelector.class, new LootSelector.a()).registerTypeAdapter(LootTable.class, new LootTable.a()).registerTypeHierarchyAdapter(LotoSelectorEntry.class, new LotoSelectorEntry.a()).registerTypeHierarchyAdapter(LootItemFunction.class, new LootItemFunctions.a()).registerTypeHierarchyAdapter(LootItemCondition.class, new LootItemConditions.a()).registerTypeHierarchyAdapter(LootTableInfo.EntityTarget.class, new LootTableInfo.EntityTarget.b$a()).create();
-    private final LoadingCache<MinecraftKey, LootTable> c = CacheBuilder.newBuilder().build(new LootTableRegistry.a((LootTableRegistry.SyntheticClass_1) null));
+    private final LoadingCache<MinecraftKey, LootTable> c = CacheBuilder.newBuilder().build(new LootTableRegistry.a(null));
     private final File d;
 
     public LootTableRegistry(File file) {
@@ -44,8 +44,6 @@ public class LootTableRegistry {
         }
 
     }
-
-    static class SyntheticClass_1 {    }
 
     class a extends CacheLoader<MinecraftKey, LootTable> {
 
@@ -130,7 +128,7 @@ public class LootTableRegistry {
             return this.a((MinecraftKey) object);
         }
 
-        a(LootTableRegistry.SyntheticClass_1 loottableregistry_syntheticclass_1) {
+        a(Object object) {
             this();
         }
     }

@@ -28,7 +28,7 @@ public class TileEntityFlowerPot extends TileEntity {
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Item", 8)) {
-            this.a = Item.d(nbttagcompound.getString("Item"));
+            this.a = Item.b(nbttagcompound.getString("Item"));
         } else {
             this.a = Item.getById(nbttagcompound.getInt("Item"));
         }
@@ -38,21 +38,20 @@ public class TileEntityFlowerPot extends TileEntity {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 5, this.c());
+        return new PacketPlayOutTileEntityData(this.position, 5, this.d());
     }
 
-    public NBTTagCompound c() {
+    public NBTTagCompound d() {
         return this.save(new NBTTagCompound());
     }
 
-    public void a(Item item, int i) {
-        this.a = item;
-        this.f = i;
+    public void setContents(ItemStack itemstack) {
+        this.a = itemstack.getItem();
+        this.f = itemstack.getData();
     }
 
-    @Nullable
-    public ItemStack d() {
-        return this.a == null ? null : new ItemStack(this.a, 1, this.f);
+    public ItemStack getContents() {
+        return this.a == null ? ItemStack.a : new ItemStack(this.a, 1, this.f);
     }
 
     @Nullable

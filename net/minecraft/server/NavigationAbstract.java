@@ -175,7 +175,7 @@ public abstract class NavigationAbstract {
                 vec3d = this.c.a((Entity) this.a);
                 if (vec3d != null) {
                     BlockPosition blockposition = (new BlockPosition(vec3d)).down();
-                    AxisAlignedBB axisalignedbb = this.b.getType(blockposition).c(this.b, blockposition);
+                    AxisAlignedBB axisalignedbb = this.b.getType(blockposition).d(this.b, blockposition);
 
                     vec3d = vec3d.a(0.0D, 1.0D - axisalignedbb.e, 0.0D);
                     this.a.getControllerMove().a(vec3d.x, vec3d.y, vec3d.z, this.d);
@@ -235,7 +235,7 @@ public abstract class NavigationAbstract {
                 this.j = vec3d1;
                 double d0 = vec3d.f(this.j);
 
-                this.m = this.a.cp() > 0.0F ? d0 / (double) this.a.cp() * 1000.0D : 0.0D;
+                this.m = this.a.cq() > 0.0F ? d0 / (double) this.a.cq() * 1000.0D : 0.0D;
             }
 
             if (this.m > 0.0D && (double) this.k > this.m * 3.0D) {

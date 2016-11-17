@@ -52,7 +52,7 @@ public class EntityFallingBlock extends Entity {
         return !this.dead;
     }
 
-    public void m() {
+    public void A_() {
         Block block = this.block.getBlock();
 
         if (this.block.getMaterial() == Material.AIR) {
@@ -77,7 +77,7 @@ public class EntityFallingBlock extends Entity {
                 this.motY -= 0.03999999910593033D;
             }
 
-            this.move(this.motX, this.motY, this.motZ);
+            this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
             this.motX *= 0.9800000190734863D;
             this.motY *= 0.9800000190734863D;
             this.motZ *= 0.9800000190734863D;
@@ -97,7 +97,7 @@ public class EntityFallingBlock extends Entity {
                     if (iblockdata.getBlock() != Blocks.PISTON_EXTENSION) {
                         this.die();
                         if (!this.f) {
-                            if (this.world.a(block, blockposition, true, EnumDirection.UP, (Entity) null, (ItemStack) null) && !BlockFalling.i(this.world.getType(blockposition.down())) && this.world.setTypeAndData(blockposition, this.block, 3)) {
+                            if (this.world.a(block, blockposition, true, EnumDirection.UP, (Entity) null) && !BlockFalling.i(this.world.getType(blockposition.down())) && this.world.setTypeAndData(blockposition, this.block, 3)) {
                                 if (block instanceof BlockFalling) {
                                     ((BlockFalling) block).a_(this.world, blockposition);
                                 }
@@ -125,6 +125,8 @@ public class EntityFallingBlock extends Entity {
                             } else if (this.dropItem && this.world.getGameRules().getBoolean("doEntityDrops")) {
                                 this.a(new ItemStack(block, 1, block.getDropData(this.block)), 0.0F);
                             }
+                        } else if (block instanceof BlockFalling) {
+                            ((BlockFalling) block).b(this.world, blockposition);
                         }
                     }
                 } else if (this.ticksLived > 100 && !this.world.isClientSide && (blockposition.getY() < 1 || blockposition.getY() > 256) || this.ticksLived > 600) {
@@ -172,7 +174,7 @@ public class EntityFallingBlock extends Entity {
 
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {}
+    public static void b(DataConverterManager dataconvertermanager) {}
 
     protected void b(NBTTagCompound nbttagcompound) {
         Block block = this.block != null ? this.block.getBlock() : Blocks.AIR;

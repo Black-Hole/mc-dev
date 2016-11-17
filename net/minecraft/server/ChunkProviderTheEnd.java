@@ -16,25 +16,27 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
     public NoiseGeneratorOctaves d;
     private final World l;
     private final boolean m;
-    private final WorldGenEndCity n = new WorldGenEndCity(this);
-    private final NoiseGenerator3Handler o;
-    private double[] p;
-    private BiomeBase[] q;
+    private final BlockPosition n;
+    private final WorldGenEndCity o = new WorldGenEndCity(this);
+    private final NoiseGenerator3Handler p;
+    private double[] q;
+    private BiomeBase[] r;
     double[] e;
     double[] f;
     double[] g;
-    private final WorldGenEndIsland r = new WorldGenEndIsland();
+    private final WorldGenEndIsland s = new WorldGenEndIsland();
 
-    public ChunkProviderTheEnd(World world, boolean flag, long i) {
+    public ChunkProviderTheEnd(World world, boolean flag, long i, BlockPosition blockposition) {
         this.l = world;
         this.m = flag;
+        this.n = blockposition;
         this.h = new Random(i);
         this.i = new NoiseGeneratorOctaves(this.h, 16);
         this.j = new NoiseGeneratorOctaves(this.h, 16);
         this.k = new NoiseGeneratorOctaves(this.h, 8);
         this.c = new NoiseGeneratorOctaves(this.h, 10);
         this.d = new NoiseGeneratorOctaves(this.h, 16);
-        this.o = new NoiseGenerator3Handler(this.h);
+        this.p = new NoiseGenerator3Handler(this.h);
     }
 
     public void a(int i, int j, ChunkSnapshot chunksnapshot) {
@@ -43,20 +45,20 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
         boolean flag2 = true;
         boolean flag3 = true;
 
-        this.p = this.a(this.p, i * 2, 0, j * 2, 3, 33, 3);
+        this.q = this.a(this.q, i * 2, 0, j * 2, 3, 33, 3);
 
         for (int k = 0; k < 2; ++k) {
             for (int l = 0; l < 2; ++l) {
                 for (int i1 = 0; i1 < 32; ++i1) {
                     double d0 = 0.25D;
-                    double d1 = this.p[((k + 0) * 3 + l + 0) * 33 + i1 + 0];
-                    double d2 = this.p[((k + 0) * 3 + l + 1) * 33 + i1 + 0];
-                    double d3 = this.p[((k + 1) * 3 + l + 0) * 33 + i1 + 0];
-                    double d4 = this.p[((k + 1) * 3 + l + 1) * 33 + i1 + 0];
-                    double d5 = (this.p[((k + 0) * 3 + l + 0) * 33 + i1 + 1] - d1) * 0.25D;
-                    double d6 = (this.p[((k + 0) * 3 + l + 1) * 33 + i1 + 1] - d2) * 0.25D;
-                    double d7 = (this.p[((k + 1) * 3 + l + 0) * 33 + i1 + 1] - d3) * 0.25D;
-                    double d8 = (this.p[((k + 1) * 3 + l + 1) * 33 + i1 + 1] - d4) * 0.25D;
+                    double d1 = this.q[((k + 0) * 3 + l + 0) * 33 + i1 + 0];
+                    double d2 = this.q[((k + 0) * 3 + l + 1) * 33 + i1 + 0];
+                    double d3 = this.q[((k + 1) * 3 + l + 0) * 33 + i1 + 0];
+                    double d4 = this.q[((k + 1) * 3 + l + 1) * 33 + i1 + 0];
+                    double d5 = (this.q[((k + 0) * 3 + l + 0) * 33 + i1 + 1] - d1) * 0.25D;
+                    double d6 = (this.q[((k + 0) * 3 + l + 1) * 33 + i1 + 1] - d2) * 0.25D;
+                    double d7 = (this.q[((k + 1) * 3 + l + 0) * 33 + i1 + 1] - d3) * 0.25D;
+                    double d8 = (this.q[((k + 1) * 3 + l + 1) * 33 + i1 + 1] - d4) * 0.25D;
 
                     for (int j1 = 0; j1 < 4; ++j1) {
                         double d9 = 0.125D;
@@ -136,18 +138,18 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
         this.h.setSeed((long) i * 341873128712L + (long) j * 132897987541L);
         ChunkSnapshot chunksnapshot = new ChunkSnapshot();
 
-        this.q = this.l.getWorldChunkManager().getBiomeBlock(this.q, i * 16, j * 16, 16, 16);
+        this.r = this.l.getWorldChunkManager().getBiomeBlock(this.r, i * 16, j * 16, 16, 16);
         this.a(i, j, chunksnapshot);
         this.a(chunksnapshot);
         if (this.m) {
-            this.n.a(this.l, i, j, chunksnapshot);
+            this.o.a(this.l, i, j, chunksnapshot);
         }
 
         Chunk chunk = new Chunk(this.l, chunksnapshot, i, j);
         byte[] abyte = chunk.getBiomeIndex();
 
         for (int k = 0; k < abyte.length; ++k) {
-            abyte[k] = (byte) BiomeBase.a(this.q[k]);
+            abyte[k] = (byte) BiomeBase.a(this.r[k]);
         }
 
         chunk.initLighting();
@@ -172,7 +174,7 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
                 long k1 = (long) (i + i1);
                 long l1 = (long) (j + j1);
 
-                if (k1 * k1 + l1 * l1 > 4096L && this.o.a((double) k1, (double) l1) < -0.8999999761581421D) {
+                if (k1 * k1 + l1 * l1 > 4096L && this.p.a((double) k1, (double) l1) < -0.8999999761581421D) {
                     float f3 = (MathHelper.e((float) k1) * 3439.0F + MathHelper.e((float) l1) * 147.0F) % 13.0F + 9.0F;
 
                     f = (float) (k - i1 * 2);
@@ -266,7 +268,7 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
         BlockPosition blockposition = new BlockPosition(i * 16, 0, j * 16);
 
         if (this.m) {
-            this.n.a(this.l, this.h, new ChunkCoordIntPair(i, j));
+            this.o.a(this.l, this.h, new ChunkCoordIntPair(i, j));
         }
 
         this.l.getBiome(blockposition.a(16, 0, 16)).a(this.l, this.l.random, blockposition);
@@ -276,25 +278,48 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
             float f = this.a(i, j, 1, 1);
 
             if (f < -20.0F && this.h.nextInt(14) == 0) {
-                this.r.generate(this.l, this.h, blockposition.a(this.h.nextInt(16) + 8, 55 + this.h.nextInt(16), this.h.nextInt(16) + 8));
+                this.s.generate(this.l, this.h, blockposition.a(this.h.nextInt(16) + 8, 55 + this.h.nextInt(16), this.h.nextInt(16) + 8));
                 if (this.h.nextInt(4) == 0) {
-                    this.r.generate(this.l, this.h, blockposition.a(this.h.nextInt(16) + 8, 55 + this.h.nextInt(16), this.h.nextInt(16) + 8));
+                    this.s.generate(this.l, this.h, blockposition.a(this.h.nextInt(16) + 8, 55 + this.h.nextInt(16), this.h.nextInt(16) + 8));
                 }
             }
 
             if (this.a(i, j, 1, 1) > 40.0F) {
                 int l = this.h.nextInt(5);
 
-                for (int i1 = 0; i1 < l; ++i1) {
-                    int j1 = this.h.nextInt(16) + 8;
-                    int k1 = this.h.nextInt(16) + 8;
-                    int l1 = this.l.getHighestBlockYAt(blockposition.a(j1, 0, k1)).getY();
+                int i1;
+                int j1;
+                int k1;
+                int l1;
 
+                for (i1 = 0; i1 < l; ++i1) {
+                    j1 = this.h.nextInt(16) + 8;
+                    k1 = this.h.nextInt(16) + 8;
+                    l1 = this.l.getHighestBlockYAt(blockposition.a(j1, 0, k1)).getY();
                     if (l1 > 0) {
                         int i2 = l1 - 1;
 
                         if (this.l.isEmpty(blockposition.a(j1, i2 + 1, k1)) && this.l.getType(blockposition.a(j1, i2, k1)).getBlock() == Blocks.END_STONE) {
                             BlockChorusFlower.a(this.l, blockposition.a(j1, i2 + 1, k1), this.h, 8);
+                        }
+                    }
+                }
+
+                if (this.h.nextInt(700) == 0) {
+                    i1 = this.h.nextInt(16) + 8;
+                    j1 = this.h.nextInt(16) + 8;
+                    k1 = this.l.getHighestBlockYAt(blockposition.a(i1, 0, j1)).getY();
+                    if (k1 > 0) {
+                        l1 = k1 + 3 + this.h.nextInt(7);
+                        BlockPosition blockposition1 = blockposition.a(i1, l1, j1);
+
+                        (new WorldGenEndGateway()).generate(this.l, this.h, blockposition1);
+                        TileEntity tileentity = this.l.getTileEntity(blockposition1);
+
+                        if (tileentity instanceof TileEntityEndGateway) {
+                            TileEntityEndGateway tileentityendgateway = (TileEntityEndGateway) tileentity;
+
+                            tileentityendgateway.b(this.n);
                         }
                     }
                 }
@@ -313,8 +338,8 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
     }
 
     @Nullable
-    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
-        return null;
+    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, boolean flag) {
+        return "EndCity".equals(s) && this.o != null ? this.o.getNearestGeneratedFeature(world, blockposition, flag) : null;
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {}

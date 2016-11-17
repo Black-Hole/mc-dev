@@ -16,12 +16,12 @@ public class BlockLever extends Block {
 
     protected BlockLever() {
         super(Material.ORIENTABLE);
-        this.w(this.blockStateList.getBlockData().set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH).set(BlockLever.POWERED, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH).set(BlockLever.POWERED, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockLever.k;
     }
 
@@ -68,7 +68,7 @@ public class BlockLever extends Block {
 
             do {
                 if (!iterator.hasNext()) {
-                    if (world.getType(blockposition.down()).q()) {
+                    if (world.getType(blockposition.down()).r()) {
                         return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.a(EnumDirection.UP, entityliving.getDirection()));
                     }
 
@@ -82,7 +82,7 @@ public class BlockLever extends Block {
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (this.e(world, blockposition, iblockdata) && !a(world, blockposition, ((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).c().opposite())) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
@@ -100,32 +100,32 @@ public class BlockLever extends Block {
         }
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        switch (BlockLever.SyntheticClass_1.b[((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).ordinal()]) {
-        case 1:
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        switch ((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)) {
+        case EAST:
         default:
             return BlockLever.f;
 
-        case 2:
+        case WEST:
             return BlockLever.e;
 
-        case 3:
+        case SOUTH:
             return BlockLever.d;
 
-        case 4:
+        case NORTH:
             return BlockLever.c;
 
-        case 5:
-        case 6:
+        case UP_Z:
+        case UP_X:
             return BlockLever.g;
 
-        case 7:
-        case 8:
+        case DOWN_X:
+        case DOWN_Z:
             return BlockLever.B;
         }
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
@@ -133,21 +133,21 @@ public class BlockLever extends Block {
             world.setTypeAndData(blockposition, iblockdata, 3);
             float f3 = ((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue() ? 0.6F : 0.5F;
 
-            world.a((EntityHuman) null, blockposition, SoundEffects.dl, SoundCategory.BLOCKS, 0.3F, f3);
-            world.applyPhysics(blockposition, this);
+            world.a((EntityHuman) null, blockposition, SoundEffects.dv, SoundCategory.BLOCKS, 0.3F, f3);
+            world.applyPhysics(blockposition, this, false);
             EnumDirection enumdirection1 = ((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).c();
 
-            world.applyPhysics(blockposition.shift(enumdirection1.opposite()), this);
+            world.applyPhysics(blockposition.shift(enumdirection1.opposite()), this, false);
             return true;
         }
     }
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue()) {
-            world.applyPhysics(blockposition, this);
+            world.applyPhysics(blockposition, this, false);
             EnumDirection enumdirection = ((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).c();
 
-            world.applyPhysics(blockposition.shift(enumdirection.opposite()), this);
+            world.applyPhysics(blockposition.shift(enumdirection.opposite()), this, false);
         }
 
         super.remove(world, blockposition, iblockdata);
@@ -181,76 +181,76 @@ public class BlockLever extends Block {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        switch (BlockLever.SyntheticClass_1.c[enumblockrotation.ordinal()]) {
-        case 1:
-            switch (BlockLever.SyntheticClass_1.b[((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).ordinal()]) {
-            case 1:
+        switch (enumblockrotation) {
+        case CLOCKWISE_180:
+            switch ((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)) {
+            case EAST:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.WEST);
 
-            case 2:
+            case WEST:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.EAST);
 
-            case 3:
+            case SOUTH:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH);
 
-            case 4:
+            case NORTH:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.SOUTH);
 
             default:
                 return iblockdata;
             }
 
-        case 2:
-            switch (BlockLever.SyntheticClass_1.b[((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).ordinal()]) {
-            case 1:
+        case COUNTERCLOCKWISE_90:
+            switch ((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)) {
+            case EAST:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH);
 
-            case 2:
+            case WEST:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.SOUTH);
 
-            case 3:
+            case SOUTH:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.EAST);
 
-            case 4:
+            case NORTH:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.WEST);
 
-            case 5:
+            case UP_Z:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.UP_X);
 
-            case 6:
+            case UP_X:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.UP_Z);
 
-            case 7:
+            case DOWN_X:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.DOWN_Z);
 
-            case 8:
+            case DOWN_Z:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.DOWN_X);
             }
 
-        case 3:
-            switch (BlockLever.SyntheticClass_1.b[((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).ordinal()]) {
-            case 1:
+        case CLOCKWISE_90:
+            switch ((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)) {
+            case EAST:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.SOUTH);
 
-            case 2:
+            case WEST:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH);
 
-            case 3:
+            case SOUTH:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.WEST);
 
-            case 4:
+            case NORTH:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.EAST);
 
-            case 5:
+            case UP_Z:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.UP_X);
 
-            case 6:
+            case UP_X:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.UP_Z);
 
-            case 7:
+            case DOWN_X:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.DOWN_Z);
 
-            case 8:
+            case DOWN_Z:
                 return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.DOWN_X);
             }
 
@@ -265,137 +265,6 @@ public class BlockLever extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockLever.FACING, BlockLever.POWERED});
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a;
-        static final int[] b;
-        static final int[] c;
-        static final int[] d = new int[EnumDirection.EnumAxis.values().length];
-
-        static {
-            try {
-                BlockLever.SyntheticClass_1.d[EnumDirection.EnumAxis.X.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.d[EnumDirection.EnumAxis.Z.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            c = new int[EnumBlockRotation.values().length];
-
-            try {
-                BlockLever.SyntheticClass_1.c[EnumBlockRotation.CLOCKWISE_180.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.c[EnumBlockRotation.COUNTERCLOCKWISE_90.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.c[EnumBlockRotation.CLOCKWISE_90.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror4) {
-                ;
-            }
-
-            b = new int[BlockLever.EnumLeverPosition.values().length];
-
-            try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.EAST.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror5) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.WEST.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror6) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.SOUTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror7) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.NORTH.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror8) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.UP_Z.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror9) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.UP_X.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror10) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.DOWN_X.ordinal()] = 7;
-            } catch (NoSuchFieldError nosuchfielderror11) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.b[BlockLever.EnumLeverPosition.DOWN_Z.ordinal()] = 8;
-            } catch (NoSuchFieldError nosuchfielderror12) {
-                ;
-            }
-
-            a = new int[EnumDirection.values().length];
-
-            try {
-                BlockLever.SyntheticClass_1.a[EnumDirection.DOWN.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror13) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.a[EnumDirection.UP.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror14) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.a[EnumDirection.NORTH.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror15) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.a[EnumDirection.SOUTH.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror16) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.a[EnumDirection.WEST.ordinal()] = 5;
-            } catch (NoSuchFieldError nosuchfielderror17) {
-                ;
-            }
-
-            try {
-                BlockLever.SyntheticClass_1.a[EnumDirection.EAST.ordinal()] = 6;
-            } catch (NoSuchFieldError nosuchfielderror18) {
-                ;
-            }
-
-        }
     }
 
     public static enum EnumLeverPosition implements INamable {
@@ -434,41 +303,41 @@ public class BlockLever extends Block {
         }
 
         public static BlockLever.EnumLeverPosition a(EnumDirection enumdirection, EnumDirection enumdirection1) {
-            switch (BlockLever.SyntheticClass_1.a[enumdirection.ordinal()]) {
-            case 1:
-                switch (BlockLever.SyntheticClass_1.d[enumdirection1.k().ordinal()]) {
-                case 1:
+            switch (enumdirection) {
+            case DOWN:
+                switch (enumdirection1.k()) {
+                case X:
                     return BlockLever.EnumLeverPosition.DOWN_X;
 
-                case 2:
+                case Z:
                     return BlockLever.EnumLeverPosition.DOWN_Z;
 
                 default:
                     throw new IllegalArgumentException("Invalid entityFacing " + enumdirection1 + " for facing " + enumdirection);
                 }
 
-            case 2:
-                switch (BlockLever.SyntheticClass_1.d[enumdirection1.k().ordinal()]) {
-                case 1:
+            case UP:
+                switch (enumdirection1.k()) {
+                case X:
                     return BlockLever.EnumLeverPosition.UP_X;
 
-                case 2:
+                case Z:
                     return BlockLever.EnumLeverPosition.UP_Z;
 
                 default:
                     throw new IllegalArgumentException("Invalid entityFacing " + enumdirection1 + " for facing " + enumdirection);
                 }
 
-            case 3:
+            case NORTH:
                 return BlockLever.EnumLeverPosition.NORTH;
 
-            case 4:
+            case SOUTH:
                 return BlockLever.EnumLeverPosition.SOUTH;
 
-            case 5:
+            case WEST:
                 return BlockLever.EnumLeverPosition.WEST;
 
-            case 6:
+            case EAST:
                 return BlockLever.EnumLeverPosition.EAST;
 
             default:

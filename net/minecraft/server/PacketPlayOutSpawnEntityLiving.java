@@ -26,13 +26,13 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
     public PacketPlayOutSpawnEntityLiving(EntityLiving entityliving) {
         this.a = entityliving.getId();
         this.b = entityliving.getUniqueID();
-        this.c = (byte) EntityTypes.a((Entity) entityliving);
+        this.c = EntityTypes.b.a((Object) entityliving.getClass());
         this.d = entityliving.locX;
         this.e = entityliving.locY;
         this.f = entityliving.locZ;
         this.j = (byte) ((int) (entityliving.yaw * 256.0F / 360.0F));
         this.k = (byte) ((int) (entityliving.pitch * 256.0F / 360.0F));
-        this.l = (byte) ((int) (entityliving.aQ * 256.0F / 360.0F));
+        this.l = (byte) ((int) (entityliving.aP * 256.0F / 360.0F));
         double d0 = 3.9D;
         double d1 = entityliving.motX;
         double d2 = entityliving.motY;
@@ -71,7 +71,7 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.g();
         this.b = packetdataserializer.i();
-        this.c = packetdataserializer.readByte() & 255;
+        this.c = packetdataserializer.g();
         this.d = packetdataserializer.readDouble();
         this.e = packetdataserializer.readDouble();
         this.f = packetdataserializer.readDouble();
@@ -87,7 +87,7 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a(this.b);
-        packetdataserializer.writeByte(this.c & 255);
+        packetdataserializer.d(this.c);
         packetdataserializer.writeDouble(this.d);
         packetdataserializer.writeDouble(this.e);
         packetdataserializer.writeDouble(this.f);

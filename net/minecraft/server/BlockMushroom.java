@@ -11,7 +11,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
         this.a(true);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockMushroom.a;
     }
 

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class Explosion {
 
@@ -97,7 +98,7 @@ public class Explosion {
             Entity entity = (Entity) list.get(l1);
 
             if (!entity.bt()) {
-                double d7 = entity.f(this.posX, this.posY, this.posZ) / (double) f3;
+                double d7 = entity.e(this.posX, this.posY, this.posZ) / (double) f3;
 
                 if (d7 <= 1.0D) {
                     double d8 = entity.locX - this.posX;
@@ -113,7 +114,7 @@ public class Explosion {
                         double d13 = (1.0D - d7) * d12;
 
                         entity.damageEntity(DamageSource.explosion(this), (float) ((int) ((d13 * d13 + d13) / 2.0D * 7.0D * (double) f3 + 1.0D)));
-                        double d14 = 1.0D;
+                        double d14 = d13;
 
                         if (entity instanceof EntityLiving) {
                             d14 = EnchantmentProtection.a((EntityLiving) entity, d13);
@@ -137,7 +138,7 @@ public class Explosion {
     }
 
     public void a(boolean flag) {
-        this.world.a((EntityHuman) null, this.posX, this.posY, this.posZ, SoundEffects.bF, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F);
+        this.world.a((EntityHuman) null, this.posX, this.posY, this.posZ, SoundEffects.bP, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F);
         if (this.size >= 2.0F && this.b) {
             this.world.addParticle(EnumParticle.EXPLOSION_HUGE, this.posX, this.posY, this.posZ, 1.0D, 0.0D, 0.0D, new int[0]);
         } else {
@@ -205,6 +206,7 @@ public class Explosion {
         return this.k;
     }
 
+    @Nullable
     public EntityLiving getSource() {
         return this.source == null ? null : (this.source instanceof EntityTNTPrimed ? ((EntityTNTPrimed) this.source).getSource() : (this.source instanceof EntityLiving ? (EntityLiving) this.source : null));
     }

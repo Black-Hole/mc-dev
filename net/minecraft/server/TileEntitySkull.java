@@ -60,7 +60,7 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     }
 
-    public void E_() {
+    public void F_() {
         if (this.a == 5) {
             if (this.world.isBlockIndirectlyPowered(this.position)) {
                 this.i = true;
@@ -79,10 +79,10 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 4, this.c());
+        return new PacketPlayOutTileEntityData(this.position, 4, this.d());
     }
 
-    public NBTTagCompound c() {
+    public NBTTagCompound d() {
         return this.save(new NBTTagCompound());
     }
 

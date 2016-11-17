@@ -30,17 +30,17 @@ public class LootItem extends LotoSelectorEntry {
             }
         }
 
-        if (itemstack.count > 0) {
-            if (itemstack.count < this.a.getMaxStackSize()) {
+        if (!itemstack.isEmpty()) {
+            if (itemstack.getCount() < this.a.getMaxStackSize()) {
                 collection.add(itemstack);
             } else {
-                int k = itemstack.count;
+                int k = itemstack.getCount();
 
                 while (k > 0) {
                     ItemStack itemstack1 = itemstack.cloneItemStack();
 
-                    itemstack1.count = Math.min(itemstack.getMaxStackSize(), k);
-                    k -= itemstack1.count;
+                    itemstack1.setCount(Math.min(itemstack.getMaxStackSize(), k));
+                    k -= itemstack1.getCount();
                     collection.add(itemstack1);
                 }
             }

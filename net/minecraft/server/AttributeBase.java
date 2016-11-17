@@ -22,7 +22,7 @@ public abstract class AttributeBase implements IAttribute {
         return this.b;
     }
 
-    public double b() {
+    public double getDefault() {
         return this.c;
     }
 

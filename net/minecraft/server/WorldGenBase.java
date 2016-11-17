@@ -30,5 +30,15 @@ public class WorldGenBase {
 
     }
 
+    public static void a(long i, Random random, int j, int k) {
+        random.setSeed(i);
+        long l = random.nextLong();
+        long i1 = random.nextLong();
+        long j1 = (long) j * l;
+        long k1 = (long) k * i1;
+
+        random.setSeed(j1 ^ k1 ^ i);
+    }
+
     protected void a(World world, int i, int j, int k, int l, ChunkSnapshot chunksnapshot) {}
 }

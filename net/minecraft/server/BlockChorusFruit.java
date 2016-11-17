@@ -15,9 +15,9 @@ public class BlockChorusFruit extends Block {
     public static final BlockStateBoolean f = BlockStateBoolean.of("down");
 
     protected BlockChorusFruit() {
-        super(Material.PLANT);
+        super(Material.PLANT, MaterialMapColor.z);
         this.a(CreativeModeTab.c);
-        this.w(this.blockStateList.getBlockData().set(BlockChorusFruit.a, Boolean.valueOf(false)).set(BlockChorusFruit.b, Boolean.valueOf(false)).set(BlockChorusFruit.c, Boolean.valueOf(false)).set(BlockChorusFruit.d, Boolean.valueOf(false)).set(BlockChorusFruit.e, Boolean.valueOf(false)).set(BlockChorusFruit.f, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockChorusFruit.a, Boolean.valueOf(false)).set(BlockChorusFruit.b, Boolean.valueOf(false)).set(BlockChorusFruit.c, Boolean.valueOf(false)).set(BlockChorusFruit.d, Boolean.valueOf(false)).set(BlockChorusFruit.e, Boolean.valueOf(false)).set(BlockChorusFruit.f, Boolean.valueOf(false)));
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -31,7 +31,7 @@ public class BlockChorusFruit extends Block {
         return iblockdata.set(BlockChorusFruit.f, Boolean.valueOf(block == this || block == Blocks.CHORUS_FLOWER || block == Blocks.END_STONE)).set(BlockChorusFruit.e, Boolean.valueOf(block1 == this || block1 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.a, Boolean.valueOf(block2 == this || block2 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.b, Boolean.valueOf(block3 == this || block3 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.c, Boolean.valueOf(block4 == this || block4 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.d, Boolean.valueOf(block5 == this || block5 == Blocks.CHORUS_FLOWER));
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         iblockdata = iblockdata.b(iblockaccess, blockposition);
         float f = 0.1875F;
         float f1 = ((Boolean) iblockdata.get(BlockChorusFruit.d)).booleanValue() ? 0.0F : 0.1875F;
@@ -87,7 +87,6 @@ public class BlockChorusFruit extends Block {
 
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Items.CHORUS_FRUIT;
     }
@@ -108,7 +107,7 @@ public class BlockChorusFruit extends Block {
         return super.canPlace(world, blockposition) ? this.b(world, blockposition) : false;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!this.b(world, blockposition)) {
             world.a(blockposition, (Block) this, 1);
         }

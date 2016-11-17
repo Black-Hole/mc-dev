@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class InventoryLargeChest implements ITileInventory {
 
     private final String a;
@@ -20,16 +18,20 @@ public class InventoryLargeChest implements ITileInventory {
 
         this.left = itileinventory;
         this.right = itileinventory1;
-        if (itileinventory.x_()) {
-            itileinventory1.a(itileinventory.y_());
-        } else if (itileinventory1.x_()) {
-            itileinventory.a(itileinventory1.y_());
+        if (itileinventory.isLocked()) {
+            itileinventory1.a(itileinventory.getLock());
+        } else if (itileinventory1.isLocked()) {
+            itileinventory.a(itileinventory1.getLock());
         }
 
     }
 
     public int getSize() {
         return this.left.getSize() + this.right.getSize();
+    }
+
+    public boolean w_() {
+        return this.left.w_() && this.right.w_();
     }
 
     public boolean a(IInventory iinventory) {
@@ -48,22 +50,19 @@ public class InventoryLargeChest implements ITileInventory {
         return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
     }
 
-    @Nullable
     public ItemStack getItem(int i) {
         return i >= this.left.getSize() ? this.right.getItem(i - this.left.getSize()) : this.left.getItem(i);
     }
 
-    @Nullable
     public ItemStack splitStack(int i, int j) {
         return i >= this.left.getSize() ? this.right.splitStack(i - this.left.getSize(), j) : this.left.splitStack(i, j);
     }
 
-    @Nullable
     public ItemStack splitWithoutUpdate(int i) {
         return i >= this.left.getSize() ? this.right.splitWithoutUpdate(i - this.left.getSize()) : this.left.splitWithoutUpdate(i);
     }
 
-    public void setItem(int i, @Nullable ItemStack itemstack) {
+    public void setItem(int i, ItemStack itemstack) {
         if (i >= this.left.getSize()) {
             this.right.setItem(i - this.left.getSize(), itemstack);
         } else {
@@ -105,12 +104,12 @@ public class InventoryLargeChest implements ITileInventory {
 
     public void setProperty(int i, int j) {}
 
-    public int g() {
+    public int h() {
         return 0;
     }
 
-    public boolean x_() {
-        return this.left.x_() || this.right.x_();
+    public boolean isLocked() {
+        return this.left.isLocked() || this.right.isLocked();
     }
 
     public void a(ChestLock chestlock) {
@@ -118,8 +117,8 @@ public class InventoryLargeChest implements ITileInventory {
         this.right.a(chestlock);
     }
 
-    public ChestLock y_() {
-        return this.left.y_();
+    public ChestLock getLock() {
+        return this.left.getLock();
     }
 
     public String getContainerName() {
@@ -130,8 +129,8 @@ public class InventoryLargeChest implements ITileInventory {
         return new ContainerChest(playerinventory, this, entityhuman);
     }
 
-    public void l() {
-        this.left.l();
-        this.right.l();
+    public void clear() {
+        this.left.clear();
+        this.right.clear();
     }
 }

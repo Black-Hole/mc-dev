@@ -14,10 +14,10 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
     public int shake;
     public EntityLiving shooter;
     public String shooterName;
+    private int au;
     private int av;
-    private int aw;
     public Entity c;
-    private int ax;
+    private int aw;
 
     public EntityProjectile(World world) {
         super(world);
@@ -70,26 +70,26 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.motZ = d2;
         float f3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 
-        this.yaw = (float) (MathHelper.b(d0, d2) * 57.2957763671875D);
-        this.pitch = (float) (MathHelper.b(d1, (double) f3) * 57.2957763671875D);
+        this.yaw = (float) (MathHelper.c(d0, d2) * 57.2957763671875D);
+        this.pitch = (float) (MathHelper.c(d1, (double) f3) * 57.2957763671875D);
         this.lastYaw = this.yaw;
         this.lastPitch = this.pitch;
-        this.av = 0;
+        this.au = 0;
     }
 
-    public void m() {
+    public void A_() {
         this.M = this.locX;
         this.N = this.locY;
         this.O = this.locZ;
-        super.m();
+        super.A_();
         if (this.shake > 0) {
             --this.shake;
         }
 
         if (this.inGround) {
             if (this.world.getType(new BlockPosition(this.blockX, this.blockY, this.blockZ)).getBlock() == this.inBlockId) {
-                ++this.av;
-                if (this.av == 1200) {
+                ++this.au;
+                if (this.au == 1200) {
                     this.die();
                 }
 
@@ -100,10 +100,10 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             this.motX *= (double) (this.random.nextFloat() * 0.2F);
             this.motY *= (double) (this.random.nextFloat() * 0.2F);
             this.motZ *= (double) (this.random.nextFloat() * 0.2F);
+            this.au = 0;
             this.av = 0;
-            this.aw = 0;
         } else {
-            ++this.aw;
+            ++this.av;
         }
 
         Vec3D vec3d = new Vec3D(this.locX, this.locY, this.locZ);
@@ -117,7 +117,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         }
 
         Entity entity = null;
-        List list = this.world.getEntities(this, this.getBoundingBox().a(this.motX, this.motY, this.motZ).g(1.0D));
+        List list = this.world.getEntities(this, this.getBoundingBox().b(this.motX, this.motY, this.motZ).g(1.0D));
         double d0 = 0.0D;
         boolean flag = false;
 
@@ -127,7 +127,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             if (entity1.isInteractable()) {
                 if (entity1 == this.c) {
                     flag = true;
-                } else if (this.ticksLived < 2 && this.c == null) {
+                } else if (this.shooter != null && this.ticksLived < 2 && this.c == null) {
                     this.c = entity1;
                     flag = true;
                 } else {
@@ -149,8 +149,8 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
         if (this.c != null) {
             if (flag) {
-                this.ax = 2;
-            } else if (this.ax-- <= 0) {
+                this.aw = 2;
+            } else if (this.aw-- <= 0) {
                 this.c = null;
             }
         }
@@ -172,9 +172,9 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.locZ += this.motZ;
         float f = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
 
-        this.yaw = (float) (MathHelper.b(this.motX, this.motZ) * 57.2957763671875D);
+        this.yaw = (float) (MathHelper.c(this.motX, this.motZ) * 57.2957763671875D);
 
-        for (this.pitch = (float) (MathHelper.b(this.motY, (double) f) * 57.2957763671875D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
+        for (this.pitch = (float) (MathHelper.c(this.motY, (double) f) * 57.2957763671875D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
             ;
         }
 

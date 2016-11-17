@@ -8,7 +8,7 @@ public class CommandTell extends CommandAbstract {
 
     public CommandTell() {}
 
-    public List<String> b() {
+    public List<String> getAliases() {
         return Arrays.asList(new String[] { "w", "msg"});
     }
 
@@ -31,7 +31,7 @@ public class CommandTell extends CommandAbstract {
             EntityPlayer entityplayer = a(minecraftserver, icommandlistener, astring[0]);
 
             if (entityplayer == icommandlistener) {
-                throw new ExceptionPlayerNotFound("commands.message.sameTarget", new Object[0]);
+                throw new ExceptionPlayerNotFound("commands.message.sameTarget");
             } else {
                 IChatBaseComponent ichatbasecomponent = b(icommandlistener, astring, 1, !(icommandlistener instanceof EntityHuman));
                 ChatMessage chatmessage = new ChatMessage("commands.message.display.incoming", new Object[] { icommandlistener.getScoreboardDisplayName(), ichatbasecomponent.f()});

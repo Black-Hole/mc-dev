@@ -19,13 +19,13 @@ public class EntityBlaze extends EntityMonster {
     }
 
     public static void b(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, "Blaze");
+        EntityInsentient.a(dataconvertermanager, EntityBlaze.class);
     }
 
     protected void r() {
         this.goalSelector.a(4, new EntityBlaze.PathfinderGoalBlazeFireball(this));
         this.goalSelector.a(5, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
-        this.goalSelector.a(7, new PathfinderGoalRandomStroll(this, 1.0D));
+        this.goalSelector.a(7, new PathfinderGoalRandomStrollLand(this, 1.0D, 0.0F));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
@@ -45,15 +45,15 @@ public class EntityBlaze extends EntityMonster {
     }
 
     protected SoundEffect G() {
-        return SoundEffects.B;
-    }
-
-    protected SoundEffect bV() {
-        return SoundEffects.E;
+        return SoundEffects.C;
     }
 
     protected SoundEffect bW() {
-        return SoundEffects.D;
+        return SoundEffects.F;
+    }
+
+    protected SoundEffect bX() {
+        return SoundEffects.E;
     }
 
     public float e(float f) {
@@ -67,7 +67,7 @@ public class EntityBlaze extends EntityMonster {
 
         if (this.world.isClientSide) {
             if (this.random.nextInt(24) == 0 && !this.isSilent()) {
-                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, SoundEffects.C, this.bC(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
+                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, SoundEffects.D, this.bC(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
             }
 
             for (int i = 0; i < 2; ++i) {
@@ -107,7 +107,7 @@ public class EntityBlaze extends EntityMonster {
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.p;
+        return LootTables.q;
     }
 
     public boolean o() {
@@ -126,7 +126,7 @@ public class EntityBlaze extends EntityMonster {
         this.datawatcher.set(EntityBlaze.c, Byte.valueOf(b0));
     }
 
-    protected boolean s_() {
+    protected boolean r_() {
         return true;
     }
 

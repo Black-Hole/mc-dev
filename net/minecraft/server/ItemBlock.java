@@ -10,12 +10,7 @@ public class ItemBlock extends Item {
         this.a = block;
     }
 
-    public ItemBlock b(String s) {
-        super.c(s);
-        return this;
-    }
-
-    public EnumInteractionResult a(ItemStack itemstack, EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         IBlockData iblockdata = world.getType(blockposition);
         Block block = iblockdata.getBlock();
 
@@ -23,7 +18,9 @@ public class ItemBlock extends Item {
             blockposition = blockposition.shift(enumdirection);
         }
 
-        if (itemstack.count != 0 && entityhuman.a(blockposition, enumdirection, itemstack) && world.a(this.a, blockposition, false, enumdirection, (Entity) null, itemstack)) {
+        ItemStack itemstack = entityhuman.b(enumhand);
+
+        if (!itemstack.isEmpty() && entityhuman.a(blockposition, enumdirection, itemstack) && world.a(this.a, blockposition, false, enumdirection, (Entity) null)) {
             int i = this.filterData(itemstack.getData());
             IBlockData iblockdata1 = this.a.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityhuman);
 
@@ -34,10 +31,10 @@ public class ItemBlock extends Item {
                     this.a.postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
                 }
 
-                SoundEffectType soundeffecttype = this.a.w();
+                SoundEffectType soundeffecttype = this.a.getStepSound();
 
                 world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
-                --itemstack.count;
+                itemstack.subtract(1);
             }
 
             return EnumInteractionResult.SUCCESS;
@@ -52,24 +49,25 @@ public class ItemBlock extends Item {
         if (minecraftserver == null) {
             return false;
         } else {
-            if (itemstack.hasTag() && itemstack.getTag().hasKeyOfType("BlockEntityTag", 10)) {
+            NBTTagCompound nbttagcompound = itemstack.d("BlockEntityTag");
+
+            if (nbttagcompound != null) {
                 TileEntity tileentity = world.getTileEntity(blockposition);
 
                 if (tileentity != null) {
-                    if (!world.isClientSide && tileentity.isFilteredNBT() && (entityhuman == null || !entityhuman.dh())) {
+                    if (!world.isClientSide && tileentity.isFilteredNBT() && (entityhuman == null || !entityhuman.dk())) {
                         return false;
                     }
 
-                    NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
-                    NBTTagCompound nbttagcompound1 = nbttagcompound.g();
-                    NBTTagCompound nbttagcompound2 = (NBTTagCompound) itemstack.getTag().get("BlockEntityTag");
+                    NBTTagCompound nbttagcompound1 = tileentity.save(new NBTTagCompound());
+                    NBTTagCompound nbttagcompound2 = nbttagcompound1.g();
 
-                    nbttagcompound.a(nbttagcompound2);
-                    nbttagcompound.setInt("x", blockposition.getX());
-                    nbttagcompound.setInt("y", blockposition.getY());
-                    nbttagcompound.setInt("z", blockposition.getZ());
-                    if (!nbttagcompound.equals(nbttagcompound1)) {
-                        tileentity.a(nbttagcompound);
+                    nbttagcompound1.a(nbttagcompound);
+                    nbttagcompound1.setInt("x", blockposition.getX());
+                    nbttagcompound1.setInt("y", blockposition.getY());
+                    nbttagcompound1.setInt("z", blockposition.getZ());
+                    if (!nbttagcompound1.equals(nbttagcompound2)) {
+                        tileentity.a(nbttagcompound1);
                         tileentity.update();
                         return true;
                     }
@@ -80,7 +78,7 @@ public class ItemBlock extends Item {
         }
     }
 
-    public String f_(ItemStack itemstack) {
+    public String a(ItemStack itemstack) {
         return this.a.a();
     }
 
@@ -88,11 +86,7 @@ public class ItemBlock extends Item {
         return this.a.a();
     }
 
-    public Block d() {
+    public Block getBlock() {
         return this.a;
-    }
-
-    public Item c(String s) {
-        return this.b(s);
     }
 }

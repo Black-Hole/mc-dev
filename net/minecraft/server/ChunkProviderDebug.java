@@ -82,7 +82,7 @@ public class ChunkProviderDebug implements ChunkGenerator {
     }
 
     @Nullable
-    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
+    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, boolean flag) {
         return null;
     }
 
@@ -94,7 +94,7 @@ public class ChunkProviderDebug implements ChunkGenerator {
         while (iterator.hasNext()) {
             Block block = (Block) iterator.next();
 
-            ChunkProviderDebug.c.addAll(block.t().a());
+            ChunkProviderDebug.c.addAll(block.s().a());
         }
 
         d = MathHelper.f(MathHelper.c((float) ChunkProviderDebug.c.size()));

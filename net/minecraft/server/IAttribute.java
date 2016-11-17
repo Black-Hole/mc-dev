@@ -8,7 +8,7 @@ public interface IAttribute {
 
     double a(double d0);
 
-    double b();
+    double getDefault();
 
     boolean c();
 

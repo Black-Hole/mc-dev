@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockDragonEgg extends Block {
 
@@ -11,7 +10,7 @@ public class BlockDragonEgg extends Block {
         super(Material.DRAGON_EGG, MaterialMapColor.E);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockDragonEgg.a;
     }
 
@@ -19,7 +18,7 @@ public class BlockDragonEgg extends Block {
         world.a(blockposition, (Block) this, this.a(world));
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         world.a(blockposition, (Block) this, this.a(world));
     }
 
@@ -50,7 +49,7 @@ public class BlockDragonEgg extends Block {
         }
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         this.c(world, blockposition);
         return true;
     }

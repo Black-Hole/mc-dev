@@ -16,11 +16,11 @@ public class BlockFenceGate extends BlockFacingHorizontal {
 
     public BlockFenceGate(BlockWood.EnumLogVariant blockwood_enumlogvariant) {
         super(Material.WOOD, blockwood_enumlogvariant.c());
-        this.w(this.blockStateList.getBlockData().set(BlockFenceGate.OPEN, Boolean.valueOf(false)).set(BlockFenceGate.POWERED, Boolean.valueOf(false)).set(BlockFenceGate.IN_WALL, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockFenceGate.OPEN, Boolean.valueOf(false)).set(BlockFenceGate.POWERED, Boolean.valueOf(false)).set(BlockFenceGate.IN_WALL, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
         return ((Boolean) iblockdata.get(BlockFenceGate.IN_WALL)).booleanValue() ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.g : BlockFenceGate.f) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.e : BlockFenceGate.d);
     }
@@ -48,7 +48,7 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() ? BlockFenceGate.k : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.Z ? BlockFenceGate.B : BlockFenceGate.C);
     }
 
@@ -65,10 +65,12 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        return this.getBlockData().set(BlockFenceGate.FACING, entityliving.getDirection()).set(BlockFenceGate.OPEN, Boolean.valueOf(false)).set(BlockFenceGate.POWERED, Boolean.valueOf(false)).set(BlockFenceGate.IN_WALL, Boolean.valueOf(false));
+        boolean flag = world.isBlockIndirectlyPowered(blockposition);
+
+        return this.getBlockData().set(BlockFenceGate.FACING, entityliving.getDirection()).set(BlockFenceGate.OPEN, Boolean.valueOf(flag)).set(BlockFenceGate.POWERED, Boolean.valueOf(flag)).set(BlockFenceGate.IN_WALL, Boolean.valueOf(false));
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, @Nullable ItemStack itemstack, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue()) {
             iblockdata = iblockdata.set(BlockFenceGate.OPEN, Boolean.valueOf(false));
             world.setTypeAndData(blockposition, iblockdata, 10);
@@ -87,19 +89,14 @@ public class BlockFenceGate extends BlockFacingHorizontal {
         return true;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!world.isClientSide) {
             boolean flag = world.isBlockIndirectlyPowered(blockposition);
 
-            if (flag || block.getBlockData().m()) {
-                if (flag && !((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() && !((Boolean) iblockdata.get(BlockFenceGate.POWERED)).booleanValue()) {
-                    world.setTypeAndData(blockposition, iblockdata.set(BlockFenceGate.OPEN, Boolean.valueOf(true)).set(BlockFenceGate.POWERED, Boolean.valueOf(true)), 2);
-                    world.a((EntityHuman) null, 1008, blockposition, 0);
-                } else if (!flag && ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() && ((Boolean) iblockdata.get(BlockFenceGate.POWERED)).booleanValue()) {
-                    world.setTypeAndData(blockposition, iblockdata.set(BlockFenceGate.OPEN, Boolean.valueOf(false)).set(BlockFenceGate.POWERED, Boolean.valueOf(false)), 2);
-                    world.a((EntityHuman) null, 1014, blockposition, 0);
-                } else if (flag != ((Boolean) iblockdata.get(BlockFenceGate.POWERED)).booleanValue()) {
-                    world.setTypeAndData(blockposition, iblockdata.set(BlockFenceGate.POWERED, Boolean.valueOf(flag)), 2);
+            if (((Boolean) iblockdata.get(BlockFenceGate.POWERED)).booleanValue() != flag) {
+                world.setTypeAndData(blockposition, iblockdata.set(BlockFenceGate.POWERED, Boolean.valueOf(flag)).set(BlockFenceGate.OPEN, Boolean.valueOf(flag)), 2);
+                if (((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() != flag) {
+                    world.a((EntityHuman) null, flag ? 1008 : 1014, blockposition, 0);
                 }
             }
 

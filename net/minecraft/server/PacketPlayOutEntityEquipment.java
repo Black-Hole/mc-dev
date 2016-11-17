@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.io.IOException;
-import javax.annotation.Nullable;
 
 public class PacketPlayOutEntityEquipment implements Packet<PacketListenerPlayOut> {
 
@@ -9,12 +8,15 @@ public class PacketPlayOutEntityEquipment implements Packet<PacketListenerPlayOu
     private EnumItemSlot b;
     private ItemStack c;
 
-    public PacketPlayOutEntityEquipment() {}
+    public PacketPlayOutEntityEquipment() {
+        this.c = ItemStack.a;
+    }
 
-    public PacketPlayOutEntityEquipment(int i, EnumItemSlot enumitemslot, @Nullable ItemStack itemstack) {
+    public PacketPlayOutEntityEquipment(int i, EnumItemSlot enumitemslot, ItemStack itemstack) {
+        this.c = ItemStack.a;
         this.a = i;
         this.b = enumitemslot;
-        this.c = itemstack == null ? null : itemstack.cloneItemStack();
+        this.c = itemstack.isEmpty() ? ItemStack.a : itemstack.cloneItemStack();
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {

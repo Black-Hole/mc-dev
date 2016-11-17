@@ -5,7 +5,7 @@ import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 
-public class RegistryID<K> implements Registry<K>, Iterable<K> {
+public class RegistryID<K> implements Registry<K> {
 
     private static final Object a = null;
     private K[] b;
@@ -21,7 +21,7 @@ public class RegistryID<K> implements Registry<K>, Iterable<K> {
         this.d = (Object[]) (new Object[i]);
     }
 
-    public int getId(K k0) {
+    public int getId(@Nullable K k0) {
         return this.c(this.b(k0, this.d(k0)));
     }
 
@@ -90,11 +90,11 @@ public class RegistryID<K> implements Registry<K>, Iterable<K> {
 
     }
 
-    private int d(K k0) {
+    private int d(@Nullable K k0) {
         return (MathHelper.f(System.identityHashCode(k0)) & Integer.MAX_VALUE) % this.b.length;
     }
 
-    private int b(K k0, int i) {
+    private int b(@Nullable K k0, int i) {
         int j;
 
         for (j = i; j < this.b.length; ++j) {

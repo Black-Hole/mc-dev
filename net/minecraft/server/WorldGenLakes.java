@@ -87,7 +87,7 @@ public class WorldGenLakes extends WorldGenerator {
                         if (aboolean[(j * 16 + k1) * 8 + j1]) {
                             BlockPosition blockposition1 = blockposition.a(j, j1 - 1, k1);
 
-                            if (world.getType(blockposition1).getBlock() == Blocks.DIRT && world.b(EnumSkyBlock.SKY, blockposition.a(j, j1, k1)) > 0) {
+                            if (world.getType(blockposition1).getBlock() == Blocks.DIRT && world.getBrightness(EnumSkyBlock.SKY, blockposition.a(j, j1, k1)) > 0) {
                                 BiomeBase biomebase = world.getBiome(blockposition1);
 
                                 if (biomebase.r.getBlock() == Blocks.MYCELIUM) {

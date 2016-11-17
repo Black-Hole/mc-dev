@@ -7,8 +7,8 @@ import org.apache.logging.log4j.Logger;
 
 public class RedirectStream extends PrintStream {
 
-    private static final Logger a = LogManager.getLogger();
-    private final String b;
+    protected static final Logger a = LogManager.getLogger();
+    protected final String b;
 
     public RedirectStream(String s, OutputStream outputstream) {
         super(outputstream);
@@ -23,10 +23,7 @@ public class RedirectStream extends PrintStream {
         this.a(String.valueOf(object));
     }
 
-    private void a(String s) {
-        StackTraceElement[] astacktraceelement = Thread.currentThread().getStackTrace();
-        StackTraceElement stacktraceelement = astacktraceelement[Math.min(3, astacktraceelement.length)];
-
-        RedirectStream.a.info("[{}]@.({}:{}): {}", new Object[] { this.b, stacktraceelement.getFileName(), Integer.valueOf(stacktraceelement.getLineNumber()), s});
+    protected void a(String s) {
+        RedirectStream.a.info("[{}]: {}", new Object[] { this.b, s});
     }
 }

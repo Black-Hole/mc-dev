@@ -15,21 +15,21 @@ public class BlockCobbleWall extends Block {
 
     public BlockCobbleWall(Block block) {
         super(block.material);
-        this.w(this.blockStateList.getBlockData().set(BlockCobbleWall.UP, Boolean.valueOf(false)).set(BlockCobbleWall.NORTH, Boolean.valueOf(false)).set(BlockCobbleWall.EAST, Boolean.valueOf(false)).set(BlockCobbleWall.SOUTH, Boolean.valueOf(false)).set(BlockCobbleWall.WEST, Boolean.valueOf(false)).set(BlockCobbleWall.VARIANT, BlockCobbleWall.EnumCobbleVariant.NORMAL));
+        this.y(this.blockStateList.getBlockData().set(BlockCobbleWall.UP, Boolean.valueOf(false)).set(BlockCobbleWall.NORTH, Boolean.valueOf(false)).set(BlockCobbleWall.EAST, Boolean.valueOf(false)).set(BlockCobbleWall.SOUTH, Boolean.valueOf(false)).set(BlockCobbleWall.WEST, Boolean.valueOf(false)).set(BlockCobbleWall.VARIANT, BlockCobbleWall.EnumCobbleVariant.NORMAL));
         this.c(block.strength);
         this.b(block.durability / 3.0F);
         this.a(block.stepSound);
-        this.a(CreativeModeTab.b);
+        this.a(CreativeModeTab.c);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
         return BlockCobbleWall.g[i(iblockdata)];
     }
 
     @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        iblockdata = this.updateState(iblockdata, world, blockposition);
+    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
         return BlockCobbleWall.B[i(iblockdata)];
     }
 

@@ -87,6 +87,7 @@ public class WorldGenFactory {
         b(WorldGenLargeFeature.WorldGenLargeFeatureStart.class, "Temple");
         b(WorldGenMonument.WorldGenMonumentStart.class, "Monument");
         b(WorldGenEndCity.Start.class, "EndCity");
+        b(WorldGenWoodlandMansion.a.class, "Mansion");
         WorldGenMineshaftPieces.a();
         WorldGenVillagePieces.a();
         WorldGenNetherPieces.a();
@@ -94,5 +95,6 @@ public class WorldGenFactory {
         WorldGenRegistration.a();
         WorldGenMonumentPieces.a();
         WorldGenEndCityPieces.a();
+        WorldGenWoodlandMansionPieces.a();
     }
 }

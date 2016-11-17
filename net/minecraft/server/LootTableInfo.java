@@ -63,44 +63,18 @@ public class LootTableInfo {
 
     @Nullable
     public Entity a(LootTableInfo.EntityTarget loottableinfo_entitytarget) {
-        switch (LootTableInfo.SyntheticClass_1.a[loottableinfo_entitytarget.ordinal()]) {
-        case 1:
+        switch (loottableinfo_entitytarget) {
+        case THIS:
             return this.a();
 
-        case 2:
+        case KILLER:
             return this.c();
 
-        case 3:
+        case KILLER_PLAYER:
             return this.b();
 
         default:
             return null;
-        }
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[LootTableInfo.EntityTarget.values().length];
-
-        static {
-            try {
-                LootTableInfo.SyntheticClass_1.a[LootTableInfo.EntityTarget.THIS.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                LootTableInfo.SyntheticClass_1.a[LootTableInfo.EntityTarget.KILLER.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                LootTableInfo.SyntheticClass_1.a[LootTableInfo.EntityTarget.KILLER_PLAYER.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
         }
     }
 

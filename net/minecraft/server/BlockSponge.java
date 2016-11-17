@@ -11,7 +11,7 @@ public class BlockSponge extends Block {
 
     protected BlockSponge() {
         super(Material.SPONGE);
-        this.w(this.blockStateList.getBlockData().set(BlockSponge.WET, Boolean.valueOf(false)));
+        this.y(this.blockStateList.getBlockData().set(BlockSponge.WET, Boolean.valueOf(false)));
         this.a(CreativeModeTab.b);
     }
 
@@ -27,9 +27,9 @@ public class BlockSponge extends Block {
         this.e(world, blockposition, iblockdata);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         this.e(world, blockposition, iblockdata);
-        super.a(iblockdata, world, blockposition, block);
+        super.a(iblockdata, world, blockposition, block, blockposition1);
     }
 
     protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -80,7 +80,7 @@ public class BlockSponge extends Block {
 
         while (iterator.hasNext()) {
             blockposition1 = (BlockPosition) iterator.next();
-            world.applyPhysics(blockposition1, Blocks.AIR);
+            world.applyPhysics(blockposition1, Blocks.AIR, false);
         }
 
         return i > 0;

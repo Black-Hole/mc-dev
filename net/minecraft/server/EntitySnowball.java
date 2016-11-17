@@ -14,7 +14,7 @@ public class EntitySnowball extends EntityProjectile {
         super(world, d0, d1, d2);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
+    public static void b(DataConverterManager dataconvertermanager) {
         EntityProjectile.a(dataconvertermanager, "Snowball");
     }
 
@@ -29,11 +29,8 @@ public class EntitySnowball extends EntityProjectile {
             movingobjectposition.entity.damageEntity(DamageSource.projectile(this, this.getShooter()), (float) b0);
         }
 
-        for (int i = 0; i < 8; ++i) {
-            this.world.addParticle(EnumParticle.SNOWBALL, this.locX, this.locY, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
-        }
-
         if (!this.world.isClientSide) {
+            this.world.broadcastEntityEffect(this, (byte) 3);
             this.die();
         }
 

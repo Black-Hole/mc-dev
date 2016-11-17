@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockGrassPath extends Block {
 
@@ -12,7 +11,19 @@ public class BlockGrassPath extends Block {
         this.d(255);
     }
 
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        super.onPlace(world, blockposition, iblockdata);
+        this.b(world, blockposition);
+    }
+
+    private void b(World world, BlockPosition blockposition) {
+        if (world.getType(blockposition.up()).getMaterial().isBuildable()) {
+            world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
+        }
+
+    }
+
+    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockGrassPath.a;
     }
 
@@ -24,7 +35,6 @@ public class BlockGrassPath extends Block {
         return false;
     }
 
-    @Nullable
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
     }
@@ -33,11 +43,8 @@ public class BlockGrassPath extends Block {
         return new ItemStack(this);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
-        super.a(iblockdata, world, blockposition, block);
-        if (world.getType(blockposition.up()).getMaterial().isBuildable()) {
-            world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
-        }
-
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+        super.a(iblockdata, world, blockposition, block, blockposition1);
+        this.b(world, blockposition);
     }
 }

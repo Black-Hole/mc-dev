@@ -12,7 +12,7 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
 
     public void c() {
         super.c();
-        if (this.f.dl() && this.b instanceof EntityVillager && ((EntityVillager) this.b).dm()) {
+        if (this.f.do_() && this.b instanceof EntityVillager && ((EntityVillager) this.b).dp()) {
             this.e = 10;
         } else {
             this.e = 0;
@@ -25,38 +25,38 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
         if (this.e > 0) {
             --this.e;
             if (this.e == 0) {
-                InventorySubcontainer inventorysubcontainer = this.f.dj();
+                InventorySubcontainer inventorysubcontainer = this.f.dm();
 
                 for (int i = 0; i < inventorysubcontainer.getSize(); ++i) {
                     ItemStack itemstack = inventorysubcontainer.getItem(i);
-                    ItemStack itemstack1 = null;
+                    ItemStack itemstack1 = ItemStack.a;
 
-                    if (itemstack != null) {
+                    if (!itemstack.isEmpty()) {
                         Item item = itemstack.getItem();
                         int j;
 
-                        if ((item == Items.BREAD || item == Items.POTATO || item == Items.CARROT || item == Items.BEETROOT) && itemstack.count > 3) {
-                            j = itemstack.count / 2;
-                            itemstack.count -= j;
+                        if ((item == Items.BREAD || item == Items.POTATO || item == Items.CARROT || item == Items.BEETROOT) && itemstack.getCount() > 3) {
+                            j = itemstack.getCount() / 2;
+                            itemstack.subtract(j);
                             itemstack1 = new ItemStack(item, j, itemstack.getData());
-                        } else if (item == Items.WHEAT && itemstack.count > 5) {
-                            j = itemstack.count / 2 / 3 * 3;
+                        } else if (item == Items.WHEAT && itemstack.getCount() > 5) {
+                            j = itemstack.getCount() / 2 / 3 * 3;
                             int k = j / 3;
 
-                            itemstack.count -= j;
+                            itemstack.subtract(j);
                             itemstack1 = new ItemStack(Items.BREAD, k, 0);
                         }
 
-                        if (itemstack.count <= 0) {
-                            inventorysubcontainer.setItem(i, (ItemStack) null);
+                        if (itemstack.isEmpty()) {
+                            inventorysubcontainer.setItem(i, ItemStack.a);
                         }
                     }
 
-                    if (itemstack1 != null) {
+                    if (!itemstack1.isEmpty()) {
                         double d0 = this.f.locY - 0.30000001192092896D + (double) this.f.getHeadHeight();
                         EntityItem entityitem = new EntityItem(this.f.world, this.f.locX, d0, this.f.locZ, itemstack1);
                         float f = 0.3F;
-                        float f1 = this.f.aQ;
+                        float f1 = this.f.aP;
                         float f2 = this.f.pitch;
 
                         entityitem.motX = (double) (-MathHelper.sin(f1 * 0.017453292F) * MathHelper.cos(f2 * 0.017453292F) * 0.3F);

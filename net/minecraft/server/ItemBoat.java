@@ -13,7 +13,8 @@ public class ItemBoat extends Item {
         this.c("boat." + entityboat_enumboattype.a());
     }
 
-    public InteractionResultWrapper<ItemStack> a(ItemStack itemstack, World world, EntityHuman entityhuman, EnumHand enumhand) {
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        ItemStack itemstack = entityhuman.b(enumhand);
         float f = 1.0F;
         float f1 = entityhuman.lastPitch + (entityhuman.pitch - entityhuman.lastPitch) * 1.0F;
         float f2 = entityhuman.lastYaw + (entityhuman.yaw - entityhuman.lastYaw) * 1.0F;
@@ -36,7 +37,7 @@ public class ItemBoat extends Item {
         } else {
             Vec3D vec3d2 = entityhuman.f(1.0F);
             boolean flag = false;
-            List list = world.getEntities(entityhuman, entityhuman.getBoundingBox().a(vec3d2.x * 5.0D, vec3d2.y * 5.0D, vec3d2.z * 5.0D).g(1.0D));
+            List list = world.getEntities(entityhuman, entityhuman.getBoundingBox().b(vec3d2.x * 5.0D, vec3d2.y * 5.0D, vec3d2.z * 5.0D).g(1.0D));
 
             for (int i = 0; i < list.size(); ++i) {
                 Entity entity = (Entity) list.get(i);
@@ -44,7 +45,7 @@ public class ItemBoat extends Item {
                 if (entity.isInteractable()) {
                     AxisAlignedBB axisalignedbb = entity.getBoundingBox().g((double) entity.aA());
 
-                    if (axisalignedbb.a(vec3d)) {
+                    if (axisalignedbb.b(vec3d)) {
                         flag = true;
                     }
                 }
@@ -69,7 +70,7 @@ public class ItemBoat extends Item {
                     }
 
                     if (!entityhuman.abilities.canInstantlyBuild) {
-                        --itemstack.count;
+                        itemstack.subtract(1);
                     }
 
                     entityhuman.b(StatisticList.b((Item) this));

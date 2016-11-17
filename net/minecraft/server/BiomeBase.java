@@ -84,7 +84,8 @@ public abstract class BiomeBase {
         this.v.add(new BiomeBase.BiomeMeta(EntityChicken.class, 10, 4, 4));
         this.v.add(new BiomeBase.BiomeMeta(EntityCow.class, 8, 4, 4));
         this.u.add(new BiomeBase.BiomeMeta(EntitySpider.class, 100, 4, 4));
-        this.u.add(new BiomeBase.BiomeMeta(EntityZombie.class, 100, 4, 4));
+        this.u.add(new BiomeBase.BiomeMeta(EntityZombie.class, 95, 4, 4));
+        this.u.add(new BiomeBase.BiomeMeta(EntityZombieVillager.class, 5, 1, 1));
         this.u.add(new BiomeBase.BiomeMeta(EntitySkeleton.class, 100, 4, 4));
         this.u.add(new BiomeBase.BiomeMeta(EntityCreeper.class, 100, 4, 4));
         this.u.add(new BiomeBase.BiomeMeta(EntitySlime.class, 100, 4, 4));
@@ -115,17 +116,17 @@ public abstract class BiomeBase {
     }
 
     public List<BiomeBase.BiomeMeta> getMobs(EnumCreatureType enumcreaturetype) {
-        switch (BiomeBase.SyntheticClass_1.a[enumcreaturetype.ordinal()]) {
-        case 1:
+        switch (enumcreaturetype) {
+        case MONSTER:
             return this.u;
 
-        case 2:
+        case CREATURE:
             return this.v;
 
-        case 3:
+        case WATER_CREATURE:
             return this.w;
 
-        case 4:
+        case AMBIENT:
             return this.x;
 
         default:
@@ -326,7 +327,7 @@ public abstract class BiomeBase {
         a(149, "mutated_jungle", new BiomeJungle(false, (new BiomeBase.a("Jungle M")).a("jungle").c(0.2F).d(0.4F).a(0.95F).b(0.9F)));
         a(151, "mutated_jungle_edge", new BiomeJungle(true, (new BiomeBase.a("JungleEdge M")).a("jungle_edge").c(0.2F).d(0.4F).a(0.95F).b(0.8F)));
         a(155, "mutated_birch_forest", new BiomeForestMutated((new BiomeBase.a("Birch Forest M")).a("birch_forest").c(0.2F).d(0.4F).a(0.6F).b(0.6F)));
-        a(156, "mutated_birch_forest_hills", new BiomeForestMutated((new BiomeBase.a("Birch Forest Hills M")).a("birch_forest").c(0.55F).d(0.5F).a(0.6F).b(0.6F)));
+        a(156, "mutated_birch_forest_hills", new BiomeForestMutated((new BiomeBase.a("Birch Forest Hills M")).a("birch_forest_hills").c(0.55F).d(0.5F).a(0.6F).b(0.6F)));
         a(157, "mutated_roofed_forest", new BiomeForest(BiomeForest.Type.ROOFED, (new BiomeBase.a("Roofed Forest M")).a("roofed_forest").c(0.2F).d(0.4F).a(0.7F).b(0.8F)));
         a(158, "mutated_taiga_cold", new BiomeTaiga(BiomeTaiga.Type.NORMAL, (new BiomeBase.a("Cold Taiga M")).a("taiga_cold").c(0.3F).d(0.4F).a(-0.5F).b(0.4F).b()));
         a(160, "mutated_redwood_taiga", new BiomeTaiga(BiomeTaiga.Type.MEGA_SPRUCE, (new BiomeBase.a("Mega Spruce Taiga")).a("redwood_taiga").c(0.2F).d(0.2F).a(0.25F).b(0.8F)));
@@ -346,38 +347,6 @@ public abstract class BiomeBase {
             BiomeBase.j.a(biomebase, a((BiomeBase) BiomeBase.REGISTRY_ID.get(new MinecraftKey(biomebase.H))));
         }
 
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] a = new int[EnumCreatureType.values().length];
-
-        static {
-            try {
-                BiomeBase.SyntheticClass_1.a[EnumCreatureType.MONSTER.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BiomeBase.SyntheticClass_1.a[EnumCreatureType.CREATURE.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
-                ;
-            }
-
-            try {
-                BiomeBase.SyntheticClass_1.a[EnumCreatureType.WATER_CREATURE.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BiomeBase.SyntheticClass_1.a[EnumCreatureType.AMBIENT.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-        }
     }
 
     public static class a {
