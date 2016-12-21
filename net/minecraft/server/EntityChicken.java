@@ -102,7 +102,7 @@ public class EntityChicken extends EntityAnimal {
         return this.isChickenJockey() ? 10 : super.getExpValue(entityhuman);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityChicken.class);
     }
 

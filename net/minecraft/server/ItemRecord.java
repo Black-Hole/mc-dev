@@ -27,7 +27,7 @@ public class ItemRecord extends Item {
                 ((BlockJukeBox) Blocks.JUKEBOX).a(world, blockposition, iblockdata, itemstack);
                 world.a((EntityHuman) null, 1010, blockposition, Item.getId(this));
                 itemstack.subtract(1);
-                entityhuman.b(StatisticList.Z);
+                entityhuman.b(StatisticList.X);
             }
 
             return EnumInteractionResult.SUCCESS;

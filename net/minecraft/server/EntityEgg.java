@@ -14,7 +14,7 @@ public class EntityEgg extends EntityProjectile {
         super(world, d0, d1, d2);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityProjectile.a(dataconvertermanager, "ThrownEgg");
     }
 

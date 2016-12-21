@@ -152,7 +152,7 @@ public class EntityBat extends EntityAmbient {
         }
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityBat.class);
     }
 

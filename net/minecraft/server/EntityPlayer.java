@@ -88,17 +88,34 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     }
 
+    public static void a(DataConverterManager dataconvertermanager) {
+        dataconvertermanager.a(DataConverterTypes.PLAYER, new DataInspector() {
+            public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
+                if (nbttagcompound.hasKeyOfType("RootVehicle", 10)) {
+                    NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("RootVehicle");
+
+                    if (nbttagcompound1.hasKeyOfType("Entity", 10)) {
+                        nbttagcompound1.set("Entity", dataconverter.a(DataConverterTypes.ENTITY, nbttagcompound1.getCompound("Entity"), i));
+                    }
+                }
+
+                return nbttagcompound;
+            }
+        });
+    }
+
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setInt("playerGameType", this.playerInteractManager.getGameMode().getId());
         Entity entity = this.getVehicle();
+        Entity entity1 = this.bB();
 
-        if (this.bB() != null && entity != this & entity.b(EntityPlayer.class).size() == 1) {
+        if (entity1 != null && entity != this & entity.b(EntityPlayer.class).size() == 1) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
             NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
             entity.d(nbttagcompound2);
-            nbttagcompound1.a("Attach", this.bB().getUniqueID());
+            nbttagcompound1.a("Attach", entity1.getUniqueID());
             nbttagcompound1.set("Entity", nbttagcompound2);
             nbttagcompound.set("RootVehicle", nbttagcompound1);
         }
@@ -445,7 +462,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         EntityHuman.EnumBedResult entityhuman_enumbedresult = super.a(blockposition);
 
         if (entityhuman_enumbedresult == EntityHuman.EnumBedResult.OK) {
-            this.b(StatisticList.ad);
+            this.b(StatisticList.ab);
             PacketPlayOutBed packetplayoutbed = new PacketPlayOutBed(this, blockposition);
 
             this.x().getTracker().a((Entity) this, (Packet) packetplayoutbed);

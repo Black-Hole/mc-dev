@@ -158,7 +158,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     }
 
     private static boolean b(PacketPlayInFlying packetplayinflying) {
-        return Doubles.isFinite(packetplayinflying.a(0.0D)) && Doubles.isFinite(packetplayinflying.b(0.0D)) && Doubles.isFinite(packetplayinflying.c(0.0D)) && Floats.isFinite(packetplayinflying.b(0.0F)) && Floats.isFinite(packetplayinflying.a(0.0F)) ? false : Math.abs(packetplayinflying.a(0.0D)) <= 3.0E7D && Math.abs(packetplayinflying.a(0.0D)) <= 3.0E7D;
+        return Doubles.isFinite(packetplayinflying.a(0.0D)) && Doubles.isFinite(packetplayinflying.b(0.0D)) && Doubles.isFinite(packetplayinflying.c(0.0D)) && Floats.isFinite(packetplayinflying.b(0.0F)) && Floats.isFinite(packetplayinflying.a(0.0F)) ? false : Math.abs(packetplayinflying.a(0.0D)) <= 3.0E7D && Math.abs(packetplayinflying.c(0.0D)) <= 3.0E7D;
     }
 
     private static boolean b(PacketPlayInVehicleMove packetplayinvehiclemove) {
@@ -228,7 +228,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
                 this.minecraftServer.getPlayerList().d(this.player);
                 this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
-                this.D = d11 >= -0.03125D && !this.minecraftServer.getAllowFlight() && !worldserver.d(entity.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
+                this.D = d11 >= -0.03125D && !this.minecraftServer.getAllowFlight() && !worldserver.c(entity.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
                 this.v = entity.locX;
                 this.w = entity.locY;
                 this.x = entity.locZ;
@@ -292,72 +292,79 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                         double d10 = this.player.motX * this.player.motX + this.player.motY * this.player.motY + this.player.motZ * this.player.motZ;
                         double d11 = d7 * d7 + d8 * d8 + d9 * d9;
 
-                        ++this.receivedMovePackets;
-                        int i = this.receivedMovePackets - this.processedMovePackets;
-
-                        if (i > 5) {
-                            PlayerConnection.LOGGER.debug("{} is sending move packets too frequently ({} packets since last tick)", new Object[] { this.player.getName(), Integer.valueOf(i)});
-                            i = 1;
-                        }
-
-                        if (!this.player.K() && (!this.player.x().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.cH())) {
-                            float f2 = this.player.cH() ? 300.0F : 100.0F;
-
-                            if (d11 - d10 > (double) (f2 * (float) i) && (!this.minecraftServer.R() || !this.minecraftServer.Q().equals(this.player.getName()))) {
-                                PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", new Object[] { this.player.getName(), Double.valueOf(d7), Double.valueOf(d8), Double.valueOf(d9)});
-                                this.a(this.player.locX, this.player.locY, this.player.locZ, this.player.yaw, this.player.pitch);
-                                return;
+                        if (this.player.isSleeping()) {
+                            if (d11 > 1.0D) {
+                                this.a(this.player.locX, this.player.locY, this.player.locZ, packetplayinflying.a(this.player.yaw), packetplayinflying.b(this.player.pitch));
                             }
-                        }
 
-                        boolean flag = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink(0.0625D)).isEmpty();
+                        } else {
+                            ++this.receivedMovePackets;
+                            int i = this.receivedMovePackets - this.processedMovePackets;
 
-                        d7 = d4 - this.o;
-                        d8 = d5 - this.p;
-                        d9 = d6 - this.q;
-                        if (this.player.onGround && !packetplayinflying.a() && d8 > 0.0D) {
-                            this.player.cm();
-                        }
-
-                        this.player.move(EnumMoveType.PLAYER, d7, d8, d9);
-                        this.player.onGround = packetplayinflying.a();
-                        double d12 = d8;
-
-                        d7 = d4 - this.player.locX;
-                        d8 = d5 - this.player.locY;
-                        if (d8 > -0.5D || d8 < 0.5D) {
-                            d8 = 0.0D;
-                        }
-
-                        d9 = d6 - this.player.locZ;
-                        d11 = d7 * d7 + d8 * d8 + d9 * d9;
-                        boolean flag1 = false;
-
-                        if (!this.player.K() && d11 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative() && this.player.playerInteractManager.getGameMode() != EnumGamemode.SPECTATOR) {
-                            flag1 = true;
-                            PlayerConnection.LOGGER.warn("{} moved wrongly!", new Object[] { this.player.getName()});
-                        }
-
-                        this.player.setLocation(d4, d5, d6, f, f1);
-                        this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
-                        if (!this.player.noclip && !this.player.isSleeping()) {
-                            boolean flag2 = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink(0.0625D)).isEmpty();
-
-                            if (flag && (flag1 || !flag2)) {
-                                this.a(d0, d1, d2, f, f1);
-                                return;
+                            if (i > 5) {
+                                PlayerConnection.LOGGER.debug("{} is sending move packets too frequently ({} packets since last tick)", new Object[] { this.player.getName(), Integer.valueOf(i)});
+                                i = 1;
                             }
-                        }
 
-                        this.B = d12 >= -0.03125D;
-                        this.B &= !this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly;
-                        this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.cH() && !worldserver.d(this.player.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
-                        this.player.onGround = packetplayinflying.a();
-                        this.minecraftServer.getPlayerList().d(this.player);
-                        this.player.a(this.player.locY - d3, packetplayinflying.a());
-                        this.o = this.player.locX;
-                        this.p = this.player.locY;
-                        this.q = this.player.locZ;
+                            if (!this.player.K() && (!this.player.x().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.cH())) {
+                                float f2 = this.player.cH() ? 300.0F : 100.0F;
+
+                                if (d11 - d10 > (double) (f2 * (float) i) && (!this.minecraftServer.R() || !this.minecraftServer.Q().equals(this.player.getName()))) {
+                                    PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", new Object[] { this.player.getName(), Double.valueOf(d7), Double.valueOf(d8), Double.valueOf(d9)});
+                                    this.a(this.player.locX, this.player.locY, this.player.locZ, this.player.yaw, this.player.pitch);
+                                    return;
+                                }
+                            }
+
+                            boolean flag = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink(0.0625D)).isEmpty();
+
+                            d7 = d4 - this.o;
+                            d8 = d5 - this.p;
+                            d9 = d6 - this.q;
+                            if (this.player.onGround && !packetplayinflying.a() && d8 > 0.0D) {
+                                this.player.cm();
+                            }
+
+                            this.player.move(EnumMoveType.PLAYER, d7, d8, d9);
+                            this.player.onGround = packetplayinflying.a();
+                            double d12 = d8;
+
+                            d7 = d4 - this.player.locX;
+                            d8 = d5 - this.player.locY;
+                            if (d8 > -0.5D || d8 < 0.5D) {
+                                d8 = 0.0D;
+                            }
+
+                            d9 = d6 - this.player.locZ;
+                            d11 = d7 * d7 + d8 * d8 + d9 * d9;
+                            boolean flag1 = false;
+
+                            if (!this.player.K() && d11 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative() && this.player.playerInteractManager.getGameMode() != EnumGamemode.SPECTATOR) {
+                                flag1 = true;
+                                PlayerConnection.LOGGER.warn("{} moved wrongly!", new Object[] { this.player.getName()});
+                            }
+
+                            this.player.setLocation(d4, d5, d6, f, f1);
+                            this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
+                            if (!this.player.noclip && !this.player.isSleeping()) {
+                                boolean flag2 = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink(0.0625D)).isEmpty();
+
+                                if (flag && (flag1 || !flag2)) {
+                                    this.a(d0, d1, d2, f, f1);
+                                    return;
+                                }
+                            }
+
+                            this.B = d12 >= -0.03125D;
+                            this.B &= !this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly;
+                            this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.cH() && !worldserver.c(this.player.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
+                            this.player.onGround = packetplayinflying.a();
+                            this.minecraftServer.getPlayerList().d(this.player);
+                            this.player.a(this.player.locY - d3, packetplayinflying.a());
+                            this.o = this.player.locX;
+                            this.p = this.player.locY;
+                            this.q = this.player.locZ;
+                        }
                     }
                 }
             }

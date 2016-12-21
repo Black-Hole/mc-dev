@@ -10,7 +10,7 @@ public class EntityMinecartChest extends EntityMinecartContainer {
         super(world, d0, d1, d2);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityMinecartContainer.b(dataconvertermanager, EntityMinecartChest.class);
     }
 

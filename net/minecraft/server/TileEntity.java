@@ -208,12 +208,7 @@ public abstract class TileEntity {
     }
 
     public void setPosition(BlockPosition blockposition) {
-        if (blockposition instanceof BlockPosition.MutableBlockPosition || blockposition instanceof BlockPosition.PooledBlockPosition) {
-            TileEntity.a.warn("Tried to assign a mutable BlockPos to a block entity...", new Error(blockposition.getClass().toString()));
-            blockposition = new BlockPosition(blockposition);
-        }
-
-        this.position = blockposition;
+        this.position = blockposition.h();
     }
 
     public boolean isFilteredNBT() {

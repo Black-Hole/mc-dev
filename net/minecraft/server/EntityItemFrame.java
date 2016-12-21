@@ -151,7 +151,7 @@ public class EntityItemFrame extends EntityHanging {
 
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItem(EntityItemFrame.class, new String[] { "Item"})));
     }
 

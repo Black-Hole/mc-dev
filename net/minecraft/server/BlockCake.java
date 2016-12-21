@@ -39,7 +39,7 @@ public class BlockCake extends Block {
         if (!entityhuman.n(false)) {
             return false;
         } else {
-            entityhuman.b(StatisticList.J);
+            entityhuman.b(StatisticList.H);
             entityhuman.getFoodData().eat(2, 0.1F);
             int i = ((Integer) iblockdata.get(BlockCake.BITES)).intValue();
 

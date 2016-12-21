@@ -332,8 +332,8 @@ public class BlockStateList {
             return this.a.a((IBlockData) this, iblockaccess, blockposition);
         }
 
-        public void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
-            this.a.a((IBlockData) this, world, blockposition, axisalignedbb, list, entity);
+        public void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
+            this.a.a(this, world, blockposition, axisalignedbb, list, entity, flag);
         }
 
         public AxisAlignedBB d(IBlockAccess iblockaccess, BlockPosition blockposition) {

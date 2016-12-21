@@ -23,5 +23,7 @@ public class RecipeIngots {
 
         craftingmanager.registerShapedRecipe(new ItemStack(Items.GOLD_INGOT), new Object[] { "###", "###", "###", Character.valueOf('#'), Items.GOLD_NUGGET});
         craftingmanager.registerShapedRecipe(new ItemStack(Items.GOLD_NUGGET, 9), new Object[] { "#", Character.valueOf('#'), Items.GOLD_INGOT});
+        craftingmanager.registerShapedRecipe(new ItemStack(Items.IRON_INGOT), new Object[] { "###", "###", "###", Character.valueOf('#'), Items.da});
+        craftingmanager.registerShapedRecipe(new ItemStack(Items.da, 9), new Object[] { "#", Character.valueOf('#'), Items.IRON_INGOT});
     }
 }

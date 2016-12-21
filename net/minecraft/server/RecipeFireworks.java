@@ -56,15 +56,15 @@ public class RecipeFireworks implements IRecipe {
         if (j <= 3 && i <= 1) {
             NBTTagCompound nbttagcompound;
             NBTTagCompound nbttagcompound1;
+            int l1;
 
             if (j >= 1 && i == 1 && i1 == 0) {
                 this.a = new ItemStack(Items.FIREWORKS, 3);
+                nbttagcompound = new NBTTagCompound();
                 if (l > 0) {
-                    nbttagcompound = new NBTTagCompound();
-                    nbttagcompound1 = new NBTTagCompound();
                     NBTTagList nbttaglist = new NBTTagList();
 
-                    for (int l1 = 0; l1 < inventorycrafting.getSize(); ++l1) {
+                    for (l1 = 0; l1 < inventorycrafting.getSize(); ++l1) {
                         ItemStack itemstack1 = inventorycrafting.getItem(l1);
 
                         if (itemstack1.getItem() == Items.FIREWORK_CHARGE && itemstack1.hasTag() && itemstack1.getTag().hasKeyOfType("Explosion", 10)) {
@@ -72,12 +72,13 @@ public class RecipeFireworks implements IRecipe {
                         }
                     }
 
-                    nbttagcompound1.set("Explosions", nbttaglist);
-                    nbttagcompound1.setByte("Flight", (byte) j);
-                    nbttagcompound.set("Fireworks", nbttagcompound1);
-                    this.a.setTag(nbttagcompound);
+                    nbttagcompound.set("Explosions", nbttaglist);
                 }
 
+                nbttagcompound.setByte("Flight", (byte) j);
+                nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound1.set("Fireworks", nbttagcompound);
+                this.a.setTag(nbttagcompound1);
                 return true;
             } else if (j == 1 && i == 0 && l == 0 && k > 0 && j1 <= 1) {
                 this.a = new ItemStack(Items.FIREWORK_CHARGE);
@@ -137,8 +138,8 @@ public class RecipeFireworks implements IRecipe {
 
                 int[] aint1 = new int[arraylist1.size()];
 
-                for (int l2 = 0; l2 < aint1.length; ++l2) {
-                    aint1[l2] = ((Integer) arraylist1.get(l2)).intValue();
+                for (l1 = 0; l1 < aint1.length; ++l1) {
+                    aint1[l1] = ((Integer) arraylist1.get(l1)).intValue();
                 }
 
                 if (!this.a.isEmpty() && this.a.hasTag()) {

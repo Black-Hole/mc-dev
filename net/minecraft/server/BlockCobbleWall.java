@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.List;
 import javax.annotation.Nullable;
 
 public class BlockCobbleWall extends Block {
@@ -25,6 +26,14 @@ public class BlockCobbleWall extends Block {
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
         return BlockCobbleWall.g[i(iblockdata)];
+    }
+
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
+        if (!flag) {
+            iblockdata = this.updateState(iblockdata, world, blockposition);
+        }
+
+        a(blockposition, axisalignedbb, list, BlockCobbleWall.g[i(iblockdata)]);
     }
 
     @Nullable

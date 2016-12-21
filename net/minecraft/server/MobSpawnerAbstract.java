@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.StringUtils;
 
 public abstract class MobSpawnerAbstract {
 
@@ -26,9 +25,8 @@ public abstract class MobSpawnerAbstract {
     @Nullable
     public MinecraftKey getMobName() {
         String s = this.spawnData.b().getString("id");
-        MinecraftKey minecraftkey = new MinecraftKey(s);
 
-        return !UtilColor.b(s) && StringUtils.equals(s, minecraftkey.toString()) ? minecraftkey : null;
+        return UtilColor.b(s) ? null : new MinecraftKey(s);
     }
 
     public void setMobName(@Nullable MinecraftKey minecraftkey) {
@@ -149,13 +147,12 @@ public abstract class MobSpawnerAbstract {
             }
         }
 
-        NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("SpawnData");
-
-        if (!nbttagcompound1.hasKeyOfType("id", 8)) {
-            nbttagcompound1.setString("id", "Pig");
+        if (nbttagcompound.hasKeyOfType("SpawnData", 10)) {
+            this.a(new MobSpawnerData(1, nbttagcompound.getCompound("SpawnData")));
+        } else if (!this.mobs.isEmpty()) {
+            this.a((MobSpawnerData) WeightedRandom.a(this.a().random, this.mobs));
         }
 
-        this.a(new MobSpawnerData(1, nbttagcompound1));
         if (nbttagcompound.hasKeyOfType("MinSpawnDelay", 99)) {
             this.minSpawnDelay = nbttagcompound.getShort("MinSpawnDelay");
             this.maxSpawnDelay = nbttagcompound.getShort("MaxSpawnDelay");

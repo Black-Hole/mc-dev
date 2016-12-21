@@ -60,7 +60,7 @@ public class BlockPiston extends BlockDirectional {
         return !((Boolean) iblockdata.get(BlockPiston.EXTENDED)).booleanValue() || iblockdata.get(BlockPiston.FACING) == EnumDirection.DOWN;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
         a(blockposition, axisalignedbb, list, iblockdata.d(world, blockposition));
     }
 
@@ -163,7 +163,7 @@ public class BlockPiston extends BlockDirectional {
                 return false;
             }
 
-            world.setTypeAndData(blockposition, iblockdata.set(BlockPiston.EXTENDED, Boolean.valueOf(true)), 2);
+            world.setTypeAndData(blockposition, iblockdata.set(BlockPiston.EXTENDED, Boolean.valueOf(true)), 3);
             world.a((EntityHuman) null, blockposition, SoundEffects.ev, SoundCategory.BLOCKS, 0.5F, world.random.nextFloat() * 0.25F + 0.6F);
         } else if (i == 1) {
             TileEntity tileentity = world.getTileEntity(blockposition.shift(enumdirection));
@@ -283,7 +283,7 @@ public class BlockPiston extends BlockDirectional {
                 blockposition2 = (BlockPosition) list1.get(k);
                 iblockdata = world.getType(blockposition2);
                 iblockdata.getBlock().b(world, blockposition2, iblockdata, 0);
-                world.setAir(blockposition2);
+                world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 4);
                 --j;
                 aiblockdata[j] = iblockdata;
             }
@@ -323,7 +323,6 @@ public class BlockPiston extends BlockDirectional {
 
             if (flag) {
                 world.applyPhysics(blockposition3, Blocks.PISTON_HEAD, false);
-                world.applyPhysics(blockposition, this, false);
             }
 
             return true;

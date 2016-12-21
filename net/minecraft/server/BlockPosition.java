@@ -148,38 +148,40 @@ public class BlockPosition extends BaseBlockPosition {
     }
 
     public static Iterable<BlockPosition> a(BlockPosition blockposition, BlockPosition blockposition1) {
-        final BlockPosition blockposition2 = new BlockPosition(Math.min(blockposition.getX(), blockposition1.getX()), Math.min(blockposition.getY(), blockposition1.getY()), Math.min(blockposition.getZ(), blockposition1.getZ()));
-        final BlockPosition blockposition3 = new BlockPosition(Math.max(blockposition.getX(), blockposition1.getX()), Math.max(blockposition.getY(), blockposition1.getY()), Math.max(blockposition.getZ(), blockposition1.getZ()));
+        return a(Math.min(blockposition.getX(), blockposition1.getX()), Math.min(blockposition.getY(), blockposition1.getY()), Math.min(blockposition.getZ(), blockposition1.getZ()), Math.max(blockposition.getX(), blockposition1.getX()), Math.max(blockposition.getY(), blockposition1.getY()), Math.max(blockposition.getZ(), blockposition1.getZ()));
+    }
 
+    public static Iterable<BlockPosition> a(final int i, final int j, final int k, final int l, final int i1, final int j1) {
         return new Iterable() {
             public Iterator<BlockPosition> iterator() {
                 return new AbstractIterator() {
-                    private BlockPosition b;
+                    private boolean b = true;
+                    private int c;
+                    private int d;
+                    private int e;
 
                     protected BlockPosition a() {
-                        if (this.b == null) {
-                            this.b = blockposition;
-                            return this.b;
-                        } else if (this.b.equals(blockposition1)) {
+                        if (this.b) {
+                            this.b = false;
+                            this.c = i;
+                            this.d = j;
+                            this.e = k;
+                            return new BlockPosition(i, j, k);
+                        } else if (this.c == l && this.d == i1 && this.e == j1) {
                             return (BlockPosition) this.endOfData();
                         } else {
-                            int i = this.b.getX();
-                            int j = this.b.getY();
-                            int k = this.b.getZ();
-
-                            if (i < blockposition1.getX()) {
-                                ++i;
-                            } else if (j < blockposition1.getY()) {
-                                i = blockposition.getX();
-                                ++j;
-                            } else if (k < blockposition1.getZ()) {
-                                i = blockposition.getX();
-                                j = blockposition.getY();
-                                ++k;
+                            if (this.c < l) {
+                                ++this.c;
+                            } else if (this.d < i1) {
+                                this.c = i;
+                                ++this.d;
+                            } else if (this.e < j1) {
+                                this.c = i;
+                                this.d = j;
+                                ++this.e;
                             }
 
-                            this.b = new BlockPosition(i, j, k);
-                            return this.b;
+                            return new BlockPosition(this.c, this.d, this.e);
                         }
                     }
 
@@ -196,9 +198,10 @@ public class BlockPosition extends BaseBlockPosition {
     }
 
     public static Iterable<BlockPosition.MutableBlockPosition> b(BlockPosition blockposition, BlockPosition blockposition1) {
-        final BlockPosition blockposition2 = new BlockPosition(Math.min(blockposition.getX(), blockposition1.getX()), Math.min(blockposition.getY(), blockposition1.getY()), Math.min(blockposition.getZ(), blockposition1.getZ()));
-        final BlockPosition blockposition3 = new BlockPosition(Math.max(blockposition.getX(), blockposition1.getX()), Math.max(blockposition.getY(), blockposition1.getY()), Math.max(blockposition.getZ(), blockposition1.getZ()));
+        return b(Math.min(blockposition.getX(), blockposition1.getX()), Math.min(blockposition.getY(), blockposition1.getY()), Math.min(blockposition.getZ(), blockposition1.getZ()), Math.max(blockposition.getX(), blockposition1.getX()), Math.max(blockposition.getY(), blockposition1.getY()), Math.max(blockposition.getZ(), blockposition1.getZ()));
+    }
 
+    public static Iterable<BlockPosition.MutableBlockPosition> b(final int i, final int j, final int k, final int l, final int i1, final int j1) {
         return new Iterable() {
             public Iterator<BlockPosition.MutableBlockPosition> iterator() {
                 return new AbstractIterator() {
@@ -206,29 +209,22 @@ public class BlockPosition extends BaseBlockPosition {
 
                     protected BlockPosition.MutableBlockPosition a() {
                         if (this.b == null) {
-                            this.b = new BlockPosition.MutableBlockPosition(blockposition.getX(), blockposition.getY(), blockposition.getZ());
+                            this.b = new BlockPosition.MutableBlockPosition(i, j, k);
                             return this.b;
-                        } else if (this.b.equals(blockposition1)) {
+                        } else if (this.b.b == l && this.b.c == i1 && this.b.d == j1) {
                             return (BlockPosition.MutableBlockPosition) this.endOfData();
                         } else {
-                            int i = this.b.getX();
-                            int j = this.b.getY();
-                            int k = this.b.getZ();
-
-                            if (i < blockposition1.getX()) {
-                                ++i;
-                            } else if (j < blockposition1.getY()) {
-                                i = blockposition.getX();
-                                ++j;
-                            } else if (k < blockposition1.getZ()) {
-                                i = blockposition.getX();
-                                j = blockposition.getY();
-                                ++k;
+                            if (this.b.b < l) {
+                                ++this.b.b;
+                            } else if (this.b.c < i1) {
+                                this.b.b = i;
+                                ++this.b.c;
+                            } else if (this.b.d < j1) {
+                                this.b.b = i;
+                                this.b.c = j;
+                                ++this.b.d;
                             }
 
-                            this.b.b = i;
-                            this.b.c = j;
-                            this.b.d = k;
                             return this.b;
                         }
                     }

@@ -147,7 +147,7 @@ public class EntitySheep extends EntityAnimal {
         return super.a(entityhuman, enumhand);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntitySheep.class);
     }
 

@@ -15,7 +15,7 @@ public class EntityDragonFireball extends EntityFireball {
         this.setSize(1.0F, 1.0F);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityFireball.a(dataconvertermanager, "DragonFireball");
     }
 

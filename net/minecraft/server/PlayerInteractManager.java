@@ -234,7 +234,7 @@ public class PlayerInteractManager {
                     }
 
                     if (flag && flag1) {
-                        iblockdata.getBlock().a(this.world, (EntityHuman) this.player, blockposition, iblockdata, tileentity, itemstack2);
+                        iblockdata.getBlock().a(this.world, this.player, blockposition, iblockdata, tileentity, itemstack2);
                     }
                 }
 

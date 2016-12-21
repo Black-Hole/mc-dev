@@ -8,7 +8,7 @@ public class EntityHorseMule extends EntityHorseChestedAbstract {
         super(world);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityHorseChestedAbstract.b(dataconvertermanager, EntityHorseMule.class);
     }
 

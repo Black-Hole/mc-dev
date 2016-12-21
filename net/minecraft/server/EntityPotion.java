@@ -181,6 +181,12 @@ public class EntityPotion extends EntityProjectile {
             entityareaeffectcloud.a(new MobEffect(mobeffect));
         }
 
+        NBTTagCompound nbttagcompound = itemstack.getTag();
+
+        if (nbttagcompound != null && nbttagcompound.hasKeyOfType("CustomPotionColor", 99)) {
+            entityareaeffectcloud.setColor(nbttagcompound.getInt("CustomPotionColor"));
+        }
+
         this.world.addEntity(entityareaeffectcloud);
     }
 
@@ -195,7 +201,7 @@ public class EntityPotion extends EntityProjectile {
 
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityProjectile.a(dataconvertermanager, "ThrownPotion");
         dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItem(EntityPotion.class, new String[] { "Potion"})));
     }

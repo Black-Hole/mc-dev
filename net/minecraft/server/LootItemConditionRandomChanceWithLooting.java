@@ -19,7 +19,7 @@ public class LootItemConditionRandomChanceWithLooting implements LootItemConditi
         int i = 0;
 
         if (loottableinfo.c() instanceof EntityLiving) {
-            i = EnchantmentManager.h((EntityLiving) loottableinfo.c());
+            i = EnchantmentManager.g((EntityLiving) loottableinfo.c());
         }
 
         return random.nextFloat() < this.a + (float) i * this.b;

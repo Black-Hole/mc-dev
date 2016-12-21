@@ -105,7 +105,7 @@ public class BlockPistonMoving extends BlockTileEntity {
         return tileentitypiston == null ? null : tileentitypiston.a(iblockaccess, blockposition);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
         TileEntityPiston tileentitypiston = this.c(world, blockposition);
 
         if (tileentitypiston != null) {

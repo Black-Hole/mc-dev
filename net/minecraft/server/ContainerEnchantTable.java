@@ -202,7 +202,7 @@ public class ContainerEnchantTable extends Container {
                         }
                     }
 
-                    entityhuman.b(StatisticList.Y);
+                    entityhuman.b(StatisticList.W);
                     this.enchantSlots.update();
                     this.f = entityhuman.cY();
                     this.a(this.enchantSlots);

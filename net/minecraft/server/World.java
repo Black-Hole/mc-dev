@@ -865,8 +865,7 @@ public abstract class World implements IBlockAccess {
         this.u.add(iworldaccess);
     }
 
-    public List<AxisAlignedBB> getCubes(@Nullable Entity entity, AxisAlignedBB axisalignedbb) {
-        ArrayList arraylist = Lists.newArrayList();
+    private boolean a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, boolean flag, @Nullable List<AxisAlignedBB> list) {
         int i = MathHelper.floor(axisalignedbb.a) - 1;
         int j = MathHelper.f(axisalignedbb.d) + 1;
         int k = MathHelper.floor(axisalignedbb.b) - 1;
@@ -874,48 +873,66 @@ public abstract class World implements IBlockAccess {
         int i1 = MathHelper.floor(axisalignedbb.c) - 1;
         int j1 = MathHelper.f(axisalignedbb.f) + 1;
         WorldBorder worldborder = this.getWorldBorder();
-        boolean flag = entity != null && entity.br();
-        boolean flag1 = entity != null && this.a(worldborder, entity);
+        boolean flag1 = entity != null && entity.br();
+        boolean flag2 = entity != null && this.g(entity);
         IBlockData iblockdata = Blocks.STONE.getBlockData();
         BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
 
-        int k1;
+        try {
+            for (int k1 = i; k1 < j; ++k1) {
+                for (int l1 = i1; l1 < j1; ++l1) {
+                    boolean flag3 = k1 == i || k1 == j - 1;
+                    boolean flag4 = l1 == i1 || l1 == j1 - 1;
 
-        for (int l1 = i; l1 < j; ++l1) {
-            for (k1 = i1; k1 < j1; ++k1) {
-                int i2 = (l1 != i && l1 != j - 1 ? 0 : 1) + (k1 != i1 && k1 != j1 - 1 ? 0 : 1);
+                    if ((!flag3 || !flag4) && this.isLoaded(blockposition_pooledblockposition.f(k1, 64, l1))) {
+                        for (int i2 = k; i2 < l; ++i2) {
+                            if (!flag3 && !flag4 || i2 != l - 1) {
+                                if (flag) {
+                                    if (k1 < -30000000 || k1 >= 30000000 || l1 < -30000000 || l1 >= 30000000) {
+                                        boolean flag5 = true;
 
-                if (i2 != 2 && this.isLoaded(blockposition_pooledblockposition.f(l1, 64, k1))) {
-                    for (int j2 = k; j2 < l; ++j2) {
-                        if (i2 <= 0 || j2 != k && j2 != l - 1) {
-                            blockposition_pooledblockposition.f(l1, j2, k1);
-                            if (entity != null) {
-                                if (flag && flag1) {
-                                    entity.k(false);
-                                } else if (!flag && !flag1) {
-                                    entity.k(true);
+                                        return flag5;
+                                    }
+                                } else if (entity != null && flag1 == flag2) {
+                                    entity.k(!flag2);
+                                }
+
+                                blockposition_pooledblockposition.f(k1, i2, l1);
+                                IBlockData iblockdata1;
+
+                                if (!flag && !worldborder.a((BlockPosition) blockposition_pooledblockposition) && flag2) {
+                                    iblockdata1 = iblockdata;
+                                } else {
+                                    iblockdata1 = this.getType(blockposition_pooledblockposition);
+                                }
+
+                                iblockdata1.a(this, blockposition_pooledblockposition, axisalignedbb, list, entity, false);
+                                if (flag && !list.isEmpty()) {
+                                    boolean flag6 = true;
+
+                                    return flag6;
                                 }
                             }
-
-                            IBlockData iblockdata1 = iblockdata;
-
-                            if (worldborder.a((BlockPosition) blockposition_pooledblockposition) || !flag1) {
-                                iblockdata1 = this.getType(blockposition_pooledblockposition);
-                            }
-
-                            iblockdata1.a(this, blockposition_pooledblockposition, axisalignedbb, arraylist, entity);
                         }
                     }
                 }
             }
-        }
 
-        blockposition_pooledblockposition.t();
+            return !list.isEmpty();
+        } finally {
+            blockposition_pooledblockposition.t();
+        }
+    }
+
+    public List<AxisAlignedBB> getCubes(@Nullable Entity entity, AxisAlignedBB axisalignedbb) {
+        ArrayList arraylist = Lists.newArrayList();
+
+        this.a(entity, axisalignedbb, false, arraylist);
         if (entity != null) {
             List list = this.getEntities(entity, axisalignedbb.g(0.25D));
 
-            for (k1 = 0; k1 < list.size(); ++k1) {
-                Entity entity1 = (Entity) list.get(k1);
+            for (int i = 0; i < list.size(); ++i) {
+                Entity entity1 = (Entity) list.get(i);
 
                 if (!entity.x(entity1)) {
                     AxisAlignedBB axisalignedbb1 = entity1.ag();
@@ -935,11 +952,11 @@ public abstract class World implements IBlockAccess {
         return arraylist;
     }
 
-    public boolean a(WorldBorder worldborder, Entity entity) {
-        double d0 = worldborder.b();
-        double d1 = worldborder.c();
-        double d2 = worldborder.d();
-        double d3 = worldborder.e();
+    public boolean g(Entity entity) {
+        double d0 = this.N.b();
+        double d1 = this.N.c();
+        double d2 = this.N.d();
+        double d3 = this.N.e();
 
         if (entity.br()) {
             ++d0;
@@ -956,49 +973,8 @@ public abstract class World implements IBlockAccess {
         return entity.locX > d0 && entity.locX < d2 && entity.locZ > d1 && entity.locZ < d3;
     }
 
-    public boolean b(AxisAlignedBB axisalignedbb) {
-        ArrayList arraylist = Lists.newArrayList();
-        int i = MathHelper.floor(axisalignedbb.a) - 1;
-        int j = MathHelper.f(axisalignedbb.d) + 1;
-        int k = MathHelper.floor(axisalignedbb.b) - 1;
-        int l = MathHelper.f(axisalignedbb.e) + 1;
-        int i1 = MathHelper.floor(axisalignedbb.c) - 1;
-        int j1 = MathHelper.f(axisalignedbb.f) + 1;
-        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
-
-        try {
-            for (int k1 = i; k1 < j; ++k1) {
-                for (int l1 = i1; l1 < j1; ++l1) {
-                    int i2 = (k1 != i && k1 != j - 1 ? 0 : 1) + (l1 != i1 && l1 != j1 - 1 ? 0 : 1);
-
-                    if (i2 != 2 && this.isLoaded(blockposition_pooledblockposition.f(k1, 64, l1))) {
-                        for (int j2 = k; j2 < l; ++j2) {
-                            if (i2 <= 0 || j2 != k && j2 != l - 1) {
-                                blockposition_pooledblockposition.f(k1, j2, l1);
-                                if (k1 < -30000000 || k1 >= 30000000 || l1 < -30000000 || l1 >= 30000000) {
-                                    boolean flag = true;
-
-                                    return flag;
-                                }
-
-                                IBlockData iblockdata = this.getType(blockposition_pooledblockposition);
-
-                                iblockdata.a(this, blockposition_pooledblockposition, axisalignedbb, arraylist, (Entity) null);
-                                if (!arraylist.isEmpty()) {
-                                    boolean flag1 = true;
-
-                                    return flag1;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return false;
-        } finally {
-            blockposition_pooledblockposition.t();
-        }
+    public boolean a(AxisAlignedBB axisalignedbb) {
+        return this.a((Entity) null, axisalignedbb, true, Lists.newArrayList());
     }
 
     public int a(float f) {
@@ -1131,7 +1107,7 @@ public abstract class World implements IBlockAccess {
             this.methodProfiler.a("tick");
             if (!entity.dead && !(entity instanceof EntityPlayer)) {
                 try {
-                    this.g(entity);
+                    this.h(entity);
                 } catch (Throwable throwable1) {
                     crashreport1 = CrashReport.a(throwable1, "Ticking entity");
                     crashreportsystemdetails1 = crashreport1.a("Entity being ticked");
@@ -1258,7 +1234,7 @@ public abstract class World implements IBlockAccess {
 
     }
 
-    public void g(Entity entity) {
+    public void h(Entity entity) {
         this.entityJoinedWorld(entity, true);
     }
 
@@ -1327,7 +1303,7 @@ public abstract class World implements IBlockAccess {
                     Entity entity1 = (Entity) iterator.next();
 
                     if (!entity1.dead && entity1.bB() == entity) {
-                        this.g(entity1);
+                        this.h(entity1);
                     } else {
                         entity1.stopRiding();
                     }
@@ -1337,7 +1313,7 @@ public abstract class World implements IBlockAccess {
         }
     }
 
-    public boolean c(AxisAlignedBB axisalignedbb) {
+    public boolean b(AxisAlignedBB axisalignedbb) {
         return this.a(axisalignedbb, (Entity) null);
     }
 
@@ -1355,7 +1331,7 @@ public abstract class World implements IBlockAccess {
         return true;
     }
 
-    public boolean d(AxisAlignedBB axisalignedbb) {
+    public boolean c(AxisAlignedBB axisalignedbb) {
         int i = MathHelper.floor(axisalignedbb.a);
         int j = MathHelper.f(axisalignedbb.d);
         int k = MathHelper.floor(axisalignedbb.b);
@@ -1407,7 +1383,7 @@ public abstract class World implements IBlockAccess {
         return false;
     }
 
-    public boolean f(AxisAlignedBB axisalignedbb) {
+    public boolean e(AxisAlignedBB axisalignedbb) {
         int i = MathHelper.floor(axisalignedbb.a);
         int j = MathHelper.f(axisalignedbb.d);
         int k = MathHelper.floor(axisalignedbb.b);

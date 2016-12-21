@@ -307,9 +307,9 @@ public class BlockChest extends BlockTileEntity {
             if (itileinventory != null) {
                 entityhuman.openContainer(itileinventory);
                 if (this.g == BlockChest.Type.BASIC) {
-                    entityhuman.b(StatisticList.ac);
+                    entityhuman.b(StatisticList.aa);
                 } else if (this.g == BlockChest.Type.TRAP) {
-                    entityhuman.b(StatisticList.W);
+                    entityhuman.b(StatisticList.U);
                 }
             }
 

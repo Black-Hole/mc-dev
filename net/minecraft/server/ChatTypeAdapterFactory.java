@@ -58,6 +58,6 @@ public class ChatTypeAdapterFactory implements TypeAdapterFactory {
     }
 
     private String a(Object object) {
-        return object instanceof Enum ? ((Enum) object).name().toLowerCase(Locale.US) : object.toString().toLowerCase(Locale.US);
+        return object instanceof Enum ? ((Enum) object).name().toLowerCase(Locale.ROOT) : object.toString().toLowerCase(Locale.ROOT);
     }
 }

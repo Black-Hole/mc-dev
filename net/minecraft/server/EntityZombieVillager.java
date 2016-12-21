@@ -26,7 +26,7 @@ public class EntityZombieVillager extends EntityZombie {
         return Math.max(((Integer) this.datawatcher.get(EntityZombieVillager.c)).intValue() % 6, 0);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityZombieVillager.class);
     }
 
@@ -146,6 +146,10 @@ public class EntityZombieVillager extends EntityZombie {
         }
 
         return i;
+    }
+
+    protected float cj() {
+        return this.isBaby() ? (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 2.0F : (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
     }
 
     public SoundEffect G() {

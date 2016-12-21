@@ -9,7 +9,7 @@ public class EntityCow extends EntityAnimal {
         this.setSize(0.9F, 1.4F);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityCow.class);
     }
 

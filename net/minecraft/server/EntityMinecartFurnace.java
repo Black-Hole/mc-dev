@@ -15,7 +15,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityMinecartAbstract.a(dataconvertermanager, EntityMinecartFurnace.class);
     }
 

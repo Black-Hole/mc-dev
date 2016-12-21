@@ -22,6 +22,17 @@ public class ItemFishingRod extends Item {
             world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.I, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemFishingRod.j.nextFloat() * 0.4F + 0.8F));
             if (!world.isClientSide) {
                 EntityFishingHook entityfishinghook = new EntityFishingHook(world, entityhuman);
+                int j = EnchantmentManager.c(itemstack);
+
+                if (j > 0) {
+                    entityfishinghook.a(j);
+                }
+
+                int k = EnchantmentManager.b(itemstack);
+
+                if (k > 0) {
+                    entityfishinghook.b(k);
+                }
 
                 world.addEntity(entityfishinghook);
             }

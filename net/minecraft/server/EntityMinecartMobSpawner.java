@@ -24,7 +24,7 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
         super(world, d0, d1, d2);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         a(dataconvertermanager, EntityMinecartMobSpawner.class);
         dataconvertermanager.a(DataConverterTypes.ENTITY, new DataInspector() {
             public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {

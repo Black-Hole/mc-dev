@@ -22,8 +22,11 @@ public class BlockFence extends Block {
         this.a(CreativeModeTab.c);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
-        iblockdata = iblockdata.b((IBlockAccess) world, blockposition);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
+        if (!flag) {
+            iblockdata = iblockdata.b((IBlockAccess) world, blockposition);
+        }
+
         a(blockposition, axisalignedbb, list, BlockFence.f);
         if (((Boolean) iblockdata.get(BlockFence.NORTH)).booleanValue()) {
             a(blockposition, axisalignedbb, list, BlockFence.C);

@@ -174,7 +174,7 @@ public class PathfinderNormal extends PathfinderAbstract {
                         AxisAlignedBB axisalignedbb1 = this.a.getType(blockposition).d(this.a, blockposition);
                         AxisAlignedBB axisalignedbb2 = axisalignedbb.b(0.0D, axisalignedbb1.e - 0.002D, 0.0D);
 
-                        if (this.b.world.b(axisalignedbb2)) {
+                        if (this.b.world.a(axisalignedbb2)) {
                             pathpoint = null;
                         }
                     }
@@ -183,7 +183,7 @@ public class PathfinderNormal extends PathfinderAbstract {
                 if (pathtype == PathType.OPEN) {
                     AxisAlignedBB axisalignedbb3 = new AxisAlignedBB((double) i - d2 + 0.5D, (double) j + 0.001D, (double) k - d2 + 0.5D, (double) i + d2 + 0.5D, (double) ((float) j + this.b.length), (double) k + d2 + 0.5D);
 
-                    if (this.b.world.b(axisalignedbb3)) {
+                    if (this.b.world.a(axisalignedbb3)) {
                         return null;
                     }
 

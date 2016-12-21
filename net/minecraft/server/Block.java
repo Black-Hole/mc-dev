@@ -257,7 +257,7 @@ public class Block {
     }
 
     @Deprecated
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
         a(blockposition, axisalignedbb, list, iblockdata.c(world, blockposition));
     }
 

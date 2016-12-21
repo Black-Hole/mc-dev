@@ -78,7 +78,11 @@ public abstract class Enchantment {
         return 0.0F;
     }
 
-    public boolean a(Enchantment enchantment) {
+    public final boolean c(Enchantment enchantment) {
+        return this.a(enchantment) && enchantment.a(this);
+    }
+
+    protected boolean a(Enchantment enchantment) {
         return this != enchantment;
     }
 
@@ -137,6 +141,7 @@ public abstract class Enchantment {
         Enchantment.enchantments.a(19, new MinecraftKey("knockback"), new EnchantmentKnockback(Enchantment.Rarity.UNCOMMON, new EnumItemSlot[] { EnumItemSlot.MAINHAND}));
         Enchantment.enchantments.a(20, new MinecraftKey("fire_aspect"), new EnchantmentFire(Enchantment.Rarity.RARE, new EnumItemSlot[] { EnumItemSlot.MAINHAND}));
         Enchantment.enchantments.a(21, new MinecraftKey("looting"), new EnchantmentLootBonus(Enchantment.Rarity.RARE, EnchantmentSlotType.WEAPON, new EnumItemSlot[] { EnumItemSlot.MAINHAND}));
+        Enchantment.enchantments.a(22, new MinecraftKey("sweeping"), new EnchantmentSweeping(Enchantment.Rarity.RARE, new EnumItemSlot[] { EnumItemSlot.MAINHAND}));
         Enchantment.enchantments.a(32, new MinecraftKey("efficiency"), new EnchantmentDigging(Enchantment.Rarity.COMMON, new EnumItemSlot[] { EnumItemSlot.MAINHAND}));
         Enchantment.enchantments.a(33, new MinecraftKey("silk_touch"), new EnchantmentSilkTouch(Enchantment.Rarity.VERY_RARE, new EnumItemSlot[] { EnumItemSlot.MAINHAND}));
         Enchantment.enchantments.a(34, new MinecraftKey("unbreaking"), new EnchantmentDurability(Enchantment.Rarity.UNCOMMON, new EnumItemSlot[] { EnumItemSlot.MAINHAND}));

@@ -49,14 +49,14 @@ public class BlockFlowerPot extends BlockTileEntity {
                 }
 
                 tileentityflowerpot.setContents(itemstack);
-                entityhuman.b(StatisticList.V);
+                entityhuman.b(StatisticList.T);
                 if (!entityhuman.abilities.canInstantlyBuild) {
                     itemstack.subtract(1);
                 }
             } else {
                 if (itemstack.isEmpty()) {
                     entityhuman.a(enumhand, itemstack1);
-                } else if (!entityhuman.inventory.pickup(itemstack1)) {
+                } else if (!entityhuman.c(itemstack1)) {
                     entityhuman.drop(itemstack1, false);
                 }
 

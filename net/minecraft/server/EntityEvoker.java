@@ -46,7 +46,7 @@ public class EntityEvoker extends EntityMonster {
         this.datawatcher.register(EntityEvoker.a, Byte.valueOf((byte) 0));
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityEvoker.class);
     }
 

@@ -18,4 +18,8 @@ public class EnchantmentInfiniteArrows extends Enchantment {
     public int getMaxLevel() {
         return 1;
     }
+
+    public boolean a(Enchantment enchantment) {
+        return enchantment instanceof EnchantmentMending ? false : super.a(enchantment);
+    }
 }

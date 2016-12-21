@@ -18,7 +18,7 @@ public class BlockCauldron extends Block {
         this.y(this.blockStateList.getBlockData().set(BlockCauldron.LEVEL, Integer.valueOf(0)));
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
         a(blockposition, axisalignedbb, list, BlockCauldron.b);
         a(blockposition, axisalignedbb, list, BlockCauldron.f);
         a(blockposition, axisalignedbb, list, BlockCauldron.c);
@@ -64,7 +64,7 @@ public class BlockCauldron extends Block {
                         entityhuman.a(enumhand, new ItemStack(Items.BUCKET));
                     }
 
-                    entityhuman.b(StatisticList.K);
+                    entityhuman.b(StatisticList.I);
                     this.a(world, blockposition, iblockdata, 3);
                     world.a((EntityHuman) null, blockposition, SoundEffects.N, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
@@ -81,7 +81,7 @@ public class BlockCauldron extends Block {
                         }
                     }
 
-                    entityhuman.b(StatisticList.L);
+                    entityhuman.b(StatisticList.J);
                     this.a(world, blockposition, iblockdata, 0);
                     world.a((EntityHuman) null, blockposition, SoundEffects.P, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
@@ -94,7 +94,7 @@ public class BlockCauldron extends Block {
                     if (i > 0 && !world.isClientSide) {
                         if (!entityhuman.abilities.canInstantlyBuild) {
                             itemstack1 = PotionUtil.a(new ItemStack(Items.POTION), Potions.b);
-                            entityhuman.b(StatisticList.L);
+                            entityhuman.b(StatisticList.J);
                             itemstack.subtract(1);
                             if (itemstack.isEmpty()) {
                                 entityhuman.a(enumhand, itemstack1);
@@ -114,7 +114,7 @@ public class BlockCauldron extends Block {
                     if (i < 3 && !world.isClientSide) {
                         if (!entityhuman.abilities.canInstantlyBuild) {
                             itemstack1 = new ItemStack(Items.GLASS_BOTTLE);
-                            entityhuman.b(StatisticList.L);
+                            entityhuman.b(StatisticList.J);
                             entityhuman.a(enumhand, itemstack1);
                             if (entityhuman instanceof EntityPlayer) {
                                 ((EntityPlayer) entityhuman).updateInventory(entityhuman.defaultContainer);
@@ -133,7 +133,7 @@ public class BlockCauldron extends Block {
                         if (itemarmor.d() == ItemArmor.EnumArmorMaterial.LEATHER && itemarmor.e_(itemstack) && !world.isClientSide) {
                             itemarmor.d(itemstack);
                             this.a(world, blockposition, iblockdata, i - 1);
-                            entityhuman.b(StatisticList.M);
+                            entityhuman.b(StatisticList.K);
                             return true;
                         }
                     }
@@ -143,7 +143,7 @@ public class BlockCauldron extends Block {
                             itemstack1 = itemstack.cloneItemStack();
                             itemstack1.setCount(1);
                             TileEntityBanner.c(itemstack1);
-                            entityhuman.b(StatisticList.N);
+                            entityhuman.b(StatisticList.L);
                             if (!entityhuman.abilities.canInstantlyBuild) {
                                 itemstack.subtract(1);
                                 this.a(world, blockposition, iblockdata, i - 1);

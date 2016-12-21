@@ -24,7 +24,7 @@ public class EntityGuardianElder extends EntityGuardian {
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(80.0D);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityGuardianElder.class);
     }
 

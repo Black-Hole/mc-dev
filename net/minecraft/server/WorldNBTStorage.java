@@ -153,6 +153,7 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
 
     }
 
+    @Nullable
     public NBTTagCompound load(EntityHuman entityhuman) {
         NBTTagCompound nbttagcompound = null;
 

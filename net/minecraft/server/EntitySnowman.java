@@ -11,7 +11,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         this.setSize(0.7F, 1.9F);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntitySnowman.class);
     }
 

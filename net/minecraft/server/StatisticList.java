@@ -42,67 +42,65 @@ public class StatisticList {
     public static final Statistic C = (new CounterStatistic("stat.animalsBred", new ChatMessage("stat.animalsBred", new Object[0]))).h();
     public static final Statistic D = (new CounterStatistic("stat.playerKills", new ChatMessage("stat.playerKills", new Object[0]))).h();
     public static final Statistic E = (new CounterStatistic("stat.fishCaught", new ChatMessage("stat.fishCaught", new Object[0]))).h();
-    public static final Statistic F = (new CounterStatistic("stat.junkFished", new ChatMessage("stat.junkFished", new Object[0]))).h();
-    public static final Statistic G = (new CounterStatistic("stat.treasureFished", new ChatMessage("stat.treasureFished", new Object[0]))).h();
-    public static final Statistic H = (new CounterStatistic("stat.talkedToVillager", new ChatMessage("stat.talkedToVillager", new Object[0]))).h();
-    public static final Statistic I = (new CounterStatistic("stat.tradedWithVillager", new ChatMessage("stat.tradedWithVillager", new Object[0]))).h();
-    public static final Statistic J = (new CounterStatistic("stat.cakeSlicesEaten", new ChatMessage("stat.cakeSlicesEaten", new Object[0]))).h();
-    public static final Statistic K = (new CounterStatistic("stat.cauldronFilled", new ChatMessage("stat.cauldronFilled", new Object[0]))).h();
-    public static final Statistic L = (new CounterStatistic("stat.cauldronUsed", new ChatMessage("stat.cauldronUsed", new Object[0]))).h();
-    public static final Statistic M = (new CounterStatistic("stat.armorCleaned", new ChatMessage("stat.armorCleaned", new Object[0]))).h();
-    public static final Statistic N = (new CounterStatistic("stat.bannerCleaned", new ChatMessage("stat.bannerCleaned", new Object[0]))).h();
-    public static final Statistic O = (new CounterStatistic("stat.brewingstandInteraction", new ChatMessage("stat.brewingstandInteraction", new Object[0]))).h();
-    public static final Statistic P = (new CounterStatistic("stat.beaconInteraction", new ChatMessage("stat.beaconInteraction", new Object[0]))).h();
-    public static final Statistic Q = (new CounterStatistic("stat.dropperInspected", new ChatMessage("stat.dropperInspected", new Object[0]))).h();
-    public static final Statistic R = (new CounterStatistic("stat.hopperInspected", new ChatMessage("stat.hopperInspected", new Object[0]))).h();
-    public static final Statistic S = (new CounterStatistic("stat.dispenserInspected", new ChatMessage("stat.dispenserInspected", new Object[0]))).h();
-    public static final Statistic T = (new CounterStatistic("stat.noteblockPlayed", new ChatMessage("stat.noteblockPlayed", new Object[0]))).h();
-    public static final Statistic U = (new CounterStatistic("stat.noteblockTuned", new ChatMessage("stat.noteblockTuned", new Object[0]))).h();
-    public static final Statistic V = (new CounterStatistic("stat.flowerPotted", new ChatMessage("stat.flowerPotted", new Object[0]))).h();
-    public static final Statistic W = (new CounterStatistic("stat.trappedChestTriggered", new ChatMessage("stat.trappedChestTriggered", new Object[0]))).h();
-    public static final Statistic X = (new CounterStatistic("stat.enderchestOpened", new ChatMessage("stat.enderchestOpened", new Object[0]))).h();
-    public static final Statistic Y = (new CounterStatistic("stat.itemEnchanted", new ChatMessage("stat.itemEnchanted", new Object[0]))).h();
-    public static final Statistic Z = (new CounterStatistic("stat.recordPlayed", new ChatMessage("stat.recordPlayed", new Object[0]))).h();
-    public static final Statistic aa = (new CounterStatistic("stat.furnaceInteraction", new ChatMessage("stat.furnaceInteraction", new Object[0]))).h();
-    public static final Statistic ab = (new CounterStatistic("stat.craftingTableInteraction", new ChatMessage("stat.workbenchInteraction", new Object[0]))).h();
-    public static final Statistic ac = (new CounterStatistic("stat.chestOpened", new ChatMessage("stat.chestOpened", new Object[0]))).h();
-    public static final Statistic ad = (new CounterStatistic("stat.sleepInBed", new ChatMessage("stat.sleepInBed", new Object[0]))).h();
-    public static final Statistic ae = (new CounterStatistic("stat.shulkerBoxOpened", new ChatMessage("stat.shulkerBoxOpened", new Object[0]))).h();
-    private static final Statistic[] af = new Statistic[4096];
+    public static final Statistic F = (new CounterStatistic("stat.talkedToVillager", new ChatMessage("stat.talkedToVillager", new Object[0]))).h();
+    public static final Statistic G = (new CounterStatistic("stat.tradedWithVillager", new ChatMessage("stat.tradedWithVillager", new Object[0]))).h();
+    public static final Statistic H = (new CounterStatistic("stat.cakeSlicesEaten", new ChatMessage("stat.cakeSlicesEaten", new Object[0]))).h();
+    public static final Statistic I = (new CounterStatistic("stat.cauldronFilled", new ChatMessage("stat.cauldronFilled", new Object[0]))).h();
+    public static final Statistic J = (new CounterStatistic("stat.cauldronUsed", new ChatMessage("stat.cauldronUsed", new Object[0]))).h();
+    public static final Statistic K = (new CounterStatistic("stat.armorCleaned", new ChatMessage("stat.armorCleaned", new Object[0]))).h();
+    public static final Statistic L = (new CounterStatistic("stat.bannerCleaned", new ChatMessage("stat.bannerCleaned", new Object[0]))).h();
+    public static final Statistic M = (new CounterStatistic("stat.brewingstandInteraction", new ChatMessage("stat.brewingstandInteraction", new Object[0]))).h();
+    public static final Statistic N = (new CounterStatistic("stat.beaconInteraction", new ChatMessage("stat.beaconInteraction", new Object[0]))).h();
+    public static final Statistic O = (new CounterStatistic("stat.dropperInspected", new ChatMessage("stat.dropperInspected", new Object[0]))).h();
+    public static final Statistic P = (new CounterStatistic("stat.hopperInspected", new ChatMessage("stat.hopperInspected", new Object[0]))).h();
+    public static final Statistic Q = (new CounterStatistic("stat.dispenserInspected", new ChatMessage("stat.dispenserInspected", new Object[0]))).h();
+    public static final Statistic R = (new CounterStatistic("stat.noteblockPlayed", new ChatMessage("stat.noteblockPlayed", new Object[0]))).h();
+    public static final Statistic S = (new CounterStatistic("stat.noteblockTuned", new ChatMessage("stat.noteblockTuned", new Object[0]))).h();
+    public static final Statistic T = (new CounterStatistic("stat.flowerPotted", new ChatMessage("stat.flowerPotted", new Object[0]))).h();
+    public static final Statistic U = (new CounterStatistic("stat.trappedChestTriggered", new ChatMessage("stat.trappedChestTriggered", new Object[0]))).h();
+    public static final Statistic V = (new CounterStatistic("stat.enderchestOpened", new ChatMessage("stat.enderchestOpened", new Object[0]))).h();
+    public static final Statistic W = (new CounterStatistic("stat.itemEnchanted", new ChatMessage("stat.itemEnchanted", new Object[0]))).h();
+    public static final Statistic X = (new CounterStatistic("stat.recordPlayed", new ChatMessage("stat.recordPlayed", new Object[0]))).h();
+    public static final Statistic Y = (new CounterStatistic("stat.furnaceInteraction", new ChatMessage("stat.furnaceInteraction", new Object[0]))).h();
+    public static final Statistic Z = (new CounterStatistic("stat.craftingTableInteraction", new ChatMessage("stat.workbenchInteraction", new Object[0]))).h();
+    public static final Statistic aa = (new CounterStatistic("stat.chestOpened", new ChatMessage("stat.chestOpened", new Object[0]))).h();
+    public static final Statistic ab = (new CounterStatistic("stat.sleepInBed", new ChatMessage("stat.sleepInBed", new Object[0]))).h();
+    public static final Statistic ac = (new CounterStatistic("stat.shulkerBoxOpened", new ChatMessage("stat.shulkerBoxOpened", new Object[0]))).h();
+    private static final Statistic[] ad = new Statistic[4096];
+    private static final Statistic[] ae = new Statistic[32000];
+    private static final Statistic[] af = new Statistic[32000];
     private static final Statistic[] ag = new Statistic[32000];
     private static final Statistic[] ah = new Statistic[32000];
     private static final Statistic[] ai = new Statistic[32000];
-    private static final Statistic[] aj = new Statistic[32000];
-    private static final Statistic[] ak = new Statistic[32000];
 
     @Nullable
     public static Statistic a(Block block) {
-        return StatisticList.af[Block.getId(block)];
+        return StatisticList.ad[Block.getId(block)];
     }
 
     @Nullable
     public static Statistic a(Item item) {
-        return StatisticList.ag[Item.getId(item)];
+        return StatisticList.ae[Item.getId(item)];
     }
 
     @Nullable
     public static Statistic b(Item item) {
-        return StatisticList.ah[Item.getId(item)];
+        return StatisticList.af[Item.getId(item)];
     }
 
     @Nullable
     public static Statistic c(Item item) {
-        return StatisticList.ai[Item.getId(item)];
+        return StatisticList.ag[Item.getId(item)];
     }
 
     @Nullable
     public static Statistic d(Item item) {
-        return StatisticList.aj[Item.getId(item)];
+        return StatisticList.ah[Item.getId(item)];
     }
 
     @Nullable
     public static Statistic e(Item item) {
-        return StatisticList.ak[Item.getId(item)];
+        return StatisticList.ai[Item.getId(item)];
     }
 
     public static void a() {
@@ -145,12 +143,12 @@ public class StatisticList {
                 String s = f(item);
 
                 if (s != null) {
-                    StatisticList.ag[i] = (new CraftingStatistic("stat.craftItem.", s, new ChatMessage("stat.craftItem", new Object[] { (new ItemStack(item)).C()}), item)).h();
+                    StatisticList.ae[i] = (new CraftingStatistic("stat.craftItem.", s, new ChatMessage("stat.craftItem", new Object[] { (new ItemStack(item)).C()}), item)).h();
                 }
             }
         }
 
-        a(StatisticList.ag);
+        a(StatisticList.ae);
     }
 
     private static void c() {
@@ -165,13 +163,13 @@ public class StatisticList {
                 String s = f(item);
 
                 if (s != null && block.o()) {
-                    StatisticList.af[i] = (new CraftingStatistic("stat.mineBlock.", s, new ChatMessage("stat.mineBlock", new Object[] { (new ItemStack(block)).C()}), item)).h();
-                    StatisticList.e.add((CraftingStatistic) StatisticList.af[i]);
+                    StatisticList.ad[i] = (new CraftingStatistic("stat.mineBlock.", s, new ChatMessage("stat.mineBlock", new Object[] { (new ItemStack(block)).C()}), item)).h();
+                    StatisticList.e.add((CraftingStatistic) StatisticList.ad[i]);
                 }
             }
         }
 
-        a(StatisticList.af);
+        a(StatisticList.ad);
     }
 
     private static void d() {
@@ -185,15 +183,15 @@ public class StatisticList {
                 String s = f(item);
 
                 if (s != null) {
-                    StatisticList.ah[i] = (new CraftingStatistic("stat.useItem.", s, new ChatMessage("stat.useItem", new Object[] { (new ItemStack(item)).C()}), item)).h();
+                    StatisticList.af[i] = (new CraftingStatistic("stat.useItem.", s, new ChatMessage("stat.useItem", new Object[] { (new ItemStack(item)).C()}), item)).h();
                     if (!(item instanceof ItemBlock)) {
-                        StatisticList.d.add((CraftingStatistic) StatisticList.ah[i]);
+                        StatisticList.d.add((CraftingStatistic) StatisticList.af[i]);
                     }
                 }
             }
         }
 
-        a(StatisticList.ah);
+        a(StatisticList.af);
     }
 
     private static void e() {
@@ -207,12 +205,12 @@ public class StatisticList {
                 String s = f(item);
 
                 if (s != null && item.usesDurability()) {
-                    StatisticList.ai[i] = (new CraftingStatistic("stat.breakItem.", s, new ChatMessage("stat.breakItem", new Object[] { (new ItemStack(item)).C()}), item)).h();
+                    StatisticList.ag[i] = (new CraftingStatistic("stat.breakItem.", s, new ChatMessage("stat.breakItem", new Object[] { (new ItemStack(item)).C()}), item)).h();
                 }
             }
         }
 
-        a(StatisticList.ai);
+        a(StatisticList.ag);
     }
 
     private static void f() {
@@ -226,13 +224,13 @@ public class StatisticList {
                 String s = f(item);
 
                 if (s != null) {
-                    StatisticList.aj[i] = (new CraftingStatistic("stat.pickup.", s, new ChatMessage("stat.pickup", new Object[] { (new ItemStack(item)).C()}), item)).h();
-                    StatisticList.ak[i] = (new CraftingStatistic("stat.drop.", s, new ChatMessage("stat.drop", new Object[] { (new ItemStack(item)).C()}), item)).h();
+                    StatisticList.ah[i] = (new CraftingStatistic("stat.pickup.", s, new ChatMessage("stat.pickup", new Object[] { (new ItemStack(item)).C()}), item)).h();
+                    StatisticList.ai[i] = (new CraftingStatistic("stat.drop.", s, new ChatMessage("stat.drop", new Object[] { (new ItemStack(item)).C()}), item)).h();
                 }
             }
         }
 
-        a(StatisticList.ai);
+        a(StatisticList.ag);
     }
 
     private static String f(Item item) {

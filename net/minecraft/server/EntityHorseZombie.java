@@ -8,7 +8,7 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         super(world);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityHorseAbstract.c(dataconvertermanager, EntityHorseZombie.class);
     }
 

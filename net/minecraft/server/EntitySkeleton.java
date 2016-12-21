@@ -8,7 +8,7 @@ public class EntitySkeleton extends EntitySkeletonAbstract {
         super(world);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntitySkeleton.class);
     }
 

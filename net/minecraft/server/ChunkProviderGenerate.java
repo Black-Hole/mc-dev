@@ -429,7 +429,7 @@ public class ChunkProviderGenerate implements ChunkGenerator {
 
     @Nullable
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, boolean flag) {
-        return "Stronghold".equals(s) && this.w != null ? this.w.getNearestGeneratedFeature(world, blockposition, flag) : ("Mansion".equals(s) && this.C != null ? this.C.getNearestGeneratedFeature(world, blockposition, flag) : ("Monument".equals(s) && this.B != null ? this.B.getNearestGeneratedFeature(world, blockposition, flag) : ("Village".equals(s) && this.x != null ? this.x.getNearestGeneratedFeature(world, blockposition, flag) : ("Mineshaft".equals(s) && this.y != null ? this.y.getNearestGeneratedFeature(world, blockposition, flag) : ("Temple".equals(s) && this.z != null ? this.z.getNearestGeneratedFeature(world, blockposition, flag) : null)))));
+        return !this.o ? null : ("Stronghold".equals(s) && this.w != null ? this.w.getNearestGeneratedFeature(world, blockposition, flag) : ("Mansion".equals(s) && this.C != null ? this.C.getNearestGeneratedFeature(world, blockposition, flag) : ("Monument".equals(s) && this.B != null ? this.B.getNearestGeneratedFeature(world, blockposition, flag) : ("Village".equals(s) && this.x != null ? this.x.getNearestGeneratedFeature(world, blockposition, flag) : ("Mineshaft".equals(s) && this.y != null ? this.y.getNearestGeneratedFeature(world, blockposition, flag) : ("Temple".equals(s) && this.z != null ? this.z.getNearestGeneratedFeature(world, blockposition, flag) : null))))));
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {

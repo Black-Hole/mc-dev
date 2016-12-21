@@ -13,7 +13,7 @@ public class EntityEnderPearl extends EntityProjectile {
         this.d = entityliving;
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityProjectile.a(dataconvertermanager, "ThrownEnderpearl");
     }
 

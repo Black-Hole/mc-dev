@@ -45,8 +45,11 @@ public class BlockStairs extends Block {
         this.a(CreativeModeTab.b);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
-        iblockdata = this.updateState(iblockdata, world, blockposition);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
+        if (!flag) {
+            iblockdata = this.updateState(iblockdata, world, blockposition);
+        }
+
         Iterator iterator = z(iblockdata).iterator();
 
         while (iterator.hasNext()) {

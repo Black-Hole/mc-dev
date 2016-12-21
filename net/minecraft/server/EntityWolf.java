@@ -87,7 +87,7 @@ public class EntityWolf extends EntityTameableAnimal {
         this.a(SoundEffects.hP, 0.15F, 1.0F);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityWolf.class);
     }
 

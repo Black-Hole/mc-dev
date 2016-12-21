@@ -26,7 +26,7 @@ public class BlockEnderPortalFrame extends Block {
         return BlockEnderPortalFrame.c;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
         a(blockposition, axisalignedbb, list, BlockEnderPortalFrame.c);
         if (((Boolean) world.getType(blockposition).get(BlockEnderPortalFrame.EYE)).booleanValue()) {
             a(blockposition, axisalignedbb, list, BlockEnderPortalFrame.d);

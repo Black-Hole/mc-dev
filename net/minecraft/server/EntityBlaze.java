@@ -18,7 +18,7 @@ public class EntityBlaze extends EntityMonster {
         this.b_ = 10;
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityBlaze.class);
     }
 
@@ -167,7 +167,7 @@ public class EntityBlaze extends EntityMonster {
                 }
 
                 this.a.getControllerMove().a(entityliving.locX, entityliving.locY, entityliving.locZ, 1.0D);
-            } else if (d0 < 256.0D) {
+            } else if (d0 < this.f() * this.f()) {
                 double d1 = entityliving.locX - this.a.locX;
                 double d2 = entityliving.getBoundingBox().b + (double) (entityliving.length / 2.0F) - (this.a.locY + (double) (this.a.length / 2.0F));
                 double d3 = entityliving.locZ - this.a.locZ;
@@ -206,6 +206,12 @@ public class EntityBlaze extends EntityMonster {
             }
 
             super.e();
+        }
+
+        private double f() {
+            AttributeInstance attributeinstance = this.a.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
+
+            return attributeinstance == null ? 16.0D : attributeinstance.getValue();
         }
     }
 }

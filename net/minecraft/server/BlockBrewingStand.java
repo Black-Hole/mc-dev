@@ -35,7 +35,7 @@ public class BlockBrewingStand extends BlockTileEntity {
         return false;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
         a(blockposition, axisalignedbb, list, BlockBrewingStand.c);
         a(blockposition, axisalignedbb, list, BlockBrewingStand.b);
     }
@@ -52,7 +52,7 @@ public class BlockBrewingStand extends BlockTileEntity {
 
             if (tileentity instanceof TileEntityBrewingStand) {
                 entityhuman.openContainer((TileEntityBrewingStand) tileentity);
-                entityhuman.b(StatisticList.O);
+                entityhuman.b(StatisticList.M);
             }
 
             return true;

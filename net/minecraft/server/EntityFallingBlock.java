@@ -174,7 +174,7 @@ public class EntityFallingBlock extends Entity {
 
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {}
+    public static void a(DataConverterManager dataconvertermanager) {}
 
     protected void b(NBTTagCompound nbttagcompound) {
         Block block = this.block != null ? this.block.getBlock() : Blocks.AIR;

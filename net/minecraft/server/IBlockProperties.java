@@ -54,7 +54,7 @@ public interface IBlockProperties {
     @Nullable
     AxisAlignedBB c(IBlockAccess iblockaccess, BlockPosition blockposition);
 
-    void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity);
+    void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag);
 
     AxisAlignedBB d(IBlockAccess iblockaccess, BlockPosition blockposition);
 

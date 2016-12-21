@@ -52,6 +52,30 @@ public class RecipesFurnace {
         this.registerRecipe(Blocks.REDSTONE_ORE, new ItemStack(Items.REDSTONE), 0.7F);
         this.registerRecipe(Blocks.LAPIS_ORE, new ItemStack(Items.DYE, 1, EnumColor.BLUE.getInvColorIndex()), 0.2F);
         this.registerRecipe(Blocks.QUARTZ_ORE, new ItemStack(Items.QUARTZ), 0.2F);
+        this.a((Item) Items.CHAINMAIL_HELMET, new ItemStack(Items.da), 0.1F);
+        this.a((Item) Items.CHAINMAIL_CHESTPLATE, new ItemStack(Items.da), 0.1F);
+        this.a((Item) Items.CHAINMAIL_LEGGINGS, new ItemStack(Items.da), 0.1F);
+        this.a((Item) Items.CHAINMAIL_BOOTS, new ItemStack(Items.da), 0.1F);
+        this.a(Items.IRON_PICKAXE, new ItemStack(Items.da), 0.1F);
+        this.a(Items.IRON_SHOVEL, new ItemStack(Items.da), 0.1F);
+        this.a(Items.IRON_AXE, new ItemStack(Items.da), 0.1F);
+        this.a(Items.IRON_HOE, new ItemStack(Items.da), 0.1F);
+        this.a(Items.IRON_SWORD, new ItemStack(Items.da), 0.1F);
+        this.a((Item) Items.IRON_HELMET, new ItemStack(Items.da), 0.1F);
+        this.a((Item) Items.IRON_CHESTPLATE, new ItemStack(Items.da), 0.1F);
+        this.a((Item) Items.IRON_LEGGINGS, new ItemStack(Items.da), 0.1F);
+        this.a((Item) Items.IRON_BOOTS, new ItemStack(Items.da), 0.1F);
+        this.a(Items.IRON_HORSE_ARMOR, new ItemStack(Items.da), 0.1F);
+        this.a(Items.GOLDEN_PICKAXE, new ItemStack(Items.GOLD_NUGGET), 0.1F);
+        this.a(Items.GOLDEN_SHOVEL, new ItemStack(Items.GOLD_NUGGET), 0.1F);
+        this.a(Items.GOLDEN_AXE, new ItemStack(Items.GOLD_NUGGET), 0.1F);
+        this.a(Items.GOLDEN_HOE, new ItemStack(Items.GOLD_NUGGET), 0.1F);
+        this.a(Items.GOLDEN_SWORD, new ItemStack(Items.GOLD_NUGGET), 0.1F);
+        this.a((Item) Items.GOLDEN_HELMET, new ItemStack(Items.GOLD_NUGGET), 0.1F);
+        this.a((Item) Items.GOLDEN_CHESTPLATE, new ItemStack(Items.GOLD_NUGGET), 0.1F);
+        this.a((Item) Items.GOLDEN_LEGGINGS, new ItemStack(Items.GOLD_NUGGET), 0.1F);
+        this.a((Item) Items.GOLDEN_BOOTS, new ItemStack(Items.GOLD_NUGGET), 0.1F);
+        this.a(Items.GOLDEN_HORSE_ARMOR, new ItemStack(Items.GOLD_NUGGET), 0.1F);
     }
 
     public void registerRecipe(Block block, ItemStack itemstack, float f) {

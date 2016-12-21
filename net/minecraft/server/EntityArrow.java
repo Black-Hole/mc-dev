@@ -128,7 +128,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         if (this.inGround) {
             int i = block.toLegacyData(iblockdata);
 
-            if ((block != this.av || i != this.aw) && !this.world.b(this.getBoundingBox().g(0.05D))) {
+            if ((block != this.av || i != this.aw) && !this.world.a(this.getBoundingBox().g(0.05D))) {
                 this.inGround = false;
                 this.motX *= (double) (this.random.nextFloat() * 0.2F);
                 this.motY *= (double) (this.random.nextFloat() * 0.2F);
@@ -373,7 +373,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
 
     public static void a(DataConverterManager dataconvertermanager, String s) {}
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         a(dataconvertermanager, "Arrow");
     }
 

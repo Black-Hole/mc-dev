@@ -17,7 +17,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
         this.setSize(0.6F, 1.95F);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityWitch.class);
     }
 

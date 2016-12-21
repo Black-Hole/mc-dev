@@ -62,7 +62,7 @@ public class CommandEnchant extends CommandAbstract {
                                 if (Enchantment.c(short0) != null) {
                                     Enchantment enchantment1 = Enchantment.c(short0);
 
-                                    if (!enchantment.a(enchantment1)) {
+                                    if (!enchantment.c(enchantment1)) {
                                         throw new CommandException("commands.enchant.cantCombine", new Object[] { enchantment.d(i), enchantment1.d(nbttaglist.get(j).getShort("lvl"))});
                                     }
                                 }

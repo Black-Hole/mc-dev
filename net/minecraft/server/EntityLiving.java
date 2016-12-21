@@ -907,7 +907,7 @@ public abstract class EntityLiving extends Entity {
                 int i = 0;
 
                 if (entity instanceof EntityHuman) {
-                    i = EnchantmentManager.h((EntityLiving) entity);
+                    i = EnchantmentManager.g((EntityLiving) entity);
                 }
 
                 if (this.isDropExperience() && this.world.getGameRules().getBoolean("doMobLoot")) {
@@ -1240,7 +1240,7 @@ public abstract class EntityLiving extends Entity {
                 double d4 = Math.floor(this.locZ) + 0.5D;
                 double d5 = this.getBoundingBox().d - this.getBoundingBox().a;
                 double d6 = this.getBoundingBox().f - this.getBoundingBox().c;
-                AxisAlignedBB axisalignedbb = new AxisAlignedBB(d3 - d5 / 2.0D, this.getBoundingBox().b, d4 - d6 / 2.0D, d3 + d5 / 2.0D, this.getBoundingBox().e, d4 + d6 / 2.0D);
+                AxisAlignedBB axisalignedbb = new AxisAlignedBB(d3 - d5 / 2.0D, this.getBoundingBox().b - (double) entity.length, d4 - d6 / 2.0D, d3 + d5 / 2.0D, this.getBoundingBox().e - (double) entity.length, d4 + d6 / 2.0D);
                 int[][] aint1 = aint;
                 int i = aint.length;
 
@@ -1252,7 +1252,7 @@ public abstract class EntityLiving extends Entity {
                     double d10 = d4 + d8;
                     AxisAlignedBB axisalignedbb1 = axisalignedbb.d(d7, 1.0D, d8);
 
-                    if (!this.world.b(axisalignedbb1)) {
+                    if (!this.world.a(axisalignedbb1)) {
                         if (this.world.getType(new BlockPosition(d9, this.locY, d10)).r()) {
                             this.enderTeleportTo(d9, this.locY + 1.0D, d10);
                             return;
@@ -1265,7 +1265,7 @@ public abstract class EntityLiving extends Entity {
                             d2 = this.locY + 1.0D;
                             d0 = d10;
                         }
-                    } else if (!this.world.b(axisalignedbb1.d(0.0D, 1.0D, 0.0D)) && this.world.getType(new BlockPosition(d9, this.locY + 1.0D, d10)).r()) {
+                    } else if (!this.world.a(axisalignedbb1.d(0.0D, 1.0D, 0.0D)) && this.world.getType(new BlockPosition(d9, this.locY + 1.0D, d10)).r()) {
                         d1 = d9;
                         d2 = this.locY + 2.0D;
                         d0 = d10;
@@ -1292,9 +1292,9 @@ public abstract class EntityLiving extends Entity {
             double d13 = this.locZ + (double) f2 * d0;
 
             this.setPosition(d12, entity.locY + (double) entity.length + 0.001D, d13);
-            if (this.world.b(this.getBoundingBox())) {
+            if (this.world.a(this.getBoundingBox())) {
                 this.setPosition(d12, entity.locY + (double) entity.length + 1.001D, d13);
-                if (this.world.b(this.getBoundingBox())) {
+                if (this.world.a(this.getBoundingBox())) {
                     this.setPosition(entity.locX, entity.locY + (double) this.length + 0.001D, entity.locZ);
                 }
             }
@@ -1346,7 +1346,7 @@ public abstract class EntityLiving extends Entity {
                 d1 = this.locY;
                 f4 = this.cp();
                 f3 = 0.02F;
-                f2 = (float) EnchantmentManager.d(this);
+                f2 = (float) EnchantmentManager.e(this);
                 if (f2 > 3.0F) {
                     f2 = 3.0F;
                 }

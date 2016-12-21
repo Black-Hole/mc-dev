@@ -9,7 +9,7 @@ public class EntityGiantZombie extends EntityMonster {
         this.setSize(this.width * 6.0F, this.length * 6.0F);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityGiantZombie.class);
     }
 

@@ -7,7 +7,7 @@ public class MobSpawnerData extends WeightedRandom.WeightedRandomChoice {
     public MobSpawnerData() {
         super(1);
         this.b = new NBTTagCompound();
-        this.b.setString("id", "Pig");
+        this.b.setString("id", "minecraft:pig");
     }
 
     public MobSpawnerData(NBTTagCompound nbttagcompound) {
@@ -21,6 +21,12 @@ public class MobSpawnerData extends WeightedRandom.WeightedRandomChoice {
 
     public NBTTagCompound a() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
+
+        if (!this.b.hasKeyOfType("id", 8)) {
+            this.b.setString("id", "minecraft:pig");
+        } else if (!this.b.getString("id").contains(":")) {
+            this.b.setString("id", (new MinecraftKey(this.b.getString("id"))).toString());
+        }
 
         nbttagcompound.set("Entity", this.b);
         nbttagcompound.setInt("Weight", this.a);

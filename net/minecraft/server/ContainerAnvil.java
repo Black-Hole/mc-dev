@@ -43,13 +43,20 @@ public class ContainerAnvil extends Container {
                     entityhuman.levelDown(-ContainerAnvil.this.a);
                 }
 
-                ContainerAnvil.this.h.setItem(0, ItemStack.a);
-                if (ContainerAnvil.this.k > 0) {
-                    ItemStack itemstack1 = ContainerAnvil.this.h.getItem(1);
+                ItemStack itemstack1 = ContainerAnvil.this.h.getItem(0);
 
-                    if (!itemstack1.isEmpty() && itemstack1.getCount() > ContainerAnvil.this.k) {
-                        itemstack1.subtract(ContainerAnvil.this.k);
-                        ContainerAnvil.this.h.setItem(1, itemstack1);
+                if (itemstack1.getCount() != 1 && !entityhuman.abilities.canInstantlyBuild && !(itemstack1.getItem() instanceof ItemNameTag)) {
+                    itemstack1.setCount(itemstack1.getCount() - 1);
+                } else {
+                    ContainerAnvil.this.h.setItem(0, ItemStack.a);
+                }
+
+                if (ContainerAnvil.this.k > 0) {
+                    ItemStack itemstack2 = ContainerAnvil.this.h.getItem(1);
+
+                    if (!itemstack2.isEmpty() && itemstack2.getCount() > ContainerAnvil.this.k) {
+                        itemstack2.subtract(ContainerAnvil.this.k);
+                        ContainerAnvil.this.h.setItem(1, itemstack2);
                     } else {
                         ContainerAnvil.this.h.setItem(1, ItemStack.a);
                     }
@@ -114,6 +121,11 @@ public class ContainerAnvil extends Container {
             this.a = 0;
         } else {
             ItemStack itemstack1 = itemstack.cloneItemStack();
+
+            if (itemstack1.getCount() > 1 && !this.m.abilities.canInstantlyBuild && !(itemstack1.getItem() instanceof ItemNameTag)) {
+                itemstack1.setCount(1);
+            }
+
             ItemStack itemstack2 = this.h.getItem(1);
             Map map = EnchantmentManager.a(itemstack1);
             int j = b0 + itemstack.getRepairCost() + (itemstack2.isEmpty() ? 0 : itemstack2.getRepairCost());
@@ -148,15 +160,13 @@ public class ContainerAnvil extends Container {
                         return;
                     }
 
-                    int j1;
-                    int k1;
-
                     if (itemstack1.f() && !flag) {
                         k = itemstack.k() - itemstack.i();
                         l = itemstack2.k() - itemstack2.i();
                         i1 = l + itemstack1.k() * 12 / 100;
-                        j1 = k + i1;
-                        k1 = itemstack1.k() - j1;
+                        int j1 = k + i1;
+                        int k1 = itemstack1.k() - j1;
+
                         if (k1 < 0) {
                             k1 = 0;
                         }
@@ -168,19 +178,22 @@ public class ContainerAnvil extends Container {
                     }
 
                     Map map1 = EnchantmentManager.a(itemstack2);
+                    boolean flag1 = false;
+                    boolean flag2 = false;
                     Iterator iterator = map1.keySet().iterator();
 
                     while (iterator.hasNext()) {
                         Enchantment enchantment = (Enchantment) iterator.next();
 
                         if (enchantment != null) {
-                            j1 = map.containsKey(enchantment) ? ((Integer) map.get(enchantment)).intValue() : 0;
-                            k1 = ((Integer) map1.get(enchantment)).intValue();
-                            k1 = j1 == k1 ? k1 + 1 : Math.max(k1, j1);
-                            boolean flag1 = enchantment.canEnchant(itemstack);
+                            int l1 = map.containsKey(enchantment) ? ((Integer) map.get(enchantment)).intValue() : 0;
+                            int i2 = ((Integer) map1.get(enchantment)).intValue();
+
+                            i2 = l1 == i2 ? i2 + 1 : Math.max(i2, l1);
+                            boolean flag3 = enchantment.canEnchant(itemstack);
 
                             if (this.m.abilities.canInstantlyBuild || itemstack.getItem() == Items.ENCHANTED_BOOK) {
-                                flag1 = true;
+                                flag3 = true;
                             }
 
                             Iterator iterator1 = map.keySet().iterator();
@@ -188,44 +201,53 @@ public class ContainerAnvil extends Container {
                             while (iterator1.hasNext()) {
                                 Enchantment enchantment1 = (Enchantment) iterator1.next();
 
-                                if (enchantment1 != enchantment && !enchantment.a(enchantment1)) {
-                                    flag1 = false;
+                                if (enchantment1 != enchantment && !enchantment.c(enchantment1)) {
+                                    flag3 = false;
                                     ++i;
                                 }
                             }
 
-                            if (flag1) {
-                                if (k1 > enchantment.getMaxLevel()) {
-                                    k1 = enchantment.getMaxLevel();
+                            if (!flag3) {
+                                flag2 = true;
+                            } else {
+                                flag1 = true;
+                                if (i2 > enchantment.getMaxLevel()) {
+                                    i2 = enchantment.getMaxLevel();
                                 }
 
-                                map.put(enchantment, Integer.valueOf(k1));
-                                int l1 = 0;
+                                map.put(enchantment, Integer.valueOf(i2));
+                                int j2 = 0;
 
                                 switch (enchantment.e()) {
                                 case COMMON:
-                                    l1 = 1;
+                                    j2 = 1;
                                     break;
 
                                 case UNCOMMON:
-                                    l1 = 2;
+                                    j2 = 2;
                                     break;
 
                                 case RARE:
-                                    l1 = 4;
+                                    j2 = 4;
                                     break;
 
                                 case VERY_RARE:
-                                    l1 = 8;
+                                    j2 = 8;
                                 }
 
                                 if (flag) {
-                                    l1 = Math.max(1, l1 / 2);
+                                    j2 = Math.max(1, j2 / 2);
                                 }
 
-                                i += l1 * k1;
+                                i += j2 * i2;
                             }
                         }
+                    }
+
+                    if (flag2 && !flag1) {
+                        this.g.setItem(0, ItemStack.a);
+                        this.a = 0;
+                        return;
                     }
                 }
             }
@@ -256,17 +278,17 @@ public class ContainerAnvil extends Container {
             }
 
             if (!itemstack1.isEmpty()) {
-                int i2 = itemstack1.getRepairCost();
+                int k2 = itemstack1.getRepairCost();
 
-                if (!itemstack2.isEmpty() && i2 < itemstack2.getRepairCost()) {
-                    i2 = itemstack2.getRepairCost();
+                if (!itemstack2.isEmpty() && k2 < itemstack2.getRepairCost()) {
+                    k2 = itemstack2.getRepairCost();
                 }
 
                 if (b1 != i || b1 == 0) {
-                    i2 = i2 * 2 + 1;
+                    k2 = k2 * 2 + 1;
                 }
 
-                itemstack1.setRepairCost(i2);
+                itemstack1.setRepairCost(k2);
                 EnchantmentManager.a(map, itemstack1);
             }
 

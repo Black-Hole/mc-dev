@@ -20,7 +20,7 @@ public class LootEnchantFunction extends LootItemFunction {
         Entity entity = loottableinfo.c();
 
         if (entity instanceof EntityLiving) {
-            int i = EnchantmentManager.h((EntityLiving) entity);
+            int i = EnchantmentManager.g((EntityLiving) entity);
 
             if (i == 0) {
                 return itemstack;

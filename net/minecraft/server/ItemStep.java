@@ -37,7 +37,7 @@ public class ItemStep extends ItemBlock {
                     IBlockData iblockdata1 = this.a(iblockstate, comparable1);
                     AxisAlignedBB axisalignedbb = iblockdata1.c(world, blockposition);
 
-                    if (axisalignedbb != Block.k && world.c(axisalignedbb.a(blockposition)) && world.setTypeAndData(blockposition, iblockdata1, 11)) {
+                    if (axisalignedbb != Block.k && world.b(axisalignedbb.a(blockposition)) && world.setTypeAndData(blockposition, iblockdata1, 11)) {
                         SoundEffectType soundeffecttype = this.c.getStepSound();
 
                         world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
@@ -64,7 +64,7 @@ public class ItemStep extends ItemBlock {
                 IBlockData iblockdata1 = this.a(this.b.g(), comparable);
                 AxisAlignedBB axisalignedbb = iblockdata1.c(world, blockposition);
 
-                if (axisalignedbb != Block.k && world.c(axisalignedbb.a(blockposition)) && world.setTypeAndData(blockposition, iblockdata1, 11)) {
+                if (axisalignedbb != Block.k && world.b(axisalignedbb.a(blockposition)) && world.setTypeAndData(blockposition, iblockdata1, 11)) {
                     SoundEffectType soundeffecttype = this.c.getStepSound();
 
                     world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);

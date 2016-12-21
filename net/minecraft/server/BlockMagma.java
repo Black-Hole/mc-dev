@@ -16,7 +16,7 @@ public class BlockMagma extends Block {
     }
 
     public void stepOn(World world, BlockPosition blockposition, Entity entity) {
-        if (!entity.isFireProof() && entity instanceof EntityLiving && !EnchantmentManager.j((EntityLiving) entity)) {
+        if (!entity.isFireProof() && entity instanceof EntityLiving && !EnchantmentManager.i((EntityLiving) entity)) {
             entity.damageEntity(DamageSource.HOT_FLOOR, 1.0F);
         }
 

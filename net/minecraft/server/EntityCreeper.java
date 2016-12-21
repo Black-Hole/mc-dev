@@ -57,7 +57,7 @@ public class EntityCreeper extends EntityMonster {
         this.datawatcher.register(EntityCreeper.c, Boolean.valueOf(false));
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityCreeper.class);
     }
 

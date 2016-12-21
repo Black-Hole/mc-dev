@@ -131,6 +131,12 @@ public class EnchantmentManager {
         return EnchantmentManager.c.a;
     }
 
+    public static float a(EntityLiving entityliving) {
+        int i = a(Enchantments.r, entityliving);
+
+        return i > 0 ? EnchantmentSweeping.e(i) : 0.0F;
+    }
+
     public static void a(EntityLiving entityliving, Entity entity) {
         EnchantmentManager.d.b = entity;
         EnchantmentManager.d.a = entityliving;
@@ -179,7 +185,7 @@ public class EnchantmentManager {
         }
     }
 
-    public static int a(EntityLiving entityliving) {
+    public static int b(EntityLiving entityliving) {
         return a(Enchantments.KNOCKBACK, entityliving);
     }
 
@@ -191,7 +197,7 @@ public class EnchantmentManager {
         return a(Enchantments.OXYGEN, entityliving);
     }
 
-    public static int d(EntityLiving entityliving) {
+    public static int e(EntityLiving entityliving) {
         return a(Enchantments.DEPTH_STRIDER, entityliving);
     }
 
@@ -199,32 +205,32 @@ public class EnchantmentManager {
         return a(Enchantments.DIG_SPEED, entityliving);
     }
 
-    public static int f(EntityLiving entityliving) {
-        return a(Enchantments.LUCK, entityliving);
+    public static int b(ItemStack itemstack) {
+        return getEnchantmentLevel(Enchantments.LUCK, itemstack);
+    }
+
+    public static int c(ItemStack itemstack) {
+        return getEnchantmentLevel(Enchantments.LURE, itemstack);
     }
 
     public static int g(EntityLiving entityliving) {
-        return a(Enchantments.LURE, entityliving);
-    }
-
-    public static int h(EntityLiving entityliving) {
         return a(Enchantments.LOOT_BONUS_MOBS, entityliving);
     }
 
-    public static boolean i(EntityLiving entityliving) {
+    public static boolean h(EntityLiving entityliving) {
         return a(Enchantments.WATER_WORKER, entityliving) > 0;
     }
 
-    public static boolean j(EntityLiving entityliving) {
+    public static boolean i(EntityLiving entityliving) {
         return a(Enchantments.j, entityliving) > 0;
     }
 
-    public static boolean b(ItemStack itemstack) {
+    public static boolean d(ItemStack itemstack) {
         return getEnchantmentLevel(Enchantments.k, itemstack) > 0;
     }
 
-    public static boolean c(ItemStack itemstack) {
-        return getEnchantmentLevel(Enchantments.C, itemstack) > 0;
+    public static boolean e(ItemStack itemstack) {
+        return getEnchantmentLevel(Enchantments.D, itemstack) > 0;
     }
 
     public static ItemStack b(Enchantment enchantment, EntityLiving entityliving) {
@@ -324,7 +330,7 @@ public class EnchantmentManager {
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
-            if (!weightedrandomenchant.enchantment.a(((WeightedRandomEnchant) iterator.next()).enchantment)) {
+            if (!weightedrandomenchant.enchantment.c(((WeightedRandomEnchant) iterator.next()).enchantment)) {
                 iterator.remove();
             }
         }

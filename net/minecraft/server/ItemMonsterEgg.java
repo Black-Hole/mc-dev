@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.StringUtils;
 
 public class ItemMonsterEgg extends Item {
 
@@ -193,7 +192,11 @@ public class ItemMonsterEgg extends Item {
                 String s = nbttagcompound1.getString("id");
                 MinecraftKey minecraftkey = new MinecraftKey(s);
 
-                return !StringUtils.equals(s, minecraftkey.toString()) ? null : minecraftkey;
+                if (!s.contains(":")) {
+                    nbttagcompound1.setString("id", minecraftkey.toString());
+                }
+
+                return minecraftkey;
             }
         }
     }

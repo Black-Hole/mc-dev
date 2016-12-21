@@ -95,7 +95,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return 1;
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityGhast.class);
     }
 

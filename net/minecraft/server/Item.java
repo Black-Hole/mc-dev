@@ -706,8 +706,9 @@ public class Item {
         a(446, "jungle_boat", new ItemBoat(EntityBoat.EnumBoatType.JUNGLE));
         a(447, "acacia_boat", new ItemBoat(EntityBoat.EnumBoatType.ACACIA));
         a(448, "dark_oak_boat", new ItemBoat(EntityBoat.EnumBoatType.DARK_OAK));
-        a(449, "totem", (new Item()).c("totem").d(1).a(CreativeModeTab.j));
+        a(449, "totem_of_undying", (new Item()).c("totem").d(1).a(CreativeModeTab.j));
         a(450, "shulker_shell", (new Item()).c("shulkerShell").a(CreativeModeTab.l));
+        a(452, "iron_nugget", (new Item()).c("ironNugget").a(CreativeModeTab.l));
         a(2256, "record_13", (new ItemRecord("13", SoundEffects.fa)).c("record"));
         a(2257, "record_cat", (new ItemRecord("cat", SoundEffects.fc)).c("record"));
         a(2258, "record_blocks", (new ItemRecord("blocks", SoundEffects.fb)).c("record"));

@@ -26,7 +26,7 @@ public class EntitySquid extends EntityWaterAnimal {
         this.bA = 1.0F / (this.random.nextFloat() + 1.0F) * 0.2F;
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntitySquid.class);
     }
 

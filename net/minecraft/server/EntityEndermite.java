@@ -59,7 +59,7 @@ public class EntityEndermite extends EntityMonster {
         return LootTables.al;
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityEndermite.class);
     }
 

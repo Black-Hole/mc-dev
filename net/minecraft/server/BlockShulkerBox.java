@@ -47,13 +47,13 @@ public class BlockShulkerBox extends BlockTileEntity {
                 if (((TileEntityShulkerBox) tileentity).p() == TileEntityShulkerBox.AnimationPhase.CLOSED) {
                     AxisAlignedBB axisalignedbb = BlockShulkerBox.j.b((double) (0.5F * (float) enumdirection1.getAdjacentX()), (double) (0.5F * (float) enumdirection1.getAdjacentY()), (double) (0.5F * (float) enumdirection1.getAdjacentZ())).a((double) enumdirection1.getAdjacentX(), (double) enumdirection1.getAdjacentY(), (double) enumdirection1.getAdjacentZ());
 
-                    flag = !world.b(axisalignedbb.a(blockposition.shift(enumdirection1)));
+                    flag = !world.a(axisalignedbb.a(blockposition.shift(enumdirection1)));
                 } else {
                     flag = true;
                 }
 
                 if (flag) {
-                    entityhuman.b(StatisticList.ae);
+                    entityhuman.b(StatisticList.ac);
                     entityhuman.openContainer((IInventory) tileentity);
                 }
 

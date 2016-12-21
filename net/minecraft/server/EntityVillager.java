@@ -150,7 +150,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
             }
 
             if (enumhand == EnumHand.MAIN_HAND) {
-                entityhuman.b(StatisticList.H);
+                entityhuman.b(StatisticList.F);
             }
 
             if (!this.world.isClientSide && !this.trades.isEmpty()) {
@@ -171,7 +171,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         this.datawatcher.register(EntityVillager.by, Integer.valueOf(0));
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityVillager.class);
         dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItemList(EntityVillager.class, new String[] { "Inventory"})));
         dataconvertermanager.a(DataConverterTypes.ENTITY, new DataInspector() {

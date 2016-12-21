@@ -61,7 +61,7 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
     }
 
     public boolean a(EntityHuman entityhuman) {
-        return this.isTamed() && this.e((EntityLiving) entityhuman);
+        return !this.isLeashed();
     }
 
     protected void p(boolean flag) {

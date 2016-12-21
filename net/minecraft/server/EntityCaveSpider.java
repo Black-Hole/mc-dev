@@ -9,7 +9,7 @@ public class EntityCaveSpider extends EntitySpider {
         this.setSize(0.7F, 0.5F);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityCaveSpider.class);
     }
 

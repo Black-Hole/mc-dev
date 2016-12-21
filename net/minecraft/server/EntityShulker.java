@@ -96,7 +96,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
         return new EntityShulker.b(this);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityShulker.class);
     }
 
@@ -322,7 +322,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
             for (int i = 0; i < 5; ++i) {
                 BlockPosition blockposition1 = blockposition.a(8 - this.random.nextInt(17), 8 - this.random.nextInt(17), 8 - this.random.nextInt(17));
 
-                if (blockposition1.getY() > 0 && this.world.isEmpty(blockposition1) && this.world.a(this.world.getWorldBorder(), (Entity) this) && this.world.getCubes(this, new AxisAlignedBB(blockposition1)).isEmpty()) {
+                if (blockposition1.getY() > 0 && this.world.isEmpty(blockposition1) && this.world.g(this) && this.world.getCubes(this, new AxisAlignedBB(blockposition1)).isEmpty()) {
                     boolean flag = false;
                     EnumDirection[] aenumdirection = EnumDirection.values();
                     int j = aenumdirection.length;

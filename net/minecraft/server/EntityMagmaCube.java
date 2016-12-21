@@ -9,7 +9,7 @@ public class EntityMagmaCube extends EntitySlime {
         this.fireProof = true;
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityMagmaCube.class);
     }
 

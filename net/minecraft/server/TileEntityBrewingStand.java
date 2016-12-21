@@ -227,7 +227,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         } else {
             Item item = itemstack.getItem();
 
-            return i == 4 ? item == Items.BLAZE_POWDER : item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.GLASS_BOTTLE;
+            return i == 4 ? item == Items.BLAZE_POWDER : (item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.GLASS_BOTTLE) && this.getItem(i) == ItemStack.a;
         }
     }
 

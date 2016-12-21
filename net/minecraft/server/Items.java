@@ -210,6 +210,7 @@ public class Items {
     public static final Item BEETROOT_SOUP;
     public static final Item cY;
     public static final Item cZ;
+    public static final Item da;
 
     private static Item get(String s) {
         Item item = (Item) Item.REGISTRY.get(new MinecraftKey(s));
@@ -431,8 +432,9 @@ public class Items {
             BEETROOT_SEEDS = get("beetroot_seeds");
             BEETROOT = get("beetroot");
             BEETROOT_SOUP = get("beetroot_soup");
-            cY = get("totem");
+            cY = get("totem_of_undying");
             cZ = get("shulker_shell");
+            da = get("iron_nugget");
         }
     }
 }

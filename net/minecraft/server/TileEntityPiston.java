@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -11,9 +12,9 @@ public class TileEntityPiston extends TileEntity implements ITickable {
     private EnumDirection f;
     private boolean g;
     private boolean h;
-    private static final ThreadLocal<Boolean> i = new ThreadLocal() {
-        protected Boolean a() {
-            return Boolean.FALSE;
+    private static final ThreadLocal<EnumDirection> i = new ThreadLocal() {
+        protected EnumDirection a() {
+            return null;
         }
 
         protected Object initialValue() {
@@ -80,9 +81,9 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         double d0 = (double) (f - this.j);
         ArrayList arraylist = Lists.newArrayList();
 
-        this.j().a(this.world, BlockPosition.ZERO, new AxisAlignedBB(BlockPosition.ZERO), arraylist, (Entity) null);
+        this.j().a(this.world, BlockPosition.ZERO, new AxisAlignedBB(BlockPosition.ZERO), arraylist, (Entity) null, true);
         if (!arraylist.isEmpty()) {
-            AxisAlignedBB axisalignedbb = this.a(new AxisAlignedBB(BlockPosition.ZERO));
+            AxisAlignedBB axisalignedbb = this.a(this.a((List) arraylist));
             List list = this.world.getEntities((Entity) null, this.a(axisalignedbb, enumdirection, d0).b(axisalignedbb));
 
             if (!list.isEmpty()) {
@@ -123,11 +124,11 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
                         if (d1 > 0.0D) {
                             d1 = Math.min(d1, d0) + 0.01D;
-                            TileEntityPiston.i.set(Boolean.valueOf(true));
+                            TileEntityPiston.i.set(enumdirection);
                             entity.move(EnumMoveType.PISTON, d1 * (double) enumdirection.getAdjacentX(), d1 * (double) enumdirection.getAdjacentY(), d1 * (double) enumdirection.getAdjacentZ());
-                            TileEntityPiston.i.set(Boolean.valueOf(false));
+                            TileEntityPiston.i.set((Object) null);
                             if (!this.g && this.h) {
-                                this.a(entity, enumdirection);
+                                this.a(entity, enumdirection, d0);
                             }
                         }
                     }
@@ -135,6 +136,28 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
             }
         }
+    }
+
+    private AxisAlignedBB a(List<AxisAlignedBB> list) {
+        double d0 = 0.0D;
+        double d1 = 0.0D;
+        double d2 = 0.0D;
+        double d3 = 1.0D;
+        double d4 = 1.0D;
+        double d5 = 1.0D;
+
+        AxisAlignedBB axisalignedbb;
+
+        for (Iterator iterator = list.iterator(); iterator.hasNext(); d5 = Math.max(axisalignedbb.f, d5)) {
+            axisalignedbb = (AxisAlignedBB) iterator.next();
+            d0 = Math.min(axisalignedbb.a, d0);
+            d1 = Math.min(axisalignedbb.b, d1);
+            d2 = Math.min(axisalignedbb.c, d2);
+            d3 = Math.max(axisalignedbb.d, d3);
+            d4 = Math.max(axisalignedbb.e, d4);
+        }
+
+        return new AxisAlignedBB(d0, d1, d2, d3, d4, d5);
     }
 
     private double a(AxisAlignedBB axisalignedbb, EnumDirection enumdirection, AxisAlignedBB axisalignedbb1) {
@@ -184,19 +207,20 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         }
     }
 
-    private void a(Entity entity, EnumDirection enumdirection) {
+    private void a(Entity entity, EnumDirection enumdirection, double d0) {
         AxisAlignedBB axisalignedbb = entity.getBoundingBox();
         AxisAlignedBB axisalignedbb1 = Block.j.a(this.position);
 
         if (axisalignedbb.c(axisalignedbb1)) {
             EnumDirection enumdirection1 = enumdirection.opposite();
-            double d0 = this.a(axisalignedbb1, enumdirection1, axisalignedbb) + 0.01D;
-            double d1 = this.a(axisalignedbb1, enumdirection1, axisalignedbb.a(axisalignedbb1)) + 0.01D;
+            double d1 = this.a(axisalignedbb1, enumdirection1, axisalignedbb) + 0.01D;
+            double d2 = this.a(axisalignedbb1, enumdirection1, axisalignedbb.a(axisalignedbb1)) + 0.01D;
 
-            if (Math.abs(d0 - d1) < 0.01D) {
-                TileEntityPiston.i.set(Boolean.valueOf(true));
-                entity.move(EnumMoveType.PISTON, d0 * (double) enumdirection1.getAdjacentX(), d0 * (double) enumdirection1.getAdjacentY(), d0 * (double) enumdirection1.getAdjacentZ());
-                TileEntityPiston.i.set(Boolean.valueOf(false));
+            if (Math.abs(d1 - d2) < 0.01D) {
+                d1 = Math.min(d1, d0) + 0.01D;
+                TileEntityPiston.i.set(enumdirection);
+                entity.move(EnumMoveType.PISTON, d1 * (double) enumdirection1.getAdjacentX(), d1 * (double) enumdirection1.getAdjacentY(), d1 * (double) enumdirection1.getAdjacentZ());
+                TileEntityPiston.i.set((Object) null);
             }
         }
 
@@ -259,6 +283,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         this.j = nbttagcompound.getFloat("progress");
         this.k = this.j;
         this.g = nbttagcompound.getBoolean("extending");
+        this.h = nbttagcompound.getBoolean("source");
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
@@ -268,15 +293,18 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         nbttagcompound.setInt("facing", this.f.a());
         nbttagcompound.setFloat("progress", this.k);
         nbttagcompound.setBoolean("extending", this.g);
+        nbttagcompound.setBoolean("source", this.h);
         return nbttagcompound;
     }
 
     public void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
-        if (!this.e() && this.h()) {
-            this.a.set(BlockPiston.EXTENDED, Boolean.valueOf(true)).a(world, blockposition, axisalignedbb, list, entity);
+        if (!this.g && this.h) {
+            this.a.set(BlockPiston.EXTENDED, Boolean.valueOf(true)).a(world, blockposition, axisalignedbb, list, entity, false);
         }
 
-        if ((double) this.j >= 1.0D || !((Boolean) TileEntityPiston.i.get()).booleanValue()) {
+        EnumDirection enumdirection = (EnumDirection) TileEntityPiston.i.get();
+
+        if ((double) this.j >= 1.0D || enumdirection != (this.g ? this.f : this.f.opposite())) {
             int i = list.size();
             IBlockData iblockdata;
 
@@ -291,7 +319,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
             double d1 = (double) ((float) this.f.getAdjacentY() * f);
             double d2 = (double) ((float) this.f.getAdjacentZ() * f);
 
-            iblockdata.a(world, blockposition, axisalignedbb.d(-d0, -d1, -d2), list, entity);
+            iblockdata.a(world, blockposition, axisalignedbb.d(-d0, -d1, -d2), list, entity, true);
 
             for (int j = i; j < list.size(); ++j) {
                 list.set(j, ((AxisAlignedBB) list.get(j)).d(d0, d1, d2));

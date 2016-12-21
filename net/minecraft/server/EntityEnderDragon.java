@@ -756,7 +756,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return new PathEntity(apathpoint);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityEnderDragon.class);
     }
 

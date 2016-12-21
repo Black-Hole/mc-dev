@@ -44,8 +44,11 @@ public class BlockChorusFruit extends Block {
         return new AxisAlignedBB((double) f1, (double) f2, (double) f3, (double) f4, (double) f5, (double) f6);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
-        iblockdata = iblockdata.b((IBlockAccess) world, blockposition);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
+        if (!flag) {
+            iblockdata = iblockdata.b((IBlockAccess) world, blockposition);
+        }
+
         float f = 0.1875F;
         float f1 = 0.8125F;
 

@@ -114,46 +114,38 @@ public abstract class PlayerList {
             playerconnection.sendPacket(new PacketPlayOutEntityEffect(entityplayer.getId(), mobeffect));
         }
 
-        if (nbttagcompound != null) {
-            if (nbttagcompound.hasKeyOfType("RootVehicle", 10)) {
-                NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("RootVehicle");
-                Entity entity = ChunkRegionLoader.a(nbttagcompound1.getCompound("Entity"), worldserver, true);
+        if (nbttagcompound != null && nbttagcompound.hasKeyOfType("RootVehicle", 10)) {
+            NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("RootVehicle");
+            Entity entity = ChunkRegionLoader.a(nbttagcompound1.getCompound("Entity"), worldserver, true);
 
-                if (entity != null) {
-                    UUID uuid = nbttagcompound1.a("Attach");
-                    Iterator iterator1;
-                    Entity entity1;
+            if (entity != null) {
+                UUID uuid = nbttagcompound1.a("Attach");
+                Iterator iterator1;
+                Entity entity1;
 
-                    if (entity.getUniqueID().equals(uuid)) {
-                        entityplayer.a(entity, true);
-                    } else {
-                        iterator1 = entity.by().iterator();
+                if (entity.getUniqueID().equals(uuid)) {
+                    entityplayer.a(entity, true);
+                } else {
+                    iterator1 = entity.by().iterator();
 
-                        while (iterator1.hasNext()) {
-                            entity1 = (Entity) iterator1.next();
-                            if (entity1.getUniqueID().equals(uuid)) {
-                                entityplayer.a(entity1, true);
-                                break;
-                            }
-                        }
-                    }
-
-                    if (!entityplayer.isPassenger()) {
-                        PlayerList.f.warn("Couldn\'t reattach entity to player");
-                        worldserver.removeEntity(entity);
-                        iterator1 = entity.by().iterator();
-
-                        while (iterator1.hasNext()) {
-                            entity1 = (Entity) iterator1.next();
-                            worldserver.removeEntity(entity1);
+                    while (iterator1.hasNext()) {
+                        entity1 = (Entity) iterator1.next();
+                        if (entity1.getUniqueID().equals(uuid)) {
+                            entityplayer.a(entity1, true);
+                            break;
                         }
                     }
                 }
-            } else if (nbttagcompound.hasKeyOfType("Riding", 10)) {
-                Entity entity2 = ChunkRegionLoader.a(nbttagcompound.getCompound("Riding"), worldserver, true);
 
-                if (entity2 != null) {
-                    entityplayer.a(entity2, true);
+                if (!entityplayer.isPassenger()) {
+                    PlayerList.f.warn("Couldn\'t reattach entity to player");
+                    worldserver.removeEntity(entity);
+                    iterator1 = entity.by().iterator();
+
+                    while (iterator1.hasNext()) {
+                        entity1 = (Entity) iterator1.next();
+                        worldserver.removeEntity(entity1);
+                    }
                 }
             }
         }
@@ -234,6 +226,7 @@ public abstract class PlayerList {
         return PlayerChunkMap.getFurthestViewableBlock(this.s());
     }
 
+    @Nullable
     public NBTTagCompound a(EntityPlayer entityplayer) {
         NBTTagCompound nbttagcompound = this.server.worldServer[0].getWorldData().h();
         NBTTagCompound nbttagcompound1;

@@ -17,4 +17,23 @@ public class ItemFireworks extends Item {
 
         return EnumInteractionResult.SUCCESS;
     }
+
+    public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
+        if (entityhuman.cH()) {
+            ItemStack itemstack = entityhuman.b(enumhand);
+
+            if (!world.isClientSide) {
+                EntityFireworks entityfireworks = new EntityFireworks(world, itemstack, entityhuman);
+
+                world.addEntity(entityfireworks);
+                if (!entityhuman.abilities.canInstantlyBuild) {
+                    itemstack.subtract(1);
+                }
+            }
+
+            return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, entityhuman.b(enumhand));
+        } else {
+            return new InteractionResultWrapper(EnumInteractionResult.PASS, entityhuman.b(enumhand));
+        }
+    }
 }

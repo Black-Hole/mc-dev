@@ -20,8 +20,11 @@ public class BlockThin extends Block {
         this.a(CreativeModeTab.c);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
-        iblockdata = this.updateState(iblockdata, world, blockposition);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
+        if (!flag) {
+            iblockdata = this.updateState(iblockdata, world, blockposition);
+        }
+
         a(blockposition, axisalignedbb, list, BlockThin.f[0]);
         if (((Boolean) iblockdata.get(BlockThin.NORTH)).booleanValue()) {
             a(blockposition, axisalignedbb, list, BlockThin.f[a(EnumDirection.NORTH)]);

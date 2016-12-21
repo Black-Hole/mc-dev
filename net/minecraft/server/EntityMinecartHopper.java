@@ -119,7 +119,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityMinecartContainer.b(dataconvertermanager, EntityMinecartHopper.class);
     }
 

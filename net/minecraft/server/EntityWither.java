@@ -60,7 +60,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         this.datawatcher.register(EntityWither.bx, Integer.valueOf(0));
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityWither.class);
     }
 
@@ -76,6 +76,11 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
             this.bF.a(this.getScoreboardDisplayName());
         }
 
+    }
+
+    public void setCustomName(String s) {
+        super.setCustomName(s);
+        this.bF.a(this.getScoreboardDisplayName());
     }
 
     protected SoundEffect G() {

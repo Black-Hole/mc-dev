@@ -97,6 +97,14 @@ public class BlockSoil extends Block {
 
     }
 
+    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        super.onPlace(world, blockposition, iblockdata);
+        if (world.getType(blockposition.up()).getMaterial().isBuildable()) {
+            this.b(world, blockposition);
+        }
+
+    }
+
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
         return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
     }

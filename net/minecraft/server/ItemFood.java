@@ -23,7 +23,6 @@ public class ItemFood extends Item {
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
-        itemstack.subtract(1);
         if (entityliving instanceof EntityHuman) {
             EntityHuman entityhuman = (EntityHuman) entityliving;
 
@@ -33,6 +32,7 @@ public class ItemFood extends Item {
             entityhuman.b(StatisticList.b((Item) this));
         }
 
+        itemstack.subtract(1);
         return itemstack;
     }
 

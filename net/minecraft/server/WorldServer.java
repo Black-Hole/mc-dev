@@ -477,7 +477,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.methodProfiler.a("tick");
             if (!entity.dead) {
                 try {
-                    this.g(entity);
+                    this.h(entity);
                 } catch (Throwable throwable) {
                     CrashReport crashreport = CrashReport.a(throwable, "Ticking player");
                     CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Player being ticked");
@@ -817,7 +817,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     public boolean addEntity(Entity entity) {
-        return this.i(entity) ? super.addEntity(entity) : false;
+        return this.j(entity) ? super.addEntity(entity) : false;
     }
 
     public void a(Collection<Entity> collection) {
@@ -827,7 +827,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         while (iterator.hasNext()) {
             Entity entity = (Entity) iterator.next();
 
-            if (this.i(entity)) {
+            if (this.j(entity)) {
                 this.entityList.add(entity);
                 this.b(entity);
             }
@@ -835,7 +835,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     }
 
-    private boolean i(Entity entity) {
+    private boolean j(Entity entity) {
         if (entity.dead) {
             WorldServer.a.warn("Tried to add entity {} but it was marked as removed already", new Object[] { EntityTypes.a(entity)});
             return false;

@@ -341,7 +341,7 @@ public class EntityBoat extends Entity {
                                 blockposition_pooledblockposition.f(l1, k2, i2);
                                 IBlockData iblockdata = this.world.getType(blockposition_pooledblockposition);
 
-                                iblockdata.a(this.world, blockposition_pooledblockposition, axisalignedbb1, arraylist, this);
+                                iblockdata.a(this.world, blockposition_pooledblockposition, axisalignedbb1, arraylist, this, false);
                                 if (!arraylist.isEmpty()) {
                                     f += iblockdata.getBlock().frictionFactor;
                                     ++k1;

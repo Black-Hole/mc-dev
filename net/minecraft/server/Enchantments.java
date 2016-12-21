@@ -21,6 +21,7 @@ public class Enchantments {
     public static final Enchantment KNOCKBACK = a("knockback");
     public static final Enchantment FIRE_ASPECT = a("fire_aspect");
     public static final Enchantment LOOT_BONUS_MOBS = a("looting");
+    public static final Enchantment r = a("sweeping");
     public static final Enchantment DIG_SPEED = a("efficiency");
     public static final Enchantment SILK_TOUCH = a("silk_touch");
     public static final Enchantment DURABILITY = a("unbreaking");
@@ -31,8 +32,8 @@ public class Enchantments {
     public static final Enchantment ARROW_INFINITE = a("infinity");
     public static final Enchantment LUCK = a("luck_of_the_sea");
     public static final Enchantment LURE = a("lure");
-    public static final Enchantment B = a("mending");
-    public static final Enchantment C = a("vanishing_curse");
+    public static final Enchantment C = a("mending");
+    public static final Enchantment D = a("vanishing_curse");
 
     @Nullable
     private static Enchantment a(String s) {

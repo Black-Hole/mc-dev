@@ -55,7 +55,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
 
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityHorseAbstract.c(dataconvertermanager, EntityHorseSkeleton.class);
     }
 

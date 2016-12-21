@@ -16,6 +16,8 @@ public class EntityFishingHook extends Entity {
     private float au;
     public Entity hooked;
     private EntityFishingHook.HookState av;
+    private int aw;
+    private int ax;
 
     public EntityFishingHook(World world, EntityHuman entityhuman) {
         super(world);
@@ -29,6 +31,14 @@ public class EntityFishingHook extends Entity {
         this.ah = true;
         this.owner = entityhuman;
         this.owner.hookedFish = this;
+    }
+
+    public void a(int i) {
+        this.ax = i;
+    }
+
+    public void b(int i) {
+        this.aw = i;
     }
 
     private void n() {
@@ -355,7 +365,7 @@ public class EntityFishingHook extends Entity {
                 }
             } else {
                 this.h = MathHelper.nextInt(this.random, 100, 600);
-                this.h -= EnchantmentManager.g(this.owner) * 20 * 5;
+                this.h -= this.ax * 20 * 5;
             }
         }
 
@@ -380,7 +390,7 @@ public class EntityFishingHook extends Entity {
             } else if (this.g > 0) {
                 LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
-                loottableinfo_a.a((float) EnchantmentManager.f(this.owner) + this.owner.dj());
+                loottableinfo_a.a((float) this.aw + this.owner.dj());
                 Iterator iterator = this.world.ak().a(LootTables.az).a(this.random, loottableinfo_a.a()).iterator();
 
                 while (iterator.hasNext()) {
@@ -397,6 +407,11 @@ public class EntityFishingHook extends Entity {
                     entityitem.motZ = d2 * 0.1D;
                     this.world.addEntity(entityitem);
                     this.owner.world.addEntity(new EntityExperienceOrb(this.owner.world, this.owner.locX, this.owner.locY + 0.5D, this.owner.locZ + 0.5D, this.random.nextInt(6) + 1));
+                    Item item = itemstack.getItem();
+
+                    if (item == Items.FISH || item == Items.COOKED_FISH) {
+                        this.owner.a(StatisticList.E, 1);
+                    }
                 }
 
                 i = 1;

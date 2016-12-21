@@ -74,7 +74,7 @@ public class PathfinderGoalArrowAttack extends PathfinderGoal {
         float f;
 
         if (--this.d == 0) {
-            if (d0 > (double) this.j || !flag) {
+            if (!flag) {
                 return;
             }
 

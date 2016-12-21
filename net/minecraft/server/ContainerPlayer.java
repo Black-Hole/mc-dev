@@ -37,7 +37,7 @@ public class ContainerPlayer extends Container {
                 public boolean isAllowed(EntityHuman entityhuman) {
                     ItemStack itemstack = this.getItem();
 
-                    return !itemstack.isEmpty() && !entityhuman.z() && EnchantmentManager.b(itemstack) ? false : super.isAllowed(entityhuman);
+                    return !itemstack.isEmpty() && !entityhuman.z() && EnchantmentManager.d(itemstack) ? false : super.isAllowed(entityhuman);
                 }
             });
         }

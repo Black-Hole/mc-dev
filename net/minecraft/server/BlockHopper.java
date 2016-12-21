@@ -32,7 +32,7 @@ public class BlockHopper extends BlockTileEntity {
         return BlockHopper.j;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
         a(blockposition, axisalignedbb, list, BlockHopper.c);
         a(blockposition, axisalignedbb, list, BlockHopper.g);
         a(blockposition, axisalignedbb, list, BlockHopper.f);
@@ -82,7 +82,7 @@ public class BlockHopper extends BlockTileEntity {
 
             if (tileentity instanceof TileEntityHopper) {
                 entityhuman.openContainer((TileEntityHopper) tileentity);
-                entityhuman.b(StatisticList.R);
+                entityhuman.b(StatisticList.P);
             }
 
             return true;

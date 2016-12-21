@@ -23,15 +23,16 @@ public class DamageSource {
     public static final DamageSource ANVIL = new DamageSource("anvil");
     public static final DamageSource FALLING_BLOCK = new DamageSource("fallingBlock");
     public static final DamageSource DRAGON_BREATH = (new DamageSource("dragonBreath")).setIgnoreArmor();
-    private boolean u;
+    public static final DamageSource t = (new DamageSource("fireworks")).d();
     private boolean v;
     private boolean w;
-    private float x = 0.1F;
-    private boolean y;
+    private boolean x;
+    private float y = 0.1F;
     private boolean z;
     private boolean A;
     private boolean B;
     private boolean C;
+    private boolean D;
     public String translationIndex;
 
     public static DamageSource mobAttack(EntityLiving entityliving) {
@@ -75,37 +76,37 @@ public class DamageSource {
     }
 
     public boolean a() {
-        return this.z;
+        return this.A;
     }
 
     public DamageSource b() {
-        this.z = true;
+        this.A = true;
         return this;
     }
 
     public boolean isExplosion() {
-        return this.C;
+        return this.D;
     }
 
     public DamageSource d() {
-        this.C = true;
+        this.D = true;
         return this;
     }
 
     public boolean ignoresArmor() {
-        return this.u;
-    }
-
-    public float getExhaustionCost() {
-        return this.x;
-    }
-
-    public boolean ignoresInvulnerability() {
         return this.v;
     }
 
-    public boolean isStarvation() {
+    public float getExhaustionCost() {
+        return this.y;
+    }
+
+    public boolean ignoresInvulnerability() {
         return this.w;
+    }
+
+    public boolean isStarvation() {
+        return this.x;
     }
 
     protected DamageSource(String s) {
@@ -123,24 +124,24 @@ public class DamageSource {
     }
 
     protected DamageSource setIgnoreArmor() {
-        this.u = true;
-        this.x = 0.0F;
+        this.v = true;
+        this.y = 0.0F;
         return this;
     }
 
     protected DamageSource l() {
-        this.v = true;
+        this.w = true;
         return this;
     }
 
     protected DamageSource m() {
-        this.w = true;
-        this.x = 0.0F;
+        this.x = true;
+        this.y = 0.0F;
         return this;
     }
 
     protected DamageSource setExplosion() {
-        this.y = true;
+        this.z = true;
         return this;
     }
 
@@ -153,7 +154,7 @@ public class DamageSource {
     }
 
     public boolean o() {
-        return this.y;
+        return this.z;
     }
 
     public String p() {
@@ -161,20 +162,20 @@ public class DamageSource {
     }
 
     public DamageSource q() {
-        this.A = true;
+        this.B = true;
         return this;
     }
 
     public boolean r() {
-        return this.A;
-    }
-
-    public boolean isMagic() {
         return this.B;
     }
 
+    public boolean isMagic() {
+        return this.C;
+    }
+
     public DamageSource setMagic() {
-        this.B = true;
+        this.C = true;
         return this;
     }
 

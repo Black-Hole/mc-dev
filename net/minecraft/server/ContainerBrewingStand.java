@@ -70,7 +70,7 @@ public class ContainerBrewingStand extends Container {
                     if (!this.a(itemstack1, 3, 4, false)) {
                         return ItemStack.a;
                     }
-                } else if (ContainerBrewingStand.SlotPotionBottle.c_(itemstack)) {
+                } else if (ContainerBrewingStand.SlotPotionBottle.c_(itemstack) && itemstack.getCount() == 1) {
                     if (!this.a(itemstack1, 0, 3, false)) {
                         return ItemStack.a;
                     }

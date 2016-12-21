@@ -68,7 +68,7 @@ public class EntityOcelot extends EntityTameableAnimal {
 
     public void e(float f, float f1) {}
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void a(DataConverterManager dataconvertermanager) {
         EntityInsentient.a(dataconvertermanager, EntityOcelot.class);
     }
 

@@ -57,7 +57,7 @@ public class BlockPistonExtension extends BlockDirectional {
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
         a(blockposition, axisalignedbb, list, iblockdata.d(world, blockposition));
         a(blockposition, axisalignedbb, list, this.i(iblockdata));
     }

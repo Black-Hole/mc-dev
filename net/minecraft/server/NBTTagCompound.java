@@ -1,18 +1,24 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.Map.Entry;
 import javax.annotation.Nullable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class NBTTagCompound extends NBTBase {
 
+    private static final Logger b = LogManager.getLogger();
     private final Map<String, NBTBase> map = Maps.newHashMap();
 
     public NBTTagCompound() {}
@@ -291,11 +297,19 @@ public class NBTTagCompound extends NBTBase {
 
     public String toString() {
         StringBuilder stringbuilder = new StringBuilder("{");
+        Object object = this.map.keySet();
 
-        Entry entry;
+        if (NBTTagCompound.b.isDebugEnabled()) {
+            ArrayList arraylist = Lists.newArrayList(this.map.keySet());
 
-        for (Iterator iterator = this.map.entrySet().iterator(); iterator.hasNext(); stringbuilder.append((String) entry.getKey()).append(':').append(entry.getValue())) {
-            entry = (Entry) iterator.next();
+            Collections.sort(arraylist);
+            object = arraylist;
+        }
+
+        String s;
+
+        for (Iterator iterator = ((Collection) object).iterator(); iterator.hasNext(); stringbuilder.append(s).append(':').append(this.map.get(s))) {
+            s = (String) iterator.next();
             if (stringbuilder.length() != 1) {
                 stringbuilder.append(',');
             }

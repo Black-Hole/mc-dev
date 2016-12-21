@@ -490,7 +490,7 @@ public abstract class EntityInsentient extends EntityLiving {
                 }
             } else if (itemstack.getItem() instanceof ItemArmor && !(itemstack1.getItem() instanceof ItemArmor)) {
                 flag = true;
-            } else if (itemstack.getItem() instanceof ItemArmor && itemstack1.getItem() instanceof ItemArmor && !EnchantmentManager.b(itemstack1)) {
+            } else if (itemstack.getItem() instanceof ItemArmor && itemstack1.getItem() instanceof ItemArmor && !EnchantmentManager.d(itemstack1)) {
                 ItemArmor itemarmor = (ItemArmor) itemstack.getItem();
                 ItemArmor itemarmor1 = (ItemArmor) itemstack1.getItem();
 
@@ -752,7 +752,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
             boolean flag1 = d0 > 1.0D;
 
-            if (!itemstack.isEmpty() && !EnchantmentManager.c(itemstack) && (flag || flag1) && (double) (this.random.nextFloat() - (float) i * 0.01F) < d0) {
+            if (!itemstack.isEmpty() && !EnchantmentManager.e(itemstack) && (flag || flag1) && (double) (this.random.nextFloat() - (float) i * 0.01F) < d0) {
                 if (!flag1 && itemstack.f()) {
                     itemstack.setData(itemstack.k() - this.random.nextInt(1 + this.random.nextInt(Math.max(itemstack.k() - 3, 1))));
                 }

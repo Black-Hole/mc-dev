@@ -232,7 +232,7 @@ public abstract class EntityHuman extends EntityLiving {
             AxisAlignedBB axisalignedbb = this.getBoundingBox();
 
             axisalignedbb = new AxisAlignedBB(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c, axisalignedbb.a + (double) f, axisalignedbb.b + (double) f1, axisalignedbb.c + (double) f);
-            if (!this.world.b(axisalignedbb)) {
+            if (!this.world.a(axisalignedbb)) {
                 this.setSize(f, f1);
             }
         }
@@ -424,7 +424,7 @@ public abstract class EntityHuman extends EntityLiving {
         for (int i = 0; i < this.inventory.getSize(); ++i) {
             ItemStack itemstack = this.inventory.getItem(i);
 
-            if (!itemstack.isEmpty() && EnchantmentManager.c(itemstack)) {
+            if (!itemstack.isEmpty() && EnchantmentManager.e(itemstack)) {
                 this.inventory.splitWithoutUpdate(i);
             }
         }
@@ -598,7 +598,7 @@ public abstract class EntityHuman extends EntityLiving {
             f *= f1;
         }
 
-        if (this.a(Material.WATER) && !EnchantmentManager.i(this)) {
+        if (this.a(Material.WATER) && !EnchantmentManager.h(this)) {
             f /= 5.0F;
         }
 
@@ -613,7 +613,7 @@ public abstract class EntityHuman extends EntityLiving {
         return this.inventory.b(iblockdata);
     }
 
-    public static void b(DataConverterManager dataconvertermanager) {
+    public static void c(DataConverterManager dataconvertermanager) {
         dataconvertermanager.a(DataConverterTypes.PLAYER, new DataInspector() {
             public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
                 DataConverterRegistry.b(dataconverter, nbttagcompound, i, "Inventory");
@@ -663,7 +663,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("DataVersion", 819);
+        nbttagcompound.setInt("DataVersion", 921);
         nbttagcompound.set("Inventory", this.inventory.a(new NBTTagList()));
         nbttagcompound.setInt("SelectedItemSlot", this.inventory.itemInHandIndex);
         nbttagcompound.setBoolean("Sleeping", this.sleeping);
@@ -880,7 +880,7 @@ public abstract class EntityHuman extends EntityLiving {
                     boolean flag = f2 > 0.9F;
                     boolean flag1 = false;
                     byte b0 = 0;
-                    int i = b0 + EnchantmentManager.a((EntityLiving) this);
+                    int i = b0 + EnchantmentManager.b((EntityLiving) this);
 
                     if (this.isSprinting() && flag) {
                         this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ex, this.bC(), 1.0F, 1.0F);
@@ -938,6 +938,7 @@ public abstract class EntityHuman extends EntityLiving {
                         }
 
                         if (flag3) {
+                            float f4 = 1.0F + EnchantmentManager.a((EntityLiving) this) * f;
                             List list = this.world.a(EntityLiving.class, entity.getBoundingBox().grow(1.0D, 0.25D, 1.0D));
                             Iterator iterator = list.iterator();
 
@@ -946,7 +947,7 @@ public abstract class EntityHuman extends EntityLiving {
 
                                 if (entityliving != this && entityliving != entity && !this.r(entityliving) && this.h(entityliving) < 9.0D) {
                                     entityliving.a(this, 0.4F, (double) MathHelper.sin(this.yaw * 0.017453292F), (double) (-MathHelper.cos(this.yaw * 0.017453292F)));
-                                    entityliving.damageEntity(DamageSource.playerAttack(this), 1.0F);
+                                    entityliving.damageEntity(DamageSource.playerAttack(this), f4);
                                 }
                             }
 
@@ -1008,15 +1009,15 @@ public abstract class EntityHuman extends EntityLiving {
                         }
 
                         if (entity instanceof EntityLiving) {
-                            float f4 = f3 - ((EntityLiving) entity).getHealth();
+                            float f5 = f3 - ((EntityLiving) entity).getHealth();
 
-                            this.a(StatisticList.y, Math.round(f4 * 10.0F));
+                            this.a(StatisticList.y, Math.round(f5 * 10.0F));
                             if (j > 0) {
                                 entity.setOnFire(j * 4);
                             }
 
-                            if (this.world instanceof WorldServer && f4 > 2.0F) {
-                                int k = (int) ((double) f4 * 0.5D);
+                            if (this.world instanceof WorldServer && f5 > 2.0F) {
+                                int k = (int) ((double) f5 * 0.5D);
 
                                 ((WorldServer) this.world).a(EnumParticle.DAMAGE_INDICATOR, entity.locX, entity.locY + (double) (entity.length * 0.5F), entity.locZ, k, 0.1D, 0.0D, 0.1D, 0.2D, new int[0]);
                             }
@@ -1558,6 +1559,11 @@ public abstract class EntityHuman extends EntityLiving {
             this.inventory.armor.set(enumitemslot.b(), itemstack);
         }
 
+    }
+
+    public boolean c(ItemStack itemstack) {
+        this.a_(itemstack);
+        return this.inventory.pickup(itemstack);
     }
 
     public Iterable<ItemStack> aG() {
