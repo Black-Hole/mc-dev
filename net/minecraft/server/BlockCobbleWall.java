@@ -33,7 +33,7 @@ public class BlockCobbleWall extends Block {
             iblockdata = this.updateState(iblockdata, world, blockposition);
         }
 
-        a(blockposition, axisalignedbb, list, BlockCobbleWall.g[i(iblockdata)]);
+        a(blockposition, axisalignedbb, list, BlockCobbleWall.B[i(iblockdata)]);
     }
 
     @Nullable

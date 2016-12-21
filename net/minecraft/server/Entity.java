@@ -666,17 +666,15 @@ public abstract class Entity implements ICommandListener {
                 if (this.K > (float) this.ax && iblockdata.getMaterial() != Material.AIR) {
                     this.ax = (int) this.K + 1;
                     if (this.isInWater()) {
-                        float f = MathHelper.sqrt(this.motX * this.motX * 0.20000000298023224D + this.motY * this.motY + this.motZ * this.motZ * 0.20000000298023224D) * 0.35F;
+                        Entity entity = this.isVehicle() && this.bw() != null ? this.bw() : this;
+                        float f = entity == this ? 0.35F : 0.4F;
+                        float f1 = MathHelper.sqrt(entity.motX * entity.motX * 0.20000000298023224D + entity.motY * entity.motY + entity.motZ * entity.motZ * 0.20000000298023224D) * f;
 
-                        if (this.isVehicle()) {
-                            f = MathHelper.sqrt(this.bw().motX * this.bw().motX * 0.20000000298023224D + this.bw().motY * this.bw().motY + this.bw().motZ * this.bw().motZ * 0.20000000298023224D) * 0.4F;
+                        if (f1 > 1.0F) {
+                            f1 = 1.0F;
                         }
 
-                        if (f > 1.0F) {
-                            f = 1.0F;
-                        }
-
-                        this.a(this.aa(), f, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+                        this.a(this.aa(), f1, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
                     } else {
                         this.a(blockposition, block1);
                     }
@@ -884,33 +882,31 @@ public abstract class Entity implements ICommandListener {
     }
 
     protected void al() {
-        float f = MathHelper.sqrt(this.motX * this.motX * 0.20000000298023224D + this.motY * this.motY + this.motZ * this.motZ * 0.20000000298023224D) * 0.2F;
+        Entity entity = this.isVehicle() && this.bw() != null ? this.bw() : this;
+        float f = entity == this ? 0.2F : 0.9F;
+        float f1 = MathHelper.sqrt(entity.motX * entity.motX * 0.20000000298023224D + entity.motY * entity.motY + entity.motZ * entity.motZ * 0.20000000298023224D) * f;
 
-        if (this.isVehicle()) {
-            f = MathHelper.sqrt(this.bw().motX * this.bw().motX * 0.20000000298023224D + this.bw().motY * this.bw().motY + this.bw().motZ * this.bw().motZ * 0.20000000298023224D) * 0.9F;
+        if (f1 > 1.0F) {
+            f1 = 1.0F;
         }
 
-        if (f > 1.0F) {
-            f = 1.0F;
-        }
-
-        this.a(this.ab(), f, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
-        float f1 = (float) MathHelper.floor(this.getBoundingBox().b);
+        this.a(this.ab(), f1, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+        float f2 = (float) MathHelper.floor(this.getBoundingBox().b);
 
         int i;
-        float f2;
         float f3;
+        float f4;
 
         for (i = 0; (float) i < 1.0F + this.width * 20.0F; ++i) {
-            f2 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width;
             f3 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width;
-            this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX + (double) f2, (double) (f1 + 1.0F), this.locZ + (double) f3, this.motX, this.motY - (double) (this.random.nextFloat() * 0.2F), this.motZ, new int[0]);
+            f4 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width;
+            this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX + (double) f3, (double) (f2 + 1.0F), this.locZ + (double) f4, this.motX, this.motY - (double) (this.random.nextFloat() * 0.2F), this.motZ, new int[0]);
         }
 
         for (i = 0; (float) i < 1.0F + this.width * 20.0F; ++i) {
-            f2 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width;
             f3 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width;
-            this.world.addParticle(EnumParticle.WATER_SPLASH, this.locX + (double) f2, (double) (f1 + 1.0F), this.locZ + (double) f3, this.motX, this.motY, this.motZ, new int[0]);
+            f4 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width;
+            this.world.addParticle(EnumParticle.WATER_SPLASH, this.locX + (double) f3, (double) (f2 + 1.0F), this.locZ + (double) f4, this.motX, this.motY, this.motZ, new int[0]);
         }
 
     }
