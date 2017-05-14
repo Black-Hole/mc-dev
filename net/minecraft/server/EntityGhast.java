@@ -31,8 +31,8 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return this.b;
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (!this.world.isClientSide && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
             this.die();
         }
@@ -42,9 +42,8 @@ public class EntityGhast extends EntityFlying implements IMonster {
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (this.isInvulnerable(damagesource)) {
             return false;
-        } else if ("fireball".equals(damagesource.p()) && damagesource.getEntity() instanceof EntityHuman) {
+        } else if (damagesource.i() instanceof EntityLargeFireball && damagesource.getEntity() instanceof EntityHuman) {
             super.damageEntity(damagesource, 1000.0F);
-            ((EntityHuman) damagesource.getEntity()).b((Statistic) AchievementList.z);
             return true;
         } else {
             return super.damageEntity(damagesource, f);
@@ -62,20 +61,20 @@ public class EntityGhast extends EntityFlying implements IMonster {
         this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(100.0D);
     }
 
-    public SoundCategory bC() {
+    public SoundCategory bI() {
         return SoundCategory.HOSTILE;
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.bV;
+    protected SoundEffect F() {
+        return SoundEffects.cb;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.bX;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.cd;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.bW;
+    protected SoundEffect cd() {
+        return SoundEffects.cc;
     }
 
     @Nullable
@@ -83,15 +82,15 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return LootTables.aj;
     }
 
-    protected float ci() {
+    protected float co() {
         return 10.0F;
     }
 
-    public boolean cM() {
-        return this.random.nextInt(20) == 0 && super.cM() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+    public boolean P() {
+        return this.random.nextInt(20) == 0 && super.P() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
-    public int cQ() {
+    public int cS() {
         return 1;
     }
 
@@ -151,7 +150,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
 
                 if (this.a == 20) {
                     double d1 = 4.0D;
-                    Vec3D vec3d = this.ghast.f(1.0F);
+                    Vec3D vec3d = this.ghast.g(1.0F);
                     double d2 = entityliving.locX - (this.ghast.locX + vec3d.x * 4.0D);
                     double d3 = entityliving.getBoundingBox().b + (double) (entityliving.length / 2.0F) - (0.5D + this.ghast.locY + (double) (this.ghast.length / 2.0F));
                     double d4 = entityliving.locZ - (this.ghast.locZ + vec3d.z * 4.0D);
@@ -219,7 +218,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
         public boolean a() {
             ControllerMove controllermove = this.a.getControllerMove();
 
-            if (!controllermove.a()) {
+            if (!controllermove.b()) {
                 return true;
             } else {
                 double d0 = controllermove.d() - this.a.locX;
@@ -255,7 +254,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
             this.i = entityghast;
         }
 
-        public void c() {
+        public void a() {
             if (this.h == ControllerMove.Operation.MOVE_TO) {
                 double d0 = this.b - this.i.locX;
                 double d1 = this.c - this.i.locY;

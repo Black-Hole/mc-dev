@@ -487,12 +487,12 @@ public class CommandScoreboard extends CommandAbstract {
             while (i < astring.length) {
                 s1 = astring[i++];
                 if (PlayerSelector.isPattern(s1)) {
-                    List list = c(minecraftserver, icommandlistener, s1);
+                    List list = d(minecraftserver, icommandlistener, s1);
                     Iterator iterator = list.iterator();
 
                     while (iterator.hasNext()) {
                         Entity entity = (Entity) iterator.next();
-                        String s2 = e(minecraftserver, icommandlistener, entity.bf());
+                        String s2 = f(minecraftserver, icommandlistener, entity.bl());
 
                         if (scoreboard.addPlayerToTeam(s2, s)) {
                             hashset.add(s2);
@@ -501,7 +501,7 @@ public class CommandScoreboard extends CommandAbstract {
                         }
                     }
                 } else {
-                    String s3 = e(minecraftserver, icommandlistener, s1);
+                    String s3 = f(minecraftserver, icommandlistener, s1);
 
                     if (scoreboard.addPlayerToTeam(s3, s)) {
                         hashset.add(s3);
@@ -539,12 +539,12 @@ public class CommandScoreboard extends CommandAbstract {
             while (i < astring.length) {
                 s = astring[i++];
                 if (PlayerSelector.isPattern(s)) {
-                    List list = c(minecraftserver, icommandlistener, s);
+                    List list = d(minecraftserver, icommandlistener, s);
                     Iterator iterator = list.iterator();
 
                     while (iterator.hasNext()) {
                         Entity entity = (Entity) iterator.next();
-                        String s1 = e(minecraftserver, icommandlistener, entity.bf());
+                        String s1 = f(minecraftserver, icommandlistener, entity.bl());
 
                         if (scoreboard.removePlayerFromTeam(s1)) {
                             hashset.add(s1);
@@ -553,7 +553,7 @@ public class CommandScoreboard extends CommandAbstract {
                         }
                     }
                 } else {
-                    String s2 = e(minecraftserver, icommandlistener, s);
+                    String s2 = f(minecraftserver, icommandlistener, s);
 
                     if (scoreboard.removePlayerFromTeam(s2)) {
                         hashset.add(s2);
@@ -655,7 +655,7 @@ public class CommandScoreboard extends CommandAbstract {
         Scoreboard scoreboard = this.a(minecraftserver);
 
         if (astring.length > i) {
-            String s = e(minecraftserver, icommandlistener, astring[i]);
+            String s = f(minecraftserver, icommandlistener, astring[i]);
             Map map = scoreboard.getPlayerObjectives(s);
 
             icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, map.size());
@@ -694,7 +694,7 @@ public class CommandScoreboard extends CommandAbstract {
     protected void k(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
         String s = astring[i - 1];
         int j = i;
-        String s1 = e(minecraftserver, icommandlistener, astring[i++]);
+        String s1 = f(minecraftserver, icommandlistener, astring[i++]);
 
         if (s1.length() > 40) {
             throw new ExceptionInvalidSyntax("commands.scoreboard.players.name.tooLong", new Object[] { s1, Integer.valueOf(40)});
@@ -703,7 +703,7 @@ public class CommandScoreboard extends CommandAbstract {
             int k = "set".equalsIgnoreCase(s) ? a(astring[i++]) : a(astring[i++], 0);
 
             if (astring.length > i) {
-                Entity entity = b(minecraftserver, icommandlistener, astring[j]);
+                Entity entity = c(minecraftserver, icommandlistener, astring[j]);
 
                 try {
                     NBTTagCompound nbttagcompound = MojangsonParser.parse(a(astring, i));
@@ -734,7 +734,7 @@ public class CommandScoreboard extends CommandAbstract {
 
     protected void l(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
         Scoreboard scoreboard = this.a(minecraftserver);
-        String s = e(minecraftserver, icommandlistener, astring[i++]);
+        String s = f(minecraftserver, icommandlistener, astring[i++]);
 
         if (astring.length > i) {
             ScoreboardObjective scoreboardobjective = this.a(astring[i++], false, minecraftserver);
@@ -750,7 +750,7 @@ public class CommandScoreboard extends CommandAbstract {
 
     protected void m(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
         Scoreboard scoreboard = this.a(minecraftserver);
-        String s = d(minecraftserver, icommandlistener, astring[i++]);
+        String s = e(minecraftserver, icommandlistener, astring[i++]);
 
         if (s.length() > 40) {
             throw new ExceptionInvalidSyntax("commands.scoreboard.players.name.tooLong", new Object[] { s, Integer.valueOf(40)});
@@ -770,7 +770,7 @@ public class CommandScoreboard extends CommandAbstract {
 
     protected void n(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
         Scoreboard scoreboard = this.a(minecraftserver);
-        String s = e(minecraftserver, icommandlistener, astring[i++]);
+        String s = f(minecraftserver, icommandlistener, astring[i++]);
 
         if (s.length() > 40) {
             throw new ExceptionInvalidSyntax("commands.scoreboard.players.name.tooLong", new Object[] { s, Integer.valueOf(40)});
@@ -797,10 +797,10 @@ public class CommandScoreboard extends CommandAbstract {
 
     protected void o(ICommandListener icommandlistener, String[] astring, int i, MinecraftServer minecraftserver) throws CommandException {
         Scoreboard scoreboard = this.a(minecraftserver);
-        String s = e(minecraftserver, icommandlistener, astring[i++]);
+        String s = f(minecraftserver, icommandlistener, astring[i++]);
         ScoreboardObjective scoreboardobjective = this.a(astring[i++], true, minecraftserver);
         String s1 = astring[i++];
-        String s2 = e(minecraftserver, icommandlistener, astring[i++]);
+        String s2 = f(minecraftserver, icommandlistener, astring[i++]);
         ScoreboardObjective scoreboardobjective1 = this.a(astring[i], false, minecraftserver);
 
         if (s.length() > 40) {
@@ -852,10 +852,10 @@ public class CommandScoreboard extends CommandAbstract {
     }
 
     protected void a(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, int i) throws CommandException {
-        String s = e(minecraftserver, icommandlistener, astring[i]);
-        Entity entity = b(minecraftserver, icommandlistener, astring[i++]);
+        String s = f(minecraftserver, icommandlistener, astring[i]);
+        Entity entity = c(minecraftserver, icommandlistener, astring[i++]);
         String s1 = astring[i++];
-        Set set = entity.P();
+        Set set = entity.getScoreboardTags();
 
         if ("list".equals(s1)) {
             if (!set.isEmpty()) {
@@ -886,7 +886,7 @@ public class CommandScoreboard extends CommandAbstract {
             }
 
             if ("add".equals(s1)) {
-                if (!entity.a(s2)) {
+                if (!entity.addScoreboardTag(s2)) {
                     throw new CommandException("commands.scoreboard.players.tag.tooMany", new Object[] { Integer.valueOf(1024)});
                 }
 
@@ -896,7 +896,7 @@ public class CommandScoreboard extends CommandAbstract {
                     throw new ExceptionUsage("commands.scoreboard.players.tag.usage", new Object[0]);
                 }
 
-                if (!entity.b(s2)) {
+                if (!entity.removeScoreboardTag(s2)) {
                     throw new CommandException("commands.scoreboard.players.tag.notFound", new Object[] { s2});
                 }
 

@@ -120,4 +120,8 @@ public class BlockReed extends Block {
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockReed.AGE});
     }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
+    }
 }

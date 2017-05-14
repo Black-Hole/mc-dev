@@ -22,7 +22,7 @@ public class BlockSeaLantern extends Block {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return MaterialMapColor.p;
+        return MaterialMapColor.q;
     }
 
     protected boolean n() {

@@ -4,7 +4,7 @@ public interface ITileInventory extends IInventory, ITileEntityContainer {
 
     boolean isLocked();
 
-    void a(ChestLock chestlock);
+    void setLock(ChestLock chestlock);
 
     ChestLock getLock();
 }

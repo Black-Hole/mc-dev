@@ -4,12 +4,12 @@ public class BiomeStoneBeach extends BiomeBase {
 
     public BiomeStoneBeach(BiomeBase.a biomebase_a) {
         super(biomebase_a);
-        this.v.clear();
+        this.u.clear();
+        this.q = Blocks.STONE.getBlockData();
         this.r = Blocks.STONE.getBlockData();
-        this.s = Blocks.STONE.getBlockData();
-        this.t.z = -999;
-        this.t.D = 0;
-        this.t.F = 0;
-        this.t.G = 0;
+        this.s.z = -999;
+        this.s.D = 0;
+        this.s.F = 0;
+        this.s.G = 0;
     }
 }

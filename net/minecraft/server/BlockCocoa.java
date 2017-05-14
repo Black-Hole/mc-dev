@@ -142,4 +142,8 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockCocoa.FACING, BlockCocoa.AGE});
     }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
+    }
 }

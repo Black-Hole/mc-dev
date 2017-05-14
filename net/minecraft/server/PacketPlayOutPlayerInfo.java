@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -170,7 +170,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
     }
 
     public String toString() {
-        return Objects.toStringHelper(this).add("action", this.a).add("entries", this.b).toString();
+        return MoreObjects.toStringHelper(this).add("action", this.a).add("entries", this.b).toString();
     }
 
     public class PlayerInfoData {
@@ -205,7 +205,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
         }
 
         public String toString() {
-            return Objects.toStringHelper(this).add("latency", this.b).add("gameMode", this.c).add("profile", this.d).add("displayName", this.e == null ? null : IChatBaseComponent.ChatSerializer.a(this.e)).toString();
+            return MoreObjects.toStringHelper(this).add("latency", this.b).add("gameMode", this.c).add("profile", this.d).add("displayName", this.e == null ? null : IChatBaseComponent.ChatSerializer.a(this.e)).toString();
         }
     }
 

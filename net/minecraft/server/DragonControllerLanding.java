@@ -14,9 +14,9 @@ public class DragonControllerLanding extends AbstractDragonController {
         Vec3D vec3d = this.a.a(1.0F).a();
 
         vec3d.b(-0.7853982F);
-        double d0 = this.a.bv.locX;
-        double d1 = this.a.bv.locY + (double) (this.a.bv.length / 2.0F);
-        double d2 = this.a.bv.locZ;
+        double d0 = this.a.bw.locX;
+        double d1 = this.a.bw.locY + (double) (this.a.bw.length / 2.0F);
+        double d2 = this.a.bw.locZ;
 
         for (int i = 0; i < 8; ++i) {
             double d3 = d0 + this.a.getRandom().nextGaussian() / 2.0D;

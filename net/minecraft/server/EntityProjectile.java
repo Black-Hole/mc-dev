@@ -77,11 +77,11 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.au = 0;
     }
 
-    public void A_() {
+    public void B_() {
         this.M = this.locX;
         this.N = this.locY;
         this.O = this.locZ;
-        super.A_();
+        super.B_();
         if (this.shake > 0) {
             --this.shake;
         }

@@ -16,6 +16,6 @@ public class ItemLeaves extends ItemBlock {
     }
 
     public String a(ItemStack itemstack) {
-        return super.getName() + "." + this.b.e(itemstack.getData()).d();
+        return super.getName() + "." + this.b.b(itemstack.getData()).d();
     }
 }

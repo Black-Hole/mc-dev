@@ -1,17 +1,8 @@
 package net.minecraft.server;
 
-public class RecipeShulkerBox {
+public class RecipeShulkerBox {    public static class Dye extends IRecipe {
 
-    public RecipeShulkerBox() {}
-
-    void a(CraftingManager craftingmanager) {
-        craftingmanager.registerShapedRecipe(BlockShulkerBox.b(EntityShulker.bx), new Object[] { "-", "#", "-", Character.valueOf('-'), Items.cZ, Character.valueOf('#'), Blocks.CHEST});
-        craftingmanager.a(new RecipeShulkerBox.Dye(null));
-    }
-
-    static class Dye implements IRecipe {
-
-        private Dye() {}
+        public Dye() {}
 
         public boolean a(InventoryCrafting inventorycrafting, World world) {
             int i = 0;
@@ -65,10 +56,6 @@ public class RecipeShulkerBox {
             return itemstack3;
         }
 
-        public int a() {
-            return 10;
-        }
-
         public ItemStack b() {
             return ItemStack.a;
         }
@@ -79,16 +66,16 @@ public class RecipeShulkerBox {
             for (int i = 0; i < nonnulllist.size(); ++i) {
                 ItemStack itemstack = inventorycrafting.getItem(i);
 
-                if (itemstack.getItem().s()) {
-                    nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
+                if (itemstack.getItem().r()) {
+                    nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
                 }
             }
 
             return nonnulllist;
         }
 
-        Dye(Object object) {
-            this();
+        public boolean d() {
+            return true;
         }
     }
 }

@@ -13,7 +13,7 @@ public class PlayerListBox extends JList implements ITickable {
         minecraftserver.a((ITickable) this);
     }
 
-    public void F_() {
+    public void e() {
         if (this.b++ % 20 == 0) {
             Vector vector = new Vector();
 

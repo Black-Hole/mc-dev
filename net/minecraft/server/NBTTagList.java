@@ -6,6 +6,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -70,7 +71,7 @@ public class NBTTagList extends NBTBase {
                 stringbuilder.append(',');
             }
 
-            stringbuilder.append(i).append(':').append(this.list.get(i));
+            stringbuilder.append(this.list.get(i));
         }
 
         return stringbuilder.append(']').toString();
@@ -152,7 +153,7 @@ public class NBTTagList extends NBTBase {
         return new int[0];
     }
 
-    public double e(int i) {
+    public double f(int i) {
         if (i >= 0 && i < this.list.size()) {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
@@ -164,7 +165,7 @@ public class NBTTagList extends NBTBase {
         return 0.0D;
     }
 
-    public float f(int i) {
+    public float g(int i) {
         if (i >= 0 && i < this.list.size()) {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
@@ -186,7 +187,7 @@ public class NBTTagList extends NBTBase {
         }
     }
 
-    public NBTBase h(int i) {
+    public NBTBase i(int i) {
         return (NBTBase) (i >= 0 && i < this.list.size() ? (NBTBase) this.list.get(i) : new NBTTagEnd());
     }
 
@@ -211,15 +212,13 @@ public class NBTTagList extends NBTBase {
     }
 
     public boolean equals(Object object) {
-        if (super.equals(object)) {
+        if (!super.equals(object)) {
+            return false;
+        } else {
             NBTTagList nbttaglist = (NBTTagList) object;
 
-            if (this.type == nbttaglist.type) {
-                return this.list.equals(nbttaglist.list);
-            }
+            return this.type == nbttaglist.type && Objects.equals(this.list, nbttaglist.list);
         }
-
-        return false;
     }
 
     public int hashCode() {

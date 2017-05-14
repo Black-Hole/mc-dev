@@ -24,8 +24,8 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         return Blocks.TNT.getBlockData();
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (this.a > 0) {
             --this.a;
             this.world.addParticle(EnumParticle.SMOKE_NORMAL, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
@@ -107,7 +107,7 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
         if (!this.world.isClientSide) {
             this.world.broadcastEntityEffect(this, (byte) 10);
             if (!this.isSilent()) {
-                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.gV, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.hW, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
         }
 

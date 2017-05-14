@@ -218,4 +218,8 @@ public class BlockTripwire extends Block {
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockTripwire.POWERED, BlockTripwire.ATTACHED, BlockTripwire.DISARMED, BlockTripwire.NORTH, BlockTripwire.EAST, BlockTripwire.WEST, BlockTripwire.SOUTH});
     }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
+    }
 }

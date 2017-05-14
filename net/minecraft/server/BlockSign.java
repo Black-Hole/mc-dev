@@ -61,4 +61,8 @@ public class BlockSign extends BlockTileEntity {
     public boolean canPlace(World world, BlockPosition blockposition) {
         return !this.b(world, blockposition) && super.canPlace(world, blockposition);
     }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
+    }
 }

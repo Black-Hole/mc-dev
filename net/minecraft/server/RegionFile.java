@@ -92,7 +92,7 @@ public class RegionFile {
             return null;
         } else {
             try {
-                int k = this.e(i, j);
+                int k = this.getOffset(i, j);
 
                 if (k == 0) {
                     return null;
@@ -141,7 +141,7 @@ public class RegionFile {
 
     protected synchronized void a(int i, int j, byte[] abyte, int k) {
         try {
-            int l = this.e(i, j);
+            int l = this.getOffset(i, j);
             int i1 = l >> 8;
             int j1 = l & 255;
             int k1 = (k + 5) / 4096 + 1;
@@ -224,12 +224,12 @@ public class RegionFile {
         return i < 0 || i >= 32 || j < 0 || j >= 32;
     }
 
-    private int e(int i, int j) {
+    private synchronized int getOffset(int i, int j) {
         return this.d[i + j * 32];
     }
 
     public boolean c(int i, int j) {
-        return this.e(i, j) != 0;
+        return this.getOffset(i, j) != 0;
     }
 
     private void a(int i, int j, int k) throws IOException {

@@ -15,6 +15,6 @@ public class BlockGravel extends BlockFalling {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return MaterialMapColor.m;
+        return MaterialMapColor.n;
     }
 }

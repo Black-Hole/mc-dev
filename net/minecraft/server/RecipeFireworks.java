@@ -3,16 +3,16 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 
-public class RecipeFireworks implements IRecipe {
+public class RecipeFireworks extends IRecipe {
 
-    private ItemStack a;
+    private ItemStack b;
 
     public RecipeFireworks() {
-        this.a = ItemStack.a;
+        this.b = ItemStack.a;
     }
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
-        this.a = ItemStack.a;
+        this.b = ItemStack.a;
         int i = 0;
         int j = 0;
         int k = 0;
@@ -59,7 +59,7 @@ public class RecipeFireworks implements IRecipe {
             int l1;
 
             if (j >= 1 && i == 1 && i1 == 0) {
-                this.a = new ItemStack(Items.FIREWORKS, 3);
+                this.b = new ItemStack(Items.FIREWORKS, 3);
                 nbttagcompound = new NBTTagCompound();
                 if (l > 0) {
                     NBTTagList nbttaglist = new NBTTagList();
@@ -78,10 +78,10 @@ public class RecipeFireworks implements IRecipe {
                 nbttagcompound.setByte("Flight", (byte) j);
                 nbttagcompound1 = new NBTTagCompound();
                 nbttagcompound1.set("Fireworks", nbttagcompound);
-                this.a.setTag(nbttagcompound1);
+                this.b.setTag(nbttagcompound1);
                 return true;
             } else if (j == 1 && i == 0 && l == 0 && k > 0 && j1 <= 1) {
-                this.a = new ItemStack(Items.FIREWORK_CHARGE);
+                this.b = new ItemStack(Items.FIREWORK_CHARGE);
                 nbttagcompound = new NBTTagCompound();
                 nbttagcompound1 = new NBTTagCompound();
                 byte b0 = 0;
@@ -118,7 +118,7 @@ public class RecipeFireworks implements IRecipe {
                 nbttagcompound1.setIntArray("Colors", aint);
                 nbttagcompound1.setByte("Type", b0);
                 nbttagcompound.set("Explosion", nbttagcompound1);
-                this.a.setTag(nbttagcompound);
+                this.b.setTag(nbttagcompound);
                 return true;
             } else if (j == 0 && i == 0 && l == 1 && k > 0 && k == i1) {
                 ArrayList arraylist1 = Lists.newArrayList();
@@ -130,8 +130,8 @@ public class RecipeFireworks implements IRecipe {
                         if (itemstack3.getItem() == Items.DYE) {
                             arraylist1.add(Integer.valueOf(ItemDye.a[itemstack3.getData() & 15]));
                         } else if (itemstack3.getItem() == Items.FIREWORK_CHARGE) {
-                            this.a = itemstack3.cloneItemStack();
-                            this.a.setCount(1);
+                            this.b = itemstack3.cloneItemStack();
+                            this.b.setCount(1);
                         }
                     }
                 }
@@ -142,8 +142,8 @@ public class RecipeFireworks implements IRecipe {
                     aint1[l1] = ((Integer) arraylist1.get(l1)).intValue();
                 }
 
-                if (!this.a.isEmpty() && this.a.hasTag()) {
-                    NBTTagCompound nbttagcompound2 = this.a.getTag().getCompound("Explosion");
+                if (!this.b.isEmpty() && this.b.hasTag()) {
+                    NBTTagCompound nbttagcompound2 = this.b.getTag().getCompound("Explosion");
 
                     if (nbttagcompound2 == null) {
                         return false;
@@ -163,15 +163,11 @@ public class RecipeFireworks implements IRecipe {
     }
 
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
-        return this.a.cloneItemStack();
-    }
-
-    public int a() {
-        return 10;
+        return this.b.cloneItemStack();
     }
 
     public ItemStack b() {
-        return this.a;
+        return this.b;
     }
 
     public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
@@ -180,11 +176,15 @@ public class RecipeFireworks implements IRecipe {
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
-            if (itemstack.getItem().s()) {
-                nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
+            if (itemstack.getItem().r()) {
+                nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
             }
         }
 
         return nonnulllist;
+    }
+
+    public boolean d() {
+        return true;
     }
 }

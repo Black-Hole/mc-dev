@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.Charsets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
 import io.netty.channel.ChannelFuture;
@@ -11,6 +10,7 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.util.Arrays;
 import java.util.Random;
@@ -45,7 +45,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
         LoginListener.random.nextBytes(this.e);
     }
 
-    public void F_() {
+    public void e() {
         if (this.g == LoginListener.EnumProtocolState.READY_TO_ACCEPT) {
             this.b();
         } else if (this.g == LoginListener.EnumProtocolState.DELAY_ACCEPT) {
@@ -66,7 +66,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
 
     public void disconnect(String s) {
         try {
-            LoginListener.c.info("Disconnecting {}: {}", new Object[] { this.d(), s});
+            LoginListener.c.info("Disconnecting {}: {}", this.c(), s);
             ChatComponentText chatcomponenttext = new ChatComponentText(s);
 
             this.networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
@@ -114,10 +114,10 @@ public class LoginListener implements PacketLoginInListener, ITickable {
     }
 
     public void a(IChatBaseComponent ichatbasecomponent) {
-        LoginListener.c.info("{} lost connection: {}", new Object[] { this.d(), ichatbasecomponent.toPlainText()});
+        LoginListener.c.info("{} lost connection: {}", this.c(), ichatbasecomponent.toPlainText());
     }
 
-    public String d() {
+    public String c() {
         return this.i != null ? this.i + " (" + this.networkManager.getSocketAddress() + ")" : String.valueOf(this.networkManager.getSocketAddress());
     }
 
@@ -152,7 +152,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
 
                         LoginListener.this.i = LoginListener.this.server.az().hasJoinedServer(new GameProfile((UUID) null, gameprofile.getName()), s, this.a());
                         if (LoginListener.this.i != null) {
-                            LoginListener.c.info("UUID of player {} is {}", new Object[] { LoginListener.this.i.getName(), LoginListener.this.i.getId()});
+                            LoginListener.c.info("UUID of player {} is {}", LoginListener.this.i.getName(), LoginListener.this.i.getId());
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else if (LoginListener.this.server.R()) {
                             LoginListener.c.warn("Failed to verify username but will let them in anyway!");
@@ -160,7 +160,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else {
                             LoginListener.this.disconnect("Failed to verify username!");
-                            LoginListener.c.error("Username \'{}\' tried to join with an invalid session", new Object[] { gameprofile.getName()});
+                            LoginListener.c.error("Username \'{}\' tried to join with an invalid session", gameprofile.getName());
                         }
                     } catch (AuthenticationUnavailableException authenticationunavailableexception) {
                         if (LoginListener.this.server.R()) {
@@ -186,7 +186,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
     }
 
     protected GameProfile a(GameProfile gameprofile) {
-        UUID uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + gameprofile.getName()).getBytes(Charsets.UTF_8));
+        UUID uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + gameprofile.getName()).getBytes(StandardCharsets.UTF_8));
 
         return new GameProfile(uuid, gameprofile.getName());
     }

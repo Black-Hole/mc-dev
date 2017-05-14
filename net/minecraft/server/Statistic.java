@@ -7,42 +7,42 @@ import java.util.Locale;
 public class Statistic {
 
     public final String name;
-    private final IChatBaseComponent a;
-    public boolean f;
-    private final Counter b;
-    private final IScoreboardCriteria c;
-    private Class<? extends IJsonStatistic> d;
+    private final IChatBaseComponent g;
+    public boolean b;
+    private final Counter h;
+    private final IScoreboardCriteria i;
+    private Class<? extends IJsonStatistic> j;
     private static final NumberFormat k = NumberFormat.getIntegerInstance(Locale.US);
-    public static Counter g = new Counter() {
+    public static Counter c = new Counter() {
     };
     private static final DecimalFormat l = new DecimalFormat("########0.00");
-    public static Counter h = new Counter() {
+    public static Counter d = new Counter() {
     };
-    public static Counter i = new Counter() {
+    public static Counter e = new Counter() {
     };
-    public static Counter j = new Counter() {
+    public static Counter f = new Counter() {
     };
 
     public Statistic(String s, IChatBaseComponent ichatbasecomponent, Counter counter) {
         this.name = s;
-        this.a = ichatbasecomponent;
-        this.b = counter;
-        this.c = new ScoreboardStatisticCriteria(this);
-        IScoreboardCriteria.criteria.put(this.c.getName(), this.c);
+        this.g = ichatbasecomponent;
+        this.h = counter;
+        this.i = new ScoreboardStatisticCriteria(this);
+        IScoreboardCriteria.criteria.put(this.i.getName(), this.i);
     }
 
     public Statistic(String s, IChatBaseComponent ichatbasecomponent) {
-        this(s, ichatbasecomponent, Statistic.g);
+        this(s, ichatbasecomponent, Statistic.c);
     }
 
-    public Statistic i() {
-        this.f = true;
+    public Statistic c() {
+        this.b = true;
         return this;
     }
 
-    public Statistic h() {
+    public Statistic a() {
         if (StatisticList.a.containsKey(this.name)) {
-            throw new RuntimeException("Duplicate stat id: \"" + ((Statistic) StatisticList.a.get(this.name)).a + "\" and \"" + this.a + "\" at id " + this.name);
+            throw new RuntimeException("Duplicate stat id: \"" + ((Statistic) StatisticList.a.get(this.name)).g + "\" and \"" + this.g + "\" at id " + this.name);
         } else {
             StatisticList.stats.add(this);
             StatisticList.a.put(this.name, this);
@@ -50,24 +50,11 @@ public class Statistic {
         }
     }
 
-    public boolean d() {
-        return false;
-    }
-
-    public IChatBaseComponent e() {
-        IChatBaseComponent ichatbasecomponent = this.a.f();
+    public IChatBaseComponent d() {
+        IChatBaseComponent ichatbasecomponent = this.g.f();
 
         ichatbasecomponent.getChatModifier().setColor(EnumChatFormat.GRAY);
-        ichatbasecomponent.getChatModifier().setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_ACHIEVEMENT, new ChatComponentText(this.name)));
         return ichatbasecomponent;
-    }
-
-    public IChatBaseComponent j() {
-        IChatBaseComponent ichatbasecomponent = this.e();
-        IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText("[")).addSibling(ichatbasecomponent).a("]");
-
-        ichatbasecomponent1.setChatModifier(ichatbasecomponent.getChatModifier());
-        return ichatbasecomponent1;
     }
 
     public boolean equals(Object object) {
@@ -87,19 +74,14 @@ public class Statistic {
     }
 
     public String toString() {
-        return "Stat{id=" + this.name + ", nameId=" + this.a + ", awardLocallyOnly=" + this.f + ", formatter=" + this.b + ", objectiveCriteria=" + this.c + '}';
+        return "Stat{id=" + this.name + ", nameId=" + this.g + ", awardLocallyOnly=" + this.b + ", formatter=" + this.h + ", objectiveCriteria=" + this.i + '}';
     }
 
-    public IScoreboardCriteria k() {
-        return this.c;
+    public IScoreboardCriteria f() {
+        return this.i;
     }
 
-    public Class<? extends IJsonStatistic> l() {
-        return this.d;
-    }
-
-    public Statistic b(Class<? extends IJsonStatistic> oclass) {
-        this.d = oclass;
-        return this;
+    public Class<? extends IJsonStatistic> g() {
+        return this.j;
     }
 }

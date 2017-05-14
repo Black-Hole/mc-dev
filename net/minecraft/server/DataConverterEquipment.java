@@ -14,7 +14,7 @@ public class DataConverterEquipment implements IDataConverter {
 
         if (!nbttaglist.isEmpty() && !nbttagcompound.hasKeyOfType("HandItems", 10)) {
             nbttaglist1 = new NBTTagList();
-            nbttaglist1.add(nbttaglist.h(0));
+            nbttaglist1.add(nbttaglist.i(0));
             nbttaglist1.add(new NBTTagCompound());
             nbttagcompound.set("HandItems", nbttaglist1);
         }
@@ -35,17 +35,17 @@ public class DataConverterEquipment implements IDataConverter {
 
             if (!nbttagcompound.hasKeyOfType("HandDropChances", 10)) {
                 nbttaglist2 = new NBTTagList();
-                nbttaglist2.add(new NBTTagFloat(nbttaglist1.f(0)));
+                nbttaglist2.add(new NBTTagFloat(nbttaglist1.g(0)));
                 nbttaglist2.add(new NBTTagFloat(0.0F));
                 nbttagcompound.set("HandDropChances", nbttaglist2);
             }
 
             if (!nbttagcompound.hasKeyOfType("ArmorDropChances", 10)) {
                 nbttaglist2 = new NBTTagList();
-                nbttaglist2.add(new NBTTagFloat(nbttaglist1.f(1)));
-                nbttaglist2.add(new NBTTagFloat(nbttaglist1.f(2)));
-                nbttaglist2.add(new NBTTagFloat(nbttaglist1.f(3)));
-                nbttaglist2.add(new NBTTagFloat(nbttaglist1.f(4)));
+                nbttaglist2.add(new NBTTagFloat(nbttaglist1.g(1)));
+                nbttaglist2.add(new NBTTagFloat(nbttaglist1.g(2)));
+                nbttaglist2.add(new NBTTagFloat(nbttaglist1.g(3)));
+                nbttaglist2.add(new NBTTagFloat(nbttaglist1.g(4)));
                 nbttagcompound.set("ArmorDropChances", nbttaglist2);
             }
 

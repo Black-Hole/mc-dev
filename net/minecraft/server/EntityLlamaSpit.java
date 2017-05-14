@@ -21,8 +21,8 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
         this.setSize(0.25F, 0.25F);
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (this.b != null) {
             this.j();
         }

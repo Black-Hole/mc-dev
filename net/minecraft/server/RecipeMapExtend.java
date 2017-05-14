@@ -5,7 +5,7 @@ import java.util.Iterator;
 public class RecipeMapExtend extends ShapedRecipes {
 
     public RecipeMapExtend() {
-        super(3, 3, new ItemStack[] { new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.FILLED_MAP, 1, 32767), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER), new ItemStack(Items.PAPER)}, new ItemStack(Items.MAP));
+        super("", 3, 3, NonNullList.a(RecipeItemStack.a, new RecipeItemStack[] { RecipeItemStack.a(new Item[] { Items.PAPER}), RecipeItemStack.a(new Item[] { Items.PAPER}), RecipeItemStack.a(new Item[] { Items.PAPER}), RecipeItemStack.a(new Item[] { Items.PAPER}), RecipeItemStack.a((Item) Items.FILLED_MAP), RecipeItemStack.a(new Item[] { Items.PAPER}), RecipeItemStack.a(new Item[] { Items.PAPER}), RecipeItemStack.a(new Item[] { Items.PAPER}), RecipeItemStack.a(new Item[] { Items.PAPER})}), new ItemStack(Items.MAP));
     }
 
     public boolean a(InventoryCrafting inventorycrafting, World world) {
@@ -67,5 +67,9 @@ public class RecipeMapExtend extends ShapedRecipes {
 
         itemstack.getTag().setInt("map_scale_direction", 1);
         return itemstack;
+    }
+
+    public boolean d() {
+        return true;
     }
 }

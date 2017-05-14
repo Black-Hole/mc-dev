@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 public class NBTTagIntArray extends NBTBase {
 
@@ -13,6 +14,22 @@ public class NBTTagIntArray extends NBTBase {
 
     public NBTTagIntArray(int[] aint) {
         this.data = aint;
+    }
+
+    public NBTTagIntArray(List<Integer> list) {
+        this(a(list));
+    }
+
+    private static int[] a(List<Integer> list) {
+        int[] aint = new int[list.size()];
+
+        for (int i = 0; i < list.size(); ++i) {
+            Integer integer = (Integer) list.get(i);
+
+            aint[i] = integer == null ? 0 : integer.intValue();
+        }
+
+        return aint;
     }
 
     void write(DataOutput dataoutput) throws IOException {
@@ -46,17 +63,17 @@ public class NBTTagIntArray extends NBTBase {
     }
 
     public String toString() {
-        String s = "[";
-        int[] aint = this.data;
-        int i = aint.length;
+        StringBuilder stringbuilder = new StringBuilder("[I;");
 
-        for (int j = 0; j < i; ++j) {
-            int k = aint[j];
+        for (int i = 0; i < this.data.length; ++i) {
+            if (i != 0) {
+                stringbuilder.append(',');
+            }
 
-            s = s + k + ",";
+            stringbuilder.append(this.data[i]);
         }
 
-        return s + "]";
+        return stringbuilder.append(']').toString();
     }
 
     public NBTTagIntArray c() {
@@ -67,7 +84,7 @@ public class NBTTagIntArray extends NBTBase {
     }
 
     public boolean equals(Object object) {
-        return super.equals(object) ? Arrays.equals(this.data, ((NBTTagIntArray) object).data) : false;
+        return super.equals(object) && Arrays.equals(this.data, ((NBTTagIntArray) object).data);
     }
 
     public int hashCode() {

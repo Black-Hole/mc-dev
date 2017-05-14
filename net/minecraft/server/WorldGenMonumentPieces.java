@@ -1420,7 +1420,7 @@ public class WorldGenMonumentPieces {
         }
 
         public boolean a(World world, Random random, StructureBoundingBox structureboundingbox) {
-            int i = Math.max(world.K(), 64) - this.l.b;
+            int i = Math.max(world.getSeaLevel(), 64) - this.l.b;
 
             this.a(world, structureboundingbox, 0, 0, 0, 58, i, 58, false);
             this.a(false, 0, world, random, structureboundingbox);
@@ -1893,7 +1893,7 @@ public class WorldGenMonumentPieces {
                 for (int l1 = i; l1 <= l; ++l1) {
                     for (int i2 = k; i2 <= j1; ++i2) {
                         if (!flag || this.a(world, l1, k1, i2, structureboundingbox).getMaterial() != Material.AIR) {
-                            if (this.d(k1) >= world.K()) {
+                            if (this.d(k1) >= world.getSeaLevel()) {
                                 this.a(world, Blocks.AIR.getBlockData(), l1, k1, i2, structureboundingbox);
                             } else {
                                 this.a(world, WorldGenMonumentPieces.WorldGenMonumentPiece.f, l1, k1, i2, structureboundingbox);

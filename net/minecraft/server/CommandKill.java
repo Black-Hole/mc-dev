@@ -24,12 +24,12 @@ public class CommandKill extends CommandAbstract {
         if (astring.length == 0) {
             EntityPlayer entityplayer = a(icommandlistener);
 
-            entityplayer.Q();
+            entityplayer.killEntity();
             a(icommandlistener, (ICommand) this, "commands.kill.successful", new Object[] { entityplayer.getScoreboardDisplayName()});
         } else {
-            Entity entity = b(minecraftserver, icommandlistener, astring[0]);
+            Entity entity = c(minecraftserver, icommandlistener, astring[0]);
 
-            entity.Q();
+            entity.killEntity();
             a(icommandlistener, (ICommand) this, "commands.kill.successful", new Object[] { entity.getScoreboardDisplayName()});
         }
     }

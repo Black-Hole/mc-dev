@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 public class NBTTagByteArray extends NBTBase {
 
@@ -13,6 +14,22 @@ public class NBTTagByteArray extends NBTBase {
 
     public NBTTagByteArray(byte[] abyte) {
         this.data = abyte;
+    }
+
+    public NBTTagByteArray(List<Byte> list) {
+        this(a(list));
+    }
+
+    private static byte[] a(List<Byte> list) {
+        byte[] abyte = new byte[list.size()];
+
+        for (int i = 0; i < list.size(); ++i) {
+            Byte obyte = (Byte) list.get(i);
+
+            abyte[i] = obyte == null ? 0 : obyte.byteValue();
+        }
+
+        return abyte;
     }
 
     void write(DataOutput dataoutput) throws IOException {
@@ -34,7 +51,17 @@ public class NBTTagByteArray extends NBTBase {
     }
 
     public String toString() {
-        return "[" + this.data.length + " bytes]";
+        StringBuilder stringbuilder = new StringBuilder("[B;");
+
+        for (int i = 0; i < this.data.length; ++i) {
+            if (i != 0) {
+                stringbuilder.append(',');
+            }
+
+            stringbuilder.append(this.data[i]).append('B');
+        }
+
+        return stringbuilder.append(']').toString();
     }
 
     public NBTBase clone() {
@@ -45,7 +72,7 @@ public class NBTTagByteArray extends NBTBase {
     }
 
     public boolean equals(Object object) {
-        return super.equals(object) ? Arrays.equals(this.data, ((NBTTagByteArray) object).data) : false;
+        return super.equals(object) && Arrays.equals(this.data, ((NBTTagByteArray) object).data);
     }
 
     public int hashCode() {

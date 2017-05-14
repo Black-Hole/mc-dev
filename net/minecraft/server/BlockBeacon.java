@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class BlockBeacon extends BlockTileEntity {
 
     public BlockBeacon() {
-        super(Material.SHATTERABLE, MaterialMapColor.G);
+        super(Material.SHATTERABLE, MaterialMapColor.H);
         this.c(3.0F);
         this.a(CreativeModeTab.f);
     }
@@ -45,7 +45,7 @@ public class BlockBeacon extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityBeacon) {
-                ((TileEntityBeacon) tileentity).a(itemstack.getName());
+                ((TileEntityBeacon) tileentity).setCustomName(itemstack.getName());
             }
         }
 

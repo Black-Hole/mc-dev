@@ -24,6 +24,6 @@ public class RedirectStream extends PrintStream {
     }
 
     protected void a(String s) {
-        RedirectStream.a.info("[{}]: {}", new Object[] { this.b, s});
+        RedirectStream.a.info("[{}]: {}", this.b, s);
     }
 }

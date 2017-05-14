@@ -128,7 +128,7 @@ public class TileEntityStructure extends TileEntity {
     }
 
     public boolean a(EntityHuman entityhuman) {
-        if (!entityhuman.dk()) {
+        if (!entityhuman.isCreativeAndOp()) {
             return false;
         } else {
             if (entityhuman.getWorld().isClientSide) {

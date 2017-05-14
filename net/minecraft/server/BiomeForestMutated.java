@@ -9,6 +9,6 @@ public class BiomeForestMutated extends BiomeForest {
     }
 
     public WorldGenTreeAbstract a(Random random) {
-        return random.nextBoolean() ? BiomeForest.y : BiomeForest.z;
+        return random.nextBoolean() ? BiomeForest.x : BiomeForest.y;
     }
 }

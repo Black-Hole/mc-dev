@@ -36,6 +36,10 @@ public class EntityEnderPearl extends EntityProjectile {
                 TileEntityEndGateway tileentityendgateway = (TileEntityEndGateway) tileentity;
 
                 if (entityliving != null) {
+                    if (entityliving instanceof EntityPlayer) {
+                        CriterionTriggers.d.a((EntityPlayer) entityliving, this.world.getType(blockposition));
+                    }
+
                     tileentityendgateway.a((Entity) entityliving);
                     this.die();
                     return;
@@ -81,13 +85,13 @@ public class EntityEnderPearl extends EntityProjectile {
 
     }
 
-    public void A_() {
+    public void B_() {
         EntityLiving entityliving = this.getShooter();
 
         if (entityliving != null && entityliving instanceof EntityHuman && !entityliving.isAlive()) {
             this.die();
         } else {
-            super.A_();
+            super.B_();
         }
 
     }

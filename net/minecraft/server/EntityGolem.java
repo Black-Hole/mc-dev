@@ -11,17 +11,17 @@ public abstract class EntityGolem extends EntityCreature implements IAnimal {
     public void e(float f, float f1) {}
 
     @Nullable
-    protected SoundEffect G() {
+    protected SoundEffect F() {
         return null;
     }
 
     @Nullable
-    protected SoundEffect bW() {
+    protected SoundEffect d(DamageSource damagesource) {
         return null;
     }
 
     @Nullable
-    protected SoundEffect bX() {
+    protected SoundEffect cd() {
         return null;
     }
 

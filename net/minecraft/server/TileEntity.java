@@ -74,7 +74,7 @@ public abstract class TileEntity {
                 tileentity = (TileEntity) oclass.newInstance();
             }
         } catch (Throwable throwable) {
-            TileEntity.a.error("Failed to create block entity {}", new Object[] { s, throwable});
+            TileEntity.a.error("Failed to create block entity {}", s, throwable);
         }
 
         if (tileentity != null) {
@@ -82,11 +82,11 @@ public abstract class TileEntity {
                 tileentity.b(world);
                 tileentity.a(nbttagcompound);
             } catch (Throwable throwable1) {
-                TileEntity.a.error("Failed to load data for block entity {}", new Object[] { s, throwable1});
+                TileEntity.a.error("Failed to load data for block entity {}", s, throwable1);
                 tileentity = null;
             }
         } else {
-            TileEntity.a.warn("Skipping BlockEntity with id {}", new Object[] { s});
+            TileEntity.a.warn("Skipping BlockEntity with id {}", s);
         }
 
         return tileentity;
@@ -249,5 +249,6 @@ public abstract class TileEntity {
         a("end_gateway", TileEntityEndGateway.class);
         a("command_block", TileEntityCommand.class);
         a("shulker_box", TileEntityShulkerBox.class);
+        a("bed", TileEntityBed.class);
     }
 }

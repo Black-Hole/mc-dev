@@ -20,6 +20,8 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutStatistic packetplayoutstatistic);
 
+    void a(PacketPlayOutRecipes packetplayoutrecipes);
+
     void a(PacketPlayOutBlockBreakAnimation packetplayoutblockbreakanimation);
 
     void a(PacketPlayOutOpenSignEditor packetplayoutopensigneditor);
@@ -147,4 +149,6 @@ public interface PacketListenerPlayOut extends PacketListener {
     void a(PacketPlayOutSetCooldown packetplayoutsetcooldown);
 
     void a(PacketPlayOutVehicleMove packetplayoutvehiclemove);
+
+    void a(PacketPlayOutAdvancements packetplayoutadvancements);
 }

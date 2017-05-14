@@ -34,4 +34,8 @@ public class BlockAir extends Block {
     public boolean c(IBlockData iblockdata) {
         return false;
     }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
+    }
 }

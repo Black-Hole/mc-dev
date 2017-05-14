@@ -158,7 +158,7 @@ public class LootTableInfo {
         }
 
         public LootTableInfo a() {
-            return new LootTableInfo(this.b, this.a, this.a.ak(), this.c, this.d, this.e);
+            return new LootTableInfo(this.b, this.a, this.a.getLootTableRegistry(), this.c, this.d, this.e);
         }
     }
 }

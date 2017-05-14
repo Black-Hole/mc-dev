@@ -20,13 +20,13 @@ public class BlockHugeMushroom extends Block {
     public MaterialMapColor r(IBlockData iblockdata) {
         switch ((BlockHugeMushroom.EnumHugeMushroomVariant) iblockdata.get(BlockHugeMushroom.VARIANT)) {
         case ALL_STEM:
-            return MaterialMapColor.e;
+            return MaterialMapColor.f;
 
         case ALL_INSIDE:
-            return MaterialMapColor.d;
+            return MaterialMapColor.e;
 
         case STEM:
-            return MaterialMapColor.d;
+            return MaterialMapColor.e;
 
         default:
             return super.r(iblockdata);

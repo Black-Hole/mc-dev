@@ -18,7 +18,7 @@ public class ItemStep extends ItemBlock {
     }
 
     public String a(ItemStack itemstack) {
-        return this.b.e(itemstack.getData());
+        return this.b.b(itemstack.getData());
     }
 
     public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
@@ -42,6 +42,9 @@ public class ItemStep extends ItemBlock {
 
                         world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
                         itemstack.subtract(1);
+                        if (entityhuman instanceof EntityPlayer) {
+                            CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition, itemstack);
+                        }
                     }
 
                     return EnumInteractionResult.SUCCESS;

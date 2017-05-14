@@ -167,8 +167,8 @@ public class ContainerBrewingStand extends Container {
         public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
             PotionRegistry potionregistry = PotionUtil.d(itemstack);
 
-            if (potionregistry != Potions.b && potionregistry != Potions.EMPTY) {
-                this.a.b((Statistic) AchievementList.B);
+            if (entityhuman instanceof EntityPlayer) {
+                CriterionTriggers.j.a((EntityPlayer) entityhuman, potionregistry);
             }
 
             super.a(entityhuman, itemstack);

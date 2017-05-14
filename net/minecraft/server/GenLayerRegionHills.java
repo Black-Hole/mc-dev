@@ -27,7 +27,7 @@ public class GenLayerRegionHills extends GenLayer {
                 boolean flag = (l1 - 2) % 29 == 0;
 
                 if (k1 > 255) {
-                    GenLayerRegionHills.c.debug("old! {}", new Object[] { Integer.valueOf(k1)});
+                    GenLayerRegionHills.c.debug("old! {}", Integer.valueOf(k1));
                 }
 
                 BiomeBase biomebase = BiomeBase.a(k1);

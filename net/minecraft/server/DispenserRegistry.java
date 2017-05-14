@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.mojang.authlib.GameProfile;
+import java.io.File;
 import java.io.PrintStream;
 import java.util.Random;
 import java.util.UUID;
@@ -218,7 +219,7 @@ public class DispenserRegistry {
 
                 if (world.isEmpty(blockposition)) {
                     world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
-                    if (itemstack.isDamaged(1, world.random)) {
+                    if (itemstack.isDamaged(1, world.random, (EntityPlayer) null)) {
                         itemstack.setCount(0);
                     }
                 } else if (world.getType(blockposition).getBlock() == Blocks.TNT) {
@@ -259,7 +260,7 @@ public class DispenserRegistry {
                 EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, (EntityLiving) null);
 
                 world.addEntity(entitytntprimed);
-                world.a((EntityHuman) null, entitytntprimed.locX, entitytntprimed.locY, entitytntprimed.locZ, SoundEffects.gV, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.a((EntityHuman) null, entitytntprimed.locX, entitytntprimed.locY, entitytntprimed.locZ, SoundEffects.hW, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 itemstack.subtract(1);
                 return itemstack;
             }
@@ -357,13 +358,27 @@ public class DispenserRegistry {
             BlockFire.e();
             MobEffectList.k();
             Enchantment.g();
-            Item.u();
+            Item.t();
             PotionRegistry.b();
             PotionBrewer.a();
-            EntityTypes.b();
+            EntityTypes.c();
             StatisticList.a();
             BiomeBase.q();
             b();
+            if (!CraftingManager.init()) {
+                DispenserRegistry.c.error("Errors with built-in recipes!");
+            }
+
+            if (DispenserRegistry.c.isDebugEnabled()) {
+                if ((new AdvancementDataWorld((File) null)).b()) {
+                    DispenserRegistry.c.error("Errors with built-in advancements!");
+                }
+
+                if (!LootTables.b()) {
+                    DispenserRegistry.c.error("Errors with built-in loot tables");
+                }
+            }
+
         }
     }
 
@@ -402,7 +417,7 @@ public class DispenserRegistry {
                 }
 
                 if (itemstack1.hasName()) {
-                    ((TileEntityShulkerBox) tileentity).a(itemstack1.getName());
+                    ((TileEntityShulkerBox) tileentity).setCustomName(itemstack1.getName());
                 }
 
                 world.updateAdjacentComparators(blockposition, iblockdata.getBlock());

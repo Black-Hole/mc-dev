@@ -51,10 +51,10 @@ public class CommandSummon extends CommandAbstract {
                 boolean flag = false;
 
                 if (astring.length >= 5) {
-                    IChatBaseComponent ichatbasecomponent = a(icommandlistener, astring, 4);
+                    String s1 = a(astring, 4);
 
                     try {
-                        nbttagcompound = MojangsonParser.parse(ichatbasecomponent.toPlainText());
+                        nbttagcompound = MojangsonParser.parse(s1);
                         flag = true;
                     } catch (MojangsonParseException mojangsonparseexception) {
                         throw new CommandException("commands.summon.tagError", new Object[] { mojangsonparseexception.getMessage()});

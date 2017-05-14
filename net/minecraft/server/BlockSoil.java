@@ -13,7 +13,7 @@ public class BlockSoil extends Block {
         super(Material.EARTH);
         this.y(this.blockStateList.getBlockData().set(BlockSoil.MOISTURE, Integer.valueOf(0)));
         this.a(true);
-        this.d(255);
+        this.e(255);
     }
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -119,5 +119,9 @@ public class BlockSoil extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockSoil.MOISTURE});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.DOWN ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
     }
 }

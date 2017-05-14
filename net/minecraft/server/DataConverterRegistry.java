@@ -34,10 +34,12 @@ public class DataConverterRegistry {
         dataconvertermanager.a((DataConverterType) DataConverterTypes.BLOCK_ENTITY, (IDataConverter) (new DataConverterShulkerBoxBlock()));
         dataconvertermanager.a((DataConverterType) DataConverterTypes.OPTIONS, (IDataConverter) (new DataConverterLang()));
         dataconvertermanager.a((DataConverterType) DataConverterTypes.ITEM_INSTANCE, (IDataConverter) (new DataConverterTotem()));
+        dataconvertermanager.a((DataConverterType) DataConverterTypes.CHUNK, (IDataConverter) (new DataConverterBedBlock()));
+        dataconvertermanager.a((DataConverterType) DataConverterTypes.ITEM_INSTANCE, (IDataConverter) (new DataConverterBedItem()));
     }
 
     public static DataConverterManager a() {
-        DataConverterManager dataconvertermanager = new DataConverterManager(922);
+        DataConverterManager dataconvertermanager = new DataConverterManager(1133);
 
         WorldData.a(dataconvertermanager);
         EntityPlayer.a(dataconvertermanager);

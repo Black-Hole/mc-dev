@@ -107,7 +107,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                                 do {
                                                     --k4;
                                                     iblockdata = chunk.getBlockData(blockposition_mutableblockposition.c(i4 + i3, k4, j4 + j3));
-                                                } while (iblockdata.g() == MaterialMapColor.b && k4 > 0);
+                                                } while (iblockdata.g() == MaterialMapColor.c && k4 > 0);
 
                                                 if (k4 > 0 && iblockdata.getMaterial().isLiquid()) {
                                                     int l4 = k4 - 1;
@@ -141,9 +141,9 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                     b0 = 0;
                                 }
 
-                                MaterialMapColor materialmapcolor = (MaterialMapColor) Iterables.getFirst(Multisets.copyHighestCountFirst(hashmultiset), MaterialMapColor.b);
+                                MaterialMapColor materialmapcolor = (MaterialMapColor) Iterables.getFirst(Multisets.copyHighestCountFirst(hashmultiset), MaterialMapColor.c);
 
-                                if (materialmapcolor == MaterialMapColor.n) {
+                                if (materialmapcolor == MaterialMapColor.o) {
                                     d2 = (double) k3 * 0.1D + (double) (k1 + l1 & 1) * 0.2D;
                                     b0 = 1;
                                     if (d2 < 0.5D) {
@@ -158,7 +158,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                 d0 = d1;
                                 if (l1 >= 0 && i2 * i2 + j2 * j2 < j1 * j1 && (!flag1 || (k1 + l1 & 1) != 0)) {
                                     byte b1 = worldmap.colors[k1 + l1 * 128];
-                                    byte b2 = (byte) (materialmapcolor.M * 4 + b0);
+                                    byte b2 = (byte) (materialmapcolor.ad * 4 + b0);
 
                                     if (b1 != b2) {
                                         worldmap.colors[k1 + l1 * 128] = b2;
@@ -191,7 +191,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                             int j1 = l * i;
                             int k1 = i1 * i;
                             BiomeBase biomebase = abiomebase[j1 + k1 * 128 * i];
-                            MaterialMapColor materialmapcolor = MaterialMapColor.b;
+                            MaterialMapColor materialmapcolor = MaterialMapColor.c;
                             int l1 = 3;
                             int i2 = 8;
 
@@ -229,7 +229,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                 }
 
                                 if (biomebase.j() < 0.0F) {
-                                    materialmapcolor = MaterialMapColor.q;
+                                    materialmapcolor = MaterialMapColor.r;
                                     if (i2 > 7 && i1 % 2 == 0) {
                                         l1 = (l + (int) (MathHelper.sin((float) i1 + 0.0F) * 7.0F)) / 8 % 5;
                                         if (l1 == 3) {
@@ -238,7 +238,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                             l1 = 0;
                                         }
                                     } else if (i2 > 7) {
-                                        materialmapcolor = MaterialMapColor.b;
+                                        materialmapcolor = MaterialMapColor.c;
                                     } else if (i2 > 5) {
                                         l1 = 1;
                                     } else if (i2 > 3) {
@@ -247,7 +247,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                         l1 = 0;
                                     }
                                 } else if (i2 > 0) {
-                                    materialmapcolor = MaterialMapColor.B;
+                                    materialmapcolor = MaterialMapColor.C;
                                     if (i2 > 3) {
                                         l1 = 1;
                                     } else {
@@ -256,8 +256,8 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                 }
                             }
 
-                            if (materialmapcolor != MaterialMapColor.b) {
-                                worldmap.colors[l + i1 * 128] = (byte) (materialmapcolor.M * 4 + l1);
+                            if (materialmapcolor != MaterialMapColor.c) {
+                                worldmap.colors[l + i1 * 128] = (byte) (materialmapcolor.ad * 4 + l1);
                                 worldmap.flagDirty(l, i1);
                             }
                         }

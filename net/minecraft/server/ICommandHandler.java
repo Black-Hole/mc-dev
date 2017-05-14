@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public interface ICommandHandler {
 
-    int a(ICommandListener icommandlistener, String s);
+    int b(ICommandListener icommandlistener, String s);
 
     List<String> a(ICommandListener icommandlistener, String s, @Nullable BlockPosition blockposition);
 

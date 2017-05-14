@@ -47,7 +47,7 @@ public class EntityPotion extends EntityProjectile {
 
         if (itemstack.getItem() != Items.SPLASH_POTION && itemstack.getItem() != Items.LINGERING_POTION) {
             if (this.world != null) {
-                EntityPotion.f.error("ThrownPotion entity {} has no item?!", new Object[] { Integer.valueOf(this.getId())});
+                EntityPotion.f.error("ThrownPotion entity {} has no item?!", Integer.valueOf(this.getId()));
             }
 
             return new ItemStack(Items.SPLASH_POTION);
@@ -131,7 +131,7 @@ public class EntityPotion extends EntityProjectile {
             while (iterator.hasNext()) {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                if (entityliving.cJ()) {
+                if (entityliving.cP()) {
                     double d0 = this.h(entityliving);
 
                     if (d0 < 16.0D) {

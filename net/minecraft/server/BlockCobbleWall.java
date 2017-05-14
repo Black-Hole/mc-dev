@@ -80,11 +80,12 @@ public class BlockCobbleWall extends Block {
         return false;
     }
 
-    private boolean c(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
         Block block = iblockdata.getBlock();
+        EnumBlockFaceShape enumblockfaceshape = iblockdata.d(iblockaccess, blockposition, enumdirection);
 
-        return block == Blocks.BARRIER ? false : (block != this && !(block instanceof BlockFenceGate) ? (block.material.k() && iblockdata.h() ? block.material != Material.PUMPKIN : false) : true);
+        return !c(block) && enumblockfaceshape == EnumBlockFaceShape.SOLID || enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE_THICK || enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE && block instanceof BlockFenceGate;
     }
 
     public int getDropData(IBlockData iblockdata) {
@@ -100,10 +101,10 @@ public class BlockCobbleWall extends Block {
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        boolean flag = this.c(iblockaccess, blockposition.north());
-        boolean flag1 = this.c(iblockaccess, blockposition.east());
-        boolean flag2 = this.c(iblockaccess, blockposition.south());
-        boolean flag3 = this.c(iblockaccess, blockposition.west());
+        boolean flag = this.a(iblockaccess, blockposition.north(), EnumDirection.SOUTH);
+        boolean flag1 = this.a(iblockaccess, blockposition.east(), EnumDirection.WEST);
+        boolean flag2 = this.a(iblockaccess, blockposition.south(), EnumDirection.NORTH);
+        boolean flag3 = this.a(iblockaccess, blockposition.west(), EnumDirection.EAST);
         boolean flag4 = flag && !flag1 && flag2 && !flag3 || !flag && flag1 && !flag2 && flag3;
 
         return iblockdata.set(BlockCobbleWall.UP, Boolean.valueOf(!flag4 || !iblockaccess.isEmpty(blockposition.up()))).set(BlockCobbleWall.NORTH, Boolean.valueOf(flag)).set(BlockCobbleWall.EAST, Boolean.valueOf(flag1)).set(BlockCobbleWall.SOUTH, Boolean.valueOf(flag2)).set(BlockCobbleWall.WEST, Boolean.valueOf(flag3));
@@ -111,6 +112,10 @@ public class BlockCobbleWall extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockCobbleWall.UP, BlockCobbleWall.NORTH, BlockCobbleWall.EAST, BlockCobbleWall.WEST, BlockCobbleWall.SOUTH, BlockCobbleWall.VARIANT});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection != EnumDirection.UP && enumdirection != EnumDirection.DOWN ? EnumBlockFaceShape.MIDDLE_POLE_THICK : EnumBlockFaceShape.CENTER_BIG;
     }
 
     public static enum EnumCobbleVariant implements INamable {

@@ -14,7 +14,6 @@ public class ItemGoldenApple extends ItemFood {
     protected void a(ItemStack itemstack, World world, EntityHuman entityhuman) {
         if (!world.isClientSide) {
             if (itemstack.getData() > 0) {
-                entityhuman.b((Statistic) AchievementList.M);
                 entityhuman.addEffect(new MobEffect(MobEffects.REGENERATION, 400, 1));
                 entityhuman.addEffect(new MobEffect(MobEffects.RESISTANCE, 6000, 0));
                 entityhuman.addEffect(new MobEffect(MobEffects.FIRE_RESISTANCE, 6000, 0));

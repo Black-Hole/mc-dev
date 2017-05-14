@@ -1,18 +1,16 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public abstract class BiomeBase {
 
-    private static final Logger y = LogManager.getLogger();
+    private static final Logger x = LogManager.getLogger();
     protected static final IBlockData a = Blocks.STONE.getBlockData();
     protected static final IBlockData b = Blocks.AIR.getBlockData();
     protected static final IBlockData c = Blocks.BEDROCK.getBlockData();
@@ -21,32 +19,31 @@ public abstract class BiomeBase {
     protected static final IBlockData f = Blocks.SANDSTONE.getBlockData();
     protected static final IBlockData g = Blocks.ICE.getBlockData();
     protected static final IBlockData h = Blocks.WATER.getBlockData();
-    public static final Set<BiomeBase> i = Sets.newHashSet();
-    public static final RegistryBlockID<BiomeBase> j = new RegistryBlockID();
-    protected static final NoiseGenerator3 k = new NoiseGenerator3(new Random(1234L), 1);
-    protected static final NoiseGenerator3 l = new NoiseGenerator3(new Random(2345L), 1);
-    protected static final WorldGenTallPlant m = new WorldGenTallPlant();
-    protected static final WorldGenTrees n = new WorldGenTrees(false);
-    protected static final WorldGenBigTree o = new WorldGenBigTree(false);
-    protected static final WorldGenSwampTree p = new WorldGenSwampTree();
+    public static final RegistryBlockID<BiomeBase> i = new RegistryBlockID();
+    protected static final NoiseGenerator3 j = new NoiseGenerator3(new Random(1234L), 1);
+    protected static final NoiseGenerator3 k = new NoiseGenerator3(new Random(2345L), 1);
+    protected static final WorldGenTallPlant l = new WorldGenTallPlant();
+    protected static final WorldGenTrees m = new WorldGenTrees(false);
+    protected static final WorldGenBigTree n = new WorldGenBigTree(false);
+    protected static final WorldGenSwampTree o = new WorldGenSwampTree();
     public static final RegistryMaterials<MinecraftKey, BiomeBase> REGISTRY_ID = new RegistryMaterials();
-    private final String z;
+    private final String y;
+    private final float z;
     private final float A;
     private final float B;
     private final float C;
-    private final float D;
-    private final int E;
+    private final int D;
+    private final boolean E;
     private final boolean F;
-    private final boolean G;
     @Nullable
-    private final String H;
+    private final String G;
+    public IBlockData q;
     public IBlockData r;
-    public IBlockData s;
-    public BiomeDecorator t;
+    public BiomeDecorator s;
+    protected List<BiomeBase.BiomeMeta> t;
     protected List<BiomeBase.BiomeMeta> u;
     protected List<BiomeBase.BiomeMeta> v;
     protected List<BiomeBase.BiomeMeta> w;
-    protected List<BiomeBase.BiomeMeta> x;
 
     public static int a(BiomeBase biomebase) {
         return BiomeBase.REGISTRY_ID.a((Object) biomebase);
@@ -59,40 +56,40 @@ public abstract class BiomeBase {
 
     @Nullable
     public static BiomeBase b(BiomeBase biomebase) {
-        return (BiomeBase) BiomeBase.j.fromId(a(biomebase));
+        return (BiomeBase) BiomeBase.i.fromId(a(biomebase));
     }
 
     protected BiomeBase(BiomeBase.a biomebase_a) {
-        this.r = Blocks.GRASS.getBlockData();
-        this.s = Blocks.DIRT.getBlockData();
+        this.q = Blocks.GRASS.getBlockData();
+        this.r = Blocks.DIRT.getBlockData();
+        this.t = Lists.newArrayList();
         this.u = Lists.newArrayList();
         this.v = Lists.newArrayList();
         this.w = Lists.newArrayList();
-        this.x = Lists.newArrayList();
-        this.z = biomebase_a.a;
-        this.A = biomebase_a.b;
-        this.B = biomebase_a.c;
-        this.C = biomebase_a.d;
-        this.D = biomebase_a.e;
-        this.E = biomebase_a.f;
-        this.F = biomebase_a.g;
-        this.G = biomebase_a.h;
-        this.H = biomebase_a.i;
-        this.t = this.a();
-        this.v.add(new BiomeBase.BiomeMeta(EntitySheep.class, 12, 4, 4));
-        this.v.add(new BiomeBase.BiomeMeta(EntityPig.class, 10, 4, 4));
-        this.v.add(new BiomeBase.BiomeMeta(EntityChicken.class, 10, 4, 4));
-        this.v.add(new BiomeBase.BiomeMeta(EntityCow.class, 8, 4, 4));
-        this.u.add(new BiomeBase.BiomeMeta(EntitySpider.class, 100, 4, 4));
-        this.u.add(new BiomeBase.BiomeMeta(EntityZombie.class, 95, 4, 4));
-        this.u.add(new BiomeBase.BiomeMeta(EntityZombieVillager.class, 5, 1, 1));
-        this.u.add(new BiomeBase.BiomeMeta(EntitySkeleton.class, 100, 4, 4));
-        this.u.add(new BiomeBase.BiomeMeta(EntityCreeper.class, 100, 4, 4));
-        this.u.add(new BiomeBase.BiomeMeta(EntitySlime.class, 100, 4, 4));
-        this.u.add(new BiomeBase.BiomeMeta(EntityEnderman.class, 10, 1, 4));
-        this.u.add(new BiomeBase.BiomeMeta(EntityWitch.class, 5, 1, 1));
-        this.w.add(new BiomeBase.BiomeMeta(EntitySquid.class, 10, 4, 4));
-        this.x.add(new BiomeBase.BiomeMeta(EntityBat.class, 10, 8, 8));
+        this.y = biomebase_a.a;
+        this.z = biomebase_a.b;
+        this.A = biomebase_a.c;
+        this.B = biomebase_a.d;
+        this.C = biomebase_a.e;
+        this.D = biomebase_a.f;
+        this.E = biomebase_a.g;
+        this.F = biomebase_a.h;
+        this.G = biomebase_a.i;
+        this.s = this.a();
+        this.u.add(new BiomeBase.BiomeMeta(EntitySheep.class, 12, 4, 4));
+        this.u.add(new BiomeBase.BiomeMeta(EntityPig.class, 10, 4, 4));
+        this.u.add(new BiomeBase.BiomeMeta(EntityChicken.class, 10, 4, 4));
+        this.u.add(new BiomeBase.BiomeMeta(EntityCow.class, 8, 4, 4));
+        this.t.add(new BiomeBase.BiomeMeta(EntitySpider.class, 100, 4, 4));
+        this.t.add(new BiomeBase.BiomeMeta(EntityZombie.class, 95, 4, 4));
+        this.t.add(new BiomeBase.BiomeMeta(EntityZombieVillager.class, 5, 1, 1));
+        this.t.add(new BiomeBase.BiomeMeta(EntitySkeleton.class, 100, 4, 4));
+        this.t.add(new BiomeBase.BiomeMeta(EntityCreeper.class, 100, 4, 4));
+        this.t.add(new BiomeBase.BiomeMeta(EntitySlime.class, 100, 4, 4));
+        this.t.add(new BiomeBase.BiomeMeta(EntityEnderman.class, 10, 1, 4));
+        this.t.add(new BiomeBase.BiomeMeta(EntityWitch.class, 5, 1, 1));
+        this.v.add(new BiomeBase.BiomeMeta(EntitySquid.class, 10, 4, 4));
+        this.w.add(new BiomeBase.BiomeMeta(EntityBat.class, 10, 8, 8));
     }
 
     protected BiomeDecorator a() {
@@ -100,11 +97,11 @@ public abstract class BiomeBase {
     }
 
     public boolean b() {
-        return this.H != null;
+        return this.G != null;
     }
 
     public WorldGenTreeAbstract a(Random random) {
-        return (WorldGenTreeAbstract) (random.nextInt(10) == 0 ? BiomeBase.o : BiomeBase.n);
+        return (WorldGenTreeAbstract) (random.nextInt(10) == 0 ? BiomeBase.n : BiomeBase.m);
     }
 
     public WorldGenerator b(Random random) {
@@ -118,16 +115,16 @@ public abstract class BiomeBase {
     public List<BiomeBase.BiomeMeta> getMobs(EnumCreatureType enumcreaturetype) {
         switch (enumcreaturetype) {
         case MONSTER:
-            return this.u;
+            return this.t;
 
         case CREATURE:
-            return this.v;
+            return this.u;
 
         case WATER_CREATURE:
-            return this.w;
+            return this.v;
 
         case AMBIENT:
-            return this.x;
+            return this.w;
 
         default:
             return Collections.emptyList();
@@ -139,7 +136,7 @@ public abstract class BiomeBase {
     }
 
     public boolean d() {
-        return this.p() ? false : this.G;
+        return this.p() ? false : this.F;
     }
 
     public boolean e() {
@@ -152,7 +149,7 @@ public abstract class BiomeBase {
 
     public final float a(BlockPosition blockposition) {
         if (blockposition.getY() > 64) {
-            float f = (float) (BiomeBase.k.a((double) ((float) blockposition.getX() / 8.0F), (double) ((float) blockposition.getZ() / 8.0F)) * 4.0D);
+            float f = (float) (BiomeBase.j.a((double) ((float) blockposition.getX() / 8.0F), (double) ((float) blockposition.getZ() / 8.0F)) * 4.0D);
 
             return this.getTemperature() - (f + (float) blockposition.getY() - 64.0F) * 0.05F / 30.0F;
         } else {
@@ -161,7 +158,7 @@ public abstract class BiomeBase {
     }
 
     public void a(World world, Random random, BlockPosition blockposition) {
-        this.t.a(world, random, this, blockposition);
+        this.s.a(world, random, this, blockposition);
     }
 
     public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
@@ -169,9 +166,9 @@ public abstract class BiomeBase {
     }
 
     public final void b(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
-        int k = world.K();
-        IBlockData iblockdata = this.r;
-        IBlockData iblockdata1 = this.s;
+        int k = world.getSeaLevel();
+        IBlockData iblockdata = this.q;
+        IBlockData iblockdata1 = this.r;
         int l = -1;
         int i1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
         int j1 = i & 15;
@@ -192,8 +189,8 @@ public abstract class BiomeBase {
                             iblockdata = BiomeBase.b;
                             iblockdata1 = BiomeBase.a;
                         } else if (l1 >= k - 4 && l1 <= k + 1) {
-                            iblockdata = this.r;
-                            iblockdata1 = this.s;
+                            iblockdata = this.q;
+                            iblockdata1 = this.r;
                         }
 
                         if (l1 < k && (iblockdata == null || iblockdata.getMaterial() == Material.AIR)) {
@@ -252,27 +249,23 @@ public abstract class BiomeBase {
     }
 
     public final float j() {
-        return this.A;
-    }
-
-    public final float getHumidity() {
-        return this.D;
-    }
-
-    public final String l() {
         return this.z;
     }
 
-    public final float m() {
-        return this.B;
-    }
-
-    public final float getTemperature() {
+    public final float getHumidity() {
         return this.C;
     }
 
+    public final float m() {
+        return this.A;
+    }
+
+    public final float getTemperature() {
+        return this.B;
+    }
+
     public final boolean p() {
-        return this.F;
+        return this.E;
     }
 
     public static void q() {
@@ -338,13 +331,12 @@ public abstract class BiomeBase {
         a(165, "mutated_mesa", new BiomeMesa(true, false, (new BiomeBase.a("Mesa (Bryce)")).a("mesa").a(2.0F).b(0.0F).a()));
         a(166, "mutated_mesa_rock", new BiomeMesa(false, true, (new BiomeBase.a("Mesa Plateau F M")).a("mesa_rock").c(0.45F).d(0.3F).a(2.0F).b(0.0F).a()));
         a(167, "mutated_mesa_clear_rock", new BiomeMesa(false, false, (new BiomeBase.a("Mesa Plateau M")).a("mesa_clear_rock").c(0.45F).d(0.3F).a(2.0F).b(0.0F).a()));
-        Collections.addAll(BiomeBase.i, new BiomeBase[] { Biomes.a, Biomes.c, Biomes.d, Biomes.e, Biomes.f, Biomes.g, Biomes.h, Biomes.i, Biomes.m, Biomes.n, Biomes.o, Biomes.p, Biomes.q, Biomes.r, Biomes.s, Biomes.t, Biomes.u, Biomes.w, Biomes.x, Biomes.y, Biomes.z, Biomes.A, Biomes.B, Biomes.C, Biomes.D, Biomes.E, Biomes.F, Biomes.G, Biomes.H, Biomes.I, Biomes.J, Biomes.K, Biomes.L, Biomes.M, Biomes.N, Biomes.O});
     }
 
     private static void a(int i, String s, BiomeBase biomebase) {
         BiomeBase.REGISTRY_ID.a(i, new MinecraftKey(s), biomebase);
         if (biomebase.b()) {
-            BiomeBase.j.a(biomebase, a((BiomeBase) BiomeBase.REGISTRY_ID.get(new MinecraftKey(biomebase.H))));
+            BiomeBase.i.a(biomebase, a((BiomeBase) BiomeBase.REGISTRY_ID.get(new MinecraftKey(biomebase.G))));
         }
 
     }

@@ -5,9 +5,9 @@ import javax.annotation.Nullable;
 
 public class EntityOcelot extends EntityTameableAnimal {
 
-    private static final DataWatcherObject<Integer> bA = DataWatcher.a(EntityOcelot.class, DataWatcherRegistry.b);
-    private PathfinderGoalAvoidTarget<EntityHuman> bB;
-    private PathfinderGoalTempt bC;
+    private static final DataWatcherObject<Integer> bB = DataWatcher.a(EntityOcelot.class, DataWatcherRegistry.b);
+    private PathfinderGoalAvoidTarget<EntityHuman> bC;
+    private PathfinderGoalTempt bD;
 
     public EntityOcelot(World world) {
         super(world);
@@ -16,10 +16,10 @@ public class EntityOcelot extends EntityTameableAnimal {
 
     protected void r() {
         this.goalSit = new PathfinderGoalSit(this);
-        this.bC = new PathfinderGoalTempt(this, 0.6D, Items.FISH, true);
+        this.bD = new PathfinderGoalTempt(this, 0.6D, Items.FISH, true);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, this.goalSit);
-        this.goalSelector.a(3, this.bC);
+        this.goalSelector.a(3, this.bD);
         this.goalSelector.a(5, new PathfinderGoalFollowOwner(this, 1.0D, 10.0F, 5.0F));
         this.goalSelector.a(6, new PathfinderGoalJumpOnBlock(this, 0.8D));
         this.goalSelector.a(7, new PathfinderGoalLeapAtTarget(this, 0.3F));
@@ -32,12 +32,12 @@ public class EntityOcelot extends EntityTameableAnimal {
 
     protected void i() {
         super.i();
-        this.datawatcher.register(EntityOcelot.bA, Integer.valueOf(0));
+        this.datawatcher.register(EntityOcelot.bB, Integer.valueOf(0));
     }
 
     public void M() {
-        if (this.getControllerMove().a()) {
-            double d0 = this.getControllerMove().b();
+        if (this.getControllerMove().b()) {
+            double d0 = this.getControllerMove().c();
 
             if (d0 == 0.6D) {
                 this.setSneaking(true);
@@ -83,19 +83,19 @@ public class EntityOcelot extends EntityTameableAnimal {
     }
 
     @Nullable
-    protected SoundEffect G() {
-        return this.isTamed() ? (this.isInLove() ? SoundEffects.V : (this.random.nextInt(4) == 0 ? SoundEffects.W : SoundEffects.R)) : null;
+    protected SoundEffect F() {
+        return this.isTamed() ? (this.isInLove() ? SoundEffects.Y : (this.random.nextInt(4) == 0 ? SoundEffects.Z : SoundEffects.U)) : null;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.U;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.X;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.S;
+    protected SoundEffect cd() {
+        return SoundEffects.V;
     }
 
-    protected float ci() {
+    protected float co() {
         return 0.4F;
     }
 
@@ -127,16 +127,15 @@ public class EntityOcelot extends EntityTameableAnimal {
             if (this.e((EntityLiving) entityhuman) && !this.world.isClientSide && !this.e(itemstack)) {
                 this.goalSit.setSitting(!this.isSitting());
             }
-        } else if ((this.bC == null || this.bC.f()) && itemstack.getItem() == Items.FISH && entityhuman.h(this) < 9.0D) {
+        } else if ((this.bD == null || this.bD.f()) && itemstack.getItem() == Items.FISH && entityhuman.h(this) < 9.0D) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 itemstack.subtract(1);
             }
 
             if (!this.world.isClientSide) {
                 if (this.random.nextInt(3) == 0) {
-                    this.setTamed(true);
+                    this.c(entityhuman);
                     this.setCatType(1 + this.world.random.nextInt(3));
-                    this.setOwnerUUID(entityhuman.getUniqueID());
                     this.p(true);
                     this.goalSit.setSitting(true);
                     this.world.broadcastEntityEffect(this, (byte) 7);
@@ -183,14 +182,14 @@ public class EntityOcelot extends EntityTameableAnimal {
     }
 
     public int getCatType() {
-        return ((Integer) this.datawatcher.get(EntityOcelot.bA)).intValue();
+        return ((Integer) this.datawatcher.get(EntityOcelot.bB)).intValue();
     }
 
     public void setCatType(int i) {
-        this.datawatcher.set(EntityOcelot.bA, Integer.valueOf(i));
+        this.datawatcher.set(EntityOcelot.bB, Integer.valueOf(i));
     }
 
-    public boolean cM() {
+    public boolean P() {
         return this.world.random.nextInt(3) != 0;
     }
 
@@ -198,7 +197,7 @@ public class EntityOcelot extends EntityTameableAnimal {
         if (this.world.a(this.getBoundingBox(), (Entity) this) && this.world.getCubes(this, this.getBoundingBox()).isEmpty() && !this.world.containsLiquid(this.getBoundingBox())) {
             BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
-            if (blockposition.getY() < this.world.K()) {
+            if (blockposition.getY() < this.world.getSeaLevel()) {
                 return false;
             }
 
@@ -217,14 +216,14 @@ public class EntityOcelot extends EntityTameableAnimal {
         return this.hasCustomName() ? this.getCustomName() : (this.isTamed() ? LocaleI18n.get("entity.Cat.name") : super.getName());
     }
 
-    protected void di() {
-        if (this.bB == null) {
-            this.bB = new PathfinderGoalAvoidTarget(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
+    protected void dk() {
+        if (this.bC == null) {
+            this.bC = new PathfinderGoalAvoidTarget(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
         }
 
-        this.goalSelector.a((PathfinderGoal) this.bB);
+        this.goalSelector.a((PathfinderGoal) this.bC);
         if (!this.isTamed()) {
-            this.goalSelector.a(4, this.bB);
+            this.goalSelector.a(4, this.bC);
         }
 
     }

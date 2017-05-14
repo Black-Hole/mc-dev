@@ -14,7 +14,7 @@ public class BlockCauldron extends Block {
     protected static final AxisAlignedBB f = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.125D, 1.0D, 1.0D);
 
     public BlockCauldron() {
-        super(Material.ORE, MaterialMapColor.m);
+        super(Material.ORE, MaterialMapColor.n);
         this.y(this.blockStateList.getBlockData().set(BlockCauldron.LEVEL, Integer.valueOf(0)));
     }
 
@@ -66,7 +66,7 @@ public class BlockCauldron extends Block {
 
                     entityhuman.b(StatisticList.I);
                     this.a(world, blockposition, iblockdata, 3);
-                    world.a((EntityHuman) null, blockposition, SoundEffects.N, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.a((EntityHuman) null, blockposition, SoundEffects.Q, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
 
                 return true;
@@ -83,7 +83,7 @@ public class BlockCauldron extends Block {
 
                     entityhuman.b(StatisticList.J);
                     this.a(world, blockposition, iblockdata, 0);
-                    world.a((EntityHuman) null, blockposition, SoundEffects.P, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.a((EntityHuman) null, blockposition, SoundEffects.S, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
 
                 return true;
@@ -105,7 +105,7 @@ public class BlockCauldron extends Block {
                             }
                         }
 
-                        world.a((EntityHuman) null, blockposition, SoundEffects.K, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        world.a((EntityHuman) null, blockposition, SoundEffects.N, SoundCategory.BLOCKS, 1.0F, 1.0F);
                         this.a(world, blockposition, iblockdata, i - 1);
                     }
 
@@ -121,7 +121,7 @@ public class BlockCauldron extends Block {
                             }
                         }
 
-                        world.a((EntityHuman) null, blockposition, SoundEffects.J, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        world.a((EntityHuman) null, blockposition, SoundEffects.M, SoundCategory.BLOCKS, 1.0F, 1.0F);
                         this.a(world, blockposition, iblockdata, i + 1);
                     }
 
@@ -217,5 +217,9 @@ public class BlockCauldron extends Block {
 
     public boolean b(IBlockAccess iblockaccess, BlockPosition blockposition) {
         return true;
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.UP ? EnumBlockFaceShape.BOWL : (enumdirection == EnumDirection.DOWN ? EnumBlockFaceShape.UNDEFINED : EnumBlockFaceShape.SOLID);
     }
 }

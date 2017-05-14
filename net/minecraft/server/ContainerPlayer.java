@@ -4,7 +4,7 @@ public class ContainerPlayer extends Container {
 
     private static final EnumItemSlot[] h = new EnumItemSlot[] { EnumItemSlot.HEAD, EnumItemSlot.CHEST, EnumItemSlot.LEGS, EnumItemSlot.FEET};
     public InventoryCrafting craftInventory = new InventoryCrafting(this, 2, 2);
-    public IInventory resultInventory = new InventoryCraftResult();
+    public InventoryCraftResult resultInventory = new InventoryCraftResult();
     public boolean g;
     private final EntityHuman owner;
 
@@ -54,25 +54,18 @@ public class ContainerPlayer extends Container {
 
         this.a(new Slot(playerinventory, 40, 77, 62) {
         });
-        this.a((IInventory) this.craftInventory);
     }
 
     public void a(IInventory iinventory) {
-        this.resultInventory.setItem(0, CraftingManager.getInstance().craft(this.craftInventory, this.owner.world));
+        this.a(this.owner.world, this.owner, this.craftInventory, this.resultInventory);
     }
 
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-
-        for (int i = 0; i < 4; ++i) {
-            ItemStack itemstack = this.craftInventory.splitWithoutUpdate(i);
-
-            if (!itemstack.isEmpty()) {
-                entityhuman.drop(itemstack, false);
-            }
+        this.resultInventory.clear();
+        if (!entityhuman.world.isClientSide) {
+            this.a(entityhuman, entityhuman.world, this.craftInventory);
         }
-
-        this.resultInventory.setItem(0, ItemStack.a);
     }
 
     public boolean a(EntityHuman entityhuman) {

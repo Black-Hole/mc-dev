@@ -12,7 +12,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
     private double e;
     private double f;
     private double g;
-    private EntityHuman h;
+    private EntityHuman target;
     private int i;
     private boolean j;
     private final Set<Item> k;
@@ -38,8 +38,8 @@ public class PathfinderGoalTempt extends PathfinderGoal {
             --this.i;
             return false;
         } else {
-            this.h = this.a.world.findNearbyPlayer(this.a, 10.0D);
-            return this.h == null ? false : this.a(this.h.getItemInMainHand()) || this.a(this.h.getItemInOffHand());
+            this.target = this.a.world.findNearbyPlayer(this.a, 10.0D);
+            return this.target == null ? false : this.a(this.target.getItemInMainHand()) || this.a(this.target.getItemInOffHand());
         }
     }
 
@@ -49,47 +49,47 @@ public class PathfinderGoalTempt extends PathfinderGoal {
 
     public boolean b() {
         if (this.l) {
-            if (this.a.h(this.h) < 36.0D) {
-                if (this.h.d(this.c, this.d, this.e) > 0.010000000000000002D) {
+            if (this.a.h(this.target) < 36.0D) {
+                if (this.target.d(this.c, this.d, this.e) > 0.010000000000000002D) {
                     return false;
                 }
 
-                if (Math.abs((double) this.h.pitch - this.f) > 5.0D || Math.abs((double) this.h.yaw - this.g) > 5.0D) {
+                if (Math.abs((double) this.target.pitch - this.f) > 5.0D || Math.abs((double) this.target.yaw - this.g) > 5.0D) {
                     return false;
                 }
             } else {
-                this.c = this.h.locX;
-                this.d = this.h.locY;
-                this.e = this.h.locZ;
+                this.c = this.target.locX;
+                this.d = this.target.locY;
+                this.e = this.target.locZ;
             }
 
-            this.f = (double) this.h.pitch;
-            this.g = (double) this.h.yaw;
+            this.f = (double) this.target.pitch;
+            this.g = (double) this.target.yaw;
         }
 
         return this.a();
     }
 
     public void c() {
-        this.c = this.h.locX;
-        this.d = this.h.locY;
-        this.e = this.h.locZ;
+        this.c = this.target.locX;
+        this.d = this.target.locY;
+        this.e = this.target.locZ;
         this.j = true;
     }
 
     public void d() {
-        this.h = null;
-        this.a.getNavigation().o();
+        this.target = null;
+        this.a.getNavigation().p();
         this.i = 100;
         this.j = false;
     }
 
     public void e() {
-        this.a.getControllerLook().a(this.h, (float) (this.a.cL() + 20), (float) this.a.N());
-        if (this.a.h(this.h) < 6.25D) {
-            this.a.getNavigation().o();
+        this.a.getControllerLook().a(this.target, (float) (this.a.O() + 20), (float) this.a.N());
+        if (this.a.h(this.target) < 6.25D) {
+            this.a.getNavigation().p();
         } else {
-            this.a.getNavigation().a((Entity) this.h, this.b);
+            this.a.getNavigation().a((Entity) this.target, this.b);
         }
 
     }

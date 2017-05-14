@@ -36,6 +36,10 @@ public class BlockEndGateway extends BlockTileEntity {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return MaterialMapColor.E;
+        return MaterialMapColor.F;
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 }

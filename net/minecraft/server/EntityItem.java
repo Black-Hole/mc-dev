@@ -49,11 +49,11 @@ public class EntityItem extends Entity {
         this.getDataWatcher().register(EntityItem.c, ItemStack.a);
     }
 
-    public void A_() {
+    public void B_() {
         if (this.getItemStack().isEmpty()) {
             this.die();
         } else {
-            super.A_();
+            super.B_();
             if (this.pickupDelay > 0 && this.pickupDelay != 32767) {
                 --this.pickupDelay;
             }
@@ -83,7 +83,7 @@ public class EntityItem extends Entity {
                     this.motY = 0.20000000298023224D;
                     this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
                     this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-                    this.a(SoundEffects.bL, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
+                    this.a(SoundEffects.bR, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
                 }
 
                 if (!this.world.isClientSide) {
@@ -108,7 +108,7 @@ public class EntityItem extends Entity {
                 ++this.age;
             }
 
-            this.ak();
+            this.aq();
             if (!this.world.isClientSide) {
                 double d3 = this.motX - d0;
                 double d4 = this.motY - d1;
@@ -155,7 +155,7 @@ public class EntityItem extends Entity {
                         return false;
                     } else if (itemstack1.getItem() == null) {
                         return false;
-                    } else if (itemstack1.getItem().l() && itemstack1.getData() != itemstack.getData()) {
+                    } else if (itemstack1.getItem().k() && itemstack1.getData() != itemstack.getData()) {
                         return false;
                     } else if (itemstack1.getCount() < itemstack.getCount()) {
                         return entityitem.a(this);
@@ -184,10 +184,10 @@ public class EntityItem extends Entity {
         this.age = 4800;
     }
 
-    public boolean ak() {
+    public boolean aq() {
         if (this.world.a(this.getBoundingBox(), Material.WATER, (Entity) this)) {
             if (!this.inWater && !this.justCreated) {
-                this.al();
+                this.ar();
             }
 
             this.inWater = true;
@@ -208,7 +208,7 @@ public class EntityItem extends Entity {
         } else if (!this.getItemStack().isEmpty() && this.getItemStack().getItem() == Items.NETHER_STAR && damagesource.isExplosion()) {
             return false;
         } else {
-            this.ap();
+            this.av();
             this.f = (int) ((float) this.f - f);
             if (this.f <= 0) {
                 this.die();
@@ -271,34 +271,6 @@ public class EntityItem extends Entity {
             int i = itemstack.getCount();
 
             if (this.pickupDelay == 0 && (this.h == null || 6000 - this.age <= 200 || this.h.equals(entityhuman.getName())) && entityhuman.inventory.pickup(itemstack)) {
-                if (item == Item.getItemOf(Blocks.LOG)) {
-                    entityhuman.b((Statistic) AchievementList.g);
-                }
-
-                if (item == Item.getItemOf(Blocks.LOG2)) {
-                    entityhuman.b((Statistic) AchievementList.g);
-                }
-
-                if (item == Items.LEATHER) {
-                    entityhuman.b((Statistic) AchievementList.t);
-                }
-
-                if (item == Items.DIAMOND) {
-                    entityhuman.b((Statistic) AchievementList.w);
-                }
-
-                if (item == Items.BLAZE_ROD) {
-                    entityhuman.b((Statistic) AchievementList.A);
-                }
-
-                if (item == Items.DIAMOND && this.n() != null) {
-                    EntityHuman entityhuman1 = this.world.a(this.n());
-
-                    if (entityhuman1 != null && entityhuman1 != entityhuman) {
-                        entityhuman1.b((Statistic) AchievementList.x);
-                    }
-                }
-
                 entityhuman.receive(this, i);
                 if (itemstack.isEmpty()) {
                     this.die();
@@ -315,13 +287,13 @@ public class EntityItem extends Entity {
         return this.hasCustomName() ? this.getCustomName() : LocaleI18n.get("item." + this.getItemStack().a());
     }
 
-    public boolean aV() {
+    public boolean bb() {
         return false;
     }
 
     @Nullable
-    public Entity c(int i) {
-        Entity entity = super.c(i);
+    public Entity b(int i) {
+        Entity entity = super.b(i);
 
         if (!this.world.isClientSide && entity instanceof EntityItem) {
             ((EntityItem) entity).x();

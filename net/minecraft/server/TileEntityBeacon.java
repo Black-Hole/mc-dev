@@ -27,7 +27,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         this.inventorySlot = ItemStack.a;
     }
 
-    public void F_() {
+    public void e() {
         if (this.world.getTime() % 80L == 0L) {
             this.n();
         }
@@ -79,28 +79,27 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
     }
 
     private void F() {
-        int i = this.levels;
-        int j = this.position.getX();
-        int k = this.position.getY();
-        int l = this.position.getZ();
+        int i = this.position.getX();
+        int j = this.position.getY();
+        int k = this.position.getZ();
 
         this.levels = 0;
         this.g.clear();
         this.j = true;
-        TileEntityBeacon.BeaconColorTracker tileentitybeacon_beaconcolortracker = new TileEntityBeacon.BeaconColorTracker(EntitySheep.a(EnumColor.WHITE));
+        TileEntityBeacon.BeaconColorTracker tileentitybeacon_beaconcolortracker = new TileEntityBeacon.BeaconColorTracker(EnumColor.WHITE.f());
 
         this.g.add(tileentitybeacon_beaconcolortracker);
         boolean flag = true;
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        int i1;
+        int l;
 
-        for (i1 = k + 1; i1 < 256; ++i1) {
-            IBlockData iblockdata = this.world.getType(blockposition_mutableblockposition.c(j, i1, l));
+        for (l = j + 1; l < 256; ++l) {
+            IBlockData iblockdata = this.world.getType(blockposition_mutableblockposition.c(i, l, k));
             float[] afloat;
 
             if (iblockdata.getBlock() == Blocks.STAINED_GLASS) {
-                afloat = EntitySheep.a((EnumColor) iblockdata.get(BlockStainedGlass.COLOR));
+                afloat = ((EnumColor) iblockdata.get(BlockStainedGlass.COLOR)).f();
             } else {
                 if (iblockdata.getBlock() != Blocks.STAINED_GLASS_PANE) {
                     if (iblockdata.c() >= 15 && iblockdata.getBlock() != Blocks.BEDROCK) {
@@ -113,7 +112,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
                     continue;
                 }
 
-                afloat = EntitySheep.a((EnumColor) iblockdata.get(BlockStainedGlassPane.COLOR));
+                afloat = ((EnumColor) iblockdata.get(BlockStainedGlassPane.COLOR)).f();
             }
 
             if (!flag) {
@@ -131,18 +130,18 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         }
 
         if (this.j) {
-            for (i1 = 1; i1 <= 4; this.levels = i1++) {
-                int j1 = k - i1;
+            for (l = 1; l <= 4; this.levels = l++) {
+                int i1 = j - l;
 
-                if (j1 < 0) {
+                if (i1 < 0) {
                     break;
                 }
 
                 boolean flag1 = true;
 
-                for (int k1 = j - i1; k1 <= j + i1 && flag1; ++k1) {
-                    for (int l1 = l - i1; l1 <= l + i1; ++l1) {
-                        Block block = this.world.getType(new BlockPosition(k1, j1, l1)).getBlock();
+                for (int j1 = i - l; j1 <= i + l && flag1; ++j1) {
+                    for (int k1 = k - l; k1 <= k + l; ++k1) {
+                        Block block = this.world.getType(new BlockPosition(j1, i1, k1)).getBlock();
 
                         if (block != Blocks.EMERALD_BLOCK && block != Blocks.GOLD_BLOCK && block != Blocks.DIAMOND_BLOCK && block != Blocks.IRON_BLOCK) {
                             flag1 = false;
@@ -161,16 +160,20 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
             }
         }
 
-        if (!this.world.isClientSide && this.levels == 4 && i < this.levels) {
-            Iterator iterator = this.world.a(EntityHuman.class, (new AxisAlignedBB((double) j, (double) k, (double) l, (double) j, (double) (k - 4), (double) l)).grow(10.0D, 5.0D, 10.0D)).iterator();
+        if (!this.world.isClientSide) {
+            Iterator iterator = this.world.a(EntityPlayer.class, (new AxisAlignedBB((double) i, (double) j, (double) k, (double) i, (double) (j - 4), (double) k)).grow(10.0D, 5.0D, 10.0D)).iterator();
 
             while (iterator.hasNext()) {
-                EntityHuman entityhuman = (EntityHuman) iterator.next();
+                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                entityhuman.b((Statistic) AchievementList.K);
+                CriterionTriggers.k.a(entityplayer, this);
             }
         }
 
+    }
+
+    public int s() {
+        return this.levels;
     }
 
     @Nullable
@@ -208,7 +211,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         return 1;
     }
 
-    public boolean w_() {
+    public boolean x_() {
         return this.inventorySlot.isEmpty();
     }
 
@@ -257,7 +260,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         return this.o != null && !this.o.isEmpty();
     }
 
-    public void a(String s) {
+    public void setCustomName(String s) {
         this.o = s;
     }
 

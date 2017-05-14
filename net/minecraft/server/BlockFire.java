@@ -99,7 +99,7 @@ public class BlockFire extends Block {
             }
 
             Block block = world.getType(blockposition.down()).getBlock();
-            boolean flag = block == Blocks.NETHERRACK;
+            boolean flag = block == Blocks.NETHERRACK || block == Blocks.df;
 
             if (world.worldProvider instanceof WorldProviderTheEnd && block == Blocks.BEDROCK) {
                 flag = true;
@@ -107,7 +107,7 @@ public class BlockFire extends Block {
 
             int i = ((Integer) iblockdata.get(BlockFire.AGE)).intValue();
 
-            if (!flag && world.W() && this.b(world, blockposition) && random.nextFloat() < 0.2F + (float) i * 0.03F) {
+            if (!flag && world.Y() && this.b(world, blockposition) && random.nextFloat() < 0.2F + (float) i * 0.03F) {
                 world.setAir(blockposition);
             } else {
                 if (i < 15) {
@@ -165,7 +165,7 @@ public class BlockFire extends Block {
                                         k1 /= 2;
                                     }
 
-                                    if (k1 > 0 && random.nextInt(i1) <= k1 && (!world.W() || !this.b(world, blockposition1))) {
+                                    if (k1 > 0 && random.nextInt(i1) <= k1 && (!world.Y() || !this.b(world, blockposition1))) {
                                         int l1 = i + random.nextInt(5) / 4;
 
                                         if (l1 > 15) {
@@ -192,20 +192,20 @@ public class BlockFire extends Block {
         return false;
     }
 
-    private int c(Block block) {
+    private int e(Block block) {
         Integer integer = (Integer) this.B.get(block);
 
         return integer == null ? 0 : integer.intValue();
     }
 
-    private int d(Block block) {
+    private int f(Block block) {
         Integer integer = (Integer) this.flameChances.get(block);
 
         return integer == null ? 0 : integer.intValue();
     }
 
     private void a(World world, BlockPosition blockposition, int i, Random random, int j) {
-        int k = this.c(world.getType(blockposition).getBlock());
+        int k = this.e(world.getType(blockposition).getBlock());
 
         if (random.nextInt(i) < k) {
             IBlockData iblockdata = world.getType(blockposition);
@@ -255,7 +255,7 @@ public class BlockFire extends Block {
             for (int k = 0; k < j; ++k) {
                 EnumDirection enumdirection = aenumdirection[k];
 
-                i = Math.max(this.d(world.getType(blockposition.shift(enumdirection)).getBlock()), i);
+                i = Math.max(this.f(world.getType(blockposition.shift(enumdirection)).getBlock()), i);
             }
 
             return i;
@@ -267,7 +267,7 @@ public class BlockFire extends Block {
     }
 
     public boolean c(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.d(iblockaccess.getType(blockposition).getBlock()) > 0;
+        return this.f(iblockaccess.getType(blockposition).getBlock()) > 0;
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
@@ -292,7 +292,7 @@ public class BlockFire extends Block {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return MaterialMapColor.f;
+        return MaterialMapColor.g;
     }
 
     public IBlockData fromLegacyData(int i) {
@@ -305,5 +305,9 @@ public class BlockFire extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockFire.AGE, BlockFire.NORTH, BlockFire.EAST, BlockFire.SOUTH, BlockFire.WEST, BlockFire.UPPER});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 }

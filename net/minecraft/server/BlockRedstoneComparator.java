@@ -123,7 +123,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
             iblockdata = iblockdata.a((IBlockState) BlockRedstoneComparator.MODE);
             float f3 = iblockdata.get(BlockRedstoneComparator.MODE) == BlockRedstoneComparator.EnumComparatorMode.SUBTRACT ? 0.55F : 0.5F;
 
-            world.a(entityhuman, blockposition, SoundEffects.an, SoundCategory.BLOCKS, 0.3F, f3);
+            world.a(entityhuman, blockposition, SoundEffects.aq, SoundCategory.BLOCKS, 0.3F, f3);
             world.setTypeAndData(blockposition, iblockdata, 2);
             this.k(world, blockposition, iblockdata);
             return true;

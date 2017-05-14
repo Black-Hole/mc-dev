@@ -342,5 +342,9 @@ public class ChunkProviderTheEnd implements ChunkGenerator {
         return "EndCity".equals(s) && this.o != null ? this.o.getNearestGeneratedFeature(world, blockposition, flag) : null;
     }
 
+    public boolean a(World world, String s, BlockPosition blockposition) {
+        return "EndCity".equals(s) && this.o != null ? this.o.b(blockposition) : false;
+    }
+
     public void recreateStructures(Chunk chunk, int i, int j) {}
 }

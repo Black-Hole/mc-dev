@@ -56,7 +56,7 @@ public class ControllerLook {
 
         float f2 = MathHelper.g(this.a.aP - this.a.aN);
 
-        if (!this.a.getNavigation().n()) {
+        if (!this.a.getNavigation().o()) {
             if (f2 < -75.0F) {
                 this.a.aP = this.a.aN - 75.0F;
             }

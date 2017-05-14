@@ -67,17 +67,17 @@ public final class IEntitySelector {
     }
 
     public static <T extends Entity> Predicate<T> a(final Entity entity) {
-        final ScoreboardTeamBase scoreboardteambase = entity.aQ();
+        final ScoreboardTeamBase scoreboardteambase = entity.aW();
         final ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
 
         return scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : Predicates.and(IEntitySelector.e, new Predicate() {
             public boolean a(@Nullable Entity entity) {
                 if (!entity.isCollidable()) {
                     return false;
-                } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).cR())) {
+                } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).cX())) {
                     return false;
                 } else {
-                    ScoreboardTeamBase scoreboardteambase = entity.aQ();
+                    ScoreboardTeamBase scoreboardteambase = entity.aW();
                     ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
 
                     if (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER) {
@@ -101,7 +101,7 @@ public final class IEntitySelector {
             public boolean a(@Nullable Entity entity) {
                 while (true) {
                     if (entity.isPassenger()) {
-                        entity = entity.bB();
+                        entity = entity.bH();
                         if (entity != entity1) {
                             continue;
                         }
@@ -135,7 +135,7 @@ public final class IEntitySelector {
             } else {
                 EntityLiving entityliving = (EntityLiving) entity;
 
-                return !entityliving.getEquipment(EntityInsentient.d(this.a)).isEmpty() ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).cT() : (entityliving instanceof EntityArmorStand ? true : entityliving instanceof EntityHuman));
+                return !entityliving.getEquipment(EntityInsentient.d(this.a)).isEmpty() ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).cV() : (entityliving instanceof EntityArmorStand ? true : entityliving instanceof EntityHuman));
             }
         }
 

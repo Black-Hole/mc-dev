@@ -107,7 +107,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
             chatmessage = new ChatMessage("disconnect.genericReason", new Object[] { "Internal Exception: " + throwable});
         }
 
-        NetworkManager.g.debug(throwable);
+        NetworkManager.g.debug(chatmessage.toPlainText(), throwable);
         this.close(chatmessage);
     }
 
@@ -124,7 +124,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     public void setPacketListener(PacketListener packetlistener) {
         Validate.notNull(packetlistener, "packetListener", new Object[0]);
-        NetworkManager.g.debug("Set listener of {} to {}", new Object[] { this, packetlistener});
+        NetworkManager.g.debug("Set listener of {} to {}", this, packetlistener);
         this.m = packetlistener;
     }
 
@@ -136,7 +136,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
             this.j.writeLock().lock();
 
             try {
-                this.i.add(new NetworkManager.QueuedPacket(packet, (GenericFutureListener[]) null));
+                this.i.add(new NetworkManager.QueuedPacket(packet, new GenericFutureListener[0]));
             } finally {
                 this.j.writeLock().unlock();
             }
@@ -221,10 +221,13 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     public void a() {
         this.m();
         if (this.m instanceof ITickable) {
-            ((ITickable) this.m).F_();
+            ((ITickable) this.m).e();
         }
 
-        this.channel.flush();
+        if (this.channel != null) {
+            this.channel.flush();
+        }
+
     }
 
     public SocketAddress getSocketAddress() {

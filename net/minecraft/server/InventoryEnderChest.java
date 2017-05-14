@@ -62,7 +62,7 @@ public class InventoryEnderChest extends InventorySubcontainer {
 
     public void closeContainer(EntityHuman entityhuman) {
         if (this.a != null) {
-            this.a.e();
+            this.a.f();
         }
 
         super.closeContainer(entityhuman);

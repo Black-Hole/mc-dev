@@ -7,7 +7,7 @@ public class EntityMushroomCow extends EntityCow {
     public EntityMushroomCow(World world) {
         super(world);
         this.setSize(0.9F, 1.4F);
-        this.bz = Blocks.MYCELIUM;
+        this.bA = Blocks.MYCELIUM;
     }
 
     public static void c(DataConverterManager dataconvertermanager) {
@@ -46,7 +46,7 @@ public class EntityMushroomCow extends EntityCow {
                 }
 
                 itemstack.damage(1, entityhuman);
-                this.a(SoundEffects.dV, 1.0F, 1.0F);
+                this.a(SoundEffects.ei, 1.0F, 1.0F);
             }
 
             return true;

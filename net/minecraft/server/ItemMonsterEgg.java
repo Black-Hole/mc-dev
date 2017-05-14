@@ -95,11 +95,11 @@ public class ItemMonsterEgg extends Item {
             NBTTagCompound nbttagcompound = itemstack.getTag();
 
             if (nbttagcompound != null && nbttagcompound.hasKeyOfType("EntityTag", 10)) {
-                if (!world.isClientSide && entity.bu() && (entityhuman == null || !minecraftserver.getPlayerList().isOp(entityhuman.getProfile()))) {
+                if (!world.isClientSide && entity.bA() && (entityhuman == null || !minecraftserver.getPlayerList().isOp(entityhuman.getProfile()))) {
                     return;
                 }
 
-                NBTTagCompound nbttagcompound1 = entity.e(new NBTTagCompound());
+                NBTTagCompound nbttagcompound1 = entity.save(new NBTTagCompound());
                 UUID uuid = entity.getUniqueID();
 
                 nbttagcompound1.a(nbttagcompound.getCompound("EntityTag"));

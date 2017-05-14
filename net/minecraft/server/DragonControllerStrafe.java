@@ -55,12 +55,12 @@ public class DragonControllerStrafe extends AbstractDragonController {
                     f1 += 0.5F;
                     if (this.c >= 5 && f1 >= 0.0F && f1 < 10.0F) {
                         d2 = 1.0D;
-                        Vec3D vec3d2 = this.a.f(1.0F);
-                        double d6 = this.a.bv.locX - vec3d2.x * 1.0D;
-                        double d7 = this.a.bv.locY + (double) (this.a.bv.length / 2.0F) + 0.5D;
-                        double d8 = this.a.bv.locZ - vec3d2.z * 1.0D;
+                        Vec3D vec3d2 = this.a.g(1.0F);
+                        double d6 = this.a.bw.locX - vec3d2.x * 1.0D;
+                        double d7 = this.a.bw.locY + (double) (this.a.bw.length / 2.0F) + 0.5D;
+                        double d8 = this.a.bw.locZ - vec3d2.z * 1.0D;
                         double d9 = this.f.locX - d6;
-                        double d10 = this.f.locY + (double) (this.f.length / 2.0F) - (d7 + (double) (this.a.bv.length / 2.0F));
+                        double d10 = this.f.locY + (double) (this.f.length / 2.0F) - (d7 + (double) (this.a.bw.length / 2.0F));
                         double d11 = this.f.locZ - d8;
 
                         this.a.world.a((EntityHuman) null, 1017, new BlockPosition(this.a), 0);
@@ -89,7 +89,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
 
     private void j() {
         if (this.d == null || this.d.b()) {
-            int i = this.a.o();
+            int i = this.a.p();
             int j = i;
 
             if (this.a.getRandom().nextInt(8) == 0) {
@@ -103,7 +103,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
                 --j;
             }
 
-            if (this.a.db() != null && this.a.db().c() > 0) {
+            if (this.a.dd() != null && this.a.dd().c() > 0) {
                 j %= 12;
                 if (j < 0) {
                     j += 12;
@@ -151,7 +151,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
 
     public void a(EntityLiving entityliving) {
         this.f = entityliving;
-        int i = this.a.o();
+        int i = this.a.p();
         int j = this.a.k(this.f.locX, this.f.locY, this.f.locZ);
         int k = MathHelper.floor(this.f.locX);
         int l = MathHelper.floor(this.f.locZ);

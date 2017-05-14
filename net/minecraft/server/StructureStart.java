@@ -94,7 +94,7 @@ public abstract class StructureStart {
     public void b(NBTTagCompound nbttagcompound) {}
 
     protected void a(World world, Random random, int i) {
-        int j = world.K() - i;
+        int j = world.getSeaLevel() - i;
         int k = this.b.d() + 1;
 
         if (k < j) {

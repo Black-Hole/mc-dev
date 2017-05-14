@@ -1,10 +1,12 @@
 package net.minecraft.server;
 
 import java.util.Iterator;
+import javax.annotation.Nullable;
 
 public class InventoryCraftResult implements IInventory {
 
     private final NonNullList<ItemStack> items;
+    private IRecipe b;
 
     public InventoryCraftResult() {
         this.items = NonNullList.a(1, ItemStack.a);
@@ -14,7 +16,7 @@ public class InventoryCraftResult implements IInventory {
         return 1;
     }
 
-    public boolean w_() {
+    public boolean x_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -88,5 +90,14 @@ public class InventoryCraftResult implements IInventory {
 
     public void clear() {
         this.items.clear();
+    }
+
+    public void a(@Nullable IRecipe irecipe) {
+        this.b = irecipe;
+    }
+
+    @Nullable
+    public IRecipe i() {
+        return this.b;
     }
 }

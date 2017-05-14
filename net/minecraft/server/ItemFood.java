@@ -27,9 +27,12 @@ public class ItemFood extends Item {
             EntityHuman entityhuman = (EntityHuman) entityliving;
 
             entityhuman.getFoodData().a(this, itemstack);
-            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.eE, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.fD, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
             this.a(itemstack, world, entityhuman);
             entityhuman.b(StatisticList.b((Item) this));
+            if (entityhuman instanceof EntityPlayer) {
+                CriterionTriggers.y.a((EntityPlayer) entityhuman, itemstack);
+            }
         }
 
         itemstack.subtract(1);

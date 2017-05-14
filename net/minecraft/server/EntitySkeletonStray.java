@@ -12,8 +12,8 @@ public class EntitySkeletonStray extends EntitySkeletonAbstract {
         EntityInsentient.a(dataconvertermanager, EntitySkeletonStray.class);
     }
 
-    public boolean cM() {
-        return super.cM() && this.world.h(new BlockPosition(this));
+    public boolean P() {
+        return super.P() && this.world.h(new BlockPosition(this));
     }
 
     @Nullable
@@ -21,20 +21,20 @@ public class EntitySkeletonStray extends EntitySkeletonAbstract {
         return LootTables.aq;
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.gQ;
+    protected SoundEffect F() {
+        return SoundEffects.hR;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.gS;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.hT;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.gR;
+    protected SoundEffect cd() {
+        return SoundEffects.hS;
     }
 
-    SoundEffect o() {
-        return SoundEffects.gT;
+    SoundEffect p() {
+        return SoundEffects.hU;
     }
 
     protected EntityArrow a(float f) {

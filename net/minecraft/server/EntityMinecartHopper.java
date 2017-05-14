@@ -75,8 +75,8 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
         return this.locZ;
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (!this.world.isClientSide && this.isAlive() && this.isEnabled()) {
             BlockPosition blockposition = new BlockPosition(this);
 
@@ -88,7 +88,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 
             if (!this.J()) {
                 this.setCooldown(0);
-                if (this.I()) {
+                if (this.H()) {
                     this.setCooldown(4);
                     this.update();
                 }
@@ -97,7 +97,7 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 
     }
 
-    public boolean I() {
+    public boolean H() {
         if (TileEntityHopper.a((IHopper) this)) {
             return true;
         } else {

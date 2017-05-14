@@ -398,7 +398,7 @@ public class DefinedStructure {
                     nbttaglist = nbttagcompound.getList("entities", 10);
 
                     for (j = 0; j < nbttaglist.size(); ++j) {
-                        nbttagcompound1 = (NBTTagCompound) nbttaglist.h(j);
+                        nbttagcompound1 = (NBTTagCompound) nbttaglist.i(j);
                         if (nbttagcompound1.hasKeyOfType("nbt", 10)) {
                             nbttagcompound1.set("nbt", dataconverter.a(DataConverterTypes.ENTITY, nbttagcompound1.getCompound("nbt"), i));
                         }
@@ -409,7 +409,7 @@ public class DefinedStructure {
                     nbttaglist = nbttagcompound.getList("blocks", 10);
 
                     for (j = 0; j < nbttaglist.size(); ++j) {
-                        nbttagcompound1 = (NBTTagCompound) nbttaglist.h(j);
+                        nbttagcompound1 = (NBTTagCompound) nbttaglist.i(j);
                         if (nbttagcompound1.hasKeyOfType("nbt", 10)) {
                             nbttagcompound1.set("nbt", dataconverter.a(DataConverterTypes.BLOCK_ENTITY, nbttagcompound1.getCompound("nbt"), i));
                         }
@@ -467,7 +467,7 @@ public class DefinedStructure {
         nbttagcompound.set("entities", nbttaglist1);
         nbttagcompound.set("size", this.a(new int[] { this.c.getX(), this.c.getY(), this.c.getZ()}));
         nbttagcompound.setString("author", this.d);
-        nbttagcompound.setInt("DataVersion", 922);
+        nbttagcompound.setInt("DataVersion", 1133);
         return nbttagcompound;
     }
 
@@ -508,7 +508,7 @@ public class DefinedStructure {
         for (int k = 0; k < nbttaglist4.size(); ++k) {
             NBTTagCompound nbttagcompound3 = nbttaglist4.get(k);
             NBTTagList nbttaglist5 = nbttagcompound3.getList("pos", 6);
-            Vec3D vec3d = new Vec3D(nbttaglist5.e(0), nbttaglist5.e(1), nbttaglist5.e(2));
+            Vec3D vec3d = new Vec3D(nbttaglist5.f(0), nbttaglist5.f(1), nbttaglist5.f(2));
             NBTTagList nbttaglist6 = nbttagcompound3.getList("blockPos", 3);
             BlockPosition blockposition1 = new BlockPosition(nbttaglist6.c(0), nbttaglist6.c(1), nbttaglist6.c(2));
 

@@ -16,7 +16,7 @@ public class TileEntityDispenser extends TileEntityLootable {
         return 9;
     }
 
-    public boolean w_() {
+    public boolean x_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;

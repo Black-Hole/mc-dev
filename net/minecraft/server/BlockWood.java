@@ -32,7 +32,7 @@ public class BlockWood extends Block {
 
     public static enum EnumLogVariant implements INamable {
 
-        OAK(0, "oak", MaterialMapColor.o), SPRUCE(1, "spruce", MaterialMapColor.J), BIRCH(2, "birch", MaterialMapColor.d), JUNGLE(3, "jungle", MaterialMapColor.l), ACACIA(4, "acacia", MaterialMapColor.q), DARK_OAK(5, "dark_oak", "big_oak", MaterialMapColor.B);
+        OAK(0, "oak", MaterialMapColor.p), SPRUCE(1, "spruce", MaterialMapColor.K), BIRCH(2, "birch", MaterialMapColor.e), JUNGLE(3, "jungle", MaterialMapColor.m), ACACIA(4, "acacia", MaterialMapColor.r), DARK_OAK(5, "dark_oak", "big_oak", MaterialMapColor.C);
 
         private static final BlockWood.EnumLogVariant[] g = new BlockWood.EnumLogVariant[values().length];
         private final int h;

@@ -2,5 +2,5 @@ package net.minecraft.server;
 
 public interface ITickable {
 
-    void F_();
+    void e();
 }

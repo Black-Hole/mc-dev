@@ -22,7 +22,7 @@ public class CommandEntityData extends CommandAbstract {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.entitydata.usage", new Object[0]);
         } else {
-            Entity entity = b(minecraftserver, icommandlistener, astring[0]);
+            Entity entity = c(minecraftserver, icommandlistener, astring[0]);
 
             if (entity instanceof EntityHuman) {
                 throw new CommandException("commands.entitydata.noPlayers", new Object[] { entity.getScoreboardDisplayName()});
@@ -33,7 +33,7 @@ public class CommandEntityData extends CommandAbstract {
                 NBTTagCompound nbttagcompound2;
 
                 try {
-                    nbttagcompound2 = MojangsonParser.parse(a(icommandlistener, astring, 1).toPlainText());
+                    nbttagcompound2 = MojangsonParser.parse(a(astring, 1));
                 } catch (MojangsonParseException mojangsonparseexception) {
                     throw new CommandException("commands.entitydata.tagError", new Object[] { mojangsonparseexception.getMessage()});
                 }

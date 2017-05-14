@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public abstract class NBTBase {
 
-    public static final String[] a = new String[] { "END", "BYTE", "SHORT", "INT", "LONG", "FLOAT", "DOUBLE", "BYTE[]", "STRING", "LIST", "COMPOUND", "INT[]"};
+    public static final String[] a = new String[] { "END", "BYTE", "SHORT", "INT", "LONG", "FLOAT", "DOUBLE", "BYTE[]", "STRING", "LIST", "COMPOUND", "INT[]", "LONG[]"};
 
     abstract void write(DataOutput dataoutput) throws IOException;
 
@@ -56,8 +56,60 @@ public abstract class NBTBase {
         case 11:
             return new NBTTagIntArray();
 
+        case 12:
+            return new NBTTagLongArray();
+
         default:
             return null;
+        }
+    }
+
+    public static String j(int i) {
+        switch (i) {
+        case 0:
+            return "TAG_End";
+
+        case 1:
+            return "TAG_Byte";
+
+        case 2:
+            return "TAG_Short";
+
+        case 3:
+            return "TAG_Int";
+
+        case 4:
+            return "TAG_Long";
+
+        case 5:
+            return "TAG_Float";
+
+        case 6:
+            return "TAG_Double";
+
+        case 7:
+            return "TAG_Byte_Array";
+
+        case 8:
+            return "TAG_String";
+
+        case 9:
+            return "TAG_List";
+
+        case 10:
+            return "TAG_Compound";
+
+        case 11:
+            return "TAG_Int_Array";
+
+        case 12:
+            return "TAG_Long_Array";
+
+        case 99:
+            return "Any Numeric Tag";
+
+        default:
+            return "UNKNOWN";
         }
     }
 
@@ -68,13 +120,7 @@ public abstract class NBTBase {
     }
 
     public boolean equals(Object object) {
-        if (!(object instanceof NBTBase)) {
-            return false;
-        } else {
-            NBTBase nbtbase = (NBTBase) object;
-
-            return this.getTypeId() == nbtbase.getTypeId();
-        }
+        return object instanceof NBTBase && this.getTypeId() == ((NBTBase) object).getTypeId();
     }
 
     public int hashCode() {

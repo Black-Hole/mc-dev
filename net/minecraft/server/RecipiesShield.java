@@ -1,17 +1,8 @@
 package net.minecraft.server;
 
-public class RecipiesShield {
+public class RecipiesShield {    public static class Decoration extends IRecipe {
 
-    public RecipiesShield() {}
-
-    public void a(CraftingManager craftingmanager) {
-        craftingmanager.registerShapedRecipe(new ItemStack(Items.SHIELD), new Object[] { "WoW", "WWW", " W ", Character.valueOf('W'), Blocks.PLANKS, Character.valueOf('o'), Items.IRON_INGOT});
-        craftingmanager.a(new RecipiesShield.Decoration(null));
-    }
-
-    static class Decoration implements IRecipe {
-
-        private Decoration() {}
+        public Decoration() {}
 
         public boolean a(InventoryCrafting inventorycrafting, World world) {
             ItemStack itemstack = ItemStack.a;
@@ -80,10 +71,6 @@ public class RecipiesShield {
             }
         }
 
-        public int a() {
-            return 2;
-        }
-
         public ItemStack b() {
             return ItemStack.a;
         }
@@ -94,16 +81,16 @@ public class RecipiesShield {
             for (int i = 0; i < nonnulllist.size(); ++i) {
                 ItemStack itemstack = inventorycrafting.getItem(i);
 
-                if (itemstack.getItem().s()) {
-                    nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
+                if (itemstack.getItem().r()) {
+                    nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
                 }
             }
 
             return nonnulllist;
         }
 
-        Decoration(Object object) {
-            this();
+        public boolean d() {
+            return true;
         }
     }
 }

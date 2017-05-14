@@ -13,6 +13,7 @@ public class EntityTNTPrimed extends Entity {
         super(world);
         this.c = 80;
         this.i = true;
+        this.fireProof = true;
         this.setSize(0.98F, 0.98F);
     }
 
@@ -43,7 +44,7 @@ public class EntityTNTPrimed extends Entity {
         return !this.dead;
     }
 
-    public void A_() {
+    public void B_() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
@@ -68,7 +69,7 @@ public class EntityTNTPrimed extends Entity {
                 this.explode();
             }
         } else {
-            this.ak();
+            this.aq();
             this.world.addParticle(EnumParticle.SMOKE_NORMAL, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
         }
 

@@ -122,10 +122,10 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         EnumDirection enumdirection1 = enumdirection.e();
         EnumDirection enumdirection2 = enumdirection.f();
 
-        return Math.max(this.b(iblockaccess, blockposition.shift(enumdirection1), enumdirection1), this.b(iblockaccess, blockposition.shift(enumdirection2), enumdirection2));
+        return Math.max(this.a(iblockaccess, blockposition.shift(enumdirection1), enumdirection1), this.a(iblockaccess, blockposition.shift(enumdirection2), enumdirection2));
     }
 
-    protected int b(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+    protected int a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
         Block block = iblockdata.getBlock();
 
@@ -213,7 +213,11 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
 
     protected abstract IBlockData A(IBlockData iblockdata);
 
-    public boolean b(Block block) {
+    public boolean d(Block block) {
         return this.E(block.getBlockData());
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.DOWN ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
     }
 }

@@ -30,7 +30,7 @@ public class BlockLog2 extends BlockLogAbstract {
             switch (blockwood_enumlogvariant) {
             case ACACIA:
             default:
-                return MaterialMapColor.m;
+                return MaterialMapColor.n;
 
             case DARK_OAK:
                 return BlockWood.EnumLogVariant.DARK_OAK.c();

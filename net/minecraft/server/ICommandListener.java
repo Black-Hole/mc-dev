@@ -6,25 +6,35 @@ public interface ICommandListener {
 
     String getName();
 
-    IChatBaseComponent getScoreboardDisplayName();
+    default IChatBaseComponent getScoreboardDisplayName() {
+        return new ChatComponentText(this.getName());
+    }
 
-    void sendMessage(IChatBaseComponent ichatbasecomponent);
+    default void sendMessage(IChatBaseComponent ichatbasecomponent) {}
 
     boolean a(int i, String s);
 
-    BlockPosition getChunkCoordinates();
+    default BlockPosition getChunkCoordinates() {
+        return BlockPosition.ZERO;
+    }
 
-    Vec3D d();
+    default Vec3D d() {
+        return Vec3D.a;
+    }
 
     World getWorld();
 
     @Nullable
-    Entity f();
+    default Entity f() {
+        return null;
+    }
 
-    boolean getSendCommandFeedback();
+    default boolean getSendCommandFeedback() {
+        return false;
+    }
 
-    void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i);
+    default void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {}
 
     @Nullable
-    MinecraftServer B_();
+    MinecraftServer C_();
 }

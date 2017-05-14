@@ -154,13 +154,13 @@ public class BlockSkull extends BlockTileEntity {
 
                 entitywither.setPositionRotation((double) blockposition2.getX() + 0.5D, (double) blockposition2.getY() + 0.55D, (double) blockposition2.getZ() + 0.5D, shapedetector_shapedetectorcollection.getFacing().k() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F, 0.0F);
                 entitywither.aN = shapedetector_shapedetectorcollection.getFacing().k() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
-                entitywither.o();
-                Iterator iterator = world.a(EntityHuman.class, entitywither.getBoundingBox().g(50.0D)).iterator();
+                entitywither.p();
+                Iterator iterator = world.a(EntityPlayer.class, entitywither.getBoundingBox().g(50.0D)).iterator();
 
                 while (iterator.hasNext()) {
-                    EntityHuman entityhuman = (EntityHuman) iterator.next();
+                    EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                    entityhuman.b((Statistic) AchievementList.I);
+                    CriterionTriggers.m.a(entityplayer, (Entity) entitywither);
                 }
 
                 world.addEntity(entitywither);
@@ -224,5 +224,9 @@ public class BlockSkull extends BlockTileEntity {
         }
 
         return this.D;
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 }

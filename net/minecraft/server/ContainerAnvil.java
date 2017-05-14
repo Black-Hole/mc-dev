@@ -18,9 +18,9 @@ public class ContainerAnvil extends Container {
     };
     private final World i;
     private final BlockPosition j;
-    public int a;
+    public int levelCost;
     private int k;
-    private String l;
+    public String renameText;
     private final EntityHuman m;
 
     public ContainerAnvil(PlayerInventory playerinventory, final World world, final BlockPosition blockposition, EntityHuman entityhuman) {
@@ -35,28 +35,21 @@ public class ContainerAnvil extends Container {
             }
 
             public boolean isAllowed(EntityHuman entityhuman) {
-                return (entityhuman.abilities.canInstantlyBuild || entityhuman.expLevel >= ContainerAnvil.this.a) && ContainerAnvil.this.a > 0 && this.hasItem();
+                return (entityhuman.abilities.canInstantlyBuild || entityhuman.expLevel >= ContainerAnvil.this.levelCost) && ContainerAnvil.this.levelCost > 0 && this.hasItem();
             }
 
             public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
                 if (!entityhuman.abilities.canInstantlyBuild) {
-                    entityhuman.levelDown(-ContainerAnvil.this.a);
+                    entityhuman.levelDown(-ContainerAnvil.this.levelCost);
                 }
 
-                ItemStack itemstack1 = ContainerAnvil.this.h.getItem(0);
-
-                if (itemstack1.getCount() != 1 && !entityhuman.abilities.canInstantlyBuild && !(itemstack1.getItem() instanceof ItemNameTag)) {
-                    itemstack1.setCount(itemstack1.getCount() - 1);
-                } else {
-                    ContainerAnvil.this.h.setItem(0, ItemStack.a);
-                }
-
+                ContainerAnvil.this.h.setItem(0, ItemStack.a);
                 if (ContainerAnvil.this.k > 0) {
-                    ItemStack itemstack2 = ContainerAnvil.this.h.getItem(1);
+                    ItemStack itemstack1 = ContainerAnvil.this.h.getItem(1);
 
-                    if (!itemstack2.isEmpty() && itemstack2.getCount() > ContainerAnvil.this.k) {
-                        itemstack2.subtract(ContainerAnvil.this.k);
-                        ContainerAnvil.this.h.setItem(1, itemstack2);
+                    if (!itemstack1.isEmpty() && itemstack1.getCount() > ContainerAnvil.this.k) {
+                        itemstack1.subtract(ContainerAnvil.this.k);
+                        ContainerAnvil.this.h.setItem(1, itemstack1);
                     } else {
                         ContainerAnvil.this.h.setItem(1, ItemStack.a);
                     }
@@ -64,7 +57,7 @@ public class ContainerAnvil extends Container {
                     ContainerAnvil.this.h.setItem(1, ItemStack.a);
                 }
 
-                ContainerAnvil.this.a = 0;
+                ContainerAnvil.this.levelCost = 0;
                 IBlockData iblockdata = world.getType(blockposition);
 
                 if (!entityhuman.abilities.canInstantlyBuild && !world.isClientSide && iblockdata.getBlock() == Blocks.ANVIL && entityhuman.getRandom().nextFloat() < 0.12F) {
@@ -111,21 +104,16 @@ public class ContainerAnvil extends Container {
     public void e() {
         ItemStack itemstack = this.h.getItem(0);
 
-        this.a = 1;
+        this.levelCost = 1;
         int i = 0;
         byte b0 = 0;
         byte b1 = 0;
 
         if (itemstack.isEmpty()) {
             this.g.setItem(0, ItemStack.a);
-            this.a = 0;
+            this.levelCost = 0;
         } else {
             ItemStack itemstack1 = itemstack.cloneItemStack();
-
-            if (itemstack1.getCount() > 1 && !this.m.abilities.canInstantlyBuild && !(itemstack1.getItem() instanceof ItemNameTag)) {
-                itemstack1.setCount(1);
-            }
-
             ItemStack itemstack2 = this.h.getItem(1);
             Map map = EnchantmentManager.a(itemstack1);
             int j = b0 + itemstack.getRepairCost() + (itemstack2.isEmpty() ? 0 : itemstack2.getRepairCost());
@@ -141,7 +129,7 @@ public class ContainerAnvil extends Container {
                     k = Math.min(itemstack1.i(), itemstack1.k() / 4);
                     if (k <= 0) {
                         this.g.setItem(0, ItemStack.a);
-                        this.a = 0;
+                        this.levelCost = 0;
                         return;
                     }
 
@@ -156,7 +144,7 @@ public class ContainerAnvil extends Container {
                 } else {
                     if (!flag && (itemstack1.getItem() != itemstack2.getItem() || !itemstack1.f())) {
                         this.g.setItem(0, ItemStack.a);
-                        this.a = 0;
+                        this.levelCost = 0;
                         return;
                     }
 
@@ -240,40 +228,43 @@ public class ContainerAnvil extends Container {
                                 }
 
                                 i += j2 * i2;
+                                if (itemstack.getCount() > 1) {
+                                    i = 40;
+                                }
                             }
                         }
                     }
 
                     if (flag2 && !flag1) {
                         this.g.setItem(0, ItemStack.a);
-                        this.a = 0;
+                        this.levelCost = 0;
                         return;
                     }
                 }
             }
 
-            if (StringUtils.isBlank(this.l)) {
+            if (StringUtils.isBlank(this.renameText)) {
                 if (itemstack.hasName()) {
                     b1 = 1;
                     i += b1;
                     itemstack1.s();
                 }
-            } else if (!this.l.equals(itemstack.getName())) {
+            } else if (!this.renameText.equals(itemstack.getName())) {
                 b1 = 1;
                 i += b1;
-                itemstack1.g(this.l);
+                itemstack1.g(this.renameText);
             }
 
-            this.a = j + i;
+            this.levelCost = j + i;
             if (i <= 0) {
                 itemstack1 = ItemStack.a;
             }
 
-            if (b1 == i && b1 > 0 && this.a >= 40) {
-                this.a = 39;
+            if (b1 == i && b1 > 0 && this.levelCost >= 40) {
+                this.levelCost = 39;
             }
 
-            if (this.a >= 40 && !this.m.abilities.canInstantlyBuild) {
+            if (this.levelCost >= 40 && !this.m.abilities.canInstantlyBuild) {
                 itemstack1 = ItemStack.a;
             }
 
@@ -299,20 +290,13 @@ public class ContainerAnvil extends Container {
 
     public void addSlotListener(ICrafting icrafting) {
         super.addSlotListener(icrafting);
-        icrafting.setContainerData(this, 0, this.a);
+        icrafting.setContainerData(this, 0, this.levelCost);
     }
 
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
         if (!this.i.isClientSide) {
-            for (int i = 0; i < this.h.getSize(); ++i) {
-                ItemStack itemstack = this.h.splitWithoutUpdate(i);
-
-                if (!itemstack.isEmpty()) {
-                    entityhuman.drop(itemstack, false);
-                }
-            }
-
+            this.a(entityhuman, this.i, this.h);
         }
     }
 
@@ -359,14 +343,14 @@ public class ContainerAnvil extends Container {
     }
 
     public void a(String s) {
-        this.l = s;
+        this.renameText = s;
         if (this.getSlot(2).hasItem()) {
             ItemStack itemstack = this.getSlot(2).getItem();
 
             if (StringUtils.isBlank(s)) {
                 itemstack.s();
             } else {
-                itemstack.g(this.l);
+                itemstack.g(this.renameText);
             }
         }
 

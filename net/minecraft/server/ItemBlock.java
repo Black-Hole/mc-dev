@@ -29,6 +29,9 @@ public class ItemBlock extends Item {
                 if (iblockdata1.getBlock() == this.a) {
                     a(world, entityhuman, blockposition, itemstack);
                     this.a.postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
+                    if (entityhuman instanceof EntityPlayer) {
+                        CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition, itemstack);
+                    }
                 }
 
                 SoundEffectType soundeffecttype = this.a.getStepSound();
@@ -55,7 +58,7 @@ public class ItemBlock extends Item {
                 TileEntity tileentity = world.getTileEntity(blockposition);
 
                 if (tileentity != null) {
-                    if (!world.isClientSide && tileentity.isFilteredNBT() && (entityhuman == null || !entityhuman.dk())) {
+                    if (!world.isClientSide && tileentity.isFilteredNBT() && (entityhuman == null || !entityhuman.isCreativeAndOp())) {
                         return false;
                     }
 

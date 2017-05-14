@@ -27,6 +27,10 @@ public class BlockSnow extends Block {
         return ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() == 8;
     }
 
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.DOWN ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
+    }
+
     @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         int i = ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() - 1;
@@ -48,7 +52,13 @@ public class BlockSnow extends Block {
         IBlockData iblockdata = world.getType(blockposition.down());
         Block block = iblockdata.getBlock();
 
-        return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (iblockdata.getMaterial() == Material.LEAVES ? true : (block == this && ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() == 8 ? true : iblockdata.q() && iblockdata.getMaterial().isSolid())) : false;
+        if (block != Blocks.ICE && block != Blocks.PACKED_ICE && block != Blocks.BARRIER) {
+            EnumBlockFaceShape enumblockfaceshape = iblockdata.d(world, blockposition.down(), EnumDirection.UP);
+
+            return enumblockfaceshape == EnumBlockFaceShape.SOLID || iblockdata.getMaterial() == Material.LEAVES || block == this && ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() == 8;
+        } else {
+            return false;
+        }
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {

@@ -21,7 +21,7 @@ public class DataConverterManager implements DataConverter {
     public NBTTagCompound a(DataConverterType dataconvertertype, NBTTagCompound nbttagcompound) {
         int i = nbttagcompound.hasKeyOfType("DataVersion", 99) ? nbttagcompound.getInt("DataVersion") : -1;
 
-        return i >= 922 ? nbttagcompound : this.a(dataconvertertype, nbttagcompound, i);
+        return i >= 1133 ? nbttagcompound : this.a(dataconvertertype, nbttagcompound, i);
     }
 
     public NBTTagCompound a(DataConverterType dataconvertertype, NBTTagCompound nbttagcompound, int i) {
@@ -74,7 +74,7 @@ public class DataConverterManager implements DataConverter {
         int i = idataconverter.a();
 
         if (i > this.d) {
-            DataConverterManager.a.warn("Ignored fix registered for version: {} as the DataVersion of the game is: {}", new Object[] { Integer.valueOf(i), Integer.valueOf(this.d)});
+            DataConverterManager.a.warn("Ignored fix registered for version: {} as the DataVersion of the game is: {}", Integer.valueOf(i), Integer.valueOf(this.d));
         } else {
             if (!list.isEmpty() && ((IDataConverter) SystemUtils.a(list)).a() > i) {
                 for (int j = 0; j < list.size(); ++j) {

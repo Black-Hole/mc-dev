@@ -27,7 +27,7 @@ public abstract class BlockFluids extends Block {
         return this.material != Material.LAVA;
     }
 
-    public static float e(int i) {
+    public static float b(int i) {
         if (i >= 8) {
             i = 0;
         }
@@ -57,10 +57,22 @@ public abstract class BlockFluids extends Block {
         return flag && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0;
     }
 
-    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        Material material = iblockaccess.getType(blockposition).getMaterial();
+    private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+        IBlockData iblockdata = iblockaccess.getType(blockposition);
+        Block block = iblockdata.getBlock();
+        Material material = iblockdata.getMaterial();
 
-        return material == this.material ? false : (enumdirection == EnumDirection.UP ? true : (material == Material.ICE ? false : super.a(iblockaccess, blockposition, enumdirection)));
+        if (material == this.material) {
+            return false;
+        } else if (enumdirection == EnumDirection.UP) {
+            return true;
+        } else if (material == Material.ICE) {
+            return false;
+        } else {
+            boolean flag = c(block) || block instanceof BlockStairs;
+
+            return !flag && iblockdata.d(iblockaccess, blockposition, enumdirection) == EnumBlockFaceShape.SOLID;
+        }
     }
 
     public EnumRenderType a(IBlockData iblockdata) {
@@ -184,7 +196,7 @@ public abstract class BlockFluids extends Block {
         double d1 = (double) blockposition.getY();
         double d2 = (double) blockposition.getZ();
 
-        world.a((EntityHuman) null, blockposition, SoundEffects.dr, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+        world.a((EntityHuman) null, blockposition, SoundEffects.dE, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
 
         for (int i = 0; i < 8; ++i) {
             world.addParticle(EnumParticle.SMOKE_LARGE, d0 + Math.random(), d1 + 1.2D, d2 + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
@@ -227,10 +239,14 @@ public abstract class BlockFluids extends Block {
     public static float f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         int i = ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue();
 
-        return (i & 7) == 0 && iblockaccess.getType(blockposition.up()).getMaterial() == Material.WATER ? 1.0F : 1.0F - e(i);
+        return (i & 7) == 0 && iblockaccess.getType(blockposition.up()).getMaterial() == Material.WATER ? 1.0F : 1.0F - b(i);
     }
 
     public static float g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return (float) blockposition.getY() + f(iblockdata, iblockaccess, blockposition);
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 }

@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public enum DimensionManager {
 
-    OVERWORLD(0, "Overworld", "", WorldProviderNormal.class), NETHER(-1, "Nether", "_nether", WorldProviderHell.class), THE_END(1, "The End", "_end", WorldProviderTheEnd.class);
+    OVERWORLD(0, "overworld", "", WorldProviderNormal.class), NETHER(-1, "the_nether", "_nether", WorldProviderHell.class), THE_END(1, "the_end", "_end", WorldProviderTheEnd.class);
 
     private final int d;
     private final String e;
@@ -60,5 +60,20 @@ public enum DimensionManager {
         }
 
         throw new IllegalArgumentException("Invalid dimension id " + i);
+    }
+
+    public static DimensionManager a(String s) {
+        DimensionManager[] adimensionmanager = values();
+        int i = adimensionmanager.length;
+
+        for (int j = 0; j < i; ++j) {
+            DimensionManager dimensionmanager = adimensionmanager[j];
+
+            if (dimensionmanager.b().equals(s)) {
+                return dimensionmanager;
+            }
+        }
+
+        throw new IllegalArgumentException("Invalid dimension " + s);
     }
 }

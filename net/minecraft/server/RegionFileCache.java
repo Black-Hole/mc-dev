@@ -86,7 +86,7 @@ public class RegionFileCache {
         return regionfile.b(i & 31, j & 31);
     }
 
-    public static boolean f(File file, int i, int j) {
+    public static synchronized boolean chunkExists(File file, int i, int j) {
         RegionFile regionfile = b(file, i, j);
 
         return regionfile != null ? regionfile.c(i & 31, j & 31) : false;

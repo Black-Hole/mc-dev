@@ -14,7 +14,7 @@ public abstract class BlockLeaves extends Block {
         this.a(true);
         this.a(CreativeModeTab.c);
         this.c(0.2F);
-        this.d(1);
+        this.e(1);
         this.a(SoundEffectType.c);
     }
 
@@ -188,5 +188,5 @@ public abstract class BlockLeaves extends Block {
         return false;
     }
 
-    public abstract BlockWood.EnumLogVariant e(int i);
+    public abstract BlockWood.EnumLogVariant b(int i);
 }

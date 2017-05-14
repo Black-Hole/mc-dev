@@ -1,14 +1,34 @@
 package net.minecraft.server;
 
-public interface IRecipe {
+public abstract class IRecipe implements Comparable<IRecipe> {
 
-    boolean a(InventoryCrafting inventorycrafting, World world);
+    protected String a;
 
-    ItemStack craftItem(InventoryCrafting inventorycrafting);
+    public IRecipe() {
+        this("");
+    }
 
-    int a();
+    public IRecipe(String s) {
+        this.a = s;
+    }
 
-    ItemStack b();
+    public abstract boolean a(InventoryCrafting inventorycrafting, World world);
 
-    NonNullList<ItemStack> b(InventoryCrafting inventorycrafting);
+    public abstract ItemStack craftItem(InventoryCrafting inventorycrafting);
+
+    public abstract ItemStack b();
+
+    public abstract NonNullList<ItemStack> b(InventoryCrafting inventorycrafting);
+
+    public boolean d() {
+        return false;
+    }
+
+    public int a(IRecipe irecipe) {
+        return ((MinecraftKey) CraftingManager.recipes.b(this)).a((MinecraftKey) CraftingManager.recipes.b(irecipe));
+    }
+
+    public int compareTo(Object object) {
+        return this.a((IRecipe) object);
+    }
 }

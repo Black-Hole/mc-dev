@@ -4,11 +4,11 @@ import java.util.UUID;
 
 public abstract class EntityCreature extends EntityInsentient {
 
-    public static final UUID bu = UUID.fromString("E199AD21-BA8A-4C53-8D13-6182D5C69D3A");
-    public static final AttributeModifier bv = (new AttributeModifier(EntityCreature.bu, "Fleeing speed bonus", 2.0D, 2)).a(false);
+    public static final UUID bv = UUID.fromString("E199AD21-BA8A-4C53-8D13-6182D5C69D3A");
+    public static final AttributeModifier bw = (new AttributeModifier(EntityCreature.bv, "Fleeing speed bonus", 2.0D, 2)).a(false);
     private BlockPosition a;
     private float b;
-    private float c;
+    private final float c;
 
     public EntityCreature(World world) {
         super(world);
@@ -21,15 +21,15 @@ public abstract class EntityCreature extends EntityInsentient {
         return 0.0F;
     }
 
-    public boolean cM() {
-        return super.cM() && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ)) >= 0.0F;
+    public boolean P() {
+        return super.P() && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ)) >= 0.0F;
     }
 
-    public boolean da() {
-        return !this.navigation.n();
+    public boolean dc() {
+        return !this.navigation.o();
     }
 
-    public boolean db() {
+    public boolean dd() {
         return this.f(new BlockPosition(this));
     }
 
@@ -42,24 +42,24 @@ public abstract class EntityCreature extends EntityInsentient {
         this.b = (float) i;
     }
 
-    public BlockPosition dc() {
+    public BlockPosition de() {
         return this.a;
     }
 
-    public float dd() {
+    public float df() {
         return this.b;
     }
 
-    public void de() {
+    public void dg() {
         this.b = -1.0F;
     }
 
-    public boolean df() {
+    public boolean dh() {
         return this.b != -1.0F;
     }
 
-    protected void cV() {
-        super.cV();
+    protected void cX() {
+        super.cX();
         if (this.isLeashed() && this.getLeashHolder() != null && this.getLeashHolder().world == this.world) {
             Entity entity = this.getLeashHolder();
 
@@ -74,7 +74,7 @@ public abstract class EntityCreature extends EntityInsentient {
                 return;
             }
 
-            this.q(f);
+            this.s(f);
             if (f > 10.0F) {
                 this.unleash(true, true);
                 this.goalSelector.c(1);
@@ -91,15 +91,15 @@ public abstract class EntityCreature extends EntityInsentient {
                 float f1 = 2.0F;
                 Vec3D vec3d = (new Vec3D(entity.locX - this.locX, entity.locY - this.locY, entity.locZ - this.locZ)).a().a((double) Math.max(f - 2.0F, 0.0F));
 
-                this.getNavigation().a(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z, this.dg());
+                this.getNavigation().a(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z, this.di());
             }
         }
 
     }
 
-    protected double dg() {
+    protected double di() {
         return 1.0D;
     }
 
-    protected void q(float f) {}
+    protected void s(float f) {}
 }

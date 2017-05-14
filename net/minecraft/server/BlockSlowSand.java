@@ -7,7 +7,7 @@ public class BlockSlowSand extends Block {
     protected static final AxisAlignedBB a = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D);
 
     public BlockSlowSand() {
-        super(Material.SAND, MaterialMapColor.B);
+        super(Material.SAND, MaterialMapColor.C);
         this.a(CreativeModeTab.b);
     }
 

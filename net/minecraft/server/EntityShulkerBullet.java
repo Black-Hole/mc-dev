@@ -30,7 +30,7 @@ public class EntityShulkerBullet extends Entity {
         this.noclip = true;
     }
 
-    public SoundCategory bC() {
+    public SoundCategory bI() {
         return SoundCategory.HOSTILE;
     }
 
@@ -189,11 +189,11 @@ public class EntityShulkerBullet extends Entity {
         this.d = 10 + this.random.nextInt(5) * 10;
     }
 
-    public void A_() {
+    public void B_() {
         if (!this.world.isClientSide && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
             this.die();
         } else {
-            super.A_();
+            super.B_();
             if (!this.world.isClientSide) {
                 List list;
                 Iterator iterator;
@@ -282,14 +282,14 @@ public class EntityShulkerBullet extends Entity {
         return false;
     }
 
-    public float e(float f) {
+    public float f(float f) {
         return 1.0F;
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
         if (movingobjectposition.entity == null) {
             ((WorldServer) this.world).a(EnumParticle.EXPLOSION_LARGE, this.locX, this.locY, this.locZ, 2, 0.2D, 0.2D, 0.2D, 0.0D, new int[0]);
-            this.a(SoundEffects.fC, 1.0F, 1.0F);
+            this.a(SoundEffects.gD, 1.0F, 1.0F);
         } else {
             boolean flag = movingobjectposition.entity.damageEntity(DamageSource.a(this, this.shooter).b(), 4.0F);
 
@@ -310,7 +310,7 @@ public class EntityShulkerBullet extends Entity {
 
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (!this.world.isClientSide) {
-            this.a(SoundEffects.fD, 1.0F, 1.0F);
+            this.a(SoundEffects.gE, 1.0F, 1.0F);
             ((WorldServer) this.world).a(EnumParticle.CRIT, this.locX, this.locY, this.locZ, 15, 0.2D, 0.2D, 0.2D, 0.0D, new int[0]);
             this.die();
         }

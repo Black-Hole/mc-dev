@@ -22,9 +22,9 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
             return false;
         } else {
             Navigation navigation = (Navigation) this.a.getNavigation();
-            PathEntity pathentity = navigation.k();
+            PathEntity pathentity = navigation.l();
 
-            if (pathentity != null && !pathentity.b() && navigation.f()) {
+            if (pathentity != null && !pathentity.b() && navigation.g()) {
                 for (int i = 0; i < Math.min(pathentity.e() + 2, pathentity.d()); ++i) {
                     PathPoint pathpoint = pathentity.a(i);
 

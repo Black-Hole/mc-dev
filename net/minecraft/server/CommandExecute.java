@@ -26,9 +26,10 @@ public class CommandExecute extends CommandAbstract {
             throw new ExceptionUsage("commands.execute.usage", new Object[0]);
         } else {
             final Entity entity = a(minecraftserver, icommandlistener, astring[0], Entity.class);
-            final double d0 = b(entity.locX, astring[1], false);
-            final double d1 = b(entity.locY, astring[2], false);
-            final double d2 = b(entity.locZ, astring[3], false);
+            Vec3D vec3d = icommandlistener.d();
+            final double d0 = b(vec3d.x, astring[1], false);
+            final double d1 = b(vec3d.y, astring[2], false);
+            final double d2 = b(vec3d.z, astring[3], false);
             final BlockPosition blockposition = new BlockPosition(d0, d1, d2);
             byte b0 = 4;
 
@@ -99,14 +100,14 @@ public class CommandExecute extends CommandAbstract {
                     entity.a(commandobjectiveexecutor_enumcommandresult, i);
                 }
 
-                public MinecraftServer B_() {
-                    return entity.B_();
+                public MinecraftServer C_() {
+                    return entity.C_();
                 }
             };
             ICommandHandler icommandhandler = minecraftserver.getCommandHandler();
 
             try {
-                int i = icommandhandler.a(icommandlistener1, s);
+                int i = icommandhandler.b(icommandlistener1, s);
 
                 if (i < 1) {
                     throw new CommandException("commands.execute.allInvocationsFailed", new Object[] { s});

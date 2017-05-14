@@ -41,7 +41,7 @@ public class CommandTestForBlock extends CommandAbstract {
                     boolean flag = false;
 
                     if (astring.length >= 6 && block.isTileEntity()) {
-                        String s = a(icommandlistener, astring, 5).toPlainText();
+                        String s = a(astring, 5);
 
                         try {
                             nbttagcompound = MojangsonParser.parse(s);

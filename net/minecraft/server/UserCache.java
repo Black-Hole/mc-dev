@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.Charsets;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -23,8 +22,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -195,8 +196,8 @@ public class UserCache {
         BufferedReader bufferedreader = null;
 
         try {
-            bufferedreader = Files.newReader(this.h, Charsets.UTF_8);
-            List list = (List) this.b.fromJson(bufferedreader, UserCache.i);
+            bufferedreader = Files.newReader(this.h, StandardCharsets.UTF_8);
+            List list = (List) ChatDeserializer.a(this.b, (Reader) bufferedreader, (Type) UserCache.i);
 
             this.d.clear();
             this.e.clear();
@@ -227,7 +228,7 @@ public class UserCache {
         BufferedWriter bufferedwriter = null;
 
         try {
-            bufferedwriter = Files.newWriter(this.h, Charsets.UTF_8);
+            bufferedwriter = Files.newWriter(this.h, StandardCharsets.UTF_8);
             bufferedwriter.write(s);
             return;
         } catch (FileNotFoundException filenotfoundexception) {

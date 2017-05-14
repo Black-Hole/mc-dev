@@ -30,23 +30,23 @@ public class EntityCow extends EntityAnimal {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.ao;
+    protected SoundEffect F() {
+        return SoundEffects.ar;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.aq;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.at;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.ap;
+    protected SoundEffect cd() {
+        return SoundEffects.as;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.as, 0.15F, 1.0F);
+        this.a(SoundEffects.av, 0.15F, 1.0F);
     }
 
-    protected float ci() {
+    protected float co() {
         return 0.4F;
     }
 
@@ -59,7 +59,7 @@ public class EntityCow extends EntityAnimal {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (itemstack.getItem() == Items.BUCKET && !entityhuman.abilities.canInstantlyBuild && !this.isBaby()) {
-            entityhuman.a(SoundEffects.ar, 1.0F, 1.0F);
+            entityhuman.a(SoundEffects.au, 1.0F, 1.0F);
             itemstack.subtract(1);
             if (itemstack.isEmpty()) {
                 entityhuman.a(enumhand, new ItemStack(Items.MILK_BUCKET));

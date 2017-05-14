@@ -3,20 +3,19 @@ package net.minecraft.server;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Objects;
 
 public class NBTTagString extends NBTBase {
 
     private String data;
 
     public NBTTagString() {
-        this.data = "";
+        this("");
     }
 
     public NBTTagString(String s) {
+        Objects.requireNonNull(s, "Null string not allowed");
         this.data = s;
-        if (s == null) {
-            throw new IllegalArgumentException("Empty string not allowed");
-        }
     }
 
     void write(DataOutput dataoutput) throws IOException {
@@ -34,7 +33,7 @@ public class NBTTagString extends NBTBase {
     }
 
     public String toString() {
-        return "\"" + this.data.replace("\"", "\\\"") + "\"";
+        return a(this.data);
     }
 
     public NBTTagString c() {
@@ -51,7 +50,7 @@ public class NBTTagString extends NBTBase {
         } else {
             NBTTagString nbttagstring = (NBTTagString) object;
 
-            return this.data == null && nbttagstring.data == null || this.data != null && this.data.equals(nbttagstring.data);
+            return this.data == null && nbttagstring.data == null || Objects.equals(this.data, nbttagstring.data);
         }
     }
 
@@ -61,6 +60,22 @@ public class NBTTagString extends NBTBase {
 
     public String c_() {
         return this.data;
+    }
+
+    public static String a(String s) {
+        StringBuilder stringbuilder = new StringBuilder("\"");
+
+        for (int i = 0; i < s.length(); ++i) {
+            char c0 = s.charAt(i);
+
+            if (c0 == 92 || c0 == 34) {
+                stringbuilder.append('\\');
+            }
+
+            stringbuilder.append(c0);
+        }
+
+        return stringbuilder.append('\"').toString();
     }
 
     public NBTBase clone() {

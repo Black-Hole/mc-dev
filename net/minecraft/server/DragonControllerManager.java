@@ -26,7 +26,7 @@ public class DragonControllerManager {
                 this.enderDragon.getDataWatcher().set(EntityEnderDragon.PHASE, Integer.valueOf(dragoncontrollerphase.b()));
             }
 
-            DragonControllerManager.a.debug("Dragon is now in phase {} on the {}", new Object[] { dragoncontrollerphase, this.enderDragon.world.isClientSide ? "client" : "server"});
+            DragonControllerManager.a.debug("Dragon is now in phase {} on the {}", dragoncontrollerphase, this.enderDragon.world.isClientSide ? "client" : "server");
             this.currentDragonController.d();
         }
     }

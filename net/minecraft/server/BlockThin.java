@@ -76,7 +76,7 @@ public class BlockThin extends Block {
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.set(BlockThin.NORTH, Boolean.valueOf(this.c(iblockaccess.getType(blockposition.north()).getBlock()))).set(BlockThin.SOUTH, Boolean.valueOf(this.c(iblockaccess.getType(blockposition.south()).getBlock()))).set(BlockThin.WEST, Boolean.valueOf(this.c(iblockaccess.getType(blockposition.west()).getBlock()))).set(BlockThin.EAST, Boolean.valueOf(this.c(iblockaccess.getType(blockposition.east()).getBlock())));
+        return iblockdata.set(BlockThin.NORTH, Boolean.valueOf(this.b(iblockaccess, iblockaccess.getType(blockposition.north()), blockposition.north(), EnumDirection.SOUTH))).set(BlockThin.SOUTH, Boolean.valueOf(this.b(iblockaccess, iblockaccess.getType(blockposition.south()), blockposition.south(), EnumDirection.NORTH))).set(BlockThin.WEST, Boolean.valueOf(this.b(iblockaccess, iblockaccess.getType(blockposition.west()), blockposition.west(), EnumDirection.EAST))).set(BlockThin.EAST, Boolean.valueOf(this.b(iblockaccess, iblockaccess.getType(blockposition.east()), blockposition.east(), EnumDirection.WEST)));
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
@@ -91,8 +91,15 @@ public class BlockThin extends Block {
         return false;
     }
 
-    public final boolean c(Block block) {
-        return block.getBlockData().h() || block == this || block == Blocks.GLASS || block == Blocks.STAINED_GLASS || block == Blocks.STAINED_GLASS_PANE || block instanceof BlockThin;
+    public final boolean b(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        Block block = iblockdata.getBlock();
+        EnumBlockFaceShape enumblockfaceshape = iblockdata.d(iblockaccess, blockposition, enumdirection);
+
+        return !e(block) && enumblockfaceshape == EnumBlockFaceShape.SOLID || enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE_THIN;
+    }
+
+    protected static boolean e(Block block) {
+        return block instanceof BlockShulkerBox || block instanceof BlockLeaves || block == Blocks.BEACON || block == Blocks.cauldron || block == Blocks.GLOWSTONE || block == Blocks.ICE || block == Blocks.SEA_LANTERN || block == Blocks.PISTON || block == Blocks.STICKY_PISTON || block == Blocks.PISTON_HEAD;
     }
 
     protected boolean n() {
@@ -134,5 +141,9 @@ public class BlockThin extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockThin.NORTH, BlockThin.EAST, BlockThin.WEST, BlockThin.SOUTH});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection != EnumDirection.UP && enumdirection != EnumDirection.DOWN ? EnumBlockFaceShape.MIDDLE_POLE_THIN : EnumBlockFaceShape.CENTER_SMALL;
     }
 }

@@ -32,8 +32,8 @@ public class EntityExperienceOrb extends Entity {
 
     protected void i() {}
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (this.c > 0) {
             --this.c;
         }
@@ -49,7 +49,7 @@ public class EntityExperienceOrb extends Entity {
             this.motY = 0.20000000298023224D;
             this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
             this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-            this.a(SoundEffects.bL, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
+            this.a(SoundEffects.bR, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
         }
 
         this.i(this.locX, (this.getBoundingBox().b + this.getBoundingBox().e) / 2.0D, this.locZ);
@@ -104,7 +104,7 @@ public class EntityExperienceOrb extends Entity {
 
     }
 
-    public boolean ak() {
+    public boolean aq() {
         return this.world.a(this.getBoundingBox(), Material.WATER, (Entity) this);
     }
 
@@ -116,7 +116,7 @@ public class EntityExperienceOrb extends Entity {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            this.ap();
+            this.av();
             this.d = (int) ((float) this.d - f);
             if (this.d <= 0) {
                 this.die();
@@ -140,15 +140,15 @@ public class EntityExperienceOrb extends Entity {
 
     public void d(EntityHuman entityhuman) {
         if (!this.world.isClientSide) {
-            if (this.c == 0 && entityhuman.bz == 0) {
-                entityhuman.bz = 2;
+            if (this.c == 0 && entityhuman.bD == 0) {
+                entityhuman.bD = 2;
                 entityhuman.receive(this, 1);
                 ItemStack itemstack = EnchantmentManager.b(Enchantments.C, (EntityLiving) entityhuman);
 
                 if (!itemstack.isEmpty() && itemstack.h()) {
                     int i = Math.min(this.d(this.value), itemstack.i());
 
-                    this.value -= this.b(i);
+                    this.value -= this.c(i);
                     itemstack.setData(itemstack.i() - i);
                 }
 
@@ -162,7 +162,7 @@ public class EntityExperienceOrb extends Entity {
         }
     }
 
-    private int b(int i) {
+    private int c(int i) {
         return i / 2;
     }
 
@@ -178,7 +178,7 @@ public class EntityExperienceOrb extends Entity {
         return i >= 2477 ? 2477 : (i >= 1237 ? 1237 : (i >= 617 ? 617 : (i >= 307 ? 307 : (i >= 149 ? 149 : (i >= 73 ? 73 : (i >= 37 ? 37 : (i >= 17 ? 17 : (i >= 7 ? 7 : (i >= 3 ? 3 : 1)))))))));
     }
 
-    public boolean aV() {
+    public boolean bb() {
         return false;
     }
 }

@@ -3,17 +3,17 @@ package net.minecraft.server;
 public class BlockShulkerBox extends BlockTileEntity {
 
     public static final BlockStateEnum<EnumDirection> a = BlockStateDirection.of("facing");
-    private final EnumColor b;
+    public final EnumColor color;
 
     public BlockShulkerBox(EnumColor enumcolor) {
-        super(Material.STONE, MaterialMapColor.b);
-        this.b = enumcolor;
+        super(Material.STONE, MaterialMapColor.c);
+        this.color = enumcolor;
         this.a(CreativeModeTab.c);
         this.y(this.blockStateList.getBlockData().set(BlockShulkerBox.a, EnumDirection.UP));
     }
 
     public TileEntity a(World world, int i) {
-        return new TileEntityShulkerBox(this.b);
+        return new TileEntityShulkerBox(this.color);
     }
 
     public boolean b(IBlockData iblockdata) {
@@ -83,10 +83,13 @@ public class BlockShulkerBox extends BlockTileEntity {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) world.getTileEntity(blockposition);
+        if (world.getTileEntity(blockposition) instanceof TileEntityShulkerBox) {
+            TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) world.getTileEntity(blockposition);
 
-        tileentityshulkerbox.a(entityhuman.abilities.canInstantlyBuild);
-        tileentityshulkerbox.d(entityhuman);
+            tileentityshulkerbox.a(entityhuman.abilities.canInstantlyBuild);
+            tileentityshulkerbox.d(entityhuman);
+        }
+
     }
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {}
@@ -96,7 +99,7 @@ public class BlockShulkerBox extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityShulkerBox) {
-                ((TileEntityShulkerBox) tileentity).a(itemstack.getName());
+                ((TileEntityShulkerBox) tileentity).setCustomName(itemstack.getName());
             }
         }
 
@@ -117,7 +120,7 @@ public class BlockShulkerBox extends BlockTileEntity {
                 itemstack.setTag(nbttagcompound);
                 if (tileentityshulkerbox.hasCustomName()) {
                     itemstack.g(tileentityshulkerbox.getName());
-                    tileentityshulkerbox.a("");
+                    tileentityshulkerbox.setCustomName("");
                 }
 
                 a(world, blockposition, itemstack);
@@ -222,5 +225,13 @@ public class BlockShulkerBox extends BlockTileEntity {
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockShulkerBox.a)));
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
+        EnumDirection enumdirection1 = (EnumDirection) iblockdata.get(BlockShulkerBox.a);
+        TileEntityShulkerBox.AnimationPhase tileentityshulkerbox_animationphase = ((TileEntityShulkerBox) iblockaccess.getTileEntity(blockposition)).p();
+
+        return tileentityshulkerbox_animationphase != TileEntityShulkerBox.AnimationPhase.CLOSED && (tileentityshulkerbox_animationphase != TileEntityShulkerBox.AnimationPhase.OPENED || enumdirection1 != enumdirection.opposite() && enumdirection1 != enumdirection) ? EnumBlockFaceShape.UNDEFINED : EnumBlockFaceShape.SOLID;
     }
 }

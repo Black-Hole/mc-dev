@@ -34,7 +34,7 @@ public class BlockLever extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        return a(world, blockposition, enumdirection.opposite());
+        return a(world, blockposition, enumdirection);
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
@@ -59,7 +59,7 @@ public class BlockLever extends Block {
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
         IBlockData iblockdata = this.getBlockData().set(BlockLever.POWERED, Boolean.valueOf(false));
 
-        if (a(world, blockposition, enumdirection.opposite())) {
+        if (a(world, blockposition, enumdirection)) {
             return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.a(enumdirection, entityliving.getDirection()));
         } else {
             Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
@@ -76,14 +76,14 @@ public class BlockLever extends Block {
                 }
 
                 enumdirection1 = (EnumDirection) iterator.next();
-            } while (enumdirection1 == enumdirection || !a(world, blockposition, enumdirection1.opposite()));
+            } while (enumdirection1 == enumdirection || !a(world, blockposition, enumdirection1));
 
             return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.a(enumdirection1, entityliving.getDirection()));
         }
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (this.e(world, blockposition, iblockdata) && !a(world, blockposition, ((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).c().opposite())) {
+        if (this.e(world, blockposition, iblockdata) && !a(world, blockposition, ((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).c())) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
         }
@@ -133,7 +133,7 @@ public class BlockLever extends Block {
             world.setTypeAndData(blockposition, iblockdata, 3);
             float f3 = ((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue() ? 0.6F : 0.5F;
 
-            world.a((EntityHuman) null, blockposition, SoundEffects.dv, SoundCategory.BLOCKS, 0.3F, f3);
+            world.a((EntityHuman) null, blockposition, SoundEffects.dI, SoundCategory.BLOCKS, 0.3F, f3);
             world.applyPhysics(blockposition, this, false);
             EnumDirection enumdirection1 = ((BlockLever.EnumLeverPosition) iblockdata.get(BlockLever.FACING)).c();
 
@@ -265,6 +265,10 @@ public class BlockLever extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockLever.FACING, BlockLever.POWERED});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 
     public static enum EnumLeverPosition implements INamable {

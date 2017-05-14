@@ -2,19 +2,19 @@ package net.minecraft.server;
 
 public class NavigationSpider extends Navigation {
 
-    private BlockPosition f;
+    private BlockPosition i;
 
     public NavigationSpider(EntityInsentient entityinsentient, World world) {
         super(entityinsentient, world);
     }
 
-    public PathEntity a(BlockPosition blockposition) {
-        this.f = blockposition;
-        return super.a(blockposition);
+    public PathEntity b(BlockPosition blockposition) {
+        this.i = blockposition;
+        return super.b(blockposition);
     }
 
     public PathEntity a(Entity entity) {
-        this.f = new BlockPosition(entity);
+        this.i = new BlockPosition(entity);
         return super.a(entity);
     }
 
@@ -24,23 +24,23 @@ public class NavigationSpider extends Navigation {
         if (pathentity != null) {
             return this.a(pathentity, d0);
         } else {
-            this.f = new BlockPosition(entity);
+            this.i = new BlockPosition(entity);
             this.d = d0;
             return true;
         }
     }
 
-    public void l() {
-        if (!this.n()) {
-            super.l();
+    public void d() {
+        if (!this.o()) {
+            super.d();
         } else {
-            if (this.f != null) {
+            if (this.i != null) {
                 double d0 = (double) (this.a.width * this.a.width);
 
-                if (this.a.d(this.f) >= d0 && (this.a.locY <= (double) this.f.getY() || this.a.d(new BlockPosition(this.f.getX(), MathHelper.floor(this.a.locY), this.f.getZ())) >= d0)) {
-                    this.a.getControllerMove().a((double) this.f.getX(), (double) this.f.getY(), (double) this.f.getZ(), this.d);
+                if (this.a.d(this.i) >= d0 && (this.a.locY <= (double) this.i.getY() || this.a.d(new BlockPosition(this.i.getX(), MathHelper.floor(this.a.locY), this.i.getZ())) >= d0)) {
+                    this.a.getControllerMove().a((double) this.i.getX(), (double) this.i.getY(), (double) this.i.getZ(), this.d);
                 } else {
-                    this.f = null;
+                    this.i = null;
                 }
             }
 

@@ -21,7 +21,7 @@ public class VillageSiege {
     }
 
     public void a() {
-        if (this.a.B()) {
+        if (this.a.D()) {
             this.c = 0;
         } else if (this.c != 2) {
             if (this.c == 0) {
@@ -71,7 +71,7 @@ public class VillageSiege {
             EntityHuman entityhuman = (EntityHuman) iterator.next();
 
             if (!entityhuman.isSpectator()) {
-                this.f = this.a.ai().getClosestVillage(new BlockPosition(entityhuman), 1);
+                this.f = this.a.ak().getClosestVillage(new BlockPosition(entityhuman), 1);
                 if (this.f != null && this.f.c() >= 10 && this.f.d() >= 20 && this.f.e() >= 20) {
                     BlockPosition blockposition = this.f.a();
                     float f = (float) this.f.b();
@@ -86,7 +86,7 @@ public class VillageSiege {
                             this.h = blockposition.getY();
                             this.i = blockposition.getZ() + (int) ((double) (MathHelper.sin(f1) * f) * 0.9D);
                             flag = false;
-                            Iterator iterator1 = this.a.ai().getVillages().iterator();
+                            Iterator iterator1 = this.a.ak().getVillages().iterator();
 
                             while (iterator1.hasNext()) {
                                 Village village = (Village) iterator1.next();

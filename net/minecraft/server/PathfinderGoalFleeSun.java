@@ -20,7 +20,7 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
     }
 
     public boolean a() {
-        if (!this.f.B()) {
+        if (!this.f.D()) {
             return false;
         } else if (!this.a.isBurning()) {
             return false;
@@ -43,7 +43,7 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.a.getNavigation().n();
+        return !this.a.getNavigation().o();
     }
 
     public void c() {

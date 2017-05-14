@@ -5,11 +5,11 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.IllegalFormatException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 
 public class LocaleLanguage {
@@ -23,7 +23,7 @@ public class LocaleLanguage {
     public LocaleLanguage() {
         try {
             InputStream inputstream = LocaleLanguage.class.getResourceAsStream("/assets/minecraft/lang/en_us.lang");
-            Iterator iterator = IOUtils.readLines(inputstream, Charsets.UTF_8).iterator();
+            Iterator iterator = IOUtils.readLines(inputstream, StandardCharsets.UTF_8).iterator();
 
             while (iterator.hasNext()) {
                 String s = (String) iterator.next();

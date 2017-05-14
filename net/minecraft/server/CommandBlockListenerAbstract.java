@@ -7,62 +7,79 @@ import javax.annotation.Nullable;
 public abstract class CommandBlockListenerAbstract implements ICommandListener {
 
     private static final SimpleDateFormat a = new SimpleDateFormat("HH:mm:ss");
-    private int b;
+    private long b = -1L;
     private boolean c = true;
-    private IChatBaseComponent d;
-    private String e = "";
-    private String f = "@";
-    private final CommandObjectiveExecutor g = new CommandObjectiveExecutor();
+    private int d;
+    private boolean e = true;
+    private IChatBaseComponent f;
+    private String g = "";
+    private String h = "@";
+    private final CommandObjectiveExecutor i = new CommandObjectiveExecutor();
 
     public CommandBlockListenerAbstract() {}
 
     public int k() {
-        return this.b;
+        return this.d;
     }
 
     public void a(int i) {
-        this.b = i;
+        this.d = i;
     }
 
     public IChatBaseComponent l() {
-        return (IChatBaseComponent) (this.d == null ? new ChatComponentText("") : this.d);
+        return (IChatBaseComponent) (this.f == null ? new ChatComponentText("") : this.f);
     }
 
     public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setString("Command", this.e);
-        nbttagcompound.setInt("SuccessCount", this.b);
-        nbttagcompound.setString("CustomName", this.f);
-        nbttagcompound.setBoolean("TrackOutput", this.c);
-        if (this.d != null && this.c) {
-            nbttagcompound.setString("LastOutput", IChatBaseComponent.ChatSerializer.a(this.d));
+        nbttagcompound.setString("Command", this.g);
+        nbttagcompound.setInt("SuccessCount", this.d);
+        nbttagcompound.setString("CustomName", this.h);
+        nbttagcompound.setBoolean("TrackOutput", this.e);
+        if (this.f != null && this.e) {
+            nbttagcompound.setString("LastOutput", IChatBaseComponent.ChatSerializer.a(this.f));
         }
 
-        this.g.b(nbttagcompound);
+        nbttagcompound.setBoolean("UpdateLastExecution", this.c);
+        if (this.c && this.b > 0L) {
+            nbttagcompound.setLong("LastExecution", this.b);
+        }
+
+        this.i.b(nbttagcompound);
         return nbttagcompound;
     }
 
     public void b(NBTTagCompound nbttagcompound) {
-        this.e = nbttagcompound.getString("Command");
-        this.b = nbttagcompound.getInt("SuccessCount");
+        this.g = nbttagcompound.getString("Command");
+        this.d = nbttagcompound.getInt("SuccessCount");
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
-            this.f = nbttagcompound.getString("CustomName");
+            this.h = nbttagcompound.getString("CustomName");
         }
 
         if (nbttagcompound.hasKeyOfType("TrackOutput", 1)) {
-            this.c = nbttagcompound.getBoolean("TrackOutput");
+            this.e = nbttagcompound.getBoolean("TrackOutput");
         }
 
-        if (nbttagcompound.hasKeyOfType("LastOutput", 8) && this.c) {
+        if (nbttagcompound.hasKeyOfType("LastOutput", 8) && this.e) {
             try {
-                this.d = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("LastOutput"));
+                this.f = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("LastOutput"));
             } catch (Throwable throwable) {
-                this.d = new ChatComponentText(throwable.getMessage());
+                this.f = new ChatComponentText(throwable.getMessage());
             }
         } else {
-            this.d = null;
+            this.f = null;
         }
 
-        this.g.a(nbttagcompound);
+        if (nbttagcompound.hasKey("UpdateLastExecution")) {
+            this.c = nbttagcompound.getBoolean("UpdateLastExecution");
+        }
+
+        if (this.c && nbttagcompound.hasKey("LastExecution")) {
+            this.b = nbttagcompound.getLong("LastExecution");
+        } else {
+            this.b = -1L;
+        }
+
+        this.i.a(nbttagcompound);
     }
 
     public boolean a(int i, String s) {
@@ -70,106 +87,110 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     }
 
     public void setCommand(String s) {
-        this.e = s;
-        this.b = 0;
+        this.g = s;
+        this.d = 0;
     }
 
     public String getCommand() {
-        return this.e;
+        return this.g;
     }
 
-    public void a(World world) {
-        if (world.isClientSide) {
-            this.b = 0;
-        } else if ("Searge".equalsIgnoreCase(this.e)) {
-            this.d = new ChatComponentText("#itzlipofutzli");
-            this.b = 1;
-        } else {
-            MinecraftServer minecraftserver = this.B_();
-
-            if (minecraftserver != null && minecraftserver.M() && minecraftserver.getEnableCommandBlock()) {
-                ICommandHandler icommandhandler = minecraftserver.getCommandHandler();
-
-                try {
-                    this.d = null;
-                    this.b = icommandhandler.a(this, this.e);
-                } catch (Throwable throwable) {
-                    CrashReport crashreport = CrashReport.a(throwable, "Executing command block");
-                    CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Command to be executed");
-
-                    crashreportsystemdetails.a("Command", new CrashReportCallable() {
-                        public String a() throws Exception {
-                            return CommandBlockListenerAbstract.this.getCommand();
-                        }
-
-                        public Object call() throws Exception {
-                            return this.a();
-                        }
-                    });
-                    crashreportsystemdetails.a("Name", new CrashReportCallable() {
-                        public String a() throws Exception {
-                            return CommandBlockListenerAbstract.this.getName();
-                        }
-
-                        public Object call() throws Exception {
-                            return this.a();
-                        }
-                    });
-                    throw new ReportedException(crashreport);
-                }
+    public boolean a(World world) {
+        if (!world.isClientSide && world.getTime() != this.b) {
+            if ("Searge".equalsIgnoreCase(this.g)) {
+                this.f = new ChatComponentText("#itzlipofutzli");
+                this.d = 1;
+                return true;
             } else {
-                this.b = 0;
-            }
+                MinecraftServer minecraftserver = this.C_();
 
+                if (minecraftserver != null && minecraftserver.M() && minecraftserver.getEnableCommandBlock()) {
+                    try {
+                        this.f = null;
+                        this.d = minecraftserver.getCommandHandler().b(this, this.g);
+                    } catch (Throwable throwable) {
+                        CrashReport crashreport = CrashReport.a(throwable, "Executing command block");
+                        CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Command to be executed");
+
+                        crashreportsystemdetails.a("Command", new CrashReportCallable() {
+                            public String a() throws Exception {
+                                return CommandBlockListenerAbstract.this.getCommand();
+                            }
+
+                            public Object call() throws Exception {
+                                return this.a();
+                            }
+                        });
+                        crashreportsystemdetails.a("Name", new CrashReportCallable() {
+                            public String a() throws Exception {
+                                return CommandBlockListenerAbstract.this.getName();
+                            }
+
+                            public Object call() throws Exception {
+                                return this.a();
+                            }
+                        });
+                        throw new ReportedException(crashreport);
+                    }
+                } else {
+                    this.d = 0;
+                }
+
+                if (this.c) {
+                    this.b = world.getTime();
+                } else {
+                    this.b = -1L;
+                }
+
+                return true;
+            }
+        } else {
+            return false;
         }
     }
 
     public String getName() {
-        return this.f;
-    }
-
-    public IChatBaseComponent getScoreboardDisplayName() {
-        return new ChatComponentText(this.getName());
+        return this.h;
     }
 
     public void setName(String s) {
-        this.f = s;
+        this.h = s;
     }
 
     public void sendMessage(IChatBaseComponent ichatbasecomponent) {
-        if (this.c && this.getWorld() != null && !this.getWorld().isClientSide) {
-            this.d = (new ChatComponentText("[" + CommandBlockListenerAbstract.a.format(new Date()) + "] ")).addSibling(ichatbasecomponent);
+        if (this.e && this.getWorld() != null && !this.getWorld().isClientSide) {
+            this.f = (new ChatComponentText("[" + CommandBlockListenerAbstract.a.format(new Date()) + "] ")).addSibling(ichatbasecomponent);
             this.i();
         }
 
     }
 
     public boolean getSendCommandFeedback() {
-        MinecraftServer minecraftserver = this.B_();
+        MinecraftServer minecraftserver = this.C_();
 
         return minecraftserver == null || !minecraftserver.M() || minecraftserver.worldServer[0].getGameRules().getBoolean("commandBlockOutput");
     }
 
     public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
-        this.g.a(this.B_(), this, commandobjectiveexecutor_enumcommandresult, i);
+        this.i.a(this.C_(), this, commandobjectiveexecutor_enumcommandresult, i);
     }
 
     public abstract void i();
 
     public void b(@Nullable IChatBaseComponent ichatbasecomponent) {
-        this.d = ichatbasecomponent;
+        this.f = ichatbasecomponent;
     }
 
     public void a(boolean flag) {
-        this.c = flag;
+        this.e = flag;
     }
 
     public boolean n() {
-        return this.c;
+        return this.e;
     }
 
     public boolean a(EntityHuman entityhuman) {
-        if (!entityhuman.dk()) {
+        if (!entityhuman.isCreativeAndOp()) {
             return false;
         } else {
             if (entityhuman.getWorld().isClientSide) {
@@ -181,6 +202,6 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
     }
 
     public CommandObjectiveExecutor o() {
-        return this.g;
+        return this.i;
     }
 }

@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class PathfinderGoalRandomStrollLand extends PathfinderGoalRandomStroll {
 
-    private final float h;
+    protected final float h;
 
     public PathfinderGoalRandomStrollLand(EntityCreature entitycreature, double d0) {
         this(entitycreature, d0, 0.001F);

@@ -8,8 +8,8 @@ public class EntityVex extends EntityMonster {
     private EntityInsentient b;
     @Nullable
     private BlockPosition c;
-    private boolean bw;
-    private int bx;
+    private boolean bx;
+    private int by;
 
     public EntityVex(World world) {
         super(world);
@@ -24,13 +24,13 @@ public class EntityVex extends EntityMonster {
         this.checkBlockCollisions();
     }
 
-    public void A_() {
+    public void B_() {
         this.noclip = true;
-        super.A_();
+        super.B_();
         this.noclip = false;
         this.setNoGravity(true);
-        if (this.bw && --this.bx <= 0) {
-            this.bx = 20;
+        if (this.bx && --this.by <= 0) {
+            this.by = 20;
             this.damageEntity(DamageSource.STARVE, 1.0F);
         }
 
@@ -83,18 +83,18 @@ public class EntityVex extends EntityMonster {
             nbttagcompound.setInt("BoundZ", this.c.getZ());
         }
 
-        if (this.bw) {
-            nbttagcompound.setInt("LifeTicks", this.bx);
+        if (this.bx) {
+            nbttagcompound.setInt("LifeTicks", this.by);
         }
 
     }
 
-    public EntityInsentient o() {
+    public EntityInsentient p() {
         return this.b;
     }
 
     @Nullable
-    public BlockPosition di() {
+    public BlockPosition dk() {
         return this.c;
     }
 
@@ -102,7 +102,7 @@ public class EntityVex extends EntityMonster {
         this.c = blockposition;
     }
 
-    private boolean b(int i) {
+    private boolean c(int i) {
         byte b0 = ((Byte) this.datawatcher.get(EntityVex.a)).byteValue();
 
         return (b0 & i) != 0;
@@ -121,8 +121,8 @@ public class EntityVex extends EntityMonster {
         this.datawatcher.set(EntityVex.a, Byte.valueOf((byte) (j & 255)));
     }
 
-    public boolean dj() {
-        return this.b(1);
+    public boolean dl() {
+        return this.c(1);
     }
 
     public void a(boolean flag) {
@@ -134,28 +134,28 @@ public class EntityVex extends EntityMonster {
     }
 
     public void a(int i) {
-        this.bw = true;
-        this.bx = i;
+        this.bx = true;
+        this.by = i;
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.hc;
+    protected SoundEffect F() {
+        return SoundEffects.id;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.he;
+    protected SoundEffect cd() {
+        return SoundEffects.if_;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.hf;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.ig;
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return LootTables.ax;
+        return LootTables.ay;
     }
 
-    public float e(float f) {
+    public float f(float f) {
         return 1.0F;
     }
 
@@ -194,7 +194,7 @@ public class EntityVex extends EntityMonster {
         }
 
         public boolean a() {
-            return !EntityVex.this.getControllerMove().a() && EntityVex.this.random.nextInt(7) == 0;
+            return !EntityVex.this.getControllerMove().b() && EntityVex.this.random.nextInt(7) == 0;
         }
 
         public boolean b() {
@@ -202,7 +202,7 @@ public class EntityVex extends EntityMonster {
         }
 
         public void e() {
-            BlockPosition blockposition = EntityVex.this.di();
+            BlockPosition blockposition = EntityVex.this.dk();
 
             if (blockposition == null) {
                 blockposition = new BlockPosition(EntityVex.this);
@@ -230,20 +230,20 @@ public class EntityVex extends EntityMonster {
         }
 
         public boolean a() {
-            return EntityVex.this.getGoalTarget() != null && !EntityVex.this.getControllerMove().a() && EntityVex.this.random.nextInt(7) == 0 ? EntityVex.this.h((Entity) EntityVex.this.getGoalTarget()) > 4.0D : false;
+            return EntityVex.this.getGoalTarget() != null && !EntityVex.this.getControllerMove().b() && EntityVex.this.random.nextInt(7) == 0 ? EntityVex.this.h((Entity) EntityVex.this.getGoalTarget()) > 4.0D : false;
         }
 
         public boolean b() {
-            return EntityVex.this.getControllerMove().a() && EntityVex.this.dj() && EntityVex.this.getGoalTarget() != null && EntityVex.this.getGoalTarget().isAlive();
+            return EntityVex.this.getControllerMove().b() && EntityVex.this.dl() && EntityVex.this.getGoalTarget() != null && EntityVex.this.getGoalTarget().isAlive();
         }
 
         public void c() {
             EntityLiving entityliving = EntityVex.this.getGoalTarget();
-            Vec3D vec3d = entityliving.g(1.0F);
+            Vec3D vec3d = entityliving.h(1.0F);
 
             EntityVex.this.moveController.a(vec3d.x, vec3d.y, vec3d.z, 1.0D);
             EntityVex.this.a(true);
-            EntityVex.this.a(SoundEffects.hd, 1.0F, 1.0F);
+            EntityVex.this.a(SoundEffects.ie, 1.0F, 1.0F);
         }
 
         public void d() {
@@ -260,7 +260,7 @@ public class EntityVex extends EntityMonster {
                 double d0 = EntityVex.this.h((Entity) entityliving);
 
                 if (d0 < 9.0D) {
-                    Vec3D vec3d = entityliving.g(1.0F);
+                    Vec3D vec3d = entityliving.h(1.0F);
 
                     EntityVex.this.moveController.a(vec3d.x, vec3d.y, vec3d.z, 1.0D);
                 }
@@ -275,7 +275,7 @@ public class EntityVex extends EntityMonster {
             super(entityvex);
         }
 
-        public void c() {
+        public void a() {
             if (this.h == ControllerMove.Operation.MOVE_TO) {
                 double d0 = this.b - EntityVex.this.locX;
                 double d1 = this.c - EntityVex.this.locY;

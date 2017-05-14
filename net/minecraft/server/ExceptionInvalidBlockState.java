@@ -9,4 +9,8 @@ public class ExceptionInvalidBlockState extends CommandException {
     public ExceptionInvalidBlockState(String s, Object... aobject) {
         super(s, aobject);
     }
+
+    public synchronized Throwable fillInStackTrace() {
+        return this;
+    }
 }

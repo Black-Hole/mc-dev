@@ -101,4 +101,8 @@ public class BlockCactus extends Block {
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockCactus.AGE});
     }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
+    }
 }

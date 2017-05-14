@@ -25,7 +25,7 @@ public class PathfinderGoalSit extends PathfinderGoal {
     }
 
     public void c() {
-        this.entity.getNavigation().o();
+        this.entity.getNavigation().p();
         this.entity.setSitting(true);
     }
 

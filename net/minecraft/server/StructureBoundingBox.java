@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 public class StructureBoundingBox {
 
@@ -135,7 +135,7 @@ public class StructureBoundingBox {
     }
 
     public String toString() {
-        return Objects.toStringHelper(this).add("x0", this.a).add("y0", this.b).add("z0", this.c).add("x1", this.d).add("y1", this.e).add("z1", this.f).toString();
+        return MoreObjects.toStringHelper(this).add("x0", this.a).add("y0", this.b).add("z0", this.c).add("x1", this.d).add("y1", this.e).add("z1", this.f).toString();
     }
 
     public NBTTagIntArray g() {

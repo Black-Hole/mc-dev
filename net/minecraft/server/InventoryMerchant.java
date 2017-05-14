@@ -20,7 +20,7 @@ public class InventoryMerchant implements IInventory {
         return this.itemsInSlots.size();
     }
 
-    public boolean w_() {
+    public boolean x_() {
         Iterator iterator = this.itemsInSlots.iterator();
 
         ItemStack itemstack;

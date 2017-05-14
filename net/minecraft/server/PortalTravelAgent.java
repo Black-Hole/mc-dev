@@ -72,7 +72,7 @@ public class PortalTravelAgent {
                 BlockPosition blockposition1;
 
                 for (int i1 = -128; i1 <= 128; ++i1) {
-                    for (BlockPosition blockposition2 = blockposition.a(l, this.world.Z() - 1 - blockposition.getY(), i1); blockposition2.getY() >= 0; blockposition2 = blockposition1) {
+                    for (BlockPosition blockposition2 = blockposition.a(l, this.world.ab() - 1 - blockposition.getY(), i1); blockposition2.getY() >= 0; blockposition2 = blockposition1) {
                         blockposition1 = blockposition2.down();
                         if (this.world.getType(blockposition2).getBlock() == Blocks.PORTAL) {
                             for (blockposition1 = blockposition2.down(); this.world.getType(blockposition1).getBlock() == Blocks.PORTAL; blockposition1 = blockposition1.down()) {
@@ -186,7 +186,7 @@ public class PortalTravelAgent {
                 d2 = (double) j2 + 0.5D - entity.locZ;
 
                 label271:
-                for (k2 = this.world.Z() - 1; k2 >= 0; --k2) {
+                for (k2 = this.world.ab() - 1; k2 >= 0; --k2) {
                     if (this.world.isEmpty(blockposition_mutableblockposition.c(i2, k2, j2))) {
                         while (k2 > 0 && this.world.isEmpty(blockposition_mutableblockposition.c(i2, k2 - 1, j2))) {
                             --k2;
@@ -238,7 +238,7 @@ public class PortalTravelAgent {
                     d2 = (double) j2 + 0.5D - entity.locZ;
 
                     label219:
-                    for (k2 = this.world.Z() - 1; k2 >= 0; --k2) {
+                    for (k2 = this.world.ab() - 1; k2 >= 0; --k2) {
                         if (this.world.isEmpty(blockposition_mutableblockposition.c(i2, k2, j2))) {
                             while (k2 > 0 && this.world.isEmpty(blockposition_mutableblockposition.c(i2, k2 - 1, j2))) {
                                 --k2;
@@ -289,7 +289,7 @@ public class PortalTravelAgent {
         }
 
         if (d0 < 0.0D) {
-            i1 = MathHelper.clamp(i1, 70, this.world.Z() - 10);
+            i1 = MathHelper.clamp(i1, 70, this.world.ab() - 10);
             j5 = i1;
 
             for (k2 = -1; k2 <= 1; ++k2) {

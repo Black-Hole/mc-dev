@@ -29,7 +29,7 @@ public class MethodProfiler {
 
     public void a(String s) {
         if (this.a) {
-            if (this.e.length() > 0) {
+            if (!this.e.isEmpty()) {
                 this.e = this.e + ".";
             }
 
@@ -54,7 +54,7 @@ public class MethodProfiler {
             }
 
             if (k > 100000000L) {
-                MethodProfiler.b.warn("Something\'s taking too long! \'{}\' took aprox {} ms", new Object[] { this.e, Double.valueOf((double) k / 1000000.0D)});
+                MethodProfiler.b.warn("Something\'s taking too long! \'{}\' took aprox {} ms", this.e, Double.valueOf((double) k / 1000000.0D));
             }
 
             this.e = this.c.isEmpty() ? "" : (String) this.c.get(this.c.size() - 1);
@@ -69,7 +69,7 @@ public class MethodProfiler {
             long j = this.f.containsKey(s) ? ((Long) this.f.get(s)).longValue() : -1L;
             ArrayList arraylist = Lists.newArrayList();
 
-            if (s.length() > 0) {
+            if (!s.isEmpty()) {
                 s = s + ".";
             }
 
@@ -133,7 +133,7 @@ public class MethodProfiler {
     }
 
     public String c() {
-        return this.c.size() == 0 ? "[UNKNOWN]" : (String) this.c.get(this.c.size() - 1);
+        return this.c.isEmpty() ? "[UNKNOWN]" : (String) this.c.get(this.c.size() - 1);
     }
 
     public static final class ProfilerInfo implements Comparable<MethodProfiler.ProfilerInfo> {

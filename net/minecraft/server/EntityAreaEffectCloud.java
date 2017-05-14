@@ -122,11 +122,11 @@ public class EntityAreaEffectCloud extends Entity {
         return ((Integer) this.getDataWatcher().get(EntityAreaEffectCloud.e)).intValue();
     }
 
-    public void b(int i) {
+    public void c(int i) {
         this.getDataWatcher().set(EntityAreaEffectCloud.e, Integer.valueOf(i));
     }
 
-    public int o() {
+    public int p() {
         return ((Integer) this.getDataWatcher().get(EntityAreaEffectCloud.f)).intValue();
     }
 
@@ -150,8 +150,8 @@ public class EntityAreaEffectCloud extends Entity {
         this.au = i;
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         boolean flag = this.q();
         float f = this.getRadius();
 
@@ -164,7 +164,7 @@ public class EntityAreaEffectCloud extends Entity {
             }
 
             if (aint.length > 1) {
-                aint[1] = this.o();
+                aint[1] = this.p();
             }
 
             float f1;
@@ -273,7 +273,7 @@ public class EntityAreaEffectCloud extends Entity {
                         while (iterator2.hasNext()) {
                             EntityLiving entityliving = (EntityLiving) iterator2.next();
 
-                            if (!this.at.containsKey(entityliving) && entityliving.cJ()) {
+                            if (!this.at.containsKey(entityliving) && entityliving.cP()) {
                                 double d0 = entityliving.locX - this.locX;
                                 double d1 = entityliving.locZ - this.locZ;
                                 double d2 = d0 * d0 + d1 * d1;
@@ -364,7 +364,7 @@ public class EntityAreaEffectCloud extends Entity {
 
             if (enumparticle != null) {
                 this.setParticle(enumparticle);
-                this.b(nbttagcompound.getInt("ParticleParam1"));
+                this.c(nbttagcompound.getInt("ParticleParam1"));
                 this.d(nbttagcompound.getInt("ParticleParam2"));
             }
         }
@@ -404,7 +404,7 @@ public class EntityAreaEffectCloud extends Entity {
         nbttagcompound.setFloat("Radius", this.getRadius());
         nbttagcompound.setString("Particle", this.getParticle().b());
         nbttagcompound.setInt("ParticleParam1", this.n());
-        nbttagcompound.setInt("ParticleParam2", this.o());
+        nbttagcompound.setInt("ParticleParam2", this.p());
         if (this.aC != null) {
             nbttagcompound.a("OwnerUUID", this.aC);
         }

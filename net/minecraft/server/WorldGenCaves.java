@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import java.util.Random;
 
 public class WorldGenCaves extends WorldGenBase {
@@ -145,7 +145,7 @@ public class WorldGenCaves extends WorldGenBase {
 
                                         if (d14 > -0.7D && d12 * d12 + d14 * d14 + d13 * d13 < 1.0D) {
                                             IBlockData iblockdata1 = chunksnapshot.a(j3, j4, i4);
-                                            IBlockData iblockdata2 = (IBlockData) Objects.firstNonNull(chunksnapshot.a(j3, j4 + 1, i4), WorldGenCaves.b);
+                                            IBlockData iblockdata2 = (IBlockData) MoreObjects.firstNonNull(chunksnapshot.a(j3, j4 + 1, i4), WorldGenCaves.b);
 
                                             if (iblockdata1.getBlock() == Blocks.GRASS || iblockdata1.getBlock() == Blocks.MYCELIUM) {
                                                 flag3 = true;
@@ -158,7 +158,7 @@ public class WorldGenCaves extends WorldGenBase {
                                                     chunksnapshot.a(j3, j4, i4, WorldGenCaves.b);
                                                     if (flag3 && chunksnapshot.a(j3, j4 - 1, i4).getBlock() == Blocks.DIRT) {
                                                         blockposition_mutableblockposition.c(j3 + j * 16, 0, i4 + k * 16);
-                                                        chunksnapshot.a(j3, j4 - 1, i4, this.g.getBiome(blockposition_mutableblockposition).r.getBlock().getBlockData());
+                                                        chunksnapshot.a(j3, j4 - 1, i4, this.g.getBiome(blockposition_mutableblockposition).q.getBlock().getBlockData());
                                                     }
                                                 }
                                             }

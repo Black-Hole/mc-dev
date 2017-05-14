@@ -53,7 +53,7 @@ public class BlockDirt extends Block {
 
     public static enum EnumDirtVariant implements INamable {
 
-        DIRT(0, "dirt", "default", MaterialMapColor.l), COARSE_DIRT(1, "coarse_dirt", "coarse", MaterialMapColor.l), PODZOL(2, "podzol", MaterialMapColor.J);
+        DIRT(0, "dirt", "default", MaterialMapColor.m), COARSE_DIRT(1, "coarse_dirt", "coarse", MaterialMapColor.m), PODZOL(2, "podzol", MaterialMapColor.K);
 
         private static final BlockDirt.EnumDirtVariant[] d = new BlockDirt.EnumDirtVariant[values().length];
         private final int e;

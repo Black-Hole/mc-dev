@@ -25,12 +25,12 @@ public class BlockFalling extends Block {
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (!world.isClientSide) {
-            this.c(world, blockposition);
+            this.b(world, blockposition);
         }
 
     }
 
-    private void c(World world, BlockPosition blockposition) {
+    private void b(World world, BlockPosition blockposition) {
         if (i(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
             boolean flag = true;
 
@@ -71,7 +71,7 @@ public class BlockFalling extends Block {
         return block == Blocks.FIRE || material == Material.AIR || material == Material.WATER || material == Material.LAVA;
     }
 
-    public void a_(World world, BlockPosition blockposition) {}
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {}
 
-    public void b(World world, BlockPosition blockposition) {}
+    public void a_(World world, BlockPosition blockposition) {}
 }

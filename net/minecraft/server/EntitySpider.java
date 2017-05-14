@@ -28,7 +28,7 @@ public class EntitySpider extends EntityMonster {
         this.targetSelector.a(3, new EntitySpider.PathfinderGoalSpiderNearestAttackableTarget(this, EntityIronGolem.class));
     }
 
-    public double ay() {
+    public double aE() {
         return (double) (this.length * 0.5F);
     }
 
@@ -41,8 +41,8 @@ public class EntitySpider extends EntityMonster {
         this.datawatcher.register(EntitySpider.a, Byte.valueOf((byte) 0));
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (!this.world.isClientSide) {
             this.a(this.positionChanged);
         }
@@ -55,20 +55,20 @@ public class EntitySpider extends EntityMonster {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.30000001192092896D);
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.gy;
+    protected SoundEffect F() {
+        return SoundEffects.hz;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.gA;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.hB;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.gz;
+    protected SoundEffect cd() {
+        return SoundEffects.hA;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.gB, 0.15F, 1.0F);
+        this.a(SoundEffects.hC, 0.15F, 1.0F);
     }
 
     @Nullable
@@ -77,10 +77,10 @@ public class EntitySpider extends EntityMonster {
     }
 
     public boolean m_() {
-        return this.o();
+        return this.p();
     }
 
-    public void aS() {}
+    public void aY() {}
 
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.ARTHROPOD;
@@ -90,7 +90,7 @@ public class EntitySpider extends EntityMonster {
         return mobeffect.getMobEffect() == MobEffects.POISON ? false : super.d(mobeffect);
     }
 
-    public boolean o() {
+    public boolean p() {
         return (((Byte) this.datawatcher.get(EntitySpider.a)).byteValue() & 1) != 0;
     }
 
@@ -148,7 +148,7 @@ public class EntitySpider extends EntityMonster {
         }
 
         public boolean a() {
-            float f = this.e.e(1.0F);
+            float f = this.e.f(1.0F);
 
             return f >= 0.5F ? false : super.a();
         }
@@ -161,7 +161,7 @@ public class EntitySpider extends EntityMonster {
         }
 
         public boolean b() {
-            float f = this.b.e(1.0F);
+            float f = this.b.f(1.0F);
 
             if (f >= 0.5F && this.b.getRandom().nextInt(100) == 0) {
                 this.b.setGoalTarget((EntityLiving) null);

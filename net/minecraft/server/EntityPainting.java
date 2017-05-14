@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.annotation.Nullable;
 
 public class EntityPainting extends EntityHanging {
@@ -15,20 +16,36 @@ public class EntityPainting extends EntityHanging {
     public EntityPainting(World world, BlockPosition blockposition, EnumDirection enumdirection) {
         super(world, blockposition);
         ArrayList arraylist = Lists.newArrayList();
+        int i = 0;
         EntityPainting.EnumArt[] aentitypainting_enumart = EntityPainting.EnumArt.values();
-        int i = aentitypainting_enumart.length;
+        int j = aentitypainting_enumart.length;
 
-        for (int j = 0; j < i; ++j) {
-            EntityPainting.EnumArt entitypainting_enumart = aentitypainting_enumart[j];
+        for (int k = 0; k < j; ++k) {
+            EntityPainting.EnumArt entitypainting_enumart = aentitypainting_enumart[k];
 
             this.art = entitypainting_enumart;
             this.setDirection(enumdirection);
             if (this.survives()) {
                 arraylist.add(entitypainting_enumart);
+                int l = entitypainting_enumart.C * entitypainting_enumart.D;
+
+                if (l > i) {
+                    i = l;
+                }
             }
         }
 
         if (!arraylist.isEmpty()) {
+            Iterator iterator = arraylist.iterator();
+
+            while (iterator.hasNext()) {
+                EntityPainting.EnumArt entitypainting_enumart1 = (EntityPainting.EnumArt) iterator.next();
+
+                if (entitypainting_enumart1.C * entitypainting_enumart1.D < i) {
+                    iterator.remove();
+                }
+            }
+
             this.art = (EntityPainting.EnumArt) arraylist.get(this.random.nextInt(arraylist.size()));
         }
 
@@ -70,7 +87,7 @@ public class EntityPainting extends EntityHanging {
 
     public void a(@Nullable Entity entity) {
         if (this.world.getGameRules().getBoolean("doEntityDrops")) {
-            this.a(SoundEffects.en, 1.0F, 1.0F);
+            this.a(SoundEffects.eF, 1.0F, 1.0F);
             if (entity instanceof EntityHuman) {
                 EntityHuman entityhuman = (EntityHuman) entity;
 
@@ -83,8 +100,8 @@ public class EntityPainting extends EntityHanging {
         }
     }
 
-    public void o() {
-        this.a(SoundEffects.eo, 1.0F, 1.0F);
+    public void p() {
+        this.a(SoundEffects.eG, 1.0F, 1.0F);
     }
 
     public void setPositionRotation(double d0, double d1, double d2, float f, float f1) {

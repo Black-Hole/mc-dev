@@ -22,7 +22,7 @@ public class EntityItemFrame extends EntityHanging {
         this.getDataWatcher().register(EntityItemFrame.d, Integer.valueOf(0));
     }
 
-    public float aA() {
+    public float aG() {
         return 0.0F;
     }
 
@@ -32,7 +32,7 @@ public class EntityItemFrame extends EntityHanging {
         } else if (!damagesource.isExplosion() && !this.getItem().isEmpty()) {
             if (!this.world.isClientSide) {
                 this.b(damagesource.getEntity(), false);
-                this.a(SoundEffects.dh, 1.0F, 1.0F);
+                this.a(SoundEffects.du, 1.0F, 1.0F);
                 this.setItem(ItemStack.a);
             }
 
@@ -51,12 +51,12 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     public void a(@Nullable Entity entity) {
-        this.a(SoundEffects.df, 1.0F, 1.0F);
+        this.a(SoundEffects.ds, 1.0F, 1.0F);
         this.b(entity, true);
     }
 
-    public void o() {
-        this.a(SoundEffects.dg, 1.0F, 1.0F);
+    public void p() {
+        this.a(SoundEffects.dt, 1.0F, 1.0F);
     }
 
     public void b(@Nullable Entity entity, boolean flag) {
@@ -115,7 +115,7 @@ public class EntityItemFrame extends EntityHanging {
         this.getDataWatcher().set(EntityItemFrame.c, itemstack);
         this.getDataWatcher().markDirty(EntityItemFrame.c);
         if (!itemstack.isEmpty()) {
-            this.a(SoundEffects.de, 1.0F, 1.0F);
+            this.a(SoundEffects.dr, 1.0F, 1.0F);
         }
 
         if (flag && this.blockPosition != null) {
@@ -191,7 +191,7 @@ public class EntityItemFrame extends EntityHanging {
                     }
                 }
             } else {
-                this.a(SoundEffects.di, 1.0F, 1.0F);
+                this.a(SoundEffects.dv, 1.0F, 1.0F);
                 this.setRotation(this.getRotation() + 1);
             }
         }

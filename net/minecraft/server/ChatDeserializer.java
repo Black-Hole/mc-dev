@@ -8,10 +8,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.lang.reflect.Type;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -53,6 +55,10 @@ public class ChatDeserializer {
         }
     }
 
+    public static String a(JsonObject jsonobject, String s, String s1) {
+        return jsonobject.has(s) ? a(jsonobject.get(s), s) : s1;
+    }
+
     public static Item b(JsonElement jsonelement, String s) {
         if (jsonelement.isJsonPrimitive()) {
             String s1 = jsonelement.getAsString();
@@ -81,6 +87,14 @@ public class ChatDeserializer {
             return jsonelement.getAsBoolean();
         } else {
             throw new JsonSyntaxException("Expected " + s + " to be a Boolean, was " + d(jsonelement));
+        }
+    }
+
+    public static boolean j(JsonObject jsonobject, String s) {
+        if (jsonobject.has(s)) {
+            return c(jsonobject.get(s), s);
+        } else {
+            throw new JsonSyntaxException("Missing " + s + ", expected to find a Boolean");
         }
     }
 
@@ -144,6 +158,10 @@ public class ChatDeserializer {
         }
     }
 
+    public static JsonObject a(JsonObject jsonobject, String s, JsonObject jsonobject1) {
+        return jsonobject.has(s) ? m(jsonobject.get(s), s) : jsonobject1;
+    }
+
     public static JsonArray n(JsonElement jsonelement, String s) {
         if (jsonelement.isJsonArray()) {
             return jsonelement.getAsJsonArray();
@@ -158,6 +176,10 @@ public class ChatDeserializer {
         } else {
             throw new JsonSyntaxException("Missing " + s + ", expected to find a JsonArray");
         }
+    }
+
+    public static JsonArray a(JsonObject jsonobject, String s, @Nullable JsonArray jsonarray) {
+        return jsonobject.has(s) ? n(jsonobject.get(s), s) : jsonarray;
     }
 
     public static <T> T a(@Nullable JsonElement jsonelement, String s, JsonDeserializationContext jsondeserializationcontext, Class<? extends T> oclass) {
@@ -208,6 +230,7 @@ public class ChatDeserializer {
         }
     }
 
+    @Nullable
     public static <T> T a(Gson gson, Reader reader, Class<T> oclass, boolean flag) {
         try {
             JsonReader jsonreader = new JsonReader(reader);
@@ -219,11 +242,45 @@ public class ChatDeserializer {
         }
     }
 
-    public static <T> T a(Gson gson, String s, Class<T> oclass) {
-        return a(gson, s, oclass, false);
+    @Nullable
+    public static <T> T a(Gson gson, Reader reader, Type type, boolean flag) {
+        try {
+            JsonReader jsonreader = new JsonReader(reader);
+
+            jsonreader.setLenient(flag);
+            return gson.getAdapter(TypeToken.get(type)).read(jsonreader);
+        } catch (IOException ioexception) {
+            throw new JsonParseException(ioexception);
+        }
     }
 
+    @Nullable
+    public static <T> T a(Gson gson, String s, Type type, boolean flag) {
+        return a(gson, (Reader) (new StringReader(s)), type, flag);
+    }
+
+    @Nullable
     public static <T> T a(Gson gson, String s, Class<T> oclass, boolean flag) {
         return a(gson, (Reader) (new StringReader(s)), oclass, flag);
+    }
+
+    @Nullable
+    public static <T> T a(Gson gson, Reader reader, Type type) {
+        return a(gson, reader, type, false);
+    }
+
+    @Nullable
+    public static <T> T a(Gson gson, String s, Type type) {
+        return a(gson, s, type, false);
+    }
+
+    @Nullable
+    public static <T> T a(Gson gson, Reader reader, Class<T> oclass) {
+        return a(gson, reader, oclass, false);
+    }
+
+    @Nullable
+    public static <T> T a(Gson gson, String s, Class<T> oclass) {
+        return a(gson, s, oclass, false);
     }
 }

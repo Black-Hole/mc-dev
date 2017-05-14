@@ -103,7 +103,7 @@ public class Item {
         return 0;
     }
 
-    public boolean l() {
+    public boolean k() {
         return this.m;
     }
 
@@ -146,7 +146,7 @@ public class Item {
         return false;
     }
 
-    public Item o() {
+    public Item n() {
         this.l = true;
         return this;
     }
@@ -173,16 +173,16 @@ public class Item {
         return this;
     }
 
-    public boolean q() {
+    public boolean p() {
         return true;
     }
 
     @Nullable
-    public Item r() {
+    public Item q() {
         return this.craftingResult;
     }
 
-    public boolean s() {
+    public boolean r() {
         return this.craftingResult != null;
     }
 
@@ -244,7 +244,7 @@ public class Item {
         return this;
     }
 
-    public boolean t() {
+    public boolean s() {
         return false;
     }
 
@@ -256,7 +256,7 @@ public class Item {
         return HashMultimap.create();
     }
 
-    public static void u() {
+    public static void t() {
         a(Blocks.AIR, (Item) (new ItemAir(Blocks.AIR)));
         a(Blocks.STONE, (new ItemMultiTexture(Blocks.STONE, Blocks.STONE, new ItemMultiTexture.a() {
             public String a(ItemStack itemstack) {
@@ -508,6 +508,24 @@ public class Item {
         a(Blocks.dy, (Item) (new ItemShulkerBox(Blocks.dy)));
         a(Blocks.dz, (Item) (new ItemShulkerBox(Blocks.dz)));
         a(Blocks.dA, (Item) (new ItemShulkerBox(Blocks.dA)));
+        b(Blocks.dB);
+        b(Blocks.dC);
+        b(Blocks.dD);
+        b(Blocks.dE);
+        b(Blocks.dF);
+        b(Blocks.dG);
+        b(Blocks.dH);
+        b(Blocks.dI);
+        b(Blocks.dJ);
+        b(Blocks.dK);
+        b(Blocks.dL);
+        b(Blocks.dM);
+        b(Blocks.dN);
+        b(Blocks.dO);
+        b(Blocks.dP);
+        b(Blocks.dQ);
+        a(Blocks.dR, (new ItemCloth(Blocks.dR)).c("concrete"));
+        a(Blocks.dS, (new ItemCloth(Blocks.dS)).c("concrete_powder"));
         b(Blocks.STRUCTURE_BLOCK);
         a(256, "iron_shovel", (new ItemSpade(Item.EnumToolMaterial.IRON)).c("shovelIron"));
         a(257, "iron_pickaxe", (new ItemPickaxe(Item.EnumToolMaterial.IRON)).c("pickaxeIron"));
@@ -533,7 +551,7 @@ public class Item {
         a(277, "diamond_shovel", (new ItemSpade(Item.EnumToolMaterial.DIAMOND)).c("shovelDiamond"));
         a(278, "diamond_pickaxe", (new ItemPickaxe(Item.EnumToolMaterial.DIAMOND)).c("pickaxeDiamond"));
         a(279, "diamond_axe", (new ItemAxe(Item.EnumToolMaterial.DIAMOND)).c("hatchetDiamond"));
-        a(280, "stick", (new Item()).o().c("stick").a(CreativeModeTab.l));
+        a(280, "stick", (new Item()).n().c("stick").a(CreativeModeTab.l));
         a(281, "bowl", (new Item()).c("bowl").a(CreativeModeTab.l));
         a(282, "mushroom_stew", (new ItemSoup(6)).c("mushroomStew"));
         a(283, "golden_sword", (new ItemSword(Item.EnumToolMaterial.GOLD)).c("swordGold"));
@@ -607,7 +625,7 @@ public class Item {
         a(349, "fish", (new ItemFish(false)).c("fish").a(true));
         a(350, "cooked_fish", (new ItemFish(true)).c("fish").a(true));
         a(351, "dye", (new ItemDye()).c("dyePowder"));
-        a(352, "bone", (new Item()).c("bone").o().a(CreativeModeTab.f));
+        a(352, "bone", (new Item()).c("bone").n().a(CreativeModeTab.f));
         a(353, "sugar", (new Item()).c("sugar").a(CreativeModeTab.l));
         a(354, "cake", (new ItemReed(Blocks.CAKE)).d(1).c("cake").a(CreativeModeTab.h));
         a(355, "bed", (new ItemBed()).d(1).c("bed"));
@@ -624,7 +642,7 @@ public class Item {
         a(366, "cooked_chicken", (new ItemFood(6, 0.6F, true)).c("chickenCooked"));
         a(367, "rotten_flesh", (new ItemFood(4, 0.1F, true)).a(new MobEffect(MobEffects.HUNGER, 600, 0), 0.8F).c("rottenFlesh"));
         a(368, "ender_pearl", (new ItemEnderPearl()).c("enderPearl"));
-        a(369, "blaze_rod", (new Item()).c("blazeRod").a(CreativeModeTab.l).o());
+        a(369, "blaze_rod", (new Item()).c("blazeRod").a(CreativeModeTab.l).n());
         a(370, "ghast_tear", (new Item()).c("ghastTear").a(CreativeModeTab.k));
         a(371, "gold_nugget", (new Item()).c("goldNugget").a(CreativeModeTab.l));
         a(372, "nether_wart", (new ItemSeeds(Blocks.NETHER_WART, Blocks.SOUL_SAND)).c("netherStalkSeeds"));
@@ -709,18 +727,19 @@ public class Item {
         a(449, "totem_of_undying", (new Item()).c("totem").d(1).a(CreativeModeTab.j));
         a(450, "shulker_shell", (new Item()).c("shulkerShell").a(CreativeModeTab.l));
         a(452, "iron_nugget", (new Item()).c("ironNugget").a(CreativeModeTab.l));
-        a(2256, "record_13", (new ItemRecord("13", SoundEffects.fa)).c("record"));
-        a(2257, "record_cat", (new ItemRecord("cat", SoundEffects.fc)).c("record"));
-        a(2258, "record_blocks", (new ItemRecord("blocks", SoundEffects.fb)).c("record"));
-        a(2259, "record_chirp", (new ItemRecord("chirp", SoundEffects.fd)).c("record"));
-        a(2260, "record_far", (new ItemRecord("far", SoundEffects.fe)).c("record"));
-        a(2261, "record_mall", (new ItemRecord("mall", SoundEffects.ff)).c("record"));
-        a(2262, "record_mellohi", (new ItemRecord("mellohi", SoundEffects.fg)).c("record"));
-        a(2263, "record_stal", (new ItemRecord("stal", SoundEffects.fh)).c("record"));
-        a(2264, "record_strad", (new ItemRecord("strad", SoundEffects.fi)).c("record"));
-        a(2265, "record_ward", (new ItemRecord("ward", SoundEffects.fk)).c("record"));
-        a(2266, "record_11", (new ItemRecord("11", SoundEffects.eZ)).c("record"));
-        a(2267, "record_wait", (new ItemRecord("wait", SoundEffects.fj)).c("record"));
+        a(453, "knowledge_book", (new ItemKnowledgeBook()).c("knowledgeBook"));
+        a(2256, "record_13", (new ItemRecord("13", SoundEffects.gb)).c("record"));
+        a(2257, "record_cat", (new ItemRecord("cat", SoundEffects.gd)).c("record"));
+        a(2258, "record_blocks", (new ItemRecord("blocks", SoundEffects.gc)).c("record"));
+        a(2259, "record_chirp", (new ItemRecord("chirp", SoundEffects.ge)).c("record"));
+        a(2260, "record_far", (new ItemRecord("far", SoundEffects.gf)).c("record"));
+        a(2261, "record_mall", (new ItemRecord("mall", SoundEffects.gg)).c("record"));
+        a(2262, "record_mellohi", (new ItemRecord("mellohi", SoundEffects.gh)).c("record"));
+        a(2263, "record_stal", (new ItemRecord("stal", SoundEffects.gi)).c("record"));
+        a(2264, "record_strad", (new ItemRecord("strad", SoundEffects.gj)).c("record"));
+        a(2265, "record_ward", (new ItemRecord("ward", SoundEffects.gl)).c("record"));
+        a(2266, "record_11", (new ItemRecord("11", SoundEffects.ga)).c("record"));
+        a(2267, "record_wait", (new ItemRecord("wait", SoundEffects.gk)).c("record"));
     }
 
     private static void b(Block block) {

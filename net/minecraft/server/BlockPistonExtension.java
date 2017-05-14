@@ -152,7 +152,7 @@ public class BlockPistonExtension extends BlockDirectional {
     }
 
     @Nullable
-    public static EnumDirection e(int i) {
+    public static EnumDirection b(int i) {
         int j = i & 7;
 
         return j > 5 ? null : EnumDirection.fromType1(j);
@@ -163,7 +163,7 @@ public class BlockPistonExtension extends BlockDirectional {
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockPistonExtension.FACING, e(i)).set(BlockPistonExtension.TYPE, (i & 8) > 0 ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT);
+        return this.getBlockData().set(BlockPistonExtension.FACING, b(i)).set(BlockPistonExtension.TYPE, (i & 8) > 0 ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT);
     }
 
     public int toLegacyData(IBlockData iblockdata) {
@@ -187,6 +187,10 @@ public class BlockPistonExtension extends BlockDirectional {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockPistonExtension.FACING, BlockPistonExtension.TYPE, BlockPistonExtension.SHORT});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == iblockdata.get(BlockPistonExtension.FACING) ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
     }
 
     public static enum EnumPistonType implements INamable {

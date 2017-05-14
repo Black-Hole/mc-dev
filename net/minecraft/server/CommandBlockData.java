@@ -43,7 +43,7 @@ public class CommandBlockData extends CommandAbstract {
                     NBTTagCompound nbttagcompound2;
 
                     try {
-                        nbttagcompound2 = MojangsonParser.parse(a(icommandlistener, astring, 3).toPlainText());
+                        nbttagcompound2 = MojangsonParser.parse(a(astring, 3));
                     } catch (MojangsonParseException mojangsonparseexception) {
                         throw new CommandException("commands.blockdata.tagError", new Object[] { mojangsonparseexception.getMessage()});
                     }

@@ -36,7 +36,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
 
     public void d(@Nullable EntityHuman entityhuman) {
         if (this.m != null) {
-            LootTable loottable = this.world.ak().a(this.m);
+            LootTable loottable = this.world.getLootTableRegistry().a(this.m);
 
             this.m = null;
             Random random;
@@ -50,7 +50,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
             LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
             if (entityhuman != null) {
-                loottableinfo_a.a(entityhuman.dj());
+                loottableinfo_a.a(entityhuman.ds());
             }
 
             loottable.a(this, random, loottableinfo_a.a());
@@ -71,7 +71,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
         return this.o != null && !this.o.isEmpty();
     }
 
-    public void a(String s) {
+    public void setCustomName(String s) {
         this.o = s;
     }
 

@@ -5,21 +5,21 @@ import java.util.Random;
 
 public class BiomeIcePlains extends BiomeBase {
 
-    private final boolean y;
-    private final WorldGenPackedIce2 z = new WorldGenPackedIce2();
-    private final WorldGenPackedIce1 A = new WorldGenPackedIce1(4);
+    private final boolean x;
+    private final WorldGenPackedIce2 y = new WorldGenPackedIce2();
+    private final WorldGenPackedIce1 z = new WorldGenPackedIce1(4);
 
     public BiomeIcePlains(boolean flag, BiomeBase.a biomebase_a) {
         super(biomebase_a);
-        this.y = flag;
+        this.x = flag;
         if (flag) {
-            this.r = Blocks.SNOW.getBlockData();
+            this.q = Blocks.SNOW.getBlockData();
         }
 
-        this.v.clear();
-        this.v.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 10, 2, 3));
-        this.v.add(new BiomeBase.BiomeMeta(EntityPolarBear.class, 1, 1, 2));
-        Iterator iterator = this.u.iterator();
+        this.u.clear();
+        this.u.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 10, 2, 3));
+        this.u.add(new BiomeBase.BiomeMeta(EntityPolarBear.class, 1, 1, 2));
+        Iterator iterator = this.t.iterator();
 
         while (iterator.hasNext()) {
             BiomeBase.BiomeMeta biomebase_biomemeta = (BiomeBase.BiomeMeta) iterator.next();
@@ -29,8 +29,8 @@ public class BiomeIcePlains extends BiomeBase {
             }
         }
 
-        this.u.add(new BiomeBase.BiomeMeta(EntitySkeleton.class, 20, 4, 4));
-        this.u.add(new BiomeBase.BiomeMeta(EntitySkeletonStray.class, 80, 4, 4));
+        this.t.add(new BiomeBase.BiomeMeta(EntitySkeleton.class, 20, 4, 4));
+        this.t.add(new BiomeBase.BiomeMeta(EntitySkeletonStray.class, 80, 4, 4));
     }
 
     public float f() {
@@ -38,7 +38,7 @@ public class BiomeIcePlains extends BiomeBase {
     }
 
     public void a(World world, Random random, BlockPosition blockposition) {
-        if (this.y) {
+        if (this.x) {
             int i;
             int j;
             int k;
@@ -46,13 +46,13 @@ public class BiomeIcePlains extends BiomeBase {
             for (i = 0; i < 3; ++i) {
                 j = random.nextInt(16) + 8;
                 k = random.nextInt(16) + 8;
-                this.z.generate(world, random, world.getHighestBlockYAt(blockposition.a(j, 0, k)));
+                this.y.generate(world, random, world.getHighestBlockYAt(blockposition.a(j, 0, k)));
             }
 
             for (i = 0; i < 2; ++i) {
                 j = random.nextInt(16) + 8;
                 k = random.nextInt(16) + 8;
-                this.A.generate(world, random, world.getHighestBlockYAt(blockposition.a(j, 0, k)));
+                this.z.generate(world, random, world.getHighestBlockYAt(blockposition.a(j, 0, k)));
             }
         }
 

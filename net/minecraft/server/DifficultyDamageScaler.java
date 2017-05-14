@@ -17,6 +17,10 @@ public class DifficultyDamageScaler {
         return this.b;
     }
 
+    public boolean a(float f) {
+        return this.b > f;
+    }
+
     public float d() {
         return this.b < 2.0F ? 0.0F : (this.b > 4.0F ? 1.0F : (this.b - 2.0F) / 2.0F);
     }

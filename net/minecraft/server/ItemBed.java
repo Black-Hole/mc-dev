@@ -4,6 +4,8 @@ public class ItemBed extends Item {
 
     public ItemBed() {
         this.a(CreativeModeTab.c);
+        this.setMaxDurability(0);
+        this.a(true);
     }
 
     public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
@@ -36,11 +38,23 @@ public class ItemBed extends Item {
 
                     world.setTypeAndData(blockposition, iblockdata2, 10);
                     world.setTypeAndData(blockposition1, iblockdata2.set(BlockBed.PART, BlockBed.EnumBedPart.HEAD), 10);
-                    world.update(blockposition, block, false);
-                    world.update(blockposition1, iblockdata1.getBlock(), false);
                     SoundEffectType soundeffecttype = iblockdata2.getBlock().getStepSound();
 
                     world.a((EntityHuman) null, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
+                    TileEntity tileentity = world.getTileEntity(blockposition1);
+
+                    if (tileentity instanceof TileEntityBed) {
+                        ((TileEntityBed) tileentity).a(itemstack);
+                    }
+
+                    TileEntity tileentity1 = world.getTileEntity(blockposition);
+
+                    if (tileentity1 instanceof TileEntityBed) {
+                        ((TileEntityBed) tileentity1).a(itemstack);
+                    }
+
+                    world.update(blockposition, block, false);
+                    world.update(blockposition1, iblockdata1.getBlock(), false);
                     itemstack.subtract(1);
                     return EnumInteractionResult.SUCCESS;
                 } else {
@@ -50,5 +64,9 @@ public class ItemBed extends Item {
                 return EnumInteractionResult.FAIL;
             }
         }
+    }
+
+    public String a(ItemStack itemstack) {
+        return super.getName() + "." + EnumColor.fromColorIndex(itemstack.getData()).d();
     }
 }

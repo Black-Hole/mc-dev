@@ -32,11 +32,7 @@ public class TileEntityCommand extends TileEntity {
             TileEntityCommand.this.getWorld().notify(TileEntityCommand.this.position, iblockdata, iblockdata, 3);
         }
 
-        public Entity f() {
-            return null;
-        }
-
-        public MinecraftServer B_() {
+        public MinecraftServer C_() {
             return TileEntityCommand.this.world.getMinecraftServer();
         }
     };
@@ -55,15 +51,15 @@ public class TileEntityCommand extends TileEntity {
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.i.b(nbttagcompound);
-        this.a(nbttagcompound.getBoolean("powered"));
-        this.c(nbttagcompound.getBoolean("conditionMet"));
+        this.a = nbttagcompound.getBoolean("powered");
+        this.g = nbttagcompound.getBoolean("conditionMet");
         this.b(nbttagcompound.getBoolean("auto"));
     }
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        if (this.j()) {
-            this.d(false);
+        if (this.k()) {
+            this.c(false);
             NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
 
             return new PacketPlayOutTileEntityData(this.position, 2, nbttagcompound);
@@ -100,18 +96,12 @@ public class TileEntityCommand extends TileEntity {
         boolean flag1 = this.f;
 
         this.f = flag;
-        if (!flag1 && flag && !this.a && this.world != null && this.k() != TileEntityCommand.Type.SEQUENCE) {
+        if (!flag1 && flag && !this.a && this.world != null && this.l() != TileEntityCommand.Type.SEQUENCE) {
             Block block = this.getBlock();
 
             if (block instanceof BlockCommand) {
-                BlockPosition blockposition = this.getPosition();
-                BlockCommand blockcommand = (BlockCommand) block;
-
-                this.g = !this.l() || blockcommand.e(this.world, blockposition, this.world.getType(blockposition));
-                this.world.a(blockposition, block, block.a(this.world));
-                if (this.g) {
-                    blockcommand.c(this.world, blockposition);
-                }
+                this.j();
+                this.world.a(this.position, block, block.a(this.world));
             }
         }
 
@@ -121,25 +111,38 @@ public class TileEntityCommand extends TileEntity {
         return this.g;
     }
 
-    public void c(boolean flag) {
-        this.g = flag;
+    public boolean j() {
+        this.g = true;
+        if (this.m()) {
+            BlockPosition blockposition = this.position.shift(((EnumDirection) this.world.getType(this.position).get(BlockCommand.a)).opposite());
+
+            if (this.world.getType(blockposition).getBlock() instanceof BlockCommand) {
+                TileEntity tileentity = this.world.getTileEntity(blockposition);
+
+                this.g = tileentity instanceof TileEntityCommand && ((TileEntityCommand) tileentity).getCommandBlock().k() > 0;
+            } else {
+                this.g = false;
+            }
+        }
+
+        return this.g;
     }
 
-    public boolean j() {
+    public boolean k() {
         return this.h;
     }
 
-    public void d(boolean flag) {
+    public void c(boolean flag) {
         this.h = flag;
     }
 
-    public TileEntityCommand.Type k() {
+    public TileEntityCommand.Type l() {
         Block block = this.getBlock();
 
         return block == Blocks.COMMAND_BLOCK ? TileEntityCommand.Type.REDSTONE : (block == Blocks.dc ? TileEntityCommand.Type.AUTO : (block == Blocks.dd ? TileEntityCommand.Type.SEQUENCE : TileEntityCommand.Type.REDSTONE));
     }
 
-    public boolean l() {
+    public boolean m() {
         IBlockData iblockdata = this.world.getType(this.getPosition());
 
         return iblockdata.getBlock() instanceof BlockCommand ? ((Boolean) iblockdata.get(BlockCommand.b)).booleanValue() : false;

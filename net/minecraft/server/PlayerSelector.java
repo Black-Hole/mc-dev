@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 public class PlayerSelector {
 
-    private static final Pattern a = Pattern.compile("^@([pare])(?:\\[([^ ]*)\\])?$");
+    private static final Pattern a = Pattern.compile("^@([pares])(?:\\[([^ ]*)\\])?$");
     private static final Splitter b = Splitter.on(',').omitEmptyStrings();
     private static final Splitter c = Splitter.on('=').limit(2);
     private static final Set<String> d = Sets.newHashSet();
@@ -65,6 +65,10 @@ public class PlayerSelector {
     @Nullable
     public static EntityPlayer getPlayer(ICommandListener icommandlistener, String s) throws CommandException {
         return (EntityPlayer) getEntity(icommandlistener, s, EntityPlayer.class);
+    }
+
+    public static List<EntityPlayer> b(ICommandListener icommandlistener, String s) throws CommandException {
+        return getPlayers(icommandlistener, s, EntityPlayer.class);
     }
 
     @Nullable
@@ -125,6 +129,39 @@ public class PlayerSelector {
                         arraylist1.addAll(f(map));
                         arraylist1.addAll(a(map, vec3d));
                         arraylist1.addAll(g(map));
+                        if ("s".equalsIgnoreCase(s1)) {
+                            Entity entity = icommandlistener.f();
+
+                            if (entity != null && oclass.isAssignableFrom(entity.getClass())) {
+                                if (map.containsKey(PlayerSelector.l) || map.containsKey(PlayerSelector.m) || map.containsKey(PlayerSelector.n)) {
+                                    int i = a(map, PlayerSelector.l, 0);
+                                    int j = a(map, PlayerSelector.m, 0);
+                                    int k = a(map, PlayerSelector.n, 0);
+                                    AxisAlignedBB axisalignedbb = a(blockposition, i, j, k);
+
+                                    if (!axisalignedbb.c(entity.getBoundingBox())) {
+                                        return Collections.emptyList();
+                                    }
+                                }
+
+                                Iterator iterator1 = arraylist1.iterator();
+
+                                Predicate predicate;
+
+                                do {
+                                    if (!iterator1.hasNext()) {
+                                        return Lists.newArrayList(new Entity[] { entity});
+                                    }
+
+                                    predicate = (Predicate) iterator1.next();
+                                } while (predicate.apply(entity));
+
+                                return Collections.emptyList();
+                            }
+
+                            return Collections.emptyList();
+                        }
+
                         arraylist.addAll(a(map, oclass, (List) arraylist1, s1, world, blockposition));
                     }
                 }
@@ -142,7 +179,7 @@ public class PlayerSelector {
         if (h(map)) {
             arraylist.add(icommandlistener.getWorld());
         } else {
-            Collections.addAll(arraylist, icommandlistener.B_().worldServer);
+            Collections.addAll(arraylist, icommandlistener.C_().worldServer);
         }
 
         return arraylist;
@@ -171,7 +208,7 @@ public class PlayerSelector {
     private static List<Predicate<Entity>> a(Map<String, String> map, String s) {
         String s1 = b(map, PlayerSelector.w);
 
-        if (s1 != null && (s.equals("e") || s.equals("r"))) {
+        if (s1 != null && (s.equals("e") || s.equals("r") || s.equals("s"))) {
             final boolean flag = s1.startsWith("!");
             final MinecraftKey minecraftkey = new MinecraftKey(flag ? s1.substring(1) : s1);
 
@@ -185,7 +222,7 @@ public class PlayerSelector {
                 }
             });
         } else {
-            return !s.equals("e") ? Collections.singletonList(new Predicate() {
+            return !s.equals("e") && !s.equals("s") ? Collections.singletonList(new Predicate() {
                 public boolean a(@Nullable Entity entity) {
                     return entity instanceof EntityHuman;
                 }
@@ -282,7 +319,7 @@ public class PlayerSelector {
                         return false;
                     } else {
                         EntityLiving entityliving = (EntityLiving) entity;
-                        ScoreboardTeamBase scoreboardteambase = entityliving.aQ();
+                        ScoreboardTeamBase scoreboardteambase = entityliving.aW();
                         String s = scoreboardteambase == null ? "" : scoreboardteambase.getName();
 
                         return s.equals(s1) != flag;
@@ -306,7 +343,7 @@ public class PlayerSelector {
                 if (entity == null) {
                     return false;
                 } else {
-                    Scoreboard scoreboard = icommandlistener.B_().getWorldServer(0).getScoreboard();
+                    Scoreboard scoreboard = icommandlistener.C_().getWorldServer(0).getScoreboard();
                     Iterator iterator = map.entrySet().iterator();
 
                     Entry entry;
@@ -333,7 +370,7 @@ public class PlayerSelector {
                             return false;
                         }
 
-                        String s1 = entity instanceof EntityPlayer ? entity.getName() : entity.bf();
+                        String s1 = entity instanceof EntityPlayer ? entity.getName() : entity.bl();
 
                         if (!scoreboard.b(s1, scoreboardobjective)) {
                             return false;
@@ -393,7 +430,7 @@ public class PlayerSelector {
         if (s != null) {
             arraylist.add(new Predicate() {
                 public boolean a(@Nullable Entity entity) {
-                    return entity == null ? false : ("".equals(s) ? entity.P().isEmpty() != flag : entity.P().contains(s) != flag);
+                    return entity == null ? false : ("".equals(s) ? entity.getScoreboardTags().isEmpty() != flag : entity.getScoreboardTags().contains(s) != flag);
                 }
 
                 public boolean apply(@Nullable Object object) {

@@ -5,7 +5,7 @@ import java.util.Random;
 public class BlockMelon extends Block {
 
     protected BlockMelon() {
-        super(Material.PUMPKIN, MaterialMapColor.u);
+        super(Material.PUMPKIN, MaterialMapColor.v);
         this.a(CreativeModeTab.b);
     }
 

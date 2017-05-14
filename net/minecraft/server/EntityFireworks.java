@@ -48,11 +48,11 @@ public class EntityFireworks extends Entity {
         this.e = entityliving;
     }
 
-    public void A_() {
+    public void B_() {
         this.M = this.locX;
         this.N = this.locY;
         this.O = this.locZ;
-        super.A_();
+        super.B_();
         if (this.j()) {
             if (this.e == null) {
                 Entity entity = this.world.getEntity(((Integer) this.datawatcher.get(EntityFireworks.b)).intValue());
@@ -63,8 +63,8 @@ public class EntityFireworks extends Entity {
             }
 
             if (this.e != null) {
-                if (this.e.cH()) {
-                    Vec3D vec3d = this.e.aB();
+                if (this.e.cN()) {
+                    Vec3D vec3d = this.e.aH();
                     double d0 = 1.5D;
                     double d1 = 0.1D;
 
@@ -108,7 +108,7 @@ public class EntityFireworks extends Entity {
         this.pitch = this.lastPitch + (this.pitch - this.lastPitch) * 0.2F;
         this.yaw = this.lastYaw + (this.yaw - this.lastYaw) * 0.2F;
         if (this.ticksFlown == 0 && !this.isSilent()) {
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.bC, SoundCategory.AMBIENT, 3.0F, 1.0F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.bI, SoundCategory.AMBIENT, 3.0F, 1.0F);
         }
 
         ++this.ticksFlown;
@@ -204,7 +204,7 @@ public class EntityFireworks extends Entity {
 
     }
 
-    public boolean aV() {
+    public boolean bb() {
         return false;
     }
 }

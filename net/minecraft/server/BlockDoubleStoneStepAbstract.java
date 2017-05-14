@@ -33,7 +33,7 @@ public abstract class BlockDoubleStoneStepAbstract extends BlockStepAbstract {
         return new ItemStack(Blocks.STONE_SLAB2, 1, ((BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant) iblockdata.get(BlockDoubleStoneStepAbstract.VARIANT)).a());
     }
 
-    public String e(int i) {
+    public String b(int i) {
         return super.a() + "." + BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant.a(i).d();
     }
 

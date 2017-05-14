@@ -24,7 +24,7 @@ public class CommandSpawnpoint extends CommandAbstract {
         if (astring.length > 1 && astring.length < 4) {
             throw new ExceptionUsage("commands.spawnpoint.usage", new Object[0]);
         } else {
-            EntityPlayer entityplayer = astring.length > 0 ? a(minecraftserver, icommandlistener, astring[0]) : a(icommandlistener);
+            EntityPlayer entityplayer = astring.length > 0 ? b(minecraftserver, icommandlistener, astring[0]) : a(icommandlistener);
             BlockPosition blockposition = astring.length > 3 ? a(icommandlistener, astring, 1, true) : entityplayer.getChunkCoordinates();
 
             if (entityplayer.world != null) {

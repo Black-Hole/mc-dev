@@ -9,4 +9,8 @@ public class ExceptionInvalidSyntax extends CommandException {
     public ExceptionInvalidSyntax(String s, Object... aobject) {
         super(s, aobject);
     }
+
+    public synchronized Throwable fillInStackTrace() {
+        return this;
+    }
 }

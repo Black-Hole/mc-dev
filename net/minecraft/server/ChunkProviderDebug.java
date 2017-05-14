@@ -86,6 +86,10 @@ public class ChunkProviderDebug implements ChunkGenerator {
         return null;
     }
 
+    public boolean a(World world, String s, BlockPosition blockposition) {
+        return false;
+    }
+
     public void recreateStructures(Chunk chunk, int i, int j) {}
 
     static {

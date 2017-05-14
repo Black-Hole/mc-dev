@@ -28,7 +28,7 @@ public class NBTTagFloat extends NBTNumber {
     }
 
     public String toString() {
-        return "" + this.data + "f";
+        return this.data + "f";
     }
 
     public NBTTagFloat c() {
@@ -36,13 +36,7 @@ public class NBTTagFloat extends NBTNumber {
     }
 
     public boolean equals(Object object) {
-        if (super.equals(object)) {
-            NBTTagFloat nbttagfloat = (NBTTagFloat) object;
-
-            return this.data == nbttagfloat.data;
-        } else {
-            return false;
-        }
+        return super.equals(object) && this.data == ((NBTTagFloat) object).data;
     }
 
     public int hashCode() {

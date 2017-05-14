@@ -59,15 +59,15 @@ public class CommandObjectiveExecutor {
                     icommandlistener.a(commandobjectiveexecutor_enumcommandresult, i);
                 }
 
-                public MinecraftServer B_() {
-                    return icommandlistener.B_();
+                public MinecraftServer C_() {
+                    return icommandlistener.C_();
                 }
             };
 
             String s1;
 
             try {
-                s1 = CommandAbstract.e(minecraftserver, icommandlistener1, s);
+                s1 = CommandAbstract.f(minecraftserver, icommandlistener1, s);
             } catch (CommandException commandexception) {
                 return;
             }

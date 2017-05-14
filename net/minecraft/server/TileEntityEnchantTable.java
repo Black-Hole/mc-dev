@@ -36,7 +36,7 @@ public class TileEntityEnchantTable extends TileEntity implements ITickable, ITi
 
     }
 
-    public void F_() {
+    public void e() {
         this.k = this.j;
         this.m = this.l;
         EntityHuman entityhuman = this.world.a((double) ((float) this.position.getX() + 0.5F), (double) ((float) this.position.getY() + 0.5F), (double) ((float) this.position.getZ() + 0.5F), 3.0D, false);
@@ -105,7 +105,7 @@ public class TileEntityEnchantTable extends TileEntity implements ITickable, ITi
         return this.p != null && !this.p.isEmpty();
     }
 
-    public void a(String s) {
+    public void setCustomName(String s) {
         this.p = s;
     }
 

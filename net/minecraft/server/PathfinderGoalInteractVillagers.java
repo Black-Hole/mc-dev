@@ -12,7 +12,7 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
 
     public void c() {
         super.c();
-        if (this.f.do_() && this.b instanceof EntityVillager && ((EntityVillager) this.b).dp()) {
+        if (this.f.dq() && this.b instanceof EntityVillager && ((EntityVillager) this.b).dr()) {
             this.e = 10;
         } else {
             this.e = 0;
@@ -25,7 +25,7 @@ public class PathfinderGoalInteractVillagers extends PathfinderGoalInteract {
         if (this.e > 0) {
             --this.e;
             if (this.e == 0) {
-                InventorySubcontainer inventorysubcontainer = this.f.dm();
+                InventorySubcontainer inventorysubcontainer = this.f.do_();
 
                 for (int i = 0; i < inventorysubcontainer.getSize(); ++i) {
                     ItemStack itemstack = inventorysubcontainer.getItem(i);

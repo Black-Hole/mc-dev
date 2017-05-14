@@ -108,9 +108,9 @@ public class CommandStats extends CommandAbstract {
                         commandobjectiveexecutor = ((TileEntitySign) tileentity).f();
                     }
                 } else {
-                    Entity entity = b(minecraftserver, icommandlistener, astring[1]);
+                    Entity entity = c(minecraftserver, icommandlistener, astring[1]);
 
-                    commandobjectiveexecutor = entity.bs();
+                    commandobjectiveexecutor = entity.by();
                 }
 
                 if ("set".equals(s)) {

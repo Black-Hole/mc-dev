@@ -16,6 +16,10 @@ public class ItemSeeds extends Item {
 
         if (enumdirection == EnumDirection.UP && entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack) && world.getType(blockposition).getBlock() == this.b && world.isEmpty(blockposition.up())) {
             world.setTypeUpdate(blockposition.up(), this.a.getBlockData());
+            if (entityhuman instanceof EntityPlayer) {
+                CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition.up(), itemstack);
+            }
+
             itemstack.subtract(1);
             return EnumInteractionResult.SUCCESS;
         } else {

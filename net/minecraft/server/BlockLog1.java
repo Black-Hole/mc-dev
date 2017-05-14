@@ -36,7 +36,7 @@ public class BlockLog1 extends BlockLogAbstract {
                 return BlockWood.EnumLogVariant.DARK_OAK.c();
 
             case BIRCH:
-                return MaterialMapColor.p;
+                return MaterialMapColor.q;
 
             case JUNGLE:
                 return BlockWood.EnumLogVariant.SPRUCE.c();

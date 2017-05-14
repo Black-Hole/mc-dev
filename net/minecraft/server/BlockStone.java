@@ -42,7 +42,7 @@ public class BlockStone extends Block {
 
     public static enum EnumStoneVariant implements INamable {
 
-        STONE(0, MaterialMapColor.m, "stone", true), GRANITE(1, MaterialMapColor.l, "granite", true), GRANITE_SMOOTH(2, MaterialMapColor.l, "smooth_granite", "graniteSmooth", false), DIORITE(3, MaterialMapColor.p, "diorite", true), DIORITE_SMOOTH(4, MaterialMapColor.p, "smooth_diorite", "dioriteSmooth", false), ANDESITE(5, MaterialMapColor.m, "andesite", true), ANDESITE_SMOOTH(6, MaterialMapColor.m, "smooth_andesite", "andesiteSmooth", false);
+        STONE(0, MaterialMapColor.n, "stone", true), GRANITE(1, MaterialMapColor.m, "granite", true), GRANITE_SMOOTH(2, MaterialMapColor.m, "smooth_granite", "graniteSmooth", false), DIORITE(3, MaterialMapColor.q, "diorite", true), DIORITE_SMOOTH(4, MaterialMapColor.q, "smooth_diorite", "dioriteSmooth", false), ANDESITE(5, MaterialMapColor.n, "andesite", true), ANDESITE_SMOOTH(6, MaterialMapColor.n, "smooth_andesite", "andesiteSmooth", false);
 
         private static final BlockStone.EnumStoneVariant[] h = new BlockStone.EnumStoneVariant[values().length];
         private final int i;

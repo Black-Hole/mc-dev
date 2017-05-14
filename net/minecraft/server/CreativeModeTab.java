@@ -11,54 +11,55 @@ public abstract class CreativeModeTab {
     };
     public static final CreativeModeTab e = new CreativeModeTab(3, "transportation") {
     };
-    public static final CreativeModeTab f = new CreativeModeTab(4, "misc") {
+    public static final CreativeModeTab f = new CreativeModeTab(6, "misc") {
     };
     public static final CreativeModeTab g = (new CreativeModeTab(5, "search") {
     }).a("item_search.png");
-    public static final CreativeModeTab h = new CreativeModeTab(6, "food") {
+    public static final CreativeModeTab h = new CreativeModeTab(7, "food") {
     };
-    public static final CreativeModeTab i = (new CreativeModeTab(7, "tools") {
+    public static final CreativeModeTab i = (new CreativeModeTab(8, "tools") {
     }).a(new EnchantmentSlotType[] { EnchantmentSlotType.ALL, EnchantmentSlotType.DIGGER, EnchantmentSlotType.FISHING_ROD, EnchantmentSlotType.BREAKABLE});
-    public static final CreativeModeTab j = (new CreativeModeTab(8, "combat") {
+    public static final CreativeModeTab j = (new CreativeModeTab(9, "combat") {
     }).a(new EnchantmentSlotType[] { EnchantmentSlotType.ALL, EnchantmentSlotType.ARMOR, EnchantmentSlotType.ARMOR_FEET, EnchantmentSlotType.ARMOR_HEAD, EnchantmentSlotType.ARMOR_LEGS, EnchantmentSlotType.ARMOR_CHEST, EnchantmentSlotType.BOW, EnchantmentSlotType.WEAPON, EnchantmentSlotType.WEARABLE, EnchantmentSlotType.BREAKABLE});
-    public static final CreativeModeTab k = new CreativeModeTab(9, "brewing") {
+    public static final CreativeModeTab k = new CreativeModeTab(10, "brewing") {
     };
-    public static final CreativeModeTab l = new CreativeModeTab(10, "materials") {
+    public static final CreativeModeTab l = CreativeModeTab.f;
+    public static final CreativeModeTab m = new CreativeModeTab(4, "hotbar") {
     };
-    public static final CreativeModeTab m = (new CreativeModeTab(11, "inventory") {
+    public static final CreativeModeTab n = (new CreativeModeTab(11, "inventory") {
     }).a("inventory.png").j().h();
-    private final int n;
-    private final String o;
-    private String p = "items.png";
-    private boolean q = true;
+    private final int o;
+    private final String p;
+    private String q = "items.png";
     private boolean r = true;
-    private EnchantmentSlotType[] s;
-    private ItemStack t;
+    private boolean s = true;
+    private EnchantmentSlotType[] t;
+    private ItemStack u;
 
     public CreativeModeTab(int i, String s) {
-        this.n = i;
-        this.o = s;
-        this.t = ItemStack.a;
+        this.o = i;
+        this.p = s;
+        this.u = ItemStack.a;
         CreativeModeTab.a[i] = this;
     }
 
     public CreativeModeTab a(String s) {
-        this.p = s;
+        this.q = s;
         return this;
     }
 
     public CreativeModeTab h() {
-        this.r = false;
+        this.s = false;
         return this;
     }
 
     public CreativeModeTab j() {
-        this.q = false;
+        this.r = false;
         return this;
     }
 
     public CreativeModeTab a(EnchantmentSlotType... aenchantmentslottype) {
-        this.s = aenchantmentslottype;
+        this.t = aenchantmentslottype;
         return this;
     }
 }

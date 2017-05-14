@@ -28,7 +28,7 @@ public class NBTTagDouble extends NBTNumber {
     }
 
     public String toString() {
-        return "" + this.data + "d";
+        return this.data + "d";
     }
 
     public NBTTagDouble c() {
@@ -36,13 +36,7 @@ public class NBTTagDouble extends NBTNumber {
     }
 
     public boolean equals(Object object) {
-        if (super.equals(object)) {
-            NBTTagDouble nbttagdouble = (NBTTagDouble) object;
-
-            return this.data == nbttagdouble.data;
-        } else {
-            return false;
-        }
+        return super.equals(object) && this.data == ((NBTTagDouble) object).data;
     }
 
     public int hashCode() {

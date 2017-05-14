@@ -78,4 +78,8 @@ public class BlockEndRod extends BlockDirectional {
     public EnumPistonReaction h(IBlockData iblockdata) {
         return EnumPistonReaction.NORMAL;
     }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
+    }
 }

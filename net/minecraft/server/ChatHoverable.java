@@ -58,27 +58,27 @@ public class ChatHoverable {
 
     public static enum EnumHoverAction {
 
-        SHOW_TEXT("show_text", true), SHOW_ACHIEVEMENT("show_achievement", true), SHOW_ITEM("show_item", true), SHOW_ENTITY("show_entity", true);
+        SHOW_TEXT("show_text", true), SHOW_ITEM("show_item", true), SHOW_ENTITY("show_entity", true);
 
-        private static final Map<String, ChatHoverable.EnumHoverAction> e = Maps.newHashMap();
-        private final boolean f;
-        private final String g;
+        private static final Map<String, ChatHoverable.EnumHoverAction> d = Maps.newHashMap();
+        private final boolean e;
+        private final String f;
 
         private EnumHoverAction(String s, boolean flag) {
-            this.g = s;
-            this.f = flag;
+            this.f = s;
+            this.e = flag;
         }
 
         public boolean a() {
-            return this.f;
+            return this.e;
         }
 
         public String b() {
-            return this.g;
+            return this.f;
         }
 
         public static ChatHoverable.EnumHoverAction a(String s) {
-            return (ChatHoverable.EnumHoverAction) ChatHoverable.EnumHoverAction.e.get(s);
+            return (ChatHoverable.EnumHoverAction) ChatHoverable.EnumHoverAction.d.get(s);
         }
 
         static {
@@ -88,7 +88,7 @@ public class ChatHoverable {
             for (int j = 0; j < i; ++j) {
                 ChatHoverable.EnumHoverAction chathoverable_enumhoveraction = achathoverable_enumhoveraction[j];
 
-                ChatHoverable.EnumHoverAction.e.put(chathoverable_enumhoveraction.b(), chathoverable_enumhoveraction);
+                ChatHoverable.EnumHoverAction.d.put(chathoverable_enumhoveraction.b(), chathoverable_enumhoveraction);
             }
 
         }

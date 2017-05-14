@@ -31,7 +31,7 @@ public class CommandTp extends CommandAbstract {
             if (astring.length != 2 && astring.length != 4 && astring.length != 6) {
                 object = a(icommandlistener);
             } else {
-                object = b(minecraftserver, icommandlistener, astring[0]);
+                object = c(minecraftserver, icommandlistener, astring[0]);
                 b0 = 1;
             }
 
@@ -51,7 +51,7 @@ public class CommandTp extends CommandAbstract {
                     a(icommandlistener, (ICommand) this, "commands.tp.success.coordinates", new Object[] { ((Entity) object).getName(), Double.valueOf(commandabstract_commandnumber.a()), Double.valueOf(commandabstract_commandnumber1.a()), Double.valueOf(commandabstract_commandnumber2.a())});
                 }
             } else {
-                Entity entity = b(minecraftserver, icommandlistener, astring[astring.length - 1]);
+                Entity entity = c(minecraftserver, icommandlistener, astring[astring.length - 1]);
 
                 if (entity.world != ((Entity) object).world) {
                     throw new CommandException("commands.tp.notSameDimension", new Object[0]);
@@ -108,17 +108,17 @@ public class CommandTp extends CommandAbstract {
 
             entity.stopRiding();
             ((EntityPlayer) entity).playerConnection.a(commandabstract_commandnumber.b(), commandabstract_commandnumber1.b(), commandabstract_commandnumber2.b(), f, f1, enumset);
-            entity.h(f);
+            entity.setHeadRotation(f);
         } else {
             float f2 = (float) MathHelper.g(commandabstract_commandnumber3.a());
 
             f = (float) MathHelper.g(commandabstract_commandnumber4.a());
             f = MathHelper.a(f, -90.0F, 90.0F);
             entity.setPositionRotation(commandabstract_commandnumber.a(), commandabstract_commandnumber1.a(), commandabstract_commandnumber2.a(), f2, f);
-            entity.h(f2);
+            entity.setHeadRotation(f2);
         }
 
-        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).cH()) {
+        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).cN()) {
             entity.motY = 0.0D;
             entity.onGround = true;
         }

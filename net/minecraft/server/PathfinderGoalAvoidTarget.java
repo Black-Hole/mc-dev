@@ -63,7 +63,7 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
     }
 
     public boolean b() {
-        return !this.h.n();
+        return !this.h.o();
     }
 
     public void c() {

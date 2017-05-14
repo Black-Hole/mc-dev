@@ -31,19 +31,23 @@ public class BlockStatePredicate implements Predicate<IBlockData> {
 
     public boolean a(@Nullable IBlockData iblockdata) {
         if (iblockdata != null && iblockdata.getBlock().equals(this.b.getBlock())) {
-            Iterator iterator = this.c.entrySet().iterator();
+            if (this.c.isEmpty()) {
+                return true;
+            } else {
+                Iterator iterator = this.c.entrySet().iterator();
 
-            Entry entry;
+                Entry entry;
 
-            do {
-                if (!iterator.hasNext()) {
-                    return true;
-                }
+                do {
+                    if (!iterator.hasNext()) {
+                        return true;
+                    }
 
-                entry = (Entry) iterator.next();
-            } while (this.a(iblockdata, (IBlockState) entry.getKey(), (Predicate) entry.getValue()));
+                    entry = (Entry) iterator.next();
+                } while (this.a(iblockdata, (IBlockState) entry.getKey(), (Predicate) entry.getValue()));
 
-            return false;
+                return false;
+            }
         } else {
             return false;
         }

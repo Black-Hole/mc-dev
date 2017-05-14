@@ -179,16 +179,12 @@ public abstract class Container {
                     }
 
                     slot2 = (Slot) this.c.get(i);
-                    if (slot2 != null && slot2.isAllowed(entityhuman)) {
-                        itemstack2 = this.b(entityhuman, i);
-                        if (!itemstack2.isEmpty()) {
-                            Item item = itemstack2.getItem();
+                    if (slot2 == null || !slot2.isAllowed(entityhuman)) {
+                        return ItemStack.a;
+                    }
 
-                            itemstack = itemstack2.cloneItemStack();
-                            if (slot2.getItem().getItem() == item) {
-                                this.a(i, j, true, entityhuman);
-                            }
-                        }
+                    for (itemstack2 = this.b(entityhuman, i); !itemstack2.isEmpty() && ItemStack.c(slot2.getItem(), itemstack2); itemstack2 = this.b(entityhuman, i)) {
+                        itemstack = itemstack2.cloneItemStack();
                     }
                 } else {
                     if (i < 0) {
@@ -352,10 +348,6 @@ public abstract class Container {
         return true;
     }
 
-    protected void a(int i, int j, boolean flag, EntityHuman entityhuman) {
-        this.a(i, j, InventoryClickType.QUICK_MOVE, entityhuman);
-    }
-
     public void b(EntityHuman entityhuman) {
         PlayerInventory playerinventory = entityhuman.inventory;
 
@@ -366,12 +358,39 @@ public abstract class Container {
 
     }
 
+    protected void a(EntityHuman entityhuman, World world, IInventory iinventory) {
+        int i;
+
+        if (entityhuman.isAlive() && (!(entityhuman instanceof EntityPlayer) || !((EntityPlayer) entityhuman).t())) {
+            for (i = 0; i < iinventory.getSize(); ++i) {
+                entityhuman.inventory.a(world, iinventory.splitWithoutUpdate(i));
+            }
+
+        } else {
+            for (i = 0; i < iinventory.getSize(); ++i) {
+                entityhuman.drop(iinventory.splitWithoutUpdate(i), false);
+            }
+
+        }
+    }
+
     public void a(IInventory iinventory) {
         this.b();
     }
 
     public void setItem(int i, ItemStack itemstack) {
         this.getSlot(i).set(itemstack);
+    }
+
+    public void b(int i, ItemStack itemstack) {
+        ItemStack itemstack1 = this.getSlot(i).getItem();
+
+        if (itemstack1.isEmpty()) {
+            this.setItem(i, itemstack);
+        } else if (itemstack1.a().equals(itemstack.a()) && itemstack1.getCount() < itemstack1.getMaxStackSize()) {
+            itemstack1.add(itemstack.getCount());
+        }
+
     }
 
     public boolean c(EntityHuman entityhuman) {
@@ -543,6 +562,22 @@ public abstract class Container {
 
             f /= (float) iinventory.getSize();
             return MathHelper.d(f * 14.0F) + (i > 0 ? 1 : 0);
+        }
+    }
+
+    protected void a(World world, EntityHuman entityhuman, InventoryCrafting inventorycrafting, InventoryCraftResult inventorycraftresult) {
+        if (!world.isClientSide) {
+            EntityPlayer entityplayer = (EntityPlayer) entityhuman;
+            ItemStack itemstack = ItemStack.a;
+            IRecipe irecipe = CraftingManager.b(inventorycrafting, world);
+
+            if (irecipe != null && (irecipe.d() || !world.getGameRules().getBoolean("doLimitedCrafting") || entityplayer.F().f(irecipe))) {
+                inventorycraftresult.a(irecipe);
+                itemstack = irecipe.craftItem(inventorycrafting);
+            }
+
+            inventorycraftresult.setItem(0, itemstack);
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutSetSlot(this.windowId, 0, itemstack));
         }
     }
 }

@@ -3,7 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 
-public class RecipeArmorDye implements IRecipe {
+public class RecipeArmorDye extends IRecipe {
 
     public RecipeArmorDye() {}
 
@@ -78,7 +78,7 @@ public class RecipeArmorDye implements IRecipe {
                         return ItemStack.a;
                     }
 
-                    float[] afloat = EntitySheep.a(EnumColor.fromInvColorIndex(itemstack1.getData()));
+                    float[] afloat = EnumColor.fromInvColorIndex(itemstack1.getData()).f();
                     int j1 = (int) (afloat[0] * 255.0F);
                     int k1 = (int) (afloat[1] * 255.0F);
 
@@ -111,10 +111,6 @@ public class RecipeArmorDye implements IRecipe {
         }
     }
 
-    public int a() {
-        return 10;
-    }
-
     public ItemStack b() {
         return ItemStack.a;
     }
@@ -125,11 +121,15 @@ public class RecipeArmorDye implements IRecipe {
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
-            if (itemstack.getItem().s()) {
-                nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
+            if (itemstack.getItem().r()) {
+                nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
             }
         }
 
         return nonnulllist;
+    }
+
+    public boolean d() {
+        return true;
     }
 }

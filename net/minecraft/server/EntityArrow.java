@@ -98,8 +98,8 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         this.ax = 0;
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (this.lastPitch == 0.0F && this.lastYaw == 0.0F) {
             float f = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
 
@@ -218,7 +218,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                 f2 = 0.6F;
             }
 
-            if (this.ai()) {
+            if (this.an()) {
                 this.extinguish();
             }
 
@@ -262,7 +262,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
                     EntityLiving entityliving = (EntityLiving) entity;
 
                     if (!this.world.isClientSide) {
-                        entityliving.f(entityliving.cc() + 1);
+                        entityliving.setArrowCount(entityliving.getArrowCount() + 1);
                     }
 
                     if (this.knockbackStrength > 0) {
@@ -454,7 +454,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         this.knockbackStrength = i;
     }
 
-    public boolean aV() {
+    public boolean bb() {
         return false;
     }
 

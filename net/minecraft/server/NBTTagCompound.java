@@ -10,8 +10,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 public class NBTTagCompound extends NBTBase {
 
     private static final Logger b = LogManager.getLogger();
+    private static final Pattern c = Pattern.compile("[A-Za-z0-9._+-]+");
     private final Map<String, NBTBase> map = Maps.newHashMap();
 
     public NBTTagCompound() {}
@@ -308,7 +311,7 @@ public class NBTTagCompound extends NBTBase {
 
         String s;
 
-        for (Iterator iterator = ((Collection) object).iterator(); iterator.hasNext(); stringbuilder.append(s).append(':').append(this.map.get(s))) {
+        for (Iterator iterator = ((Collection) object).iterator(); iterator.hasNext(); stringbuilder.append(s(s)).append(':').append(this.map.get(s))) {
             s = (String) iterator.next();
             if (stringbuilder.length() != 1) {
                 stringbuilder.append(',');
@@ -362,13 +365,7 @@ public class NBTTagCompound extends NBTBase {
     }
 
     public boolean equals(Object object) {
-        if (super.equals(object)) {
-            NBTTagCompound nbttagcompound = (NBTTagCompound) object;
-
-            return this.map.entrySet().equals(nbttagcompound.map.entrySet());
-        } else {
-            return false;
-        }
+        return super.equals(object) && Objects.equals(this.map.entrySet(), ((NBTTagCompound) object).map.entrySet());
     }
 
     public int hashCode() {
@@ -427,6 +424,10 @@ public class NBTTagCompound extends NBTBase {
             }
         }
 
+    }
+
+    protected static String s(String s) {
+        return NBTTagCompound.c.matcher(s).matches() ? s : NBTTagString.a(s);
     }
 
     public NBTBase clone() {

@@ -8,7 +8,7 @@ public class BlockNetherWart extends BlockPlant {
     private static final AxisAlignedBB[] c = new AxisAlignedBB[] { new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.3125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.6875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D)};
 
     protected BlockNetherWart() {
-        super(Material.PLANT, MaterialMapColor.D);
+        super(Material.PLANT, MaterialMapColor.E);
         this.y(this.blockStateList.getBlockData().set(BlockNetherWart.AGE, Integer.valueOf(0)));
         this.a(true);
         this.a((CreativeModeTab) null);

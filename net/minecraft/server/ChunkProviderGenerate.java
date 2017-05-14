@@ -364,7 +364,7 @@ public class ChunkProviderGenerate implements ChunkGenerator {
             k1 = this.i.nextInt(16) + 8;
             l1 = this.i.nextInt(this.i.nextInt(248) + 8);
             i2 = this.i.nextInt(16) + 8;
-            if (l1 < this.n.K() || this.i.nextInt(this.s.E / 8) == 0) {
+            if (l1 < this.n.getSeaLevel() || this.i.nextInt(this.s.E / 8) == 0) {
                 (new WorldGenLakes(Blocks.LAVA)).generate(this.n, this.i, blockposition.a(k1, l1, i2));
             }
         }
@@ -425,6 +425,10 @@ public class ChunkProviderGenerate implements ChunkGenerator {
         }
 
         return biomebase.getMobs(enumcreaturetype);
+    }
+
+    public boolean a(World world, String s, BlockPosition blockposition) {
+        return !this.o ? false : ("Stronghold".equals(s) && this.w != null ? this.w.b(blockposition) : ("Mansion".equals(s) && this.C != null ? this.C.b(blockposition) : ("Monument".equals(s) && this.B != null ? this.B.b(blockposition) : ("Village".equals(s) && this.x != null ? this.x.b(blockposition) : ("Mineshaft".equals(s) && this.y != null ? this.y.b(blockposition) : ("Temple".equals(s) && this.z != null ? this.z.b(blockposition) : false))))));
     }
 
     @Nullable

@@ -17,8 +17,8 @@ public class NavigationListener implements IWorldAccess {
             for (int k = this.a.size(); j < k; ++j) {
                 NavigationAbstract navigationabstract = (NavigationAbstract) this.a.get(j);
 
-                if (navigationabstract != null && !navigationabstract.i()) {
-                    PathEntity pathentity = navigationabstract.k();
+                if (navigationabstract != null && !navigationabstract.j()) {
+                    PathEntity pathentity = navigationabstract.l();
 
                     if (pathentity != null && !pathentity.b() && pathentity.d() != 0) {
                         PathPoint pathpoint = navigationabstract.c.c();
@@ -26,7 +26,7 @@ public class NavigationListener implements IWorldAccess {
                         int l = (pathentity.d() - pathentity.e()) * (pathentity.d() - pathentity.e());
 
                         if (d0 < (double) l) {
-                            navigationabstract.j();
+                            navigationabstract.k();
                         }
                     }
                 }

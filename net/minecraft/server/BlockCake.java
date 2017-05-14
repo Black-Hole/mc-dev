@@ -99,4 +99,8 @@ public class BlockCake extends Block {
     public boolean isComplexRedstone(IBlockData iblockdata) {
         return true;
     }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
+    }
 }

@@ -1,13 +1,15 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Sets;
+import java.io.File;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Set;
 
 public class LootTables {
 
-    private static final Set<MinecraftKey> aD = Sets.newHashSet();
-    private static final Set<MinecraftKey> aE = Collections.unmodifiableSet(LootTables.aD);
+    private static final Set<MinecraftKey> aE = Sets.newHashSet();
+    private static final Set<MinecraftKey> aF = Collections.unmodifiableSet(LootTables.aE);
     public static final MinecraftKey a = a("empty");
     public static final MinecraftKey b = a("chests/spawn_bonus_chest");
     public static final MinecraftKey c = a("chests/end_city_treasure");
@@ -83,19 +85,20 @@ public class LootTables {
     public static final MinecraftKey au = a("entities/evocation_illager");
     public static final MinecraftKey av = a("entities/vindication_illager");
     public static final MinecraftKey aw = a("entities/llama");
-    public static final MinecraftKey ax = a("entities/vex");
-    public static final MinecraftKey ay = a("entities/ender_dragon");
-    public static final MinecraftKey az = a("gameplay/fishing");
-    public static final MinecraftKey aA = a("gameplay/fishing/junk");
-    public static final MinecraftKey aB = a("gameplay/fishing/treasure");
-    public static final MinecraftKey aC = a("gameplay/fishing/fish");
+    public static final MinecraftKey ax = a("entities/parrot");
+    public static final MinecraftKey ay = a("entities/vex");
+    public static final MinecraftKey az = a("entities/ender_dragon");
+    public static final MinecraftKey aA = a("gameplay/fishing");
+    public static final MinecraftKey aB = a("gameplay/fishing/junk");
+    public static final MinecraftKey aC = a("gameplay/fishing/treasure");
+    public static final MinecraftKey aD = a("gameplay/fishing/fish");
 
     private static MinecraftKey a(String s) {
         return a(new MinecraftKey("minecraft", s));
     }
 
     public static MinecraftKey a(MinecraftKey minecraftkey) {
-        if (LootTables.aD.add(minecraftkey)) {
+        if (LootTables.aE.add(minecraftkey)) {
             return minecraftkey;
         } else {
             throw new IllegalArgumentException(minecraftkey + " is already a registered built-in loot table");
@@ -103,6 +106,23 @@ public class LootTables {
     }
 
     public static Set<MinecraftKey> a() {
-        return LootTables.aE;
+        return LootTables.aF;
+    }
+
+    public static boolean b() {
+        LootTableRegistry loottableregistry = new LootTableRegistry((File) null);
+        Iterator iterator = LootTables.aF.iterator();
+
+        MinecraftKey minecraftkey;
+
+        do {
+            if (!iterator.hasNext()) {
+                return true;
+            }
+
+            minecraftkey = (MinecraftKey) iterator.next();
+        } while (loottableregistry.a(minecraftkey) != LootTable.a);
+
+        return false;
     }
 }

@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class RecipeMapClone implements IRecipe {
+public class RecipeMapClone extends IRecipe {
 
     public RecipeMapClone() {}
 
@@ -72,10 +72,6 @@ public class RecipeMapClone implements IRecipe {
         }
     }
 
-    public int a() {
-        return 9;
-    }
-
     public ItemStack b() {
         return ItemStack.a;
     }
@@ -86,11 +82,15 @@ public class RecipeMapClone implements IRecipe {
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
-            if (itemstack.getItem().s()) {
-                nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
+            if (itemstack.getItem().r()) {
+                nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
             }
         }
 
         return nonnulllist;
+    }
+
+    public boolean d() {
+        return true;
     }
 }

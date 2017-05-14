@@ -1,7 +1,9 @@
 package net.minecraft.server;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -74,15 +76,15 @@ public class CommandDebug extends CommandAbstract {
         File file = new File(minecraftserver.d("debug"), "profile-results-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + ".txt");
 
         file.getParentFile().mkdirs();
-        FileWriter filewriter = null;
+        OutputStreamWriter outputstreamwriter = null;
 
         try {
-            filewriter = new FileWriter(file);
-            filewriter.write(this.b(i, j, minecraftserver));
+            outputstreamwriter = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+            outputstreamwriter.write(this.b(i, j, minecraftserver));
         } catch (Throwable throwable) {
-            CommandDebug.a.error("Could not save profiler results to {}", new Object[] { file, throwable});
+            CommandDebug.a.error("Could not save profiler results to {}", file, throwable);
         } finally {
-            IOUtils.closeQuietly(filewriter);
+            IOUtils.closeQuietly(outputstreamwriter);
         }
 
     }

@@ -137,9 +137,9 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
 
     public void save(EntityHuman entityhuman) {
         try {
-            NBTTagCompound nbttagcompound = entityhuman.e(new NBTTagCompound());
-            File file = new File(this.playerDir, entityhuman.bf() + ".dat.tmp");
-            File file1 = new File(this.playerDir, entityhuman.bf() + ".dat");
+            NBTTagCompound nbttagcompound = entityhuman.save(new NBTTagCompound());
+            File file = new File(this.playerDir, entityhuman.bl() + ".dat.tmp");
+            File file1 = new File(this.playerDir, entityhuman.bl() + ".dat");
 
             NBTCompressedStreamTools.a(nbttagcompound, (OutputStream) (new FileOutputStream(file)));
             if (file1.exists()) {
@@ -148,7 +148,7 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
 
             file.renameTo(file1);
         } catch (Exception exception) {
-            WorldNBTStorage.b.warn("Failed to save player data for {}", new Object[] { entityhuman.getName()});
+            WorldNBTStorage.b.warn("Failed to save player data for {}", entityhuman.getName());
         }
 
     }
@@ -158,13 +158,13 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
         NBTTagCompound nbttagcompound = null;
 
         try {
-            File file = new File(this.playerDir, entityhuman.bf() + ".dat");
+            File file = new File(this.playerDir, entityhuman.bl() + ".dat");
 
             if (file.exists() && file.isFile()) {
                 nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));
             }
         } catch (Exception exception) {
-            WorldNBTStorage.b.warn("Failed to load player data for {}", new Object[] { entityhuman.getName()});
+            WorldNBTStorage.b.warn("Failed to load player data for {}", entityhuman.getName());
         }
 
         if (nbttagcompound != null) {

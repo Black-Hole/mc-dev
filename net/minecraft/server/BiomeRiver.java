@@ -4,6 +4,6 @@ public class BiomeRiver extends BiomeBase {
 
     public BiomeRiver(BiomeBase.a biomebase_a) {
         super(biomebase_a);
-        this.v.clear();
+        this.u.clear();
     }
 }

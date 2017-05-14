@@ -29,7 +29,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
     public void c(World world, BlockPosition blockposition) {
         if (world.worldProvider.m()) {
             IBlockData iblockdata = world.getType(blockposition);
-            int i = world.getBrightness(EnumSkyBlock.SKY, blockposition) - world.af();
+            int i = world.getBrightness(EnumSkyBlock.SKY, blockposition) - world.ah();
             float f = world.d(1.0F);
 
             if (this.c) {
@@ -52,7 +52,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (entityhuman.dc()) {
+        if (entityhuman.di()) {
             if (world.isClientSide) {
                 return true;
             } else {
@@ -109,5 +109,9 @@ public class BlockDaylightDetector extends BlockTileEntity {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockDaylightDetector.POWER});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.DOWN ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
     }
 }

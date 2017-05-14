@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import java.util.List;
+
 public class SlotResult extends Slot {
 
     private final InventoryCrafting a;
@@ -39,51 +42,19 @@ public class SlotResult extends Slot {
         }
 
         this.c = 0;
-        if (itemstack.getItem() == Item.getItemOf(Blocks.CRAFTING_TABLE)) {
-            this.b.b((Statistic) AchievementList.h);
-        }
+        InventoryCraftResult inventorycraftresult = (InventoryCraftResult) this.inventory;
+        IRecipe irecipe = inventorycraftresult.i();
 
-        if (itemstack.getItem() instanceof ItemPickaxe) {
-            this.b.b((Statistic) AchievementList.i);
-        }
-
-        if (itemstack.getItem() == Item.getItemOf(Blocks.FURNACE)) {
-            this.b.b((Statistic) AchievementList.j);
-        }
-
-        if (itemstack.getItem() instanceof ItemHoe) {
-            this.b.b((Statistic) AchievementList.l);
-        }
-
-        if (itemstack.getItem() == Items.BREAD) {
-            this.b.b((Statistic) AchievementList.m);
-        }
-
-        if (itemstack.getItem() == Items.CAKE) {
-            this.b.b((Statistic) AchievementList.n);
-        }
-
-        if (itemstack.getItem() instanceof ItemPickaxe && ((ItemPickaxe) itemstack.getItem()).g() != Item.EnumToolMaterial.WOOD) {
-            this.b.b((Statistic) AchievementList.o);
-        }
-
-        if (itemstack.getItem() instanceof ItemSword) {
-            this.b.b((Statistic) AchievementList.r);
-        }
-
-        if (itemstack.getItem() == Item.getItemOf(Blocks.ENCHANTING_TABLE)) {
-            this.b.b((Statistic) AchievementList.E);
-        }
-
-        if (itemstack.getItem() == Item.getItemOf(Blocks.BOOKSHELF)) {
-            this.b.b((Statistic) AchievementList.G);
+        if (irecipe != null) {
+            this.b.a((List) Lists.newArrayList(new IRecipe[] { irecipe}));
+            inventorycraftresult.a((IRecipe) null);
         }
 
     }
 
     public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
         this.c(itemstack);
-        NonNullList nonnulllist = CraftingManager.getInstance().b(this.a, entityhuman.world);
+        NonNullList nonnulllist = CraftingManager.c(this.a, entityhuman.world);
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack1 = this.a.getItem(i);

@@ -90,7 +90,7 @@ public class WorldGenLakes extends WorldGenerator {
                             if (world.getType(blockposition1).getBlock() == Blocks.DIRT && world.getBrightness(EnumSkyBlock.SKY, blockposition.a(j, j1, k1)) > 0) {
                                 BiomeBase biomebase = world.getBiome(blockposition1);
 
-                                if (biomebase.r.getBlock() == Blocks.MYCELIUM) {
+                                if (biomebase.q.getBlock() == Blocks.MYCELIUM) {
                                     world.setTypeAndData(blockposition1, Blocks.MYCELIUM.getBlockData(), 2);
                                 } else {
                                     world.setTypeAndData(blockposition1, Blocks.GRASS.getBlockData(), 2);

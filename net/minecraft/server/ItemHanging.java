@@ -20,7 +20,7 @@ public class ItemHanging extends Item {
 
             if (entityhanging != null && entityhanging.survives()) {
                 if (!world.isClientSide) {
-                    entityhanging.o();
+                    entityhanging.p();
                     world.addEntity(entityhanging);
                 }
 

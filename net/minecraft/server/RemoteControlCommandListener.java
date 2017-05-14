@@ -21,10 +21,6 @@ public class RemoteControlCommandListener implements ICommandListener {
         return "Rcon";
     }
 
-    public IChatBaseComponent getScoreboardDisplayName() {
-        return new ChatComponentText(this.getName());
-    }
-
     public void sendMessage(IChatBaseComponent ichatbasecomponent) {
         this.a.append(ichatbasecomponent.toPlainText());
     }
@@ -33,29 +29,15 @@ public class RemoteControlCommandListener implements ICommandListener {
         return true;
     }
 
-    public BlockPosition getChunkCoordinates() {
-        return BlockPosition.ZERO;
-    }
-
-    public Vec3D d() {
-        return Vec3D.a;
-    }
-
     public World getWorld() {
         return this.b.getWorld();
-    }
-
-    public Entity f() {
-        return null;
     }
 
     public boolean getSendCommandFeedback() {
         return true;
     }
 
-    public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {}
-
-    public MinecraftServer B_() {
+    public MinecraftServer C_() {
         return this.b;
     }
 }

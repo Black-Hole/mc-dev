@@ -85,11 +85,12 @@ public class BlockFence extends Block {
         return false;
     }
 
-    public boolean c(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
+        EnumBlockFaceShape enumblockfaceshape = iblockdata.d(iblockaccess, blockposition, enumdirection);
         Block block = iblockdata.getBlock();
 
-        return block == Blocks.BARRIER ? false : ((!(block instanceof BlockFence) || block.material != this.material) && !(block instanceof BlockFenceGate) ? (block.material.k() && iblockdata.h() ? block.material != Material.PUMPKIN : false) : true);
+        return !c(block) && enumblockfaceshape == EnumBlockFaceShape.SOLID || enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE && (iblockdata.getMaterial() == this.material || block instanceof BlockFenceGate);
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
@@ -107,7 +108,7 @@ public class BlockFence extends Block {
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.set(BlockFence.NORTH, Boolean.valueOf(this.c(iblockaccess, blockposition.north()))).set(BlockFence.EAST, Boolean.valueOf(this.c(iblockaccess, blockposition.east()))).set(BlockFence.SOUTH, Boolean.valueOf(this.c(iblockaccess, blockposition.south()))).set(BlockFence.WEST, Boolean.valueOf(this.c(iblockaccess, blockposition.west())));
+        return iblockdata.set(BlockFence.NORTH, Boolean.valueOf(this.a(iblockaccess, blockposition.north(), EnumDirection.SOUTH))).set(BlockFence.EAST, Boolean.valueOf(this.a(iblockaccess, blockposition.east(), EnumDirection.WEST))).set(BlockFence.SOUTH, Boolean.valueOf(this.a(iblockaccess, blockposition.south(), EnumDirection.NORTH))).set(BlockFence.WEST, Boolean.valueOf(this.a(iblockaccess, blockposition.west(), EnumDirection.EAST)));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
@@ -141,5 +142,9 @@ public class BlockFence extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockFence.NORTH, BlockFence.EAST, BlockFence.WEST, BlockFence.SOUTH});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection != EnumDirection.UP && enumdirection != EnumDirection.DOWN ? EnumBlockFaceShape.MIDDLE_POLE : EnumBlockFaceShape.CENTER;
     }
 }

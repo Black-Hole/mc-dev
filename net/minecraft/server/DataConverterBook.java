@@ -26,7 +26,7 @@ public class DataConverterBook implements IDataConverter {
                             object = new ChatComponentText(s);
                         } else {
                             try {
-                                object = (IChatBaseComponent) DataConverterSignText.a.fromJson(s, IChatBaseComponent.class);
+                                object = (IChatBaseComponent) ChatDeserializer.a(DataConverterSignText.a, s, IChatBaseComponent.class, true);
                                 if (object == null) {
                                     object = new ChatComponentText("");
                                 }

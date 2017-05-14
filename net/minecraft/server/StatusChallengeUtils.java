@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.base.Charsets;
+import java.nio.charset.StandardCharsets;
 
 public class StatusChallengeUtils {
 
@@ -15,7 +15,7 @@ public class StatusChallengeUtils {
             ;
         }
 
-        return new String(abyte, i, l - i, Charsets.UTF_8);
+        return new String(abyte, i, l - i, StandardCharsets.UTF_8);
     }
 
     public static int b(byte[] abyte, int i) {

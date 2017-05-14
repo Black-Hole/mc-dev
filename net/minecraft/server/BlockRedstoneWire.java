@@ -56,14 +56,14 @@ public class BlockRedstoneWire extends Block {
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        iblockdata = iblockdata.set(BlockRedstoneWire.WEST, this.b(iblockaccess, blockposition, EnumDirection.WEST));
-        iblockdata = iblockdata.set(BlockRedstoneWire.EAST, this.b(iblockaccess, blockposition, EnumDirection.EAST));
-        iblockdata = iblockdata.set(BlockRedstoneWire.NORTH, this.b(iblockaccess, blockposition, EnumDirection.NORTH));
-        iblockdata = iblockdata.set(BlockRedstoneWire.SOUTH, this.b(iblockaccess, blockposition, EnumDirection.SOUTH));
+        iblockdata = iblockdata.set(BlockRedstoneWire.WEST, this.a(iblockaccess, blockposition, EnumDirection.WEST));
+        iblockdata = iblockdata.set(BlockRedstoneWire.EAST, this.a(iblockaccess, blockposition, EnumDirection.EAST));
+        iblockdata = iblockdata.set(BlockRedstoneWire.NORTH, this.a(iblockaccess, blockposition, EnumDirection.NORTH));
+        iblockdata = iblockdata.set(BlockRedstoneWire.SOUTH, this.a(iblockaccess, blockposition, EnumDirection.SOUTH));
         return iblockdata;
     }
 
-    private BlockRedstoneWire.EnumRedstoneWireConnection b(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+    private BlockRedstoneWire.EnumRedstoneWireConnection a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         BlockPosition blockposition1 = blockposition.shift(enumdirection);
         IBlockData iblockdata = iblockaccess.getType(blockposition.shift(enumdirection));
 
@@ -323,7 +323,7 @@ public class BlockRedstoneWire extends Block {
                 while (iterator.hasNext()) {
                     EnumDirection enumdirection1 = (EnumDirection) iterator.next();
 
-                    if (this.c(iblockaccess, blockposition, enumdirection1)) {
+                    if (this.b(iblockaccess, blockposition, enumdirection1)) {
                         enumset.add(enumdirection1);
                     }
                 }
@@ -339,7 +339,7 @@ public class BlockRedstoneWire extends Block {
         }
     }
 
-    private boolean c(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+    private boolean b(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         BlockPosition blockposition1 = blockposition.shift(enumdirection);
         IBlockData iblockdata = iblockaccess.getType(blockposition1);
         boolean flag = iblockdata.m();
@@ -417,6 +417,10 @@ public class BlockRedstoneWire extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockRedstoneWire.NORTH, BlockRedstoneWire.EAST, BlockRedstoneWire.SOUTH, BlockRedstoneWire.WEST, BlockRedstoneWire.POWER});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 
     static enum EnumRedstoneWireConnection implements INamable {

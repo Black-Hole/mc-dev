@@ -26,7 +26,7 @@ public class ItemGlassBottle extends Item {
             EntityAreaEffectCloud entityareaeffectcloud = (EntityAreaEffectCloud) list.get(0);
 
             entityareaeffectcloud.setRadius(entityareaeffectcloud.getRadius() - 0.5F);
-            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.L, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.O, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, new ItemStack(Items.DRAGON_BREATH)));
         } else {
             MovingObjectPosition movingobjectposition = this.a(world, entityhuman, true);
@@ -42,7 +42,7 @@ public class ItemGlassBottle extends Item {
                     }
 
                     if (world.getType(blockposition).getMaterial() == Material.WATER) {
-                        world.a(entityhuman, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.K, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+                        world.a(entityhuman, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.N, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, PotionUtil.a(new ItemStack(Items.POTION), Potions.b)));
                     }
                 }

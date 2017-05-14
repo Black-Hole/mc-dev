@@ -36,8 +36,8 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
         } else if (!entityliving.isAlive()) {
             return false;
         } else {
-            ScoreboardTeamBase scoreboardteambase = this.e.aQ();
-            ScoreboardTeamBase scoreboardteambase1 = entityliving.aQ();
+            ScoreboardTeamBase scoreboardteambase = this.e.aW();
+            ScoreboardTeamBase scoreboardteambase1 = entityliving.aW();
 
             if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
                 return false;
@@ -96,7 +96,7 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
             return false;
         } else {
             if (entityinsentient instanceof EntityOwnable && ((EntityOwnable) entityinsentient).getOwnerUUID() != null) {
-                if (entityliving instanceof EntityOwnable && ((EntityOwnable) entityinsentient).getOwnerUUID().equals(entityliving.getUniqueID())) {
+                if (entityliving instanceof EntityOwnable && ((EntityOwnable) entityinsentient).getOwnerUUID().equals(((EntityOwnable) entityliving).getOwnerUUID())) {
                     return false;
                 }
 

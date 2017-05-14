@@ -59,8 +59,8 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
         this.a.b(nbttagcompound);
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         this.a.c();
     }
 }

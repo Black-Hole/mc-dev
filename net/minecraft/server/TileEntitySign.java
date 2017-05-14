@@ -37,12 +37,6 @@ public class TileEntitySign extends TileEntity {
                 return "Sign";
             }
 
-            public IChatBaseComponent getScoreboardDisplayName() {
-                return new ChatComponentText(this.getName());
-            }
-
-            public void sendMessage(IChatBaseComponent ichatbasecomponent) {}
-
             public boolean a(int i, String s) {
                 return true;
             }
@@ -59,17 +53,7 @@ public class TileEntitySign extends TileEntity {
                 return TileEntitySign.this.world;
             }
 
-            public Entity f() {
-                return null;
-            }
-
-            public boolean getSendCommandFeedback() {
-                return false;
-            }
-
-            public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {}
-
-            public MinecraftServer B_() {
+            public MinecraftServer C_() {
                 return TileEntitySign.this.world.getMinecraftServer();
             }
         };
@@ -156,8 +140,8 @@ public class TileEntitySign extends TileEntity {
 
             }
 
-            public MinecraftServer B_() {
-                return entityhuman.B_();
+            public MinecraftServer C_() {
+                return entityhuman.C_();
             }
         };
         IChatBaseComponent[] aichatbasecomponent = this.lines;
@@ -171,7 +155,7 @@ public class TileEntitySign extends TileEntity {
                 ChatClickable chatclickable = chatmodifier.h();
 
                 if (chatclickable.a() == ChatClickable.EnumClickAction.RUN_COMMAND) {
-                    entityhuman.B_().getCommandHandler().a(icommandlistener, chatclickable.b());
+                    entityhuman.C_().getCommandHandler().b(icommandlistener, chatclickable.b());
                 }
             }
         }

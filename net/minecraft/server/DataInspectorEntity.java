@@ -30,7 +30,7 @@ public class DataInspectorEntity implements DataInspector {
             boolean flag;
 
             if (s1 == null) {
-                DataInspectorEntity.a.warn("Unable to resolve Entity for ItemInstance: {}", new Object[] { s});
+                DataInspectorEntity.a.warn("Unable to resolve Entity for ItemInstance: {}", s);
                 flag = false;
             } else {
                 flag = !nbttagcompound2.hasKeyOfType("id", 8);

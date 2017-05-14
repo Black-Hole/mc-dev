@@ -99,7 +99,7 @@ public abstract class WorldProvider {
     }
 
     public int getSeaLevel() {
-        return this.type == WorldType.FLAT ? 4 : this.b.K() + 1;
+        return this.type == WorldType.FLAT ? 4 : this.b.getSeaLevel() + 1;
     }
 
     public WorldChunkManager k() {

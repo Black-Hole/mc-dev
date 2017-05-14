@@ -7,8 +7,8 @@ import java.util.Map.Entry;
 
 public class ItemCooldown {
 
-    private final Map<Item, ItemCooldown.Info> a = Maps.newHashMap();
-    private int b;
+    public final Map<Item, ItemCooldown.Info> cooldowns = Maps.newHashMap();
+    public int currentTick;
 
     public ItemCooldown() {}
 
@@ -17,11 +17,11 @@ public class ItemCooldown {
     }
 
     public float a(Item item, float f) {
-        ItemCooldown.Info itemcooldown_info = (ItemCooldown.Info) this.a.get(item);
+        ItemCooldown.Info itemcooldown_info = (ItemCooldown.Info) this.cooldowns.get(item);
 
         if (itemcooldown_info != null) {
-            float f1 = (float) (itemcooldown_info.b - itemcooldown_info.a);
-            float f2 = (float) itemcooldown_info.b - ((float) this.b + f);
+            float f1 = (float) (itemcooldown_info.endTick - itemcooldown_info.a);
+            float f2 = (float) itemcooldown_info.endTick - ((float) this.currentTick + f);
 
             return MathHelper.a(f2 / f1, 0.0F, 1.0F);
         } else {
@@ -30,14 +30,14 @@ public class ItemCooldown {
     }
 
     public void a() {
-        ++this.b;
-        if (!this.a.isEmpty()) {
-            Iterator iterator = this.a.entrySet().iterator();
+        ++this.currentTick;
+        if (!this.cooldowns.isEmpty()) {
+            Iterator iterator = this.cooldowns.entrySet().iterator();
 
             while (iterator.hasNext()) {
                 Entry entry = (Entry) iterator.next();
 
-                if (((ItemCooldown.Info) entry.getValue()).b <= this.b) {
+                if (((ItemCooldown.Info) entry.getValue()).endTick <= this.currentTick) {
                     iterator.remove();
                     this.c((Item) entry.getKey());
                 }
@@ -47,7 +47,7 @@ public class ItemCooldown {
     }
 
     public void a(Item item, int i) {
-        this.a.put(item, new ItemCooldown.Info(this.b, this.b + i, null));
+        this.cooldowns.put(item, new ItemCooldown.Info(this.currentTick, this.currentTick + i, null));
         this.b(item, i);
     }
 
@@ -55,14 +55,14 @@ public class ItemCooldown {
 
     protected void c(Item item) {}
 
-    class Info {
+    public class Info {
 
         final int a;
-        final int b;
+        public final int endTick;
 
         private Info(int i, int j) {
             this.a = i;
-            this.b = j;
+            this.endTick = j;
         }
 
         Info(int i, int j, Object object) {

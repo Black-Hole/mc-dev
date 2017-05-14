@@ -30,7 +30,7 @@ public abstract class TileEntityContainer extends TileEntity implements ITileInv
         return this.a;
     }
 
-    public void a(ChestLock chestlock) {
+    public void setLock(ChestLock chestlock) {
         this.a = chestlock;
     }
 

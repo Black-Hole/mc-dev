@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class DataWatcherRegistry {
 
-    private static final RegistryID<DataWatcherSerializer<?>> n = new RegistryID(16);
+    private static final RegistryID<DataWatcherSerializer<?>> o = new RegistryID(16);
     public static final DataWatcherSerializer<Byte> a = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, Byte obyte) {
             packetdataserializer.writeByte(obyte.byteValue());
@@ -18,6 +18,10 @@ public class DataWatcherRegistry {
 
         public DataWatcherObject<Byte> a(int i) {
             return new DataWatcherObject(i, this);
+        }
+
+        public Byte a(Byte obyte) {
+            return obyte;
         }
 
         public Object a(PacketDataSerializer packetdataserializer) {
@@ -37,6 +41,10 @@ public class DataWatcherRegistry {
             return new DataWatcherObject(i, this);
         }
 
+        public Integer a(Integer integer) {
+            return integer;
+        }
+
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
@@ -52,6 +60,10 @@ public class DataWatcherRegistry {
 
         public DataWatcherObject<Float> a(int i) {
             return new DataWatcherObject(i, this);
+        }
+
+        public Float a(Float ofloat) {
+            return ofloat;
         }
 
         public Object a(PacketDataSerializer packetdataserializer) {
@@ -71,6 +83,10 @@ public class DataWatcherRegistry {
             return new DataWatcherObject(i, this);
         }
 
+        public String a(String s) {
+            return s;
+        }
+
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
@@ -88,6 +104,10 @@ public class DataWatcherRegistry {
             return new DataWatcherObject(i, this);
         }
 
+        public IChatBaseComponent a(IChatBaseComponent ichatbasecomponent) {
+            return ichatbasecomponent.f();
+        }
+
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
@@ -103,6 +123,10 @@ public class DataWatcherRegistry {
 
         public DataWatcherObject<ItemStack> a(int i) {
             return new DataWatcherObject(i, this);
+        }
+
+        public ItemStack a(ItemStack itemstack) {
+            return itemstack.cloneItemStack();
         }
 
         public Object a(PacketDataSerializer packetdataserializer) {
@@ -129,6 +153,10 @@ public class DataWatcherRegistry {
             return new DataWatcherObject(i, this);
         }
 
+        public Optional<IBlockData> a(Optional<IBlockData> optional) {
+            return optional;
+        }
+
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
@@ -144,6 +172,10 @@ public class DataWatcherRegistry {
 
         public DataWatcherObject<Boolean> a(int i) {
             return new DataWatcherObject(i, this);
+        }
+
+        public Boolean a(Boolean obool) {
+            return obool;
         }
 
         public Object a(PacketDataSerializer packetdataserializer) {
@@ -165,6 +197,10 @@ public class DataWatcherRegistry {
             return new DataWatcherObject(i, this);
         }
 
+        public Vector3f a(Vector3f vector3f) {
+            return vector3f;
+        }
+
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
@@ -180,6 +216,10 @@ public class DataWatcherRegistry {
 
         public DataWatcherObject<BlockPosition> a(int i) {
             return new DataWatcherObject(i, this);
+        }
+
+        public BlockPosition a(BlockPosition blockposition) {
+            return blockposition;
         }
 
         public Object a(PacketDataSerializer packetdataserializer) {
@@ -203,6 +243,10 @@ public class DataWatcherRegistry {
             return new DataWatcherObject(i, this);
         }
 
+        public Optional<BlockPosition> a(Optional<BlockPosition> optional) {
+            return optional;
+        }
+
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
@@ -218,6 +262,10 @@ public class DataWatcherRegistry {
 
         public DataWatcherObject<EnumDirection> a(int i) {
             return new DataWatcherObject(i, this);
+        }
+
+        public EnumDirection a(EnumDirection enumdirection) {
+            return enumdirection;
         }
 
         public Object a(PacketDataSerializer packetdataserializer) {
@@ -241,22 +289,47 @@ public class DataWatcherRegistry {
             return new DataWatcherObject(i, this);
         }
 
+        public Optional<UUID> a(Optional<UUID> optional) {
+            return optional;
+        }
+
+        public Object a(PacketDataSerializer packetdataserializer) {
+            return this.b(packetdataserializer);
+        }
+    };
+    public static final DataWatcherSerializer<NBTTagCompound> n = new DataWatcherSerializer() {
+        public void a(PacketDataSerializer packetdataserializer, NBTTagCompound nbttagcompound) {
+            packetdataserializer.a(nbttagcompound);
+        }
+
+        public NBTTagCompound b(PacketDataSerializer packetdataserializer) {
+            return packetdataserializer.j();
+        }
+
+        public DataWatcherObject<NBTTagCompound> a(int i) {
+            return new DataWatcherObject(i, this);
+        }
+
+        public NBTTagCompound a(NBTTagCompound nbttagcompound) {
+            return nbttagcompound.g();
+        }
+
         public Object a(PacketDataSerializer packetdataserializer) {
             return this.b(packetdataserializer);
         }
     };
 
     public static void a(DataWatcherSerializer<?> datawatcherserializer) {
-        DataWatcherRegistry.n.c(datawatcherserializer);
+        DataWatcherRegistry.o.c(datawatcherserializer);
     }
 
     @Nullable
     public static DataWatcherSerializer<?> a(int i) {
-        return (DataWatcherSerializer) DataWatcherRegistry.n.fromId(i);
+        return (DataWatcherSerializer) DataWatcherRegistry.o.fromId(i);
     }
 
     public static int b(DataWatcherSerializer<?> datawatcherserializer) {
-        return DataWatcherRegistry.n.getId(datawatcherserializer);
+        return DataWatcherRegistry.o.getId(datawatcherserializer);
     }
 
     static {
@@ -273,5 +346,6 @@ public class DataWatcherRegistry {
         a(DataWatcherRegistry.l);
         a(DataWatcherRegistry.m);
         a(DataWatcherRegistry.g);
+        a(DataWatcherRegistry.n);
     }
 }

@@ -16,7 +16,7 @@ public class PacketPlayOutEntityEquipment implements Packet<PacketListenerPlayOu
         this.c = ItemStack.a;
         this.a = i;
         this.b = enumitemslot;
-        this.c = itemstack.isEmpty() ? ItemStack.a : itemstack.cloneItemStack();
+        this.c = itemstack.cloneItemStack();
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {

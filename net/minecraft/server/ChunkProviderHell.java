@@ -67,7 +67,7 @@ public class ChunkProviderHell implements ChunkGenerator {
 
     public void a(int i, int j, ChunkSnapshot chunksnapshot) {
         boolean flag = true;
-        int k = this.n.K() / 2 + 1;
+        int k = this.n.getSeaLevel() / 2 + 1;
         boolean flag1 = true;
         boolean flag2 = true;
         boolean flag3 = true;
@@ -134,7 +134,7 @@ public class ChunkProviderHell implements ChunkGenerator {
     }
 
     public void b(int i, int j, ChunkSnapshot chunksnapshot) {
-        int k = this.n.K() + 1;
+        int k = this.n.getSeaLevel() + 1;
         double d0 = 0.03125D;
 
         this.q = this.x.a(this.q, i * 16, j * 16, 0, 16, 16, 1, 0.03125D, 0.03125D, 1.0D);
@@ -338,7 +338,7 @@ public class ChunkProviderHell implements ChunkGenerator {
             this.C.generate(this.n, this.p, blockposition.a(this.p.nextInt(16), this.p.nextInt(108) + 10, this.p.nextInt(16)));
         }
 
-        i1 = this.n.K() / 2 + 1;
+        i1 = this.n.getSeaLevel() / 2 + 1;
 
         int j1;
 
@@ -377,6 +377,10 @@ public class ChunkProviderHell implements ChunkGenerator {
     @Nullable
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, boolean flag) {
         return "Fortress".equals(s) && this.I != null ? this.I.getNearestGeneratedFeature(world, blockposition, flag) : null;
+    }
+
+    public boolean a(World world, String s, BlockPosition blockposition) {
+        return "Fortress".equals(s) && this.I != null ? this.I.b(blockposition) : false;
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {

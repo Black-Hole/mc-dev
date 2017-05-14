@@ -28,7 +28,8 @@ public class TileEntityNote extends TileEntity {
 
     public void play(World world, BlockPosition blockposition) {
         if (world.getType(blockposition.up()).getMaterial() == Material.AIR) {
-            Material material = world.getType(blockposition.down()).getMaterial();
+            IBlockData iblockdata = world.getType(blockposition.down());
+            Material material = iblockdata.getMaterial();
             byte b0 = 0;
 
             if (material == Material.STONE) {
@@ -45,6 +46,28 @@ public class TileEntityNote extends TileEntity {
 
             if (material == Material.WOOD) {
                 b0 = 4;
+            }
+
+            Block block = iblockdata.getBlock();
+
+            if (block == Blocks.CLAY) {
+                b0 = 5;
+            }
+
+            if (block == Blocks.GOLD_BLOCK) {
+                b0 = 6;
+            }
+
+            if (block == Blocks.WOOL) {
+                b0 = 7;
+            }
+
+            if (block == Blocks.PACKED_ICE) {
+                b0 = 8;
+            }
+
+            if (block == Blocks.di) {
+                b0 = 9;
             }
 
             world.playBlockAction(blockposition, Blocks.NOTEBLOCK, b0, this.note);

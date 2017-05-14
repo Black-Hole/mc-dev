@@ -9,4 +9,8 @@ public class ExceptionUnknownCommand extends CommandException {
     public ExceptionUnknownCommand(String s, Object... aobject) {
         super(s, aobject);
     }
+
+    public synchronized Throwable fillInStackTrace() {
+        return this;
+    }
 }

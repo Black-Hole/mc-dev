@@ -17,4 +17,6 @@ public interface ChunkGenerator {
     BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, boolean flag);
 
     void recreateStructures(Chunk chunk, int i, int j);
+
+    boolean a(World world, String s, BlockPosition blockposition);
 }

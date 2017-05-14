@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class BlockSlime extends BlockHalfTransparent {
 
     public BlockSlime() {
-        super(Material.CLAY, false, MaterialMapColor.c);
+        super(Material.CLAY, false, MaterialMapColor.d);
         this.a(CreativeModeTab.c);
         this.frictionFactor = 0.8F;
     }

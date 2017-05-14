@@ -41,7 +41,7 @@ public class BlockStairs extends Block {
         this.c(this.P.strength);
         this.b(this.P.durability / 3.0F);
         this.a(this.P.stepSound);
-        this.d(255);
+        this.e(255);
         this.a(CreativeModeTab.b);
     }
 
@@ -134,6 +134,35 @@ public class BlockStairs extends Block {
 
         case EAST:
             return flag ? BlockStairs.M : BlockStairs.D;
+        }
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
+        if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
+            return enumdirection == EnumDirection.UP == (iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP) ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
+        } else {
+            BlockStairs.EnumStairShape blockstairs_enumstairshape = (BlockStairs.EnumStairShape) iblockdata.get(BlockStairs.SHAPE);
+
+            if (blockstairs_enumstairshape != BlockStairs.EnumStairShape.OUTER_LEFT && blockstairs_enumstairshape != BlockStairs.EnumStairShape.OUTER_RIGHT) {
+                EnumDirection enumdirection1 = (EnumDirection) iblockdata.get(BlockStairs.FACING);
+
+                switch (blockstairs_enumstairshape) {
+                case INNER_RIGHT:
+                    return enumdirection1 != enumdirection && enumdirection1 != enumdirection.f() ? EnumBlockFaceShape.UNDEFINED : EnumBlockFaceShape.SOLID;
+
+                case INNER_LEFT:
+                    return enumdirection1 != enumdirection && enumdirection1 != enumdirection.e() ? EnumBlockFaceShape.UNDEFINED : EnumBlockFaceShape.SOLID;
+
+                case STRAIGHT:
+                    return enumdirection1 == enumdirection ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
+
+                default:
+                    return EnumBlockFaceShape.UNDEFINED;
+                }
+            } else {
+                return EnumBlockFaceShape.UNDEFINED;
+            }
         }
     }
 

@@ -11,7 +11,7 @@ public class NextTickListEntry implements Comparable<NextTickListEntry> {
 
     public NextTickListEntry(BlockPosition blockposition, Block block) {
         this.f = (long) (NextTickListEntry.d++);
-        this.a = blockposition;
+        this.a = blockposition.h();
         this.e = block;
     }
 

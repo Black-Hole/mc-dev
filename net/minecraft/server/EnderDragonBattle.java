@@ -134,7 +134,7 @@ public class EnderDragonBattle {
                     EntityEnderDragon entityenderdragon = (EntityEnderDragon) list.get(0);
 
                     this.m = entityenderdragon.getUniqueID();
-                    EnderDragonBattle.a.info("Found that there\'s a dragon still alive ({})", new Object[] { entityenderdragon});
+                    EnderDragonBattle.a.info("Found that there\'s a dragon still alive ({})", entityenderdragon);
                     this.k = false;
                     if (!flag) {
                         EnderDragonBattle.a.info("But we didn\'t have a portal, let\'s remove it.");
@@ -190,7 +190,14 @@ public class EnderDragonBattle {
             if (enumdragonrespawn == EnumDragonRespawn.END) {
                 this.p = null;
                 this.k = false;
-                this.m();
+                EntityEnderDragon entityenderdragon = this.m();
+                Iterator iterator = this.c.getPlayers().iterator();
+
+                while (iterator.hasNext()) {
+                    EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+
+                    CriterionTriggers.m.a(entityplayer, (Entity) entityenderdragon);
+                }
             } else {
                 this.p = enumdragonrespawn;
             }
@@ -317,7 +324,7 @@ public class EnderDragonBattle {
             this.h += this.d.a(EntityEnderCrystal.class, worldgenender_spike.f()).size();
         }
 
-        EnderDragonBattle.a.debug("Found {} end crystals still alive", new Object[] { Integer.valueOf(this.h)});
+        EnderDragonBattle.a.debug("Found {} end crystals still alive", Integer.valueOf(this.h));
     }
 
     public void a(EntityEnderDragon entityenderdragon) {
@@ -355,7 +362,7 @@ public class EnderDragonBattle {
         WorldGenEndTrophy worldgenendtrophy = new WorldGenEndTrophy(flag);
 
         if (this.o == null) {
-            for (this.o = this.d.q(WorldGenEndTrophy.a).down(); this.d.getType(this.o).getBlock() == Blocks.BEDROCK && this.o.getY() > this.d.K(); this.o = this.o.down()) {
+            for (this.o = this.d.q(WorldGenEndTrophy.a).down(); this.d.getType(this.o).getBlock() == Blocks.BEDROCK && this.o.getY() > this.d.getSeaLevel(); this.o = this.o.down()) {
                 ;
             }
         }
@@ -363,7 +370,7 @@ public class EnderDragonBattle {
         worldgenendtrophy.generate(this.d, new Random(), this.o);
     }
 
-    private void m() {
+    private EntityEnderDragon m() {
         this.d.getChunkAtWorldCoords(new BlockPosition(0, 128, 0));
         EntityEnderDragon entityenderdragon = new EntityEnderDragon(this.d);
 
@@ -371,6 +378,7 @@ public class EnderDragonBattle {
         entityenderdragon.setPositionRotation(0.0D, 128.0D, 0.0D, this.d.random.nextFloat() * 360.0F, 0.0F);
         this.d.addEntity(entityenderdragon);
         this.m = entityenderdragon.getUniqueID();
+        return entityenderdragon;
     }
 
     public void b(EntityEnderDragon entityenderdragon) {

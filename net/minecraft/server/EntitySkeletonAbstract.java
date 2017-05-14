@@ -6,23 +6,23 @@ import javax.annotation.Nullable;
 public abstract class EntitySkeletonAbstract extends EntityMonster implements IRangedEntity {
 
     private static final DataWatcherObject<Boolean> a = DataWatcher.a(EntitySkeletonAbstract.class, DataWatcherRegistry.h);
-    private final PathfinderGoalBowShoot b = new PathfinderGoalBowShoot(this, 1.0D, 20, 15.0F);
+    private final PathfinderGoalBowShoot<EntitySkeletonAbstract> b = new PathfinderGoalBowShoot(this, 1.0D, 20, 15.0F);
     private final PathfinderGoalMeleeAttack c = new PathfinderGoalMeleeAttack(this, 1.2D, flag) {
         public void d() {
             super.d();
-            EntitySkeletonAbstract.this.a(false);
+            EntitySkeletonAbstract.this.p(false);
         }
 
         public void c() {
             super.c();
-            EntitySkeletonAbstract.this.a(true);
+            EntitySkeletonAbstract.this.p(true);
         }
     };
 
     public EntitySkeletonAbstract(World world) {
         super(world);
         this.setSize(0.6F, 1.99F);
-        this.dh();
+        this.dk();
     }
 
     protected void r() {
@@ -49,19 +49,19 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(this.o(), 0.15F, 1.0F);
+        this.a(this.p(), 0.15F, 1.0F);
     }
 
-    abstract SoundEffect o();
+    abstract SoundEffect p();
 
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.UNDEAD;
     }
 
     public void n() {
-        if (this.world.B() && !this.world.isClientSide) {
-            float f = this.e(1.0F);
-            BlockPosition blockposition = this.bB() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
+        if (this.world.D() && !this.world.isClientSide) {
+            float f = this.f(1.0F);
+            BlockPosition blockposition = this.bH() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
 
             if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.h(blockposition)) {
                 boolean flag = true;
@@ -88,26 +88,12 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         super.n();
     }
 
-    public void aw() {
-        super.aw();
-        if (this.bB() instanceof EntityCreature) {
-            EntityCreature entitycreature = (EntityCreature) this.bB();
+    public void leaveVehicle() {
+        super.leaveVehicle();
+        if (this.bH() instanceof EntityCreature) {
+            EntityCreature entitycreature = (EntityCreature) this.bH();
 
             this.aN = entitycreature.aN;
-        }
-
-    }
-
-    public void die(DamageSource damagesource) {
-        super.die(damagesource);
-        if (damagesource.i() instanceof EntityArrow && damagesource.getEntity() instanceof EntityHuman) {
-            EntityHuman entityhuman = (EntityHuman) damagesource.getEntity();
-            double d0 = entityhuman.locX - this.locX;
-            double d1 = entityhuman.locZ - this.locZ;
-
-            if (d0 * d0 + d1 * d1 >= 2500.0D) {
-                entityhuman.b((Statistic) AchievementList.v);
-            }
         }
 
     }
@@ -122,10 +108,10 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         groupdataentity = super.prepare(difficultydamagescaler, groupdataentity);
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
-        this.dh();
+        this.dk();
         this.m(this.random.nextFloat() < 0.55F * difficultydamagescaler.d());
         if (this.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
-            Calendar calendar = this.world.ac();
+            Calendar calendar = this.world.ae();
 
             if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31 && this.random.nextFloat() < 0.25F) {
                 this.setSlot(EnumItemSlot.HEAD, new ItemStack(this.random.nextFloat() < 0.1F ? Blocks.LIT_PUMPKIN : Blocks.PUMPKIN));
@@ -136,7 +122,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         return groupdataentity;
     }
 
-    public void dh() {
+    public void dk() {
         if (this.world != null && !this.world.isClientSide) {
             this.goalSelector.a((PathfinderGoal) this.c);
             this.goalSelector.a((PathfinderGoal) this.b);
@@ -166,7 +152,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
 
         entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, (float) (14 - this.world.getDifficulty().a() * 4));
-        this.a(SoundEffects.fV, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.a(SoundEffects.gW, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(entityarrow);
     }
 
@@ -179,13 +165,13 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.dh();
+        this.dk();
     }
 
     public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
         super.setSlot(enumitemslot, itemstack);
         if (!this.world.isClientSide && enumitemslot == EnumItemSlot.MAINHAND) {
-            this.dh();
+            this.dk();
         }
 
     }
@@ -194,11 +180,11 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         return 1.74F;
     }
 
-    public double ax() {
+    public double aD() {
         return -0.6D;
     }
 
-    public void a(boolean flag) {
+    public void p(boolean flag) {
         this.datawatcher.set(EntitySkeletonAbstract.a, Boolean.valueOf(flag));
     }
 }

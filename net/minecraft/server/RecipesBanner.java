@@ -2,27 +2,9 @@ package net.minecraft.server;
 
 import javax.annotation.Nullable;
 
-public class RecipesBanner {
+public class RecipesBanner {    public static class AddRecipe extends IRecipe {
 
-    public RecipesBanner() {}
-
-    void a(CraftingManager craftingmanager) {
-        EnumColor[] aenumcolor = EnumColor.values();
-        int i = aenumcolor.length;
-
-        for (int j = 0; j < i; ++j) {
-            EnumColor enumcolor = aenumcolor[j];
-
-            craftingmanager.registerShapedRecipe(ItemBanner.a(enumcolor, (NBTTagList) null), new Object[] { "###", "###", " | ", Character.valueOf('#'), new ItemStack(Blocks.WOOL, 1, enumcolor.getColorIndex()), Character.valueOf('|'), Items.STICK});
-        }
-
-        craftingmanager.a(new RecipesBanner.DuplicateRecipe(null));
-        craftingmanager.a(new RecipesBanner.AddRecipe(null));
-    }
-
-    static class AddRecipe implements IRecipe {
-
-        private AddRecipe() {}
+        public AddRecipe() {}
 
         public boolean a(InventoryCrafting inventorycrafting, World world) {
             boolean flag = false;
@@ -97,10 +79,6 @@ public class RecipesBanner {
             return itemstack;
         }
 
-        public int a() {
-            return 10;
-        }
-
         public ItemStack b() {
             return ItemStack.a;
         }
@@ -111,8 +89,8 @@ public class RecipesBanner {
             for (int i = 0; i < nonnulllist.size(); ++i) {
                 ItemStack itemstack = inventorycrafting.getItem(i);
 
-                if (itemstack.getItem().s()) {
-                    nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
+                if (itemstack.getItem().r()) {
+                    nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
                 }
             }
 
@@ -203,14 +181,14 @@ public class RecipesBanner {
             return null;
         }
 
-        AddRecipe(Object object) {
-            this();
+        public boolean d() {
+            return true;
         }
     }
 
-    static class DuplicateRecipe implements IRecipe {
+    public static class DuplicateRecipe extends IRecipe {
 
-        private DuplicateRecipe() {}
+        public DuplicateRecipe() {}
 
         public boolean a(InventoryCrafting inventorycrafting, World world) {
             ItemStack itemstack = ItemStack.a;
@@ -277,10 +255,6 @@ public class RecipesBanner {
             return ItemStack.a;
         }
 
-        public int a() {
-            return 2;
-        }
-
         public ItemStack b() {
             return ItemStack.a;
         }
@@ -292,8 +266,8 @@ public class RecipesBanner {
                 ItemStack itemstack = inventorycrafting.getItem(i);
 
                 if (!itemstack.isEmpty()) {
-                    if (itemstack.getItem().s()) {
-                        nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
+                    if (itemstack.getItem().r()) {
+                        nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
                     } else if (itemstack.hasTag() && TileEntityBanner.b(itemstack) > 0) {
                         ItemStack itemstack1 = itemstack.cloneItemStack();
 
@@ -306,8 +280,8 @@ public class RecipesBanner {
             return nonnulllist;
         }
 
-        DuplicateRecipe(Object object) {
-            this();
+        public boolean d() {
+            return true;
         }
     }
 }

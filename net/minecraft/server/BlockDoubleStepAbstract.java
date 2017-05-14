@@ -29,7 +29,7 @@ public abstract class BlockDoubleStepAbstract extends BlockStepAbstract {
         return new ItemStack(Blocks.STONE_SLAB, 1, ((BlockDoubleStepAbstract.EnumStoneSlabVariant) iblockdata.get(BlockDoubleStepAbstract.VARIANT)).a());
     }
 
-    public String e(int i) {
+    public String b(int i) {
         return super.a() + "." + BlockDoubleStepAbstract.EnumStoneSlabVariant.a(i).d();
     }
 
@@ -82,7 +82,7 @@ public abstract class BlockDoubleStepAbstract extends BlockStepAbstract {
 
     public static enum EnumStoneSlabVariant implements INamable {
 
-        STONE(0, MaterialMapColor.m, "stone"), SAND(1, MaterialMapColor.d, "sandstone", "sand"), WOOD(2, MaterialMapColor.o, "wood_old", "wood"), COBBLESTONE(3, MaterialMapColor.m, "cobblestone", "cobble"), BRICK(4, MaterialMapColor.D, "brick"), SMOOTHBRICK(5, MaterialMapColor.m, "stone_brick", "smoothStoneBrick"), NETHERBRICK(6, MaterialMapColor.K, "nether_brick", "netherBrick"), QUARTZ(7, MaterialMapColor.p, "quartz");
+        STONE(0, MaterialMapColor.n, "stone"), SAND(1, MaterialMapColor.e, "sandstone", "sand"), WOOD(2, MaterialMapColor.p, "wood_old", "wood"), COBBLESTONE(3, MaterialMapColor.n, "cobblestone", "cobble"), BRICK(4, MaterialMapColor.E, "brick"), SMOOTHBRICK(5, MaterialMapColor.n, "stone_brick", "smoothStoneBrick"), NETHERBRICK(6, MaterialMapColor.L, "nether_brick", "netherBrick"), QUARTZ(7, MaterialMapColor.q, "quartz");
 
         private static final BlockDoubleStepAbstract.EnumStoneSlabVariant[] i = new BlockDoubleStepAbstract.EnumStoneSlabVariant[values().length];
         private final int j;

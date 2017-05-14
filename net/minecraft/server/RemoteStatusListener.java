@@ -10,6 +10,7 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -296,7 +297,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         private final long time = (new Date()).getTime();
         private final int token;
         private final byte[] identity;
-        private final byte[] response;
+        private final byte[] e;
         private final String f;
 
         public RemoteStatusChallenge(DatagramPacket datagrampacket) {
@@ -307,9 +308,9 @@ public class RemoteStatusListener extends RemoteConnectionThread {
             this.identity[1] = abyte[4];
             this.identity[2] = abyte[5];
             this.identity[3] = abyte[6];
-            this.f = new String(this.identity);
+            this.f = new String(this.identity, StandardCharsets.UTF_8);
             this.token = (new Random()).nextInt(16777216);
-            this.response = String.format("\t%s%d\u0000", new Object[] { this.f, Integer.valueOf(this.token)}).getBytes();
+            this.e = String.format("\t%s%d\u0000", new Object[] { this.f, Integer.valueOf(this.token)}).getBytes(StandardCharsets.UTF_8);
         }
 
         public Boolean a(long i) {
@@ -321,7 +322,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         }
 
         public byte[] b() {
-            return this.response;
+            return this.e;
         }
 
         public byte[] c() {

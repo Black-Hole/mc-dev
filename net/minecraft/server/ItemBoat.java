@@ -35,7 +35,7 @@ public class ItemBoat extends Item {
         if (movingobjectposition == null) {
             return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
         } else {
-            Vec3D vec3d2 = entityhuman.f(1.0F);
+            Vec3D vec3d2 = entityhuman.g(1.0F);
             boolean flag = false;
             List list = world.getEntities(entityhuman, entityhuman.getBoundingBox().b(vec3d2.x * 5.0D, vec3d2.y * 5.0D, vec3d2.z * 5.0D).g(1.0D));
 
@@ -43,7 +43,7 @@ public class ItemBoat extends Item {
                 Entity entity = (Entity) list.get(i);
 
                 if (entity.isInteractable()) {
-                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().g((double) entity.aA());
+                    AxisAlignedBB axisalignedbb = entity.getBoundingBox().g((double) entity.aG());
 
                     if (axisalignedbb.b(vec3d)) {
                         flag = true;

@@ -4,12 +4,9 @@ import com.google.common.base.Predicate;
 import java.util.List;
 import javax.annotation.Nullable;
 
-public class EntityEvoker extends EntityMonster {
+public class EntityEvoker extends EntityIllagerWizard {
 
-    protected static final DataWatcherObject<Byte> a = DataWatcher.a(EntityEvoker.class, DataWatcherRegistry.a);
-    private int b;
-    private int c;
-    private EntitySheep bw;
+    private EntitySheep c;
 
     public EntityEvoker(World world) {
         super(world);
@@ -20,11 +17,11 @@ public class EntityEvoker extends EntityMonster {
     protected void r() {
         super.r();
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
-        this.goalSelector.a(1, new EntityEvoker.b());
+        this.goalSelector.a(1, new EntityEvoker.b(null));
         this.goalSelector.a(2, new PathfinderGoalAvoidTarget(this, EntityHuman.class, 8.0F, 0.6D, 1.0D));
         this.goalSelector.a(4, new EntityEvoker.c(null));
         this.goalSelector.a(5, new EntityEvoker.a(null));
-        this.goalSelector.a(6, new EntityEvoker.e());
+        this.goalSelector.a(6, new EntityEvoker.d());
         this.goalSelector.a(8, new PathfinderGoalRandomStroll(this, 0.6D));
         this.goalSelector.a(9, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 3.0F, 1.0F));
         this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityInsentient.class, 8.0F));
@@ -43,7 +40,6 @@ public class EntityEvoker extends EntityMonster {
 
     protected void i() {
         super.i();
-        this.datawatcher.register(EntityEvoker.a, Byte.valueOf((byte) 0));
     }
 
     public static void a(DataConverterManager dataconvertermanager) {
@@ -52,96 +48,54 @@ public class EntityEvoker extends EntityMonster {
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.b = nbttagcompound.getInt("SpellTicks");
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("SpellTicks", this.b);
-    }
-
-    public EnumMonsterType getMonsterType() {
-        return EnumMonsterType.ILLAGER;
     }
 
     protected MinecraftKey J() {
         return LootTables.au;
     }
 
-    public boolean o() {
-        return this.world.isClientSide ? ((Byte) this.datawatcher.get(EntityEvoker.a)).byteValue() > 0 : this.b > 0;
-    }
-
-    public void a(int i) {
-        this.datawatcher.set(EntityEvoker.a, Byte.valueOf((byte) i));
-    }
-
-    private int di() {
-        return this.b;
-    }
-
     protected void M() {
         super.M();
-        if (this.b > 0) {
-            --this.b;
-        }
-
     }
 
-    public void A_() {
-        super.A_();
-        if (this.world.isClientSide && this.o()) {
-            byte b0 = ((Byte) this.datawatcher.get(EntityEvoker.a)).byteValue();
-            double d0 = 0.7D;
-            double d1 = 0.5D;
-            double d2 = 0.2D;
-
-            if (b0 == 2) {
-                d0 = 0.4D;
-                d1 = 0.3D;
-                d2 = 0.35D;
-            } else if (b0 == 1) {
-                d0 = 0.7D;
-                d1 = 0.7D;
-                d2 = 0.8D;
-            }
-
-            float f = this.aN * 0.017453292F + MathHelper.cos((float) this.ticksLived * 0.6662F) * 0.25F;
-            float f1 = MathHelper.cos(f);
-            float f2 = MathHelper.sin(f);
-
-            this.world.addParticle(EnumParticle.SPELL_MOB, this.locX + (double) f1 * 0.6D, this.locY + 1.8D, this.locZ + (double) f2 * 0.6D, d0, d1, d2, new int[0]);
-            this.world.addParticle(EnumParticle.SPELL_MOB, this.locX - (double) f1 * 0.6D, this.locY + 1.8D, this.locZ - (double) f2 * 0.6D, d0, d1, d2, new int[0]);
-        }
-
+    public void B_() {
+        super.B_();
     }
 
     public boolean r(Entity entity) {
-        return entity == null ? false : (entity == this ? true : (super.r(entity) ? true : (entity instanceof EntityVex ? this.r(((EntityVex) entity).o()) : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.aQ() == null && entity.aQ() == null : false))));
+        return entity == null ? false : (entity == this ? true : (super.r(entity) ? true : (entity instanceof EntityVex ? this.r(((EntityVex) entity).p()) : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.aW() == null && entity.aW() == null : false))));
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.bm;
+    protected SoundEffect F() {
+        return SoundEffects.bs;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.bo;
+    protected SoundEffect cd() {
+        return SoundEffects.bu;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.bp;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.bv;
     }
 
     private void a(@Nullable EntitySheep entitysheep) {
-        this.bw = entitysheep;
+        this.c = entitysheep;
     }
 
     @Nullable
-    private EntitySheep dj() {
-        return this.bw;
+    private EntitySheep do() {
+        return this.c;
     }
 
-    public class e extends EntityEvoker.d {
+    protected SoundEffect dk() {
+        return SoundEffects.bt;
+    }
+
+    public class d extends EntityIllagerWizard.c {
 
         final Predicate<EntitySheep> a = new Predicate() {
             public boolean a(EntitySheep entitysheep) {
@@ -153,16 +107,16 @@ public class EntityEvoker extends EntityMonster {
             }
         };
 
-        public e() {
-            super(null);
+        public d() {
+            super();
         }
 
         public boolean a() {
             if (EntityEvoker.this.getGoalTarget() != null) {
                 return false;
-            } else if (EntityEvoker.this.o()) {
+            } else if (EntityEvoker.this.dl()) {
                 return false;
-            } else if (EntityEvoker.this.ticksLived < this.c) {
+            } else if (EntityEvoker.this.ticksLived < this.d) {
                 return false;
             } else if (!EntityEvoker.this.world.getGameRules().getBoolean("mobGriefing")) {
                 return false;
@@ -179,7 +133,7 @@ public class EntityEvoker extends EntityMonster {
         }
 
         public boolean b() {
-            return EntityEvoker.this.dj() != null && this.b > 0;
+            return EntityEvoker.this.do() != null && this.c > 0;
         }
 
         public void d() {
@@ -188,7 +142,7 @@ public class EntityEvoker extends EntityMonster {
         }
 
         protected void j() {
-            EntitySheep entitysheep = EntityEvoker.this.dj();
+            EntitySheep entitysheep = EntityEvoker.this.do();
 
             if (entitysheep != null && entitysheep.isAlive()) {
                 entitysheep.setColor(EnumColor.RED);
@@ -209,18 +163,18 @@ public class EntityEvoker extends EntityMonster {
         }
 
         protected SoundEffect k() {
-            return SoundEffects.bs;
+            return SoundEffects.by;
         }
 
-        protected int l() {
-            return 3;
+        protected EntityIllagerWizard.Spell l() {
+            return EntityIllagerWizard.Spell.WOLOLO;
         }
     }
 
-    class c extends EntityEvoker.d {
+    class c extends EntityIllagerWizard.c {
 
         private c() {
-            super(null);
+            super();
         }
 
         public boolean a() {
@@ -257,11 +211,11 @@ public class EntityEvoker extends EntityMonster {
         }
 
         protected SoundEffect k() {
-            return SoundEffects.br;
+            return SoundEffects.bx;
         }
 
-        protected int l() {
-            return 1;
+        protected EntityIllagerWizard.Spell l() {
+            return EntityIllagerWizard.Spell.SUMMON_VEX;
         }
 
         c(Object object) {
@@ -269,10 +223,10 @@ public class EntityEvoker extends EntityMonster {
         }
     }
 
-    class a extends EntityEvoker.d {
+    class a extends EntityIllagerWizard.c {
 
         private a() {
-            super(null);
+            super();
         }
 
         protected int f() {
@@ -290,7 +244,7 @@ public class EntityEvoker extends EntityMonster {
             float f = (float) MathHelper.c(entityliving.locZ - EntityEvoker.this.locZ, entityliving.locX - EntityEvoker.this.locX);
             int i;
 
-            if (EntityEvoker.this.h((Entity) entityliving) < 9.0D) {
+            if (EntityEvoker.this.h(entityliving) < 9.0D) {
                 float f1;
 
                 for (i = 0; i < 5; ++i) {
@@ -345,11 +299,11 @@ public class EntityEvoker extends EntityMonster {
         }
 
         protected SoundEffect k() {
-            return SoundEffects.bq;
+            return SoundEffects.bw;
         }
 
-        protected int l() {
-            return 2;
+        protected EntityIllagerWizard.Spell l() {
+            return EntityIllagerWizard.Spell.FANGS;
         }
 
         a(Object object) {
@@ -357,85 +311,23 @@ public class EntityEvoker extends EntityMonster {
         }
     }
 
-    abstract class d extends PathfinderGoal {
+    class b extends EntityIllagerWizard.b {
 
-        protected int b;
-        protected int c;
-
-        private d() {}
-
-        public boolean a() {
-            return EntityEvoker.this.getGoalTarget() == null ? false : (EntityEvoker.this.o() ? false : EntityEvoker.this.ticksLived >= this.c);
-        }
-
-        public boolean b() {
-            return EntityEvoker.this.getGoalTarget() != null && this.b > 0;
-        }
-
-        public void c() {
-            this.b = this.m();
-            EntityEvoker.this.b = this.f();
-            this.c = EntityEvoker.this.ticksLived + this.i();
-            EntityEvoker.this.a(this.k(), 1.0F, 1.0F);
-            EntityEvoker.this.c = this.l();
-        }
-
-        public void e() {
-            --this.b;
-            if (this.b == 0) {
-                this.j();
-                EntityEvoker.this.a(SoundEffects.bn, 1.0F, 1.0F);
-            }
-
-        }
-
-        protected abstract void j();
-
-        protected int m() {
-            return 20;
-        }
-
-        protected abstract int f();
-
-        protected abstract int i();
-
-        protected abstract SoundEffect k();
-
-        protected abstract int l();
-
-        d(Object object) {
-            this();
-        }
-    }
-
-    class b extends PathfinderGoal {
-
-        public b() {
-            this.a(3);
-        }
-
-        public boolean a() {
-            return EntityEvoker.this.di() > 0;
-        }
-
-        public void c() {
-            super.c();
-            EntityEvoker.this.a(EntityEvoker.this.c);
-            EntityEvoker.this.navigation.o();
-        }
-
-        public void d() {
-            super.d();
-            EntityEvoker.this.a(0);
+        private b() {
+            super();
         }
 
         public void e() {
             if (EntityEvoker.this.getGoalTarget() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.cL(), (float) EntityEvoker.this.N());
-            } else if (EntityEvoker.this.dj() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.dj(), (float) EntityEvoker.this.cL(), (float) EntityEvoker.this.N());
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.O(), (float) EntityEvoker.this.N());
+            } else if (EntityEvoker.this.do() != null) {
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.do(), (float) EntityEvoker.this.O(), (float) EntityEvoker.this.N());
             }
 
+        }
+
+        b(Object object) {
+            this();
         }
     }
 }

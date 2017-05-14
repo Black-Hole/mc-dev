@@ -73,7 +73,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
     }
 
     @Nullable
-    public AxisAlignedBB ag() {
+    public AxisAlignedBB al() {
         return null;
     }
 
@@ -92,7 +92,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         this.lastZ = d2;
     }
 
-    public double ay() {
+    public double aE() {
         return 0.0D;
     }
 
@@ -103,12 +103,12 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             } else {
                 this.e(-this.u());
                 this.d(10);
-                this.ap();
+                this.av();
                 this.setDamage(this.getDamage() + f * 10.0F);
                 boolean flag = damagesource.getEntity() instanceof EntityHuman && ((EntityHuman) damagesource.getEntity()).abilities.canInstantlyBuild;
 
                 if (flag || this.getDamage() > 40.0F) {
-                    this.az();
+                    this.aF();
                     if (flag && !this.hasCustomName()) {
                         this.die();
                     } else {
@@ -141,11 +141,11 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         return !this.dead;
     }
 
-    public EnumDirection bm() {
+    public EnumDirection bs() {
         return this.g ? this.getDirection().opposite().e() : this.getDirection().e();
     }
 
-    public void A_() {
+    public void B_() {
         if (this.getType() > 0) {
             this.d(this.getType() - 1);
         }
@@ -155,7 +155,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         }
 
         if (this.locY < -64.0D) {
-            this.Y();
+            this.ac();
         }
 
         int i;
@@ -164,12 +164,12 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             this.world.methodProfiler.a("portal");
             MinecraftServer minecraftserver = this.world.getMinecraftServer();
 
-            i = this.V();
+            i = this.Z();
             if (this.ak) {
                 if (minecraftserver.getAllowNether()) {
                     if (!this.isPassenger() && this.al++ >= i) {
                         this.al = i;
-                        this.portalCooldown = this.aE();
+                        this.portalCooldown = this.aK();
                         byte b0;
 
                         if (this.world.worldProvider.getDimensionManager().getDimensionID() == -1) {
@@ -178,7 +178,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
                             b0 = -1;
                         }
 
-                        this.c(b0);
+                        this.b(b0);
                     }
 
                     this.ak = false;
@@ -292,18 +292,18 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
                 }
             }
 
-            this.ak();
+            this.aq();
         }
     }
 
-    protected double o() {
+    protected double p() {
         return 0.4D;
     }
 
     public void a(int i, int j, int k, boolean flag) {}
 
     protected void q() {
-        double d0 = this.o();
+        double d0 = this.p();
 
         this.motX = MathHelper.a(this.motX, -d0, d0);
         this.motZ = MathHelper.a(this.motZ, -d0, d0);
@@ -379,14 +379,14 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
 
         this.motX = d5 * d1 / d3;
         this.motZ = d5 * d2 / d3;
-        Entity entity = this.bx().isEmpty() ? null : (Entity) this.bx().get(0);
+        Entity entity = this.bD().isEmpty() ? null : (Entity) this.bD().get(0);
         double d6;
         double d7;
         double d8;
         double d9;
 
         if (entity instanceof EntityLiving) {
-            d6 = (double) ((EntityLiving) entity).bf;
+            d6 = (double) ((EntityLiving) entity).bg;
             if (d6 > 0.0D) {
                 d7 = -Math.sin((double) (entity.yaw * 0.017453292F));
                 d8 = Math.cos((double) (entity.yaw * 0.017453292F));
@@ -444,7 +444,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             d12 *= 0.75D;
         }
 
-        double d13 = this.o();
+        double d13 = this.p();
 
         d11 = MathHelper.a(d11, -d13, d13);
         d12 = MathHelper.a(d12, -d13, d13);

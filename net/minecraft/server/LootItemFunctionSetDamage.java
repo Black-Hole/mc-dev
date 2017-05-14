@@ -23,7 +23,7 @@ public class LootItemFunctionSetDamage extends LootItemFunction {
 
             itemstack.setData(MathHelper.d(f * (float) itemstack.k()));
         } else {
-            LootItemFunctionSetDamage.a.warn("Couldn\'t set damage of loot item {}", new Object[] { itemstack});
+            LootItemFunctionSetDamage.a.warn("Couldn\'t set damage of loot item {}", itemstack);
         }
 
         return itemstack;

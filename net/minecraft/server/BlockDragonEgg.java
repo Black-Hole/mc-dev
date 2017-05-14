@@ -7,7 +7,7 @@ public class BlockDragonEgg extends Block {
     protected static final AxisAlignedBB a = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 1.0D, 0.9375D);
 
     public BlockDragonEgg() {
-        super(Material.DRAGON_EGG, MaterialMapColor.E);
+        super(Material.DRAGON_EGG, MaterialMapColor.F);
     }
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -100,5 +100,9 @@ public class BlockDragonEgg extends Block {
 
     public boolean c(IBlockData iblockdata) {
         return false;
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 }

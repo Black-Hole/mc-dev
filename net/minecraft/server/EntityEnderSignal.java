@@ -44,11 +44,11 @@ public class EntityEnderSignal extends Entity {
         this.e = this.random.nextInt(5) > 0;
     }
 
-    public void A_() {
+    public void B_() {
         this.M = this.locX;
         this.N = this.locY;
         this.O = this.locZ;
-        super.A_();
+        super.B_();
         this.locX += this.motX;
         this.locY += this.motY;
         this.locZ += this.motZ;
@@ -109,6 +109,7 @@ public class EntityEnderSignal extends Entity {
             this.setPosition(this.locX, this.locY, this.locZ);
             ++this.d;
             if (this.d > 80 && !this.world.isClientSide) {
+                this.a(SoundEffects.bb, 1.0F, 1.0F);
                 this.die();
                 if (this.e) {
                     this.world.addEntity(new EntityItem(this.world, this.locX, this.locY, this.locZ, new ItemStack(Items.ENDER_EYE)));
@@ -124,11 +125,11 @@ public class EntityEnderSignal extends Entity {
 
     public void a(NBTTagCompound nbttagcompound) {}
 
-    public float e(float f) {
+    public float f(float f) {
         return 1.0F;
     }
 
-    public boolean aV() {
+    public boolean bb() {
         return false;
     }
 }

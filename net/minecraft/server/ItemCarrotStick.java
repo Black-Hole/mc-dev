@@ -14,10 +14,10 @@ public class ItemCarrotStick extends Item {
         if (world.isClientSide) {
             return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
         } else {
-            if (entityhuman.isPassenger() && entityhuman.bB() instanceof EntityPig) {
-                EntityPig entitypig = (EntityPig) entityhuman.bB();
+            if (entityhuman.isPassenger() && entityhuman.bH() instanceof EntityPig) {
+                EntityPig entitypig = (EntityPig) entityhuman.bH();
 
-                if (itemstack.k() - itemstack.getData() >= 7 && entitypig.di()) {
+                if (itemstack.k() - itemstack.getData() >= 7 && entitypig.dk()) {
                     itemstack.damage(7, entityhuman);
                     if (itemstack.isEmpty()) {
                         ItemStack itemstack1 = new ItemStack(Items.FISHING_ROD);

@@ -4,8 +4,9 @@ import javax.annotation.Nullable;
 
 public interface IMerchant {
 
-    void setTradingPlayer(EntityHuman entityhuman);
+    void setTradingPlayer(@Nullable EntityHuman entityhuman);
 
+    @Nullable
     EntityHuman getTrader();
 
     @Nullable
@@ -17,7 +18,7 @@ public interface IMerchant {
 
     IChatBaseComponent getScoreboardDisplayName();
 
-    World t_();
+    World u_();
 
-    BlockPosition u_();
+    BlockPosition v_();
 }

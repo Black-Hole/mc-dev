@@ -14,12 +14,16 @@ public class BlockAnvil extends BlockFalling {
     protected BlockAnvil() {
         super(Material.HEAVY);
         this.y(this.blockStateList.getBlockData().set(BlockAnvil.FACING, EnumDirection.NORTH).set(BlockAnvil.DAMAGE, Integer.valueOf(0)));
-        this.d(0);
+        this.e(0);
         this.a(CreativeModeTab.c);
     }
 
     public boolean c(IBlockData iblockdata) {
         return false;
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 
     public boolean b(IBlockData iblockdata) {
@@ -65,11 +69,11 @@ public class BlockAnvil extends BlockFalling {
         entityfallingblock.a(true);
     }
 
-    public void a_(World world, BlockPosition blockposition) {
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {
         world.triggerEffect(1031, blockposition, 0);
     }
 
-    public void b(World world, BlockPosition blockposition) {
+    public void a_(World world, BlockPosition blockposition) {
         world.triggerEffect(1029, blockposition, 0);
     }
 

@@ -4,11 +4,12 @@ import com.google.common.collect.Sets;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class PathfinderNormal extends PathfinderAbstract {
 
-    private float j;
+    protected float j;
 
     public PathfinderNormal() {}
 
@@ -202,7 +203,7 @@ public class PathfinderNormal extends PathfinderAbstract {
 
                     while (j > 0 && pathtype == PathType.OPEN) {
                         --j;
-                        if (i1++ >= this.b.aY()) {
+                        if (i1++ >= this.b.be()) {
                             return null;
                         }
 
@@ -232,6 +233,34 @@ public class PathfinderNormal extends PathfinderAbstract {
         double d0 = (double) entityinsentient.width / 2.0D;
         BlockPosition blockposition = new BlockPosition(entityinsentient);
 
+        pathtype = this.a(iblockaccess, i, j, k, l, i1, j1, flag, flag1, enumset, pathtype, blockposition);
+        if (enumset.contains(PathType.FENCE)) {
+            return PathType.FENCE;
+        } else {
+            PathType pathtype1 = PathType.BLOCKED;
+            Iterator iterator = enumset.iterator();
+
+            while (iterator.hasNext()) {
+                PathType pathtype2 = (PathType) iterator.next();
+
+                if (entityinsentient.a(pathtype2) < 0.0F) {
+                    return pathtype2;
+                }
+
+                if (entityinsentient.a(pathtype2) >= entityinsentient.a(pathtype1)) {
+                    pathtype1 = pathtype2;
+                }
+            }
+
+            if (pathtype == PathType.OPEN && entityinsentient.a(pathtype1) == 0.0F) {
+                return PathType.OPEN;
+            } else {
+                return pathtype1;
+            }
+        }
+    }
+
+    public PathType a(IBlockAccess iblockaccess, int i, int j, int k, int l, int i1, int j1, boolean flag, boolean flag1, EnumSet<PathType> enumset, PathType pathtype, BlockPosition blockposition) {
         for (int k1 = 0; k1 < l; ++k1) {
             for (int l1 = 0; l1 < i1; ++l1) {
                 for (int i2 = 0; i2 < j1; ++i2) {
@@ -261,30 +290,7 @@ public class PathfinderNormal extends PathfinderAbstract {
             }
         }
 
-        if (enumset.contains(PathType.FENCE)) {
-            return PathType.FENCE;
-        } else {
-            PathType pathtype2 = PathType.BLOCKED;
-            Iterator iterator = enumset.iterator();
-
-            while (iterator.hasNext()) {
-                PathType pathtype3 = (PathType) iterator.next();
-
-                if (entityinsentient.a(pathtype3) < 0.0F) {
-                    return pathtype3;
-                }
-
-                if (entityinsentient.a(pathtype3) >= entityinsentient.a(pathtype2)) {
-                    pathtype2 = pathtype3;
-                }
-            }
-
-            if (pathtype == PathType.OPEN && entityinsentient.a(pathtype2) == 0.0F) {
-                return PathType.OPEN;
-            } else {
-                return pathtype2;
-            }
-        }
+        return pathtype;
     }
 
     private PathType a(EntityInsentient entityinsentient, BlockPosition blockposition) {
@@ -312,17 +318,23 @@ public class PathfinderNormal extends PathfinderAbstract {
             }
         }
 
+        pathtype = this.a(iblockaccess, i, j, k, pathtype);
+        return pathtype;
+    }
+
+    @Nonnull
+    public PathType a(IBlockAccess iblockaccess, int i, int j, int k, PathType pathtype) {
         BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
 
         if (pathtype == PathType.WALKABLE) {
             for (int l = -1; l <= 1; ++l) {
                 for (int i1 = -1; i1 <= 1; ++i1) {
                     if (l != 0 || i1 != 0) {
-                        Block block1 = iblockaccess.getType(blockposition_pooledblockposition.f(l + i, j, i1 + k)).getBlock();
+                        Block block = iblockaccess.getType(blockposition_pooledblockposition.f(l + i, j, i1 + k)).getBlock();
 
-                        if (block1 == Blocks.CACTUS) {
+                        if (block == Blocks.CACTUS) {
                             pathtype = PathType.DANGER_CACTUS;
-                        } else if (block1 == Blocks.FIRE) {
+                        } else if (block == Blocks.FIRE) {
                             pathtype = PathType.DANGER_FIRE;
                         }
                     }
@@ -334,7 +346,7 @@ public class PathfinderNormal extends PathfinderAbstract {
         return pathtype;
     }
 
-    private PathType b(IBlockAccess iblockaccess, int i, int j, int k) {
+    protected PathType b(IBlockAccess iblockaccess, int i, int j, int k) {
         BlockPosition blockposition = new BlockPosition(i, j, k);
         IBlockData iblockdata = iblockaccess.getType(blockposition);
         Block block = iblockdata.getBlock();

@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class ItemSpade extends ItemTool {
 
-    private static final Set<Block> e = Sets.newHashSet(new Block[] { Blocks.CLAY, Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.SNOW, Blocks.SNOW_LAYER, Blocks.SOUL_SAND, Blocks.GRASS_PATH});
+    private static final Set<Block> e = Sets.newHashSet(new Block[] { Blocks.CLAY, Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.SNOW, Blocks.SNOW_LAYER, Blocks.SOUL_SAND, Blocks.GRASS_PATH, Blocks.dS});
 
     public ItemSpade(Item.EnumToolMaterial item_enumtoolmaterial) {
         super(1.5F, -3.0F, item_enumtoolmaterial, ItemSpade.e);
@@ -29,7 +29,7 @@ public class ItemSpade extends ItemTool {
             if (enumdirection != EnumDirection.DOWN && world.getType(blockposition.up()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
                 IBlockData iblockdata1 = Blocks.GRASS_PATH.getBlockData();
 
-                world.a(entityhuman, blockposition, SoundEffects.fy, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.a(entityhuman, blockposition, SoundEffects.gz, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 if (!world.isClientSide) {
                     world.setTypeAndData(blockposition, iblockdata1, 11);
                     itemstack.damage(1, entityhuman);

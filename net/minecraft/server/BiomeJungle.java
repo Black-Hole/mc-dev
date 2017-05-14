@@ -4,31 +4,32 @@ import java.util.Random;
 
 public class BiomeJungle extends BiomeBase {
 
-    private final boolean y;
-    private static final IBlockData z = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
-    private static final IBlockData A = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
-    private static final IBlockData B = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+    private final boolean x;
+    private static final IBlockData y = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
+    private static final IBlockData z = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+    private static final IBlockData A = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
 
     public BiomeJungle(boolean flag, BiomeBase.a biomebase_a) {
         super(biomebase_a);
-        this.y = flag;
+        this.x = flag;
         if (flag) {
-            this.t.z = 2;
+            this.s.z = 2;
         } else {
-            this.t.z = 50;
+            this.s.z = 50;
         }
 
-        this.t.C = 25;
-        this.t.B = 4;
+        this.s.C = 25;
+        this.s.B = 4;
         if (!flag) {
-            this.u.add(new BiomeBase.BiomeMeta(EntityOcelot.class, 2, 1, 1));
+            this.t.add(new BiomeBase.BiomeMeta(EntityOcelot.class, 2, 1, 1));
         }
 
-        this.v.add(new BiomeBase.BiomeMeta(EntityChicken.class, 10, 4, 4));
+        this.u.add(new BiomeBase.BiomeMeta(EntityParrot.class, 40, 1, 2));
+        this.u.add(new BiomeBase.BiomeMeta(EntityChicken.class, 10, 4, 4));
     }
 
     public WorldGenTreeAbstract a(Random random) {
-        return (WorldGenTreeAbstract) (random.nextInt(10) == 0 ? BiomeJungle.o : (random.nextInt(2) == 0 ? new WorldGenGroundBush(BiomeJungle.z, BiomeJungle.B) : (!this.y && random.nextInt(3) == 0 ? new WorldGenJungleTree(false, 10, 20, BiomeJungle.z, BiomeJungle.A) : new WorldGenTrees(false, 4 + random.nextInt(7), BiomeJungle.z, BiomeJungle.A, true))));
+        return (WorldGenTreeAbstract) (random.nextInt(10) == 0 ? BiomeJungle.n : (random.nextInt(2) == 0 ? new WorldGenGroundBush(BiomeJungle.y, BiomeJungle.A) : (!this.x && random.nextInt(3) == 0 ? new WorldGenJungleTree(false, 10, 20, BiomeJungle.y, BiomeJungle.z) : new WorldGenTrees(false, 4 + random.nextInt(7), BiomeJungle.y, BiomeJungle.z, true))));
     }
 
     public WorldGenerator b(Random random) {

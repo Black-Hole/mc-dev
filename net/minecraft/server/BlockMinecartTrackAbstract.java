@@ -42,6 +42,10 @@ public abstract class BlockMinecartTrackAbstract extends Block {
         return blockminecarttrackabstract_enumtrackposition != null && blockminecarttrackabstract_enumtrackposition.c() ? BlockMinecartTrackAbstract.b : BlockMinecartTrackAbstract.a;
     }
 
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
+    }
+
     public boolean c(IBlockData iblockdata) {
         return false;
     }

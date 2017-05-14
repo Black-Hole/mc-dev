@@ -31,14 +31,14 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
     public void a(int i, int j, int k, boolean flag) {
         if (flag) {
             if (this.isVehicle()) {
-                this.az();
+                this.aF();
             }
 
             if (this.getType() == 0) {
                 this.e(-this.u());
                 this.d(10);
                 this.setDamage(50.0F);
-                this.ap();
+                this.av();
             }
         }
 

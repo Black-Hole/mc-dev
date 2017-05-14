@@ -15,7 +15,7 @@ public class BlockChorusFruit extends Block {
     public static final BlockStateBoolean f = BlockStateBoolean.of("down");
 
     protected BlockChorusFruit() {
-        super(Material.PLANT, MaterialMapColor.z);
+        super(Material.PLANT, MaterialMapColor.A);
         this.a(CreativeModeTab.c);
         this.y(this.blockStateList.getBlockData().set(BlockChorusFruit.a, Boolean.valueOf(false)).set(BlockChorusFruit.b, Boolean.valueOf(false)).set(BlockChorusFruit.c, Boolean.valueOf(false)).set(BlockChorusFruit.d, Boolean.valueOf(false)).set(BlockChorusFruit.e, Boolean.valueOf(false)).set(BlockChorusFruit.f, Boolean.valueOf(false)));
     }
@@ -157,5 +157,9 @@ public class BlockChorusFruit extends Block {
 
     public boolean b(IBlockAccess iblockaccess, BlockPosition blockposition) {
         return false;
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 }

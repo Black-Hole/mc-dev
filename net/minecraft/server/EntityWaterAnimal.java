@@ -6,11 +6,11 @@ public abstract class EntityWaterAnimal extends EntityInsentient implements IAni
         super(world);
     }
 
-    public boolean bF() {
+    public boolean bL() {
         return true;
     }
 
-    public boolean cM() {
+    public boolean P() {
         return true;
     }
 
@@ -30,10 +30,10 @@ public abstract class EntityWaterAnimal extends EntityInsentient implements IAni
         return 1 + this.world.random.nextInt(3);
     }
 
-    public void U() {
+    public void Y() {
         int i = this.getAirTicks();
 
-        super.U();
+        super.Y();
         if (this.isAlive() && !this.isInWater()) {
             --i;
             this.setAirTicks(i);
@@ -47,7 +47,7 @@ public abstract class EntityWaterAnimal extends EntityInsentient implements IAni
 
     }
 
-    public boolean bg() {
+    public boolean bm() {
         return false;
     }
 }

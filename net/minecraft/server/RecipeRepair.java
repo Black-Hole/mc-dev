@@ -3,7 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 
-public class RecipeRepair implements IRecipe {
+public class RecipeRepair extends IRecipe {
 
     public RecipeRepair() {}
 
@@ -69,10 +69,6 @@ public class RecipeRepair implements IRecipe {
         return ItemStack.a;
     }
 
-    public int a() {
-        return 4;
-    }
-
     public ItemStack b() {
         return ItemStack.a;
     }
@@ -83,11 +79,15 @@ public class RecipeRepair implements IRecipe {
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
-            if (itemstack.getItem().s()) {
-                nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
+            if (itemstack.getItem().r()) {
+                nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
             }
         }
 
         return nonnulllist;
+    }
+
+    public boolean d() {
+        return true;
     }
 }

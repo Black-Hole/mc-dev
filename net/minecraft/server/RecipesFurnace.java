@@ -76,6 +76,22 @@ public class RecipesFurnace {
         this.a((Item) Items.GOLDEN_LEGGINGS, new ItemStack(Items.GOLD_NUGGET), 0.1F);
         this.a((Item) Items.GOLDEN_BOOTS, new ItemStack(Items.GOLD_NUGGET), 0.1F);
         this.a(Items.GOLDEN_HORSE_ARMOR, new ItemStack(Items.GOLD_NUGGET), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.WHITE.getColorIndex()), new ItemStack(Blocks.dB), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.ORANGE.getColorIndex()), new ItemStack(Blocks.dC), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.MAGENTA.getColorIndex()), new ItemStack(Blocks.dD), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.LIGHT_BLUE.getColorIndex()), new ItemStack(Blocks.dE), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.YELLOW.getColorIndex()), new ItemStack(Blocks.dF), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.LIME.getColorIndex()), new ItemStack(Blocks.dG), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.PINK.getColorIndex()), new ItemStack(Blocks.dH), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.GRAY.getColorIndex()), new ItemStack(Blocks.dI), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.SILVER.getColorIndex()), new ItemStack(Blocks.dJ), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.CYAN.getColorIndex()), new ItemStack(Blocks.dK), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.PURPLE.getColorIndex()), new ItemStack(Blocks.dL), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.BLUE.getColorIndex()), new ItemStack(Blocks.dM), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.BROWN.getColorIndex()), new ItemStack(Blocks.dN), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.GREEN.getColorIndex()), new ItemStack(Blocks.dO), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.RED.getColorIndex()), new ItemStack(Blocks.dP), 0.1F);
+        this.a(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, EnumColor.BLACK.getColorIndex()), new ItemStack(Blocks.dQ), 0.1F);
     }
 
     public void registerRecipe(Block block, ItemStack itemstack, float f) {

@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -10,7 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,8 +18,8 @@ import org.apache.logging.log4j.Logger;
 public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
     private static final Logger a = LogManager.getLogger();
-    private final Map<ChunkCoordIntPair, NBTTagCompound> b = new ConcurrentHashMap();
-    private final Set<ChunkCoordIntPair> c = Collections.newSetFromMap(new ConcurrentHashMap());
+    private final Map<ChunkCoordIntPair, NBTTagCompound> b = Maps.newConcurrentMap();
+    private final Set<ChunkCoordIntPair> c = Collections.newSetFromMap(Maps.newConcurrentMap());
     private final File d;
     private final DataConverterManager e;
     private boolean f;
@@ -47,29 +47,29 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         return this.a(world, i, j, nbttagcompound);
     }
 
-    public boolean a(int i, int j) {
+    public boolean chunkExists(int i, int j) {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
         NBTTagCompound nbttagcompound = (NBTTagCompound) this.b.get(chunkcoordintpair);
 
-        return nbttagcompound != null ? true : RegionFileCache.f(this.d, i, j);
+        return nbttagcompound != null ? true : RegionFileCache.chunkExists(this.d, i, j);
     }
 
     @Nullable
     protected Chunk a(World world, int i, int j, NBTTagCompound nbttagcompound) {
         if (!nbttagcompound.hasKeyOfType("Level", 10)) {
-            ChunkRegionLoader.a.error("Chunk file at {},{} is missing level data, skipping", new Object[] { Integer.valueOf(i), Integer.valueOf(j)});
+            ChunkRegionLoader.a.error("Chunk file at {},{} is missing level data, skipping", Integer.valueOf(i), Integer.valueOf(j));
             return null;
         } else {
             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Level");
 
             if (!nbttagcompound1.hasKeyOfType("Sections", 9)) {
-                ChunkRegionLoader.a.error("Chunk file at {},{} is missing block data, skipping", new Object[] { Integer.valueOf(i), Integer.valueOf(j)});
+                ChunkRegionLoader.a.error("Chunk file at {},{} is missing block data, skipping", Integer.valueOf(i), Integer.valueOf(j));
                 return null;
             } else {
                 Chunk chunk = this.a(world, nbttagcompound1);
 
                 if (!chunk.a(i, j)) {
-                    ChunkRegionLoader.a.error("Chunk file at {},{} is in the wrong location; relocating. (Expected {}, {}, got {}, {})", new Object[] { Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(chunk.locX), Integer.valueOf(chunk.locZ)});
+                    ChunkRegionLoader.a.error("Chunk file at {},{} is in the wrong location; relocating. (Expected {}, {}, got {}, {})", Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(chunk.locX), Integer.valueOf(chunk.locZ));
                     nbttagcompound1.setInt("xPos", i);
                     nbttagcompound1.setInt("zPos", j);
                     chunk = this.a(world, nbttagcompound1);
@@ -88,7 +88,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
             nbttagcompound.set("Level", nbttagcompound1);
-            nbttagcompound.setInt("DataVersion", 922);
+            nbttagcompound.setInt("DataVersion", 1133);
             this.a(chunk, world, nbttagcompound1);
             this.a(chunk.k(), nbttagcompound);
         } catch (Exception exception) {
@@ -105,10 +105,10 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         FileIOThread.a().a(this);
     }
 
-    public boolean c() {
+    public boolean a() {
         if (this.b.isEmpty()) {
             if (this.f) {
-                ChunkRegionLoader.a.info("ThreadedAnvilChunkStorage ({}): All chunks are saved", new Object[] { this.d.getName()});
+                ChunkRegionLoader.a.info("ThreadedAnvilChunkStorage ({}): All chunks are saved", this.d.getName());
             }
 
             return false;
@@ -147,14 +147,14 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
     public void b(World world, Chunk chunk) throws IOException {}
 
-    public void a() {}
+    public void b() {}
 
-    public void b() {
+    public void c() {
         try {
             this.f = true;
 
             while (true) {
-                if (this.c()) {
+                if (this.a()) {
                     continue;
                 }
             }
@@ -176,7 +176,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
                         nbttaglist = nbttagcompound1.getList("Entities", 10);
 
                         for (j = 0; j < nbttaglist.size(); ++j) {
-                            nbttaglist.a(j, dataconverter.a(DataConverterTypes.ENTITY, (NBTTagCompound) nbttaglist.h(j), i));
+                            nbttaglist.a(j, dataconverter.a(DataConverterTypes.ENTITY, (NBTTagCompound) nbttaglist.i(j), i));
                         }
                     }
 
@@ -184,7 +184,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
                         nbttaglist = nbttagcompound1.getList("TileEntities", 10);
 
                         for (j = 0; j < nbttaglist.size(); ++j) {
-                            nbttaglist.a(j, dataconverter.a(DataConverterTypes.BLOCK_ENTITY, (NBTTagCompound) nbttaglist.h(j), i));
+                            nbttaglist.a(j, dataconverter.a(DataConverterTypes.BLOCK_ENTITY, (NBTTagCompound) nbttaglist.i(j), i));
                         }
                     }
                 }
@@ -437,7 +437,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
     public static void a(Entity entity, World world) {
         if (world.addEntity(entity) && entity.isVehicle()) {
-            Iterator iterator = entity.bx().iterator();
+            Iterator iterator = entity.bD().iterator();
 
             while (iterator.hasNext()) {
                 Entity entity1 = (Entity) iterator.next();

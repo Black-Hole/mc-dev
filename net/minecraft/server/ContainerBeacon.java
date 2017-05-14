@@ -37,7 +37,7 @@ public class ContainerBeacon extends Container {
 
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        if (entityhuman != null && !entityhuman.world.isClientSide) {
+        if (!entityhuman.world.isClientSide) {
             ItemStack itemstack = this.f.a(this.f.getMaxStackSize());
 
             if (!itemstack.isEmpty()) {

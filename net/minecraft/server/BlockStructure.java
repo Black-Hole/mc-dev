@@ -7,7 +7,7 @@ public class BlockStructure extends BlockTileEntity {
     public static final BlockStateEnum<TileEntityStructure.UsageMode> a = BlockStateEnum.of("mode", TileEntityStructure.UsageMode.class);
 
     public BlockStructure() {
-        super(Material.ORE, MaterialMapColor.x);
+        super(Material.ORE, MaterialMapColor.y);
         this.y(this.blockStateList.getBlockData());
     }
 

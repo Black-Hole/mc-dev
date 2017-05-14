@@ -18,6 +18,8 @@ public interface PacketListenerPlayIn extends PacketListener {
 
     void a(PacketPlayInWindowClick packetplayinwindowclick);
 
+    void a(PacketPlayInAutoRecipe packetplayinautorecipe);
+
     void a(PacketPlayInCloseWindow packetplayinclosewindow);
 
     void a(PacketPlayInCustomPayload packetplayincustompayload);
@@ -55,4 +57,6 @@ public interface PacketListenerPlayIn extends PacketListener {
     void a(PacketPlayInVehicleMove packetplayinvehiclemove);
 
     void a(PacketPlayInTeleportAccept packetplayinteleportaccept);
+
+    void a(PacketPlayInRecipeDisplayed packetplayinrecipedisplayed);
 }

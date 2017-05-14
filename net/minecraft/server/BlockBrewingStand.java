@@ -64,7 +64,7 @@ public class BlockBrewingStand extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityBrewingStand) {
-                ((TileEntityBrewingStand) tileentity).a(itemstack.getName());
+                ((TileEntityBrewingStand) tileentity).setCustomName(itemstack.getName());
             }
         }
 
@@ -120,5 +120,9 @@ public class BlockBrewingStand extends BlockTileEntity {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockBrewingStand.HAS_BOTTLE[0], BlockBrewingStand.HAS_BOTTLE[1], BlockBrewingStand.HAS_BOTTLE[2]});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 }

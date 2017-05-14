@@ -8,6 +8,6 @@ public class BlockBloodStone extends Block {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return MaterialMapColor.K;
+        return MaterialMapColor.L;
     }
 }

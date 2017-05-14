@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 import com.google.common.util.concurrent.Futures;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Proxy;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class MinecraftServer implements Runnable, ICommandListener, IAsyncTaskHandler, IMojangStatistics {
+public abstract class MinecraftServer implements ICommandListener, Runnable, IAsyncTaskHandler, IMojangStatistics {
 
     public static final Logger LOGGER = LogManager.getLogger();
     public static final File a = new File("usercache.json");
@@ -54,7 +54,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     private final ServerConnection p;
     private final ServerPing q = new ServerPing();
     private final Random r = new Random();
-    private final DataConverterManager dataConverterManager;
+    public final DataConverterManager dataConverterManager;
     private String serverIp;
     private int u = -1;
     public WorldServer[] worldServer;
@@ -128,7 +128,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                 public void a(int i) {
                     if (System.currentTimeMillis() - this.b >= 1000L) {
                         this.b = System.currentTimeMillis();
-                        MinecraftServer.LOGGER.info("Converting... {}%", new Object[] { Integer.valueOf(i)});
+                        MinecraftServer.LOGGER.info("Converting... {}%", Integer.valueOf(i));
                     }
 
                 }
@@ -242,9 +242,9 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
         if (file.isFile()) {
             try {
-                this.setResourcePack("level://" + URLEncoder.encode(s, Charsets.UTF_8.toString()) + "/" + "resources.zip", "");
+                this.setResourcePack("level://" + URLEncoder.encode(s, StandardCharsets.UTF_8.toString()) + "/" + "resources.zip", "");
             } catch (UnsupportedEncodingException unsupportedencodingexception) {
-                MinecraftServer.LOGGER.warn("Something went wrong url encoding {}", new Object[] { s});
+                MinecraftServer.LOGGER.warn("Something went wrong url encoding {}", s);
             }
         }
 
@@ -267,7 +267,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     protected void a_(String s, int i) {
         this.f = s;
         this.g = i;
-        MinecraftServer.LOGGER.info("{}: {}%", new Object[] { s, Integer.valueOf(i)});
+        MinecraftServer.LOGGER.info("{}: {}%", s, Integer.valueOf(i));
     }
 
     protected void t() {
@@ -284,7 +284,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
             if (worldserver != null) {
                 if (!flag) {
-                    MinecraftServer.LOGGER.info("Saving chunks for level \'{}\'/{}", new Object[] { worldserver.getWorldData().getName(), worldserver.worldProvider.getDimensionManager().b()});
+                    MinecraftServer.LOGGER.info("Saving chunks for level \'{}\'/{}", worldserver.getWorldData().getName(), worldserver.worldProvider.getDimensionManager().b());
                 }
 
                 try {
@@ -365,7 +365,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                 long i = 0L;
 
                 this.q.setMOTD(new ChatComponentText(this.motd));
-                this.q.setServerInfo(new ServerPing.ServerData("1.11.2", 316));
+                this.q.setServerInfo(new ServerPing.ServerData("1.12-pre2", 329));
                 this.a(this.q);
 
                 while (this.isRunning) {
@@ -373,7 +373,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                     long k = j - this.ab;
 
                     if (k > 2000L && this.ab - this.R >= 15000L) {
-                        MinecraftServer.LOGGER.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", new Object[] { Long.valueOf(k), Long.valueOf(k / 50L)});
+                        MinecraftServer.LOGGER.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", Long.valueOf(k), Long.valueOf(k / 50L));
                         k = 2000L;
                         this.R = this.ab;
                     }
@@ -414,7 +414,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
             File file = new File(new File(this.A(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
 
             if (crashreport.a(file)) {
-                MinecraftServer.LOGGER.error("This crash report has been saved to: {}", new Object[] { file.getAbsolutePath()});
+                MinecraftServer.LOGGER.error("This crash report has been saved to: {}", file.getAbsolutePath());
             } else {
                 MinecraftServer.LOGGER.error("We were unable to save this crash report to disk.");
             }
@@ -452,7 +452,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
                 ImageIO.write(bufferedimage, "PNG", new ByteBufOutputStream(bytebuf));
                 ByteBuf bytebuf1 = Base64.encode(bytebuf);
 
-                serverping.setFavicon("data:image/png;base64," + bytebuf1.toString(Charsets.UTF_8));
+                serverping.setFavicon("data:image/png;base64," + bytebuf1.toString(StandardCharsets.UTF_8));
             } catch (Exception exception) {
                 MinecraftServer.LOGGER.error("Couldn\'t load server icon", exception);
             } finally {
@@ -580,10 +580,12 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         this.an().c();
         this.methodProfiler.c("players");
         this.v.tick();
+        this.methodProfiler.c("commandFunctions");
+        this.aL().e();
         this.methodProfiler.c("tickables");
 
         for (i = 0; i < this.o.size(); ++i) {
-            ((ITickable) this.o.get(i)).F_();
+            ((ITickable) this.o.get(i)).e();
         }
 
         this.methodProfiler.b();
@@ -673,7 +675,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
             }
 
             if (flag && !GraphicsEnvironment.isHeadless()) {
-                dedicatedserver.aO();
+                dedicatedserver.aR();
             }
 
             dedicatedserver.F();
@@ -710,7 +712,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
     }
 
     public String getVersion() {
-        return "1.11.2";
+        return "1.12-pre2";
     }
 
     public int H() {
@@ -1094,20 +1096,8 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         this.T = true;
     }
 
-    public BlockPosition getChunkCoordinates() {
-        return BlockPosition.ZERO;
-    }
-
-    public Vec3D d() {
-        return Vec3D.a;
-    }
-
     public World getWorld() {
         return this.worldServer[0];
-    }
-
-    public Entity f() {
-        return null;
     }
 
     public int getSpawnProtection() {
@@ -1140,14 +1130,6 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
 
     public void setIdleTimeout(int i) {
         this.H = i;
-    }
-
-    public IChatBaseComponent getScoreboardDisplayName() {
-        return new ChatComponentText(this.getName());
-    }
-
-    public boolean ay() {
-        return true;
     }
 
     public MinecraftSessionService az() {
@@ -1194,9 +1176,7 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         return this.worldServer[0].getGameRules().getBoolean("sendCommandFeedback");
     }
 
-    public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {}
-
-    public MinecraftServer B_() {
+    public MinecraftServer C_() {
         return this;
     }
 
@@ -1244,11 +1224,28 @@ public abstract class MinecraftServer implements Runnable, ICommandListener, IAs
         return this.serverThread;
     }
 
-    public DataConverterManager getDataConverterManager() {
-        return this.dataConverterManager;
-    }
-
     public int a(@Nullable WorldServer worldserver) {
         return worldserver != null ? worldserver.getGameRules().c("spawnRadius") : 10;
+    }
+
+    public AdvancementDataWorld getAdvancementData() {
+        return this.worldServer[0].z();
+    }
+
+    public CustomFunctionData aL() {
+        return this.worldServer[0].A();
+    }
+
+    public void reload() {
+        if (this.isMainThread()) {
+            this.getPlayerList().savePlayers();
+            this.worldServer[0].getLootTableRegistry().reload();
+            this.getAdvancementData().reload();
+            this.aL().f();
+            this.getPlayerList().reload();
+        } else {
+            this.postToMainThread(run<invokedynamic>(this));
+        }
+
     }
 }

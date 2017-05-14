@@ -47,7 +47,7 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        return a(world, blockposition, enumdirection.opposite());
+        return a(world, blockposition, enumdirection);
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
@@ -66,17 +66,20 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
     }
 
     protected static boolean a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        BlockPosition blockposition1 = blockposition.shift(enumdirection);
+        BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
+        IBlockData iblockdata = world.getType(blockposition1);
+        boolean flag = iblockdata.d(world, blockposition1, enumdirection) == EnumBlockFaceShape.SOLID;
+        Block block = iblockdata.getBlock();
 
-        return enumdirection == EnumDirection.DOWN ? world.getType(blockposition1).r() : world.getType(blockposition1).m();
+        return enumdirection == EnumDirection.UP ? !b(block) && flag : !c(block) && flag && !iblockdata.n();
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        return a(world, blockposition, enumdirection.opposite()) ? this.getBlockData().set(BlockButtonAbstract.FACING, enumdirection).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false)) : this.getBlockData().set(BlockButtonAbstract.FACING, EnumDirection.DOWN).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false));
+        return a(world, blockposition, enumdirection) ? this.getBlockData().set(BlockButtonAbstract.FACING, enumdirection).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false)) : this.getBlockData().set(BlockButtonAbstract.FACING, EnumDirection.DOWN).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false));
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (this.e(world, blockposition, iblockdata) && !a(world, blockposition, ((EnumDirection) iblockdata.get(BlockButtonAbstract.FACING)).opposite())) {
+        if (this.e(world, blockposition, iblockdata) && !a(world, blockposition, (EnumDirection) iblockdata.get(BlockButtonAbstract.FACING))) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
         }
@@ -292,5 +295,9 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockButtonAbstract.FACING, BlockButtonAbstract.POWERED});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 }

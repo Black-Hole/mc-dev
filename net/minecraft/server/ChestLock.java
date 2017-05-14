@@ -16,7 +16,7 @@ public class ChestLock {
         return this.b == null || this.b.isEmpty();
     }
 
-    public String b() {
+    public String getKey() {
         return this.b;
     }
 

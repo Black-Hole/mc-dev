@@ -15,7 +15,7 @@ public class BlockCloth extends Block {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return ((EnumColor) iblockdata.get(BlockCloth.COLOR)).e();
+        return MaterialMapColor.a((EnumColor) iblockdata.get(BlockCloth.COLOR));
     }
 
     public IBlockData fromLegacyData(int i) {

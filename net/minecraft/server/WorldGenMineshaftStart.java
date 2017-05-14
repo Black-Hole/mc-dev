@@ -19,7 +19,7 @@ public class WorldGenMineshaftStart extends StructureStart {
         this.d();
         if (worldgenmineshaft_type == WorldGenMineshaft.Type.MESA) {
             boolean flag = true;
-            int k = world.K() - this.b.e + this.b.d() / 2 - -5;
+            int k = world.getSeaLevel() - this.b.e + this.b.d() / 2 - -5;
 
             this.b.a(0, k, 0);
             Iterator iterator = this.a.iterator();

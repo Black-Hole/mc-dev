@@ -30,7 +30,7 @@ public class PacketPlayInClientCommand implements Packet<PacketListenerPlayIn> {
 
     public static enum EnumClientCommand {
 
-        PERFORM_RESPAWN, REQUEST_STATS, OPEN_INVENTORY_ACHIEVEMENT;
+        PERFORM_RESPAWN, REQUEST_STATS;
 
         private EnumClientCommand() {}
     }

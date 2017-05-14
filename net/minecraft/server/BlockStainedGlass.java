@@ -17,7 +17,7 @@ public class BlockStainedGlass extends BlockHalfTransparent {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return ((EnumColor) iblockdata.get(BlockStainedGlass.COLOR)).e();
+        return MaterialMapColor.a((EnumColor) iblockdata.get(BlockStainedGlass.COLOR));
     }
 
     public int a(Random random) {

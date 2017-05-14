@@ -36,12 +36,12 @@ public class PathfinderGoalTame extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.entity.getNavigation().n() && this.entity.isVehicle();
+        return !this.entity.isTamed() && !this.entity.getNavigation().o() && this.entity.isVehicle();
     }
 
     public void e() {
-        if (this.entity.getRandom().nextInt(50) == 0) {
-            Entity entity = (Entity) this.entity.bx().get(0);
+        if (!this.entity.isTamed() && this.entity.getRandom().nextInt(50) == 0) {
+            Entity entity = (Entity) this.entity.bD().get(0);
 
             if (entity == null) {
                 return;
@@ -59,8 +59,8 @@ public class PathfinderGoalTame extends PathfinderGoal {
                 this.entity.n(5);
             }
 
-            this.entity.az();
-            this.entity.dF();
+            this.entity.aF();
+            this.entity.dI();
             this.entity.world.broadcastEntityEffect(this.entity, (byte) 6);
         }
 

@@ -43,14 +43,14 @@ public class WorldGenFactory {
                 structurestart = (StructureStart) oclass.newInstance();
             }
         } catch (Exception exception) {
-            WorldGenFactory.a.warn("Failed Start with id {}", new Object[] { nbttagcompound.getString("id")});
+            WorldGenFactory.a.warn("Failed Start with id {}", nbttagcompound.getString("id"));
             exception.printStackTrace();
         }
 
         if (structurestart != null) {
             structurestart.a(world, nbttagcompound);
         } else {
-            WorldGenFactory.a.warn("Skipping Structure with id {}", new Object[] { nbttagcompound.getString("id")});
+            WorldGenFactory.a.warn("Skipping Structure with id {}", nbttagcompound.getString("id"));
         }
 
         return structurestart;
@@ -66,14 +66,14 @@ public class WorldGenFactory {
                 structurepiece = (StructurePiece) oclass.newInstance();
             }
         } catch (Exception exception) {
-            WorldGenFactory.a.warn("Failed Piece with id {}", new Object[] { nbttagcompound.getString("id")});
+            WorldGenFactory.a.warn("Failed Piece with id {}", nbttagcompound.getString("id"));
             exception.printStackTrace();
         }
 
         if (structurepiece != null) {
             structurepiece.a(world, nbttagcompound);
         } else {
-            WorldGenFactory.a.warn("Skipping Piece with id {}", new Object[] { nbttagcompound.getString("id")});
+            WorldGenFactory.a.warn("Skipping Piece with id {}", nbttagcompound.getString("id"));
         }
 
         return structurepiece;

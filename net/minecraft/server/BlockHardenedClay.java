@@ -8,6 +8,6 @@ public class BlockHardenedClay extends Block {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return MaterialMapColor.q;
+        return MaterialMapColor.r;
     }
 }

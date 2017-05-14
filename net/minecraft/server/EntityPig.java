@@ -1,18 +1,17 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Sets;
-import java.util.Iterator;
 import java.util.Set;
 import javax.annotation.Nullable;
 
 public class EntityPig extends EntityAnimal {
 
-    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityPig.class, DataWatcherRegistry.h);
-    private static final DataWatcherObject<Integer> bx = DataWatcher.a(EntityPig.class, DataWatcherRegistry.b);
-    private static final Set<Item> by = Sets.newHashSet(new Item[] { Items.CARROT, Items.POTATO, Items.BEETROOT});
-    private boolean bA;
-    private int bB;
+    private static final DataWatcherObject<Boolean> bx = DataWatcher.a(EntityPig.class, DataWatcherRegistry.h);
+    private static final DataWatcherObject<Integer> by = DataWatcher.a(EntityPig.class, DataWatcherRegistry.b);
+    private static final Set<Item> bz = Sets.newHashSet(new Item[] { Items.CARROT, Items.POTATO, Items.BEETROOT});
+    private boolean bB;
     private int bC;
+    private int bD;
 
     public EntityPig(World world) {
         super(world);
@@ -24,7 +23,7 @@ public class EntityPig extends EntityAnimal {
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.25D));
         this.goalSelector.a(3, new PathfinderGoalBreed(this, 1.0D));
         this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, Items.CARROT_ON_A_STICK, false));
-        this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, false, EntityPig.by));
+        this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, false, EntityPig.bz));
         this.goalSelector.a(5, new PathfinderGoalFollowParent(this, 1.1D));
         this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
@@ -38,12 +37,12 @@ public class EntityPig extends EntityAnimal {
     }
 
     @Nullable
-    public Entity bw() {
-        return this.bx().isEmpty() ? null : (Entity) this.bx().get(0);
+    public Entity bC() {
+        return this.bD().isEmpty() ? null : (Entity) this.bD().get(0);
     }
 
-    public boolean cR() {
-        Entity entity = this.bw();
+    public boolean cT() {
+        Entity entity = this.bC();
 
         if (!(entity instanceof EntityHuman)) {
             return false;
@@ -55,10 +54,10 @@ public class EntityPig extends EntityAnimal {
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityPig.bx.equals(datawatcherobject) && this.world.isClientSide) {
-            this.bA = true;
-            this.bB = 0;
-            this.bC = ((Integer) this.datawatcher.get(EntityPig.bx)).intValue();
+        if (EntityPig.by.equals(datawatcherobject) && this.world.isClientSide) {
+            this.bB = true;
+            this.bC = 0;
+            this.bD = ((Integer) this.datawatcher.get(EntityPig.by)).intValue();
         }
 
         super.a(datawatcherobject);
@@ -66,8 +65,8 @@ public class EntityPig extends EntityAnimal {
 
     protected void i() {
         super.i();
-        this.datawatcher.register(EntityPig.bw, Boolean.valueOf(false));
-        this.datawatcher.register(EntityPig.bx, Integer.valueOf(0));
+        this.datawatcher.register(EntityPig.bx, Boolean.valueOf(false));
+        this.datawatcher.register(EntityPig.by, Integer.valueOf(0));
     }
 
     public static void a(DataConverterManager dataconvertermanager) {
@@ -84,20 +83,20 @@ public class EntityPig extends EntityAnimal {
         this.setSaddle(nbttagcompound.getBoolean("Saddle"));
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.ep;
+    protected SoundEffect F() {
+        return SoundEffects.fo;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.er;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.fq;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.eq;
+    protected SoundEffect cd() {
+        return SoundEffects.fp;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.et, 0.15F, 1.0F);
+        this.a(SoundEffects.fs, 0.15F, 1.0F);
     }
 
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
@@ -140,14 +139,14 @@ public class EntityPig extends EntityAnimal {
     }
 
     public boolean hasSaddle() {
-        return ((Boolean) this.datawatcher.get(EntityPig.bw)).booleanValue();
+        return ((Boolean) this.datawatcher.get(EntityPig.bx)).booleanValue();
     }
 
     public void setSaddle(boolean flag) {
         if (flag) {
-            this.datawatcher.set(EntityPig.bw, Boolean.valueOf(true));
+            this.datawatcher.set(EntityPig.bx, Boolean.valueOf(true));
         } else {
-            this.datawatcher.set(EntityPig.bw, Boolean.valueOf(false));
+            this.datawatcher.set(EntityPig.bx, Boolean.valueOf(false));
         }
 
     }
@@ -169,24 +168,10 @@ public class EntityPig extends EntityAnimal {
         }
     }
 
-    public void e(float f, float f1) {
-        super.e(f, f1);
-        if (f > 5.0F) {
-            Iterator iterator = this.b(EntityHuman.class).iterator();
+    public void a(float f, float f1, float f2) {
+        Entity entity = this.bD().isEmpty() ? null : (Entity) this.bD().get(0);
 
-            while (iterator.hasNext()) {
-                EntityHuman entityhuman = (EntityHuman) iterator.next();
-
-                entityhuman.b((Statistic) AchievementList.u);
-            }
-        }
-
-    }
-
-    public void g(float f, float f1) {
-        Entity entity = this.bx().isEmpty() ? null : (Entity) this.bx().get(0);
-
-        if (this.isVehicle() && this.cR()) {
+        if (this.isVehicle() && this.cT()) {
             this.yaw = entity.yaw;
             this.lastYaw = this.yaw;
             this.pitch = entity.pitch * 0.5F;
@@ -194,20 +179,20 @@ public class EntityPig extends EntityAnimal {
             this.aN = this.yaw;
             this.aP = this.yaw;
             this.P = 1.0F;
-            this.aR = this.cq() * 0.1F;
-            if (this.bA && this.bB++ > this.bC) {
-                this.bA = false;
+            this.aR = this.cw() * 0.1F;
+            if (this.bB && this.bC++ > this.bD) {
+                this.bB = false;
             }
 
-            if (this.bA()) {
-                float f2 = (float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue() * 0.225F;
+            if (this.bG()) {
+                float f3 = (float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue() * 0.225F;
 
-                if (this.bA) {
-                    f2 += f2 * 1.15F * MathHelper.sin((float) this.bB / (float) this.bC * 3.1415927F);
+                if (this.bB) {
+                    f3 += f3 * 1.15F * MathHelper.sin((float) this.bC / (float) this.bD * 3.1415927F);
                 }
 
-                this.l(f2);
-                super.g(0.0F, 1.0F);
+                this.m(f3);
+                super.a(0.0F, 0.0F, 1.0F);
             } else {
                 this.motX = 0.0D;
                 this.motY = 0.0D;
@@ -217,29 +202,29 @@ public class EntityPig extends EntityAnimal {
             this.aF = this.aG;
             double d0 = this.locX - this.lastX;
             double d1 = this.locZ - this.lastZ;
-            float f3 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;
+            float f4 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;
 
-            if (f3 > 1.0F) {
-                f3 = 1.0F;
+            if (f4 > 1.0F) {
+                f4 = 1.0F;
             }
 
-            this.aG += (f3 - this.aG) * 0.4F;
+            this.aG += (f4 - this.aG) * 0.4F;
             this.aH += this.aG;
         } else {
             this.P = 0.5F;
             this.aR = 0.02F;
-            super.g(f, f1);
+            super.a(f, f1, f2);
         }
     }
 
-    public boolean di() {
-        if (this.bA) {
+    public boolean dk() {
+        if (this.bB) {
             return false;
         } else {
-            this.bA = true;
-            this.bB = 0;
-            this.bC = this.getRandom().nextInt(841) + 140;
-            this.getDataWatcher().set(EntityPig.bx, Integer.valueOf(this.bC));
+            this.bB = true;
+            this.bC = 0;
+            this.bD = this.getRandom().nextInt(841) + 140;
+            this.getDataWatcher().set(EntityPig.by, Integer.valueOf(this.bD));
             return true;
         }
     }
@@ -249,7 +234,7 @@ public class EntityPig extends EntityAnimal {
     }
 
     public boolean e(ItemStack itemstack) {
-        return EntityPig.by.contains(itemstack.getItem());
+        return EntityPig.bz.contains(itemstack.getItem());
     }
 
     public EntityAgeable createChild(EntityAgeable entityageable) {

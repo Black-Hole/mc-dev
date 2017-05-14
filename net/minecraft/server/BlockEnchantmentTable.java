@@ -5,8 +5,8 @@ public class BlockEnchantmentTable extends BlockTileEntity {
     protected static final AxisAlignedBB a = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
 
     protected BlockEnchantmentTable() {
-        super(Material.STONE, MaterialMapColor.D);
-        this.d(0);
+        super(Material.STONE, MaterialMapColor.E);
+        this.e(0);
         this.a(CreativeModeTab.c);
     }
 
@@ -50,9 +50,13 @@ public class BlockEnchantmentTable extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityEnchantTable) {
-                ((TileEntityEnchantTable) tileentity).a(itemstack.getName());
+                ((TileEntityEnchantTable) tileentity).setCustomName(itemstack.getName());
             }
         }
 
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.DOWN ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
     }
 }

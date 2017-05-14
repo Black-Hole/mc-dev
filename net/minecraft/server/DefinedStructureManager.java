@@ -27,7 +27,7 @@ public class DefinedStructureManager {
 
         if (definedstructure == null) {
             definedstructure = new DefinedStructure();
-            this.a.put(minecraftkey.a(), definedstructure);
+            this.a.put(minecraftkey.getKey(), definedstructure);
         }
 
         return definedstructure;
@@ -35,7 +35,7 @@ public class DefinedStructureManager {
 
     @Nullable
     public DefinedStructure b(@Nullable MinecraftServer minecraftserver, MinecraftKey minecraftkey) {
-        String s = minecraftkey.a();
+        String s = minecraftkey.getKey();
 
         if (this.a.containsKey(s)) {
             return (DefinedStructure) this.a.get(s);
@@ -51,7 +51,7 @@ public class DefinedStructureManager {
     }
 
     public boolean a(MinecraftKey minecraftkey) {
-        String s = minecraftkey.a();
+        String s = minecraftkey.getKey();
         File file = new File(this.b, s + ".nbt");
 
         if (!file.exists()) {
@@ -77,7 +77,7 @@ public class DefinedStructureManager {
 
     private boolean c(MinecraftKey minecraftkey) {
         String s = minecraftkey.b();
-        String s1 = minecraftkey.a();
+        String s1 = minecraftkey.getKey();
         InputStream inputstream = null;
 
         boolean flag;
@@ -109,7 +109,7 @@ public class DefinedStructureManager {
     }
 
     public boolean c(@Nullable MinecraftServer minecraftserver, MinecraftKey minecraftkey) {
-        String s = minecraftkey.a();
+        String s = minecraftkey.getKey();
 
         if (minecraftserver != null && this.a.containsKey(s)) {
             File file = new File(this.b);
@@ -147,6 +147,6 @@ public class DefinedStructureManager {
     }
 
     public void b(MinecraftKey minecraftkey) {
-        this.a.remove(minecraftkey.a());
+        this.a.remove(minecraftkey.getKey());
     }
 }

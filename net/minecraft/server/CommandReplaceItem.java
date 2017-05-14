@@ -74,12 +74,12 @@ public class CommandReplaceItem extends CommandAbstract {
             }
 
             ++i;
-            int k = astring.length > i ? a(astring[i++], 1, 64) : 1;
+            int k = astring.length > i ? a(astring[i++], 1, item.getMaxStackSize()) : 1;
             int l = astring.length > i ? a(astring[i++]) : 0;
             ItemStack itemstack = new ItemStack(item, k, l);
 
             if (astring.length > i) {
-                String s1 = a(icommandlistener, astring, i).toPlainText();
+                String s1 = a(astring, i);
 
                 try {
                     itemstack.setTag(MojangsonParser.parse(s1));
@@ -104,7 +104,7 @@ public class CommandReplaceItem extends CommandAbstract {
                     iinventory.setItem(j, itemstack);
                 }
             } else {
-                Entity entity = b(minecraftserver, icommandlistener, astring[1]);
+                Entity entity = c(minecraftserver, icommandlistener, astring[1]);
 
                 icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, 0);
                 if (entity instanceof EntityHuman) {

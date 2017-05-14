@@ -122,7 +122,7 @@ public final class SpawnerCreature {
                                                         }
 
                                                         entityinsentient.setPositionRotation((double) f, (double) k3, (double) f1, worldserver.random.nextFloat() * 360.0F, 0.0F);
-                                                        if (entityinsentient.cM() && entityinsentient.canSpawn()) {
+                                                        if (entityinsentient.P() && entityinsentient.canSpawn()) {
                                                             groupdataentity = entityinsentient.prepare(worldserver.D(new BlockPosition(entityinsentient)), groupdataentity);
                                                             if (entityinsentient.canSpawn()) {
                                                                 ++l2;
@@ -131,7 +131,7 @@ public final class SpawnerCreature {
                                                                 entityinsentient.die();
                                                             }
 
-                                                            if (l2 >= entityinsentient.cQ()) {
+                                                            if (l2 >= entityinsentient.cS()) {
                                                                 continue label120;
                                                             }
                                                         }

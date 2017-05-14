@@ -94,7 +94,7 @@ public class BlockFurnace extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityFurnace) {
-                ((TileEntityFurnace) tileentity).a(itemstack.getName());
+                ((TileEntityFurnace) tileentity).setCustomName(itemstack.getName());
             }
         }
 

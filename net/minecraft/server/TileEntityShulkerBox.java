@@ -26,7 +26,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
         this.l = enumcolor;
     }
 
-    public void F_() {
+    public void e() {
         this.o();
         if (this.i == TileEntityShulkerBox.AnimationPhase.OPENING || this.i == TileEntityShulkerBox.AnimationPhase.CLOSING) {
             this.G();
@@ -173,7 +173,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
             ++this.h;
             this.world.playBlockAction(this.position, this.getBlock(), 1, this.h);
             if (this.h == 1) {
-                this.world.a((EntityHuman) null, this.position, SoundEffects.fB, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                this.world.a((EntityHuman) null, this.position, SoundEffects.gC, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
             }
         }
 
@@ -184,7 +184,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
             --this.h;
             this.world.playBlockAction(this.position, this.getBlock(), 1, this.h);
             if (this.h <= 0) {
-                this.world.a((EntityHuman) null, this.position, SoundEffects.fA, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                this.world.a((EntityHuman) null, this.position, SoundEffects.gB, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
             }
         }
 
@@ -248,7 +248,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
         return this.f;
     }
 
-    public boolean w_() {
+    public boolean x_() {
         Iterator iterator = this.f.iterator();
 
         ItemStack itemstack;
@@ -303,7 +303,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
     }
 
     public boolean F() {
-        return !this.E() || !this.w_() || this.hasCustomName() || this.m != null;
+        return !this.E() || !this.x_() || this.hasCustomName() || this.m != null;
     }
 
     static {

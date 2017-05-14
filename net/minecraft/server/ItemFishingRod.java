@@ -18,8 +18,9 @@ public class ItemFishingRod extends Item {
 
             itemstack.damage(i, entityhuman);
             entityhuman.a(enumhand);
+            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.J, SoundCategory.NEUTRAL, 1.0F, 0.4F / (ItemFishingRod.j.nextFloat() * 0.4F + 0.8F));
         } else {
-            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.I, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemFishingRod.j.nextFloat() * 0.4F + 0.8F));
+            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.L, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemFishingRod.j.nextFloat() * 0.4F + 0.8F));
             if (!world.isClientSide) {
                 EntityFishingHook entityfishinghook = new EntityFishingHook(world, entityhuman);
                 int j = EnchantmentManager.c(itemstack);
@@ -31,7 +32,7 @@ public class ItemFishingRod extends Item {
                 int k = EnchantmentManager.b(itemstack);
 
                 if (k > 0) {
-                    entityfishinghook.b(k);
+                    entityfishinghook.c(k);
                 }
 
                 world.addEntity(entityfishinghook);

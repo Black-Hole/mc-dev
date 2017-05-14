@@ -44,19 +44,19 @@ public class EntityBlaze extends EntityMonster {
         this.datawatcher.register(EntityBlaze.c, Byte.valueOf((byte) 0));
     }
 
-    protected SoundEffect G() {
+    protected SoundEffect F() {
         return SoundEffects.C;
     }
 
-    protected SoundEffect bW() {
+    protected SoundEffect d(DamageSource damagesource) {
         return SoundEffects.F;
     }
 
-    protected SoundEffect bX() {
+    protected SoundEffect cd() {
         return SoundEffects.E;
     }
 
-    public float e(float f) {
+    public float f(float f) {
         return 1.0F;
     }
 
@@ -67,7 +67,7 @@ public class EntityBlaze extends EntityMonster {
 
         if (this.world.isClientSide) {
             if (this.random.nextInt(24) == 0 && !this.isSilent()) {
-                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, SoundEffects.D, this.bC(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
+                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, SoundEffects.D, this.bI(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
             }
 
             for (int i = 0; i < 2; ++i) {
@@ -79,7 +79,7 @@ public class EntityBlaze extends EntityMonster {
     }
 
     protected void M() {
-        if (this.ai()) {
+        if (this.an()) {
             this.damageEntity(DamageSource.DROWN, 1.0F);
         }
 
@@ -102,7 +102,7 @@ public class EntityBlaze extends EntityMonster {
     public void e(float f, float f1) {}
 
     public boolean isBurning() {
-        return this.o();
+        return this.p();
     }
 
     @Nullable
@@ -110,7 +110,7 @@ public class EntityBlaze extends EntityMonster {
         return LootTables.q;
     }
 
-    public boolean o() {
+    public boolean p() {
         return (((Byte) this.datawatcher.get(EntityBlaze.c)).byteValue() & 1) != 0;
     }
 
@@ -126,7 +126,7 @@ public class EntityBlaze extends EntityMonster {
         this.datawatcher.set(EntityBlaze.c, Byte.valueOf(b0));
     }
 
-    protected boolean r_() {
+    protected boolean s_() {
         return true;
     }
 
@@ -201,7 +201,7 @@ public class EntityBlaze extends EntityMonster {
 
                 this.a.getControllerLook().a(entityliving, 10.0F, 10.0F);
             } else {
-                this.a.getNavigation().o();
+                this.a.getNavigation().p();
                 this.a.getControllerMove().a(entityliving.locX, entityliving.locY, entityliving.locZ, 1.0D);
             }
 

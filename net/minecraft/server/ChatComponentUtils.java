@@ -24,7 +24,7 @@ public class ChatComponentUtils {
                 if (entity1 instanceof EntityHuman) {
                     s = entity1.getName();
                 } else {
-                    s = entity1.bf();
+                    s = entity1.bl();
                 }
             }
 
@@ -42,6 +42,8 @@ public class ChatComponentUtils {
             }
         } else if (ichatbasecomponent instanceof ChatComponentText) {
             object = new ChatComponentText(((ChatComponentText) ichatbasecomponent).g());
+        } else if (ichatbasecomponent instanceof ChatComponentKeybind) {
+            object = new ChatComponentKeybind(((ChatComponentKeybind) ichatbasecomponent).h());
         } else {
             if (!(ichatbasecomponent instanceof ChatMessage)) {
                 return ichatbasecomponent;

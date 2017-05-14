@@ -26,7 +26,7 @@ public class CommandStopSound extends CommandAbstract {
         if (astring.length >= 1 && astring.length <= 3) {
             byte b0 = 0;
             int i = b0 + 1;
-            EntityPlayer entityplayer = a(minecraftserver, icommandlistener, astring[b0]);
+            EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[b0]);
             String s = "";
             String s1 = "";
 

@@ -28,8 +28,8 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         this.datawatcher.register(EntityMinecartFurnace.c, Boolean.valueOf(false));
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (this.d > 0) {
             --this.d;
         }
@@ -46,7 +46,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
 
     }
 
-    protected double o() {
+    protected double p() {
         return 0.2D;
     }
 
@@ -70,7 +70,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
                 this.a = 0.0D;
                 this.b = 0.0D;
             } else {
-                double d1 = d0 / this.o();
+                double d1 = d0 / this.p();
 
                 this.a *= d1;
                 this.b *= d1;

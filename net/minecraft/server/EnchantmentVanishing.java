@@ -23,7 +23,7 @@ public class EnchantmentVanishing extends Enchantment {
         return true;
     }
 
-    public boolean d() {
+    public boolean isCursed() {
         return true;
     }
 }

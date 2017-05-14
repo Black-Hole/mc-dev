@@ -41,7 +41,7 @@ public class DragonControllerHold extends AbstractDragonController {
         if (this.b != null && this.b.b()) {
             BlockPosition blockposition = this.a.world.q(new BlockPosition(WorldGenEndTrophy.a));
 
-            i = this.a.db() == null ? 0 : this.a.db().c();
+            i = this.a.dd() == null ? 0 : this.a.dd().c();
             if (this.a.getRandom().nextInt(i + 3) == 0) {
                 this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.c);
                 return;
@@ -61,7 +61,7 @@ public class DragonControllerHold extends AbstractDragonController {
         }
 
         if (this.b == null || this.b.b()) {
-            int j = this.a.o();
+            int j = this.a.p();
 
             i = j;
             if (this.a.getRandom().nextInt(8) == 0) {
@@ -75,7 +75,7 @@ public class DragonControllerHold extends AbstractDragonController {
                 --i;
             }
 
-            if (this.a.db() != null && this.a.db().c() >= 0) {
+            if (this.a.dd() != null && this.a.dd().c() >= 0) {
                 i %= 12;
                 if (i < 0) {
                     i += 12;

@@ -9,7 +9,7 @@ public class BlockJukeBox extends BlockTileEntity {
     }
 
     protected BlockJukeBox() {
-        super(Material.WOOD, MaterialMapColor.l);
+        super(Material.WOOD, MaterialMapColor.m);
         this.y(this.blockStateList.getBlockData().set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false)));
         this.a(CreativeModeTab.c);
     }
@@ -26,13 +26,11 @@ public class BlockJukeBox extends BlockTileEntity {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, ItemStack itemstack) {
-        if (!world.isClientSide) {
-            TileEntity tileentity = world.getTileEntity(blockposition);
+        TileEntity tileentity = world.getTileEntity(blockposition);
 
-            if (tileentity instanceof BlockJukeBox.TileEntityRecordPlayer) {
-                ((BlockJukeBox.TileEntityRecordPlayer) tileentity).setRecord(itemstack.cloneItemStack());
-                world.setTypeAndData(blockposition, iblockdata.set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(true)), 2);
-            }
+        if (tileentity instanceof BlockJukeBox.TileEntityRecordPlayer) {
+            ((BlockJukeBox.TileEntityRecordPlayer) tileentity).setRecord(itemstack.cloneItemStack());
+            world.setTypeAndData(blockposition, iblockdata.set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(true)), 2);
         }
     }
 

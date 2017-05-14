@@ -38,7 +38,7 @@ public class CommandXp extends CommandAbstract {
                 i *= -1;
             }
 
-            EntityPlayer entityplayer = astring.length > 1 ? a(minecraftserver, icommandlistener, astring[1]) : a(icommandlistener);
+            EntityPlayer entityplayer = astring.length > 1 ? b(minecraftserver, icommandlistener, astring[1]) : a(icommandlistener);
 
             if (flag) {
                 icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, entityplayer.expLevel);

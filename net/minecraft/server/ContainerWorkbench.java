@@ -3,13 +3,15 @@ package net.minecraft.server;
 public class ContainerWorkbench extends Container {
 
     public InventoryCrafting craftInventory = new InventoryCrafting(this, 3, 3);
-    public IInventory resultInventory = new InventoryCraftResult();
+    public InventoryCraftResult resultInventory = new InventoryCraftResult();
     private final World g;
     private final BlockPosition h;
+    private final EntityHuman i;
 
     public ContainerWorkbench(PlayerInventory playerinventory, World world, BlockPosition blockposition) {
         this.g = world;
         this.h = blockposition;
+        this.i = playerinventory.player;
         this.a((Slot) (new SlotResult(playerinventory.player, this.craftInventory, this.resultInventory, 0, 124, 35)));
 
         int i;
@@ -31,24 +33,16 @@ public class ContainerWorkbench extends Container {
             this.a(new Slot(playerinventory, i, 8 + i * 18, 142));
         }
 
-        this.a((IInventory) this.craftInventory);
     }
 
     public void a(IInventory iinventory) {
-        this.resultInventory.setItem(0, CraftingManager.getInstance().craft(this.craftInventory, this.g));
+        this.a(this.g, this.i, this.craftInventory, this.resultInventory);
     }
 
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
         if (!this.g.isClientSide) {
-            for (int i = 0; i < 9; ++i) {
-                ItemStack itemstack = this.craftInventory.splitWithoutUpdate(i);
-
-                if (!itemstack.isEmpty()) {
-                    entityhuman.drop(itemstack, false);
-                }
-            }
-
+            this.a(entityhuman, this.g, this.craftInventory);
         }
     }
 

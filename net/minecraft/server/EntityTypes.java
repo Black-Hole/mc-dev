@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -69,7 +70,7 @@ public class EntityTypes {
         Entity entity = a(minecraftkey, world);
 
         if (entity == null) {
-            EntityTypes.f.warn("Skipping Entity with id {}", new Object[] { minecraftkey});
+            EntityTypes.f.warn("Skipping Entity with id {}", minecraftkey);
         } else {
             entity.f(nbttagcompound);
         }
@@ -91,7 +92,21 @@ public class EntityTypes {
         return EntityTypes.e.equals(minecraftkey) || a().contains(minecraftkey);
     }
 
-    public static void b() {
+    public static String b() {
+        StringBuilder stringbuilder = new StringBuilder();
+        Iterator iterator = a().iterator();
+
+        while (iterator.hasNext()) {
+            MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
+
+            stringbuilder.append(minecraftkey).append(", ");
+        }
+
+        stringbuilder.append(EntityTypes.e);
+        return stringbuilder.toString();
+    }
+
+    public static void c() {
         a(1, "item", EntityItem.class, "Item");
         a(2, "xp_orb", EntityExperienceOrb.class, "XPOrb");
         a(3, "area_effect_cloud", EntityAreaEffectCloud.class, "AreaEffectCloud");
@@ -128,6 +143,7 @@ public class EntityTypes {
         a(34, "evocation_illager", EntityEvoker.class, "EvocationIllager");
         a(35, "vex", EntityVex.class, "Vex");
         a(36, "vindication_illager", EntityVindicator.class, "VindicationIllager");
+        a(37, "illusion_illager", EntityIllagerIllusioner.class, "IllusionIllager");
         a(40, "commandblock_minecart", EntityMinecartCommandBlock.class, EntityMinecartAbstract.EnumMinecartType.COMMAND_BLOCK.b());
         a(41, "boat", EntityBoat.class, "Boat");
         a(42, "minecart", EntityMinecartRideable.class, EntityMinecartAbstract.EnumMinecartType.RIDEABLE.b());
@@ -171,6 +187,7 @@ public class EntityTypes {
         a(102, "polar_bear", EntityPolarBear.class, "PolarBear");
         a(103, "llama", EntityLlama.class, "Llama");
         a(104, "llama_spit", EntityLlamaSpit.class, "LlamaSpit");
+        a(105, "parrot", EntityParrot.class, "Parrot");
         a(120, "villager", EntityVillager.class, "Villager");
         a(200, "ender_crystal", EntityEnderCrystal.class, "EnderCrystal");
         a("bat", 4996656, 986895);
@@ -196,6 +213,7 @@ public class EntityTypes {
         a("pig", 15771042, 14377823);
         a("polar_bear", 15921906, 9803152);
         a("rabbit", 10051392, 7555121);
+        a("parrot", 894731, 16711680);
         a("sheep", 15198183, 16758197);
         a("shulker", 9725844, 5060690);
         a("silverfish", 7237230, 3158064);

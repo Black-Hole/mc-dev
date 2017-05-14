@@ -9,7 +9,7 @@ public class BlockChorusFlower extends Block {
     public static final BlockStateInteger AGE = BlockStateInteger.of("age", 0, 5);
 
     protected BlockChorusFlower() {
-        super(Material.PLANT, MaterialMapColor.z);
+        super(Material.PLANT, MaterialMapColor.A);
         this.y(this.blockStateList.getBlockData().set(BlockChorusFlower.AGE, Integer.valueOf(0)));
         this.a(CreativeModeTab.c);
         this.a(true);
@@ -245,5 +245,9 @@ public class BlockChorusFlower extends Block {
             world.setTypeAndData(blockposition.up(k), Blocks.CHORUS_FLOWER.getBlockData().set(BlockChorusFlower.AGE, Integer.valueOf(5)), 2);
         }
 
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 }

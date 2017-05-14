@@ -32,7 +32,7 @@ public class DataInspectorBlockEntity implements DataInspector {
                 boolean flag;
 
                 if (s1 == null) {
-                    DataInspectorBlockEntity.a.warn("Unable to resolve BlockEntity for ItemInstance: {}", new Object[] { s});
+                    DataInspectorBlockEntity.a.warn("Unable to resolve BlockEntity for ItemInstance: {}", s);
                     flag = false;
                 } else {
                     flag = !nbttagcompound2.hasKey("id");

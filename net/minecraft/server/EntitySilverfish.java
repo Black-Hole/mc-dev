@@ -26,7 +26,7 @@ public class EntitySilverfish extends EntityMonster {
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true));
     }
 
-    public double ax() {
+    public double aD() {
         return 0.1D;
     }
 
@@ -45,20 +45,20 @@ public class EntitySilverfish extends EntityMonster {
         return false;
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.fL;
+    protected SoundEffect F() {
+        return SoundEffects.gM;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.fN;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.gO;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.fM;
+    protected SoundEffect cd() {
+        return SoundEffects.gN;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.fO, 0.15F, 1.0F);
+        this.a(SoundEffects.gP, 0.15F, 1.0F);
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
@@ -78,26 +78,26 @@ public class EntitySilverfish extends EntityMonster {
         return LootTables.v;
     }
 
-    public void A_() {
+    public void B_() {
         this.aN = this.yaw;
-        super.A_();
+        super.B_();
     }
 
-    public void i(float f) {
+    public void j(float f) {
         this.yaw = f;
-        super.i(f);
+        super.j(f);
     }
 
     public float a(BlockPosition blockposition) {
         return this.world.getType(blockposition.down()).getBlock() == Blocks.STONE ? 10.0F : super.a(blockposition);
     }
 
-    protected boolean r_() {
+    protected boolean s_() {
         return true;
     }
 
-    public boolean cM() {
-        if (super.cM()) {
+    public boolean P() {
+        if (super.P()) {
             EntityHuman entityhuman = this.world.b(this, 5.0D);
 
             return entityhuman == null;
@@ -123,7 +123,7 @@ public class EntitySilverfish extends EntityMonster {
         public boolean a() {
             if (this.a.getGoalTarget() != null) {
                 return false;
-            } else if (!this.a.getNavigation().n()) {
+            } else if (!this.a.getNavigation().o()) {
                 return false;
             } else {
                 Random random = this.a.getRandom();

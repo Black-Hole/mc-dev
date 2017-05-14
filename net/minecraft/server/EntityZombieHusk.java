@@ -12,28 +12,28 @@ public class EntityZombieHusk extends EntityZombie {
         EntityInsentient.a(dataconvertermanager, EntityZombieHusk.class);
     }
 
-    public boolean cM() {
-        return super.cM() && this.world.h(new BlockPosition(this));
+    public boolean P() {
+        return super.P() && this.world.h(new BlockPosition(this));
     }
 
-    protected boolean o() {
+    protected boolean p() {
         return false;
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.cS;
+    protected SoundEffect F() {
+        return SoundEffects.cY;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.cU;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.da;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.cT;
+    protected SoundEffect cd() {
+        return SoundEffects.cZ;
     }
 
-    protected SoundEffect di() {
-        return SoundEffects.cV;
+    protected SoundEffect dk() {
+        return SoundEffects.db;
     }
 
     @Nullable
@@ -53,7 +53,7 @@ public class EntityZombieHusk extends EntityZombie {
         return flag;
     }
 
-    protected ItemStack dj() {
+    protected ItemStack dl() {
         return ItemStack.a;
     }
 }

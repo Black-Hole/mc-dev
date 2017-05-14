@@ -354,7 +354,7 @@ public class Chunk {
     }
 
     public IBlockData a(final int i, final int j, final int k) {
-        if (this.world.L() == WorldType.DEBUG_ALL_BLOCK_STATES) {
+        if (this.world.N() == WorldType.DEBUG_ALL_BLOCK_STATES) {
             IBlockData iblockdata = null;
 
             if (j == 60) {
@@ -549,7 +549,7 @@ public class Chunk {
         int j = MathHelper.floor(entity.locZ / 16.0D);
 
         if (i != this.locX || j != this.locZ) {
-            Chunk.e.warn("Wrong location! ({}, {}) should be ({}, {}), {}", new Object[] { Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(this.locX), Integer.valueOf(this.locZ), entity});
+            Chunk.e.warn("Wrong location! ({}, {}) should be ({}, {}), {}", Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(this.locX), Integer.valueOf(this.locZ), entity);
             entity.die();
         }
 
@@ -688,7 +688,7 @@ public class Chunk {
 
     }
 
-    public void e() {
+    public void markDirty() {
         this.s = true;
     }
 
@@ -711,7 +711,7 @@ public class Chunk {
                             list.add(entity1);
                         }
 
-                        Entity[] aentity = entity1.aT();
+                        Entity[] aentity = entity1.aZ();
 
                         if (aentity != null) {
                             Entity[] aentity1 = aentity;
@@ -804,12 +804,12 @@ public class Chunk {
     protected void a(ChunkGenerator chunkgenerator) {
         if (this.isDone()) {
             if (chunkgenerator.a(this, this.locX, this.locZ)) {
-                this.e();
+                this.markDirty();
             }
         } else {
             this.o();
             chunkgenerator.recreateStructures(this.locX, this.locZ);
-            this.e();
+            this.markDirty();
         }
 
     }
@@ -900,7 +900,7 @@ public class Chunk {
 
     public void a(ChunkSection[] achunksection) {
         if (this.sections.length != achunksection.length) {
-            Chunk.e.warn("Could not set level chunk sections, array length is {} instead of {}", new Object[] { Integer.valueOf(achunksection.length), Integer.valueOf(this.sections.length)});
+            Chunk.e.warn("Could not set level chunk sections, array length is {} instead of {}", Integer.valueOf(achunksection.length), Integer.valueOf(this.sections.length));
         } else {
             System.arraycopy(achunksection, 0, this.sections, 0, this.sections.length);
         }
@@ -928,7 +928,7 @@ public class Chunk {
 
     public void a(byte[] abyte) {
         if (this.g.length != abyte.length) {
-            Chunk.e.warn("Could not set level chunk biomes, array length is {} instead of {}", new Object[] { Integer.valueOf(abyte.length), Integer.valueOf(this.g.length)});
+            Chunk.e.warn("Could not set level chunk biomes, array length is {} instead of {}", Integer.valueOf(abyte.length), Integer.valueOf(this.g.length));
         } else {
             System.arraycopy(abyte, 0, this.g, 0, this.g.length);
         }
@@ -984,7 +984,7 @@ public class Chunk {
         BlockPosition blockposition = new BlockPosition(this.locX << 4, 0, this.locZ << 4);
 
         if (this.world.worldProvider.m()) {
-            if (this.world.areChunksLoadedBetween(blockposition.a(-1, 0, -1), blockposition.a(16, this.world.K(), 16))) {
+            if (this.world.areChunksLoadedBetween(blockposition.a(-1, 0, -1), blockposition.a(16, this.world.getSeaLevel(), 16))) {
                 label42:
                 for (int i = 0; i < 16; ++i) {
                     for (int j = 0; j < 16; ++j) {
@@ -1055,11 +1055,11 @@ public class Chunk {
 
         int l;
 
-        for (l = k + 16 - 1; l > this.world.K() || l > 0 && !flag1; --l) {
+        for (l = k + 16 - 1; l > this.world.getSeaLevel() || l > 0 && !flag1; --l) {
             blockposition_mutableblockposition.c(blockposition_mutableblockposition.getX(), l, blockposition_mutableblockposition.getZ());
             int i1 = this.b((BlockPosition) blockposition_mutableblockposition);
 
-            if (i1 == 255 && blockposition_mutableblockposition.getY() < this.world.K()) {
+            if (i1 == 255 && blockposition_mutableblockposition.getY() < this.world.getSeaLevel()) {
                 flag1 = true;
             }
 
@@ -1094,7 +1094,7 @@ public class Chunk {
 
     public void a(int[] aint) {
         if (this.heightMap.length != aint.length) {
-            Chunk.e.warn("Could not set level chunk heightmap, array length is {} instead of {}", new Object[] { Integer.valueOf(aint.length), Integer.valueOf(this.heightMap.length)});
+            Chunk.e.warn("Could not set level chunk heightmap, array length is {} instead of {}", Integer.valueOf(aint.length), Integer.valueOf(this.heightMap.length));
         } else {
             System.arraycopy(aint, 0, this.heightMap, 0, this.heightMap.length);
         }

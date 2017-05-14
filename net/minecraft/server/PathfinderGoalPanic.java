@@ -4,24 +4,24 @@ import javax.annotation.Nullable;
 
 public class PathfinderGoalPanic extends PathfinderGoal {
 
-    private final EntityCreature b;
-    protected double a;
-    private double c;
-    private double d;
-    private double e;
+    protected final EntityCreature a;
+    protected double b;
+    protected double c;
+    protected double d;
+    protected double e;
 
     public PathfinderGoalPanic(EntityCreature entitycreature, double d0) {
-        this.b = entitycreature;
-        this.a = d0;
+        this.a = entitycreature;
+        this.b = d0;
         this.a(1);
     }
 
     public boolean a() {
-        if (this.b.getLastDamager() == null && !this.b.isBurning()) {
+        if (this.a.getLastDamager() == null && !this.a.isBurning()) {
             return false;
         } else {
-            if (this.b.isBurning()) {
-                BlockPosition blockposition = this.a(this.b.world, this.b, 5, 4);
+            if (this.a.isBurning()) {
+                BlockPosition blockposition = this.a(this.a.world, this.a, 5, 4);
 
                 if (blockposition != null) {
                     this.c = (double) blockposition.getX();
@@ -35,8 +35,8 @@ public class PathfinderGoalPanic extends PathfinderGoal {
         }
     }
 
-    private boolean f() {
-        Vec3D vec3d = RandomPositionGenerator.a(this.b, 5, 4);
+    protected boolean f() {
+        Vec3D vec3d = RandomPositionGenerator.a(this.a, 5, 4);
 
         if (vec3d == null) {
             return false;
@@ -49,11 +49,11 @@ public class PathfinderGoalPanic extends PathfinderGoal {
     }
 
     public void c() {
-        this.b.getNavigation().a(this.c, this.d, this.e, this.a);
+        this.a.getNavigation().a(this.c, this.d, this.e, this.b);
     }
 
     public boolean b() {
-        return !this.b.getNavigation().n();
+        return !this.a.getNavigation().o();
     }
 
     @Nullable

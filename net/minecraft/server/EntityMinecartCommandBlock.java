@@ -26,7 +26,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
             return EntityMinecartCommandBlock.this;
         }
 
-        public MinecraftServer B_() {
+        public MinecraftServer C_() {
             return EntityMinecartCommandBlock.this.world.getMinecraftServer();
         }
     };
@@ -112,7 +112,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
     }
 
-    public boolean bu() {
+    public boolean bA() {
         return true;
     }
 }

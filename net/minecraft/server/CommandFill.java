@@ -61,7 +61,7 @@ public class CommandFill extends CommandAbstract {
                 boolean flag = false;
 
                 if (astring.length >= 10 && block.isTileEntity()) {
-                    String s = a(icommandlistener, astring, 9).toPlainText();
+                    String s = a(astring, 9);
 
                     try {
                         nbttagcompound = MojangsonParser.parse(s);
@@ -74,71 +74,71 @@ public class CommandFill extends CommandAbstract {
                 ArrayList arraylist = Lists.newArrayList();
 
                 i = 0;
+                Iterator iterator = BlockPosition.b(blockposition2, blockposition3).iterator();
 
-                for (int l = blockposition2.getZ(); l <= blockposition3.getZ(); ++l) {
-                    for (int i1 = blockposition2.getY(); i1 <= blockposition3.getY(); ++i1) {
-                        for (int j1 = blockposition2.getX(); j1 <= blockposition3.getX(); ++j1) {
-                            BlockPosition blockposition4 = new BlockPosition(j1, i1, l);
+                Block block1;
 
-                            if (astring.length >= 9) {
-                                if (!"outline".equals(astring[8]) && !"hollow".equals(astring[8])) {
-                                    if ("destroy".equals(astring[8])) {
-                                        world.setAir(blockposition4, true);
-                                    } else if ("keep".equals(astring[8])) {
-                                        if (!world.isEmpty(blockposition4)) {
-                                            continue;
-                                        }
-                                    } else if ("replace".equals(astring[8]) && !block.isTileEntity() && astring.length > 9) {
-                                        Block block1 = CommandAbstract.b(icommandlistener, astring[9]);
+                while (iterator.hasNext()) {
+                    BlockPosition.MutableBlockPosition blockposition_mutableblockposition = (BlockPosition.MutableBlockPosition) iterator.next();
 
-                                        if (world.getType(blockposition4).getBlock() != block1 || astring.length > 10 && !"-1".equals(astring[10]) && !"*".equals(astring[10]) && !CommandAbstract.b(block1, astring[10]).apply(world.getType(blockposition4))) {
-                                            continue;
-                                        }
-                                    }
-                                } else if (j1 != blockposition2.getX() && j1 != blockposition3.getX() && i1 != blockposition2.getY() && i1 != blockposition3.getY() && l != blockposition2.getZ() && l != blockposition3.getZ()) {
-                                    if ("hollow".equals(astring[8])) {
-                                        world.setTypeAndData(blockposition4, Blocks.AIR.getBlockData(), 2);
-                                        arraylist.add(blockposition4);
-                                    }
+                    if (astring.length >= 9) {
+                        if (!"outline".equals(astring[8]) && !"hollow".equals(astring[8])) {
+                            if ("destroy".equals(astring[8])) {
+                                world.setAir(blockposition_mutableblockposition, true);
+                            } else if ("keep".equals(astring[8])) {
+                                if (!world.isEmpty(blockposition_mutableblockposition)) {
+                                    continue;
+                                }
+                            } else if ("replace".equals(astring[8]) && !block.isTileEntity() && astring.length > 9) {
+                                block1 = CommandAbstract.b(icommandlistener, astring[9]);
+                                if (world.getType(blockposition_mutableblockposition).getBlock() != block1 || astring.length > 10 && !"-1".equals(astring[10]) && !"*".equals(astring[10]) && !CommandAbstract.b(block1, astring[10]).apply(world.getType(blockposition_mutableblockposition))) {
                                     continue;
                                 }
                             }
+                        } else {
+                            int l = blockposition_mutableblockposition.getX();
+                            int i1 = blockposition_mutableblockposition.getY();
+                            int j1 = blockposition_mutableblockposition.getZ();
 
-                            TileEntity tileentity = world.getTileEntity(blockposition4);
-
-                            if (tileentity != null) {
-                                if (tileentity instanceof IInventory) {
-                                    ((IInventory) tileentity).clear();
+                            if (l != blockposition2.getX() && l != blockposition3.getX() && i1 != blockposition2.getY() && i1 != blockposition3.getY() && j1 != blockposition2.getZ() && j1 != blockposition3.getZ()) {
+                                if ("hollow".equals(astring[8])) {
+                                    world.setTypeAndData(blockposition_mutableblockposition, Blocks.AIR.getBlockData(), 2);
+                                    arraylist.add(blockposition_mutableblockposition);
                                 }
-
-                                world.setTypeAndData(blockposition4, Blocks.BARRIER.getBlockData(), block == Blocks.BARRIER ? 2 : 4);
+                                continue;
                             }
+                        }
+                    }
 
-                            if (world.setTypeAndData(blockposition4, iblockdata, 2)) {
-                                arraylist.add(blockposition4);
-                                ++i;
-                                if (flag) {
-                                    TileEntity tileentity1 = world.getTileEntity(blockposition4);
+                    TileEntity tileentity = world.getTileEntity(blockposition_mutableblockposition);
 
-                                    if (tileentity1 != null) {
-                                        nbttagcompound.setInt("x", blockposition4.getX());
-                                        nbttagcompound.setInt("y", blockposition4.getY());
-                                        nbttagcompound.setInt("z", blockposition4.getZ());
-                                        tileentity1.a(nbttagcompound);
-                                    }
-                                }
+                    if (tileentity != null && tileentity instanceof IInventory) {
+                        ((IInventory) tileentity).clear();
+                    }
+
+                    if (world.setTypeAndData(blockposition_mutableblockposition, iblockdata, 2)) {
+                        arraylist.add(blockposition_mutableblockposition);
+                        ++i;
+                        if (flag) {
+                            TileEntity tileentity1 = world.getTileEntity(blockposition_mutableblockposition);
+
+                            if (tileentity1 != null) {
+                                nbttagcompound.setInt("x", blockposition_mutableblockposition.getX());
+                                nbttagcompound.setInt("y", blockposition_mutableblockposition.getY());
+                                nbttagcompound.setInt("z", blockposition_mutableblockposition.getZ());
+                                tileentity1.a(nbttagcompound);
                             }
                         }
                     }
                 }
 
-                Iterator iterator = arraylist.iterator();
+                iterator = arraylist.iterator();
 
                 while (iterator.hasNext()) {
-                    BlockPosition blockposition5 = (BlockPosition) iterator.next();
-                    Block block2 = world.getType(blockposition5).getBlock();
+                    BlockPosition blockposition4 = (BlockPosition) iterator.next();
 
-                    world.update(blockposition5, block2, false);
+                    block1 = world.getType(blockposition4).getBlock();
+                    world.update(blockposition4, block1, false);
                 }
 
                 if (i <= 0) {

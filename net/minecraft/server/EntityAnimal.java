@@ -1,19 +1,22 @@
 package net.minecraft.server;
 
+import java.util.UUID;
+import javax.annotation.Nullable;
+
 public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
 
-    protected Block bz;
-    private int bw;
-    private EntityHuman bx;
+    protected Block bA;
+    private int bx;
+    private UUID by;
 
     public EntityAnimal(World world) {
         super(world);
-        this.bz = Blocks.GRASS;
+        this.bA = Blocks.GRASS;
     }
 
     protected void M() {
         if (this.getAge() != 0) {
-            this.bw = 0;
+            this.bx = 0;
         }
 
         super.M();
@@ -22,12 +25,12 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
     public void n() {
         super.n();
         if (this.getAge() != 0) {
-            this.bw = 0;
+            this.bx = 0;
         }
 
-        if (this.bw > 0) {
-            --this.bw;
-            if (this.bw % 10 == 0) {
+        if (this.bx > 0) {
+            --this.bx;
+            if (this.bx % 10 == 0) {
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = this.random.nextGaussian() * 0.02D;
                 double d2 = this.random.nextGaussian() * 0.02D;
@@ -42,36 +45,41 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            this.bw = 0;
+            this.bx = 0;
             return super.damageEntity(damagesource, f);
         }
     }
 
     public float a(BlockPosition blockposition) {
-        return this.world.getType(blockposition.down()).getBlock() == this.bz ? 10.0F : this.world.n(blockposition) - 0.5F;
+        return this.world.getType(blockposition.down()).getBlock() == this.bA ? 10.0F : this.world.n(blockposition) - 0.5F;
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("InLove", this.bw);
+        nbttagcompound.setInt("InLove", this.bx);
+        if (this.by != null) {
+            nbttagcompound.a("LoveCause", this.by);
+        }
+
     }
 
-    public double ax() {
+    public double aD() {
         return 0.14D;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.bw = nbttagcompound.getInt("InLove");
+        this.bx = nbttagcompound.getInt("InLove");
+        this.by = nbttagcompound.b("LoveCause") ? nbttagcompound.a("LoveCause") : null;
     }
 
-    public boolean cM() {
+    public boolean P() {
         int i = MathHelper.floor(this.locX);
         int j = MathHelper.floor(this.getBoundingBox().b);
         int k = MathHelper.floor(this.locZ);
         BlockPosition blockposition = new BlockPosition(i, j, k);
 
-        return this.world.getType(blockposition.down()).getBlock() == this.bz && this.world.j(blockposition) > 8 && super.cM();
+        return this.world.getType(blockposition.down()).getBlock() == this.bA && this.world.j(blockposition) > 8 && super.P();
     }
 
     public int C() {
@@ -94,9 +102,9 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (!itemstack.isEmpty()) {
-            if (this.e(itemstack) && this.getAge() == 0 && this.bw <= 0) {
+            if (this.e(itemstack) && this.getAge() == 0 && this.bx <= 0) {
                 this.a(entityhuman, itemstack);
-                this.c(entityhuman);
+                this.f(entityhuman);
                 return true;
             }
 
@@ -117,22 +125,28 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
 
     }
 
-    public void c(EntityHuman entityhuman) {
-        this.bw = 600;
-        this.bx = entityhuman;
+    public void f(@Nullable EntityHuman entityhuman) {
+        this.bx = 600;
+        if (entityhuman != null) {
+            this.by = entityhuman.getUniqueID();
+        }
+
         this.world.broadcastEntityEffect(this, (byte) 18);
     }
 
-    public EntityHuman getBreedCause() {
-        return this.bx;
+    @Nullable
+    public EntityPlayer getBreedCause() {
+        EntityHuman entityhuman = this.world.b(this.by);
+
+        return entityhuman instanceof EntityPlayer ? (EntityPlayer) entityhuman : null;
     }
 
     public boolean isInLove() {
-        return this.bw > 0;
+        return this.bx > 0;
     }
 
     public void resetLove() {
-        this.bw = 0;
+        this.bx = 0;
     }
 
     public boolean mate(EntityAnimal entityanimal) {

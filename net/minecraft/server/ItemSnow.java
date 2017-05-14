@@ -32,6 +32,10 @@ public class ItemSnow extends ItemBlock {
                         SoundEffectType soundeffecttype = this.a.getStepSound();
 
                         world.a(entityhuman, blockposition1, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
+                        if (entityhuman instanceof EntityPlayer) {
+                            CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition, itemstack);
+                        }
+
                         itemstack.subtract(1);
                         return EnumInteractionResult.SUCCESS;
                     }

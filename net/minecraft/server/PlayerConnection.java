@@ -59,7 +59,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         entityplayer.playerConnection = this;
     }
 
-    public void F_() {
+    public void e() {
         this.syncPosition();
         this.player.playerTick();
         this.player.setLocation(this.l, this.m, this.n, this.player.yaw, this.player.pitch);
@@ -67,7 +67,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         this.processedMovePackets = this.receivedMovePackets;
         if (this.B) {
             if (++this.C > 80) {
-                PlayerConnection.LOGGER.warn("{} was kicked for floating too long!", new Object[] { this.player.getName()});
+                PlayerConnection.LOGGER.warn("{} was kicked for floating too long!", this.player.getName());
                 this.disconnect("Flying is not enabled on this server");
                 return;
             }
@@ -77,16 +77,16 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         }
 
         this.r = this.player.getVehicle();
-        if (this.r != this.player && this.r.bw() == this.player) {
+        if (this.r != this.player && this.r.bC() == this.player) {
             this.s = this.r.locX;
             this.t = this.r.locY;
             this.u = this.r.locZ;
             this.v = this.r.locX;
             this.w = this.r.locY;
             this.x = this.r.locZ;
-            if (this.D && this.player.getVehicle().bw() == this.player) {
+            if (this.D && this.player.getVehicle().bC() == this.player) {
                 if (++this.E > 80) {
-                    PlayerConnection.LOGGER.warn("{} was kicked for floating a vehicle too long!", new Object[] { this.player.getName()});
+                    PlayerConnection.LOGGER.warn("{} was kicked for floating a vehicle too long!", this.player.getName());
                     this.disconnect("Flying is not enabled on this server");
                     return;
                 }
@@ -103,7 +103,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         this.minecraftServer.methodProfiler.a("keepAlive");
         if ((long) this.e - this.h > 40L) {
             this.h = (long) this.e;
-            this.g = this.e();
+            this.g = this.d();
             this.f = (int) this.g;
             this.sendPacket(new PacketPlayOutKeepAlive(this.f));
         }
@@ -117,7 +117,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             --this.j;
         }
 
-        if (this.player.I() > 0L && this.minecraftServer.getIdleTimeout() > 0 && MinecraftServer.aw() - this.player.I() > (long) (this.minecraftServer.getIdleTimeout() * 1000 * 60)) {
+        if (this.player.J() > 0L && this.minecraftServer.getIdleTimeout() > 0 && MinecraftServer.aw() - this.player.J() > (long) (this.minecraftServer.getIdleTimeout() * 1000 * 60)) {
             this.disconnect("You have been idle for too long!");
         }
 
@@ -172,7 +172,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         } else {
             Entity entity = this.player.getVehicle();
 
-            if (entity != this.player && entity.bw() == this.player && entity == this.r) {
+            if (entity != this.player && entity.bC() == this.player && entity == this.r) {
                 WorldServer worldserver = this.player.x();
                 double d0 = entity.locX;
                 double d1 = entity.locY;
@@ -189,7 +189,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                 double d10 = d6 * d6 + d7 * d7 + d8 * d8;
 
                 if (d10 - d9 > 100.0D && (!this.minecraftServer.R() || !this.minecraftServer.Q().equals(entity.getName()))) {
-                    PlayerConnection.LOGGER.warn("{} (vehicle of {}) moved too quickly! {},{},{}", new Object[] { entity.getName(), this.player.getName(), Double.valueOf(d6), Double.valueOf(d7), Double.valueOf(d8)});
+                    PlayerConnection.LOGGER.warn("{} (vehicle of {}) moved too quickly! {},{},{}", entity.getName(), this.player.getName(), Double.valueOf(d6), Double.valueOf(d7), Double.valueOf(d8));
                     this.networkManager.sendPacket(new PacketPlayOutVehicleMove(entity));
                     return;
                 }
@@ -214,7 +214,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
                 if (d10 > 0.0625D) {
                     flag1 = true;
-                    PlayerConnection.LOGGER.warn("{} moved wrongly!", new Object[] { entity.getName()});
+                    PlayerConnection.LOGGER.warn("{} moved wrongly!", entity.getName());
                 }
 
                 entity.setLocation(d3, d4, d5, f, f1);
@@ -241,14 +241,25 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         PlayerConnectionUtils.ensureMainThread(packetplayinteleportaccept, this, this.player.x());
         if (packetplayinteleportaccept.a() == this.teleportAwait) {
             this.player.setLocation(this.teleportPos.x, this.teleportPos.y, this.teleportPos.z, this.player.yaw, this.player.pitch);
-            if (this.player.K()) {
+            if (this.player.L()) {
                 this.o = this.teleportPos.x;
                 this.p = this.teleportPos.y;
                 this.q = this.teleportPos.z;
-                this.player.L();
+                this.player.M();
             }
 
             this.teleportPos = null;
+        }
+
+    }
+
+    public void a(PacketPlayInRecipeDisplayed packetplayinrecipedisplayed) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinrecipedisplayed, this, this.player.x());
+        if (packetplayinrecipedisplayed.a() == PacketPlayInRecipeDisplayed.a) {
+            this.player.F().d(packetplayinrecipedisplayed.b());
+        } else if (packetplayinrecipedisplayed.a() == PacketPlayInRecipeDisplayed.b) {
+            this.player.F().a(packetplayinrecipedisplayed.c());
+            this.player.F().b(packetplayinrecipedisplayed.d());
         }
 
     }
@@ -302,15 +313,15 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             int i = this.receivedMovePackets - this.processedMovePackets;
 
                             if (i > 5) {
-                                PlayerConnection.LOGGER.debug("{} is sending move packets too frequently ({} packets since last tick)", new Object[] { this.player.getName(), Integer.valueOf(i)});
+                                PlayerConnection.LOGGER.debug("{} is sending move packets too frequently ({} packets since last tick)", this.player.getName(), Integer.valueOf(i));
                                 i = 1;
                             }
 
-                            if (!this.player.K() && (!this.player.x().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.cH())) {
-                                float f2 = this.player.cH() ? 300.0F : 100.0F;
+                            if (!this.player.L() && (!this.player.x().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.cN())) {
+                                float f2 = this.player.cN() ? 300.0F : 100.0F;
 
                                 if (d11 - d10 > (double) (f2 * (float) i) && (!this.minecraftServer.R() || !this.minecraftServer.Q().equals(this.player.getName()))) {
-                                    PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", new Object[] { this.player.getName(), Double.valueOf(d7), Double.valueOf(d8), Double.valueOf(d9)});
+                                    PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", this.player.getName(), Double.valueOf(d7), Double.valueOf(d8), Double.valueOf(d9));
                                     this.a(this.player.locX, this.player.locY, this.player.locZ, this.player.yaw, this.player.pitch);
                                     return;
                                 }
@@ -322,7 +333,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             d8 = d5 - this.p;
                             d9 = d6 - this.q;
                             if (this.player.onGround && !packetplayinflying.a() && d8 > 0.0D) {
-                                this.player.cm();
+                                this.player.cs();
                             }
 
                             this.player.move(EnumMoveType.PLAYER, d7, d8, d9);
@@ -339,9 +350,9 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             d11 = d7 * d7 + d8 * d8 + d9 * d9;
                             boolean flag1 = false;
 
-                            if (!this.player.K() && d11 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative() && this.player.playerInteractManager.getGameMode() != EnumGamemode.SPECTATOR) {
+                            if (!this.player.L() && d11 > 0.0625D && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative() && this.player.playerInteractManager.getGameMode() != EnumGamemode.SPECTATOR) {
                                 flag1 = true;
-                                PlayerConnection.LOGGER.warn("{} moved wrongly!", new Object[] { this.player.getName()});
+                                PlayerConnection.LOGGER.warn("{} moved wrongly!", this.player.getName());
                             }
 
                             this.player.setLocation(d4, d5, d6, f, f1);
@@ -357,7 +368,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
                             this.B = d12 >= -0.03125D;
                             this.B &= !this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly;
-                            this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.cH() && !worldserver.c(this.player.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
+                            this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.cN() && !worldserver.c(this.player.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
                             this.player.onGround = packetplayinflying.a();
                             this.minecraftServer.getPlayerList().d(this.player);
                             this.player.a(this.player.locY - d3, packetplayinflying.a());
@@ -488,7 +499,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             ChatMessage chatmessage = new ChatMessage("build.tooHigh", new Object[] { Integer.valueOf(this.minecraftServer.getMaxBuildHeight())});
 
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
-            this.player.playerConnection.sendPacket(new PacketPlayOutChat(chatmessage, (byte) 2));
+            this.player.playerConnection.sendPacket(new PacketPlayOutChat(chatmessage, ChatMessageType.GAME_INFO));
         } else if (this.teleportPos == null && this.player.d((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && !this.minecraftServer.a(worldserver, blockposition, this.player) && worldserver.getWorldBorder().a(blockposition)) {
             this.player.playerInteractManager.a(this.player, worldserver, itemstack, enumhand, blockposition, enumdirection, packetplayinuseitem.d(), packetplayinuseitem.e(), packetplayinuseitem.f());
         }
@@ -564,7 +575,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
     public void a(PacketPlayInBoatMove packetplayinboatmove) {
         PlayerConnectionUtils.ensureMainThread(packetplayinboatmove, this, this.player.x());
-        Entity entity = this.player.bB();
+        Entity entity = this.player.bH();
 
         if (entity instanceof EntityBoat) {
             ((EntityBoat) entity).a(packetplayinboatmove.a(), packetplayinboatmove.b());
@@ -573,13 +584,13 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     }
 
     public void a(IChatBaseComponent ichatbasecomponent) {
-        PlayerConnection.LOGGER.info("{} lost connection: {}", new Object[] { this.player.getName(), ichatbasecomponent});
+        PlayerConnection.LOGGER.info("{} lost connection: {}", this.player.getName(), ichatbasecomponent);
         this.minecraftServer.aD();
         ChatMessage chatmessage = new ChatMessage("multiplayer.player.left", new Object[] { this.player.getScoreboardDisplayName()});
 
         chatmessage.getChatModifier().setColor(EnumChatFormat.YELLOW);
         this.minecraftServer.getPlayerList().sendMessage(chatmessage);
-        this.player.t();
+        this.player.s();
         this.minecraftServer.getPlayerList().disconnect(this.player);
         if (this.minecraftServer.R() && this.player.getName().equals(this.minecraftServer.Q())) {
             PlayerConnection.LOGGER.info("Stopping singleplayer server as player logged out");
@@ -593,7 +604,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             PacketPlayOutChat packetplayoutchat = (PacketPlayOutChat) packet;
             EntityHuman.EnumChatVisibility entityhuman_enumchatvisibility = this.player.getChatFlags();
 
-            if (entityhuman_enumchatvisibility == EntityHuman.EnumChatVisibility.HIDDEN && packetplayoutchat.c() != 2) {
+            if (entityhuman_enumchatvisibility == EntityHuman.EnumChatVisibility.HIDDEN && packetplayoutchat.c() != ChatMessageType.GAME_INFO) {
                 return;
             }
 
@@ -627,7 +638,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             this.player.inventory.itemInHandIndex = packetplayinhelditemslot.a();
             this.player.resetIdleTimer();
         } else {
-            PlayerConnection.LOGGER.warn("{} tried to set an invalid carried item", new Object[] { this.player.getName()});
+            PlayerConnection.LOGGER.warn("{} tried to set an invalid carried item", this.player.getName());
         }
     }
 
@@ -668,7 +679,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     }
 
     private void handleCommand(String s) {
-        this.minecraftServer.getCommandHandler().a(this.player, s);
+        this.minecraftServer.getCommandHandler().b(this.player, s);
     }
 
     public void a(PacketPlayInArmAnimation packetplayinarmanimation) {
@@ -707,38 +718,38 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             break;
 
         case START_RIDING_JUMP:
-            if (this.player.bB() instanceof IJumpable) {
-                ijumpable = (IJumpable) this.player.bB();
+            if (this.player.bH() instanceof IJumpable) {
+                ijumpable = (IJumpable) this.player.bH();
                 int i = packetplayinentityaction.c();
 
                 if (ijumpable.a() && i > 0) {
-                    ijumpable.b(i);
+                    ijumpable.b_(i);
                 }
             }
             break;
 
         case STOP_RIDING_JUMP:
-            if (this.player.bB() instanceof IJumpable) {
-                ijumpable = (IJumpable) this.player.bB();
-                ijumpable.q_();
+            if (this.player.bH() instanceof IJumpable) {
+                ijumpable = (IJumpable) this.player.bH();
+                ijumpable.r_();
             }
             break;
 
         case OPEN_INVENTORY:
-            if (this.player.bB() instanceof EntityHorseAbstract) {
-                ((EntityHorseAbstract) this.player.bB()).f((EntityHuman) this.player);
+            if (this.player.bH() instanceof EntityHorseAbstract) {
+                ((EntityHorseAbstract) this.player.bH()).c((EntityHuman) this.player);
             }
             break;
 
         case START_FALL_FLYING:
-            if (!this.player.onGround && this.player.motY < 0.0D && !this.player.cH() && !this.player.isInWater()) {
+            if (!this.player.onGround && this.player.motY < 0.0D && !this.player.cN() && !this.player.isInWater()) {
                 ItemStack itemstack = this.player.getEquipment(EnumItemSlot.CHEST);
 
                 if (itemstack.getItem() == Items.cS && ItemElytra.d(itemstack)) {
-                    this.player.M();
+                    this.player.N();
                 }
             } else {
-                this.player.N();
+                this.player.O();
             }
             break;
 
@@ -810,17 +821,13 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
         case REQUEST_STATS:
             this.player.getStatisticManager().a(this.player);
-            break;
-
-        case OPEN_INVENTORY_ACHIEVEMENT:
-            this.player.b((Statistic) AchievementList.f);
         }
 
     }
 
     public void a(PacketPlayInCloseWindow packetplayinclosewindow) {
         PlayerConnectionUtils.ensureMainThread(packetplayinclosewindow, this, this.player.x());
-        this.player.s();
+        this.player.r();
     }
 
     public void a(PacketPlayInWindowClick packetplayinwindowclick) {
@@ -862,6 +869,79 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             }
         }
 
+    }
+
+    public void a(PacketPlayInAutoRecipe packetplayinautorecipe) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinautorecipe, this, this.player.x());
+        this.player.resetIdleTimer();
+        if (this.player.activeContainer.windowId == packetplayinautorecipe.a() && this.player.activeContainer.c(this.player)) {
+            this.player.playerConnection.sendPacket(new PacketPlayOutTransaction(packetplayinautorecipe.a(), packetplayinautorecipe.b(), true));
+            Iterator iterator;
+            PacketPlayInAutoRecipe.a packetplayinautorecipe_a;
+            ItemStack itemstack;
+            int i;
+
+            if (!packetplayinautorecipe.d().isEmpty()) {
+                iterator = packetplayinautorecipe.d().iterator();
+
+                while (iterator.hasNext()) {
+                    packetplayinautorecipe_a = (PacketPlayInAutoRecipe.a) iterator.next();
+                    itemstack = this.player.activeContainer.getSlot(packetplayinautorecipe_a.b).getItem();
+                    if (this.a(packetplayinautorecipe_a.a, itemstack)) {
+                        i = packetplayinautorecipe_a.a.getCount();
+                        if (packetplayinautorecipe_a.c == -1) {
+                            this.player.drop(packetplayinautorecipe_a.a, true);
+                        } else {
+                            ItemStack itemstack1 = this.player.inventory.getItem(packetplayinautorecipe_a.c);
+
+                            if (itemstack1.isEmpty()) {
+                                this.player.inventory.setItem(packetplayinautorecipe_a.c, packetplayinautorecipe_a.a);
+                            } else {
+                                itemstack1.add(i);
+                            }
+                        }
+
+                        if (itemstack.getCount() == i) {
+                            this.player.activeContainer.setItem(packetplayinautorecipe_a.b, ItemStack.a);
+                        } else {
+                            itemstack.subtract(i);
+                        }
+                    }
+                }
+            }
+
+            if (!packetplayinautorecipe.c().isEmpty()) {
+                iterator = packetplayinautorecipe.c().iterator();
+
+                while (iterator.hasNext()) {
+                    packetplayinautorecipe_a = (PacketPlayInAutoRecipe.a) iterator.next();
+                    itemstack = this.player.inventory.getItem(packetplayinautorecipe_a.c);
+                    if (this.a(packetplayinautorecipe_a.a, itemstack)) {
+                        i = packetplayinautorecipe_a.a.getCount();
+                        if (itemstack.getCount() == i) {
+                            this.player.inventory.splitWithoutUpdate(packetplayinautorecipe_a.c);
+                        } else {
+                            itemstack.subtract(i);
+                        }
+
+                        this.player.activeContainer.b(packetplayinautorecipe_a.b, packetplayinautorecipe_a.a);
+                    }
+                }
+            }
+
+            this.player.activeContainer.b();
+        }
+    }
+
+    private boolean a(ItemStack itemstack, ItemStack itemstack1) {
+        ItemStack itemstack2 = itemstack1.cloneItemStack();
+
+        if (itemstack2.getCount() < itemstack.getCount()) {
+            return false;
+        } else {
+            itemstack2.setCount(itemstack.getCount());
+            return ItemStack.matches(itemstack, itemstack2);
+        }
     }
 
     public void a(PacketPlayInEnchantItem packetplayinenchantitem) {
@@ -966,14 +1046,14 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
     public void a(PacketPlayInKeepAlive packetplayinkeepalive) {
         if (packetplayinkeepalive.a() == this.f) {
-            int i = (int) (this.e() - this.g);
+            int i = (int) (this.d() - this.g);
 
             this.player.ping = (this.player.ping * 3 + i) / 4;
         }
 
     }
 
-    private long e() {
+    private long d() {
         return System.nanoTime() / 1000000L;
     }
 
@@ -1094,7 +1174,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                         return;
                     }
 
-                    if (!this.player.dk()) {
+                    if (!this.player.isCreativeAndOp()) {
                         this.player.sendMessage(new ChatMessage("advMode.notAllowed", new Object[0]));
                         return;
                     }
@@ -1140,7 +1220,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                         return;
                     }
 
-                    if (!this.player.dk()) {
+                    if (!this.player.isCreativeAndOp()) {
                         this.player.sendMessage(new ChatMessage("advMode.notAllowed", new Object[0]));
                         return;
                     }
@@ -1240,7 +1320,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             }
                         }
                     } else if ("MC|Struct".equals(s)) {
-                        if (!this.player.dk()) {
+                        if (!this.player.isCreativeAndOp()) {
                             return;
                         }
 

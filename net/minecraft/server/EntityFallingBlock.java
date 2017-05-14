@@ -36,6 +36,10 @@ public class EntityFallingBlock extends Entity {
         this.a(new BlockPosition(this));
     }
 
+    public boolean bb() {
+        return false;
+    }
+
     public void a(BlockPosition blockposition) {
         this.datawatcher.set(EntityFallingBlock.d, blockposition);
     }
@@ -52,7 +56,7 @@ public class EntityFallingBlock extends Entity {
         return !this.dead;
     }
 
-    public void A_() {
+    public void B_() {
         Block block = this.block.getBlock();
 
         if (this.block.getMaterial() == Material.AIR) {
@@ -78,15 +82,33 @@ public class EntityFallingBlock extends Entity {
             }
 
             this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
-            this.motX *= 0.9800000190734863D;
-            this.motY *= 0.9800000190734863D;
-            this.motZ *= 0.9800000190734863D;
             if (!this.world.isClientSide) {
                 blockposition = new BlockPosition(this);
-                if (this.onGround) {
+                boolean flag = this.block.getBlock() == Blocks.dS;
+                boolean flag1 = flag && this.world.getType(blockposition).getMaterial() == Material.WATER;
+                double d0 = this.motX * this.motX + this.motY * this.motY + this.motZ * this.motZ;
+
+                if (flag && d0 > 1.0D) {
+                    MovingObjectPosition movingobjectposition = this.world.rayTrace(new Vec3D(this.lastX, this.lastY, this.lastZ), new Vec3D(this.locX, this.locY, this.locZ), true);
+
+                    if (movingobjectposition != null && this.world.getType(movingobjectposition.a()).getMaterial() == Material.WATER) {
+                        blockposition = movingobjectposition.a();
+                        flag1 = true;
+                    }
+                }
+
+                if (!this.onGround && !flag1) {
+                    if (this.ticksLived > 100 && !this.world.isClientSide && (blockposition.getY() < 1 || blockposition.getY() > 256) || this.ticksLived > 600) {
+                        if (this.dropItem && this.world.getGameRules().getBoolean("doEntityDrops")) {
+                            this.a(new ItemStack(block, 1, block.getDropData(this.block)), 0.0F);
+                        }
+
+                        this.die();
+                    }
+                } else {
                     IBlockData iblockdata = this.world.getType(blockposition);
 
-                    if (BlockFalling.i(this.world.getType(new BlockPosition(this.locX, this.locY - 0.009999999776482582D, this.locZ)))) {
+                    if (!flag1 && BlockFalling.i(this.world.getType(new BlockPosition(this.locX, this.locY - 0.009999999776482582D, this.locZ)))) {
                         this.onGround = false;
                         return;
                     }
@@ -97,9 +119,9 @@ public class EntityFallingBlock extends Entity {
                     if (iblockdata.getBlock() != Blocks.PISTON_EXTENSION) {
                         this.die();
                         if (!this.f) {
-                            if (this.world.a(block, blockposition, true, EnumDirection.UP, (Entity) null) && !BlockFalling.i(this.world.getType(blockposition.down())) && this.world.setTypeAndData(blockposition, this.block, 3)) {
+                            if (this.world.a(block, blockposition, true, EnumDirection.UP, (Entity) null) && (flag1 || !BlockFalling.i(this.world.getType(blockposition.down()))) && this.world.setTypeAndData(blockposition, this.block, 3)) {
                                 if (block instanceof BlockFalling) {
-                                    ((BlockFalling) block).a_(this.world, blockposition);
+                                    ((BlockFalling) block).a(this.world, blockposition, this.block, iblockdata);
                                 }
 
                                 if (this.tileEntityData != null && block instanceof ITileEntity) {
@@ -126,18 +148,15 @@ public class EntityFallingBlock extends Entity {
                                 this.a(new ItemStack(block, 1, block.getDropData(this.block)), 0.0F);
                             }
                         } else if (block instanceof BlockFalling) {
-                            ((BlockFalling) block).b(this.world, blockposition);
+                            ((BlockFalling) block).a_(this.world, blockposition);
                         }
                     }
-                } else if (this.ticksLived > 100 && !this.world.isClientSide && (blockposition.getY() < 1 || blockposition.getY() > 256) || this.ticksLived > 600) {
-                    if (this.dropItem && this.world.getGameRules().getBoolean("doEntityDrops")) {
-                        this.a(new ItemStack(block, 1, block.getDropData(this.block)), 0.0F);
-                    }
-
-                    this.die();
                 }
             }
 
+            this.motX *= 0.9800000190734863D;
+            this.motY *= 0.9800000190734863D;
+            this.motZ *= 0.9800000190734863D;
         }
     }
 
@@ -249,7 +268,7 @@ public class EntityFallingBlock extends Entity {
         return this.block;
     }
 
-    public boolean bu() {
+    public boolean bA() {
         return true;
     }
 }

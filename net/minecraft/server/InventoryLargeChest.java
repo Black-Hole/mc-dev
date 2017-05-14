@@ -19,9 +19,9 @@ public class InventoryLargeChest implements ITileInventory {
         this.left = itileinventory;
         this.right = itileinventory1;
         if (itileinventory.isLocked()) {
-            itileinventory1.a(itileinventory.getLock());
+            itileinventory1.setLock(itileinventory.getLock());
         } else if (itileinventory1.isLocked()) {
-            itileinventory.a(itileinventory1.getLock());
+            itileinventory.setLock(itileinventory1.getLock());
         }
 
     }
@@ -30,8 +30,8 @@ public class InventoryLargeChest implements ITileInventory {
         return this.left.getSize() + this.right.getSize();
     }
 
-    public boolean w_() {
-        return this.left.w_() && this.right.w_();
+    public boolean x_() {
+        return this.left.x_() && this.right.x_();
     }
 
     public boolean a(IInventory iinventory) {
@@ -112,9 +112,9 @@ public class InventoryLargeChest implements ITileInventory {
         return this.left.isLocked() || this.right.isLocked();
     }
 
-    public void a(ChestLock chestlock) {
-        this.left.a(chestlock);
-        this.right.a(chestlock);
+    public void setLock(ChestLock chestlock) {
+        this.left.setLock(chestlock);
+        this.right.setLock(chestlock);
     }
 
     public ChestLock getLock() {

@@ -1,18 +1,20 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-public class ShapelessRecipes implements IRecipe {
+public class ShapelessRecipes extends IRecipe {
 
     private final ItemStack result;
-    private final List<ItemStack> ingredients;
+    private final NonNullList<RecipeItemStack> ingredients;
 
-    public ShapelessRecipes(ItemStack itemstack, List<ItemStack> list) {
+    public ShapelessRecipes(String s, ItemStack itemstack, NonNullList<RecipeItemStack> nonnulllist) {
+        super(s);
         this.result = itemstack;
-        this.ingredients = list;
+        this.ingredients = nonnulllist;
     }
 
     public ItemStack b() {
@@ -25,8 +27,8 @@ public class ShapelessRecipes implements IRecipe {
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = inventorycrafting.getItem(i);
 
-            if (itemstack.getItem().s()) {
-                nonnulllist.set(i, new ItemStack(itemstack.getItem().r()));
+            if (itemstack.getItem().r()) {
+                nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
             }
         }
 
@@ -45,11 +47,11 @@ public class ShapelessRecipes implements IRecipe {
                     Iterator iterator = arraylist.iterator();
 
                     while (iterator.hasNext()) {
-                        ItemStack itemstack1 = (ItemStack) iterator.next();
+                        RecipeItemStack recipeitemstack = (RecipeItemStack) iterator.next();
 
-                        if (itemstack.getItem() == itemstack1.getItem() && (itemstack1.getData() == 32767 || itemstack.getData() == itemstack1.getData())) {
+                        if (recipeitemstack.a(itemstack)) {
                             flag = true;
-                            arraylist.remove(itemstack1);
+                            arraylist.remove(recipeitemstack);
                             break;
                         }
                     }
@@ -68,7 +70,21 @@ public class ShapelessRecipes implements IRecipe {
         return this.result.cloneItemStack();
     }
 
-    public int a() {
-        return this.ingredients.size();
+    public static ShapelessRecipes a(JsonObject jsonobject) {
+        String s = ChatDeserializer.a(jsonobject, "group", "");
+        NonNullList nonnulllist = a(ChatDeserializer.u(jsonobject, "ingredients"));
+        ItemStack itemstack = ShapedRecipes.a(ChatDeserializer.t(jsonobject, "result"), true);
+
+        return new ShapelessRecipes(s, itemstack, nonnulllist);
+    }
+
+    private static NonNullList<RecipeItemStack> a(JsonArray jsonarray) {
+        NonNullList nonnulllist = NonNullList.a();
+
+        for (int i = 0; i < jsonarray.size(); ++i) {
+            nonnulllist.add(ShapedRecipes.a(jsonarray.get(i)));
+        }
+
+        return nonnulllist;
     }
 }

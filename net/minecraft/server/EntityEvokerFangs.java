@@ -36,7 +36,7 @@ public class EntityEvokerFangs extends Entity {
     }
 
     @Nullable
-    public EntityLiving j() {
+    public EntityLiving getOwner() {
         if (this.e == null && this.f != null && this.world instanceof WorldServer) {
             Entity entity = ((WorldServer) this.world).getEntity(this.f);
 
@@ -61,8 +61,8 @@ public class EntityEvokerFangs extends Entity {
 
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (this.world.isClientSide) {
             if (this.d) {
                 --this.c;
@@ -104,9 +104,9 @@ public class EntityEvokerFangs extends Entity {
     }
 
     private void c(EntityLiving entityliving) {
-        EntityLiving entityliving1 = this.j();
+        EntityLiving entityliving1 = this.getOwner();
 
-        if (entityliving.isAlive() && !entityliving.aW() && entityliving != entityliving1) {
+        if (entityliving.isAlive() && !entityliving.bc() && entityliving != entityliving1) {
             if (entityliving1 == null) {
                 entityliving.damageEntity(DamageSource.MAGIC, 6.0F);
             } else {

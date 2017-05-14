@@ -14,7 +14,7 @@ public class BlockEnderPortalFrame extends Block {
     private static ShapeDetector e;
 
     public BlockEnderPortalFrame() {
-        super(Material.STONE, MaterialMapColor.C);
+        super(Material.STONE, MaterialMapColor.D);
         this.y(this.blockStateList.getBlockData().set(BlockEnderPortalFrame.FACING, EnumDirection.NORTH).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(false)));
     }
 
@@ -87,5 +87,9 @@ public class BlockEnderPortalFrame extends Block {
         }
 
         return BlockEnderPortalFrame.e;
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.DOWN ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
     }
 }

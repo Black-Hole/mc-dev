@@ -59,13 +59,5 @@ public class SlotFurnaceResult extends Slot {
         }
 
         this.b = 0;
-        if (itemstack.getItem() == Items.IRON_INGOT) {
-            this.a.b((Statistic) AchievementList.k);
-        }
-
-        if (itemstack.getItem() == Items.COOKED_FISH) {
-            this.a.b((Statistic) AchievementList.p);
-        }
-
     }
 }

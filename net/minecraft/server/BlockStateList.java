@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.base.Function;
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
@@ -136,7 +136,7 @@ public class BlockStateList {
     }
 
     public String toString() {
-        return Objects.toStringHelper(this).add("block", Block.REGISTRY.b(this.c)).add("properties", Iterables.transform(this.d.values(), BlockStateList.b)).toString();
+        return MoreObjects.toStringHelper(this).add("block", Block.REGISTRY.b(this.c)).add("properties", Iterables.transform(this.d.values(), BlockStateList.b)).toString();
     }
 
     @Nullable
@@ -362,6 +362,10 @@ public class BlockStateList {
 
         public boolean s() {
             return this.a.u(this);
+        }
+
+        public EnumBlockFaceShape d(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+            return this.a.a(iblockaccess, (IBlockData) this, blockposition, enumdirection);
         }
 
         BlockData(Block block, ImmutableMap immutablemap, Object object) {

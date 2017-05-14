@@ -45,7 +45,7 @@ public class CommandSetBlock extends CommandAbstract {
                 boolean flag = false;
 
                 if (astring.length >= 7 && block.isTileEntity()) {
-                    String s = a(icommandlistener, astring, 6).toPlainText();
+                    String s = a(astring, 6);
 
                     try {
                         nbttagcompound = MojangsonParser.parse(s);
@@ -69,12 +69,8 @@ public class CommandSetBlock extends CommandAbstract {
 
                 TileEntity tileentity = world.getTileEntity(blockposition);
 
-                if (tileentity != null) {
-                    if (tileentity instanceof IInventory) {
-                        ((IInventory) tileentity).clear();
-                    }
-
-                    world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), block == Blocks.AIR ? 2 : 4);
+                if (tileentity != null && tileentity instanceof IInventory) {
+                    ((IInventory) tileentity).clear();
                 }
 
                 if (!world.setTypeAndData(blockposition, iblockdata, 2)) {

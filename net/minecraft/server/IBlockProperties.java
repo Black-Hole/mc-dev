@@ -65,4 +65,6 @@ public interface IBlockProperties {
     Vec3D e(IBlockAccess iblockaccess, BlockPosition blockposition);
 
     boolean s();
+
+    EnumBlockFaceShape d(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection);
 }

@@ -55,7 +55,7 @@ public class CommandParticle extends CommandAbstract {
                 EntityPlayer entityplayer;
 
                 if (astring.length > 10) {
-                    entityplayer = a(minecraftserver, icommandlistener, astring[10]);
+                    entityplayer = b(minecraftserver, icommandlistener, astring[10]);
                 } else {
                     entityplayer = null;
                 }

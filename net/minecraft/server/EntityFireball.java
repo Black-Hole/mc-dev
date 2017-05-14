@@ -47,11 +47,11 @@ public abstract class EntityFireball extends Entity {
         this.dirZ = d2 / d3 * 0.1D;
     }
 
-    public void A_() {
+    public void B_() {
         if (!this.world.isClientSide && (this.shooter != null && this.shooter.dead || !this.world.isLoaded(new BlockPosition(this)))) {
             this.die();
         } else {
-            super.A_();
+            super.B_();
             if (this.k()) {
                 this.setOnFire(1);
             }
@@ -118,18 +118,18 @@ public abstract class EntityFireball extends Entity {
         if (nbttagcompound.hasKeyOfType("power", 9)) {
             nbttaglist = nbttagcompound.getList("power", 6);
             if (nbttaglist.size() == 3) {
-                this.dirX = nbttaglist.e(0);
-                this.dirY = nbttaglist.e(1);
-                this.dirZ = nbttaglist.e(2);
+                this.dirX = nbttaglist.f(0);
+                this.dirY = nbttaglist.f(1);
+                this.dirZ = nbttaglist.f(2);
             }
         }
 
         this.e = nbttagcompound.getInt("life");
         if (nbttagcompound.hasKeyOfType("direction", 9) && nbttagcompound.getList("direction", 6).size() == 3) {
             nbttaglist = nbttagcompound.getList("direction", 6);
-            this.motX = nbttaglist.e(0);
-            this.motY = nbttaglist.e(1);
-            this.motZ = nbttaglist.e(2);
+            this.motX = nbttaglist.f(0);
+            this.motY = nbttaglist.f(1);
+            this.motZ = nbttaglist.f(2);
         } else {
             this.die();
         }
@@ -140,7 +140,7 @@ public abstract class EntityFireball extends Entity {
         return true;
     }
 
-    public float aA() {
+    public float aG() {
         return 1.0F;
     }
 
@@ -148,9 +148,9 @@ public abstract class EntityFireball extends Entity {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            this.ap();
+            this.av();
             if (damagesource.getEntity() != null) {
-                Vec3D vec3d = damagesource.getEntity().aB();
+                Vec3D vec3d = damagesource.getEntity().aH();
 
                 if (vec3d != null) {
                     this.motX = vec3d.x;
@@ -172,7 +172,7 @@ public abstract class EntityFireball extends Entity {
         }
     }
 
-    public float e(float f) {
+    public float f(float f) {
         return 1.0F;
     }
 }

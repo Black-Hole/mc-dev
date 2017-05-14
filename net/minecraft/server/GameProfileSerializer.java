@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 import com.google.common.collect.UnmodifiableIterator;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -8,8 +9,12 @@ import java.util.Iterator;
 import java.util.UUID;
 import java.util.Map.Entry;
 import javax.annotation.Nullable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class GameProfileSerializer {
+
+    private static final Logger a = LogManager.getLogger();
 
     @Nullable
     public static GameProfile deserialize(NBTTagCompound nbttagcompound) {
@@ -138,13 +143,13 @@ public final class GameProfileSerializer {
                 int i = 0;
 
                 while (i < nbttaglist.size()) {
-                    NBTBase nbtbase3 = nbttaglist.h(i);
+                    NBTBase nbtbase3 = nbttaglist.i(i);
                     boolean flag1 = false;
                     int j = 0;
 
                     while (true) {
                         if (j < nbttaglist1.size()) {
-                            if (!a(nbtbase3, nbttaglist1.h(j), flag)) {
+                            if (!a(nbtbase3, nbttaglist1.i(j), flag)) {
                                 ++j;
                                 continue;
                             }
@@ -210,7 +215,7 @@ public final class GameProfileSerializer {
                     IBlockState iblockstate = blockstatelist.a(s);
 
                     if (iblockstate != null) {
-                        iblockdata = a(iblockdata, iblockstate, nbttagcompound1.getString(s));
+                        iblockdata = a(iblockdata, iblockstate, s, nbttagcompound1, nbttagcompound);
                     }
                 }
             }
@@ -219,8 +224,15 @@ public final class GameProfileSerializer {
         }
     }
 
-    private static <T extends Comparable<T>> IBlockData a(IBlockData iblockdata, IBlockState<T> iblockstate, String s) {
-        return iblockdata.set(iblockstate, (Comparable) iblockstate.b(s).get());
+    private static <T extends Comparable<T>> IBlockData a(IBlockData iblockdata, IBlockState<T> iblockstate, String s, NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
+        Optional optional = iblockstate.b(nbttagcompound.getString(s));
+
+        if (optional.isPresent()) {
+            return iblockdata.set(iblockstate, (Comparable) optional.get());
+        } else {
+            GameProfileSerializer.a.warn("Unable to read property: {} with value: {} for blockstate: {}", s, nbttagcompound.getString(s), nbttagcompound1.toString());
+            return iblockdata;
+        }
     }
 
     public static NBTTagCompound a(NBTTagCompound nbttagcompound, IBlockData iblockdata) {

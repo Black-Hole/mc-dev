@@ -39,7 +39,7 @@ public class BlockLeaves2 extends BlockLeaves {
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockLeaves2.VARIANT, this.e(i)).set(BlockLeaves2.DECAYABLE, Boolean.valueOf((i & 4) == 0)).set(BlockLeaves2.CHECK_DECAY, Boolean.valueOf((i & 8) > 0));
+        return this.getBlockData().set(BlockLeaves2.VARIANT, this.b(i)).set(BlockLeaves2.DECAYABLE, Boolean.valueOf((i & 4) == 0)).set(BlockLeaves2.CHECK_DECAY, Boolean.valueOf((i & 8) > 0));
     }
 
     public int toLegacyData(IBlockData iblockdata) {
@@ -57,7 +57,7 @@ public class BlockLeaves2 extends BlockLeaves {
         return i;
     }
 
-    public BlockWood.EnumLogVariant e(int i) {
+    public BlockWood.EnumLogVariant b(int i) {
         return BlockWood.EnumLogVariant.a((i & 3) + 4);
     }
 

@@ -11,7 +11,7 @@ public class BlockWeb extends Block {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        entity.aS();
+        entity.aY();
     }
 
     public boolean b(IBlockData iblockdata) {
@@ -42,5 +42,9 @@ public class BlockWeb extends Block {
         } else {
             super.a(world, entityhuman, blockposition, iblockdata, tileentity, itemstack);
         }
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 }

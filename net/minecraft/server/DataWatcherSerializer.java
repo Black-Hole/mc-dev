@@ -7,4 +7,6 @@ public interface DataWatcherSerializer<T> {
     T a(PacketDataSerializer packetdataserializer);
 
     DataWatcherObject<T> a(int i);
+
+    T a(T t0);
 }

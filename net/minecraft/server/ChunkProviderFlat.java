@@ -159,7 +159,7 @@ public class ChunkProviderFlat implements ChunkGenerator {
         if (this.i != null && !flag && this.b.nextInt(8) == 0) {
             BlockPosition blockposition1 = blockposition.a(this.b.nextInt(16) + 8, this.b.nextInt(this.b.nextInt(248) + 8), this.b.nextInt(16) + 8);
 
-            if (blockposition1.getY() < this.a.K() || this.b.nextInt(10) == 0) {
+            if (blockposition1.getY() < this.a.getSeaLevel() || this.b.nextInt(10) == 0) {
                 this.i.generate(this.a, this.b, blockposition1);
             }
         }
@@ -191,6 +191,12 @@ public class ChunkProviderFlat implements ChunkGenerator {
         StructureGenerator structuregenerator = (StructureGenerator) this.e.get(s);
 
         return structuregenerator != null ? structuregenerator.getNearestGeneratedFeature(world, blockposition, flag) : null;
+    }
+
+    public boolean a(World world, String s, BlockPosition blockposition) {
+        StructureGenerator structuregenerator = (StructureGenerator) this.e.get(s);
+
+        return structuregenerator != null ? structuregenerator.b(blockposition) : false;
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {

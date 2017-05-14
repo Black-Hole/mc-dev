@@ -12,9 +12,9 @@ public interface IChunkLoader {
 
     void b(World world, Chunk chunk) throws IOException;
 
-    void a();
-
     void b();
 
-    boolean a(int i, int j);
+    void c();
+
+    boolean chunkExists(int i, int j);
 }

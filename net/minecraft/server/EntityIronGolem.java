@@ -9,8 +9,8 @@ public class EntityIronGolem extends EntityGolem {
     private int c;
     @Nullable
     Village b;
-    private int bw;
     private int bx;
+    private int by;
 
     public EntityIronGolem(World world) {
         super(world);
@@ -47,9 +47,9 @@ public class EntityIronGolem extends EntityGolem {
     protected void M() {
         if (--this.c <= 0) {
             this.c = 70 + this.random.nextInt(50);
-            this.b = this.world.ai().getClosestVillage(new BlockPosition(this), 32);
+            this.b = this.world.ak().getClosestVillage(new BlockPosition(this), 32);
             if (this.b == null) {
-                this.de();
+                this.dg();
             } else {
                 BlockPosition blockposition = this.b.a();
 
@@ -81,12 +81,12 @@ public class EntityIronGolem extends EntityGolem {
 
     public void n() {
         super.n();
-        if (this.bw > 0) {
-            --this.bw;
-        }
-
         if (this.bx > 0) {
             --this.bx;
+        }
+
+        if (this.by > 0) {
+            --this.by;
         }
 
         if (this.motX * this.motX + this.motZ * this.motZ > 2.500000277905201E-7D && this.random.nextInt(5) == 0) {
@@ -121,7 +121,7 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     public boolean B(Entity entity) {
-        this.bw = 10;
+        this.bx = 10;
         this.world.broadcastEntityEffect(this, (byte) 4);
         boolean flag = entity.damageEntity(DamageSource.mobAttack(this), (float) (7 + this.random.nextInt(15)));
 
@@ -130,35 +130,35 @@ public class EntityIronGolem extends EntityGolem {
             this.a((EntityLiving) this, entity);
         }
 
-        this.a(SoundEffects.cW, 1.0F, 1.0F);
+        this.a(SoundEffects.dj, 1.0F, 1.0F);
         return flag;
     }
 
-    public Village o() {
+    public Village p() {
         return this.b;
     }
 
     public void a(boolean flag) {
         if (flag) {
-            this.bx = 400;
+            this.by = 400;
             this.world.broadcastEntityEffect(this, (byte) 11);
         } else {
-            this.bx = 0;
+            this.by = 0;
             this.world.broadcastEntityEffect(this, (byte) 34);
         }
 
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.cY;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.dl;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.cX;
+    protected SoundEffect cd() {
+        return SoundEffects.dk;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.cZ, 1.0F, 1.0F);
+        this.a(SoundEffects.dm, 1.0F, 1.0F);
     }
 
     @Nullable
@@ -166,8 +166,8 @@ public class EntityIronGolem extends EntityGolem {
         return LootTables.A;
     }
 
-    public int di() {
-        return this.bx;
+    public int dk() {
+        return this.by;
     }
 
     public boolean isPlayerCreated() {

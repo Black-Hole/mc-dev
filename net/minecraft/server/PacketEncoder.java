@@ -20,25 +20,31 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>> {
     }
 
     protected void a(ChannelHandlerContext channelhandlercontext, Packet<?> packet, ByteBuf bytebuf) throws Exception {
-        Integer integer = ((EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get()).a(this.c, packet);
+        EnumProtocol enumprotocol = (EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get();
 
-        if (PacketEncoder.a.isDebugEnabled()) {
-            PacketEncoder.a.debug(PacketEncoder.b, "OUT: [{}:{}] {}", new Object[] { channelhandlercontext.channel().attr(NetworkManager.c).get(), integer, packet.getClass().getName()});
-        }
-
-        if (integer == null) {
-            throw new IOException("Can\'t serialize unregistered packet");
+        if (enumprotocol == null) {
+            throw new RuntimeException("ConnectionProtocol unknown: " + packet.toString());
         } else {
-            PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf);
+            Integer integer = enumprotocol.a(this.c, packet);
 
-            packetdataserializer.d(integer.intValue());
-
-            try {
-                packet.b(packetdataserializer);
-            } catch (Throwable throwable) {
-                PacketEncoder.a.error(throwable);
+            if (PacketEncoder.a.isDebugEnabled()) {
+                PacketEncoder.a.debug(PacketEncoder.b, "OUT: [{}:{}] {}", channelhandlercontext.channel().attr(NetworkManager.c).get(), integer, packet.getClass().getName());
             }
 
+            if (integer == null) {
+                throw new IOException("Can\'t serialize unregistered packet");
+            } else {
+                PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf);
+
+                packetdataserializer.d(integer.intValue());
+
+                try {
+                    packet.b(packetdataserializer);
+                } catch (Throwable throwable) {
+                    PacketEncoder.a.error(throwable);
+                }
+
+            }
         }
     }
 

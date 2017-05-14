@@ -23,7 +23,7 @@ public class BlockHopper extends BlockTileEntity {
     protected static final AxisAlignedBB g = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.125D, 1.0D, 1.0D);
 
     public BlockHopper() {
-        super(Material.ORE, MaterialMapColor.m);
+        super(Material.ORE, MaterialMapColor.n);
         this.y(this.blockStateList.getBlockData().set(BlockHopper.FACING, EnumDirection.DOWN).set(BlockHopper.ENABLED, Boolean.valueOf(true)));
         this.a(CreativeModeTab.d);
     }
@@ -60,7 +60,7 @@ public class BlockHopper extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityHopper) {
-                ((TileEntityHopper) tileentity).a(itemstack.getName());
+                ((TileEntityHopper) tileentity).setCustomName(itemstack.getName());
             }
         }
 
@@ -125,7 +125,7 @@ public class BlockHopper extends BlockTileEntity {
         return false;
     }
 
-    public static EnumDirection e(int i) {
+    public static EnumDirection b(int i) {
         return EnumDirection.fromType1(i & 7);
     }
 
@@ -142,7 +142,7 @@ public class BlockHopper extends BlockTileEntity {
     }
 
     public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockHopper.FACING, e(i)).set(BlockHopper.ENABLED, Boolean.valueOf(f(i)));
+        return this.getBlockData().set(BlockHopper.FACING, b(i)).set(BlockHopper.ENABLED, Boolean.valueOf(f(i)));
     }
 
     public int toLegacyData(IBlockData iblockdata) {
@@ -166,5 +166,9 @@ public class BlockHopper extends BlockTileEntity {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockHopper.FACING, BlockHopper.ENABLED});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.UP ? EnumBlockFaceShape.BOWL : EnumBlockFaceShape.UNDEFINED;
     }
 }

@@ -4,40 +4,40 @@ import java.util.Random;
 
 public class BiomeForest extends BiomeBase {
 
-    protected static final WorldGenForest y = new WorldGenForest(false, true);
-    protected static final WorldGenForest z = new WorldGenForest(false, false);
-    protected static final WorldGenForestTree A = new WorldGenForestTree(false);
-    private final BiomeForest.Type B;
+    protected static final WorldGenForest x = new WorldGenForest(false, true);
+    protected static final WorldGenForest y = new WorldGenForest(false, false);
+    protected static final WorldGenForestTree z = new WorldGenForestTree(false);
+    private final BiomeForest.Type A;
 
     public BiomeForest(BiomeForest.Type biomeforest_type, BiomeBase.a biomebase_a) {
         super(biomebase_a);
-        this.B = biomeforest_type;
-        this.t.z = 10;
-        this.t.C = 2;
-        if (this.B == BiomeForest.Type.FLOWER) {
-            this.t.z = 6;
-            this.t.B = 100;
-            this.t.C = 1;
-            this.v.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 4, 2, 3));
+        this.A = biomeforest_type;
+        this.s.z = 10;
+        this.s.C = 2;
+        if (this.A == BiomeForest.Type.FLOWER) {
+            this.s.z = 6;
+            this.s.B = 100;
+            this.s.C = 1;
+            this.u.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 4, 2, 3));
         }
 
-        if (this.B == BiomeForest.Type.NORMAL) {
-            this.v.add(new BiomeBase.BiomeMeta(EntityWolf.class, 5, 4, 4));
+        if (this.A == BiomeForest.Type.NORMAL) {
+            this.u.add(new BiomeBase.BiomeMeta(EntityWolf.class, 5, 4, 4));
         }
 
-        if (this.B == BiomeForest.Type.ROOFED) {
-            this.t.z = -999;
+        if (this.A == BiomeForest.Type.ROOFED) {
+            this.s.z = -999;
         }
 
     }
 
     public WorldGenTreeAbstract a(Random random) {
-        return (WorldGenTreeAbstract) (this.B == BiomeForest.Type.ROOFED && random.nextInt(3) > 0 ? BiomeForest.A : (this.B != BiomeForest.Type.BIRCH && random.nextInt(5) != 0 ? (random.nextInt(10) == 0 ? BiomeForest.o : BiomeForest.n) : BiomeForest.z));
+        return (WorldGenTreeAbstract) (this.A == BiomeForest.Type.ROOFED && random.nextInt(3) > 0 ? BiomeForest.z : (this.A != BiomeForest.Type.BIRCH && random.nextInt(5) != 0 ? (random.nextInt(10) == 0 ? BiomeForest.n : BiomeForest.m) : BiomeForest.y));
     }
 
     public BlockFlowers.EnumFlowerVarient a(Random random, BlockPosition blockposition) {
-        if (this.B == BiomeForest.Type.FLOWER) {
-            double d0 = MathHelper.a((1.0D + BiomeForest.l.a((double) blockposition.getX() / 48.0D, (double) blockposition.getZ() / 48.0D)) / 2.0D, 0.0D, 0.9999D);
+        if (this.A == BiomeForest.Type.FLOWER) {
+            double d0 = MathHelper.a((1.0D + BiomeForest.k.a((double) blockposition.getX() / 48.0D, (double) blockposition.getZ() / 48.0D)) / 2.0D, 0.0D, 0.9999D);
             BlockFlowers.EnumFlowerVarient blockflowers_enumflowervarient = BlockFlowers.EnumFlowerVarient.values()[(int) (d0 * (double) BlockFlowers.EnumFlowerVarient.values().length)];
 
             return blockflowers_enumflowervarient == BlockFlowers.EnumFlowerVarient.BLUE_ORCHID ? BlockFlowers.EnumFlowerVarient.POPPY : blockflowers_enumflowervarient;
@@ -47,13 +47,13 @@ public class BiomeForest extends BiomeBase {
     }
 
     public void a(World world, Random random, BlockPosition blockposition) {
-        if (this.B == BiomeForest.Type.ROOFED) {
+        if (this.A == BiomeForest.Type.ROOFED) {
             this.b(world, random, blockposition);
         }
 
         int i = random.nextInt(5) - 3;
 
-        if (this.B == BiomeForest.Type.FLOWER) {
+        if (this.A == BiomeForest.Type.FLOWER) {
             i += 2;
         }
 
@@ -92,11 +92,11 @@ public class BiomeForest extends BiomeBase {
             int k = random.nextInt(3);
 
             if (k == 0) {
-                BiomeForest.m.a(BlockTallPlant.EnumTallFlowerVariants.SYRINGA);
+                BiomeForest.l.a(BlockTallPlant.EnumTallFlowerVariants.SYRINGA);
             } else if (k == 1) {
-                BiomeForest.m.a(BlockTallPlant.EnumTallFlowerVariants.ROSE);
+                BiomeForest.l.a(BlockTallPlant.EnumTallFlowerVariants.ROSE);
             } else if (k == 2) {
-                BiomeForest.m.a(BlockTallPlant.EnumTallFlowerVariants.PAEONIA);
+                BiomeForest.l.a(BlockTallPlant.EnumTallFlowerVariants.PAEONIA);
             }
 
             int l = 0;
@@ -107,7 +107,7 @@ public class BiomeForest extends BiomeBase {
                     int j1 = random.nextInt(16) + 8;
                     int k1 = random.nextInt(world.getHighestBlockYAt(blockposition.a(i1, 0, j1)).getY() + 32);
 
-                    if (!BiomeForest.m.generate(world, random, new BlockPosition(blockposition.getX() + i1, k1, blockposition.getZ() + j1))) {
+                    if (!BiomeForest.l.generate(world, random, new BlockPosition(blockposition.getX() + i1, k1, blockposition.getZ() + j1))) {
                         ++l;
                         continue;
                     }

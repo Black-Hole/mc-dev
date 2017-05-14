@@ -2,11 +2,13 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -36,7 +38,7 @@ public class CrashReport {
     private void h() {
         this.d.a("Minecraft Version", new CrashReportCallable() {
             public String a() {
-                return "1.11.2";
+                return "1.12-pre2";
             }
 
             public Object call() throws Exception {
@@ -232,22 +234,22 @@ public class CrashReport {
                 file.getParentFile().mkdirs();
             }
 
-            FileWriter filewriter = null;
+            OutputStreamWriter outputstreamwriter = null;
 
             boolean flag;
 
             try {
-                filewriter = new FileWriter(file);
-                filewriter.write(this.e());
+                outputstreamwriter = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+                outputstreamwriter.write(this.e());
                 this.f = file;
                 boolean flag1 = true;
 
                 return flag1;
             } catch (Throwable throwable) {
-                CrashReport.a.error("Could not save crash report to {}", new Object[] { file, throwable});
+                CrashReport.a.error("Could not save crash report to {}", file, throwable);
                 flag = false;
             } finally {
-                IOUtils.closeQuietly(filewriter);
+                IOUtils.closeQuietly(outputstreamwriter);
             }
 
             return flag;

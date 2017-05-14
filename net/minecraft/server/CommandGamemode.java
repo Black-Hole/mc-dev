@@ -25,7 +25,7 @@ public class CommandGamemode extends CommandAbstract {
             throw new ExceptionUsage("commands.gamemode.usage", new Object[0]);
         } else {
             EnumGamemode enumgamemode = this.c(icommandlistener, astring[0]);
-            EntityPlayer entityplayer = astring.length >= 2 ? a(minecraftserver, icommandlistener, astring[1]) : a(icommandlistener);
+            EntityPlayer entityplayer = astring.length >= 2 ? b(minecraftserver, icommandlistener, astring[1]) : a(icommandlistener);
 
             entityplayer.a(enumgamemode);
             ChatMessage chatmessage = new ChatMessage("gameMode." + enumgamemode.b(), new Object[0]);

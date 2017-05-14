@@ -69,7 +69,7 @@ public class DataConverterSignText implements IDataConverter {
                 object = new ChatComponentText(s1);
             } else {
                 try {
-                    object = (IChatBaseComponent) DataConverterSignText.a.fromJson(s1, IChatBaseComponent.class);
+                    object = (IChatBaseComponent) ChatDeserializer.a(DataConverterSignText.a, s1, IChatBaseComponent.class, true);
                     if (object == null) {
                         object = new ChatComponentText("");
                     }

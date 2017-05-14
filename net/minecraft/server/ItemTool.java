@@ -44,10 +44,6 @@ public class ItemTool extends Item {
         return true;
     }
 
-    public Item.EnumToolMaterial g() {
-        return this.d;
-    }
-
     public int c() {
         return this.d.e();
     }
@@ -65,7 +61,7 @@ public class ItemTool extends Item {
 
         if (enumitemslot == EnumItemSlot.MAINHAND) {
             multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemTool.h, "Tool modifier", (double) this.b, 0));
-            multimap.put(GenericAttributes.f.getName(), new AttributeModifier(ItemTool.i, "Tool modifier", (double) this.c, 0));
+            multimap.put(GenericAttributes.g.getName(), new AttributeModifier(ItemTool.i, "Tool modifier", (double) this.c, 0));
         }
 
         return multimap;

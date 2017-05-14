@@ -1,10 +1,18 @@
 package net.minecraft.server;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import java.lang.reflect.Type;
 import java.util.Locale;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
-public class MinecraftKey {
+public class MinecraftKey implements Comparable<MinecraftKey> {
 
     protected final String a;
     protected final String b;
@@ -37,7 +45,7 @@ public class MinecraftKey {
         return astring;
     }
 
-    public String a() {
+    public String getKey() {
         return this.b;
     }
 
@@ -63,5 +71,40 @@ public class MinecraftKey {
 
     public int hashCode() {
         return 31 * this.a.hashCode() + this.b.hashCode();
+    }
+
+    public int a(MinecraftKey minecraftkey) {
+        int i = this.a.compareTo(minecraftkey.a);
+
+        if (i == 0) {
+            i = this.b.compareTo(minecraftkey.b);
+        }
+
+        return i;
+    }
+
+    public int compareTo(Object object) {
+        return this.a((MinecraftKey) object);
+    }
+
+    public static class a implements JsonDeserializer<MinecraftKey>, JsonSerializer<MinecraftKey> {
+
+        public a() {}
+
+        public MinecraftKey a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+            return new MinecraftKey(ChatDeserializer.a(jsonelement, "location"));
+        }
+
+        public JsonElement a(MinecraftKey minecraftkey, Type type, JsonSerializationContext jsonserializationcontext) {
+            return new JsonPrimitive(minecraftkey.toString());
+        }
+
+        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
+            return this.a((MinecraftKey) object, type, jsonserializationcontext);
+        }
+
+        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+            return this.a(jsonelement, type, jsondeserializationcontext);
+        }
     }
 }

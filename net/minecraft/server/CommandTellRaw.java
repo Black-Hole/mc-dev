@@ -25,7 +25,7 @@ public class CommandTellRaw extends CommandAbstract {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.tellraw.usage", new Object[0]);
         } else {
-            EntityPlayer entityplayer = a(minecraftserver, icommandlistener, astring[0]);
+            EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[0]);
             String s = a(astring, 1);
 
             try {

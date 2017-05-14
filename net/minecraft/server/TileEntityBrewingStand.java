@@ -13,7 +13,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
     private boolean[] j;
     private Item k;
     private String l;
-    private int m;
+    private int fuelLevel;
 
     public TileEntityBrewingStand() {
         this.items = NonNullList.a(5, ItemStack.a);
@@ -27,7 +27,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         return this.l != null && !this.l.isEmpty();
     }
 
-    public void a(String s) {
+    public void setCustomName(String s) {
         this.l = s;
     }
 
@@ -35,7 +35,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         return this.items.size();
     }
 
-    public boolean w_() {
+    public boolean x_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -51,11 +51,11 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         return false;
     }
 
-    public void F_() {
+    public void e() {
         ItemStack itemstack = (ItemStack) this.items.get(4);
 
-        if (this.m <= 0 && itemstack.getItem() == Items.BLAZE_POWDER) {
-            this.m = 20;
+        if (this.fuelLevel <= 0 && itemstack.getItem() == Items.BLAZE_POWDER) {
+            this.fuelLevel = 20;
             itemstack.subtract(1);
             this.update();
         }
@@ -78,8 +78,8 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
                 this.brewTime = 0;
                 this.update();
             }
-        } else if (flag && this.m > 0) {
-            --this.m;
+        } else if (flag && this.fuelLevel > 0) {
+            --this.fuelLevel;
             this.brewTime = 400;
             this.k = itemstack1.getItem();
             this.update();
@@ -148,8 +148,8 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         itemstack.subtract(1);
         BlockPosition blockposition = this.getPosition();
 
-        if (itemstack.getItem().s()) {
-            ItemStack itemstack1 = new ItemStack(itemstack.getItem().r());
+        if (itemstack.getItem().r()) {
+            ItemStack itemstack1 = new ItemStack(itemstack.getItem().q());
 
             if (itemstack.isEmpty()) {
                 itemstack = itemstack1;
@@ -175,7 +175,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
             this.l = nbttagcompound.getString("CustomName");
         }
 
-        this.m = nbttagcompound.getByte("Fuel");
+        this.fuelLevel = nbttagcompound.getByte("Fuel");
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
@@ -186,7 +186,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
             nbttagcompound.setString("CustomName", this.l);
         }
 
-        nbttagcompound.setByte("Fuel", (byte) this.m);
+        nbttagcompound.setByte("Fuel", (byte) this.fuelLevel);
         return nbttagcompound;
     }
 
@@ -227,7 +227,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         } else {
             Item item = itemstack.getItem();
 
-            return i == 4 ? item == Items.BLAZE_POWDER : (item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.GLASS_BOTTLE) && this.getItem(i) == ItemStack.a;
+            return i == 4 ? item == Items.BLAZE_POWDER : (item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.GLASS_BOTTLE) && this.getItem(i).isEmpty();
         }
     }
 
@@ -257,7 +257,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
             return this.brewTime;
 
         case 1:
-            return this.m;
+            return this.fuelLevel;
 
         default:
             return 0;
@@ -271,7 +271,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
             break;
 
         case 1:
-            this.m = j;
+            this.fuelLevel = j;
         }
 
     }

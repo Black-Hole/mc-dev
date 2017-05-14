@@ -31,20 +31,20 @@ public class PistonExtendsChecker {
         this.f.clear();
         IBlockData iblockdata = this.a.getType(this.c);
 
-        if (!BlockPiston.a(iblockdata, this.a, this.c, this.d, false)) {
+        if (!BlockPiston.a(iblockdata, this.a, this.c, this.d, false, this.d)) {
             if (iblockdata.p() == EnumPistonReaction.DESTROY) {
                 this.f.add(this.c);
                 return true;
             } else {
                 return false;
             }
-        } else if (!this.a(this.c)) {
+        } else if (!this.a(this.c, this.d)) {
             return false;
         } else {
             for (int i = 0; i < this.e.size(); ++i) {
                 BlockPosition blockposition = (BlockPosition) this.e.get(i);
 
-                if (this.a.getType(blockposition).getBlock() == Blocks.SLIME && !this.b(blockposition)) {
+                if (this.a.getType(blockposition).getBlock() == Blocks.SLIME && !this.a(blockposition)) {
                     return false;
                 }
             }
@@ -53,13 +53,13 @@ public class PistonExtendsChecker {
         }
     }
 
-    private boolean a(BlockPosition blockposition) {
+    private boolean a(BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata = this.a.getType(blockposition);
         Block block = iblockdata.getBlock();
 
         if (iblockdata.getMaterial() == Material.AIR) {
             return true;
-        } else if (!BlockPiston.a(iblockdata, this.a, blockposition, this.d, false)) {
+        } else if (!BlockPiston.a(iblockdata, this.a, blockposition, this.d, false, enumdirection)) {
             return true;
         } else if (blockposition.equals(this.b)) {
             return true;
@@ -76,7 +76,7 @@ public class PistonExtendsChecker {
 
                     iblockdata = this.a.getType(blockposition1);
                     block = iblockdata.getBlock();
-                    if (iblockdata.getMaterial() == Material.AIR || !BlockPiston.a(iblockdata, this.a, blockposition1, this.d, false) || blockposition1.equals(this.b)) {
+                    if (iblockdata.getMaterial() == Material.AIR || !BlockPiston.a(iblockdata, this.a, blockposition1, this.d, false, enumdirection) || blockposition1.equals(this.b)) {
                         break;
                     }
 
@@ -107,7 +107,7 @@ public class PistonExtendsChecker {
                         for (int i1 = 0; i1 <= l + j; ++i1) {
                             BlockPosition blockposition3 = (BlockPosition) this.e.get(i1);
 
-                            if (this.a.getType(blockposition3).getBlock() == Blocks.SLIME && !this.b(blockposition3)) {
+                            if (this.a.getType(blockposition3).getBlock() == Blocks.SLIME && !this.a(blockposition3)) {
                                 return false;
                             }
                         }
@@ -120,7 +120,7 @@ public class PistonExtendsChecker {
                         return true;
                     }
 
-                    if (!BlockPiston.a(iblockdata, this.a, blockposition2, this.d, true) || blockposition2.equals(this.b)) {
+                    if (!BlockPiston.a(iblockdata, this.a, blockposition2, this.d, true, enumdirection) || blockposition2.equals(this.b)) {
                         return false;
                     }
 
@@ -155,14 +155,14 @@ public class PistonExtendsChecker {
         this.e.addAll(arraylist2);
     }
 
-    private boolean b(BlockPosition blockposition) {
+    private boolean a(BlockPosition blockposition) {
         EnumDirection[] aenumdirection = EnumDirection.values();
         int i = aenumdirection.length;
 
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
 
-            if (enumdirection.k() != this.d.k() && !this.a(blockposition.shift(enumdirection))) {
+            if (enumdirection.k() != this.d.k() && !this.a(blockposition.shift(enumdirection), enumdirection)) {
                 return false;
             }
         }

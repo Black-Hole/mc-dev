@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.util.Collection;
 
-public class RecipeTippedArrow implements IRecipe {
+public class RecipeTippedArrow extends IRecipe {
 
     public RecipeTippedArrow() {}
 
@@ -48,15 +48,15 @@ public class RecipeTippedArrow implements IRecipe {
         }
     }
 
-    public int a() {
-        return 9;
-    }
-
     public ItemStack b() {
         return ItemStack.a;
     }
 
     public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
         return NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
+    }
+
+    public boolean d() {
+        return true;
     }
 }

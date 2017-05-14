@@ -103,7 +103,7 @@ public class InventorySubcontainer implements IInventory {
         return this.b;
     }
 
-    public boolean w_() {
+    public boolean x_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;

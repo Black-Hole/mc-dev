@@ -19,20 +19,20 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
         return LootTables.ap;
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.hD;
+    protected SoundEffect F() {
+        return SoundEffects.iE;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.hF;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.iG;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.hE;
+    protected SoundEffect cd() {
+        return SoundEffects.iF;
     }
 
-    SoundEffect o() {
-        return SoundEffects.hG;
+    SoundEffect p() {
+        return SoundEffects.iH;
     }
 
     public void die(DamageSource damagesource) {
@@ -59,7 +59,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
         GroupDataEntity groupdataentity1 = super.prepare(difficultydamagescaler, groupdataentity);
 
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(4.0D);
-        this.dh();
+        this.dk();
         return groupdataentity1;
     }
 

@@ -31,7 +31,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     }
 
-    public boolean w_() {
+    public boolean x_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -97,9 +97,9 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     }
 
     @Nullable
-    public Entity c(int i) {
+    public Entity b(int i) {
         this.b = false;
-        return super.c(i);
+        return super.b(i);
     }
 
     public void die() {
@@ -180,7 +180,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         return false;
     }
 
-    public void a(ChestLock chestlock) {}
+    public void setLock(ChestLock chestlock) {}
 
     public ChestLock getLock() {
         return ChestLock.a;
@@ -188,7 +188,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     public void f(@Nullable EntityHuman entityhuman) {
         if (this.c != null) {
-            LootTable loottable = this.world.ak().a(this.c);
+            LootTable loottable = this.world.getLootTableRegistry().a(this.c);
 
             this.c = null;
             Random random;
@@ -202,7 +202,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
             LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
             if (entityhuman != null) {
-                loottableinfo_a.a(entityhuman.dj());
+                loottableinfo_a.a(entityhuman.ds());
             }
 
             loottable.a(this, random, loottableinfo_a.a());

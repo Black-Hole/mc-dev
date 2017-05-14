@@ -85,6 +85,10 @@ public class BlockBanner extends BlockTileEntity {
 
     }
 
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
+    }
+
     public static class BlockStandingBanner extends BlockBanner {
 
         public BlockStandingBanner() {

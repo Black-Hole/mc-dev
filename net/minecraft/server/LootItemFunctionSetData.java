@@ -19,7 +19,7 @@ public class LootItemFunctionSetData extends LootItemFunction {
 
     public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
         if (itemstack.f()) {
-            LootItemFunctionSetData.a.warn("Couldn\'t set data of loot item {}", new Object[] { itemstack});
+            LootItemFunctionSetData.a.warn("Couldn\'t set data of loot item {}", itemstack);
         } else {
             itemstack.setData(this.b.a(random));
         }

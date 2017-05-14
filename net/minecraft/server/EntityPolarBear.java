@@ -7,10 +7,10 @@ import javax.annotation.Nullable;
 
 public class EntityPolarBear extends EntityAnimal {
 
-    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityPolarBear.class, DataWatcherRegistry.h);
-    private float bx;
+    private static final DataWatcherObject<Boolean> bx = DataWatcher.a(EntityPolarBear.class, DataWatcherRegistry.h);
     private float by;
-    private int bA;
+    private float bz;
+    private int bB;
 
     public EntityPolarBear(World world) {
         super(world);
@@ -47,26 +47,26 @@ public class EntityPolarBear extends EntityAnimal {
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(6.0D);
     }
 
-    protected SoundEffect G() {
-        return this.isBaby() ? SoundEffects.eM : SoundEffects.eL;
+    protected SoundEffect F() {
+        return this.isBaby() ? SoundEffects.fN : SoundEffects.fM;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.eO;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.fP;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.eN;
+    protected SoundEffect cd() {
+        return SoundEffects.fO;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.eP, 0.15F, 1.0F);
+        this.a(SoundEffects.fQ, 0.15F, 1.0F);
     }
 
-    protected void dh() {
-        if (this.bA <= 0) {
-            this.a(SoundEffects.eQ, 1.0F, 1.0F);
-            this.bA = 40;
+    protected void dj() {
+        if (this.bB <= 0) {
+            this.a(SoundEffects.fR, 1.0F, 1.0F);
+            this.bB = 40;
         }
 
     }
@@ -78,22 +78,22 @@ public class EntityPolarBear extends EntityAnimal {
 
     protected void i() {
         super.i();
-        this.datawatcher.register(EntityPolarBear.bw, Boolean.valueOf(false));
+        this.datawatcher.register(EntityPolarBear.bx, Boolean.valueOf(false));
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (this.world.isClientSide) {
-            this.bx = this.by;
-            if (this.di()) {
-                this.by = MathHelper.a(this.by + 1.0F, 0.0F, 6.0F);
+            this.by = this.bz;
+            if (this.dk()) {
+                this.bz = MathHelper.a(this.bz + 1.0F, 0.0F, 6.0F);
             } else {
-                this.by = MathHelper.a(this.by - 1.0F, 0.0F, 6.0F);
+                this.bz = MathHelper.a(this.bz - 1.0F, 0.0F, 6.0F);
             }
         }
 
-        if (this.bA > 0) {
-            --this.bA;
+        if (this.bB > 0) {
+            --this.bB;
         }
 
     }
@@ -108,15 +108,15 @@ public class EntityPolarBear extends EntityAnimal {
         return flag;
     }
 
-    public boolean di() {
-        return ((Boolean) this.datawatcher.get(EntityPolarBear.bw)).booleanValue();
+    public boolean dk() {
+        return ((Boolean) this.datawatcher.get(EntityPolarBear.bx)).booleanValue();
     }
 
     public void p(boolean flag) {
-        this.datawatcher.set(EntityPolarBear.bw, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityPolarBear.bx, Boolean.valueOf(flag));
     }
 
-    protected float cp() {
+    protected float cv() {
         return 0.98F;
     }
 
@@ -167,7 +167,7 @@ public class EntityPolarBear extends EntityAnimal {
 
                 if (this.c <= 10) {
                     EntityPolarBear.this.p(true);
-                    EntityPolarBear.this.dh();
+                    EntityPolarBear.this.dj();
                 }
             } else {
                 this.c = 20;

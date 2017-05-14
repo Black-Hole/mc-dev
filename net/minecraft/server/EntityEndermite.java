@@ -38,20 +38,20 @@ public class EntityEndermite extends EntityMonster {
         return false;
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.bf;
+    protected SoundEffect F() {
+        return SoundEffects.bj;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.bh;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.bl;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.bg;
+    protected SoundEffect cd() {
+        return SoundEffects.bk;
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.bi, 0.15F, 1.0F);
+        this.a(SoundEffects.bm, 0.15F, 1.0F);
     }
 
     @Nullable
@@ -75,21 +75,21 @@ public class EntityEndermite extends EntityMonster {
         nbttagcompound.setBoolean("PlayerSpawned", this.b);
     }
 
-    public void A_() {
+    public void B_() {
         this.aN = this.yaw;
-        super.A_();
+        super.B_();
     }
 
-    public void i(float f) {
+    public void j(float f) {
         this.yaw = f;
-        super.i(f);
+        super.j(f);
     }
 
-    public double ax() {
+    public double aD() {
         return 0.1D;
     }
 
-    public boolean o() {
+    public boolean p() {
         return this.b;
     }
 
@@ -115,12 +115,12 @@ public class EntityEndermite extends EntityMonster {
 
     }
 
-    protected boolean r_() {
+    protected boolean s_() {
         return true;
     }
 
-    public boolean cM() {
-        if (super.cM()) {
+    public boolean P() {
+        if (super.P()) {
             EntityHuman entityhuman = this.world.findNearbyPlayer(this, 5.0D);
 
             return entityhuman == null;

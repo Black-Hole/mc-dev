@@ -75,17 +75,15 @@ public class PathfinderGoalBreed extends PathfinderGoal {
         EntityAgeable entityageable = this.animal.createChild(this.partner);
 
         if (entityageable != null) {
-            EntityHuman entityhuman = this.animal.getBreedCause();
+            EntityPlayer entityplayer = this.animal.getBreedCause();
 
-            if (entityhuman == null && this.partner.getBreedCause() != null) {
-                entityhuman = this.partner.getBreedCause();
+            if (entityplayer == null && this.partner.getBreedCause() != null) {
+                entityplayer = this.partner.getBreedCause();
             }
 
-            if (entityhuman != null) {
-                entityhuman.b(StatisticList.C);
-                if (this.animal instanceof EntityCow) {
-                    entityhuman.b((Statistic) AchievementList.H);
-                }
+            if (entityplayer != null) {
+                entityplayer.b(StatisticList.C);
+                CriterionTriggers.n.a(entityplayer, this.animal, this.partner, entityageable);
             }
 
             this.animal.setAgeRaw(6000);

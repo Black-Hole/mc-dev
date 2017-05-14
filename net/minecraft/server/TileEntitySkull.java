@@ -53,14 +53,14 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
                 if (!UtilColor.b(s)) {
                     this.g = new GameProfile((UUID) null, s);
-                    this.h();
+                    this.i();
                 }
             }
         }
 
     }
 
-    public void F_() {
+    public void e() {
         if (this.a == 5) {
             if (this.world.isBlockIndirectlyPowered(this.position)) {
                 this.i = true;
@@ -94,10 +94,10 @@ public class TileEntitySkull extends TileEntity implements ITickable {
     public void setGameProfile(@Nullable GameProfile gameprofile) {
         this.a = 3;
         this.g = gameprofile;
-        this.h();
+        this.i();
     }
 
-    private void h() {
+    private void i() {
         this.g = b(this.g);
         this.update();
     }

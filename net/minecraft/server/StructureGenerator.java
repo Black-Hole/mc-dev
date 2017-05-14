@@ -90,8 +90,12 @@ public abstract class StructureGenerator extends WorldGenBase {
     }
 
     public boolean b(BlockPosition blockposition) {
-        this.a(this.g);
-        return this.c(blockposition) != null;
+        if (this.g == null) {
+            return false;
+        } else {
+            this.a(this.g);
+            return this.c(blockposition) != null;
+        }
     }
 
     @Nullable
@@ -138,7 +142,7 @@ public abstract class StructureGenerator extends WorldGenBase {
     public abstract BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag);
 
     protected void a(World world) {
-        if (this.a == null) {
+        if (this.a == null && world != null) {
             this.a = (PersistentStructure) world.a(PersistentStructure.class, this.a());
             if (this.a == null) {
                 this.a = new PersistentStructure(this.a());

@@ -39,7 +39,7 @@ public class CommandTitle extends CommandAbstract {
                 }
             }
 
-            EntityPlayer entityplayer = a(minecraftserver, icommandlistener, astring[0]);
+            EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[0]);
             PacketPlayOutTitle.EnumTitleAction packetplayouttitle_enumtitleaction = PacketPlayOutTitle.EnumTitleAction.a(astring[1]);
 
             if (packetplayouttitle_enumtitleaction != PacketPlayOutTitle.EnumTitleAction.CLEAR && packetplayouttitle_enumtitleaction != PacketPlayOutTitle.EnumTitleAction.RESET) {

@@ -45,15 +45,15 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         return 0;
     }
 
-    public boolean e() {
+    public boolean f() {
         return this.g;
     }
 
-    public EnumDirection f() {
+    public EnumDirection h() {
         return this.f;
     }
 
-    public boolean h() {
+    public boolean i() {
         return this.h;
     }
 
@@ -67,13 +67,13 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
     public AxisAlignedBB a(IBlockAccess iblockaccess, BlockPosition blockposition, float f) {
         f = this.e(f);
-        IBlockData iblockdata = this.j();
+        IBlockData iblockdata = this.k();
 
         return iblockdata.d(iblockaccess, blockposition).d((double) (f * (float) this.f.getAdjacentX()), (double) (f * (float) this.f.getAdjacentY()), (double) (f * (float) this.f.getAdjacentZ()));
     }
 
-    private IBlockData j() {
-        return !this.e() && this.h() ? Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.TYPE, this.a.getBlock() == Blocks.STICKY_PISTON ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT).set(BlockPistonExtension.FACING, this.a.get(BlockPiston.FACING)) : this.a;
+    private IBlockData k() {
+        return !this.f() && this.i() ? Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.TYPE, this.a.getBlock() == Blocks.STICKY_PISTON ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT).set(BlockPistonExtension.FACING, this.a.get(BlockPiston.FACING)) : this.a;
     }
 
     private void f(float f) {
@@ -81,7 +81,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         double d0 = (double) (f - this.j);
         ArrayList arraylist = Lists.newArrayList();
 
-        this.j().a(this.world, BlockPosition.ZERO, new AxisAlignedBB(BlockPosition.ZERO), arraylist, (Entity) null, true);
+        this.k().a(this.world, BlockPosition.ZERO, new AxisAlignedBB(BlockPosition.ZERO), arraylist, (Entity) null, true);
         if (!arraylist.isEmpty()) {
             AxisAlignedBB axisalignedbb = this.a(this.a((List) arraylist));
             List list = this.world.getEntities((Entity) null, this.a(axisalignedbb, enumdirection, d0).b(axisalignedbb));
@@ -238,7 +238,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         return enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE ? axisalignedbb.f - axisalignedbb1.c : axisalignedbb1.f - axisalignedbb.c;
     }
 
-    public void i() {
+    public void j() {
         if (this.k < 1.0F && this.world != null) {
             this.j = 1.0F;
             this.k = this.j;
@@ -252,7 +252,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
     }
 
-    public void F_() {
+    public void e() {
         this.k = this.j;
         if (this.k >= 1.0F) {
             this.world.s(this.position);
@@ -308,7 +308,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
             int i = list.size();
             IBlockData iblockdata;
 
-            if (this.h()) {
+            if (this.i()) {
                 iblockdata = Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.FACING, this.f).set(BlockPistonExtension.SHORT, Boolean.valueOf(this.g != 1.0F - this.j < 0.25F));
             } else {
                 iblockdata = this.a;

@@ -20,7 +20,7 @@ public class PathfinderGoalMakeLove extends PathfinderGoal {
         } else if (this.b.getRandom().nextInt(500) != 0) {
             return false;
         } else {
-            this.a = this.d.ai().getClosestVillage(new BlockPosition(this.b), 0);
+            this.a = this.d.ak().getClosestVillage(new BlockPosition(this.b), 0);
             if (this.a == null) {
                 return false;
             } else if (this.f() && this.b.r(true)) {
@@ -58,7 +58,7 @@ public class PathfinderGoalMakeLove extends PathfinderGoal {
         this.b.getControllerLook().a(this.c, 10.0F, 30.0F);
         if (this.b.h(this.c) > 2.25D) {
             this.b.getNavigation().a((Entity) this.c, 0.25D);
-        } else if (this.e == 0 && this.c.di()) {
+        } else if (this.e == 0 && this.c.dk()) {
             this.i();
         }
 

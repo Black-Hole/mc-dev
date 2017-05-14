@@ -30,7 +30,7 @@ public class ChatComponentScore extends ChatBaseComponent {
     }
 
     public void a(ICommandListener icommandlistener) {
-        MinecraftServer minecraftserver = icommandlistener.B_();
+        MinecraftServer minecraftserver = icommandlistener.C_();
 
         if (minecraftserver != null && minecraftserver.M() && UtilColor.b(this.d)) {
             Scoreboard scoreboard = minecraftserver.getWorldServer(0).getScoreboard();

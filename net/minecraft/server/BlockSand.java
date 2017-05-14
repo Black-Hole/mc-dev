@@ -30,7 +30,7 @@ public class BlockSand extends BlockFalling {
 
     public static enum EnumSandVariant implements INamable {
 
-        SAND(0, "sand", "default", MaterialMapColor.d, -2370656), RED_SAND(1, "red_sand", "red", MaterialMapColor.q, -5679071);
+        SAND(0, "sand", "default", MaterialMapColor.e, -2370656), RED_SAND(1, "red_sand", "red", MaterialMapColor.r, -5679071);
 
         private static final BlockSand.EnumSandVariant[] c = new BlockSand.EnumSandVariant[values().length];
         private final int d;

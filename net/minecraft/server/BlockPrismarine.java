@@ -18,7 +18,7 @@ public class BlockPrismarine extends Block {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return iblockdata.get(BlockPrismarine.VARIANT) == BlockPrismarine.EnumPrismarineVariant.ROUGH ? MaterialMapColor.y : MaterialMapColor.G;
+        return iblockdata.get(BlockPrismarine.VARIANT) == BlockPrismarine.EnumPrismarineVariant.ROUGH ? MaterialMapColor.z : MaterialMapColor.H;
     }
 
     public int getDropData(IBlockData iblockdata) {

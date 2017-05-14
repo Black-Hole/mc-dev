@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.base.Predicate;
+import java.util.Iterator;
 import javax.annotation.Nullable;
 
 public class BlockPumpkin extends BlockFacingHorizontal {
@@ -20,7 +21,7 @@ public class BlockPumpkin extends BlockFacingHorizontal {
     };
 
     protected BlockPumpkin() {
-        super(Material.PUMPKIN, MaterialMapColor.q);
+        super(Material.PUMPKIN, MaterialMapColor.r);
         this.y(this.blockStateList.getBlockData().set(BlockPumpkin.FACING, EnumDirection.NORTH));
         this.a(true);
         this.a(CreativeModeTab.b);
@@ -38,6 +39,8 @@ public class BlockPumpkin extends BlockFacingHorizontal {
     private void c(World world, BlockPosition blockposition) {
         ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.getDetectorSnowGolem().a(world, blockposition);
         int i;
+        Iterator iterator;
+        EntityPlayer entityplayer;
         int j;
 
         if (shapedetector_shapedetectorcollection != null) {
@@ -52,6 +55,12 @@ public class BlockPumpkin extends BlockFacingHorizontal {
 
             entitysnowman.setPositionRotation((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.05D, (double) blockposition1.getZ() + 0.5D, 0.0F, 0.0F);
             world.addEntity(entitysnowman);
+            iterator = world.a(EntityPlayer.class, entitysnowman.getBoundingBox().g(5.0D)).iterator();
+
+            while (iterator.hasNext()) {
+                entityplayer = (EntityPlayer) iterator.next();
+                CriterionTriggers.m.a(entityplayer, (Entity) entitysnowman);
+            }
 
             for (j = 0; j < 120; ++j) {
                 world.addParticle(EnumParticle.SNOW_SHOVEL, (double) blockposition1.getX() + world.random.nextDouble(), (double) blockposition1.getY() + world.random.nextDouble() * 2.5D, (double) blockposition1.getZ() + world.random.nextDouble(), 0.0D, 0.0D, 0.0D, new int[0]);
@@ -77,6 +86,12 @@ public class BlockPumpkin extends BlockFacingHorizontal {
                 entityirongolem.setPlayerCreated(true);
                 entityirongolem.setPositionRotation((double) blockposition2.getX() + 0.5D, (double) blockposition2.getY() + 0.05D, (double) blockposition2.getZ() + 0.5D, 0.0F, 0.0F);
                 world.addEntity(entityirongolem);
+                iterator = world.a(EntityPlayer.class, entityirongolem.getBoundingBox().g(5.0D)).iterator();
+
+                while (iterator.hasNext()) {
+                    entityplayer = (EntityPlayer) iterator.next();
+                    CriterionTriggers.m.a(entityplayer, (Entity) entityirongolem);
+                }
 
                 for (j = 0; j < 120; ++j) {
                     world.addParticle(EnumParticle.SNOWBALL, (double) blockposition2.getX() + world.random.nextDouble(), (double) blockposition2.getY() + world.random.nextDouble() * 3.9D, (double) blockposition2.getZ() + world.random.nextDouble(), 0.0D, 0.0D, 0.0D, new int[0]);

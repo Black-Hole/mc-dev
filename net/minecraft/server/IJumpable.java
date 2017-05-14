@@ -4,7 +4,7 @@ public interface IJumpable {
 
     boolean a();
 
-    void b(int i);
+    void b_(int i);
 
-    void q_();
+    void r_();
 }

@@ -5,27 +5,27 @@ import java.io.IOException;
 public class PacketPlayOutChat implements Packet<PacketListenerPlayOut> {
 
     private IChatBaseComponent a;
-    private byte b;
+    private ChatMessageType b;
 
     public PacketPlayOutChat() {}
 
     public PacketPlayOutChat(IChatBaseComponent ichatbasecomponent) {
-        this(ichatbasecomponent, (byte) 1);
+        this(ichatbasecomponent, ChatMessageType.SYSTEM);
     }
 
-    public PacketPlayOutChat(IChatBaseComponent ichatbasecomponent, byte b0) {
+    public PacketPlayOutChat(IChatBaseComponent ichatbasecomponent, ChatMessageType chatmessagetype) {
         this.a = ichatbasecomponent;
-        this.b = b0;
+        this.b = chatmessagetype;
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.f();
-        this.b = packetdataserializer.readByte();
+        this.b = ChatMessageType.a(packetdataserializer.readByte());
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
-        packetdataserializer.writeByte(this.b);
+        packetdataserializer.writeByte(this.b.a());
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
@@ -33,10 +33,10 @@ public class PacketPlayOutChat implements Packet<PacketListenerPlayOut> {
     }
 
     public boolean b() {
-        return this.b == 1 || this.b == 2;
+        return this.b == ChatMessageType.SYSTEM || this.b == ChatMessageType.GAME_INFO;
     }
 
-    public byte c() {
+    public ChatMessageType c() {
         return this.b;
     }
 }

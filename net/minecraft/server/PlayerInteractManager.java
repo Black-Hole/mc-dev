@@ -112,7 +112,7 @@ public class PlayerInteractManager {
                     return;
                 }
 
-                if (!this.player.dc()) {
+                if (!this.player.di()) {
                     ItemStack itemstack = this.player.getItemInMainHand();
 
                     if (itemstack.isEmpty()) {
@@ -197,7 +197,7 @@ public class PlayerInteractManager {
             TileEntity tileentity = this.world.getTileEntity(blockposition);
             Block block = iblockdata.getBlock();
 
-            if ((block instanceof BlockCommand || block instanceof BlockStructure) && !this.player.dk()) {
+            if ((block instanceof BlockCommand || block instanceof BlockStructure) && !this.player.isCreativeAndOp()) {
                 this.world.notify(blockposition, iblockdata, iblockdata, 3);
                 return false;
             } else {
@@ -206,7 +206,7 @@ public class PlayerInteractManager {
                         return false;
                     }
 
-                    if (!this.player.dc()) {
+                    if (!this.player.di()) {
                         ItemStack itemstack = this.player.getItemInMainHand();
 
                         if (itemstack.isEmpty()) {
@@ -246,7 +246,7 @@ public class PlayerInteractManager {
     public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand) {
         if (this.gamemode == EnumGamemode.SPECTATOR) {
             return EnumInteractionResult.PASS;
-        } else if (entityhuman.di().a(itemstack.getItem())) {
+        } else if (entityhuman.getCooldownTracker().a(itemstack.getItem())) {
             return EnumInteractionResult.PASS;
         } else {
             int i = itemstack.getCount();
@@ -289,7 +289,7 @@ public class PlayerInteractManager {
                 ITileInventory itileinventory = (ITileInventory) tileentity;
 
                 if (itileinventory instanceof TileEntityChest && block instanceof BlockChest) {
-                    itileinventory = ((BlockChest) block).c(world, blockposition);
+                    itileinventory = ((BlockChest) block).getInventory(world, blockposition);
                 }
 
                 if (itileinventory != null) {
@@ -313,10 +313,10 @@ public class PlayerInteractManager {
 
             if (itemstack.isEmpty()) {
                 return EnumInteractionResult.PASS;
-            } else if (entityhuman.di().a(itemstack.getItem())) {
+            } else if (entityhuman.getCooldownTracker().a(itemstack.getItem())) {
                 return EnumInteractionResult.PASS;
             } else {
-                if (itemstack.getItem() instanceof ItemBlock && !entityhuman.dk()) {
+                if (itemstack.getItem() instanceof ItemBlock && !entityhuman.isCreativeAndOp()) {
                     Block block1 = ((ItemBlock) itemstack.getItem()).getBlock();
 
                     if (block1 instanceof BlockCommand || block1 instanceof BlockStructure) {

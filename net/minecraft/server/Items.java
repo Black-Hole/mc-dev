@@ -211,6 +211,7 @@ public class Items {
     public static final Item cY;
     public static final Item cZ;
     public static final Item da;
+    public static final Item db;
 
     private static Item get(String s) {
         Item item = (Item) Item.REGISTRY.get(new MinecraftKey(s));
@@ -435,6 +436,7 @@ public class Items {
             cY = get("totem_of_undying");
             cZ = get("shulker_shell");
             da = get("iron_nugget");
+            db = get("knowledge_book");
         }
     }
 }

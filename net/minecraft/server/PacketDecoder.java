@@ -35,7 +35,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
                 } else {
                     list.add(packet);
                     if (PacketDecoder.a.isDebugEnabled()) {
-                        PacketDecoder.a.debug(PacketDecoder.b, " IN: [{}:{}] {}", new Object[] { channelhandlercontext.channel().attr(NetworkManager.c).get(), Integer.valueOf(i), packet.getClass().getName()});
+                        PacketDecoder.a.debug(PacketDecoder.b, " IN: [{}:{}] {}", channelhandlercontext.channel().attr(NetworkManager.c).get(), Integer.valueOf(i), packet.getClass().getName());
                     }
 
                 }

@@ -30,7 +30,7 @@ public abstract class BlockWoodenStep extends BlockStepAbstract {
         return new ItemStack(Blocks.WOODEN_SLAB, 1, ((BlockWood.EnumLogVariant) iblockdata.get(BlockWoodenStep.VARIANT)).a());
     }
 
-    public String e(int i) {
+    public String b(int i) {
         return super.a() + "." + BlockWood.EnumLogVariant.a(i).d();
     }
 

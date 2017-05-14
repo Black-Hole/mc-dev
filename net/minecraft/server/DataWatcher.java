@@ -36,7 +36,7 @@ public class DataWatcher {
                 Class oclass1 = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName());
 
                 if (!oclass1.equals(oclass)) {
-                    DataWatcher.a.debug("defineId called for: {} from {}", new Object[] { oclass, oclass1, new RuntimeException()});
+                    DataWatcher.a.debug("defineId called for: {} from {}", oclass, oclass1, new RuntimeException());
                 }
             } catch (ClassNotFoundException classnotfoundexception) {
                 ;
@@ -201,7 +201,7 @@ public class DataWatcher {
 
         DataWatcher.Item datawatcher_item;
 
-        for (Iterator iterator = this.d.values().iterator(); iterator.hasNext(); arraylist.add(datawatcher_item)) {
+        for (Iterator iterator = this.d.values().iterator(); iterator.hasNext(); arraylist.add(datawatcher_item.d())) {
             datawatcher_item = (DataWatcher.Item) iterator.next();
             if (arraylist == null) {
                 arraylist = Lists.newArrayList();
@@ -297,6 +297,10 @@ public class DataWatcher {
 
         public void a(boolean flag) {
             this.c = flag;
+        }
+
+        public DataWatcher.Item<T> d() {
+            return new DataWatcher.Item(this.a, this.a.b().a(this.b));
         }
     }
 }

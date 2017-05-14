@@ -16,7 +16,7 @@ public class PacketPlayOutSetSlot implements Packet<PacketListenerPlayOut> {
         this.c = ItemStack.a;
         this.a = i;
         this.b = j;
-        this.c = itemstack.isEmpty() ? ItemStack.a : itemstack.cloneItemStack();
+        this.c = itemstack.cloneItemStack();
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

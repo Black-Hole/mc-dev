@@ -75,7 +75,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         return 64;
     }
 
-    public void F_() {
+    public void e() {
         if (this.world != null && !this.world.isClientSide) {
             --this.f;
             this.g = this.world.getTime();
@@ -129,7 +129,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         return false;
     }
 
-    public boolean w_() {
+    public boolean x_() {
         return this.p();
     }
 
@@ -155,7 +155,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         if (iinventory == null) {
             return false;
         } else {
-            EnumDirection enumdirection = BlockHopper.e(this.v()).opposite();
+            EnumDirection enumdirection = BlockHopper.b(this.v()).opposite();
 
             if (this.a(iinventory, enumdirection)) {
                 return false;
@@ -353,7 +353,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
 
         if (a(iinventory1, itemstack, i, enumdirection)) {
             boolean flag = false;
-            boolean flag1 = iinventory1.w_();
+            boolean flag1 = iinventory1.x_();
 
             if (itemstack1.isEmpty()) {
                 iinventory1.setItem(i, itemstack);
@@ -395,7 +395,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
     }
 
     private IInventory I() {
-        EnumDirection enumdirection = BlockHopper.e(this.v());
+        EnumDirection enumdirection = BlockHopper.b(this.v());
 
         return b(this.getWorld(), this.E() + (double) enumdirection.getAdjacentX(), this.F() + (double) enumdirection.getAdjacentY(), this.G() + (double) enumdirection.getAdjacentZ());
     }

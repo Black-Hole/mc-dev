@@ -15,6 +15,7 @@ import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import javax.annotation.Nullable;
 
 public interface IChatBaseComponent extends Iterable<IChatBaseComponent> {
 
@@ -103,12 +104,14 @@ public interface IChatBaseComponent extends Iterable<IChatBaseComponent> {
                     if (jsonobject1.has("value")) {
                         ((ChatComponentScore) object).b(ChatDeserializer.h(jsonobject1, "value"));
                     }
+                } else if (jsonobject.has("selector")) {
+                    object = new ChatComponentSelector(ChatDeserializer.h(jsonobject, "selector"));
                 } else {
-                    if (!jsonobject.has("selector")) {
+                    if (!jsonobject.has("keybind")) {
                         throw new JsonParseException("Don\'t know how to turn " + jsonelement + " into a Component");
                     }
 
-                    object = new ChatComponentSelector(ChatDeserializer.h(jsonobject, "selector"));
+                    object = new ChatComponentKeybind(ChatDeserializer.h(jsonobject, "keybind"));
                 }
 
                 if (jsonobject.has("extra")) {
@@ -195,14 +198,18 @@ public interface IChatBaseComponent extends Iterable<IChatBaseComponent> {
                 jsonobject1.addProperty("objective", chatcomponentscore.h());
                 jsonobject1.addProperty("value", chatcomponentscore.getText());
                 jsonobject.add("score", jsonobject1);
-            } else {
-                if (!(ichatbasecomponent instanceof ChatComponentSelector)) {
-                    throw new IllegalArgumentException("Don\'t know how to serialize " + ichatbasecomponent + " as a Component");
-                }
-
+            } else if (ichatbasecomponent instanceof ChatComponentSelector) {
                 ChatComponentSelector chatcomponentselector = (ChatComponentSelector) ichatbasecomponent;
 
                 jsonobject.addProperty("selector", chatcomponentselector.g());
+            } else {
+                if (!(ichatbasecomponent instanceof ChatComponentKeybind)) {
+                    throw new IllegalArgumentException("Don\'t know how to serialize " + ichatbasecomponent + " as a Component");
+                }
+
+                ChatComponentKeybind chatcomponentkeybind = (ChatComponentKeybind) ichatbasecomponent;
+
+                jsonobject.addProperty("keybind", chatcomponentkeybind.h());
             }
 
             return jsonobject;
@@ -212,10 +219,12 @@ public interface IChatBaseComponent extends Iterable<IChatBaseComponent> {
             return IChatBaseComponent.ChatSerializer.a.toJson(ichatbasecomponent);
         }
 
+        @Nullable
         public static IChatBaseComponent a(String s) {
             return (IChatBaseComponent) ChatDeserializer.a(IChatBaseComponent.ChatSerializer.a, s, IChatBaseComponent.class, false);
         }
 
+        @Nullable
         public static IChatBaseComponent b(String s) {
             return (IChatBaseComponent) ChatDeserializer.a(IChatBaseComponent.ChatSerializer.a, s, IChatBaseComponent.class, true);
         }

@@ -125,4 +125,8 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockFenceGate.FACING, BlockFenceGate.OPEN, BlockFenceGate.POWERED, BlockFenceGate.IN_WALL});
     }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection != EnumDirection.UP && enumdirection != EnumDirection.DOWN ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == enumdirection.e().k() ? EnumBlockFaceShape.MIDDLE_POLE : EnumBlockFaceShape.UNDEFINED) : EnumBlockFaceShape.UNDEFINED;
+    }
 }

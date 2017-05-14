@@ -19,7 +19,7 @@ public class ItemFireworks extends Item {
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
-        if (entityhuman.cH()) {
+        if (entityhuman.cN()) {
             ItemStack itemstack = entityhuman.b(enumhand);
 
             if (!world.isClientSide) {

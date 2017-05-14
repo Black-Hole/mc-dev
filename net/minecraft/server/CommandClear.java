@@ -22,7 +22,7 @@ public class CommandClear extends CommandAbstract {
     }
 
     public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        EntityPlayer entityplayer = astring.length == 0 ? a(icommandlistener) : a(minecraftserver, icommandlistener, astring[0]);
+        EntityPlayer entityplayer = astring.length == 0 ? a(icommandlistener) : b(minecraftserver, icommandlistener, astring[0]);
         Item item = astring.length >= 2 ? a(icommandlistener, astring[1]) : null;
         int i = astring.length >= 3 ? a(astring[2], -1) : -1;
         int j = astring.length >= 4 ? a(astring[3], -1) : -1;

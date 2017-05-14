@@ -9,4 +9,8 @@ public class ExceptionInvalidNumber extends CommandException {
     public ExceptionInvalidNumber(String s, Object... aobject) {
         super(s, aobject);
     }
+
+    public synchronized Throwable fillInStackTrace() {
+        return this;
+    }
 }

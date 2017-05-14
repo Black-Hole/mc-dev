@@ -81,7 +81,7 @@ public abstract class EntityHanging extends Entity {
         return i % 32 == 0 ? 0.5D : 0.0D;
     }
 
-    public void A_() {
+    public void B_() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
@@ -141,7 +141,7 @@ public abstract class EntityHanging extends Entity {
         } else {
             if (!this.dead && !this.world.isClientSide) {
                 this.die();
-                this.ap();
+                this.av();
                 this.a(damagesource.getEntity());
             }
 
@@ -185,7 +185,7 @@ public abstract class EntityHanging extends Entity {
 
     public abstract void a(@Nullable Entity entity);
 
-    public abstract void o();
+    public abstract void p();
 
     public EntityItem a(ItemStack itemstack, float f) {
         EntityItem entityitem = new EntityItem(this.world, this.locX + (double) ((float) this.direction.getAdjacentX() * 0.15F), this.locY + (double) f, this.locZ + (double) ((float) this.direction.getAdjacentZ() * 0.15F), itemstack);
@@ -195,7 +195,7 @@ public abstract class EntityHanging extends Entity {
         return entityitem;
     }
 
-    protected boolean as() {
+    protected boolean ay() {
         return false;
     }
 

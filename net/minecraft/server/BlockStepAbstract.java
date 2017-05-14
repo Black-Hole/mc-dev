@@ -15,7 +15,7 @@ public abstract class BlockStepAbstract extends Block {
     public BlockStepAbstract(Material material, MaterialMapColor materialmapcolor) {
         super(material, materialmapcolor);
         this.l = this.e();
-        this.d(255);
+        this.e(255);
     }
 
     protected boolean n() {
@@ -28,6 +28,10 @@ public abstract class BlockStepAbstract extends Block {
 
     public boolean k(IBlockData iblockdata) {
         return ((BlockStepAbstract) iblockdata.getBlock()).e() || iblockdata.get(BlockStepAbstract.HALF) == BlockStepAbstract.EnumSlabHalf.TOP;
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return ((BlockStepAbstract) iblockdata.getBlock()).e() ? EnumBlockFaceShape.SOLID : (enumdirection == EnumDirection.UP && iblockdata.get(BlockStepAbstract.HALF) == BlockStepAbstract.EnumSlabHalf.TOP ? EnumBlockFaceShape.SOLID : (enumdirection == EnumDirection.DOWN && iblockdata.get(BlockStepAbstract.HALF) == BlockStepAbstract.EnumSlabHalf.BOTTOM ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED));
     }
 
     public boolean b(IBlockData iblockdata) {
@@ -48,7 +52,7 @@ public abstract class BlockStepAbstract extends Block {
         return this.e();
     }
 
-    public abstract String e(int i);
+    public abstract String b(int i);
 
     public abstract boolean e();
 

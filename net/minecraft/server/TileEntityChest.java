@@ -31,7 +31,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
         return 27;
     }
 
-    public boolean w_() {
+    public boolean x_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -160,7 +160,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
         }
     }
 
-    public void F_() {
+    public void e() {
         this.o();
         int i = this.position.getX();
         int j = this.position.getY();
@@ -204,7 +204,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
                 d1 += 0.5D;
             }
 
-            this.world.a((EntityHuman) null, d1, (double) j + 0.5D, d0, SoundEffects.Z, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            this.world.a((EntityHuman) null, d1, (double) j + 0.5D, d0, SoundEffects.ac, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
         }
 
         if (this.l == 0 && this.j > 0.0F || this.l > 0 && this.j < 1.0F) {
@@ -234,7 +234,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
                     d0 += 0.5D;
                 }
 
-                this.world.a((EntityHuman) null, d0, (double) j + 0.5D, d2, SoundEffects.X, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                this.world.a((EntityHuman) null, d0, (double) j + 0.5D, d2, SoundEffects.aa, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
             }
 
             if (this.j < 0.0F) {

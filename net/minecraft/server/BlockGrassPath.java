@@ -8,7 +8,7 @@ public class BlockGrassPath extends Block {
 
     protected BlockGrassPath() {
         super(Material.EARTH);
-        this.d(255);
+        this.e(255);
     }
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -46,5 +46,9 @@ public class BlockGrassPath extends Block {
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         super.a(iblockdata, world, blockposition, block, blockposition1);
         this.b(world, blockposition);
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.DOWN ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
     }
 }

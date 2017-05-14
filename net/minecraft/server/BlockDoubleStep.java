@@ -7,4 +7,8 @@ public class BlockDoubleStep extends BlockDoubleStepAbstract {
     public boolean e() {
         return true;
     }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.SOLID;
+    }
 }

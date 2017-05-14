@@ -151,7 +151,7 @@ public class WorldGenCanyon extends WorldGenBase {
                                                     chunksnapshot.a(j3, j4, i4, WorldGenCanyon.b);
                                                     if (flag2 && chunksnapshot.a(j3, j4 - 1, i4).getBlock() == Blocks.DIRT) {
                                                         blockposition_mutableblockposition.c(j3 + j * 16, 0, i4 + k * 16);
-                                                        chunksnapshot.a(j3, j4 - 1, i4, this.g.getBiome(blockposition_mutableblockposition).r);
+                                                        chunksnapshot.a(j3, j4 - 1, i4, this.g.getBiome(blockposition_mutableblockposition).q);
                                                     }
                                                 }
                                             }

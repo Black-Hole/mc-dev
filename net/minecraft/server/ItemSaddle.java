@@ -13,7 +13,7 @@ public class ItemSaddle extends Item {
 
             if (!entitypig.hasSaddle() && !entitypig.isBaby()) {
                 entitypig.setSaddle(true);
-                entitypig.world.a(entityhuman, entitypig.locX, entitypig.locY, entitypig.locZ, SoundEffects.es, SoundCategory.NEUTRAL, 0.5F, 1.0F);
+                entitypig.world.a(entityhuman, entitypig.locX, entitypig.locY, entitypig.locZ, SoundEffects.fr, SoundCategory.NEUTRAL, 0.5F, 1.0F);
                 itemstack.subtract(1);
             }
 

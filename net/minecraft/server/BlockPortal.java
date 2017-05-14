@@ -46,7 +46,7 @@ public class BlockPortal extends BlockHalfTransparent {
                 Entity entity = ItemMonsterEgg.a(world, EntityTypes.getName(EntityPigZombie.class), (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 1.1D, (double) blockposition1.getZ() + 0.5D);
 
                 if (entity != null) {
-                    entity.portalCooldown = entity.aE();
+                    entity.portalCooldown = entity.aK();
                 }
             }
         }
@@ -107,7 +107,7 @@ public class BlockPortal extends BlockHalfTransparent {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (!entity.isPassenger() && !entity.isVehicle() && entity.aX()) {
+        if (!entity.isPassenger() && !entity.isVehicle() && entity.bd()) {
             entity.e(blockposition);
         }
 
@@ -200,6 +200,10 @@ public class BlockPortal extends BlockHalfTransparent {
 
             return new ShapeDetector.ShapeDetectorCollection(enumdirection.c() == enumdirection_enumaxisdirection1 ? blockposition1 : blockposition1.shift(blockportal_shape.c, blockportal_shape.b() - 1), EnumDirection.a(enumdirection_enumaxisdirection1, enumdirection_enumaxis), EnumDirection.UP, loadingcache, blockportal_shape.b(), blockportal_shape.a(), 1);
         }
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 
     public static class Shape {

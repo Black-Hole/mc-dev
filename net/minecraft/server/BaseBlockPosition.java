@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
@@ -86,7 +86,7 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
     }
 
     public String toString() {
-        return Objects.toStringHelper(this).add("x", this.getX()).add("y", this.getY()).add("z", this.getZ()).toString();
+        return MoreObjects.toStringHelper(this).add("x", this.getX()).add("y", this.getY()).add("z", this.getZ()).toString();
     }
 
     public int compareTo(Object object) {

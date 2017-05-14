@@ -93,7 +93,7 @@ public class BlockChest extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityChest) {
-                ((TileEntityChest) tileentity).a(itemstack.getName());
+                ((TileEntityChest) tileentity).setCustomName(itemstack.getName());
             }
         }
 
@@ -302,7 +302,7 @@ public class BlockChest extends BlockTileEntity {
         if (world.isClientSide) {
             return true;
         } else {
-            ITileInventory itileinventory = this.c(world, blockposition);
+            ITileInventory itileinventory = this.getInventory(world, blockposition);
 
             if (itileinventory != null) {
                 entityhuman.openContainer(itileinventory);
@@ -318,7 +318,7 @@ public class BlockChest extends BlockTileEntity {
     }
 
     @Nullable
-    public ITileInventory c(World world, BlockPosition blockposition) {
+    public ITileInventory getInventory(World world, BlockPosition blockposition) {
         return this.a(world, blockposition, false);
     }
 
@@ -421,7 +421,7 @@ public class BlockChest extends BlockTileEntity {
     }
 
     public int c(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        return Container.b((IInventory) this.c(world, blockposition));
+        return Container.b((IInventory) this.getInventory(world, blockposition));
     }
 
     public IBlockData fromLegacyData(int i) {
@@ -448,6 +448,10 @@ public class BlockChest extends BlockTileEntity {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockChest.FACING});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 
     public static enum Type {

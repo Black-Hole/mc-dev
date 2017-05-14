@@ -19,24 +19,24 @@ public class EntityBat extends EntityAmbient {
         this.datawatcher.register(EntityBat.a, Byte.valueOf((byte) 0));
     }
 
-    protected float ci() {
+    protected float co() {
         return 0.1F;
     }
 
-    protected float cj() {
-        return super.cj() * 0.95F;
+    protected float cp() {
+        return super.cp() * 0.95F;
     }
 
     @Nullable
-    protected SoundEffect G() {
+    public SoundEffect F() {
         return this.isAsleep() && this.random.nextInt(4) != 0 ? null : SoundEffects.x;
     }
 
-    protected SoundEffect bW() {
+    protected SoundEffect d(DamageSource damagesource) {
         return SoundEffects.z;
     }
 
-    protected SoundEffect bX() {
+    protected SoundEffect cd() {
         return SoundEffects.y;
     }
 
@@ -46,7 +46,7 @@ public class EntityBat extends EntityAmbient {
 
     protected void C(Entity entity) {}
 
-    protected void ct() {}
+    protected void cz() {}
 
     protected void initAttributes() {
         super.initAttributes();
@@ -68,8 +68,8 @@ public class EntityBat extends EntityAmbient {
 
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (this.isAsleep()) {
             this.motX = 0.0D;
             this.motY = 0.0D;
@@ -119,7 +119,7 @@ public class EntityBat extends EntityAmbient {
             float f = (float) (MathHelper.c(this.motZ, this.motX) * 57.2957763671875D) - 90.0F;
             float f1 = MathHelper.g(f - this.yaw);
 
-            this.bf = 0.5F;
+            this.bg = 0.5F;
             this.yaw += f1;
             if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).m()) {
                 this.setAsleep(true);
@@ -166,22 +166,22 @@ public class EntityBat extends EntityAmbient {
         nbttagcompound.setByte("BatFlags", ((Byte) this.datawatcher.get(EntityBat.a)).byteValue());
     }
 
-    public boolean cM() {
+    public boolean P() {
         BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
-        if (blockposition.getY() >= this.world.K()) {
+        if (blockposition.getY() >= this.world.getSeaLevel()) {
             return false;
         } else {
             int i = this.world.getLightLevel(blockposition);
             byte b0 = 4;
 
-            if (this.a(this.world.ac())) {
+            if (this.a(this.world.ae())) {
                 b0 = 7;
             } else if (this.random.nextBoolean()) {
                 return false;
             }
 
-            return i > this.random.nextInt(b0) ? false : super.cM();
+            return i > this.random.nextInt(b0) ? false : super.P();
         }
     }
 

@@ -28,7 +28,7 @@ public class CommandTell extends CommandAbstract {
         if (astring.length < 2) {
             throw new ExceptionUsage("commands.message.usage", new Object[0]);
         } else {
-            EntityPlayer entityplayer = a(minecraftserver, icommandlistener, astring[0]);
+            EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[0]);
 
             if (entityplayer == icommandlistener) {
                 throw new ExceptionPlayerNotFound("commands.message.sameTarget");

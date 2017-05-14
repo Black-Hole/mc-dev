@@ -24,18 +24,18 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     protected void b(World world, BlockPosition blockposition) {
         if (this.material == Material.WOOD) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.ic, SoundCategory.BLOCKS, 0.3F, 0.8F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.jd, SoundCategory.BLOCKS, 0.3F, 0.8F);
         } else {
-            world.a((EntityHuman) null, blockposition, SoundEffects.gO, SoundCategory.BLOCKS, 0.3F, 0.6F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.hP, SoundCategory.BLOCKS, 0.3F, 0.6F);
         }
 
     }
 
     protected void c(World world, BlockPosition blockposition) {
         if (this.material == Material.WOOD) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.ib, SoundCategory.BLOCKS, 0.3F, 0.7F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.jc, SoundCategory.BLOCKS, 0.3F, 0.7F);
         } else {
-            world.a((EntityHuman) null, blockposition, SoundEffects.gN, SoundCategory.BLOCKS, 0.3F, 0.5F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.hO, SoundCategory.BLOCKS, 0.3F, 0.5F);
         }
 
     }

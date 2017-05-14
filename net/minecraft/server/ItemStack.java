@@ -141,7 +141,7 @@ public final class ItemStack {
     }
 
     public boolean usesData() {
-        return this.getItem().l();
+        return this.getItem().k();
     }
 
     public boolean h() {
@@ -168,7 +168,7 @@ public final class ItemStack {
         return this.getItem().getMaxDurability();
     }
 
-    public boolean isDamaged(int i, Random random) {
+    public boolean isDamaged(int i, Random random, @Nullable EntityPlayer entityplayer) {
         if (!this.f()) {
             return false;
         } else {
@@ -188,6 +188,10 @@ public final class ItemStack {
                 }
             }
 
+            if (entityplayer != null && i != 0) {
+                CriterionTriggers.s.a(entityplayer, this, this.damage + i);
+            }
+
             this.damage += i;
             return this.damage > this.k();
         }
@@ -196,7 +200,7 @@ public final class ItemStack {
     public void damage(int i, EntityLiving entityliving) {
         if (!(entityliving instanceof EntityHuman) || !((EntityHuman) entityliving).abilities.canInstantlyBuild) {
             if (this.f()) {
-                if (this.isDamaged(i, entityliving.getRandom())) {
+                if (this.isDamaged(i, entityliving.getRandom(), entityliving instanceof EntityPlayer ? (EntityPlayer) entityliving : null)) {
                     entityliving.b(this);
                     this.subtract(1);
                     if (entityliving instanceof EntityHuman) {
@@ -241,6 +245,7 @@ public final class ItemStack {
     public ItemStack cloneItemStack() {
         ItemStack itemstack = new ItemStack(this.item, this.count, this.damage);
 
+        itemstack.d(this.D());
         if (this.tag != null) {
             itemstack.tag = this.tag.g();
         }
@@ -439,7 +444,7 @@ public final class ItemStack {
     }
 
     public boolean y() {
-        return this.getItem().t();
+        return this.getItem().s();
     }
 
     public boolean z() {
@@ -572,6 +577,10 @@ public final class ItemStack {
             this.m = false;
             return false;
         }
+    }
+
+    public int D() {
+        return this.d;
     }
 
     public void d(int i) {

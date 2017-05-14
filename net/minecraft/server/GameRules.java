@@ -29,6 +29,10 @@ public class GameRules {
         this.a("disableElytraMovementCheck", "false", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
         this.a("maxEntityCramming", "24", GameRules.EnumGameRuleType.NUMERICAL_VALUE);
         this.a("doWeatherCycle", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("doLimitedCrafting", "false", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("maxCommandChainLength", "65536", GameRules.EnumGameRuleType.NUMERICAL_VALUE);
+        this.a("announceAdvancements", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
+        this.a("gameLoopFunction", "-", GameRules.EnumGameRuleType.ANY_VALUE);
     }
 
     public void a(String s, String s1, GameRules.EnumGameRuleType gamerules_enumgameruletype) {

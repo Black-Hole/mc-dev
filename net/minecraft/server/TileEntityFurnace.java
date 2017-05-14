@@ -22,7 +22,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
         return this.items.size();
     }
 
-    public boolean w_() {
+    public boolean x_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -75,7 +75,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
         return this.m != null && !this.m.isEmpty();
     }
 
-    public void a(String s) {
+    public void setCustomName(String s) {
         this.m = s;
     }
 
@@ -118,7 +118,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
         return this.burnTime > 0;
     }
 
-    public void F_() {
+    public void e() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
 
@@ -144,7 +144,7 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
 
                             itemstack.subtract(1);
                             if (itemstack.isEmpty()) {
-                                Item item1 = item.r();
+                                Item item1 = item.q();
 
                                 this.items.set(1, item1 == null ? ItemStack.a : new ItemStack(item1));
                             }

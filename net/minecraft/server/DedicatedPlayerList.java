@@ -19,15 +19,15 @@ public class DedicatedPlayerList extends PlayerList {
             this.getIPBans().a(true);
         }
 
+        this.A();
+        this.y();
         this.z();
         this.x();
-        this.y();
-        this.w();
-        this.A();
-        this.C();
         this.B();
+        this.D();
+        this.C();
         if (!this.getWhitelist().c().exists()) {
-            this.D();
+            this.E();
         }
 
     }
@@ -40,29 +40,29 @@ public class DedicatedPlayerList extends PlayerList {
 
     public void addOp(GameProfile gameprofile) {
         super.addOp(gameprofile);
-        this.B();
+        this.C();
     }
 
     public void removeOp(GameProfile gameprofile) {
         super.removeOp(gameprofile);
-        this.B();
+        this.C();
     }
 
     public void removeWhitelist(GameProfile gameprofile) {
         super.removeWhitelist(gameprofile);
-        this.D();
+        this.E();
     }
 
     public void addWhitelist(GameProfile gameprofile) {
         super.addWhitelist(gameprofile);
-        this.D();
+        this.E();
     }
 
     public void reloadWhitelist() {
-        this.C();
+        this.D();
     }
 
-    private void w() {
+    private void x() {
         try {
             this.getIPBans().save();
         } catch (IOException ioexception) {
@@ -71,7 +71,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void x() {
+    private void y() {
         try {
             this.getProfileBans().save();
         } catch (IOException ioexception) {
@@ -80,7 +80,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void y() {
+    private void z() {
         try {
             this.getIPBans().load();
         } catch (IOException ioexception) {
@@ -89,7 +89,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void z() {
+    private void A() {
         try {
             this.getProfileBans().load();
         } catch (IOException ioexception) {
@@ -98,7 +98,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void A() {
+    private void B() {
         try {
             this.getOPs().load();
         } catch (Exception exception) {
@@ -107,7 +107,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void B() {
+    private void C() {
         try {
             this.getOPs().save();
         } catch (Exception exception) {
@@ -116,7 +116,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void C() {
+    private void D() {
         try {
             this.getWhitelist().load();
         } catch (Exception exception) {
@@ -125,7 +125,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void D() {
+    private void E() {
         try {
             this.getWhitelist().save();
         } catch (Exception exception) {

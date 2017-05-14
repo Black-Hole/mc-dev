@@ -98,7 +98,7 @@ public abstract class Enchantment {
     public String d(int i) {
         String s = LocaleI18n.get(this.a());
 
-        if (this.d()) {
+        if (this.isCursed()) {
             s = EnumChatFormat.RED + s;
         }
 
@@ -117,7 +117,7 @@ public abstract class Enchantment {
         return false;
     }
 
-    public boolean d() {
+    public boolean isCursed() {
         return false;
     }
 

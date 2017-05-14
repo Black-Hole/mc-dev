@@ -22,6 +22,6 @@ public class BlockLightStone extends Block {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return MaterialMapColor.d;
+        return MaterialMapColor.e;
     }
 }

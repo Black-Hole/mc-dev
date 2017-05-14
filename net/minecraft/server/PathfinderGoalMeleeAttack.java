@@ -38,7 +38,7 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
     public boolean b() {
         EntityLiving entityliving = this.b.getGoalTarget();
 
-        return entityliving == null ? false : (!entityliving.isAlive() ? false : (!this.e ? !this.b.getNavigation().n() : (!this.b.f(new BlockPosition(entityliving)) ? false : !(entityliving instanceof EntityHuman) || !((EntityHuman) entityliving).isSpectator() && !((EntityHuman) entityliving).z())));
+        return entityliving == null ? false : (!entityliving.isAlive() ? false : (!this.e ? !this.b.getNavigation().o() : (!this.b.f(new BlockPosition(entityliving)) ? false : !(entityliving instanceof EntityHuman) || !((EntityHuman) entityliving).isSpectator() && !((EntityHuman) entityliving).z())));
     }
 
     public void c() {
@@ -53,7 +53,7 @@ public class PathfinderGoalMeleeAttack extends PathfinderGoal {
             this.b.setGoalTarget((EntityLiving) null);
         }
 
-        this.b.getNavigation().o();
+        this.b.getNavigation().p();
     }
 
     public void e() {

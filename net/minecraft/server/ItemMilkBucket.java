@@ -8,16 +8,19 @@ public class ItemMilkBucket extends Item {
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
+        if (entityliving instanceof EntityPlayer) {
+            EntityPlayer entityplayer = (EntityPlayer) entityliving;
+
+            CriterionTriggers.y.a(entityplayer, itemstack);
+            entityplayer.b(StatisticList.b((Item) this));
+        }
+
         if (entityliving instanceof EntityHuman && !((EntityHuman) entityliving).abilities.canInstantlyBuild) {
             itemstack.subtract(1);
         }
 
         if (!world.isClientSide) {
             entityliving.removeAllEffects();
-        }
-
-        if (entityliving instanceof EntityHuman) {
-            ((EntityHuman) entityliving).b(StatisticList.b((Item) this));
         }
 
         return itemstack.isEmpty() ? new ItemStack(Items.BUCKET) : itemstack;

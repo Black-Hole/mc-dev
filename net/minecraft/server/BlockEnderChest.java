@@ -98,4 +98,8 @@ public class BlockEnderChest extends BlockTileEntity {
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockEnderChest.FACING});
     }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
+    }
 }

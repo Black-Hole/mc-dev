@@ -28,7 +28,7 @@ public class PotionRegistry {
     }
 
     public String b(String s) {
-        return this.d == null ? s + ((MinecraftKey) PotionRegistry.a.b(this)).a() : s + this.d;
+        return this.d == null ? s + ((MinecraftKey) PotionRegistry.a.b(this)).getKey() : s + this.d;
     }
 
     public List<MobEffect> a() {

@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class Blocks {
 
-    private static final Set<Block> dC;
+    private static final Set<Block> dU;
     public static final Block AIR;
     public static final Block STONE;
     public static final BlockGrass GRASS;
@@ -242,13 +242,31 @@ public class Blocks {
     public static final Block dy;
     public static final Block dz;
     public static final Block dA;
+    public static final Block dB;
+    public static final Block dC;
+    public static final Block dD;
+    public static final Block dE;
+    public static final Block dF;
+    public static final Block dG;
+    public static final Block dH;
+    public static final Block dI;
+    public static final Block dJ;
+    public static final Block dK;
+    public static final Block dL;
+    public static final Block dM;
+    public static final Block dN;
+    public static final Block dO;
+    public static final Block dP;
+    public static final Block dQ;
+    public static final Block dR;
+    public static final Block dS;
     public static final Block STRUCTURE_BLOCK;
 
     @Nullable
     private static Block get(String s) {
         Block block = (Block) Block.REGISTRY.get(new MinecraftKey(s));
 
-        if (!Blocks.dC.add(block)) {
+        if (!Blocks.dU.add(block)) {
             throw new IllegalStateException("Invalid Block requested: " + s);
         } else {
             return block;
@@ -259,7 +277,7 @@ public class Blocks {
         if (!DispenserRegistry.a()) {
             throw new RuntimeException("Accessed Blocks before Bootstrap!");
         } else {
-            dC = Sets.newHashSet();
+            dU = Sets.newHashSet();
             AIR = get("air");
             STONE = get("stone");
             GRASS = (BlockGrass) get("grass");
@@ -495,8 +513,26 @@ public class Blocks {
             dy = get("green_shulker_box");
             dz = get("red_shulker_box");
             dA = get("black_shulker_box");
+            dB = get("white_glazed_terracotta");
+            dC = get("orange_glazed_terracotta");
+            dD = get("magenta_glazed_terracotta");
+            dE = get("light_blue_glazed_terracotta");
+            dF = get("yellow_glazed_terracotta");
+            dG = get("lime_glazed_terracotta");
+            dH = get("pink_glazed_terracotta");
+            dI = get("gray_glazed_terracotta");
+            dJ = get("silver_glazed_terracotta");
+            dK = get("cyan_glazed_terracotta");
+            dL = get("purple_glazed_terracotta");
+            dM = get("blue_glazed_terracotta");
+            dN = get("brown_glazed_terracotta");
+            dO = get("green_glazed_terracotta");
+            dP = get("red_glazed_terracotta");
+            dQ = get("black_glazed_terracotta");
+            dR = get("concrete");
+            dS = get("concrete_powder");
             STRUCTURE_BLOCK = get("structure_block");
-            Blocks.dC.clear();
+            Blocks.dU.clear();
         }
     }
 }

@@ -36,7 +36,7 @@ public class DragonControllerLandingFly extends AbstractDragonController {
 
     private void j() {
         if (this.b == null || this.b.b()) {
-            int i = this.a.o();
+            int i = this.a.p();
             BlockPosition blockposition = this.a.world.q(WorldGenEndTrophy.a);
             EntityHuman entityhuman = this.a.world.a(blockposition, 128.0D, 128.0D);
             int j;

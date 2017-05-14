@@ -17,7 +17,7 @@ public class BlockCarpet extends Block {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return ((EnumColor) iblockdata.get(BlockCarpet.COLOR)).e();
+        return MaterialMapColor.a((EnumColor) iblockdata.get(BlockCarpet.COLOR));
     }
 
     public boolean b(IBlockData iblockdata) {
@@ -64,5 +64,9 @@ public class BlockCarpet extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockCarpet.COLOR});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.DOWN ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
     }
 }

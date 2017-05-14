@@ -30,7 +30,7 @@ public class EntityEnderCrystal extends Entity {
         this.getDataWatcher().register(EntityEnderCrystal.c, Boolean.valueOf(true));
     }
 
-    public void A_() {
+    public void B_() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
@@ -86,9 +86,9 @@ public class EntityEnderCrystal extends Entity {
         }
     }
 
-    public void Q() {
+    public void killEntity() {
         this.a(DamageSource.GENERIC);
-        super.Q();
+        super.killEntity();
     }
 
     private void a(DamageSource damagesource) {

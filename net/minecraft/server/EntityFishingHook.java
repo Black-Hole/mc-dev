@@ -7,7 +7,7 @@ public class EntityFishingHook extends Entity {
 
     private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityFishingHook.class, DataWatcherRegistry.b);
     private boolean isInGround;
-    private int d = 0;
+    private int d;
     public EntityHuman owner;
     private int f;
     private int g;
@@ -37,7 +37,7 @@ public class EntityFishingHook extends Entity {
         this.ax = i;
     }
 
-    public void b(int i) {
+    public void c(int i) {
         this.aw = i;
     }
 
@@ -83,11 +83,11 @@ public class EntityFishingHook extends Entity {
         super.a(datawatcherobject);
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (this.owner == null) {
             this.die();
-        } else if (this.world.isClientSide || !this.o()) {
+        } else if (this.world.isClientSide || !this.p()) {
             if (this.isInGround) {
                 ++this.d;
                 if (this.d >= 1200) {
@@ -183,7 +183,7 @@ public class EntityFishingHook extends Entity {
         }
     }
 
-    private boolean o() {
+    private boolean p() {
         ItemStack itemstack = this.owner.getItemInMainHand();
         ItemStack itemstack1 = this.owner.getItemInOffHand();
         boolean flag = itemstack.getItem() == Items.FISHING_ROD;
@@ -329,7 +329,7 @@ public class EntityFishingHook extends Entity {
                     }
                 } else {
                     this.motY = (double) (-0.4F * MathHelper.a(this.random, 0.6F, 1.0F));
-                    this.a(SoundEffects.H, 0.25F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+                    this.a(SoundEffects.K, 0.25F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
                     double d3 = this.getBoundingBox().b + 0.5D;
 
                     worldserver.a(EnumParticle.WATER_BUBBLE, this.locX, d3, this.locZ, (int) (1.0F + this.width * 20.0F), (double) this.width, 0.0D, (double) this.width, 0.20000000298023224D, new int[0]);
@@ -390,8 +390,8 @@ public class EntityFishingHook extends Entity {
             } else if (this.g > 0) {
                 LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
-                loottableinfo_a.a((float) this.aw + this.owner.dj());
-                Iterator iterator = this.world.ak().a(LootTables.az).a(this.random, loottableinfo_a.a()).iterator();
+                loottableinfo_a.a((float) this.aw + this.owner.ds());
+                Iterator iterator = this.world.getLootTableRegistry().a(LootTables.aA).a(this.random, loottableinfo_a.a()).iterator();
 
                 while (iterator.hasNext()) {
                     ItemStack itemstack = (ItemStack) iterator.next();

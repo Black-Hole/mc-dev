@@ -17,20 +17,20 @@ public class EntitySkeleton extends EntitySkeletonAbstract {
         return LootTables.ao;
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.fP;
+    protected SoundEffect F() {
+        return SoundEffects.gQ;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.fU;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.gV;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.fQ;
+    protected SoundEffect cd() {
+        return SoundEffects.gR;
     }
 
-    SoundEffect o() {
-        return SoundEffects.fW;
+    SoundEffect p() {
+        return SoundEffects.gX;
     }
 
     public void die(DamageSource damagesource) {

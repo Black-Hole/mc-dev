@@ -29,6 +29,7 @@ public class ItemEnderEye extends Item {
                     world.addParticle(EnumParticle.SMOKE_NORMAL, d0, d1, d2, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
 
+                world.a((EntityHuman) null, blockposition, SoundEffects.bp, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = BlockEnderPortalFrame.e().a(world, blockposition);
 
                 if (shapedetector_shapedetectorcollection != null) {
@@ -39,6 +40,8 @@ public class ItemEnderEye extends Item {
                             world.setTypeAndData(blockposition1.a(j, 0, k), Blocks.END_PORTAL.getBlockData(), 2);
                         }
                     }
+
+                    world.a(1038, blockposition1.a(1, 0, 1), 0);
                 }
 
                 return EnumInteractionResult.SUCCESS;
@@ -64,7 +67,11 @@ public class ItemEnderEye extends Item {
 
                     entityendersignal.a(blockposition);
                     world.addEntity(entityendersignal);
-                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.aY, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderEye.j.nextFloat() * 0.4F + 0.8F));
+                    if (entityhuman instanceof EntityPlayer) {
+                        CriterionTriggers.l.a((EntityPlayer) entityhuman, blockposition);
+                    }
+
+                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bc, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderEye.j.nextFloat() * 0.4F + 0.8F));
                     world.a((EntityHuman) null, 1003, new BlockPosition(entityhuman), 0);
                     if (!entityhuman.abilities.canInstantlyBuild) {
                         itemstack.subtract(1);

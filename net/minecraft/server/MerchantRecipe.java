@@ -64,7 +64,7 @@ public class MerchantRecipe {
         return this.maxUses;
     }
 
-    public void g() {
+    public void increaseUses() {
         ++this.uses;
     }
 

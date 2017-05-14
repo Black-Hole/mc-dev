@@ -40,7 +40,7 @@ public class BlockQuartz extends Block {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return MaterialMapColor.p;
+        return MaterialMapColor.q;
     }
 
     public IBlockData fromLegacyData(int i) {

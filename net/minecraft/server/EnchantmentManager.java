@@ -141,7 +141,7 @@ public class EnchantmentManager {
         EnchantmentManager.d.b = entity;
         EnchantmentManager.d.a = entityliving;
         if (entityliving != null) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.aI());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.aO());
         }
 
         if (entity instanceof EntityHuman) {
@@ -154,7 +154,7 @@ public class EnchantmentManager {
         EnchantmentManager.e.a = entityliving;
         EnchantmentManager.e.b = entity;
         if (entityliving != null) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.e, entityliving.aI());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.e, entityliving.aO());
         }
 
         if (entityliving instanceof EntityHuman) {
@@ -229,7 +229,7 @@ public class EnchantmentManager {
         return getEnchantmentLevel(Enchantments.k, itemstack) > 0;
     }
 
-    public static boolean e(ItemStack itemstack) {
+    public static boolean shouldNotDrop(ItemStack itemstack) {
         return getEnchantmentLevel(Enchantments.D, itemstack) > 0;
     }
 

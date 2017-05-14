@@ -11,14 +11,14 @@ public class NavigationGuardian extends NavigationAbstract {
     }
 
     protected boolean b() {
-        return this.p();
+        return this.q();
     }
 
     protected Vec3D c() {
         return new Vec3D(this.a.locX, this.a.locY + (double) this.a.length * 0.5D, this.a.locZ);
     }
 
-    protected void m() {
+    protected void n() {
         Vec3D vec3d = this.c();
         float f = this.a.width * this.a.width;
         boolean flag = true;
@@ -45,7 +45,7 @@ public class NavigationGuardian extends NavigationAbstract {
         return movingobjectposition == null || movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.MISS;
     }
 
-    public boolean b(BlockPosition blockposition) {
+    public boolean a(BlockPosition blockposition) {
         return !this.b.getType(blockposition).b();
     }
 }

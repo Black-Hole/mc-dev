@@ -34,7 +34,7 @@ public class CommandPlaySound extends CommandAbstract {
             if (soundcategory == null) {
                 throw new CommandException("commands.playsound.unknownSoundSource", new Object[] { s1});
             } else {
-                EntityPlayer entityplayer = a(minecraftserver, icommandlistener, astring[i++]);
+                EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[i++]);
                 Vec3D vec3d = icommandlistener.d();
                 double d0 = vec3d.x;
 

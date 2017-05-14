@@ -7,7 +7,7 @@ public abstract class BlockPurpurSlab extends BlockStepAbstract {
     public static final BlockStateEnum<BlockPurpurSlab.Type> d = BlockStateEnum.of("variant", BlockPurpurSlab.Type.class);
 
     public BlockPurpurSlab() {
-        super(Material.STONE, MaterialMapColor.r);
+        super(Material.STONE, MaterialMapColor.s);
         IBlockData iblockdata = this.blockStateList.getBlockData();
 
         if (!this.e()) {
@@ -50,7 +50,7 @@ public abstract class BlockPurpurSlab extends BlockStepAbstract {
         return this.e() ? new BlockStateList(this, new IBlockState[] { BlockPurpurSlab.d}) : new BlockStateList(this, new IBlockState[] { BlockPurpurSlab.HALF, BlockPurpurSlab.d});
     }
 
-    public String e(int i) {
+    public String b(int i) {
         return super.a();
     }
 

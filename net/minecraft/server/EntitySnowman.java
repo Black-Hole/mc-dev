@@ -54,7 +54,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
             int j = MathHelper.floor(this.locY);
             int k = MathHelper.floor(this.locZ);
 
-            if (this.ai()) {
+            if (this.an()) {
                 this.damageEntity(DamageSource.DROWN, 1.0F);
             }
 
@@ -94,7 +94,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         float f1 = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
 
         entitysnowball.shoot(d1, d2 + (double) f1, d3, 1.6F, 12.0F);
-        this.a(SoundEffects.gs, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.a(SoundEffects.ht, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(entitysnowball);
     }
 
@@ -129,17 +129,19 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     }
 
     @Nullable
-    protected SoundEffect G() {
-        return SoundEffects.gp;
+    protected SoundEffect F() {
+        return SoundEffects.hq;
     }
 
     @Nullable
-    protected SoundEffect bW() {
-        return SoundEffects.gr;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.hs;
     }
 
     @Nullable
-    protected SoundEffect bX() {
-        return SoundEffects.gq;
+    protected SoundEffect cd() {
+        return SoundEffects.hr;
     }
+
+    public void p(boolean flag) {}
 }

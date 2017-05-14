@@ -4,12 +4,12 @@ import javax.annotation.Nullable;
 
 public abstract class EntityAgeable extends EntityCreature {
 
-    private static final DataWatcherObject<Boolean> bw = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.h);
+    private static final DataWatcherObject<Boolean> bx = DataWatcher.a(EntityAgeable.class, DataWatcherRegistry.h);
     protected int a;
     protected int b;
     protected int c;
-    private float bx = -1.0F;
-    private float by;
+    private float by = -1.0F;
+    private float bz;
 
     public EntityAgeable(World world) {
         super(world);
@@ -61,11 +61,11 @@ public abstract class EntityAgeable extends EntityCreature {
 
     protected void i() {
         super.i();
-        this.datawatcher.register(EntityAgeable.bw, Boolean.valueOf(false));
+        this.datawatcher.register(EntityAgeable.bx, Boolean.valueOf(false));
     }
 
     public int getAge() {
-        return this.world.isClientSide ? (((Boolean) this.datawatcher.get(EntityAgeable.bw)).booleanValue() ? -1 : 1) : this.a;
+        return this.world.isClientSide ? (((Boolean) this.datawatcher.get(EntityAgeable.bx)).booleanValue() ? -1 : 1) : this.a;
     }
 
     public void setAge(int i, boolean flag) {
@@ -76,7 +76,7 @@ public abstract class EntityAgeable extends EntityCreature {
         if (j > 0) {
             j = 0;
             if (k < 0) {
-                this.o();
+                this.p();
             }
         }
 
@@ -101,7 +101,7 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     public void setAgeRaw(int i) {
-        this.datawatcher.set(EntityAgeable.bw, Boolean.valueOf(i < 0));
+        this.datawatcher.set(EntityAgeable.bx, Boolean.valueOf(i < 0));
         this.a = i;
         this.a(this.isBaby());
     }
@@ -119,7 +119,7 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityAgeable.bw.equals(datawatcherobject)) {
+        if (EntityAgeable.bx.equals(datawatcherobject)) {
             this.a(this.isBaby());
         }
 
@@ -143,7 +143,7 @@ public abstract class EntityAgeable extends EntityCreature {
                 ++i;
                 this.setAgeRaw(i);
                 if (i == 0) {
-                    this.o();
+                    this.p();
                 }
             } else if (i > 0) {
                 --i;
@@ -153,7 +153,7 @@ public abstract class EntityAgeable extends EntityCreature {
 
     }
 
-    protected void o() {}
+    protected void p() {}
 
     public boolean isBaby() {
         return this.getAge() < 0;
@@ -164,10 +164,10 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     public final void setSize(float f, float f1) {
-        boolean flag = this.bx > 0.0F;
+        boolean flag = this.by > 0.0F;
 
-        this.bx = f;
-        this.by = f1;
+        this.by = f;
+        this.bz = f1;
         if (!flag) {
             this.a(1.0F);
         }
@@ -175,6 +175,6 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     protected final void a(float f) {
-        super.setSize(this.bx * f, this.by * f);
+        super.setSize(this.by * f, this.bz * f);
     }
 }

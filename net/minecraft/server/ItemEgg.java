@@ -14,7 +14,7 @@ public class ItemEgg extends Item {
             itemstack.subtract(1);
         }
 
-        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.aE, SoundCategory.PLAYERS, 0.5F, 0.4F / (ItemEgg.j.nextFloat() * 0.4F + 0.8F));
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.aH, SoundCategory.PLAYERS, 0.5F, 0.4F / (ItemEgg.j.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
             EntityEgg entityegg = new EntityEgg(world, entityhuman);
 

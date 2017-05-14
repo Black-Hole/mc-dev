@@ -30,6 +30,9 @@ public class ItemReed extends Item {
                 if (iblockdata1.getBlock() == this.a) {
                     ItemBlock.a(world, entityhuman, blockposition, itemstack);
                     iblockdata1.getBlock().postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
+                    if (entityhuman instanceof EntityPlayer) {
+                        CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition, itemstack);
+                    }
                 }
 
                 SoundEffectType soundeffecttype = this.a.getStepSound();

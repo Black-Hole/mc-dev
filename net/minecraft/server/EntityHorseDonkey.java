@@ -17,23 +17,23 @@ public class EntityHorseDonkey extends EntityHorseChestedAbstract {
         return LootTables.H;
     }
 
-    protected SoundEffect G() {
-        super.G();
-        return SoundEffects.az;
-    }
-
-    protected SoundEffect bX() {
-        super.bX();
+    protected SoundEffect F() {
+        super.F();
         return SoundEffects.aC;
     }
 
-    protected SoundEffect bW() {
-        super.bW();
-        return SoundEffects.aD;
+    protected SoundEffect cd() {
+        super.cd();
+        return SoundEffects.aF;
+    }
+
+    protected SoundEffect d(DamageSource damagesource) {
+        super.d(damagesource);
+        return SoundEffects.aG;
     }
 
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.dG() && ((EntityHorseAbstract) entityanimal).dG());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.dJ() && ((EntityHorseAbstract) entityanimal).dJ());
     }
 
     public EntityAgeable createChild(EntityAgeable entityageable) {

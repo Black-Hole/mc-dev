@@ -24,7 +24,7 @@ public class CommandTestFor extends CommandAbstract {
         if (astring.length < 1) {
             throw new ExceptionUsage("commands.testfor.usage", new Object[0]);
         } else {
-            Entity entity = b(minecraftserver, icommandlistener, astring[0]);
+            Entity entity = c(minecraftserver, icommandlistener, astring[0]);
             NBTTagCompound nbttagcompound = null;
 
             if (astring.length >= 2) {

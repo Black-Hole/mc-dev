@@ -72,7 +72,7 @@ public class EntityTrackerEntry {
             this.scanPlayers(list);
         }
 
-        List list1 = this.tracker.bx();
+        List list1 = this.tracker.bD();
 
         if (!list1.equals(this.w)) {
             this.w = list1;
@@ -157,7 +157,7 @@ public class EntityTrackerEntry {
 
                 boolean flag3 = this.u;
 
-                if (this.tracker instanceof EntityLiving && ((EntityLiving) this.tracker).cH()) {
+                if (this.tracker instanceof EntityLiving && ((EntityLiving) this.tracker).cN()) {
                     flag3 = true;
                 }
 
@@ -294,7 +294,7 @@ public class EntityTrackerEntry {
                             entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateAttributes(this.tracker.getId(), collection));
                         }
 
-                        if (((EntityLiving) this.tracker).cH()) {
+                        if (((EntityLiving) this.tracker).cN()) {
                             flag = true;
                         }
                     }
@@ -339,12 +339,12 @@ public class EntityTrackerEntry {
                         }
                     }
 
-                    if (!this.tracker.bx().isEmpty()) {
+                    if (!this.tracker.bD().isEmpty()) {
                         entityplayer.playerConnection.sendPacket(new PacketPlayOutMount(this.tracker));
                     }
 
                     if (this.tracker.isPassenger()) {
-                        entityplayer.playerConnection.sendPacket(new PacketPlayOutMount(this.tracker.bB()));
+                        entityplayer.playerConnection.sendPacket(new PacketPlayOutMount(this.tracker.bH()));
                     }
 
                     this.tracker.b(entityplayer);

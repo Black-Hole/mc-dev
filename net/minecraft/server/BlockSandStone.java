@@ -15,7 +15,7 @@ public class BlockSandStone extends Block {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return MaterialMapColor.d;
+        return MaterialMapColor.e;
     }
 
     public IBlockData fromLegacyData(int i) {

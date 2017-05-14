@@ -15,7 +15,7 @@ public class BlockStainedGlassPane extends BlockThin {
     }
 
     public MaterialMapColor r(IBlockData iblockdata) {
-        return ((EnumColor) iblockdata.get(BlockStainedGlassPane.COLOR)).e();
+        return MaterialMapColor.a((EnumColor) iblockdata.get(BlockStainedGlassPane.COLOR));
     }
 
     public IBlockData fromLegacyData(int i) {

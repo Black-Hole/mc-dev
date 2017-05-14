@@ -152,4 +152,8 @@ public abstract class BlockPressurePlateAbstract extends Block {
     protected abstract int getPower(IBlockData iblockdata);
 
     protected abstract IBlockData a(IBlockData iblockdata, int i);
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
+    }
 }

@@ -41,8 +41,14 @@ public class BlockLadder extends Block {
         return false;
     }
 
-    public boolean canPlace(World world, BlockPosition blockposition) {
-        return world.getType(blockposition.west()).m() ? true : (world.getType(blockposition.east()).m() ? true : (world.getType(blockposition.north()).m() ? true : world.getType(blockposition.south()).m()));
+    public boolean canPlace(World world, BlockPosition blockposition, EnumDirection enumdirection) {
+        return this.c(world, blockposition.west(), enumdirection) ? true : (this.c(world, blockposition.east(), enumdirection) ? true : (this.c(world, blockposition.north(), enumdirection) ? true : this.c(world, blockposition.south(), enumdirection)));
+    }
+
+    private boolean c(World world, BlockPosition blockposition, EnumDirection enumdirection) {
+        IBlockData iblockdata = world.getType(blockposition);
+
+        return iblockdata.d(world, blockposition, enumdirection) == EnumBlockFaceShape.SOLID && !iblockdata.n();
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
@@ -77,7 +83,10 @@ public class BlockLadder extends Block {
     }
 
     protected boolean a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        return world.getType(blockposition.shift(enumdirection.opposite())).m();
+        BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
+        IBlockData iblockdata = world.getType(blockposition1);
+
+        return iblockdata.d(world, blockposition1, enumdirection) == EnumBlockFaceShape.SOLID && !iblockdata.n();
     }
 
     public IBlockData fromLegacyData(int i) {
@@ -104,5 +113,9 @@ public class BlockLadder extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockLadder.FACING});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 }

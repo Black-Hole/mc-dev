@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.UUID;
 import javax.annotation.Nullable;
 
 public class EntityZombieVillager extends EntityZombie {
@@ -7,6 +8,7 @@ public class EntityZombieVillager extends EntityZombie {
     private static final DataWatcherObject<Boolean> b = DataWatcher.a(EntityZombieVillager.class, DataWatcherRegistry.h);
     private static final DataWatcherObject<Integer> c = DataWatcher.a(EntityZombieVillager.class, DataWatcherRegistry.b);
     private int conversionTime;
+    private UUID by;
 
     public EntityZombieVillager(World world) {
         super(world);
@@ -34,13 +36,17 @@ public class EntityZombieVillager extends EntityZombie {
         super.b(nbttagcompound);
         nbttagcompound.setInt("Profession", this.getProfession());
         nbttagcompound.setInt("ConversionTime", this.isConverting() ? this.conversionTime : -1);
+        if (this.by != null) {
+            nbttagcompound.a("ConversionPlayer", this.by);
+        }
+
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.setProfession(nbttagcompound.getInt("Profession"));
         if (nbttagcompound.hasKeyOfType("ConversionTime", 99) && nbttagcompound.getInt("ConversionTime") > -1) {
-            this.b(nbttagcompound.getInt("ConversionTime"));
+            this.a(nbttagcompound.b("ConversionPlayer") ? nbttagcompound.a("ConversionPlayer") : null, nbttagcompound.getInt("ConversionTime"));
         }
 
     }
@@ -51,17 +57,17 @@ public class EntityZombieVillager extends EntityZombie {
         return super.prepare(difficultydamagescaler, groupdataentity);
     }
 
-    public void A_() {
+    public void B_() {
         if (!this.world.isClientSide && this.isConverting()) {
-            int i = this.dq();
+            int i = this.ds();
 
             this.conversionTime -= i;
             if (this.conversionTime <= 0) {
-                this.dp();
+                this.dr();
             }
         }
 
-        super.A_();
+        super.B_();
     }
 
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
@@ -73,7 +79,7 @@ public class EntityZombieVillager extends EntityZombie {
             }
 
             if (!this.world.isClientSide) {
-                this.b(this.random.nextInt(2401) + 3600);
+                this.a(entityhuman.getUniqueID(), this.random.nextInt(2401) + 3600);
             }
 
             return true;
@@ -90,7 +96,8 @@ public class EntityZombieVillager extends EntityZombie {
         return ((Boolean) this.getDataWatcher().get(EntityZombieVillager.b)).booleanValue();
     }
 
-    protected void b(int i) {
+    protected void a(@Nullable UUID uuid, int i) {
+        this.by = uuid;
         this.conversionTime = i;
         this.getDataWatcher().set(EntityZombieVillager.b, Boolean.valueOf(true));
         this.removeEffect(MobEffects.WEAKNESS);
@@ -98,13 +105,13 @@ public class EntityZombieVillager extends EntityZombie {
         this.world.broadcastEntityEffect(this, (byte) 16);
     }
 
-    protected void dp() {
+    protected void dr() {
         EntityVillager entityvillager = new EntityVillager(this.world);
 
         entityvillager.u(this);
         entityvillager.setProfession(this.getProfession());
         entityvillager.a(this.world.D(new BlockPosition(entityvillager)), (GroupDataEntity) null, false);
-        entityvillager.dl();
+        entityvillager.dn();
         if (this.isBaby()) {
             entityvillager.setAgeRaw(-24000);
         }
@@ -117,11 +124,17 @@ public class EntityZombieVillager extends EntityZombie {
         }
 
         this.world.addEntity(entityvillager);
+        EntityHuman entityhuman = this.world.b(this.by);
+
+        if (entityhuman instanceof EntityPlayer) {
+            CriterionTriggers.q.a((EntityPlayer) entityhuman, this, entityvillager);
+        }
+
         entityvillager.addEffect(new MobEffect(MobEffects.CONFUSION, 200, 0));
         this.world.a((EntityHuman) null, 1027, new BlockPosition((int) this.locX, (int) this.locY, (int) this.locZ), 0);
     }
 
-    protected int dq() {
+    protected int ds() {
         int i = 1;
 
         if (this.random.nextFloat() < 0.01F) {
@@ -148,24 +161,24 @@ public class EntityZombieVillager extends EntityZombie {
         return i;
     }
 
-    protected float cj() {
+    protected float cp() {
         return this.isBaby() ? (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 2.0F : (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
     }
 
-    public SoundEffect G() {
-        return SoundEffects.it;
+    public SoundEffect F() {
+        return SoundEffects.ju;
     }
 
-    public SoundEffect bW() {
-        return SoundEffects.ix;
+    public SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.jy;
     }
 
-    public SoundEffect bX() {
-        return SoundEffects.iw;
+    public SoundEffect cd() {
+        return SoundEffects.jx;
     }
 
-    public SoundEffect di() {
-        return SoundEffects.iy;
+    public SoundEffect dk() {
+        return SoundEffects.jz;
     }
 
     @Nullable
@@ -173,7 +186,7 @@ public class EntityZombieVillager extends EntityZombie {
         return LootTables.as;
     }
 
-    protected ItemStack dj() {
+    protected ItemStack dl() {
         return ItemStack.a;
     }
 }

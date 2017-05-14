@@ -28,7 +28,7 @@ public class NBTTagShort extends NBTNumber {
     }
 
     public String toString() {
-        return "" + this.data + "s";
+        return this.data + "s";
     }
 
     public NBTTagShort c() {
@@ -36,13 +36,7 @@ public class NBTTagShort extends NBTNumber {
     }
 
     public boolean equals(Object object) {
-        if (super.equals(object)) {
-            NBTTagShort nbttagshort = (NBTTagShort) object;
-
-            return this.data == nbttagshort.data;
-        } else {
-            return false;
-        }
+        return super.equals(object) && this.data == ((NBTTagShort) object).data;
     }
 
     public int hashCode() {

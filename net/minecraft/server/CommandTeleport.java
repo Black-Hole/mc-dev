@@ -25,7 +25,7 @@ public class CommandTeleport extends CommandAbstract {
         if (astring.length < 4) {
             throw new ExceptionUsage("commands.teleport.usage", new Object[0]);
         } else {
-            Entity entity = b(minecraftserver, icommandlistener, astring[0]);
+            Entity entity = c(minecraftserver, icommandlistener, astring[0]);
 
             if (entity.world != null) {
                 boolean flag = true;
@@ -70,17 +70,17 @@ public class CommandTeleport extends CommandAbstract {
 
             entity.stopRiding();
             ((EntityPlayer) entity).playerConnection.a(commandabstract_commandnumber.a(), commandabstract_commandnumber1.a(), commandabstract_commandnumber2.a(), f, f1, enumset);
-            entity.h(f);
+            entity.setHeadRotation(f);
         } else {
             float f2 = (float) MathHelper.g(commandabstract_commandnumber3.a());
 
             f = (float) MathHelper.g(commandabstract_commandnumber4.a());
             f = MathHelper.a(f, -90.0F, 90.0F);
             entity.setPositionRotation(commandabstract_commandnumber.a(), commandabstract_commandnumber1.a(), commandabstract_commandnumber2.a(), f2, f);
-            entity.h(f2);
+            entity.setHeadRotation(f2);
         }
 
-        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).cH()) {
+        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).cN()) {
             entity.motY = 0.0D;
             entity.onGround = true;
         }

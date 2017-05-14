@@ -7,15 +7,13 @@ public class Vector3f {
     protected final float z;
 
     public Vector3f(float f, float f1, float f2) {
-        this.x = f;
-        this.y = f1;
-        this.z = f2;
+        this.x = !Float.isInfinite(f) && !Float.isNaN(f) ? f % 360.0F : 0.0F;
+        this.y = !Float.isInfinite(f1) && !Float.isNaN(f1) ? f1 % 360.0F : 0.0F;
+        this.z = !Float.isInfinite(f2) && !Float.isNaN(f2) ? f2 % 360.0F : 0.0F;
     }
 
     public Vector3f(NBTTagList nbttaglist) {
-        this.x = nbttaglist.f(0);
-        this.y = nbttaglist.f(1);
-        this.z = nbttaglist.f(2);
+        this(nbttaglist.g(0), nbttaglist.g(1), nbttaglist.g(2));
     }
 
     public NBTTagList a() {

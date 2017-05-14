@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-public class PathfinderGoalBowShoot extends PathfinderGoal {
+public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> extends PathfinderGoal {
 
-    private final EntitySkeletonAbstract a;
+    private final T a;
     private final double b;
     private int c;
     private final float d;
@@ -12,8 +12,8 @@ public class PathfinderGoalBowShoot extends PathfinderGoal {
     private boolean h;
     private int i = -1;
 
-    public PathfinderGoalBowShoot(EntitySkeletonAbstract entityskeletonabstract, double d0, int i, float f) {
-        this.a = entityskeletonabstract;
+    public PathfinderGoalBowShoot(T t0, double d0, int i, float f) {
+        this.a = t0;
         this.b = d0;
         this.c = i;
         this.d = f * f;
@@ -33,20 +33,20 @@ public class PathfinderGoalBowShoot extends PathfinderGoal {
     }
 
     public boolean b() {
-        return (this.a() || !this.a.getNavigation().n()) && this.f();
+        return (this.a() || !this.a.getNavigation().o()) && this.f();
     }
 
     public void c() {
         super.c();
-        this.a.a(true);
+        ((IRangedEntity) this.a).p(true);
     }
 
     public void d() {
         super.d();
-        this.a.a(false);
+        ((IRangedEntity) this.a).p(false);
         this.f = 0;
         this.e = -1;
-        this.a.cF();
+        this.a.cL();
     }
 
     public void e() {
@@ -68,7 +68,7 @@ public class PathfinderGoalBowShoot extends PathfinderGoal {
             }
 
             if (d0 <= (double) this.d && this.f >= 20) {
-                this.a.getNavigation().o();
+                this.a.getNavigation().p();
                 ++this.i;
             } else {
                 this.a.getNavigation().a((Entity) entityliving, this.b);
@@ -102,13 +102,13 @@ public class PathfinderGoalBowShoot extends PathfinderGoal {
 
             if (this.a.isHandRaised()) {
                 if (!flag && this.f < -60) {
-                    this.a.cF();
+                    this.a.cL();
                 } else if (flag) {
-                    int i = this.a.cD();
+                    int i = this.a.cJ();
 
                     if (i >= 20) {
-                        this.a.cF();
-                        this.a.a(entityliving, ItemBow.b(i));
+                        this.a.cL();
+                        ((IRangedEntity) this.a).a(entityliving, ItemBow.b(i));
                         this.e = this.c;
                     }
                 }

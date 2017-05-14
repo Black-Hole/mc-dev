@@ -170,7 +170,7 @@ public class ChunkProviderServer implements IChunkProvider {
     }
 
     public void c() {
-        this.chunkLoader.b();
+        this.chunkLoader.c();
     }
 
     public boolean unloadChunks() {
@@ -192,7 +192,7 @@ public class ChunkProviderServer implements IChunkProvider {
                 }
             }
 
-            this.chunkLoader.a();
+            this.chunkLoader.b();
         }
 
         return false;
@@ -215,6 +215,10 @@ public class ChunkProviderServer implements IChunkProvider {
         return this.chunkGenerator.findNearestMapFeature(world, s, blockposition, flag);
     }
 
+    public boolean a(World world, String s, BlockPosition blockposition) {
+        return this.chunkGenerator.a(world, s, blockposition);
+    }
+
     public int g() {
         return this.chunks.size();
     }
@@ -224,6 +228,6 @@ public class ChunkProviderServer implements IChunkProvider {
     }
 
     public boolean e(int i, int j) {
-        return this.chunks.containsKey(ChunkCoordIntPair.a(i, j)) || this.chunkLoader.a(i, j);
+        return this.chunks.containsKey(ChunkCoordIntPair.a(i, j)) || this.chunkLoader.chunkExists(i, j);
     }
 }

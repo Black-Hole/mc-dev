@@ -1407,11 +1407,11 @@ public class WorldGenVillagePieces {
 
                     if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
                         blockposition = world.q(blockposition).down();
-                        if (blockposition.getY() < world.K()) {
-                            blockposition = new BlockPosition(blockposition.getX(), world.K() - 1, blockposition.getZ());
+                        if (blockposition.getY() < world.getSeaLevel()) {
+                            blockposition = new BlockPosition(blockposition.getX(), world.getSeaLevel() - 1, blockposition.getZ());
                         }
 
-                        while (blockposition.getY() >= world.K() - 1) {
+                        while (blockposition.getY() >= world.getSeaLevel() - 1) {
                             IBlockData iblockdata4 = world.getType(blockposition);
 
                             if (iblockdata4.getBlock() == Blocks.GRASS && world.isEmpty(blockposition.up())) {
@@ -1671,7 +1671,7 @@ public class WorldGenVillagePieces {
                         entityzombievillager.setPositionRotation((double) j1 + 0.5D, (double) k1, (double) l1 + 0.5D, 0.0F, 0.0F);
                         entityzombievillager.prepare(world.D(new BlockPosition(entityzombievillager)), (GroupDataEntity) null);
                         entityzombievillager.setProfession(this.c(i1, 0));
-                        entityzombievillager.cS();
+                        entityzombievillager.cU();
                         world.addEntity(entityzombievillager);
                     } else {
                         EntityVillager entityvillager = new EntityVillager(world);

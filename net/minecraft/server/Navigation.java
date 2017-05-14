@@ -4,27 +4,27 @@ import java.util.Iterator;
 
 public class Navigation extends NavigationAbstract {
 
-    private boolean f;
+    private boolean i;
 
     public Navigation(EntityInsentient entityinsentient, World world) {
         super(entityinsentient, world);
     }
 
     protected Pathfinder a() {
-        this.e = new PathfinderNormal();
-        this.e.a(true);
-        return new Pathfinder(this.e);
+        this.h = new PathfinderNormal();
+        this.h.a(true);
+        return new Pathfinder(this.h);
     }
 
     protected boolean b() {
-        return this.a.onGround || this.g() && this.p() || this.a.isPassenger();
+        return this.a.onGround || this.h() && this.q() || this.a.isPassenger();
     }
 
     protected Vec3D c() {
-        return new Vec3D(this.a.locX, (double) this.r(), this.a.locZ);
+        return new Vec3D(this.a.locX, (double) this.s(), this.a.locZ);
     }
 
-    public PathEntity a(BlockPosition blockposition) {
+    public PathEntity b(BlockPosition blockposition) {
         BlockPosition blockposition1;
 
         if (this.b.getType(blockposition).getMaterial() == Material.AIR) {
@@ -33,7 +33,7 @@ public class Navigation extends NavigationAbstract {
             }
 
             if (blockposition1.getY() > 0) {
-                return super.a(blockposition1.up());
+                return super.b(blockposition1.up());
             }
 
             while (blockposition1.getY() < this.b.getHeight() && this.b.getType(blockposition1).getMaterial() == Material.AIR) {
@@ -44,22 +44,22 @@ public class Navigation extends NavigationAbstract {
         }
 
         if (!this.b.getType(blockposition).getMaterial().isBuildable()) {
-            return super.a(blockposition);
+            return super.b(blockposition);
         } else {
             for (blockposition1 = blockposition.up(); blockposition1.getY() < this.b.getHeight() && this.b.getType(blockposition1).getMaterial().isBuildable(); blockposition1 = blockposition1.up()) {
                 ;
             }
 
-            return super.a(blockposition1);
+            return super.b(blockposition1);
         }
     }
 
     public PathEntity a(Entity entity) {
-        return this.a(new BlockPosition(entity));
+        return this.b(new BlockPosition(entity));
     }
 
-    private int r() {
-        if (this.a.isInWater() && this.g()) {
+    private int s() {
+        if (this.a.isInWater() && this.h()) {
             int i = (int) this.a.getBoundingBox().b;
             Block block = this.b.getType(new BlockPosition(MathHelper.floor(this.a.locX), i, MathHelper.floor(this.a.locZ))).getBlock();
             int j = 0;
@@ -80,33 +80,16 @@ public class Navigation extends NavigationAbstract {
         }
     }
 
-    protected void d() {
-        super.d();
-
-        int i;
-        PathPoint pathpoint;
-
-        for (i = 0; i < this.c.d(); ++i) {
-            pathpoint = this.c.a(i);
-            PathPoint pathpoint1 = i + 1 < this.c.d() ? this.c.a(i + 1) : null;
-            IBlockData iblockdata = this.b.getType(new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c));
-            Block block = iblockdata.getBlock();
-
-            if (block == Blocks.cauldron) {
-                this.c.a(i, pathpoint.a(pathpoint.a, pathpoint.b + 1, pathpoint.c));
-                if (pathpoint1 != null && pathpoint.b >= pathpoint1.b) {
-                    this.c.a(i + 1, pathpoint1.a(pathpoint1.a, pathpoint.b + 1, pathpoint1.c));
-                }
-            }
-        }
-
-        if (this.f) {
+    protected void q_() {
+        super.q_();
+        if (this.i) {
             if (this.b.h(new BlockPosition(MathHelper.floor(this.a.locX), (int) (this.a.getBoundingBox().b + 0.5D), MathHelper.floor(this.a.locZ)))) {
                 return;
             }
 
-            for (i = 0; i < this.c.d(); ++i) {
-                pathpoint = this.c.a(i);
+            for (int i = 0; i < this.c.d(); ++i) {
+                PathPoint pathpoint = this.c.a(i);
+
                 if (this.b.h(new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c))) {
                     this.c.b(i - 1);
                     return;
@@ -193,7 +176,7 @@ public class Navigation extends NavigationAbstract {
                     double d3 = (double) j2 + 0.5D - vec3d.z;
 
                     if (d2 * d0 + d3 * d1 >= 0.0D) {
-                        PathType pathtype = this.e.a(this.b, i2, j - 1, j2, this.a, l, i1, j1, true, true);
+                        PathType pathtype = this.h.a(this.b, i2, j - 1, j2, this.a, l, i1, j1, true, true);
 
                         if (pathtype == PathType.WATER) {
                             return false;
@@ -207,7 +190,7 @@ public class Navigation extends NavigationAbstract {
                             return false;
                         }
 
-                        pathtype = this.e.a(this.b, i2, j, j2, this.a, l, i1, j1, true, true);
+                        pathtype = this.h.a(this.b, i2, j, j2, this.a, l, i1, j1, true, true);
                         float f = this.a.a(pathtype);
 
                         if (f < 0.0F || f >= 8.0F) {
@@ -246,26 +229,26 @@ public class Navigation extends NavigationAbstract {
     }
 
     public void a(boolean flag) {
-        this.e.b(flag);
+        this.h.b(flag);
     }
 
     public void b(boolean flag) {
-        this.e.a(flag);
-    }
-
-    public boolean f() {
-        return this.e.c();
-    }
-
-    public void c(boolean flag) {
-        this.e.c(flag);
+        this.h.a(flag);
     }
 
     public boolean g() {
-        return this.e.e();
+        return this.h.c();
+    }
+
+    public void c(boolean flag) {
+        this.h.c(flag);
+    }
+
+    public boolean h() {
+        return this.h.e();
     }
 
     public void d(boolean flag) {
-        this.f = flag;
+        this.i = flag;
     }
 }

@@ -57,7 +57,7 @@ public class WorldLoaderServer extends WorldLoader {
 
         int i = arraylist.size() + arraylist1.size() + arraylist2.size();
 
-        WorldLoaderServer.c.info("Total conversion count is {}", new Object[] { Integer.valueOf(i)});
+        WorldLoaderServer.c.info("Total conversion count is {}", Integer.valueOf(i));
         WorldData worlddata = this.c(s);
         Object object;
 

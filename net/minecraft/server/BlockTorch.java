@@ -61,12 +61,15 @@ public class BlockTorch extends Block {
     }
 
     private boolean b(World world, BlockPosition blockposition) {
-        if (world.getType(blockposition).r()) {
-            return true;
-        } else {
-            Block block = world.getType(blockposition).getBlock();
+        Block block = world.getType(blockposition).getBlock();
+        boolean flag = block == Blocks.END_GATEWAY;
 
-            return block instanceof BlockFence || block == Blocks.GLASS || block == Blocks.COBBLESTONE_WALL || block == Blocks.STAINED_GLASS;
+        if (world.getType(blockposition).r()) {
+            return !flag;
+        } else {
+            boolean flag1 = block instanceof BlockFence || block == Blocks.GLASS || block == Blocks.COBBLESTONE_WALL || block == Blocks.STAINED_GLASS;
+
+            return flag1 && !flag;
         }
     }
 
@@ -88,9 +91,11 @@ public class BlockTorch extends Block {
 
     private boolean a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
-        boolean flag = enumdirection.k().c();
+        IBlockData iblockdata = world.getType(blockposition1);
+        Block block = iblockdata.getBlock();
+        EnumBlockFaceShape enumblockfaceshape = iblockdata.d(world, blockposition1, enumdirection);
 
-        return flag && world.d(blockposition1, true) || enumdirection.equals(EnumDirection.UP) && this.b(world, blockposition1);
+        return enumdirection.equals(EnumDirection.UP) && this.b(world, blockposition1) ? true : (enumdirection != EnumDirection.UP && enumdirection != EnumDirection.DOWN ? !c(block) && enumblockfaceshape == EnumBlockFaceShape.SOLID : false);
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
@@ -107,7 +112,7 @@ public class BlockTorch extends Block {
                 }
 
                 enumdirection1 = (EnumDirection) iterator.next();
-            } while (!world.d(blockposition.shift(enumdirection1.opposite()), true));
+            } while (!this.a(world, blockposition, enumdirection1));
 
             return this.getBlockData().set(BlockTorch.FACING, enumdirection1);
         }
@@ -128,11 +133,12 @@ public class BlockTorch extends Block {
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockTorch.FACING);
             EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
             EnumDirection enumdirection1 = enumdirection.opposite();
+            BlockPosition blockposition1 = blockposition.shift(enumdirection1);
             boolean flag = false;
 
-            if (enumdirection_enumaxis.c() && !world.d(blockposition.shift(enumdirection1), true)) {
+            if (enumdirection_enumaxis.c() && world.getType(blockposition1).d(world, blockposition1, enumdirection) != EnumBlockFaceShape.SOLID) {
                 flag = true;
-            } else if (enumdirection_enumaxis.b() && !this.b(world, blockposition.shift(enumdirection1))) {
+            } else if (enumdirection_enumaxis.b() && !this.b(world, blockposition1)) {
                 flag = true;
             }
 
@@ -227,5 +233,9 @@ public class BlockTorch extends Block {
 
     protected BlockStateList getStateList() {
         return new BlockStateList(this, new IBlockState[] { BlockTorch.FACING});
+    }
+
+    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
+        return EnumBlockFaceShape.UNDEFINED;
     }
 }

@@ -41,9 +41,9 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         this.exactTeleport = nbttagcompound.getBoolean("ExactTeleport");
     }
 
-    public void F_() {
+    public void e() {
         boolean flag = this.a();
-        boolean flag1 = this.e();
+        boolean flag1 = this.f();
 
         ++this.f;
         if (flag1) {
@@ -56,11 +56,11 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
             }
 
             if (this.f % 2400L == 0L) {
-                this.f();
+                this.h();
             }
         }
 
-        if (flag != this.a() || flag1 != this.e()) {
+        if (flag != this.a() || flag1 != this.f()) {
             this.update();
         }
 
@@ -70,7 +70,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         return this.f < 200L;
     }
 
-    public boolean e() {
+    public boolean f() {
         return this.g > 0;
     }
 
@@ -83,7 +83,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         return this.save(new NBTTagCompound());
     }
 
-    public void f() {
+    public void h() {
         if (!this.world.isClientSide) {
             this.g = 40;
             this.world.playBlockAction(this.getPosition(), this.getBlock(), 1, 0);
@@ -102,57 +102,57 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
     }
 
     public void a(Entity entity) {
-        if (!this.world.isClientSide && !this.e()) {
+        if (!this.world.isClientSide && !this.f()) {
             this.g = 100;
             if (this.exitPortal == null && this.world.worldProvider instanceof WorldProviderTheEnd) {
-                this.j();
+                this.k();
             }
 
             if (this.exitPortal != null) {
-                BlockPosition blockposition = this.exactTeleport ? this.exitPortal : this.i();
+                BlockPosition blockposition = this.exactTeleport ? this.exitPortal : this.j();
 
                 entity.enderTeleportTo((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
             }
 
-            this.f();
+            this.h();
         }
     }
 
-    private BlockPosition i() {
+    private BlockPosition j() {
         BlockPosition blockposition = a(this.world, this.exitPortal, 5, false);
 
-        TileEntityEndGateway.a.debug("Best exit position for portal at {} is {}", new Object[] { this.exitPortal, blockposition});
+        TileEntityEndGateway.a.debug("Best exit position for portal at {} is {}", this.exitPortal, blockposition);
         return blockposition.up();
     }
 
-    private void j() {
+    private void k() {
         Vec3D vec3d = (new Vec3D((double) this.getPosition().getX(), 0.0D, (double) this.getPosition().getZ())).a();
         Vec3D vec3d1 = vec3d.a(1024.0D);
 
         int i;
 
         for (i = 16; a(this.world, vec3d1).g() > 0 && i-- > 0; vec3d1 = vec3d1.e(vec3d.a(-16.0D))) {
-            TileEntityEndGateway.a.debug("Skipping backwards past nonempty chunk at {}", new Object[] { vec3d1});
+            TileEntityEndGateway.a.debug("Skipping backwards past nonempty chunk at {}", vec3d1);
         }
 
         for (i = 16; a(this.world, vec3d1).g() == 0 && i-- > 0; vec3d1 = vec3d1.e(vec3d.a(16.0D))) {
-            TileEntityEndGateway.a.debug("Skipping forward past empty chunk at {}", new Object[] { vec3d1});
+            TileEntityEndGateway.a.debug("Skipping forward past empty chunk at {}", vec3d1);
         }
 
-        TileEntityEndGateway.a.debug("Found chunk at {}", new Object[] { vec3d1});
+        TileEntityEndGateway.a.debug("Found chunk at {}", vec3d1);
         Chunk chunk = a(this.world, vec3d1);
 
         this.exitPortal = a(chunk);
         if (this.exitPortal == null) {
             this.exitPortal = new BlockPosition(vec3d1.x + 0.5D, 75.0D, vec3d1.z + 0.5D);
-            TileEntityEndGateway.a.debug("Failed to find suitable block, settling on {}", new Object[] { this.exitPortal});
+            TileEntityEndGateway.a.debug("Failed to find suitable block, settling on {}", this.exitPortal);
             (new WorldGenEndIsland()).generate(this.world, new Random(this.exitPortal.asLong()), this.exitPortal);
         } else {
-            TileEntityEndGateway.a.debug("Found block at {}", new Object[] { this.exitPortal});
+            TileEntityEndGateway.a.debug("Found block at {}", this.exitPortal);
         }
 
         this.exitPortal = a(this.world, this.exitPortal, 16, true);
-        TileEntityEndGateway.a.debug("Creating portal at {}", new Object[] { this.exitPortal});
+        TileEntityEndGateway.a.debug("Creating portal at {}", this.exitPortal);
         this.exitPortal = this.exitPortal.up(10);
         this.c(this.exitPortal);
         this.update();
@@ -220,7 +220,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
             tileentityendgateway.exitPortal = new BlockPosition(this.getPosition());
             tileentityendgateway.update();
         } else {
-            TileEntityEndGateway.a.warn("Couldn\'t save exit portal at {}", new Object[] { blockposition});
+            TileEntityEndGateway.a.warn("Couldn\'t save exit portal at {}", blockposition);
         }
 
     }

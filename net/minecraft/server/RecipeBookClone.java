@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class RecipeBookClone implements IRecipe {
+public class RecipeBookClone extends IRecipe {
 
     public RecipeBookClone() {}
 
@@ -70,10 +70,6 @@ public class RecipeBookClone implements IRecipe {
         }
     }
 
-    public int a() {
-        return 9;
-    }
-
     public ItemStack b() {
         return ItemStack.a;
     }
@@ -94,5 +90,9 @@ public class RecipeBookClone implements IRecipe {
         }
 
         return nonnulllist;
+    }
+
+    public boolean d() {
+        return true;
     }
 }

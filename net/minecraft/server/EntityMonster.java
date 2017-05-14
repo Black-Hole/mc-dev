@@ -7,13 +7,13 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         this.b_ = 5;
     }
 
-    public SoundCategory bC() {
+    public SoundCategory bI() {
         return SoundCategory.HOSTILE;
     }
 
     public void n() {
-        this.cd();
-        float f = this.e(1.0F);
+        this.cj();
+        float f = this.f(1.0F);
 
         if (f > 0.5F) {
             this.ticksFarFromPlayer += 2;
@@ -22,36 +22,36 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         super.n();
     }
 
-    public void A_() {
-        super.A_();
+    public void B_() {
+        super.B_();
         if (!this.world.isClientSide && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
             this.die();
         }
 
     }
 
-    protected SoundEffect aa() {
-        return SoundEffects.cR;
+    protected SoundEffect ae() {
+        return SoundEffects.cX;
     }
 
-    protected SoundEffect ab() {
-        return SoundEffects.cQ;
+    protected SoundEffect af() {
+        return SoundEffects.cW;
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
         return this.isInvulnerable(damagesource) ? false : super.damageEntity(damagesource, f);
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.cO;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.cU;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.cN;
+    protected SoundEffect cd() {
+        return SoundEffects.cT;
     }
 
     protected SoundEffect e(int i) {
-        return i > 4 ? SoundEffects.cM : SoundEffects.cP;
+        return i > 4 ? SoundEffects.cS : SoundEffects.cV;
     }
 
     public boolean B(Entity entity) {
@@ -81,13 +81,13 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
             if (entity instanceof EntityHuman) {
                 EntityHuman entityhuman = (EntityHuman) entity;
                 ItemStack itemstack = this.getItemInMainHand();
-                ItemStack itemstack1 = entityhuman.isHandRaised() ? entityhuman.cB() : ItemStack.a;
+                ItemStack itemstack1 = entityhuman.isHandRaised() ? entityhuman.cH() : ItemStack.a;
 
                 if (!itemstack.isEmpty() && !itemstack1.isEmpty() && itemstack.getItem() instanceof ItemAxe && itemstack1.getItem() == Items.SHIELD) {
                     float f1 = 0.25F + (float) EnchantmentManager.getDigSpeedEnchantmentLevel(this) * 0.05F;
 
                     if (this.random.nextFloat() < f1) {
-                        entityhuman.di().a(Items.SHIELD, 100);
+                        entityhuman.getCooldownTracker().a(Items.SHIELD, 100);
                         this.world.broadcastEntityEffect(entityhuman, (byte) 30);
                     }
                 }
@@ -103,7 +103,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         return 0.5F - this.world.n(blockposition);
     }
 
-    protected boolean r_() {
+    protected boolean s_() {
         BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
         if (this.world.getBrightness(EnumSkyBlock.SKY, blockposition) > this.random.nextInt(32)) {
@@ -111,8 +111,8 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         } else {
             int i = this.world.getLightLevel(blockposition);
 
-            if (this.world.V()) {
-                int j = this.world.af();
+            if (this.world.X()) {
+                int j = this.world.ah();
 
                 this.world.c(10);
                 i = this.world.getLightLevel(blockposition);
@@ -123,8 +123,8 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         }
     }
 
-    public boolean cM() {
-        return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.r_() && super.cM();
+    public boolean P() {
+        return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.s_() && super.P();
     }
 
     protected void initAttributes() {
@@ -133,6 +133,10 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     }
 
     protected boolean isDropExperience() {
+        return true;
+    }
+
+    public boolean c(EntityHuman entityhuman) {
         return true;
     }
 }

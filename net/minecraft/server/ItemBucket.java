@@ -36,10 +36,10 @@ public class ItemBucket extends Item {
                     if (material == Material.WATER && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0) {
                         world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
                         entityhuman.b(StatisticList.b((Item) this));
-                        entityhuman.a(SoundEffects.P, 1.0F, 1.0F);
+                        entityhuman.a(SoundEffects.S, 1.0F, 1.0F);
                         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, Items.WATER_BUCKET));
                     } else if (material == Material.LAVA && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0) {
-                        entityhuman.a(SoundEffects.Q, 1.0F, 1.0F);
+                        entityhuman.a(SoundEffects.T, 1.0F, 1.0F);
                         world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
                         entityhuman.b(StatisticList.b((Item) this));
                         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, Items.LAVA_BUCKET));
@@ -54,6 +54,10 @@ public class ItemBucket extends Item {
                 if (!entityhuman.a(blockposition1, movingobjectposition.direction, itemstack)) {
                     return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
                 } else if (this.a(entityhuman, world, blockposition1)) {
+                    if (entityhuman instanceof EntityPlayer) {
+                        CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition, itemstack);
+                    }
+
                     entityhuman.b(StatisticList.b((Item) this));
                     return !entityhuman.abilities.canInstantlyBuild ? new InteractionResultWrapper(EnumInteractionResult.SUCCESS, new ItemStack(Items.BUCKET)) : new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
                 } else {
@@ -97,7 +101,7 @@ public class ItemBucket extends Item {
                     int j = blockposition.getY();
                     int k = blockposition.getZ();
 
-                    world.a(entityhuman, blockposition, SoundEffects.bH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+                    world.a(entityhuman, blockposition, SoundEffects.bN, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
 
                     for (int l = 0; l < 8; ++l) {
                         world.addParticle(EnumParticle.SMOKE_LARGE, (double) i + Math.random(), (double) j + Math.random(), (double) k + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
@@ -107,7 +111,7 @@ public class ItemBucket extends Item {
                         world.setAir(blockposition, true);
                     }
 
-                    SoundEffect soundeffect = this.a == Blocks.FLOWING_LAVA ? SoundEffects.O : SoundEffects.N;
+                    SoundEffect soundeffect = this.a == Blocks.FLOWING_LAVA ? SoundEffects.R : SoundEffects.Q;
 
                     world.a(entityhuman, blockposition, soundeffect, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     world.setTypeAndData(blockposition, this.a.getBlockData(), 11);

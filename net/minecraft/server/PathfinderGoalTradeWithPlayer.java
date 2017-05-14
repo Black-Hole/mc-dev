@@ -26,7 +26,7 @@ public class PathfinderGoalTradeWithPlayer extends PathfinderGoal {
     }
 
     public void c() {
-        this.a.getNavigation().o();
+        this.a.getNavigation().p();
     }
 
     public void d() {

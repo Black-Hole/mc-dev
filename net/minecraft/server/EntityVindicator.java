@@ -3,13 +3,12 @@ package net.minecraft.server;
 import com.google.common.base.Predicate;
 import javax.annotation.Nullable;
 
-public class EntityVindicator extends EntityMonster {
+public class EntityVindicator extends EntityIllagerAbstract {
 
-    protected static final DataWatcherObject<Byte> a = DataWatcher.a(EntityVindicator.class, DataWatcherRegistry.a);
     private boolean b;
     private static final Predicate<Entity> c = new Predicate() {
         public boolean a(@Nullable Entity entity) {
-            return entity instanceof EntityLiving && ((EntityLiving) entity).cK();
+            return entity instanceof EntityLiving && ((EntityLiving) entity).cQ();
         }
 
         public boolean apply(@Nullable Object object) {
@@ -50,36 +49,14 @@ public class EntityVindicator extends EntityMonster {
 
     protected void i() {
         super.i();
-        this.datawatcher.register(EntityVindicator.a, Byte.valueOf((byte) 0));
-    }
-
-    public EnumMonsterType getMonsterType() {
-        return EnumMonsterType.ILLAGER;
     }
 
     protected MinecraftKey J() {
         return LootTables.av;
     }
 
-    private void a(int i, boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityVindicator.a)).byteValue();
-        int j;
-
-        if (flag) {
-            j = b0 | i;
-        } else {
-            j = b0 & ~i;
-        }
-
-        this.datawatcher.set(EntityVindicator.a, Byte.valueOf((byte) (j & 255)));
-    }
-
     public void a(boolean flag) {
         this.a(1, flag);
-        if (this.getEquipment(EnumItemSlot.MAINHAND) == ItemStack.a) {
-            this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
-        }
-
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -117,7 +94,7 @@ public class EntityVindicator extends EntityMonster {
     }
 
     public boolean r(Entity entity) {
-        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.aQ() == null && entity.aQ() == null : false);
+        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.aW() == null && entity.aW() == null : false);
     }
 
     public void setCustomName(String s) {
@@ -128,16 +105,16 @@ public class EntityVindicator extends EntityMonster {
 
     }
 
-    protected SoundEffect G() {
-        return SoundEffects.hm;
+    protected SoundEffect F() {
+        return SoundEffects.in;
     }
 
-    protected SoundEffect bX() {
-        return SoundEffects.hn;
+    protected SoundEffect cd() {
+        return SoundEffects.io;
     }
 
-    protected SoundEffect bW() {
-        return SoundEffects.ho;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.ip;
     }
 
     static class a extends PathfinderGoalNearestAttackableTarget<EntityLiving> {

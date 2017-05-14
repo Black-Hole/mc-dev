@@ -17,6 +17,10 @@ public class ItemPotion extends Item {
             itemstack.subtract(1);
         }
 
+        if (entityhuman instanceof EntityPlayer) {
+            CriterionTriggers.y.a((EntityPlayer) entityhuman, itemstack);
+        }
+
         if (!world.isClientSide) {
             List list = PotionUtil.getEffects(itemstack);
             Iterator iterator = list.iterator();

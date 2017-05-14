@@ -7,11 +7,11 @@ public class InventoryCrafting implements IInventory {
     private final NonNullList<ItemStack> items;
     private final int b;
     private final int c;
-    private final Container d;
+    public final Container container;
 
     public InventoryCrafting(Container container, int i, int j) {
         this.items = NonNullList.a(i * j, ItemStack.a);
-        this.d = container;
+        this.container = container;
         this.b = i;
         this.c = j;
     }
@@ -20,7 +20,7 @@ public class InventoryCrafting implements IInventory {
         return this.items.size();
     }
 
-    public boolean w_() {
+    public boolean x_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -64,7 +64,7 @@ public class InventoryCrafting implements IInventory {
         ItemStack itemstack = ContainerUtil.a(this.items, i, j);
 
         if (!itemstack.isEmpty()) {
-            this.d.a((IInventory) this);
+            this.container.a((IInventory) this);
         }
 
         return itemstack;
@@ -72,7 +72,7 @@ public class InventoryCrafting implements IInventory {
 
     public void setItem(int i, ItemStack itemstack) {
         this.items.set(i, itemstack);
-        this.d.a((IInventory) this);
+        this.container.a((IInventory) this);
     }
 
     public int getMaxStackSize() {

@@ -28,11 +28,11 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
     }
 
     protected void b(World world, BlockPosition blockposition) {
-        world.a((EntityHuman) null, blockposition, SoundEffects.dR, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
+        world.a((EntityHuman) null, blockposition, SoundEffects.ee, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
     }
 
     protected void c(World world, BlockPosition blockposition) {
-        world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_METAL_PRESSUREPLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.75F);
+        world.a((EntityHuman) null, blockposition, SoundEffects.ed, SoundCategory.BLOCKS, 0.3F, 0.75F);
     }
 
     protected int getPower(IBlockData iblockdata) {

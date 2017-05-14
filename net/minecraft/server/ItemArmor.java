@@ -149,8 +149,8 @@ public class ItemArmor extends Item {
         Multimap multimap = super.a(enumitemslot);
 
         if (enumitemslot == this.c) {
-            multimap.put(GenericAttributes.g.getName(), new AttributeModifier(ItemArmor.o[enumitemslot.b()], "Armor modifier", (double) this.d, 0));
-            multimap.put(GenericAttributes.h.getName(), new AttributeModifier(ItemArmor.o[enumitemslot.b()], "Armor toughness", (double) this.e, 0));
+            multimap.put(GenericAttributes.h.getName(), new AttributeModifier(ItemArmor.o[enumitemslot.b()], "Armor modifier", (double) this.d, 0));
+            multimap.put(GenericAttributes.i.getName(), new AttributeModifier(ItemArmor.o[enumitemslot.b()], "Armor toughness", (double) this.e, 0));
         }
 
         return multimap;

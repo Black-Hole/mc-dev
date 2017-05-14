@@ -29,7 +29,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
     public void c() {
         this.a = 40;
         this.d.broadcastEntityEffect(this.c, (byte) 10);
-        this.c.getNavigation().o();
+        this.c.getNavigation().p();
     }
 
     public void d() {
