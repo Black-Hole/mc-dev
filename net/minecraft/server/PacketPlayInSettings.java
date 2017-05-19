@@ -14,7 +14,7 @@ public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
     public PacketPlayInSettings() {}
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e(7);
+        this.a = packetdataserializer.e(16);
         this.b = packetdataserializer.readByte();
         this.c = (EntityHuman.EnumChatVisibility) packetdataserializer.a(EntityHuman.EnumChatVisibility.class);
         this.d = packetdataserializer.readBoolean();

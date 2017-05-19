@@ -120,7 +120,7 @@ public class ContainerAnvil extends Container {
 
             this.k = 0;
             if (!itemstack2.isEmpty()) {
-                boolean flag = itemstack2.getItem() == Items.ENCHANTED_BOOK && !Items.ENCHANTED_BOOK.h(itemstack2).isEmpty();
+                boolean flag = itemstack2.getItem() == Items.ENCHANTED_BOOK && !ItemEnchantedBook.h(itemstack2).isEmpty();
                 int k;
                 int l;
                 int i1;

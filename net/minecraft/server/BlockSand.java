@@ -5,14 +5,14 @@ public class BlockSand extends BlockFalling {
     public static final BlockStateEnum<BlockSand.EnumSandVariant> VARIANT = BlockStateEnum.of("variant", BlockSand.EnumSandVariant.class);
 
     public BlockSand() {
-        this.y(this.blockStateList.getBlockData().set(BlockSand.VARIANT, BlockSand.EnumSandVariant.SAND));
+        this.x(this.blockStateList.getBlockData().set(BlockSand.VARIANT, BlockSand.EnumSandVariant.SAND));
     }
 
     public int getDropData(IBlockData iblockdata) {
         return ((BlockSand.EnumSandVariant) iblockdata.get(BlockSand.VARIANT)).b();
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return ((BlockSand.EnumSandVariant) iblockdata.get(BlockSand.VARIANT)).d();
     }
 

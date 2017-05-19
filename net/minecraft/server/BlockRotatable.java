@@ -62,7 +62,7 @@ public class BlockRotatable extends Block {
         return new BlockStateList(this, new IBlockState[] { BlockRotatable.AXIS});
     }
 
-    protected ItemStack w(IBlockData iblockdata) {
+    protected ItemStack v(IBlockData iblockdata) {
         return new ItemStack(Item.getItemOf(this));
     }
 

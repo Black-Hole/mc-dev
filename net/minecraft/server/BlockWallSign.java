@@ -9,7 +9,7 @@ public class BlockWallSign extends BlockSign {
     protected static final AxisAlignedBB f = new AxisAlignedBB(0.0D, 0.28125D, 0.875D, 1.0D, 0.78125D, 1.0D);
 
     public BlockWallSign() {
-        this.y(this.blockStateList.getBlockData().set(BlockWallSign.FACING, EnumDirection.NORTH));
+        this.x(this.blockStateList.getBlockData().set(BlockWallSign.FACING, EnumDirection.NORTH));
     }
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {

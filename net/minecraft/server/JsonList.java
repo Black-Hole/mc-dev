@@ -159,29 +159,31 @@ public class JsonList<K, V extends JsonListEntry<K>> {
     }
 
     public void load() throws FileNotFoundException {
-        Collection collection = null;
-        BufferedReader bufferedreader = null;
+        if (this.c.exists()) {
+            Collection collection = null;
+            BufferedReader bufferedreader = null;
 
-        try {
-            bufferedreader = Files.newReader(this.c, StandardCharsets.UTF_8);
-            collection = (Collection) ChatDeserializer.a(this.b, (Reader) bufferedreader, (Type) JsonList.f);
-        } finally {
-            IOUtils.closeQuietly(bufferedreader);
-        }
+            try {
+                bufferedreader = Files.newReader(this.c, StandardCharsets.UTF_8);
+                collection = (Collection) ChatDeserializer.a(this.b, (Reader) bufferedreader, (Type) JsonList.f);
+            } finally {
+                IOUtils.closeQuietly(bufferedreader);
+            }
 
-        if (collection != null) {
-            this.d.clear();
-            Iterator iterator = collection.iterator();
+            if (collection != null) {
+                this.d.clear();
+                Iterator iterator = collection.iterator();
 
-            while (iterator.hasNext()) {
-                JsonListEntry jsonlistentry = (JsonListEntry) iterator.next();
+                while (iterator.hasNext()) {
+                    JsonListEntry jsonlistentry = (JsonListEntry) iterator.next();
 
-                if (jsonlistentry.getKey() != null) {
-                    this.d.put(this.a(jsonlistentry.getKey()), jsonlistentry);
+                    if (jsonlistentry.getKey() != null) {
+                        this.d.put(this.a(jsonlistentry.getKey()), jsonlistentry);
+                    }
                 }
             }
-        }
 
+        }
     }
 
     class JsonListEntrySerializer implements JsonDeserializer<JsonListEntry<K>>, JsonSerializer<JsonListEntry<K>> {

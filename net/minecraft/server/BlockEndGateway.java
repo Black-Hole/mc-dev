@@ -35,7 +35,7 @@ public class BlockEndGateway extends BlockTileEntity {
         return ItemStack.a;
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return MaterialMapColor.F;
     }
 

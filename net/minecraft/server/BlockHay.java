@@ -4,7 +4,7 @@ public class BlockHay extends BlockRotatable {
 
     public BlockHay() {
         super(Material.GRASS, MaterialMapColor.u);
-        this.y(this.blockStateList.getBlockData().set(BlockHay.AXIS, EnumDirection.EnumAxis.Y));
+        this.x(this.blockStateList.getBlockData().set(BlockHay.AXIS, EnumDirection.EnumAxis.Y));
         this.a(CreativeModeTab.b);
     }
 

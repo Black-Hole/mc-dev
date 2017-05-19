@@ -9,17 +9,17 @@ public class ItemEnchantedBook extends Item {
     }
 
     public EnumItemRarity g(ItemStack itemstack) {
-        return this.h(itemstack).isEmpty() ? super.g(itemstack) : EnumItemRarity.UNCOMMON;
+        return h(itemstack).isEmpty() ? super.g(itemstack) : EnumItemRarity.UNCOMMON;
     }
 
-    public NBTTagList h(ItemStack itemstack) {
+    public static NBTTagList h(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
-        return nbttagcompound != null && nbttagcompound.hasKeyOfType("StoredEnchantments", 9) ? (NBTTagList) nbttagcompound.get("StoredEnchantments") : new NBTTagList();
+        return nbttagcompound != null ? nbttagcompound.getList("StoredEnchantments", 10) : new NBTTagList();
     }
 
-    public void a(ItemStack itemstack, WeightedRandomEnchant weightedrandomenchant) {
-        NBTTagList nbttaglist = this.h(itemstack);
+    public static void a(ItemStack itemstack, WeightedRandomEnchant weightedrandomenchant) {
+        NBTTagList nbttaglist = h(itemstack);
         boolean flag = true;
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -50,10 +50,10 @@ public class ItemEnchantedBook extends Item {
         itemstack.getTag().set("StoredEnchantments", nbttaglist);
     }
 
-    public ItemStack a(WeightedRandomEnchant weightedrandomenchant) {
-        ItemStack itemstack = new ItemStack(this);
+    public static ItemStack a(WeightedRandomEnchant weightedrandomenchant) {
+        ItemStack itemstack = new ItemStack(Items.ENCHANTED_BOOK);
 
-        this.a(itemstack, weightedrandomenchant);
+        a(itemstack, weightedrandomenchant);
         return itemstack;
     }
 }

@@ -9,7 +9,7 @@ public class BlockHugeMushroom extends Block {
 
     public BlockHugeMushroom(Material material, MaterialMapColor materialmapcolor, Block block) {
         super(material, materialmapcolor);
-        this.y(this.blockStateList.getBlockData().set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.ALL_OUTSIDE));
+        this.x(this.blockStateList.getBlockData().set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.ALL_OUTSIDE));
         this.b = block;
     }
 
@@ -17,7 +17,7 @@ public class BlockHugeMushroom extends Block {
         return Math.max(0, random.nextInt(10) - 7);
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         switch ((BlockHugeMushroom.EnumHugeMushroomVariant) iblockdata.get(BlockHugeMushroom.VARIANT)) {
         case ALL_STEM:
             return MaterialMapColor.f;
@@ -29,7 +29,7 @@ public class BlockHugeMushroom extends Block {
             return MaterialMapColor.e;
 
         default:
-            return super.r(iblockdata);
+            return super.c(iblockdata, iblockaccess, blockposition);
         }
     }
 

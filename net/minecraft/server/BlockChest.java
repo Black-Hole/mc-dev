@@ -15,7 +15,7 @@ public class BlockChest extends BlockTileEntity {
 
     protected BlockChest(BlockChest.Type blockchest_type) {
         super(Material.WOOD);
-        this.y(this.blockStateList.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH));
+        this.x(this.blockStateList.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH));
         this.g = blockchest_type;
         this.a(blockchest_type == BlockChest.Type.TRAP ? CreativeModeTab.d : CreativeModeTab.c);
     }
@@ -372,7 +372,7 @@ public class BlockChest extends BlockTileEntity {
     }
 
     public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        if (!iblockdata.n()) {
+        if (!iblockdata.m()) {
             return 0;
         } else {
             int i = 0;
@@ -395,7 +395,7 @@ public class BlockChest extends BlockTileEntity {
     }
 
     private boolean i(World world, BlockPosition blockposition) {
-        return world.getType(blockposition.up()).m();
+        return world.getType(blockposition.up()).l();
     }
 
     private boolean j(World world, BlockPosition blockposition) {

@@ -23,7 +23,7 @@ public class BlockTorch extends Block {
 
     protected BlockTorch() {
         super(Material.ORIENTABLE);
-        this.y(this.blockStateList.getBlockData().set(BlockTorch.FACING, EnumDirection.UP));
+        this.x(this.blockStateList.getBlockData().set(BlockTorch.FACING, EnumDirection.UP));
         this.a(true);
         this.a(CreativeModeTab.c);
     }
@@ -62,9 +62,9 @@ public class BlockTorch extends Block {
 
     private boolean b(World world, BlockPosition blockposition) {
         Block block = world.getType(blockposition).getBlock();
-        boolean flag = block == Blocks.END_GATEWAY;
+        boolean flag = block == Blocks.END_GATEWAY || block == Blocks.LIT_PUMPKIN;
 
-        if (world.getType(blockposition).r()) {
+        if (world.getType(blockposition).q()) {
             return !flag;
         } else {
             boolean flag1 = block instanceof BlockFence || block == Blocks.GLASS || block == Blocks.COBBLESTONE_WALL || block == Blocks.STAINED_GLASS;

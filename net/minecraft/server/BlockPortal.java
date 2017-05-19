@@ -13,7 +13,7 @@ public class BlockPortal extends BlockHalfTransparent {
 
     public BlockPortal() {
         super(Material.PORTAL, false);
-        this.y(this.blockStateList.getBlockData().set(BlockPortal.AXIS, EnumDirection.EnumAxis.X));
+        this.x(this.blockStateList.getBlockData().set(BlockPortal.AXIS, EnumDirection.EnumAxis.X));
         this.a(true);
     }
 
@@ -38,11 +38,11 @@ public class BlockPortal extends BlockHalfTransparent {
 
             BlockPosition blockposition1;
 
-            for (blockposition1 = blockposition; !world.getType(blockposition1).r() && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
+            for (blockposition1 = blockposition; !world.getType(blockposition1).q() && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
                 ;
             }
 
-            if (i > 0 && !world.getType(blockposition1.up()).m()) {
+            if (i > 0 && !world.getType(blockposition1.up()).l()) {
                 Entity entity = ItemMonsterEgg.a(world, EntityTypes.getName(EntityPigZombie.class), (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 1.1D, (double) blockposition1.getZ() + 0.5D);
 
                 if (entity != null) {

@@ -15,15 +15,15 @@ public class CriterionConditionNBT {
     }
 
     public boolean a(ItemStack itemstack) {
-        return this == CriterionConditionNBT.a ? true : this.a((NBTBase) itemstack.save(new NBTTagCompound()));
+        return this == CriterionConditionNBT.a ? true : this.a((NBTBase) itemstack.getTag());
     }
 
     public boolean a(Entity entity) {
         return this == CriterionConditionNBT.a ? true : this.a((NBTBase) CommandAbstract.a(entity));
     }
 
-    public boolean a(NBTBase nbtbase) {
-        return this.b == null || GameProfileSerializer.a(this.b, nbtbase, true);
+    public boolean a(@Nullable NBTBase nbtbase) {
+        return nbtbase == null ? this == CriterionConditionNBT.a : this.b == null || GameProfileSerializer.a(this.b, nbtbase, true);
     }
 
     public static CriterionConditionNBT a(@Nullable JsonElement jsonelement) {

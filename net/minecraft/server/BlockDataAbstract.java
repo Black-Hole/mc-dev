@@ -59,9 +59,9 @@ public abstract class BlockDataAbstract implements IBlockData {
         StringBuilder stringbuilder = new StringBuilder();
 
         stringbuilder.append(Block.REGISTRY.b(this.getBlock()));
-        if (!this.u().isEmpty()) {
+        if (!this.t().isEmpty()) {
             stringbuilder.append("[");
-            BlockDataAbstract.a.appendTo(stringbuilder, Iterables.transform(this.u().entrySet(), BlockDataAbstract.b));
+            BlockDataAbstract.a.appendTo(stringbuilder, Iterables.transform(this.t().entrySet(), BlockDataAbstract.b));
             stringbuilder.append("]");
         }
 

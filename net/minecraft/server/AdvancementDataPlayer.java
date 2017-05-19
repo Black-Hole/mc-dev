@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,7 +39,9 @@ public class AdvancementDataPlayer {
     private final Set<Advancement> h = Sets.newLinkedHashSet();
     private final Set<Advancement> i = Sets.newLinkedHashSet();
     private EntityPlayer player;
-    private boolean k = true;
+    @Nullable
+    private Advancement k;
+    private boolean l = true;
 
     public AdvancementDataPlayer(MinecraftServer minecraftserver, File file, EntityPlayer entityplayer) {
         this.d = minecraftserver;
@@ -68,7 +71,8 @@ public class AdvancementDataPlayer {
         this.g.clear();
         this.h.clear();
         this.i.clear();
-        this.k = true;
+        this.l = true;
+        this.k = null;
         this.g();
     }
 
@@ -78,7 +82,7 @@ public class AdvancementDataPlayer {
         while (iterator.hasNext()) {
             Advancement advancement = (Advancement) iterator.next();
 
-            this.b(advancement);
+            this.c(advancement);
         }
 
     }
@@ -101,7 +105,7 @@ public class AdvancementDataPlayer {
         while (iterator.hasNext()) {
             Advancement advancement = (Advancement) iterator.next();
 
-            this.d(advancement);
+            this.e(advancement);
         }
 
     }
@@ -186,7 +190,7 @@ public class AdvancementDataPlayer {
         boolean flag1 = advancementprogress.isDone();
 
         if (advancementprogress.a(s)) {
-            this.c(advancement);
+            this.d(advancement);
             this.i.add(advancement);
             flag = true;
             if (!flag1 && advancementprogress.isDone()) {
@@ -198,7 +202,7 @@ public class AdvancementDataPlayer {
         }
 
         if (advancementprogress.isDone()) {
-            this.d(advancement);
+            this.e(advancement);
         }
 
         return flag;
@@ -209,19 +213,19 @@ public class AdvancementDataPlayer {
         AdvancementProgress advancementprogress = this.getProgress(advancement);
 
         if (advancementprogress.b(s)) {
-            this.b(advancement);
+            this.c(advancement);
             this.i.add(advancement);
             flag = true;
         }
 
         if (!advancementprogress.b()) {
-            this.d(advancement);
+            this.e(advancement);
         }
 
         return flag;
     }
 
-    private void b(Advancement advancement) {
+    private void c(Advancement advancement) {
         AdvancementProgress advancementprogress = this.getProgress(advancement);
 
         if (!advancementprogress.isDone()) {
@@ -247,7 +251,7 @@ public class AdvancementDataPlayer {
         }
     }
 
-    private void c(Advancement advancement) {
+    private void d(Advancement advancement) {
         AdvancementProgress advancementprogress = this.getProgress(advancement);
         Iterator iterator = advancement.getCriteria().entrySet().iterator();
 
@@ -297,12 +301,29 @@ public class AdvancementDataPlayer {
                 }
             }
 
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutAdvancements(this.k, linkedhashset, linkedhashset1, hashmap));
-            this.h.clear();
-            this.i.clear();
+            if (!hashmap.isEmpty() || !linkedhashset.isEmpty() || !linkedhashset1.isEmpty()) {
+                entityplayer.playerConnection.sendPacket(new PacketPlayOutAdvancements(this.l, linkedhashset, linkedhashset1, hashmap));
+                this.h.clear();
+                this.i.clear();
+            }
         }
 
-        this.k = false;
+        this.l = false;
+    }
+
+    public void a(@Nullable Advancement advancement) {
+        Advancement advancement1 = this.k;
+
+        if (advancement != null && advancement.b() == null && advancement.c() != null) {
+            this.k = advancement;
+        } else {
+            this.k = null;
+        }
+
+        if (advancement1 != this.k) {
+            this.player.playerConnection.sendPacket(new PacketPlayOutSelectAdvancementTab(this.k == null ? null : this.k.getName()));
+        }
+
     }
 
     public AdvancementProgress getProgress(Advancement advancement) {
@@ -321,8 +342,8 @@ public class AdvancementDataPlayer {
         this.data.put(advancement, advancementprogress);
     }
 
-    private void d(Advancement advancement) {
-        boolean flag = this.e(advancement);
+    private void e(Advancement advancement) {
+        boolean flag = this.f(advancement);
         boolean flag1 = this.g.contains(advancement);
 
         if (flag && !flag1) {
@@ -337,7 +358,7 @@ public class AdvancementDataPlayer {
         }
 
         if (flag != flag1 && advancement.b() != null) {
-            this.d(advancement.b());
+            this.e(advancement.b());
         }
 
         Iterator iterator = advancement.e().iterator();
@@ -345,44 +366,38 @@ public class AdvancementDataPlayer {
         while (iterator.hasNext()) {
             Advancement advancement1 = (Advancement) iterator.next();
 
-            this.d(advancement1);
+            this.e(advancement1);
         }
 
-    }
-
-    private boolean e(Advancement advancement) {
-        if (advancement.getName().toString().contains("return_to")) {
-            advancement = advancement;
-        }
-
-        int i = 0;
-
-        while (true) {
-            if (advancement != null && i <= 2) {
-                if (i == 0 && this.f(advancement)) {
-                    return true;
-                }
-
-                if (advancement.c() != null && !advancement.c().j()) {
-                    AdvancementProgress advancementprogress = this.getProgress(advancement);
-
-                    if (advancementprogress.isDone()) {
-                        return true;
-                    }
-
-                    advancement = advancement.b();
-                    ++i;
-                    continue;
-                }
-
-                return false;
-            }
-
-            return false;
-        }
     }
 
     private boolean f(Advancement advancement) {
+        for (int i = 0; advancement != null && i <= 2; ++i) {
+            if (i == 0 && this.g(advancement)) {
+                return true;
+            }
+
+            if (advancement.c() == null) {
+                return false;
+            }
+
+            AdvancementProgress advancementprogress = this.getProgress(advancement);
+
+            if (advancementprogress.isDone()) {
+                return true;
+            }
+
+            if (advancement.c().j()) {
+                return false;
+            }
+
+            advancement = advancement.b();
+        }
+
+        return false;
+    }
+
+    private boolean g(Advancement advancement) {
         AdvancementProgress advancementprogress = this.getProgress(advancement);
 
         if (advancementprogress.isDone()) {
@@ -398,7 +413,7 @@ public class AdvancementDataPlayer {
                 }
 
                 advancement1 = (Advancement) iterator.next();
-            } while (!this.f(advancement1));
+            } while (!this.g(advancement1));
 
             return true;
         }

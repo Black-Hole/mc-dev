@@ -20,12 +20,12 @@ public abstract class IRecipe implements Comparable<IRecipe> {
 
     public abstract NonNullList<ItemStack> b(InventoryCrafting inventorycrafting);
 
-    public boolean d() {
+    public boolean c() {
         return false;
     }
 
     public int a(IRecipe irecipe) {
-        return ((MinecraftKey) CraftingManager.recipes.b(this)).a((MinecraftKey) CraftingManager.recipes.b(irecipe));
+        return ((MinecraftKey) CraftingManager.recipes.b(this)).toString().compareTo(((MinecraftKey) CraftingManager.recipes.b(irecipe)).toString());
     }
 
     public int compareTo(Object object) {

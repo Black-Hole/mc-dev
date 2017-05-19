@@ -774,7 +774,7 @@ public abstract class PlayerList {
         BlockPosition blockposition = worldserver.getSpawn();
 
         entityplayer.playerConnection.sendPacket(new PacketPlayOutSpawnPosition(blockposition));
-        if (worldserver.Y()) {
+        if (worldserver.isRaining()) {
             entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(1, 0.0F));
             entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(7, worldserver.j(1.0F)));
             entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(8, worldserver.h(1.0F)));

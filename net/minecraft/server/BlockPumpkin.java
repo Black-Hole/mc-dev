@@ -22,7 +22,7 @@ public class BlockPumpkin extends BlockFacingHorizontal {
 
     protected BlockPumpkin() {
         super(Material.PUMPKIN, MaterialMapColor.r);
-        this.y(this.blockStateList.getBlockData().set(BlockPumpkin.FACING, EnumDirection.NORTH));
+        this.x(this.blockStateList.getBlockData().set(BlockPumpkin.FACING, EnumDirection.NORTH));
         this.a(true);
         this.a(CreativeModeTab.b);
     }
@@ -110,7 +110,7 @@ public class BlockPumpkin extends BlockFacingHorizontal {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return world.getType(blockposition).getBlock().material.isReplaceable() && world.getType(blockposition.down()).r();
+        return world.getType(blockposition).getBlock().material.isReplaceable() && world.getType(blockposition.down()).q();
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {

@@ -20,7 +20,7 @@ public class BlockVine extends Block {
 
     public BlockVine() {
         super(Material.REPLACEABLE_PLANT);
-        this.y(this.blockStateList.getBlockData().set(BlockVine.UP, Boolean.valueOf(false)).set(BlockVine.NORTH, Boolean.valueOf(false)).set(BlockVine.EAST, Boolean.valueOf(false)).set(BlockVine.SOUTH, Boolean.valueOf(false)).set(BlockVine.WEST, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockVine.UP, Boolean.valueOf(false)).set(BlockVine.NORTH, Boolean.valueOf(false)).set(BlockVine.EAST, Boolean.valueOf(false)).set(BlockVine.SOUTH, Boolean.valueOf(false)).set(BlockVine.WEST, Boolean.valueOf(false)));
         this.a(true);
         this.a(CreativeModeTab.c);
     }
@@ -31,7 +31,7 @@ public class BlockVine extends Block {
     }
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        iblockdata = iblockdata.b(iblockaccess, blockposition);
+        iblockdata = iblockdata.c(iblockaccess, blockposition);
         int i = 0;
         AxisAlignedBB axisalignedbb = BlockVine.j;
 

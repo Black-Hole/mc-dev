@@ -9,7 +9,7 @@ public class BlockShulkerBox extends BlockTileEntity {
         super(Material.STONE, MaterialMapColor.c);
         this.color = enumcolor;
         this.a(CreativeModeTab.c);
-        this.y(this.blockStateList.getBlockData().set(BlockShulkerBox.a, EnumDirection.UP));
+        this.x(this.blockStateList.getBlockData().set(BlockShulkerBox.a, EnumDirection.UP));
     }
 
     public TileEntity a(World world, int i) {
@@ -20,7 +20,7 @@ public class BlockShulkerBox extends BlockTileEntity {
         return false;
     }
 
-    public boolean u(IBlockData iblockdata) {
+    public boolean t(IBlockData iblockdata) {
         return true;
     }
 

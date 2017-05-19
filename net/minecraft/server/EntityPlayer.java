@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 public class EntityPlayer extends EntityHuman implements ICrafting {
 
-    private static final Logger bW = LogManager.getLogger();
+    private static final Logger bV = LogManager.getLogger();
     private String locale = "en_US";
     public PlayerConnection playerConnection;
     public final MinecraftServer server;
@@ -22,30 +22,30 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public double d;
     public double e;
     public final List<Integer> removeQueue = Lists.newLinkedList();
-    private final AdvancementDataPlayer bZ;
-    private final ServerStatisticManager ca;
-    private float cb = Float.MIN_VALUE;
+    private final AdvancementDataPlayer bY;
+    private final ServerStatisticManager bZ;
+    private float ca = Float.MIN_VALUE;
+    private int cb = Integer.MIN_VALUE;
     private int cc = Integer.MIN_VALUE;
     private int cd = Integer.MIN_VALUE;
     private int ce = Integer.MIN_VALUE;
     private int cf = Integer.MIN_VALUE;
-    private int cg = Integer.MIN_VALUE;
     private float lastHealthSent = -1.0E8F;
-    private int ci = -99999999;
-    private boolean cj = true;
+    private int ch = -99999999;
+    private boolean ci = true;
     public int lastSentExp = -99999999;
     public int invulnerableTicks = 60;
-    private EntityHuman.EnumChatVisibility cm;
-    private boolean cn = true;
-    private long co = System.currentTimeMillis();
-    private Entity cp;
+    private EntityHuman.EnumChatVisibility cl;
+    private boolean cm = true;
+    private long cn = System.currentTimeMillis();
+    private Entity co;
     public boolean worldChangeInvuln;
-    private boolean cr;
-    private final RecipeBookServer cs = new RecipeBookServer();
-    private Vec3D ct;
-    private int cu;
-    private boolean cv;
-    private Vec3D cw;
+    private boolean cq;
+    private final RecipeBookServer cr = new RecipeBookServer();
+    private Vec3D cs;
+    private int ct;
+    private boolean cu;
+    private Vec3D cv;
     private int containerCounter;
     public boolean f;
     public int ping;
@@ -73,9 +73,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         this.server = minecraftserver;
-        this.ca = minecraftserver.getPlayerList().a((EntityHuman) this);
-        this.bZ = minecraftserver.getPlayerList().h(this);
-        this.P = 0.0F;
+        this.bZ = minecraftserver.getPlayerList().a((EntityHuman) this);
+        this.bY = minecraftserver.getPlayerList().h(this);
+        this.P = 1.0F;
         this.setPositionRotation(blockposition, 0.0F, 0.0F);
 
         while (!worldserver.getCubes(this, this.getBoundingBox()).isEmpty() && this.locY < 255.0D) {
@@ -97,12 +97,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         if (nbttagcompound.hasKeyOfType("enteredNetherPosition", 10)) {
             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("enteredNetherPosition");
 
-            this.cw = new Vec3D(nbttagcompound1.getDouble("x"), nbttagcompound1.getDouble("y"), nbttagcompound1.getDouble("z"));
+            this.cv = new Vec3D(nbttagcompound1.getDouble("x"), nbttagcompound1.getDouble("y"), nbttagcompound1.getDouble("z"));
         }
 
-        this.cr = nbttagcompound.getBoolean("seenCredits");
+        this.cq = nbttagcompound.getBoolean("seenCredits");
         if (nbttagcompound.hasKeyOfType("recipeBook", 10)) {
-            this.cs.a(nbttagcompound.getCompound("recipeBook"));
+            this.cr.a(nbttagcompound.getCompound("recipeBook"));
         }
 
     }
@@ -126,13 +126,13 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setInt("playerGameType", this.playerInteractManager.getGameMode().getId());
-        nbttagcompound.setBoolean("seenCredits", this.cr);
-        if (this.cw != null) {
+        nbttagcompound.setBoolean("seenCredits", this.cq);
+        if (this.cv != null) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            nbttagcompound1.setDouble("x", this.cw.x);
-            nbttagcompound1.setDouble("y", this.cw.y);
-            nbttagcompound1.setDouble("z", this.cw.z);
+            nbttagcompound1.setDouble("x", this.cv.x);
+            nbttagcompound1.setDouble("y", this.cv.y);
+            nbttagcompound1.setDouble("z", this.cv.z);
             nbttagcompound.set("enteredNetherPosition", nbttagcompound1);
         }
 
@@ -149,7 +149,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             nbttagcompound.set("RootVehicle", nbttagcompound2);
         }
 
-        nbttagcompound.set("recipeBook", this.cs.e());
+        nbttagcompound.set("recipeBook", this.cr.e());
     }
 
     public void levelDown(int i) {
@@ -226,11 +226,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         CriterionTriggers.v.a(this);
-        if (this.ct != null) {
-            CriterionTriggers.t.a(this, this.ct, this.ticksLived - this.cu);
+        if (this.cs != null) {
+            CriterionTriggers.t.a(this, this.cs, this.ticksLived - this.ct);
         }
 
-        this.bZ.b(this);
+        this.bY.b(this);
     }
 
     public void playerTick() {
@@ -249,41 +249,41 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 }
             }
 
-            if (this.getHealth() != this.lastHealthSent || this.ci != this.foodData.getFoodLevel() || this.foodData.getSaturationLevel() == 0.0F != this.cj) {
+            if (this.getHealth() != this.lastHealthSent || this.ch != this.foodData.getFoodLevel() || this.foodData.getSaturationLevel() == 0.0F != this.ci) {
                 this.playerConnection.sendPacket(new PacketPlayOutUpdateHealth(this.getHealth(), this.foodData.getFoodLevel(), this.foodData.getSaturationLevel()));
                 this.lastHealthSent = this.getHealth();
-                this.ci = this.foodData.getFoodLevel();
-                this.cj = this.foodData.getSaturationLevel() == 0.0F;
+                this.ch = this.foodData.getFoodLevel();
+                this.ci = this.foodData.getSaturationLevel() == 0.0F;
             }
 
-            if (this.getHealth() + this.getAbsorptionHearts() != this.cb) {
-                this.cb = this.getHealth() + this.getAbsorptionHearts();
-                this.a(IScoreboardCriteria.g, MathHelper.f(this.cb));
+            if (this.getHealth() + this.getAbsorptionHearts() != this.ca) {
+                this.ca = this.getHealth() + this.getAbsorptionHearts();
+                this.a(IScoreboardCriteria.g, MathHelper.f(this.ca));
             }
 
-            if (this.foodData.getFoodLevel() != this.cc) {
-                this.cc = this.foodData.getFoodLevel();
-                this.a(IScoreboardCriteria.h, MathHelper.f((float) this.cc));
+            if (this.foodData.getFoodLevel() != this.cb) {
+                this.cb = this.foodData.getFoodLevel();
+                this.a(IScoreboardCriteria.h, MathHelper.f((float) this.cb));
             }
 
-            if (this.getAirTicks() != this.cd) {
-                this.cd = this.getAirTicks();
-                this.a(IScoreboardCriteria.i, MathHelper.f((float) this.cd));
+            if (this.getAirTicks() != this.cc) {
+                this.cc = this.getAirTicks();
+                this.a(IScoreboardCriteria.i, MathHelper.f((float) this.cc));
             }
 
-            if (this.getArmorStrength() != this.ce) {
-                this.ce = this.getArmorStrength();
-                this.a(IScoreboardCriteria.j, MathHelper.f((float) this.ce));
+            if (this.getArmorStrength() != this.cd) {
+                this.cd = this.getArmorStrength();
+                this.a(IScoreboardCriteria.j, MathHelper.f((float) this.cd));
             }
 
-            if (this.expTotal != this.cg) {
-                this.cg = this.expTotal;
-                this.a(IScoreboardCriteria.k, MathHelper.f((float) this.cg));
+            if (this.expTotal != this.cf) {
+                this.cf = this.expTotal;
+                this.a(IScoreboardCriteria.k, MathHelper.f((float) this.cf));
             }
 
-            if (this.expLevel != this.cf) {
-                this.cf = this.expLevel;
-                this.a(IScoreboardCriteria.l, MathHelper.f((float) this.cf));
+            if (this.expLevel != this.ce) {
+                this.ce = this.expLevel;
+                this.a(IScoreboardCriteria.l, MathHelper.f((float) this.ce));
             }
 
             if (this.expTotal != this.lastSentExp) {
@@ -470,17 +470,17 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public Entity b(int i) {
         this.worldChangeInvuln = true;
         if (this.dimension == 0 && i == -1) {
-            this.cw = new Vec3D(this.locX, this.locY, this.locZ);
+            this.cv = new Vec3D(this.locX, this.locY, this.locZ);
         } else if (this.dimension != -1 && i != 0) {
-            this.cw = null;
+            this.cv = null;
         }
 
         if (this.dimension == 1 && i == 1) {
             this.world.kill(this);
             if (!this.viewingCredits) {
                 this.viewingCredits = true;
-                this.playerConnection.sendPacket(new PacketPlayOutGameStateChange(4, this.cr ? 0.0F : 1.0F));
-                this.cr = true;
+                this.playerConnection.sendPacket(new PacketPlayOutGameStateChange(4, this.cq ? 0.0F : 1.0F));
+                this.cq = true;
             }
 
             return this;
@@ -493,7 +493,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             this.playerConnection.sendPacket(new PacketPlayOutWorldEvent(1032, BlockPosition.ZERO, 0, false));
             this.lastSentExp = -1;
             this.lastHealthSent = -1.0F;
-            this.ci = -1;
+            this.ch = -1;
             return this;
         }
     }
@@ -777,7 +777,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void a(Statistic statistic, int i) {
         if (statistic != null) {
-            this.ca.b(this, statistic, i);
+            this.bZ.b(this, statistic, i);
             Iterator iterator = this.getScoreboard().getObjectivesForCriteria(statistic.f()).iterator();
 
             while (iterator.hasNext()) {
@@ -791,7 +791,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void a(Statistic statistic) {
         if (statistic != null) {
-            this.ca.setStatistic(this, statistic, 0);
+            this.bZ.setStatistic(this, statistic, 0);
             Iterator iterator = this.getScoreboard().getObjectivesForCriteria(statistic.f()).iterator();
 
             while (iterator.hasNext()) {
@@ -804,7 +804,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void a(@Nonnull List<IRecipe> list) {
-        this.cs.a(list, this);
+        this.cr.a(list, this);
     }
 
     public void a(@Nonnull MinecraftKey[] aminecraftkey) {
@@ -822,11 +822,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void b(List<IRecipe> list) {
-        this.cs.b(list, this);
+        this.cr.b(list, this);
     }
 
     public void s() {
-        this.cv = true;
+        this.cu = true;
         this.aF();
         if (this.sleeping) {
             this.a(true, false, false);
@@ -835,7 +835,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public boolean t() {
-        return this.cv;
+        return this.cu;
     }
 
     public void triggerHealthUpdate() {
@@ -879,11 +879,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.getDataWatcher().set(EntityPlayer.br, entityplayer.getDataWatcher().get(EntityPlayer.br));
         this.lastSentExp = -1;
         this.lastHealthSent = -1.0F;
-        this.ci = -1;
-        this.cs.a((RecipeBook) entityplayer.cs);
+        this.ch = -1;
+        this.cr.a((RecipeBook) entityplayer.cr);
         this.removeQueue.addAll(entityplayer.removeQueue);
-        this.cr = entityplayer.cr;
-        this.cw = entityplayer.cw;
+        this.cq = entityplayer.cq;
+        this.cv = entityplayer.cv;
         this.setShoulderEntityLeft(entityplayer.getShoulderEntityLeft());
         this.setShoulderEntityRight(entityplayer.getShoulderEntityRight());
     }
@@ -892,8 +892,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         super.a(mobeffect);
         this.playerConnection.sendPacket(new PacketPlayOutEntityEffect(this.getId(), mobeffect));
         if (mobeffect.getMobEffect() == MobEffects.LEVITATION) {
-            this.cu = this.ticksLived;
-            this.ct = new Vec3D(this.locX, this.locY, this.locZ);
+            this.ct = this.ticksLived;
+            this.cs = new Vec3D(this.locX, this.locY, this.locZ);
         }
 
         CriterionTriggers.z.a(this);
@@ -909,7 +909,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         super.b(mobeffect);
         this.playerConnection.sendPacket(new PacketPlayOutRemoveEntityEffect(this.getId(), mobeffect.getMobEffect()));
         if (mobeffect.getMobEffect() == MobEffects.LEVITATION) {
-            this.ct = null;
+            this.cs = null;
         }
 
         CriterionTriggers.z.a(this);
@@ -990,14 +990,14 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void a(PacketPlayInSettings packetplayinsettings) {
         this.locale = packetplayinsettings.a();
-        this.cm = packetplayinsettings.c();
-        this.cn = packetplayinsettings.d();
+        this.cl = packetplayinsettings.c();
+        this.cm = packetplayinsettings.d();
         this.getDataWatcher().set(EntityPlayer.br, Byte.valueOf((byte) packetplayinsettings.e()));
         this.getDataWatcher().set(EntityPlayer.bs, Byte.valueOf((byte) (packetplayinsettings.getMainHand() == EnumMainHand.LEFT ? 0 : 1)));
     }
 
     public EntityHuman.EnumChatVisibility getChatFlags() {
-        return this.cm;
+        return this.cl;
     }
 
     public void setResourcePack(String s, String s1) {
@@ -1009,15 +1009,15 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void resetIdleTimer() {
-        this.co = MinecraftServer.aw();
+        this.cn = MinecraftServer.aw();
     }
 
     public ServerStatisticManager getStatisticManager() {
-        return this.ca;
+        return this.bZ;
     }
 
     public RecipeBookServer F() {
-        return this.cs;
+        return this.cr;
     }
 
     public void c(Entity entity) {
@@ -1045,16 +1045,16 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public Entity getSpecatorTarget() {
-        return (Entity) (this.cp == null ? this : this.cp);
+        return (Entity) (this.co == null ? this : this.co);
     }
 
     public void setSpectatorTarget(Entity entity) {
         Entity entity1 = this.getSpecatorTarget();
 
-        this.cp = (Entity) (entity == null ? this : entity);
-        if (entity1 != this.cp) {
-            this.playerConnection.sendPacket(new PacketPlayOutCamera(this.cp));
-            this.enderTeleportTo(this.cp.locX, this.cp.locY, this.cp.locZ);
+        this.co = (Entity) (entity == null ? this : entity);
+        if (entity1 != this.co) {
+            this.playerConnection.sendPacket(new PacketPlayOutCamera(this.co));
+            this.enderTeleportTo(this.co.locX, this.co.locY, this.co.locZ);
         }
 
     }
@@ -1076,7 +1076,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public long J() {
-        return this.co;
+        return this.cn;
     }
 
     @Nullable
@@ -1107,11 +1107,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public AdvancementDataPlayer getAdvancementData() {
-        return this.bZ;
+        return this.bY;
     }
 
     @Nullable
     public Vec3D Q() {
-        return this.cw;
+        return this.cv;
     }
 }

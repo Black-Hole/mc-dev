@@ -237,9 +237,9 @@ public final class GameProfileSerializer {
 
     public static NBTTagCompound a(NBTTagCompound nbttagcompound, IBlockData iblockdata) {
         nbttagcompound.setString("Name", ((MinecraftKey) Block.REGISTRY.b(iblockdata.getBlock())).toString());
-        if (!iblockdata.u().isEmpty()) {
+        if (!iblockdata.t().isEmpty()) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-            UnmodifiableIterator unmodifiableiterator = iblockdata.u().entrySet().iterator();
+            UnmodifiableIterator unmodifiableiterator = iblockdata.t().entrySet().iterator();
 
             while (unmodifiableiterator.hasNext()) {
                 Entry entry = (Entry) unmodifiableiterator.next();

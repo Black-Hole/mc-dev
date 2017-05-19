@@ -35,7 +35,7 @@ public class BlockStairs extends Block {
 
     protected BlockStairs(IBlockData iblockdata) {
         super(iblockdata.getBlock().material);
-        this.y(this.blockStateList.getBlockData().set(BlockStairs.FACING, EnumDirection.NORTH).set(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.STRAIGHT));
+        this.x(this.blockStateList.getBlockData().set(BlockStairs.FACING, EnumDirection.NORTH).set(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.STRAIGHT));
         this.P = iblockdata.getBlock();
         this.Q = iblockdata;
         this.c(this.P.strength);
@@ -50,7 +50,7 @@ public class BlockStairs extends Block {
             iblockdata = this.updateState(iblockdata, world, blockposition);
         }
 
-        Iterator iterator = z(iblockdata).iterator();
+        Iterator iterator = y(iblockdata).iterator();
 
         while (iterator.hasNext()) {
             AxisAlignedBB axisalignedbb1 = (AxisAlignedBB) iterator.next();
@@ -60,7 +60,7 @@ public class BlockStairs extends Block {
 
     }
 
-    private static List<AxisAlignedBB> z(IBlockData iblockdata) {
+    private static List<AxisAlignedBB> y(IBlockData iblockdata) {
         ArrayList arraylist = Lists.newArrayList();
         boolean flag = iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
 
@@ -68,17 +68,17 @@ public class BlockStairs extends Block {
         BlockStairs.EnumStairShape blockstairs_enumstairshape = (BlockStairs.EnumStairShape) iblockdata.get(BlockStairs.SHAPE);
 
         if (blockstairs_enumstairshape == BlockStairs.EnumStairShape.STRAIGHT || blockstairs_enumstairshape == BlockStairs.EnumStairShape.INNER_LEFT || blockstairs_enumstairshape == BlockStairs.EnumStairShape.INNER_RIGHT) {
-            arraylist.add(A(iblockdata));
+            arraylist.add(z(iblockdata));
         }
 
         if (blockstairs_enumstairshape != BlockStairs.EnumStairShape.STRAIGHT) {
-            arraylist.add(B(iblockdata));
+            arraylist.add(A(iblockdata));
         }
 
         return arraylist;
     }
 
-    private static AxisAlignedBB A(IBlockData iblockdata) {
+    private static AxisAlignedBB z(IBlockData iblockdata) {
         boolean flag = iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
 
         switch ((EnumDirection) iblockdata.get(BlockStairs.FACING)) {
@@ -97,7 +97,7 @@ public class BlockStairs extends Block {
         }
     }
 
-    private static AxisAlignedBB B(IBlockData iblockdata) {
+    private static AxisAlignedBB A(IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
         EnumDirection enumdirection1;
 
@@ -235,8 +235,8 @@ public class BlockStairs extends Block {
         return iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
-        return this.P.r(this.Q);
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return this.P.c(this.Q, iblockaccess, blockposition);
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
@@ -249,7 +249,7 @@ public class BlockStairs extends Block {
     @Nullable
     public MovingObjectPosition a(IBlockData iblockdata, World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
         ArrayList arraylist = Lists.newArrayList();
-        Iterator iterator = z(this.updateState(iblockdata, world, blockposition)).iterator();
+        Iterator iterator = y(this.updateState(iblockdata, world, blockposition)).iterator();
 
         while (iterator.hasNext()) {
             AxisAlignedBB axisalignedbb = (AxisAlignedBB) iterator.next();
@@ -296,10 +296,10 @@ public class BlockStairs extends Block {
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.set(BlockStairs.SHAPE, f(iblockdata, iblockaccess, blockposition));
+        return iblockdata.set(BlockStairs.SHAPE, g(iblockdata, iblockaccess, blockposition));
     }
 
-    private static BlockStairs.EnumStairShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    private static BlockStairs.EnumStairShape g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
         IBlockData iblockdata1 = iblockaccess.getType(blockposition.shift(enumdirection));
 

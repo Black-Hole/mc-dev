@@ -11,7 +11,7 @@ public class BlockFlowerPot extends BlockTileEntity {
 
     public BlockFlowerPot() {
         super(Material.ORIENTABLE);
-        this.y(this.blockStateList.getBlockData().set(BlockFlowerPot.CONTENTS, BlockFlowerPot.EnumFlowerPotContents.EMPTY).set(BlockFlowerPot.LEGACY_DATA, Integer.valueOf(0)));
+        this.x(this.blockStateList.getBlockData().set(BlockFlowerPot.CONTENTS, BlockFlowerPot.EnumFlowerPotContents.EMPTY).set(BlockFlowerPot.LEGACY_DATA, Integer.valueOf(0)));
     }
 
     public String getName() {
@@ -96,11 +96,11 @@ public class BlockFlowerPot extends BlockTileEntity {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return super.canPlace(world, blockposition) && world.getType(blockposition.down()).r();
+        return super.canPlace(world, blockposition) && world.getType(blockposition.down()).q();
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (!world.getType(blockposition.down()).r()) {
+        if (!world.getType(blockposition.down()).q()) {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
         }

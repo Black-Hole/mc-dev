@@ -9,7 +9,7 @@ public class BlockEnderChest extends BlockTileEntity {
 
     protected BlockEnderChest() {
         super(Material.STONE);
-        this.y(this.blockStateList.getBlockData().set(BlockEnderChest.FACING, EnumDirection.NORTH));
+        this.x(this.blockStateList.getBlockData().set(BlockEnderChest.FACING, EnumDirection.NORTH));
         this.a(CreativeModeTab.c);
     }
 
@@ -54,7 +54,7 @@ public class BlockEnderChest extends BlockTileEntity {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (inventoryenderchest != null && tileentity instanceof TileEntityEnderChest) {
-            if (world.getType(blockposition.up()).m()) {
+            if (world.getType(blockposition.up()).l()) {
                 return true;
             } else if (world.isClientSide) {
                 return true;

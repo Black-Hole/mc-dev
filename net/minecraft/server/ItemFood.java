@@ -15,7 +15,7 @@ public class ItemFood extends Item {
         this.b = i;
         this.d = flag;
         this.c = f;
-        this.a(CreativeModeTab.h);
+        this.b(CreativeModeTab.h);
     }
 
     public ItemFood(int i, boolean flag) {

@@ -8,7 +8,7 @@ public class BlockMonsterEggs extends Block {
 
     public BlockMonsterEggs() {
         super(Material.CLAY);
-        this.y(this.blockStateList.getBlockData().set(BlockMonsterEggs.VARIANT, BlockMonsterEggs.EnumMonsterEggVarient.STONE));
+        this.x(this.blockStateList.getBlockData().set(BlockMonsterEggs.VARIANT, BlockMonsterEggs.EnumMonsterEggVarient.STONE));
         this.c(0.0F);
         this.a(CreativeModeTab.c);
     }
@@ -23,7 +23,7 @@ public class BlockMonsterEggs extends Block {
         return iblockdata == Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE) || block == Blocks.COBBLESTONE || block == Blocks.STONEBRICK;
     }
 
-    protected ItemStack w(IBlockData iblockdata) {
+    protected ItemStack v(IBlockData iblockdata) {
         switch ((BlockMonsterEggs.EnumMonsterEggVarient) iblockdata.get(BlockMonsterEggs.VARIANT)) {
         case COBBLESTONE:
             return new ItemStack(Blocks.COBBLESTONE);

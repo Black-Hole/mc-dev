@@ -12,8 +12,22 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
 
     public BlockBed() {
         super(Material.CLOTH);
-        this.y(this.blockStateList.getBlockData().set(BlockBed.PART, BlockBed.EnumBedPart.FOOT).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockBed.PART, BlockBed.EnumBedPart.FOOT).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
         this.isTileEntity = true;
+    }
+
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        if (iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.FOOT) {
+            TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
+
+            if (tileentity instanceof TileEntityBed) {
+                EnumColor enumcolor = ((TileEntityBed) tileentity).a();
+
+                return MaterialMapColor.a(enumcolor);
+            }
+        }
+
+        return MaterialMapColor.f;
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
@@ -170,7 +184,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
     }
 
     protected static boolean b(World world, BlockPosition blockposition) {
-        return world.getType(blockposition.down()).r() && !world.getType(blockposition).getMaterial().isBuildable() && !world.getType(blockposition.up()).getMaterial().isBuildable();
+        return world.getType(blockposition.down()).q() && !world.getType(blockposition).getMaterial().isBuildable() && !world.getType(blockposition.up()).getMaterial().isBuildable();
     }
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {

@@ -454,7 +454,7 @@ public abstract class EntityLiving extends Entity {
             boolean flag = this.world.getScoreboard().addPlayerToTeam(this.bl(), s);
 
             if (!flag) {
-                EntityLiving.a.info("Unable to add mob to team \"" + s + "\" (that team probably doesn\'t exist)");
+                EntityLiving.a.warn("Unable to add mob to team \"" + s + "\" (that team probably doesn\'t exist)");
             }
         }
 
@@ -1283,19 +1283,19 @@ public abstract class EntityLiving extends Entity {
                     AxisAlignedBB axisalignedbb1 = axisalignedbb.d(d7, 0.0D, d8);
 
                     if (!this.world.a(axisalignedbb1)) {
-                        if (this.world.getType(new BlockPosition(d9, this.locY, d10)).r()) {
+                        if (this.world.getType(new BlockPosition(d9, this.locY, d10)).q()) {
                             this.enderTeleportTo(d9, this.locY + 1.0D, d10);
                             return;
                         }
 
                         BlockPosition blockposition = new BlockPosition(d9, this.locY - 1.0D, d10);
 
-                        if (this.world.getType(blockposition).r() || this.world.getType(blockposition).getMaterial() == Material.WATER) {
+                        if (this.world.getType(blockposition).q() || this.world.getType(blockposition).getMaterial() == Material.WATER) {
                             d1 = d9;
                             d2 = this.locY + 1.0D;
                             d0 = d10;
                         }
-                    } else if (!this.world.a(axisalignedbb1.d(0.0D, 1.0D, 0.0D)) && this.world.getType(new BlockPosition(d9, this.locY + 1.0D, d10)).r()) {
+                    } else if (!this.world.a(axisalignedbb1.d(0.0D, 1.0D, 0.0D)) && this.world.getType(new BlockPosition(d9, this.locY + 1.0D, d10)).q()) {
                         d1 = d9;
                         d2 = this.locY + 2.0D;
                         d0 = d10;

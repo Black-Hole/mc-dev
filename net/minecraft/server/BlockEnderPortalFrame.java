@@ -15,7 +15,7 @@ public class BlockEnderPortalFrame extends Block {
 
     public BlockEnderPortalFrame() {
         super(Material.STONE, MaterialMapColor.D);
-        this.y(this.blockStateList.getBlockData().set(BlockEnderPortalFrame.FACING, EnumDirection.NORTH).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockEnderPortalFrame.FACING, EnumDirection.NORTH).set(BlockEnderPortalFrame.EYE, Boolean.valueOf(false)));
     }
 
     public boolean b(IBlockData iblockdata) {

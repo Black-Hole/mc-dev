@@ -28,7 +28,7 @@ public class BlockSkull extends BlockTileEntity {
 
     protected BlockSkull() {
         super(Material.ORIENTABLE);
-        this.y(this.blockStateList.getBlockData().set(BlockSkull.FACING, EnumDirection.NORTH).set(BlockSkull.NODROP, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockSkull.FACING, EnumDirection.NORTH).set(BlockSkull.NODROP, Boolean.valueOf(false)));
     }
 
     public String getName() {

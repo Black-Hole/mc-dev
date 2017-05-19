@@ -7,7 +7,7 @@ public class BlockIceFrost extends BlockIce {
     public static final BlockStateInteger a = BlockStateInteger.of("age", 0, 3);
 
     public BlockIceFrost() {
-        this.y(this.blockStateList.getBlockData().set(BlockIceFrost.a, Integer.valueOf(0)));
+        this.x(this.blockStateList.getBlockData().set(BlockIceFrost.a, Integer.valueOf(0)));
     }
 
     public int toLegacyData(IBlockData iblockdata) {

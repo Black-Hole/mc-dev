@@ -9,7 +9,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
 
     protected BlockRepeater(boolean flag) {
         super(flag);
-        this.y(this.blockStateList.getBlockData().set(BlockRepeater.FACING, EnumDirection.NORTH).set(BlockRepeater.DELAY, Integer.valueOf(1)).set(BlockRepeater.LOCKED, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockRepeater.FACING, EnumDirection.NORTH).set(BlockRepeater.DELAY, Integer.valueOf(1)).set(BlockRepeater.LOCKED, Boolean.valueOf(false)));
     }
 
     public String getName() {
@@ -41,7 +41,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
         return ((Integer) iblockdata.get(BlockRepeater.DELAY)).intValue() * 2;
     }
 
-    protected IBlockData z(IBlockData iblockdata) {
+    protected IBlockData y(IBlockData iblockdata) {
         Integer integer = (Integer) iblockdata.get(BlockRepeater.DELAY);
         Boolean obool = (Boolean) iblockdata.get(BlockRepeater.LOCKED);
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockRepeater.FACING);
@@ -49,7 +49,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
         return Blocks.POWERED_REPEATER.getBlockData().set(BlockRepeater.FACING, enumdirection).set(BlockRepeater.DELAY, integer).set(BlockRepeater.LOCKED, obool);
     }
 
-    protected IBlockData A(IBlockData iblockdata) {
+    protected IBlockData z(IBlockData iblockdata) {
         Integer integer = (Integer) iblockdata.get(BlockRepeater.DELAY);
         Boolean obool = (Boolean) iblockdata.get(BlockRepeater.LOCKED);
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockRepeater.FACING);
@@ -69,7 +69,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
         return this.c(iblockaccess, blockposition, iblockdata) > 0;
     }
 
-    protected boolean C(IBlockData iblockdata) {
+    protected boolean B(IBlockData iblockdata) {
         return isDiode(iblockdata);
     }
 

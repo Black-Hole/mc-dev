@@ -332,8 +332,8 @@ public abstract class EntityInsentient extends EntityLiving {
             }
         }
 
-        if (this.hasAI()) {
-            nbttagcompound.setBoolean("NoAI", this.hasAI());
+        if (this.isNoAI()) {
+            nbttagcompound.setBoolean("NoAI", this.isNoAI());
         }
 
     }
@@ -391,7 +391,7 @@ public abstract class EntityInsentient extends EntityLiving {
             this.bD = nbttagcompound.getLong("DeathLootTableSeed");
         }
 
-        this.setAI(nbttagcompound.getBoolean("NoAI"));
+        this.setNoAI(nbttagcompound.getBoolean("NoAI"));
     }
 
     @Nullable
@@ -1095,10 +1095,10 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     public boolean cA() {
-        return super.cA() && !this.hasAI();
+        return super.cA() && !this.isNoAI();
     }
 
-    public void setAI(boolean flag) {
+    public void setNoAI(boolean flag) {
         byte b0 = ((Byte) this.datawatcher.get(EntityInsentient.a)).byteValue();
 
         this.datawatcher.set(EntityInsentient.a, Byte.valueOf(flag ? (byte) (b0 | 1) : (byte) (b0 & -2)));
@@ -1110,7 +1110,7 @@ public abstract class EntityInsentient extends EntityLiving {
         this.datawatcher.set(EntityInsentient.a, Byte.valueOf(flag ? (byte) (b0 | 2) : (byte) (b0 & -3)));
     }
 
-    public boolean hasAI() {
+    public boolean isNoAI() {
         return (((Byte) this.datawatcher.get(EntityInsentient.a)).byteValue() & 1) != 0;
     }
 

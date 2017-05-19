@@ -86,7 +86,7 @@ public class MapIcon {
         }
 
         public static MapIcon.Type a(byte b0) {
-            return values()[b0];
+            return values()[MathHelper.clamp(b0, 0, values().length - 1)];
         }
     }
 }

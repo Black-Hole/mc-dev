@@ -59,4 +59,6 @@ public interface PacketListenerPlayIn extends PacketListener {
     void a(PacketPlayInTeleportAccept packetplayinteleportaccept);
 
     void a(PacketPlayInRecipeDisplayed packetplayinrecipedisplayed);
+
+    void a(PacketPlayInAdvancements packetplayinadvancements);
 }

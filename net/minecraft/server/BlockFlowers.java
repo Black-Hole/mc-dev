@@ -11,11 +11,11 @@ public abstract class BlockFlowers extends BlockPlant {
     protected BlockStateEnum<BlockFlowers.EnumFlowerVarient> TYPE;
 
     protected BlockFlowers() {
-        this.y(this.blockStateList.getBlockData().set(this.g(), this.e() == BlockFlowers.EnumFlowerType.RED ? BlockFlowers.EnumFlowerVarient.POPPY : BlockFlowers.EnumFlowerVarient.DANDELION));
+        this.x(this.blockStateList.getBlockData().set(this.g(), this.e() == BlockFlowers.EnumFlowerType.RED ? BlockFlowers.EnumFlowerVarient.POPPY : BlockFlowers.EnumFlowerVarient.DANDELION));
     }
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return super.b(iblockdata, iblockaccess, blockposition).a(iblockdata.e(iblockaccess, blockposition));
+        return super.b(iblockdata, iblockaccess, blockposition).a(iblockdata.f(iblockaccess, blockposition));
     }
 
     public int getDropData(IBlockData iblockdata) {

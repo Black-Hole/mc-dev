@@ -33,7 +33,7 @@ public abstract class CreativeModeTab {
     private String q = "items.png";
     private boolean r = true;
     private boolean s = true;
-    private EnchantmentSlotType[] t;
+    private EnchantmentSlotType[] t = new EnchantmentSlotType[0];
     private ItemStack u;
 
     public CreativeModeTab(int i, String s) {

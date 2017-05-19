@@ -321,7 +321,7 @@ public class EntityBoat extends Entity {
                         IBlockData iblockdata = this.world.getType(blockposition_pooledblockposition);
 
                         if (iblockdata.getMaterial() == Material.WATER) {
-                            f = Math.max(f, BlockFluids.f(iblockdata, this.world, blockposition_pooledblockposition));
+                            f = Math.max(f, BlockFluids.g(iblockdata, this.world, blockposition_pooledblockposition));
                         }
 
                         if (f >= 1.0F) {
@@ -410,7 +410,7 @@ public class EntityBoat extends Entity {
                         IBlockData iblockdata = this.world.getType(blockposition_pooledblockposition);
 
                         if (iblockdata.getMaterial() == Material.WATER) {
-                            float f = BlockFluids.g(iblockdata, this.world, blockposition_pooledblockposition);
+                            float f = BlockFluids.h(iblockdata, this.world, blockposition_pooledblockposition);
 
                             this.aE = Math.max((double) f, this.aE);
                             flag |= axisalignedbb.b < (double) f;
@@ -445,7 +445,7 @@ public class EntityBoat extends Entity {
                         blockposition_pooledblockposition.f(k1, l1, i2);
                         IBlockData iblockdata = this.world.getType(blockposition_pooledblockposition);
 
-                        if (iblockdata.getMaterial() == Material.WATER && d0 < (double) BlockFluids.g(iblockdata, this.world, blockposition_pooledblockposition)) {
+                        if (iblockdata.getMaterial() == Material.WATER && d0 < (double) BlockFluids.h(iblockdata, this.world, blockposition_pooledblockposition)) {
                             if (((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() != 0) {
                                 EntityBoat.EnumStatus entityboat_enumstatus = EntityBoat.EnumStatus.UNDER_FLOWING_WATER;
 

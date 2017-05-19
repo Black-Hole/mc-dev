@@ -18,13 +18,13 @@ public class BlockFence extends Block {
 
     public BlockFence(Material material, MaterialMapColor materialmapcolor) {
         super(material, materialmapcolor);
-        this.y(this.blockStateList.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(false)).set(BlockFence.EAST, Boolean.valueOf(false)).set(BlockFence.SOUTH, Boolean.valueOf(false)).set(BlockFence.WEST, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(false)).set(BlockFence.EAST, Boolean.valueOf(false)).set(BlockFence.SOUTH, Boolean.valueOf(false)).set(BlockFence.WEST, Boolean.valueOf(false)));
         this.a(CreativeModeTab.c);
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
         if (!flag) {
-            iblockdata = iblockdata.b((IBlockAccess) world, blockposition);
+            iblockdata = iblockdata.c(world, blockposition);
         }
 
         a(blockposition, axisalignedbb, list, BlockFence.f);
@@ -89,8 +89,10 @@ public class BlockFence extends Block {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
         EnumBlockFaceShape enumblockfaceshape = iblockdata.d(iblockaccess, blockposition, enumdirection);
         Block block = iblockdata.getBlock();
+        boolean flag = enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE && (iblockdata.getMaterial() == this.material || block instanceof BlockFenceGate);
+        boolean flag1 = block == Blocks.MELON_BLOCK || block == Blocks.PUMPKIN;
 
-        return !c(block) && enumblockfaceshape == EnumBlockFaceShape.SOLID || enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE && (iblockdata.getMaterial() == this.material || block instanceof BlockFenceGate);
+        return !flag1 && !c(block) && enumblockfaceshape == EnumBlockFaceShape.SOLID || flag;
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {

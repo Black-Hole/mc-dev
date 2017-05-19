@@ -11,7 +11,7 @@ public class BlockSoil extends Block {
 
     protected BlockSoil() {
         super(Material.EARTH);
-        this.y(this.blockStateList.getBlockData().set(BlockSoil.MOISTURE, Integer.valueOf(0)));
+        this.x(this.blockStateList.getBlockData().set(BlockSoil.MOISTURE, Integer.valueOf(0)));
         this.a(true);
         this.e(255);
     }
@@ -55,7 +55,7 @@ public class BlockSoil extends Block {
         IBlockData iblockdata = Blocks.DIRT.getBlockData();
 
         world.setTypeUpdate(blockposition, iblockdata);
-        AxisAlignedBB axisalignedbb = iblockdata.c(world, blockposition).a(blockposition);
+        AxisAlignedBB axisalignedbb = iblockdata.d(world, blockposition).a(blockposition);
         List list = world.getEntities((Entity) null, axisalignedbb);
         Iterator iterator = list.iterator();
 

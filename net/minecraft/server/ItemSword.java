@@ -11,7 +11,7 @@ public class ItemSword extends Item {
         this.b = item_enumtoolmaterial;
         this.maxStackSize = 1;
         this.setMaxDurability(item_enumtoolmaterial.a());
-        this.a(CreativeModeTab.j);
+        this.b(CreativeModeTab.j);
         this.a = 3.0F + item_enumtoolmaterial.c();
     }
 

@@ -22,7 +22,7 @@ public abstract class CommandHandler implements ICommandHandler {
 
     public CommandHandler() {}
 
-    public int b(ICommandListener icommandlistener, String s) {
+    public int a(ICommandListener icommandlistener, String s) {
         s = s.trim();
         if (s.startsWith("/")) {
             s = s.substring(1);
@@ -105,7 +105,7 @@ public abstract class CommandHandler implements ICommandHandler {
             chatmessage = new ChatMessage("commands.generic.exception", new Object[0]);
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             icommandlistener.sendMessage(chatmessage);
-            CommandHandler.a.warn("Couldn\'t process command: \'{}\'", s);
+            CommandHandler.a.warn("Couldn\'t process command: " + s, throwable);
         }
 
         return false;

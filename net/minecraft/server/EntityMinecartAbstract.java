@@ -488,15 +488,15 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
                 this.motX += this.motX / d15 * 0.06D;
                 this.motZ += this.motZ / d15 * 0.06D;
             } else if (blockminecarttrackabstract_enumtrackposition == BlockMinecartTrackAbstract.EnumTrackPosition.EAST_WEST) {
-                if (this.world.getType(blockposition.west()).m()) {
+                if (this.world.getType(blockposition.west()).l()) {
                     this.motX = 0.02D;
-                } else if (this.world.getType(blockposition.east()).m()) {
+                } else if (this.world.getType(blockposition.east()).l()) {
                     this.motX = -0.02D;
                 }
             } else if (blockminecarttrackabstract_enumtrackposition == BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH) {
-                if (this.world.getType(blockposition.north()).m()) {
+                if (this.world.getType(blockposition.north()).l()) {
                     this.motZ = 0.02D;
-                } else if (this.world.getType(blockposition.south()).m()) {
+                } else if (this.world.getType(blockposition.south()).l()) {
                     this.motZ = -0.02D;
                 }
             }

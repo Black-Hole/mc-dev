@@ -52,40 +52,44 @@ public class AdvancementProgress implements Comparable<AdvancementProgress> {
     }
 
     public boolean isDone() {
-        String[][] astring = this.b;
-        int i = astring.length;
-        int j = 0;
+        if (this.b.length == 0) {
+            return false;
+        } else {
+            String[][] astring = this.b;
+            int i = astring.length;
+            int j = 0;
 
-        while (j < i) {
-            String[] astring1 = astring[j];
-            boolean flag = true;
-            String[] astring2 = astring1;
-            int k = astring1.length;
-            int l = 0;
+            while (j < i) {
+                String[] astring1 = astring[j];
+                boolean flag = false;
+                String[] astring2 = astring1;
+                int k = astring1.length;
+                int l = 0;
 
-            while (true) {
-                if (l < k) {
-                    String s = astring2[l];
-                    CriterionProgress criterionprogress = this.getCriterionProgress(s);
+                while (true) {
+                    if (l < k) {
+                        String s = astring2[l];
+                        CriterionProgress criterionprogress = this.getCriterionProgress(s);
 
-                    if (criterionprogress != null && criterionprogress.a()) {
-                        ++l;
-                        continue;
+                        if (criterionprogress == null || !criterionprogress.a()) {
+                            ++l;
+                            continue;
+                        }
+
+                        flag = true;
                     }
 
-                    flag = false;
-                }
+                    if (!flag) {
+                        return false;
+                    }
 
-                if (flag) {
-                    return true;
+                    ++j;
+                    break;
                 }
-
-                ++j;
-                break;
             }
-        }
 
-        return false;
+            return true;
+        }
     }
 
     public boolean b() {

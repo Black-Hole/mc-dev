@@ -15,7 +15,7 @@ public class PathfinderGoalMoveIndoors extends PathfinderGoal {
     public boolean a() {
         BlockPosition blockposition = new BlockPosition(this.a);
 
-        if ((!this.a.world.D() || this.a.world.Y() && !this.a.world.getBiome(blockposition).d()) && this.a.world.worldProvider.m()) {
+        if ((!this.a.world.D() || this.a.world.isRaining() && !this.a.world.getBiome(blockposition).d()) && this.a.world.worldProvider.m()) {
             if (this.a.getRandom().nextInt(50) != 0) {
                 return false;
             } else if (this.c != -1 && this.a.d((double) this.c, this.a.locY, (double) this.d) < 4.0D) {

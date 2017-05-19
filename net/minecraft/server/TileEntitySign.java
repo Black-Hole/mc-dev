@@ -155,7 +155,7 @@ public class TileEntitySign extends TileEntity {
                 ChatClickable chatclickable = chatmodifier.h();
 
                 if (chatclickable.a() == ChatClickable.EnumClickAction.RUN_COMMAND) {
-                    entityhuman.C_().getCommandHandler().b(icommandlistener, chatclickable.b());
+                    entityhuman.C_().getCommandHandler().a(icommandlistener, chatclickable.b());
                 }
             }
         }

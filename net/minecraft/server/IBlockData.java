@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public interface IBlockData extends IBlockPhysics, IBlockProperties {
 
-    Collection<IBlockState<?>> t();
+    Collection<IBlockState<?>> s();
 
     <T extends Comparable<T>> T get(IBlockState<T> iblockstate);
 
@@ -13,7 +13,7 @@ public interface IBlockData extends IBlockPhysics, IBlockProperties {
 
     <T extends Comparable<T>> IBlockData a(IBlockState<T> iblockstate);
 
-    ImmutableMap<IBlockState<?>, Comparable<?>> u();
+    ImmutableMap<IBlockState<?>, Comparable<?>> t();
 
     Block getBlock();
 }

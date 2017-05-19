@@ -5,7 +5,7 @@ public class BlockFloorSign extends BlockSign {
     public static final BlockStateInteger ROTATION = BlockStateInteger.of("rotation", 0, 15);
 
     public BlockFloorSign() {
-        this.y(this.blockStateList.getBlockData().set(BlockFloorSign.ROTATION, Integer.valueOf(0)));
+        this.x(this.blockStateList.getBlockData().set(BlockFloorSign.ROTATION, Integer.valueOf(0)));
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {

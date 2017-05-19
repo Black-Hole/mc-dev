@@ -123,7 +123,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             }
 
             this.yaw = MathHelper.g(this.yaw);
-            if (this.hasAI()) {
+            if (this.isNoAI()) {
                 this.bF = 0.5F;
             } else {
                 if (this.c < 0) {

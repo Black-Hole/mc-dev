@@ -6,7 +6,7 @@ public class BlockWood extends Block {
 
     public BlockWood() {
         super(Material.WOOD);
-        this.y(this.blockStateList.getBlockData().set(BlockWood.VARIANT, BlockWood.EnumLogVariant.OAK));
+        this.x(this.blockStateList.getBlockData().set(BlockWood.VARIANT, BlockWood.EnumLogVariant.OAK));
         this.a(CreativeModeTab.b);
     }
 
@@ -18,7 +18,7 @@ public class BlockWood extends Block {
         return this.getBlockData().set(BlockWood.VARIANT, BlockWood.EnumLogVariant.a(i));
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return ((BlockWood.EnumLogVariant) iblockdata.get(BlockWood.VARIANT)).c();
     }
 

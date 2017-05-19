@@ -17,7 +17,7 @@ public class BlockPotatoes extends BlockCrops {
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         super.dropNaturally(world, blockposition, iblockdata, f, i);
         if (!world.isClientSide) {
-            if (this.A(iblockdata) && world.random.nextInt(50) == 0) {
+            if (this.z(iblockdata) && world.random.nextInt(50) == 0) {
                 a(world, blockposition, new ItemStack(Items.POISONOUS_POTATO));
             }
 

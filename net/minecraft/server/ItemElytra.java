@@ -5,7 +5,7 @@ public class ItemElytra extends Item {
     public ItemElytra() {
         this.maxStackSize = 1;
         this.setMaxDurability(432);
-        this.a(CreativeModeTab.e);
+        this.b(CreativeModeTab.e);
         this.a(new MinecraftKey("broken"), new IDynamicTexture() {
         });
         BlockDispenser.REGISTRY.a(this, ItemArmor.b);

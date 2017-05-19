@@ -8,7 +8,7 @@ public class BlockStainedHardenedClay extends BlockCloth {
         super(Material.STONE);
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockStainedHardenedClay.b[((EnumColor) iblockdata.get(BlockStainedHardenedClay.COLOR)).getColorIndex()];
     }
 }

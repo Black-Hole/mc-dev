@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class ItemCarrotStick extends Item {
 
     public ItemCarrotStick() {
-        this.a(CreativeModeTab.e);
+        this.b(CreativeModeTab.e);
         this.d(1);
         this.setMaxDurability(25);
     }

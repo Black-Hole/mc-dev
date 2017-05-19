@@ -51,7 +51,7 @@ public abstract class BlockMinecartTrackAbstract extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return world.getType(blockposition.down()).r();
+        return world.getType(blockposition.down()).q();
     }
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -69,17 +69,17 @@ public abstract class BlockMinecartTrackAbstract extends Block {
             BlockMinecartTrackAbstract.EnumTrackPosition blockminecarttrackabstract_enumtrackposition = (BlockMinecartTrackAbstract.EnumTrackPosition) iblockdata.get(this.g());
             boolean flag = false;
 
-            if (!world.getType(blockposition.down()).r()) {
+            if (!world.getType(blockposition.down()).q()) {
                 flag = true;
             }
 
-            if (blockminecarttrackabstract_enumtrackposition == BlockMinecartTrackAbstract.EnumTrackPosition.ASCENDING_EAST && !world.getType(blockposition.east()).r()) {
+            if (blockminecarttrackabstract_enumtrackposition == BlockMinecartTrackAbstract.EnumTrackPosition.ASCENDING_EAST && !world.getType(blockposition.east()).q()) {
                 flag = true;
-            } else if (blockminecarttrackabstract_enumtrackposition == BlockMinecartTrackAbstract.EnumTrackPosition.ASCENDING_WEST && !world.getType(blockposition.west()).r()) {
+            } else if (blockminecarttrackabstract_enumtrackposition == BlockMinecartTrackAbstract.EnumTrackPosition.ASCENDING_WEST && !world.getType(blockposition.west()).q()) {
                 flag = true;
-            } else if (blockminecarttrackabstract_enumtrackposition == BlockMinecartTrackAbstract.EnumTrackPosition.ASCENDING_NORTH && !world.getType(blockposition.north()).r()) {
+            } else if (blockminecarttrackabstract_enumtrackposition == BlockMinecartTrackAbstract.EnumTrackPosition.ASCENDING_NORTH && !world.getType(blockposition.north()).q()) {
                 flag = true;
-            } else if (blockminecarttrackabstract_enumtrackposition == BlockMinecartTrackAbstract.EnumTrackPosition.ASCENDING_SOUTH && !world.getType(blockposition.south()).r()) {
+            } else if (blockminecarttrackabstract_enumtrackposition == BlockMinecartTrackAbstract.EnumTrackPosition.ASCENDING_SOUTH && !world.getType(blockposition.south()).q()) {
                 flag = true;
             }
 

@@ -4,7 +4,7 @@ public class ItemEgg extends Item {
 
     public ItemEgg() {
         this.maxStackSize = 16;
-        this.a(CreativeModeTab.l);
+        this.b(CreativeModeTab.l);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {

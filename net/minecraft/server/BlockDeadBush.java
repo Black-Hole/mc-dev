@@ -15,7 +15,7 @@ public class BlockDeadBush extends BlockPlant {
         return BlockDeadBush.a;
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return MaterialMapColor.p;
     }
 

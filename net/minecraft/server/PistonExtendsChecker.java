@@ -32,7 +32,7 @@ public class PistonExtendsChecker {
         IBlockData iblockdata = this.a.getType(this.c);
 
         if (!BlockPiston.a(iblockdata, this.a, this.c, this.d, false, this.d)) {
-            if (iblockdata.p() == EnumPistonReaction.DESTROY) {
+            if (iblockdata.o() == EnumPistonReaction.DESTROY) {
                 this.f.add(this.c);
                 return true;
             } else {
@@ -76,7 +76,7 @@ public class PistonExtendsChecker {
 
                     iblockdata = this.a.getType(blockposition1);
                     block = iblockdata.getBlock();
-                    if (iblockdata.getMaterial() == Material.AIR || !BlockPiston.a(iblockdata, this.a, blockposition1, this.d, false, enumdirection) || blockposition1.equals(this.b)) {
+                    if (iblockdata.getMaterial() == Material.AIR || !BlockPiston.a(iblockdata, this.a, blockposition1, this.d, false, this.d.opposite()) || blockposition1.equals(this.b)) {
                         break;
                     }
 
@@ -120,11 +120,11 @@ public class PistonExtendsChecker {
                         return true;
                     }
 
-                    if (!BlockPiston.a(iblockdata, this.a, blockposition2, this.d, true, enumdirection) || blockposition2.equals(this.b)) {
+                    if (!BlockPiston.a(iblockdata, this.a, blockposition2, this.d, true, this.d) || blockposition2.equals(this.b)) {
                         return false;
                     }
 
-                    if (iblockdata.p() == EnumPistonReaction.DESTROY) {
+                    if (iblockdata.o() == EnumPistonReaction.DESTROY) {
                         this.f.add(blockposition2);
                         return true;
                     }

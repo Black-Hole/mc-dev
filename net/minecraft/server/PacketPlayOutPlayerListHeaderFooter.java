@@ -9,10 +9,6 @@ public class PacketPlayOutPlayerListHeaderFooter implements Packet<PacketListene
 
     public PacketPlayOutPlayerListHeaderFooter() {}
 
-    public PacketPlayOutPlayerListHeaderFooter(IChatBaseComponent ichatbasecomponent) {
-        this.a = ichatbasecomponent;
-    }
-
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.f();
         this.b = packetdataserializer.f();

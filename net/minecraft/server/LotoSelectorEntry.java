@@ -72,7 +72,7 @@ public abstract class LotoSelectorEntry {
             if (lotoselectorentry instanceof LootItem) {
                 jsonobject.addProperty("type", "item");
             } else if (lotoselectorentry instanceof LootSelectorLootTable) {
-                jsonobject.addProperty("type", "item");
+                jsonobject.addProperty("type", "loot_table");
             } else {
                 if (!(lotoselectorentry instanceof LootSelectorEmpty)) {
                     throw new IllegalArgumentException("Don\'t know how to serialize " + lotoselectorentry);

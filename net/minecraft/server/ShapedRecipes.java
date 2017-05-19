@@ -1,10 +1,12 @@
 package net.minecraft.server;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -93,7 +95,7 @@ public class ShapedRecipes extends IRecipe {
     public static ShapedRecipes a(JsonObject jsonobject) {
         String s = ChatDeserializer.a(jsonobject, "group", "");
         Map map = b(ChatDeserializer.t(jsonobject, "key"));
-        String[] astring = a(ChatDeserializer.u(jsonobject, "pattern"));
+        String[] astring = a(a(ChatDeserializer.u(jsonobject, "pattern")));
         int i = astring[0].length();
         int j = astring.length;
         NonNullList nonnulllist = a(astring, map, i, j);
@@ -127,6 +129,64 @@ public class ShapedRecipes extends IRecipe {
         } else {
             return nonnulllist;
         }
+    }
+
+    @VisibleForTesting
+    static String[] a(String... astring) {
+        int i = Integer.MAX_VALUE;
+        int j = 0;
+        int k = 0;
+        int l = 0;
+
+        for (int i1 = 0; i1 < astring.length; ++i1) {
+            String s = astring[i1];
+
+            i = Math.min(i, a(s));
+            int j1 = b(s);
+
+            j = Math.max(j, j1);
+            if (j1 < 0) {
+                if (k == i1) {
+                    ++k;
+                }
+
+                ++l;
+            } else {
+                l = 0;
+            }
+        }
+
+        if (astring.length == l) {
+            return new String[0];
+        } else {
+            String[] astring1 = new String[astring.length - l - k];
+
+            for (int k1 = 0; k1 < astring1.length; ++k1) {
+                astring1[k1] = astring[k1 + k].substring(i, j + 1);
+            }
+
+            return astring1;
+        }
+    }
+
+    private static int a(String s) {
+        int i;
+
+        for (i = 0; i < s.length() && s.charAt(i) == 32; ++i) {
+            ;
+        }
+
+        return i;
+    }
+
+    private static int b(String s) {
+        int i;
+
+        for (i = s.length() - 1; i >= 0 && s.charAt(i) == 32; --i) {
+            ;
+        }
+
+        return i;
     }
 
     private static String[] a(JsonArray jsonarray) {
@@ -209,8 +269,10 @@ public class ShapedRecipes extends IRecipe {
 
         if (item == null) {
             throw new JsonSyntaxException("Unknown item \'" + s + "\'");
+        } else if (item.k() && !jsonobject.has("data")) {
+            throw new JsonParseException("Missing data for item \'" + s + "\'");
         } else {
-            int i = ChatDeserializer.a(jsonobject, "data", flag ? 0 : 32767);
+            int i = ChatDeserializer.a(jsonobject, "data", 0);
             int j = flag ? ChatDeserializer.a(jsonobject, "count", 1) : 1;
 
             return new ItemStack(item, j, i);

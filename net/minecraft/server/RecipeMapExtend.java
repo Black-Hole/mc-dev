@@ -69,7 +69,7 @@ public class RecipeMapExtend extends ShapedRecipes {
         return itemstack;
     }
 
-    public boolean d() {
+    public boolean c() {
         return true;
     }
 }

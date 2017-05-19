@@ -5,7 +5,7 @@ public class ItemFishingRod extends Item {
     public ItemFishingRod() {
         this.setMaxDurability(64);
         this.d(1);
-        this.a(CreativeModeTab.i);
+        this.b(CreativeModeTab.i);
         this.a(new MinecraftKey("cast"), new IDynamicTexture() {
         });
     }

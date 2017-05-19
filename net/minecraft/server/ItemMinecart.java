@@ -57,7 +57,7 @@ public class ItemMinecart extends Item {
     public ItemMinecart(EntityMinecartAbstract.EnumMinecartType entityminecartabstract_enumminecarttype) {
         this.maxStackSize = 1;
         this.b = entityminecartabstract_enumminecarttype;
-        this.a(CreativeModeTab.e);
+        this.b(CreativeModeTab.e);
         BlockDispenser.REGISTRY.a(this, ItemMinecart.a);
     }
 

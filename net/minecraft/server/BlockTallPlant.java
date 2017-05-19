@@ -11,7 +11,7 @@ public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElem
 
     public BlockTallPlant() {
         super(Material.REPLACEABLE_PLANT);
-        this.y(this.blockStateList.getBlockData().set(BlockTallPlant.VARIANT, BlockTallPlant.EnumTallFlowerVariants.SUNFLOWER).set(BlockTallPlant.HALF, BlockTallPlant.EnumTallPlantHalf.LOWER).set(BlockTallPlant.d, EnumDirection.NORTH));
+        this.x(this.blockStateList.getBlockData().set(BlockTallPlant.VARIANT, BlockTallPlant.EnumTallFlowerVariants.SUNFLOWER).set(BlockTallPlant.HALF, BlockTallPlant.EnumTallPlantHalf.LOWER).set(BlockTallPlant.d, EnumDirection.NORTH));
         this.c(0.0F);
         this.a(SoundEffectType.c);
         this.c("doublePlant");
@@ -23,7 +23,7 @@ public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElem
 
     private BlockTallPlant.EnumTallFlowerVariants a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
         if (iblockdata.getBlock() == this) {
-            iblockdata = iblockdata.b(iblockaccess, blockposition);
+            iblockdata = iblockdata.c(iblockaccess, blockposition);
             return (BlockTallPlant.EnumTallFlowerVariants) iblockdata.get(BlockTallPlant.VARIANT);
         } else {
             return BlockTallPlant.EnumTallFlowerVariants.FERN;
@@ -40,7 +40,7 @@ public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElem
         if (iblockdata.getBlock() != this) {
             return true;
         } else {
-            BlockTallPlant.EnumTallFlowerVariants blocktallplant_enumtallflowervariants = (BlockTallPlant.EnumTallFlowerVariants) iblockdata.b(iblockaccess, blockposition).get(BlockTallPlant.VARIANT);
+            BlockTallPlant.EnumTallFlowerVariants blocktallplant_enumtallflowervariants = (BlockTallPlant.EnumTallFlowerVariants) iblockdata.c(iblockaccess, blockposition).get(BlockTallPlant.VARIANT);
 
             return blocktallplant_enumtallflowervariants == BlockTallPlant.EnumTallFlowerVariants.FERN || blocktallplant_enumtallflowervariants == BlockTallPlant.EnumTallFlowerVariants.GRASS;
         }

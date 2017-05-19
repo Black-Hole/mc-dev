@@ -155,7 +155,7 @@ public class BlockStateList {
             this.b = immutablemap;
         }
 
-        public Collection<IBlockState<?>> t() {
+        public Collection<IBlockState<?>> s() {
             return Collections.unmodifiableCollection(this.b.keySet());
         }
 
@@ -187,7 +187,7 @@ public class BlockStateList {
             }
         }
 
-        public ImmutableMap<IBlockState<?>, Comparable<?>> u() {
+        public ImmutableMap<IBlockState<?>, Comparable<?>> t() {
             return this.b;
         }
 
@@ -259,8 +259,8 @@ public class BlockStateList {
             return this.a.p(this);
         }
 
-        public MaterialMapColor g() {
-            return this.a.r(this);
+        public MaterialMapColor a(IBlockAccess iblockaccess, BlockPosition blockposition) {
+            return this.a.c(this, iblockaccess, blockposition);
         }
 
         public IBlockData a(EnumBlockRotation enumblockrotation) {
@@ -271,23 +271,23 @@ public class BlockStateList {
             return this.a.a((IBlockData) this, enumblockmirror);
         }
 
-        public boolean h() {
+        public boolean g() {
             return this.a.c((IBlockData) this);
         }
 
-        public EnumRenderType j() {
+        public EnumRenderType i() {
             return this.a.a((IBlockData) this);
         }
 
-        public boolean l() {
-            return this.a.s(this);
+        public boolean k() {
+            return this.a.r(this);
         }
 
-        public boolean m() {
+        public boolean l() {
             return this.a.isOccluding(this);
         }
 
-        public boolean n() {
+        public boolean m() {
             return this.a.isPowerSource(this);
         }
 
@@ -295,7 +295,7 @@ public class BlockStateList {
             return this.a.b((IBlockData) this, iblockaccess, blockposition, enumdirection);
         }
 
-        public boolean o() {
+        public boolean n() {
             return this.a.isComplexRedstone(this);
         }
 
@@ -315,20 +315,20 @@ public class BlockStateList {
             return this.a.c(this, iblockaccess, blockposition, enumdirection);
         }
 
-        public EnumPistonReaction p() {
+        public EnumPistonReaction o() {
             return this.a.h(this);
         }
 
-        public IBlockData b(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        public IBlockData c(IBlockAccess iblockaccess, BlockPosition blockposition) {
             return this.a.updateState(this, iblockaccess, blockposition);
         }
 
-        public boolean q() {
+        public boolean p() {
             return this.a.b((IBlockData) this);
         }
 
         @Nullable
-        public AxisAlignedBB c(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        public AxisAlignedBB d(IBlockAccess iblockaccess, BlockPosition blockposition) {
             return this.a.a((IBlockData) this, iblockaccess, blockposition);
         }
 
@@ -336,7 +336,7 @@ public class BlockStateList {
             this.a.a(this, world, blockposition, axisalignedbb, list, entity, flag);
         }
 
-        public AxisAlignedBB d(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        public AxisAlignedBB e(IBlockAccess iblockaccess, BlockPosition blockposition) {
             return this.a.b(this, iblockaccess, blockposition);
         }
 
@@ -344,12 +344,12 @@ public class BlockStateList {
             return this.a.a(this, world, blockposition, vec3d, vec3d1);
         }
 
-        public boolean r() {
+        public boolean q() {
             return this.a.k(this);
         }
 
-        public Vec3D e(IBlockAccess iblockaccess, BlockPosition blockposition) {
-            return this.a.e(this, iblockaccess, blockposition);
+        public Vec3D f(IBlockAccess iblockaccess, BlockPosition blockposition) {
+            return this.a.f(this, iblockaccess, blockposition);
         }
 
         public boolean a(World world, BlockPosition blockposition, int i, int j) {
@@ -360,8 +360,8 @@ public class BlockStateList {
             this.a.a(this, world, blockposition, block, blockposition1);
         }
 
-        public boolean s() {
-            return this.a.u(this);
+        public boolean r() {
+            return this.a.t(this);
         }
 
         public EnumBlockFaceShape d(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {

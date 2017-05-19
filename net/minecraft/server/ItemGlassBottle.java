@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 public class ItemGlassBottle extends Item {
 
     public ItemGlassBottle() {
-        this.a(CreativeModeTab.k);
+        this.b(CreativeModeTab.k);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {

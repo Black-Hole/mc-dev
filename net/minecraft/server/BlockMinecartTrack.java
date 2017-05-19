@@ -6,11 +6,11 @@ public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
 
     protected BlockMinecartTrack() {
         super(false);
-        this.y(this.blockStateList.getBlockData().set(BlockMinecartTrack.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH));
+        this.x(this.blockStateList.getBlockData().set(BlockMinecartTrack.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH));
     }
 
     protected void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
-        if (block.getBlockData().n() && (new BlockMinecartTrackAbstract.MinecartTrackLogic(world, blockposition, iblockdata)).b() == 3) {
+        if (block.getBlockData().m() && (new BlockMinecartTrackAbstract.MinecartTrackLogic(world, blockposition, iblockdata)).b() == 3) {
             this.a(world, blockposition, iblockdata, false);
         }
 

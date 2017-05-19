@@ -114,7 +114,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         Block block = iblockdata.getBlock();
 
         if (iblockdata.getMaterial() != Material.AIR) {
-            AxisAlignedBB axisalignedbb = iblockdata.c(this.world, blockposition);
+            AxisAlignedBB axisalignedbb = iblockdata.d(this.world, blockposition);
 
             if (axisalignedbb != Block.k && axisalignedbb.a(blockposition).b(new Vec3D(this.locX, this.locY, this.locZ))) {
                 this.inGround = true;

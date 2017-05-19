@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class ItemNameTag extends Item {
 
     public ItemNameTag() {
-        this.a(CreativeModeTab.i);
+        this.b(CreativeModeTab.i);
     }
 
     public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {

@@ -232,7 +232,7 @@ public abstract class World implements IBlockAccess {
 
                 if (!this.isClientSide && (i & 1) != 0) {
                     this.update(blockposition, iblockdata1.getBlock(), true);
-                    if (iblockdata.o()) {
+                    if (iblockdata.n()) {
                         this.updateAdjacentComparators(blockposition, block);
                     }
                 } else if (!this.isClientSide && (i & 16) == 0) {
@@ -619,7 +619,7 @@ public abstract class World implements IBlockAccess {
                 IBlockData iblockdata = this.getType(blockposition);
                 Block block = iblockdata.getBlock();
 
-                if ((!flag1 || iblockdata.c(this, blockposition) != Block.k) && block.a(iblockdata, flag)) {
+                if ((!flag1 || iblockdata.d(this, blockposition) != Block.k) && block.a(iblockdata, flag)) {
                     MovingObjectPosition movingobjectposition = iblockdata.a(this, blockposition, vec3d, vec3d1);
 
                     if (movingobjectposition != null) {
@@ -721,7 +721,7 @@ public abstract class World implements IBlockAccess {
                     IBlockData iblockdata1 = this.getType(blockposition);
                     Block block1 = iblockdata1.getBlock();
 
-                    if (!flag1 || iblockdata1.getMaterial() == Material.PORTAL || iblockdata1.c(this, blockposition) != Block.k) {
+                    if (!flag1 || iblockdata1.getMaterial() == Material.PORTAL || iblockdata1.d(this, blockposition) != Block.k) {
                         if (block1.a(iblockdata1, flag)) {
                             MovingObjectPosition movingobjectposition2 = iblockdata1.a(this, blockposition, vec3d, vec3d1);
 
@@ -1241,78 +1241,72 @@ public abstract class World implements IBlockAccess {
     }
 
     public void entityJoinedWorld(Entity entity, boolean flag) {
-        int i = MathHelper.floor(entity.locX);
-        int j = MathHelper.floor(entity.locZ);
-        boolean flag1 = true;
-
-        if (!flag || this.isAreaLoaded(i - 32, 0, j - 32, i + 32, 0, j + 32, true)) {
-            entity.M = entity.locX;
-            entity.N = entity.locY;
-            entity.O = entity.locZ;
-            entity.lastYaw = entity.yaw;
-            entity.lastPitch = entity.pitch;
-            if (flag && entity.aa) {
-                ++entity.ticksLived;
-                if (entity.isPassenger()) {
-                    entity.leaveVehicle();
-                } else {
-                    entity.B_();
-                }
+        entity.M = entity.locX;
+        entity.N = entity.locY;
+        entity.O = entity.locZ;
+        entity.lastYaw = entity.yaw;
+        entity.lastPitch = entity.pitch;
+        if (flag && entity.aa) {
+            ++entity.ticksLived;
+            if (entity.isPassenger()) {
+                entity.leaveVehicle();
+            } else {
+                entity.B_();
             }
-
-            this.methodProfiler.a("chunkCheck");
-            if (Double.isNaN(entity.locX) || Double.isInfinite(entity.locX)) {
-                entity.locX = entity.M;
-            }
-
-            if (Double.isNaN(entity.locY) || Double.isInfinite(entity.locY)) {
-                entity.locY = entity.N;
-            }
-
-            if (Double.isNaN(entity.locZ) || Double.isInfinite(entity.locZ)) {
-                entity.locZ = entity.O;
-            }
-
-            if (Double.isNaN((double) entity.pitch) || Double.isInfinite((double) entity.pitch)) {
-                entity.pitch = entity.lastPitch;
-            }
-
-            if (Double.isNaN((double) entity.yaw) || Double.isInfinite((double) entity.yaw)) {
-                entity.yaw = entity.lastYaw;
-            }
-
-            int k = MathHelper.floor(entity.locX / 16.0D);
-            int l = MathHelper.floor(entity.locY / 16.0D);
-            int i1 = MathHelper.floor(entity.locZ / 16.0D);
-
-            if (!entity.aa || entity.ab != k || entity.ac != l || entity.ad != i1) {
-                if (entity.aa && this.isChunkLoaded(entity.ab, entity.ad, true)) {
-                    this.getChunkAt(entity.ab, entity.ad).a(entity, entity.ac);
-                }
-
-                if (!entity.bB() && !this.isChunkLoaded(k, i1, true)) {
-                    entity.aa = false;
-                } else {
-                    this.getChunkAt(k, i1).a(entity);
-                }
-            }
-
-            this.methodProfiler.b();
-            if (flag && entity.aa) {
-                Iterator iterator = entity.bD().iterator();
-
-                while (iterator.hasNext()) {
-                    Entity entity1 = (Entity) iterator.next();
-
-                    if (!entity1.dead && entity1.bH() == entity) {
-                        this.h(entity1);
-                    } else {
-                        entity1.stopRiding();
-                    }
-                }
-            }
-
         }
+
+        this.methodProfiler.a("chunkCheck");
+        if (Double.isNaN(entity.locX) || Double.isInfinite(entity.locX)) {
+            entity.locX = entity.M;
+        }
+
+        if (Double.isNaN(entity.locY) || Double.isInfinite(entity.locY)) {
+            entity.locY = entity.N;
+        }
+
+        if (Double.isNaN(entity.locZ) || Double.isInfinite(entity.locZ)) {
+            entity.locZ = entity.O;
+        }
+
+        if (Double.isNaN((double) entity.pitch) || Double.isInfinite((double) entity.pitch)) {
+            entity.pitch = entity.lastPitch;
+        }
+
+        if (Double.isNaN((double) entity.yaw) || Double.isInfinite((double) entity.yaw)) {
+            entity.yaw = entity.lastYaw;
+        }
+
+        int i = MathHelper.floor(entity.locX / 16.0D);
+        int j = MathHelper.floor(entity.locY / 16.0D);
+        int k = MathHelper.floor(entity.locZ / 16.0D);
+
+        if (!entity.aa || entity.ab != i || entity.ac != j || entity.ad != k) {
+            if (entity.aa && this.isChunkLoaded(entity.ab, entity.ad, true)) {
+                this.getChunkAt(entity.ab, entity.ad).a(entity, entity.ac);
+            }
+
+            if (!entity.bB() && !this.isChunkLoaded(i, k, true)) {
+                entity.aa = false;
+            } else {
+                this.getChunkAt(i, k).a(entity);
+            }
+        }
+
+        this.methodProfiler.b();
+        if (flag && entity.aa) {
+            Iterator iterator = entity.bD().iterator();
+
+            while (iterator.hasNext()) {
+                Entity entity1 = (Entity) iterator.next();
+
+                if (!entity1.dead && entity1.bH() == entity) {
+                    this.h(entity1);
+                } else {
+                    entity1.stopRiding();
+                }
+            }
+        }
+
     }
 
     public boolean b(AxisAlignedBB axisalignedbb) {
@@ -1634,7 +1628,7 @@ public abstract class World implements IBlockAccess {
     }
 
     public boolean t(BlockPosition blockposition) {
-        AxisAlignedBB axisalignedbb = this.getType(blockposition).c(this, blockposition);
+        AxisAlignedBB axisalignedbb = this.getType(blockposition).d(this, blockposition);
 
         return axisalignedbb != Block.k && axisalignedbb.a() >= 1.0D;
     }
@@ -1648,7 +1642,7 @@ public abstract class World implements IBlockAccess {
             if (chunk != null && !chunk.isEmpty()) {
                 IBlockData iblockdata = this.getType(blockposition);
 
-                return iblockdata.getMaterial().k() && iblockdata.h();
+                return iblockdata.getMaterial().k() && iblockdata.g();
             } else {
                 return flag;
             }
@@ -1853,26 +1847,32 @@ public abstract class World implements IBlockAccess {
                 return i;
             } else {
                 BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
-                EnumDirection[] aenumdirection = EnumDirection.values();
-                int k = aenumdirection.length;
 
-                for (int l = 0; l < k; ++l) {
-                    EnumDirection enumdirection = aenumdirection[l];
+                try {
+                    EnumDirection[] aenumdirection = EnumDirection.values();
+                    int k = aenumdirection.length;
 
-                    blockposition_pooledblockposition.j(blockposition).d(enumdirection);
-                    int i1 = this.getBrightness(enumskyblock, blockposition_pooledblockposition) - j;
+                    for (int l = 0; l < k; ++l) {
+                        EnumDirection enumdirection = aenumdirection[l];
 
-                    if (i1 > i) {
-                        i = i1;
+                        blockposition_pooledblockposition.j(blockposition).d(enumdirection);
+                        int i1 = this.getBrightness(enumskyblock, blockposition_pooledblockposition) - j;
+
+                        if (i1 > i) {
+                            i = i1;
+                        }
+
+                        if (i >= 14) {
+                            int j1 = i;
+
+                            return j1;
+                        }
                     }
 
-                    if (i >= 14) {
-                        return i;
-                    }
+                    return i;
+                } finally {
+                    blockposition_pooledblockposition.t();
                 }
-
-                blockposition_pooledblockposition.t();
-                return i;
             }
         }
     }
@@ -2157,7 +2157,7 @@ public abstract class World implements IBlockAccess {
 
     public boolean a(Block block, BlockPosition blockposition, boolean flag, EnumDirection enumdirection, @Nullable Entity entity) {
         IBlockData iblockdata = this.getType(blockposition);
-        AxisAlignedBB axisalignedbb = flag ? null : block.getBlockData().c(this, blockposition);
+        AxisAlignedBB axisalignedbb = flag ? null : block.getBlockData().d(this, blockposition);
 
         return axisalignedbb != Block.k && !this.a(axisalignedbb.a(blockposition), entity) ? false : (iblockdata.getMaterial() == Material.ORIENTABLE && block == Blocks.ANVIL ? true : iblockdata.getMaterial().isReplaceable() && block.canPlace(this, blockposition, enumdirection));
     }
@@ -2217,7 +2217,7 @@ public abstract class World implements IBlockAccess {
     public int getBlockFacePower(BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata = this.getType(blockposition);
 
-        return iblockdata.m() ? this.getBlockPower(blockposition) : iblockdata.a((IBlockAccess) this, blockposition, enumdirection);
+        return iblockdata.l() ? this.getBlockPower(blockposition) : iblockdata.a((IBlockAccess) this, blockposition, enumdirection);
     }
 
     public boolean isBlockIndirectlyPowered(BlockPosition blockposition) {
@@ -2449,12 +2449,12 @@ public abstract class World implements IBlockAccess {
         return (double) this.h(1.0F) > 0.9D;
     }
 
-    public boolean Y() {
+    public boolean isRaining() {
         return (double) this.j(1.0F) > 0.2D;
     }
 
     public boolean isRainingAt(BlockPosition blockposition) {
-        if (!this.Y()) {
+        if (!this.isRaining()) {
             return false;
         } else if (!this.h(blockposition)) {
             return false;
@@ -2598,12 +2598,12 @@ public abstract class World implements IBlockAccess {
             if (this.isLoaded(blockposition1)) {
                 IBlockData iblockdata = this.getType(blockposition1);
 
-                if (Blocks.UNPOWERED_COMPARATOR.E(iblockdata)) {
+                if (Blocks.UNPOWERED_COMPARATOR.D(iblockdata)) {
                     iblockdata.doPhysics(this, blockposition1, block, blockposition);
-                } else if (iblockdata.m()) {
+                } else if (iblockdata.l()) {
                     blockposition1 = blockposition1.shift(enumdirection);
                     iblockdata = this.getType(blockposition1);
-                    if (Blocks.UNPOWERED_COMPARATOR.E(iblockdata)) {
+                    if (Blocks.UNPOWERED_COMPARATOR.D(iblockdata)) {
                         iblockdata.doPhysics(this, blockposition1, block, blockposition);
                     }
                 }

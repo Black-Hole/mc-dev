@@ -3,8 +3,8 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.Map;
 import javax.annotation.Nullable;
@@ -21,7 +21,9 @@ public class CustomFunctionData implements ITickable {
     private final Map<MinecraftKey, CustomFunction> d = Maps.newHashMap();
     private String e = "-";
     private CustomFunction f;
-    private final ICommandListener g = new ICommandListener() {
+    private final ArrayDeque<CustomFunctionData.a> g = new ArrayDeque();
+    private boolean h = false;
+    private final ICommandListener i = new ICommandListener() {
         public String getName() {
             return CustomFunctionData.this.e;
         }
@@ -71,9 +73,50 @@ public class CustomFunctionData implements ITickable {
         }
 
         if (this.f != null) {
-            this.f.a(this.g);
+            this.a(this.f, this.i);
         }
 
+    }
+
+    public int a(CustomFunction customfunction, ICommandListener icommandlistener) {
+        int i = this.c();
+
+        if (this.h) {
+            if (this.g.size() < i) {
+                this.g.addFirst(new CustomFunctionData.a(this, icommandlistener, new CustomFunction.d(customfunction)));
+            }
+
+            return 0;
+        } else {
+            int j;
+
+            try {
+                this.h = true;
+                int k = 0;
+                CustomFunction.c[] acustomfunction_c = customfunction.a();
+
+                for (j = acustomfunction_c.length - 1; j >= 0; --j) {
+                    this.g.push(new CustomFunctionData.a(this, icommandlistener, acustomfunction_c[j]));
+                }
+
+                do {
+                    if (this.g.isEmpty()) {
+                        j = k;
+                        return j;
+                    }
+
+                    ((CustomFunctionData.a) this.g.removeFirst()).a(this.g, i);
+                    ++k;
+                } while (k < i);
+
+                j = k;
+            } finally {
+                this.g.clear();
+                this.h = false;
+            }
+
+            return j;
+        }
     }
 
     public void f() {
@@ -83,14 +126,10 @@ public class CustomFunctionData implements ITickable {
         this.h();
     }
 
-    public ICommandListener g() {
-        return this.g;
-    }
-
     private void h() {
         if (this.b != null) {
             this.b.mkdirs();
-            Iterator iterator = FileUtils.listFiles(this.b, new String[] { "txt"}, true).iterator();
+            Iterator iterator = FileUtils.listFiles(this.b, new String[] { "mcfunction"}, true).iterator();
 
             while (iterator.hasNext()) {
                 File file = (File) iterator.next();
@@ -102,8 +141,8 @@ public class CustomFunctionData implements ITickable {
 
                     try {
                         this.d.put(minecraftkey, CustomFunction.a(this, Files.readLines(file, StandardCharsets.UTF_8)));
-                    } catch (IOException ioexception) {
-                        CustomFunctionData.a.error("Couldn\'t read custom function " + minecraftkey + " from " + file, ioexception);
+                    } catch (Throwable throwable) {
+                        CustomFunctionData.a.error("Couldn\'t read custom function " + minecraftkey + " from " + file, throwable);
                     }
                 }
             }
@@ -112,6 +151,27 @@ public class CustomFunctionData implements ITickable {
                 CustomFunctionData.a.info("Loaded " + this.d.size() + " custom command functions");
             }
 
+        }
+    }
+
+    public static class a {
+
+        private final CustomFunctionData a;
+        private final ICommandListener b;
+        private final CustomFunction.c c;
+
+        public a(CustomFunctionData customfunctiondata, ICommandListener icommandlistener, CustomFunction.c customfunction_c) {
+            this.a = customfunctiondata;
+            this.b = icommandlistener;
+            this.c = customfunction_c;
+        }
+
+        public void a(ArrayDeque<CustomFunctionData.a> arraydeque, int i) {
+            this.c.a(this.a, this.b, arraydeque, i);
+        }
+
+        public String toString() {
+            return this.c.toString();
         }
     }
 }

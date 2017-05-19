@@ -181,7 +181,7 @@ public class RecipesBanner {    public static class AddRecipe extends IRecipe {
             return null;
         }
 
-        public boolean d() {
+        public boolean c() {
             return true;
         }
     }
@@ -280,7 +280,7 @@ public class RecipesBanner {    public static class AddRecipe extends IRecipe {
             return nonnulllist;
         }
 
-        public boolean d() {
+        public boolean c() {
             return true;
         }
     }

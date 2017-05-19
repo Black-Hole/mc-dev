@@ -89,7 +89,7 @@ public class RecipiesShield {    public static class Decoration extends IRecipe 
             return nonnulllist;
         }
 
-        public boolean d() {
+        public boolean c() {
             return true;
         }
     }

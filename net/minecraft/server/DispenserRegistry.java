@@ -11,11 +11,12 @@ import org.apache.logging.log4j.Logger;
 public class DispenserRegistry {
 
     public static final PrintStream a = System.out;
-    private static boolean b;
-    private static final Logger c = LogManager.getLogger();
+    private static boolean c;
+    public static boolean b;
+    private static final Logger d = LogManager.getLogger();
 
     public static boolean a() {
-        return DispenserRegistry.b;
+        return DispenserRegistry.c;
     }
 
     static void b() {
@@ -350,8 +351,8 @@ public class DispenserRegistry {
     }
 
     public static void c() {
-        if (!DispenserRegistry.b) {
-            DispenserRegistry.b = true;
+        if (!DispenserRegistry.c) {
+            DispenserRegistry.c = true;
             d();
             SoundEffect.b();
             Block.w();
@@ -366,16 +367,19 @@ public class DispenserRegistry {
             BiomeBase.q();
             b();
             if (!CraftingManager.init()) {
-                DispenserRegistry.c.error("Errors with built-in recipes!");
+                DispenserRegistry.b = true;
+                DispenserRegistry.d.error("Errors with built-in recipes!");
             }
 
-            if (DispenserRegistry.c.isDebugEnabled()) {
+            if (DispenserRegistry.d.isDebugEnabled()) {
                 if ((new AdvancementDataWorld((File) null)).b()) {
-                    DispenserRegistry.c.error("Errors with built-in advancements!");
+                    DispenserRegistry.b = true;
+                    DispenserRegistry.d.error("Errors with built-in advancements!");
                 }
 
                 if (!LootTables.b()) {
-                    DispenserRegistry.c.error("Errors with built-in loot tables");
+                    DispenserRegistry.b = true;
+                    DispenserRegistry.d.error("Errors with built-in loot tables");
                 }
             }
 
@@ -383,7 +387,7 @@ public class DispenserRegistry {
     }
 
     private static void d() {
-        if (DispenserRegistry.c.isDebugEnabled()) {
+        if (DispenserRegistry.d.isDebugEnabled()) {
             System.setErr(new DebugOutputStream("STDERR", System.err));
             System.setOut(new DebugOutputStream("STDOUT", DispenserRegistry.a));
         } else {

@@ -8,7 +8,7 @@ public class ItemHanging extends Item {
 
     public ItemHanging(Class<? extends EntityHanging> oclass) {
         this.a = oclass;
-        this.a(CreativeModeTab.c);
+        this.b(CreativeModeTab.c);
     }
 
     public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {

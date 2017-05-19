@@ -99,8 +99,12 @@ public class AdvancementDataWorld {
                     try {
                         Advancement.SerializedAdvancement advancement_serializedadvancement = (Advancement.SerializedAdvancement) ChatDeserializer.a(AdvancementDataWorld.DESERIALIZER, FileUtils.readFileToString(file, StandardCharsets.UTF_8), Advancement.SerializedAdvancement.class);
 
-                        hashmap.put(minecraftkey, advancement_serializedadvancement);
-                    } catch (JsonParseException jsonparseexception) {
+                        if (advancement_serializedadvancement == null) {
+                            AdvancementDataWorld.a.error("Couldn\'t load custom advancement " + minecraftkey + " from " + file + " as it\'s empty or null");
+                        } else {
+                            hashmap.put(minecraftkey, advancement_serializedadvancement);
+                        }
+                    } catch (IllegalArgumentException | JsonParseException jsonparseexception) {
                         AdvancementDataWorld.a.error("Parsing error loading custom advancement " + minecraftkey, jsonparseexception);
                         this.e = true;
                     } catch (IOException ioexception) {

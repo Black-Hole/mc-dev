@@ -8,7 +8,7 @@ public class BlockStructure extends BlockTileEntity {
 
     public BlockStructure() {
         super(Material.ORE, MaterialMapColor.y);
-        this.y(this.blockStateList.getBlockData());
+        this.x(this.blockStateList.getBlockData());
     }
 
     public TileEntity a(World world, int i) {

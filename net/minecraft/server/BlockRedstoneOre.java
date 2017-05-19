@@ -80,27 +80,27 @@ public class BlockRedstoneOre extends Block {
             double d2 = (double) ((float) blockposition.getY() + random.nextFloat());
             double d3 = (double) ((float) blockposition.getZ() + random.nextFloat());
 
-            if (i == 0 && !world.getType(blockposition.up()).q()) {
+            if (i == 0 && !world.getType(blockposition.up()).p()) {
                 d2 = (double) blockposition.getY() + 0.0625D + 1.0D;
             }
 
-            if (i == 1 && !world.getType(blockposition.down()).q()) {
+            if (i == 1 && !world.getType(blockposition.down()).p()) {
                 d2 = (double) blockposition.getY() - 0.0625D;
             }
 
-            if (i == 2 && !world.getType(blockposition.south()).q()) {
+            if (i == 2 && !world.getType(blockposition.south()).p()) {
                 d3 = (double) blockposition.getZ() + 0.0625D + 1.0D;
             }
 
-            if (i == 3 && !world.getType(blockposition.north()).q()) {
+            if (i == 3 && !world.getType(blockposition.north()).p()) {
                 d3 = (double) blockposition.getZ() - 0.0625D;
             }
 
-            if (i == 4 && !world.getType(blockposition.east()).q()) {
+            if (i == 4 && !world.getType(blockposition.east()).p()) {
                 d1 = (double) blockposition.getX() + 0.0625D + 1.0D;
             }
 
-            if (i == 5 && !world.getType(blockposition.west()).q()) {
+            if (i == 5 && !world.getType(blockposition.west()).p()) {
                 d1 = (double) blockposition.getX() - 0.0625D;
             }
 
@@ -111,7 +111,7 @@ public class BlockRedstoneOre extends Block {
 
     }
 
-    protected ItemStack w(IBlockData iblockdata) {
+    protected ItemStack v(IBlockData iblockdata) {
         return new ItemStack(Blocks.REDSTONE_ORE);
     }
 

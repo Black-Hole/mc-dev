@@ -6,7 +6,7 @@ public class BlockConcretePowder extends BlockFalling {
 
     public BlockConcretePowder() {
         super(Material.SAND);
-        this.y(this.blockStateList.getBlockData().set(BlockConcretePowder.a, EnumColor.WHITE));
+        this.x(this.blockStateList.getBlockData().set(BlockConcretePowder.a, EnumColor.WHITE));
         this.a(CreativeModeTab.b);
     }
 
@@ -60,7 +60,7 @@ public class BlockConcretePowder extends BlockFalling {
         return ((EnumColor) iblockdata.get(BlockConcretePowder.a)).getColorIndex();
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return MaterialMapColor.a((EnumColor) iblockdata.get(BlockConcretePowder.a));
     }
 

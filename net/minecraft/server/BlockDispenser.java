@@ -11,7 +11,7 @@ public class BlockDispenser extends BlockTileEntity {
 
     protected BlockDispenser() {
         super(Material.STONE);
-        this.y(this.blockStateList.getBlockData().set(BlockDispenser.FACING, EnumDirection.NORTH).set(BlockDispenser.TRIGGERED, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockDispenser.FACING, EnumDirection.NORTH).set(BlockDispenser.TRIGGERED, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 

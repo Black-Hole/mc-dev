@@ -23,7 +23,7 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
 
     protected BlockButtonAbstract(boolean flag) {
         super(Material.ORIENTABLE);
-        this.y(this.blockStateList.getBlockData().set(BlockButtonAbstract.FACING, EnumDirection.NORTH).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockButtonAbstract.FACING, EnumDirection.NORTH).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false)));
         this.a(true);
         this.a(CreativeModeTab.d);
         this.I = flag;
@@ -71,7 +71,7 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
         boolean flag = iblockdata.d(world, blockposition1, enumdirection) == EnumBlockFaceShape.SOLID;
         Block block = iblockdata.getBlock();
 
-        return enumdirection == EnumDirection.UP ? !b(block) && flag : !c(block) && flag && !iblockdata.n();
+        return enumdirection == EnumDirection.UP ? block == Blocks.HOPPER || !b(block) && flag : !c(block) && flag;
     }
 
     public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
@@ -188,7 +188,7 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
     }
 
     private void d(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        List list = world.a(EntityArrow.class, iblockdata.d(world, blockposition).a(blockposition));
+        List list = world.a(EntityArrow.class, iblockdata.e(world, blockposition).a(blockposition));
         boolean flag = !list.isEmpty();
         boolean flag1 = ((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)).booleanValue();
 

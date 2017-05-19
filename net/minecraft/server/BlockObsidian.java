@@ -13,7 +13,7 @@ public class BlockObsidian extends Block {
         return Item.getItemOf(Blocks.OBSIDIAN);
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return MaterialMapColor.F;
     }
 }

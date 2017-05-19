@@ -10,7 +10,7 @@ public abstract class BlockFluids extends Block {
 
     protected BlockFluids(Material material) {
         super(material);
-        this.y(this.blockStateList.getBlockData().set(BlockFluids.LEVEL, Integer.valueOf(0)));
+        this.x(this.blockStateList.getBlockData().set(BlockFluids.LEVEL, Integer.valueOf(0)));
         this.a(true);
     }
 
@@ -39,7 +39,7 @@ public abstract class BlockFluids extends Block {
         return iblockdata.getMaterial() == this.material ? ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() : -1;
     }
 
-    protected int z(IBlockData iblockdata) {
+    protected int y(IBlockData iblockdata) {
         int i = this.i(iblockdata);
 
         return i >= 8 ? 0 : i;
@@ -91,7 +91,7 @@ public abstract class BlockFluids extends Block {
         double d0 = 0.0D;
         double d1 = 0.0D;
         double d2 = 0.0D;
-        int i = this.z(iblockdata);
+        int i = this.y(iblockdata);
         BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
         Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
@@ -99,12 +99,12 @@ public abstract class BlockFluids extends Block {
             EnumDirection enumdirection = (EnumDirection) iterator.next();
 
             blockposition_pooledblockposition.j(blockposition).d(enumdirection);
-            int j = this.z(iblockaccess.getType(blockposition_pooledblockposition));
+            int j = this.y(iblockaccess.getType(blockposition_pooledblockposition));
             int k;
 
             if (j < 0) {
                 if (!iblockaccess.getType(blockposition_pooledblockposition).getMaterial().isSolid()) {
-                    j = this.z(iblockaccess.getType(blockposition_pooledblockposition.down()));
+                    j = this.y(iblockaccess.getType(blockposition_pooledblockposition.down()));
                     if (j >= 0) {
                         k = j - (i - 8);
                         d0 += (double) (enumdirection.getAdjacentX() * k);
@@ -236,14 +236,14 @@ public abstract class BlockFluids extends Block {
         }
     }
 
-    public static float f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public static float g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         int i = ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue();
 
         return (i & 7) == 0 && iblockaccess.getType(blockposition.up()).getMaterial() == Material.WATER ? 1.0F : 1.0F - b(i);
     }
 
-    public static float g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return (float) blockposition.getY() + f(iblockdata, iblockaccess, blockposition);
+    public static float h(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return (float) blockposition.getY() + g(iblockdata, iblockaccess, blockposition);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

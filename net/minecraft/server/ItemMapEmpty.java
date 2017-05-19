@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class ItemMapEmpty extends ItemWorldMapBase {
 
     protected ItemMapEmpty() {
-        this.a(CreativeModeTab.f);
+        this.b(CreativeModeTab.f);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {

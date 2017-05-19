@@ -349,9 +349,8 @@ public final class ItemStack {
 
     }
 
-    @Nullable
     public NBTTagList getEnchantments() {
-        return this.tag == null ? null : this.tag.getList("ench", 10);
+        return this.tag != null ? this.tag.getList("ench", 10) : new NBTTagList();
     }
 
     public void setTag(@Nullable NBTTagCompound nbttagcompound) {

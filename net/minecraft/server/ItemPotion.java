@@ -7,7 +7,7 @@ public class ItemPotion extends Item {
 
     public ItemPotion() {
         this.d(1);
-        this.a(CreativeModeTab.k);
+        this.b(CreativeModeTab.k);
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {

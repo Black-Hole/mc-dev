@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class ItemExpBottle extends Item {
 
     public ItemExpBottle() {
-        this.a(CreativeModeTab.f);
+        this.b(CreativeModeTab.f);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {

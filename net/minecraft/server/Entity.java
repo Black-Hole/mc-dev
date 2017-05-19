@@ -944,7 +944,7 @@ public abstract class Entity implements ICommandListener {
         BlockPosition blockposition = new BlockPosition(i, j, k);
         IBlockData iblockdata = this.world.getType(blockposition);
 
-        if (iblockdata.j() != EnumRenderType.INVISIBLE) {
+        if (iblockdata.i() != EnumRenderType.INVISIBLE) {
             this.world.addParticle(EnumParticle.BLOCK_CRACK, this.locX + ((double) this.random.nextFloat() - 0.5D) * (double) this.width, this.getBoundingBox().b + 0.1D, this.locZ + ((double) this.random.nextFloat() - 0.5D) * (double) this.width, -this.motX * 4.0D, 1.5D, -this.motZ * 4.0D, new int[] { Block.getCombinedId(iblockdata)});
         }
 
@@ -1489,7 +1489,7 @@ public abstract class Entity implements ICommandListener {
 
                 if (blockposition_pooledblockposition.getX() != k || blockposition_pooledblockposition.getY() != j || blockposition_pooledblockposition.getZ() != l) {
                     blockposition_pooledblockposition.f(k, j, l);
-                    if (this.world.getType(blockposition_pooledblockposition).s()) {
+                    if (this.world.getType(blockposition_pooledblockposition).r()) {
                         blockposition_pooledblockposition.t();
                         return true;
                     }

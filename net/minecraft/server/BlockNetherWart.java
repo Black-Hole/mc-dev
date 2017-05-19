@@ -9,7 +9,7 @@ public class BlockNetherWart extends BlockPlant {
 
     protected BlockNetherWart() {
         super(Material.PLANT, MaterialMapColor.E);
-        this.y(this.blockStateList.getBlockData().set(BlockNetherWart.AGE, Integer.valueOf(0)));
+        this.x(this.blockStateList.getBlockData().set(BlockNetherWart.AGE, Integer.valueOf(0)));
         this.a(true);
         this.a((CreativeModeTab) null);
     }

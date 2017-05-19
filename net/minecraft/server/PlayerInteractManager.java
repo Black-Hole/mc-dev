@@ -58,7 +58,6 @@ public class PlayerInteractManager {
         if (this.h) {
             int j = this.currentTick - this.j;
             IBlockData iblockdata = this.world.getType(this.i);
-            Block block = iblockdata.getBlock();
 
             if (iblockdata.getMaterial() == Material.AIR) {
                 this.h = false;
@@ -77,7 +76,6 @@ public class PlayerInteractManager {
             }
         } else if (this.d) {
             IBlockData iblockdata1 = this.world.getType(this.f);
-            Block block1 = iblockdata1.getBlock();
 
             if (iblockdata1.getMaterial() == Material.AIR) {
                 this.world.c(this.player.getId(), this.f, -1);

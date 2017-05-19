@@ -8,7 +8,7 @@ public class BlockGrass extends Block implements IBlockFragilePlantElement {
 
     protected BlockGrass() {
         super(Material.GRASS);
-        this.y(this.blockStateList.getBlockData().set(BlockGrass.SNOWY, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockGrass.SNOWY, Boolean.valueOf(false)));
         this.a(true);
         this.a(CreativeModeTab.b);
     }
@@ -68,7 +68,7 @@ public class BlockGrass extends Block implements IBlockFragilePlantElement {
             while (true) {
                 if (j < i / 16) {
                     blockposition2 = blockposition2.a(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
-                    if (world.getType(blockposition2.down()).getBlock() == Blocks.GRASS && !world.getType(blockposition2).m()) {
+                    if (world.getType(blockposition2.down()).getBlock() == Blocks.GRASS && !world.getType(blockposition2).l()) {
                         ++j;
                         continue;
                     }

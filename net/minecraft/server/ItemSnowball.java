@@ -4,7 +4,7 @@ public class ItemSnowball extends Item {
 
     public ItemSnowball() {
         this.maxStackSize = 16;
-        this.a(CreativeModeTab.f);
+        this.b(CreativeModeTab.f);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {

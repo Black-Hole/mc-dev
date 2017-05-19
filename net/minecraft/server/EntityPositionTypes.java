@@ -24,7 +24,7 @@ public class EntityPositionTypes {
         EntityPositionTypes.a.put(EntityOcelot.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
         EntityPositionTypes.a.put(EntityPig.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
         EntityPositionTypes.a.put(EntityRabbit.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
-        EntityPositionTypes.a.put(EntityParrot.class, EntityInsentient.EnumEntityPositionType.IN_AIR);
+        EntityPositionTypes.a.put(EntityParrot.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
         EntityPositionTypes.a.put(EntitySheep.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
         EntityPositionTypes.a.put(EntitySnowman.class, EntityInsentient.EnumEntityPositionType.ON_GROUND);
         EntityPositionTypes.a.put(EntitySquid.class, EntityInsentient.EnumEntityPositionType.IN_WATER);

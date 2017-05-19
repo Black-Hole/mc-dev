@@ -51,7 +51,7 @@ public class ItemArmor extends Item {
         this.setMaxDurability(itemarmor_enumarmormaterial.a(enumitemslot));
         this.e = itemarmor_enumarmormaterial.e();
         this.maxStackSize = 1;
-        this.a(CreativeModeTab.j);
+        this.b(CreativeModeTab.j);
         BlockDispenser.REGISTRY.a(this, ItemArmor.b);
     }
 

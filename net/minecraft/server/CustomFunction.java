@@ -3,39 +3,20 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
 
 public class CustomFunction {
 
-    private final CustomFunctionData a;
-    private final CustomFunction.c[] b;
+    private final CustomFunction.c[] a;
 
-    public CustomFunction(CustomFunctionData customfunctiondata, CustomFunction.c[] acustomfunction_c) {
-        this.a = customfunctiondata;
-        this.b = acustomfunction_c;
+    public CustomFunction(CustomFunction.c[] acustomfunction_c) {
+        this.a = acustomfunction_c;
     }
 
-    public int a(ICommandListener icommandlistener) {
-        ArrayDeque arraydeque = new ArrayDeque(Arrays.asList(this.b));
-        int i = this.a.c();
-        int j = 0;
-
-        do {
-            if (arraydeque.isEmpty()) {
-                return j;
-            }
-
-            CustomFunction.c customfunction_c = (CustomFunction.c) arraydeque.removeFirst();
-
-            customfunction_c.a(this.a, icommandlistener, arraydeque);
-            ++j;
-        } while (j < i);
-
-        return j;
+    public CustomFunction.c[] a() {
+        return this.a;
     }
 
     public static CustomFunction a(CustomFunctionData customfunctiondata, List<String> list) {
@@ -46,37 +27,48 @@ public class CustomFunction {
             String s = (String) iterator.next();
 
             s = s.trim();
-            if (s.startsWith("/")) {
-                s = s.substring(1);
-            }
+            if (!s.startsWith("#") && !s.isEmpty()) {
+                String[] astring = s.split(" ", 2);
+                String s1 = astring[0];
 
-            if (!s.startsWith("/") && !s.startsWith("#") && !s.isEmpty()) {
-                String[] astring = s.split(" ");
-
-                if ("function".equals(astring[0]) && astring.length == 2) {
-                    arraylist.add(new CustomFunction.d(new MinecraftKey(astring[1]), null));
+                if ("function".equals(s1) && astring.length == 2) {
+                    arraylist.add(new CustomFunction.d(new MinecraftKey(astring[1])));
                 } else {
-                    arraylist.add(new CustomFunction.b(s, null));
+                    if (!customfunctiondata.a().getCommands().containsKey(s1)) {
+                        if (s1.startsWith("//")) {
+                            throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\' (if you intended to make a comment, use \'#\' not \'//\')");
+                        }
+
+                        if (s1.startsWith("/") && s1.length() > 1) {
+                            throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\' (did you mean \'" + s1.substring(1) + "\'? Do not use a preceding forwards slash.)");
+                        }
+
+                        throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\'");
+                    }
+
+                    arraylist.add(new CustomFunction.b(s));
                 }
             }
         }
 
-        return new CustomFunction(customfunctiondata, (CustomFunction.c[]) arraylist.toArray(new CustomFunction.c[arraylist.size()]));
-    }
-
-    public CustomFunction.c[] a() {
-        return this.b;
+        return new CustomFunction((CustomFunction.c[]) arraylist.toArray(new CustomFunction.c[arraylist.size()]));
     }
 
     public static class a {
 
         public static final CustomFunction.a a = new CustomFunction.a((MinecraftKey) null);
+        @Nullable
         private final MinecraftKey b;
         private boolean c;
         private CustomFunction d;
 
         public a(@Nullable MinecraftKey minecraftkey) {
             this.b = minecraftkey;
+        }
+
+        public a(CustomFunction customfunction) {
+            this.b = null;
+            this.d = customfunction;
         }
 
         @Nullable
@@ -97,51 +89,57 @@ public class CustomFunction {
         }
     }
 
-    static class d implements CustomFunction.c {
+    public static class d implements CustomFunction.c {
 
         private final CustomFunction.a a;
 
-        private d(MinecraftKey minecraftkey) {
+        public d(MinecraftKey minecraftkey) {
             this.a = new CustomFunction.a(minecraftkey);
         }
 
-        public void a(CustomFunctionData customfunctiondata, ICommandListener icommandlistener, Deque<CustomFunction.c> deque) {
+        public d(CustomFunction customfunction) {
+            this.a = new CustomFunction.a(customfunction);
+        }
+
+        public void a(CustomFunctionData customfunctiondata, ICommandListener icommandlistener, ArrayDeque<CustomFunctionData.a> arraydeque, int i) {
             CustomFunction customfunction = this.a.a(customfunctiondata);
 
             if (customfunction != null) {
                 CustomFunction.c[] acustomfunction_c = customfunction.a();
+                int j = i - arraydeque.size();
+                int k = Math.min(acustomfunction_c.length, j);
 
-                for (int i = acustomfunction_c.length - 1; i >= 0; --i) {
-                    deque.addFirst(acustomfunction_c[i]);
+                for (int l = k - 1; l >= 0; --l) {
+                    arraydeque.addFirst(new CustomFunctionData.a(customfunctiondata, icommandlistener, acustomfunction_c[l]));
                 }
             }
 
         }
 
-        d(MinecraftKey minecraftkey, Object object) {
-            this(minecraftkey);
+        public String toString() {
+            return "/function " + this.a;
         }
     }
 
-    static class b implements CustomFunction.c {
+    public static class b implements CustomFunction.c {
 
         private final String a;
 
-        private b(String s) {
+        public b(String s) {
             this.a = s;
         }
 
-        public void a(CustomFunctionData customfunctiondata, ICommandListener icommandlistener, Deque<CustomFunction.c> deque) {
-            customfunctiondata.a().b(icommandlistener, this.a);
+        public void a(CustomFunctionData customfunctiondata, ICommandListener icommandlistener, ArrayDeque<CustomFunctionData.a> arraydeque, int i) {
+            customfunctiondata.a().a(icommandlistener, this.a);
         }
 
-        b(String s, Object object) {
-            this(s);
+        public String toString() {
+            return "/" + this.a;
         }
     }
 
-    interface c {
+    public interface c {
 
-        void a(CustomFunctionData customfunctiondata, ICommandListener icommandlistener, Deque<CustomFunction.c> deque);
+        void a(CustomFunctionData customfunctiondata, ICommandListener icommandlistener, ArrayDeque<CustomFunctionData.a> arraydeque, int i);
     }
 }

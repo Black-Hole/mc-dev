@@ -79,7 +79,7 @@ public final class SpawnerCreature {
                             int k2 = blockposition1.getZ();
                             IBlockData iblockdata = worldserver.getType(blockposition1);
 
-                            if (!iblockdata.m()) {
+                            if (!iblockdata.l()) {
                                 int l2 = 0;
                                 int i3 = 0;
 
@@ -170,7 +170,7 @@ public final class SpawnerCreature {
     }
 
     public static boolean a(IBlockData iblockdata) {
-        return iblockdata.l() ? false : (iblockdata.n() ? false : (iblockdata.getMaterial().isLiquid() ? false : !BlockMinecartTrackAbstract.i(iblockdata)));
+        return iblockdata.k() ? false : (iblockdata.m() ? false : (iblockdata.getMaterial().isLiquid() ? false : !BlockMinecartTrackAbstract.i(iblockdata)));
     }
 
     public static boolean a(EntityInsentient.EnumEntityPositionType entityinsentient_enumentitypositiontype, World world, BlockPosition blockposition) {
@@ -180,11 +180,11 @@ public final class SpawnerCreature {
             IBlockData iblockdata = world.getType(blockposition);
 
             if (entityinsentient_enumentitypositiontype == EntityInsentient.EnumEntityPositionType.IN_WATER) {
-                return iblockdata.getMaterial() == Material.WATER && world.getType(blockposition.down()).getMaterial() == Material.WATER && !world.getType(blockposition.up()).m();
+                return iblockdata.getMaterial() == Material.WATER && world.getType(blockposition.down()).getMaterial() == Material.WATER && !world.getType(blockposition.up()).l();
             } else {
                 BlockPosition blockposition1 = blockposition.down();
 
-                if (!world.getType(blockposition1).r()) {
+                if (!world.getType(blockposition1).q()) {
                     return false;
                 } else {
                     Block block = world.getType(blockposition1).getBlock();

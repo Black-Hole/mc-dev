@@ -4,7 +4,7 @@ public class ItemSaddle extends Item {
 
     public ItemSaddle() {
         this.maxStackSize = 1;
-        this.a(CreativeModeTab.e);
+        this.b(CreativeModeTab.e);
     }
 
     public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {

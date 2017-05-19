@@ -21,16 +21,16 @@ public class CommandExecute extends CommandAbstract {
         return "commands.execute.usage";
     }
 
-    public void execute(final MinecraftServer minecraftserver, final ICommandListener icommandlistener, String[] astring) throws CommandException {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length < 5) {
             throw new ExceptionUsage("commands.execute.usage", new Object[0]);
         } else {
-            final Entity entity = a(minecraftserver, icommandlistener, astring[0], Entity.class);
-            Vec3D vec3d = icommandlistener.d();
-            final double d0 = b(vec3d.x, astring[1], false);
-            final double d1 = b(vec3d.y, astring[2], false);
-            final double d2 = b(vec3d.z, astring[3], false);
-            final BlockPosition blockposition = new BlockPosition(d0, d1, d2);
+            Entity entity = a(minecraftserver, icommandlistener, astring[0], Entity.class);
+            double d0 = b(entity.locX, astring[1], false);
+            double d1 = b(entity.locY, astring[2], false);
+            double d2 = b(entity.locZ, astring[3], false);
+
+            new BlockPosition(d0, d1, d2);
             byte b0 = 4;
 
             if ("detect".equals(astring[4]) && astring.length > 10) {
@@ -39,13 +39,13 @@ public class CommandExecute extends CommandAbstract {
                 double d4 = b(d1, astring[6], false);
                 double d5 = b(d2, astring[7], false);
                 Block block = b(icommandlistener, astring[8]);
-                BlockPosition blockposition1 = new BlockPosition(d3, d4, d5);
+                BlockPosition blockposition = new BlockPosition(d3, d4, d5);
 
-                if (!world.isLoaded(blockposition1)) {
+                if (!world.isLoaded(blockposition)) {
                     throw new CommandException("commands.execute.failed", new Object[] { "detect", entity.getName()});
                 }
 
-                IBlockData iblockdata = world.getType(blockposition1);
+                IBlockData iblockdata = world.getType(blockposition);
 
                 if (iblockdata.getBlock() != block) {
                     throw new CommandException("commands.execute.failed", new Object[] { "detect", entity.getName()});
@@ -59,55 +59,11 @@ public class CommandExecute extends CommandAbstract {
             }
 
             String s = a(astring, b0);
-            ICommandListener icommandlistener1 = new ICommandListener() {
-                public String getName() {
-                    return entity.getName();
-                }
-
-                public IChatBaseComponent getScoreboardDisplayName() {
-                    return entity.getScoreboardDisplayName();
-                }
-
-                public void sendMessage(IChatBaseComponent ichatbasecomponent) {
-                    icommandlistener.sendMessage(ichatbasecomponent);
-                }
-
-                public boolean a(int i, String s) {
-                    return icommandlistener.a(i, s);
-                }
-
-                public BlockPosition getChunkCoordinates() {
-                    return blockposition;
-                }
-
-                public Vec3D d() {
-                    return new Vec3D(d0, d1, d2);
-                }
-
-                public World getWorld() {
-                    return entity.world;
-                }
-
-                public Entity f() {
-                    return entity;
-                }
-
-                public boolean getSendCommandFeedback() {
-                    return minecraftserver == null || minecraftserver.worldServer[0].getGameRules().getBoolean("commandBlockOutput");
-                }
-
-                public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
-                    entity.a(commandobjectiveexecutor_enumcommandresult, i);
-                }
-
-                public MinecraftServer C_() {
-                    return entity.C_();
-                }
-            };
+            CommandListenerWrapper commandlistenerwrapper = CommandListenerWrapper.a(icommandlistener).a(entity, new Vec3D(d0, d1, d2)).a(minecraftserver.worldServer[0].getGameRules().getBoolean("commandBlockOutput"));
             ICommandHandler icommandhandler = minecraftserver.getCommandHandler();
 
             try {
-                int i = icommandhandler.b(icommandlistener1, s);
+                int i = icommandhandler.a(commandlistenerwrapper, s);
 
                 if (i < 1) {
                     throw new CommandException("commands.execute.allInvocationsFailed", new Object[] { s});

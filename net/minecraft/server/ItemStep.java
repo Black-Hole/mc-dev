@@ -35,7 +35,7 @@ public class ItemStep extends ItemBlock {
 
                 if ((enumdirection == EnumDirection.UP && blockstepabstract_enumslabhalf == BlockStepAbstract.EnumSlabHalf.BOTTOM || enumdirection == EnumDirection.DOWN && blockstepabstract_enumslabhalf == BlockStepAbstract.EnumSlabHalf.TOP) && comparable1 == comparable) {
                     IBlockData iblockdata1 = this.a(iblockstate, comparable1);
-                    AxisAlignedBB axisalignedbb = iblockdata1.c(world, blockposition);
+                    AxisAlignedBB axisalignedbb = iblockdata1.d(world, blockposition);
 
                     if (axisalignedbb != Block.k && world.b(axisalignedbb.a(blockposition)) && world.setTypeAndData(blockposition, iblockdata1, 11)) {
                         SoundEffectType soundeffecttype = this.c.getStepSound();
@@ -65,7 +65,7 @@ public class ItemStep extends ItemBlock {
 
             if (comparable == object) {
                 IBlockData iblockdata1 = this.a(this.b.g(), comparable);
-                AxisAlignedBB axisalignedbb = iblockdata1.c(world, blockposition);
+                AxisAlignedBB axisalignedbb = iblockdata1.d(world, blockposition);
 
                 if (axisalignedbb != Block.k && world.b(axisalignedbb.a(blockposition)) && world.setTypeAndData(blockposition, iblockdata1, 11)) {
                     SoundEffectType soundeffecttype = this.c.getStepSound();

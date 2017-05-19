@@ -78,7 +78,7 @@ public class Block {
 
     @Deprecated
     public boolean k(IBlockData iblockdata) {
-        return iblockdata.getMaterial().k() && iblockdata.h();
+        return iblockdata.getMaterial().k() && iblockdata.g();
     }
 
     @Deprecated
@@ -112,7 +112,7 @@ public class Block {
     }
 
     @Deprecated
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return this.y;
     }
 
@@ -122,7 +122,7 @@ public class Block {
     }
 
     public int toLegacyData(IBlockData iblockdata) {
-        if (iblockdata.t().isEmpty()) {
+        if (iblockdata.s().isEmpty()) {
             return 0;
         } else {
             throw new IllegalArgumentException("Don\'t know how to convert " + iblockdata + " back into data...");
@@ -152,8 +152,8 @@ public class Block {
         this.material = material;
         this.y = materialmapcolor;
         this.blockStateList = this.getStateList();
-        this.y(this.blockStateList.getBlockData());
-        this.l = this.getBlockData().q();
+        this.x(this.blockStateList.getBlockData());
+        this.l = this.getBlockData().p();
         this.m = this.l ? 255 : 0;
         this.n = !material.blocksLight();
     }
@@ -183,7 +183,7 @@ public class Block {
     }
 
     protected static boolean b(Block block) {
-        return block instanceof BlockShulkerBox || block instanceof BlockLeaves || block instanceof BlockTrapdoor || block == Blocks.BEACON || block == Blocks.cauldron || block == Blocks.GLASS || block == Blocks.GLOWSTONE || block == Blocks.ICE || block == Blocks.SEA_LANTERN || block == Blocks.STAINED_GLASS;
+        return block instanceof BlockShulkerBox || block instanceof BlockLeaves || block instanceof BlockTrapdoor || block == Blocks.BEACON || block == Blocks.cauldron || block == Blocks.GLASS || block == Blocks.GLOWSTONE || block == Blocks.ICE || block == Blocks.SEA_LANTERN || block == Blocks.STAINED_GLASS || block == Blocks.LIT_PUMPKIN;
     }
 
     protected static boolean c(Block block) {
@@ -191,18 +191,18 @@ public class Block {
     }
 
     @Deprecated
-    public boolean s(IBlockData iblockdata) {
-        return iblockdata.getMaterial().isSolid() && iblockdata.h();
+    public boolean r(IBlockData iblockdata) {
+        return iblockdata.getMaterial().isSolid() && iblockdata.g();
     }
 
     @Deprecated
     public boolean isOccluding(IBlockData iblockdata) {
-        return iblockdata.getMaterial().k() && iblockdata.h() && !iblockdata.n();
+        return iblockdata.getMaterial().k() && iblockdata.g() && !iblockdata.m();
     }
 
     @Deprecated
-    public boolean u(IBlockData iblockdata) {
-        return this.material.isSolid() && this.getBlockData().h();
+    public boolean t(IBlockData iblockdata) {
+        return this.material.isSolid() && this.getBlockData().g();
     }
 
     @Deprecated
@@ -267,7 +267,7 @@ public class Block {
 
     @Deprecated
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
-        a(blockposition, axisalignedbb, list, iblockdata.c(world, blockposition));
+        a(blockposition, axisalignedbb, list, iblockdata.d(world, blockposition));
     }
 
     protected static void a(BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable AxisAlignedBB axisalignedbb1) {
@@ -284,7 +284,7 @@ public class Block {
     @Deprecated
     @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.d(iblockaccess, blockposition);
+        return iblockdata.e(iblockaccess, blockposition);
     }
 
     @Deprecated
@@ -391,7 +391,7 @@ public class Block {
     @Deprecated
     @Nullable
     public MovingObjectPosition a(IBlockData iblockdata, World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
-        return this.a(blockposition, vec3d, vec3d1, iblockdata.d(world, blockposition));
+        return this.a(blockposition, vec3d, vec3d1, iblockdata.e(world, blockposition));
     }
 
     @Nullable
@@ -450,7 +450,7 @@ public class Block {
         entityhuman.b(StatisticList.a(this));
         entityhuman.applyExhaustion(0.005F);
         if (this.n() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
-            ItemStack itemstack1 = this.w(iblockdata);
+            ItemStack itemstack1 = this.v(iblockdata);
 
             a(world, blockposition, itemstack1);
         } else {
@@ -462,10 +462,10 @@ public class Block {
     }
 
     protected boolean n() {
-        return this.getBlockData().h() && !this.isTileEntity;
+        return this.getBlockData().g() && !this.isTileEntity;
     }
 
-    protected ItemStack w(IBlockData iblockdata) {
+    protected ItemStack v(IBlockData iblockdata) {
         Item item = Item.getItemOf(this);
         int i = 0;
 
@@ -573,7 +573,7 @@ public class Block {
         return this.blockStateList;
     }
 
-    protected final void y(IBlockData iblockdata) {
+    protected final void x(IBlockData iblockdata) {
         this.blockData = iblockdata;
     }
 
@@ -586,7 +586,7 @@ public class Block {
     }
 
     @Deprecated
-    public Vec3D e(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public Vec3D f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         Block.EnumRandomOffset block_enumrandomoffset = this.u();
 
         if (block_enumrandomoffset == Block.EnumRandomOffset.NONE) {

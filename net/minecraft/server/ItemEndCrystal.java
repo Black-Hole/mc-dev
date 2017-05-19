@@ -6,7 +6,7 @@ public class ItemEndCrystal extends Item {
 
     public ItemEndCrystal() {
         this.c("end_crystal");
-        this.a(CreativeModeTab.c);
+        this.b(CreativeModeTab.c);
     }
 
     public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {

@@ -101,7 +101,7 @@ public class EntityFishingHook extends Entity {
             IBlockData iblockdata = this.world.getType(blockposition);
 
             if (iblockdata.getMaterial() == Material.WATER) {
-                f = BlockFluids.f(iblockdata, this.world, blockposition);
+                f = BlockFluids.g(iblockdata, this.world, blockposition);
             }
 
             double d0;

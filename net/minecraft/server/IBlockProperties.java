@@ -17,25 +17,25 @@ public interface IBlockProperties {
 
     boolean f();
 
-    MaterialMapColor g();
+    MaterialMapColor a(IBlockAccess iblockaccess, BlockPosition blockposition);
 
     IBlockData a(EnumBlockRotation enumblockrotation);
 
     IBlockData a(EnumBlockMirror enumblockmirror);
 
-    boolean h();
+    boolean g();
 
-    EnumRenderType j();
+    EnumRenderType i();
+
+    boolean k();
 
     boolean l();
 
     boolean m();
 
-    boolean n();
-
     int a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection);
 
-    boolean o();
+    boolean n();
 
     int a(World world, BlockPosition blockposition);
 
@@ -45,26 +45,26 @@ public interface IBlockProperties {
 
     int b(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection);
 
-    EnumPistonReaction p();
+    EnumPistonReaction o();
 
-    IBlockData b(IBlockAccess iblockaccess, BlockPosition blockposition);
+    IBlockData c(IBlockAccess iblockaccess, BlockPosition blockposition);
 
-    boolean q();
+    boolean p();
 
     @Nullable
-    AxisAlignedBB c(IBlockAccess iblockaccess, BlockPosition blockposition);
+    AxisAlignedBB d(IBlockAccess iblockaccess, BlockPosition blockposition);
 
     void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag);
 
-    AxisAlignedBB d(IBlockAccess iblockaccess, BlockPosition blockposition);
+    AxisAlignedBB e(IBlockAccess iblockaccess, BlockPosition blockposition);
 
     MovingObjectPosition a(World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1);
 
+    boolean q();
+
+    Vec3D f(IBlockAccess iblockaccess, BlockPosition blockposition);
+
     boolean r();
-
-    Vec3D e(IBlockAccess iblockaccess, BlockPosition blockposition);
-
-    boolean s();
 
     EnumBlockFaceShape d(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection);
 }

@@ -56,7 +56,7 @@ public class RecipeTippedArrow extends IRecipe {
         return NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
     }
 
-    public boolean d() {
+    public boolean c() {
         return true;
     }
 }

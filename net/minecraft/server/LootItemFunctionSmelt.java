@@ -16,16 +16,20 @@ public class LootItemFunctionSmelt extends LootItemFunction {
     }
 
     public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
-        ItemStack itemstack1 = RecipesFurnace.getInstance().getResult(itemstack);
-
-        if (itemstack1.isEmpty()) {
-            LootItemFunctionSmelt.a.warn("Couldn\'t smelt {} because there is no smelting recipe", itemstack);
+        if (itemstack.isEmpty()) {
             return itemstack;
         } else {
-            ItemStack itemstack2 = itemstack1.cloneItemStack();
+            ItemStack itemstack1 = RecipesFurnace.getInstance().getResult(itemstack);
 
-            itemstack2.setCount(itemstack.getCount());
-            return itemstack2;
+            if (itemstack1.isEmpty()) {
+                LootItemFunctionSmelt.a.warn("Couldn\'t smelt {} because there is no smelting recipe", itemstack);
+                return itemstack;
+            } else {
+                ItemStack itemstack2 = itemstack1.cloneItemStack();
+
+                itemstack2.setCount(itemstack.getCount());
+                return itemstack2;
+            }
         }
     }
 

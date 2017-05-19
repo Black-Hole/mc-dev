@@ -92,7 +92,7 @@ public class BlockBanner extends BlockTileEntity {
     public static class BlockStandingBanner extends BlockBanner {
 
         public BlockStandingBanner() {
-            this.y(this.blockStateList.getBlockData().set(BlockBanner.BlockStandingBanner.ROTATION, Integer.valueOf(0)));
+            this.x(this.blockStateList.getBlockData().set(BlockBanner.BlockStandingBanner.ROTATION, Integer.valueOf(0)));
         }
 
         public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -137,7 +137,7 @@ public class BlockBanner extends BlockTileEntity {
         protected static final AxisAlignedBB g = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.125D, 0.78125D, 1.0D);
 
         public BlockWallBanner() {
-            this.y(this.blockStateList.getBlockData().set(BlockBanner.BlockWallBanner.FACING, EnumDirection.NORTH));
+            this.x(this.blockStateList.getBlockData().set(BlockBanner.BlockWallBanner.FACING, EnumDirection.NORTH));
         }
 
         public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {

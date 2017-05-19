@@ -16,7 +16,7 @@ public class BlockFenceGate extends BlockFacingHorizontal {
 
     public BlockFenceGate(BlockWood.EnumLogVariant blockwood_enumlogvariant) {
         super(Material.WOOD, blockwood_enumlogvariant.c());
-        this.y(this.blockStateList.getBlockData().set(BlockFenceGate.OPEN, Boolean.valueOf(false)).set(BlockFenceGate.POWERED, Boolean.valueOf(false)).set(BlockFenceGate.IN_WALL, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockFenceGate.OPEN, Boolean.valueOf(false)).set(BlockFenceGate.POWERED, Boolean.valueOf(false)).set(BlockFenceGate.IN_WALL, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 

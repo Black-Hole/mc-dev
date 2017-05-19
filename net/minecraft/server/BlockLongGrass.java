@@ -10,7 +10,7 @@ public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElem
 
     protected BlockLongGrass() {
         super(Material.REPLACEABLE_PLANT);
-        this.y(this.blockStateList.getBlockData().set(BlockLongGrass.TYPE, BlockLongGrass.EnumTallGrassType.DEAD_BUSH));
+        this.x(this.blockStateList.getBlockData().set(BlockLongGrass.TYPE, BlockLongGrass.EnumTallGrassType.DEAD_BUSH));
     }
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {

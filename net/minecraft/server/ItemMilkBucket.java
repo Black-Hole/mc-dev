@@ -4,7 +4,7 @@ public class ItemMilkBucket extends Item {
 
     public ItemMilkBucket() {
         this.d(1);
-        this.a(CreativeModeTab.f);
+        this.b(CreativeModeTab.f);
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {

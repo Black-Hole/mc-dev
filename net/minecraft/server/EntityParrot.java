@@ -130,11 +130,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (!this.world.isClientSide && this.isTamed() && this.e((EntityLiving) entityhuman)) {
-            this.goalSit.setSitting(!this.isSitting());
-        }
-
-        if (itemstack.getItem() == EntityParrot.bI) {
+        if (!this.isTamed() && EntityParrot.bJ.contains(itemstack.getItem())) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 itemstack.subtract(1);
             }
@@ -143,8 +139,8 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
                 this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.eJ, this.bI(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
             }
 
-            if (!this.isTamed() && !this.world.isClientSide) {
-                if (this.random.nextInt(3) == 0) {
+            if (!this.world.isClientSide) {
+                if (this.random.nextInt(10) == 0) {
                     this.c(entityhuman);
                     this.p(true);
                     this.world.broadcastEntityEffect(this, (byte) 7);
@@ -153,15 +149,39 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
                     this.world.broadcastEntityEffect(this, (byte) 6);
                 }
             }
-        } else if (EntityParrot.bJ.contains(itemstack.getItem()) && !entityhuman.abilities.canInstantlyBuild) {
-            itemstack.subtract(1);
-        }
 
-        return super.a(entityhuman, enumhand);
+            return true;
+        } else if (itemstack.getItem() == EntityParrot.bI) {
+            if (!entityhuman.abilities.canInstantlyBuild) {
+                itemstack.subtract(1);
+            }
+
+            this.addEffect(new MobEffect(MobEffects.POISON, 900));
+            if (!this.bc()) {
+                this.damageEntity(DamageSource.playerAttack(entityhuman), Float.MAX_VALUE);
+            }
+
+            return true;
+        } else if (!this.world.isClientSide && this.isTamed() && this.e((EntityLiving) entityhuman)) {
+            this.goalSit.setSitting(!this.isSitting());
+            return true;
+        } else {
+            return super.a(entityhuman, enumhand);
+        }
     }
 
     public boolean e(ItemStack itemstack) {
         return false;
+    }
+
+    public boolean P() {
+        int i = MathHelper.floor(this.locX);
+        int j = MathHelper.floor(this.getBoundingBox().b);
+        int k = MathHelper.floor(this.locZ);
+        BlockPosition blockposition = new BlockPosition(i, j, k);
+        Block block = this.world.getType(blockposition.down()).getBlock();
+
+        return block instanceof BlockLeaves || block == Blocks.GRASS || block instanceof BlockLogAbstract || block == Blocks.AIR && this.world.j(blockposition) > 8 && super.P();
     }
 
     public void e(float f, float f1) {}

@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 public class ItemMonsterEgg extends Item {
 
     public ItemMonsterEgg() {
-        this.a(CreativeModeTab.f);
+        this.b(CreativeModeTab.f);
     }
 
     public String b(ItemStack itemstack) {

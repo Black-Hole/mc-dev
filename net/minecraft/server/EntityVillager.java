@@ -596,7 +596,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
 
             entitywitch.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
             entitywitch.prepare(this.world.D(new BlockPosition(entitywitch)), (GroupDataEntity) null);
-            entitywitch.setAI(this.hasAI());
+            entitywitch.setNoAI(this.isNoAI());
             if (this.hasCustomName()) {
                 entitywitch.setCustomName(this.getCustomName());
                 entitywitch.setCustomNameVisible(this.getCustomNameVisible());
@@ -754,7 +754,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         public void a(IMerchant imerchant, MerchantRecipeList merchantrecipelist, Random random) {
             Enchantment enchantment = (Enchantment) Enchantment.enchantments.a(random);
             int i = MathHelper.nextInt(random, enchantment.getStartLevel(), enchantment.getMaxLevel());
-            ItemStack itemstack = Items.ENCHANTED_BOOK.a(new WeightedRandomEnchant(enchantment, i));
+            ItemStack itemstack = ItemEnchantedBook.a(new WeightedRandomEnchant(enchantment, i));
             int j = 2 + random.nextInt(5 + i * 10) + 3 * i;
 
             if (enchantment.isTreasure()) {

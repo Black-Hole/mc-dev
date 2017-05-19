@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class ItemArrow extends Item {
 
     public ItemArrow() {
-        this.a(CreativeModeTab.j);
+        this.b(CreativeModeTab.j);
     }
 
     public EntityArrow a(World world, ItemStack itemstack, EntityLiving entityliving) {

@@ -28,21 +28,21 @@ public class CommandAdvancement extends CommandAbstract {
         if (astring.length < 1) {
             throw new ExceptionUsage("commands.advancement.usage", new Object[0]);
         } else {
-            CommandAdvancement.a commandadvancement_a = CommandAdvancement.a.a(astring[0]);
+            CommandAdvancement.Action commandadvancement_action = CommandAdvancement.Action.a(astring[0]);
 
-            if (commandadvancement_a != null) {
+            if (commandadvancement_action != null) {
                 if (astring.length < 3) {
-                    throw commandadvancement_a.a();
+                    throw commandadvancement_action.a();
                 }
 
                 EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[1]);
-                CommandAdvancement.b commandadvancement_b = CommandAdvancement.b.a(astring[2]);
+                CommandAdvancement.Filter commandadvancement_filter = CommandAdvancement.Filter.a(astring[2]);
 
-                if (commandadvancement_b == null) {
-                    throw commandadvancement_a.a();
+                if (commandadvancement_filter == null) {
+                    throw commandadvancement_action.a();
                 }
 
-                this.a(minecraftserver, icommandlistener, astring, entityplayer, commandadvancement_a, commandadvancement_b);
+                this.a(minecraftserver, icommandlistener, astring, entityplayer, commandadvancement_action, commandadvancement_filter);
             } else {
                 if (!"test".equals(astring[0])) {
                     throw new ExceptionUsage("commands.advancement.usage", new Object[0]);
@@ -62,49 +62,49 @@ public class CommandAdvancement extends CommandAbstract {
         }
     }
 
-    private void a(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, EntityPlayer entityplayer, CommandAdvancement.a commandadvancement_a, CommandAdvancement.b commandadvancement_b) throws CommandException {
-        if (commandadvancement_b == CommandAdvancement.b.e) {
+    private void a(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, EntityPlayer entityplayer, CommandAdvancement.Action commandadvancement_action, CommandAdvancement.Filter commandadvancement_filter) throws CommandException {
+        if (commandadvancement_filter == CommandAdvancement.Filter.EVERYTHING) {
             if (astring.length == 3) {
-                int i = commandadvancement_a.a(entityplayer, minecraftserver.getAdvancementData().c());
+                int i = commandadvancement_action.a(entityplayer, minecraftserver.getAdvancementData().c());
 
                 if (i == 0) {
-                    throw commandadvancement_b.a(commandadvancement_a, new Object[] { entityplayer.getName()});
+                    throw commandadvancement_filter.a(commandadvancement_action, new Object[] { entityplayer.getName()});
                 } else {
-                    commandadvancement_b.a(icommandlistener, this, commandadvancement_a, new Object[] { entityplayer.getName(), Integer.valueOf(i)});
+                    commandadvancement_filter.a(icommandlistener, this, commandadvancement_action, new Object[] { entityplayer.getName(), Integer.valueOf(i)});
                 }
             } else {
-                throw commandadvancement_b.a(commandadvancement_a);
+                throw commandadvancement_filter.a(commandadvancement_action);
             }
         } else if (astring.length < 4) {
-            throw commandadvancement_b.a(commandadvancement_a);
+            throw commandadvancement_filter.a(commandadvancement_action);
         } else {
             Advancement advancement = a(minecraftserver, astring[3]);
 
-            if (commandadvancement_b == CommandAdvancement.b.a && astring.length == 5) {
+            if (commandadvancement_filter == CommandAdvancement.Filter.ONLY && astring.length == 5) {
                 String s = astring[4];
 
                 if (!advancement.getCriteria().keySet().contains(s)) {
                     throw new CommandException("commands.advancement.criterionNotFound", new Object[] { advancement.getName(), astring[4]});
                 }
 
-                if (!commandadvancement_a.a(entityplayer, advancement, s)) {
-                    throw new CommandException(commandadvancement_a.d + ".criterion.failed", new Object[] { advancement.getName(), entityplayer.getName(), s});
+                if (!commandadvancement_action.a(entityplayer, advancement, s)) {
+                    throw new CommandException(commandadvancement_action.d + ".criterion.failed", new Object[] { advancement.getName(), entityplayer.getName(), s});
                 }
 
-                a(icommandlistener, (ICommand) this, commandadvancement_a.d + ".criterion.success", new Object[] { advancement.getName(), entityplayer.getName(), s});
+                a(icommandlistener, (ICommand) this, commandadvancement_action.d + ".criterion.success", new Object[] { advancement.getName(), entityplayer.getName(), s});
             } else {
                 if (astring.length != 4) {
-                    throw commandadvancement_b.a(commandadvancement_a);
+                    throw commandadvancement_filter.a(commandadvancement_action);
                 }
 
-                List list = this.a(advancement, commandadvancement_b);
-                int j = commandadvancement_a.a(entityplayer, (Iterable) list);
+                List list = this.a(advancement, commandadvancement_filter);
+                int j = commandadvancement_action.a(entityplayer, (Iterable) list);
 
                 if (j == 0) {
-                    throw commandadvancement_b.a(commandadvancement_a, new Object[] { advancement.getName(), entityplayer.getName()});
+                    throw commandadvancement_filter.a(commandadvancement_action, new Object[] { advancement.getName(), entityplayer.getName()});
                 }
 
-                commandadvancement_b.a(icommandlistener, this, commandadvancement_a, new Object[] { advancement.getName(), entityplayer.getName(), Integer.valueOf(j)});
+                commandadvancement_filter.a(icommandlistener, this, commandadvancement_action, new Object[] { advancement.getName(), entityplayer.getName(), Integer.valueOf(j)});
             }
 
         }
@@ -122,17 +122,17 @@ public class CommandAdvancement extends CommandAbstract {
 
     }
 
-    private List<Advancement> a(Advancement advancement, CommandAdvancement.b commandadvancement_b) {
+    private List<Advancement> a(Advancement advancement, CommandAdvancement.Filter commandadvancement_filter) {
         ArrayList arraylist = Lists.newArrayList();
 
-        if (commandadvancement_b.h) {
+        if (commandadvancement_filter.h) {
             for (Advancement advancement1 = advancement.b(); advancement1 != null; advancement1 = advancement1.b()) {
                 arraylist.add(advancement1);
             }
         }
 
         arraylist.add(advancement);
-        if (commandadvancement_b.i) {
+        if (commandadvancement_filter.i) {
             this.a(advancement, (List) arraylist);
         }
 
@@ -166,25 +166,25 @@ public class CommandAdvancement extends CommandAbstract {
         if (astring.length == 1) {
             return a(astring, new String[] { "grant", "revoke", "test"});
         } else {
-            CommandAdvancement.a commandadvancement_a = CommandAdvancement.a.a(astring[0]);
+            CommandAdvancement.Action commandadvancement_action = CommandAdvancement.Action.a(astring[0]);
 
-            if (commandadvancement_a != null) {
+            if (commandadvancement_action != null) {
                 if (astring.length == 2) {
                     return a(astring, minecraftserver.getPlayers());
                 }
 
                 if (astring.length == 3) {
-                    return a(astring, CommandAdvancement.b.f);
+                    return a(astring, CommandAdvancement.Filter.f);
                 }
 
-                CommandAdvancement.b commandadvancement_b = CommandAdvancement.b.a(astring[2]);
+                CommandAdvancement.Filter commandadvancement_filter = CommandAdvancement.Filter.a(astring[2]);
 
-                if (commandadvancement_b != null && commandadvancement_b != CommandAdvancement.b.e) {
+                if (commandadvancement_filter != null && commandadvancement_filter != CommandAdvancement.Filter.EVERYTHING) {
                     if (astring.length == 4) {
                         return a(astring, (Collection) this.a(minecraftserver));
                     }
 
-                    if (astring.length == 5 && commandadvancement_b == CommandAdvancement.b.a) {
+                    if (astring.length == 5 && commandadvancement_filter == CommandAdvancement.Filter.ONLY) {
                         Advancement advancement = minecraftserver.getAdvancementData().a(new MinecraftKey(astring[3]));
 
                         if (advancement != null) {
@@ -216,14 +216,14 @@ public class CommandAdvancement extends CommandAbstract {
         }
     }
 
-    private List<String> a(MinecraftServer minecraftserver) {
+    private List<MinecraftKey> a(MinecraftServer minecraftserver) {
         ArrayList arraylist = Lists.newArrayList();
         Iterator iterator = minecraftserver.getAdvancementData().c().iterator();
 
         while (iterator.hasNext()) {
             Advancement advancement = (Advancement) iterator.next();
 
-            arraylist.add(advancement.getName().toString());
+            arraylist.add(advancement.getName());
         }
 
         return arraylist;
@@ -243,43 +243,43 @@ public class CommandAdvancement extends CommandAbstract {
         }
     }
 
-    static enum b {
+    static enum Filter {
 
-        a("only", false, false), b("through", true, true), c("from", false, true), d("until", true, false), e("everything", true, true);
+        ONLY("only", false, false), THROUGH("through", true, true), FROM("from", false, true), UNTIL("until", true, false), EVERYTHING("everything", true, true);
 
         static final String[] f = new String[values().length];
         final String g;
         final boolean h;
         final boolean i;
 
-        private b(String s, boolean flag, boolean flag1) {
+        private Filter(String s, boolean flag, boolean flag1) {
             this.g = s;
             this.h = flag;
             this.i = flag1;
         }
 
-        CommandException a(CommandAdvancement.a commandadvancement_a, Object... aobject) {
-            return new CommandException(commandadvancement_a.d + "." + this.g + ".failed", aobject);
+        CommandException a(CommandAdvancement.Action commandadvancement_action, Object... aobject) {
+            return new CommandException(commandadvancement_action.d + "." + this.g + ".failed", aobject);
         }
 
-        CommandException a(CommandAdvancement.a commandadvancement_a) {
-            return new CommandException(commandadvancement_a.d + "." + this.g + ".usage", new Object[0]);
+        CommandException a(CommandAdvancement.Action commandadvancement_action) {
+            return new CommandException(commandadvancement_action.d + "." + this.g + ".usage", new Object[0]);
         }
 
-        void a(ICommandListener icommandlistener, CommandAdvancement commandadvancement, CommandAdvancement.a commandadvancement_a, Object... aobject) {
-            CommandAbstract.a(icommandlistener, (ICommand) commandadvancement, commandadvancement_a.d + "." + this.g + ".success", aobject);
+        void a(ICommandListener icommandlistener, CommandAdvancement commandadvancement, CommandAdvancement.Action commandadvancement_action, Object... aobject) {
+            CommandAbstract.a(icommandlistener, (ICommand) commandadvancement, commandadvancement_action.d + "." + this.g + ".success", aobject);
         }
 
         @Nullable
-        static CommandAdvancement.b a(String s) {
-            CommandAdvancement.b[] acommandadvancement_b = values();
-            int i = acommandadvancement_b.length;
+        static CommandAdvancement.Filter a(String s) {
+            CommandAdvancement.Filter[] acommandadvancement_filter = values();
+            int i = acommandadvancement_filter.length;
 
             for (int j = 0; j < i; ++j) {
-                CommandAdvancement.b commandadvancement_b = acommandadvancement_b[j];
+                CommandAdvancement.Filter commandadvancement_filter = acommandadvancement_filter[j];
 
-                if (commandadvancement_b.g.equals(s)) {
-                    return commandadvancement_b;
+                if (commandadvancement_filter.g.equals(s)) {
+                    return commandadvancement_filter;
                 }
             }
 
@@ -288,15 +288,15 @@ public class CommandAdvancement extends CommandAbstract {
 
         static {
             for (int i = 0; i < values().length; ++i) {
-                CommandAdvancement.b.f[i] = values()[i].g;
+                CommandAdvancement.Filter.f[i] = values()[i].g;
             }
 
         }
     }
 
-    static enum a {
+    static enum Action {
 
-        a("grant") {;
+        GRANT("grant") {;
             protected boolean a(EntityPlayer entityplayer, Advancement advancement) {
                 AdvancementProgress advancementprogress = entityplayer.getAdvancementData().getProgress(advancement);
 
@@ -318,7 +318,7 @@ public class CommandAdvancement extends CommandAbstract {
             protected boolean a(EntityPlayer entityplayer, Advancement advancement, String s) {
                 return entityplayer.getAdvancementData().grantCriteria(advancement, s);
             }
-        }, b("revoke") {;
+        }, REVOKE("revoke") {;
     protected boolean a(EntityPlayer entityplayer, Advancement advancement) {
         AdvancementProgress advancementprogress = entityplayer.getAdvancementData().getProgress(advancement);
 
@@ -345,21 +345,21 @@ public class CommandAdvancement extends CommandAbstract {
         final String c;
         final String d;
 
-        private a(String s) {
+        private Action(String s) {
             this.c = s;
             this.d = "commands.advancement." + s;
         }
 
         @Nullable
-        static CommandAdvancement.a a(String s) {
-            CommandAdvancement.a[] acommandadvancement_a = values();
-            int i = acommandadvancement_a.length;
+        static CommandAdvancement.Action a(String s) {
+            CommandAdvancement.Action[] acommandadvancement_action = values();
+            int i = acommandadvancement_action.length;
 
             for (int j = 0; j < i; ++j) {
-                CommandAdvancement.a commandadvancement_a = acommandadvancement_a[j];
+                CommandAdvancement.Action commandadvancement_action = acommandadvancement_action[j];
 
-                if (commandadvancement_a.c.equals(s)) {
-                    return commandadvancement_a;
+                if (commandadvancement_action.c.equals(s)) {
+                    return commandadvancement_action;
                 }
             }
 
@@ -389,7 +389,7 @@ public class CommandAdvancement extends CommandAbstract {
 
         protected abstract boolean a(EntityPlayer entityplayer, Advancement advancement, String s);
 
-        a(String s, Object object) {
+        Action(String s, Object object) {
             this(s);
         }
     }

@@ -12,11 +12,10 @@ import java.util.Map.Entry;
 
 public class EnchantmentManager {
 
-    private static final Random a = new Random();
-    private static final EnchantmentManager.EnchantmentModifierProtection b = new EnchantmentManager.EnchantmentModifierProtection(null);
-    private static final EnchantmentManager.EnchantmentModifierDamage c = new EnchantmentManager.EnchantmentModifierDamage(null);
-    private static final EnchantmentManager.EnchantmentModifierThorns d = new EnchantmentManager.EnchantmentModifierThorns(null);
-    private static final EnchantmentManager.EnchantmentModifierArthropods e = new EnchantmentManager.EnchantmentModifierArthropods(null);
+    private static final EnchantmentManager.EnchantmentModifierProtection a = new EnchantmentManager.EnchantmentModifierProtection(null);
+    private static final EnchantmentManager.EnchantmentModifierDamage b = new EnchantmentManager.EnchantmentModifierDamage(null);
+    private static final EnchantmentManager.EnchantmentModifierThorns c = new EnchantmentManager.EnchantmentModifierThorns(null);
+    private static final EnchantmentManager.EnchantmentModifierArthropods d = new EnchantmentManager.EnchantmentModifierArthropods(null);
 
     public static int getEnchantmentLevel(Enchantment enchantment, ItemStack itemstack) {
         if (itemstack.isEmpty()) {
@@ -24,34 +23,30 @@ public class EnchantmentManager {
         } else {
             NBTTagList nbttaglist = itemstack.getEnchantments();
 
-            if (nbttaglist == null) {
-                return 0;
-            } else {
-                for (int i = 0; i < nbttaglist.size(); ++i) {
-                    Enchantment enchantment1 = Enchantment.c(nbttaglist.get(i).getShort("id"));
-                    short short0 = nbttaglist.get(i).getShort("lvl");
+            for (int i = 0; i < nbttaglist.size(); ++i) {
+                NBTTagCompound nbttagcompound = nbttaglist.get(i);
+                Enchantment enchantment1 = Enchantment.c(nbttagcompound.getShort("id"));
+                short short0 = nbttagcompound.getShort("lvl");
 
-                    if (enchantment1 == enchantment) {
-                        return short0;
-                    }
+                if (enchantment1 == enchantment) {
+                    return short0;
                 }
-
-                return 0;
             }
+
+            return 0;
         }
     }
 
     public static Map<Enchantment, Integer> a(ItemStack itemstack) {
         LinkedHashMap linkedhashmap = Maps.newLinkedHashMap();
-        NBTTagList nbttaglist = itemstack.getItem() == Items.ENCHANTED_BOOK ? Items.ENCHANTED_BOOK.h(itemstack) : itemstack.getEnchantments();
+        NBTTagList nbttaglist = itemstack.getItem() == Items.ENCHANTED_BOOK ? ItemEnchantedBook.h(itemstack) : itemstack.getEnchantments();
 
-        if (nbttaglist != null) {
-            for (int i = 0; i < nbttaglist.size(); ++i) {
-                Enchantment enchantment = Enchantment.c(nbttaglist.get(i).getShort("id"));
-                short short0 = nbttaglist.get(i).getShort("lvl");
+        for (int i = 0; i < nbttaglist.size(); ++i) {
+            NBTTagCompound nbttagcompound = nbttaglist.get(i);
+            Enchantment enchantment = Enchantment.c(nbttagcompound.getShort("id"));
+            short short0 = nbttagcompound.getShort("lvl");
 
-                linkedhashmap.put(enchantment, Integer.valueOf(short0));
-            }
+            linkedhashmap.put(enchantment, Integer.valueOf(short0));
         }
 
         return linkedhashmap;
@@ -73,7 +68,7 @@ public class EnchantmentManager {
                 nbttagcompound.setShort("lvl", (short) i);
                 nbttaglist.add(nbttagcompound);
                 if (itemstack.getItem() == Items.ENCHANTED_BOOK) {
-                    Items.ENCHANTED_BOOK.a(itemstack, new WeightedRandomEnchant(enchantment, i));
+                    ItemEnchantedBook.a(itemstack, new WeightedRandomEnchant(enchantment, i));
                 }
             }
         }
@@ -92,17 +87,15 @@ public class EnchantmentManager {
         if (!itemstack.isEmpty()) {
             NBTTagList nbttaglist = itemstack.getEnchantments();
 
-            if (nbttaglist != null) {
-                for (int i = 0; i < nbttaglist.size(); ++i) {
-                    short short0 = nbttaglist.get(i).getShort("id");
-                    short short1 = nbttaglist.get(i).getShort("lvl");
+            for (int i = 0; i < nbttaglist.size(); ++i) {
+                short short0 = nbttaglist.get(i).getShort("id");
+                short short1 = nbttaglist.get(i).getShort("lvl");
 
-                    if (Enchantment.c(short0) != null) {
-                        enchantmentmanager_enchantmentmodifier.a(Enchantment.c(short0), short1);
-                    }
+                if (Enchantment.c(short0) != null) {
+                    enchantmentmanager_enchantmentmodifier.a(Enchantment.c(short0), short1);
                 }
-
             }
+
         }
     }
 
@@ -118,17 +111,17 @@ public class EnchantmentManager {
     }
 
     public static int a(Iterable<ItemStack> iterable, DamageSource damagesource) {
-        EnchantmentManager.b.a = 0;
-        EnchantmentManager.b.b = damagesource;
-        a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.b, iterable);
-        return EnchantmentManager.b.a;
+        EnchantmentManager.a.a = 0;
+        EnchantmentManager.a.b = damagesource;
+        a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.a, iterable);
+        return EnchantmentManager.a.a;
     }
 
     public static float a(ItemStack itemstack, EnumMonsterType enummonstertype) {
-        EnchantmentManager.c.a = 0.0F;
-        EnchantmentManager.c.b = enummonstertype;
-        a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.c, itemstack);
-        return EnchantmentManager.c.a;
+        EnchantmentManager.b.a = 0.0F;
+        EnchantmentManager.b.b = enummonstertype;
+        a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.b, itemstack);
+        return EnchantmentManager.b.a;
     }
 
     public static float a(EntityLiving entityliving) {
@@ -138,27 +131,27 @@ public class EnchantmentManager {
     }
 
     public static void a(EntityLiving entityliving, Entity entity) {
-        EnchantmentManager.d.b = entity;
-        EnchantmentManager.d.a = entityliving;
+        EnchantmentManager.c.b = entity;
+        EnchantmentManager.c.a = entityliving;
         if (entityliving != null) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.aO());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.c, entityliving.aO());
         }
 
         if (entity instanceof EntityHuman) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.getItemInMainHand());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.c, entityliving.getItemInMainHand());
         }
 
     }
 
     public static void b(EntityLiving entityliving, Entity entity) {
-        EnchantmentManager.e.a = entityliving;
-        EnchantmentManager.e.b = entity;
+        EnchantmentManager.d.a = entityliving;
+        EnchantmentManager.d.b = entity;
         if (entityliving != null) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.e, entityliving.aO());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.aO());
         }
 
         if (entityliving instanceof EntityHuman) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.e, entityliving.getItemInMainHand());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.getItemInMainHand());
         }
 
     }
@@ -285,7 +278,7 @@ public class EnchantmentManager {
             WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) iterator.next();
 
             if (flag1) {
-                Items.ENCHANTED_BOOK.a(itemstack, weightedrandomenchant);
+                ItemEnchantedBook.a(itemstack, weightedrandomenchant);
             } else {
                 itemstack.addEnchantment(weightedrandomenchant.enchantment, weightedrandomenchant.level);
             }

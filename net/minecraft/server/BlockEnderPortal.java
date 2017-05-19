@@ -36,7 +36,7 @@ public class BlockEnderPortal extends BlockTileEntity {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (!entity.isPassenger() && !entity.isVehicle() && entity.bd() && !world.isClientSide && entity.getBoundingBox().c(iblockdata.d(world, blockposition).a(blockposition))) {
+        if (!entity.isPassenger() && !entity.isVehicle() && entity.bd() && !world.isClientSide && entity.getBoundingBox().c(iblockdata.e(world, blockposition).a(blockposition))) {
             entity.b(1);
         }
 
@@ -46,7 +46,7 @@ public class BlockEnderPortal extends BlockTileEntity {
         return ItemStack.a;
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return MaterialMapColor.F;
     }
 

@@ -4,7 +4,7 @@ public class ItemEnderPearl extends Item {
 
     public ItemEnderPearl() {
         this.maxStackSize = 16;
-        this.a(CreativeModeTab.f);
+        this.b(CreativeModeTab.f);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {

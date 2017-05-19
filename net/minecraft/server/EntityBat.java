@@ -87,7 +87,7 @@ public class EntityBat extends EntityAmbient {
         BlockPosition blockposition1 = blockposition.up();
 
         if (this.isAsleep()) {
-            if (this.world.getType(blockposition1).m()) {
+            if (this.world.getType(blockposition1).l()) {
                 if (this.random.nextInt(200) == 0) {
                     this.aP = (float) this.random.nextInt(360);
                 }
@@ -121,7 +121,7 @@ public class EntityBat extends EntityAmbient {
 
             this.bg = 0.5F;
             this.yaw += f1;
-            if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).m()) {
+            if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).l()) {
                 this.setAsleep(true);
             }
         }

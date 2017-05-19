@@ -6,7 +6,7 @@ public class BlockStainedGlassPane extends BlockThin {
 
     public BlockStainedGlassPane() {
         super(Material.SHATTERABLE, false);
-        this.y(this.blockStateList.getBlockData().set(BlockStainedGlassPane.NORTH, Boolean.valueOf(false)).set(BlockStainedGlassPane.EAST, Boolean.valueOf(false)).set(BlockStainedGlassPane.SOUTH, Boolean.valueOf(false)).set(BlockStainedGlassPane.WEST, Boolean.valueOf(false)).set(BlockStainedGlassPane.COLOR, EnumColor.WHITE));
+        this.x(this.blockStateList.getBlockData().set(BlockStainedGlassPane.NORTH, Boolean.valueOf(false)).set(BlockStainedGlassPane.EAST, Boolean.valueOf(false)).set(BlockStainedGlassPane.SOUTH, Boolean.valueOf(false)).set(BlockStainedGlassPane.WEST, Boolean.valueOf(false)).set(BlockStainedGlassPane.COLOR, EnumColor.WHITE));
         this.a(CreativeModeTab.c);
     }
 
@@ -14,7 +14,7 @@ public class BlockStainedGlassPane extends BlockThin {
         return ((EnumColor) iblockdata.get(BlockStainedGlassPane.COLOR)).getColorIndex();
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return MaterialMapColor.a((EnumColor) iblockdata.get(BlockStainedGlassPane.COLOR));
     }
 

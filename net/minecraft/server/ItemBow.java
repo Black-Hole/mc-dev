@@ -5,7 +5,7 @@ public class ItemBow extends Item {
     public ItemBow() {
         this.maxStackSize = 1;
         this.setMaxDurability(384);
-        this.a(CreativeModeTab.j);
+        this.b(CreativeModeTab.j);
         this.a(new MinecraftKey("pull"), new IDynamicTexture() {
         });
         this.a(new MinecraftKey("pulling"), new IDynamicTexture() {

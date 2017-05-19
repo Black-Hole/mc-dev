@@ -89,9 +89,9 @@ public class ItemWorldMap extends ItemWorldMapBase {
 
                                     l3 = l3 * l3 * 31287121 + l3 * 11;
                                     if ((l3 >> 20 & 1) == 0) {
-                                        hashmultiset.add(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT).g(), 10);
+                                        hashmultiset.add(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT).a((IBlockAccess) world, BlockPosition.ZERO), 10);
                                     } else {
-                                        hashmultiset.add(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE).g(), 100);
+                                        hashmultiset.add(Blocks.STONE.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE).a((IBlockAccess) world, BlockPosition.ZERO), 100);
                                     }
 
                                     d1 = 100.0D;
@@ -106,8 +106,9 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                             if (k4 > 1) {
                                                 do {
                                                     --k4;
-                                                    iblockdata = chunk.getBlockData(blockposition_mutableblockposition.c(i4 + i3, k4, j4 + j3));
-                                                } while (iblockdata.g() == MaterialMapColor.c && k4 > 0);
+                                                    iblockdata = chunk.a(i4 + i3, k4, j4 + j3);
+                                                    blockposition_mutableblockposition.c((chunk.locX << 4) + i4 + i3, k4, (chunk.locZ << 4) + j4 + j3);
+                                                } while (iblockdata.a((IBlockAccess) world, blockposition_mutableblockposition) == MaterialMapColor.c && k4 > 0);
 
                                                 if (k4 > 0 && iblockdata.getMaterial().isLiquid()) {
                                                     int l4 = k4 - 1;
@@ -124,7 +125,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                             }
 
                                             d1 += (double) k4 / (double) (i * i);
-                                            hashmultiset.add(iblockdata.g());
+                                            hashmultiset.add(iblockdata.a((IBlockAccess) world, blockposition_mutableblockposition));
                                         }
                                     }
                                 }

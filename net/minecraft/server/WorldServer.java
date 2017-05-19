@@ -251,7 +251,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
         } else {
             int i = this.getGameRules().c("randomTickSpeed");
-            boolean flag = this.Y();
+            boolean flag = this.isRaining();
             boolean flag1 = this.X();
 
             this.methodProfiler.a("pollingChunks");
@@ -980,7 +980,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     protected void t() {
-        boolean flag = this.Y();
+        boolean flag = this.isRaining();
 
         super.t();
         if (this.n != this.o) {
@@ -991,7 +991,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.server.getPlayerList().a((Packet) (new PacketPlayOutGameStateChange(8, this.q)), this.worldProvider.getDimensionManager().getDimensionID());
         }
 
-        if (flag != this.Y()) {
+        if (flag != this.isRaining()) {
             if (flag) {
                 this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(2, 0.0F));
             } else {

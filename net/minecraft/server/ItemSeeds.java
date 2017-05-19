@@ -8,7 +8,7 @@ public class ItemSeeds extends Item {
     public ItemSeeds(Block block, Block block1) {
         this.a = block;
         this.b = block1;
-        this.a(CreativeModeTab.l);
+        this.b(CreativeModeTab.l);
     }
 
     public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {

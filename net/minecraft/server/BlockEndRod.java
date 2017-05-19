@@ -8,7 +8,7 @@ public class BlockEndRod extends BlockDirectional {
 
     protected BlockEndRod() {
         super(Material.ORIENTABLE);
-        this.y(this.blockStateList.getBlockData().set(BlockEndRod.FACING, EnumDirection.UP));
+        this.x(this.blockStateList.getBlockData().set(BlockEndRod.FACING, EnumDirection.UP));
         this.a(CreativeModeTab.c);
     }
 

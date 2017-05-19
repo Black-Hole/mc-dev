@@ -73,7 +73,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
         thread.setDaemon(true);
         thread.start();
-        DedicatedServer.LOGGER.info("Starting minecraft server version 1.12-pre2");
+        DedicatedServer.LOGGER.info("Starting minecraft server version 1.12-pre5");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
             DedicatedServer.LOGGER.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
         }
@@ -333,7 +333,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         while (!this.serverCommandQueue.isEmpty()) {
             ServerCommand servercommand = (ServerCommand) this.serverCommandQueue.remove(0);
 
-            this.getCommandHandler().b(servercommand.source, servercommand.command);
+            this.getCommandHandler().a(servercommand.source, servercommand.command);
         }
 
     }
@@ -541,7 +541,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     public String executeRemoteCommand(String s) {
         this.remoteControlCommandListener.clearMessages();
-        this.b.b(this.remoteControlCommandListener, s);
+        this.b.a(this.remoteControlCommandListener, s);
         return this.remoteControlCommandListener.getMessages();
     }
 

@@ -56,7 +56,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
 
         if (itemstack.getItem() == Items.BOOK) {
             itemstack = new ItemStack(Items.ENCHANTED_BOOK);
-            Items.ENCHANTED_BOOK.a(itemstack, new WeightedRandomEnchant(enchantment, i));
+            ItemEnchantedBook.a(itemstack, new WeightedRandomEnchant(enchantment, i));
         } else {
             itemstack.addEnchantment(enchantment, i);
         }

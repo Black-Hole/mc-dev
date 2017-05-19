@@ -17,7 +17,7 @@ public class BlockChorusFruit extends Block {
     protected BlockChorusFruit() {
         super(Material.PLANT, MaterialMapColor.A);
         this.a(CreativeModeTab.c);
-        this.y(this.blockStateList.getBlockData().set(BlockChorusFruit.a, Boolean.valueOf(false)).set(BlockChorusFruit.b, Boolean.valueOf(false)).set(BlockChorusFruit.c, Boolean.valueOf(false)).set(BlockChorusFruit.d, Boolean.valueOf(false)).set(BlockChorusFruit.e, Boolean.valueOf(false)).set(BlockChorusFruit.f, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockChorusFruit.a, Boolean.valueOf(false)).set(BlockChorusFruit.b, Boolean.valueOf(false)).set(BlockChorusFruit.c, Boolean.valueOf(false)).set(BlockChorusFruit.d, Boolean.valueOf(false)).set(BlockChorusFruit.e, Boolean.valueOf(false)).set(BlockChorusFruit.f, Boolean.valueOf(false)));
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -32,7 +32,7 @@ public class BlockChorusFruit extends Block {
     }
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        iblockdata = iblockdata.b(iblockaccess, blockposition);
+        iblockdata = iblockdata.c(iblockaccess, blockposition);
         float f = 0.1875F;
         float f1 = ((Boolean) iblockdata.get(BlockChorusFruit.d)).booleanValue() ? 0.0F : 0.1875F;
         float f2 = ((Boolean) iblockdata.get(BlockChorusFruit.f)).booleanValue() ? 0.0F : 0.1875F;
@@ -46,7 +46,7 @@ public class BlockChorusFruit extends Block {
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
         if (!flag) {
-            iblockdata = iblockdata.b((IBlockAccess) world, blockposition);
+            iblockdata = iblockdata.c(world, blockposition);
         }
 
         float f = 0.1875F;

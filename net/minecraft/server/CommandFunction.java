@@ -21,8 +21,8 @@ public class CommandFunction extends CommandAbstract {
         return "commands.function.usage";
     }
 
-    public void execute(final MinecraftServer minecraftserver, final ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length != 1) {
+    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
+        if (astring.length != 1 && astring.length != 3) {
             throw new ExceptionUsage("commands.function.usage", new Object[0]);
         } else {
             MinecraftKey minecraftkey = new MinecraftKey(astring[0]);
@@ -31,11 +31,36 @@ public class CommandFunction extends CommandAbstract {
             if (customfunction == null) {
                 throw new CommandException("commands.function.unknown", new Object[] { minecraftkey});
             } else {
-                int i = customfunction.a(new CommandListenerWrapper(icommandlistener) {
-                    public boolean a(int i, String s) {
-                        return super.a(i, s) && minecraftserver.aL().g().a(i, s);
+                if (astring.length == 3) {
+                    String s = astring[1];
+                    boolean flag;
+
+                    if ("if".equals(s)) {
+                        flag = true;
+                    } else {
+                        if (!"unless".equals(s)) {
+                            throw new ExceptionUsage("commands.function.usage", new Object[0]);
+                        }
+
+                        flag = false;
                     }
-                });
+
+                    boolean flag1 = false;
+
+                    try {
+                        c(minecraftserver, icommandlistener, astring[2]);
+                        flag1 = true;
+                    } catch (ExceptionEntityNotFound exceptionentitynotfound) {
+                        ;
+                    }
+
+                    if (flag != flag1) {
+                        icommandlistener.sendMessage(new ChatMessage("commands.function.skipped", new Object[] { minecraftkey}));
+                        return;
+                    }
+                }
+
+                int i = minecraftserver.aL().a(customfunction, CommandListenerWrapper.a(icommandlistener).i().a(2).a(false));
 
                 a(icommandlistener, (ICommand) this, "commands.function.success", new Object[] { minecraftkey, Integer.valueOf(i)});
             }
@@ -43,6 +68,6 @@ public class CommandFunction extends CommandAbstract {
     }
 
     public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, (Collection) minecraftserver.aL().d().keySet()) : Collections.emptyList();
+        return astring.length == 1 ? a(astring, (Collection) minecraftserver.aL().d().keySet()) : (astring.length == 2 ? a(astring, new String[] { "if", "unless"}) : (astring.length == 3 ? a(astring, minecraftserver.getPlayers()) : Collections.emptyList()));
     }
 }

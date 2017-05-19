@@ -189,7 +189,7 @@ public class ContainerEnchantTable extends Container {
                         WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(k);
 
                         if (flag) {
-                            Items.ENCHANTED_BOOK.a(itemstack, weightedrandomenchant);
+                            ItemEnchantedBook.a(itemstack, weightedrandomenchant);
                         } else {
                             itemstack.addEnchantment(weightedrandomenchant.enchantment, weightedrandomenchant.level);
                         }

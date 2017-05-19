@@ -168,7 +168,7 @@ public class DataWatcher {
                         arraylist = Lists.newArrayList();
                     }
 
-                    arraylist.add(datawatcher_item);
+                    arraylist.add(datawatcher_item.d());
                 }
             }
 

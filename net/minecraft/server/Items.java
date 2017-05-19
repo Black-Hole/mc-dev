@@ -172,7 +172,7 @@ public class Items {
     public static final Item PUMPKIN_PIE;
     public static final Item FIREWORKS;
     public static final Item FIREWORK_CHARGE;
-    public static final ItemEnchantedBook ENCHANTED_BOOK;
+    public static final Item ENCHANTED_BOOK;
     public static final Item COMPARATOR;
     public static final Item NETHERBRICK;
     public static final Item QUARTZ;
@@ -397,7 +397,7 @@ public class Items {
             PUMPKIN_PIE = get("pumpkin_pie");
             FIREWORKS = get("fireworks");
             FIREWORK_CHARGE = get("firework_charge");
-            ENCHANTED_BOOK = (ItemEnchantedBook) get("enchanted_book");
+            ENCHANTED_BOOK = get("enchanted_book");
             COMPARATOR = get("comparator");
             NETHERBRICK = get("netherbrick");
             QUARTZ = get("quartz");

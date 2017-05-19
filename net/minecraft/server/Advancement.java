@@ -42,11 +42,14 @@ public class Advancement {
             this.h = new ChatComponentText("[");
             this.h.getChatModifier().setColor(advancementdisplay.e().c());
             IChatBaseComponent ichatbasecomponent = advancementdisplay.a().f();
+            ChatComponentText chatcomponenttext = new ChatComponentText("");
             IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent.f();
 
-            ichatbasecomponent1.a("\n");
-            ichatbasecomponent1.addSibling(advancementdisplay.b());
-            ichatbasecomponent.getChatModifier().setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatbasecomponent1));
+            ichatbasecomponent1.getChatModifier().setColor(advancementdisplay.e().c());
+            chatcomponenttext.addSibling(ichatbasecomponent1);
+            chatcomponenttext.a("\n");
+            chatcomponenttext.addSibling(advancementdisplay.b());
+            ichatbasecomponent.getChatModifier().setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, chatcomponenttext));
             this.h.addSibling(ichatbasecomponent);
             this.h.a("]");
         }
@@ -198,19 +201,27 @@ public class Advancement {
                 String[][] astring = new String[jsonarray.size()][];
 
                 int i;
+                int j;
 
-                for (int j = 0; j < jsonarray.size(); ++j) {
-                    JsonArray jsonarray1 = ChatDeserializer.n(jsonarray.get(j), "requirements[" + j + "]");
+                for (i = 0; i < jsonarray.size(); ++i) {
+                    JsonArray jsonarray1 = ChatDeserializer.n(jsonarray.get(i), "requirements[" + i + "]");
 
-                    astring[j] = new String[jsonarray1.size()];
+                    astring[i] = new String[jsonarray1.size()];
 
-                    for (i = 0; i < jsonarray1.size(); ++i) {
-                        astring[j][i] = ChatDeserializer.a(jsonarray1.get(i), "requirements[" + j + "][" + i + "]");
+                    for (j = 0; j < jsonarray1.size(); ++j) {
+                        astring[i][j] = ChatDeserializer.a(jsonarray1.get(j), "requirements[" + i + "][" + j + "]");
                     }
                 }
 
                 if (astring.length == 0) {
-                    astring = new String[][] { (String[]) map.keySet().toArray(new String[0])};
+                    astring = new String[map.size()][];
+                    i = 0;
+
+                    String s;
+
+                    for (Iterator iterator = map.keySet().iterator(); iterator.hasNext(); astring[i++] = new String[] { s}) {
+                        s = (String) iterator.next();
+                    }
                 }
 
                 String[][] astring1 = astring;
@@ -218,8 +229,8 @@ public class Advancement {
 
                 int l;
 
-                for (i = 0; i < k; ++i) {
-                    String[] astring2 = astring1[i];
+                for (j = 0; j < k; ++j) {
+                    String[] astring2 = astring1[j];
 
                     if (astring2.length == 0 && map.isEmpty()) {
                         throw new JsonSyntaxException("Requirement entry cannot be empty");
@@ -230,18 +241,18 @@ public class Advancement {
                     l = astring2.length;
 
                     for (int i1 = 0; i1 < l; ++i1) {
-                        String s = astring3[i1];
+                        String s1 = astring3[i1];
 
-                        if (!map.containsKey(s)) {
-                            throw new JsonSyntaxException("Unknown required criterion \'" + s + "\'");
+                        if (!map.containsKey(s1)) {
+                            throw new JsonSyntaxException("Unknown required criterion \'" + s1 + "\'");
                         }
                     }
                 }
 
-                Iterator iterator = map.keySet().iterator();
+                Iterator iterator1 = map.keySet().iterator();
 
-                while (iterator.hasNext()) {
-                    String s1 = (String) iterator.next();
+                while (iterator1.hasNext()) {
+                    String s2 = (String) iterator1.next();
                     boolean flag = false;
                     String[][] astring4 = astring;
                     int j1 = astring.length;
@@ -252,7 +263,7 @@ public class Advancement {
                         if (l < j1) {
                             String[] astring5 = astring4[l];
 
-                            if (!ArrayUtils.contains(astring5, s1)) {
+                            if (!ArrayUtils.contains(astring5, s2)) {
                                 ++l;
                                 continue;
                             }
@@ -261,7 +272,7 @@ public class Advancement {
                         }
 
                         if (!flag) {
-                            throw new JsonSyntaxException("Criterion \'" + s1 + "\' isn\'t a requirement for completion. This isn\'t supported behaviour, all criteria must be required.");
+                            throw new JsonSyntaxException("Criterion \'" + s2 + "\' isn\'t a requirement for completion. This isn\'t supported behaviour, all criteria must be required.");
                         }
                         break;
                     }

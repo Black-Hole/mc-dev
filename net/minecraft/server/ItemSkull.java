@@ -9,7 +9,7 @@ public class ItemSkull extends Item {
     private static final String[] a = new String[] { "skeleton", "wither", "zombie", "char", "creeper", "dragon"};
 
     public ItemSkull() {
-        this.a(CreativeModeTab.c);
+        this.b(CreativeModeTab.c);
         this.setMaxDurability(0);
         this.a(true);
     }
@@ -68,6 +68,10 @@ public class ItemSkull extends Item {
 
                         tileentityskull.setRotation(i);
                         Blocks.SKULL.a(world, blockposition, tileentityskull);
+                    }
+
+                    if (entityhuman instanceof EntityPlayer) {
+                        CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition, itemstack);
                     }
 
                     itemstack.subtract(1);

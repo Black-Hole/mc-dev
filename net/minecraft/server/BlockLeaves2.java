@@ -16,7 +16,7 @@ public class BlockLeaves2 extends BlockLeaves {
     });
 
     public BlockLeaves2() {
-        this.y(this.blockStateList.getBlockData().set(BlockLeaves2.VARIANT, BlockWood.EnumLogVariant.ACACIA).set(BlockLeaves2.CHECK_DECAY, Boolean.valueOf(true)).set(BlockLeaves2.DECAYABLE, Boolean.valueOf(true)));
+        this.x(this.blockStateList.getBlockData().set(BlockLeaves2.VARIANT, BlockWood.EnumLogVariant.ACACIA).set(BlockLeaves2.CHECK_DECAY, Boolean.valueOf(true)).set(BlockLeaves2.DECAYABLE, Boolean.valueOf(true)));
     }
 
     protected void a(World world, BlockPosition blockposition, IBlockData iblockdata, int i) {
@@ -34,7 +34,7 @@ public class BlockLeaves2 extends BlockLeaves {
         return new ItemStack(this, 1, iblockdata.getBlock().toLegacyData(iblockdata) & 3);
     }
 
-    protected ItemStack w(IBlockData iblockdata) {
+    protected ItemStack v(IBlockData iblockdata) {
         return new ItemStack(Item.getItemOf(this), 1, ((BlockWood.EnumLogVariant) iblockdata.get(BlockLeaves2.VARIANT)).a() - 4);
     }
 

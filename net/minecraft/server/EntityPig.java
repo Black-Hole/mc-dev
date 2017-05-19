@@ -157,7 +157,7 @@ public class EntityPig extends EntityAnimal {
 
             entitypigzombie.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
             entitypigzombie.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
-            entitypigzombie.setAI(this.hasAI());
+            entitypigzombie.setNoAI(this.isNoAI());
             if (this.hasCustomName()) {
                 entitypigzombie.setCustomName(this.getCustomName());
                 entitypigzombie.setCustomNameVisible(this.getCustomNameVisible());

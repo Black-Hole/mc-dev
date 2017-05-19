@@ -136,6 +136,6 @@ public class NavigationFlying extends NavigationAbstract {
     }
 
     public boolean a(BlockPosition blockposition) {
-        return this.b.getType(blockposition).r();
+        return this.b.getType(blockposition).q();
     }
 }

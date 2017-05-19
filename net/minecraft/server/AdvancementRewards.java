@@ -110,7 +110,7 @@ public class AdvancementRewards {
                 }
             };
 
-            customfunction.a(icommandlistener);
+            minecraftserver.aL().a(customfunction, icommandlistener);
         }
 
     }

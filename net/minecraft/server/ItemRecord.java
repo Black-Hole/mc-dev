@@ -13,7 +13,7 @@ public class ItemRecord extends Item {
         this.c = "item.record." + s + ".desc";
         this.b = soundeffect;
         this.maxStackSize = 1;
-        this.a(CreativeModeTab.f);
+        this.b(CreativeModeTab.f);
         ItemRecord.a.put(this.b, this);
     }
 

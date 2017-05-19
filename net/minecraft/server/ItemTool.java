@@ -20,7 +20,7 @@ public class ItemTool extends Item {
         this.a = item_enumtoolmaterial.b();
         this.b = f + item_enumtoolmaterial.c();
         this.c = f1;
-        this.a(CreativeModeTab.i);
+        this.b(CreativeModeTab.i);
     }
 
     protected ItemTool(Item.EnumToolMaterial item_enumtoolmaterial, Set<Block> set) {

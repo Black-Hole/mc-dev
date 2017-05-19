@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class RecipeItemStack implements Predicate<ItemStack> {
 
-    public static final RecipeItemStack a = new RecipeItemStack(new ItemStack[0]) {
+    public static final RecipeItemStack a = new RecipeItemStack(new ItemStack[0], null) {
         public boolean a(@Nullable ItemStack itemstack) {
             return itemstack.isEmpty();
         }
@@ -16,7 +16,7 @@ public class RecipeItemStack implements Predicate<ItemStack> {
     };
     public final ItemStack[] choices;
 
-    public RecipeItemStack(ItemStack... aitemstack) {
+    private RecipeItemStack(ItemStack... aitemstack) {
         this.choices = aitemstack;
     }
 
@@ -58,10 +58,27 @@ public class RecipeItemStack implements Predicate<ItemStack> {
     }
 
     public static RecipeItemStack a(ItemStack... aitemstack) {
-        return aitemstack.length == 0 ? RecipeItemStack.a : new RecipeItemStack(aitemstack);
+        if (aitemstack.length > 0) {
+            ItemStack[] aitemstack1 = aitemstack;
+            int i = aitemstack.length;
+
+            for (int j = 0; j < i; ++j) {
+                ItemStack itemstack = aitemstack1[j];
+
+                if (!itemstack.isEmpty()) {
+                    return new RecipeItemStack(aitemstack);
+                }
+            }
+        }
+
+        return RecipeItemStack.a;
     }
 
     public boolean apply(@Nullable Object object) {
         return this.a((ItemStack) object);
+    }
+
+    RecipeItemStack(ItemStack[] aitemstack, Object object) {
+        this(aitemstack);
     }
 }

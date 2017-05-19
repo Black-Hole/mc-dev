@@ -4,7 +4,7 @@ public class ItemShield extends Item {
 
     public ItemShield() {
         this.maxStackSize = 1;
-        this.a(CreativeModeTab.j);
+        this.b(CreativeModeTab.j);
         this.setMaxDurability(336);
         this.a(new MinecraftKey("blocking"), new IDynamicTexture() {
         });

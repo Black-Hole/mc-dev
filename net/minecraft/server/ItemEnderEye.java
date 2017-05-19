@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class ItemEnderEye extends Item {
 
     public ItemEnderEye() {
-        this.a(CreativeModeTab.f);
+        this.b(CreativeModeTab.f);
     }
 
     public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {

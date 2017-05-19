@@ -11,7 +11,7 @@ public class BlockPistonMoving extends BlockTileEntity {
 
     public BlockPistonMoving() {
         super(Material.PISTON);
-        this.y(this.blockStateList.getBlockData().set(BlockPistonMoving.FACING, EnumDirection.NORTH).set(BlockPistonMoving.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT));
+        this.x(this.blockStateList.getBlockData().set(BlockPistonMoving.FACING, EnumDirection.NORTH).set(BlockPistonMoving.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT));
         this.c(-1.0F);
     }
 

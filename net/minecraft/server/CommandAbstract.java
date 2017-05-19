@@ -503,7 +503,7 @@ public abstract class CommandAbstract implements ICommand {
         HashMap hashmap = Maps.newHashMap();
 
         if ("default".equals(s)) {
-            return block.getBlockData().u();
+            return block.getBlockData().t();
         } else {
             BlockStateList blockstatelist = block.s();
             Iterator iterator = CommandAbstract.b.split(s).iterator();

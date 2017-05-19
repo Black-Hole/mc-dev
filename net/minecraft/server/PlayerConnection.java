@@ -158,7 +158,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     }
 
     private static boolean b(PacketPlayInFlying packetplayinflying) {
-        return Doubles.isFinite(packetplayinflying.a(0.0D)) && Doubles.isFinite(packetplayinflying.b(0.0D)) && Doubles.isFinite(packetplayinflying.c(0.0D)) && Floats.isFinite(packetplayinflying.b(0.0F)) && Floats.isFinite(packetplayinflying.a(0.0F)) ? false : Math.abs(packetplayinflying.a(0.0D)) <= 3.0E7D && Math.abs(packetplayinflying.c(0.0D)) <= 3.0E7D;
+        return Doubles.isFinite(packetplayinflying.a(0.0D)) && Doubles.isFinite(packetplayinflying.b(0.0D)) && Doubles.isFinite(packetplayinflying.c(0.0D)) && Floats.isFinite(packetplayinflying.b(0.0F)) && Floats.isFinite(packetplayinflying.a(0.0F)) ? Math.abs(packetplayinflying.a(0.0D)) > 3.0E7D || Math.abs(packetplayinflying.b(0.0D)) > 3.0E7D || Math.abs(packetplayinflying.c(0.0D)) > 3.0E7D : true;
     }
 
     private static boolean b(PacketPlayInVehicleMove packetplayinvehiclemove) {
@@ -260,6 +260,19 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         } else if (packetplayinrecipedisplayed.a() == PacketPlayInRecipeDisplayed.b) {
             this.player.F().a(packetplayinrecipedisplayed.c());
             this.player.F().b(packetplayinrecipedisplayed.d());
+        }
+
+    }
+
+    public void a(PacketPlayInAdvancements packetplayinadvancements) {
+        PlayerConnectionUtils.ensureMainThread(packetplayinadvancements, this, this.player.x());
+        if (packetplayinadvancements.b() == PacketPlayInAdvancements.Status.OPENED_TAB) {
+            MinecraftKey minecraftkey = packetplayinadvancements.c();
+            Advancement advancement = this.minecraftServer.getAdvancementData().a(minecraftkey);
+
+            if (advancement != null) {
+                this.player.getAdvancementData().a(advancement);
+            }
         }
 
     }
@@ -679,7 +692,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     }
 
     private void handleCommand(String s) {
-        this.minecraftServer.getCommandHandler().b(this.player, s);
+        this.minecraftServer.getCommandHandler().a(this.player, s);
     }
 
     public void a(PacketPlayInArmAnimation packetplayinarmanimation) {
@@ -806,6 +819,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             if (this.player.viewingCredits) {
                 this.player.viewingCredits = false;
                 this.player = this.minecraftServer.getPlayerList().moveToWorld(this.player, 0, true);
+                CriterionTriggers.u.a(this.player, DimensionManager.THE_END, DimensionManager.OVERWORLD);
             } else {
                 if (this.player.getHealth() > 0.0F) {
                     return;
@@ -1312,7 +1326,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             if (packetplayincustompayload.b() != null && packetplayincustompayload.b().readableBytes() >= 1) {
                                 String s4 = SharedConstants.a(packetplayincustompayload.b().e(32767));
 
-                                if (s4.length() <= 30) {
+                                if (s4.length() <= 35) {
                                     containeranvil.a(s4);
                                 }
                             } else {

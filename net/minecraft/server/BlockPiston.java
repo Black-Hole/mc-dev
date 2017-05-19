@@ -18,14 +18,14 @@ public class BlockPiston extends BlockDirectional {
 
     public BlockPiston(boolean flag) {
         super(Material.PISTON);
-        this.y(this.blockStateList.getBlockData().set(BlockPiston.FACING, EnumDirection.NORTH).set(BlockPiston.EXTENDED, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockPiston.FACING, EnumDirection.NORTH).set(BlockPiston.EXTENDED, Boolean.valueOf(false)));
         this.sticky = flag;
         this.a(SoundEffectType.d);
         this.c(0.5F);
         this.a(CreativeModeTab.d);
     }
 
-    public boolean u(IBlockData iblockdata) {
+    public boolean t(IBlockData iblockdata) {
         return !((Boolean) iblockdata.get(BlockPiston.EXTENDED)).booleanValue();
     }
 
@@ -61,7 +61,7 @@ public class BlockPiston extends BlockDirectional {
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
-        a(blockposition, axisalignedbb, list, iblockdata.d(world, blockposition));
+        a(blockposition, axisalignedbb, list, iblockdata.e(world, blockposition));
     }
 
     public boolean b(IBlockData iblockdata) {
@@ -193,7 +193,7 @@ public class BlockPiston extends BlockDirectional {
                     }
                 }
 
-                if (!flag1 && iblockdata1.getMaterial() != Material.AIR && a(iblockdata1, world, blockposition1, enumdirection.opposite(), false, enumdirection) && (iblockdata1.p() == EnumPistonReaction.NORMAL || block == Blocks.PISTON || block == Blocks.STICKY_PISTON)) {
+                if (!flag1 && iblockdata1.getMaterial() != Material.AIR && a(iblockdata1, world, blockposition1, enumdirection.opposite(), false, enumdirection) && (iblockdata1.o() == EnumPistonReaction.NORMAL || block == Blocks.PISTON || block == Blocks.STICKY_PISTON)) {
                     this.a(world, blockposition, enumdirection, false);
                 }
             } else {
@@ -231,7 +231,7 @@ public class BlockPiston extends BlockDirectional {
                         return false;
                     }
 
-                    switch (iblockdata.p()) {
+                    switch (iblockdata.o()) {
                     case BLOCK:
                         return false;
 
@@ -270,7 +270,7 @@ public class BlockPiston extends BlockDirectional {
             for (int i = 0; i < list.size(); ++i) {
                 BlockPosition blockposition1 = (BlockPosition) list.get(i);
 
-                arraylist.add(world.getType(blockposition1).b((IBlockAccess) world, blockposition1));
+                arraylist.add(world.getType(blockposition1).c(world, blockposition1));
             }
 
             List list1 = pistonextendschecker.getBrokenBlocks();

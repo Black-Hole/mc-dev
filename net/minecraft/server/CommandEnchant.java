@@ -55,16 +55,14 @@ public class CommandEnchant extends CommandAbstract {
                     if (itemstack.hasTag()) {
                         NBTTagList nbttaglist = itemstack.getEnchantments();
 
-                        if (nbttaglist != null) {
-                            for (int j = 0; j < nbttaglist.size(); ++j) {
-                                short short0 = nbttaglist.get(j).getShort("id");
+                        for (int j = 0; j < nbttaglist.size(); ++j) {
+                            short short0 = nbttaglist.get(j).getShort("id");
 
-                                if (Enchantment.c(short0) != null) {
-                                    Enchantment enchantment1 = Enchantment.c(short0);
+                            if (Enchantment.c(short0) != null) {
+                                Enchantment enchantment1 = Enchantment.c(short0);
 
-                                    if (!enchantment.c(enchantment1)) {
-                                        throw new CommandException("commands.enchant.cantCombine", new Object[] { enchantment.d(i), enchantment1.d(nbttaglist.get(j).getShort("lvl"))});
-                                    }
+                                if (!enchantment.c(enchantment1)) {
+                                    throw new CommandException("commands.enchant.cantCombine", new Object[] { enchantment.d(i), enchantment1.d(nbttaglist.get(j).getShort("lvl"))});
                                 }
                             }
                         }

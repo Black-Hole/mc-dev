@@ -58,12 +58,6 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
         this.d.a(PathType.WATER, this.i);
     }
 
-    protected boolean a(BlockPosition blockposition) {
-        IBlockData iblockdata = this.a.getType(blockposition);
-
-        return iblockdata.getMaterial() == Material.AIR ? true : !iblockdata.h();
-    }
-
     public void e() {
         this.d.getControllerLook().a(this.e, 10.0F, (float) this.d.N());
         if (!this.d.isSitting()) {
@@ -97,6 +91,6 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
         BlockPosition blockposition = new BlockPosition(i + l, k - 1, j + i1);
         IBlockData iblockdata = this.a.getType(blockposition);
 
-        return iblockdata.d(this.a, blockposition, EnumDirection.DOWN) == EnumBlockFaceShape.SOLID && this.a(blockposition.up()) && this.a(blockposition.up(2));
+        return iblockdata.d(this.a, blockposition, EnumDirection.DOWN) == EnumBlockFaceShape.SOLID && this.a.isEmpty(blockposition.up()) && this.a.isEmpty(blockposition.up(2));
     }
 }

@@ -9,7 +9,7 @@ public class ItemBucket extends Item {
     public ItemBucket(Block block) {
         this.maxStackSize = 1;
         this.a = block;
-        this.a(CreativeModeTab.f);
+        this.b(CreativeModeTab.f);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
@@ -55,7 +55,7 @@ public class ItemBucket extends Item {
                     return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
                 } else if (this.a(entityhuman, world, blockposition1)) {
                     if (entityhuman instanceof EntityPlayer) {
-                        CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition, itemstack);
+                        CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition1, itemstack);
                     }
 
                     entityhuman.b(StatisticList.b((Item) this));

@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -73,16 +74,27 @@ public class ShapelessRecipes extends IRecipe {
     public static ShapelessRecipes a(JsonObject jsonobject) {
         String s = ChatDeserializer.a(jsonobject, "group", "");
         NonNullList nonnulllist = a(ChatDeserializer.u(jsonobject, "ingredients"));
-        ItemStack itemstack = ShapedRecipes.a(ChatDeserializer.t(jsonobject, "result"), true);
 
-        return new ShapelessRecipes(s, itemstack, nonnulllist);
+        if (nonnulllist.isEmpty()) {
+            throw new JsonParseException("No ingredients for shapeless recipe");
+        } else if (nonnulllist.size() > 9) {
+            throw new JsonParseException("Too many ingredients for shapeless recipe");
+        } else {
+            ItemStack itemstack = ShapedRecipes.a(ChatDeserializer.t(jsonobject, "result"), true);
+
+            return new ShapelessRecipes(s, itemstack, nonnulllist);
+        }
     }
 
     private static NonNullList<RecipeItemStack> a(JsonArray jsonarray) {
         NonNullList nonnulllist = NonNullList.a();
 
         for (int i = 0; i < jsonarray.size(); ++i) {
-            nonnulllist.add(ShapedRecipes.a(jsonarray.get(i)));
+            RecipeItemStack recipeitemstack = ShapedRecipes.a(jsonarray.get(i));
+
+            if (recipeitemstack != RecipeItemStack.a) {
+                nonnulllist.add(recipeitemstack);
+            }
         }
 
         return nonnulllist;

@@ -6,7 +6,7 @@ import java.util.Random;
 public class ItemArmorStand extends Item {
 
     public ItemArmorStand() {
-        this.a(CreativeModeTab.c);
+        this.b(CreativeModeTab.c);
     }
 
     public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {

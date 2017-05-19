@@ -5,7 +5,7 @@ public class ItemShears extends Item {
     public ItemShears() {
         this.d(1);
         this.setMaxDurability(238);
-        this.a(CreativeModeTab.i);
+        this.b(CreativeModeTab.i);
     }
 
     public boolean a(ItemStack itemstack, World world, IBlockData iblockdata, BlockPosition blockposition, EntityLiving entityliving) {

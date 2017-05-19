@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class ItemBed extends Item {
 
     public ItemBed() {
-        this.a(CreativeModeTab.c);
+        this.b(CreativeModeTab.c);
         this.setMaxDurability(0);
         this.a(true);
     }
@@ -33,7 +33,7 @@ public class ItemBed extends Item {
                 boolean flag2 = flag || world.isEmpty(blockposition);
                 boolean flag3 = flag1 || world.isEmpty(blockposition1);
 
-                if (flag2 && flag3 && world.getType(blockposition.down()).r() && world.getType(blockposition1.down()).r()) {
+                if (flag2 && flag3 && world.getType(blockposition.down()).q() && world.getType(blockposition1.down()).q()) {
                     IBlockData iblockdata2 = Blocks.BED.getBlockData().set(BlockBed.OCCUPIED, Boolean.valueOf(false)).set(BlockBed.FACING, enumdirection1).set(BlockBed.PART, BlockBed.EnumBedPart.FOOT);
 
                     world.setTypeAndData(blockposition, iblockdata2, 10);
@@ -55,6 +55,10 @@ public class ItemBed extends Item {
 
                     world.update(blockposition, block, false);
                     world.update(blockposition1, iblockdata1.getBlock(), false);
+                    if (entityhuman instanceof EntityPlayer) {
+                        CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition, itemstack);
+                    }
+
                     itemstack.subtract(1);
                     return EnumInteractionResult.SUCCESS;
                 } else {

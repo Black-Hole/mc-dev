@@ -10,6 +10,7 @@ public abstract class Enchantment {
     public static final RegistryMaterials<MinecraftKey, Enchantment> enchantments = new RegistryMaterials();
     private final EnumItemSlot[] a;
     private final Enchantment.Rarity e;
+    @Nullable
     public EnchantmentSlotType itemTarget;
     protected String d;
 

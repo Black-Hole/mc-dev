@@ -62,7 +62,7 @@ public class DefinedStructure {
                         nbttagcompound.remove("y");
                         nbttagcompound.remove("z");
                         arraylist1.add(new DefinedStructure.BlockInfo(blockposition5, iblockdata, nbttagcompound));
-                    } else if (!iblockdata.b() && !iblockdata.h()) {
+                    } else if (!iblockdata.b() && !iblockdata.g()) {
                         arraylist2.add(new DefinedStructure.BlockInfo(blockposition5, iblockdata, (NBTTagCompound) null));
                     } else {
                         arraylist.add(new DefinedStructure.BlockInfo(blockposition5, iblockdata, (NBTTagCompound) null));
@@ -467,7 +467,7 @@ public class DefinedStructure {
         nbttagcompound.set("entities", nbttaglist1);
         nbttagcompound.set("size", this.a(new int[] { this.c.getX(), this.c.getY(), this.c.getZ()}));
         nbttagcompound.setString("author", this.d);
-        nbttagcompound.setInt("DataVersion", 1133);
+        nbttagcompound.setInt("DataVersion", 1136);
         return nbttagcompound;
     }
 

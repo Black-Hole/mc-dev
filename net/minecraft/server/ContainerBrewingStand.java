@@ -9,9 +9,9 @@ public class ContainerBrewingStand extends Container {
 
     public ContainerBrewingStand(PlayerInventory playerinventory, IInventory iinventory) {
         this.brewingStand = iinventory;
-        this.a((Slot) (new ContainerBrewingStand.SlotPotionBottle(playerinventory.player, iinventory, 0, 56, 51)));
-        this.a((Slot) (new ContainerBrewingStand.SlotPotionBottle(playerinventory.player, iinventory, 1, 79, 58)));
-        this.a((Slot) (new ContainerBrewingStand.SlotPotionBottle(playerinventory.player, iinventory, 2, 102, 51)));
+        this.a((Slot) (new ContainerBrewingStand.SlotPotionBottle(iinventory, 0, 56, 51)));
+        this.a((Slot) (new ContainerBrewingStand.SlotPotionBottle(iinventory, 1, 79, 58)));
+        this.a((Slot) (new ContainerBrewingStand.SlotPotionBottle(iinventory, 2, 102, 51)));
         this.f = this.a((Slot) (new ContainerBrewingStand.SlotBrewing(iinventory, 3, 79, 17)));
         this.a((Slot) (new ContainerBrewingStand.a(iinventory, 4, 17, 17)));
 
@@ -149,11 +149,8 @@ public class ContainerBrewingStand extends Container {
 
     static class SlotPotionBottle extends Slot {
 
-        private final EntityHuman a;
-
-        public SlotPotionBottle(EntityHuman entityhuman, IInventory iinventory, int i, int j, int k) {
+        public SlotPotionBottle(IInventory iinventory, int i, int j, int k) {
             super(iinventory, i, j, k);
-            this.a = entityhuman;
         }
 
         public boolean isAllowed(ItemStack itemstack) {

@@ -4,7 +4,7 @@ public class ItemSign extends Item {
 
     public ItemSign() {
         this.maxStackSize = 16;
-        this.a(CreativeModeTab.c);
+        this.b(CreativeModeTab.c);
     }
 
     public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
@@ -32,6 +32,10 @@ public class ItemSign extends Item {
 
                     if (tileentity instanceof TileEntitySign && !ItemBlock.a(world, entityhuman, blockposition, itemstack)) {
                         entityhuman.openSign((TileEntitySign) tileentity);
+                    }
+
+                    if (entityhuman instanceof EntityPlayer) {
+                        CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition, itemstack);
                     }
 
                     itemstack.subtract(1);

@@ -10,17 +10,17 @@ public class PlayerInventory implements IInventory {
     public final NonNullList<ItemStack> items;
     public final NonNullList<ItemStack> armor;
     public final NonNullList<ItemStack> extraSlots;
-    private final List<NonNullList<ItemStack>> g;
+    private final List<NonNullList<ItemStack>> f;
     public int itemInHandIndex;
     public EntityHuman player;
     private ItemStack carried;
-    public boolean f;
+    private int h;
 
     public PlayerInventory(EntityHuman entityhuman) {
         this.items = NonNullList.a(36, ItemStack.a);
         this.armor = NonNullList.a(4, ItemStack.a);
         this.extraSlots = NonNullList.a(1, ItemStack.a);
-        this.g = Arrays.asList(new NonNullList[] { this.items, this.armor, this.extraSlots});
+        this.f = Arrays.asList(new NonNullList[] { this.items, this.armor, this.extraSlots});
         this.carried = ItemStack.a;
         this.player = entityhuman;
     }
@@ -139,7 +139,7 @@ public class PlayerInventory implements IInventory {
         return k;
     }
 
-    private int i(ItemStack itemstack) {
+    private int h(ItemStack itemstack) {
         int i = this.firstPartial(itemstack);
 
         if (i == -1) {
@@ -200,7 +200,7 @@ public class PlayerInventory implements IInventory {
     }
 
     public void n() {
-        Iterator iterator = this.g.iterator();
+        Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
             NonNullList nonnulllist = (NonNullList) iterator.next();
@@ -245,7 +245,7 @@ public class PlayerInventory implements IInventory {
                     do {
                         j = itemstack.getCount();
                         if (i == -1) {
-                            itemstack.setCount(this.i(itemstack));
+                            itemstack.setCount(this.h(itemstack));
                         } else {
                             itemstack.setCount(this.d(i, itemstack));
                         }
@@ -307,7 +307,7 @@ public class PlayerInventory implements IInventory {
 
         NonNullList nonnulllist1;
 
-        for (Iterator iterator = this.g.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
+        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
             nonnulllist1 = (NonNullList) iterator.next();
             if (i < nonnulllist1.size()) {
                 nonnulllist = nonnulllist1;
@@ -319,7 +319,7 @@ public class PlayerInventory implements IInventory {
     }
 
     public void e(ItemStack itemstack) {
-        Iterator iterator = this.g.iterator();
+        Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
             NonNullList nonnulllist = (NonNullList) iterator.next();
@@ -339,7 +339,7 @@ public class PlayerInventory implements IInventory {
 
         NonNullList nonnulllist1;
 
-        for (Iterator iterator = this.g.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
+        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
             nonnulllist1 = (NonNullList) iterator.next();
             if (i < nonnulllist1.size()) {
                 nonnulllist = nonnulllist1;
@@ -362,7 +362,7 @@ public class PlayerInventory implements IInventory {
 
         NonNullList nonnulllist1;
 
-        for (Iterator iterator = this.g.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
+        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
             nonnulllist1 = (NonNullList) iterator.next();
             if (i < nonnulllist1.size()) {
                 nonnulllist = nonnulllist1;
@@ -488,7 +488,7 @@ public class PlayerInventory implements IInventory {
 
         NonNullList nonnulllist1;
 
-        for (Iterator iterator = this.g.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
+        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
             nonnulllist1 = (NonNullList) iterator.next();
             if (i < nonnulllist1.size()) {
                 nonnulllist = nonnulllist1;
@@ -542,7 +542,7 @@ public class PlayerInventory implements IInventory {
     }
 
     public void o() {
-        Iterator iterator = this.g.iterator();
+        Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
             List list = (List) iterator.next();
@@ -560,7 +560,7 @@ public class PlayerInventory implements IInventory {
     }
 
     public void update() {
-        this.f = true;
+        ++this.h;
     }
 
     public void setCarried(ItemStack itemstack) {
@@ -576,7 +576,7 @@ public class PlayerInventory implements IInventory {
     }
 
     public boolean g(ItemStack itemstack) {
-        Iterator iterator = this.g.iterator();
+        Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
             List list = (List) iterator.next();
@@ -621,7 +621,7 @@ public class PlayerInventory implements IInventory {
     }
 
     public void clear() {
-        Iterator iterator = this.g.iterator();
+        Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
             List list = (List) iterator.next();

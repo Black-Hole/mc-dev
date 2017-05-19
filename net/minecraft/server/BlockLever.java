@@ -16,7 +16,7 @@ public class BlockLever extends Block {
 
     protected BlockLever() {
         super(Material.ORIENTABLE);
-        this.y(this.blockStateList.getBlockData().set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH).set(BlockLever.POWERED, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH).set(BlockLever.POWERED, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 
@@ -68,7 +68,7 @@ public class BlockLever extends Block {
 
             do {
                 if (!iterator.hasNext()) {
-                    if (world.getType(blockposition.down()).r()) {
+                    if (world.getType(blockposition.down()).q()) {
                         return iblockdata.set(BlockLever.FACING, BlockLever.EnumLeverPosition.a(EnumDirection.UP, entityliving.getDirection()));
                     }
 

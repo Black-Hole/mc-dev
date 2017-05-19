@@ -94,7 +94,7 @@ public class CommandClone extends CommandAbstract {
 
                                                 arraylist1.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, nbttagcompound));
                                                 linkedlist.addLast(blockposition4);
-                                            } else if (!iblockdata.b() && !iblockdata.h()) {
+                                            } else if (!iblockdata.b() && !iblockdata.g()) {
                                                 arraylist2.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, (NBTTagCompound) null));
                                                 linkedlist.addFirst(blockposition4);
                                             } else {

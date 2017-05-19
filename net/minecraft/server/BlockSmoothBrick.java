@@ -10,7 +10,7 @@ public class BlockSmoothBrick extends Block {
 
     public BlockSmoothBrick() {
         super(Material.STONE);
-        this.y(this.blockStateList.getBlockData().set(BlockSmoothBrick.VARIANT, BlockSmoothBrick.EnumStonebrickType.DEFAULT));
+        this.x(this.blockStateList.getBlockData().set(BlockSmoothBrick.VARIANT, BlockSmoothBrick.EnumStonebrickType.DEFAULT));
         this.a(CreativeModeTab.b);
     }
 

@@ -11,7 +11,7 @@ public class ItemHoe extends Item {
         this.a = item_enumtoolmaterial;
         this.maxStackSize = 1;
         this.setMaxDurability(item_enumtoolmaterial.a());
-        this.a(CreativeModeTab.i);
+        this.b(CreativeModeTab.i);
         this.b = item_enumtoolmaterial.c() + 1.0F;
     }
 

@@ -9,7 +9,7 @@ public class BlockPrismarine extends Block {
 
     public BlockPrismarine() {
         super(Material.STONE);
-        this.y(this.blockStateList.getBlockData().set(BlockPrismarine.VARIANT, BlockPrismarine.EnumPrismarineVariant.ROUGH));
+        this.x(this.blockStateList.getBlockData().set(BlockPrismarine.VARIANT, BlockPrismarine.EnumPrismarineVariant.ROUGH));
         this.a(CreativeModeTab.b);
     }
 
@@ -17,7 +17,7 @@ public class BlockPrismarine extends Block {
         return LocaleI18n.get(this.a() + "." + BlockPrismarine.EnumPrismarineVariant.ROUGH.c() + ".name");
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata.get(BlockPrismarine.VARIANT) == BlockPrismarine.EnumPrismarineVariant.ROUGH ? MaterialMapColor.z : MaterialMapColor.H;
     }
 

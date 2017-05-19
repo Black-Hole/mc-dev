@@ -7,11 +7,11 @@ public class BlockDirt extends Block {
 
     protected BlockDirt() {
         super(Material.EARTH);
-        this.y(this.blockStateList.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT).set(BlockDirt.SNOWY, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT).set(BlockDirt.SNOWY, Boolean.valueOf(false)));
         this.a(CreativeModeTab.b);
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return ((BlockDirt.EnumDirtVariant) iblockdata.get(BlockDirt.VARIANT)).d();
     }
 

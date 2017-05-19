@@ -30,7 +30,7 @@ public class RecipeBook {
     }
 
     public boolean a(IRecipe irecipe) {
-        return irecipe.d() ? false : this.b.add(irecipe);
+        return irecipe.c() ? false : this.b.add(irecipe);
     }
 
     public void b(IRecipe irecipe) {

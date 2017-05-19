@@ -276,7 +276,7 @@ public class EntityEvoker extends EntityIllagerWizard {
                 if (!EntityEvoker.this.world.d(blockposition, true) && EntityEvoker.this.world.d(blockposition.down(), true)) {
                     if (!EntityEvoker.this.world.isEmpty(blockposition)) {
                         IBlockData iblockdata = EntityEvoker.this.world.getType(blockposition);
-                        AxisAlignedBB axisalignedbb = iblockdata.c(EntityEvoker.this.world, blockposition);
+                        AxisAlignedBB axisalignedbb = iblockdata.d(EntityEvoker.this.world, blockposition);
 
                         if (axisalignedbb != null) {
                             d4 = axisalignedbb.e;

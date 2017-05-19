@@ -5,7 +5,7 @@ public class ItemCoal extends Item {
     public ItemCoal() {
         this.a(true);
         this.setMaxDurability(0);
-        this.a(CreativeModeTab.l);
+        this.b(CreativeModeTab.l);
     }
 
     public String a(ItemStack itemstack) {

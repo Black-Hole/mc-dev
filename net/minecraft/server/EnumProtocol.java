@@ -24,7 +24,6 @@ public enum EnumProtocol {
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutNamedEntitySpawn.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutAnimation.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutStatistic.class);
-        this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutAdvancements.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutBlockBreakAnimation.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutTileEntityData.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutBlockAction.class);
@@ -54,10 +53,10 @@ public enum EnumProtocol {
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutWorldParticles.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutLogin.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutMap.class);
+        this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntity.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntity.PacketPlayOutRelEntityMove.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntity.PacketPlayOutEntityLook.class);
-        this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntity.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutVehicleMove.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutOpenSignEditor.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutAbilities.class);
@@ -71,6 +70,7 @@ public enum EnumProtocol {
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutResourcePackSend.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutRespawn.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntityHeadRotation.class);
+        this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSelectAdvancementTab.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutWorldBorder.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutCamera.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutHeldItemSlot.class);
@@ -92,6 +92,7 @@ public enum EnumProtocol {
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutPlayerListHeaderFooter.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutCollect.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntityTeleport.class);
+        this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutAdvancements.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutUpdateAttributes.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutEntityEffect.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInTeleportAccept.class);
@@ -107,10 +108,10 @@ public enum EnumProtocol {
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInCustomPayload.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInUseEntity.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInKeepAlive.class);
+        this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInFlying.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInFlying.PacketPlayInPosition.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInFlying.PacketPlayInPositionLook.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInFlying.PacketPlayInLook.class);
-        this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInFlying.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInVehicleMove.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInBoatMove.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInAbilities.class);
@@ -119,6 +120,7 @@ public enum EnumProtocol {
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInSteerVehicle.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInRecipeDisplayed.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInResourcePackStatus.class);
+        this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInAdvancements.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInHeldItemSlot.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInSetCreativeSlot.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInUpdateSign.class);

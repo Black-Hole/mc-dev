@@ -310,7 +310,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
     }
 
     public static boolean a(Block block) {
-        return block != Blocks.BEDROCK && block != Blocks.END_PORTAL && block != Blocks.END_PORTAL_FRAME && block != Blocks.COMMAND_BLOCK && block != Blocks.dc && block != Blocks.dd && block != Blocks.BARRIER && block != Blocks.STRUCTURE_BLOCK && block != Blocks.dj;
+        return block != Blocks.BEDROCK && block != Blocks.END_PORTAL && block != Blocks.END_PORTAL_FRAME && block != Blocks.COMMAND_BLOCK && block != Blocks.dc && block != Blocks.dd && block != Blocks.BARRIER && block != Blocks.STRUCTURE_BLOCK && block != Blocks.dj && block != Blocks.PISTON_EXTENSION && block != Blocks.END_GATEWAY;
     }
 
     public void p() {

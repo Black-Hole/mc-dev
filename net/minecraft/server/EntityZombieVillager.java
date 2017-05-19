@@ -117,7 +117,7 @@ public class EntityZombieVillager extends EntityZombie {
         }
 
         this.world.kill(this);
-        entityvillager.setAI(this.hasAI());
+        entityvillager.setNoAI(this.isNoAI());
         if (this.hasCustomName()) {
             entityvillager.setCustomName(this.getCustomName());
             entityvillager.setCustomNameVisible(this.getCustomNameVisible());

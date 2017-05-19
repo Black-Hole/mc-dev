@@ -424,7 +424,7 @@ public class EntityRabbit extends EntityAnimal {
                 IBlockData iblockdata = world.getType(blockposition);
 
                 block = iblockdata.getBlock();
-                if (block instanceof BlockCarrots && ((BlockCarrots) block).A(iblockdata)) {
+                if (block instanceof BlockCarrots && ((BlockCarrots) block).z(iblockdata)) {
                     this.e = true;
                     return true;
                 }

@@ -10,7 +10,7 @@ public class BlockSnow extends Block {
 
     protected BlockSnow() {
         super(Material.PACKED_ICE);
-        this.y(this.blockStateList.getBlockData().set(BlockSnow.LAYERS, Integer.valueOf(1)));
+        this.x(this.blockStateList.getBlockData().set(BlockSnow.LAYERS, Integer.valueOf(1)));
         this.a(true);
         this.a(CreativeModeTab.c);
     }
@@ -35,7 +35,7 @@ public class BlockSnow extends Block {
     public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         int i = ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() - 1;
         float f = 0.125F;
-        AxisAlignedBB axisalignedbb = iblockdata.d(iblockaccess, blockposition);
+        AxisAlignedBB axisalignedbb = iblockdata.e(iblockaccess, blockposition);
 
         return new AxisAlignedBB(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c, axisalignedbb.d, (double) ((float) i * 0.125F), axisalignedbb.f);
     }

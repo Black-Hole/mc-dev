@@ -9,7 +9,7 @@ public class ItemBoat extends Item {
     public ItemBoat(EntityBoat.EnumBoatType entityboat_enumboattype) {
         this.a = entityboat_enumboattype;
         this.maxStackSize = 1;
-        this.a(CreativeModeTab.e);
+        this.b(CreativeModeTab.e);
         this.c("boat." + entityboat_enumboattype.a());
     }
 

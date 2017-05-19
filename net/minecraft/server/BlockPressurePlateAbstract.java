@@ -63,7 +63,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
     }
 
     private boolean i(World world, BlockPosition blockposition) {
-        return world.getType(blockposition).r() || world.getType(blockposition).getBlock() instanceof BlockFence;
+        return world.getType(blockposition).q() || world.getType(blockposition).getBlock() instanceof BlockFence;
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {}

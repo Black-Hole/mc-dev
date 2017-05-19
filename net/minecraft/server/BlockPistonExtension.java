@@ -29,7 +29,7 @@ public class BlockPistonExtension extends BlockDirectional {
 
     public BlockPistonExtension() {
         super(Material.PISTON);
-        this.y(this.blockStateList.getBlockData().set(BlockPistonExtension.FACING, EnumDirection.NORTH).set(BlockPistonExtension.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT).set(BlockPistonExtension.SHORT, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockPistonExtension.FACING, EnumDirection.NORTH).set(BlockPistonExtension.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT).set(BlockPistonExtension.SHORT, Boolean.valueOf(false)));
         this.a(SoundEffectType.d);
         this.c(0.5F);
     }
@@ -58,7 +58,7 @@ public class BlockPistonExtension extends BlockDirectional {
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
-        a(blockposition, axisalignedbb, list, iblockdata.d(world, blockposition));
+        a(blockposition, axisalignedbb, list, iblockdata.e(world, blockposition));
         a(blockposition, axisalignedbb, list, this.i(iblockdata));
     }
 

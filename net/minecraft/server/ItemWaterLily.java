@@ -25,6 +25,10 @@ public class ItemWaterLily extends ItemWithAuxData {
 
                 if (iblockdata.getMaterial() == Material.WATER && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0 && world.isEmpty(blockposition1)) {
                     world.setTypeAndData(blockposition1, Blocks.WATERLILY.getBlockData(), 11);
+                    if (entityhuman instanceof EntityPlayer) {
+                        CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition1, itemstack);
+                    }
+
                     if (!entityhuman.abilities.canInstantlyBuild) {
                         itemstack.subtract(1);
                     }

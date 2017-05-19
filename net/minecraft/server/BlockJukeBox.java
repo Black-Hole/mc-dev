@@ -10,7 +10,7 @@ public class BlockJukeBox extends BlockTileEntity {
 
     protected BlockJukeBox() {
         super(Material.WOOD, MaterialMapColor.m);
-        this.y(this.blockStateList.getBlockData().set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false)));
         this.a(CreativeModeTab.c);
     }
 

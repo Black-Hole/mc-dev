@@ -11,7 +11,7 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
 
     protected BlockPressurePlateWeighted(Material material, int i, MaterialMapColor materialmapcolor) {
         super(material, materialmapcolor);
-        this.y(this.blockStateList.getBlockData().set(BlockPressurePlateWeighted.POWER, Integer.valueOf(0)));
+        this.x(this.blockStateList.getBlockData().set(BlockPressurePlateWeighted.POWER, Integer.valueOf(0)));
         this.weight = i;
     }
 

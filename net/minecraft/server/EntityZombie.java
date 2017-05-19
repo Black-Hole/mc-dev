@@ -164,7 +164,7 @@ public class EntityZombie extends EntityMonster {
                     int j1 = j + MathHelper.nextInt(this.random, 7, 40) * MathHelper.nextInt(this.random, -1, 1);
                     int k1 = k + MathHelper.nextInt(this.random, 7, 40) * MathHelper.nextInt(this.random, -1, 1);
 
-                    if (this.world.getType(new BlockPosition(i1, j1 - 1, k1)).r() && this.world.getLightLevel(new BlockPosition(i1, j1, k1)) < 10) {
+                    if (this.world.getType(new BlockPosition(i1, j1 - 1, k1)).q() && this.world.getLightLevel(new BlockPosition(i1, j1, k1)) < 10) {
                         entityzombie.setPosition((double) i1, (double) j1, (double) k1);
                         if (!this.world.isPlayerNearby((double) i1, (double) j1, (double) k1, 7.0D) && this.world.a(entityzombie.getBoundingBox(), (Entity) entityzombie) && this.world.getCubes(entityzombie, entityzombie.getBoundingBox()).isEmpty() && !this.world.containsLiquid(entityzombie.getBoundingBox())) {
                             this.world.addEntity(entityzombie);
@@ -278,7 +278,7 @@ public class EntityZombie extends EntityMonster {
             entityzombievillager.prepare(this.world.D(new BlockPosition(entityzombievillager)), new EntityZombie.GroupDataZombie(false, null));
             entityzombievillager.setProfession(entityvillager.getProfession());
             entityzombievillager.setBaby(entityvillager.isBaby());
-            entityzombievillager.setAI(entityvillager.hasAI());
+            entityzombievillager.setNoAI(entityvillager.isNoAI());
             if (entityvillager.hasCustomName()) {
                 entityzombievillager.setCustomName(entityvillager.getCustomName());
                 entityzombievillager.setCustomNameVisible(entityvillager.getCustomNameVisible());

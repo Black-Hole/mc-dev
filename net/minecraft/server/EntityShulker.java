@@ -316,7 +316,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
     }
 
     protected boolean p() {
-        if (!this.hasAI() && this.isAlive()) {
+        if (!this.isNoAI() && this.isAlive()) {
             BlockPosition blockposition = new BlockPosition(this);
 
             for (int i = 0; i < 5; ++i) {

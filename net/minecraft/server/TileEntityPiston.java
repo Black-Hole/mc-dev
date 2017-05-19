@@ -69,7 +69,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         f = this.e(f);
         IBlockData iblockdata = this.k();
 
-        return iblockdata.d(iblockaccess, blockposition).d((double) (f * (float) this.f.getAdjacentX()), (double) (f * (float) this.f.getAdjacentY()), (double) (f * (float) this.f.getAdjacentZ()));
+        return iblockdata.e(iblockaccess, blockposition).d((double) (f * (float) this.f.getAdjacentX()), (double) (f * (float) this.f.getAdjacentY()), (double) (f * (float) this.f.getAdjacentZ()));
     }
 
     private IBlockData k() {

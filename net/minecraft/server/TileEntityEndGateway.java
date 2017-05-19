@@ -168,7 +168,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
                         BlockPosition blockposition2 = new BlockPosition(blockposition.getX() + j, l, blockposition.getZ() + k);
                         IBlockData iblockdata = world.getType(blockposition2);
 
-                        if (iblockdata.l() && (flag || iblockdata.getBlock() != Blocks.BEDROCK)) {
+                        if (iblockdata.k() && (flag || iblockdata.getBlock() != Blocks.BEDROCK)) {
                             blockposition1 = blockposition2;
                             break;
                         }
@@ -197,7 +197,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
             BlockPosition blockposition3 = (BlockPosition) iterator.next();
             IBlockData iblockdata = chunk.getBlockData(blockposition3);
 
-            if (iblockdata.getBlock() == Blocks.END_STONE && !chunk.getBlockData(blockposition3.up(1)).l() && !chunk.getBlockData(blockposition3.up(2)).l()) {
+            if (iblockdata.getBlock() == Blocks.END_STONE && !chunk.getBlockData(blockposition3.up(1)).k() && !chunk.getBlockData(blockposition3.up(2)).k()) {
                 double d1 = blockposition3.g(0.0D, 0.0D, 0.0D);
 
                 if (blockposition2 == null || d1 < d0) {

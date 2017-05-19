@@ -17,7 +17,7 @@ public class BlockTripwireHook extends Block {
 
     public BlockTripwireHook() {
         super(Material.ORIENTABLE);
-        this.y(this.blockStateList.getBlockData().set(BlockTripwireHook.FACING, EnumDirection.NORTH).set(BlockTripwireHook.POWERED, Boolean.valueOf(false)).set(BlockTripwireHook.ATTACHED, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockTripwireHook.FACING, EnumDirection.NORTH).set(BlockTripwireHook.POWERED, Boolean.valueOf(false)).set(BlockTripwireHook.ATTACHED, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
         this.a(true);
     }
@@ -56,8 +56,9 @@ public class BlockTripwireHook extends Block {
         EnumDirection enumdirection1 = enumdirection.opposite();
         BlockPosition blockposition1 = blockposition.shift(enumdirection1);
         IBlockData iblockdata = world.getType(blockposition1);
+        boolean flag = c(iblockdata.getBlock());
 
-        return enumdirection.k().c() && iblockdata.d(world, blockposition1, enumdirection) == EnumBlockFaceShape.SOLID && !iblockdata.n();
+        return !flag && enumdirection.k().c() && iblockdata.d(world, blockposition1, enumdirection) == EnumBlockFaceShape.SOLID && !iblockdata.m();
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {

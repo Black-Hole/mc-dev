@@ -7,7 +7,7 @@ public class ItemBanner extends ItemBlock {
     public ItemBanner() {
         super(Blocks.STANDING_BANNER);
         this.maxStackSize = 16;
-        this.a(CreativeModeTab.c);
+        this.b(CreativeModeTab.c);
         this.a(true);
         this.setMaxDurability(0);
     }
@@ -37,6 +37,10 @@ public class ItemBanner extends ItemBlock {
 
                     if (tileentity instanceof TileEntityBanner) {
                         ((TileEntityBanner) tileentity).a(itemstack, false);
+                    }
+
+                    if (entityhuman instanceof EntityPlayer) {
+                        CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition, itemstack);
                     }
 
                     itemstack.subtract(1);

@@ -39,7 +39,7 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
             IBlockData iblockdata = world.getType(blockposition);
             Block block = iblockdata.getBlock();
 
-            if (this.f == 0 && block instanceof BlockCrops && ((BlockCrops) block).A(iblockdata)) {
+            if (this.f == 0 && block instanceof BlockCrops && ((BlockCrops) block).z(iblockdata)) {
                 world.setAir(blockposition, true);
             } else if (this.f == 1 && iblockdata.getMaterial() == Material.AIR) {
                 InventorySubcontainer inventorysubcontainer = this.c.do_();
@@ -88,7 +88,7 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
             IBlockData iblockdata = world.getType(blockposition);
 
             block = iblockdata.getBlock();
-            if (block instanceof BlockCrops && ((BlockCrops) block).A(iblockdata) && this.e && (this.f == 0 || this.f < 0)) {
+            if (block instanceof BlockCrops && ((BlockCrops) block).z(iblockdata) && this.e && (this.f == 0 || this.f < 0)) {
                 this.f = 0;
                 return true;
             }

@@ -44,12 +44,11 @@ public abstract class EntityHuman extends EntityLiving {
     public int expTotal;
     public float exp;
     protected int bS;
-    protected float bT = 0.1F;
-    protected float bU = 0.02F;
+    protected float bT = 0.02F;
     private int f;
     private final GameProfile g;
-    private ItemStack bW;
-    private final ItemCooldown bX;
+    private ItemStack bV;
+    private final ItemCooldown bW;
     @Nullable
     public EntityFishingHook hookedFish;
 
@@ -59,8 +58,8 @@ public abstract class EntityHuman extends EntityLiving {
 
     public EntityHuman(World world, GameProfile gameprofile) {
         super(world);
-        this.bW = ItemStack.a;
-        this.bX = this.l();
+        this.bV = ItemStack.a;
+        this.bW = this.l();
         this.a(a(gameprofile));
         this.g = gameprofile;
         this.defaultContainer = new ContainerPlayer(this.inventory, !world.isClientSide, this);
@@ -153,15 +152,15 @@ public abstract class EntityHuman extends EntityLiving {
         ++this.aE;
         ItemStack itemstack = this.getItemInMainHand();
 
-        if (!ItemStack.matches(this.bW, itemstack)) {
-            if (!ItemStack.d(this.bW, itemstack)) {
+        if (!ItemStack.matches(this.bV, itemstack)) {
+            if (!ItemStack.d(this.bV, itemstack)) {
                 this.dq();
             }
 
-            this.bW = itemstack.isEmpty() ? ItemStack.a : itemstack.cloneItemStack();
+            this.bV = itemstack.isEmpty() ? ItemStack.a : itemstack.cloneItemStack();
         }
 
-        this.bX.a();
+        this.bW.a();
         this.cR();
     }
 
@@ -328,9 +327,9 @@ public abstract class EntityHuman extends EntityLiving {
             attributeinstance.setValue((double) this.abilities.b());
         }
 
-        this.aR = this.bU;
+        this.aR = this.bT;
         if (this.isSprinting()) {
-            this.aR = (float) ((double) this.aR + (double) this.bU * 0.3D);
+            this.aR = (float) ((double) this.aR + (double) this.bT * 0.3D);
         }
 
         this.m((float) attributeinstance.getValue());
@@ -373,7 +372,7 @@ public abstract class EntityHuman extends EntityLiving {
 
         this.j(this.getShoulderEntityLeft());
         this.j(this.getShoulderEntityRight());
-        if (!this.world.isClientSide && (!this.onGround || this.isInWater())) {
+        if (!this.world.isClientSide && (!this.onGround || this.isInWater() || this.isPassenger())) {
             this.releaseShoulderEntities();
         }
 
@@ -639,7 +638,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("DataVersion", 1133);
+        nbttagcompound.setInt("DataVersion", 1136);
         nbttagcompound.set("Inventory", this.inventory.a(new NBTTagList()));
         nbttagcompound.setInt("SelectedItemSlot", this.inventory.itemInHandIndex);
         nbttagcompound.setBoolean("Sleeping", this.sleeping);
@@ -1525,12 +1524,16 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public boolean g(NBTTagCompound nbttagcompound) {
-        if (this.getShoulderEntityLeft().isEmpty()) {
-            this.setShoulderEntityLeft(nbttagcompound);
-            return true;
-        } else if (this.getShoulderEntityRight().isEmpty()) {
-            this.setShoulderEntityRight(nbttagcompound);
-            return true;
+        if (!this.isPassenger() && this.onGround && !this.isInWater()) {
+            if (this.getShoulderEntityLeft().isEmpty()) {
+                this.setShoulderEntityLeft(nbttagcompound);
+                return true;
+            } else if (this.getShoulderEntityRight().isEmpty()) {
+                this.setShoulderEntityRight(nbttagcompound);
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
@@ -1726,7 +1729,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public ItemCooldown getCooldownTracker() {
-        return this.bX;
+        return this.bW;
     }
 
     public void collide(Entity entity) {

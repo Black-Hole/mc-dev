@@ -184,7 +184,7 @@ public abstract class BlockLeaves extends Block {
         return !this.c;
     }
 
-    public boolean u(IBlockData iblockdata) {
+    public boolean t(IBlockData iblockdata) {
         return false;
     }
 

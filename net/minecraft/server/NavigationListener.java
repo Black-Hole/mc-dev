@@ -36,8 +36,8 @@ public class NavigationListener implements IWorldAccess {
     }
 
     protected boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {
-        AxisAlignedBB axisalignedbb = iblockdata.c(world, blockposition);
-        AxisAlignedBB axisalignedbb1 = iblockdata1.c(world, blockposition);
+        AxisAlignedBB axisalignedbb = iblockdata.d(world, blockposition);
+        AxisAlignedBB axisalignedbb1 = iblockdata1.d(world, blockposition);
 
         return axisalignedbb != axisalignedbb1 && (axisalignedbb == null || !axisalignedbb.equals(axisalignedbb1));
     }

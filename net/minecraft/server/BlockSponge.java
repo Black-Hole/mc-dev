@@ -11,7 +11,7 @@ public class BlockSponge extends Block {
 
     protected BlockSponge() {
         super(Material.SPONGE);
-        this.y(this.blockStateList.getBlockData().set(BlockSponge.WET, Boolean.valueOf(false)));
+        this.x(this.blockStateList.getBlockData().set(BlockSponge.WET, Boolean.valueOf(false)));
         this.a(CreativeModeTab.b);
     }
 

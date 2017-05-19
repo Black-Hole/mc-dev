@@ -6,7 +6,7 @@ import java.util.List;
 public class ItemLeash extends Item {
 
     public ItemLeash() {
-        this.a(CreativeModeTab.i);
+        this.b(CreativeModeTab.i);
     }
 
     public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {

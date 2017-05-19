@@ -75,13 +75,13 @@ public class EntityPotion extends EntityProjectile {
             if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && flag) {
                 BlockPosition blockposition = movingobjectposition.a().shift(movingobjectposition.direction);
 
-                this.a(blockposition);
+                this.a(blockposition, movingobjectposition.direction);
                 Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                 while (iterator.hasNext()) {
                     EnumDirection enumdirection = (EnumDirection) iterator.next();
 
-                    this.a(blockposition.shift(enumdirection));
+                    this.a(blockposition.shift(enumdirection), enumdirection);
                 }
             }
 
@@ -194,9 +194,9 @@ public class EntityPotion extends EntityProjectile {
         return this.getItem().getItem() == Items.LINGERING_POTION;
     }
 
-    private void a(BlockPosition blockposition) {
+    private void a(BlockPosition blockposition, EnumDirection enumdirection) {
         if (this.world.getType(blockposition).getBlock() == Blocks.FIRE) {
-            this.world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
+            this.world.douseFire((EntityHuman) null, blockposition.shift(enumdirection), enumdirection.opposite());
         }
 
     }

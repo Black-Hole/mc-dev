@@ -26,7 +26,7 @@ public class ItemSnow extends ItemBlock {
 
                 if (i < 8) {
                     IBlockData iblockdata1 = iblockdata.set(BlockSnow.LAYERS, Integer.valueOf(i + 1));
-                    AxisAlignedBB axisalignedbb = iblockdata1.c(world, blockposition1);
+                    AxisAlignedBB axisalignedbb = iblockdata1.d(world, blockposition1);
 
                     if (axisalignedbb != Block.k && world.b(axisalignedbb.a(blockposition1)) && world.setTypeAndData(blockposition1, iblockdata1, 10)) {
                         SoundEffectType soundeffecttype = this.a.getStepSound();

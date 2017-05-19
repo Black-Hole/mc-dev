@@ -11,7 +11,7 @@ public class BlockMagma extends Block {
         this.a(true);
     }
 
-    public MaterialMapColor r(IBlockData iblockdata) {
+    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return MaterialMapColor.L;
     }
 
