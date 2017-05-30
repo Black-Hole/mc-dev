@@ -365,7 +365,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
                 long i = 0L;
 
                 this.q.setMOTD(new ChatComponentText(this.motd));
-                this.q.setServerInfo(new ServerPing.ServerData("1.12-pre5", 332));
+                this.q.setServerInfo(new ServerPing.ServerData("1.12-pre6", 333));
                 this.a(this.q);
 
                 while (this.isRunning) {
@@ -712,7 +712,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
     }
 
     public String getVersion() {
-        return "1.12-pre5";
+        return "1.12-pre6";
     }
 
     public int H() {
@@ -808,7 +808,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
                 while (iterator.hasNext()) {
                     String s3 = (String) iterator.next();
 
-                    if (flag2) {
+                    if (flag2 && !flag) {
                         arraylist.add("/" + s3);
                     } else {
                         arraylist.add(s3);

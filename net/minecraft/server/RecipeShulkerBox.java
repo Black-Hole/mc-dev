@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class RecipeShulkerBox {    public static class Dye extends IRecipe {
+public class RecipeShulkerBox {    public static class Dye implements IRecipe {
 
         public Dye() {}
 

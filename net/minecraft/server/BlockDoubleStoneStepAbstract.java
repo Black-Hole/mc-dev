@@ -17,7 +17,7 @@ public abstract class BlockDoubleStoneStepAbstract extends BlockStepAbstract {
             iblockdata = iblockdata.set(BlockDoubleStoneStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
         }
 
-        this.x(iblockdata.set(BlockDoubleStoneStepAbstract.VARIANT, BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant.RED_SANDSTONE));
+        this.w(iblockdata.set(BlockDoubleStoneStepAbstract.VARIANT, BlockDoubleStoneStepAbstract.EnumStoneSlab2Variant.RED_SANDSTONE));
         this.a(CreativeModeTab.b);
     }
 

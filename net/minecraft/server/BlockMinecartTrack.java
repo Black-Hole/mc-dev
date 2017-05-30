@@ -6,7 +6,7 @@ public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
 
     protected BlockMinecartTrack() {
         super(false);
-        this.x(this.blockStateList.getBlockData().set(BlockMinecartTrack.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH));
+        this.w(this.blockStateList.getBlockData().set(BlockMinecartTrack.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH));
     }
 
     protected void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {

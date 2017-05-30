@@ -14,7 +14,7 @@ public abstract class BlockWoodenStep extends BlockStepAbstract {
             iblockdata = iblockdata.set(BlockWoodenStep.HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
         }
 
-        this.x(iblockdata.set(BlockWoodenStep.VARIANT, BlockWood.EnumLogVariant.OAK));
+        this.w(iblockdata.set(BlockWoodenStep.VARIANT, BlockWood.EnumLogVariant.OAK));
         this.a(CreativeModeTab.b);
     }
 

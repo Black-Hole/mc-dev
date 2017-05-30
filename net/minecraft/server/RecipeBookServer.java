@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -15,21 +16,20 @@ public class RecipeBookServer extends RecipeBook {
 
     public void a(List<IRecipe> list, EntityPlayer entityplayer) {
         ArrayList arraylist = Lists.newArrayList();
-        ArrayList arraylist1 = Lists.newArrayList();
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
             IRecipe irecipe = (IRecipe) iterator.next();
 
-            if (this.a(irecipe)) {
-                this.a.add(irecipe);
+            if (!this.a.get(d(irecipe))) {
+                this.a(irecipe);
+                this.g(irecipe);
                 arraylist.add(irecipe);
-                arraylist1.add(irecipe);
                 CriterionTriggers.f.a(entityplayer, irecipe);
             }
         }
 
-        this.a(entityplayer, arraylist, arraylist1, 1);
+        this.a(PacketPlayOutRecipes.a.b, entityplayer, arraylist);
     }
 
     public void b(List<IRecipe> list, EntityPlayer entityplayer) {
@@ -39,24 +39,26 @@ public class RecipeBookServer extends RecipeBook {
         while (iterator.hasNext()) {
             IRecipe irecipe = (IRecipe) iterator.next();
 
-            this.b(irecipe);
-            arraylist.add(irecipe);
+            if (this.a.get(d(irecipe))) {
+                this.c(irecipe);
+                arraylist.add(irecipe);
+            }
         }
 
-        this.a(entityplayer, arraylist, Lists.newArrayList(), 2);
+        this.a(PacketPlayOutRecipes.a.c, entityplayer, arraylist);
     }
 
-    private void a(EntityPlayer entityplayer, List<IRecipe> list, List<IRecipe> list1, int i) {
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(list, list1, this.c, this.d, i));
+    private void a(PacketPlayOutRecipes.a packetplayoutrecipes_a, EntityPlayer entityplayer, List<IRecipe> list) {
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(packetplayoutrecipes_a, list, Collections.emptyList(), this.c, this.d));
     }
 
-    public NBTTagCompound e() {
+    public NBTTagCompound c() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.setBoolean("isGuiOpen", this.c);
         nbttagcompound.setBoolean("isFilteringCraftable", this.d);
         NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator = this.b.iterator();
+        Iterator iterator = this.d().iterator();
 
         while (iterator.hasNext()) {
             IRecipe irecipe = (IRecipe) iterator.next();
@@ -66,7 +68,7 @@ public class RecipeBookServer extends RecipeBook {
 
         nbttagcompound.set("recipes", nbttaglist);
         NBTTagList nbttaglist1 = new NBTTagList();
-        Iterator iterator1 = this.a.iterator();
+        Iterator iterator1 = this.e().iterator();
 
         while (iterator1.hasNext()) {
             IRecipe irecipe1 = (IRecipe) iterator1.next();
@@ -81,16 +83,16 @@ public class RecipeBookServer extends RecipeBook {
     public void a(NBTTagCompound nbttagcompound) {
         this.c = nbttagcompound.getBoolean("isGuiOpen");
         this.d = nbttagcompound.getBoolean("isFilteringCraftable");
-        this.b.clear();
         NBTTagList nbttaglist = nbttagcompound.getList("recipes", 8);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             MinecraftKey minecraftkey = new MinecraftKey(nbttaglist.getString(i));
+            IRecipe irecipe = CraftingManager.a(minecraftkey);
 
-            if (CraftingManager.a(minecraftkey) == null) {
-                RecipeBookServer.e.info("[ServerRecipeBook] Tried to load unrecognized recipe: " + minecraftkey + " removed now.");
+            if (irecipe == null) {
+                RecipeBookServer.e.info("Tried to load unrecognized recipe: {} removed now.", minecraftkey);
             } else {
-                this.b.add(CraftingManager.a(minecraftkey));
+                this.a(irecipe);
             }
         }
 
@@ -98,17 +100,38 @@ public class RecipeBookServer extends RecipeBook {
 
         for (int j = 0; j < nbttaglist1.size(); ++j) {
             MinecraftKey minecraftkey1 = new MinecraftKey(nbttaglist1.getString(j));
+            IRecipe irecipe1 = CraftingManager.a(minecraftkey1);
 
-            if (CraftingManager.a(minecraftkey1) == null) {
-                RecipeBookServer.e.info("[ServerRecipeBook] Tried to load unrecognized recipe: " + minecraftkey1 + " removed now.");
+            if (irecipe1 == null) {
+                RecipeBookServer.e.info("Tried to load unrecognized recipe: {} removed now.", minecraftkey1);
             } else {
-                this.a.add(CraftingManager.a(minecraftkey1));
+                this.g(irecipe1);
             }
         }
 
     }
 
+    private List<IRecipe> d() {
+        ArrayList arraylist = Lists.newArrayList();
+
+        for (int i = this.a.nextSetBit(0); i >= 0; i = this.a.nextSetBit(i + 1)) {
+            arraylist.add(CraftingManager.recipes.getId(i));
+        }
+
+        return arraylist;
+    }
+
+    private List<IRecipe> e() {
+        ArrayList arraylist = Lists.newArrayList();
+
+        for (int i = this.b.nextSetBit(0); i >= 0; i = this.b.nextSetBit(i + 1)) {
+            arraylist.add(CraftingManager.recipes.getId(i));
+        }
+
+        return arraylist;
+    }
+
     public void a(EntityPlayer entityplayer) {
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(Lists.newArrayList(this.b), this.a, this.c, this.d, 3));
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(PacketPlayOutRecipes.a.a, this.d(), this.e(), this.c, this.d));
     }
 }

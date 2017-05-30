@@ -9,7 +9,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
 
     protected BlockRepeater(boolean flag) {
         super(flag);
-        this.x(this.blockStateList.getBlockData().set(BlockRepeater.FACING, EnumDirection.NORTH).set(BlockRepeater.DELAY, Integer.valueOf(1)).set(BlockRepeater.LOCKED, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockRepeater.FACING, EnumDirection.NORTH).set(BlockRepeater.DELAY, Integer.valueOf(1)).set(BlockRepeater.LOCKED, Boolean.valueOf(false)));
     }
 
     public String getName() {
@@ -37,7 +37,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
         }
     }
 
-    protected int i(IBlockData iblockdata) {
+    protected int x(IBlockData iblockdata) {
         return ((Integer) iblockdata.get(BlockRepeater.DELAY)).intValue() * 2;
     }
 

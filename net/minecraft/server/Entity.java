@@ -1510,7 +1510,7 @@ public abstract class Entity implements ICommandListener {
         return null;
     }
 
-    public void leaveVehicle() {
+    public void aC() {
         Entity entity = this.bH();
 
         if (this.isPassenger() && entity.dead) {
@@ -1568,7 +1568,7 @@ public abstract class Entity implements ICommandListener {
         return this.j <= 0;
     }
 
-    public void aF() {
+    public void ejectPassengers() {
         for (int i = this.passengers.size() - 1; i >= 0; --i) {
             ((Entity) this.passengers.get(i)).stopRiding();
         }

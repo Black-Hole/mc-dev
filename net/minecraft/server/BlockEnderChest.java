@@ -9,7 +9,7 @@ public class BlockEnderChest extends BlockTileEntity {
 
     protected BlockEnderChest() {
         super(Material.STONE);
-        this.x(this.blockStateList.getBlockData().set(BlockEnderChest.FACING, EnumDirection.NORTH));
+        this.w(this.blockStateList.getBlockData().set(BlockEnderChest.FACING, EnumDirection.NORTH));
         this.a(CreativeModeTab.c);
     }
 

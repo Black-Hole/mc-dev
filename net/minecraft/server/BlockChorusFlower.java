@@ -10,7 +10,7 @@ public class BlockChorusFlower extends Block {
 
     protected BlockChorusFlower() {
         super(Material.PLANT, MaterialMapColor.A);
-        this.x(this.blockStateList.getBlockData().set(BlockChorusFlower.AGE, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockChorusFlower.AGE, Integer.valueOf(0)));
         this.a(CreativeModeTab.c);
         this.a(true);
     }
@@ -182,7 +182,7 @@ public class BlockChorusFlower extends Block {
         a(world, blockposition, new ItemStack(Item.getItemOf(this)));
     }
 
-    protected ItemStack v(IBlockData iblockdata) {
+    protected ItemStack u(IBlockData iblockdata) {
         return ItemStack.a;
     }
 

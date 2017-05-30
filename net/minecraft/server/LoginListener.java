@@ -59,18 +59,16 @@ public class LoginListener implements PacketLoginInListener, ITickable {
         }
 
         if (this.h++ == 600) {
-            this.disconnect("Took too long to log in");
+            this.disconnect(new ChatMessage("multiplayer.disconnect.slow_login", new Object[0]));
         }
 
     }
 
-    public void disconnect(String s) {
+    public void disconnect(IChatBaseComponent ichatbasecomponent) {
         try {
-            LoginListener.c.info("Disconnecting {}: {}", this.c(), s);
-            ChatComponentText chatcomponenttext = new ChatComponentText(s);
-
-            this.networkManager.sendPacket(new PacketLoginOutDisconnect(chatcomponenttext));
-            this.networkManager.close(chatcomponenttext);
+            LoginListener.c.info("Disconnecting {}: {}", this.c(), ichatbasecomponent.toPlainText());
+            this.networkManager.sendPacket(new PacketLoginOutDisconnect(ichatbasecomponent));
+            this.networkManager.close(ichatbasecomponent);
         } catch (Exception exception) {
             LoginListener.c.error("Error whilst disconnecting player", exception);
         }
@@ -85,7 +83,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
         String s = this.server.getPlayerList().attemptLogin(this.networkManager.getSocketAddress(), this.i);
 
         if (s != null) {
-            this.disconnect(s);
+            this.disconnect(new ChatMessage(s, new Object[0]));
         } else {
             this.g = LoginListener.EnumProtocolState.ACCEPTED;
             if (this.server.aG() >= 0 && !this.networkManager.isLocal()) {
@@ -159,7 +157,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
                             LoginListener.this.i = LoginListener.this.a(gameprofile);
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else {
-                            LoginListener.this.disconnect("Failed to verify username!");
+                            LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.unverified_username", new Object[0]));
                             LoginListener.c.error("Username \'{}\' tried to join with an invalid session", gameprofile.getName());
                         }
                     } catch (AuthenticationUnavailableException authenticationunavailableexception) {
@@ -168,7 +166,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
                             LoginListener.this.i = LoginListener.this.a(gameprofile);
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else {
-                            LoginListener.this.disconnect("Authentication servers are down. Please try again later, sorry!");
+                            LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.authservers_down", new Object[0]));
                             LoginListener.c.error("Couldn\'t verify username because servers are unavailable");
                         }
                     }

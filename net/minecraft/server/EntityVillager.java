@@ -545,7 +545,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
                 chatmessage.getChatModifier().setChatHoverable(this.bt());
                 chatmessage.getChatModifier().setInsertion(this.bl());
                 if (scoreboardteambase != null) {
-                    chatmessage.getChatModifier().setColor(scoreboardteambase.m());
+                    chatmessage.getChatModifier().setColor(scoreboardteambase.getColor());
                 }
 
                 return chatmessage;

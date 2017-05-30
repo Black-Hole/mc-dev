@@ -12,7 +12,7 @@ public class BlockCommand extends BlockTileEntity {
 
     public BlockCommand(MaterialMapColor materialmapcolor) {
         super(Material.ORE, materialmapcolor);
-        this.x(this.blockStateList.getBlockData().set(BlockCommand.a, EnumDirection.NORTH).set(BlockCommand.b, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockCommand.a, EnumDirection.NORTH).set(BlockCommand.b, Boolean.valueOf(false)));
     }
 
     public TileEntity a(World world, int i) {

@@ -12,7 +12,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
 
     public BlockBed() {
         super(Material.CLOTH);
-        this.x(this.blockStateList.getBlockData().set(BlockBed.PART, BlockBed.EnumBedPart.FOOT).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockBed.PART, BlockBed.EnumBedPart.FOOT).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
         this.isTileEntity = true;
     }
 

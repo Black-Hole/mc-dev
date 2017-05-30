@@ -1,45 +1,51 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import java.util.List;
-import java.util.SortedSet;
+import java.util.BitSet;
 
 public class RecipeBook {
 
-    protected final List<IRecipe> a = Lists.newArrayList();
-    protected final SortedSet<IRecipe> b = Sets.newTreeSet();
+    protected final BitSet a = new BitSet();
+    protected final BitSet b = new BitSet();
     protected boolean c;
     protected boolean d;
 
     public RecipeBook() {}
 
-    public SortedSet<IRecipe> a() {
-        return this.b;
-    }
-
     public void a(RecipeBook recipebook) {
-        this.b.clear();
         this.a.clear();
-        this.b.addAll(recipebook.a());
-        this.a.addAll(recipebook.b());
+        this.b.clear();
+        this.a.or(recipebook.a);
+        this.b.or(recipebook.b);
     }
 
-    public List<IRecipe> b() {
-        return this.a;
+    public void a(IRecipe irecipe) {
+        if (!irecipe.c()) {
+            this.a.set(d(irecipe));
+        }
+
     }
 
-    public boolean a(IRecipe irecipe) {
-        return irecipe.c() ? false : this.b.add(irecipe);
+    public boolean b(IRecipe irecipe) {
+        return this.a.get(d(irecipe));
     }
 
-    public void b(IRecipe irecipe) {
-        this.b.remove(irecipe);
-        this.a.remove(irecipe);
+    public void c(IRecipe irecipe) {
+        int i = d(irecipe);
+
+        this.a.clear(i);
+        this.b.clear(i);
     }
 
-    public void d(IRecipe irecipe) {
-        this.a.remove(irecipe);
+    protected static int d(IRecipe irecipe) {
+        return CraftingManager.recipes.a((Object) irecipe);
+    }
+
+    public void f(IRecipe irecipe) {
+        this.b.clear(d(irecipe));
+    }
+
+    public void g(IRecipe irecipe) {
+        this.b.set(d(irecipe));
     }
 
     public void a(boolean flag) {
@@ -48,30 +54,5 @@ public class RecipeBook {
 
     public void b(boolean flag) {
         this.d = flag;
-    }
-
-    public boolean f(IRecipe irecipe) {
-        return this.b.contains(irecipe);
-    }
-
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        } else if (object instanceof RecipeBook) {
-            RecipeBook recipebook = (RecipeBook) object;
-
-            return this.c != recipebook.c ? false : (this.d != recipebook.d ? false : (!this.a.equals(recipebook.a) ? false : this.b.equals(recipebook.b)));
-        } else {
-            return false;
-        }
-    }
-
-    public int hashCode() {
-        int i = this.a.hashCode();
-
-        i = 31 * i + this.b.hashCode();
-        i = 31 * i + (this.c ? 1 : 0);
-        i = 31 * i + (this.d ? 1 : 0);
-        return i;
     }
 }

@@ -9,7 +9,7 @@ public class BlockHugeMushroom extends Block {
 
     public BlockHugeMushroom(Material material, MaterialMapColor materialmapcolor, Block block) {
         super(material, materialmapcolor);
-        this.x(this.blockStateList.getBlockData().set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.ALL_OUTSIDE));
+        this.w(this.blockStateList.getBlockData().set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.ALL_OUTSIDE));
         this.b = block;
     }
 

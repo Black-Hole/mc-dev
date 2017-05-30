@@ -12,7 +12,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     protected static final AxisAlignedBB[] d = new AxisAlignedBB[] { new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.125D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.25D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.375D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.5D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.625D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.75D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 0.875D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D)};
 
     protected BlockStem(Block block) {
-        this.x(this.blockStateList.getBlockData().set(BlockStem.AGE, Integer.valueOf(0)).set(BlockStem.FACING, EnumDirection.UP));
+        this.w(this.blockStateList.getBlockData().set(BlockStem.AGE, Integer.valueOf(0)).set(BlockStem.FACING, EnumDirection.UP));
         this.blockFruit = block;
         this.a(true);
         this.a((CreativeModeTab) null);
@@ -40,7 +40,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
         return iblockdata;
     }
 
-    protected boolean i(IBlockData iblockdata) {
+    protected boolean x(IBlockData iblockdata) {
         return iblockdata.getBlock() == Blocks.FARMLAND;
     }
 

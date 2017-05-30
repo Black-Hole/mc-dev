@@ -68,7 +68,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         if (this.B) {
             if (++this.C > 80) {
                 PlayerConnection.LOGGER.warn("{} was kicked for floating too long!", this.player.getName());
-                this.disconnect("Flying is not enabled on this server");
+                this.disconnect(new ChatMessage("multiplayer.disconnect.flying", new Object[0]));
                 return;
             }
         } else {
@@ -87,7 +87,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             if (this.D && this.player.getVehicle().bC() == this.player) {
                 if (++this.E > 80) {
                     PlayerConnection.LOGGER.warn("{} was kicked for floating a vehicle too long!", this.player.getName());
-                    this.disconnect("Flying is not enabled on this server");
+                    this.disconnect(new ChatMessage("multiplayer.disconnect.flying", new Object[0]));
                     return;
                 }
             } else {
@@ -118,7 +118,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         }
 
         if (this.player.J() > 0L && this.minecraftServer.getIdleTimeout() > 0 && MinecraftServer.aw() - this.player.J() > (long) (this.minecraftServer.getIdleTimeout() * 1000 * 60)) {
-            this.disconnect("You have been idle for too long!");
+            this.disconnect(new ChatMessage("multiplayer.disconnect.idling", new Object[0]));
         }
 
     }
@@ -136,12 +136,10 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         return this.networkManager;
     }
 
-    public void disconnect(String s) {
-        final ChatComponentText chatcomponenttext = new ChatComponentText(s);
-
-        this.networkManager.sendPacket(new PacketPlayOutKickDisconnect(chatcomponenttext), new GenericFutureListener() {
+    public void disconnect(final IChatBaseComponent ichatbasecomponent) {
+        this.networkManager.sendPacket(new PacketPlayOutKickDisconnect(ichatbasecomponent), new GenericFutureListener() {
             public void operationComplete(Future<? super Void> future) throws Exception {
-                PlayerConnection.this.networkManager.close(chatcomponenttext);
+                PlayerConnection.this.networkManager.close(ichatbasecomponent);
             }
         }, new GenericFutureListener[0]);
         this.networkManager.stopReading();
@@ -168,7 +166,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     public void a(PacketPlayInVehicleMove packetplayinvehiclemove) {
         PlayerConnectionUtils.ensureMainThread(packetplayinvehiclemove, this, this.player.x());
         if (b(packetplayinvehiclemove)) {
-            this.disconnect("Invalid move vehicle packet received");
+            this.disconnect(new ChatMessage("multiplayer.disconnect.invalid_vehicle_movement", new Object[0]));
         } else {
             Entity entity = this.player.getVehicle();
 
@@ -255,9 +253,9 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
     public void a(PacketPlayInRecipeDisplayed packetplayinrecipedisplayed) {
         PlayerConnectionUtils.ensureMainThread(packetplayinrecipedisplayed, this, this.player.x());
-        if (packetplayinrecipedisplayed.a() == PacketPlayInRecipeDisplayed.a) {
-            this.player.F().d(packetplayinrecipedisplayed.b());
-        } else if (packetplayinrecipedisplayed.a() == PacketPlayInRecipeDisplayed.b) {
+        if (packetplayinrecipedisplayed.a() == PacketPlayInRecipeDisplayed.a.a) {
+            this.player.F().f(packetplayinrecipedisplayed.b());
+        } else if (packetplayinrecipedisplayed.a() == PacketPlayInRecipeDisplayed.a.b) {
             this.player.F().a(packetplayinrecipedisplayed.c());
             this.player.F().b(packetplayinrecipedisplayed.d());
         }
@@ -280,7 +278,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     public void a(PacketPlayInFlying packetplayinflying) {
         PlayerConnectionUtils.ensureMainThread(packetplayinflying, this, this.player.x());
         if (b(packetplayinflying)) {
-            this.disconnect("Invalid move player packet received");
+            this.disconnect(new ChatMessage("multiplayer.disconnect.invalid_player_movement", new Object[0]));
         } else {
             WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
 
@@ -670,7 +668,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
             for (int i = 0; i < s.length(); ++i) {
                 if (!SharedConstants.isAllowedChatCharacter(s.charAt(i))) {
-                    this.disconnect("Illegal characters in chat");
+                    this.disconnect(new ChatMessage("multiplayer.disconnect.illegal_characters", new Object[0]));
                     return;
                 }
             }
@@ -685,7 +683,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
             this.chatThrottle += 20;
             if (this.chatThrottle > 200 && !this.minecraftServer.getPlayerList().isOp(this.player.getProfile())) {
-                this.disconnect("disconnect.spam");
+                this.disconnect(new ChatMessage("disconnect.spam", new Object[0]));
             }
 
         }
@@ -797,7 +795,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                     entity.a(this.player, packetplayinuseentity.c(), enumhand);
                 } else if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.ATTACK) {
                     if (entity instanceof EntityItem || entity instanceof EntityExperienceOrb || entity instanceof EntityArrow || entity == this.player) {
-                        this.disconnect("Attempting to attack an invalid entity");
+                        this.disconnect(new ChatMessage("multiplayer.disconnect.invalid_entity_attacked", new Object[0]));
                         this.minecraftServer.warning("Player " + this.player.getName() + " tried to attack an invalid entity");
                         return;
                     }

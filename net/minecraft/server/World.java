@@ -828,7 +828,7 @@ public abstract class World implements IBlockAccess {
 
     public void kill(Entity entity) {
         if (entity.isVehicle()) {
-            entity.aF();
+            entity.ejectPassengers();
         }
 
         if (entity.isPassenger()) {
@@ -1241,6 +1241,19 @@ public abstract class World implements IBlockAccess {
     }
 
     public void entityJoinedWorld(Entity entity, boolean flag) {
+        int i;
+        int j;
+
+        if (!(entity instanceof EntityHuman)) {
+            i = MathHelper.floor(entity.locX);
+            j = MathHelper.floor(entity.locZ);
+            boolean flag1 = true;
+
+            if (flag && !this.isAreaLoaded(i - 32, 0, j - 32, i + 32, 0, j + 32, true)) {
+                return;
+            }
+        }
+
         entity.M = entity.locX;
         entity.N = entity.locY;
         entity.O = entity.locZ;
@@ -1249,7 +1262,7 @@ public abstract class World implements IBlockAccess {
         if (flag && entity.aa) {
             ++entity.ticksLived;
             if (entity.isPassenger()) {
-                entity.leaveVehicle();
+                entity.aC();
             } else {
                 entity.B_();
             }
@@ -1276,8 +1289,8 @@ public abstract class World implements IBlockAccess {
             entity.yaw = entity.lastYaw;
         }
 
-        int i = MathHelper.floor(entity.locX / 16.0D);
-        int j = MathHelper.floor(entity.locY / 16.0D);
+        i = MathHelper.floor(entity.locX / 16.0D);
+        j = MathHelper.floor(entity.locY / 16.0D);
         int k = MathHelper.floor(entity.locZ / 16.0D);
 
         if (!entity.aa || entity.ab != i || entity.ac != j || entity.ad != k) {

@@ -16,7 +16,7 @@ public class BlockLog1 extends BlockLogAbstract {
     });
 
     public BlockLog1() {
-        this.x(this.blockStateList.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLog1.AXIS, BlockLogAbstract.EnumLogRotation.Y));
+        this.w(this.blockStateList.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLog1.AXIS, BlockLogAbstract.EnumLogRotation.Y));
     }
 
     public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -94,7 +94,7 @@ public class BlockLog1 extends BlockLogAbstract {
         return new BlockStateList(this, new IBlockState[] { BlockLog1.VARIANT, BlockLog1.AXIS});
     }
 
-    protected ItemStack v(IBlockData iblockdata) {
+    protected ItemStack u(IBlockData iblockdata) {
         return new ItemStack(Item.getItemOf(this), 1, ((BlockWood.EnumLogVariant) iblockdata.get(BlockLog1.VARIANT)).a());
     }
 

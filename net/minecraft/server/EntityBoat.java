@@ -168,7 +168,7 @@ public class EntityBoat extends Entity {
         }
 
         if (!this.world.isClientSide && this.h >= 60.0F) {
-            this.aF();
+            this.ejectPassengers();
         }
 
         if (this.q() > 0) {

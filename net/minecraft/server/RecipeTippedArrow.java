@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.util.Collection;
 
-public class RecipeTippedArrow extends IRecipe {
+public class RecipeTippedArrow implements IRecipe {
 
     public RecipeTippedArrow() {}
 

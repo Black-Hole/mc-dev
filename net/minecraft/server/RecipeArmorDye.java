@@ -3,7 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 
-public class RecipeArmorDye extends IRecipe {
+public class RecipeArmorDye implements IRecipe {
 
     public RecipeArmorDye() {}
 

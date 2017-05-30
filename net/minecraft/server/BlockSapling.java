@@ -9,7 +9,7 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
     protected static final AxisAlignedBB d = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
 
     protected BlockSapling() {
-        this.x(this.blockStateList.getBlockData().set(BlockSapling.TYPE, BlockWood.EnumLogVariant.OAK).set(BlockSapling.STAGE, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockSapling.TYPE, BlockWood.EnumLogVariant.OAK).set(BlockSapling.STAGE, Integer.valueOf(0)));
         this.a(CreativeModeTab.c);
     }
 

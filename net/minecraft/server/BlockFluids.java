@@ -10,7 +10,7 @@ public abstract class BlockFluids extends Block {
 
     protected BlockFluids(Material material) {
         super(material);
-        this.x(this.blockStateList.getBlockData().set(BlockFluids.LEVEL, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockFluids.LEVEL, Integer.valueOf(0)));
         this.a(true);
     }
 
@@ -35,12 +35,12 @@ public abstract class BlockFluids extends Block {
         return (float) (i + 1) / 9.0F;
     }
 
-    protected int i(IBlockData iblockdata) {
+    protected int x(IBlockData iblockdata) {
         return iblockdata.getMaterial() == this.material ? ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() : -1;
     }
 
     protected int y(IBlockData iblockdata) {
-        int i = this.i(iblockdata);
+        int i = this.x(iblockdata);
 
         return i >= 8 ? 0 : i;
     }

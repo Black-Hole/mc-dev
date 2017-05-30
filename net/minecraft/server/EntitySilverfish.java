@@ -133,7 +133,7 @@ public class EntitySilverfish extends EntityMonster {
                     BlockPosition blockposition = (new BlockPosition(this.a.locX, this.a.locY + 0.5D, this.a.locZ)).shift(this.h);
                     IBlockData iblockdata = this.a.world.getType(blockposition);
 
-                    if (BlockMonsterEggs.i(iblockdata)) {
+                    if (BlockMonsterEggs.x(iblockdata)) {
                         this.i = true;
                         return true;
                     }
@@ -156,7 +156,7 @@ public class EntitySilverfish extends EntityMonster {
                 BlockPosition blockposition = (new BlockPosition(this.a.locX, this.a.locY + 0.5D, this.a.locZ)).shift(this.h);
                 IBlockData iblockdata = world.getType(blockposition);
 
-                if (BlockMonsterEggs.i(iblockdata)) {
+                if (BlockMonsterEggs.x(iblockdata)) {
                     world.setTypeAndData(blockposition, Blocks.MONSTER_EGG.getBlockData().set(BlockMonsterEggs.VARIANT, BlockMonsterEggs.EnumMonsterEggVarient.a(iblockdata)), 3);
                     this.a.doSpawnEffect();
                     this.a.die();

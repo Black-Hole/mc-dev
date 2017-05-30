@@ -140,11 +140,11 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         return i;
     }
 
-    public void a(EnumChatFormat enumchatformat) {
+    public void setColor(EnumChatFormat enumchatformat) {
         this.k = enumchatformat;
     }
 
-    public EnumChatFormat m() {
+    public EnumChatFormat getColor() {
         return this.k;
     }
 }

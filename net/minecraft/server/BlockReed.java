@@ -11,7 +11,7 @@ public class BlockReed extends Block {
 
     protected BlockReed() {
         super(Material.PLANT);
-        this.x(this.blockStateList.getBlockData().set(BlockReed.AGE, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockReed.AGE, Integer.valueOf(0)));
         this.a(true);
     }
 

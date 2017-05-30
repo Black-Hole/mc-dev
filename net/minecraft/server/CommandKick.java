@@ -23,21 +23,17 @@ public class CommandKick extends CommandAbstract {
     public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
         if (astring.length > 0 && astring[0].length() > 1) {
             EntityPlayer entityplayer = minecraftserver.getPlayerList().getPlayer(astring[0]);
-            String s = "Kicked by an operator.";
-            boolean flag = false;
 
             if (entityplayer == null) {
                 throw new ExceptionPlayerNotFound("commands.generic.player.notFound", new Object[] { astring[0]});
             } else {
                 if (astring.length >= 2) {
-                    s = a(icommandlistener, astring, 1).toPlainText();
-                    flag = true;
-                }
+                    IChatBaseComponent ichatbasecomponent = a(icommandlistener, astring, 1);
 
-                entityplayer.playerConnection.disconnect(s);
-                if (flag) {
-                    a(icommandlistener, (ICommand) this, "commands.kick.success.reason", new Object[] { entityplayer.getName(), s});
+                    entityplayer.playerConnection.disconnect(ichatbasecomponent);
+                    a(icommandlistener, (ICommand) this, "commands.kick.success.reason", new Object[] { entityplayer.getName(), ichatbasecomponent.toPlainText()});
                 } else {
+                    entityplayer.playerConnection.disconnect(new ChatMessage("multiplayer.disconnect.kicked", new Object[0]));
                     a(icommandlistener, (ICommand) this, "commands.kick.success", new Object[] { entityplayer.getName()});
                 }
 

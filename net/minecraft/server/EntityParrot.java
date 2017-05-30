@@ -157,15 +157,16 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
             }
 
             this.addEffect(new MobEffect(MobEffects.POISON, 900));
-            if (!this.bc()) {
+            if (entityhuman.z() || !this.bc()) {
                 this.damageEntity(DamageSource.playerAttack(entityhuman), Float.MAX_VALUE);
             }
 
             return true;
-        } else if (!this.world.isClientSide && this.isTamed() && this.e((EntityLiving) entityhuman)) {
-            this.goalSit.setSitting(!this.isSitting());
-            return true;
         } else {
+            if (!this.world.isClientSide && !this.a() && this.isTamed() && this.e((EntityLiving) entityhuman)) {
+                this.goalSit.setSitting(!this.isSitting());
+            }
+
             return super.a(entityhuman, enumhand);
         }
     }
@@ -308,6 +309,10 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     @Nullable
     protected MinecraftKey J() {
         return LootTables.ax;
+    }
+
+    public boolean a() {
+        return !this.onGround;
     }
 
     static {

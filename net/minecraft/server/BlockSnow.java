@@ -10,7 +10,7 @@ public class BlockSnow extends Block {
 
     protected BlockSnow() {
         super(Material.PACKED_ICE);
-        this.x(this.blockStateList.getBlockData().set(BlockSnow.LAYERS, Integer.valueOf(1)));
+        this.w(this.blockStateList.getBlockData().set(BlockSnow.LAYERS, Integer.valueOf(1)));
         this.a(true);
         this.a(CreativeModeTab.c);
     }

@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -77,6 +78,10 @@ public class CommandGamerule extends CommandAbstract {
 
                 if (gamerules.a(astring[0], GameRules.EnumGameRuleType.BOOLEAN_VALUE)) {
                     return a(astring, new String[] { "true", "false"});
+                }
+
+                if (gamerules.a(astring[0], GameRules.EnumGameRuleType.d)) {
+                    return a(astring, (Collection) minecraftserver.aL().d().keySet());
                 }
             }
 

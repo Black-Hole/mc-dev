@@ -12,7 +12,7 @@ public class BlockLadder extends Block {
 
     protected BlockLadder() {
         super(Material.ORIENTABLE);
-        this.x(this.blockStateList.getBlockData().set(BlockLadder.FACING, EnumDirection.NORTH));
+        this.w(this.blockStateList.getBlockData().set(BlockLadder.FACING, EnumDirection.NORTH));
         this.a(CreativeModeTab.c);
     }
 

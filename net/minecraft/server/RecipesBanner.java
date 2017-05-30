@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import javax.annotation.Nullable;
 
-public class RecipesBanner {    public static class AddRecipe extends IRecipe {
+public class RecipesBanner {    public static class AddRecipe implements IRecipe {
 
         public AddRecipe() {}
 
@@ -186,7 +186,7 @@ public class RecipesBanner {    public static class AddRecipe extends IRecipe {
         }
     }
 
-    public static class DuplicateRecipe extends IRecipe {
+    public static class DuplicateRecipe implements IRecipe {
 
         public DuplicateRecipe() {}
 

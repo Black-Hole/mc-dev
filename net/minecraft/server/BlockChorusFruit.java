@@ -17,7 +17,7 @@ public class BlockChorusFruit extends Block {
     protected BlockChorusFruit() {
         super(Material.PLANT, MaterialMapColor.A);
         this.a(CreativeModeTab.c);
-        this.x(this.blockStateList.getBlockData().set(BlockChorusFruit.a, Boolean.valueOf(false)).set(BlockChorusFruit.b, Boolean.valueOf(false)).set(BlockChorusFruit.c, Boolean.valueOf(false)).set(BlockChorusFruit.d, Boolean.valueOf(false)).set(BlockChorusFruit.e, Boolean.valueOf(false)).set(BlockChorusFruit.f, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockChorusFruit.a, Boolean.valueOf(false)).set(BlockChorusFruit.b, Boolean.valueOf(false)).set(BlockChorusFruit.c, Boolean.valueOf(false)).set(BlockChorusFruit.d, Boolean.valueOf(false)).set(BlockChorusFruit.e, Boolean.valueOf(false)).set(BlockChorusFruit.f, Boolean.valueOf(false)));
     }
 
     public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {

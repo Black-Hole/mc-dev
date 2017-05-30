@@ -21,7 +21,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
     public BlockMinecartDetector() {
         super(true);
-        this.x(this.blockStateList.getBlockData().set(BlockMinecartDetector.POWERED, Boolean.valueOf(false)).set(BlockMinecartDetector.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH));
+        this.w(this.blockStateList.getBlockData().set(BlockMinecartDetector.POWERED, Boolean.valueOf(false)).set(BlockMinecartDetector.SHAPE, BlockMinecartTrackAbstract.EnumTrackPosition.NORTH_SOUTH));
         this.a(true);
     }
 

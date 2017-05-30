@@ -23,7 +23,7 @@ public abstract class BlockButtonAbstract extends BlockDirectional {
 
     protected BlockButtonAbstract(boolean flag) {
         super(Material.ORIENTABLE);
-        this.x(this.blockStateList.getBlockData().set(BlockButtonAbstract.FACING, EnumDirection.NORTH).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockButtonAbstract.FACING, EnumDirection.NORTH).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false)));
         this.a(true);
         this.a(CreativeModeTab.d);
         this.I = flag;

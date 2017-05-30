@@ -82,6 +82,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         int i = this.position.getX();
         int j = this.position.getY();
         int k = this.position.getZ();
+        int l = this.levels;
 
         this.levels = 0;
         this.g.clear();
@@ -92,10 +93,10 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         boolean flag = true;
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        int l;
+        int i1;
 
-        for (l = j + 1; l < 256; ++l) {
-            IBlockData iblockdata = this.world.getType(blockposition_mutableblockposition.c(i, l, k));
+        for (i1 = j + 1; i1 < 256; ++i1) {
+            IBlockData iblockdata = this.world.getType(blockposition_mutableblockposition.c(i, i1, k));
             float[] afloat;
 
             if (iblockdata.getBlock() == Blocks.STAINED_GLASS) {
@@ -130,18 +131,18 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         }
 
         if (this.j) {
-            for (l = 1; l <= 4; this.levels = l++) {
-                int i1 = j - l;
+            for (i1 = 1; i1 <= 4; this.levels = i1++) {
+                int j1 = j - i1;
 
-                if (i1 < 0) {
+                if (j1 < 0) {
                     break;
                 }
 
                 boolean flag1 = true;
 
-                for (int j1 = i - l; j1 <= i + l && flag1; ++j1) {
-                    for (int k1 = k - l; k1 <= k + l; ++k1) {
-                        Block block = this.world.getType(new BlockPosition(j1, i1, k1)).getBlock();
+                for (int k1 = i - i1; k1 <= i + i1 && flag1; ++k1) {
+                    for (int l1 = k - i1; l1 <= k + i1; ++l1) {
+                        Block block = this.world.getType(new BlockPosition(k1, j1, l1)).getBlock();
 
                         if (block != Blocks.EMERALD_BLOCK && block != Blocks.GOLD_BLOCK && block != Blocks.DIAMOND_BLOCK && block != Blocks.IRON_BLOCK) {
                             flag1 = false;
@@ -160,7 +161,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
             }
         }
 
-        if (!this.world.isClientSide) {
+        if (!this.world.isClientSide && l < this.levels) {
             Iterator iterator = this.world.a(EntityPlayer.class, (new AxisAlignedBB((double) i, (double) j, (double) k, (double) i, (double) (j - 4), (double) k)).grow(10.0D, 5.0D, 10.0D)).iterator();
 
             while (iterator.hasNext()) {

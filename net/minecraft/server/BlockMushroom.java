@@ -53,7 +53,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
         return super.canPlace(world, blockposition) && this.f(world, blockposition, this.getBlockData());
     }
 
-    protected boolean i(IBlockData iblockdata) {
+    protected boolean x(IBlockData iblockdata) {
         return iblockdata.b();
     }
 
@@ -61,7 +61,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
         if (blockposition.getY() >= 0 && blockposition.getY() < 256) {
             IBlockData iblockdata1 = world.getType(blockposition.down());
 
-            return iblockdata1.getBlock() == Blocks.MYCELIUM ? true : (iblockdata1.getBlock() == Blocks.DIRT && iblockdata1.get(BlockDirt.VARIANT) == BlockDirt.EnumDirtVariant.PODZOL ? true : world.j(blockposition) < 13 && this.i(iblockdata1));
+            return iblockdata1.getBlock() == Blocks.MYCELIUM ? true : (iblockdata1.getBlock() == Blocks.DIRT && iblockdata1.get(BlockDirt.VARIANT) == BlockDirt.EnumDirtVariant.PODZOL ? true : world.j(blockposition) < 13 && this.x(iblockdata1));
         } else {
             return false;
         }

@@ -124,10 +124,12 @@ public class EntityZombieVillager extends EntityZombie {
         }
 
         this.world.addEntity(entityvillager);
-        EntityHuman entityhuman = this.world.b(this.by);
+        if (this.by != null) {
+            EntityHuman entityhuman = this.world.b(this.by);
 
-        if (entityhuman instanceof EntityPlayer) {
-            CriterionTriggers.q.a((EntityPlayer) entityhuman, this, entityvillager);
+            if (entityhuman instanceof EntityPlayer) {
+                CriterionTriggers.q.a((EntityPlayer) entityhuman, this, entityvillager);
+            }
         }
 
         entityvillager.addEffect(new MobEffect(MobEffects.CONFUSION, 200, 0));

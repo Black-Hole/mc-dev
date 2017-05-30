@@ -273,7 +273,7 @@ public abstract class EntityHuman extends EntityLiving {
         this.activeContainer = this.defaultContainer;
     }
 
-    public void leaveVehicle() {
+    public void aC() {
         if (!this.world.isClientSide && this.isSneaking() && this.isPassenger()) {
             this.stopRiding();
             this.setSneaking(false);
@@ -284,7 +284,7 @@ public abstract class EntityHuman extends EntityLiving {
             float f = this.yaw;
             float f1 = this.pitch;
 
-            super.leaveVehicle();
+            super.aC();
             this.bB = this.bC;
             this.bC = 0.0F;
             this.l(this.locX - d0, this.locY - d1, this.locZ - d2);
@@ -372,7 +372,7 @@ public abstract class EntityHuman extends EntityLiving {
 
         this.j(this.getShoulderEntityLeft());
         this.j(this.getShoulderEntityRight());
-        if (!this.world.isClientSide && (!this.onGround || this.isInWater() || this.isPassenger())) {
+        if (!this.world.isClientSide && (this.fallDistance > 0.5F || this.isInWater() || this.isPassenger()) || this.abilities.isFlying) {
             this.releaseShoulderEntities();
         }
 
@@ -638,7 +638,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("DataVersion", 1136);
+        nbttagcompound.setInt("DataVersion", 1137);
         nbttagcompound.set("Inventory", this.inventory.a(new NBTTagList()));
         nbttagcompound.setInt("SelectedItemSlot", this.inventory.itemInHandIndex);
         nbttagcompound.setBoolean("Sleeping", this.sleeping);

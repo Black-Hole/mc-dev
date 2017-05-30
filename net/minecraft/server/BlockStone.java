@@ -8,7 +8,7 @@ public class BlockStone extends Block {
 
     public BlockStone() {
         super(Material.STONE);
-        this.x(this.blockStateList.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE));
+        this.w(this.blockStateList.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.STONE));
         this.a(CreativeModeTab.b);
     }
 

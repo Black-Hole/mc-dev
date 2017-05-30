@@ -31,7 +31,7 @@ public class BlockFalling extends Block {
     }
 
     private void b(World world, BlockPosition blockposition) {
-        if (i(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
+        if (x(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
             boolean flag = true;
 
             if (!BlockFalling.instaFall && world.areChunksLoadedBetween(blockposition.a(-32, -32, -32), blockposition.a(32, 32, 32))) {
@@ -46,7 +46,7 @@ public class BlockFalling extends Block {
 
                 BlockPosition blockposition1;
 
-                for (blockposition1 = blockposition.down(); i(world.getType(blockposition1)) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
+                for (blockposition1 = blockposition.down(); x(world.getType(blockposition1)) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
                     ;
                 }
 
@@ -64,7 +64,7 @@ public class BlockFalling extends Block {
         return 2;
     }
 
-    public static boolean i(IBlockData iblockdata) {
+    public static boolean x(IBlockData iblockdata) {
         Block block = iblockdata.getBlock();
         Material material = iblockdata.getMaterial();
 

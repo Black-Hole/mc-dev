@@ -376,7 +376,7 @@ public abstract class PlayerList {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer2 = (EntityPlayer) iterator.next();
 
-            entityplayer2.playerConnection.disconnect("You logged in from another location");
+            entityplayer2.playerConnection.disconnect(new ChatMessage("multiplayer.disconnect.duplicate_login", new Object[0]));
         }
 
         Object object;
@@ -847,7 +847,7 @@ public abstract class PlayerList {
 
     public void u() {
         for (int i = 0; i < this.players.size(); ++i) {
-            ((EntityPlayer) this.players.get(i)).playerConnection.disconnect("Server closed");
+            ((EntityPlayer) this.players.get(i)).playerConnection.disconnect(new ChatMessage("multiplayer.disconnect.server_shutdown", new Object[0]));
         }
 
     }

@@ -16,7 +16,7 @@ public class BlockLever extends Block {
 
     protected BlockLever() {
         super(Material.ORIENTABLE);
-        this.x(this.blockStateList.getBlockData().set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH).set(BlockLever.POWERED, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockLever.FACING, BlockLever.EnumLeverPosition.NORTH).set(BlockLever.POWERED, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 

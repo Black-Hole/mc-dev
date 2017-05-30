@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class PathfinderNormal extends PathfinderAbstract {
@@ -322,7 +321,6 @@ public class PathfinderNormal extends PathfinderAbstract {
         return pathtype;
     }
 
-    @Nonnull
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k, PathType pathtype) {
         BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
 

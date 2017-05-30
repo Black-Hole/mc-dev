@@ -136,9 +136,13 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
 
     @Nullable
     public EntityPlayer getBreedCause() {
-        EntityHuman entityhuman = this.world.b(this.by);
+        if (this.by == null) {
+            return null;
+        } else {
+            EntityHuman entityhuman = this.world.b(this.by);
 
-        return entityhuman instanceof EntityPlayer ? (EntityPlayer) entityhuman : null;
+            return entityhuman instanceof EntityPlayer ? (EntityPlayer) entityhuman : null;
+        }
     }
 
     public boolean isInLove() {

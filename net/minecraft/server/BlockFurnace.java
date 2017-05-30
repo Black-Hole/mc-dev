@@ -10,7 +10,7 @@ public class BlockFurnace extends BlockTileEntity {
 
     protected BlockFurnace(boolean flag) {
         super(Material.STONE);
-        this.x(this.blockStateList.getBlockData().set(BlockFurnace.FACING, EnumDirection.NORTH));
+        this.w(this.blockStateList.getBlockData().set(BlockFurnace.FACING, EnumDirection.NORTH));
         this.b = flag;
     }
 

@@ -15,7 +15,7 @@ public class BlockChest extends BlockTileEntity {
 
     protected BlockChest(BlockChest.Type blockchest_type) {
         super(Material.WOOD);
-        this.x(this.blockStateList.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH));
+        this.w(this.blockStateList.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH));
         this.g = blockchest_type;
         this.a(blockchest_type == BlockChest.Type.TRAP ? CreativeModeTab.d : CreativeModeTab.c);
     }

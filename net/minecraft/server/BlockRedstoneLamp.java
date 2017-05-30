@@ -54,7 +54,7 @@ public class BlockRedstoneLamp extends Block {
         return new ItemStack(Blocks.REDSTONE_LAMP);
     }
 
-    protected ItemStack v(IBlockData iblockdata) {
+    protected ItemStack u(IBlockData iblockdata) {
         return new ItemStack(Blocks.REDSTONE_LAMP);
     }
 }

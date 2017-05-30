@@ -571,7 +571,7 @@ public abstract class Container {
             ItemStack itemstack = ItemStack.a;
             IRecipe irecipe = CraftingManager.b(inventorycrafting, world);
 
-            if (irecipe != null && (irecipe.c() || !world.getGameRules().getBoolean("doLimitedCrafting") || entityplayer.F().f(irecipe))) {
+            if (irecipe != null && (irecipe.c() || !world.getGameRules().getBoolean("doLimitedCrafting") || entityplayer.F().b(irecipe))) {
                 inventorycraftresult.a(irecipe);
                 itemstack = irecipe.craftItem(inventorycrafting);
             }

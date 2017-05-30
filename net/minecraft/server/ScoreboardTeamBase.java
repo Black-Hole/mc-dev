@@ -19,7 +19,7 @@ public abstract class ScoreboardTeamBase {
 
     public abstract boolean allowFriendlyFire();
 
-    public abstract EnumChatFormat m();
+    public abstract EnumChatFormat getColor();
 
     public abstract Collection<String> getPlayerNameSet();
 

@@ -6,7 +6,7 @@ public class BlockStainedGlassPane extends BlockThin {
 
     public BlockStainedGlassPane() {
         super(Material.SHATTERABLE, false);
-        this.x(this.blockStateList.getBlockData().set(BlockStainedGlassPane.NORTH, Boolean.valueOf(false)).set(BlockStainedGlassPane.EAST, Boolean.valueOf(false)).set(BlockStainedGlassPane.SOUTH, Boolean.valueOf(false)).set(BlockStainedGlassPane.WEST, Boolean.valueOf(false)).set(BlockStainedGlassPane.COLOR, EnumColor.WHITE));
+        this.w(this.blockStateList.getBlockData().set(BlockStainedGlassPane.NORTH, Boolean.valueOf(false)).set(BlockStainedGlassPane.EAST, Boolean.valueOf(false)).set(BlockStainedGlassPane.SOUTH, Boolean.valueOf(false)).set(BlockStainedGlassPane.WEST, Boolean.valueOf(false)).set(BlockStainedGlassPane.COLOR, EnumColor.WHITE));
         this.a(CreativeModeTab.c);
     }
 

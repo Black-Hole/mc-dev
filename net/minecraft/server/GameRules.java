@@ -32,7 +32,7 @@ public class GameRules {
         this.a("doLimitedCrafting", "false", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
         this.a("maxCommandChainLength", "65536", GameRules.EnumGameRuleType.NUMERICAL_VALUE);
         this.a("announceAdvancements", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("gameLoopFunction", "-", GameRules.EnumGameRuleType.ANY_VALUE);
+        this.a("gameLoopFunction", "-", GameRules.EnumGameRuleType.d);
     }
 
     public void a(String s, String s1, GameRules.EnumGameRuleType gamerules_enumgameruletype) {
@@ -112,7 +112,7 @@ public class GameRules {
 
     public static enum EnumGameRuleType {
 
-        ANY_VALUE, BOOLEAN_VALUE, NUMERICAL_VALUE;
+        ANY_VALUE, BOOLEAN_VALUE, NUMERICAL_VALUE, d;
 
         private EnumGameRuleType() {}
     }

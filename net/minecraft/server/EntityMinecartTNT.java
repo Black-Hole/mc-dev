@@ -58,17 +58,21 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
     }
 
     public void a(DamageSource damagesource) {
-        super.a(damagesource);
         double d0 = this.motX * this.motX + this.motZ * this.motZ;
 
-        if (!damagesource.isExplosion() && this.world.getGameRules().getBoolean("doEntityDrops")) {
-            this.a(new ItemStack(Blocks.TNT, 1), 0.0F);
-        }
+        if (!damagesource.o() && !damagesource.isExplosion() && d0 < 0.009999999776482582D) {
+            super.a(damagesource);
+            if (!damagesource.isExplosion() && this.world.getGameRules().getBoolean("doEntityDrops")) {
+                this.a(new ItemStack(Blocks.TNT, 1), 0.0F);
+            }
 
-        if (damagesource.o() || damagesource.isExplosion() || d0 >= 0.009999999776482582D) {
-            this.c(d0);
-        }
+        } else {
+            if (this.a < 0) {
+                this.j();
+                this.a = this.random.nextInt(20) + this.random.nextInt(20);
+            }
 
+        }
     }
 
     protected void c(double d0) {

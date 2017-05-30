@@ -22,7 +22,7 @@ public class BlockPumpkin extends BlockFacingHorizontal {
 
     protected BlockPumpkin() {
         super(Material.PUMPKIN, MaterialMapColor.r);
-        this.x(this.blockStateList.getBlockData().set(BlockPumpkin.FACING, EnumDirection.NORTH));
+        this.w(this.blockStateList.getBlockData().set(BlockPumpkin.FACING, EnumDirection.NORTH));
         this.a(true);
         this.a(CreativeModeTab.b);
     }

@@ -11,7 +11,7 @@ public abstract class BlockFlowers extends BlockPlant {
     protected BlockStateEnum<BlockFlowers.EnumFlowerVarient> TYPE;
 
     protected BlockFlowers() {
-        this.x(this.blockStateList.getBlockData().set(this.g(), this.e() == BlockFlowers.EnumFlowerType.RED ? BlockFlowers.EnumFlowerVarient.POPPY : BlockFlowers.EnumFlowerVarient.DANDELION));
+        this.w(this.blockStateList.getBlockData().set(this.g(), this.e() == BlockFlowers.EnumFlowerType.RED ? BlockFlowers.EnumFlowerVarient.POPPY : BlockFlowers.EnumFlowerVarient.DANDELION));
     }
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {

@@ -11,7 +11,7 @@ public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElem
 
     public BlockTallPlant() {
         super(Material.REPLACEABLE_PLANT);
-        this.x(this.blockStateList.getBlockData().set(BlockTallPlant.VARIANT, BlockTallPlant.EnumTallFlowerVariants.SUNFLOWER).set(BlockTallPlant.HALF, BlockTallPlant.EnumTallPlantHalf.LOWER).set(BlockTallPlant.d, EnumDirection.NORTH));
+        this.w(this.blockStateList.getBlockData().set(BlockTallPlant.VARIANT, BlockTallPlant.EnumTallFlowerVariants.SUNFLOWER).set(BlockTallPlant.HALF, BlockTallPlant.EnumTallPlantHalf.LOWER).set(BlockTallPlant.d, EnumDirection.NORTH));
         this.c(0.0F);
         this.a(SoundEffectType.c);
         this.c("doublePlant");

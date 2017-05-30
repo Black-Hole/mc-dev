@@ -146,7 +146,7 @@ public abstract class BlockLeaves extends Block {
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         if (!world.isClientSide) {
-            int j = this.i(iblockdata);
+            int j = this.x(iblockdata);
 
             if (i > 0) {
                 j -= 2 << i;
@@ -176,7 +176,7 @@ public abstract class BlockLeaves extends Block {
 
     protected void a(World world, BlockPosition blockposition, IBlockData iblockdata, int i) {}
 
-    protected int i(IBlockData iblockdata) {
+    protected int x(IBlockData iblockdata) {
         return 20;
     }
 

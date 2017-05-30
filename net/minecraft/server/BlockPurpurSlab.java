@@ -14,7 +14,7 @@ public abstract class BlockPurpurSlab extends BlockStepAbstract {
             iblockdata = iblockdata.set(BlockPurpurSlab.HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
         }
 
-        this.x(iblockdata.set(BlockPurpurSlab.d, BlockPurpurSlab.Type.DEFAULT));
+        this.w(iblockdata.set(BlockPurpurSlab.d, BlockPurpurSlab.Type.DEFAULT));
         this.a(CreativeModeTab.b);
     }
 

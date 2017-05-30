@@ -139,7 +139,7 @@ public class PlayerInventory implements IInventory {
         return k;
     }
 
-    private int h(ItemStack itemstack) {
+    private int i(ItemStack itemstack) {
         int i = this.firstPartial(itemstack);
 
         if (i == -1) {
@@ -245,7 +245,7 @@ public class PlayerInventory implements IInventory {
                     do {
                         j = itemstack.getCount();
                         if (i == -1) {
-                            itemstack.setCount(this.h(itemstack));
+                            itemstack.setCount(this.i(itemstack));
                         } else {
                             itemstack.setCount(this.d(i, itemstack));
                         }
@@ -318,7 +318,7 @@ public class PlayerInventory implements IInventory {
         return nonnulllist != null && !((ItemStack) nonnulllist.get(i)).isEmpty() ? ContainerUtil.a(nonnulllist, i, j) : ItemStack.a;
     }
 
-    public void e(ItemStack itemstack) {
+    public void f(ItemStack itemstack) {
         Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
@@ -575,7 +575,7 @@ public class PlayerInventory implements IInventory {
         return this.player.dead ? false : entityhuman.h(this.player) <= 64.0D;
     }
 
-    public boolean g(ItemStack itemstack) {
+    public boolean h(ItemStack itemstack) {
         Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {

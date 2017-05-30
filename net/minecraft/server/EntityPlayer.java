@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 public class EntityPlayer extends EntityHuman implements ICrafting {
 
     private static final Logger bV = LogManager.getLogger();
-    private String locale = "en_US";
+    public String locale = "en_US";
     public PlayerConnection playerConnection;
     public final MinecraftServer server;
     public final PlayerInteractManager playerInteractManager;
@@ -149,7 +148,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             nbttagcompound.set("RootVehicle", nbttagcompound2);
         }
 
-        nbttagcompound.set("recipeBook", this.cr.e());
+        nbttagcompound.set("recipeBook", this.cr.c());
     }
 
     public void levelDown(int i) {
@@ -401,7 +400,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         ScoreboardTeam scoreboardteam = this.getScoreboard().getPlayerTeam(this.getName());
 
         if (scoreboardteam != null) {
-            int i = scoreboardteam.m().b();
+            int i = scoreboardteam.getColor().b();
 
             if (i >= 0 && i < IScoreboardCriteria.n.length) {
                 Iterator iterator = this.getScoreboard().getObjectivesForCriteria(IScoreboardCriteria.n[i]).iterator();
@@ -418,7 +417,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         ScoreboardTeam scoreboardteam1 = this.getScoreboard().getPlayerTeam(s);
 
         if (scoreboardteam1 != null) {
-            int j = scoreboardteam1.m().b();
+            int j = scoreboardteam1.getColor().b();
 
             if (j >= 0 && j < IScoreboardCriteria.m.length) {
                 return this.getScoreboard().getObjectivesForCriteria(IScoreboardCriteria.m[j]);
@@ -803,11 +802,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
     }
 
-    public void a(@Nonnull List<IRecipe> list) {
+    public void a(List<IRecipe> list) {
         this.cr.a(list, this);
     }
 
-    public void a(@Nonnull MinecraftKey[] aminecraftkey) {
+    public void a(MinecraftKey[] aminecraftkey) {
         ArrayList arraylist = Lists.newArrayList();
         MinecraftKey[] aminecraftkey1 = aminecraftkey;
         int i = aminecraftkey.length;
@@ -827,7 +826,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void s() {
         this.cu = true;
-        this.aF();
+        this.ejectPassengers();
         if (this.sleeping) {
             this.a(true, false, false);
         }

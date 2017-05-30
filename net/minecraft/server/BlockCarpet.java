@@ -7,7 +7,7 @@ public class BlockCarpet extends Block {
 
     protected BlockCarpet() {
         super(Material.WOOL);
-        this.x(this.blockStateList.getBlockData().set(BlockCarpet.COLOR, EnumColor.WHITE));
+        this.w(this.blockStateList.getBlockData().set(BlockCarpet.COLOR, EnumColor.WHITE));
         this.a(true);
         this.a(CreativeModeTab.c);
     }

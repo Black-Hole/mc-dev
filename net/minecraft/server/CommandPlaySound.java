@@ -36,42 +36,12 @@ public class CommandPlaySound extends CommandAbstract {
             } else {
                 EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[i++]);
                 Vec3D vec3d = icommandlistener.d();
-                double d0 = vec3d.x;
-
-                if (astring.length > i) {
-                    d0 = b(d0, astring[i++], true);
-                }
-
-                double d1 = vec3d.y;
-
-                if (astring.length > i) {
-                    d1 = b(d1, astring[i++], 0, 0, false);
-                }
-
-                double d2 = vec3d.z;
-
-                if (astring.length > i) {
-                    d2 = b(d2, astring[i++], true);
-                }
-
-                double d3 = 1.0D;
-
-                if (astring.length > i) {
-                    d3 = a(astring[i++], 0.0D, 3.4028234663852886E38D);
-                }
-
-                double d4 = 1.0D;
-
-                if (astring.length > i) {
-                    d4 = a(astring[i++], 0.0D, 2.0D);
-                }
-
-                double d5 = 0.0D;
-
-                if (astring.length > i) {
-                    d5 = a(astring[i], 0.0D, 1.0D);
-                }
-
+                double d0 = astring.length > i ? b(vec3d.x, astring[i++], true) : vec3d.x;
+                double d1 = astring.length > i ? b(vec3d.y, astring[i++], 0, 0, false) : vec3d.y;
+                double d2 = astring.length > i ? b(vec3d.z, astring[i++], true) : vec3d.z;
+                double d3 = astring.length > i ? a(astring[i++], 0.0D, 3.4028234663852886E38D) : 1.0D;
+                double d4 = astring.length > i ? a(astring[i++], 0.0D, 2.0D) : 1.0D;
+                double d5 = astring.length > i ? a(astring[i], 0.0D, 1.0D) : 0.0D;
                 double d6 = d3 > 1.0D ? d3 * 16.0D : 16.0D;
                 double d7 = entityplayer.e(d0, d1, d2);
 

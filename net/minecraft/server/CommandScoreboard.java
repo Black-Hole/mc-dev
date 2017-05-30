@@ -366,7 +366,7 @@ public class CommandScoreboard extends CommandAbstract {
                         throw new ExceptionUsage("commands.scoreboard.teams.option.noValue", new Object[] { s, a(EnumChatFormat.a(true, false))});
                     }
 
-                    scoreboardteam.a(enumchatformat);
+                    scoreboardteam.setColor(enumchatformat);
                     scoreboardteam.setPrefix(enumchatformat.toString());
                     scoreboardteam.setSuffix(EnumChatFormat.RESET.toString());
                 } else if ("friendlyfire".equalsIgnoreCase(s)) {

@@ -62,7 +62,7 @@ public class PersistentScoreboard extends PersistentBase {
 
             scoreboardteam.setDisplayName(s1);
             if (nbttagcompound.hasKeyOfType("TeamColor", 8)) {
-                scoreboardteam.a(EnumChatFormat.b(nbttagcompound.getString("TeamColor")));
+                scoreboardteam.setColor(EnumChatFormat.b(nbttagcompound.getString("TeamColor")));
             }
 
             scoreboardteam.setPrefix(nbttagcompound.getString("Prefix"));
@@ -188,8 +188,8 @@ public class PersistentScoreboard extends PersistentBase {
 
             nbttagcompound.setString("Name", scoreboardteam.getName());
             nbttagcompound.setString("DisplayName", scoreboardteam.getDisplayName());
-            if (scoreboardteam.m().b() >= 0) {
-                nbttagcompound.setString("TeamColor", scoreboardteam.m().e());
+            if (scoreboardteam.getColor().b() >= 0) {
+                nbttagcompound.setString("TeamColor", scoreboardteam.getColor().e());
             }
 
             nbttagcompound.setString("Prefix", scoreboardteam.getPrefix());

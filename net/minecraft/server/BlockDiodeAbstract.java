@@ -89,7 +89,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
                     b0 = -2;
                 }
 
-                world.a(blockposition, this, this.i(iblockdata), b0);
+                world.a(blockposition, this, this.x(iblockdata), b0);
             }
 
         }
@@ -204,10 +204,10 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
     }
 
     protected int E(IBlockData iblockdata) {
-        return this.i(iblockdata);
+        return this.x(iblockdata);
     }
 
-    protected abstract int i(IBlockData iblockdata);
+    protected abstract int x(IBlockData iblockdata);
 
     protected abstract IBlockData y(IBlockData iblockdata);
 

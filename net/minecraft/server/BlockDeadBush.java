@@ -19,7 +19,7 @@ public class BlockDeadBush extends BlockPlant {
         return MaterialMapColor.p;
     }
 
-    protected boolean i(IBlockData iblockdata) {
+    protected boolean x(IBlockData iblockdata) {
         return iblockdata.getBlock() == Blocks.SAND || iblockdata.getBlock() == Blocks.HARDENED_CLAY || iblockdata.getBlock() == Blocks.STAINED_HARDENED_CLAY || iblockdata.getBlock() == Blocks.DIRT;
     }
 

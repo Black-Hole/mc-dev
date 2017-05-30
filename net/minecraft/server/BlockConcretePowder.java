@@ -6,7 +6,7 @@ public class BlockConcretePowder extends BlockFalling {
 
     public BlockConcretePowder() {
         super(Material.SAND);
-        this.x(this.blockStateList.getBlockData().set(BlockConcretePowder.a, EnumColor.WHITE));
+        this.w(this.blockStateList.getBlockData().set(BlockConcretePowder.a, EnumColor.WHITE));
         this.a(CreativeModeTab.b);
     }
 

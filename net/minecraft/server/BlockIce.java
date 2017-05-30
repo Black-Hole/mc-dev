@@ -16,7 +16,7 @@ public class BlockIce extends BlockHalfTransparent {
         entityhuman.b(StatisticList.a((Block) this));
         entityhuman.applyExhaustion(0.005F);
         if (this.n() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
-            a(world, blockposition, this.v(iblockdata));
+            a(world, blockposition, this.u(iblockdata));
         } else {
             if (world.worldProvider.l()) {
                 world.setAir(blockposition);

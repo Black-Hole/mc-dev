@@ -11,7 +11,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
     public BlockDaylightDetector(boolean flag) {
         super(Material.WOOD);
         this.c = flag;
-        this.x(this.blockStateList.getBlockData().set(BlockDaylightDetector.POWER, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockDaylightDetector.POWER, Integer.valueOf(0)));
         this.a(CreativeModeTab.d);
         this.c(0.2F);
         this.a(SoundEffectType.a);

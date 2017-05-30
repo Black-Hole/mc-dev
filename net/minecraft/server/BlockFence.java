@@ -18,7 +18,7 @@ public class BlockFence extends Block {
 
     public BlockFence(Material material, MaterialMapColor materialmapcolor) {
         super(material, materialmapcolor);
-        this.x(this.blockStateList.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(false)).set(BlockFence.EAST, Boolean.valueOf(false)).set(BlockFence.SOUTH, Boolean.valueOf(false)).set(BlockFence.WEST, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(false)).set(BlockFence.EAST, Boolean.valueOf(false)).set(BlockFence.SOUTH, Boolean.valueOf(false)).set(BlockFence.WEST, Boolean.valueOf(false)));
         this.a(CreativeModeTab.c);
     }
 
@@ -48,10 +48,10 @@ public class BlockFence extends Block {
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
-        return BlockFence.e[i(iblockdata)];
+        return BlockFence.e[x(iblockdata)];
     }
 
-    private static int i(IBlockData iblockdata) {
+    private static int x(IBlockData iblockdata) {
         int i = 0;
 
         if (((Boolean) iblockdata.get(BlockFence.NORTH)).booleanValue()) {
@@ -90,9 +90,12 @@ public class BlockFence extends Block {
         EnumBlockFaceShape enumblockfaceshape = iblockdata.d(iblockaccess, blockposition, enumdirection);
         Block block = iblockdata.getBlock();
         boolean flag = enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE && (iblockdata.getMaterial() == this.material || block instanceof BlockFenceGate);
-        boolean flag1 = block == Blocks.MELON_BLOCK || block == Blocks.PUMPKIN;
 
-        return !flag1 && !c(block) && enumblockfaceshape == EnumBlockFaceShape.SOLID || flag;
+        return !e(block) && enumblockfaceshape == EnumBlockFaceShape.SOLID || flag;
+    }
+
+    protected static boolean e(Block block) {
+        return Block.c(block) || block == Blocks.BARRIER || block == Blocks.MELON_BLOCK || block == Blocks.PUMPKIN;
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {

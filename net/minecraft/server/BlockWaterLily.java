@@ -30,7 +30,7 @@ public class BlockWaterLily extends BlockPlant {
         return BlockWaterLily.a;
     }
 
-    protected boolean i(IBlockData iblockdata) {
+    protected boolean x(IBlockData iblockdata) {
         return iblockdata.getBlock() == Blocks.WATER || iblockdata.getMaterial() == Material.ICE;
     }
 

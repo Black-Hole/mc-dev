@@ -8,7 +8,7 @@ public class BlockMycel extends Block {
 
     protected BlockMycel() {
         super(Material.GRASS, MaterialMapColor.A);
-        this.x(this.blockStateList.getBlockData().set(BlockMycel.SNOWY, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockMycel.SNOWY, Boolean.valueOf(false)));
         this.a(true);
         this.a(CreativeModeTab.b);
     }

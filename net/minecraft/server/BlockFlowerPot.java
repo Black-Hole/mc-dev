@@ -11,7 +11,7 @@ public class BlockFlowerPot extends BlockTileEntity {
 
     public BlockFlowerPot() {
         super(Material.ORIENTABLE);
-        this.x(this.blockStateList.getBlockData().set(BlockFlowerPot.CONTENTS, BlockFlowerPot.EnumFlowerPotContents.EMPTY).set(BlockFlowerPot.LEGACY_DATA, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockFlowerPot.CONTENTS, BlockFlowerPot.EnumFlowerPotContents.EMPTY).set(BlockFlowerPot.LEGACY_DATA, Integer.valueOf(0)));
     }
 
     public String getName() {

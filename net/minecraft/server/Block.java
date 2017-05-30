@@ -152,7 +152,7 @@ public class Block {
         this.material = material;
         this.y = materialmapcolor;
         this.blockStateList = this.getStateList();
-        this.x(this.blockStateList.getBlockData());
+        this.w(this.blockStateList.getBlockData());
         this.l = this.getBlockData().p();
         this.m = this.l ? 255 : 0;
         this.n = !material.blocksLight();
@@ -450,7 +450,7 @@ public class Block {
         entityhuman.b(StatisticList.a(this));
         entityhuman.applyExhaustion(0.005F);
         if (this.n() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
-            ItemStack itemstack1 = this.v(iblockdata);
+            ItemStack itemstack1 = this.u(iblockdata);
 
             a(world, blockposition, itemstack1);
         } else {
@@ -465,7 +465,7 @@ public class Block {
         return this.getBlockData().g() && !this.isTileEntity;
     }
 
-    protected ItemStack v(IBlockData iblockdata) {
+    protected ItemStack u(IBlockData iblockdata) {
         Item item = Item.getItemOf(this);
         int i = 0;
 
@@ -573,7 +573,7 @@ public class Block {
         return this.blockStateList;
     }
 
-    protected final void x(IBlockData iblockdata) {
+    protected final void w(IBlockData iblockdata) {
         this.blockData = iblockdata;
     }
 

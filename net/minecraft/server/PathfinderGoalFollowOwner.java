@@ -91,6 +91,6 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
         BlockPosition blockposition = new BlockPosition(i + l, k - 1, j + i1);
         IBlockData iblockdata = this.a.getType(blockposition);
 
-        return iblockdata.d(this.a, blockposition, EnumDirection.DOWN) == EnumBlockFaceShape.SOLID && this.a.isEmpty(blockposition.up()) && this.a.isEmpty(blockposition.up(2));
+        return iblockdata.d(this.a, blockposition, EnumDirection.DOWN) == EnumBlockFaceShape.SOLID && iblockdata.a((Entity) this.d) && this.a.isEmpty(blockposition.up()) && this.a.isEmpty(blockposition.up(2));
     }
 }

@@ -27,7 +27,7 @@ public class BlockDragonEgg extends Block {
     }
 
     private void b(World world, BlockPosition blockposition) {
-        if (BlockFalling.i(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
+        if (BlockFalling.x(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
             boolean flag = true;
 
             if (!BlockFalling.instaFall && world.areChunksLoadedBetween(blockposition.a(-32, -32, -32), blockposition.a(32, 32, 32))) {
@@ -37,7 +37,7 @@ public class BlockDragonEgg extends Block {
 
                 BlockPosition blockposition1;
 
-                for (blockposition1 = blockposition; BlockFalling.i(world.getType(blockposition1)) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
+                for (blockposition1 = blockposition; BlockFalling.x(world.getType(blockposition1)) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
                     ;
                 }
 

@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class RecipeMapClone extends IRecipe {
+public class RecipeMapClone implements IRecipe {
 
     public RecipeMapClone() {}
 

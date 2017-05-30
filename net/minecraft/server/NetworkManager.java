@@ -306,7 +306,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
                 if (this.j() != null) {
                     this.i().a(this.j());
                 } else if (this.i() != null) {
-                    this.i().a(new ChatComponentText("Disconnected"));
+                    this.i().a(new ChatMessage("multiplayer.disconnect.banned", new Object[0]));
                 }
             }
 

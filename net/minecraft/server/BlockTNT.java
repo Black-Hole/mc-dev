@@ -6,7 +6,7 @@ public class BlockTNT extends Block {
 
     public BlockTNT() {
         super(Material.TNT);
-        this.x(this.blockStateList.getBlockData().set(BlockTNT.EXPLODE, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockTNT.EXPLODE, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 

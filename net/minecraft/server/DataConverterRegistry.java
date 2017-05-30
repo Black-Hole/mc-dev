@@ -39,7 +39,7 @@ public class DataConverterRegistry {
     }
 
     public static DataConverterManager a() {
-        DataConverterManager dataconvertermanager = new DataConverterManager(1136);
+        DataConverterManager dataconvertermanager = new DataConverterManager(1137);
 
         WorldData.a(dataconvertermanager);
         EntityPlayer.a(dataconvertermanager);

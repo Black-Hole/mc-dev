@@ -48,15 +48,13 @@ public class CommandFunction extends CommandAbstract {
                     boolean flag1 = false;
 
                     try {
-                        c(minecraftserver, icommandlistener, astring[2]);
-                        flag1 = true;
+                        flag1 = !d(minecraftserver, icommandlistener, astring[2]).isEmpty();
                     } catch (ExceptionEntityNotFound exceptionentitynotfound) {
                         ;
                     }
 
                     if (flag != flag1) {
-                        icommandlistener.sendMessage(new ChatMessage("commands.function.skipped", new Object[] { minecraftkey}));
-                        return;
+                        throw new CommandException("commands.function.skipped", new Object[] { minecraftkey});
                     }
                 }
 

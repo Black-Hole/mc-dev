@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class RecipiesShield {    public static class Decoration extends IRecipe {
+public class RecipiesShield {    public static class Decoration implements IRecipe {
 
         public Decoration() {}
 

@@ -88,8 +88,8 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         super.n();
     }
 
-    public void leaveVehicle() {
-        super.leaveVehicle();
+    public void aC() {
+        super.aC();
         if (this.bH() instanceof EntityCreature) {
             EntityCreature entitycreature = (EntityCreature) this.bH();
 

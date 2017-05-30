@@ -12,7 +12,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
 
     public BlockRedstoneComparator(boolean flag) {
         super(flag);
-        this.x(this.blockStateList.getBlockData().set(BlockRedstoneComparator.FACING, EnumDirection.NORTH).set(BlockRedstoneComparator.POWERED, Boolean.valueOf(false)).set(BlockRedstoneComparator.MODE, BlockRedstoneComparator.EnumComparatorMode.COMPARE));
+        this.w(this.blockStateList.getBlockData().set(BlockRedstoneComparator.FACING, EnumDirection.NORTH).set(BlockRedstoneComparator.POWERED, Boolean.valueOf(false)).set(BlockRedstoneComparator.MODE, BlockRedstoneComparator.EnumComparatorMode.COMPARE));
         this.isTileEntity = true;
     }
 
@@ -28,7 +28,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
         return new ItemStack(Items.COMPARATOR);
     }
 
-    protected int i(IBlockData iblockdata) {
+    protected int x(IBlockData iblockdata) {
         return 2;
     }
 

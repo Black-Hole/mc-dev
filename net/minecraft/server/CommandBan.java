@@ -45,7 +45,7 @@ public class CommandBan extends CommandAbstract {
                 EntityPlayer entityplayer = minecraftserver.getPlayerList().getPlayer(astring[0]);
 
                 if (entityplayer != null) {
-                    entityplayer.playerConnection.disconnect("You are banned from this server.");
+                    entityplayer.playerConnection.disconnect(new ChatMessage("multiplayer.disconnect.banned", new Object[0]));
                 }
 
                 a(icommandlistener, (ICommand) this, "commands.ban.success", new Object[] { astring[0]});

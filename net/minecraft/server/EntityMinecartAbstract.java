@@ -108,7 +108,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
                 boolean flag = damagesource.getEntity() instanceof EntityHuman && ((EntityHuman) damagesource.getEntity()).abilities.canInstantlyBuild;
 
                 if (flag || this.getDamage() > 40.0F) {
-                    this.aF();
+                    this.ejectPassengers();
                     if (flag && !this.hasCustomName()) {
                         this.die();
                     } else {

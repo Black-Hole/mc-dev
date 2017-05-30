@@ -363,7 +363,6 @@ public class DispenserRegistry {
             PotionRegistry.b();
             PotionBrewer.a();
             EntityTypes.c();
-            StatisticList.a();
             BiomeBase.q();
             b();
             if (!CraftingManager.init()) {
@@ -371,6 +370,7 @@ public class DispenserRegistry {
                 DispenserRegistry.d.error("Errors with built-in recipes!");
             }
 
+            StatisticList.a();
             if (DispenserRegistry.d.isDebugEnabled()) {
                 if ((new AdvancementDataWorld((File) null)).b()) {
                     DispenserRegistry.b = true;

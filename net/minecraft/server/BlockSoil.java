@@ -11,7 +11,7 @@ public class BlockSoil extends Block {
 
     protected BlockSoil() {
         super(Material.EARTH);
-        this.x(this.blockStateList.getBlockData().set(BlockSoil.MOISTURE, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockSoil.MOISTURE, Integer.valueOf(0)));
         this.a(true);
         this.e(255);
     }

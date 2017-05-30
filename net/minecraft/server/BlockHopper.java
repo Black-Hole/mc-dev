@@ -24,7 +24,7 @@ public class BlockHopper extends BlockTileEntity {
 
     public BlockHopper() {
         super(Material.ORE, MaterialMapColor.n);
-        this.x(this.blockStateList.getBlockData().set(BlockHopper.FACING, EnumDirection.DOWN).set(BlockHopper.ENABLED, Boolean.valueOf(true)));
+        this.w(this.blockStateList.getBlockData().set(BlockHopper.FACING, EnumDirection.DOWN).set(BlockHopper.ENABLED, Boolean.valueOf(true)));
         this.a(CreativeModeTab.d);
     }
 

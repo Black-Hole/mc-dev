@@ -31,23 +31,19 @@ public class CustomFunction {
                 String[] astring = s.split(" ", 2);
                 String s1 = astring[0];
 
-                if ("function".equals(s1) && astring.length == 2) {
-                    arraylist.add(new CustomFunction.d(new MinecraftKey(astring[1])));
-                } else {
-                    if (!customfunctiondata.a().getCommands().containsKey(s1)) {
-                        if (s1.startsWith("//")) {
-                            throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\' (if you intended to make a comment, use \'#\' not \'//\')");
-                        }
-
-                        if (s1.startsWith("/") && s1.length() > 1) {
-                            throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\' (did you mean \'" + s1.substring(1) + "\'? Do not use a preceding forwards slash.)");
-                        }
-
-                        throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\'");
+                if (!customfunctiondata.a().getCommands().containsKey(s1)) {
+                    if (s1.startsWith("//")) {
+                        throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\' (if you intended to make a comment, use \'#\' not \'//\')");
                     }
 
-                    arraylist.add(new CustomFunction.b(s));
+                    if (s1.startsWith("/") && s1.length() > 1) {
+                        throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\' (did you mean \'" + s1.substring(1) + "\'? Do not use a preceding forwards slash.)");
+                    }
+
+                    throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\'");
                 }
+
+                arraylist.add(new CustomFunction.b(s));
             }
         }
 
@@ -92,10 +88,6 @@ public class CustomFunction {
     public static class d implements CustomFunction.c {
 
         private final CustomFunction.a a;
-
-        public d(MinecraftKey minecraftkey) {
-            this.a = new CustomFunction.a(minecraftkey);
-        }
 
         public d(CustomFunction customfunction) {
             this.a = new CustomFunction.a(customfunction);

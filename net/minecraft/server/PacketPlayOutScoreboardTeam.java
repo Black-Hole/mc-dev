@@ -39,7 +39,7 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
             this.j = scoreboardteam.packOptionData();
             this.e = scoreboardteam.getNameTagVisibility().e;
             this.f = scoreboardteam.getCollisionRule().e;
-            this.g = scoreboardteam.m().b();
+            this.g = scoreboardteam.getColor().b();
         }
 
         if (i == 0) {

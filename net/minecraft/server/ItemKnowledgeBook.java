@@ -3,45 +3,45 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nullable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ItemKnowledgeBook extends Item {
+
+    private static final Logger a = LogManager.getLogger();
 
     public ItemKnowledgeBook() {
         this.d(1);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
-        ItemStack itemstack = entityhuman.b(enumhand).cloneItemStack();
-
-        entityhuman.a(enumhand, ItemStack.a);
+        ItemStack itemstack = entityhuman.b(enumhand);
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
-        if (nbttagcompound != null && this.b(nbttagcompound)) {
-            NBTTagList nbttaglist = nbttagcompound.getList("Recipes", 8);
-            ArrayList arraylist = Lists.newArrayList();
+        if (!entityhuman.abilities.canInstantlyBuild) {
+            entityhuman.a(enumhand, ItemStack.a);
+        }
 
-            for (int i = 0; i < nbttaglist.size(); ++i) {
-                MinecraftKey minecraftkey = new MinecraftKey(nbttaglist.getString(i));
+        if (nbttagcompound != null && nbttagcompound.hasKeyOfType("Recipes", 9)) {
+            if (!world.isClientSide) {
+                NBTTagList nbttaglist = nbttagcompound.getList("Recipes", 8);
+                ArrayList arraylist = Lists.newArrayList();
 
-                if (this.b(minecraftkey)) {
-                    arraylist.add(CraftingManager.a(minecraftkey));
+                for (int i = 0; i < nbttaglist.size(); ++i) {
+                    IRecipe irecipe = CraftingManager.a(new MinecraftKey(nbttaglist.getString(i)));
+
+                    if (irecipe != null) {
+                        arraylist.add(irecipe);
+                    }
                 }
+
+                entityhuman.a((List) arraylist);
+                entityhuman.b(StatisticList.b((Item) this));
             }
 
-            entityhuman.a((List) arraylist);
-            entityhuman.b(StatisticList.b((Item) this));
             return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
         } else {
             return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
         }
-    }
-
-    private boolean b(@Nullable NBTTagCompound nbttagcompound) {
-        return nbttagcompound != null && nbttagcompound.hasKey("Recipes");
-    }
-
-    private boolean b(@Nullable MinecraftKey minecraftkey) {
-        return minecraftkey != null && CraftingManager.a(minecraftkey) != null;
     }
 }

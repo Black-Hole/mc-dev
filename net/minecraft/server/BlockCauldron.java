@@ -15,7 +15,7 @@ public class BlockCauldron extends Block {
 
     public BlockCauldron() {
         super(Material.ORE, MaterialMapColor.n);
-        this.x(this.blockStateList.getBlockData().set(BlockCauldron.LEVEL, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockCauldron.LEVEL, Integer.valueOf(0)));
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {

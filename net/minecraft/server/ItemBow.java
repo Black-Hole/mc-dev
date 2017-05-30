@@ -88,7 +88,7 @@ public class ItemBow extends Item {
                     if (!flag1 && !entityhuman.abilities.canInstantlyBuild) {
                         itemstack1.subtract(1);
                         if (itemstack1.isEmpty()) {
-                            entityhuman.inventory.e(itemstack1);
+                            entityhuman.inventory.f(itemstack1);
                         }
                     }
 

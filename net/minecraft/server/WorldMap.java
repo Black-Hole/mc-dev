@@ -96,14 +96,14 @@ public class WorldMap extends PersistentBase {
             this.i.add(worldmap_worldmaphumantracker);
         }
 
-        if (!entityhuman.inventory.g(itemstack)) {
+        if (!entityhuman.inventory.h(itemstack)) {
             this.decorations.remove(entityhuman.getName());
         }
 
         for (int i = 0; i < this.i.size(); ++i) {
             WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker1 = (WorldMap.WorldMapHumanTracker) this.i.get(i);
 
-            if (!worldmap_worldmaphumantracker1.trackee.dead && (worldmap_worldmaphumantracker1.trackee.inventory.g(itemstack) || itemstack.z())) {
+            if (!worldmap_worldmaphumantracker1.trackee.dead && (worldmap_worldmaphumantracker1.trackee.inventory.h(itemstack) || itemstack.z())) {
                 if (!itemstack.z() && worldmap_worldmaphumantracker1.trackee.dimension == this.map && this.track) {
                     this.a(MapIcon.Type.PLAYER, worldmap_worldmaphumantracker1.trackee.world, worldmap_worldmaphumantracker1.trackee.getName(), worldmap_worldmaphumantracker1.trackee.locX, worldmap_worldmaphumantracker1.trackee.locZ, (double) worldmap_worldmaphumantracker1.trackee.yaw);
                 }

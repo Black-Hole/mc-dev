@@ -12,7 +12,7 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
 
     public BlockCocoa() {
         super(Material.PLANT);
-        this.x(this.blockStateList.getBlockData().set(BlockCocoa.FACING, EnumDirection.NORTH).set(BlockCocoa.AGE, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockCocoa.FACING, EnumDirection.NORTH).set(BlockCocoa.AGE, Integer.valueOf(0)));
         this.a(true);
     }
 

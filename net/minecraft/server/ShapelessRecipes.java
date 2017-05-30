@@ -7,13 +7,14 @@ import com.google.gson.JsonParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ShapelessRecipes extends IRecipe {
+public class ShapelessRecipes implements IRecipe {
 
     private final ItemStack result;
     private final NonNullList<RecipeItemStack> ingredients;
+    private final String c;
 
     public ShapelessRecipes(String s, ItemStack itemstack, NonNullList<RecipeItemStack> nonnulllist) {
-        super(s);
+        this.c = s;
         this.result = itemstack;
         this.ingredients = nonnulllist;
     }

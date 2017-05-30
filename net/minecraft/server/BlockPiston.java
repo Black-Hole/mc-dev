@@ -18,7 +18,7 @@ public class BlockPiston extends BlockDirectional {
 
     public BlockPiston(boolean flag) {
         super(Material.PISTON);
-        this.x(this.blockStateList.getBlockData().set(BlockPiston.FACING, EnumDirection.NORTH).set(BlockPiston.EXTENDED, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockPiston.FACING, EnumDirection.NORTH).set(BlockPiston.EXTENDED, Boolean.valueOf(false)));
         this.sticky = flag;
         this.a(SoundEffectType.d);
         this.c(0.5F);

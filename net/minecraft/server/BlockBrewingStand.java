@@ -12,7 +12,7 @@ public class BlockBrewingStand extends BlockTileEntity {
 
     public BlockBrewingStand() {
         super(Material.ORE);
-        this.x(this.blockStateList.getBlockData().set(BlockBrewingStand.HAS_BOTTLE[0], Boolean.valueOf(false)).set(BlockBrewingStand.HAS_BOTTLE[1], Boolean.valueOf(false)).set(BlockBrewingStand.HAS_BOTTLE[2], Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockBrewingStand.HAS_BOTTLE[0], Boolean.valueOf(false)).set(BlockBrewingStand.HAS_BOTTLE[1], Boolean.valueOf(false)).set(BlockBrewingStand.HAS_BOTTLE[2], Boolean.valueOf(false)));
     }
 
     public String getName() {

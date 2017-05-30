@@ -15,7 +15,7 @@ public class BlockThin extends Block {
 
     protected BlockThin(Material material, boolean flag) {
         super(material);
-        this.x(this.blockStateList.getBlockData().set(BlockThin.NORTH, Boolean.valueOf(false)).set(BlockThin.EAST, Boolean.valueOf(false)).set(BlockThin.SOUTH, Boolean.valueOf(false)).set(BlockThin.WEST, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockThin.NORTH, Boolean.valueOf(false)).set(BlockThin.EAST, Boolean.valueOf(false)).set(BlockThin.SOUTH, Boolean.valueOf(false)).set(BlockThin.WEST, Boolean.valueOf(false)));
         this.a = flag;
         this.a(CreativeModeTab.c);
     }
@@ -50,10 +50,10 @@ public class BlockThin extends Block {
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
-        return BlockThin.f[i(iblockdata)];
+        return BlockThin.f[x(iblockdata)];
     }
 
-    private static int i(IBlockData iblockdata) {
+    private static int x(IBlockData iblockdata) {
         int i = 0;
 
         if (((Boolean) iblockdata.get(BlockThin.NORTH)).booleanValue()) {
@@ -99,7 +99,7 @@ public class BlockThin extends Block {
     }
 
     protected static boolean e(Block block) {
-        return block instanceof BlockShulkerBox || block instanceof BlockLeaves || block == Blocks.BEACON || block == Blocks.cauldron || block == Blocks.GLOWSTONE || block == Blocks.ICE || block == Blocks.SEA_LANTERN || block == Blocks.PISTON || block == Blocks.STICKY_PISTON || block == Blocks.PISTON_HEAD || block == Blocks.MELON_BLOCK || block == Blocks.PUMPKIN || block == Blocks.LIT_PUMPKIN;
+        return block instanceof BlockShulkerBox || block instanceof BlockLeaves || block == Blocks.BEACON || block == Blocks.cauldron || block == Blocks.GLOWSTONE || block == Blocks.ICE || block == Blocks.SEA_LANTERN || block == Blocks.PISTON || block == Blocks.STICKY_PISTON || block == Blocks.PISTON_HEAD || block == Blocks.MELON_BLOCK || block == Blocks.PUMPKIN || block == Blocks.LIT_PUMPKIN || block == Blocks.BARRIER;
     }
 
     protected boolean n() {

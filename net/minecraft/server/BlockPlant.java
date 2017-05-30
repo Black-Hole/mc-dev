@@ -22,10 +22,10 @@ public class BlockPlant extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        return super.canPlace(world, blockposition) && this.i(world.getType(blockposition.down()));
+        return super.canPlace(world, blockposition) && this.x(world.getType(blockposition.down()));
     }
 
-    protected boolean i(IBlockData iblockdata) {
+    protected boolean x(IBlockData iblockdata) {
         return iblockdata.getBlock() == Blocks.GRASS || iblockdata.getBlock() == Blocks.DIRT || iblockdata.getBlock() == Blocks.FARMLAND;
     }
 
@@ -47,7 +47,7 @@ public class BlockPlant extends Block {
     }
 
     public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return this.i(world.getType(blockposition.down()));
+        return this.x(world.getType(blockposition.down()));
     }
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {

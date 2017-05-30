@@ -68,7 +68,7 @@ public class CommandBanIp extends CommandAbstract {
 
         for (Iterator iterator = list.iterator(); iterator.hasNext(); astring[i++] = entityplayer.getName()) {
             entityplayer = (EntityPlayer) iterator.next();
-            entityplayer.playerConnection.disconnect("You have been IP banned.");
+            entityplayer.playerConnection.disconnect(new ChatMessage("multiplayer.disconnect.ip_banned", new Object[0]));
         }
 
         if (list.isEmpty()) {

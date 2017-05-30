@@ -31,7 +31,7 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
     public void a(int i, int j, int k, boolean flag) {
         if (flag) {
             if (this.isVehicle()) {
-                this.aF();
+                this.ejectPassengers();
             }
 
             if (this.getType() == 0) {

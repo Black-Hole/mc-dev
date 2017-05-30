@@ -111,7 +111,7 @@ public class BlockRedstoneOre extends Block {
 
     }
 
-    protected ItemStack v(IBlockData iblockdata) {
+    protected ItemStack u(IBlockData iblockdata) {
         return new ItemStack(Blocks.REDSTONE_ORE);
     }
 

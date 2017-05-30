@@ -3,7 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 
-public class RecipeRepair extends IRecipe {
+public class RecipeRepair implements IRecipe {
 
     public RecipeRepair() {}
 

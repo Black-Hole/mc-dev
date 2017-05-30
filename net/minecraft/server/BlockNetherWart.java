@@ -9,7 +9,7 @@ public class BlockNetherWart extends BlockPlant {
 
     protected BlockNetherWart() {
         super(Material.PLANT, MaterialMapColor.E);
-        this.x(this.blockStateList.getBlockData().set(BlockNetherWart.AGE, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockNetherWart.AGE, Integer.valueOf(0)));
         this.a(true);
         this.a((CreativeModeTab) null);
     }
@@ -18,12 +18,12 @@ public class BlockNetherWart extends BlockPlant {
         return BlockNetherWart.c[((Integer) iblockdata.get(BlockNetherWart.AGE)).intValue()];
     }
 
-    protected boolean i(IBlockData iblockdata) {
+    protected boolean x(IBlockData iblockdata) {
         return iblockdata.getBlock() == Blocks.SOUL_SAND;
     }
 
     public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return this.i(world.getType(blockposition.down()));
+        return this.x(world.getType(blockposition.down()));
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {

@@ -8,7 +8,7 @@ public class BlockObserver extends BlockDirectional {
 
     public BlockObserver() {
         super(Material.STONE);
-        this.x(this.blockStateList.getBlockData().set(BlockObserver.FACING, EnumDirection.SOUTH).set(BlockObserver.a, Boolean.valueOf(false)));
+        this.w(this.blockStateList.getBlockData().set(BlockObserver.FACING, EnumDirection.SOUTH).set(BlockObserver.a, Boolean.valueOf(false)));
         this.a(CreativeModeTab.d);
     }
 

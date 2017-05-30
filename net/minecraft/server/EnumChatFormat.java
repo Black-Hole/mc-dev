@@ -16,7 +16,7 @@ public enum EnumChatFormat {
     private static final Map<String, EnumChatFormat> w = Maps.newHashMap();
     private static final Pattern x = Pattern.compile("(?i)\u00a7[0-9A-FK-OR]");
     private final String y;
-    private final char z;
+    public final char character;
     private final boolean A;
     private final String B;
     private final int C;
@@ -35,7 +35,7 @@ public enum EnumChatFormat {
 
     private EnumChatFormat(String s, char c0, boolean flag, int i) {
         this.y = s;
-        this.z = c0;
+        this.character = c0;
         this.A = flag;
         this.C = i;
         this.B = "\u00a7" + c0;

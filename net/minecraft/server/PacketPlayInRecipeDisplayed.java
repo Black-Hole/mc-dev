@@ -4,38 +4,36 @@ import java.io.IOException;
 
 public class PacketPlayInRecipeDisplayed implements Packet<PacketListenerPlayIn> {
 
-    public static int a = 1;
-    public static int b = 2;
-    private int c;
-    private IRecipe d;
-    private boolean e;
-    private boolean f;
+    private PacketPlayInRecipeDisplayed.a a;
+    private IRecipe b;
+    private boolean c;
+    private boolean d;
 
     public PacketPlayInRecipeDisplayed() {}
 
     public PacketPlayInRecipeDisplayed(IRecipe irecipe) {
-        this.c = PacketPlayInRecipeDisplayed.a;
-        this.d = irecipe;
+        this.a = PacketPlayInRecipeDisplayed.a.a;
+        this.b = irecipe;
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.c = packetdataserializer.readInt();
-        if (this.c == PacketPlayInRecipeDisplayed.a) {
-            this.d = CraftingManager.a(packetdataserializer.readInt());
-        } else if (this.c == PacketPlayInRecipeDisplayed.b) {
-            this.e = packetdataserializer.readBoolean();
-            this.f = packetdataserializer.readBoolean();
+        this.a = (PacketPlayInRecipeDisplayed.a) packetdataserializer.a(PacketPlayInRecipeDisplayed.a.class);
+        if (this.a == PacketPlayInRecipeDisplayed.a.a) {
+            this.b = CraftingManager.a(packetdataserializer.readInt());
+        } else if (this.a == PacketPlayInRecipeDisplayed.a.b) {
+            this.c = packetdataserializer.readBoolean();
+            this.d = packetdataserializer.readBoolean();
         }
 
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeInt(this.c);
-        if (this.c == PacketPlayInRecipeDisplayed.a) {
-            packetdataserializer.writeInt(CraftingManager.a(this.d));
-        } else if (this.c == PacketPlayInRecipeDisplayed.b) {
-            packetdataserializer.writeBoolean(this.e);
-            packetdataserializer.writeBoolean(this.f);
+        packetdataserializer.a((Enum) this.a);
+        if (this.a == PacketPlayInRecipeDisplayed.a.a) {
+            packetdataserializer.writeInt(CraftingManager.a(this.b));
+        } else if (this.a == PacketPlayInRecipeDisplayed.a.b) {
+            packetdataserializer.writeBoolean(this.c);
+            packetdataserializer.writeBoolean(this.d);
         }
 
     }
@@ -44,19 +42,26 @@ public class PacketPlayInRecipeDisplayed implements Packet<PacketListenerPlayIn>
         packetlistenerplayin.a(this);
     }
 
-    public int a() {
-        return this.c;
+    public PacketPlayInRecipeDisplayed.a a() {
+        return this.a;
     }
 
     public IRecipe b() {
-        return this.d;
+        return this.b;
     }
 
     public boolean c() {
-        return this.e;
+        return this.c;
     }
 
     public boolean d() {
-        return this.f;
+        return this.d;
+    }
+
+    public static enum a {
+
+        a, b;
+
+        private a() {}
     }
 }

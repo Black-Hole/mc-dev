@@ -89,7 +89,7 @@ public class LootTableRegistry {
 
                         try {
                             return (LootTable) ChatDeserializer.a(LootTableRegistry.b, s, LootTable.class);
-                        } catch (JsonParseException jsonparseexception) {
+                        } catch (IllegalArgumentException | JsonParseException jsonparseexception) {
                             LootTableRegistry.a.error("Couldn\'t load loot table {} from {}", minecraftkey, file, jsonparseexception);
                             return LootTable.a;
                         }

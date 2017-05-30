@@ -22,7 +22,7 @@ public class BlockRedstoneWire extends Block {
 
     public BlockRedstoneWire() {
         super(Material.ORIENTABLE);
-        this.x(this.blockStateList.getBlockData().set(BlockRedstoneWire.NORTH, BlockRedstoneWire.EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.EAST, BlockRedstoneWire.EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.SOUTH, BlockRedstoneWire.EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.WEST, BlockRedstoneWire.EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.POWER, Integer.valueOf(0)));
+        this.w(this.blockStateList.getBlockData().set(BlockRedstoneWire.NORTH, BlockRedstoneWire.EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.EAST, BlockRedstoneWire.EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.SOUTH, BlockRedstoneWire.EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.WEST, BlockRedstoneWire.EnumRedstoneWireConnection.NONE).set(BlockRedstoneWire.POWER, Integer.valueOf(0)));
     }
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -67,13 +67,13 @@ public class BlockRedstoneWire extends Block {
         BlockPosition blockposition1 = blockposition.shift(enumdirection);
         IBlockData iblockdata = iblockaccess.getType(blockposition.shift(enumdirection));
 
-        if (!a(iblockaccess.getType(blockposition1), enumdirection) && (iblockdata.l() || !i(iblockaccess.getType(blockposition1.down())))) {
+        if (!a(iblockaccess.getType(blockposition1), enumdirection) && (iblockdata.l() || !x(iblockaccess.getType(blockposition1.down())))) {
             IBlockData iblockdata1 = iblockaccess.getType(blockposition.up());
 
             if (!iblockdata1.l()) {
                 boolean flag = iblockaccess.getType(blockposition1).q() || iblockaccess.getType(blockposition1).getBlock() == Blocks.GLOWSTONE;
 
-                if (flag && i(iblockaccess.getType(blockposition1.up()))) {
+                if (flag && x(iblockaccess.getType(blockposition1.up()))) {
                     if (iblockdata.k()) {
                         return BlockRedstoneWire.EnumRedstoneWireConnection.UP;
                     }
@@ -349,10 +349,10 @@ public class BlockRedstoneWire extends Block {
     }
 
     protected static boolean c(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return i(iblockaccess.getType(blockposition));
+        return x(iblockaccess.getType(blockposition));
     }
 
-    protected static boolean i(IBlockData iblockdata) {
+    protected static boolean x(IBlockData iblockdata) {
         return a(iblockdata, (EnumDirection) null);
     }
 

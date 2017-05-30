@@ -16,7 +16,7 @@ public class BlockCobbleWall extends Block {
 
     public BlockCobbleWall(Block block) {
         super(block.material);
-        this.x(this.blockStateList.getBlockData().set(BlockCobbleWall.UP, Boolean.valueOf(false)).set(BlockCobbleWall.NORTH, Boolean.valueOf(false)).set(BlockCobbleWall.EAST, Boolean.valueOf(false)).set(BlockCobbleWall.SOUTH, Boolean.valueOf(false)).set(BlockCobbleWall.WEST, Boolean.valueOf(false)).set(BlockCobbleWall.VARIANT, BlockCobbleWall.EnumCobbleVariant.NORMAL));
+        this.w(this.blockStateList.getBlockData().set(BlockCobbleWall.UP, Boolean.valueOf(false)).set(BlockCobbleWall.NORTH, Boolean.valueOf(false)).set(BlockCobbleWall.EAST, Boolean.valueOf(false)).set(BlockCobbleWall.SOUTH, Boolean.valueOf(false)).set(BlockCobbleWall.WEST, Boolean.valueOf(false)).set(BlockCobbleWall.VARIANT, BlockCobbleWall.EnumCobbleVariant.NORMAL));
         this.c(block.strength);
         this.b(block.durability / 3.0F);
         this.a(block.stepSound);
@@ -25,7 +25,7 @@ public class BlockCobbleWall extends Block {
 
     public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
-        return BlockCobbleWall.g[i(iblockdata)];
+        return BlockCobbleWall.g[x(iblockdata)];
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
@@ -33,16 +33,16 @@ public class BlockCobbleWall extends Block {
             iblockdata = this.updateState(iblockdata, world, blockposition);
         }
 
-        a(blockposition, axisalignedbb, list, BlockCobbleWall.B[i(iblockdata)]);
+        a(blockposition, axisalignedbb, list, BlockCobbleWall.B[x(iblockdata)]);
     }
 
     @Nullable
     public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
-        return BlockCobbleWall.B[i(iblockdata)];
+        return BlockCobbleWall.B[x(iblockdata)];
     }
 
-    private static int i(IBlockData iblockdata) {
+    private static int x(IBlockData iblockdata) {
         int i = 0;
 
         if (((Boolean) iblockdata.get(BlockCobbleWall.NORTH)).booleanValue()) {
@@ -84,10 +84,13 @@ public class BlockCobbleWall extends Block {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
         Block block = iblockdata.getBlock();
         EnumBlockFaceShape enumblockfaceshape = iblockdata.d(iblockaccess, blockposition, enumdirection);
-        boolean flag = block == Blocks.MELON_BLOCK || block == Blocks.PUMPKIN;
-        boolean flag1 = enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE_THICK || enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE && block instanceof BlockFenceGate;
+        boolean flag = enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE_THICK || enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE && block instanceof BlockFenceGate;
 
-        return !flag && !c(block) && enumblockfaceshape == EnumBlockFaceShape.SOLID || flag1;
+        return !e(block) && enumblockfaceshape == EnumBlockFaceShape.SOLID || flag;
+    }
+
+    protected static boolean e(Block block) {
+        return Block.c(block) || block == Blocks.BARRIER || block == Blocks.MELON_BLOCK || block == Blocks.PUMPKIN;
     }
 
     public int getDropData(IBlockData iblockdata) {

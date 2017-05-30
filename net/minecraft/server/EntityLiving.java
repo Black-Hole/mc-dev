@@ -1889,8 +1889,8 @@ public abstract class EntityLiving extends Entity {
 
     }
 
-    public void leaveVehicle() {
-        super.leaveVehicle();
+    public void aC() {
+        super.aC();
         this.aW = this.aX;
         this.aX = 0.0F;
         this.fallDistance = 0.0F;

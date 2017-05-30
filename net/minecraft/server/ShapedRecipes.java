@@ -15,15 +15,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 import javax.annotation.Nullable;
 
-public class ShapedRecipes extends IRecipe {
+public class ShapedRecipes implements IRecipe {
 
     private final int width;
     private final int height;
     private final NonNullList<RecipeItemStack> items;
     private final ItemStack result;
+    private final String e;
 
     public ShapedRecipes(String s, int i, int j, NonNullList<RecipeItemStack> nonnulllist, ItemStack itemstack) {
-        super(s);
+        this.e = s;
         this.width = i;
         this.height = j;
         this.items = nonnulllist;
@@ -125,7 +126,7 @@ public class ShapedRecipes extends IRecipe {
         }
 
         if (!hashset.isEmpty()) {
-            throw new JsonSyntaxException("Key defines symbols that aren\'t used in pattern: " + hashset.toString());
+            throw new JsonSyntaxException("Key defines symbols that aren\'t used in pattern: " + hashset);
         } else {
             return nonnulllist;
         }

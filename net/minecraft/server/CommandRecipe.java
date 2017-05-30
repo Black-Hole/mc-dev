@@ -55,9 +55,13 @@ public class CommandRecipe extends CommandAbstract {
                             throw new CommandException("commands.recipe.unknownrecipe", new Object[] { astring[2]});
                         }
 
+                        if (irecipe.c()) {
+                            throw new CommandException("commands.recipe.unsupported", new Object[] { astring[2]});
+                        }
+
                         ArrayList arraylist = Lists.newArrayList(new IRecipe[] { irecipe});
 
-                        if (flag == entityplayer.F().f(irecipe)) {
+                        if (flag == entityplayer.F().b(irecipe)) {
                             String s = flag ? "commands.recipe.alreadyHave" : "commands.recipe.dontHave";
 
                             throw new CommandException(s, new Object[] { entityplayer.getName(), irecipe.b().getName()});
