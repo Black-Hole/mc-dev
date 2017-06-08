@@ -467,7 +467,7 @@ public class DefinedStructure {
         nbttagcompound.set("entities", nbttaglist1);
         nbttagcompound.set("size", this.a(new int[] { this.c.getX(), this.c.getY(), this.c.getZ()}));
         nbttagcompound.setString("author", this.d);
-        nbttagcompound.setInt("DataVersion", 1137);
+        nbttagcompound.setInt("DataVersion", 1139);
         return nbttagcompound;
     }
 

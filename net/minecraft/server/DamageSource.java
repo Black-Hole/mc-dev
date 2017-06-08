@@ -146,7 +146,7 @@ public class DamageSource {
     }
 
     public IChatBaseComponent getLocalizedDeathMessage(EntityLiving entityliving) {
-        EntityLiving entityliving1 = entityliving.cg();
+        EntityLiving entityliving1 = entityliving.ci();
         String s = "death.attack." + this.translationIndex;
         String s1 = s + ".player";
 

@@ -26,7 +26,7 @@ public class ContainerEnchantTable extends Container {
     public ContainerEnchantTable(PlayerInventory playerinventory, World world, BlockPosition blockposition) {
         this.world = world;
         this.position = blockposition;
-        this.f = playerinventory.player.de();
+        this.f = playerinventory.player.dg();
         this.a(new Slot(this.enchantSlots, 0, 15, 47) {
             public boolean isAllowed(ItemStack itemstack) {
                 return true;
@@ -208,7 +208,7 @@ public class ContainerEnchantTable extends Container {
                     }
 
                     this.enchantSlots.update();
-                    this.f = entityhuman.de();
+                    this.f = entityhuman.dg();
                     this.a(this.enchantSlots);
                     this.world.a((EntityHuman) null, this.position, SoundEffects.aR, SoundCategory.BLOCKS, 1.0F, this.world.random.nextFloat() * 0.1F + 0.9F);
                 }

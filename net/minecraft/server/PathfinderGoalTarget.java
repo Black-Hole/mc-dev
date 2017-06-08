@@ -36,8 +36,8 @@ public abstract class PathfinderGoalTarget extends PathfinderGoal {
         } else if (!entityliving.isAlive()) {
             return false;
         } else {
-            ScoreboardTeamBase scoreboardteambase = this.e.aW();
-            ScoreboardTeamBase scoreboardteambase1 = entityliving.aW();
+            ScoreboardTeamBase scoreboardteambase = this.e.aY();
+            ScoreboardTeamBase scoreboardteambase1 = entityliving.aY();
 
             if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
                 return false;

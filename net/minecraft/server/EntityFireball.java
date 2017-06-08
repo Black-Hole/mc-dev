@@ -140,7 +140,7 @@ public abstract class EntityFireball extends Entity {
         return true;
     }
 
-    public float aG() {
+    public float aI() {
         return 1.0F;
     }
 
@@ -148,9 +148,9 @@ public abstract class EntityFireball extends Entity {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            this.av();
+            this.ax();
             if (damagesource.getEntity() != null) {
-                Vec3D vec3d = damagesource.getEntity().aH();
+                Vec3D vec3d = damagesource.getEntity().aJ();
 
                 if (vec3d != null) {
                     this.motX = vec3d.x;
@@ -172,7 +172,7 @@ public abstract class EntityFireball extends Entity {
         }
     }
 
-    public float f(float f) {
+    public float aw() {
         return 1.0F;
     }
 }

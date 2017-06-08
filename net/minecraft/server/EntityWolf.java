@@ -84,7 +84,7 @@ public class EntityWolf extends EntityTameableAnimal {
     }
 
     protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.iQ, 0.15F, 1.0F);
+        this.a(SoundEffects.iT, 0.15F, 1.0F);
     }
 
     public static void a(DataConverterManager dataconvertermanager) {
@@ -107,18 +107,18 @@ public class EntityWolf extends EntityTameableAnimal {
     }
 
     protected SoundEffect F() {
-        return this.isAngry() ? SoundEffects.iL : (this.random.nextInt(3) == 0 ? (this.isTamed() && ((Float) this.datawatcher.get(EntityWolf.DATA_HEALTH)).floatValue() < 10.0F ? SoundEffects.iR : SoundEffects.iO) : SoundEffects.iJ);
+        return this.isAngry() ? SoundEffects.iO : (this.random.nextInt(3) == 0 ? (this.isTamed() && ((Float) this.datawatcher.get(EntityWolf.DATA_HEALTH)).floatValue() < 10.0F ? SoundEffects.iU : SoundEffects.iR) : SoundEffects.iM);
     }
 
     protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.iQ;
+    }
+
+    protected SoundEffect cf() {
         return SoundEffects.iN;
     }
 
-    protected SoundEffect cd() {
-        return SoundEffects.iK;
-    }
-
-    protected float co() {
+    protected float cq() {
         return 0.4F;
     }
 
@@ -129,7 +129,7 @@ public class EntityWolf extends EntityTameableAnimal {
 
     public void n() {
         super.n();
-        if (!this.world.isClientSide && this.bG && !this.bH && !this.dc() && this.onGround) {
+        if (!this.world.isClientSide && this.bG && !this.bH && !this.de() && this.onGround) {
             this.bH = true;
             this.bI = 0.0F;
             this.bJ = 0.0F;
@@ -145,7 +145,7 @@ public class EntityWolf extends EntityTameableAnimal {
     public void B_() {
         super.B_();
         this.bF = this.bE;
-        if (this.dv()) {
+        if (this.dx()) {
             this.bE += (1.0F - this.bE) * 0.4F;
         } else {
             this.bE += (0.0F - this.bE) * 0.4F;
@@ -158,7 +158,7 @@ public class EntityWolf extends EntityTameableAnimal {
             this.bJ = 0.0F;
         } else if ((this.bG || this.bH) && this.bH) {
             if (this.bI == 0.0F) {
-                this.a(SoundEffects.iP, this.co(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                this.a(SoundEffects.iS, this.cq(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             }
 
             this.bJ = this.bI;
@@ -298,7 +298,7 @@ public class EntityWolf extends EntityTameableAnimal {
         return itemstack.getItem() instanceof ItemFood && ((ItemFood) itemstack.getItem()).g();
     }
 
-    public int cS() {
+    public int cU() {
         return 8;
     }
 
@@ -355,7 +355,7 @@ public class EntityWolf extends EntityTameableAnimal {
         }
     }
 
-    public boolean dv() {
+    public boolean dx() {
         return ((Boolean) this.datawatcher.get(EntityWolf.bC)).booleanValue();
     }
 

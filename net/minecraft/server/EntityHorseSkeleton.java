@@ -16,7 +16,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(15.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
-        this.getAttributeInstance(EntityHorseSkeleton.attributeJumpStrength).setValue(this.dL());
+        this.getAttributeInstance(EntityHorseSkeleton.attributeJumpStrength).setValue(this.dN());
     }
 
     protected SoundEffect F() {
@@ -24,8 +24,8 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
         return SoundEffects.gS;
     }
 
-    protected SoundEffect cd() {
-        super.cd();
+    protected SoundEffect cf() {
+        super.cf();
         return SoundEffects.gT;
     }
 
@@ -38,8 +38,8 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
         return EnumMonsterType.UNDEAD;
     }
 
-    public double aE() {
-        return super.aE() - 0.1875D;
+    public double aG() {
+        return super.aG() - 0.1875D;
     }
 
     @Nullable
@@ -49,7 +49,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
 
     public void n() {
         super.n();
-        if (this.dj() && this.bJ++ >= 18000) {
+        if (this.dl() && this.bJ++ >= 18000) {
             this.die();
         }
 
@@ -61,7 +61,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setBoolean("SkeletonTrap", this.dj());
+        nbttagcompound.setBoolean("SkeletonTrap", this.dl());
         nbttagcompound.setInt("SkeletonTrapTime", this.bJ);
     }
 
@@ -71,7 +71,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
         this.bJ = nbttagcompound.getInt("SkeletonTrapTime");
     }
 
-    public boolean dj() {
+    public boolean dl() {
         return this.bI;
     }
 
@@ -104,7 +104,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
             return super.a(entityhuman, enumhand);
         } else {
             if (flag) {
-                if (itemstack.getItem() == Items.SADDLE && !this.dE()) {
+                if (itemstack.getItem() == Items.SADDLE && !this.dG()) {
                     this.c(entityhuman);
                     return true;
                 }

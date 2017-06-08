@@ -100,7 +100,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
             Entity entity = (Entity) iterator.next();
 
             if (entity instanceof EntityHuman) {
-                hashset.add(entity.aW());
+                hashset.add(entity.aY());
             } else {
                 hashset.add((Object) null);
             }
@@ -193,7 +193,7 @@ public class CommandSpreadPlayers extends CommandAbstract {
             CommandSpreadPlayers.Location2D commandspreadplayers_location2d;
 
             if (flag) {
-                ScoreboardTeamBase scoreboardteambase = entity instanceof EntityHuman ? entity.aW() : null;
+                ScoreboardTeamBase scoreboardteambase = entity instanceof EntityHuman ? entity.aY() : null;
 
                 if (!hashmap.containsKey(scoreboardteambase)) {
                     hashmap.put(scoreboardteambase, acommandspreadplayers_location2d[i++]);

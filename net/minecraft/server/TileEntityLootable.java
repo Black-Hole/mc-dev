@@ -50,7 +50,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
             LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
             if (entityhuman != null) {
-                loottableinfo_a.a(entityhuman.ds());
+                loottableinfo_a.a(entityhuman.du());
             }
 
             loottable.a(this, random, loottableinfo_a.a());

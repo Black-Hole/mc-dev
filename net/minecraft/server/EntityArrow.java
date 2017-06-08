@@ -454,7 +454,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         this.knockbackStrength = i;
     }
 
-    public boolean bb() {
+    public boolean bd() {
         return false;
     }
 

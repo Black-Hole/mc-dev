@@ -65,8 +65,8 @@ public class MobEffectList {
             if (!entityliving.world.isClientSide) {
                 ((EntityHuman) entityliving).getFoodData().eat(i + 1, 1.0F);
             }
-        } else if ((this != MobEffects.HEAL || entityliving.ca()) && (this != MobEffects.HARM || !entityliving.ca())) {
-            if (this == MobEffects.HARM && !entityliving.ca() || this == MobEffects.HEAL && entityliving.ca()) {
+        } else if ((this != MobEffects.HEAL || entityliving.cc()) && (this != MobEffects.HARM || !entityliving.cc())) {
+            if (this == MobEffects.HARM && !entityliving.cc() || this == MobEffects.HEAL && entityliving.cc()) {
                 entityliving.damageEntity(DamageSource.MAGIC, (float) (6 << i));
             }
         } else {
@@ -78,8 +78,8 @@ public class MobEffectList {
     public void applyInstantEffect(@Nullable Entity entity, @Nullable Entity entity1, EntityLiving entityliving, int i, double d0) {
         int j;
 
-        if ((this != MobEffects.HEAL || entityliving.ca()) && (this != MobEffects.HARM || !entityliving.ca())) {
-            if (this == MobEffects.HARM && !entityliving.ca() || this == MobEffects.HEAL && entityliving.ca()) {
+        if ((this != MobEffects.HEAL || entityliving.cc()) && (this != MobEffects.HARM || !entityliving.cc())) {
+            if (this == MobEffects.HARM && !entityliving.cc() || this == MobEffects.HEAL && entityliving.cc()) {
                 j = (int) (d0 * (double) (6 << i) + 0.5D);
                 if (entity == null) {
                     entityliving.damageEntity(DamageSource.MAGIC, (float) j);

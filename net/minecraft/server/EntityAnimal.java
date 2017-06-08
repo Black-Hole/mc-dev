@@ -63,7 +63,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
 
     }
 
-    public double aD() {
+    public double aF() {
         return 0.14D;
     }
 

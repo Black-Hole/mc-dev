@@ -88,7 +88,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
             nbttagcompound.set("Level", nbttagcompound1);
-            nbttagcompound.setInt("DataVersion", 1137);
+            nbttagcompound.setInt("DataVersion", 1139);
             this.a(chunk, world, nbttagcompound1);
             this.a(chunk.k(), nbttagcompound);
         } catch (Exception exception) {
@@ -437,7 +437,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
     public static void a(Entity entity, World world) {
         if (world.addEntity(entity) && entity.isVehicle()) {
-            Iterator iterator = entity.bD().iterator();
+            Iterator iterator = entity.bF().iterator();
 
             while (iterator.hasNext()) {
                 Entity entity1 = (Entity) iterator.next();

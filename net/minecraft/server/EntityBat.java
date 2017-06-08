@@ -19,12 +19,12 @@ public class EntityBat extends EntityAmbient {
         this.datawatcher.register(EntityBat.a, Byte.valueOf((byte) 0));
     }
 
-    protected float co() {
+    protected float cq() {
         return 0.1F;
     }
 
-    protected float cp() {
-        return super.cp() * 0.95F;
+    protected float cr() {
+        return super.cr() * 0.95F;
     }
 
     @Nullable
@@ -36,7 +36,7 @@ public class EntityBat extends EntityAmbient {
         return SoundEffects.z;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.y;
     }
 
@@ -46,7 +46,7 @@ public class EntityBat extends EntityAmbient {
 
     protected void C(Entity entity) {}
 
-    protected void cz() {}
+    protected void cB() {}
 
     protected void initAttributes() {
         super.initAttributes();

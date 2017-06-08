@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class SoundEffectType {
 
-    public static final SoundEffectType a = new SoundEffectType(1.0F, 1.0F, SoundEffects.iW, SoundEffects.je, SoundEffects.jb, SoundEffects.ja, SoundEffects.iZ);
+    public static final SoundEffectType a = new SoundEffectType(1.0F, 1.0F, SoundEffects.iZ, SoundEffects.jh, SoundEffects.je, SoundEffects.jd, SoundEffects.jc);
     public static final SoundEffectType b = new SoundEffectType(1.0F, 1.0F, SoundEffects.cr, SoundEffects.cv, SoundEffects.cu, SoundEffects.ct, SoundEffects.cs);
     public static final SoundEffectType c = new SoundEffectType(1.0F, 1.0F, SoundEffects.cm, SoundEffects.cq, SoundEffects.cp, SoundEffects.co, SoundEffects.cn);
     public static final SoundEffectType d = new SoundEffectType(1.0F, 1.0F, SoundEffects.hI, SoundEffects.hQ, SoundEffects.hN, SoundEffects.hM, SoundEffects.hL);

@@ -116,7 +116,7 @@ public class EntityExperienceOrb extends Entity {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            this.av();
+            this.ax();
             this.d = (int) ((float) this.d - f);
             if (this.d <= 0) {
                 this.die();
@@ -178,7 +178,7 @@ public class EntityExperienceOrb extends Entity {
         return i >= 2477 ? 2477 : (i >= 1237 ? 1237 : (i >= 617 ? 617 : (i >= 307 ? 307 : (i >= 149 ? 149 : (i >= 73 ? 73 : (i >= 37 ? 37 : (i >= 17 ? 17 : (i >= 7 ? 7 : (i >= 3 ? 3 : 1)))))))));
     }
 
-    public boolean bb() {
+    public boolean bd() {
         return false;
     }
 }

@@ -208,7 +208,7 @@ public class EntityItem extends Entity {
         } else if (!this.getItemStack().isEmpty() && this.getItemStack().getItem() == Items.NETHER_STAR && damagesource.isExplosion()) {
             return false;
         } else {
-            this.av();
+            this.ax();
             this.f = (int) ((float) this.f - f);
             if (this.f <= 0) {
                 this.die();
@@ -287,7 +287,7 @@ public class EntityItem extends Entity {
         return this.hasCustomName() ? this.getCustomName() : LocaleI18n.get("item." + this.getItemStack().a());
     }
 
-    public boolean bb() {
+    public boolean bd() {
         return false;
     }
 

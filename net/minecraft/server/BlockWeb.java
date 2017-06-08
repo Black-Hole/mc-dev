@@ -11,7 +11,7 @@ public class BlockWeb extends Block {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        entity.aY();
+        entity.ba();
     }
 
     public boolean b(IBlockData iblockdata) {

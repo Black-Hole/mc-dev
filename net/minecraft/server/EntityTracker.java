@@ -259,7 +259,7 @@ public class EntityTracker {
                     arraylist.add(entity);
                 }
 
-                if (!entity.bD().isEmpty()) {
+                if (!entity.bF().isEmpty()) {
                     arraylist1.add(entity);
                 }
             }

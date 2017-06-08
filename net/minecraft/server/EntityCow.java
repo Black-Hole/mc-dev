@@ -38,7 +38,7 @@ public class EntityCow extends EntityAnimal {
         return SoundEffects.at;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.as;
     }
 
@@ -46,7 +46,7 @@ public class EntityCow extends EntityAnimal {
         this.a(SoundEffects.av, 0.15F, 1.0F);
     }
 
-    protected float co() {
+    protected float cq() {
         return 0.4F;
     }
 

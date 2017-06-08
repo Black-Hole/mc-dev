@@ -92,11 +92,11 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 f = MathHelper.cos(this.bF * 6.2831855F);
                 f1 = MathHelper.cos(this.bE * 6.2831855F);
                 if (f1 <= -0.3F && f >= -0.3F) {
-                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.aX, this.bI(), 5.0F, 0.8F + this.random.nextFloat() * 0.3F, false);
+                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.aX, this.bK(), 5.0F, 0.8F + this.random.nextFloat() * 0.3F, false);
                 }
 
                 if (!this.bL.a().a() && --this.bM < 0) {
-                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.aY, this.bI(), 2.5F, 0.8F + this.random.nextFloat() * 0.3F, false);
+                    this.world.a(this.locX, this.locY, this.locZ, SoundEffects.aY, this.bK(), 2.5F, 0.8F + this.random.nextFloat() * 0.3F, false);
                     this.bM = 200 + this.random.nextInt(200);
                 }
             }
@@ -111,7 +111,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             f2 = (this.random.nextFloat() - 0.5F) * 8.0F;
             this.world.addParticle(EnumParticle.EXPLOSION_LARGE, this.locX + (double) f, this.locY + 2.0D + (double) f1, this.locZ + (double) f2, 0.0D, 0.0D, 0.0D, new int[0]);
         } else {
-            this.de();
+            this.dg();
             f = 0.2F / (MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ) * 10.0F + 1.0F);
             f *= (float) Math.pow(2.0D, this.motY);
             if (this.bL.a().a()) {
@@ -258,7 +258,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
                 this.bw.B_();
                 this.bx.B_();
-                f3 = this.s(1.0F);
+                f3 = this.q(1.0F);
                 this.bw.setPositionRotation(this.locX + (double) (f13 * 6.5F * f8), this.locY + (double) f3 + (double) (f9 * 6.5F), this.locZ - (double) (f14 * 6.5F * f8), 0.0F, 0.0F);
                 this.bx.setPositionRotation(this.locX + (double) (f13 * 5.5F * f8), this.locY + (double) f3 + (double) (f9 * 5.5F), this.locZ - (double) (f14 * 5.5F * f8), 0.0F, 0.0F);
 
@@ -307,7 +307,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         }
     }
 
-    private float s(float f) {
+    private float q(float f) {
         double d0;
 
         if (this.bL.a().a()) {
@@ -322,7 +322,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return (float) d0;
     }
 
-    private void de() {
+    private void dg() {
         if (this.currentEnderCrystal != null) {
             if (this.currentEnderCrystal.dead) {
                 this.currentEnderCrystal = null;
@@ -366,7 +366,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 double d4 = d2 * d2 + d3 * d3;
 
                 entity.f(d2 / d4 * 4.0D, 0.20000000298023224D, d3 / d4 * 4.0D);
-                if (!this.bL.a().a() && ((EntityLiving) entity).bR() < entity.ticksLived - 2) {
+                if (!this.bL.a().a() && ((EntityLiving) entity).bT() < entity.ticksLived - 2) {
                     entity.damageEntity(DamageSource.mobAttack(this), 5.0F);
                     this.a((EntityLiving) this, entity);
                 }
@@ -488,7 +488,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     }
 
-    protected void bM() {
+    protected void bO() {
         if (this.bK != null) {
             this.bK.b(this);
         }
@@ -775,7 +775,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     protected void L() {}
 
-    public Entity[] aZ() {
+    public Entity[] bb() {
         return this.children;
     }
 
@@ -787,7 +787,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return this.world;
     }
 
-    public SoundCategory bI() {
+    public SoundCategory bK() {
         return SoundCategory.HOSTILE;
     }
 
@@ -799,7 +799,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return SoundEffects.aZ;
     }
 
-    protected float co() {
+    protected float cq() {
         return 5.0F;
     }
 
@@ -820,10 +820,10 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
                 f1 = 1.5F;
                 this.pitch = -45.0F;
-                vec3d = this.g(f);
+                vec3d = this.e(f);
                 this.pitch = f2;
             } else {
-                vec3d = this.g(f);
+                vec3d = this.e(f);
             }
         } else {
             BlockPosition blockposition = this.world.q(WorldGenEndTrophy.a);
@@ -834,7 +834,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             float f5 = 1.5F;
 
             this.pitch = -f3 * 1.5F * 5.0F;
-            vec3d = this.g(f);
+            vec3d = this.e(f);
             this.pitch = f4;
         }
 
@@ -870,7 +870,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     @Nullable
-    public EnderDragonBattle dd() {
+    public EnderDragonBattle df() {
         return this.bK;
     }
 
@@ -880,7 +880,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return false;
     }
 
-    public boolean bd() {
+    public boolean bf() {
         return false;
     }
 }

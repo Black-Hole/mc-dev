@@ -20,7 +20,7 @@ public class EntityAIBodyControl {
             this.c = this.a.aP;
             this.b = 0;
         } else {
-            if (this.a.bD().isEmpty() || !(this.a.bD().get(0) instanceof EntityInsentient)) {
+            if (this.a.bF().isEmpty() || !(this.a.bF().get(0) instanceof EntityInsentient)) {
                 float f = 75.0F;
 
                 if (Math.abs(this.a.aP - this.c) > 15.0F) {

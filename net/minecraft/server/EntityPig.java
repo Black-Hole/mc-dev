@@ -37,12 +37,12 @@ public class EntityPig extends EntityAnimal {
     }
 
     @Nullable
-    public Entity bC() {
-        return this.bD().isEmpty() ? null : (Entity) this.bD().get(0);
+    public Entity bE() {
+        return this.bF().isEmpty() ? null : (Entity) this.bF().get(0);
     }
 
-    public boolean cT() {
-        Entity entity = this.bC();
+    public boolean cV() {
+        Entity entity = this.bE();
 
         if (!(entity instanceof EntityHuman)) {
             return false;
@@ -91,7 +91,7 @@ public class EntityPig extends EntityAnimal {
         return SoundEffects.fq;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.fp;
     }
 
@@ -169,9 +169,9 @@ public class EntityPig extends EntityAnimal {
     }
 
     public void a(float f, float f1, float f2) {
-        Entity entity = this.bD().isEmpty() ? null : (Entity) this.bD().get(0);
+        Entity entity = this.bF().isEmpty() ? null : (Entity) this.bF().get(0);
 
-        if (this.isVehicle() && this.cT()) {
+        if (this.isVehicle() && this.cV()) {
             this.yaw = entity.yaw;
             this.lastYaw = this.yaw;
             this.pitch = entity.pitch * 0.5F;
@@ -179,19 +179,19 @@ public class EntityPig extends EntityAnimal {
             this.aN = this.yaw;
             this.aP = this.yaw;
             this.P = 1.0F;
-            this.aR = this.cw() * 0.1F;
+            this.aR = this.cy() * 0.1F;
             if (this.bB && this.bC++ > this.bD) {
                 this.bB = false;
             }
 
-            if (this.bG()) {
+            if (this.bI()) {
                 float f3 = (float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue() * 0.225F;
 
                 if (this.bB) {
                     f3 += f3 * 1.15F * MathHelper.sin((float) this.bC / (float) this.bD * 3.1415927F);
                 }
 
-                this.m(f3);
+                this.k(f3);
                 super.a(0.0F, 0.0F, 1.0F);
             } else {
                 this.motX = 0.0D;
@@ -217,7 +217,7 @@ public class EntityPig extends EntityAnimal {
         }
     }
 
-    public boolean dk() {
+    public boolean dm() {
         if (this.bB) {
             return false;
         } else {

@@ -51,11 +51,11 @@ public class EntitySquid extends EntityWaterAnimal {
         return SoundEffects.hH;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.hG;
     }
 
-    protected float co() {
+    protected float cq() {
         return 0.4F;
     }
 
@@ -167,7 +167,7 @@ public class EntitySquid extends EntityWaterAnimal {
         }
 
         public void e() {
-            int i = this.a.bU();
+            int i = this.a.bW();
 
             if (i > 100) {
                 this.a.b(0.0F, 0.0F, 0.0F);

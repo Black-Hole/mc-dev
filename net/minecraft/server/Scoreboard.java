@@ -365,7 +365,7 @@ public class Scoreboard {
 
     public void a(Entity entity) {
         if (entity != null && !(entity instanceof EntityHuman) && !entity.isAlive()) {
-            String s = entity.bl();
+            String s = entity.bn();
 
             this.resetPlayerScores(s, (ScoreboardObjective) null);
             this.removePlayerFromTeam(s);

@@ -24,7 +24,7 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     protected void b(World world, BlockPosition blockposition) {
         if (this.material == Material.WOOD) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.jd, SoundCategory.BLOCKS, 0.3F, 0.8F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.jg, SoundCategory.BLOCKS, 0.3F, 0.8F);
         } else {
             world.a((EntityHuman) null, blockposition, SoundEffects.hP, SoundCategory.BLOCKS, 0.3F, 0.6F);
         }
@@ -33,7 +33,7 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     protected void c(World world, BlockPosition blockposition) {
         if (this.material == Material.WOOD) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.jc, SoundCategory.BLOCKS, 0.3F, 0.7F);
+            world.a((EntityHuman) null, blockposition, SoundEffects.jf, SoundCategory.BLOCKS, 0.3F, 0.7F);
         } else {
             world.a((EntityHuman) null, blockposition, SoundEffects.hO, SoundCategory.BLOCKS, 0.3F, 0.5F);
         }

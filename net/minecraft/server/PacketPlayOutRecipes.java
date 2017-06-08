@@ -7,7 +7,7 @@ import java.util.List;
 
 public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
 
-    private PacketPlayOutRecipes.a a;
+    private PacketPlayOutRecipes.Action a;
     private List<IRecipe> b;
     private List<IRecipe> c;
     private boolean d;
@@ -15,8 +15,8 @@ public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutRecipes() {}
 
-    public PacketPlayOutRecipes(PacketPlayOutRecipes.a packetplayoutrecipes_a, List<IRecipe> list, List<IRecipe> list1, boolean flag, boolean flag1) {
-        this.a = packetplayoutrecipes_a;
+    public PacketPlayOutRecipes(PacketPlayOutRecipes.Action packetplayoutrecipes_action, List<IRecipe> list, List<IRecipe> list1, boolean flag, boolean flag1) {
+        this.a = packetplayoutrecipes_action;
         this.b = list;
         this.c = list1;
         this.d = flag;
@@ -28,7 +28,7 @@ public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = (PacketPlayOutRecipes.a) packetdataserializer.a(PacketPlayOutRecipes.a.class);
+        this.a = (PacketPlayOutRecipes.Action) packetdataserializer.a(PacketPlayOutRecipes.Action.class);
         this.d = packetdataserializer.readBoolean();
         this.e = packetdataserializer.readBoolean();
         int i = packetdataserializer.g();
@@ -41,7 +41,7 @@ public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
             this.b.add(CraftingManager.a(packetdataserializer.g()));
         }
 
-        if (this.a == PacketPlayOutRecipes.a.a) {
+        if (this.a == PacketPlayOutRecipes.Action.INIT) {
             i = packetdataserializer.g();
             this.c = Lists.newArrayList();
 
@@ -66,7 +66,7 @@ public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
             packetdataserializer.d(CraftingManager.a(irecipe));
         }
 
-        if (this.a == PacketPlayOutRecipes.a.a) {
+        if (this.a == PacketPlayOutRecipes.Action.INIT) {
             packetdataserializer.d(this.c.size());
             iterator = this.c.iterator();
 
@@ -78,10 +78,10 @@ public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
 
     }
 
-    public static enum a {
+    public static enum Action {
 
-        a, b, c;
+        INIT, ADD, REMOVE;
 
-        private a() {}
+        private Action() {}
     }
 }

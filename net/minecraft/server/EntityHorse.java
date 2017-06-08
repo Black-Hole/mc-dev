@@ -50,24 +50,24 @@ public class EntityHorse extends EntityHorseAbstract {
             }
         }
 
-        this.dB();
+        this.dD();
     }
 
     public void setVariant(int i) {
         this.datawatcher.set(EntityHorse.bI, Integer.valueOf(i));
-        this.dO();
+        this.dQ();
     }
 
     public int getVariant() {
         return ((Integer) this.datawatcher.get(EntityHorse.bI)).intValue();
     }
 
-    private void dO() {
+    private void dQ() {
         this.bO = null;
     }
 
-    protected void dB() {
-        super.dB();
+    protected void dD() {
+        super.dD();
         this.g(this.inventoryChest.getItem(1));
     }
 
@@ -75,7 +75,7 @@ public class EntityHorse extends EntityHorseAbstract {
         EnumHorseArmor enumhorsearmor = EnumHorseArmor.a(itemstack);
 
         this.datawatcher.set(EntityHorse.bJ, Integer.valueOf(enumhorsearmor.a()));
-        this.dO();
+        this.dQ();
         if (!this.world.isClientSide) {
             this.getAttributeInstance(GenericAttributes.h).b(EntityHorse.bH);
             int i = enumhorsearmor.c();
@@ -87,15 +87,15 @@ public class EntityHorse extends EntityHorseAbstract {
 
     }
 
-    public EnumHorseArmor dr() {
+    public EnumHorseArmor dt() {
         return EnumHorseArmor.a(((Integer) this.datawatcher.get(EntityHorse.bJ)).intValue());
     }
 
     public void a(IInventory iinventory) {
-        EnumHorseArmor enumhorsearmor = this.dr();
+        EnumHorseArmor enumhorsearmor = this.dt();
 
         super.a(iinventory);
-        EnumHorseArmor enumhorsearmor1 = this.dr();
+        EnumHorseArmor enumhorsearmor1 = this.dt();
 
         if (this.ticksLived > 20 && enumhorsearmor != enumhorsearmor1 && enumhorsearmor1 != EnumHorseArmor.NONE) {
             this.a(SoundEffects.cH, 0.5F, 1.0F);
@@ -113,16 +113,16 @@ public class EntityHorse extends EntityHorseAbstract {
 
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.maxHealth).setValue((double) this.dK());
-        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(this.dM());
-        this.getAttributeInstance(EntityHorse.attributeJumpStrength).setValue(this.dL());
+        this.getAttributeInstance(GenericAttributes.maxHealth).setValue((double) this.dM());
+        this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(this.dO());
+        this.getAttributeInstance(EntityHorse.attributeJumpStrength).setValue(this.dN());
     }
 
     public void B_() {
         super.B_();
         if (this.world.isClientSide && this.datawatcher.a()) {
             this.datawatcher.e();
-            this.dO();
+            this.dQ();
         }
 
     }
@@ -132,8 +132,8 @@ public class EntityHorse extends EntityHorseAbstract {
         return SoundEffects.cF;
     }
 
-    protected SoundEffect cd() {
-        super.cd();
+    protected SoundEffect cf() {
+        super.cf();
         return SoundEffects.cJ;
     }
 
@@ -142,8 +142,8 @@ public class EntityHorse extends EntityHorseAbstract {
         return SoundEffects.cM;
     }
 
-    protected SoundEffect dm() {
-        super.dm();
+    protected SoundEffect do_() {
+        super.do_();
         return SoundEffects.cG;
     }
 
@@ -183,12 +183,12 @@ public class EntityHorse extends EntityHorseAbstract {
                 }
 
                 if (!this.isTamed()) {
-                    this.dI();
+                    this.dK();
                     return true;
                 }
 
                 boolean flag1 = EnumHorseArmor.a(itemstack) != EnumHorseArmor.NONE;
-                boolean flag2 = !this.isBaby() && !this.dE() && itemstack.getItem() == Items.SADDLE;
+                boolean flag2 = !this.isBaby() && !this.dG() && itemstack.getItem() == Items.SADDLE;
 
                 if (flag1 || flag2) {
                     this.c(entityhuman);
@@ -206,7 +206,7 @@ public class EntityHorse extends EntityHorseAbstract {
     }
 
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.dJ() && ((EntityHorseAbstract) entityanimal).dJ());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.dL() && ((EntityHorseAbstract) entityanimal).dL());
     }
 
     public EntityAgeable createChild(EntityAgeable entityageable) {
@@ -246,7 +246,7 @@ public class EntityHorse extends EntityHorseAbstract {
         return (EntityAgeable) object;
     }
 
-    public boolean dN() {
+    public boolean dP() {
         return true;
     }
 

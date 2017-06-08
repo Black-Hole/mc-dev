@@ -83,9 +83,9 @@ public class ControllerMove {
                 }
             }
 
-            this.a.m(f2);
-            this.a.p(this.f);
-            this.a.r(this.g);
+            this.a.k(f2);
+            this.a.n(this.f);
+            this.a.p(this.g);
             this.h = ControllerMove.Operation.WAIT;
         } else if (this.h == ControllerMove.Operation.MOVE_TO) {
             this.h = ControllerMove.Operation.WAIT;
@@ -95,24 +95,24 @@ public class ControllerMove {
             double d3 = d0 * d0 + d2 * d2 + d1 * d1;
 
             if (d3 < 2.500000277905201E-7D) {
-                this.a.p(0.0F);
+                this.a.n(0.0F);
                 return;
             }
 
             f = (float) (MathHelper.c(d1, d0) * 57.2957763671875D) - 90.0F;
             this.a.yaw = this.a(this.a.yaw, f, 90.0F);
-            this.a.m((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
+            this.a.k((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
             if (d2 > (double) this.a.P && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.a.width)) {
                 this.a.getControllerJump().a();
                 this.h = ControllerMove.Operation.JUMPING;
             }
         } else if (this.h == ControllerMove.Operation.JUMPING) {
-            this.a.m((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
+            this.a.k((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
             if (this.a.onGround) {
                 this.h = ControllerMove.Operation.WAIT;
             }
         } else {
-            this.a.p(0.0F);
+            this.a.n(0.0F);
         }
 
     }

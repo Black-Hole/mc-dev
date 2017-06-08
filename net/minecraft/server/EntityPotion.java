@@ -131,7 +131,7 @@ public class EntityPotion extends EntityProjectile {
             while (iterator.hasNext()) {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                if (entityliving.cP()) {
+                if (entityliving.cR()) {
                     double d0 = this.h(entityliving);
 
                     if (d0 < 16.0D) {

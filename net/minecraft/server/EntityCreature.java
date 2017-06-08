@@ -25,11 +25,11 @@ public abstract class EntityCreature extends EntityInsentient {
         return super.P() && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ)) >= 0.0F;
     }
 
-    public boolean dc() {
+    public boolean de() {
         return !this.navigation.o();
     }
 
-    public boolean dd() {
+    public boolean df() {
         return this.f(new BlockPosition(this));
     }
 
@@ -42,24 +42,24 @@ public abstract class EntityCreature extends EntityInsentient {
         this.b = (float) i;
     }
 
-    public BlockPosition de() {
+    public BlockPosition dg() {
         return this.a;
     }
 
-    public float df() {
+    public float dh() {
         return this.b;
     }
 
-    public void dg() {
+    public void di() {
         this.b = -1.0F;
     }
 
-    public boolean dh() {
+    public boolean dj() {
         return this.b != -1.0F;
     }
 
-    protected void cX() {
-        super.cX();
+    protected void cZ() {
+        super.cZ();
         if (this.isLeashed() && this.getLeashHolder() != null && this.getLeashHolder().world == this.world) {
             Entity entity = this.getLeashHolder();
 
@@ -74,7 +74,7 @@ public abstract class EntityCreature extends EntityInsentient {
                 return;
             }
 
-            this.s(f);
+            this.q(f);
             if (f > 10.0F) {
                 this.unleash(true, true);
                 this.goalSelector.c(1);
@@ -91,15 +91,15 @@ public abstract class EntityCreature extends EntityInsentient {
                 float f1 = 2.0F;
                 Vec3D vec3d = (new Vec3D(entity.locX - this.locX, entity.locY - this.locY, entity.locZ - this.locZ)).a().a((double) Math.max(f - 2.0F, 0.0F));
 
-                this.getNavigation().a(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z, this.di());
+                this.getNavigation().a(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z, this.dk());
             }
         }
 
     }
 
-    protected double di() {
+    protected double dk() {
         return 1.0D;
     }
 
-    protected void s(float f) {}
+    protected void q(float f) {}
 }

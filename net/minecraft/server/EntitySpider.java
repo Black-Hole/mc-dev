@@ -28,7 +28,7 @@ public class EntitySpider extends EntityMonster {
         this.targetSelector.a(3, new EntitySpider.PathfinderGoalSpiderNearestAttackableTarget(this, EntityIronGolem.class));
     }
 
-    public double aE() {
+    public double aG() {
         return (double) (this.length * 0.5F);
     }
 
@@ -63,7 +63,7 @@ public class EntitySpider extends EntityMonster {
         return SoundEffects.hB;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.hA;
     }
 
@@ -80,7 +80,7 @@ public class EntitySpider extends EntityMonster {
         return this.p();
     }
 
-    public void aY() {}
+    public void ba() {}
 
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.ARTHROPOD;
@@ -148,7 +148,7 @@ public class EntitySpider extends EntityMonster {
         }
 
         public boolean a() {
-            float f = this.e.f(1.0F);
+            float f = this.e.aw();
 
             return f >= 0.5F ? false : super.a();
         }
@@ -161,7 +161,7 @@ public class EntitySpider extends EntityMonster {
         }
 
         public boolean b() {
-            float f = this.b.f(1.0F);
+            float f = this.b.aw();
 
             if (f >= 0.5F && this.b.getRandom().nextInt(100) == 0) {
                 this.b.setGoalTarget((EntityLiving) null);

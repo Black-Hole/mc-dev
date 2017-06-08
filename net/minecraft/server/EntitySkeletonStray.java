@@ -29,7 +29,7 @@ public class EntitySkeletonStray extends EntitySkeletonAbstract {
         return SoundEffects.hT;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.hS;
     }
 

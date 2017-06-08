@@ -41,7 +41,7 @@ public class PathfinderGoalTame extends PathfinderGoal {
 
     public void e() {
         if (!this.entity.isTamed() && this.entity.getRandom().nextInt(50) == 0) {
-            Entity entity = (Entity) this.entity.bD().get(0);
+            Entity entity = (Entity) this.entity.bF().get(0);
 
             if (entity == null) {
                 return;
@@ -60,7 +60,7 @@ public class PathfinderGoalTame extends PathfinderGoal {
             }
 
             this.entity.ejectPassengers();
-            this.entity.dI();
+            this.entity.dK();
             this.entity.world.broadcastEntityEffect(this.entity, (byte) 6);
         }
 

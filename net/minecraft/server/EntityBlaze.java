@@ -52,11 +52,11 @@ public class EntityBlaze extends EntityMonster {
         return SoundEffects.F;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.E;
     }
 
-    public float f(float f) {
+    public float aw() {
         return 1.0F;
     }
 
@@ -67,7 +67,7 @@ public class EntityBlaze extends EntityMonster {
 
         if (this.world.isClientSide) {
             if (this.random.nextInt(24) == 0 && !this.isSilent()) {
-                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, SoundEffects.D, this.bI(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
+                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, SoundEffects.D, this.bK(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
             }
 
             for (int i = 0; i < 2; ++i) {

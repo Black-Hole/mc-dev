@@ -89,21 +89,21 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
                     this.world.addParticle(EnumParticle.CLOUD, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
 
-                this.world.a(this.locX, this.locY, this.locZ, SoundEffects.dg, this.bI(), 1.0F, 1.0F, false);
+                this.world.a(this.locX, this.locY, this.locZ, SoundEffects.dg, this.bK(), 1.0F, 1.0F, false);
             }
         }
 
     }
 
     public boolean r(Entity entity) {
-        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.aW() == null && entity.aW() == null : false);
+        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.aY() == null && entity.aY() == null : false);
     }
 
     protected SoundEffect F() {
         return SoundEffects.dc;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.de;
     }
 
@@ -111,12 +111,12 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         return SoundEffects.df;
     }
 
-    protected SoundEffect dk() {
+    protected SoundEffect dm() {
         return SoundEffects.dd;
     }
 
     public void a(EntityLiving entityliving, float f) {
-        EntityArrow entityarrow = this.t(f);
+        EntityArrow entityarrow = this.r(f);
         double d0 = entityliving.locX - this.locX;
         double d1 = entityliving.getBoundingBox().b + (double) (entityliving.length / 3.0F) - entityarrow.locY;
         double d2 = entityliving.locZ - this.locZ;
@@ -127,7 +127,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         this.world.addEntity(entityarrow);
     }
 
-    protected EntityArrow t(float f) {
+    protected EntityArrow r(float f) {
         EntityTippedArrow entitytippedarrow = new EntityTippedArrow(this.world, this);
 
         entitytippedarrow.a((EntityLiving) this, f);

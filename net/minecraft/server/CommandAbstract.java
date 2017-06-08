@@ -258,7 +258,7 @@ public abstract class CommandAbstract implements ICommand {
             return b(minecraftserver, icommandlistener, s).getName();
         } catch (ExceptionPlayerNotFound exceptionplayernotfound) {
             try {
-                return c(minecraftserver, icommandlistener, s).bl();
+                return c(minecraftserver, icommandlistener, s).bn();
             } catch (ExceptionEntityNotFound exceptionentitynotfound) {
                 if (PlayerSelector.isPattern(s)) {
                     throw exceptionentitynotfound;

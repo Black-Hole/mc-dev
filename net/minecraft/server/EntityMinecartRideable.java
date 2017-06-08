@@ -38,7 +38,7 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
                 this.e(-this.u());
                 this.d(10);
                 this.setDamage(50.0F);
-                this.av();
+                this.ax();
             }
         }
 

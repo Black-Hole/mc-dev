@@ -97,7 +97,7 @@ public class Explosion {
         for (int l1 = 0; l1 < list.size(); ++l1) {
             Entity entity = (Entity) list.get(l1);
 
-            if (!entity.bz()) {
+            if (!entity.bB()) {
                 double d7 = entity.e(this.posX, this.posY, this.posZ) / (double) f3;
 
                 if (d7 <= 1.0D) {

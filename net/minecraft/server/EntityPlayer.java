@@ -136,7 +136,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         Entity entity = this.getVehicle();
-        Entity entity1 = this.bH();
+        Entity entity1 = this.bJ();
 
         if (entity1 != null && entity != this && entity.b(EntityPlayer.class).size() == 1) {
             NBTTagCompound nbttagcompound2 = new NBTTagCompound();
@@ -321,7 +321,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         this.playerConnection.sendPacket(new PacketPlayOutCombatEvent(this.getCombatTracker(), PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED, flag));
         if (flag) {
-            ScoreboardTeamBase scoreboardteambase = this.aW();
+            ScoreboardTeamBase scoreboardteambase = this.aY();
 
             if (scoreboardteambase != null && scoreboardteambase.getDeathMessageVisibility() != ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS) {
                 if (scoreboardteambase.getDeathMessageVisibility() == ScoreboardTeamBase.EnumNameTagVisibility.HIDE_FOR_OTHER_TEAMS) {
@@ -336,7 +336,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         this.releaseShoulderEntities();
         if (!this.world.getGameRules().getBoolean("keepInventory") && !this.isSpectator()) {
-            this.cT();
+            this.cV();
             this.inventory.o();
         }
 
@@ -350,7 +350,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             scoreboardscore.incrementScore();
         }
 
-        EntityLiving entityliving = this.cg();
+        EntityLiving entityliving = this.ci();
 
         if (entityliving != null) {
             EntityTypes.MonsterEggInfo entitytypes_monsteregginfo = (EntityTypes.MonsterEggInfo) EntityTypes.eggInfo.get(EntityTypes.a((Entity) entityliving));
@@ -396,7 +396,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     private Collection<ScoreboardObjective> E(Entity entity) {
-        String s = entity instanceof EntityHuman ? entity.getName() : entity.bl();
+        String s = entity instanceof EntityHuman ? entity.getName() : entity.bn();
         ScoreboardTeam scoreboardteam = this.getScoreboard().getPlayerTeam(this.getName());
 
         if (scoreboardteam != null) {
@@ -546,12 +546,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public boolean a(Entity entity, boolean flag) {
-        Entity entity1 = this.bH();
+        Entity entity1 = this.bJ();
 
         if (!super.a(entity, flag)) {
             return false;
         } else {
-            Entity entity2 = this.bH();
+            Entity entity2 = this.bJ();
 
             if (entity2 != entity1 && this.playerConnection != null) {
                 this.playerConnection.a(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
@@ -562,10 +562,10 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void stopRiding() {
-        Entity entity = this.bH();
+        Entity entity = this.bJ();
 
         super.stopRiding();
-        Entity entity1 = this.bH();
+        Entity entity1 = this.bJ();
 
         if (entity1 != entity && this.playerConnection != null) {
             this.playerConnection.a(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
@@ -948,7 +948,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         this.updateAbilities();
-        this.cC();
+        this.cE();
     }
 
     public boolean isSpectator() {
@@ -1034,7 +1034,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     protected void G() {
         if (this.isSpectator()) {
-            this.bW();
+            this.bY();
             this.setInvisible(true);
         } else {
             super.G();
@@ -1085,7 +1085,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void a(EnumHand enumhand) {
         super.a(enumhand);
-        this.dq();
+        this.ds();
     }
 
     public boolean L() {

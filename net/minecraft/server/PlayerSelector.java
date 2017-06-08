@@ -319,7 +319,7 @@ public class PlayerSelector {
                         return false;
                     } else {
                         EntityLiving entityliving = (EntityLiving) entity;
-                        ScoreboardTeamBase scoreboardteambase = entityliving.aW();
+                        ScoreboardTeamBase scoreboardteambase = entityliving.aY();
                         String s = scoreboardteambase == null ? "" : scoreboardteambase.getName();
 
                         return s.equals(s1) != flag;
@@ -370,7 +370,7 @@ public class PlayerSelector {
                             return false;
                         }
 
-                        String s1 = entity instanceof EntityPlayer ? entity.getName() : entity.bl();
+                        String s1 = entity instanceof EntityPlayer ? entity.getName() : entity.bn();
 
                         if (!scoreboard.b(s1, scoreboardobjective)) {
                             return false;

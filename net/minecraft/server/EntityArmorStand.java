@@ -71,8 +71,8 @@ public class EntityArmorStand extends EntityLiving {
         this.setPosition(d0, d1, d2);
     }
 
-    public boolean cA() {
-        return super.cA() && !this.isNoGravity();
+    public boolean cC() {
+        return super.cC() && !this.isNoGravity();
     }
 
     protected void i() {
@@ -86,7 +86,7 @@ public class EntityArmorStand extends EntityLiving {
         this.datawatcher.register(EntityArmorStand.g, EntityArmorStand.bw);
     }
 
-    public Iterable<ItemStack> aM() {
+    public Iterable<ItemStack> aO() {
         return this.by;
     }
 
@@ -287,7 +287,7 @@ public class EntityArmorStand extends EntityLiving {
 
     protected void C(Entity entity) {}
 
-    protected void cz() {
+    protected void cB() {
         List list = this.world.getEntities(this, this.getBoundingBox(), EntityArmorStand.bx);
 
         for (int i = 0; i < list.size(); ++i) {
@@ -497,7 +497,7 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     private void H() {
-        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.j, this.bI(), 1.0F, 1.0F);
+        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.j, this.bK(), 1.0F, 1.0F);
     }
 
     protected float g(float f, float f1) {
@@ -510,7 +510,7 @@ public class EntityArmorStand extends EntityLiving {
         return this.isBaby() ? this.length * 0.5F : this.length * 0.9F;
     }
 
-    public double aD() {
+    public double aF() {
         return this.isMarker() ? 0.0D : 0.10000000149011612D;
     }
 
@@ -520,7 +520,7 @@ public class EntityArmorStand extends EntityLiving {
         }
     }
 
-    public void j(float f) {
+    public void h(float f) {
         this.aO = this.lastYaw = f;
         this.aQ = this.aP = f;
     }
@@ -604,7 +604,7 @@ public class EntityArmorStand extends EntityLiving {
         this.die();
     }
 
-    public boolean bz() {
+    public boolean bB() {
         return this.isInvisible();
     }
 
@@ -712,13 +712,13 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     @Nullable
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.j;
     }
 
     public void onLightningStrike(EntityLightning entitylightning) {}
 
-    public boolean cP() {
+    public boolean cR() {
         return false;
     }
 
@@ -730,7 +730,7 @@ public class EntityArmorStand extends EntityLiving {
         super.a(datawatcherobject);
     }
 
-    public boolean cQ() {
+    public boolean cS() {
         return false;
     }
 }

@@ -86,10 +86,10 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         }
 
         super.n();
-        this.dv();
+        this.dx();
     }
 
-    private void dv() {
+    private void dx() {
         this.bE = this.bB;
         this.bD = this.bC;
         this.bC = (float) ((double) this.bC + (double) (this.onGround ? -1 : 4) * 0.3D);
@@ -116,7 +116,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
                 if (!entityinsentient.isSilent()) {
                     SoundEffect soundeffect = g(EntityTypes.b.a((Object) entityinsentient.getClass()));
 
-                    world.a((EntityHuman) null, entity.locX, entity.locY, entity.locZ, soundeffect, entity.bI(), 0.7F, b(world.random));
+                    world.a((EntityHuman) null, entity.locX, entity.locY, entity.locZ, soundeffect, entity.bK(), 0.7F, b(world.random));
                     return true;
                 }
             }
@@ -136,7 +136,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
             }
 
             if (!this.isSilent()) {
-                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.eJ, this.bI(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.eJ, this.bK(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
             }
 
             if (!this.world.isClientSide) {
@@ -157,7 +157,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
             }
 
             this.addEffect(new MobEffect(MobEffects.POISON, 900));
-            if (entityhuman.z() || !this.bc()) {
+            if (entityhuman.z() || !this.be()) {
                 this.damageEntity(DamageSource.playerAttack(entityhuman), Float.MAX_VALUE);
             }
 
@@ -200,7 +200,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
 
     public static void a(World world, Entity entity) {
         if (!entity.isSilent() && !b(world, entity) && world.random.nextInt(200) == 0) {
-            world.a((EntityHuman) null, entity.locX, entity.locY, entity.locZ, a(world.random), entity.bI(), 1.0F, b(world.random));
+            world.a((EntityHuman) null, entity.locX, entity.locY, entity.locZ, a(world.random), entity.bK(), 1.0F, b(world.random));
         }
 
     }
@@ -232,7 +232,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         return SoundEffects.eL;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.eI;
     }
 
@@ -249,7 +249,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         return true;
     }
 
-    protected float cp() {
+    protected float cr() {
         return b(this.random);
     }
 
@@ -257,7 +257,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         return (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F;
     }
 
-    public SoundCategory bI() {
+    public SoundCategory bK() {
         return SoundCategory.NEUTRAL;
     }
 

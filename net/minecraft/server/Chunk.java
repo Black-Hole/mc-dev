@@ -711,7 +711,7 @@ public class Chunk {
                             list.add(entity1);
                         }
 
-                        Entity[] aentity = entity1.aZ();
+                        Entity[] aentity = entity1.bb();
 
                         if (aentity != null) {
                             Entity[] aentity1 = aentity;

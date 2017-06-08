@@ -7,13 +7,13 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         this.b_ = 5;
     }
 
-    public SoundCategory bI() {
+    public SoundCategory bK() {
         return SoundCategory.HOSTILE;
     }
 
     public void n() {
-        this.cj();
-        float f = this.f(1.0F);
+        this.cl();
+        float f = this.aw();
 
         if (f > 0.5F) {
             this.ticksFarFromPlayer += 2;
@@ -46,7 +46,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         return SoundEffects.cU;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.cT;
     }
 
@@ -81,7 +81,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
             if (entity instanceof EntityHuman) {
                 EntityHuman entityhuman = (EntityHuman) entity;
                 ItemStack itemstack = this.getItemInMainHand();
-                ItemStack itemstack1 = entityhuman.isHandRaised() ? entityhuman.cH() : ItemStack.a;
+                ItemStack itemstack1 = entityhuman.isHandRaised() ? entityhuman.cJ() : ItemStack.a;
 
                 if (!itemstack.isEmpty() && !itemstack1.isEmpty() && itemstack.getItem() instanceof ItemAxe && itemstack1.getItem() == Items.SHIELD) {
                     float f1 = 0.25F + (float) EnchantmentManager.getDigSpeedEnchantmentLevel(this) * 0.05F;

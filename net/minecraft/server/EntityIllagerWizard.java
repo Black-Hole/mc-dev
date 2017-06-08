@@ -28,7 +28,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         nbttagcompound.setInt("SpellTicks", this.b);
     }
 
-    public boolean dl() {
+    public boolean dn() {
         return this.world.isClientSide ? ((Byte) this.datawatcher.get(EntityIllagerWizard.c)).byteValue() > 0 : this.b > 0;
     }
 
@@ -51,7 +51,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
     public void B_() {
         super.B_();
-        if (this.world.isClientSide && this.dl()) {
+        if (this.world.isClientSide && this.dn()) {
             EntityIllagerWizard.Spell entityillagerwizard_spell = this.getSpell();
             double d0 = entityillagerwizard_spell.h[0];
             double d1 = entityillagerwizard_spell.h[1];
@@ -66,11 +66,11 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
     }
 
-    protected int dn() {
+    protected int dp() {
         return this.b;
     }
 
-    protected abstract SoundEffect dk();
+    protected abstract SoundEffect dm();
 
     public static enum Spell {
 
@@ -108,7 +108,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         protected c() {}
 
         public boolean a() {
-            return EntityIllagerWizard.this.getGoalTarget() == null ? false : (EntityIllagerWizard.this.dl() ? false : EntityIllagerWizard.this.ticksLived >= this.d);
+            return EntityIllagerWizard.this.getGoalTarget() == null ? false : (EntityIllagerWizard.this.dn() ? false : EntityIllagerWizard.this.ticksLived >= this.d);
         }
 
         public boolean b() {
@@ -132,7 +132,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
             --this.c;
             if (this.c == 0) {
                 this.j();
-                EntityIllagerWizard.this.a(EntityIllagerWizard.this.dk(), 1.0F, 1.0F);
+                EntityIllagerWizard.this.a(EntityIllagerWizard.this.dm(), 1.0F, 1.0F);
             }
 
         }
@@ -160,7 +160,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         }
 
         public boolean a() {
-            return EntityIllagerWizard.this.dn() > 0;
+            return EntityIllagerWizard.this.dp() > 0;
         }
 
         public void c() {

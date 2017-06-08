@@ -8,7 +8,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     private boolean b;
     private static final Predicate<Entity> c = new Predicate() {
         public boolean a(@Nullable Entity entity) {
-            return entity instanceof EntityLiving && ((EntityLiving) entity).cQ();
+            return entity instanceof EntityLiving && ((EntityLiving) entity).cS();
         }
 
         public boolean apply(@Nullable Object object) {
@@ -94,7 +94,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     }
 
     public boolean r(Entity entity) {
-        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.aW() == null && entity.aW() == null : false);
+        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.aY() == null && entity.aY() == null : false);
     }
 
     public void setCustomName(String s) {
@@ -106,15 +106,15 @@ public class EntityVindicator extends EntityIllagerAbstract {
     }
 
     protected SoundEffect F() {
-        return SoundEffects.in;
+        return SoundEffects.iq;
     }
 
-    protected SoundEffect cd() {
-        return SoundEffects.io;
+    protected SoundEffect cf() {
+        return SoundEffects.ir;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.ip;
+        return SoundEffects.is;
     }
 
     static class a extends PathfinderGoalNearestAttackableTarget<EntityLiving> {

@@ -28,11 +28,11 @@ public class EntityZombieHusk extends EntityZombie {
         return SoundEffects.da;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.cZ;
     }
 
-    protected SoundEffect dk() {
+    protected SoundEffect dm() {
         return SoundEffects.db;
     }
 
@@ -53,7 +53,7 @@ public class EntityZombieHusk extends EntityZombie {
         return flag;
     }
 
-    protected ItemStack dl() {
+    protected ItemStack dn() {
         return ItemStack.a;
     }
 }

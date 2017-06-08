@@ -492,7 +492,7 @@ public class CommandScoreboard extends CommandAbstract {
 
                     while (iterator.hasNext()) {
                         Entity entity = (Entity) iterator.next();
-                        String s2 = f(minecraftserver, icommandlistener, entity.bl());
+                        String s2 = f(minecraftserver, icommandlistener, entity.bn());
 
                         if (scoreboard.addPlayerToTeam(s2, s)) {
                             hashset.add(s2);
@@ -544,7 +544,7 @@ public class CommandScoreboard extends CommandAbstract {
 
                     while (iterator.hasNext()) {
                         Entity entity = (Entity) iterator.next();
-                        String s1 = f(minecraftserver, icommandlistener, entity.bl());
+                        String s1 = f(minecraftserver, icommandlistener, entity.bn());
 
                         if (scoreboard.removePlayerFromTeam(s1)) {
                             hashset.add(s1);

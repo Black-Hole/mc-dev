@@ -125,11 +125,11 @@ public class EntityEnderSignal extends Entity {
 
     public void a(NBTTagCompound nbttagcompound) {}
 
-    public float f(float f) {
+    public float aw() {
         return 1.0F;
     }
 
-    public boolean bb() {
+    public boolean bd() {
         return false;
     }
 }

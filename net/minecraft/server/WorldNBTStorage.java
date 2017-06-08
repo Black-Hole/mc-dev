@@ -138,8 +138,8 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
     public void save(EntityHuman entityhuman) {
         try {
             NBTTagCompound nbttagcompound = entityhuman.save(new NBTTagCompound());
-            File file = new File(this.playerDir, entityhuman.bl() + ".dat.tmp");
-            File file1 = new File(this.playerDir, entityhuman.bl() + ".dat");
+            File file = new File(this.playerDir, entityhuman.bn() + ".dat.tmp");
+            File file1 = new File(this.playerDir, entityhuman.bn() + ".dat");
 
             NBTCompressedStreamTools.a(nbttagcompound, (OutputStream) (new FileOutputStream(file)));
             if (file1.exists()) {
@@ -158,7 +158,7 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
         NBTTagCompound nbttagcompound = null;
 
         try {
-            File file = new File(this.playerDir, entityhuman.bl() + ".dat");
+            File file = new File(this.playerDir, entityhuman.bn() + ".dat");
 
             if (file.exists() && file.isFile()) {
                 nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));

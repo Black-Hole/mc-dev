@@ -21,7 +21,7 @@ public class RecipeBookServer extends RecipeBook {
         while (iterator.hasNext()) {
             IRecipe irecipe = (IRecipe) iterator.next();
 
-            if (!this.a.get(d(irecipe))) {
+            if (!this.a.get(d(irecipe)) && !irecipe.c()) {
                 this.a(irecipe);
                 this.g(irecipe);
                 arraylist.add(irecipe);
@@ -29,7 +29,7 @@ public class RecipeBookServer extends RecipeBook {
             }
         }
 
-        this.a(PacketPlayOutRecipes.a.b, entityplayer, arraylist);
+        this.a(PacketPlayOutRecipes.Action.ADD, entityplayer, arraylist);
     }
 
     public void b(List<IRecipe> list, EntityPlayer entityplayer) {
@@ -45,11 +45,11 @@ public class RecipeBookServer extends RecipeBook {
             }
         }
 
-        this.a(PacketPlayOutRecipes.a.c, entityplayer, arraylist);
+        this.a(PacketPlayOutRecipes.Action.REMOVE, entityplayer, arraylist);
     }
 
-    private void a(PacketPlayOutRecipes.a packetplayoutrecipes_a, EntityPlayer entityplayer, List<IRecipe> list) {
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(packetplayoutrecipes_a, list, Collections.emptyList(), this.c, this.d));
+    private void a(PacketPlayOutRecipes.Action packetplayoutrecipes_action, EntityPlayer entityplayer, List<IRecipe> list) {
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(packetplayoutrecipes_action, list, Collections.emptyList(), this.c, this.d));
     }
 
     public NBTTagCompound c() {
@@ -132,6 +132,6 @@ public class RecipeBookServer extends RecipeBook {
     }
 
     public void a(EntityPlayer entityplayer) {
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(PacketPlayOutRecipes.a.a, this.d(), this.e(), this.c, this.d));
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(PacketPlayOutRecipes.Action.INIT, this.d(), this.e(), this.c, this.d));
     }
 }

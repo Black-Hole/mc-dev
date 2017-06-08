@@ -141,7 +141,7 @@ public abstract class EntityHanging extends Entity {
         } else {
             if (!this.dead && !this.world.isClientSide) {
                 this.die();
-                this.av();
+                this.ax();
                 this.a(damagesource.getEntity());
             }
 
@@ -195,7 +195,7 @@ public abstract class EntityHanging extends Entity {
         return entityitem;
     }
 
-    protected boolean ay() {
+    protected boolean aA() {
         return false;
     }
 

@@ -16,7 +16,7 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(15.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
-        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.dL());
+        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.dN());
     }
 
     public EnumMonsterType getMonsterType() {
@@ -25,17 +25,17 @@ public class EntityHorseZombie extends EntityHorseAbstract {
 
     protected SoundEffect F() {
         super.F();
-        return SoundEffects.jk;
+        return SoundEffects.jn;
     }
 
-    protected SoundEffect cd() {
-        super.cd();
-        return SoundEffects.jl;
+    protected SoundEffect cf() {
+        super.cf();
+        return SoundEffects.jo;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
         super.d(damagesource);
-        return SoundEffects.jm;
+        return SoundEffects.jp;
     }
 
     @Nullable
@@ -60,7 +60,7 @@ public class EntityHorseZombie extends EntityHorseAbstract {
             return super.a(entityhuman, enumhand);
         } else {
             if (flag) {
-                if (!this.dE() && itemstack.getItem() == Items.SADDLE) {
+                if (!this.dG() && itemstack.getItem() == Items.SADDLE) {
                     this.c(entityhuman);
                     return true;
                 }

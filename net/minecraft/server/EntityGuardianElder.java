@@ -10,7 +10,7 @@ public class EntityGuardianElder extends EntityGuardian {
     public EntityGuardianElder(World world) {
         super(world);
         this.setSize(this.width * 2.35F, this.length * 2.35F);
-        this.cU();
+        this.cW();
         if (this.goalRandomStroll != null) {
             this.goalRandomStroll.setTimeBetweenMovement(400);
         }
@@ -45,11 +45,11 @@ public class EntityGuardianElder extends EntityGuardian {
         return this.isInWater() ? SoundEffects.aO : SoundEffects.aP;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return this.isInWater() ? SoundEffects.aL : SoundEffects.aM;
     }
 
-    protected SoundEffect dl() {
+    protected SoundEffect dn() {
         return SoundEffects.aN;
     }
 
@@ -83,7 +83,7 @@ public class EntityGuardianElder extends EntityGuardian {
             }
         }
 
-        if (!this.dh()) {
+        if (!this.dj()) {
             this.a(new BlockPosition(this), 16);
         }
 

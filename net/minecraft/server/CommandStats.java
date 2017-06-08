@@ -110,7 +110,7 @@ public class CommandStats extends CommandAbstract {
                 } else {
                     Entity entity = c(minecraftserver, icommandlistener, astring[1]);
 
-                    commandobjectiveexecutor = entity.by();
+                    commandobjectiveexecutor = entity.bA();
                 }
 
                 if ("set".equals(s)) {

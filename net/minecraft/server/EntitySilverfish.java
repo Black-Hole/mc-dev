@@ -26,7 +26,7 @@ public class EntitySilverfish extends EntityMonster {
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true));
     }
 
-    public double aD() {
+    public double aF() {
         return 0.1D;
     }
 
@@ -53,7 +53,7 @@ public class EntitySilverfish extends EntityMonster {
         return SoundEffects.gO;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.gN;
     }
 
@@ -83,9 +83,9 @@ public class EntitySilverfish extends EntityMonster {
         super.B_();
     }
 
-    public void j(float f) {
+    public void h(float f) {
         this.yaw = f;
-        super.j(f);
+        super.h(f);
     }
 
     public float a(BlockPosition blockposition) {

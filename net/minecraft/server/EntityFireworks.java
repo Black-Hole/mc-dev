@@ -63,8 +63,8 @@ public class EntityFireworks extends Entity {
             }
 
             if (this.e != null) {
-                if (this.e.cN()) {
-                    Vec3D vec3d = this.e.aH();
+                if (this.e.cP()) {
+                    Vec3D vec3d = this.e.aJ();
                     double d0 = 1.5D;
                     double d1 = 0.1D;
 
@@ -204,7 +204,7 @@ public class EntityFireworks extends Entity {
 
     }
 
-    public boolean bb() {
+    public boolean bd() {
         return false;
     }
 }

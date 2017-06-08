@@ -202,7 +202,7 @@ public class PathfinderNormal extends PathfinderAbstract {
 
                     while (j > 0 && pathtype == PathType.OPEN) {
                         --j;
-                        if (i1++ >= this.b.be()) {
+                        if (i1++ >= this.b.bg()) {
                             return null;
                         }
 

@@ -36,7 +36,7 @@ public class EntityFallingBlock extends Entity {
         this.a(new BlockPosition(this));
     }
 
-    public boolean bb() {
+    public boolean bd() {
         return false;
     }
 
@@ -268,7 +268,7 @@ public class EntityFallingBlock extends Entity {
         return this.block;
     }
 
-    public boolean bA() {
+    public boolean bC() {
         return true;
     }
 }

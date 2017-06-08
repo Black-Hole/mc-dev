@@ -183,7 +183,7 @@ public class Block {
     }
 
     protected static boolean b(Block block) {
-        return block instanceof BlockShulkerBox || block instanceof BlockLeaves || block instanceof BlockTrapdoor || block == Blocks.BEACON || block == Blocks.cauldron || block == Blocks.GLASS || block == Blocks.GLOWSTONE || block == Blocks.ICE || block == Blocks.SEA_LANTERN || block == Blocks.STAINED_GLASS || block == Blocks.LIT_PUMPKIN;
+        return block instanceof BlockShulkerBox || block instanceof BlockLeaves || block instanceof BlockTrapdoor || block == Blocks.BEACON || block == Blocks.cauldron || block == Blocks.GLASS || block == Blocks.GLOWSTONE || block == Blocks.ICE || block == Blocks.SEA_LANTERN || block == Blocks.STAINED_GLASS;
     }
 
     protected static boolean c(Block block) {

@@ -26,7 +26,7 @@ public abstract class EntityPerchable extends EntityTameableAnimal {
         super.B_();
     }
 
-    public boolean du() {
+    public boolean dw() {
         return this.bB > 100;
     }
 }

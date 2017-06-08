@@ -22,7 +22,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     public EntitySkeletonAbstract(World world) {
         super(world);
         this.setSize(0.6F, 1.99F);
-        this.dk();
+        this.dm();
     }
 
     protected void r() {
@@ -60,8 +60,8 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     public void n() {
         if (this.world.D() && !this.world.isClientSide) {
-            float f = this.f(1.0F);
-            BlockPosition blockposition = this.bH() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
+            float f = this.aw();
+            BlockPosition blockposition = this.bJ() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
 
             if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.h(blockposition)) {
                 boolean flag = true;
@@ -88,10 +88,10 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         super.n();
     }
 
-    public void aC() {
-        super.aC();
-        if (this.bH() instanceof EntityCreature) {
-            EntityCreature entitycreature = (EntityCreature) this.bH();
+    public void aE() {
+        super.aE();
+        if (this.bJ() instanceof EntityCreature) {
+            EntityCreature entitycreature = (EntityCreature) this.bJ();
 
             this.aN = entitycreature.aN;
         }
@@ -108,7 +108,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         groupdataentity = super.prepare(difficultydamagescaler, groupdataentity);
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
-        this.dk();
+        this.dm();
         this.m(this.random.nextFloat() < 0.55F * difficultydamagescaler.d());
         if (this.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
             Calendar calendar = this.world.ae();
@@ -122,7 +122,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         return groupdataentity;
     }
 
-    public void dk() {
+    public void dm() {
         if (this.world != null && !this.world.isClientSide) {
             this.goalSelector.a((PathfinderGoal) this.c);
             this.goalSelector.a((PathfinderGoal) this.b);
@@ -165,13 +165,13 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.dk();
+        this.dm();
     }
 
     public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
         super.setSlot(enumitemslot, itemstack);
         if (!this.world.isClientSide && enumitemslot == EnumItemSlot.MAINHAND) {
-            this.dk();
+            this.dm();
         }
 
     }
@@ -180,7 +180,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         return 1.74F;
     }
 
-    public double aD() {
+    public double aF() {
         return -0.6D;
     }
 

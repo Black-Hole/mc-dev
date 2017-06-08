@@ -59,7 +59,7 @@ public abstract class CommandHandler implements ICommandHandler {
                     while (iterator.hasNext()) {
                         Entity entity = (Entity) iterator.next();
 
-                        astring[j] = entity.bl();
+                        astring[j] = entity.bn();
                         if (this.a(icommandlistener, astring, icommand, s)) {
                             ++i;
                         }

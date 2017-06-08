@@ -106,7 +106,7 @@ public class EntityEvokerFangs extends Entity {
     private void c(EntityLiving entityliving) {
         EntityLiving entityliving1 = this.getOwner();
 
-        if (entityliving.isAlive() && !entityliving.bc() && entityliving != entityliving1) {
+        if (entityliving.isAlive() && !entityliving.be() && entityliving != entityliving1) {
             if (entityliving1 == null) {
                 entityliving.damageEntity(DamageSource.MAGIC, 6.0F);
             } else {

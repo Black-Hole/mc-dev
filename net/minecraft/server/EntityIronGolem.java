@@ -49,7 +49,7 @@ public class EntityIronGolem extends EntityGolem {
             this.c = 70 + this.random.nextInt(50);
             this.b = this.world.ak().getClosestVillage(new BlockPosition(this), 32);
             if (this.b == null) {
-                this.dg();
+                this.di();
             } else {
                 BlockPosition blockposition = this.b.a();
 
@@ -153,7 +153,7 @@ public class EntityIronGolem extends EntityGolem {
         return SoundEffects.dl;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.dk;
     }
 
@@ -166,7 +166,7 @@ public class EntityIronGolem extends EntityGolem {
         return LootTables.A;
     }
 
-    public int dk() {
+    public int dm() {
         return this.by;
     }
 

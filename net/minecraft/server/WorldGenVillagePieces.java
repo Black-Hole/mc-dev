@@ -1671,7 +1671,7 @@ public class WorldGenVillagePieces {
                         entityzombievillager.setPositionRotation((double) j1 + 0.5D, (double) k1, (double) l1 + 0.5D, 0.0F, 0.0F);
                         entityzombievillager.prepare(world.D(new BlockPosition(entityzombievillager)), (GroupDataEntity) null);
                         entityzombievillager.setProfession(this.c(i1, 0));
-                        entityzombievillager.cU();
+                        entityzombievillager.cW();
                         world.addEntity(entityzombievillager);
                     } else {
                         EntityVillager entityvillager = new EntityVillager(world);

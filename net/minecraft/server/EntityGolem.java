@@ -21,7 +21,7 @@ public abstract class EntityGolem extends EntityCreature implements IAnimal {
     }
 
     @Nullable
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return null;
     }
 

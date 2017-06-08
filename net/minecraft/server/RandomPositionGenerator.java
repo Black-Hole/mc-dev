@@ -40,9 +40,9 @@ public class RandomPositionGenerator {
         Random random = entitycreature.getRandom();
         boolean flag1;
 
-        if (entitycreature.dh()) {
-            double d0 = entitycreature.de().distanceSquared((double) MathHelper.floor(entitycreature.locX), (double) MathHelper.floor(entitycreature.locY), (double) MathHelper.floor(entitycreature.locZ)) + 4.0D;
-            double d1 = (double) (entitycreature.df() + (float) i);
+        if (entitycreature.dj()) {
+            double d0 = entitycreature.dg().distanceSquared((double) MathHelper.floor(entitycreature.locX), (double) MathHelper.floor(entitycreature.locY), (double) MathHelper.floor(entitycreature.locZ)) + 4.0D;
+            double d1 = (double) (entitycreature.dh() + (float) i);
 
             flag1 = d0 < d1 * d1;
         } else {
@@ -63,8 +63,8 @@ public class RandomPositionGenerator {
             if (vec3d == null || (double) k1 * vec3d.x + (double) i2 * vec3d.z >= 0.0D) {
                 BlockPosition blockposition;
 
-                if (entitycreature.dh() && i > 1) {
-                    blockposition = entitycreature.de();
+                if (entitycreature.dj() && i > 1) {
+                    blockposition = entitycreature.dg();
                     if (entitycreature.locX > (double) blockposition.getX()) {
                         k1 -= random.nextInt(i / 2);
                     } else {

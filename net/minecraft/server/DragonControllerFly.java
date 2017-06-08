@@ -38,7 +38,7 @@ public class DragonControllerFly extends AbstractDragonController {
         Vec3D vec3d = this.a.a(1.0F);
         int j = this.a.k(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
 
-        if (this.a.dd() != null && this.a.dd().c() > 0) {
+        if (this.a.df() != null && this.a.df().c() > 0) {
             j %= 12;
             if (j < 0) {
                 j += 12;

@@ -34,7 +34,7 @@ public class EntityLightning extends EntityWeather {
 
     }
 
-    public SoundCategory bI() {
+    public SoundCategory bK() {
         return SoundCategory.WEATHER;
     }
 

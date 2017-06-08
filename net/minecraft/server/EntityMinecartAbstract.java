@@ -92,7 +92,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         this.lastZ = d2;
     }
 
-    public double aE() {
+    public double aG() {
         return 0.0D;
     }
 
@@ -103,7 +103,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             } else {
                 this.e(-this.u());
                 this.d(10);
-                this.av();
+                this.ax();
                 this.setDamage(this.getDamage() + f * 10.0F);
                 boolean flag = damagesource.getEntity() instanceof EntityHuman && ((EntityHuman) damagesource.getEntity()).abilities.canInstantlyBuild;
 
@@ -141,7 +141,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         return !this.dead;
     }
 
-    public EnumDirection bs() {
+    public EnumDirection bu() {
         return this.g ? this.getDirection().opposite().e() : this.getDirection().e();
     }
 
@@ -169,7 +169,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
                 if (minecraftserver.getAllowNether()) {
                     if (!this.isPassenger() && this.al++ >= i) {
                         this.al = i;
-                        this.portalCooldown = this.aK();
+                        this.portalCooldown = this.aM();
                         byte b0;
 
                         if (this.world.worldProvider.getDimensionManager().getDimensionID() == -1) {
@@ -379,7 +379,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
 
         this.motX = d5 * d1 / d3;
         this.motZ = d5 * d2 / d3;
-        Entity entity = this.bD().isEmpty() ? null : (Entity) this.bD().get(0);
+        Entity entity = this.bF().isEmpty() ? null : (Entity) this.bF().get(0);
         double d6;
         double d7;
         double d8;

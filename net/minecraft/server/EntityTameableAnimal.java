@@ -12,7 +12,7 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
 
     public EntityTameableAnimal(World world) {
         super(world);
-        this.dk();
+        this.dm();
     }
 
     protected void i() {
@@ -94,10 +94,10 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
             this.datawatcher.set(EntityTameableAnimal.bx, Byte.valueOf((byte) (b0 & -5)));
         }
 
-        this.dk();
+        this.dm();
     }
 
-    protected void dk() {}
+    protected void dm() {}
 
     public boolean isSitting() {
         return (((Byte) this.datawatcher.get(EntityTameableAnimal.bx)).byteValue() & 1) != 0;
@@ -155,16 +155,16 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
         return true;
     }
 
-    public ScoreboardTeamBase aW() {
+    public ScoreboardTeamBase aY() {
         if (this.isTamed()) {
             EntityLiving entityliving = this.getOwner();
 
             if (entityliving != null) {
-                return entityliving.aW();
+                return entityliving.aY();
             }
         }
 
-        return super.aW();
+        return super.aY();
     }
 
     public boolean r(Entity entity) {

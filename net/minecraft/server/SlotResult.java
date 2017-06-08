@@ -45,7 +45,7 @@ public class SlotResult extends Slot {
         InventoryCraftResult inventorycraftresult = (InventoryCraftResult) this.inventory;
         IRecipe irecipe = inventorycraftresult.i();
 
-        if (irecipe != null) {
+        if (irecipe != null && !irecipe.c()) {
             this.b.a((List) Lists.newArrayList(new IRecipe[] { irecipe}));
             inventorycraftresult.a((IRecipe) null);
         }

@@ -110,7 +110,7 @@ public class PlayerInteractManager {
                     return;
                 }
 
-                if (!this.player.di()) {
+                if (!this.player.dk()) {
                     ItemStack itemstack = this.player.getItemInMainHand();
 
                     if (itemstack.isEmpty()) {
@@ -204,7 +204,7 @@ public class PlayerInteractManager {
                         return false;
                     }
 
-                    if (!this.player.di()) {
+                    if (!this.player.dk()) {
                         ItemStack itemstack = this.player.getItemInMainHand();
 
                         if (itemstack.isEmpty()) {

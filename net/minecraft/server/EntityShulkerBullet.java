@@ -30,7 +30,7 @@ public class EntityShulkerBullet extends Entity {
         this.noclip = true;
     }
 
-    public SoundCategory bI() {
+    public SoundCategory bK() {
         return SoundCategory.HOSTILE;
     }
 
@@ -282,7 +282,7 @@ public class EntityShulkerBullet extends Entity {
         return false;
     }
 
-    public float f(float f) {
+    public float aw() {
         return 1.0F;
     }
 

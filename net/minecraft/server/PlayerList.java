@@ -128,7 +128,7 @@ public abstract class PlayerList {
                 if (entity.getUniqueID().equals(uuid)) {
                     entityplayer.a(entity, true);
                 } else {
-                    iterator1 = entity.bE().iterator();
+                    iterator1 = entity.bG().iterator();
 
                     while (iterator1.hasNext()) {
                         entity1 = (Entity) iterator1.next();
@@ -142,7 +142,7 @@ public abstract class PlayerList {
                 if (!entityplayer.isPassenger()) {
                     PlayerList.f.warn("Couldn\'t reattach entity to player");
                     worldserver.removeEntity(entity);
-                    iterator1 = entity.bE().iterator();
+                    iterator1 = entity.bG().iterator();
 
                     while (iterator1.hasNext()) {
                         entity1 = (Entity) iterator1.next();
@@ -297,7 +297,7 @@ public abstract class PlayerList {
                 PlayerList.f.debug("Removing player mount");
                 entityplayer.stopRiding();
                 worldserver.removeEntity(entity);
-                Iterator iterator = entity.bE().iterator();
+                Iterator iterator = entity.bG().iterator();
 
                 while (iterator.hasNext()) {
                     Entity entity1 = (Entity) iterator.next();
@@ -581,7 +581,7 @@ public abstract class PlayerList {
     }
 
     public void a(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent) {
-        ScoreboardTeamBase scoreboardteambase = entityhuman.aW();
+        ScoreboardTeamBase scoreboardteambase = entityhuman.aY();
 
         if (scoreboardteambase != null) {
             Collection collection = scoreboardteambase.getPlayerNameSet();
@@ -600,7 +600,7 @@ public abstract class PlayerList {
     }
 
     public void b(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent) {
-        ScoreboardTeamBase scoreboardteambase = entityhuman.aW();
+        ScoreboardTeamBase scoreboardteambase = entityhuman.aY();
 
         if (scoreboardteambase == null) {
             this.sendMessage(ichatbasecomponent);
@@ -608,7 +608,7 @@ public abstract class PlayerList {
             for (int i = 0; i < this.players.size(); ++i) {
                 EntityPlayer entityplayer = (EntityPlayer) this.players.get(i);
 
-                if (entityplayer.aW() != scoreboardteambase) {
+                if (entityplayer.aY() != scoreboardteambase) {
                     entityplayer.sendMessage(ichatbasecomponent);
                 }
             }
@@ -627,7 +627,7 @@ public abstract class PlayerList {
 
             s = s + ((EntityPlayer) arraylist.get(i)).getName();
             if (flag) {
-                s = s + " (" + ((EntityPlayer) arraylist.get(i)).bl() + ")";
+                s = s + " (" + ((EntityPlayer) arraylist.get(i)).bn() + ")";
             }
         }
 

@@ -875,7 +875,7 @@ public abstract class World implements IBlockAccess {
         int i1 = MathHelper.floor(axisalignedbb.c) - 1;
         int j1 = MathHelper.f(axisalignedbb.f) + 1;
         WorldBorder worldborder = this.getWorldBorder();
-        boolean flag1 = entity != null && entity.bx();
+        boolean flag1 = entity != null && entity.bz();
         boolean flag2 = entity != null && this.g(entity);
         IBlockData iblockdata = Blocks.STONE.getBlockData();
         BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
@@ -960,7 +960,7 @@ public abstract class World implements IBlockAccess {
         double d2 = this.P.d();
         double d3 = this.P.e();
 
-        if (entity.bx()) {
+        if (entity.bz()) {
             ++d0;
             ++d1;
             --d2;
@@ -1096,7 +1096,7 @@ public abstract class World implements IBlockAccess {
 
         for (i = 0; i < this.entityList.size(); ++i) {
             entity = (Entity) this.entityList.get(i);
-            Entity entity1 = entity.bH();
+            Entity entity1 = entity.bJ();
 
             if (entity1 != null) {
                 if (!entity1.dead && entity1.w(entity)) {
@@ -1262,7 +1262,7 @@ public abstract class World implements IBlockAccess {
         if (flag && entity.aa) {
             ++entity.ticksLived;
             if (entity.isPassenger()) {
-                entity.aC();
+                entity.aE();
             } else {
                 entity.B_();
             }
@@ -1298,7 +1298,7 @@ public abstract class World implements IBlockAccess {
                 this.getChunkAt(entity.ab, entity.ad).a(entity, entity.ac);
             }
 
-            if (!entity.bB() && !this.isChunkLoaded(i, k, true)) {
+            if (!entity.bD() && !this.isChunkLoaded(i, k, true)) {
                 entity.aa = false;
             } else {
                 this.getChunkAt(i, k).a(entity);
@@ -1307,12 +1307,12 @@ public abstract class World implements IBlockAccess {
 
         this.methodProfiler.b();
         if (flag && entity.aa) {
-            Iterator iterator = entity.bD().iterator();
+            Iterator iterator = entity.bF().iterator();
 
             while (iterator.hasNext()) {
                 Entity entity1 = (Entity) iterator.next();
 
-                if (!entity1.dead && entity1.bH() == entity) {
+                if (!entity1.dead && entity1.bJ() == entity) {
                     this.h(entity1);
                 } else {
                     entity1.stopRiding();
@@ -1463,7 +1463,7 @@ public abstract class World implements IBlockAccess {
             }
 
             blockposition_pooledblockposition.t();
-            if (vec3d.b() > 0.0D && entity.bm()) {
+            if (vec3d.b() > 0.0D && entity.bo()) {
                 vec3d = vec3d.a();
                 double d1 = 0.014D;
 
@@ -2339,7 +2339,7 @@ public abstract class World implements IBlockAccess {
                 }
 
                 if (entityhuman1.isInvisible()) {
-                    float f = entityhuman1.cU();
+                    float f = entityhuman1.cW();
 
                     if (f < 0.1F) {
                         f = 0.1F;

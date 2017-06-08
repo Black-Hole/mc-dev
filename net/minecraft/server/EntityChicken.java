@@ -77,7 +77,7 @@ public class EntityChicken extends EntityAnimal {
         return SoundEffects.ag;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.ae;
     }
 
@@ -132,7 +132,7 @@ public class EntityChicken extends EntityAnimal {
         float f2 = 0.1F;
         float f3 = 0.0F;
 
-        entity.setPosition(this.locX + (double) (0.1F * f), this.locY + (double) (this.length * 0.5F) + entity.aD() + 0.0D, this.locZ - (double) (0.1F * f1));
+        entity.setPosition(this.locX + (double) (0.1F * f), this.locY + (double) (this.length * 0.5F) + entity.aF() + 0.0D, this.locZ - (double) (0.1F * f1));
         if (entity instanceof EntityLiving) {
             ((EntityLiving) entity).aN = this.aN;
         }

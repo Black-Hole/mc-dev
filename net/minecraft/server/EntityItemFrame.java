@@ -22,7 +22,7 @@ public class EntityItemFrame extends EntityHanging {
         this.getDataWatcher().register(EntityItemFrame.d, Integer.valueOf(0));
     }
 
-    public float aG() {
+    public float aI() {
         return 0.0F;
     }
 

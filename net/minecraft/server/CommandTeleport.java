@@ -80,7 +80,7 @@ public class CommandTeleport extends CommandAbstract {
             entity.setHeadRotation(f2);
         }
 
-        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).cN()) {
+        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).cP()) {
             entity.motY = 0.0D;
             entity.onGround = true;
         }

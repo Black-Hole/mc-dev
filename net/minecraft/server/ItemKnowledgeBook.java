@@ -28,11 +28,15 @@ public class ItemKnowledgeBook extends Item {
                 ArrayList arraylist = Lists.newArrayList();
 
                 for (int i = 0; i < nbttaglist.size(); ++i) {
-                    IRecipe irecipe = CraftingManager.a(new MinecraftKey(nbttaglist.getString(i)));
+                    String s = nbttaglist.getString(i);
+                    IRecipe irecipe = CraftingManager.a(new MinecraftKey(s));
 
-                    if (irecipe != null) {
-                        arraylist.add(irecipe);
+                    if (irecipe == null) {
+                        ItemKnowledgeBook.a.error("Invalid recipe: " + s);
+                        return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
                     }
+
+                    arraylist.add(irecipe);
                 }
 
                 entityhuman.a((List) arraylist);
@@ -41,6 +45,7 @@ public class ItemKnowledgeBook extends Item {
 
             return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
         } else {
+            ItemKnowledgeBook.a.error("Tag not valid: " + nbttagcompound);
             return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
         }
     }

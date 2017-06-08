@@ -94,7 +94,7 @@ public class EntityVex extends EntityMonster {
     }
 
     @Nullable
-    public BlockPosition dk() {
+    public BlockPosition dm() {
         return this.c;
     }
 
@@ -121,7 +121,7 @@ public class EntityVex extends EntityMonster {
         this.datawatcher.set(EntityVex.a, Byte.valueOf((byte) (j & 255)));
     }
 
-    public boolean dl() {
+    public boolean dn() {
         return this.c(1);
     }
 
@@ -139,15 +139,15 @@ public class EntityVex extends EntityMonster {
     }
 
     protected SoundEffect F() {
-        return SoundEffects.id;
+        return SoundEffects.ig;
     }
 
-    protected SoundEffect cd() {
-        return SoundEffects.if_;
+    protected SoundEffect cf() {
+        return SoundEffects.ii;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.ig;
+        return SoundEffects.ij;
     }
 
     @Nullable
@@ -155,7 +155,7 @@ public class EntityVex extends EntityMonster {
         return LootTables.ay;
     }
 
-    public float f(float f) {
+    public float aw() {
         return 1.0F;
     }
 
@@ -202,7 +202,7 @@ public class EntityVex extends EntityMonster {
         }
 
         public void e() {
-            BlockPosition blockposition = EntityVex.this.dk();
+            BlockPosition blockposition = EntityVex.this.dm();
 
             if (blockposition == null) {
                 blockposition = new BlockPosition(EntityVex.this);
@@ -234,16 +234,16 @@ public class EntityVex extends EntityMonster {
         }
 
         public boolean b() {
-            return EntityVex.this.getControllerMove().b() && EntityVex.this.dl() && EntityVex.this.getGoalTarget() != null && EntityVex.this.getGoalTarget().isAlive();
+            return EntityVex.this.getControllerMove().b() && EntityVex.this.dn() && EntityVex.this.getGoalTarget() != null && EntityVex.this.getGoalTarget().isAlive();
         }
 
         public void c() {
             EntityLiving entityliving = EntityVex.this.getGoalTarget();
-            Vec3D vec3d = entityliving.h(1.0F);
+            Vec3D vec3d = entityliving.f(1.0F);
 
             EntityVex.this.moveController.a(vec3d.x, vec3d.y, vec3d.z, 1.0D);
             EntityVex.this.a(true);
-            EntityVex.this.a(SoundEffects.ie, 1.0F, 1.0F);
+            EntityVex.this.a(SoundEffects.ih, 1.0F, 1.0F);
         }
 
         public void d() {
@@ -260,7 +260,7 @@ public class EntityVex extends EntityMonster {
                 double d0 = EntityVex.this.h((Entity) entityliving);
 
                 if (d0 < 9.0D) {
-                    Vec3D vec3d = entityliving.h(1.0F);
+                    Vec3D vec3d = entityliving.f(1.0F);
 
                     EntityVex.this.moveController.a(vec3d.x, vec3d.y, vec3d.z, 1.0D);
                 }

@@ -90,7 +90,7 @@ public class BlockCobbleWall extends Block {
     }
 
     protected static boolean e(Block block) {
-        return Block.c(block) || block == Blocks.BARRIER || block == Blocks.MELON_BLOCK || block == Blocks.PUMPKIN;
+        return Block.c(block) || block == Blocks.BARRIER || block == Blocks.MELON_BLOCK || block == Blocks.PUMPKIN || block == Blocks.LIT_PUMPKIN;
     }
 
     public int getDropData(IBlockData iblockdata) {

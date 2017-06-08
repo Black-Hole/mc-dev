@@ -134,7 +134,7 @@ public class EnchantmentManager {
         EnchantmentManager.c.b = entity;
         EnchantmentManager.c.a = entityliving;
         if (entityliving != null) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.c, entityliving.aO());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.c, entityliving.aQ());
         }
 
         if (entity instanceof EntityHuman) {
@@ -147,7 +147,7 @@ public class EnchantmentManager {
         EnchantmentManager.d.a = entityliving;
         EnchantmentManager.d.b = entity;
         if (entityliving != null) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.aO());
+            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.aQ());
         }
 
         if (entityliving instanceof EntityHuman) {

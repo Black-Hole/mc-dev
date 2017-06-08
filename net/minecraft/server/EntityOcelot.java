@@ -91,11 +91,11 @@ public class EntityOcelot extends EntityTameableAnimal {
         return SoundEffects.X;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.V;
     }
 
-    protected float co() {
+    protected float cq() {
         return 0.4F;
     }
 
@@ -216,7 +216,7 @@ public class EntityOcelot extends EntityTameableAnimal {
         return this.hasCustomName() ? this.getCustomName() : (this.isTamed() ? LocaleI18n.get("entity.Cat.name") : super.getName());
     }
 
-    protected void dk() {
+    protected void dm() {
         if (this.bC == null) {
             this.bC = new PathfinderGoalAvoidTarget(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
         }

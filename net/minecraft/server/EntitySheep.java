@@ -174,7 +174,7 @@ public class EntitySheep extends EntityAnimal {
         return SoundEffects.gu;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.gt;
     }
 

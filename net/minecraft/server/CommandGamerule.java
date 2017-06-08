@@ -80,7 +80,7 @@ public class CommandGamerule extends CommandAbstract {
                     return a(astring, new String[] { "true", "false"});
                 }
 
-                if (gamerules.a(astring[0], GameRules.EnumGameRuleType.d)) {
+                if (gamerules.a(astring[0], GameRules.EnumGameRuleType.FUNCTION)) {
                     return a(astring, (Collection) minecraftserver.aL().d().keySet());
                 }
             }

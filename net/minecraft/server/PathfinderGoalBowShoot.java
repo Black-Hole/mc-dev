@@ -46,7 +46,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
         ((IRangedEntity) this.a).p(false);
         this.f = 0;
         this.e = -1;
-        this.a.cL();
+        this.a.cN();
     }
 
     public void e() {
@@ -102,12 +102,12 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
 
             if (this.a.isHandRaised()) {
                 if (!flag && this.f < -60) {
-                    this.a.cL();
+                    this.a.cN();
                 } else if (flag) {
-                    int i = this.a.cJ();
+                    int i = this.a.cL();
 
                     if (i >= 20) {
-                        this.a.cL();
+                        this.a.cN();
                         ((IRangedEntity) this.a).a(entityliving, ItemBow.b(i));
                         this.e = this.c;
                     }

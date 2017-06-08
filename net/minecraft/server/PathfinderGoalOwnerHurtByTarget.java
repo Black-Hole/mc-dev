@@ -22,7 +22,7 @@ public class PathfinderGoalOwnerHurtByTarget extends PathfinderGoalTarget {
                 return false;
             } else {
                 this.b = entityliving.getLastDamager();
-                int i = entityliving.bR();
+                int i = entityliving.bT();
 
                 return i != this.c && this.a(this.b, false) && this.a.a(this.b, entityliving);
             }
@@ -34,7 +34,7 @@ public class PathfinderGoalOwnerHurtByTarget extends PathfinderGoalTarget {
         EntityLiving entityliving = this.a.getOwner();
 
         if (entityliving != null) {
-            this.c = entityliving.bR();
+            this.c = entityliving.bT();
         }
 
         super.c();

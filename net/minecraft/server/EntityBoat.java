@@ -84,7 +84,7 @@ public class EntityBoat extends Entity {
         return true;
     }
 
-    public double aE() {
+    public double aG() {
         return -0.1D;
     }
 
@@ -98,7 +98,7 @@ public class EntityBoat extends Entity {
                 this.d(-this.r());
                 this.c(10);
                 this.setDamage(this.p() + f * 10.0F);
-                this.av();
+                this.ax();
                 boolean flag = damagesource.getEntity() instanceof EntityHuman && ((EntityHuman) damagesource.getEntity()).abilities.canInstantlyBuild;
 
                 if (flag || this.p() > 40.0F) {
@@ -154,7 +154,7 @@ public class EntityBoat extends Entity {
         return !this.dead;
     }
 
-    public EnumDirection bs() {
+    public EnumDirection bu() {
         return this.getDirection().e();
     }
 
@@ -184,8 +184,8 @@ public class EntityBoat extends Entity {
         this.lastZ = this.locZ;
         super.B_();
         this.t();
-        if (this.bG()) {
-            if (this.bD().isEmpty() || !(this.bD().get(0) instanceof EntityHuman)) {
+        if (this.bI()) {
+            if (this.bF().isEmpty() || !(this.bF().get(0) instanceof EntityHuman)) {
                 this.a(false, false);
             }
 
@@ -208,11 +208,11 @@ public class EntityBoat extends Entity {
                     SoundEffect soundeffect = this.k();
 
                     if (soundeffect != null) {
-                        Vec3D vec3d = this.g(1.0F);
+                        Vec3D vec3d = this.e(1.0F);
                         double d0 = i == 1 ? -vec3d.z : vec3d.z;
                         double d1 = i == 1 ? vec3d.x : -vec3d.x;
 
-                        this.world.a((EntityHuman) null, this.locX + d0, this.locY, this.locZ + d1, soundeffect, this.bI(), 1.0F, 0.8F + 0.4F * this.random.nextFloat());
+                        this.world.a((EntityHuman) null, this.locX + d0, this.locY, this.locZ + d1, soundeffect, this.bK(), 1.0F, 0.8F + 0.4F * this.random.nextFloat());
                     }
                 }
 
@@ -226,13 +226,13 @@ public class EntityBoat extends Entity {
         List list = this.world.getEntities(this, this.getBoundingBox().grow(0.20000000298023224D, -0.009999999776482582D, 0.20000000298023224D), IEntitySelector.a(this));
 
         if (!list.isEmpty()) {
-            boolean flag = !this.world.isClientSide && !(this.bC() instanceof EntityHuman);
+            boolean flag = !this.world.isClientSide && !(this.bE() instanceof EntityHuman);
 
             for (int j = 0; j < list.size(); ++j) {
                 Entity entity = (Entity) list.get(j);
 
                 if (!entity.w(this)) {
-                    if (flag && this.bD().size() < 2 && !entity.isPassenger() && entity.width < this.width && entity instanceof EntityLiving && !(entity instanceof EntityWaterAnimal) && !(entity instanceof EntityHuman)) {
+                    if (flag && this.bF().size() < 2 && !entity.isPassenger() && entity.width < this.width && entity instanceof EntityLiving && !(entity instanceof EntityWaterAnimal) && !(entity instanceof EntityHuman)) {
                         entity.startRiding(this);
                     } else {
                         this.collide(entity);
@@ -261,7 +261,7 @@ public class EntityBoat extends Entity {
     }
 
     private void t() {
-        if (this.au > 0 && !this.bG()) {
+        if (this.au > 0 && !this.bI()) {
             double d0 = this.locX + (this.av - this.locX) / (double) this.au;
             double d1 = this.locY + (this.aw - this.locY) / (double) this.au;
             double d2 = this.locZ + (this.ax - this.locZ) / (double) this.au;
@@ -490,7 +490,7 @@ public class EntityBoat extends Entity {
                 this.g = 0.9F;
             } else if (this.aG == EntityBoat.EnumStatus.ON_LAND) {
                 this.g = this.aF;
-                if (this.bC() instanceof EntityHuman) {
+                if (this.bE() instanceof EntityHuman) {
                     this.aF /= 2.0F;
                 }
             }
@@ -545,10 +545,10 @@ public class EntityBoat extends Entity {
     public void k(Entity entity) {
         if (this.w(entity)) {
             float f = 0.0F;
-            float f1 = (float) ((this.dead ? 0.009999999776482582D : this.aE()) + entity.aD());
+            float f1 = (float) ((this.dead ? 0.009999999776482582D : this.aG()) + entity.aF());
 
-            if (this.bD().size() > 1) {
-                int i = this.bD().indexOf(entity);
+            if (this.bF().size() > 1) {
+                int i = this.bF().indexOf(entity);
 
                 if (i == 0) {
                     f = 0.2F;
@@ -567,10 +567,10 @@ public class EntityBoat extends Entity {
             entity.yaw += this.at;
             entity.setHeadRotation(entity.getHeadRotation() + this.at);
             this.a(entity);
-            if (entity instanceof EntityAnimal && this.bD().size() > 1) {
+            if (entity instanceof EntityAnimal && this.bF().size() > 1) {
                 int j = entity.getId() % 2 == 0 ? 90 : 270;
 
-                entity.j(((EntityAnimal) entity).aN + (float) j);
+                entity.h(((EntityAnimal) entity).aN + (float) j);
                 entity.setHeadRotation(entity.getHeadRotation() + (float) j);
             }
 
@@ -578,7 +578,7 @@ public class EntityBoat extends Entity {
     }
 
     protected void a(Entity entity) {
-        entity.j(this.yaw);
+        entity.h(this.yaw);
         float f = MathHelper.g(entity.yaw - this.yaw);
         float f1 = MathHelper.a(f, -105.0F, 105.0F);
 
@@ -646,7 +646,7 @@ public class EntityBoat extends Entity {
     }
 
     public boolean a(int i) {
-        return ((Boolean) this.datawatcher.get(EntityBoat.e[i])).booleanValue() && this.bC() != null;
+        return ((Boolean) this.datawatcher.get(EntityBoat.e[i])).booleanValue() && this.bE() != null;
     }
 
     public void setDamage(float f) {
@@ -682,12 +682,12 @@ public class EntityBoat extends Entity {
     }
 
     protected boolean q(Entity entity) {
-        return this.bD().size() < 2;
+        return this.bF().size() < 2;
     }
 
     @Nullable
-    public Entity bC() {
-        List list = this.bD();
+    public Entity bE() {
+        List list = this.bF();
 
         return list.isEmpty() ? null : (Entity) list.get(0);
     }

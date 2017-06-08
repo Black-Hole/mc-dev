@@ -37,15 +37,15 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
     }
 
     protected SoundEffect F() {
-        return SoundEffects.iu;
-    }
-
-    protected SoundEffect d(DamageSource damagesource) {
         return SoundEffects.ix;
     }
 
-    protected SoundEffect cd() {
-        return SoundEffects.iv;
+    protected SoundEffect d(DamageSource damagesource) {
+        return SoundEffects.iA;
+    }
+
+    protected SoundEffect cf() {
+        return SoundEffects.iy;
     }
 
     public void a(boolean flag) {
@@ -91,7 +91,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
 
                 if (this.random.nextFloat() < 0.15F && this.a(Material.WATER) && !this.hasEffect(MobEffects.WATER_BREATHING)) {
                     potionregistry = Potions.t;
-                } else if (this.random.nextFloat() < 0.15F && (this.isBurning() || this.cc() != null && this.cc().o()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+                } else if (this.random.nextFloat() < 0.15F && (this.isBurning() || this.ce() != null && this.ce().o()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
                     potionregistry = Potions.m;
                 } else if (this.random.nextFloat() < 0.05F && this.getHealth() < this.getMaxHealth()) {
                     potionregistry = Potions.v;
@@ -103,7 +103,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
                     this.setSlot(EnumItemSlot.MAINHAND, PotionUtil.a(new ItemStack(Items.POTION), potionregistry));
                     this.bx = this.getItemInMainHand().m();
                     this.a(true);
-                    this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.iw, this.bI(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+                    this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.iz, this.bK(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
                     AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
                     attributeinstance.c(EntityWitch.b);
@@ -158,7 +158,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
 
             entitypotion.pitch -= -20.0F;
             entitypotion.shoot(d1, d2 + (double) (f1 * 0.2F), d3, 0.75F, 8.0F);
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.iy, this.bI(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.iB, this.bK(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
             this.world.addEntity(entitypotion);
         }
     }

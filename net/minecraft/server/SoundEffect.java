@@ -555,6 +555,9 @@ public class SoundEffect {
         a("record.wait");
         a("record.ward");
         a("ui.button.click");
+        a("ui.toast.in");
+        a("ui.toast.out");
+        a("ui.toast.challenge_complete");
         a("weather.rain");
         a("weather.rain.above");
     }

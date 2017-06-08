@@ -55,7 +55,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
                     f1 += 0.5F;
                     if (this.c >= 5 && f1 >= 0.0F && f1 < 10.0F) {
                         d2 = 1.0D;
-                        Vec3D vec3d2 = this.a.g(1.0F);
+                        Vec3D vec3d2 = this.a.e(1.0F);
                         double d6 = this.a.bw.locX - vec3d2.x * 1.0D;
                         double d7 = this.a.bw.locY + (double) (this.a.bw.length / 2.0F) + 0.5D;
                         double d8 = this.a.bw.locZ - vec3d2.z * 1.0D;
@@ -103,7 +103,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
                 --j;
             }
 
-            if (this.a.dd() != null && this.a.dd().c() > 0) {
+            if (this.a.df() != null && this.a.df().c() > 0) {
                 j %= 12;
                 if (j < 0) {
                     j += 12;

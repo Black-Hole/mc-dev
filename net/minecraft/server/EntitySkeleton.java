@@ -25,7 +25,7 @@ public class EntitySkeleton extends EntitySkeletonAbstract {
         return SoundEffects.gV;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.gR;
     }
 

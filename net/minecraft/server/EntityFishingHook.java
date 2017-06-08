@@ -390,7 +390,7 @@ public class EntityFishingHook extends Entity {
             } else if (this.g > 0) {
                 LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
-                loottableinfo_a.a((float) this.aw + this.owner.ds());
+                loottableinfo_a.a((float) this.aw + this.owner.du());
                 Iterator iterator = this.world.getLootTableRegistry().a(LootTables.aA).a(this.random, loottableinfo_a.a()).iterator();
 
                 while (iterator.hasNext()) {

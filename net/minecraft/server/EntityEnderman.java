@@ -83,14 +83,14 @@ public class EntityEnderman extends EntityMonster {
         if (this.ticksLived >= this.bz + 400) {
             this.bz = this.ticksLived;
             if (!this.isSilent()) {
-                this.world.a(this.locX, this.locY + (double) this.getHeadHeight(), this.locZ, SoundEffects.bh, this.bI(), 2.5F, 1.0F, false);
+                this.world.a(this.locX, this.locY + (double) this.getHeadHeight(), this.locZ, SoundEffects.bh, this.bK(), 2.5F, 1.0F, false);
             }
         }
 
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityEnderman.by.equals(datawatcherobject) && this.dm() && this.world.isClientSide) {
+        if (EntityEnderman.by.equals(datawatcherobject) && this.do_() && this.world.isClientSide) {
             this.p();
         }
 
@@ -135,7 +135,7 @@ public class EntityEnderman extends EntityMonster {
         if (itemstack.getItem() == Item.getItemOf(Blocks.PUMPKIN)) {
             return false;
         } else {
-            Vec3D vec3d = entityhuman.g(1.0F).a();
+            Vec3D vec3d = entityhuman.e(1.0F).a();
             Vec3D vec3d1 = new Vec3D(this.locX - entityhuman.locX, this.getBoundingBox().b + (double) this.getHeadHeight() - (entityhuman.locY + (double) entityhuman.getHeadHeight()), this.locZ - entityhuman.locZ);
             double d0 = vec3d1.b();
 
@@ -167,18 +167,18 @@ public class EntityEnderman extends EntityMonster {
         }
 
         if (this.world.D() && this.ticksLived >= this.bA + 600) {
-            float f = this.f(1.0F);
+            float f = this.aw();
 
             if (f > 0.5F && this.world.h(new BlockPosition(this)) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
                 this.setGoalTarget((EntityLiving) null);
-                this.dk();
+                this.dm();
             }
         }
 
         super.M();
     }
 
-    protected boolean dk() {
+    protected boolean dm() {
         double d0 = this.locX + (this.random.nextDouble() - 0.5D) * 64.0D;
         double d1 = this.locY + (double) (this.random.nextInt(64) - 32);
         double d2 = this.locZ + (this.random.nextDouble() - 0.5D) * 64.0D;
@@ -202,7 +202,7 @@ public class EntityEnderman extends EntityMonster {
         boolean flag = this.j(d0, d1, d2);
 
         if (flag) {
-            this.world.a((EntityHuman) null, this.lastX, this.lastY, this.lastZ, SoundEffects.bi, this.bI(), 1.0F, 1.0F);
+            this.world.a((EntityHuman) null, this.lastX, this.lastY, this.lastZ, SoundEffects.bi, this.bK(), 1.0F, 1.0F);
             this.a(SoundEffects.bi, 1.0F, 1.0F);
         }
 
@@ -210,14 +210,14 @@ public class EntityEnderman extends EntityMonster {
     }
 
     protected SoundEffect F() {
-        return this.dm() ? SoundEffects.bg : SoundEffects.bd;
+        return this.do_() ? SoundEffects.bg : SoundEffects.bd;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
         return SoundEffects.bf;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.be;
     }
 
@@ -253,7 +253,7 @@ public class EntityEnderman extends EntityMonster {
             return false;
         } else if (damagesource instanceof EntityDamageSourceIndirect) {
             for (int i = 0; i < 64; ++i) {
-                if (this.dk()) {
+                if (this.dm()) {
                     return true;
                 }
             }
@@ -263,14 +263,14 @@ public class EntityEnderman extends EntityMonster {
             boolean flag = super.damageEntity(damagesource, f);
 
             if (damagesource.ignoresArmor() && this.random.nextInt(10) != 0) {
-                this.dk();
+                this.dm();
             }
 
             return flag;
         }
     }
 
-    public boolean dm() {
+    public boolean do_() {
         return ((Boolean) this.datawatcher.get(EntityEnderman.by)).booleanValue();
     }
 
@@ -420,7 +420,7 @@ public class EntityEnderman extends EntityMonster {
                 if (this.d != null) {
                     if (this.i.f((EntityHuman) this.d)) {
                         if (((EntityHuman) this.d).h(this.i) < 16.0D) {
-                            this.i.dk();
+                            this.i.dm();
                         }
 
                         this.l = 0;

@@ -112,7 +112,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
     }
 
-    public boolean bA() {
+    public boolean bC() {
         return true;
     }
 }

@@ -154,7 +154,7 @@ public class WorldGenRegistration {
                         this.e = true;
                         EntityWitch entitywitch = new EntityWitch(world);
 
-                        entitywitch.cU();
+                        entitywitch.cW();
                         entitywitch.setPositionRotation((double) i + 0.5D, (double) j, (double) k + 0.5D, 0.0F, 0.0F);
                         entitywitch.prepare(world.D(new BlockPosition(i, j, k)), (GroupDataEntity) null);
                         world.addEntity(entitywitch);

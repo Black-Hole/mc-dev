@@ -131,7 +131,7 @@ public final class SpawnerCreature {
                                                                 entityinsentient.die();
                                                             }
 
-                                                            if (l2 >= entityinsentient.cS()) {
+                                                            if (l2 >= entityinsentient.cU()) {
                                                                 continue label120;
                                                             }
                                                         }

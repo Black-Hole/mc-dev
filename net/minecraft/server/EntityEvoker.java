@@ -67,14 +67,14 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     public boolean r(Entity entity) {
-        return entity == null ? false : (entity == this ? true : (super.r(entity) ? true : (entity instanceof EntityVex ? this.r(((EntityVex) entity).p()) : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.aW() == null && entity.aW() == null : false))));
+        return entity == null ? false : (entity == this ? true : (super.r(entity) ? true : (entity instanceof EntityVex ? this.r(((EntityVex) entity).p()) : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.aY() == null && entity.aY() == null : false))));
     }
 
     protected SoundEffect F() {
         return SoundEffects.bs;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.bu;
     }
 
@@ -87,11 +87,11 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     @Nullable
-    private EntitySheep do() {
+    private EntitySheep dq() {
         return this.c;
     }
 
-    protected SoundEffect dk() {
+    protected SoundEffect dm() {
         return SoundEffects.bt;
     }
 
@@ -114,7 +114,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         public boolean a() {
             if (EntityEvoker.this.getGoalTarget() != null) {
                 return false;
-            } else if (EntityEvoker.this.dl()) {
+            } else if (EntityEvoker.this.dn()) {
                 return false;
             } else if (EntityEvoker.this.ticksLived < this.d) {
                 return false;
@@ -133,7 +133,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         }
 
         public boolean b() {
-            return EntityEvoker.this.do() != null && this.c > 0;
+            return EntityEvoker.this.dq() != null && this.c > 0;
         }
 
         public void d() {
@@ -142,7 +142,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         }
 
         protected void j() {
-            EntitySheep entitysheep = EntityEvoker.this.do();
+            EntitySheep entitysheep = EntityEvoker.this.dq();
 
             if (entitysheep != null && entitysheep.isAlive()) {
                 entitysheep.setColor(EnumColor.RED);
@@ -320,8 +320,8 @@ public class EntityEvoker extends EntityIllagerWizard {
         public void e() {
             if (EntityEvoker.this.getGoalTarget() != null) {
                 EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.O(), (float) EntityEvoker.this.N());
-            } else if (EntityEvoker.this.do() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.do(), (float) EntityEvoker.this.O(), (float) EntityEvoker.this.N());
+            } else if (EntityEvoker.this.dq() != null) {
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.dq(), (float) EntityEvoker.this.O(), (float) EntityEvoker.this.N());
             }
 
         }

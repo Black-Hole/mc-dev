@@ -61,7 +61,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
         this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(100.0D);
     }
 
-    public SoundCategory bI() {
+    public SoundCategory bK() {
         return SoundCategory.HOSTILE;
     }
 
@@ -73,7 +73,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return SoundEffects.cd;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.cc;
     }
 
@@ -82,7 +82,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return LootTables.aj;
     }
 
-    protected float co() {
+    protected float cq() {
         return 10.0F;
     }
 
@@ -90,7 +90,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return this.random.nextInt(20) == 0 && super.P() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
-    public int cS() {
+    public int cU() {
         return 1;
     }
 
@@ -150,7 +150,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
 
                 if (this.a == 20) {
                     double d1 = 4.0D;
-                    Vec3D vec3d = this.ghast.g(1.0F);
+                    Vec3D vec3d = this.ghast.e(1.0F);
                     double d2 = entityliving.locX - (this.ghast.locX + vec3d.x * 4.0D);
                     double d3 = entityliving.getBoundingBox().b + (double) (entityliving.length / 2.0F) - (0.5D + this.ghast.locY + (double) (this.ghast.length / 2.0F));
                     double d4 = entityliving.locZ - (this.ghast.locZ + vec3d.z * 4.0D);

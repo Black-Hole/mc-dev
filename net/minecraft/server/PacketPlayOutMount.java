@@ -12,7 +12,7 @@ public class PacketPlayOutMount implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutMount(Entity entity) {
         this.a = entity.getId();
-        List list = entity.bD();
+        List list = entity.bF();
 
         this.b = new int[list.size()];
 

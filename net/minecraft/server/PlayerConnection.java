@@ -77,14 +77,14 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         }
 
         this.r = this.player.getVehicle();
-        if (this.r != this.player && this.r.bC() == this.player) {
+        if (this.r != this.player && this.r.bE() == this.player) {
             this.s = this.r.locX;
             this.t = this.r.locY;
             this.u = this.r.locZ;
             this.v = this.r.locX;
             this.w = this.r.locY;
             this.x = this.r.locZ;
-            if (this.D && this.player.getVehicle().bC() == this.player) {
+            if (this.D && this.player.getVehicle().bE() == this.player) {
                 if (++this.E > 80) {
                     PlayerConnection.LOGGER.warn("{} was kicked for floating a vehicle too long!", this.player.getName());
                     this.disconnect(new ChatMessage("multiplayer.disconnect.flying", new Object[0]));
@@ -170,7 +170,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         } else {
             Entity entity = this.player.getVehicle();
 
-            if (entity != this.player && entity.bC() == this.player && entity == this.r) {
+            if (entity != this.player && entity.bE() == this.player && entity == this.r) {
                 WorldServer worldserver = this.player.x();
                 double d0 = entity.locX;
                 double d1 = entity.locY;
@@ -253,9 +253,9 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
     public void a(PacketPlayInRecipeDisplayed packetplayinrecipedisplayed) {
         PlayerConnectionUtils.ensureMainThread(packetplayinrecipedisplayed, this, this.player.x());
-        if (packetplayinrecipedisplayed.a() == PacketPlayInRecipeDisplayed.a.a) {
+        if (packetplayinrecipedisplayed.a() == PacketPlayInRecipeDisplayed.Status.SHOWN) {
             this.player.F().f(packetplayinrecipedisplayed.b());
-        } else if (packetplayinrecipedisplayed.a() == PacketPlayInRecipeDisplayed.a.b) {
+        } else if (packetplayinrecipedisplayed.a() == PacketPlayInRecipeDisplayed.Status.SETTINGS) {
             this.player.F().a(packetplayinrecipedisplayed.c());
             this.player.F().b(packetplayinrecipedisplayed.d());
         }
@@ -328,8 +328,8 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                                 i = 1;
                             }
 
-                            if (!this.player.L() && (!this.player.x().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.cN())) {
-                                float f2 = this.player.cN() ? 300.0F : 100.0F;
+                            if (!this.player.L() && (!this.player.x().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.cP())) {
+                                float f2 = this.player.cP() ? 300.0F : 100.0F;
 
                                 if (d11 - d10 > (double) (f2 * (float) i) && (!this.minecraftServer.R() || !this.minecraftServer.Q().equals(this.player.getName()))) {
                                     PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", this.player.getName(), Double.valueOf(d7), Double.valueOf(d8), Double.valueOf(d9));
@@ -344,7 +344,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             d8 = d5 - this.p;
                             d9 = d6 - this.q;
                             if (this.player.onGround && !packetplayinflying.a() && d8 > 0.0D) {
-                                this.player.cs();
+                                this.player.cu();
                             }
 
                             this.player.move(EnumMoveType.PLAYER, d7, d8, d9);
@@ -379,7 +379,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
                             this.B = d12 >= -0.03125D;
                             this.B &= !this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly;
-                            this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.cN() && !worldserver.c(this.player.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
+                            this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.cP() && !worldserver.c(this.player.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
                             this.player.onGround = packetplayinflying.a();
                             this.minecraftServer.getPlayerList().d(this.player);
                             this.player.a(this.player.locY - d3, packetplayinflying.a());
@@ -586,7 +586,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
     public void a(PacketPlayInBoatMove packetplayinboatmove) {
         PlayerConnectionUtils.ensureMainThread(packetplayinboatmove, this, this.player.x());
-        Entity entity = this.player.bH();
+        Entity entity = this.player.bJ();
 
         if (entity instanceof EntityBoat) {
             ((EntityBoat) entity).a(packetplayinboatmove.a(), packetplayinboatmove.b());
@@ -595,7 +595,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     }
 
     public void a(IChatBaseComponent ichatbasecomponent) {
-        PlayerConnection.LOGGER.info("{} lost connection: {}", this.player.getName(), ichatbasecomponent);
+        PlayerConnection.LOGGER.info("{} lost connection: {}", this.player.getName(), ichatbasecomponent.toPlainText());
         this.minecraftServer.aD();
         ChatMessage chatmessage = new ChatMessage("multiplayer.player.left", new Object[] { this.player.getScoreboardDisplayName()});
 
@@ -729,8 +729,8 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             break;
 
         case START_RIDING_JUMP:
-            if (this.player.bH() instanceof IJumpable) {
-                ijumpable = (IJumpable) this.player.bH();
+            if (this.player.bJ() instanceof IJumpable) {
+                ijumpable = (IJumpable) this.player.bJ();
                 int i = packetplayinentityaction.c();
 
                 if (ijumpable.a() && i > 0) {
@@ -740,20 +740,20 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             break;
 
         case STOP_RIDING_JUMP:
-            if (this.player.bH() instanceof IJumpable) {
-                ijumpable = (IJumpable) this.player.bH();
+            if (this.player.bJ() instanceof IJumpable) {
+                ijumpable = (IJumpable) this.player.bJ();
                 ijumpable.r_();
             }
             break;
 
         case OPEN_INVENTORY:
-            if (this.player.bH() instanceof EntityHorseAbstract) {
-                ((EntityHorseAbstract) this.player.bH()).c((EntityHuman) this.player);
+            if (this.player.bJ() instanceof EntityHorseAbstract) {
+                ((EntityHorseAbstract) this.player.bJ()).c((EntityHuman) this.player);
             }
             break;
 
         case START_FALL_FLYING:
-            if (!this.player.onGround && this.player.motY < 0.0D && !this.player.cN() && !this.player.isInWater()) {
+            if (!this.player.onGround && this.player.motY < 0.0D && !this.player.cP() && !this.player.isInWater()) {
                 ItemStack itemstack = this.player.getEquipment(EnumItemSlot.CHEST);
 
                 if (itemstack.getItem() == Items.cS && ItemElytra.d(itemstack)) {

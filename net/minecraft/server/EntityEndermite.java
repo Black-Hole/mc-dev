@@ -46,7 +46,7 @@ public class EntityEndermite extends EntityMonster {
         return SoundEffects.bl;
     }
 
-    protected SoundEffect cd() {
+    protected SoundEffect cf() {
         return SoundEffects.bk;
     }
 
@@ -80,12 +80,12 @@ public class EntityEndermite extends EntityMonster {
         super.B_();
     }
 
-    public void j(float f) {
+    public void h(float f) {
         this.yaw = f;
-        super.j(f);
+        super.h(f);
     }
 
-    public double aD() {
+    public double aF() {
         return 0.1D;
     }
 

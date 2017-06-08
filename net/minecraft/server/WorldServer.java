@@ -456,7 +456,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
         for (int i = 0; i < this.players.size(); ++i) {
             Entity entity = (Entity) this.players.get(i);
-            Entity entity1 = entity.bH();
+            Entity entity1 = entity.bJ();
 
             if (entity1 != null) {
                 if (!entity1.dead && entity1.w(entity)) {
@@ -859,7 +859,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         super.b(entity);
         this.entitiesById.a(entity.getId(), entity);
         this.entitiesByUUID.put(entity.getUniqueID(), entity);
-        Entity[] aentity = entity.aZ();
+        Entity[] aentity = entity.bb();
 
         if (aentity != null) {
             Entity[] aentity1 = aentity;
@@ -878,7 +878,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         super.c(entity);
         this.entitiesById.d(entity.getId());
         this.entitiesByUUID.remove(entity.getUniqueID());
-        Entity[] aentity = entity.aZ();
+        Entity[] aentity = entity.bb();
 
         if (aentity != null) {
             Entity[] aentity1 = aentity;

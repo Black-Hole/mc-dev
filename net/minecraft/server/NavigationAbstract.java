@@ -236,7 +236,7 @@ public abstract class NavigationAbstract {
                 this.l = vec3d1;
                 double d0 = vec3d.f(this.l);
 
-                this.o = this.a.cw() > 0.0F ? d0 / (double) this.a.cw() * 1000.0D : 0.0D;
+                this.o = this.a.cy() > 0.0F ? d0 / (double) this.a.cy() * 1000.0D : 0.0D;
             }
 
             if (this.o > 0.0D && (double) this.m > this.o * 3.0D) {

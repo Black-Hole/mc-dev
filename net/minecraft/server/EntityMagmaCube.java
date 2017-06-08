@@ -31,7 +31,7 @@ public class EntityMagmaCube extends EntitySlime {
         this.getAttributeInstance(GenericAttributes.h).setValue((double) (i * 3));
     }
 
-    public float f(float f) {
+    public float aw() {
         return 1.0F;
     }
 
@@ -39,60 +39,60 @@ public class EntityMagmaCube extends EntitySlime {
         return EnumParticle.FLAME;
     }
 
-    protected EntitySlime dc() {
+    protected EntitySlime de() {
         return new EntityMagmaCube(this.world);
     }
 
     @Nullable
     protected MinecraftKey J() {
-        return this.dk() ? LootTables.a : LootTables.ai;
+        return this.dm() ? LootTables.a : LootTables.ai;
     }
 
     public boolean isBurning() {
         return false;
     }
 
-    protected int dd() {
-        return super.dd() * 4;
+    protected int df() {
+        return super.df() * 4;
     }
 
-    protected void de() {
+    protected void dg() {
         this.a *= 0.9F;
     }
 
-    protected void cs() {
+    protected void cu() {
         this.motY = (double) (0.42F + (float) this.getSize() * 0.1F);
         this.impulse = true;
     }
 
-    protected void cu() {
+    protected void cw() {
         this.motY = (double) (0.22F + (float) this.getSize() * 0.05F);
         this.impulse = true;
     }
 
     public void e(float f, float f1) {}
 
-    protected boolean df() {
+    protected boolean dh() {
         return true;
     }
 
-    protected int dg() {
-        return super.dg() + 2;
+    protected int di() {
+        return super.di() + 2;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return this.dk() ? SoundEffects.hj : SoundEffects.dW;
+        return this.dm() ? SoundEffects.hj : SoundEffects.dW;
     }
 
-    protected SoundEffect cd() {
-        return this.dk() ? SoundEffects.hi : SoundEffects.dV;
+    protected SoundEffect cf() {
+        return this.dm() ? SoundEffects.hi : SoundEffects.dV;
     }
 
-    protected SoundEffect dh() {
-        return this.dk() ? SoundEffects.hk : SoundEffects.dY;
+    protected SoundEffect dj() {
+        return this.dm() ? SoundEffects.hk : SoundEffects.dY;
     }
 
-    protected SoundEffect di() {
+    protected SoundEffect dk() {
         return SoundEffects.dX;
     }
 }
