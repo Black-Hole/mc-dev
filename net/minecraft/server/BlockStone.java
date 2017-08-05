@@ -28,6 +28,18 @@ public class BlockStone extends Block {
         return ((BlockStone.EnumStoneVariant) iblockdata.get(BlockStone.VARIANT)).a();
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        BlockStone.EnumStoneVariant[] ablockstone_enumstonevariant = BlockStone.EnumStoneVariant.values();
+        int i = ablockstone_enumstonevariant.length;
+
+        for (int j = 0; j < i; ++j) {
+            BlockStone.EnumStoneVariant blockstone_enumstonevariant = ablockstone_enumstonevariant[j];
+
+            nonnulllist.add(new ItemStack(this, 1, blockstone_enumstonevariant.a()));
+        }
+
+    }
+
     public IBlockData fromLegacyData(int i) {
         return this.getBlockData().set(BlockStone.VARIANT, BlockStone.EnumStoneVariant.a(i));
     }

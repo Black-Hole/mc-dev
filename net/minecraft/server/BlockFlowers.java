@@ -22,6 +22,18 @@ public abstract class BlockFlowers extends BlockPlant {
         return ((BlockFlowers.EnumFlowerVarient) iblockdata.get(this.g())).b();
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        BlockFlowers.EnumFlowerVarient[] ablockflowers_enumflowervarient = BlockFlowers.EnumFlowerVarient.a(this.e());
+        int i = ablockflowers_enumflowervarient.length;
+
+        for (int j = 0; j < i; ++j) {
+            BlockFlowers.EnumFlowerVarient blockflowers_enumflowervarient = ablockflowers_enumflowervarient[j];
+
+            nonnulllist.add(new ItemStack(this, 1, blockflowers_enumflowervarient.b()));
+        }
+
+    }
+
     public IBlockData fromLegacyData(int i) {
         return this.getBlockData().set(this.g(), BlockFlowers.EnumFlowerVarient.a(this.e(), i));
     }
@@ -93,6 +105,10 @@ public abstract class BlockFlowers extends BlockPlant {
             }
 
             return ablockflowers_enumflowervarient[i];
+        }
+
+        public static BlockFlowers.EnumFlowerVarient[] a(BlockFlowers.EnumFlowerType blockflowers_enumflowertype) {
+            return BlockFlowers.EnumFlowerVarient.k[blockflowers_enumflowertype.ordinal()];
         }
 
         public String toString() {

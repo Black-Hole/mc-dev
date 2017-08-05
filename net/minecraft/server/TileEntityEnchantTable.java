@@ -28,8 +28,8 @@ public class TileEntityEnchantTable extends TileEntity implements ITickable, ITi
         return nbttagcompound;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
             this.p = nbttagcompound.getString("CustomName");
         }

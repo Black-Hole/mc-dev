@@ -62,6 +62,20 @@ public class ItemBanner extends ItemBlock {
         return LocaleI18n.get(s);
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        if (this.a(creativemodetab)) {
+            EnumColor[] aenumcolor = EnumColor.values();
+            int i = aenumcolor.length;
+
+            for (int j = 0; j < i; ++j) {
+                EnumColor enumcolor = aenumcolor[j];
+
+                nonnulllist.add(a(enumcolor, (NBTTagList) null));
+            }
+        }
+
+    }
+
     public static ItemStack a(EnumColor enumcolor, @Nullable NBTTagList nbttaglist) {
         ItemStack itemstack = new ItemStack(Items.BANNER, 1, enumcolor.getInvColorIndex());
 
@@ -70,6 +84,10 @@ public class ItemBanner extends ItemBlock {
         }
 
         return itemstack;
+    }
+
+    public CreativeModeTab b() {
+        return CreativeModeTab.c;
     }
 
     public static EnumColor c(ItemStack itemstack) {

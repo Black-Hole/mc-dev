@@ -35,6 +35,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.Validate;
@@ -365,7 +366,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
                 long i = 0L;
 
                 this.q.setMOTD(new ChatComponentText(this.motd));
-                this.q.setServerInfo(new ServerPing.ServerData("1.12", 335));
+                this.q.setServerInfo(new ServerPing.ServerData("1.12.1", 338));
                 this.a(this.q);
 
                 while (this.isRunning) {
@@ -539,7 +540,9 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
             if (i == 0 || this.getAllowNether()) {
                 WorldServer worldserver = this.worldServer[i];
 
-                this.methodProfiler.a(worldserver.getWorldData().getName());
+                this.methodProfiler.a(() -> {
+                    return worldserver.getWorldData().getName();
+                });
                 if (this.ticks % 20 == 0) {
                     this.methodProfiler.a("timeSync");
                     this.v.a((Packet) (new PacketPlayOutUpdateTime(worldserver.getTime(), worldserver.getDayTime(), worldserver.getGameRules().getBoolean("doDaylightCycle"))), worldserver.worldProvider.getDimensionManager().getDimensionID());
@@ -712,7 +715,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
     }
 
     public String getVersion() {
-        return "1.12";
+        return "1.12.1";
     }
 
     public int H() {
@@ -1244,7 +1247,7 @@ public abstract class MinecraftServer implements ICommandListener, Runnable, IAs
             this.aL().f();
             this.getPlayerList().reload();
         } else {
-            this.postToMainThread(run<invokedynamic>(this));
+            this.postToMainThread(this::reload);
         }
 
     }

@@ -608,8 +608,8 @@ public class EntityArmorStand extends EntityLiving {
         return this.isInvisible();
     }
 
-    public EnumPistonReaction o_() {
-        return this.isMarker() ? EnumPistonReaction.IGNORE : super.o_();
+    public EnumPistonReaction getPushReaction() {
+        return this.isMarker() ? EnumPistonReaction.IGNORE : super.getPushReaction();
     }
 
     public void setSmall(boolean flag) {

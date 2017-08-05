@@ -120,7 +120,7 @@ public class CommandFill extends CommandAbstract {
                                         nbttagcompound.setInt("x", blockposition4.getX());
                                         nbttagcompound.setInt("y", blockposition4.getY());
                                         nbttagcompound.setInt("z", blockposition4.getZ());
-                                        tileentity1.a(nbttagcompound);
+                                        tileentity1.load(nbttagcompound);
                                     }
                                 }
                             }

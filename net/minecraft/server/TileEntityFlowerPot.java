@@ -25,8 +25,8 @@ public class TileEntityFlowerPot extends TileEntity {
         return nbttagcompound;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Item", 8)) {
             this.a = Item.b(nbttagcompound.getString("Item"));
         } else {

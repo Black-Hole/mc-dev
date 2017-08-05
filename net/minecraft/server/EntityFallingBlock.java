@@ -140,7 +140,7 @@ public class EntityFallingBlock extends Entity {
                                             }
                                         }
 
-                                        tileentity.a(nbttagcompound);
+                                        tileentity.load(nbttagcompound);
                                         tileentity.update();
                                     }
                                 }

@@ -25,4 +25,12 @@ public class ItemGoldenApple extends ItemFood {
         }
 
     }
+
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        if (this.a(creativemodetab)) {
+            nonnulllist.add(new ItemStack(this));
+            nonnulllist.add(new ItemStack(this, 1, 1));
+        }
+
+    }
 }

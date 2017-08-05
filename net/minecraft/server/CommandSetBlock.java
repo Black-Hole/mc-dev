@@ -83,7 +83,7 @@ public class CommandSetBlock extends CommandAbstract {
                             nbttagcompound.setInt("x", blockposition.getX());
                             nbttagcompound.setInt("y", blockposition.getY());
                             nbttagcompound.setInt("z", blockposition.getZ());
-                            tileentity1.a(nbttagcompound);
+                            tileentity1.load(nbttagcompound);
                         }
                     }
 

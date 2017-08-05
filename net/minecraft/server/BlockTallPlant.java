@@ -149,6 +149,18 @@ public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElem
         }
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        BlockTallPlant.EnumTallFlowerVariants[] ablocktallplant_enumtallflowervariants = BlockTallPlant.EnumTallFlowerVariants.values();
+        int i = ablocktallplant_enumtallflowervariants.length;
+
+        for (int j = 0; j < i; ++j) {
+            BlockTallPlant.EnumTallFlowerVariants blocktallplant_enumtallflowervariants = ablocktallplant_enumtallflowervariants[j];
+
+            nonnulllist.add(new ItemStack(this, 1, blocktallplant_enumtallflowervariants.a()));
+        }
+
+    }
+
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return new ItemStack(this, 1, this.a((IBlockAccess) world, blockposition, iblockdata).a());
     }

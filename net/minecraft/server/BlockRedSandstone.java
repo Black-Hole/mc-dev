@@ -14,6 +14,18 @@ public class BlockRedSandstone extends Block {
         return ((BlockRedSandstone.EnumRedSandstoneVariant) iblockdata.get(BlockRedSandstone.TYPE)).a();
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        BlockRedSandstone.EnumRedSandstoneVariant[] ablockredsandstone_enumredsandstonevariant = BlockRedSandstone.EnumRedSandstoneVariant.values();
+        int i = ablockredsandstone_enumredsandstonevariant.length;
+
+        for (int j = 0; j < i; ++j) {
+            BlockRedSandstone.EnumRedSandstoneVariant blockredsandstone_enumredsandstonevariant = ablockredsandstone_enumredsandstonevariant[j];
+
+            nonnulllist.add(new ItemStack(this, 1, blockredsandstone_enumredsandstonevariant.a()));
+        }
+
+    }
+
     public IBlockData fromLegacyData(int i) {
         return this.getBlockData().set(BlockRedSandstone.TYPE, BlockRedSandstone.EnumRedSandstoneVariant.a(i));
     }

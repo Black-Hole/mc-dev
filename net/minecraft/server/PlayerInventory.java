@@ -63,6 +63,18 @@ public class PlayerInventory implements IInventory {
         return i >= 0 && i < 9;
     }
 
+    public int c(ItemStack itemstack) {
+        for (int i = 0; i < this.items.size(); ++i) {
+            ItemStack itemstack1 = (ItemStack) this.items.get(i);
+
+            if (!((ItemStack) this.items.get(i)).isEmpty() && this.b(itemstack, (ItemStack) this.items.get(i)) && !((ItemStack) this.items.get(i)).h() && !itemstack1.hasEnchantments() && !itemstack1.hasName()) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     public int l() {
         int i;
         int j;
@@ -627,6 +639,21 @@ public class PlayerInventory implements IInventory {
             List list = (List) iterator.next();
 
             list.clear();
+        }
+
+    }
+
+    public void a(AutoRecipeStackManager autorecipestackmanager, boolean flag) {
+        Iterator iterator = this.items.iterator();
+
+        while (iterator.hasNext()) {
+            ItemStack itemstack = (ItemStack) iterator.next();
+
+            autorecipestackmanager.a(itemstack);
+        }
+
+        if (flag) {
+            autorecipestackmanager.a((ItemStack) this.extraSlots.get(0));
         }
 
     }

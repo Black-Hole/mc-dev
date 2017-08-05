@@ -12,8 +12,8 @@ public class TileEntityBed extends TileEntity {
         this.a(EnumColor.fromColorIndex(itemstack.getData()));
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         if (nbttagcompound.hasKey("color")) {
             this.a = EnumColor.fromColorIndex(nbttagcompound.getInt("color"));
         }

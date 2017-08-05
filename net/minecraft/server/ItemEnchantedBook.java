@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
+
 public class ItemEnchantedBook extends Item {
 
     public ItemEnchantedBook() {}
@@ -55,5 +57,33 @@ public class ItemEnchantedBook extends Item {
 
         a(itemstack, weightedrandomenchant);
         return itemstack;
+    }
+
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        Iterator iterator;
+        Enchantment enchantment;
+
+        if (creativemodetab == CreativeModeTab.g) {
+            iterator = Enchantment.enchantments.iterator();
+
+            while (iterator.hasNext()) {
+                enchantment = (Enchantment) iterator.next();
+                if (enchantment.itemTarget != null) {
+                    for (int i = enchantment.getStartLevel(); i <= enchantment.getMaxLevel(); ++i) {
+                        nonnulllist.add(a(new WeightedRandomEnchant(enchantment, i)));
+                    }
+                }
+            }
+        } else if (creativemodetab.n().length != 0) {
+            iterator = Enchantment.enchantments.iterator();
+
+            while (iterator.hasNext()) {
+                enchantment = (Enchantment) iterator.next();
+                if (creativemodetab.a(enchantment.itemTarget)) {
+                    nonnulllist.add(a(new WeightedRandomEnchant(enchantment, enchantment.getMaxLevel())));
+                }
+            }
+        }
+
     }
 }

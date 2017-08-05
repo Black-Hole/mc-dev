@@ -92,7 +92,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
                 for (int i = 0; i < list.size(); ++i) {
                     Entity entity = (Entity) list.get(i);
 
-                    if (entity.o_() != EnumPistonReaction.IGNORE) {
+                    if (entity.getPushReaction() != EnumPistonReaction.IGNORE) {
                         if (flag) {
                             switch (enumdirection.k()) {
                             case X:
@@ -276,8 +276,8 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
     public static void a(DataConverterManager dataconvertermanager) {}
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         this.a = Block.getById(nbttagcompound.getInt("blockId")).fromLegacyData(nbttagcompound.getInt("blockData"));
         this.f = EnumDirection.fromType1(nbttagcompound.getInt("facing"));
         this.j = nbttagcompound.getFloat("progress");

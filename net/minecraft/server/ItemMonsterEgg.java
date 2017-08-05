@@ -175,6 +175,30 @@ public class ItemMonsterEgg extends Item {
         }
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        if (this.a(creativemodetab)) {
+            Iterator iterator = EntityTypes.eggInfo.values().iterator();
+
+            while (iterator.hasNext()) {
+                EntityTypes.MonsterEggInfo entitytypes_monsteregginfo = (EntityTypes.MonsterEggInfo) iterator.next();
+                ItemStack itemstack = new ItemStack(this, 1);
+
+                a(itemstack, entitytypes_monsteregginfo.a);
+                nonnulllist.add(itemstack);
+            }
+        }
+
+    }
+
+    public static void a(ItemStack itemstack, MinecraftKey minecraftkey) {
+        NBTTagCompound nbttagcompound = itemstack.hasTag() ? itemstack.getTag() : new NBTTagCompound();
+        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+
+        nbttagcompound1.setString("id", minecraftkey.toString());
+        nbttagcompound.set("EntityTag", nbttagcompound1);
+        itemstack.setTag(nbttagcompound);
+    }
+
     @Nullable
     public static MinecraftKey h(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.getTag();

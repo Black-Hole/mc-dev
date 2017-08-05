@@ -12,6 +12,18 @@ public class BlockSand extends BlockFalling {
         return ((BlockSand.EnumSandVariant) iblockdata.get(BlockSand.VARIANT)).b();
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        BlockSand.EnumSandVariant[] ablocksand_enumsandvariant = BlockSand.EnumSandVariant.values();
+        int i = ablocksand_enumsandvariant.length;
+
+        for (int j = 0; j < i; ++j) {
+            BlockSand.EnumSandVariant blocksand_enumsandvariant = ablocksand_enumsandvariant[j];
+
+            nonnulllist.add(new ItemStack(this, 1, blocksand_enumsandvariant.b()));
+        }
+
+    }
+
     public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return ((BlockSand.EnumSandVariant) iblockdata.get(BlockSand.VARIANT)).d();
     }

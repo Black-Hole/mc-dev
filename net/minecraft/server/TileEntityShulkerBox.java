@@ -94,7 +94,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
                 for (int i = 0; i < list.size(); ++i) {
                     Entity entity = (Entity) list.get(i);
 
-                    if (entity.o_() != EnumPistonReaction.IGNORE) {
+                    if (entity.getPushReaction() != EnumPistonReaction.IGNORE) {
                         double d0 = 0.0D;
                         double d1 = 0.0D;
                         double d2 = 0.0D;
@@ -206,8 +206,8 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
         dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList(TileEntityShulkerBox.class, new String[] { "Items"})));
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         this.e(nbttagcompound);
     }
 

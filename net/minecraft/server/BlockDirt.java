@@ -25,6 +25,12 @@ public class BlockDirt extends Block {
         return iblockdata;
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        nonnulllist.add(new ItemStack(this, 1, BlockDirt.EnumDirtVariant.DIRT.a()));
+        nonnulllist.add(new ItemStack(this, 1, BlockDirt.EnumDirtVariant.COARSE_DIRT.a()));
+        nonnulllist.add(new ItemStack(this, 1, BlockDirt.EnumDirtVariant.PODZOL.a()));
+    }
+
     public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return new ItemStack(this, 1, ((BlockDirt.EnumDirtVariant) iblockdata.get(BlockDirt.VARIANT)).a());
     }

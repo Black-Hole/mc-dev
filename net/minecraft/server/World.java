@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 public abstract class World implements IBlockAccess {
@@ -1147,7 +1148,9 @@ public abstract class World implements IBlockAccess {
 
                 if (this.isLoaded(blockposition) && this.P.a(blockposition)) {
                     try {
-                        this.methodProfiler.a(tileentity.getClass().getSimpleName());
+                        this.methodProfiler.a(() -> {
+                            return String.valueOf(TileEntity.a(tileentity.getClass()));
+                        });
                         ((ITickable) tileentity).e();
                         this.methodProfiler.b();
                     } catch (Throwable throwable2) {

@@ -54,6 +54,13 @@ public class BlockCarpet extends Block {
         return ((EnumColor) iblockdata.get(BlockCarpet.COLOR)).getColorIndex();
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        for (int i = 0; i < 16; ++i) {
+            nonnulllist.add(new ItemStack(this, 1, i));
+        }
+
+    }
+
     public IBlockData fromLegacyData(int i) {
         return this.getBlockData().set(BlockCarpet.COLOR, EnumColor.fromColorIndex(i));
     }

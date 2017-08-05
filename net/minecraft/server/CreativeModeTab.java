@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public abstract class CreativeModeTab {
 
     public static final CreativeModeTab[] a = new CreativeModeTab[12];
@@ -58,8 +60,29 @@ public abstract class CreativeModeTab {
         return this;
     }
 
+    public EnchantmentSlotType[] n() {
+        return this.t;
+    }
+
     public CreativeModeTab a(EnchantmentSlotType... aenchantmentslottype) {
         this.t = aenchantmentslottype;
         return this;
+    }
+
+    public boolean a(@Nullable EnchantmentSlotType enchantmentslottype) {
+        if (enchantmentslottype != null) {
+            EnchantmentSlotType[] aenchantmentslottype = this.t;
+            int i = aenchantmentslottype.length;
+
+            for (int j = 0; j < i; ++j) {
+                EnchantmentSlotType enchantmentslottype1 = aenchantmentslottype[j];
+
+                if (enchantmentslottype1 == enchantmentslottype) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

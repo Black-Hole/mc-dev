@@ -14,6 +14,13 @@ public class BlockStainedGlassPane extends BlockThin {
         return ((EnumColor) iblockdata.get(BlockStainedGlassPane.COLOR)).getColorIndex();
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        for (int i = 0; i < EnumColor.values().length; ++i) {
+            nonnulllist.add(new ItemStack(this, 1, i));
+        }
+
+    }
+
     public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return MaterialMapColor.a((EnumColor) iblockdata.get(BlockStainedGlassPane.COLOR));
     }

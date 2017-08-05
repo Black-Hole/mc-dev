@@ -2345,7 +2345,7 @@ public abstract class Entity implements ICommandListener {
         return this.au;
     }
 
-    public EnumPistonReaction o_() {
+    public EnumPistonReaction getPushReaction() {
         return EnumPistonReaction.NORMAL;
     }
 

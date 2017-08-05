@@ -47,6 +47,13 @@ public class BlockLongGrass extends BlockPlant implements IBlockFragilePlantElem
         return new ItemStack(this, 1, iblockdata.getBlock().toLegacyData(iblockdata));
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        for (int i = 1; i < 3; ++i) {
+            nonnulllist.add(new ItemStack(this, 1, i));
+        }
+
+    }
+
     public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
         return iblockdata.get(BlockLongGrass.TYPE) != BlockLongGrass.EnumTallGrassType.DEAD_BUSH;
     }

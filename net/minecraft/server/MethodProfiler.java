@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,6 +37,12 @@ public class MethodProfiler {
             this.e = this.e + s;
             this.c.add(this.e);
             this.d.add(Long.valueOf(System.nanoTime()));
+        }
+    }
+
+    public void a(Supplier<String> supplier) {
+        if (this.a) {
+            this.a((String) supplier.get());
         }
     }
 

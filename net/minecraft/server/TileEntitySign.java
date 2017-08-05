@@ -29,9 +29,9 @@ public class TileEntitySign extends TileEntity {
         this.a(world);
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
+    public void load(NBTTagCompound nbttagcompound) {
         this.isEditable = false;
-        super.a(nbttagcompound);
+        super.load(nbttagcompound);
         ICommandListener icommandlistener = new ICommandListener() {
             public String getName() {
                 return "Sign";

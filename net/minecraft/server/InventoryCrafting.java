@@ -114,4 +114,15 @@ public class InventoryCrafting implements IInventory {
     public int j() {
         return this.b;
     }
+
+    public void a(AutoRecipeStackManager autorecipestackmanager) {
+        Iterator iterator = this.items.iterator();
+
+        while (iterator.hasNext()) {
+            ItemStack itemstack = (ItemStack) iterator.next();
+
+            autorecipestackmanager.a(itemstack);
+        }
+
+    }
 }

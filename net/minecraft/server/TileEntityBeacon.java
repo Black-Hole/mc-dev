@@ -193,8 +193,8 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         return TileEntityBeacon.f.contains(mobeffectlist) ? mobeffectlist : null;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         this.primaryEffect = f(nbttagcompound.getInt("Primary"));
         this.secondaryEffect = f(nbttagcompound.getInt("Secondary"));
         this.levels = nbttagcompound.getInt("Levels");

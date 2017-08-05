@@ -153,6 +153,18 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
         return ((BlockWood.EnumLogVariant) iblockdata.get(BlockSapling.TYPE)).a();
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        BlockWood.EnumLogVariant[] ablockwood_enumlogvariant = BlockWood.EnumLogVariant.values();
+        int i = ablockwood_enumlogvariant.length;
+
+        for (int j = 0; j < i; ++j) {
+            BlockWood.EnumLogVariant blockwood_enumlogvariant = ablockwood_enumlogvariant[j];
+
+            nonnulllist.add(new ItemStack(this, 1, blockwood_enumlogvariant.a()));
+        }
+
+    }
+
     public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
         return true;
     }

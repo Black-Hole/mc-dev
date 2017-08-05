@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
+
 public class ItemTippedArrow extends ItemArrow {
 
     public ItemTippedArrow() {}
@@ -9,6 +11,21 @@ public class ItemTippedArrow extends ItemArrow {
 
         entitytippedarrow.a(itemstack);
         return entitytippedarrow;
+    }
+
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        if (this.a(creativemodetab)) {
+            Iterator iterator = PotionRegistry.a.iterator();
+
+            while (iterator.hasNext()) {
+                PotionRegistry potionregistry = (PotionRegistry) iterator.next();
+
+                if (!potionregistry.a().isEmpty()) {
+                    nonnulllist.add(PotionUtil.a(new ItemStack(this), potionregistry));
+                }
+            }
+        }
+
     }
 
     public String b(ItemStack itemstack) {

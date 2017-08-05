@@ -10,6 +10,10 @@ public interface IRecipe {
 
     NonNullList<ItemStack> b(InventoryCrafting inventorycrafting);
 
+    default NonNullList<RecipeItemStack> d() {
+        return NonNullList.a();
+    }
+
     default boolean c() {
         return false;
     }

@@ -307,11 +307,11 @@ public class WorldData {
     private void a(NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
         NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
-        nbttagcompound2.setString("Name", "1.12");
-        nbttagcompound2.setInt("Id", 1139);
+        nbttagcompound2.setString("Name", "1.12.1");
+        nbttagcompound2.setInt("Id", 1241);
         nbttagcompound2.setBoolean("Snapshot", false);
         nbttagcompound.set("Version", nbttagcompound2);
-        nbttagcompound.setInt("DataVersion", 1139);
+        nbttagcompound.setInt("DataVersion", 1241);
         nbttagcompound.setLong("RandomSeed", this.e);
         nbttagcompound.setString("generatorName", this.f.name());
         nbttagcompound.setInt("generatorVersion", this.f.getVersion());

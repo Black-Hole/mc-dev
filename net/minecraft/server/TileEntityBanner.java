@@ -59,8 +59,8 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
         return nbttagcompound;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
             this.a = nbttagcompound.getString("CustomName");
         }

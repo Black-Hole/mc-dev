@@ -41,8 +41,8 @@ public class TileEntitySkull extends TileEntity implements ITickable {
         return nbttagcompound;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         this.a = nbttagcompound.getByte("SkullType");
         this.rotation = nbttagcompound.getByte("Rot");
         if (this.a == 3) {

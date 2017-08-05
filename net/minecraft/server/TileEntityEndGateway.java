@@ -31,8 +31,8 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         return nbttagcompound;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         this.f = nbttagcompound.getLong("Age");
         if (nbttagcompound.hasKeyOfType("ExitPortal", 10)) {
             this.exitPortal = GameProfileSerializer.c(nbttagcompound.getCompound("ExitPortal"));

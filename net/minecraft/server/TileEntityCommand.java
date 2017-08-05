@@ -48,8 +48,8 @@ public class TileEntityCommand extends TileEntity {
         return nbttagcompound;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         this.i.b(nbttagcompound);
         this.a = nbttagcompound.getBoolean("powered");
         this.g = nbttagcompound.getBoolean("conditionMet");

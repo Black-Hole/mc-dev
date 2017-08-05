@@ -88,7 +88,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
             nbttagcompound.set("Level", nbttagcompound1);
-            nbttagcompound.setInt("DataVersion", 1139);
+            nbttagcompound.setInt("DataVersion", 1241);
             this.a(chunk, world, nbttagcompound1);
             this.a(chunk.k(), nbttagcompound);
         } catch (Exception exception) {
@@ -347,7 +347,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
         for (int i1 = 0; i1 < nbttaglist2.size(); ++i1) {
             NBTTagCompound nbttagcompound3 = nbttaglist2.get(i1);
-            TileEntity tileentity = TileEntity.a(world, nbttagcompound3);
+            TileEntity tileentity = TileEntity.create(world, nbttagcompound3);
 
             if (tileentity != null) {
                 chunk.a(tileentity);

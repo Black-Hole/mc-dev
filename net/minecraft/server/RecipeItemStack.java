@@ -1,6 +1,9 @@
 package net.minecraft.server;
 
 import com.google.common.base.Predicate;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntComparators;
+import it.unimi.dsi.fastutil.ints.IntList;
 import javax.annotation.Nullable;
 
 public class RecipeItemStack implements Predicate<ItemStack> {
@@ -15,6 +18,7 @@ public class RecipeItemStack implements Predicate<ItemStack> {
         }
     };
     public final ItemStack[] choices;
+    private IntList c;
 
     private RecipeItemStack(ItemStack... aitemstack) {
         this.choices = aitemstack;
@@ -41,6 +45,24 @@ public class RecipeItemStack implements Predicate<ItemStack> {
 
             return false;
         }
+    }
+
+    public IntList b() {
+        if (this.c == null) {
+            this.c = new IntArrayList(this.choices.length);
+            ItemStack[] aitemstack = this.choices;
+            int i = aitemstack.length;
+
+            for (int j = 0; j < i; ++j) {
+                ItemStack itemstack = aitemstack[j];
+
+                this.c.add(AutoRecipeStackManager.b(itemstack));
+            }
+
+            this.c.sort(IntComparators.NATURAL_COMPARATOR);
+        }
+
+        return this.c;
     }
 
     public static RecipeItemStack a(Item item) {

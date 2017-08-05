@@ -55,8 +55,8 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
         dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList(TileEntityChest.class, new String[] { "Items"})));
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         this.items = NonNullList.a(this.getSize(), ItemStack.a);
         if (!this.c(nbttagcompound)) {
             ContainerUtil.b(nbttagcompound, this.items);

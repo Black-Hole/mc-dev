@@ -36,6 +36,22 @@ public class ItemFish extends ItemFood {
         super.a(itemstack, world, entityhuman);
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        if (this.a(creativemodetab)) {
+            ItemFish.EnumFish[] aitemfish_enumfish = ItemFish.EnumFish.values();
+            int i = aitemfish_enumfish.length;
+
+            for (int j = 0; j < i; ++j) {
+                ItemFish.EnumFish itemfish_enumfish = aitemfish_enumfish[j];
+
+                if (!this.b || itemfish_enumfish.g()) {
+                    nonnulllist.add(new ItemStack(this, 1, itemfish_enumfish.a()));
+                }
+            }
+        }
+
+    }
+
     public String a(ItemStack itemstack) {
         ItemFish.EnumFish itemfish_enumfish = ItemFish.EnumFish.a(itemstack);
 

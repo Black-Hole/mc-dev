@@ -41,6 +41,20 @@ public abstract class BlockDoubleStepAbstract extends BlockStepAbstract {
         return BlockDoubleStepAbstract.EnumStoneSlabVariant.a(itemstack.getData() & 7);
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        BlockDoubleStepAbstract.EnumStoneSlabVariant[] ablockdoublestepabstract_enumstoneslabvariant = BlockDoubleStepAbstract.EnumStoneSlabVariant.values();
+        int i = ablockdoublestepabstract_enumstoneslabvariant.length;
+
+        for (int j = 0; j < i; ++j) {
+            BlockDoubleStepAbstract.EnumStoneSlabVariant blockdoublestepabstract_enumstoneslabvariant = ablockdoublestepabstract_enumstoneslabvariant[j];
+
+            if (blockdoublestepabstract_enumstoneslabvariant != BlockDoubleStepAbstract.EnumStoneSlabVariant.WOOD) {
+                nonnulllist.add(new ItemStack(this, 1, blockdoublestepabstract_enumstoneslabvariant.a()));
+            }
+        }
+
+    }
+
     public IBlockData fromLegacyData(int i) {
         IBlockData iblockdata = this.getBlockData().set(BlockDoubleStepAbstract.VARIANT, BlockDoubleStepAbstract.EnumStoneSlabVariant.a(i & 7));
 

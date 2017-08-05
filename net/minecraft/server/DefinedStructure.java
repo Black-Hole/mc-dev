@@ -203,7 +203,7 @@ public class DefinedStructure {
                                 definedstructure_blockinfo1.c.setInt("x", blockposition1.getX());
                                 definedstructure_blockinfo1.c.setInt("y", blockposition1.getY());
                                 definedstructure_blockinfo1.c.setInt("z", blockposition1.getZ());
-                                tileentity.a(definedstructure_blockinfo1.c);
+                                tileentity.load(definedstructure_blockinfo1.c);
                                 tileentity.a(definedstructureinfo.b());
                                 tileentity.a(definedstructureinfo.c());
                             }
@@ -467,7 +467,7 @@ public class DefinedStructure {
         nbttagcompound.set("entities", nbttaglist1);
         nbttagcompound.set("size", this.a(new int[] { this.c.getX(), this.c.getY(), this.c.getZ()}));
         nbttagcompound.setString("author", this.d);
-        nbttagcompound.setInt("DataVersion", 1139);
+        nbttagcompound.setInt("DataVersion", 1241);
         return nbttagcompound;
     }
 

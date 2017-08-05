@@ -163,7 +163,7 @@ public class CommandClone extends CommandAbstract {
                                     commandclone_commandclonestoredtileentity.c.setInt("x", commandclone_commandclonestoredtileentity.a.getX());
                                     commandclone_commandclonestoredtileentity.c.setInt("y", commandclone_commandclonestoredtileentity.a.getY());
                                     commandclone_commandclonestoredtileentity.c.setInt("z", commandclone_commandclonestoredtileentity.a.getZ());
-                                    tileentity2.a(commandclone_commandclonestoredtileentity.c);
+                                    tileentity2.load(commandclone_commandclonestoredtileentity.c);
                                     tileentity2.update();
                                 }
                             }

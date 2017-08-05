@@ -30,6 +30,13 @@ public class BlockLeaves1 extends BlockLeaves {
         return iblockdata.get(BlockLeaves1.VARIANT) == BlockWood.EnumLogVariant.JUNGLE ? 40 : super.x(iblockdata);
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        nonnulllist.add(new ItemStack(this, 1, BlockWood.EnumLogVariant.OAK.a()));
+        nonnulllist.add(new ItemStack(this, 1, BlockWood.EnumLogVariant.SPRUCE.a()));
+        nonnulllist.add(new ItemStack(this, 1, BlockWood.EnumLogVariant.BIRCH.a()));
+        nonnulllist.add(new ItemStack(this, 1, BlockWood.EnumLogVariant.JUNGLE.a()));
+    }
+
     protected ItemStack u(IBlockData iblockdata) {
         return new ItemStack(Item.getItemOf(this), 1, ((BlockWood.EnumLogVariant) iblockdata.get(BlockLeaves1.VARIANT)).a());
     }

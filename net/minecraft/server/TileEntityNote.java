@@ -14,8 +14,8 @@ public class TileEntityNote extends TileEntity {
         return nbttagcompound;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         this.note = nbttagcompound.getByte("note");
         this.note = (byte) MathHelper.clamp(this.note, 0, 24);
         this.f = nbttagcompound.getBoolean("powered");

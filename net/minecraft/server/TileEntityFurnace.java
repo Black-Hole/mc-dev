@@ -83,8 +83,8 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
         dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList(TileEntityFurnace.class, new String[] { "Items"})));
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         this.items = NonNullList.a(this.getSize(), ItemStack.a);
         ContainerUtil.b(nbttagcompound, this.items);
         this.burnTime = nbttagcompound.getShort("BurnTime");

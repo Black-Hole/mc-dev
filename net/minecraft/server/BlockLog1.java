@@ -47,6 +47,13 @@ public class BlockLog1 extends BlockLogAbstract {
         }
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        nonnulllist.add(new ItemStack(this, 1, BlockWood.EnumLogVariant.OAK.a()));
+        nonnulllist.add(new ItemStack(this, 1, BlockWood.EnumLogVariant.SPRUCE.a()));
+        nonnulllist.add(new ItemStack(this, 1, BlockWood.EnumLogVariant.BIRCH.a()));
+        nonnulllist.add(new ItemStack(this, 1, BlockWood.EnumLogVariant.JUNGLE.a()));
+    }
+
     public IBlockData fromLegacyData(int i) {
         IBlockData iblockdata = this.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.a((i & 3) % 4));
 

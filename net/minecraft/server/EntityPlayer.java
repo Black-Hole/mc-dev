@@ -72,7 +72,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         this.server = minecraftserver;
-        this.bZ = minecraftserver.getPlayerList().a((EntityHuman) this);
+        this.bZ = minecraftserver.getPlayerList().getStatisticManager(this);
         this.bY = minecraftserver.getPlayerList().h(this);
         this.P = 1.0F;
         this.setPositionRotation(blockposition, 0.0F, 0.0F);

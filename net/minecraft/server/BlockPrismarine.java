@@ -37,6 +37,12 @@ public class BlockPrismarine extends Block {
         return this.getBlockData().set(BlockPrismarine.VARIANT, BlockPrismarine.EnumPrismarineVariant.a(i));
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        nonnulllist.add(new ItemStack(this, 1, BlockPrismarine.b));
+        nonnulllist.add(new ItemStack(this, 1, BlockPrismarine.c));
+        nonnulllist.add(new ItemStack(this, 1, BlockPrismarine.d));
+    }
+
     public static enum EnumPrismarineVariant implements INamable {
 
         ROUGH(0, "prismarine", "rough"), BRICKS(1, "prismarine_bricks", "bricks"), DARK(2, "dark_prismarine", "dark");

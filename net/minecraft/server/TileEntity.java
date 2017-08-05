@@ -40,7 +40,7 @@ public abstract class TileEntity {
         return this.world != null;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
+    public void load(NBTTagCompound nbttagcompound) {
         this.position = new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z"));
     }
 
@@ -63,7 +63,7 @@ public abstract class TileEntity {
     }
 
     @Nullable
-    public static TileEntity a(World world, NBTTagCompound nbttagcompound) {
+    public static TileEntity create(World world, NBTTagCompound nbttagcompound) {
         TileEntity tileentity = null;
         String s = nbttagcompound.getString("id");
 
@@ -80,7 +80,7 @@ public abstract class TileEntity {
         if (tileentity != null) {
             try {
                 tileentity.b(world);
-                tileentity.a(nbttagcompound);
+                tileentity.load(nbttagcompound);
             } catch (Throwable throwable1) {
                 TileEntity.a.error("Failed to load data for block entity {}", s, throwable1);
                 tileentity = null;

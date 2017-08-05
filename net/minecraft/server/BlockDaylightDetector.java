@@ -111,6 +111,13 @@ public class BlockDaylightDetector extends BlockTileEntity {
         return new BlockStateList(this, new IBlockState[] { BlockDaylightDetector.POWER});
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        if (!this.c) {
+            super.a(creativemodetab, nonnulllist);
+        }
+
+    }
+
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
         return enumdirection == EnumDirection.DOWN ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
     }

@@ -34,6 +34,11 @@ public class BlockLeaves2 extends BlockLeaves {
         return new ItemStack(this, 1, iblockdata.getBlock().toLegacyData(iblockdata) & 3);
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        nonnulllist.add(new ItemStack(this, 1, 0));
+        nonnulllist.add(new ItemStack(this, 1, 1));
+    }
+
     protected ItemStack u(IBlockData iblockdata) {
         return new ItemStack(Item.getItemOf(this), 1, ((BlockWood.EnumLogVariant) iblockdata.get(BlockLeaves2.VARIANT)).a() - 4);
     }

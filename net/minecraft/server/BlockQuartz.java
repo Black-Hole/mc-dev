@@ -39,6 +39,12 @@ public class BlockQuartz extends Block {
         return blockquartz_enumquartzvariant != BlockQuartz.EnumQuartzVariant.LINES_X && blockquartz_enumquartzvariant != BlockQuartz.EnumQuartzVariant.LINES_Z ? super.u(iblockdata) : new ItemStack(Item.getItemOf(this), 1, BlockQuartz.EnumQuartzVariant.LINES_Y.a());
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        nonnulllist.add(new ItemStack(this, 1, BlockQuartz.EnumQuartzVariant.DEFAULT.a()));
+        nonnulllist.add(new ItemStack(this, 1, BlockQuartz.EnumQuartzVariant.CHISELED.a()));
+        nonnulllist.add(new ItemStack(this, 1, BlockQuartz.EnumQuartzVariant.LINES_Y.a()));
+    }
+
     public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return MaterialMapColor.q;
     }

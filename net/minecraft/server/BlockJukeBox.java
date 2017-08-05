@@ -117,8 +117,8 @@ public class BlockJukeBox extends BlockTileEntity {
             this.record = ItemStack.a;
         }
 
-        public void a(NBTTagCompound nbttagcompound) {
-            super.a(nbttagcompound);
+        public void load(NBTTagCompound nbttagcompound) {
+            super.load(nbttagcompound);
             if (nbttagcompound.hasKeyOfType("RecordItem", 10)) {
                 this.setRecord(new ItemStack(nbttagcompound.getCompound("RecordItem")));
             } else if (nbttagcompound.getInt("Record") > 0) {

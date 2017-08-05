@@ -60,6 +60,18 @@ public class BlockMonsterEggs extends Block {
         return new ItemStack(this, 1, iblockdata.getBlock().toLegacyData(iblockdata));
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        BlockMonsterEggs.EnumMonsterEggVarient[] ablockmonstereggs_enummonstereggvarient = BlockMonsterEggs.EnumMonsterEggVarient.values();
+        int i = ablockmonstereggs_enummonstereggvarient.length;
+
+        for (int j = 0; j < i; ++j) {
+            BlockMonsterEggs.EnumMonsterEggVarient blockmonstereggs_enummonstereggvarient = ablockmonstereggs_enummonstereggvarient[j];
+
+            nonnulllist.add(new ItemStack(this, 1, blockmonstereggs_enummonstereggvarient.a()));
+        }
+
+    }
+
     public IBlockData fromLegacyData(int i) {
         return this.getBlockData().set(BlockMonsterEggs.VARIANT, BlockMonsterEggs.EnumMonsterEggVarient.a(i));
     }

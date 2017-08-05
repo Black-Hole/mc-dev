@@ -16,12 +16,12 @@ public class HandshakeListener implements PacketHandshakingInListener {
             this.b.setProtocol(EnumProtocol.LOGIN);
             ChatMessage chatmessage;
 
-            if (packethandshakinginsetprotocol.b() > 335) {
-                chatmessage = new ChatMessage("multiplayer.disconnect.outdated_server", new Object[] { "1.12"});
+            if (packethandshakinginsetprotocol.b() > 338) {
+                chatmessage = new ChatMessage("multiplayer.disconnect.outdated_server", new Object[] { "1.12.1"});
                 this.b.sendPacket(new PacketLoginOutDisconnect(chatmessage));
                 this.b.close(chatmessage);
-            } else if (packethandshakinginsetprotocol.b() < 335) {
-                chatmessage = new ChatMessage("multiplayer.disconnect.outdated_client", new Object[] { "1.12"});
+            } else if (packethandshakinginsetprotocol.b() < 338) {
+                chatmessage = new ChatMessage("multiplayer.disconnect.outdated_client", new Object[] { "1.12.1"});
                 this.b.sendPacket(new PacketLoginOutDisconnect(chatmessage));
                 this.b.close(chatmessage);
             } else {

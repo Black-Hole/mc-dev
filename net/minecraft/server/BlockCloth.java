@@ -14,6 +14,18 @@ public class BlockCloth extends Block {
         return ((EnumColor) iblockdata.get(BlockCloth.COLOR)).getColorIndex();
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        EnumColor[] aenumcolor = EnumColor.values();
+        int i = aenumcolor.length;
+
+        for (int j = 0; j < i; ++j) {
+            EnumColor enumcolor = aenumcolor[j];
+
+            nonnulllist.add(new ItemStack(this, 1, enumcolor.getColorIndex()));
+        }
+
+    }
+
     public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return MaterialMapColor.a((EnumColor) iblockdata.get(BlockCloth.COLOR));
     }

@@ -86,6 +86,11 @@ public class BlockSponge extends Block {
         return i > 0;
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        nonnulllist.add(new ItemStack(this, 1, 0));
+        nonnulllist.add(new ItemStack(this, 1, 1));
+    }
+
     public IBlockData fromLegacyData(int i) {
         return this.getBlockData().set(BlockSponge.WET, Boolean.valueOf((i & 1) == 1));
     }

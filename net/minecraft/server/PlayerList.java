@@ -863,7 +863,7 @@ public abstract class PlayerList {
         this.sendMessage(ichatbasecomponent, true);
     }
 
-    public ServerStatisticManager a(EntityHuman entityhuman) {
+    public ServerStatisticManager getStatisticManager(EntityHuman entityhuman) {
         UUID uuid = entityhuman.getUniqueID();
         ServerStatisticManager serverstatisticmanager = uuid == null ? null : (ServerStatisticManager) this.o.get(uuid);
 

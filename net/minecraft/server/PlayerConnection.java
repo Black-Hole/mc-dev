@@ -50,6 +50,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     private int E;
     private int receivedMovePackets;
     private int processedMovePackets;
+    private AutoRecipe H = new AutoRecipe();
 
     public PlayerConnection(MinecraftServer minecraftserver, NetworkManager networkmanager, EntityPlayer entityplayer) {
         this.minecraftServer = minecraftserver;
@@ -886,73 +887,8 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     public void a(PacketPlayInAutoRecipe packetplayinautorecipe) {
         PlayerConnectionUtils.ensureMainThread(packetplayinautorecipe, this, this.player.x());
         this.player.resetIdleTimer();
-        if (this.player.activeContainer.windowId == packetplayinautorecipe.a() && this.player.activeContainer.c(this.player)) {
-            this.player.playerConnection.sendPacket(new PacketPlayOutTransaction(packetplayinautorecipe.a(), packetplayinautorecipe.b(), true));
-            Iterator iterator;
-            PacketPlayInAutoRecipe.a packetplayinautorecipe_a;
-            ItemStack itemstack;
-            int i;
-
-            if (!packetplayinautorecipe.d().isEmpty()) {
-                iterator = packetplayinautorecipe.d().iterator();
-
-                while (iterator.hasNext()) {
-                    packetplayinautorecipe_a = (PacketPlayInAutoRecipe.a) iterator.next();
-                    itemstack = this.player.activeContainer.getSlot(packetplayinautorecipe_a.b).getItem();
-                    if (this.a(packetplayinautorecipe_a.a, itemstack)) {
-                        i = packetplayinautorecipe_a.a.getCount();
-                        if (packetplayinautorecipe_a.c == -1) {
-                            this.player.drop(packetplayinautorecipe_a.a, true);
-                        } else {
-                            ItemStack itemstack1 = this.player.inventory.getItem(packetplayinautorecipe_a.c);
-
-                            if (itemstack1.isEmpty()) {
-                                this.player.inventory.setItem(packetplayinautorecipe_a.c, packetplayinautorecipe_a.a);
-                            } else {
-                                itemstack1.add(i);
-                            }
-                        }
-
-                        if (itemstack.getCount() == i) {
-                            this.player.activeContainer.setItem(packetplayinautorecipe_a.b, ItemStack.a);
-                        } else {
-                            itemstack.subtract(i);
-                        }
-                    }
-                }
-            }
-
-            if (!packetplayinautorecipe.c().isEmpty()) {
-                iterator = packetplayinautorecipe.c().iterator();
-
-                while (iterator.hasNext()) {
-                    packetplayinautorecipe_a = (PacketPlayInAutoRecipe.a) iterator.next();
-                    itemstack = this.player.inventory.getItem(packetplayinautorecipe_a.c);
-                    if (this.a(packetplayinautorecipe_a.a, itemstack)) {
-                        i = packetplayinautorecipe_a.a.getCount();
-                        if (itemstack.getCount() == i) {
-                            this.player.inventory.splitWithoutUpdate(packetplayinautorecipe_a.c);
-                        } else {
-                            itemstack.subtract(i);
-                        }
-
-                        this.player.activeContainer.b(packetplayinautorecipe_a.b, packetplayinautorecipe_a.a);
-                    }
-                }
-            }
-
-            this.player.activeContainer.b();
-        }
-    }
-
-    private boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        ItemStack itemstack2 = itemstack1.cloneItemStack();
-
-        if (itemstack2.getCount() < itemstack.getCount()) {
-            return false;
-        } else {
-            itemstack2.setCount(itemstack.getCount());
-            return ItemStack.matches(itemstack, itemstack2);
+        if (!this.player.isSpectator() && this.player.activeContainer.windowId == packetplayinautorecipe.a() && this.player.activeContainer.c(this.player)) {
+            this.H.a(this.player, packetplayinautorecipe.b(), packetplayinautorecipe.c());
         }
     }
 

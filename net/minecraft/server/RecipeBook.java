@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.BitSet;
+import javax.annotation.Nullable;
 
 public class RecipeBook {
 
@@ -25,7 +26,7 @@ public class RecipeBook {
 
     }
 
-    public boolean b(IRecipe irecipe) {
+    public boolean b(@Nullable IRecipe irecipe) {
         return this.a.get(d(irecipe));
     }
 
@@ -36,7 +37,7 @@ public class RecipeBook {
         this.b.clear(i);
     }
 
-    protected static int d(IRecipe irecipe) {
+    protected static int d(@Nullable IRecipe irecipe) {
         return CraftingManager.recipes.a((Object) irecipe);
     }
 

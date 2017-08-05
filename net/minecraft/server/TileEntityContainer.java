@@ -8,8 +8,8 @@ public abstract class TileEntityContainer extends TileEntity implements ITileInv
         this.a = ChestLock.a;
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         this.a = ChestLock.b(nbttagcompound);
     }
 

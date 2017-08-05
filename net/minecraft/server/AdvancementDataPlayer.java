@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -134,7 +135,7 @@ public class AdvancementDataPlayer {
                     throw new JsonParseException("Found null for advancements");
                 }
 
-                Stream stream = map.entrySet().stream().sorted(Comparator.comparing(apply<invokedynamic>()));
+                Stream stream = map.entrySet().stream().sorted(Comparator.comparing(Entry::getValue));
                 Iterator iterator = ((List) stream.collect(Collectors.toList())).iterator();
 
                 while (iterator.hasNext()) {

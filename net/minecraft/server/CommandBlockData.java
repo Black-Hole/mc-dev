@@ -55,7 +55,7 @@ public class CommandBlockData extends CommandAbstract {
                     if (nbttagcompound.equals(nbttagcompound1)) {
                         throw new CommandException("commands.blockdata.failed", new Object[] { nbttagcompound.toString()});
                     } else {
-                        tileentity.a(nbttagcompound);
+                        tileentity.load(nbttagcompound);
                         tileentity.update();
                         world.notify(blockposition, iblockdata, iblockdata, 3);
                         icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 1);

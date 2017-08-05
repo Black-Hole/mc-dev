@@ -153,4 +153,6 @@ public interface PacketListenerPlayOut extends PacketListener {
     void a(PacketPlayOutAdvancements packetplayoutadvancements);
 
     void a(PacketPlayOutSelectAdvancementTab packetplayoutselectadvancementtab);
+
+    void a(PacketPlayOutAutoRecipe packetplayoutautorecipe);
 }

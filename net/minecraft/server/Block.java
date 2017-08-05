@@ -530,6 +530,14 @@ public class Block {
         return new ItemStack(Item.getItemOf(this), 1, this.getDropData(iblockdata));
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        nonnulllist.add(new ItemStack(this));
+    }
+
+    public CreativeModeTab q() {
+        return this.creativeTab;
+    }
+
     public Block a(CreativeModeTab creativemodetab) {
         this.creativeTab = creativemodetab;
         return this;

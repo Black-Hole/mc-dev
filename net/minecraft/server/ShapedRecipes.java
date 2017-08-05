@@ -49,6 +49,10 @@ public class ShapedRecipes implements IRecipe {
         return nonnulllist;
     }
 
+    public NonNullList<RecipeItemStack> d() {
+        return this.items;
+    }
+
     public boolean a(InventoryCrafting inventorycrafting, World world) {
         for (int i = 0; i <= 3 - this.width; ++i) {
             for (int j = 0; j <= 3 - this.height; ++j) {
@@ -91,6 +95,14 @@ public class ShapedRecipes implements IRecipe {
 
     public ItemStack craftItem(InventoryCrafting inventorycrafting) {
         return this.b().cloneItemStack();
+    }
+
+    public int f() {
+        return this.width;
+    }
+
+    public int g() {
+        return this.height;
     }
 
     public static ShapedRecipes a(JsonObject jsonobject) {

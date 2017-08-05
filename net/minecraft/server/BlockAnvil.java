@@ -65,6 +65,12 @@ public class BlockAnvil extends BlockFalling {
         return enumdirection.k() == EnumDirection.EnumAxis.X ? BlockAnvil.c : BlockAnvil.d;
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        nonnulllist.add(new ItemStack(this));
+        nonnulllist.add(new ItemStack(this, 1, 1));
+        nonnulllist.add(new ItemStack(this, 1, 2));
+    }
+
     protected void a(EntityFallingBlock entityfallingblock) {
         entityfallingblock.a(true);
     }

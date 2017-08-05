@@ -14,6 +14,18 @@ public class BlockSandStone extends Block {
         return ((BlockSandStone.EnumSandstoneVariant) iblockdata.get(BlockSandStone.TYPE)).a();
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        BlockSandStone.EnumSandstoneVariant[] ablocksandstone_enumsandstonevariant = BlockSandStone.EnumSandstoneVariant.values();
+        int i = ablocksandstone_enumsandstonevariant.length;
+
+        for (int j = 0; j < i; ++j) {
+            BlockSandStone.EnumSandstoneVariant blocksandstone_enumsandstonevariant = ablocksandstone_enumsandstonevariant[j];
+
+            nonnulllist.add(new ItemStack(this, 1, blocksandstone_enumsandstonevariant.a()));
+        }
+
+    }
+
     public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return MaterialMapColor.e;
     }

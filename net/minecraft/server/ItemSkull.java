@@ -83,6 +83,15 @@ public class ItemSkull extends Item {
         }
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        if (this.a(creativemodetab)) {
+            for (int i = 0; i < ItemSkull.a.length; ++i) {
+                nonnulllist.add(new ItemStack(this, 1, i));
+            }
+        }
+
+    }
+
     public int filterData(int i) {
         return i;
     }

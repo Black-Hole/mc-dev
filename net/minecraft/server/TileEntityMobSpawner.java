@@ -52,8 +52,8 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
         });
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        super.a(nbttagcompound);
+    public void load(NBTTagCompound nbttagcompound) {
+        super.load(nbttagcompound);
         this.a.a(nbttagcompound);
     }
 

@@ -23,6 +23,10 @@ public class ShapelessRecipes implements IRecipe {
         return this.result;
     }
 
+    public NonNullList<RecipeItemStack> d() {
+        return this.ingredients;
+    }
+
     public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
         NonNullList nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
 

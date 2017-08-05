@@ -239,6 +239,24 @@ public class Item {
         return 0;
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        if (this.a(creativemodetab)) {
+            nonnulllist.add(new ItemStack(this));
+        }
+
+    }
+
+    protected boolean a(CreativeModeTab creativemodetab) {
+        CreativeModeTab creativemodetab1 = this.b();
+
+        return creativemodetab1 != null && (creativemodetab == CreativeModeTab.g || creativemodetab == creativemodetab1);
+    }
+
+    @Nullable
+    public CreativeModeTab b() {
+        return this.n;
+    }
+
     public Item b(CreativeModeTab creativemodetab) {
         this.n = creativemodetab;
         return this;

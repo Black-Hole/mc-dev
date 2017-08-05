@@ -69,4 +69,19 @@ public class ItemPotion extends Item {
     public String b(ItemStack itemstack) {
         return LocaleI18n.get(PotionUtil.d(itemstack).b("potion.effect."));
     }
+
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        if (this.a(creativemodetab)) {
+            Iterator iterator = PotionRegistry.a.iterator();
+
+            while (iterator.hasNext()) {
+                PotionRegistry potionregistry = (PotionRegistry) iterator.next();
+
+                if (potionregistry != Potions.EMPTY) {
+                    nonnulllist.add(PotionUtil.a(new ItemStack(this), potionregistry));
+                }
+            }
+        }
+
+    }
 }

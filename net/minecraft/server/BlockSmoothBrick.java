@@ -18,6 +18,18 @@ public class BlockSmoothBrick extends Block {
         return ((BlockSmoothBrick.EnumStonebrickType) iblockdata.get(BlockSmoothBrick.VARIANT)).a();
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        BlockSmoothBrick.EnumStonebrickType[] ablocksmoothbrick_enumstonebricktype = BlockSmoothBrick.EnumStonebrickType.values();
+        int i = ablocksmoothbrick_enumstonebricktype.length;
+
+        for (int j = 0; j < i; ++j) {
+            BlockSmoothBrick.EnumStonebrickType blocksmoothbrick_enumstonebricktype = ablocksmoothbrick_enumstonebricktype[j];
+
+            nonnulllist.add(new ItemStack(this, 1, blocksmoothbrick_enumstonebricktype.a()));
+        }
+
+    }
+
     public IBlockData fromLegacyData(int i) {
         return this.getBlockData().set(BlockSmoothBrick.VARIANT, BlockSmoothBrick.EnumStonebrickType.a(i));
     }

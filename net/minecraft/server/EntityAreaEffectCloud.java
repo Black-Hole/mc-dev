@@ -286,7 +286,7 @@ public class EntityAreaEffectCloud extends Entity {
                                         MobEffect mobeffect1 = (MobEffect) iterator3.next();
 
                                         if (mobeffect1.getMobEffect().isInstant()) {
-                                            mobeffect1.getMobEffect().applyInstantEffect(this, this.y(), entityliving, mobeffect1.getAmplifier(), 0.5D);
+                                            mobeffect1.getMobEffect().applyInstantEffect(this, this.getSource(), entityliving, mobeffect1.getAmplifier(), 0.5D);
                                         } else {
                                             entityliving.addEffect(new MobEffect(mobeffect1));
                                         }
@@ -337,7 +337,7 @@ public class EntityAreaEffectCloud extends Entity {
     }
 
     @Nullable
-    public EntityLiving y() {
+    public EntityLiving getSource() {
         if (this.aB == null && this.aC != null && this.world instanceof WorldServer) {
             Entity entity = ((WorldServer) this.world).getEntity(this.aC);
 
@@ -440,7 +440,7 @@ public class EntityAreaEffectCloud extends Entity {
         super.a(datawatcherobject);
     }
 
-    public EnumPistonReaction o_() {
+    public EnumPistonReaction getPushReaction() {
         return EnumPistonReaction.IGNORE;
     }
 }

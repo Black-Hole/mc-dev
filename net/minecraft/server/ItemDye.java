@@ -98,4 +98,13 @@ public class ItemDye extends Item {
             return false;
         }
     }
+
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        if (this.a(creativemodetab)) {
+            for (int i = 0; i < 16; ++i) {
+                nonnulllist.add(new ItemStack(this, 1, i));
+            }
+        }
+
+    }
 }

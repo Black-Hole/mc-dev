@@ -11,4 +11,12 @@ public class ItemCoal extends Item {
     public String a(ItemStack itemstack) {
         return itemstack.getData() == 1 ? "item.charcoal" : "item.coal";
     }
+
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        if (this.a(creativemodetab)) {
+            nonnulllist.add(new ItemStack(this, 1, 0));
+            nonnulllist.add(new ItemStack(this, 1, 1));
+        }
+
+    }
 }

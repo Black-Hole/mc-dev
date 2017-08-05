@@ -41,6 +41,11 @@ public class BlockLog2 extends BlockLogAbstract {
         }
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        nonnulllist.add(new ItemStack(this, 1, BlockWood.EnumLogVariant.ACACIA.a() - 4));
+        nonnulllist.add(new ItemStack(this, 1, BlockWood.EnumLogVariant.DARK_OAK.a() - 4));
+    }
+
     public IBlockData fromLegacyData(int i) {
         IBlockData iblockdata = this.getBlockData().set(BlockLog2.VARIANT, BlockWood.EnumLogVariant.a((i & 3) + 4));
 

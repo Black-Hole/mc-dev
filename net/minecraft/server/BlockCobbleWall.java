@@ -93,6 +93,18 @@ public class BlockCobbleWall extends Block {
         return Block.c(block) || block == Blocks.BARRIER || block == Blocks.MELON_BLOCK || block == Blocks.PUMPKIN || block == Blocks.LIT_PUMPKIN;
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        BlockCobbleWall.EnumCobbleVariant[] ablockcobblewall_enumcobblevariant = BlockCobbleWall.EnumCobbleVariant.values();
+        int i = ablockcobblewall_enumcobblevariant.length;
+
+        for (int j = 0; j < i; ++j) {
+            BlockCobbleWall.EnumCobbleVariant blockcobblewall_enumcobblevariant = ablockcobblewall_enumcobblevariant[j];
+
+            nonnulllist.add(new ItemStack(this, 1, blockcobblewall_enumcobblevariant.a()));
+        }
+
+    }
+
     public int getDropData(IBlockData iblockdata) {
         return ((BlockCobbleWall.EnumCobbleVariant) iblockdata.get(BlockCobbleWall.VARIANT)).a();
     }

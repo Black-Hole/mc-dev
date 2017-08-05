@@ -70,7 +70,7 @@ public class ItemBlock extends Item {
                     nbttagcompound1.setInt("y", blockposition.getY());
                     nbttagcompound1.setInt("z", blockposition.getZ());
                     if (!nbttagcompound1.equals(nbttagcompound2)) {
-                        tileentity.a(nbttagcompound1);
+                        tileentity.load(nbttagcompound1);
                         tileentity.update();
                         return true;
                     }
@@ -87,6 +87,17 @@ public class ItemBlock extends Item {
 
     public String getName() {
         return this.a.a();
+    }
+
+    public CreativeModeTab b() {
+        return this.a.q();
+    }
+
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        if (this.a(creativemodetab)) {
+            this.a.a(creativemodetab, nonnulllist);
+        }
+
     }
 
     public Block getBlock() {

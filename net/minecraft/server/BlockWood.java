@@ -14,6 +14,18 @@ public class BlockWood extends Block {
         return ((BlockWood.EnumLogVariant) iblockdata.get(BlockWood.VARIANT)).a();
     }
 
+    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
+        BlockWood.EnumLogVariant[] ablockwood_enumlogvariant = BlockWood.EnumLogVariant.values();
+        int i = ablockwood_enumlogvariant.length;
+
+        for (int j = 0; j < i; ++j) {
+            BlockWood.EnumLogVariant blockwood_enumlogvariant = ablockwood_enumlogvariant[j];
+
+            nonnulllist.add(new ItemStack(this, 1, blockwood_enumlogvariant.a()));
+        }
+
+    }
+
     public IBlockData fromLegacyData(int i) {
         return this.getBlockData().set(BlockWood.VARIANT, BlockWood.EnumLogVariant.a(i));
     }
