@@ -236,7 +236,7 @@ public class WorldGenStrongholdPieces {
 
         public boolean a(World world, Random random, StructureBoundingBox structureboundingbox) {
             this.a(world, structureboundingbox, 0, 0, 0, 10, 7, 15, false, random, WorldGenStrongholdPieces.e);
-            this.a(world, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.GRATES, 4, 1, 0);
+            this.a(world, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.GRATES, 4, 1, 0);
             byte b0 = 6;
 
             this.a(world, structureboundingbox, 1, b0, 1, 1, b0, 14, false, random, WorldGenStrongholdPieces.e);
@@ -875,7 +875,7 @@ public class WorldGenStrongholdPieces {
             } else {
                 this.a(world, structureboundingbox, 0, 0, 0, 4, 10, 7, true, random, WorldGenStrongholdPieces.e);
                 this.a(world, random, structureboundingbox, this.d, 1, 7, 0);
-                this.a(world, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING, 1, 1, 7);
+                this.a(world, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING, 1, 1, 7);
                 IBlockData iblockdata = Blocks.STONE_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.SOUTH);
 
                 for (int i = 0; i < 6; ++i) {
@@ -933,7 +933,7 @@ public class WorldGenStrongholdPieces {
             } else {
                 this.a(world, structureboundingbox, 0, 0, 0, 4, 4, 6, true, random, WorldGenStrongholdPieces.e);
                 this.a(world, random, structureboundingbox, this.d, 1, 1, 0);
-                this.a(world, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING, 1, 1, 6);
+                this.a(world, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING, 1, 1, 6);
                 this.a(world, structureboundingbox, 3, 1, 2, 3, 1, 4, Blocks.STONEBRICK.getBlockData(), Blocks.STONEBRICK.getBlockData(), false);
                 this.a(world, Blocks.STONE_SLAB.fromLegacyData(BlockDoubleStepAbstract.EnumStoneSlabVariant.SMOOTHBRICK.a()), 3, 1, 1, structureboundingbox);
                 this.a(world, Blocks.STONE_SLAB.fromLegacyData(BlockDoubleStepAbstract.EnumStoneSlabVariant.SMOOTHBRICK.a()), 3, 1, 5, structureboundingbox);
@@ -1006,7 +1006,7 @@ public class WorldGenStrongholdPieces {
             } else {
                 this.a(world, structureboundingbox, 0, 0, 0, 4, 4, 6, true, random, WorldGenStrongholdPieces.e);
                 this.a(world, random, structureboundingbox, this.d, 1, 1, 0);
-                this.a(world, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING, 1, 1, 6);
+                this.a(world, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING, 1, 1, 6);
                 IBlockData iblockdata = Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.EAST);
                 IBlockData iblockdata1 = Blocks.TORCH.getBlockData().set(BlockTorch.FACING, EnumDirection.WEST);
 
@@ -1050,7 +1050,7 @@ public class WorldGenStrongholdPieces {
             super(i);
             this.a = true;
             this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
-            this.d = WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING;
+            this.d = WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING;
             if (this.f().k() == EnumDirection.EnumAxis.Z) {
                 this.l = new StructureBoundingBox(j, 64, k, j + 5 - 1, 74, k + 5 - 1);
             } else {
@@ -1097,7 +1097,7 @@ public class WorldGenStrongholdPieces {
             } else {
                 this.a(world, structureboundingbox, 0, 0, 0, 4, 10, 4, true, random, WorldGenStrongholdPieces.e);
                 this.a(world, random, structureboundingbox, this.d, 1, 7, 0);
-                this.a(world, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING, 1, 1, 4);
+                this.a(world, random, structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING, 1, 1, 4);
                 this.a(world, Blocks.STONEBRICK.getBlockData(), 2, 6, 1, structureboundingbox);
                 this.a(world, Blocks.STONEBRICK.getBlockData(), 1, 5, 1, structureboundingbox);
                 this.a(world, Blocks.STONE_SLAB.fromLegacyData(BlockDoubleStepAbstract.EnumStoneSlabVariant.STONE.a()), 1, 6, 1, structureboundingbox);
@@ -1197,15 +1197,15 @@ public class WorldGenStrongholdPieces {
 
     abstract static class WorldGenStrongholdPiece extends StructurePiece {
 
-        protected WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType d;
+        protected WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType d;
 
         public WorldGenStrongholdPiece() {
-            this.d = WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING;
+            this.d = WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING;
         }
 
         protected WorldGenStrongholdPiece(int i) {
             super(i);
-            this.d = WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING;
+            this.d = WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING;
         }
 
         protected void a(NBTTagCompound nbttagcompound) {
@@ -1213,11 +1213,11 @@ public class WorldGenStrongholdPieces {
         }
 
         protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
-            this.d = WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.valueOf(nbttagcompound.getString("EntryDoor"));
+            this.d = WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.valueOf(nbttagcompound.getString("EntryDoor"));
         }
 
-        protected void a(World world, Random random, StructureBoundingBox structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType worldgenstrongholdpieces_worldgenstrongholdpiece_worldgenstrongholdpiece$worldgenstrongholddoortype, int i, int j, int k) {
-            switch (worldgenstrongholdpieces_worldgenstrongholdpiece_worldgenstrongholdpiece$worldgenstrongholddoortype) {
+        protected void a(World world, Random random, StructureBoundingBox structureboundingbox, WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType worldgenstrongholdpieces_worldgenstrongholdpiece_worldgenstrongholddoortype, int i, int j, int k) {
+            switch (worldgenstrongholdpieces_worldgenstrongholdpiece_worldgenstrongholddoortype) {
             case OPENING:
                 this.a(world, structureboundingbox, i, j, k, i + 3 - 1, j + 3 - 1, k, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
                 break;
@@ -1262,23 +1262,23 @@ public class WorldGenStrongholdPieces {
 
         }
 
-        protected WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType a(Random random) {
+        protected WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType a(Random random) {
             int i = random.nextInt(5);
 
             switch (i) {
             case 0:
             case 1:
             default:
-                return WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.OPENING;
+                return WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.OPENING;
 
             case 2:
-                return WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.WOOD_DOOR;
+                return WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.WOOD_DOOR;
 
             case 3:
-                return WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.GRATES;
+                return WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.GRATES;
 
             case 4:
-                return WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdPiece$WorldGenStrongholdDoorType.IRON_DOOR;
+                return WorldGenStrongholdPieces.WorldGenStrongholdPiece.WorldGenStrongholdDoorType.IRON_DOOR;
             }
         }
 
@@ -1355,11 +1355,11 @@ public class WorldGenStrongholdPieces {
             return structureboundingbox != null && structureboundingbox.b > 10;
         }
 
-        public static enum WorldGenStrongholdPiece$WorldGenStrongholdDoorType {
+        public static enum WorldGenStrongholdDoorType {
 
             OPENING, WOOD_DOOR, GRATES, IRON_DOOR;
 
-            private WorldGenStrongholdPiece$WorldGenStrongholdDoorType() {}
+            private WorldGenStrongholdDoorType() {}
         }
     }
 

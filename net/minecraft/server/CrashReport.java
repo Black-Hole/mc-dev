@@ -38,7 +38,7 @@ public class CrashReport {
     private void h() {
         this.d.a("Minecraft Version", new CrashReportCallable() {
             public String a() {
-                return "1.12.1";
+                return "1.12.2";
             }
 
             public Object call() throws Exception {

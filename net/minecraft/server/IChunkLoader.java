@@ -8,7 +8,7 @@ public interface IChunkLoader {
     @Nullable
     Chunk a(World world, int i, int j) throws IOException;
 
-    void a(World world, Chunk chunk) throws IOException, ExceptionWorldConflict;
+    void saveChunk(World world, Chunk chunk) throws IOException, ExceptionWorldConflict;
 
     void b(World world, Chunk chunk) throws IOException;
 

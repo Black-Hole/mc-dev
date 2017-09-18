@@ -18,7 +18,7 @@ public class BlockGrassPath extends Block {
 
     private void b(World world, BlockPosition blockposition) {
         if (world.getType(blockposition.up()).getMaterial().isBuildable()) {
-            world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
+            BlockSoil.b(world, blockposition);
         }
 
     }

@@ -1,8 +1,10 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class EntityEnderPearl extends EntityProjectile {
 
-    private EntityLiving d;
+    private EntityLiving e;
 
     public EntityEnderPearl(World world) {
         super(world);
@@ -10,7 +12,7 @@ public class EntityEnderPearl extends EntityProjectile {
 
     public EntityEnderPearl(World world, EntityLiving entityliving) {
         super(world, entityliving);
-        this.d = entityliving;
+        this.e = entityliving;
     }
 
     public static void a(DataConverterManager dataconvertermanager) {
@@ -21,7 +23,7 @@ public class EntityEnderPearl extends EntityProjectile {
         EntityLiving entityliving = this.getShooter();
 
         if (movingobjectposition.entity != null) {
-            if (movingobjectposition.entity == this.d) {
+            if (movingobjectposition.entity == this.e) {
                 return;
             }
 
@@ -94,5 +96,14 @@ public class EntityEnderPearl extends EntityProjectile {
             super.B_();
         }
 
+    }
+
+    @Nullable
+    public Entity b(int i) {
+        if (this.shooter.dimension != i) {
+            this.shooter = null;
+        }
+
+        return super.b(i);
     }
 }

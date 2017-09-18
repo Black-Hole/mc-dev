@@ -129,9 +129,9 @@ public class ServerPing {
             return this.b;
         }
 
-        public static class ServerData$Serializer implements JsonDeserializer<ServerPing.ServerData>, JsonSerializer<ServerPing.ServerData> {
+        public static class Serializer implements JsonDeserializer<ServerPing.ServerData>, JsonSerializer<ServerPing.ServerData> {
 
-            public ServerData$Serializer() {}
+            public Serializer() {}
 
             public ServerPing.ServerData a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
                 JsonObject jsonobject = ChatDeserializer.m(jsonelement, "version");
@@ -184,9 +184,9 @@ public class ServerPing {
             this.c = agameprofile;
         }
 
-        public static class ServerPingPlayerSample$Serializer implements JsonDeserializer<ServerPing.ServerPingPlayerSample>, JsonSerializer<ServerPing.ServerPingPlayerSample> {
+        public static class Serializer implements JsonDeserializer<ServerPing.ServerPingPlayerSample>, JsonSerializer<ServerPing.ServerPingPlayerSample> {
 
-            public ServerPingPlayerSample$Serializer() {}
+            public Serializer() {}
 
             public ServerPing.ServerPingPlayerSample a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
                 JsonObject jsonobject = ChatDeserializer.m(jsonelement, "players");

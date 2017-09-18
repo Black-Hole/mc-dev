@@ -26,7 +26,7 @@ public class AutoRecipe {
             this.c = entityplayer;
             this.d = irecipe;
             this.e = flag;
-            this.h = entityplayer.activeContainer.c;
+            this.h = entityplayer.activeContainer.slots;
             Container container = entityplayer.activeContainer;
 
             this.f = null;

@@ -1137,6 +1137,12 @@ public abstract class World implements IBlockAccess {
         }
 
         this.methodProfiler.c("blockEntities");
+        if (!this.tileEntityListUnload.isEmpty()) {
+            this.tileEntityListTick.removeAll(this.tileEntityListUnload);
+            this.tileEntityList.removeAll(this.tileEntityListUnload);
+            this.tileEntityListUnload.clear();
+        }
+
         this.O = true;
         Iterator iterator = this.tileEntityListTick.iterator();
 
@@ -1172,12 +1178,6 @@ public abstract class World implements IBlockAccess {
         }
 
         this.O = false;
-        if (!this.tileEntityListUnload.isEmpty()) {
-            this.tileEntityListTick.removeAll(this.tileEntityListUnload);
-            this.tileEntityList.removeAll(this.tileEntityListUnload);
-            this.tileEntityListUnload.clear();
-        }
-
         this.methodProfiler.c("pendingBlockEntities");
         if (!this.b.isEmpty()) {
             for (int i1 = 0; i1 < this.b.size(); ++i1) {

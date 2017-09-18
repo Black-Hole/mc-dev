@@ -238,13 +238,13 @@ public class ContainerEnchantTable extends Container {
         }
     }
 
-    public boolean a(EntityHuman entityhuman) {
+    public boolean canUse(EntityHuman entityhuman) {
         return this.world.getType(this.position).getBlock() != Blocks.ENCHANTING_TABLE ? false : entityhuman.d((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
-    public ItemStack b(EntityHuman entityhuman, int i) {
+    public ItemStack shiftClick(EntityHuman entityhuman, int i) {
         ItemStack itemstack = ItemStack.a;
-        Slot slot = (Slot) this.c.get(i);
+        Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
@@ -263,15 +263,15 @@ public class ContainerEnchantTable extends Container {
                     return ItemStack.a;
                 }
             } else {
-                if (((Slot) this.c.get(0)).hasItem() || !((Slot) this.c.get(0)).isAllowed(itemstack1)) {
+                if (((Slot) this.slots.get(0)).hasItem() || !((Slot) this.slots.get(0)).isAllowed(itemstack1)) {
                     return ItemStack.a;
                 }
 
                 if (itemstack1.hasTag() && itemstack1.getCount() == 1) {
-                    ((Slot) this.c.get(0)).set(itemstack1.cloneItemStack());
+                    ((Slot) this.slots.get(0)).set(itemstack1.cloneItemStack());
                     itemstack1.setCount(0);
                 } else if (!itemstack1.isEmpty()) {
-                    ((Slot) this.c.get(0)).set(new ItemStack(itemstack1.getItem(), 1, itemstack1.getData()));
+                    ((Slot) this.slots.get(0)).set(new ItemStack(itemstack1.getItem(), 1, itemstack1.getData()));
                     itemstack1.subtract(1);
                 }
             }

@@ -32,20 +32,20 @@ public class ContainerChest extends Container {
 
     }
 
-    public boolean a(EntityHuman entityhuman) {
+    public boolean canUse(EntityHuman entityhuman) {
         return this.container.a(entityhuman);
     }
 
-    public ItemStack b(EntityHuman entityhuman, int i) {
+    public ItemStack shiftClick(EntityHuman entityhuman, int i) {
         ItemStack itemstack = ItemStack.a;
-        Slot slot = (Slot) this.c.get(i);
+        Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
 
             itemstack = itemstack1.cloneItemStack();
             if (i < this.f * 9) {
-                if (!this.a(itemstack1, this.f * 9, this.c.size(), true)) {
+                if (!this.a(itemstack1, this.f * 9, this.slots.size(), true)) {
                     return ItemStack.a;
                 }
             } else if (!this.a(itemstack1, 0, this.f * 9, false)) {

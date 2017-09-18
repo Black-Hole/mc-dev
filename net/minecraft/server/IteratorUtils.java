@@ -55,21 +55,21 @@ public class IteratorUtils {
         }
 
         public Iterator<T[]> iterator() {
-            return (Iterator) (this.b.length <= 0 ? Collections.singletonList((Object[]) IteratorUtils.b(this.a, 0)).iterator() : new IteratorUtils.ClassIterable.ClassIterable$ClassIterator(this.a, this.b, null));
+            return (Iterator) (this.b.length <= 0 ? Collections.singletonList((Object[]) IteratorUtils.b(this.a, 0)).iterator() : new IteratorUtils.ClassIterable.ClassIterator(this.a, this.b, null));
         }
 
         ClassIterable(Class oclass, Iterable[] aiterable, Object object) {
             this(oclass, aiterable);
         }
 
-        static class ClassIterable$ClassIterator<T> extends UnmodifiableIterator<T[]> {
+        static class ClassIterator<T> extends UnmodifiableIterator<T[]> {
 
             private int a;
             private final Iterable<? extends T>[] b;
             private final Iterator<? extends T>[] c;
             private final T[] d;
 
-            private ClassIterable$ClassIterator(Class<T> oclass, Iterable<? extends T>[] aiterable) {
+            private ClassIterator(Class<T> oclass, Iterable<? extends T>[] aiterable) {
                 this.a = -2;
                 this.b = aiterable;
                 this.c = (Iterator[]) IteratorUtils.b(Iterator.class, this.b.length);
@@ -147,7 +147,7 @@ public class IteratorUtils {
                 return this.a();
             }
 
-            ClassIterable$ClassIterator(Class oclass, Iterable[] aiterable, Object object) {
+            ClassIterator(Class oclass, Iterable[] aiterable, Object object) {
                 this(oclass, aiterable);
             }
         }

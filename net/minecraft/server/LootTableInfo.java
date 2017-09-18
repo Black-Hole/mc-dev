@@ -103,9 +103,9 @@ public class LootTableInfo {
             throw new IllegalArgumentException("Invalid entity target " + s);
         }
 
-        public static class b$a extends TypeAdapter<LootTableInfo.EntityTarget> {
+        public static class a extends TypeAdapter<LootTableInfo.EntityTarget> {
 
-            public b$a() {}
+            public a() {}
 
             public void a(JsonWriter jsonwriter, LootTableInfo.EntityTarget loottableinfo_entitytarget) throws IOException {
                 jsonwriter.value(loottableinfo_entitytarget.d);

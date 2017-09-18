@@ -300,13 +300,13 @@ public class ContainerAnvil extends Container {
         }
     }
 
-    public boolean a(EntityHuman entityhuman) {
+    public boolean canUse(EntityHuman entityhuman) {
         return this.i.getType(this.j).getBlock() != Blocks.ANVIL ? false : entityhuman.d((double) this.j.getX() + 0.5D, (double) this.j.getY() + 0.5D, (double) this.j.getZ() + 0.5D) <= 64.0D;
     }
 
-    public ItemStack b(EntityHuman entityhuman, int i) {
+    public ItemStack shiftClick(EntityHuman entityhuman, int i) {
         ItemStack itemstack = ItemStack.a;
-        Slot slot = (Slot) this.c.get(i);
+        Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();

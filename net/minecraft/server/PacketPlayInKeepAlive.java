@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class PacketPlayInKeepAlive implements Packet<PacketListenerPlayIn> {
 
-    private int a;
+    private long a;
 
     public PacketPlayInKeepAlive() {}
 
@@ -13,14 +13,14 @@ public class PacketPlayInKeepAlive implements Packet<PacketListenerPlayIn> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.readLong();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
+        packetdataserializer.writeLong(this.a);
     }
 
-    public int a() {
+    public long a() {
         return this.a;
     }
 }

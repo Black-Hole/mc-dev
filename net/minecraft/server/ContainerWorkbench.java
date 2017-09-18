@@ -46,13 +46,13 @@ public class ContainerWorkbench extends Container {
         }
     }
 
-    public boolean a(EntityHuman entityhuman) {
+    public boolean canUse(EntityHuman entityhuman) {
         return this.g.getType(this.h).getBlock() != Blocks.CRAFTING_TABLE ? false : entityhuman.d((double) this.h.getX() + 0.5D, (double) this.h.getY() + 0.5D, (double) this.h.getZ() + 0.5D) <= 64.0D;
     }
 
-    public ItemStack b(EntityHuman entityhuman, int i) {
+    public ItemStack shiftClick(EntityHuman entityhuman, int i) {
         ItemStack itemstack = ItemStack.a;
-        Slot slot = (Slot) this.c.get(i);
+        Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();

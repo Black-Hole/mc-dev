@@ -16,7 +16,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
     public String shooterName;
     private int au;
     private int av;
-    public Entity c;
+    public Entity d;
     private int aw;
 
     public EntityProjectile(World world) {
@@ -125,10 +125,10 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             Entity entity1 = (Entity) list.get(i);
 
             if (entity1.isInteractable()) {
-                if (entity1 == this.c) {
+                if (entity1 == this.d) {
                     flag = true;
-                } else if (this.shooter != null && this.ticksLived < 2 && this.c == null) {
-                    this.c = entity1;
+                } else if (this.shooter != null && this.ticksLived < 2 && this.d == null) {
+                    this.d = entity1;
                     flag = true;
                 } else {
                     flag = false;
@@ -147,11 +147,11 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             }
         }
 
-        if (this.c != null) {
+        if (this.d != null) {
             if (flag) {
                 this.aw = 2;
             } else if (this.aw-- <= 0) {
-                this.c = null;
+                this.d = null;
             }
         }
 

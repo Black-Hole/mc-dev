@@ -36,7 +36,7 @@ public class BlockEnderPortal extends BlockTileEntity {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (!entity.isPassenger() && !entity.isVehicle() && entity.bf() && !world.isClientSide && entity.getBoundingBox().c(iblockdata.e(world, blockposition).a(blockposition))) {
+        if (!world.isClientSide && !entity.isPassenger() && !entity.isVehicle() && entity.bf() && entity.getBoundingBox().c(iblockdata.e(world, blockposition).a(blockposition))) {
             entity.b(1);
         }
 

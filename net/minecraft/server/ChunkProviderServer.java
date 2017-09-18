@@ -136,7 +136,7 @@ public class ChunkProviderServer implements IChunkProvider {
     public void saveChunk(Chunk chunk) {
         try {
             chunk.setLastSaved(this.world.getTime());
-            this.chunkLoader.a(this.world, chunk);
+            this.chunkLoader.saveChunk(this.world, chunk);
         } catch (IOException ioexception) {
             ChunkProviderServer.a.error("Couldn\'t save chunk", ioexception);
         } catch (ExceptionWorldConflict exceptionworldconflict) {

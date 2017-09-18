@@ -62,13 +62,13 @@ public class ContainerFurnace extends Container {
         this.g = this.furnace.getProperty(3);
     }
 
-    public boolean a(EntityHuman entityhuman) {
+    public boolean canUse(EntityHuman entityhuman) {
         return this.furnace.a(entityhuman);
     }
 
-    public ItemStack b(EntityHuman entityhuman, int i) {
+    public ItemStack shiftClick(EntityHuman entityhuman, int i) {
         ItemStack itemstack = ItemStack.a;
-        Slot slot = (Slot) this.c.get(i);
+        Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();

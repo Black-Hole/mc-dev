@@ -68,13 +68,13 @@ public class ContainerPlayer extends Container {
         }
     }
 
-    public boolean a(EntityHuman entityhuman) {
+    public boolean canUse(EntityHuman entityhuman) {
         return true;
     }
 
-    public ItemStack b(EntityHuman entityhuman, int i) {
+    public ItemStack shiftClick(EntityHuman entityhuman, int i) {
         ItemStack itemstack = ItemStack.a;
-        Slot slot = (Slot) this.c.get(i);
+        Slot slot = (Slot) this.slots.get(i);
 
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
@@ -96,13 +96,13 @@ public class ContainerPlayer extends Container {
                 if (!this.a(itemstack1, 9, 45, false)) {
                     return ItemStack.a;
                 }
-            } else if (enumitemslot.a() == EnumItemSlot.Function.ARMOR && !((Slot) this.c.get(8 - enumitemslot.b())).hasItem()) {
+            } else if (enumitemslot.a() == EnumItemSlot.Function.ARMOR && !((Slot) this.slots.get(8 - enumitemslot.b())).hasItem()) {
                 int j = 8 - enumitemslot.b();
 
                 if (!this.a(itemstack1, j, j + 1, false)) {
                     return ItemStack.a;
                 }
-            } else if (enumitemslot == EnumItemSlot.OFFHAND && !((Slot) this.c.get(45)).hasItem()) {
+            } else if (enumitemslot == EnumItemSlot.OFFHAND && !((Slot) this.slots.get(45)).hasItem()) {
                 if (!this.a(itemstack1, 45, 46, false)) {
                     return ItemStack.a;
                 }

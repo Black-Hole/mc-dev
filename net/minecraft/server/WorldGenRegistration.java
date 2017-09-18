@@ -172,7 +172,7 @@ public class WorldGenRegistration {
         private boolean f;
         private boolean g;
         private boolean h;
-        private static final WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece i = new WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemple$WorldGenJungleTemplePiece(null);
+        private static final WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemplePiece i = new WorldGenRegistration.WorldGenJungleTemple.WorldGenJungleTemplePiece(null);
 
         public WorldGenJungleTemple() {}
 
@@ -381,9 +381,9 @@ public class WorldGenRegistration {
             }
         }
 
-        static class WorldGenJungleTemple$WorldGenJungleTemplePiece extends StructurePiece.StructurePieceBlockSelector {
+        static class WorldGenJungleTemplePiece extends StructurePiece.StructurePieceBlockSelector {
 
-            private WorldGenJungleTemple$WorldGenJungleTemplePiece() {}
+            private WorldGenJungleTemplePiece() {}
 
             public void a(Random random, int i, int j, int k, boolean flag) {
                 if (random.nextFloat() < 0.4F) {
@@ -394,7 +394,7 @@ public class WorldGenRegistration {
 
             }
 
-            WorldGenJungleTemple$WorldGenJungleTemplePiece(Object object) {
+            WorldGenJungleTemplePiece(Object object) {
                 this();
             }
         }

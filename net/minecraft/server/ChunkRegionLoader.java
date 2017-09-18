@@ -80,7 +80,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         }
     }
 
-    public void a(World world, Chunk chunk) throws IOException, ExceptionWorldConflict {
+    public void saveChunk(World world, Chunk chunk) throws IOException, ExceptionWorldConflict {
         world.checkSession();
 
         try {
@@ -88,8 +88,8 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
             nbttagcompound.set("Level", nbttagcompound1);
-            nbttagcompound.setInt("DataVersion", 1241);
-            this.a(chunk, world, nbttagcompound1);
+            nbttagcompound.setInt("DataVersion", 1343);
+            this.saveBody(chunk, world, nbttagcompound1);
             this.a(chunk.k(), nbttagcompound);
         } catch (Exception exception) {
             ChunkRegionLoader.a.error("Failed to save chunk", exception);
@@ -194,7 +194,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         });
     }
 
-    private void a(Chunk chunk, World world, NBTTagCompound nbttagcompound) {
+    private void saveBody(Chunk chunk, World world, NBTTagCompound nbttagcompound) {
         nbttagcompound.setInt("xPos", chunk.locX);
         nbttagcompound.setInt("zPos", chunk.locZ);
         nbttagcompound.setLong("LastUpdate", world.getTime());

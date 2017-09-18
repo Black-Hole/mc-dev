@@ -22,8 +22,8 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     private final MinecraftServer minecraftServer;
     public EntityPlayer player;
     private int e;
-    private int f;
-    private long g;
+    private long f;
+    private boolean g;
     private long h;
     private int chatThrottle;
     private int j;
@@ -102,11 +102,17 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         }
 
         this.minecraftServer.methodProfiler.a("keepAlive");
-        if ((long) this.e - this.h > 40L) {
-            this.h = (long) this.e;
-            this.g = this.d();
-            this.f = (int) this.g;
-            this.sendPacket(new PacketPlayOutKeepAlive(this.f));
+        long i = this.d();
+
+        if (i - this.f >= 15000L) {
+            if (this.g) {
+                this.disconnect(new ChatMessage("disconnect.timeout", new Object[0]));
+            } else {
+                this.g = true;
+                this.f = i;
+                this.h = i;
+                this.sendPacket(new PacketPlayOutKeepAlive(this.h));
+            }
         }
 
         this.minecraftServer.methodProfiler.b();
@@ -850,8 +856,8 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             if (this.player.isSpectator()) {
                 NonNullList nonnulllist = NonNullList.a();
 
-                for (int i = 0; i < this.player.activeContainer.c.size(); ++i) {
-                    nonnulllist.add(((Slot) this.player.activeContainer.c.get(i)).getItem());
+                for (int i = 0; i < this.player.activeContainer.slots.size(); ++i) {
+                    nonnulllist.add(((Slot) this.player.activeContainer.slots.get(i)).getItem());
                 }
 
                 this.player.a(this.player.activeContainer, nonnulllist);
@@ -870,8 +876,8 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                     this.player.activeContainer.a(this.player, false);
                     NonNullList nonnulllist1 = NonNullList.a();
 
-                    for (int j = 0; j < this.player.activeContainer.c.size(); ++j) {
-                        ItemStack itemstack1 = ((Slot) this.player.activeContainer.c.get(j)).getItem();
+                    for (int j = 0; j < this.player.activeContainer.slots.size(); ++j) {
+                        ItemStack itemstack1 = ((Slot) this.player.activeContainer.slots.get(j)).getItem();
                         ItemStack itemstack2 = itemstack1.isEmpty() ? ItemStack.a : itemstack1;
 
                         nonnulllist1.add(itemstack2);
@@ -993,10 +999,13 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     }
 
     public void a(PacketPlayInKeepAlive packetplayinkeepalive) {
-        if (packetplayinkeepalive.a() == this.f) {
-            int i = (int) (this.d() - this.g);
+        if (this.g && packetplayinkeepalive.a() == this.h) {
+            int i = (int) (this.d() - this.f);
 
             this.player.ping = (this.player.ping * 3 + i) / 4;
+            this.g = false;
+        } else if (!this.player.getName().equals(this.minecraftServer.Q())) {
+            this.disconnect(new ChatMessage("disconnect.timeout", new Object[0]));
         }
 
     }

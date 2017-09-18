@@ -9,7 +9,7 @@ public class EntitySheep extends EntityAnimal {
 
     private static final DataWatcherObject<Byte> bx = DataWatcher.a(EntitySheep.class, DataWatcherRegistry.a);
     private final InventoryCrafting container = new InventoryCrafting(new Container() {
-        public boolean a(EntityHuman entityhuman) {
+        public boolean canUse(EntityHuman entityhuman) {
             return false;
         }
     }, 2, 1);

@@ -4,11 +4,11 @@ import java.io.IOException;
 
 public class PacketPlayOutKeepAlive implements Packet<PacketListenerPlayOut> {
 
-    private int a;
+    private long a;
 
     public PacketPlayOutKeepAlive() {}
 
-    public PacketPlayOutKeepAlive(int i) {
+    public PacketPlayOutKeepAlive(long i) {
         this.a = i;
     }
 
@@ -17,10 +17,10 @@ public class PacketPlayOutKeepAlive implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.readLong();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a);
+        packetdataserializer.writeLong(this.a);
     }
 }

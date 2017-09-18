@@ -9,8 +9,8 @@ import javax.annotation.Nullable;
 
 public abstract class Container {
 
-    public NonNullList<ItemStack> b = NonNullList.a();
-    public List<Slot> c = Lists.newArrayList();
+    public NonNullList<ItemStack> items = NonNullList.a();
+    public List<Slot> slots = Lists.newArrayList();
     public int windowId;
     private int dragType = -1;
     private int g;
@@ -21,9 +21,9 @@ public abstract class Container {
     public Container() {}
 
     protected Slot a(Slot slot) {
-        slot.rawSlotIndex = this.c.size();
-        this.c.add(slot);
-        this.b.add(ItemStack.a);
+        slot.rawSlotIndex = this.slots.size();
+        this.slots.add(slot);
+        this.items.add(ItemStack.a);
         return slot;
     }
 
@@ -40,21 +40,21 @@ public abstract class Container {
     public NonNullList<ItemStack> a() {
         NonNullList nonnulllist = NonNullList.a();
 
-        for (int i = 0; i < this.c.size(); ++i) {
-            nonnulllist.add(((Slot) this.c.get(i)).getItem());
+        for (int i = 0; i < this.slots.size(); ++i) {
+            nonnulllist.add(((Slot) this.slots.get(i)).getItem());
         }
 
         return nonnulllist;
     }
 
     public void b() {
-        for (int i = 0; i < this.c.size(); ++i) {
-            ItemStack itemstack = ((Slot) this.c.get(i)).getItem();
-            ItemStack itemstack1 = (ItemStack) this.b.get(i);
+        for (int i = 0; i < this.slots.size(); ++i) {
+            ItemStack itemstack = ((Slot) this.slots.get(i)).getItem();
+            ItemStack itemstack1 = (ItemStack) this.items.get(i);
 
             if (!ItemStack.matches(itemstack1, itemstack)) {
                 itemstack1 = itemstack.isEmpty() ? ItemStack.a : itemstack.cloneItemStack();
-                this.b.set(i, itemstack1);
+                this.items.set(i, itemstack1);
 
                 for (int j = 0; j < this.listeners.size(); ++j) {
                     ((ICrafting) this.listeners.get(j)).a(this, i, itemstack1);
@@ -70,8 +70,8 @@ public abstract class Container {
 
     @Nullable
     public Slot getSlot(IInventory iinventory, int i) {
-        for (int j = 0; j < this.c.size(); ++j) {
-            Slot slot = (Slot) this.c.get(j);
+        for (int j = 0; j < this.slots.size(); ++j) {
+            Slot slot = (Slot) this.slots.get(j);
 
             if (slot.a(iinventory, i)) {
                 return slot;
@@ -82,11 +82,11 @@ public abstract class Container {
     }
 
     public Slot getSlot(int i) {
-        return (Slot) this.c.get(i);
+        return (Slot) this.slots.get(i);
     }
 
-    public ItemStack b(EntityHuman entityhuman, int i) {
-        Slot slot = (Slot) this.c.get(i);
+    public ItemStack shiftClick(EntityHuman entityhuman, int i) {
+        Slot slot = (Slot) this.slots.get(i);
 
         return slot != null ? slot.getItem() : ItemStack.a;
     }
@@ -116,7 +116,7 @@ public abstract class Container {
                     this.d();
                 }
             } else if (this.g == 1) {
-                Slot slot = (Slot) this.c.get(i);
+                Slot slot = (Slot) this.slots.get(i);
 
                 itemstack1 = playerinventory.getCarried();
                 if (slot != null && a(slot, itemstack1, true) && slot.isAllowed(itemstack1) && (this.dragType == 2 || itemstack1.getCount() > this.h.size()) && this.b(slot)) {
@@ -178,12 +178,12 @@ public abstract class Container {
                         return ItemStack.a;
                     }
 
-                    slot2 = (Slot) this.c.get(i);
+                    slot2 = (Slot) this.slots.get(i);
                     if (slot2 == null || !slot2.isAllowed(entityhuman)) {
                         return ItemStack.a;
                     }
 
-                    for (itemstack2 = this.b(entityhuman, i); !itemstack2.isEmpty() && ItemStack.c(slot2.getItem(), itemstack2); itemstack2 = this.b(entityhuman, i)) {
+                    for (itemstack2 = this.shiftClick(entityhuman, i); !itemstack2.isEmpty() && ItemStack.c(slot2.getItem(), itemstack2); itemstack2 = this.shiftClick(entityhuman, i)) {
                         itemstack = itemstack2.cloneItemStack();
                     }
                 } else {
@@ -191,7 +191,7 @@ public abstract class Container {
                         return ItemStack.a;
                     }
 
-                    slot2 = (Slot) this.c.get(i);
+                    slot2 = (Slot) this.slots.get(i);
                     if (slot2 != null) {
                         itemstack2 = slot2.getItem();
                         itemstack1 = playerinventory.getCarried();
@@ -257,7 +257,7 @@ public abstract class Container {
                     }
                 }
             } else if (inventoryclicktype == InventoryClickType.SWAP && j >= 0 && j < 9) {
-                slot2 = (Slot) this.c.get(i);
+                slot2 = (Slot) this.slots.get(i);
                 itemstack2 = playerinventory.getItem(j);
                 itemstack1 = slot2.getItem();
                 if (!itemstack2.isEmpty() || !itemstack1.isEmpty()) {
@@ -294,29 +294,29 @@ public abstract class Container {
                     }
                 }
             } else if (inventoryclicktype == InventoryClickType.CLONE && entityhuman.abilities.canInstantlyBuild && playerinventory.getCarried().isEmpty() && i >= 0) {
-                slot2 = (Slot) this.c.get(i);
+                slot2 = (Slot) this.slots.get(i);
                 if (slot2 != null && slot2.hasItem()) {
                     itemstack2 = slot2.getItem().cloneItemStack();
                     itemstack2.setCount(itemstack2.getMaxStackSize());
                     playerinventory.setCarried(itemstack2);
                 }
             } else if (inventoryclicktype == InventoryClickType.THROW && playerinventory.getCarried().isEmpty() && i >= 0) {
-                slot2 = (Slot) this.c.get(i);
+                slot2 = (Slot) this.slots.get(i);
                 if (slot2 != null && slot2.hasItem() && slot2.isAllowed(entityhuman)) {
                     itemstack2 = slot2.a(j == 0 ? 1 : slot2.getItem().getCount());
                     slot2.a(entityhuman, itemstack2);
                     entityhuman.drop(itemstack2, true);
                 }
             } else if (inventoryclicktype == InventoryClickType.PICKUP_ALL && i >= 0) {
-                slot2 = (Slot) this.c.get(i);
+                slot2 = (Slot) this.slots.get(i);
                 itemstack2 = playerinventory.getCarried();
                 if (!itemstack2.isEmpty() && (slot2 == null || !slot2.hasItem() || !slot2.isAllowed(entityhuman))) {
-                    l = j == 0 ? 0 : this.c.size() - 1;
+                    l = j == 0 ? 0 : this.slots.size() - 1;
                     k1 = j == 0 ? 1 : -1;
 
                     for (int l1 = 0; l1 < 2; ++l1) {
-                        for (int i2 = l; i2 >= 0 && i2 < this.c.size() && itemstack2.getCount() < itemstack2.getMaxStackSize(); i2 += k1) {
-                            Slot slot3 = (Slot) this.c.get(i2);
+                        for (int i2 = l; i2 >= 0 && i2 < this.slots.size() && itemstack2.getCount() < itemstack2.getMaxStackSize(); i2 += k1) {
+                            Slot slot3 = (Slot) this.slots.get(i2);
 
                             if (slot3.hasItem() && a(slot3, itemstack2, true) && slot3.isAllowed(entityhuman) && this.a(itemstack2, slot3)) {
                                 ItemStack itemstack5 = slot3.getItem();
@@ -382,17 +382,6 @@ public abstract class Container {
         this.getSlot(i).set(itemstack);
     }
 
-    public void b(int i, ItemStack itemstack) {
-        ItemStack itemstack1 = this.getSlot(i).getItem();
-
-        if (itemstack1.isEmpty()) {
-            this.setItem(i, itemstack);
-        } else if (itemstack1.a().equals(itemstack.a()) && itemstack1.getCount() < itemstack1.getMaxStackSize()) {
-            itemstack1.add(itemstack.getCount());
-        }
-
-    }
-
     public boolean c(EntityHuman entityhuman) {
         return !this.i.contains(entityhuman);
     }
@@ -406,7 +395,7 @@ public abstract class Container {
 
     }
 
-    public abstract boolean a(EntityHuman entityhuman);
+    public abstract boolean canUse(EntityHuman entityhuman);
 
     protected boolean a(ItemStack itemstack, int i, int j, boolean flag) {
         boolean flag1 = false;
@@ -429,7 +418,7 @@ public abstract class Container {
                     break;
                 }
 
-                slot = (Slot) this.c.get(k);
+                slot = (Slot) this.slots.get(k);
                 itemstack1 = slot.getItem();
                 if (!itemstack1.isEmpty() && itemstack1.getItem() == itemstack.getItem() && (!itemstack.usesData() || itemstack.getData() == itemstack1.getData()) && ItemStack.equals(itemstack, itemstack1)) {
                     int l = itemstack1.getCount() + itemstack.getCount();
@@ -471,7 +460,7 @@ public abstract class Container {
                     break;
                 }
 
-                slot = (Slot) this.c.get(k);
+                slot = (Slot) this.slots.get(k);
                 itemstack1 = slot.getItem();
                 if (itemstack1.isEmpty() && slot.isAllowed(itemstack)) {
                     if (itemstack.getCount() > slot.getMaxStackSize()) {

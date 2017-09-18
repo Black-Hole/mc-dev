@@ -8,6 +8,7 @@ public class BlockSoil extends Block {
 
     public static final BlockStateInteger MOISTURE = BlockStateInteger.of("moisture", 0, 7);
     protected static final AxisAlignedBB b = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.9375D, 1.0D);
+    protected static final AxisAlignedBB c = new AxisAlignedBB(0.0D, 0.9375D, 0.0D, 1.0D, 1.0D, 1.0D);
 
     protected BlockSoil() {
         super(Material.EARTH);
@@ -35,7 +36,7 @@ public class BlockSoil extends Block {
             if (i > 0) {
                 world.setTypeAndData(blockposition, iblockdata.set(BlockSoil.MOISTURE, Integer.valueOf(i - 1)), 2);
             } else if (!this.c(world, blockposition)) {
-                this.b(world, blockposition);
+                b(world, blockposition);
             }
         } else if (i < 7) {
             world.setTypeAndData(blockposition, iblockdata.set(BlockSoil.MOISTURE, Integer.valueOf(7)), 2);
@@ -45,24 +46,23 @@ public class BlockSoil extends Block {
 
     public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
         if (!world.isClientSide && world.random.nextFloat() < f - 0.5F && entity instanceof EntityLiving && (entity instanceof EntityHuman || world.getGameRules().getBoolean("mobGriefing")) && entity.width * entity.width * entity.length > 0.512F) {
-            this.b(world, blockposition);
+            b(world, blockposition);
         }
 
         super.fallOn(world, blockposition, entity, f);
     }
 
-    private void b(World world, BlockPosition blockposition) {
-        IBlockData iblockdata = Blocks.DIRT.getBlockData();
-
-        world.setTypeUpdate(blockposition, iblockdata);
-        AxisAlignedBB axisalignedbb = iblockdata.d(world, blockposition).a(blockposition);
+    protected static void b(World world, BlockPosition blockposition) {
+        world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
+        AxisAlignedBB axisalignedbb = BlockSoil.c.a(blockposition);
         List list = world.getEntities((Entity) null, axisalignedbb);
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
             Entity entity = (Entity) iterator.next();
+            double d0 = Math.min(axisalignedbb.e - axisalignedbb.b, axisalignedbb.e - entity.getBoundingBox().b);
 
-            entity.setPosition(entity.locX, axisalignedbb.e, entity.locZ);
+            entity.enderTeleportTo(entity.locX, entity.locY + d0 + 0.001D, entity.locZ);
         }
 
     }
@@ -92,7 +92,7 @@ public class BlockSoil extends Block {
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         super.a(iblockdata, world, blockposition, block, blockposition1);
         if (world.getType(blockposition.up()).getMaterial().isBuildable()) {
-            this.b(world, blockposition);
+            b(world, blockposition);
         }
 
     }
@@ -100,7 +100,7 @@ public class BlockSoil extends Block {
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
         super.onPlace(world, blockposition, iblockdata);
         if (world.getType(blockposition.up()).getMaterial().isBuildable()) {
-            this.b(world, blockposition);
+            b(world, blockposition);
         }
 
     }

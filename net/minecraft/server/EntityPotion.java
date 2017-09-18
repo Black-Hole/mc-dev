@@ -9,9 +9,9 @@ import org.apache.logging.log4j.Logger;
 
 public class EntityPotion extends EntityProjectile {
 
-    private static final DataWatcherObject<ItemStack> e = DataWatcher.a(EntityPotion.class, DataWatcherRegistry.f);
-    private static final Logger f = LogManager.getLogger();
-    public static final Predicate<EntityLiving> d = new Predicate() {
+    private static final DataWatcherObject<ItemStack> f = DataWatcher.a(EntityPotion.class, DataWatcherRegistry.f);
+    private static final Logger g = LogManager.getLogger();
+    public static final Predicate<EntityLiving> e = new Predicate() {
         public boolean a(@Nullable EntityLiving entityliving) {
             return EntityPotion.c(entityliving);
         }
@@ -39,15 +39,15 @@ public class EntityPotion extends EntityProjectile {
     }
 
     protected void i() {
-        this.getDataWatcher().register(EntityPotion.e, ItemStack.a);
+        this.getDataWatcher().register(EntityPotion.f, ItemStack.a);
     }
 
     public ItemStack getItem() {
-        ItemStack itemstack = (ItemStack) this.getDataWatcher().get(EntityPotion.e);
+        ItemStack itemstack = (ItemStack) this.getDataWatcher().get(EntityPotion.f);
 
         if (itemstack.getItem() != Items.SPLASH_POTION && itemstack.getItem() != Items.LINGERING_POTION) {
             if (this.world != null) {
-                EntityPotion.f.error("ThrownPotion entity {} has no item?!", Integer.valueOf(this.getId()));
+                EntityPotion.g.error("ThrownPotion entity {} has no item?!", Integer.valueOf(this.getId()));
             }
 
             return new ItemStack(Items.SPLASH_POTION);
@@ -57,8 +57,8 @@ public class EntityPotion extends EntityProjectile {
     }
 
     public void setItem(ItemStack itemstack) {
-        this.getDataWatcher().set(EntityPotion.e, itemstack);
-        this.getDataWatcher().markDirty(EntityPotion.e);
+        this.getDataWatcher().set(EntityPotion.f, itemstack);
+        this.getDataWatcher().markDirty(EntityPotion.f);
     }
 
     protected float j() {
@@ -104,7 +104,7 @@ public class EntityPotion extends EntityProjectile {
 
     private void n() {
         AxisAlignedBB axisalignedbb = this.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
-        List list = this.world.a(EntityLiving.class, axisalignedbb, EntityPotion.d);
+        List list = this.world.a(EntityLiving.class, axisalignedbb, EntityPotion.e);
 
         if (!list.isEmpty()) {
             Iterator iterator = list.iterator();

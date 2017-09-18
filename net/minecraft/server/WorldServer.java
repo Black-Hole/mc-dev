@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -15,6 +14,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -178,14 +179,13 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     protected void f() {
         this.Q = false;
-        Iterator iterator = this.players.iterator();
+        List list = (List) this.players.stream().filter(EntityHuman::isSleeping).collect(Collectors.toList());
+        Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
             EntityHuman entityhuman = (EntityHuman) iterator.next();
 
-            if (entityhuman.isSleeping()) {
-                entityhuman.a(false, false, true);
-            }
+            entityhuman.a(false, false, true);
         }
 
         if (this.getGameRules().getBoolean("doWeatherCycle")) {
@@ -348,7 +348,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     protected BlockPosition a(BlockPosition blockposition) {
         BlockPosition blockposition1 = this.p(blockposition);
         AxisAlignedBB axisalignedbb = (new AxisAlignedBB(blockposition1, new BlockPosition(blockposition1.getX(), this.getHeight(), blockposition1.getZ()))).g(3.0D);
-        List list = this.a(EntityLiving.class, axisalignedbb, new Predicate() {
+        List list = this.a(EntityLiving.class, axisalignedbb, new com.google.common.base.Predicate() {
             public boolean a(@Nullable EntityLiving entityliving) {
                 return entityliving != null && entityliving.isAlive() && WorldServer.this.h(entityliving.getChunkCoordinates());
             }
